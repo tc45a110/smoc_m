@@ -7,7 +7,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 
 /**
- * 满扑满管理授权中心das
+ * 满扑满管理授权中心
  *
  * @EnableFeignClients 开启FeignClient功能
  * @EnableOAuth2Client 开启OAuth2客户端
