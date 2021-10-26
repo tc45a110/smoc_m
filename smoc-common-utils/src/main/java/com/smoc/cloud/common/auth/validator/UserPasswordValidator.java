@@ -1,0 +1,27 @@
+package com.smoc.cloud.common.auth.validator;
+
+import com.smoc.cloud.common.validator.MpmIdValidator;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
+/**
+ * 用户字段规则验证
+ * 2019/3/29 14:29
+ **/
+@Setter
+@Getter
+public class UserPasswordValidator extends MpmIdValidator {
+
+    @NotNull(message = "密码不能为空！")
+    @Length(min = 8, max = 16, message = "字段长度要在{min}-{max}之间！")
+    @Pattern(regexp = "^(?=.*\\d)(?=.*[a-zA-Z])(?=.*[~!@#$%^&*._])[\\da-zA-Z~!@#$%^&*._]{8,}$", message = "密码不符合规则")
+    private String password;
+
+    @NotNull(message = "原密码不能为空！")
+    @Length(min = 8, max = 16, message = "字段长度要在{min}-{max}之间！")
+    private String oldPassword;
+}

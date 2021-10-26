@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+
+<th:block th:fragment="org_tree_select">
+    <!-- org_select control start-->
+    <div id="org_select"
+         style="display: none; position:absolute; z-index:1010; margin-left:0px; width: 360px">
+        <div style="width: 360px;height: 40px;border:1px solid #ddd;margin-bottom:-1px;padding:10px 15px;background-color:#ffffff">
+            <div style="width:140px;float: left">组织机构</div>
+            <div style="width:185px;float: left;text-align: right">
+                <a onclick="cleanOrgSelect()"
+                   class="btn btn-icon waves-effect waves-light btn-warning btn-xs"
+                   style="margin-right: 10px"><i class="fa fa-remove"></i> 清空
+                </a>
+                <a onclick="closeOrgTree()"
+                   class="btn btn-icon waves-effect waves-light btn-danger btn-xs"
+                   style="margin-right: 0px"><i class="fa fa-remove"></i> 关闭
+                </a>
+            </div>
+        </div>
+        <div id="org_tree"></div>
+    </div>
+    <!-- org_select control end-->
+</th:block>
+<th:block th:fragment="org_tree_select_js">
+    <!-- start treeSelect js -->
+    <script th:src="@{/static/plugins/bootstrap-treeview/bootstrap-treeview.min.js}"></script>
+    <script>
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+
+        $(function () {
+            $('#org_tree').treeview({
+                data: loadData('mpmorganization'),//节点数据
+                expanded: false,//初始是否展开
+                levels: 2,//初始显示层数
+                icon: "glyphicon glyphicon-stop",
+                selectedIcon: "glyphicon glyphicon-stop",
+                color: "#4c4c4c",
+                backColor: "#ffffff",
+                selectedColor: "#ffffff",
+                iconBackground: "#ffffff",
+                lazyLoad: loadSubData,
+                onNodeSelected: function (event, data) {
+                    $('#organizationId').val(data.id);
+                    $('#organizationName').val(data.text);
+                    $('#org_select').css('display', 'none');
+                }
+            });
+        });
+
+        function loadData(id) {
+
+            var treeSelect = {};
+            $.ajax({
+                url: contextPath + "/sysOrg/getSysOrgByParentId/" + id,
+                type: "get",
+                contentType: "application/json",
+                timeout: 30000, //超时时间：30秒
+                async: false,
+                dataType: "text",
+                success: function (data) {
+                    treeSelect = data;
+                }, error: function (data) {
+                    console.log("error");
+                }
+            });
+
+            return treeSelect;
+        }
+
+        function loadSubData(node, func) {//这个技巧真高，即能得到节点数据，又能把节点下级的数据通过函数发回去
+            var subTreeData = loadData(node.id);
+            var array = JSON.parse(subTreeData);
+            $('#org_tree').treeview('addNode', [array, node, 1, {silent: true}]);
+        }
+
+        function orgTreeShow() {
+
+            $('#org_select').css('display', 'block');
+
+        }
+
+        function closeOrgTree() {
+            $('#org_select').css('display', 'none');
+        }
+
+        function cleanOrgSelect() {
+            $('#organizationId').val("");
+            $('#organizationName').val("");
+            $('#org_select').css('display', 'none');
+        }
+
+    </script>
+    <!-- end treeSelect js -->
+</th:block>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="smoc-auth" />
+        <module name="smoc-auth-ui" />
+        <module name="smoc-common-utils" />
+        <module name="smoc-parent-ui" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="smoc-auth" target="1.8" />
+      <module name="smoc-auth-ui" target="1.8" />
+      <module name="smoc-common-utils" target="1.8" />
+      <module name="smoc-parent" target="1.8" />
+      <module name="smoc-parent-ui" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="smoc-auth" options="-parameters" />
+      <module name="smoc-auth-ui" options="-parameters" />
+      <module name="smoc-common-utils" options="-parameters" />
+      <module name="smoc-parent-ui" options="-parameters" />
+    </option>
+  </component>
+</project>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
+    <!-- Custom box css -->
+    <link th:href="@{/static/plugins/custombox/css/custombox.min.css}" rel="stylesheet">
+</head>
+<body>
+<!-- Loader -->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+        <div class="row fixed-navigation">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">客户端管理 </h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            用户管理
+                        </li>
+                        <li class="active">
+                            客户端管理
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+        <div class="row" style="position: relative;margin-top: 80px" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <div class="row m-b-60">
+                        <div class="col-sm-12">
+                            <form class="form-inline">
+                                <div class="form-group pull-right" style="text-align: right">
+                                    <a sec:authorize-url="/client/add" th:href="@{/client/add}"
+                                       class="btn btn-success waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-plus-sign"></i> 新建</a>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="panel panel-color panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">客户端列表</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table table-hover m-10" style="margin-top: -12px;">
+                                <thead>
+                                <tr>
+                                    <th>用户名称</th>
+                                    <th>授权类型</th>
+                                    <th>授权范围</th>
+                                    <th sec:authorize-url="/client/operate/column">操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="client:${list.data}">
+                                    <td th:text="${client.getClientId()}"></td>
+                                    <td th:text="${client.getAuthorizedGrantTypes()}">
+                                        client_credentials、password、refresh_token
+                                    </td>
+                                    <td th:text="${client.getScope()}"></td>
+                                    <td sec:authorize-url="/client/operate/column">
+                                        <a sec:authorize-url="/client/edit/*"
+                                           th:href="@{/client/edit/{id}(id=${client.getClientId()})}"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color: #29b6f6;" title="编辑"><i
+                                                style="font-size: 18px"
+                                                class="mdi mdi-table-edit"></i></a>
+
+                                        <a sec:authorize-url="/client/resetClientSecret"
+                                           th:onclick="confirmEditSecret([[${client.getClientId()}]],this)"
+                                           data-toggle="modal"
+                                           data-target="#edit-secret-modal" class="on-default remove-row"
+                                           style="padding-left: 10px;color: #26a69a" title="修改密码"><i
+                                                style="font-size: 18px"
+                                                class="mdi mdi-account-key"></i></a>
+
+                                        <a sec:authorize-url="/client/deleteById/*"
+                                           th:onclick="confirmDelete([[${client.getClientId()}]],this)"
+                                           data-toggle="modal"
+                                           data-target="#confirm-modal" class="on-default remove-row"
+                                           style="padding-left: 10px;color: #f05050" title="删除"><i
+                                                style="font-size: 18px"
+                                                class="mdi mdi-delete-sweep"></i></a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- end row -->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+
+        <th:block th:insert="fragments/common_fragments :: confirm-modal"/>
+
+        <!-- start edit-secret-modal   -->
+        <div id="edit-secret-modal" class="modal fade" tabindex="-1" role="dialog"
+             aria-labelledby="custom-width-modalLabel"
+             aria-hidden="true" style="display: none;margin: 60px">
+            <div class="modal-dialog" style="width:33%;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title" id="custom-width-modalLabel">修改客户端密码</h4>
+                    </div>
+                    <form th:action="@{/client/resetClientSecret}" id="edit_form"
+                          th:object="${resetClientSecretValidator}"
+                          method="post" data-parsley-validate="">
+                        <div class="modal-body">
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="p-20">
+                                        <div class="form-group m-b-20">
+                                            <label for="clientSecret">客户端密码<span class="text-danger">*</span>&nbsp;<span
+                                                    class="text-danger" style="font-weight: 200;font-size: 12px"
+                                                    th:if="${#fields.hasErrors('clientSecret')}"
+                                                    th:errors="*{clientSecret}"></span></label>
+                                            <input id="clientSecret" type="text" th:field="*{clientSecret}"
+                                                   class="form-control"
+                                                   required="" data-parsley-length="[18,32]"
+                                                   placeholder="输入客户端密码">
+                                        </div>
+                                        <div class="form-group m-b-20">
+                                            <label for="reSecret">确认客户端密码<span class="text-danger">*</span>&nbsp;<span
+                                                    class="text-danger" style="font-weight: 200;font-size: 12px"></span></label>
+                                            <input id="reSecret" data-parsley-equalto="#clientSecret" type="text"
+                                                   name="reSecret" class="form-control"
+                                                   required="" data-parsley-length="[18,32]"
+                                                   placeholder="确认客户端密码">
+                                            <input type="hidden" th:field="*{clientId}">
+                                        </div>
+                                    </div>
+                                    <!-- end class p-20 -->
+                                </div> <!-- end col -->
+                            </div> <!-- end row -->
+
+                        </div>
+                        <div class="modal-footer">
+                            <a class="btn btn-default waves-effect" data-dismiss="modal">取消</a>
+                            <button type="submit" class="btn btn-teal waves-effect waves-light">确认修改</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- end edit-secret-modal  -->
+    </div> <!-- container -->
+
+</div> <!-- content -->
+
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: common_submit_form"/>
+<script type="text/javascript">
+    function confirmDelete(id) {
+        $("#deleteId").val(id);
+    }
+
+    function deleteById() {
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $('#preloader').css('display', 'block');
+        location.href = contextPath + '/client/deleteById/' + $("#deleteId").val();
+    }
+
+    function confirmEditSecret(id) {
+        $("#clientId").val(id);
+    }
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+</script>
+</body>
+</html>

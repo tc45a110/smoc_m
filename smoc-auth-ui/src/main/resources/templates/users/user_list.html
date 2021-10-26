@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <!-- Custom box css -->
+    <link th:href="@{/static/plugins/custombox/css/custombox.min.css}" rel="stylesheet">
+</head>
+<body>
+<!-- Loader -->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+        <div class="row fixed-navigation">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">用户管理 </h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            用户管理
+                        </li>
+                        <li class="active">
+                            用户管理
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row -->
+        <div class="row" style="position: relative;margin-top: 80px" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <form th:action="@{/users/page}" id="query_form" th:object="${user}"
+                          method="post">
+                        <div class="row m-b-60">
+                            <div class="col-sm-12">
+                                <div class="form-group  col-sm-3">
+                                    <input id="organizationName" type="text" style="width: 360px" class="form-control"
+                                           th:field="*{corporation}" readonly
+                                           placeholder="公司单位" onfocus="orgTreeShow()" autocomplete="off">
+                                    <input id="organizationId" type="hidden" readonly
+                                           th:field="*{organization}">
+                                    <th:block th:insert="fragments/org_select_fragments :: org_tree_select"/>
+                                </div>
+                                <div class="form-group  col-sm-3">
+
+                                    <input type="text" class="form-control" th:field="*{realName}"
+                                           placeholder="姓名" autocomplete="off">
+
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control" th:field="*{phone}"
+                                           placeholder="手机号" autocomplete="off">
+                                </div>
+
+
+                                <div class="form-group col-sm-3 pull-right" style="text-align: center">
+                                    <button sec:authorize-url="/users/page" type="submit"
+                                            class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-search"></i> 查询
+                                    </button>
+                                    <a sec:authorize-url="/users/add" th:href="@{/users/add}"
+                                       class="btn btn-success waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-plus-sign"></i> 新建</a>
+                                    <input type="hidden" name="currentPage" id="currentPage"
+                                           th:value="${pageParams.currentPage}">
+                                    <input type="hidden" name="pageSize" id="pageSize"
+                                           th:value="${pageParams.pageSize}">
+                                </div>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div th:each="user:${list}" class="col-md-3">
+                <div class="text-center card-box">
+                    <div class="dropdown pull-left">
+                        <h3 class="m-0 text-muted" style="font-size: 14px; ">[[${user.corporation}]]</h3>
+                    </div>
+                    <div class="dropdown pull-right">
+                        <a href="#" class="dropdown-toggle card-drop" data-toggle="dropdown" aria-expanded="false">
+                            <h3 class="m-0 text-muted"><i class="mdi mdi-dots-horizontal"></i></h3>
+                        </a>
+                        <ul sec:authorize-url="/users/dropdown" class="dropdown-menu" role="menu">
+                            <li><a sec:authorize-url="/users/edit/*" th:href="@{/users/edit/{id}(id=${user.id})}"
+                                   style="font-size: 12px;color: #989898"><i
+                                    style="font-size: 12px;padding-right: 4px;color: #29b6f6;"
+                                    class="mdi mdi-table-edit"></i>修改</a></li>
+                            <li><a sec:authorize-url="/users/forbiddenUser/*/*"
+                                   th:onclick="confirmForbidden([[${user.id}]],[[${user.active}]],this)"
+                                   data-toggle="modal"
+                                   data-target="#user-forbiden"
+                                   style="font-size: 12px;color: #989898"><i
+                                    style="font-size: 12px;padding-right: 4px;color: #f5707a;"
+                                    class="mdi mdi-checkbox-marked"></i>[[${user.active}==1?'禁用':'启用']]</a>
+                            </li>
+                            <li><a sec:authorize-url="/users/resetPassword"
+                                   th:onclick="openResetPassword([[${user.id}]],this)" data-toggle="modal"
+                                   data-target="#user-reset-password"
+                                   style="font-size: 12px;color: #989898"><i
+                                    style="font-size: 12px;padding-right: 4px;color: #4bd396;"
+                                    class="mdi mdi-account-key"></i>重置密码</a></li>
+                            <li><a sec:authorize-url="/users/clearUsersCache"
+                                   th:onclick="clearUsersCache([[${user.id}]],[[${user.realName}]],this)"
+                                   data-toggle="modal"
+                                   data-target="#user-clear-cache"
+                                   style="font-size: 12px;color: #FBD971"><i
+                                    style="font-size: 12px;padding-right: 4px;color: #FBD971"
+                                    class="mdi mdi-format-clear"></i>清除用户缓存</a></li>
+                        </ul>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="member-card">
+                        <div class="thumb-xl member-thumb m-b-10 center-block">
+                            <img th:src="@{/static/assets/images/happy.png}"
+                                 class="img-circle img-thumbnail"
+                                 alt="profile-image">
+                            <i class="mdi mdi-star-circle member-star text-success" title="verified user"></i>
+                        </div>
+
+                        <div class="">
+                            <h4 class="m-b-5" style="color: #00acc1;font-size: 16px">
+                                [[${user.realName}]]（[[${user.phone}]]）</h4>
+                            <p class="text-muted" style="font-size: 12px">[[${user.code}]]
+                                <span> | </span> <span style="font-size: 12px"
+                                                       th:text="${user.type}==1?'移动运营人员':(${user.type}==2?'企业运营用户':(${user.type}==3?'系统用户':'客户'))">
+                                </span>
+                            </p>
+                        </div>
+
+                        <a sec:authorize-url="/users/findById/*" th:href="@{/users/view/{id}(id=${user.id})}"
+                           class="btn btn-info btn-rounded waves-effect m-t-10 waves-light" style="font-size: 12px">查看明细
+                        </a>
+
+                    </div>
+                </div>
+            </div> <!-- end col -->
+        </div>
+        <!-- end row -->
+        <th:block th:insert="fragments/page_fragments :: page"/>
+
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+    </div> <!-- container -->
+
+</div> <!-- content -->
+<!--modals-->
+<div id="user-forbiden" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="custom-width-modalLabel" aria-hidden="true" style="display: none;margin-top: 80px">
+    <div class="modal-dialog" style="width:33%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="custom-width-modalLabel">禁用、启用用户</h4>
+            </div>
+            <div class="modal-body">
+                <h4>注意：</h4>
+                <p>用户被禁用后将无法登陆及操作！</p>
+            </div>
+            <div class="modal-footer">
+                <input type="hidden" id="forbiddenId">
+                <input type="hidden" id="active">
+                <button type="button" id="forbbenButton" onclick="forbbenUser()"
+                        class="btn btn-danger waves-effect waves-light">确定禁用
+                </button>
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div id="user-reset-password" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true" style="display: none;margin-top:80px">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">重置密码</h4>
+            </div>
+            <form th:action="@{/users/resetPassword}" id="edit_form"
+                  th:object="${userPasswordValidator}"
+                  method="post" data-parsley-validate="">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="password">密码<span class="text-danger">*</span>&nbsp;<span
+                                        class="text-danger" style="font-weight: 200;font-size: 12px"
+                                        th:if="${#fields.hasErrors('password')}"
+                                        th:errors="*{password}"></span></label>
+                                <input id="password" type="text" th:field="*{password}"
+                                       class="form-control"
+                                       required="" data-parsley-length="[6,32]"
+                                       placeholder="输入密码">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group m-b-20">
+                                <label for="rePassword">确认密码<span class="text-danger">*</span>&nbsp;<span
+                                        class="text-danger" style="font-weight: 200;font-size: 12px"></span></label>
+                                <input id="rePassword" data-parsley-equalto="#password" type="text"
+                                       name="reSecret" class="form-control"
+                                       required="" data-parsley-length="[6,32]"
+                                       placeholder="确认密码">
+                                <input type="hidden" th:field="*{id}">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">关闭</button>
+                    <button type="submit" class="btn btn-info waves-effect waves-light">确认修改</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div><!-- /.modal -->
+
+<div id="user-clear-cache" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+
+     aria-hidden="true" style="display: none;margin-top:80px">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">清除缓存</h4>
+            </div>
+            <form th:action="@{/users/clearUsersCache}" id="clear_form"
+                  th:object="${clearCacheValidator}"
+                  method="post" data-parsley-validate="">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <mpm:tag id="system" identity="system" show-type="select" key="code"
+                                         class="form-control" name="system" data-icon="mdi mdi-account-switch"
+                                         required="true" title="要清除缓存系统"/>
+                                <input type="hidden" th:field="*{userId}">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">关闭</button>
+                    <button type="submit" class="btn btn-info waves-effect waves-light">确认清除</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div><!-- /.modal -->
+
+
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<th:block th:insert="fragments/org_select_fragments :: org_tree_select_js"/>
+<th:block th:insert="fragments/common_fragments :: common_submit_form"/>
+<script>
+    //确认禁用
+    function confirmForbidden(id, active) {
+        $("#forbiddenId").val(id);
+        $("#active").val(active);
+        if (0 == active) {
+            document.getElementById("forbbenButton").innerText = "确定启用";
+        } else {
+            document.getElementById("forbbenButton").innerText = "确定禁用";
+        }
+    }
+
+    function forbbenUser() {
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $('#preloader').css('display', 'block');
+        location.href = contextPath + '/users/forbiddenUser/' + $("#forbiddenId").val() + "/" + $("#active").val();
+    }
+
+    function clearUsersCache(userId) {
+        $("#userId").val(userId);
+    }
+
+    //打开重置密码框
+    function openResetPassword(id) {
+        $("#id").val(id);
+    }
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+</script>
+</body>
+</html>

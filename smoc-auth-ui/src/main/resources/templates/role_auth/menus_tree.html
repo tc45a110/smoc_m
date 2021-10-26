@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <link th:href="@{/static/plugins/bootstrap-treeview/bootstrap-treeview.min.css}" rel="stylesheet"
+          type="text/css"/>
+    <style>
+        .treeview .list-group-item.node-checked {
+            color: #3ac9d6;
+        }
+    </style>
+</head>
+<body>
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Start content -->
+<div class="content">
+    <div class="container">
+        <!-- end row -->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="mails">
+                    <div class="table-box">
+                        <div class="table-detail col-md-12" style="background-color: #FFFFFF">
+                            <div class="row">
+                                <div class="p-20" style="min-width: 300px;">
+                                    <h5 class=" text-uppercase hidden-xxs">mpm-cloud
+                                        <span th:remove="${roleId} =='root'? all:none"><button sec:authorize-url="/roleAuth/save" type="button"
+                                                                                               onclick="submitForm()"
+                                                                                               class="btn btn-teal waves-effect waves-light"
+                                                                                               style="float:right;margin-top: -8px;">提交</button></span>
+                                    </h5>
+
+                                    <div class="list-group mail-list  m-t-20">
+                                        <div id="menus_tree"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end table box -->
+                    <form th:action="@{/roleAuth/save}" id="submit_form" th:object="${roleAuthValidator}"
+                          method="post">
+                        <input type="hidden" id="roleId" th:field="*{roleId}">
+                        <input type="hidden" id="menusId" th:field="*{menusId}">
+                    </form>
+
+                </div> <!-- mails -->
+            </div>
+        </div>
+        <!-- end row -->
+    </div> <!-- container -->
+
+</div> <!-- content -->
+
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<script th:src="@{/static/plugins/bootstrap-treeview/bootstrap-treeview.min.js}"></script>
+<script>
+
+    var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+    var roleId = '[[${roleId}]]';
+
+    var nodeCheckedSilent = false;
+    $(function () {
+        $('#menus_tree').treeview({
+            data: loadData('/roleAuth/loadSystemMenus/' + roleId),//节点数据
+            expanded: false,//初始是否展开
+            levels: 6,//初始显示层数
+            icon: "glyphicon glyphicon-stop",
+            selectedIcon: "glyphicon glyphicon-stop",
+            color: "#4c4c4c",
+            backColor: "#3ac9d6",
+            selectedColor: "#3ac9d6",
+            selectable: false,
+            iconBackground: "#4c4c4c",
+            showCheckbox: true,
+            lazyLoad: loadSubData,
+            onNodeChecked: nodeChecked
+        });
+    });
+
+    function loadData(url) {
+
+        var treeData = {};
+        $.ajax({
+            url: contextPath + url,
+            type: "get",
+            contentType: "application/json",
+            timeout: 30000, //超时时间：30秒
+            async: false,
+            dataType: "text",
+            success: function (data) {
+                treeData = data;
+            }, error: function (data) {
+                console.log("error");
+            }
+        });
+        return treeData;
+    }
+
+    function loadSubData(node, func) {//这个技巧真高，即能得到节点数据，又能把节点下级的数据通过函数发回去
+        var subData = loadData('/roleAuth/loadMenus/' + node.id + "/" + roleId);
+        var array = JSON.parse(subData);
+        $('#menus_tree').treeview('addNode', [array, node, 1, {silent: true}]);
+    }
+
+    function nodeChecked(event, node) {
+        $('#preloader').css('display', 'block');
+        checkAllParent(node);
+        $('#preloader').css('display', 'none');
+    }
+
+    //选中全部父节点
+    function checkAllParent(node) {
+
+        $('#menus_tree').treeview('checkNode', [node, {silent: true}]);
+        var parentNode = $('#menus_tree').treeview('getParents', node)[0];
+
+        if (!(typeof (parentNode) == "undefined")) {
+
+            if (!("id" in parentNode)) {
+                return;
+            } else {
+                checkAllParent(parentNode);
+            }
+        } else {
+            return;
+        }
+
+    }
+
+    function nodeUnchecked(event, node) {
+        $('#preloader').css('display', 'block');
+        uncheckAllSon(node);
+        $('#preloader').css('display', 'none');
+    }
+
+    //级联取消所有子节点
+    function uncheckAllSon(node) {
+        $('#menus_tree').treeview('uncheckNode', [node, {silent: true}]);
+        if (null != node.nodes && node.nodes.length > 0) {
+            for (var i in node.nodes) {
+                uncheckAllSon(node.nodes[i]);
+            }
+        } else {
+            return;
+        }
+    }
+
+    function submitForm() {
+
+        var menusId = "";
+
+        var checkedNodes = $('#menus_tree').treeview('getChecked');
+        for (var i in checkedNodes) {
+            var node = checkedNodes[i];
+            if (menusId == "") {
+                menusId = node.id;
+            } else {
+                menusId += "," + node.id;
+            }
+        }
+
+        var roleId = $('#roleId').val();
+        if (null == roleId || "" == roleId) {
+            alert("角色不能为空！");
+            return;
+        }
+
+        if (null == menusId || "" == menusId) {
+            alert("请选择菜单！");
+            return;
+        }
+        $('#menusId').val(menusId);
+        $('#preloader').css('display', 'block');
+        $('#submit_form').submit();
+
+    }
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+</script>
+</body>
+</html>

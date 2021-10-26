@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
+    <!-- Jquery filer css -->
+    <link th:href="@{/static/plugins/jquery.filer/css/jquery.filer.css}" rel="stylesheet"/>
+    <link th:href="@{/static/plugins/jquery.filer/css/themes/jquery.filer-dragdropbox-theme.css}" rel="stylesheet"/>
+
+</head>
+<body>
+<!-- Loader -->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">更新字典缓存</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            更新字典缓存
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" th:remove="${#strings.isEmpty(success)}?none:all">
+            <div class="col-sm-12">
+                <div class="wrapper-page">
+                    <div class="m-t-40 account-pages">
+                        <div class="text-center account-logo-box">
+                            <h2 class="text-uppercase">
+                                <a href="#" class="text-success">
+                                    <span style="color:#FFFFFF">更新字典缓存</span>
+                                </a>
+                            </h2>
+                        </div>
+                        <div class="account-content">
+                            <div class="text-center m-b-20">
+                                <div class="m-b-20">
+                                    <form th:action="@{/dictCache/updateDictCache}" id="submit_form"
+                                          method="post" data-parsley-validate="">
+
+                                        <br>
+                                        <div class="text-center">
+                                            <button  sec:authorize-url="/dictCache/updateDictCache" type="submit"
+                                                     class="btn btn-teal waves-effect waves-light btn-lg">更新系统权限
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                    <!-- end card-box-->
+                </div>
+                <!-- end wrapper -->
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- success div start-->
+        <div class="row" th:remove="${#strings.isEmpty(success)}?all:none">
+            <div class="col-sm-12">
+                <div class="wrapper-page">
+                    <div class="m-t-40 account-pages">
+                        <div class="text-center account-logo-box">
+                            <h2 class="text-uppercase">
+                                <a href="#" class="text-success">
+                                    <span style="color:#FFFFFF">成功提示</span>
+                                </a>
+                            </h2>
+                        </div>
+                        <div class="account-content">
+                            <div class="text-center m-b-20">
+                                <div class="m-b-20">
+                                    <img th:src="@{/static/assets/images/users/avatar-5.jpg}"
+                                         class="img-circle img-thumbnail thumb-lg" alt="thumbnail">
+                                </div>
+                                <p class="text-muted m-b-0 font-13">成功信息：[[${success}]] </p>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                    <!-- end card-box-->
+                </div>
+                <!-- end wrapper -->
+            </div>
+        </div>
+        <!-- success div end-->
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: common_submit_form"/>
+<script>
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+</script>
+</body>
+</html>

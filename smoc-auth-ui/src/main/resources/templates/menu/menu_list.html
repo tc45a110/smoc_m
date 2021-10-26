@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <th:block th:insert="fragments/common_fragments :: common_header"/>
+        <th:block th:insert="fragments/common_fragments :: common_css"/>
+    </head>
+    <body>
+        <th:block th:insert="fragments/common_fragments :: common_loader"/>
+
+        <!-- Start content -->
+        <div class="content">
+            <div class="container">
+                <!-- start row -->
+                <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+                    <div class="col-sm-12">
+                        <div class="card-box">
+                            <div class="row m-b-60">
+                                <div class="col-sm-12">
+                                    <form class="form-inline">
+                                        <div class="form-group " style="text-align: right">
+                                            <a sec:authorize-url="/menus/add/*/*" th:remove="${parentId =='root'}? all:none"
+                                               th:href="@{/menus/add/{systemId}/{parentId}(parentId=${parentId},systemId=${systemId})}"
+                                               class="btn btn-success waves-effect waves-light m-l-10 btn-md">
+                                                <i class="glyphicon glyphicon-plus-sign"></i>
+                                                新建
+                                            </a>
+                                        </div>
+                                    </form>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- end row -->
+
+                <!-- start row -->
+                <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+                    <div class="col-sm-12">
+                        <div class="panel panel-color panel-info">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">菜单列表</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="table table table-hover m-10" style="margin-top: -12px;">
+                                        <thead>
+                                            <tr>
+                                                <th>模块名称</th>
+                                                <th>标识</th>
+                                                <th>路径</th>
+                                                <th>图标</th>
+                                                <th>排序</th>
+                                                <th>类型</th>
+                                                <th>本地</th>
+                                                <th>显示</th>
+                                                <th sec:authorize-url="/menus/operate/column">操作</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="menu:${list.data}">
+                                                <td th:text="${menu.moduleName}">用户管理</td>
+                                                <td th:text="${menu.moduleCode}">smoc-auth</td>
+                                                <td th:text="${menu.modulePath}">/user/</td>
+                                                <td><i th:if="${menu.moduleIcon != null}" th:class="${menu.moduleIcon}"></i></td>
+                                                <td th:text="${menu.sort}">/user/</td>
+                                                <td>
+                                                    <div class="radio radio-info radio-inline">
+                                                        <input type="radio" id="isOperating" value="option1"
+                                                               th:checked="${menu.isOperating == 1}" disabled>
+                                                        <label for="isOperating">链接</label>
+                                                    </div>
+                                                    <div class="radio radio-info radio-inline">
+                                                        <input type="radio" id="isOperating2" value="option2"
+                                                               th:checked="${menu.isOperating == 0}" disabled>
+                                                        <label for="isOperating2">文件夹</label>
+                                                    </div>
+
+                                                </td>
+                                                <td>
+                                                    <div class="radio radio-info radio-inline">
+                                                        <input type="radio" id="isLocal" value="option1"
+                                                               th:checked="${menu.isLocal == 1}" disabled>
+                                                        <label for="isLocal">是</label>
+                                                    </div>
+                                                    <div class="radio radio-info radio-inline">
+                                                        <input type="radio" id="isLoca2" value="option2"
+                                                               th:checked="${menu.isLocal == 0}" disabled>
+                                                        <label for="isLoca2">否</label>
+                                                    </div>
+
+                                                </td>
+                                                <td>
+                                                    <div class="radio radio-info radio-inline">
+                                                        <input type="radio" id="isDisplay" value="option1"
+                                                               th:checked="${menu.isDisplay == 1}" disabled>
+                                                        <label for="isDisplay">是</label>
+                                                    </div>
+                                                    <div class="radio radio-info radio-inline">
+                                                        <input type="radio" id="isDisplay2" value="option2"
+                                                               th:checked="${menu.isDisplay == 0}" disabled>
+                                                        <label for="isDisplay2">否</label>
+                                                    </div>
+
+                                                </td>
+                                                <td sec:authorize-url="/menus/operate/column">
+                                                    <a sec:authorize-url="/menus/edit/*" th:href="@{/menus/edit/{id}(id=${menu.id})}" class="on-default edit-row"
+                                                       style="padding-left: 5px;color: #29b6f6;" title="编辑"><i style="font-size: 18px" class="mdi mdi-table-edit"></i>
+                                                    </a>
+
+                                                    <a sec:authorize-url="/menus/deleteById/*"  th:onclick="confirmDelete([[${menu.id}]],this)" data-toggle="modal"
+                                                       data-target="#confirm-modal" class="on-default remove-row"
+                                                       style="padding-left: 5px;color: #f05050" title="删除"><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- end row -->
+
+                <th:block th:insert="fragments/common_fragments :: common_error"/>
+                <th:block th:insert="fragments/common_fragments :: confirm-modal"/>
+
+            </div> <!-- container -->
+
+        </div> <!-- content -->
+
+        <th:block th:insert="fragments/common_fragments :: common_js"/>
+
+        <script>
+
+            function confirmDelete(id) {
+                $("#deleteId").val(id);
+            }
+
+            function deleteById() {
+                var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+                $('#preloader').css('display', 'block');
+                location.href = contextPath + "/menus/deleteById/" + $("#deleteId").val();
+            }
+
+            var resizefunc = [];
+            //隐藏进度项
+            $('#preloader').css('display', 'none');
+
+        </script>
+    </body>
+</html>

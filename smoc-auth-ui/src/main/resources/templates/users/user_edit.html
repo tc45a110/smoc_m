@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
+    <!-- Jquery filer css -->
+    <link th:href="@{/static/plugins/jquery.filer/css/jquery.filer.css}" rel="stylesheet"/>
+    <link th:href="@{/static/plugins/jquery.filer/css/themes/jquery.filer-dragdropbox-theme.css}" rel="stylesheet"/>
+
+</head>
+<body>
+<!-- Loader -->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">添加、修改用户</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            用户管理
+                        </li>
+                        <li class="active">
+                            添加、修改用户
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-md-12">
+                <div class="card-box">
+                    <form th:action="@{/users/save/{op}(op=${op})}" id="submit_form" th:object="${userValidator}"
+                          method="post" data-parsley-validate="">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="p-20">
+                                    <div class="form-group m-b-20">
+                                        <label for="userName">用户名<span class="text-danger">*</span>&nbsp;<span
+                                                class="text-danger" style="font-weight: 200;font-size: 12px"
+                                                th:if="${#fields.hasErrors('baseUserValidator.userName')}"
+                                                th:errors="*{baseUserValidator.userName}"></span></label>
+                                        <input id="userName" type="text" th:field="*{baseUserValidator.userName}"
+                                               class="form-control"
+                                               required="" data-parsley-length="[6,32]" autocomplete="off"
+                                               placeholder="输入用户名">
+                                    </div>
+                                    <div class="form-group m-b-20">
+                                        <label for="phone">手机号<span class="text-danger">*</span>&nbsp;<span
+                                                class="text-danger" style="font-weight: 200;font-size: 12px"
+                                                th:if="${#fields.hasErrors('baseUserValidator.phone')}"
+                                                th:errors="*{baseUserValidator.phone}"></span></label>
+                                        <input id="phone" type="text" th:field="*{baseUserValidator.phone}"
+                                               class="form-control" autocomplete="off"
+                                               required="" data-parsley-length="[11,11]" data-parsley-type="digits"
+                                               placeholder="输入手机号">
+                                    </div>
+                                    <div class="form-group m-b-20">
+                                        <label for="realName">姓名<span class="text-danger">*</span>&nbsp;<span
+                                                class="text-danger" style="font-weight: 200;font-size: 12px"
+                                                th:if="${#fields.hasErrors('baseUserExtendsValidator.realName')}"
+                                                th:errors="*{baseUserExtendsValidator.realName}"></span></label>
+                                        <input id="realName" type="text" th:field="*{baseUserExtendsValidator.realName}"
+                                               class="form-control" autocomplete="off"
+                                               required="" data-parsley-length="[2,16]"
+                                               placeholder="输入姓名">
+                                    </div>
+                                    <div class="form-group" th:remove="${op}=='edit'?'all':'none'">
+                                        <div class="row">
+                                            <div class="col-sm-6 m-b-10">
+                                                <label for="password">密码<span class="text-danger">*</span>&nbsp;<span
+                                                        class="text-danger" style="font-weight: 200;font-size: 12px"
+                                                        th:if="${#fields.hasErrors('baseUserValidator.password')}"
+                                                        th:errors="*{baseUserValidator.password}"></span></label>
+                                                <input id="password" type="password"
+                                                       th:field="*{baseUserValidator.password}"
+                                                       placeholder="输入密码" required autocomplete="off"
+                                                       class="form-control">
+                                            </div>
+                                            <div class="col-sm-6 m-b-10">
+                                                <label for="passWord2">确认密码 <span class="text-danger">*</span></label>
+                                                <input data-parsley-equalto="#password" type="password" required
+                                                       autocomplete="off"
+                                                       placeholder="输入确认密码" class="form-control" id="passWord2">
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-sm-6 m-b-10">
+                                                <label for="organizationName">公司/企业<span class="text-danger">*</span>&nbsp;<span
+                                                        class="text-danger" style="font-weight: 200;font-size: 12px"
+                                                        th:if="${#fields.hasErrors('baseUserExtendsValidator.corporation')}"
+                                                        th:errors="*{baseUserExtendsValidator.corporation}"></span></label>
+                                                <input id="organizationName"
+                                                       type="text"
+                                                       th:field="*{baseUserExtendsValidator.corporation}"
+                                                       class="form-control" onfocus="orgTreeShow()"
+                                                       data-parsley-maxlength="36" readonly autocomplete="off"
+                                                       placeholder="输入公司单位">
+                                                <input id="organizationId" type="hidden"
+                                                       th:field="*{baseUserValidator.organization}">
+                                                <th:block
+                                                        th:insert="fragments/org_select_fragments :: org_tree_select"/>
+                                            </div>
+                                            <div class="col-sm-6 m-b-10">
+                                                <label>用户类型<span class="text-danger">*</span>&nbsp;<span
+                                                        class="text-danger" style="font-weight: 200;font-size: 12px"
+                                                        th:if="${#fields.hasErrors('baseUserExtendsValidator.type')}"
+                                                        th:errors="*{baseUserExtendsValidator.type}"></span></label>
+                                                <mpm:tag id="type" identity="userType"  show-type="select"  key="code" class="form-control"  name="baseUserExtendsValidator.type" data-icon="mdi mdi-account-switch" th:value="${userValidator.baseUserExtendsValidator.type}"  required="true" title="用户类型" />
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+
+                                            <div class="col-sm-6 m-b-20" style="padding-left: 10px;">
+                                                <label class="m-b-20">管理员</label>
+                                                <br/>
+                                                <div class="radio radio-info radio-inline">
+                                                    <input type="radio" id="inlineRadio2" value="0"
+                                                           name="baseUserExtendsValidator.administrator"
+                                                           th:attr="checked=${userValidator.baseUserExtendsValidator.administrator}==0">
+                                                    <label for="inlineRadio2"> 否 </label>
+                                                </div>
+                                                <div class="radio radio-info radio-inline">
+                                                    <input type="radio" id="inlineRadio1" value="1"
+                                                           name="baseUserExtendsValidator.administrator" required
+                                                           th:attr="checked=${userValidator.baseUserExtendsValidator.administrator}==1">
+                                                    <label for="inlineRadio1"> 是 </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6 m-b-10">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!-- end class p-20 -->
+                            </div> <!-- end col -->
+
+                            <div class="col-md-6">
+                                <div class="p-20">
+                                    <div class="form-group m-b-20">
+                                        <label>拥有角色</label>
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <div th:each="role,roleState:${roleList}" th:if="${roleState.odd}"
+                                                     class="checkbox checkbox-info m-b-15">
+                                                    <input th:id="${role.id}" name="roleIds"
+                                                           th:value="${role.id}" type="checkbox"
+                                                           th:attr="checked=${checkedMap[role.id]}"
+                                                           required="">
+                                                    <label th:for="${role.id}"
+                                                           th:text="${role.roleName+'('+role.roleCode+')'}">
+                                                    </label>
+                                                </div>
+                                            </div> <!-- end col -->
+
+                                            <div class="col-xs-6">
+                                                <div th:each="role,roleState:${roleList}" th:if="${roleState.even}"
+                                                     class="checkbox checkbox-info m-b-15">
+                                                    <input th:id="${role.id}" name="roleIds"
+                                                           th:value="${role.id}" type="checkbox"
+                                                           th:attr="checked=${checkedMap[role.id]}"
+                                                           required="">
+                                                    <label th:for="${role.id}"
+                                                           th:text="${role.roleName+'('+role.roleCode+')'}">
+                                                    </label>
+                                                </div>
+                                            </div> <!-- end col -->
+
+                                        </div> <!-- end row -->
+                                    </div>
+                                    <div class="form-group m-b-20">
+                                        <label>授权范围</label>
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <div th:each="system,systemState:${systemList}"
+                                                     class="checkbox checkbox-info m-b-15" th:if="${systemState.odd}">
+                                                    <input th:id="${system.getId()}" name="baseUserExtendsValidator.webChat"
+                                                           th:value="${system.getProjectName()}" type="checkbox"
+                                                           th:attr="checked=${systemMap[system.getProjectName()]}"
+                                                           required="">
+                                                    <label th:for="${system.getId()}"
+                                                           th:text="${system.getSystemName()+'('+system.getProjectName()+')'}">
+                                                        绩效考核KPI(mpm-kpi)
+                                                    </label>
+                                                </div>
+                                            </div> <!-- end col -->
+                                            <div class="col-xs-6">
+                                                <div th:each="system,systemState:${systemList}"
+                                                     class="checkbox checkbox-info m-b-15" th:if="${systemState.even}">
+                                                    <input th:id="${system.getId()}" name="baseUserExtendsValidator.webChat"
+                                                           th:value="${system.getProjectName()}" type="checkbox"
+                                                           th:attr="checked=${systemMap[system.getProjectName()]}"
+                                                           required="">
+                                                    <label th:for="${system.getId()}"
+                                                           th:text="${system.getSystemName()+'('+system.getProjectName()+')'}">
+                                                        绩效考核KPI(mpm-kpi)
+                                                    </label>
+                                                </div>
+                                            </div> <!-- end col -->
+
+                                        </div> <!-- end row -->
+                                    </div>
+
+                                </div>
+                                <!-- end class p-20 -->
+                            </div> <!-- end col -->
+                        </div> <!-- end row -->
+
+                        <div class="text-center">
+                            <input type="hidden" th:field="*{baseUserExtendsValidator.id}">
+                            <input type="hidden" th:field="*{baseUserValidator.id}">
+                            <input type="hidden" th:field="*{baseUserValidator.active}">
+                            <input type="hidden" th:field="*{baseUserValidator.gender}">
+                            <input type="hidden" th:field="*{baseUserExtendsValidator.department}">
+                            <input type="hidden" th:field="*{baseUserExtendsValidator.code}" value="code">
+                            <input type="hidden" th:field="*{baseUserExtendsValidator.parentCode}" value="parentCode">
+                            <input type="hidden" name="userValidator.baseUserExtendsValidator.teamLeader" value="1">
+                            <button sec:authorize-url="/users/save/*" type="submit"
+                                    class="btn btn-teal waves-effect waves-light">提交
+                            </button>
+                            <a sec:authorize-url="/users/list" th:href="@{/users/list}"
+                               class="btn btn-default waves-effect waves-light">返回
+                            </a>
+                        </div>
+                    </form>
+                    <!-- end form -->
+
+                </div> <!-- end card-box -->
+            </div> <!-- end col -->
+        </div>
+        <!-- end row -->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<th:block th:insert="fragments/org_select_fragments :: org_tree_select_js"/>
+<!-- Jquery filer js -->
+<script th:src="@{/static/plugins/jquery.filer/js/jquery.filer.min.js}"></script>
+
+<!-- page specific js -->
+<script th:src="@{/static/assets/pages/jquery.property-add.init.js}"></script>
+<th:block th:insert="fragments/common_fragments :: common_submit_form"/>
+<script>
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+</script>
+</body>
+</html>
