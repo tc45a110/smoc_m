@@ -1,0 +1,43 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+
+  application: #服务应用名称
+    name: smoc-admin
+
+  profiles: #指定启动模式
+    active: dev
+
+  main:
+    allow-bean-definition-overriding: true
+
+  thymeleaf:
+    cache: false
+
+  #**********************************************************
+  # feign
+#**********************************************************
+feign: #开启客户端熔断
+  httpclient:
+    enabled: true
+  compression: #启用feign压缩
+    response:
+      enabled: true
+    request:
+      enabled: true
+      mime-types: text/xml,application/xml,application/json
+      min-request-size: 2048
+
+ribbon: #禁用eureka注册中心负载 启用listOfServers
+  eureka:
+    enabled: false
+  eager-load:
+    enabled: true #开启Ribbon的饥饿加载模式
+    clients: meip-auth #指定需要饥饿加载的服务名
+
+
+
+
+

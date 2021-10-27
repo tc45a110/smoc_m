@@ -11,6 +11,7 @@
         <option value="$PROJECT_DIR$/smoc-common-utils/pom.xml" />
         <option value="$PROJECT_DIR$/smoc-auth/pom.xml" />
         <option value="$PROJECT_DIR$/smoc-auth-ui/pom.xml" />
+        <option value="$PROJECT_DIR$/smoc-admin-ui/pom.xml" />
       </list>
     </option>
   </component>

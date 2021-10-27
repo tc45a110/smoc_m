@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+	<th:block th:fragment="login_js">
+		<script th:src="@{/static/assets/js/jquery.min.js}"
+			type="text/javascript"></script>
+		<script th:src="@{/static/js/jquery.cookie.js}"></script>
+		<script th:src="@{/static/js/jsencrypt.min.js}" type="text/javascript"></script>
+		<script th:src="@{/static/js/login.js}" type="text/javascript"></script>
+	</th:block>
+</body>
+</html>
