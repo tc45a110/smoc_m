@@ -7,6 +7,25 @@ server: #服务端口
         name: OAUTH2SESSION
       timeout: 240m
   connection-timeout: 15000
+
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+  redis: #redis配置
+    host: r-2zegyswwjdbicif2hdpd.redis.rds.aliyuncs.com
+    port: 6379
+    password: Tsmoc40#RedistEst
+    database: 0
+    timeout: 10000
+    jedis:
+      pool:
+        max-active: 8
+        max-idle: 8
+        max-wait: -1
+        min-idle: 5
+
 #**********************************************************
 # manpuman oauth2 token参数设置
 #**********************************************************
@@ -40,39 +59,9 @@ com:
       max-threads: 500
       protocol: org.apache.coyote.http11.Http11NioProtocol #org.apache.coyote.http11.Http11AprProtocol
 
-smoc-auth: #链接授权管理中心，负载配置（其实可以是网关地址）
-  ribbon:
-    #NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule #配置规则 随机
-    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RoundRobinRule #配置规则 轮询
-    #NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RetryRule #配置规则 重试
-    #NFLoadBalancerRuleClassName: com.netflix.loadbalancer.WeightedResponseTimeRule #配置规则 响应时间权重
-    #NFLoadBalancerRuleClassName: com.netflix.loadbalancer.BestAvailableRule #配置规则 最空闲连接策略
-    ConnectTimeout: 2000 #请求连接超时时间
-    ReadTimeout: 6000 #请求处理的超时时间
-    OkToRetryOnAllOperations: true #对所有请求都进行重试
-    MaxAutoRetriesNextServer: 2 #切换实例的重试次数
-    MaxAutoRetries: 1 #对当前实例的重试次数 ,192.168.1.149:18081
-    listOfServers: localhost:18081
-
 logging:
   config: classpath:logback-spring.xml
   path: E:/log/smoc-log/smoc--admin-ui-logs
   level:
     root: info
 
-spring:
-  #**********************************************************
-  # Redis
-  #**********************************************************
-  redis: #redis配置
-    host: r-2zegyswwjdbicif2hdpd.redis.rds.aliyuncs.com
-    port: 6379
-    password: Tsmoc40#RedistEst
-    database: 0
-    timeout: 10000
-    jedis:
-      pool:
-        max-active: 8
-        max-idle: 8
-        max-wait: -1
-        min-idle: 5
