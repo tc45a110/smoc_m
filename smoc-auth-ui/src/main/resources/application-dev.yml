@@ -42,7 +42,7 @@ com:
         login-post-path: /security_login #spring security 拦截登录Post path   用户字段userName  密码字段 password  验证码字段 verificationCode
         auth-uri: localhost:18081 # 备用 授权中心地址，系统启动时 负载找不到host,系统启动后，会自动使用负载的host  注意不加http:// 及后缀
         system-name: 认证、鉴权中心 #系统名称
-        company-name: 中国移动通信集团北京有限公司  #公司名称
+        company-name: 北京星语互联科技有限公司  #公司名称
         ssl: false
         enable-verify-code: false #是否启用验证码
         help-mobile: 联系电话 #帮助电话
