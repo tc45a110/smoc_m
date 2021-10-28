@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
+    <style>
+        .mpma {
+            margin-right: 7px;
+            color: #313a46;
+            -webkit-transition: color .3s ease;
+            transition: color .3s ease;
+            display: inline-block;
+            border: 1px solid #dcdee0;
+            padding: 1px 6px;
+            border-radius: 3px;
+        }
+        td {
+            line-height: 26px !important;
+        }
+    </style>
+</head>
+<body>
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+        <!-- start row -->
+        <div class="row fixed-navigation">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">票据到期查询 </h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            票据到期记录
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+        <!-- start row -->
+        <div class="row" style="position: relative;margin-top: 80px" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <form th:action="@{/billInfo/billExpirePage}" id="query_form" th:object="${billInfo}" method="post">
+                        <div class="row m-b-60">
+                            <div class="col-sm-12">
+                                <div class="form-group  col-sm-3">
+                                    <input id="organizationName" type="text" style="width: 380px" class="form-control"
+                                           readonly th:field="*{organizationName}"
+                                           placeholder="公司单位" onfocus="orgTreeShow()" autocomplete="off">
+                                    <input id="organizationId" type="hidden"  th:field="*{organizationId}">
+                                    <input id="orgCode" type="hidden"  th:value="${orgCode}">
+                                    <th:block
+                                            th:insert="fragments/org_select_fragments :: org_tree_select"/>
+                                </div>
+                                <div class="form-group  col-sm-3">
+
+                                    <input id="reportrange" class="form-control" type="text" th:field="*{billBuyDate}"/>
+
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control" th:field="*{billNo}"
+                                           placeholder="票据编号" autocomplete="off">
+                                </div>
+
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control" th:field="*{billEnterName}"
+                                           placeholder="开票企业" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <mpm:tag id="billType" identity="billType" show-type="select" key="code"
+                                             class="form-control" name="billType" th:value="${billInfo.billType}"  data-icon="mdi mdi-content-copy"  title="票据类型"/>
+                                </div>
+                                <div class="form-group  col-sm-3" sec:authorize-url="/billBusi/column/billStatus">
+                                    <mpm:tag id="billStatus" identity="billStatus" show-type="select" key="code"
+                                             class="form-control" name="billStatus" th:value="${billInfo.billStatus}" data-icon="mdi mdi-equal-box"  title="票据状态"/>
+                                </div>
+                                <div class="form-group col-sm-3 pull-right" style="text-align: right">
+                                    <button sec:authorize-url="/billInfo/billExpirePage" type="submit"
+                                            class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-search"></i> 查询
+                                    </button>
+                                    <input type="hidden" name="currentPage" id="currentPage"  th:value="${pageParams.currentPage}">
+                                    <input type="hidden" name="pageSize" id="pageSize"  th:value="${pageParams.pageSize}">
+                                </div>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row -->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="panel panel-color panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">票据到期查询</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table table-hover m-10" style="margin-top: -12px;">
+                                <thead>
+                                <tr>
+                                    <th>到期日期</th>
+                                    <th>票据编号/开票企业</th>
+                                    <th>票据金额/购票金额</th>
+                                    <th>票据期限/剩余期限</th>
+                                    <th>年化利率(%)/购票日期</th>
+                                    <th>票据类型</th>
+                                    <th sec:authorize-url="/billBusi/column/billStatus">票据状态</th>
+                                    <th sec:authorize-url="/billBusi/column/payStatus">付款状态</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="info:${list}">
+                                        <td>[[${info.billEndDate}]]</td>
+                                        <td>[[${info.billNo}]]<br>
+                                            [[${info.billEnterName}]]
+                                        </td>
+                                        <td><span style="color: green">[[${info.billLines}]]</span><br>
+                                            <span style="color: orange">[[${info.settleAmount}]]</span>
+                                        </td>
+                                        <td><span style="color: green">[[${info.remainingTime}]]</span><br>
+                                            <span style="color: orange">[[${info.surplusDay}]]</span>
+                                        </td>
+                                        <td><span style="color: green" sec:authorize-url="/billBusi/column/rate">[[${info.settleRate}]]</span><br>
+                                            <span style="color: orange">[[${info.billBuyDate}]]</span>
+                                        </td>
+                                        <td><a class="mpma" data-toggle="tooltip" data-placement="top" title=""
+                                               th:style="'padding-left:5px;color:'+${billType[#strings.trim(info.billType)]}+';border: 1px solid '+${billType[#strings.trim(info.billType)]}"><i
+                                                class="mdi mdi-compass" th:style="'color:'+${billType[#strings.trim(info.billType)]}"></i><span style="padding-left: 4px">
+                                             <mpm:tag identity="billType" show-type="label" key="code" th:value="${info.billType}" /></span></a></td>
+
+                                        <td sec:authorize-url="/billBusi/column/billStatus"><a class="mpma"  data-toggle="tooltip" data-placement="top"
+                                                    th:style="'padding-left:5px;color:'+${billStatus[#strings.trim(info.billStatus)]}+';border: 1px solid '+${billStatus[#strings.trim(info.billStatus)]}"><i
+                                            class="mdi mdi-compass-outline" th:style="'color:'+${billStatus[#strings.trim(info.billStatus)]}"></i><span style="padding-left: 4px">
+                                                <mpm:tag identity="billStatus" show-type="label" key="code" th:value="${info.billStatus}" />
+                                            </span></a>
+                                    </td>
+
+                                        <td sec:authorize-url="/billBusi/column/payStatus">
+                                            <a class="mpma" data-toggle="tooltip" data-placement="top"
+                                               th:style="'padding-left:5px;color:'+${billPayStatus[#strings.trim(info.payStatus)]}+';border: 1px solid '+${billPayStatus[#strings.trim(info.payStatus)]}" ><i
+                                                    class="mdi mdi-clock-start" th:style="'color: '+${billPayStatus[#strings.trim(info.payStatus)]}"></i>
+                                                <span style="padding-left: 4px" th:if="${#strings.trim(info.payStatus) eq '1'}"> 已付款</span>
+                                                <span style="padding-left: 4px" th:if="${#strings.trim(info.payStatus) eq '2'}"> 未付款</span>
+                                            </a>
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>到期总金额 <font color="green">
+                                            [[${statisticsData.data1}]]</font></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <hr>
+                        </div>
+                        <th:block th:insert="fragments/page_fragments :: page"/>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- end row -->
+
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+    </div> <!-- container -->
+
+</div> <!-- content -->
+
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/org_select_fragments :: org_tree_select_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<script th:src="@{/static/plugins/moment/moment.js}"></script>
+<script th:src="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.js}"></script>
+<script>
+
+    $('#reportrange').daterangepicker({
+        format: 'YYYY-MM-DD',
+        startDate: '[[${billInfo.billBuyDate}]]',
+        endDate: '[[${billInfo.billEndDate}]]',
+        minDate: '2012-01-01',
+        maxDate: '2080-12-31',
+        dateLimit: {
+            days: 365
+        },
+        showDropdowns: true,
+        showWeekNumbers: true,
+        timePicker: false,
+        timePickerIncrement: 1,
+        timePicker12Hour: true,
+        ranges: {
+            '今天': [moment(), moment()],
+            '昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            '最近7天': [moment().subtract(6, 'days'), moment()],
+            '最近30天': [moment().subtract(29, 'days'), moment()],
+            '本月': [moment().startOf('month'), moment().endOf('month')],
+            '上月': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        },
+        opens: 'right',
+        buttonClasses: ['btn btn-default'],
+        applyClass: 'btn-small btn-primary',
+        cancelClass: 'btn-small',
+        format: 'YYYY-MM-DD',
+        separator: ' - ',
+        locale: {
+            applyLabel: '确认',
+            cancelLabel: '取消',
+            fromLabel: '从',
+            toLabel: '到',
+            customRangeLabel: '自定义',
+            format: "YYYY-MM-DD",
+            daysOfWeek: ['日', '一', '二', '三', '四', '五', '六'],
+            monthNames: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+            firstDay: 1
+        }
+    }, function (start, end, label) {
+        //alert('A date range was chosen: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+    });
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+</script>
+</body>
+</html>
