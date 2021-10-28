@@ -27,6 +27,19 @@ public class CustomerController {
     }
 
     /**
+     * 分页查询EC
+     *
+     * @return
+     */
+    @RequestMapping(value = "/customer/page", method = RequestMethod.POST)
+    public ModelAndView page() {
+        ModelAndView view = new ModelAndView("customer/customer_list");
+
+        return view;
+
+    }
+
+    /**
      * 查看EC明细
      *
      * @return

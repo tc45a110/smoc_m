@@ -7,6 +7,8 @@
     <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
     <th:block th:insert="fragments/common_fragments :: select_css"/>
     <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
+    <style>
+    </style>
 </head>
 <body>
 <th:block th:insert="fragments/common_fragments :: common_loader"/>
@@ -32,7 +34,7 @@
         <div class="row" style="position: relative;margin-top: 80px" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
                 <div class="card-box">
-                    <form  id="query_form"  method="post">
+                    <form th:action="@{/ec/customer/page}"  id="query_form"  method="post">
                         <div class="row m-b-60">
                             <div class="col-sm-12">
                                 <div class="form-group  col-sm-3">
@@ -40,14 +42,25 @@
                                            placeholder="企业名称" autocomplete="off">
                                 </div>
                                 <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control"
+                                           placeholder="联系人" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control"
+                                           placeholder="联系方式" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-3">
                                     <mpm:tag id="enterpriseType" identity="enterpriseType" show-type="select" key="code"
-                                             class="form-control" name="enterpriseType" value=""  data-icon="mdi mdi-content-copy"  title="企业类型"/>
+                                             class="form-control" name="enterpriseType" value="" title="企业类型"/>
                                 </div>
                                 <div class="form-group col-sm-3 pull-right" style="text-align: right">
                                     <button type="submit"
                                             class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
-                                        <i class="glyphicon glyphicon-search"></i> 查询
+                                        <i class="glyphicon glyphicon-search" style="margin-right:5px"></i> 查询
                                     </button>
+                                    <a  th:href="@{/ec/customer/add}"
+                                        class="btn btn-success waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>EC开户</a>
                                 </div>
 
                             </div>
@@ -67,22 +80,179 @@
                     </div>
                     <div class="panel-body">
                         <div class="table-responsive">
-                            <table class="table table table-hover m-10" style="margin-top: -12px;">
+                            <table class="table table m-10" style="margin-top: -12px;">
                                 <thead>
                                 <tr>
-                                    <th>企业名称</th>
-                                    <th>企业地址</th>
-                                    <th>企业联系人</th>
-                                    <th>企业联系方式</th>
-                                    <th>企业邮箱</th>
-                                    <th>显示顺序</th>
-                                    <th>企业IP</th>
-                                    <th>操作</th>
+                                    <th width="325px">企业名称</th>
+                                    <th width="200px">联系人</th>
+                                    <th>地址</th>
+                                    <th width="100px" style="float:right">操作</th>
+                                    <th width="150px" style="float:right">资料完成进度</th>
                                 </tr>
                                 </thead>
                                 <tbody>
+                                <tr>
+                                    <td  colspan="5">
+                                        <ul class="sitemap">
+                                            <li>
+                                                <div id="ss" style="width:100%;height:40px;margin：0 auto;" onmouseover="changeBg('ss')" onmouseout="changeBgBack('ss')" >
+                                                   <div style="width:325px;text-align:left;line-height:40px;float:left">
+                                                       <a href=""> <i class="fa  fa-angle-double-down" style="margin-left:10px;margin-right:10px"></i>
+                                                           北京星语互联科技有限公司</a>
+                                                   </div>
+                                                    <div style="width:200px;text-align:left;line-height:40px;border-left:1px solid blue;float:left">
+                                                        <p class="text-success" style="font-size:14px;line-height:40px;">耀中国<span style="font-size:14px;color:#989898;margin-left:5px">(13910916881)</span></p>
+                                                    </div>
+                                                    <div style="align:left;line-height:40px;border-left:1px solid blue;float:left">
+                                                        北京市朝阳区武汉路23号
+                                                    </div>
+
+                                                    <div class="pull-right" style="width:100px;text-align:left;line-height:40px;border-left:1px solid blue;float:right">
+                                                        <a
+                                                                class="on-default edit-row"
+                                                                style="padding-left: 5px;color: #29b6f6;"
+                                                                title="完善信息"><i style="font-size: 18px"
+                                                                                class="mdi mdi-table-edit"></i></a>
+                                                        <a
+                                                                class="on-default edit-row"
+                                                                style="padding-left: 5px;color: #4bd396;"
+                                                                title="开子企业账户"><i style="font-size: 18px"
+                                                                                  class="mdi mdi-account-plus"></i></a>
+
+                                                    </div>
+                                                    <div style="width:150px;text-align:left;line-height:40px;border-left:1px solid blue;float:right;">
+                                                        <div class="progress" style="margin-top:15px">
+                                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 20%;" class="progress-bar progress-bar-success progress-bar-striped" title="基本资料"></div>
+                                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 20%;" class="progress-bar progress-bar-info" title="账户信息"></div>
+                                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 20%;" class="progress-bar progress-bar-warning progress-bar-striped active"></div>
+                                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 20%;" class="progress-bar progress-bar-danger progress-bar-striped active"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <ul>
+                                                    <li>
+                                                        <div id="bb" style="width:100%;height:40px;margin：0 auto;" onmouseover="changeBg('bb')" onmouseout="changeBgBack('bb')" >
+                                                            <div style="width:310px;text-align:left;line-height:24px;float:left">
+                                                                <a href="">系统启动加载系统有限公司</a>
+                                                            </div>
+                                                            <div style="width:200px;text-align:left;line-height:24px;border-left:1px solid blue;float:left">
+                                                                <p class="text-success" style="font-size:14px;line-height:24px;">耀中国<span style="font-size:14px;color:#989898;margin-left:5px">(13910916881)</span></p>
+                                                            </div>
+                                                            <div style="text-align:left;line-height:24px;border-left:1px solid blue;float:left">
+                                                                北京市朝阳区武汉路23号
+                                                            </div>
+                                                            <div style="width:100px;text-align:left;line-height:24px;border-left:1px solid blue;float:right">
+                                                                <a class="edit-row"
+                                                                        style="color: #29b6f6;"
+                                                                        title="完善信息"><i style="font-size: 18px"
+                                                                                        class="mdi mdi-table-edit"></i></a>
+
+                                                            </div>
+                                                            <div style="width:150px;text-align:left;line-height:24px;border-left:1px solid blue;float:right">
+                                                                <div class="progress" style="margin-top:6px">
+                                                                    <div role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 20%;" class="progress-bar progress-bar-success progress-bar-striped" title="基本资料"></div>
+                                                                    <div role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 20%;" class="progress-bar progress-bar-info" title="账户信息"></div>
+                                                                    <div role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 20%;" class="progress-bar progress-bar-warning progress-bar-striped active"></div>
+                                                                    <div role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 20%;" class="progress-bar progress-bar-danger progress-bar-striped active"></div>
+                                                                </div>
+                                                            </div>
 
 
+                                                        </div>
+
+                                                    </li>
+                                                    <li>
+                                                        <div id="cc" style="width:100%;height:40px;margin：0 auto" onmouseover="changeBg('cc')" onmouseout="changeBgBack('cc')" >
+                                                            <div style="width:25%;text-align:left;">
+                                                                <a href="">
+                                                                    北京启蒙教育有限公司</a>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div id='dd' style="width:100%;height:40px;margin：0 auto;" onmouseover="changeBg('dd')" onmouseout="changeBgBack('dd')" >
+                                                            <div style="width:25%;text-align:left;">
+                                                                <a href="">
+                                                                    北京大拇指网络有限公司</a>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td  colspan="5">
+                                        <ul class="sitemap">
+                                            <li>
+                                                <div id="ee" style="width:100%;height:40px;margin：0 auto" onmouseover="changeBg('ee')" onmouseout="changeBgBack('ee')" >
+                                                    <div style="width:25%;align:left;line-height:40px">
+                                                        <a href=""> <i class="fa fa-angle-double-right" style="margin-left:10px;margin-right:10px"></i>
+                                                            北京星语互联科技有限公司</a>
+                                                    </div>
+                                                </div>
+                                              </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td  colspan="5">
+                                        <ul class="sitemap">
+                                            <li>
+                                                <div id="ff" style="width:100%;height:40px;margin：0 auto" onmouseover="changeBg('ff')" onmouseout="changeBgBack('ff')" >
+                                                    <div style="width:25%;align:left;line-height:40px">
+                                                        <a href=""> <i class="fa fa-angle-double-right" style="margin-left:10px;margin-right:10px"></i>
+                                                            北京星语互联科技有限公司</a>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td  colspan="5">
+                                        <ul class="sitemap">
+                                            <li>
+                                                <div id="gg" style="width:100%;height:40px;margin：0 auto" onmouseover="changeBg('gg')" onmouseout="changeBgBack('gg')" >
+                                                    <div style="width:25%;align:left;line-height:40px">
+                                                        <a href=""> <i class="fa fa-angle-double-right" style="margin-left:10px;margin-right:10px"></i>
+                                                            北京星语互联科技有限公司</a>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td  colspan="5">
+                                        <ul class="sitemap">
+                                            <li>
+                                                <div id="tt" style="width:100%;height:40px;margin：0 auto" onmouseover="changeBg('tt')" onmouseout="changeBgBack('tt')" >
+                                                    <div style="width:25%;align:left;line-height:40px">
+                                                        <a href=""> <i class="fa fa-angle-double-right" style="margin-left:10px;margin-right:10px"></i>
+                                                            北京星语互联科技有限公司</a>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td  colspan="5">
+                                        <ul class="sitemap">
+                                            <li>
+                                                <div id="aa" style="width:100%;height:40px;margin：0 auto" onmouseover="changeBg('aa')" onmouseout="changeBgBack('aa')" >
+                                                    <div style="width:25%;align:left;line-height:40px">
+                                                        <a href=""> <i class="fa fa-angle-double-right" style="margin-left:10px;margin-right:10px"></i>
+                                                            北京星语互联科技有限公司</a>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -102,8 +272,19 @@
 </div> <!-- content -->
 
 <th:block th:insert="fragments/common_fragments :: common_js"/>
-
+<th:block th:insert="fragments/org_select_fragments :: org_tree_select_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
 <script>
+
+   function changeBg(id){
+
+     $("#"+id).css('background-color', '#F3F3F3');
+
+   }
+
+   function changeBgBack(id){
+     $("#"+id).css('background-color', '#fff');
+   }
 
     function confirmDelete(id) {
         $("#deleteId").val(id);
