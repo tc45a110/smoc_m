@@ -276,14 +276,32 @@
             <div class="col-lg-4">
                 <div class="card-box">
 
-                    <div id="main4" style="height: 300px;"></div>
+                    <div id="main3" style="height: 400px;"></div>
 
                 </div>
             </div><!-- end col -->
             <div class="col-lg-8">
                 <div class="card-box">
 
-                    <div id="main3" style="height: 300px;"></div>
+                    <div id="main4" style="height: 400px;"></div>
+
+                </div>
+            </div><!-- end col -->
+
+        </div>
+        <!-- end row -->
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card-box">
+
+                    <div id="main1" style="height: 400px;"></div>
+
+                </div>
+            </div><!-- end col -->
+            <div class="col-lg-6">
+                <div class="card-box">
+
+                    <div id="main2" style="height: 400px;"></div>
 
                 </div>
             </div><!-- end col -->
@@ -297,6 +315,346 @@
 <script th:src="@{/static/assets/js/jquery.min.js}"></script>
 <script th:src="@{/static/echarts/echarts.min.js}"></script>
 <script type="text/javascript">
+
+var dom = document.getElementById("main4");
+var myChart = echarts.init(dom);
+var app = {};
+option = null;
+var posList = [
+    'left', 'right', 'top', 'bottom',
+    'inside',
+    'insideTop', 'insideLeft', 'insideRight', 'insideBottom',
+    'insideTopLeft', 'insideTopRight', 'insideBottomLeft', 'insideBottomRight'
+];
+
+app.configParameters = {
+    rotate: {
+        min: -90,
+        max: 90
+    },
+    align: {
+        options: {
+            left: 'left',
+            center: 'center',
+            right: 'right'
+        }
+    },
+    verticalAlign: {
+        options: {
+            top: 'top',
+            middle: 'middle',
+            bottom: 'bottom'
+        }
+    },
+    position: {
+        options: echarts.util.reduce(posList, function (map, pos) {
+            map[pos] = pos;
+            return map;
+        }, {})
+    },
+    distance: {
+        min: 0,
+        max: 100
+    }
+};
+
+app.config = {
+    rotate: 90,
+    align: 'left',
+    verticalAlign: 'middle',
+    position: 'insideBottom',
+    distance: 15,
+    onChange: function () {
+        var labelOption = {
+            normal: {
+                rotate: app.config.rotate,
+                align: app.config.align,
+                verticalAlign: app.config.verticalAlign,
+                position: app.config.position,
+                distance: app.config.distance
+            }
+        };
+        myChart.setOption({
+            series: [{
+                label: labelOption
+            }, {
+                label: labelOption
+            }, {
+                label: labelOption
+            }, {
+                label: labelOption
+            }]
+        });
+    }
+};
+
+
+var labelOption = {
+    show: true,
+    position: app.config.position,
+    distance: app.config.distance,
+    align: app.config.align,
+    verticalAlign: app.config.verticalAlign,
+    rotate: app.config.rotate,
+    formatter: '{c}  {name|{a}}',
+    fontSize: 12,
+    rich: {
+        name: {
+            textBorderColor: '#fff'
+        }
+    }
+};
+
+option = {
+    title: {
+        text: '通道投诉（电信、联通）10.26——11.26'
+    },
+    color: ['#EE6666', '#92CB76', '#FAC858'],
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'shadow'
+        }
+    },
+    toolbox: {
+        show: true,
+        feature: {
+            dataView: {show: true, readOnly: false},
+            magicType: {show: true, type: ['line', 'bar']},
+            restore: {show: true},
+            saveAsImage: {show: true}
+        }
+    },
+    xAxis: [
+        {
+            type: 'category',
+            axisTick: {show: false},
+            axisLabel: {
+              interval: 'auto',
+              rotate: 30
+             },
+            data: ['SGIP-短信-A通道-108642', 'SGIP-短信-A通道-108643', 'SGIP-短信-A通道-108644', 'SGIP-短信-A通道-108645', 'SGIP-短信-A通道-108646','SGIP-短信-A通道-108647', 'SGIP-短信-A通道-108648', 'SGIP-短信-A通道-108649', 'SGIP-短信-A通道-108650', 'SGIP-短信-A通道-108651']
+        }
+    ],
+    yAxis: [
+        {
+            type: 'value'
+        }
+    ],
+    series: [
+        {
+            name: '标准',
+            type: 'bar',
+            barGap: 0,
+            label: labelOption,
+            data: [10, 10, 10, 15, 12,10, 10, 10, 15, 12]
+        },
+        {
+            name: '投诉量',
+            type: 'bar',
+            label: labelOption,
+            data: [5, 6, 2, 1, 4,5, 6, 2, 1, 4]
+        },
+        {
+            name: '投诉率',
+            type: 'bar',
+            label: labelOption,
+            data: [0.4, 0.8, 0.2, 0.4, 0.9,0.4, 0.8, 0.2, 0.4, 0.9]
+        }
+    ]
+};;
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+
+var dom1 = document.getElementById("main3");
+var myChart1 = echarts.init(dom1);
+option1 = null;
+
+option1 = {
+    title: {
+        text: '通道投诉（移动）10.01——11.01'
+    },
+    color: ['#EE6666', '#92CB76', '#FAC858'],
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'shadow'
+        }
+    },
+    toolbox: {
+        show: true,
+        feature: {
+            dataView: {show: true, readOnly: false},
+            magicType: {show: true, type: ['line', 'bar']},
+            restore: {show: true},
+            saveAsImage: {show: true}
+        }
+    },
+    xAxis: [
+        {
+            type: 'category',
+            axisTick: {show: false},
+            axisLabel: {
+              rotate: 30
+            },
+            data: ['SGIP-短信-A通道-108642', 'SGIP-短信-A通道-108643', 'SGIP-短信-A通道-108644', 'SGIP-短信-A通道-108645', 'SGIP-短信-A通道-108645']
+        }
+    ],
+    yAxis: [
+        {
+            type: 'value'
+        }
+    ],
+    series: [
+        {
+            name: '标准',
+            type: 'bar',
+            barGap: 0,
+            label: labelOption,
+            data: [10, 10, 10, 15, 12]
+        },
+        {
+            name: '投诉量',
+            type: 'bar',
+            label: labelOption,
+            data: [5, 6, 2, 1, 4]
+        },
+        {
+            name: '投诉率',
+            type: 'bar',
+            label: labelOption,
+            data: [0.4, 0.8, 0.2, 0.4, 0.9]
+        }
+    ]
+};;
+if (option1 && typeof option1 === "object") {
+    myChart1.setOption(option1, true);
+}
+
+var dom3 = document.getElementById("main1");
+var myChart3 = echarts.init(dom3);
+var app = {};
+option3 = null;
+option3 = {
+    title: {
+        text: '近12个月短信发送量（W）'
+    },
+    tooltip: {
+        trigger: 'axis'
+    },
+    toolbox: {
+        show: true,
+        feature: {
+            dataView: {show: true, readOnly: false},
+            magicType: {show: true, type: ['line', 'bar']},
+            restore: {show: true},
+            saveAsImage: {show: true}
+        }
+    },
+    calculable: true,
+    xAxis: [
+        {
+            type: 'category',
+            axisLabel: {
+              interval: 'auto',
+              rotate: 30
+             },
+            data: ['2020-11', '2020-12', '2021-01', '2021-02', '2021-03', '2021-04', '2021-05', '2021-06', '2021-07', '2021-08', '2021-09','2021-10']
+        }
+    ],
+    yAxis: [
+        {
+            type: 'value'
+        }
+    ],
+    series: [
+        {
+            name: '短信发送量（W）',
+            type: 'bar',
+            data: [26, 59, 90, 264, 287, 707, 1756, 1822, 487, 188, 60, 23],
+            markPoint: {
+                data: [
+                    {name: '最高', value: 1822, xAxis: 7, yAxis: 1822},
+                    {name: '最低', value: 23, xAxis: 11, yAxis: 23}
+                ]
+            },
+            markLine: {
+                data: [
+                    {type: 'average', name: '平均值'}
+                ]
+            }
+        }
+    ]
+};
+;
+if (option3 && typeof option3 === "object") {
+    myChart3.setOption(option3, true);
+}
+
+var dom4 = document.getElementById("main2");
+var myChart4 = echarts.init(dom4);
+var app = {};
+option4 = null;
+option4 = {
+    title: {
+        text: '近12个月营业收入（W）'
+    },
+    tooltip: {
+        trigger: 'axis'
+    },
+    color: ['#66AAE7'],
+    toolbox: {
+        show: true,
+        feature: {
+            dataView: {show: true, readOnly: false},
+            magicType: {show: true, type: ['line', 'bar']},
+            restore: {show: true},
+            saveAsImage: {show: true}
+        }
+    },
+    calculable: true,
+    xAxis: [
+        {
+            type: 'category',
+            axisLabel: {
+              interval: 'auto',
+              rotate: 30
+             },
+            data: ['2020-11', '2020-12', '2021-01', '2021-02', '2021-03', '2021-04', '2021-05', '2021-06', '2021-07', '2021-08', '2021-09','2021-10']
+        }
+    ],
+    yAxis: [
+        {
+            type: 'value'
+        }
+    ],
+    series: [
+        {
+            name: '营业收入（W）',
+            type: 'bar',
+            data: [26, 59, 90, 264, 287, 707, 1756, 1822, 487, 188, 60, 23],
+            markPoint: {
+                data: [
+                    {name: '最高', value: 1822, xAxis: 7, yAxis: 1822},
+                    {name: '最低', value: 23, xAxis: 11, yAxis: 23}
+                ]
+            },
+            markLine: {
+                data: [
+                    {type: 'average', name: '平均值'}
+                ]
+            }
+        }
+    ]
+};
+;
+if (option4 && typeof option4 === "object") {
+    myChart4.setOption(option4, true);
+}
+
+
+
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
