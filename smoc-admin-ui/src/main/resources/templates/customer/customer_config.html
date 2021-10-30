@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
+</head>
+<body>
+<!-- Loader -->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">EC详细信息</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            EC管理
+                        </li>
+                        <li class="active">
+                            EC详细信息
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="text-center card-box">
+                                <div class="member-card">
+                                    <div class="thumb-xl member-thumb m-b-10 center-block">
+                                        <img th:src="@{/static/assets/images/users/avatar-1.jpg}" class="img-circle img-thumbnail"
+                                             alt="profile-image">
+                                        <i class="mdi mdi-star-circle member-star text-success"
+                                           title="verified user"></i>
+                                    </div>
+
+                                    <div class="">
+                                        <h4 class="m-b-5">北京星语互联科技有限公司</h4>
+                                        <p class="text-muted"></p>
+                                    </div>
+                                    <hr/>
+
+                                    <div class="text-left">
+                                        <p class="text-muted font-13"><strong>父公司 :</strong> <span class="m-l-15">北京星语互联科技有限公司</span>
+                                        <p class="text-muted font-13"><strong>联系人 :</strong> <span class="m-l-15">贾明</span>
+                                        </p>
+                                        <p class="text-muted font-13"><strong>联系方式 :</strong><span class="m-l-15">13819816885</span>
+                                        </p>
+                                        <p class="text-muted font-13"><strong>企业类型 :</strong><span class="m-l-15">渠道商</span>
+                                        </p>
+                                        <p class="text-muted font-13"><strong>企业类型 :</strong><span class="m-l-15">北京市朝阳区武汉路23号</span>
+                                        </p>
+                                        </p>
+                                        <p class="text-muted font-13"><strong>销售码（销售身份） :</strong> <span class="m-l-15">XY0000</span>
+                                        </p>
+                                        <p class="text-muted font-13"><strong>企业IP :</strong><span class="m-l-15">124.23.5.24</span>
+                                        </p>
+                                        <p class="text-muted font-13"><strong>状态 :</strong><span class="m-l-15">正常</span>
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <button type="button" style="margin-right:10px;"
+                                                class="btn btn-info btn-sm w-sm waves-effect m-t-10 waves-light">编辑EC信息
+                                        </button>
+                                        <button type="button"
+                                                class="btn btn-danger btn-sm w-sm waves-effect m-t-10 waves-light">注销EC
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </div> <!-- end card-box -->
+
+                            <div class="text-center card-box">
+                                dddd
+                            </div>
+
+                        </div> <!-- end col -->
+
+                        <div class="col-md-9">
+
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12">
+                                    <h4>EC详细信息<div class="pull-right">
+                                        <a sec:authorize-url="/ec/customer/list" th:href="@{/ec/customer/list}" class="btn btn-default waves-effect waves-light btn-sm">返回企业列表</a>
+                                        <a
+                                          style="margin-left:10px;"      class="btn btn-success waves-effect waves-light btn-sm">管理EC通道账户
+                                        </a>
+                                    </div></h4>
+
+                                    <div class="row">
+                                        <div class="col-lg-12" style="margin-top:10px">
+                                            <div class="panel panel-color panel-info">
+                                                <div id="login-account-down"  class="panel-heading" style="display:block">
+                                                    <h3 class="panel-title">
+                                                        <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
+                                                        登录账户信息
+                                                        <div class="pull-right">
+                                                            <i id="login-account-icon-down" class="fa fa-angle-double-down" style="margin-right:10px"></i>
+                                                        </div>
+                                                    </h3>
+                                                </div>
+                                                <div id="login-account-up" class="panel-heading" style="display:none">
+                                                    <h3 class="panel-title">
+                                                        <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
+                                                        登录账户信息
+                                                        <div class="pull-right">
+                                                            <i id="login-account-icon-up" class="fa fa-angle-double-down" style="margin-right:10px"></i>
+                                                        </div>
+                                                    </h3>
+                                                </div>
+                                                <div id="login-account" class="panel-body"  style="display:block">
+                                                   <div class="row">
+                                                       <div  class="col-md-4">
+                                                           <div class="property-card property-horizontal">
+                                                               <div class="row">
+                                                                   <div class="col-sm-12">
+                                                                       <div class="property-content" style="height:146px">
+                                                                           <div class="listingInfo">
+                                                                               <div class="">
+                                                                                   <h5 style="padding-left:10px">账号：13910941234</h5>
+                                                                               </div>
+                                                                               <div class="col-sm-12">
+                                                                                   <p style="font-size:12px">账号状态：正常</p>
+                                                                               </div>
+                                                                           </div>
+                                                                           <div class="property-action">
+
+                                                                               <div class="pull-right">
+                                                                                   <a class="btn btn-info" style="font-size:12px;">密码重置</a>
+                                                                                   <a class="btn btn-primary" style="font-size:12px;">编辑</a>
+                                                                                   <a class="btn btn-danger" style="font-size:12px;">注销</a>
+                                                                               </div>
+                                                                           </div>
+                                                                           <!-- end. Card actions -->
+                                                                       </div>
+                                                                   </div>
+                                                                   <!-- /col 8 -->
+                                                               </div>
+                                                               <!-- /inner row -->
+                                                           </div>
+
+                                                       </div>
+                                                       <div  class="col-md-4">
+                                                           <div class="property-card property-horizontal">
+                                                               <div class="row">
+                                                                   <div class="col-sm-12">
+                                                                       <div class="property-content" style="height:146px">
+                                                                           <div class="listingInfo">
+                                                                               <div class="">
+                                                                                   <h5 style="padding-left:10px">账号：13910941234</h5>
+                                                                               </div>
+                                                                               <div class="col-sm-12">
+                                                                                   <p style="font-size:12px">账号状态：正常</p>
+                                                                               </div>
+                                                                           </div>
+                                                                           <div class="property-action">
+
+                                                                               <div class="pull-right">
+                                                                                   <a class="btn btn-info" style="font-size:12px;">密码重置</a>
+                                                                                   <a class="btn btn-primary" style="font-size:12px;">编辑</a>
+                                                                                   <a class="btn btn-danger" style="font-size:12px;">注销</a>
+                                                                               </div>
+                                                                           </div>
+                                                                           <!-- end. Card actions -->
+                                                                       </div>
+                                                                   </div>
+                                                                   <!-- /col 8 -->
+                                                               </div>
+                                                               <!-- /inner row -->
+                                                           </div>
+
+                                                       </div>
+                                                       <div  class="col-md-4">
+                                                           <div class="property-card property-horizontal">
+                                                               <div class="row">
+                                                                   <div class="col-sm-12">
+                                                                       <div class="property-content" style="height:146px">
+                                                                           <div class="listingInfo">
+                                                                               <div class="">
+
+                                                                               </div>
+                                                                               <div class="col-sm-12" style="line-height:110px;margin:0 auto;">
+                                                                                   <a
+                                                                                      class="btn btn-info waves-effect waves-light m-l-10 btn-md">
+                                                                                       <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>新建EC登录账户</a>
+                                                                               </div>
+                                                                           </div>
+
+                                                                           <!-- end. Card actions -->
+                                                                       </div>
+                                                                   </div>
+                                                                   <!-- /col 8 -->
+                                                               </div>
+                                                               <!-- /inner row -->
+                                                           </div>
+
+                                                       </div>
+                                                   </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-12" style="margin-top:10px">
+                                            <div class="panel panel-color panel-teal">
+                                                <div id="mail-info-down" class="panel-heading" style="display:block">
+                                                    <h3 class="panel-title">
+                                                        <i class="mdi mdi-email-outline" style="margin-right:5px"></i>
+                                                        邮寄信息
+                                                        <div class="pull-right">
+                                                          <i id="mail-info-icon-down" class="fa fa-angle-double-down" style="margin-right:10px"></i>
+                                                        </div>
+                                                    </h3>
+                                                </div>
+                                                <div id="mail-info-up" class="panel-heading" style="display:none">
+                                                    <h3 class="panel-title">
+                                                        <i class="mdi mdi-email-outline" style="margin-right:5px"></i>
+                                                        邮寄信息
+                                                        <div class="pull-right">
+                                                            <i id="mail-info-icon-up" class="fa fa-angle-double-down" style="margin-right:10px"></i>
+                                                        </div>
+                                                    </h3>
+                                                </div>
+                                                <div id="mail-info" class="panel-body" style="display:block">
+                                                    <div class="row">
+                                                        <div  class="col-md-4">
+                                                            <div class="property-card property-horizontal">
+                                                                <div class="row">
+                                                                    <div class="col-sm-12">
+                                                                        <div class="property-content" style="height:206px">
+                                                                            <div class="listingInfo">
+                                                                                <div class="">
+                                                                                    <h5 style="padding-left:10px">邮寄备注：寄给公司财务
+                                                                                        <div class="pull-right">
+                                                                                            <i class="fa  fa-copy" style="margin-right:5px;color:#26A59A" title="复制邮寄信息"></i>
+                                                                                        </div>
+                                                                                    </h5>
+                                                                                </div>
+                                                                                <div class="col-sm-12">
+                                                                                    <p style="font-size:12px">姓名：马江涛</p>
+                                                                                    <p style="font-size:12px">联系方式：13780236678</p>
+                                                                                    <p style="font-size:12px">地址：湖北省武汉市光谷广场明天大厦A座1209</p>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="property-action">
+
+                                                                                <div class="pull-right">
+                                                                                    <a class="btn btn-teal" style="font-size:12px;">编辑</a>
+                                                                                    <a class="btn btn-danger" style="font-size:12px;">删除</a>
+                                                                                </div>
+                                                                            </div>
+                                                                            <!-- end. Card actions -->
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- /col 8 -->
+                                                                </div>
+                                                                <!-- /inner row -->
+                                                            </div>
+
+                                                        </div>
+                                                        <div  class="col-md-4">
+                                                            <div class="property-card property-horizontal">
+                                                                <div class="row">
+                                                                    <div class="col-sm-12">
+                                                                        <div class="property-content" style="height:206px">
+                                                                            <div class="listingInfo">
+                                                                                <div class="">
+                                                                                    <h5 style="padding-left:10px">邮寄备注：寄给公司财务
+                                                                                        <div class="pull-right">
+                                                                                            <i class="fa  fa-copy" style="margin-right:5px;color:#26A59A" title="复制邮寄信息"></i>
+                                                                                        </div>
+                                                                                    </h5>
+                                                                                </div>
+                                                                                <div class="col-sm-12">
+                                                                                    <p style="font-size:12px">姓名：马江涛</p>
+                                                                                    <p style="font-size:12px">联系方式：13780236678</p>
+                                                                                    <p style="font-size:12px">地址：湖北省武汉市光谷广场明天大厦A座1209</p>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="property-action">
+
+                                                                                <div class="pull-right">
+                                                                                    <a class="btn btn-teal" style="font-size:12px;">编辑</a>
+                                                                                    <a class="btn btn-danger" style="font-size:12px;">删除</a>
+                                                                                </div>
+                                                                            </div>
+                                                                            <!-- end. Card actions -->
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- /col 8 -->
+                                                                </div>
+                                                                <!-- /inner row -->
+                                                            </div>
+
+                                                        </div>
+                                                        <div  class="col-md-4">
+                                                            <div class="property-card property-horizontal">
+                                                                <div class="row">
+                                                                    <div class="col-sm-12">
+                                                                        <div class="property-content" style="height:206px">
+                                                                            <div class="listingInfo">
+                                                                                <div class="">
+
+                                                                                </div>
+                                                                                <div class="col-sm-12" style="line-height:166px;margin:0 auto;">
+                                                                                    <a
+                                                                                         class="btn btn-teal waves-effect waves-light m-l-10 btn-md">
+                                                                                        <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>新建邮寄信息</a>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <!-- end. Card actions -->
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- /col 8 -->
+                                                                </div>
+                                                                <!-- /inner row -->
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-12" style="margin-top:10px">
+                                            <div class="panel panel-color panel-success">
+                                                <div id="invoice-info-down" class="panel-heading" style="display:block">
+                                                    <h3 class="panel-title">
+                                                        <i class="mdi mdi-note-outline" style="margin-right:5px"></i>
+                                                        开票信息
+                                                        <div class="pull-right">
+                                                            <i id="invoice-info-icon-down" class="fa fa-angle-double-down" style="margin-right:10px"></i>
+                                                        </div>
+                                                    </h3>
+                                                </div>
+                                                <div id="invoice-info-up" class="panel-heading" style="display:none">
+                                                    <h3 class="panel-title">
+                                                        <i class="mdi mdi-note-outline" style="margin-right:5px"></i>
+                                                        开票信息
+                                                        <div class="pull-right">
+                                                            <i id="invoice-info-icon-up" class="fa fa-angle-double-up" style="margin-right:10px;"></i>
+                                                        </div>
+                                                    </h3>
+                                                </div>
+                                                <div id="invoice-info" class="panel-body" style="display:block">
+                                                    <div class="row">
+                                                        <div  class="col-md-4">
+                                                            <div class="property-card property-horizontal">
+                                                                <div class="row">
+                                                                    <div class="col-sm-12">
+                                                                        <div class="property-content" style="height:230px">
+                                                                            <div class="listingInfo">
+                                                                                <div class="">
+                                                                                    <h5 style="padding-left:10px">增值税普通发票
+                                                                                        <div class="pull-right">
+                                                                                            <i class="fa fa-copy" style="margin-right:5px;color:#4CD396" title="复制普通发票信息"></i>
+                                                                                        </div>
+                                                                                    </h5>
+                                                                                </div>
+                                                                                <div class="col-sm-12">
+                                                                                    <p style="font-size:12px">发票抬头：武汉理工科技部联合企业</p>
+                                                                                    <p style="font-size:12px">纳税人税号：91110111MA04GM163P</p>
+                                                                                    <p style="font-size:12px">备注：材料</p>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="property-action">
+
+                                                                                <div class="pull-right">
+
+                                                                                    <a class="btn btn-success" style="font-size:12px;">设置</a>
+                                                                                    <a class="btn btn-danger" style="font-size:12px;">删除</a>
+                                                                                </div>
+                                                                            </div>
+                                                                            <!-- end. Card actions -->
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- /col 8 -->
+                                                                </div>
+                                                                <!-- /inner row -->
+                                                            </div>
+
+                                                        </div>
+                                                        <div  class="col-md-8">
+                                                            <div class="property-card property-horizontal">
+                                                                <div class="row">
+                                                                    <div class="col-sm-12">
+                                                                        <div class="property-content" style="height:230px">
+                                                                            <div class="listingInfo">
+                                                                                <div class="">
+                                                                                    <h5 style="padding-left:10px">增值税专用发票
+                                                                                        <div class="pull-right">
+                                                                                            <i class="fa  fa-copy" style="margin-right:5px;color:#4CD396" title="复制增值税发票信息"></i>
+                                                                                        </div>
+                                                                                    </h5>
+                                                                                </div>
+                                                                                <div class="col-sm-7">
+                                                                                    <p style="font-size:12px">发票抬头：武汉理工科技部联合企业</p>
+                                                                                    <p style="font-size:12px">注册地址：湖北省武汉市马房山23号武汉理工东院23号楼1502</p>
+                                                                                    <p style="font-size:12px">开户银行：中国建设银行湖北分行武汉马房山支行</p>
+                                                                                    <p style="font-size:12px">备注：材料费</p>
+                                                                                </div>
+                                                                                <div class="col-sm-5">
+                                                                                    <p style="font-size:12px">纳税人税号：91110111MA04GM163P</p>
+                                                                                    <p style="font-size:12px">注册电话：11011011011</p>
+                                                                                    <p style="font-size:12px">开户账号：220 3303 3334 3334 334333</p>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="property-action">
+
+                                                                                <div class="pull-right">
+                                                                                    <a class="btn btn-success" style="font-size:12px;">设置</a>
+                                                                                    <a class="btn btn-danger" style="font-size:12px;">删除</a>
+                                                                                </div>
+                                                                            </div>
+                                                                            <!-- end. Card actions -->
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- /col 8 -->
+                                                                </div>
+                                                                <!-- /inner row -->
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="card-box">
+                                                <ul class="nav nav-tabs tabs-bordered">
+                                                    <li class="active">
+                                                        <a href="#home-b1" data-toggle="tab" aria-expanded="false">
+                                                            <span class="visible-xs"><i class="fa fa-home"></i></span>
+                                                            <span class="hidden-xs">合同信息</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="">
+                                                        <a href="#profile-b1" data-toggle="tab" aria-expanded="true">
+                                                            <span class="visible-xs"><i class="fa fa-user"></i></span>
+                                                            <span class="hidden-xs">资料审核信息</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="">
+                                                        <a href="#channel-b1" data-toggle="tab" aria-expanded="true">
+                                                            <span class="visible-xs"><i class="fa fa-user"></i></span>
+                                                            <span class="hidden-xs">通道信息</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="">
+                                                        <a href="#prod-b1" data-toggle="tab" aria-expanded="true">
+                                                            <span class="visible-xs"><i class="fa fa-user"></i></span>
+                                                            <span class="hidden-xs">产品信息</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="">
+                                                        <a href="#messages-b1" data-toggle="tab" aria-expanded="false">
+                                                            <span class="visible-xs"><i class="fa fa-envelope-o"></i></span>
+                                                            <span class="hidden-xs">消息发送统计</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="">
+                                                        <a href="#settings-b1" data-toggle="tab" aria-expanded="false">
+                                                            <span class="visible-xs"><i class="fa fa-cog"></i></span>
+                                                            <span class="hidden-xs">消费金额统计</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="">
+                                                        <a href="#ts-b1" data-toggle="tab" aria-expanded="false">
+                                                            <span class="visible-xs"><i class="fa fa-cog"></i></span>
+                                                            <span class="hidden-xs">投诉记录</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="">
+                                                        <a href="#login-b1" data-toggle="tab" aria-expanded="false">
+                                                            <span class="visible-xs"><i class="fa fa-cog"></i></span>
+                                                            <span class="hidden-xs">web登录记录</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="">
+                                                        <a href="#op-b1" data-toggle="tab" aria-expanded="false">
+                                                            <span class="visible-xs"><i class="fa fa-cog"></i></span>
+                                                            <span class="hidden-xs">操作记录</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                                <div class="tab-content">
+                                                    <div class="tab-pane" id="home-b1">
+                                                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.</p>
+                                                        <p>Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.</p>
+                                                    </div>
+                                                    <div class="tab-pane active" id="profile-b1">
+                                                        <p>Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.</p>
+                                                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.</p>
+                                                    </div>
+                                                    <div class="tab-pane" id="messages-b1">
+                                                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.</p>
+                                                        <p>Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.</p>
+                                                    </div>
+                                                    <div class="tab-pane active" id="channel-b1">
+                                                        <p>Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.</p>
+                                                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.</p>
+                                                    </div>
+                                                    <div class="tab-pane" id="prod-b1">
+                                                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.</p>
+                                                        <p>Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.</p>
+                                                    </div>
+                                                    <div class="tab-pane" id="settings-b1">
+                                                        <p>Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.</p>
+                                                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.</p>
+                                                    </div>
+                                                    <div class="tab-pane" id="op-b1">
+                                                        <p>Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.</p>
+                                                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.</p>
+                                                    </div>
+                                                    <div class="tab-pane" id="ts-b1">
+                                                        <p>Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.</p>
+                                                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.</p>
+                                                    </div>
+                                                    <div class="tab-pane" id="login-b1">
+                                                        <p>Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt.Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.</p>
+                                                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div> <!-- end col -->
+                                    </div>
+                                    <!-- end row -->
+                                </div> <!-- end col -->
+
+                            </div> <!-- end row -->
+
+                        </div>
+                        <!-- end col -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End row -->
+
+        <!-- end row -->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<script>
+
+
+    $(document).ready(function(){
+
+       $('#login-account-icon-down').on("click",function(){
+          $('#login-account-down').css('display','none');
+          $('#login-account-up').css('display','block');
+          $('#login-account').css('display','none');
+       });
+       $('#login-account-icon-up').on("click",function(){
+          $('#login-account-down').css('display','block');
+          $('#login-account-up').css('display','none');
+          $('#login-account').css('display','block');
+       });
+       $('#mail-info-icon-down').on("click",function(){
+          $('#mail-info-down').css('display','none');
+          $('#mail-info-up').css('display','block');
+          $('#mail-info').css('display','none');
+       });
+       $('#mail-info-icon-up').on("click",function(){
+          $('#mail-info-down').css('display','block');
+          $('#mail-info-up').css('display','none');
+          $('#mail-info').css('display','block');
+       });
+       $('#invoice-info-icon-down').on("click",function(){
+          $('#invoice-info-down').css('display','none');
+          $('#invoice-info-up').css('display','block');
+          $('#invoice-info').css('display','none');
+       });
+       $('#invoice-info-icon-up').on("click",function(){
+          $('#invoice-info-down').css('display','block');
+          $('#invoice-info-up').css('display','none');
+          $('#invoice-info').css('display','block');
+       });
+    });
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+</script>
+</body>
+</html>

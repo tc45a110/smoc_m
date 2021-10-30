@@ -61,6 +61,32 @@ public class CustomerController {
     }
 
     /**
+     * EC开户
+     * level表示企业层级
+     * @return
+     */
+    @RequestMapping(value = "/customer/add/{level}/{parentId}", method = RequestMethod.GET)
+    public ModelAndView add(@PathVariable String level,@PathVariable String parentId) {
+        ModelAndView view = new ModelAndView("customer/customer_edit");
+        view.addObject("level",level);
+        view.addObject("parentId",parentId);
+        return view;
+
+    }
+
+    /**
+     * EC开户
+     * level表示企业层级
+     * @return
+     */
+    @RequestMapping(value = "/customer/config/{id}", method = RequestMethod.GET)
+    public ModelAndView config(@PathVariable String id) {
+        ModelAndView view = new ModelAndView("customer/customer_config");
+        return view;
+
+    }
+
+    /**
      * 查看EC明细
      *
      * @return

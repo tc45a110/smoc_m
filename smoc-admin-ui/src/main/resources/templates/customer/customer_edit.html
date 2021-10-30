@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
+
+</head>
+<body>
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <!-- start row -->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">新建、修改EC信息</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            EC管理
+                        </li>
+                        <li class="active">
+                            新建、修改EC信息
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row -->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-md-12">
+                <div class="card-box">
+                    <form  id="submit_form"
+                          method="post" data-parsley-validate="">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="p-20">
+                                    <div class="form-group m-b-20" th:remove="${level =='1'}?all:none">
+                                        <label for="linkt">父公司</label>：北京星语互联科技有限公司
+                                    </div>
+                                    <div class="form-group m-b-20">
+                                        <label for="linkt">联系人<span class="text-danger">*</span>&nbsp;</label>
+                                        <input id="linkt" type="text"  class="form-control"
+                                               required="" data-parsley-length="[2,12]" autocomplete="off"
+                                               placeholder="输入联系人">
+                                    </div>
+                                    <div class="form-group m-b-20">
+                                        <label for="linkk">联系方式<span class="text-danger">*</span>&nbsp;</label>
+                                        <input id="linkk" type="text"  class="form-control"
+                                               required="" data-parsley-length="[7,24]" autocomplete="off"
+                                               placeholder="输入联系方式">
+                                    </div>
+                                    <div class="form-group m-b-20">
+                                        <label for="eName">企业名称<span class="text-danger">*</span>&nbsp;</label>
+                                        <input id="eName" type="text"  class="form-control"
+                                               required="" data-parsley-length="[2,64]" autocomplete="off"
+                                               placeholder="输入企业名称">
+                                    </div>
+                                    <div class="form-group m-b-20">
+                                        <label for="address">企业地址<span class="text-danger">*</span>&nbsp;</label>
+                                        <input id="address" type="text"  class="form-control"
+                                               required="" data-parsley-length="[2,128]" autocomplete="off"
+                                               placeholder="输入企业地址">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="enterpriseType">企业类型<span class="text-danger">*</span></label>
+                                        <mpm:tag id="enterpriseType" required="true"  identity="enterpriseType" show-type="select" key="code"
+                                                 class="form-control" name="enterpriseType" value="" title="企业类型"/>
+                                    </div>
+
+                                    <div class="form-group m-b-20">
+                                        <label for="sale">销售码（销售身份）</label>
+                                        <input id="sale" type="text"  class="form-control"
+                                               data-parsley-length="[7,24]" autocomplete="off"
+                                               placeholder="输入销售码，空则默认XY0000">
+                                    </div>
+                                    <div class="form-group m-b-20">
+                                        <label class="m-b-10">有效状态</label>
+                                        <br/>
+                                        <div class="radio radio-info radio-inline">
+                                            <input type="radio" id="active1" value="1" checked
+                                                   required="">
+                                            <label for="active1"> 是 </label>
+                                        </div>
+                                        <div class="radio radio-info radio-inline">
+                                            <input type="radio" id="active0" value="0">
+                                            <label for="active0"> 否 </label>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <!-- end class p-20 -->
+                            </div> <!-- end col -->
+
+                            <div class="col-md-6">
+
+                            </div> <!-- end col -->
+                        </div> <!-- end row -->
+
+                        <div class="text-center">
+                            <a sec:authorize-url="/ec/customer/config/*" th:href="@{/ec/customer/config/0000}"  type="button" class="btn btn-teal waves-effect waves-light">下一步</a>
+                            <a sec:authorize-url="/ec/customer/list" th:href="@{/ec/customer/list}" class="btn btn-default waves-effect waves-light">返回</a>
+                        </div>
+                    </form>
+                    <!-- end form -->
+
+                </div> <!-- end card-box -->
+            </div> <!-- end col -->
+        </div>
+        <!-- end row -->
+
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<th:block th:insert="fragments/common_fragments :: common_submit_form"/>
+<script>
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+</script>
+</body>
+</html>

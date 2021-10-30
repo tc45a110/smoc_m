@@ -53,12 +53,16 @@
                                     <mpm:tag id="enterpriseType" identity="enterpriseType" show-type="select" key="code"
                                              class="form-control" name="enterpriseType" value="" title="企业类型"/>
                                 </div>
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control"
+                                           placeholder="销售码" autocomplete="off">
+                                </div>
                                 <div class="form-group col-sm-3 pull-right" style="text-align: right">
-                                    <button type="submit"
+                                    <button sec:authorize-url="/ec/customer/page" type="submit"
                                             class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search" style="margin-right:5px"></i> 查询
                                     </button>
-                                    <a  th:href="@{/ec/customer/add}"
+                                    <a sec:authorize-url="/ec/customer/add/*/*"  th:href="@{/ec/customer/add/1/0000}"
                                         class="btn btn-success waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>EC开户</a>
                                 </div>
@@ -108,12 +112,12 @@
                                                     </div>
 
                                                     <div class="pull-right" style="width:100px;text-align:left;line-height:40px;float:right">
-                                                        <a
+                                                        <a   sec:authorize-url="/ec/customer/config/*" th:href="@{/ec/customer/config/id}"
                                                                 class="on-default edit-row"
                                                                 style="padding-left: 10px;color: #29b6f6;"
                                                                 title="完善信息"><i style="font-size: 18px"
                                                                                 class="mdi mdi-table-edit"></i></a>
-                                                        <a
+                                                        <a    sec:authorize-url="/ec/customer/add/*/*"  th:href="@{/ec/customer/add/2/parentId}"
                                                                 class="on-default edit-row"
                                                                 style="padding-left: 5px;color: #4bd396;"
                                                                 title="开企业子账户"><i style="font-size: 18px"
@@ -175,7 +179,8 @@
                                                                 北京市朝阳区武汉路23号
                                                             </div>
                                                             <div style="width:100px;text-align:left;line-height:24px;float:right">
-                                                                <a class="edit-row"
+                                                                <a sec:authorize-url="/ec/customer/config/*" th:href="@{/ec/customer/config/id}"
+                                                                   class="edit-row"
                                                                    style="color: #29b6f6;margin-left:10px"
                                                                    title="完善信息"><i style="font-size: 18px"
                                                                                    class="mdi mdi-table-edit"></i></a>
@@ -207,7 +212,8 @@
                                                                 北京市朝阳区武汉路23号
                                                             </div>
                                                             <div style="width:100px;text-align:left;line-height:24px;float:right">
-                                                                <a class="edit-row"
+                                                                <a sec:authorize-url="/ec/customer/config/*" th:href="@{/ec/customer/config/id}"
+                                                                   class="edit-row"
                                                                    style="color: #29b6f6;margin-left:10px"
                                                                    title="完善信息"><i style="font-size: 18px"
                                                                                    class="mdi mdi-table-edit"></i></a>
@@ -250,16 +256,17 @@
                                                     </div>
 
                                                     <div class="pull-right" style="width:100px;text-align:left;line-height:40px;float:right">
-                                                        <a
-                                                                class="on-default edit-row"
+                                                        <a sec:authorize-url="/ec/customer/config/*" th:href="@{/ec/customer/config/id}"
+                                                           class="edit-row"
                                                                 style="padding-left: 10px;color: #29b6f6;"
                                                                 title="完善信息"><i style="font-size: 18px"
                                                                                 class="mdi mdi-table-edit"></i></a>
-                                                        <a
-                                                                class="on-default edit-row"
-                                                                style="padding-left: 5px;color: #4bd396;"
-                                                                title="开企业子账户"><i style="font-size: 18px"
-                                                                                  class="mdi mdi-account-plus"></i></a>
+
+                                                        <a    sec:authorize-url="/ec/customer/add/*/*"  th:href="@{/ec/customer/add/2/parentId}"
+                                                              class="on-default edit-row"
+                                                              style="padding-left: 5px;color: #4bd396;"
+                                                              title="开企业子账户"><i style="font-size: 18px"
+                                                                                class="mdi mdi-account-plus"></i></a>
 
                                                     </div>
                                                     <div style="width:150px;text-align:left;line-height:40px;float:right;">
@@ -285,7 +292,8 @@
                                                                 北京市朝阳区武汉路23号
                                                             </div>
                                                             <div style="width:100px;text-align:left;line-height:24px;float:right">
-                                                                <a class="edit-row"
+                                                                <a sec:authorize-url="/ec/customer/config/*" th:href="@{/ec/customer/config/id}"
+                                                                   class="edit-row"
                                                                    style="color: #29b6f6;margin-left:10px"
                                                                    title="完善信息"><i style="font-size: 18px"
                                                                                    class="mdi mdi-table-edit"></i></a>
@@ -349,7 +357,8 @@
                                                                 北京市朝阳区武汉路23号
                                                             </div>
                                                             <div style="width:100px;text-align:left;line-height:24px;float:right">
-                                                                <a class="edit-row"
+                                                                <a sec:authorize-url="/ec/customer/config/*" th:href="@{/ec/customer/config/id}"
+                                                                   class="edit-row"
                                                                    style="color: #29b6f6;margin-left:10px"
                                                                    title="完善信息"><i style="font-size: 18px"
                                                                                    class="mdi mdi-table-edit"></i></a>
@@ -397,11 +406,11 @@
                                                                 style="padding-left: 10px;color: #29b6f6;"
                                                                 title="完善信息"><i style="font-size: 18px"
                                                                                 class="mdi mdi-table-edit"></i></a>
-                                                        <a
-                                                                class="on-default edit-row"
-                                                                style="padding-left: 5px;color: #4bd396;"
-                                                                title="开企业子账户"><i style="font-size: 18px"
-                                                                                  class="mdi mdi-account-plus"></i></a>
+                                                        <a    sec:authorize-url="/ec/customer/add/*/*"  th:href="@{/ec/customer/add/2/parentId}"
+                                                              class="on-default edit-row"
+                                                              style="padding-left: 5px;color: #4bd396;"
+                                                              title="开企业子账户"><i style="font-size: 18px"
+                                                                                class="mdi mdi-account-plus"></i></a>
 
                                                     </div>
                                                     <div style="width:150px;text-align:left;line-height:40px;float:right;">
@@ -539,11 +548,11 @@
                                                                 style="padding-left: 10px;color: #29b6f6;"
                                                                 title="完善信息"><i style="font-size: 18px"
                                                                                 class="mdi mdi-table-edit"></i></a>
-                                                        <a
-                                                                class="on-default edit-row"
-                                                                style="padding-left: 5px;color: #4bd396;"
-                                                                title="开企业子账户"><i style="font-size: 18px"
-                                                                                  class="mdi mdi-account-plus"></i></a>
+                                                        <a    sec:authorize-url="/ec/customer/add/*/*"  th:href="@{/ec/customer/add/2/parentId}"
+                                                              class="on-default edit-row"
+                                                              style="padding-left: 5px;color: #4bd396;"
+                                                              title="开企业子账户"><i style="font-size: 18px"
+                                                                                class="mdi mdi-account-plus"></i></a>
 
                                                     </div>
                                                     <div style="width:150px;text-align:left;line-height:40px;float:right;">
@@ -681,11 +690,11 @@
                                                                 style="padding-left: 10px;color: #29b6f6;"
                                                                 title="完善信息"><i style="font-size: 18px"
                                                                                 class="mdi mdi-table-edit"></i></a>
-                                                        <a
-                                                                class="on-default edit-row"
-                                                                style="padding-left: 5px;color: #4bd396;"
-                                                                title="开企业子账户"><i style="font-size: 18px"
-                                                                                  class="mdi mdi-account-plus"></i></a>
+                                                        <a    sec:authorize-url="/ec/customer/add/*/*"  th:href="@{/ec/customer/add/2/parentId}"
+                                                              class="on-default edit-row"
+                                                              style="padding-left: 5px;color: #4bd396;"
+                                                              title="开企业子账户"><i style="font-size: 18px"
+                                                                                class="mdi mdi-account-plus"></i></a>
 
                                                     </div>
                                                     <div style="width:150px;text-align:left;line-height:40px;float:right;">
@@ -823,11 +832,11 @@
                                                                 style="padding-left: 10px;color: #29b6f6;"
                                                                 title="完善信息"><i style="font-size: 18px"
                                                                                 class="mdi mdi-table-edit"></i></a>
-                                                        <a
-                                                                class="on-default edit-row"
-                                                                style="padding-left: 5px;color: #4bd396;"
-                                                                title="开企业子账户"><i style="font-size: 18px"
-                                                                                  class="mdi mdi-account-plus"></i></a>
+                                                        <a    sec:authorize-url="/ec/customer/add/*/*"  th:href="@{/ec/customer/add/2/parentId}"
+                                                              class="on-default edit-row"
+                                                              style="padding-left: 5px;color: #4bd396;"
+                                                              title="开企业子账户"><i style="font-size: 18px"
+                                                                                class="mdi mdi-account-plus"></i></a>
 
                                                     </div>
                                                     <div style="width:150px;text-align:left;line-height:40px;float:right;">
@@ -965,11 +974,11 @@
                                                                 style="padding-left: 10px;color: #29b6f6;"
                                                                 title="完善信息"><i style="font-size: 18px"
                                                                                 class="mdi mdi-table-edit"></i></a>
-                                                        <a
-                                                                class="on-default edit-row"
-                                                                style="padding-left: 5px;color: #4bd396;"
-                                                                title="开企业子账户"><i style="font-size: 18px"
-                                                                                  class="mdi mdi-account-plus"></i></a>
+                                                        <a    sec:authorize-url="/ec/customer/add/*/*"  th:href="@{/ec/customer/add/2/parentId}"
+                                                              class="on-default edit-row"
+                                                              style="padding-left: 5px;color: #4bd396;"
+                                                              title="开企业子账户"><i style="font-size: 18px"
+                                                                                class="mdi mdi-account-plus"></i></a>
 
                                                     </div>
                                                     <div style="width:150px;text-align:left;line-height:40px;float:right;">
@@ -1107,12 +1116,11 @@
                                                                 style="padding-left: 10px;color: #29b6f6;"
                                                                 title="完善信息"><i style="font-size: 18px"
                                                                                 class="mdi mdi-table-edit"></i></a>
-                                                        <a
-                                                                class="on-default edit-row"
-                                                                style="padding-left: 5px;color: #4bd396;"
-                                                                title="开企业子账户"><i style="font-size: 18px"
-                                                                                  class="mdi mdi-account-plus"></i></a>
-
+                                                        <a    sec:authorize-url="/ec/customer/add/*/*"  th:href="@{/ec/customer/add/2/parentId}"
+                                                              class="on-default edit-row"
+                                                              style="padding-left: 5px;color: #4bd396;"
+                                                              title="开企业子账户"><i style="font-size: 18px"
+                                                                                class="mdi mdi-account-plus"></i></a>
                                                     </div>
                                                     <div style="width:150px;text-align:left;line-height:40px;float:right;">
                                                         <div class="progress" style="margin-top:15px">
@@ -1249,11 +1257,11 @@
                                                                 style="padding-left: 10px;color: #29b6f6;"
                                                                 title="完善信息"><i style="font-size: 18px"
                                                                                 class="mdi mdi-table-edit"></i></a>
-                                                        <a
-                                                                class="on-default edit-row"
-                                                                style="padding-left: 5px;color: #4bd396;"
-                                                                title="开企业子账户"><i style="font-size: 18px"
-                                                                                  class="mdi mdi-account-plus"></i></a>
+                                                        <a    sec:authorize-url="/ec/customer/add/*/*"  th:href="@{/ec/customer/add/2/parentId}"
+                                                              class="on-default edit-row"
+                                                              style="padding-left: 5px;color: #4bd396;"
+                                                              title="开企业子账户"><i style="font-size: 18px"
+                                                                                class="mdi mdi-account-plus"></i></a>
 
                                                     </div>
                                                     <div style="width:150px;text-align:left;line-height:40px;float:right;">
@@ -1674,7 +1682,6 @@
 </div> <!-- content -->
 
 <th:block th:insert="fragments/common_fragments :: common_js"/>
-<th:block th:insert="fragments/org_select_fragments :: org_tree_select_js"/>
 <th:block th:insert="fragments/common_fragments :: select_js"/>
 <script>
 
