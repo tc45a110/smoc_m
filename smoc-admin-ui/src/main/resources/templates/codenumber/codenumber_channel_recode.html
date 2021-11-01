@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+</head>
+<body>
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+
+<!-- Start content -->
+<div class="content" style="margin-top: 0px;background-color: #ffffff;height: 720px">
+    <div class="container" style="padding-top: 30px">
+
+        <!-- start row -->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div  class="col-md-4">
+                <div class="property-card property-horizontal">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="property-content">
+                                <div class="listingInfo">
+                                    <div class="">
+                                        <h4><a href="#" class="text-dark">全国移动普通短信通道（全国）</a></h4>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="text-muted"><i class="mdi mdi-blackberry m-r-5"></i>通道ID：10000010</p>
+                                        <p class="text-muted"><i class="fa fa-money m-r-5"></i>单价：$10,000</p>
+                                        <p class="text-muted"><i class="mdi mdi-counter m-r-5"></i>账户使用数：30</p>
+                                        <p class="text-muted"><i class="mdi mdi-cellphone m-r-5"></i>运营商：<mpm:tag identity="carrier" value="CMCC,UNICOM,TELC" show-type="label" key="code" /></p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="text-muted"><i class="mdi mdi-account m-r-5"></i>通道账号：h71008</p>
+                                        <p class="text-muted"><i class="fa fa-money m-r-5"></i>商务费：$10,000</p>
+                                        <p class="text-muted"><i class="mdi mdi-counter m-r-5"></i>产品使用数：500</p>
+                                        <p class="text-muted"><i class="mdi mdi-account m-r-5"></i>通道对接：渠道商</p>
+
+                                    </div>
+                                </div>
+                                <div class="property-action">
+                                    <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="业务类型"
+                                       style="color:#188AE2;border: 1px solid #188AE2">
+                                        <i class="mdi mdi-apps"></i>
+                                        <span><mpm:tag identity="businessType" value="TEXT_SMS" show-type="label"  key="code" /></span>
+                                    </a>
+                                    <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="通道协议类型"
+                                       style="color:#4BD396;border: 1px solid #4BD396">
+                                        <i class="glyphicon glyphicon-filter"></i>
+                                        <span><mpm:tag identity="channelProtocolType" value="CMPP" show-type="label"  key="code"/></span>
+                                    </a>
+                                    <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="通道状态"
+                                       style="color:#3AC9D6;border: 1px solid #3AC9D6">
+                                        <i class="mdi mdi-view-module"></i>
+                                        <span> <mpm:tag identity="channelStatus" value="001" show-type="label"  key="code"/></span>
+                                    </a>
+                                </div>
+                                <!-- end. Card actions -->
+                            </div>
+                        </div>
+                        <!-- /col 8 -->
+                    </div>
+                    <!-- /inner row -->
+                </div>
+
+            </div> <!-- end col -->
+            <div  class="col-md-4">
+                <div class="property-card property-horizontal">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="property-content">
+                                <div class="listingInfo">
+                                    <div class="">
+                                        <h4><a href="#" class="text-dark">全国移动普通短信通道（全国）</a></h4>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="text-muted"><i class="mdi mdi-blackberry m-r-5"></i>通道ID：10000010</p>
+                                        <p class="text-muted"><i class="fa fa-money m-r-5"></i>单价：$10,000</p>
+                                        <p class="text-muted"><i class="mdi mdi-counter m-r-5"></i>账户使用数：30</p>
+                                        <p class="text-muted"><i class="mdi mdi-cellphone m-r-5"></i>运营商：<mpm:tag identity="carrier" value="CMCC,UNICOM,TELC" show-type="label" key="code" /></p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="text-muted"><i class="mdi mdi-account m-r-5"></i>通道账号：h71008</p>
+                                        <p class="text-muted"><i class="fa fa-money m-r-5"></i>商务费：$10,000</p>
+                                        <p class="text-muted"><i class="mdi mdi-counter m-r-5"></i>产品使用数：500</p>
+                                        <p class="text-muted"><i class="mdi mdi-account m-r-5"></i>通道对接：渠道商</p>
+
+                                    </div>
+                                </div>
+                                <div class="property-action">
+                                    <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="业务类型"
+                                       style="color:#188AE2;border: 1px solid #188AE2">
+                                        <i class="mdi mdi-apps"></i>
+                                        <span><mpm:tag identity="businessType" value="TEXT_SMS" show-type="label"  key="code" /></span>
+                                    </a>
+                                    <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="通道协议类型"
+                                       style="color:#4BD396;border: 1px solid #4BD396">
+                                        <i class="glyphicon glyphicon-filter"></i>
+                                        <span><mpm:tag identity="channelProtocolType" value="CMPP" show-type="label"  key="code"/></span>
+                                    </a>
+                                    <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="通道状态"
+                                       style="color:#3AC9D6;border: 1px solid #3AC9D6">
+                                        <i class="mdi mdi-view-module"></i>
+                                        <span> <mpm:tag identity="channelStatus" value="001" show-type="label"  key="code"/></span>
+                                    </a>
+                                </div>
+                                <!-- end. Card actions -->
+                            </div>
+                        </div>
+                        <!-- /col 8 -->
+                    </div>
+                    <!-- /inner row -->
+                </div>
+
+            </div> <!-- end col -->
+            <div  class="col-md-4">
+                <div class="property-card property-horizontal">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="property-content">
+                                <div class="listingInfo">
+                                    <div class="">
+                                        <h4><a href="#" class="text-dark">全国移动普通短信通道（全国）</a></h4>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="text-muted"><i class="mdi mdi-blackberry m-r-5"></i>通道ID：10000010</p>
+                                        <p class="text-muted"><i class="fa fa-money m-r-5"></i>单价：$10,000</p>
+                                        <p class="text-muted"><i class="mdi mdi-counter m-r-5"></i>账户使用数：30</p>
+                                        <p class="text-muted"><i class="mdi mdi-cellphone m-r-5"></i>运营商：<mpm:tag identity="carrier" value="CMCC,UNICOM,TELC" show-type="label" key="code" /></p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="text-muted"><i class="mdi mdi-account m-r-5"></i>通道账号：h71008</p>
+                                        <p class="text-muted"><i class="fa fa-money m-r-5"></i>商务费：$10,000</p>
+                                        <p class="text-muted"><i class="mdi mdi-counter m-r-5"></i>产品使用数：500</p>
+                                        <p class="text-muted"><i class="mdi mdi-account m-r-5"></i>通道对接：渠道商</p>
+
+                                    </div>
+                                </div>
+                                <div class="property-action">
+                                    <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="业务类型"
+                                       style="color:#188AE2;border: 1px solid #188AE2">
+                                        <i class="mdi mdi-apps"></i>
+                                        <span><mpm:tag identity="businessType" value="TEXT_SMS" show-type="label"  key="code" /></span>
+                                    </a>
+                                    <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="通道协议类型"
+                                       style="color:#4BD396;border: 1px solid #4BD396">
+                                        <i class="glyphicon glyphicon-filter"></i>
+                                        <span><mpm:tag identity="channelProtocolType" value="CMPP" show-type="label"  key="code"/></span>
+                                    </a>
+                                    <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="通道状态"
+                                       style="color:#3AC9D6;border: 1px solid #3AC9D6">
+                                        <i class="mdi mdi-view-module"></i>
+                                        <span> <mpm:tag identity="channelStatus" value="001" show-type="label"  key="code"/></span>
+                                    </a>
+                                </div>
+                                <!-- end. Card actions -->
+                            </div>
+                        </div>
+                        <!-- /col 8 -->
+                    </div>
+                    <!-- /inner row -->
+                </div>
+
+            </div> <!-- end col -->
+            <div  class="col-md-4">
+                <div class="property-card property-horizontal">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="property-content">
+                                <div class="listingInfo">
+                                    <div class="">
+                                        <h4><a href="#" class="text-dark">全国移动普通短信通道（全国）</a></h4>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="text-muted"><i class="mdi mdi-blackberry m-r-5"></i>通道ID：10000010</p>
+                                        <p class="text-muted"><i class="fa fa-money m-r-5"></i>单价：$10,000</p>
+                                        <p class="text-muted"><i class="mdi mdi-counter m-r-5"></i>账户使用数：30</p>
+                                        <p class="text-muted"><i class="mdi mdi-cellphone m-r-5"></i>运营商：<mpm:tag identity="carrier" value="CMCC,UNICOM,TELC" show-type="label" key="code" /></p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="text-muted"><i class="mdi mdi-account m-r-5"></i>通道账号：h71008</p>
+                                        <p class="text-muted"><i class="fa fa-money m-r-5"></i>商务费：$10,000</p>
+                                        <p class="text-muted"><i class="mdi mdi-counter m-r-5"></i>产品使用数：500</p>
+                                        <p class="text-muted"><i class="mdi mdi-account m-r-5"></i>通道对接：渠道商</p>
+
+                                    </div>
+                                </div>
+                                <div class="property-action">
+                                    <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="业务类型"
+                                       style="color:#188AE2;border: 1px solid #188AE2">
+                                        <i class="mdi mdi-apps"></i>
+                                        <span><mpm:tag identity="businessType" value="TEXT_SMS" show-type="label"  key="code" /></span>
+                                    </a>
+                                    <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="通道协议类型"
+                                       style="color:#4BD396;border: 1px solid #4BD396">
+                                        <i class="glyphicon glyphicon-filter"></i>
+                                        <span><mpm:tag identity="channelProtocolType" value="CMPP" show-type="label"  key="code"/></span>
+                                    </a>
+                                    <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="通道状态"
+                                       style="color:#3AC9D6;border: 1px solid #3AC9D6">
+                                        <i class="mdi mdi-view-module"></i>
+                                        <span> <mpm:tag identity="channelStatus" value="001" show-type="label"  key="code"/></span>
+                                    </a>
+                                </div>
+                                <!-- end. Card actions -->
+                            </div>
+                        </div>
+                        <!-- /col 8 -->
+                    </div>
+                    <!-- /inner row -->
+                </div>
+
+            </div> <!-- end col -->
+            <div  class="col-md-4">
+                <div class="property-card property-horizontal">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="property-content">
+                                <div class="listingInfo">
+                                    <div class="">
+                                        <h4><a href="#" class="text-dark">全国移动普通短信通道（全国）</a></h4>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="text-muted"><i class="mdi mdi-blackberry m-r-5"></i>通道ID：10000010</p>
+                                        <p class="text-muted"><i class="fa fa-money m-r-5"></i>单价：$10,000</p>
+                                        <p class="text-muted"><i class="mdi mdi-counter m-r-5"></i>账户使用数：30</p>
+                                        <p class="text-muted"><i class="mdi mdi-cellphone m-r-5"></i>运营商：<mpm:tag identity="carrier" value="CMCC,UNICOM,TELC" show-type="label" key="code" /></p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="text-muted"><i class="mdi mdi-account m-r-5"></i>通道账号：h71008</p>
+                                        <p class="text-muted"><i class="fa fa-money m-r-5"></i>商务费：$10,000</p>
+                                        <p class="text-muted"><i class="mdi mdi-counter m-r-5"></i>产品使用数：500</p>
+                                        <p class="text-muted"><i class="mdi mdi-account m-r-5"></i>通道对接：渠道商</p>
+
+                                    </div>
+                                </div>
+                                <div class="property-action">
+                                    <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="业务类型"
+                                       style="color:#188AE2;border: 1px solid #188AE2">
+                                        <i class="mdi mdi-apps"></i>
+                                        <span><mpm:tag identity="businessType" value="TEXT_SMS" show-type="label"  key="code" /></span>
+                                    </a>
+                                    <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="通道协议类型"
+                                       style="color:#4BD396;border: 1px solid #4BD396">
+                                        <i class="glyphicon glyphicon-filter"></i>
+                                        <span><mpm:tag identity="channelProtocolType" value="CMPP" show-type="label"  key="code"/></span>
+                                    </a>
+                                    <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="通道状态"
+                                       style="color:#3AC9D6;border: 1px solid #3AC9D6">
+                                        <i class="mdi mdi-view-module"></i>
+                                        <span> <mpm:tag identity="channelStatus" value="001" show-type="label"  key="code"/></span>
+                                    </a>
+                                </div>
+                                <!-- end. Card actions -->
+                            </div>
+                        </div>
+                        <!-- /col 8 -->
+                    </div>
+                    <!-- /inner row -->
+                </div>
+
+            </div> <!-- end col -->
+            <div  class="col-md-4">
+                <div class="property-card property-horizontal">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="property-content">
+                                <div class="listingInfo">
+                                    <div class="">
+                                        <h4><a href="#" class="text-dark">全国移动普通短信通道（全国）</a></h4>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="text-muted"><i class="mdi mdi-blackberry m-r-5"></i>通道ID：10000010</p>
+                                        <p class="text-muted"><i class="fa fa-money m-r-5"></i>单价：$10,000</p>
+                                        <p class="text-muted"><i class="mdi mdi-counter m-r-5"></i>账户使用数：30</p>
+                                        <p class="text-muted"><i class="mdi mdi-cellphone m-r-5"></i>运营商：<mpm:tag identity="carrier" value="CMCC,UNICOM,TELC" show-type="label" key="code" /></p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="text-muted"><i class="mdi mdi-account m-r-5"></i>通道账号：h71008</p>
+                                        <p class="text-muted"><i class="fa fa-money m-r-5"></i>商务费：$10,000</p>
+                                        <p class="text-muted"><i class="mdi mdi-counter m-r-5"></i>产品使用数：500</p>
+                                        <p class="text-muted"><i class="mdi mdi-account m-r-5"></i>通道对接：渠道商</p>
+
+                                    </div>
+                                </div>
+                                <div class="property-action">
+                                    <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="业务类型"
+                                       style="color:#188AE2;border: 1px solid #188AE2">
+                                        <i class="mdi mdi-apps"></i>
+                                        <span><mpm:tag identity="businessType" value="TEXT_SMS" show-type="label"  key="code" /></span>
+                                    </a>
+                                    <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="通道协议类型"
+                                       style="color:#4BD396;border: 1px solid #4BD396">
+                                        <i class="glyphicon glyphicon-filter"></i>
+                                        <span><mpm:tag identity="channelProtocolType" value="CMPP" show-type="label"  key="code"/></span>
+                                    </a>
+                                    <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="通道状态"
+                                       style="color:#3AC9D6;border: 1px solid #3AC9D6">
+                                        <i class="mdi mdi-view-module"></i>
+                                        <span> <mpm:tag identity="channelStatus" value="001" show-type="label"  key="code"/></span>
+                                    </a>
+                                </div>
+                                <!-- end. Card actions -->
+                            </div>
+                        </div>
+                        <!-- /col 8 -->
+                    </div>
+                    <!-- /inner row -->
+                </div>
+
+            </div> <!-- end col -->
+
+        </div>
+        <!-- end row -->
+
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+
+    </div> <!-- container -->
+</div> <!-- content -->
+
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+
+<script>
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+</script>
+</body>
+</html>

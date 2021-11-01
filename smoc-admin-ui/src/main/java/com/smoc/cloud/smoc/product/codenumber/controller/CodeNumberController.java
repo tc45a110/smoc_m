@@ -1,4 +1,4 @@
-package com.smoc.cloud.smoc.codenumber.controller;
+package com.smoc.cloud.smoc.product.codenumber.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -94,6 +94,20 @@ public class CodeNumberController {
     public ModelAndView detail(@PathVariable String id, HttpServletRequest request) {
 
         ModelAndView view = new ModelAndView("codenumber/codenumber_detail");
+
+        return view;
+
+    }
+
+    /**
+     * 通道使用记录
+     *
+     * @return
+     */
+    @RequestMapping(value = "/channelRecode/{id}", method = RequestMethod.GET)
+    public ModelAndView channelRecode(@PathVariable String id, HttpServletRequest request) {
+
+        ModelAndView view = new ModelAndView("codenumber/codenumber_channel_recode");
 
         return view;
 

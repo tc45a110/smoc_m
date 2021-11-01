@@ -64,7 +64,7 @@
                                     <button class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search"></i> 查询
                                     </button>
-                                    <a class="btn btn-success waves-effect waves-light m-l-10 btn-md">
+                                    <a sec:authorize-url="/channel/add" th:href="@{/channel/add}" class="btn btn-success waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-plus-sign"></i> 新建</a>
                                     <input type="hidden" name="currentPage" id="currentPage">
                                     <input type="hidden" name="pageSize" id="pageSize">
@@ -79,7 +79,7 @@
         <!-- end row -->
 
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
-            <div  class="col-md-4">
+            <div  class="col-md-6">
                 <div class="property-card property-horizontal">
                     <div class="row">
                         <div class="col-sm-12">
@@ -98,7 +98,7 @@
                                         <p class="text-muted"><i class="mdi mdi-blackberry m-r-5"></i>码号：10691111</p>
                                         <p class="text-muted"><i class="fa fa-money m-r-5"></i>单价：$10,000</p>
                                         <p class="text-muted"><i class="mdi mdi-counter m-r-5"></i>产品使用数：500</p>
-                                        <p class="text-muted"><i class="mdi mdi-account m-r-5"></i>通道对接：渠道商</p>
+                                        <p class="text-muted"><i class="mdi mdi-file-delimited m-r-5"></i>频次限制：0/0/0/0</p>
 
                                     </div>
                                 </div>
@@ -109,7 +109,7 @@
                                         <span><mpm:tag identity="businessType" value="TEXT_SMS" show-type="label"  key="code" /></span>
                                     </a>
                                     <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="通道协议类型"
-                                       style="color:#FF9800;border: 1px solid #FF9800">
+                                       style="color:#4BD396;border: 1px solid #4BD396">
                                         <i class="glyphicon glyphicon-filter"></i>
                                         <span><mpm:tag identity="channelProtocolType" value="CMPP" show-type="label"  key="code"/></span>
                                     </a>
@@ -119,8 +119,8 @@
                                         <span> <mpm:tag identity="channelStatus" value="001" show-type="label"  key="code"/></span>
                                     </a>
                                     <div class="pull-right">
-                                        <a class="btn btn-primary">查看</a>
-                                        <a class="btn btn-info">编辑</a>
+                                        <a class="btn btn-primary" sec:authorize-url="/channel/view/*" th:href="@{/channel/view/id}">查看</a>
+                                        <a class="btn btn-info" sec:authorize-url="/channel/edit/*" th:href="@{/channel/edit/id}">编辑</a>
                                     </div>
                                 </div>
                                 <!-- end. Card actions -->
@@ -132,7 +132,7 @@
                 </div>
 
             </div> <!-- end col -->
-            <div  class="col-md-4">
+            <div  class="col-md-6">
                 <div class="property-card property-horizontal">
                     <div class="row">
                         <div class="col-sm-12">
@@ -151,7 +151,7 @@
                                         <p class="text-muted"><i class="mdi mdi-blackberry m-r-5"></i>码号：10691111</p>
                                         <p class="text-muted"><i class="fa fa-money m-r-5"></i>单价：$430,000</p>
                                         <p class="text-muted"><i class="mdi mdi-counter m-r-5"></i>产品使用数：500</p>
-                                        <p class="text-muted"><i class="mdi mdi-account m-r-5"></i>通道对接：渠道商</p>
+                                        <p class="text-muted"><i class="mdi mdi-file-delimited m-r-5"></i>频次限制：0/0/0/0</p>
                                     </div>
                                 </div>
                                 <div class="property-action">
@@ -161,7 +161,7 @@
                                         <span><mpm:tag identity="businessType" value="MULTI_SMS" show-type="label"  key="code" /></span>
                                     </a>
                                     <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="通道协议类型"
-                                       style="color:#FF9800;border: 1px solid #FF9800">
+                                       style="color:#4BD396;border: 1px solid #4BD396">
                                         <i class="glyphicon glyphicon-filter"></i>
                                         <span><mpm:tag identity="channelProtocolType" value="HTTP" show-type="label"  key="code"/></span>
                                     </a>
@@ -171,8 +171,8 @@
                                         <span> <mpm:tag identity="channelStatus" value="003" show-type="label"  key="code"/></span>
                                     </a>
                                     <div class="pull-right">
-                                        <a class="btn btn-primary">查看</a>
-                                        <a class="btn btn-info">编辑</a>
+                                        <a class="btn btn-primary" sec:authorize-url="/channel/view/*" th:href="@{/channel/view/id}">查看</a>
+                                        <a class="btn btn-info" sec:authorize-url="/channel/edit/*" th:href="@{/channel/edit/id}">编辑</a>
                                     </div>
                                 </div>
                                 <!-- end. Card actions -->
@@ -184,7 +184,7 @@
                 </div>
 
             </div> <!-- end col -->
-            <div  class="col-md-4">
+            <div  class="col-md-6">
                 <div class="property-card property-horizontal">
                     <div class="row">
                         <div class="col-sm-12">
@@ -203,7 +203,7 @@
                                         <p class="text-muted"><i class="mdi mdi-blackberry m-r-5"></i>码号：10692222</p>
                                         <p class="text-muted"><i class="fa fa-money m-r-5"></i>单价：$430,000</p>
                                         <p class="text-muted"><i class="mdi mdi-counter m-r-5"></i>产品使用数：500</p>
-                                        <p class="text-muted"><i class="mdi mdi-account m-r-5"></i>通道对接：销售人员</p>
+                                        <p class="text-muted"><i class="mdi mdi-file-delimited m-r-5"></i>频次限制：0/0/0/0</p>
                                     </div>
                                 </div>
                                 <div class="property-action">
@@ -213,7 +213,7 @@
                                         <span><mpm:tag identity="businessType" value="INTERNATIONAL_SMS" show-type="label"  key="code" /></span>
                                     </a>
                                     <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="通道协议类型"
-                                       style="color:#FF9800;border: 1px solid #FF9800">
+                                       style="color:#4BD396;border: 1px solid #4BD396">
                                         <i class="glyphicon glyphicon-filter"></i>
                                         <span><mpm:tag identity="channelProtocolType" value="MM7" show-type="label"  key="code"/></span>
                                     </a>
@@ -223,8 +223,8 @@
                                         <span> <mpm:tag identity="channelStatus" value="005" show-type="label"  key="code"/></span>
                                     </a>
                                     <div class="pull-right">
-                                        <a class="btn btn-primary">查看</a>
-                                        <a class="btn btn-info">编辑</a>
+                                        <a class="btn btn-primary" sec:authorize-url="/channel/view/*" th:href="@{/channel/view/id}">查看</a>
+                                        <a class="btn btn-info" sec:authorize-url="/channel/edit/*" th:href="@{/channel/edit/id}">编辑</a>
                                     </div>
                                 </div>
                                 <!-- end. Card actions -->
@@ -237,7 +237,7 @@
 
             </div> <!-- end col -->
 
-            <div  class="col-md-4">
+            <div  class="col-md-6">
                 <div class="property-card property-horizontal">
                     <div class="row">
                         <div class="col-sm-12">
@@ -256,7 +256,7 @@
                                         <p class="text-muted"><i class="mdi mdi-blackberry m-r-5"></i>码号：10692222</p>
                                         <p class="text-muted"><i class="fa fa-money m-r-5"></i>单价：$430,000</p>
                                         <p class="text-muted"><i class="mdi mdi-counter m-r-5"></i>产品使用数：500</p>
-                                        <p class="text-muted"><i class="mdi mdi-account m-r-5"></i>通道对接：销售人员</p>
+                                        <p class="text-muted"><i class="mdi mdi-file-delimited m-r-5"></i>频次限制：0/0/0/0</p>
                                     </div>
                                 </div>
                                 <div class="property-action">
@@ -266,7 +266,7 @@
                                         <span><mpm:tag identity="businessType" value="INTERNATIONAL_SMS" show-type="label"  key="code" /></span>
                                     </a>
                                     <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="通道协议类型"
-                                       style="color:#FF9800;border: 1px solid #FF9800">
+                                       style="color:#4BD396;border: 1px solid #4BD396">
                                         <i class="glyphicon glyphicon-filter"></i>
                                         <span><mpm:tag identity="channelProtocolType" value="MM7" show-type="label"  key="code"/></span>
                                     </a>
@@ -276,8 +276,8 @@
                                         <span> <mpm:tag identity="channelStatus" value="006" show-type="label"  key="code"/></span>
                                     </a>
                                     <div class="pull-right">
-                                        <a class="btn btn-primary">查看</a>
-                                        <a class="btn btn-info">编辑</a>
+                                        <a class="btn btn-primary" sec:authorize-url="/channel/view/*" th:href="@{/channel/view/id}">查看</a>
+                                        <a class="btn btn-info" sec:authorize-url="/channel/edit/*" th:href="@{/channel/edit/id}">编辑</a>
                                     </div>
                                 </div>
                                 <!-- end. Card actions -->
