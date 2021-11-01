@@ -80,10 +80,56 @@
 
                                 </div>
                             </div> <!-- end card-box -->
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="panel panel-color panel-default">
+                                            <div class="panel-heading">
+                                                <h3 class="panel-title" style="color:#4C4C4C">
+                                                    <i class="mdi mdi-filter-outline" style="margin-right:5px"></i>
+                                                    个性化显示设置
+                                                </h3>
+                                            </div>
+                                            <div  class="panel-body">
+                                                <div class="row">
+                                                    <div  class="col-md-12">
+                                                        <div class="property-horizontal">
+                                                            <div class="row">
+                                                                <div class="col-sm-12">
+                                                                    <div class="property-content" style="height:146px">
+                                                                        <div class="listingInfo">
 
-                            <div class="text-center card-box">
-                                dddd
-                            </div>
+                                                                            <div class="col-sm-12">
+                                                                                <p style="font-size:12px">WEB登录账户：
+                                                                                    是否显示  <input id="login-show" type="checkbox"  checked data-plugin="switchery" data-color="#3CC9D7" data-size="small" style="margin-right:20px;margin-left:5px"/>
+                                                                                    是否展开  <input id="login-spread" type="checkbox" checked data-plugin="switchery" data-color="#26A59A" data-size="small" style="margin-left:5px"/>
+                                                                                </p>
+
+                                                                                <p style="font-size:12px">邮&nbsp;&nbsp;&nbsp;寄&nbsp;&nbsp;&nbsp;信&nbsp;&nbsp;息：
+                                                                                    是否显示  <input id="mail-show" type="checkbox" checked data-plugin="switchery" data-color="#3CC9D7" data-size="small" style="margin-right:20px;margin-left:5px"/>
+                                                                                    是否展开  <input id="mail-spread" type="checkbox" checked data-plugin="switchery" data-color="#26A59A" data-size="small" style="margin-left:5px"/>
+                                                                                </p>
+                                                                                <p style="font-size:12px">开&nbsp;&nbsp;&nbsp;票&nbsp;&nbsp;&nbsp;信&nbsp;&nbsp;息：
+                                                                                    是否显示  <input id="invoice-show" type="checkbox" checked data-plugin="switchery" data-color="#3CC9D7" data-size="small" style="margin-right:20px;margin-left:5px"/>
+                                                                                    是否展开  <input id="invoice-spread" type="checkbox" checked data-plugin="switchery" data-color="#26A59A" data-size="small" style="margin-left:5px"/>
+                                                                                </p>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <!-- end. Card actions -->
+                                                                    </div>
+                                                                </div>
+                                                                <!-- /col 8 -->
+                                                            </div>
+                                                            <!-- /inner row -->
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
 
                         </div> <!-- end col -->
 
@@ -98,13 +144,13 @@
                                         </a>
                                     </div></h4>
 
-                                    <div class="row">
+                                    <div id="login-panel" class="row" style="display:block">
                                         <div class="col-lg-12" style="margin-top:10px">
                                             <div class="panel panel-color panel-info">
                                                 <div id="login-account-down"  class="panel-heading" style="display:block">
                                                     <h3 class="panel-title">
                                                         <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
-                                                        登录账户信息
+                                                        WEB登录账户信息
                                                         <div class="pull-right">
                                                             <i id="login-account-icon-down" class="fa fa-angle-double-down" style="margin-right:10px"></i>
                                                         </div>
@@ -113,7 +159,7 @@
                                                 <div id="login-account-up" class="panel-heading" style="display:none">
                                                     <h3 class="panel-title">
                                                         <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
-                                                        登录账户信息
+                                                        WEB登录账户信息
                                                         <div class="pull-right">
                                                             <i id="login-account-icon-up" class="fa fa-angle-double-down" style="margin-right:10px"></i>
                                                         </div>
@@ -193,7 +239,7 @@
                                                                                <div class="col-sm-12" style="line-height:110px;margin:0 auto;">
                                                                                    <a
                                                                                       class="btn btn-info waves-effect waves-light m-l-10 btn-md">
-                                                                                       <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>新建EC登录账户</a>
+                                                                                       <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>新建WEB登录账户</a>
                                                                                </div>
                                                                            </div>
 
@@ -212,7 +258,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="row">
+                                    <div id="mail-panel" class="row">
                                         <div class="col-lg-12" style="margin-top:10px">
                                             <div class="panel panel-color panel-teal">
                                                 <div id="mail-info-down" class="panel-heading" style="display:block">
@@ -336,7 +382,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="row">
+                                    <div id="invoice-panel" class="row">
                                         <div class="col-lg-12" style="margin-top:10px">
                                             <div class="panel panel-color panel-success">
                                                 <div id="invoice-info-down" class="panel-heading" style="display:block">
@@ -562,10 +608,187 @@
     </div> <!-- container -->
 </div> <!-- content -->
 <th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/login_fragments :: login_js"/>
 <script>
+
+       // 切换按钮初始化
+        var switchery = [];
+        var elems = document.querySelectorAll('.switchery');
+        for (var i = 0; i < elems.length; i++) {
+            switchery[i] = new Switchery(elems[i]);
+        }
 
 
     $(document).ready(function(){
+
+        if ($.cookie("login-panel") == "true") {
+		   $('#login-panel').css('display','block');
+		   $("#login-show").attr("checked", 'checked');
+	    }else if($.cookie("login-panel") == "false"){
+	       $('#login-panel').css('display','none');
+	    }
+
+	    if ($.cookie("login-spread") == "true") {
+		   $('#login-account-down').css('display','block');
+           $('#login-account-up').css('display','none');
+           $('#login-account').css('display','block');
+           $("#login-spread").prop("checked", true);
+	    }else if($.cookie("login-spread") == "false"){
+	       $('#login-account-down').css('display','none');
+           $('#login-account-up').css('display','block');
+           $('#login-account').css('display','none');
+           $("#login-spread").prop("checked", false);
+	    }
+
+	    if ($.cookie("mail-show") == "true") {
+		   $('#mail-panel').css('display','block');
+		   $("#mail-show").attr("checked", true);
+	    }else if($.cookie("mail-show") == "false"){
+	       $('#mail-panel').css('display','none');
+	       $("#mail-show").attr("checked", false);
+	    }
+
+	    if ($.cookie("mail-spread") == "true") {
+		   $('#login-account-down').css('display','block');
+           $('#login-account-up').css('display','none');
+           $('#login-account').css('display','block');
+           $("#mail-spread").attr("checked", true);
+	    }else if($.cookie("mail-spread") == "false"){
+	        $('#mail-info-down').css('display','none');
+            $('#mail-info-up').css('display','block');
+            $('#mail-info').css('display','none');
+           $("#mail-spread").attr("checked", false);
+	    }
+
+	    if ($.cookie("invoice-show") == "true") {
+		   $('#invoice-panel').css('display','block');
+		   $("#invoice-show").attr("checked", true);
+	    }else if($.cookie("invoice-show") == "false"){
+	       $('#invoice-panel').css('display','none');
+	       $("#invoice-show").attr("checked", false);
+	    }
+
+	    if ($.cookie("invoice-spread") == "true") {
+		    $('#invoice-info-down').css('display','block');
+            $('#invoice-info-up').css('display','none');
+            $('#invoice-info').css('display','block');
+            $("#invoice-spread").attr("checked", true);
+	    }else if($.cookie("invoice-spread") == "false"){
+	        $('#invoice-info-down').css('display','none');
+            $('#invoice-info-up').css('display','block');
+            $('#invoice-info').css('display','none');
+            $("#invoice-spread").attr("checked", false);
+	    }
+
+
+        $("#login-show").change(function() {
+           if ($(this).prop("checked")) {
+             $('#login-panel').css('display','block');
+             //存储cookie
+             $.cookie("login-panel", 'true', {
+			    expires : 360
+		     });
+           } else {
+             $('#login-panel').css('display','none');
+             //存储cookie
+             $.cookie("login-panel", "false", {
+			   expires : 360
+		     });
+           }
+        });
+
+        $("#login-spread").change(function() {
+           if ($(this).prop("checked")) {
+             $('#login-account-down').css('display','block');
+             $('#login-account-up').css('display','none');
+             $('#login-account').css('display','block');
+             //存储cookie
+             $.cookie("login-spread", 'true', {
+			    expires : 360
+		     });
+           } else {
+             $('#login-account-down').css('display','none');
+             $('#login-account-up').css('display','block');
+             $('#login-account').css('display','none');
+             //存储cookie
+             $.cookie("login-spread", "false", {
+			   expires : 360
+		     });
+           }
+        });
+
+        $("#mail-show").change(function() {
+          if ($(this).prop("checked")) {
+             $('#mail-panel').css('display','block');
+             //存储cookie
+             $.cookie("mail-show", 'true', {
+			    expires : 360
+		     });
+           } else {
+             $('#mail-panel').css('display','none');
+             //存储cookie
+             $.cookie("mail-show", "false", {
+			   expires : 360
+		     });
+           }
+        });
+
+        $("#mail-spread").change(function() {
+          if ($(this).prop("checked")) {
+              $('#mail-info-down').css('display','block');
+              $('#mail-info-up').css('display','none');
+              $('#mail-info').css('display','block');
+              //存储cookie
+              $.cookie("mail-spread", 'true', {
+			    expires : 360
+		      });
+           } else {
+             $('#mail-info-down').css('display','none');
+             $('#mail-info-up').css('display','block');
+             $('#mail-info').css('display','none');
+             //存储cookie
+             $.cookie("mail-spread", "false", {
+			   expires : 360
+		     });
+           }
+        });
+
+        $("#invoice-show").change(function() {
+          if ($(this).prop("checked")) {
+             $('#invoice-panel').css('display','block');
+             //存储cookie
+             $.cookie("invoice-show", 'true', {
+			    expires : 360
+		     });
+           } else {
+             $('#invoice-panel').css('display','none');
+             //存储cookie
+             $.cookie("invoice-show", "false", {
+			   expires : 360
+		     });
+           }
+        });
+
+        $("#invoice-spread").change(function() {
+            if ($(this).prop("checked")) {
+             $('#invoice-info-down').css('display','block');
+             $('#invoice-info-up').css('display','none');
+             $('#invoice-info').css('display','block');
+             //存储cookie
+             $.cookie("invoice-spread", 'true', {
+			    expires : 360
+		     });
+           } else {
+             $('#invoice-info-down').css('display','none');
+             $('#invoice-info-up').css('display','block');
+             $('#invoice-info').css('display','none');
+             //存储cookie
+             $.cookie("invoice-spread", "false", {
+			   expires : 360
+		     });
+           }
+        });
+
 
        $('#login-account-icon-down').on("click",function(){
           $('#login-account-down').css('display','none');
