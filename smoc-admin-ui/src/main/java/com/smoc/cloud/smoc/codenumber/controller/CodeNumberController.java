@@ -30,4 +30,44 @@ public class CodeNumberController {
 
     }
 
+    /**
+     * 码号分页查询
+     *
+     * @return
+     */
+    @RequestMapping(value = "/page", method = RequestMethod.POST)
+    public ModelAndView page() {
+        ModelAndView view = new ModelAndView("codenumber/codenumber_list");
+
+        return view;
+
+    }
+
+    /**
+     * 码号添加
+     *
+     * @return
+     */
+    @RequestMapping(value = "/add", method = RequestMethod.GET)
+    public ModelAndView add(HttpServletRequest request) {
+
+        ModelAndView view = new ModelAndView("codenumber/codenumber_edit");
+
+        return view;
+
+    }
+
+    /**
+     * 码号编辑
+     *
+     * @return
+     */
+    @RequestMapping(value = "/edit", method = RequestMethod.GET)
+    public ModelAndView edit(HttpServletRequest request) {
+
+        ModelAndView view = new ModelAndView("codenumber/codenumber_edit");
+
+        return view;
+
+    }
 }
