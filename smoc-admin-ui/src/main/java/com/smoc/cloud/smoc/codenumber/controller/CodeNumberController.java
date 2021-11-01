@@ -70,4 +70,32 @@ public class CodeNumberController {
         return view;
 
     }
+
+    /**
+     * 码号查看
+     *
+     * @return
+     */
+    @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
+    public ModelAndView view(@PathVariable String id, HttpServletRequest request) {
+
+        ModelAndView view = new ModelAndView("codenumber/codenumber_view");
+
+        return view;
+
+    }
+
+    /**
+     * 码号详情
+     *
+     * @return
+     */
+    @RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
+    public ModelAndView detail(@PathVariable String id, HttpServletRequest request) {
+
+        ModelAndView view = new ModelAndView("codenumber/codenumber_detail");
+
+        return view;
+
+    }
 }
