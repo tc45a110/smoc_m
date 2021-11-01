@@ -82,6 +82,17 @@ public class CustomerController {
     @RequestMapping(value = "/customer/config/{id}", method = RequestMethod.GET)
     public ModelAndView config(@PathVariable String id) {
         ModelAndView view = new ModelAndView("customer/customer_config");
+
+        //查询数据
+        PageParams params = new PageParams<>();
+        params.setPages(3);
+        params.setPageSize(10);
+        params.setStartRow(1);
+        params.setEndRow(10);
+        params.setCurrentPage(1);
+        params.setTotalRows(22);
+
+        view.addObject("pageParams",params);
         return view;
 
     }
