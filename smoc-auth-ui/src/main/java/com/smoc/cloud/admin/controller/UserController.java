@@ -238,6 +238,8 @@ public class UserController {
             userValidator.getBaseUserValidator().setActive(1);
             userValidator.getBaseUserValidator().setGender("male");
         } else if (!StringUtils.isEmpty(op) && "edit".equals(op)) {
+            ResponseData<UserValidator> data = usersService.findById(userValidator.getBaseUserValidator().getId());
+            userValidator.getBaseUserValidator().setCreateDate(data.getData().getBaseUserValidator().getCreateDate());
             userValidator.getBaseUserValidator().setUpdateDate(new Date());
         } else {
             view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":" + ResponseCode.PARAM_LINK_ERROR.getMessage());
@@ -246,8 +248,12 @@ public class UserController {
 
 
         //把企业编码付给用户
-        ResponseData<OrgValidator> responseData = orgService.findById(userValidator.getBaseUserValidator().getOrganization());
-        userValidator.getBaseUserExtendsValidator().setCode(responseData.getData().getOrgCode());
+       /* ResponseData<OrgValidator> responseData = orgService.findById(userValidator.getBaseUserValidator().getOrganization());
+        userValidator.getBaseUserExtendsValidator().setCode(responseData.getData().getOrgCode());*/
+        //如果销售码为空默认XY0000
+        if(StringUtils.isEmpty(userValidator.getBaseUserExtendsValidator().getCode())){
+            userValidator.getBaseUserExtendsValidator().setCode("XY0000");
+        }
 
         //记录日志
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");

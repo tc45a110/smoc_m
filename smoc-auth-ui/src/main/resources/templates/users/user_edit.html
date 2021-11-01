@@ -144,7 +144,15 @@
                                                 </div>
                                             </div>
                                             <div class="col-sm-6 m-b-10">
+                                                <label for="code">销售码&nbsp;<span
+                                                        class="text-danger" style="font-weight: 200;font-size: 12px"
+                                                        th:if="${#fields.hasErrors('baseUserExtendsValidator.code')}"
+                                                        th:errors="*{baseUserExtendsValidator.code}"></span></label>
+                                                <input id="code" type="text" th:field="*{baseUserExtendsValidator.code}"
+                                                       class="form-control" autocomplete="off" data-parsley-length="[2,16]"
+                                                       placeholder="空则默认XY0000">
                                             </div>
+
                                         </div>
                                     </div>
 
@@ -197,7 +205,6 @@
                                                            required="">
                                                     <label th:for="${system.getId()}"
                                                            th:text="${system.getSystemName()+'('+system.getProjectName()+')'}">
-                                                        绩效考核KPI(mpm-kpi)
                                                     </label>
                                                 </div>
                                             </div> <!-- end col -->
@@ -210,7 +217,6 @@
                                                            required="">
                                                     <label th:for="${system.getId()}"
                                                            th:text="${system.getSystemName()+'('+system.getProjectName()+')'}">
-                                                        绩效考核KPI(mpm-kpi)
                                                     </label>
                                                 </div>
                                             </div> <!-- end col -->
@@ -229,8 +235,7 @@
                             <input type="hidden" th:field="*{baseUserValidator.active}">
                             <input type="hidden" th:field="*{baseUserValidator.gender}">
                             <input type="hidden" th:field="*{baseUserExtendsValidator.department}">
-                            <input type="hidden" th:field="*{baseUserExtendsValidator.code}" value="code">
-                            <input type="hidden" th:field="*{baseUserExtendsValidator.parentCode}" value="parentCode">
+                            <input type="hidden" th:field="*{baseUserExtendsValidator.parentCode}" value="0">
                             <input type="hidden" name="userValidator.baseUserExtendsValidator.teamLeader" value="1">
                             <button sec:authorize-url="/users/save/*" type="submit"
                                     class="btn btn-teal waves-effect waves-light">提交

@@ -25,7 +25,7 @@ public class BaseUserRepositoryImpl extends BasePageRepository {
     public PageList page(PageParams<Users> pageParams) {
 
         //查询sql
-        StringBuffer sqlBuffer = new StringBuffer("select user.ID,user.USER_NAME,user.PHONE,user.ACTIVE,extends.REAL_NAME,extends.CORPORATION,extends.CODE,extends.TYPE,extends.HEADER from base_user user,base_user_extends extends where user.ID = extends.ID and (extends.type=1 or extends.type=2 ) ");
+        StringBuffer sqlBuffer = new StringBuffer("select user.ID,user.USER_NAME,user.PHONE,user.ACTIVE,extends.REAL_NAME,extends.CORPORATION,extends.CODE,extends.TYPE,extends.HEADER from base_user user,base_user_extends extends where user.ID = extends.ID and extends.type!=0 ");
 
         //组织查询条件
         Users user = pageParams.getParams();

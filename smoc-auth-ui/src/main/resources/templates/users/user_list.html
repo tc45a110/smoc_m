@@ -137,8 +137,9 @@
                             <h4 class="m-b-5" style="color: #00acc1;font-size: 16px">
                                 [[${user.realName}]]（[[${user.phone}]]）</h4>
                             <p class="text-muted" style="font-size: 12px">[[${user.code}]]
-                                <span> | </span> <span style="font-size: 12px"
-                                                       th:text="${user.type}==1?'移动运营人员':(${user.type}==2?'企业运营用户':(${user.type}==3?'系统用户':'客户'))">
+                                <span> | </span>
+                                <span style="font-size: 12px">
+                                    <mpm:tag identity="userType" th:value="${user.type}" show-type="label"  key="code"/>
                                 </span>
                             </p>
                         </div>
