@@ -1,5 +1,6 @@
 package com.smoc.cloud.smoc.product.codenumber.controller;
 
+import com.smoc.cloud.common.page.PageParams;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +27,17 @@ public class CodeNumberController {
 
         ModelAndView view = new ModelAndView("codenumber/codenumber_list");
 
+        //查询数据
+        PageParams params = new PageParams<>();
+        params.setPages(10);
+        params.setPageSize(8);
+        params.setStartRow(1);
+        params.setEndRow(10);
+        params.setCurrentPage(1);
+        params.setTotalRows(80);
+
+        view.addObject("pageParams",params);
+
         return view;
 
     }
@@ -38,6 +50,17 @@ public class CodeNumberController {
     @RequestMapping(value = "/page", method = RequestMethod.POST)
     public ModelAndView page() {
         ModelAndView view = new ModelAndView("codenumber/codenumber_list");
+
+        //查询数据
+        PageParams params = new PageParams<>();
+        params.setPages(10);
+        params.setPageSize(8);
+        params.setStartRow(1);
+        params.setEndRow(10);
+        params.setCurrentPage(1);
+        params.setTotalRows(80);
+
+        view.addObject("pageParams",params);
 
         return view;
 
@@ -108,6 +131,20 @@ public class CodeNumberController {
     public ModelAndView channelRecode(@PathVariable String id, HttpServletRequest request) {
 
         ModelAndView view = new ModelAndView("codenumber/codenumber_channel_recode");
+
+        return view;
+
+    }
+
+    /**
+     * 统计发送量
+     *
+     * @return
+     */
+    @RequestMapping(value = "/statisticsSendCount/{id}", method = RequestMethod.GET)
+    public ModelAndView statisticsSendCount(@PathVariable String id, HttpServletRequest request) {
+
+        ModelAndView view = new ModelAndView("codenumber/codenumber_statistics_send");
 
         return view;
 

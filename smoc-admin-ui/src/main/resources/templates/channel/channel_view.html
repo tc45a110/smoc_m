@@ -19,13 +19,13 @@
         <div class="row fixed-navigation">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">码号详细信息 </h4>
+                    <h4 class="page-title">通道详细信息 </h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
-                            码号管理
+                            通道管理
                         </li>
                         <li class="active">
-                            码号详细信息
+                            通道详细信息
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -38,25 +38,33 @@
             <div class="col-md-12">
                 <div class="card-box">
                     <ul class="nav nav-tabs">
-                        <li class="active" id="tab1"><a onclick="active('1')"  sec:authorize-url="/codenumber/detail/*"
-                                                        th:href="@{/codenumber/detail/id}"
-                                                        th:target="content1">码号详情</a></li>
-                        <li class="" id="tab2"><a onclick="active('2')" sec:authorize-url="/codenumber/channelRecode/*"
-                                                  th:href="@{/codenumber/channelRecode/id}"
-                                                  th:target="content1">通道使用记录</a></li>
-                        <li class="" id="tab3"><a onclick="active('3')" sec:authorize-url="/codenumber/statisticsSendCount/*"
-                                                  th:href="@{/codenumber/statisticsSendCount/id}"
+                        <li class="active" id="tab1"><a onclick="active('1')"  sec:authorize-url="/channel/detail/*"
+                                                        th:href="@{/channel/detail/id}"
+                                                        th:target="content1">通道详情</a></li>
+                        <li class="" id="tab2"><a onclick="active('2')" sec:authorize-url="/channel/customerRecode/*"
+                                                  th:href="@{/channel/customerRecode/id}"
+                                                  th:target="content1">用户使用记录</a></li>
+                        <li class="" id="tab3"><a onclick="active('3')" sec:authorize-url="/channel/productRecode/*"
+                                                  th:href="@{/channel/productRecode/id}"
+                                                  th:target="content1">产品使用记录</a></li>
+                        <li class="" id="tab4"><a onclick="active('4')" sec:authorize-url="/channel/beforePrice/*"
+                                                  th:href="@{/channel/beforePrice/id}"
+                                                  th:target="content1">价格历史记录</a></li>
+                        <li class="" id="tab5"><a onclick="active('5')" sec:authorize-url="/channel/beforeBusinessFees/*"
+                                                  th:href="@{/channel/beforeBusinessFees/id}"
+                                                  th:target="content1">商务费历史记录</a></li>
+                        <li class="" id="tab6"><a onclick="active('6')" sec:authorize-url="/channel/beforeBusinessFees/*"
                                                   th:target="content1">统计发送量</a></li>
                         <div class="pull-right">
-                            <a sec:authorize-url="/codenumber/list" th:href="@{/codenumber/list}"
+                            <a sec:authorize-url="/channel/list" th:href="@{/channel/list}"
                                class="btn btn-default waves-effect waves-light">
                                 <i class="glyphicon  glyphicon-share-alt" ></i>
-                                返回码号列表</a>
+                                返回通道列表</a>
                         </div>
                     </ul>
                     <div class="tab-cotent">
                         <iframe name="content1" id="content1" th:frameBorder="0" th:scrolling="auto"
-                                th:src="@{/codenumber/detail/id}" style="padding: 0px; width: 100%; height: 800px"> </iframe>
+                                th:src="@{/channel/detail/id}" style="padding: 0px; width: 100%; height: 800px"> </iframe>
                     </div>
                 </div>
             </div>
@@ -73,7 +81,7 @@
 <script>
 
     function active(tab) {
-        for(var num = 1;num<4;num++){
+        for(var num = 1;num<7;num++){
             $('#tab'+num).removeClass("active");
         }
         $('#tab'+tab).attr("class","active");

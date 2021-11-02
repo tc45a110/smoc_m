@@ -1,5 +1,6 @@
 package com.smoc.cloud.smoc.product.channel.controller;
 
+import com.smoc.cloud.common.page.PageParams;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +28,17 @@ public class ChannelController {
 
         ModelAndView view = new ModelAndView("channel/channel_list");
 
+        //查询数据
+        PageParams params = new PageParams<>();
+        params.setPages(10);
+        params.setPageSize(8);
+        params.setStartRow(1);
+        params.setEndRow(10);
+        params.setCurrentPage(1);
+        params.setTotalRows(80);
+
+        view.addObject("pageParams",params);
+
         return view;
 
     }
@@ -39,6 +51,17 @@ public class ChannelController {
     @RequestMapping(value = "/page", method = RequestMethod.POST)
     public ModelAndView page() {
         ModelAndView view = new ModelAndView("channel/channel_list");
+
+        //查询数据
+        PageParams params = new PageParams<>();
+        params.setPages(10);
+        params.setPageSize(8);
+        params.setStartRow(1);
+        params.setEndRow(10);
+        params.setCurrentPage(1);
+        params.setTotalRows(80);
+
+        view.addObject("pageParams",params);
 
         return view;
 
