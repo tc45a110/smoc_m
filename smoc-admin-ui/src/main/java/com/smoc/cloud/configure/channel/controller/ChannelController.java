@@ -89,7 +89,7 @@ public class ChannelController {
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public ModelAndView edit(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("channel/channel_edit");
+        ModelAndView view = new ModelAndView("/configure/channel/channel_edit");
 
         return view;
 

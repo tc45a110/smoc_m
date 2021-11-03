@@ -38,25 +38,25 @@
             <div class="col-md-12">
                 <div class="card-box">
                     <ul class="nav nav-tabs">
-                        <li class="active" id="tab1"><a onclick="active('1')"  sec:authorize-url="/channel/detail/*"
-                                                        th:href="@{/channel/detail/id}"
+                        <li class="active" id="tab1"><a onclick="active('1')"  sec:authorize-url="/configure/channel/detail/*"
+                                                        th:href="@{/configure/channel/detail/id}"
                                                         th:target="content1">通道详情</a></li>
-                        <li class="" id="tab2"><a onclick="active('2')" sec:authorize-url="/channel/customerRecode/*"
-                                                  th:href="@{/channel/customerRecode/id}"
+                        <li class="" id="tab2"><a onclick="active('2')" sec:authorize-url="/configure/channel/customerRecode/*"
+                                                  th:href="@{/configure/channel/customerRecode/id}"
                                                   th:target="content1">用户使用记录</a></li>
-                        <li class="" id="tab3"><a onclick="active('3')" sec:authorize-url="/channel/productRecode/*"
-                                                  th:href="@{/channel/productRecode/id}"
+                        <li class="" id="tab3"><a onclick="active('3')" sec:authorize-url="/configure/channel/productRecode/*"
+                                                  th:href="@{/configure/channel/productRecode/id}"
                                                   th:target="content1">产品使用记录</a></li>
-                        <li class="" id="tab4"><a onclick="active('4')" sec:authorize-url="/channel/beforePrice/*"
-                                                  th:href="@{/channel/beforePrice/id}"
+                        <li class="" id="tab4"><a onclick="active('4')" sec:authorize-url="/configure/channel/beforePrice/*"
+                                                  th:href="@{/configure/channel/beforePrice/id}"
                                                   th:target="content1">价格历史记录</a></li>
-                        <li class="" id="tab5"><a onclick="active('5')" sec:authorize-url="/channel/beforeBusinessFees/*"
-                                                  th:href="@{/channel/beforeBusinessFees/id}"
+                        <li class="" id="tab5"><a onclick="active('5')" sec:authorize-url="/configure/channel/beforeBusinessFees/*"
+                                                  th:href="@{/configure/channel/beforeBusinessFees/id}"
                                                   th:target="content1">商务费历史记录</a></li>
-                        <li class="" id="tab6"><a onclick="active('6')" sec:authorize-url="/channel/beforeBusinessFees/*"
+                        <li class="" id="tab6"><a onclick="active('6')" sec:authorize-url="/configure/channel/beforeBusinessFees/*"
                                                   th:target="content1">统计发送量</a></li>
                         <div class="pull-right">
-                            <a sec:authorize-url="/channel/list" th:href="@{/channel/list}"
+                            <a sec:authorize-url="/configure/channel/list" th:href="@{/configure/channel/list}"
                                class="btn btn-default waves-effect waves-light">
                                 <i class="glyphicon  glyphicon-share-alt" ></i>
                                 返回通道列表</a>
@@ -64,7 +64,7 @@
                     </ul>
                     <div class="tab-cotent">
                         <iframe name="content1" id="content1" th:frameBorder="0" th:scrolling="auto"
-                                th:src="@{/channel/detail/id}" style="padding: 0px; width: 100%; height: 800px"> </iframe>
+                                th:src="@{/configure/channel/detail/id}" style="padding: 0px; width: 100%; height: 800px"> </iframe>
                     </div>
                 </div>
             </div>

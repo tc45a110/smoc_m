@@ -36,15 +36,15 @@
         </div>
         <!-- end row -->
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
-            <div class="col-lg-6" style="margin-top:10px">
+            <div class="col-lg-6" style="margin-top:10px;">
                 <div class="panel panel-color panel-teal">
-                    <div class="panel-heading" style="display:block">
+                    <div class="panel-heading">
                         <h3 class="panel-title">
                             <i class="mdi mdi-content-save-all" style="margin-right:5px"></i>
                             通道基础信息
                         </h3>
                     </div>
-                    <div class="panel-body">
+                    <div class="panel-body" style="height: 1080px">
                         <div class="row">
                             <div class="col-md-10">
                                 <div class="p-20">
@@ -449,9 +449,16 @@
                                 </div>
                                 <!-- end class p-20 -->
                             </div> <!-- end col -->
-
-
                         </div>
+
+                        <div class="text-right">
+                            <button  class="btn btn-teal waves-effect waves-light">提交
+                            </button>
+                            <a sec:authorize-url="/configure/channel/list" th:href="@{/configure/channel/list}"
+                               class="btn btn-default waves-effect waves-light">返回
+                            </a>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -463,6 +470,7 @@
     </div> <!-- container -->
 </div> <!-- content -->
 <th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
 <script th:src="@{/static/plugins/moment/moment.js}"></script>
 <script th:src="@{/static/plugins/timepicker/bootstrap-timepicker.js}"></script>
 <script th:src="@{/static/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js}"></script>
