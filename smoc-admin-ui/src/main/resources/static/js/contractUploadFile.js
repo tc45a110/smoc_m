@@ -3,9 +3,7 @@ $(document).ready(function() {
 		changeInput: '<div class="jFiler-input-dragDrop"><div class="jFiler-input-inner"><div class="jFiler-input-icon"><i class="icon-jfi-cloud-up-o"></i></div><div class="jFiler-input-text"><h3>Drag & Drop files here</h3> <span style="display:inline-block; margin: 15px 0">or</span></div><a class="jFiler-input-choose-btn btn btn-custom waves-effect waves-light">上传附件</a></div></div>',
 		showThumbs: true,
 		theme: "dragdropbox",
-		limit: 1,
 		maxSize: 4,
-		extensions:["xlsx","xls","txt"],
 		templates: {
 			box: '<ul class="jFiler-items-list jFiler-items-grid"></ul>',
 			item: '<li class="jFiler-item">\
@@ -67,7 +65,6 @@ $(document).ready(function() {
 			removeConfirmation: "确定移除该文件?",
 			errors: {
 				filesLimit: "只能上传 {{fi-limit}} 个资源文件",
-				filesType: "文件必须为xlsx、xls、txt格式",
 				filesSize: "文件大小不能超过{{fi-maxSize}}MB",
 				filesSizeAll: "Files you've choosed are too large! Please upload files up to {{fi-maxSize}} MB."
 			}
