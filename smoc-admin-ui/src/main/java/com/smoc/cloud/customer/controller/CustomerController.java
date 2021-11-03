@@ -3,6 +3,7 @@ package com.smoc.cloud.customer.controller;
 import com.smoc.cloud.common.page.PageParams;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -93,6 +94,12 @@ public class CustomerController {
         params.setTotalRows(22);
 
         view.addObject("pageParams",params);
+
+        if("0000".equals(id)){
+            view.addObject("parentId","0");
+        }else{
+            view.addObject("parentId","1");
+        }
         return view;
 
     }
@@ -105,6 +112,12 @@ public class CustomerController {
     @RequestMapping(value = "/customer/view/{id}", method = RequestMethod.GET)
     public ModelAndView view(@PathVariable String id) {
         ModelAndView view = new ModelAndView("customer/customer_view");
+
+        if("0000".equals(id)){
+            view.addObject("parentId","0");
+        }else{
+            view.addObject("parentId","1");
+        }
 
         return view;
 
