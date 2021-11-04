@@ -11,21 +11,21 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * EC合同管理
+ * EC资料管理
  */
 @Slf4j
 @Controller
 @RequestMapping("/ec")
-public class ContractController {
+public class ResourceController {
 
     /**
-     * 查询EC合同
+     * 查询EC资料
      *
      * @return
      */
-    @RequestMapping(value = "/contract/list", method = RequestMethod.GET)
+    @RequestMapping(value = "/resource/list", method = RequestMethod.GET)
     public ModelAndView list() {
-        ModelAndView view = new ModelAndView("contract/contract_list");
+        ModelAndView view = new ModelAndView("resource/resource_list");
 
         //查询数据
         PageParams params = new PageParams<>();
@@ -43,13 +43,13 @@ public class ContractController {
     }
 
     /**
-     * 分页查询EC合同
+     * 分页查询EC资料
      *
      * @return
      */
-    @RequestMapping(value = "/contract/page", method = RequestMethod.POST)
+    @RequestMapping(value = "/resource/page", method = RequestMethod.POST)
     public ModelAndView page() {
-        ModelAndView view = new ModelAndView("contract/contract_list");
+        ModelAndView view = new ModelAndView("resource/resource_list");
         //查询数据
         PageParams params = new PageParams<>();
         params.setPages(10);
@@ -68,10 +68,10 @@ public class ContractController {
      * 添加
      * @return
      */
-    @RequestMapping(value = "/contract/add", method = RequestMethod.GET)
+    @RequestMapping(value = "/resource/add", method = RequestMethod.GET)
     public ModelAndView add() {
 
-        ModelAndView view = new ModelAndView("contract/contract_edit");
+        ModelAndView view = new ModelAndView("resource/resource_edit");
 
         return view;
 
@@ -81,24 +81,23 @@ public class ContractController {
      * 编辑
      * @return
      */
-    @RequestMapping(value = "/contract/edit/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/resource/edit/{id}", method = RequestMethod.GET)
     public ModelAndView edit(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("contract/contract_edit");
+        ModelAndView view = new ModelAndView("resource/resource_edit");
 
         return view;
 
     }
 
-
     /**
-     * 查询EC合同审核
+     * 查询EC资料审核
      *
      * @return
      */
-    @RequestMapping(value = "/contract/checkList", method = RequestMethod.GET)
+    @RequestMapping(value = "/resource/checkList", method = RequestMethod.GET)
     public ModelAndView checkList() {
-        ModelAndView view = new ModelAndView("contract/contract_check_list");
+        ModelAndView view = new ModelAndView("resource/resource_check_list");
 
         //查询数据
         PageParams params = new PageParams<>();
@@ -116,13 +115,13 @@ public class ContractController {
     }
 
     /**
-     * 分页查询EC合同审核
+     * 分页查询EC资料审核
      *
      * @return
      */
-    @RequestMapping(value = "/contract/checkPage", method = RequestMethod.POST)
+    @RequestMapping(value = "/resource/checkPage", method = RequestMethod.POST)
     public ModelAndView checkPage() {
-        ModelAndView view = new ModelAndView("contract/contract_check_list");
+        ModelAndView view = new ModelAndView("resource/resource_check_list");
         //查询数据
         PageParams params = new PageParams<>();
         params.setPages(10);
@@ -136,4 +135,31 @@ public class ContractController {
         return view;
 
     }
+
+    /**
+     * 显示审核页面
+     * @return
+     */
+    @RequestMapping(value = "/resource/checkView/{id}", method = RequestMethod.GET)
+    public ModelAndView checkView(@PathVariable String id, HttpServletRequest request) {
+
+        ModelAndView view = new ModelAndView("resource/resource_check_view");
+
+        return view;
+
+    }
+
+    /**
+     * 显示审核详情
+     * @return
+     */
+    @RequestMapping(value = "/resource/checkDetail/{id}", method = RequestMethod.GET)
+    public ModelAndView checkDetail(@PathVariable String id, HttpServletRequest request) {
+
+        ModelAndView view = new ModelAndView("resource/resource_check_detail");
+
+        return view;
+
+    }
+
 }
