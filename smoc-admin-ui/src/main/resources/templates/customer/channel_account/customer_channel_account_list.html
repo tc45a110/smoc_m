@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
+    <style>
+    </style>
+</head>
+<body>
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+        <!-- start row -->
+        <div class="row fixed-navigation">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">EC通道账户管理 </h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            客户管理
+                        </li>
+                        <li class="active">
+                            EC通道账户管理
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+        <!-- start row -->
+        <div class="row" style="position: relative;margin-top: 80px" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <form th:action="@{/ec/customer/channel/account/page}"  id="query_form"  method="post">
+                        <div class="row m-b-60">
+                            <div class="col-sm-12">
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control"
+                                           placeholder="企业名称" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control"
+                                           placeholder="账号名称" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control"
+                                           placeholder="账号" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <mpm:tag id="businessType" identity="businessType" show-type="select" key="code"
+                                             class="form-control" name="enterpriseType" value="" title="业务类型"/>
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <mpm:tag id="contentType" identity="contentType" show-type="select" key="code"
+                                             class="form-control" name="enterpriseType" value="" title="内容类型"/>
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <mpm:tag id="carrier" identity="carrier" show-type="select" key="code"
+                                             class="form-control" name="enterpriseType" value="" title="发送运营商"/>
+                                </div>
+                                <div class="form-group col-sm-3 pull-right" style="text-align: right">
+                                    <button sec:authorize-url="/ec/customer/channel/account/page" type="submit"
+                                            class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-search" style="margin-right:5px"></i> 查询
+                                    </button>
+                                    <a sec:authorize-url="/ec/customer/channel/account/add"  th:href="@{/ec/customer/channel/account/add}"
+                                       class="btn btn-success waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>EC开户</a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row -->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="panel panel-color panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">EC通道账号列表</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table m-10" style="margin-top: -12px;">
+                                <thead>
+                                <tr>
+                                    <th>企业名称</th>
+                                    <th>账号名称</th>
+                                    <th>账号</th>
+                                    <th>业务类型</th>
+                                    <th>内容类型</th>
+                                    <th>发送运营商</th>
+                                    <th>扩展码</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <span style="color:#26A69A">（渠道商）</span><a  th:href="@{/ec/customer/config/0000}" > 北京星语互联科技有限公司</a>
+                                    </td>
+                                    <td>
+                                        普通短信账号
+                                    </td>
+                                    <td>
+                                         XY93348334343134343
+                                    </td>
+                                    <td>
+                                        普通短信
+                                    </td>
+                                    <td>
+                                       信用卡
+                                    </td>
+                                    <td>
+                                        移动
+                                    </td>
+                                    <td>
+                                        98761234
+                                    </td>
+                                    <td>
+                                        <a   sec:authorize-url="/ec/customer/config/*" th:href="@{/ec/customer/config/0000}"
+                                             class="on-default edit-row"
+                                             style="padding-left: 10px;color: #29b6f6;"
+                                             title="修改、配置信息"><i style="font-size: 18px"
+                                                                class="mdi mdi-table-edit"></i></a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <th:block th:insert="fragments/page_fragments :: page"/>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+        <!-- end row -->
+
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+
+        <th:block th:insert="fragments/common_fragments :: confirm-modal"/>
+
+    </div> <!-- container -->
+
+</div> <!-- content -->
+
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<script>
+
+    function changeBg(id){
+
+        $("#"+id).css('background-color', '#F3F3F3');
+
+    }
+
+    function changeBgBack(id){
+        $("#"+id).css('background-color', '#fff');
+    }
+
+    function confirmDelete(id) {
+        $("#deleteId").val(id);
+    }
+
+    function deleteById() {
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $('#preloader').css('display', 'block');
+        location.href = contextPath + '/system/deleteById/' + $("#deleteId").val();
+    }
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+</script>
+</body>
+</html>
