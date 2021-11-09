@@ -18,7 +18,7 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">EC详细信息</h4>
+                    <h4 class="page-title">EC通道账户配置</h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
                             客户管理
@@ -27,7 +27,7 @@
                             EC管理
                         </li>
                         <li class="active">
-                            EC详细信息
+                            EC通道账户配置
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -57,25 +57,38 @@
                                     <hr/>
 
                                     <div class="text-left">
-                                        <p th:remove="${parentId =='0'}?all:none" class="text-muted font-13"><strong>父公司 :</strong> <span class="m-l-15">北京星语互联科技有限公司</span>
-                                        <p class="text-muted font-13"><strong>联系人 :</strong> <span
-                                                class="m-l-15">贾明</span>
-                                        </p>
-                                        <p class="text-muted font-13"><strong>联系方式 :</strong><span class="m-l-15">13819816885</span>
-                                        </p>
-                                        <p class="text-muted font-13"><strong>企业类型 :</strong><span
-                                                class="m-l-15">渠道商</span>
-                                        </p>
-                                        <p class="text-muted font-13"><strong>企业类型 :</strong><span class="m-l-15">北京市朝阳区武汉路23号</span>
-                                        </p>
-                                        </p>
-                                        <p class="text-muted font-13"><strong>销售码（销售身份） :</strong> <span class="m-l-15">XY0000</span>
-                                        </p>
-                                        <p class="text-muted font-13"><strong>企业IP :</strong><span class="m-l-15">124.23.5.24</span>
-                                        </p>
-                                        <p class="text-muted font-13"><strong>状态 :</strong><span
-                                                class="m-l-15">正常</span>
-                                        </p>
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                                <a href="#" data-toggle="modal" data-target="#add-category" class="btn btn-lg btn-danger btn-block waves-effect m-t-20 waves-light">
+                                                    <i class="fa fa-plus"></i> Create New
+                                                </a>
+                                                <div id="external-events" class="m-t-20">
+                                                    <br>
+                                                    <p class="text-muted">Drag and drop your event or click in the calendar</p>
+                                                    <div class="external-event bg-success" data-class="bg-success">
+                                                        <i class="mdi mdi-checkbox-blank-circle m-r-10 vertical-middle"></i>New Theme Release
+                                                    </div>
+                                                    <div class="external-event bg-info" data-class="bg-info">
+                                                        <i class="mdi mdi-checkbox-blank-circle m-r-10 vertical-middle"></i>My Event
+                                                    </div>
+                                                    <div class="external-event bg-warning" data-class="bg-warning">
+                                                        <i class="mdi mdi-checkbox-blank-circle m-r-10 vertical-middle"></i>Meet manager
+                                                    </div>
+                                                    <div class="external-event bg-purple" data-class="bg-purple">
+                                                        <i class="mdi mdi-checkbox-blank-circle m-r-10 vertical-middle"></i>Create New theme
+                                                    </div>
+                                                </div>
+
+                                                <!-- checkbox -->
+                                                <div class="checkbox checkbox-custom m-t-40">
+                                                    <input id="drop-remove" type="checkbox">
+                                                    <label for="drop-remove">
+                                                        Remove after drop
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                        </div>
                                     </div>
                                     <div>
                                         <button type="button" style="margin-right:10px;"
@@ -605,7 +618,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="row" style="margin-top:10px">
+                                    <div class="row">
                                         <div class="col-md-12">
                                             <div class="card-box">
                                                 <ul class="nav nav-tabs tabs-bordered">

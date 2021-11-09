@@ -56,4 +56,38 @@ public class CustomerChannelAccountController {
         return view;
 
     }
+
+    /**
+     * 客户通道账号列表
+     * @return
+     */
+    @RequestMapping(value = "/customer/channel/account/search", method = RequestMethod.POST)
+    public ModelAndView search() {
+        ModelAndView view = new ModelAndView("customer/channel_account/customer_channel_account_search");
+
+        //查询数据
+        PageParams params = new PageParams<>();
+        params.setPages(3);
+        params.setPageSize(10);
+        params.setStartRow(1);
+        params.setEndRow(10);
+        params.setCurrentPage(1);
+        params.setTotalRows(22);
+
+        view.addObject("pageParams",params);
+        return view;
+
+    }
+
+    /**
+     * 客户通道账号列表
+     * @return
+     */
+    @RequestMapping(value = "/customer/channel/account/config", method = RequestMethod.GET)
+    public ModelAndView config() {
+        ModelAndView view = new ModelAndView("customer/channel_account/customer_channel_account_config");
+
+        return view;
+
+    }
 }
