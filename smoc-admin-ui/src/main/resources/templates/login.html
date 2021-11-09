@@ -45,7 +45,7 @@
                                 </div>
                                 <div th:if="${@systemProperties.enableVerifyCode}" class="form-group">
                                     <div class="col-xs-12">
-                                        <input style="float: left;width: 65%;" class="form-control" type="text" required="" value="" autocomplete="off"
+                                        <input style="float: left;width: 65%;" class="form-control" type="text" required="" value="Wjho2020.." autocomplete="off"
                                                 name="verifyCode" id="verifyCode" placeholder="验证码">
                                         <a th:onClick="'javascript:refreshVerifyCode()'"><img style="float: left;width: 30%;margin-left: 10px;" title="点击图片刷新验证码" id="verifyCodeImg" th:src="@{/verifyCode}"></a>
                                         <input type="hidden" id="verify" name="verify" value="true">
