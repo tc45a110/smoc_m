@@ -69,7 +69,7 @@
                                             class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search" style="margin-right:5px"></i> 查询
                                     </button>
-                                    <a sec:authorize-url="/ec/customer/channel/account/add"  th:href="@{/ec/customer/channel/account/add}"
+                                    <a sec:authorize-url="/ec/customer/search/*"  th:href="@{/ec/customer/search/channel_account}"
                                        class="btn btn-success waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>新建EC通道账户</a>
                                 </div>
@@ -117,7 +117,8 @@
                                          XY93348334343134343
                                     </td>
                                     <td>
-                                        普通短信
+                                        <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">普通短信</a>
+
                                     </td>
                                     <td>
                                        信用卡

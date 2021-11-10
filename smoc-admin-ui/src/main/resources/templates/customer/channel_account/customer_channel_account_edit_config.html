@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
+</head>
+<body>
+<!-- Loader -->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">EC通道账户详细</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            客户管理
+                        </li>
+                        <li>
+                            EC通道管理
+                        </li>
+                        <li class="active">
+                            EC通道账户详细
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="card-box">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12">
+                                    <h4 class="m-b-10">EC详细信息
+                                        <div class="pull-right" style="margin-top: -12px;">
+                                            <a sec:authorize-url="/ec/customer/list" th:href="@{/ec/customer/list}"
+                                               class="btn btn-default waves-effect waves-light btn-md">
+                                                <i class="glyphicon  glyphicon-share-alt" style="margin-right:5px"></i>
+                                                返回</a>
+                                            <a  th:href="@{/ec/customer/channel/account/config}"
+                                                style="margin-left:10px;"
+                                                class="btn btn-success waves-effect waves-light btn-md">
+                                                <i class="mdi mdi-vector-circle" style="margin-right:5px"></i>
+                                                EC通道账户
+                                            </a>
+                                            <a
+                                                    style="margin-left:10px;"
+                                                    class="btn btn-info waves-effect waves-light btn-md">
+                                                <i class="mdi mdi-poll" style="margin-right:5px"></i>
+                                                EC统计分析
+                                            </a>
+                                        </div>
+                                    </h4>
+
+                                    <div class="row" style="margin-top:20px">
+                                        <div class="col-md-12">
+                                            <div class="card-box">
+                                                <ul class="nav nav-tabs tabs-bordered">
+                                                    <li class="active">
+                                                        <a href="#contract" data-toggle="tab" aria-expanded="false">
+                                                            <span class="visible-xs"><i class="fa fa-home"></i></span>
+                                                            <span class="hidden-xs">合同信息</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="">
+                                                        <a href="#profile-b1" data-toggle="tab" aria-expanded="true">
+                                                            <span class="visible-xs"><i class="fa fa-user"></i></span>
+                                                            <span class="hidden-xs">资料审核信息</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="">
+                                                        <a href="#channel-b1" data-toggle="tab" aria-expanded="true">
+                                                            <span class="visible-xs"><i class="fa fa-user"></i></span>
+                                                            <span class="hidden-xs">通道信息</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="">
+                                                        <a href="#prod-b1" data-toggle="tab" aria-expanded="true">
+                                                            <span class="visible-xs"><i class="fa fa-user"></i></span>
+                                                            <span class="hidden-xs">产品信息</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="">
+                                                        <a href="#ts-b1" data-toggle="tab" aria-expanded="false">
+                                                            <span class="visible-xs"><i class="fa fa-cog"></i></span>
+                                                            <span class="hidden-xs">投诉记录</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="">
+                                                        <a href="#login" data-toggle="tab" aria-expanded="false">
+                                                            <span class="visible-xs"><i class="fa fa-cog"></i></span>
+                                                            <span class="hidden-xs">web登录记录</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="">
+                                                        <a href="#operate" data-toggle="tab" aria-expanded="false">
+                                                            <span class="visible-xs"><i class="fa fa-cog"></i></span>
+                                                            <span class="hidden-xs">EC信息记录</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                                <div class="tab-content">
+                                                    <div class="tab-pane active" id="contract">
+
+                                                    </div>
+                                                    <div class="tab-pane" id="login">
+                                                    </div>
+                                                    <div class="tab-pane" id="operate">
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div> <!-- end col -->
+                                    </div>
+                                    <!-- end row -->
+                                </div> <!-- end col -->
+
+                            </div> <!-- end row -->
+
+                </div>
+            </div>
+        </div>
+        <!-- End row -->
+
+        <!-- end row -->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+
+<script>
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+</script>
+</body>
+</html>

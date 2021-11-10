@@ -51,7 +51,7 @@
                                     </div>
 
                                     <div class="">
-                                        <h4 class="m-b-5">北京星语互联科技有限公司</h4>
+                                        <h4 class="m-b-5 m-t-5">北京星语互联科技有限公司</h4>
                                         <p class="text-muted"></p>
                                     </div>
                                     <hr/>
@@ -78,12 +78,14 @@
                                         </p>
                                     </div>
                                     <div>
-                                        <button type="button" style="margin-right:10px;"
-                                                class="btn btn-info btn-sm w-sm waves-effect m-t-10 waves-light">编辑EC信息
-                                        </button>
-                                        <button type="button"
-                                                class="btn btn-danger btn-sm w-sm waves-effect m-t-10 waves-light">注销EC
-                                        </button>
+
+                                        <a sec:authorize-url="/ec/customer/add/*/*"  th:href="@{/ec/customer/add/1/0000}"
+                                           class="btn btn-info waves-effect waves-light m-l-10 btn-sm">
+                                            <i class="mdi mdi-table-edit" style="margin-right:5px"></i>编辑EC</a>
+                                        <a
+                                           class="btn btn-danger waves-effect waves-light m-l-10 btn-sm">
+                                            <i class="mdi mdi-delete" style="margin-right:5px"></i>注销EC</a>
+
                                     </div>
 
                                 </div>

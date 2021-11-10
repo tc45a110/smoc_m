@@ -76,11 +76,35 @@ public class CustomerChannelAccountController {
 
         view.addObject("pageParams",params);
         return view;
+    }
+
+    /**
+     * 客户通道账号添加
+     * @return
+     */
+    @RequestMapping(value = "/customer/channel/account/add", method = RequestMethod.GET)
+    public ModelAndView add() {
+        ModelAndView view = new ModelAndView("customer/channel_account/customer_channel_account_edit");
+
+        return view;
 
     }
 
     /**
-     * 客户通道账号列表
+     * 客户通道账号添加
+     * @return
+     */
+    @RequestMapping(value = "/customer/channel/account/account_config", method = RequestMethod.GET)
+    public ModelAndView edit() {
+        ModelAndView view = new ModelAndView("customer/channel_account/customer_channel_account_edit_config");
+
+        return view;
+
+    }
+
+
+    /**
+     * 客户通道账号配置
      * @return
      */
     @RequestMapping(value = "/customer/channel/account/config", method = RequestMethod.GET)
