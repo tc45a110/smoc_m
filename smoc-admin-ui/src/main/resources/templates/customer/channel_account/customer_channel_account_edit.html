@@ -44,8 +44,12 @@
                     <form  id="submit_form"
                           method="post" data-parsley-validate="">
                         <div class="row">
-                            <div class="col-md-6">
-                                <div class="p-20">
+                            <div class="col-md-6 panel panel-default" style="padding-left: 0px;padding-right: 0px">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">通道账户 基础信息</h3>
+                                </div>
+                                <div class="panel-body">
+                                  <div class="p-l-r-10">
                                     <div class="form-group m-b-20">
                                         <label for="linkt">EC名称</label>：北京星语互联科技有限公司
                                     </div>
@@ -62,12 +66,12 @@
                                                placeholder="账号">
                                     </div>
                                     <div class="form-group">
-                                        <label for="businessType">业务类型<span class="text-danger">*</span></label>
+                                        <label>业务类型<span class="text-danger">*</span></label>
                                         <mpm:tag id="enterpriseType" required="true"  identity="businessType" show-type="select" key="code"
                                                  class="form-control" name="enterpriseType" value="" title="业务类型"/>
                                     </div>
                                     <div class="form-group">
-                                        <label for="contentType">内容类型<span class="text-danger">*</span></label>
+                                        <label>内容类型<span class="text-danger">*</span></label>
                                         <mpm:tag id="enterpriseType" required="true"  identity="contentType" show-type="select" key="code"
                                                  class="form-control" name="enterpriseType" value="" title="内容类型"/>
                                     </div>
@@ -84,30 +88,110 @@
                                                placeholder="输入携号转网标识">
                                     </div>
                                     <div class="form-group">
-                                        <label for="carrier">运营商<span class="text-danger">*</span></label>
+                                        <label>运营商<span class="text-danger">*</span></label>
                                         <mpm:tag id="enterpriseType" required="true"  identity="carrier" show-type="select" key="code"
                                                 name="enterpriseType" value="" title="运营商"/>
                                     </div>
-                                    <div class="form-group m-b-20">
-                                        <label class="m-b-10">有效状态</label>
-                                        <br/>
-                                        <div class="radio radio-info radio-inline">
-                                            <input type="radio" id="active1" value="1" checked
-                                                   required="">
-                                            <label for="active1"> 是 </label>
-                                        </div>
-                                        <div class="radio radio-info radio-inline">
-                                            <input type="radio" id="active0" value="0">
-                                            <label for="active0"> 否 </label>
-                                        </div>
+                                      <br>
+                                      <div class="form-group m-b-20">
+                                          <label class="m-b-10">账号层级</label>
 
-                                    </div>
+                                          <div class="radio radio-info radio-inline">
+                                              <input style="margin-left: 10px"  type="radio" id="active12" value="1" checked
+                                                     required="">
+                                              <label for="active1"> 一级主账号 </label>
+                                          </div>
+                                          <div class="radio radio-info radio-inline">
+                                              <input style="margin-left: 10px" type="radio" id="active02" value="0">
+                                              <label for="active0"> 二级子账号 </label>
+                                          </div>
 
+                                      </div>
+
+                                      <div style="height: 10px"></div>
+
+                                      <div class="form-group m-b-20">
+                                          <label class="m-b-10">有效状态</label>
+
+                                          <div class="radio radio-info radio-inline">
+                                              <input type="radio" id="active1" value="1" checked
+                                                     required="">
+                                              <label for="active1"> 是 </label>
+                                          </div>
+                                          <div class="radio radio-info radio-inline">
+                                              <input type="radio" id="active0" value="0">
+                                              <label for="active0"> 否 </label>
+                                          </div>
+
+                                      </div>
                                 </div>
-                                <!-- end class p-20 -->
+                                </div>
                             </div> <!-- end col -->
 
-                            <div class="col-md-6">
+                            <div class="col-md-6 panel panel-color panel-info" style="padding-left:0px;padding-right: 0px">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">通道账户 接口信息</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="p-l-r-10">
+                                        <div class="form-group m-b-20">
+                                            <label>接口类型<span class="text-danger">*</span>&nbsp;</label>
+                                            <mpm:tag id="inter" required="true"  identity="channelProtocolType" show-type="select" key="code"
+                                                     class="form-control" name="inter" value="" title="接口类型"/>
+                                        </div>
+                                        <div class="form-group m-b-20">
+                                            <label for="password">接口密码<span class="text-danger">*</span>&nbsp;</label>
+                                            <input id="password" type="password"  class="form-control"
+                                                   required="" data-parsley-length="[6,30]" autocomplete="off"
+                                                   placeholder="接口密码">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="service">服务代码<span class="text-danger">*</span></label>
+                                            <input id="service" type="text"  class="form-control"
+                                                   required="" data-parsley-length="[4,30]" autocomplete="off"
+                                                   placeholder="服务代码">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="links">最大链接数<span class="text-danger">*</span></label>
+                                            <input id="links" type="text"  class="form-control"
+                                                   required="" data-parsley-length="[1,30]" autocomplete="off"
+                                                   placeholder="最大链接数">
+                                        </div>
+                                        <div class="form-group m-b-20">
+                                            <label for="speed">客户提交速率(次/秒)<span class="text-danger">*</span>&nbsp;</label>
+                                            <input id="speed" type="text"  class="form-control"
+                                                   required="" data-parsley-length="[2,64]" autocomplete="off"
+                                                   placeholder="客户提交速率">
+                                        </div>
+                                        <div class="form-group m-b-20">
+                                            <label for="check">进入审核<span class="text-danger">*</span>&nbsp;</label>
+                                            <input id="check" type="text"  class="form-control"
+                                                   required="" data-parsley-length="[2,24]" autocomplete="off"
+                                                   placeholder="进入审核">
+                                        </div>
+                                        <div class="form-group m-b-20">
+                                            <label for="ip">客户鉴权IP<span class="text-danger">*</span>&nbsp;</label>
+                                            <input id="ip" type="text"  class="form-control"
+                                                   required="" data-parsley-length="[2,24]" autocomplete="off"
+                                                   placeholder="客户鉴权IP">
+                                        </div>
+                                        <div class="form-group m-b-20">
+                                            <label for="url">运营商状态报告推送地址url<span class="text-danger">*</span>&nbsp;</label>
+                                            <input id="url" type="text"  class="form-control"
+                                                   required="" data-parsley-length="[2,24]" autocomplete="off"
+                                                   placeholder="运营商状态报告推送地址url">
+                                        </div>
+                                        <div class="form-group m-b-20">
+                                            <label for="upUrl">上行短信推送地址url<span class="text-danger">*</span>&nbsp;</label>
+                                            <input id="upUrl" type="text"  class="form-control"
+                                                   required="" data-parsley-length="[2,24]" autocomplete="off"
+                                                   placeholder="上行短信推送地址url">
+                                        </div>
+
+
+
+                                    </div>
+                                </div>
 
                             </div> <!-- end col -->
                         </div> <!-- end row -->

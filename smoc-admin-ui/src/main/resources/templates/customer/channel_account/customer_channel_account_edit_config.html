@@ -39,7 +39,7 @@
                 <div class="card-box">
                             <div class="row">
                                 <div class="col-md-12 col-sm-12">
-                                    <h4 class="m-b-10">EC详细信息
+                                    <h4 class="m-b-10">EC通道账户详细
                                         <div class="pull-right" style="margin-top: -12px;">
                                             <a sec:authorize-url="/ec/customer/list" th:href="@{/ec/customer/list}"
                                                class="btn btn-default waves-effect waves-light btn-md">
@@ -63,52 +63,58 @@
                                     <div class="row" style="margin-top:20px">
                                         <div class="col-md-12">
                                             <div class="card-box">
-                                                <ul class="nav nav-tabs tabs-bordered">
+                                                <ul class="nav nav-tabs navtab-bg nav-justified">
                                                     <li class="active">
+                                                        <a href="#channel_info" data-toggle="tab" aria-expanded="false">
+                                                            <span class="visible-xs"><i class="fa fa-home"></i></span>
+                                                            <span class="hidden-xs">通道账户信息</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="">
                                                         <a href="#contract" data-toggle="tab" aria-expanded="false">
                                                             <span class="visible-xs"><i class="fa fa-home"></i></span>
-                                                            <span class="hidden-xs">合同信息</span>
+                                                            <span class="hidden-xs">通道基础信息</span>
                                                         </a>
                                                     </li>
                                                     <li class="">
                                                         <a href="#profile-b1" data-toggle="tab" aria-expanded="true">
                                                             <span class="visible-xs"><i class="fa fa-user"></i></span>
-                                                            <span class="hidden-xs">资料审核信息</span>
+                                                            <span class="hidden-xs">通道接口参数</span>
                                                         </a>
                                                     </li>
                                                     <li class="">
                                                         <a href="#channel-b1" data-toggle="tab" aria-expanded="true">
                                                             <span class="visible-xs"><i class="fa fa-user"></i></span>
-                                                            <span class="hidden-xs">通道信息</span>
+                                                            <span class="hidden-xs">通道财务信息</span>
                                                         </a>
                                                     </li>
                                                     <li class="">
                                                         <a href="#prod-b1" data-toggle="tab" aria-expanded="true">
                                                             <span class="visible-xs"><i class="fa fa-user"></i></span>
-                                                            <span class="hidden-xs">产品信息</span>
+                                                            <span class="hidden-xs">信息过滤信息</span>
                                                         </a>
                                                     </li>
                                                     <li class="">
                                                         <a href="#ts-b1" data-toggle="tab" aria-expanded="false">
                                                             <span class="visible-xs"><i class="fa fa-cog"></i></span>
-                                                            <span class="hidden-xs">投诉记录</span>
+                                                            <span class="hidden-xs">通道发送信息</span>
                                                         </a>
                                                     </li>
                                                     <li class="">
                                                         <a href="#login" data-toggle="tab" aria-expanded="false">
                                                             <span class="visible-xs"><i class="fa fa-cog"></i></span>
-                                                            <span class="hidden-xs">web登录记录</span>
+                                                            <span class="hidden-xs">通道扩展参数</span>
                                                         </a>
                                                     </li>
                                                     <li class="">
                                                         <a href="#operate" data-toggle="tab" aria-expanded="false">
                                                             <span class="visible-xs"><i class="fa fa-cog"></i></span>
-                                                            <span class="hidden-xs">EC信息记录</span>
+                                                            <span class="hidden-xs">通道账户操作记录</span>
                                                         </a>
                                                     </li>
                                                 </ul>
                                                 <div class="tab-content">
-                                                    <div class="tab-pane active" id="contract">
+                                                    <div class="tab-pane active" id="channel_info">
 
                                                     </div>
                                                     <div class="tab-pane" id="login">
