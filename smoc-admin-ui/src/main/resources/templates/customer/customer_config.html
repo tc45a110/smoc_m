@@ -57,7 +57,7 @@
                                     <hr/>
 
                                     <div class="text-left">
-                                        <p th:remove="${parentId =='0'}?all:none" class="text-muted font-13"><strong>父公司 :</strong> <span class="m-l-15">北京星语互联科技有限公司</span>
+                                        <p th:remove="${parentId =='0'}?all:none" class="text-muted font-13"><strong>上级EC :</strong> <span class="m-l-15">北京星语互联科技有限公司</span>
                                         <p class="text-muted font-13"><strong>联系人 :</strong> <span
                                                 class="m-l-15">贾明</span>
                                         </p>
@@ -183,11 +183,11 @@
                                                class="btn btn-default waves-effect waves-light btn-md">
                                                 <i class="glyphicon  glyphicon-share-alt" style="margin-right:5px"></i>
                                                 返回</a>
-                                            <a  th:href="@{/ec/customer/channel/account/config}"
+                                            <a  th:href="@{/ec/customer/channel/account/center}"
                                                     style="margin-left:10px;"
                                                     class="btn btn-success waves-effect waves-light btn-md">
                                                 <i class="mdi mdi-vector-circle" style="margin-right:5px"></i>
-                                                EC通道账户
+                                                EC通道账户中心
                                             </a>
                                             <a
                                                     style="margin-left:10px;"

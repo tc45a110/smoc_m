@@ -4,14 +4,17 @@ package com.smoc.cloud.customer.controller;
 import com.smoc.cloud.common.page.PageParams;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Slf4j
 @Controller
 @RequestMapping("/ec")
-public class CustomerChannelAccountController {
+public class ChannelAccountController {
 
     /**
      * 客户通道账号列表
@@ -19,7 +22,7 @@ public class CustomerChannelAccountController {
      */
     @RequestMapping(value = "/customer/channel/account/list", method = RequestMethod.GET)
     public ModelAndView list() {
-        ModelAndView view = new ModelAndView("customer/channel_account/customer_channel_account_list");
+        ModelAndView view = new ModelAndView("customer/channel_account/channel_account_list");
 
         //查询数据
         PageParams params = new PageParams<>();
@@ -41,7 +44,7 @@ public class CustomerChannelAccountController {
      */
     @RequestMapping(value = "/customer/channel/account/page", method = RequestMethod.POST)
     public ModelAndView page() {
-        ModelAndView view = new ModelAndView("customer/channel_account/customer_channel_account_list");
+        ModelAndView view = new ModelAndView("customer/channel_account/channel_account_list");
 
         //查询数据
         PageParams params = new PageParams<>();
@@ -58,12 +61,12 @@ public class CustomerChannelAccountController {
     }
 
     /**
-     * 客户通道账号列表
+     * 查询EC列表
      * @return
      */
     @RequestMapping(value = "/customer/channel/account/search", method = RequestMethod.POST)
     public ModelAndView search() {
-        ModelAndView view = new ModelAndView("customer/channel_account/customer_channel_account_search");
+        ModelAndView view = new ModelAndView("customer/channel_account/channel_account_search");
 
         //查询数据
         PageParams params = new PageParams<>();
@@ -77,40 +80,56 @@ public class CustomerChannelAccountController {
         view.addObject("pageParams",params);
         return view;
     }
-
-    /**
-     * 客户通道账号添加
-     * @return
-     */
-    @RequestMapping(value = "/customer/channel/account/add", method = RequestMethod.GET)
-    public ModelAndView add() {
-        ModelAndView view = new ModelAndView("customer/channel_account/customer_channel_account_edit");
-
-        return view;
-
-    }
-
-    /**
-     * 客户通道账号添加
-     * @return
-     */
-    @RequestMapping(value = "/customer/channel/account/account_config", method = RequestMethod.GET)
-    public ModelAndView edit() {
-        ModelAndView view = new ModelAndView("customer/channel_account/customer_channel_account_edit_config");
-
-        return view;
-
-    }
-
 
     /**
      * 客户通道账号配置
      * @return
      */
-    @RequestMapping(value = "/customer/channel/account/config", method = RequestMethod.GET)
-    public ModelAndView config() {
-        ModelAndView view = new ModelAndView("customer/channel_account/customer_channel_account_config");
+    @RequestMapping(value = "/customer/channel/account/config/{type}", method = RequestMethod.GET)
+    public ModelAndView config(@PathVariable String type, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("customer/channel_account/channel_account_config");
+        view.addObject("type",type);
+        view.addObject("url","/ec/customer/channel/account/edit/"+type+"/id");
+        if("view".equals(type)){
+            view.addObject("url","/ec/customer/channel/account/view/detail/id");
+        }
 
+        return view;
+
+    }
+
+
+    /**
+     * 客户通道账号中心
+     * @return
+     */
+    @RequestMapping(value = "/customer/channel/account/center", method = RequestMethod.GET)
+    public ModelAndView center() {
+        ModelAndView view = new ModelAndView("customer/channel_account/channel_account_center");
+
+        return view;
+
+    }
+
+    /**
+     * 客户通道账号明细
+     * @return
+     */
+    @RequestMapping(value = "/customer/channel/account/view/{type}/{id}", method = RequestMethod.GET)
+    public ModelAndView view(@PathVariable String type,@PathVariable String id, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("customer/channel_account/channel_account_view");
+
+        return view;
+
+    }
+
+    /**
+     * 客户通道账号中心
+     * @return
+     */
+    @RequestMapping(value = "/customer/channel/account/edit/{type}/{id}", method = RequestMethod.GET)
+    public ModelAndView baseEdit(@PathVariable String type,@PathVariable String id, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("customer/channel_account/channel_account_edit_"+type);
         return view;
 
     }
