@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
+
+</head>
+<body style="background-color:#fff">
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+
+<!-- Start content -->
+<div class="content">
+    <div class="container" style="padding-left:0px">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="mails">
+                    <div class="table-box">
+                        <div class="table-detail" style="width: 360px;">
+                                <div class="col-lg-12">
+                                    <div class="panel panel-color panel-info">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">已选择的产品</h3>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="col-md-12">
+                                                <div class="card-box widget-box-two widget-two-primary">
+                                                    <div class="wigdet-two-content text-white">
+                                                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="MM7通道产品">MM7通道产品
+
+                                                            <a class="pull-right" data-toggle="tooltip" data-placement="left" title="" data-original-title="移除该已选中产品">
+                                                                <i class="glyphicon glyphicon-remove" style="font-size:16px;color:#fff;" ></i>
+                                                            </a>
+                                                        </p>
+                                                        <p class="text-white"><b>业务类型：彩信</b> </p>
+                                                        <p class="m-0"><b>内容类型：房地产</b></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <div class="card-box widget-box-two widget-two-purple">
+                                                    <i class="mdi mdi-amplifier widget-two-icon"></i>
+                                                    <div class="wigdet-two-content text-white">
+                                                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="User This Month">User This Month</p>
+                                                        <h2 class="text-white"><span data-plugin="counterup">52 </span> <small><i class="mdi mdi-arrow-up text-success"></i></small></h2>
+                                                        <p class="m-0"><b>Last:</b> 40.33k</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <div class="card-box widget-box-two widget-two-pink">
+                                                    <i class="mdi mdi-apple-keyboard-command widget-two-icon"></i>
+                                                    <div class="wigdet-two-content text-white">
+                                                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Request Per Minute">Request Per Minute</p>
+                                                        <h2 class="text-white"><span data-plugin="counterup">5874 </span> <small><i class="mdi mdi-arrow-down text-danger"></i></small></h2>
+                                                        <p class="m-0"><b>Last:</b> 956</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <div class="card-box widget-box-two widget-two-teal">
+                                                    <i class="mdi mdi-cube-outline widget-two-icon"></i>
+                                                    <div class="wigdet-two-content text-white">
+                                                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="User Today">User Today</p>
+                                                        <h2 class="text-white"><span data-plugin="counterup">965 </span> <small><i class="mdi mdi-arrow-down text-danger"></i></small></h2>
+                                                        <p class="m-0"><b>Last:</b> 1250</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                        </div>
+
+                        <div class="table-detail mail-right">
+                            <div class="col-lg-12">
+                                <div class="panel panel-border panel-info">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">检索产品列表</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="card-box">
+                                                    <form th:action="@{/ec/customer/channel/account/page}"  id="query_form"  method="post">
+                                                        <div class="row m-b-60">
+                                                            <div class="col-sm-12">
+                                                                <div class="form-group  col-sm-12">
+                                                                    <label>业务类型：</label>
+                                                                    <mpm:tag id="businessType" identity="businessType" show-type="checkbox" key="code"
+                                                                             class="form-control" name="enterpriseType" value="" title="业务类型"/>
+                                                                </div>
+                                                                <div class="form-group  col-sm-12">
+                                                                    <label>内容类型：</label>
+                                                                    <mpm:tag id="contentType" identity="contentType" show-type="checkbox" key="code"
+                                                                             class="form-control" name="enterpriseType" value="" title="内容类型"/>
+                                                                </div>
+                                                                <div class="form-group  col-sm-4">
+                                                                    <input type="text" class="form-control"
+                                                                           placeholder="产品名称" autocomplete="off">
+                                                                </div>
+                                                                <div class="form-group col-sm-4 pull-right" style="text-align: right">
+                                                                    <button sec:authorize-url="/ec/customer/channel/account/page" type="submit"
+                                                                            class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
+                                                                        <i class="glyphicon glyphicon-search" style="margin-right:5px"></i> 查询
+                                                                    </button>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="property-card property-horizontal">
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <div class="property-content"
+                                                                 style="height:166px">
+                                                                <div class="listingInfo">
+                                                                    <div class="">
+                                                                        <h5 style="padding-left:10px">
+                                                                            产品名称：MM7通道产品
+                                                                        </h5>
+                                                                    </div>
+                                                                    <div class="col-sm-6">
+                                                                        <p style="font-size:12px">业务类型：<a class="btn btn-teal btn-rounded btn-xs waves-effect waves-light">彩信</a></p>
+                                                                        <p style="font-size:12px">
+                                                                            通道数：<a class="btn btn-purple btn-rounded btn-xs waves-effect waves-light">6个</a></p>
+
+                                                                    </div>
+                                                                    <div class="col-sm-6">
+                                                                        <p style="font-size:12px">内容类型：<a class="btn btn-info btn-rounded btn-xs waves-effect waves-light">游戏</a></p>
+                                                                        <p style="font-size:12px"></p>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="property-action">
+                                                                                     <span style="padding-left:10px;font-size:12px">
+                                                                                            产品业务介绍：次产品只能用来发送彩信、地产、有戏、验证码
+                                                                                     </span>
+
+                                                                </div>
+                                                                <!-- end. Card actions -->
+                                                            </div>
+                                                        </div>
+                                                        <!-- /col 8 -->
+                                                    </div>
+                                                    <!-- /inner row -->
+                                                </div>
+
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="property-card property-horizontal">
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <div class="property-content"
+                                                                 style="height:166px">
+                                                                <div class="listingInfo">
+                                                                    <div class="">
+                                                                        <h5 style="padding-left:10px">
+                                                                            产品名称：MM7通道产品
+                                                                        </h5>
+                                                                    </div>
+                                                                    <div class="col-sm-6">
+                                                                        <p style="font-size:12px">业务类型：<a class="btn btn-teal btn-rounded btn-xs waves-effect waves-light">彩信</a></p>
+                                                                        <p style="font-size:12px">
+                                                                            通道数：<a class="btn btn-purple btn-rounded btn-xs waves-effect waves-light">6个</a></p>
+
+                                                                    </div>
+                                                                    <div class="col-sm-6">
+                                                                        <p style="font-size:12px">内容类型：<a class="btn btn-info btn-rounded btn-xs waves-effect waves-light">游戏</a></p>
+                                                                        <p style="font-size:12px"></p>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="property-action">
+                                                                                     <span style="padding-left:10px;font-size:12px">
+                                                                                            产品业务介绍：次产品只能用来发送彩信、地产、有戏、验证码
+                                                                                     </span>
+
+                                                                </div>
+                                                                <!-- end. Card actions -->
+                                                            </div>
+                                                        </div>
+                                                        <!-- /col 8 -->
+                                                    </div>
+                                                    <!-- /inner row -->
+                                                </div>
+
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="property-card property-horizontal">
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <div class="property-content"
+                                                                 style="height:166px">
+                                                                <div class="listingInfo">
+                                                                    <div class="">
+                                                                        <h5 style="padding-left:10px">
+                                                                            产品名称：MM7通道产品
+                                                                        </h5>
+                                                                    </div>
+                                                                    <div class="col-sm-6">
+                                                                        <p style="font-size:12px">业务类型：<a class="btn btn-teal btn-rounded btn-xs waves-effect waves-light">彩信</a></p>
+                                                                        <p style="font-size:12px">
+                                                                            通道数：<a class="btn btn-purple btn-rounded btn-xs waves-effect waves-light">6个</a></p>
+
+                                                                    </div>
+                                                                    <div class="col-sm-6">
+                                                                        <p style="font-size:12px">内容类型：<a class="btn btn-info btn-rounded btn-xs waves-effect waves-light">游戏</a></p>
+                                                                        <p style="font-size:12px"></p>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="property-action">
+                                                                                     <span style="padding-left:10px;font-size:12px">
+                                                                                            产品业务介绍：次产品只能用来发送彩信、地产、有戏、验证码
+                                                                                     </span>
+
+                                                                </div>
+                                                                <!-- end. Card actions -->
+                                                            </div>
+                                                        </div>
+                                                        <!-- /col 8 -->
+                                                    </div>
+                                                    <!-- /inner row -->
+                                                </div>
+
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="property-card property-horizontal">
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <div class="property-content"
+                                                                 style="height:166px">
+                                                                <div class="listingInfo">
+                                                                    <div class="">
+                                                                        <h5 style="padding-left:10px">
+                                                                            产品名称：MM7通道产品
+                                                                        </h5>
+                                                                    </div>
+                                                                    <div class="col-sm-6">
+                                                                        <p style="font-size:12px">业务类型：<a class="btn btn-teal btn-rounded btn-xs waves-effect waves-light">彩信</a></p>
+                                                                        <p style="font-size:12px">
+                                                                            通道数：<a class="btn btn-purple btn-rounded btn-xs waves-effect waves-light">6个</a></p>
+
+                                                                    </div>
+                                                                    <div class="col-sm-6">
+                                                                        <p style="font-size:12px">内容类型：<a class="btn btn-info btn-rounded btn-xs waves-effect waves-light">游戏</a></p>
+                                                                        <p style="font-size:12px"></p>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="property-action">
+                                                                                     <span style="padding-left:10px;font-size:12px">
+                                                                                            产品业务介绍：次产品只能用来发送彩信、地产、有戏、验证码
+                                                                                     </span>
+
+                                                                </div>
+                                                                <!-- end. Card actions -->
+                                                            </div>
+                                                        </div>
+                                                        <!-- /col 8 -->
+                                                    </div>
+                                                    <!-- /inner row -->
+                                                </div>
+
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="property-card property-horizontal">
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <div class="property-content"
+                                                                 style="height:166px">
+                                                                <div class="listingInfo">
+                                                                    <div class="">
+                                                                        <h5 style="padding-left:10px">
+                                                                            产品名称：MM7通道产品
+                                                                        </h5>
+                                                                    </div>
+                                                                    <div class="col-sm-6">
+                                                                        <p style="font-size:12px">业务类型：<a class="btn btn-teal btn-rounded btn-xs waves-effect waves-light">彩信</a></p>
+                                                                        <p style="font-size:12px">
+                                                                            通道数：<a class="btn btn-purple btn-rounded btn-xs waves-effect waves-light">6个</a></p>
+
+                                                                    </div>
+                                                                    <div class="col-sm-6">
+                                                                        <p style="font-size:12px">内容类型：<a class="btn btn-info btn-rounded btn-xs waves-effect waves-light">游戏</a></p>
+                                                                        <p style="font-size:12px"></p>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="property-action">
+                                                                                     <span style="padding-left:10px;font-size:12px">
+                                                                                            产品业务介绍：次产品只能用来发送彩信、地产、有戏、验证码
+                                                                                     </span>
+
+                                                                </div>
+                                                                <!-- end. Card actions -->
+                                                            </div>
+                                                        </div>
+                                                        <!-- /col 8 -->
+                                                    </div>
+                                                    <!-- /inner row -->
+                                                </div>
+
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="property-card property-horizontal">
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <div class="property-content"
+                                                                 style="height:166px">
+                                                                <div class="listingInfo">
+                                                                    <div class="">
+                                                                        <h5 style="padding-left:10px">
+                                                                            产品名称：MM7通道产品
+                                                                        </h5>
+                                                                    </div>
+                                                                    <div class="col-sm-6">
+                                                                        <p style="font-size:12px">业务类型：<a class="btn btn-teal btn-rounded btn-xs waves-effect waves-light">彩信</a></p>
+                                                                        <p style="font-size:12px">
+                                                                            通道数：<a class="btn btn-purple btn-rounded btn-xs waves-effect waves-light">6个</a></p>
+
+                                                                    </div>
+                                                                    <div class="col-sm-6">
+                                                                        <p style="font-size:12px">内容类型：<a class="btn btn-info btn-rounded btn-xs waves-effect waves-light">游戏</a></p>
+                                                                        <p style="font-size:12px"></p>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="property-action">
+                                                                                     <span style="padding-left:10px;font-size:12px">
+                                                                                            产品业务介绍：次产品只能用来发送彩信、地产、有戏、验证码
+                                                                                     </span>
+
+                                                                </div>
+                                                                <!-- end. Card actions -->
+                                                            </div>
+                                                        </div>
+                                                        <!-- /col 8 -->
+                                                    </div>
+                                                    <!-- /inner row -->
+                                                </div>
+
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="property-card property-horizontal">
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <div class="property-content"
+                                                                 style="height:166px">
+                                                                <div class="listingInfo">
+                                                                    <div class="">
+                                                                        <h5 style="padding-left:10px">
+                                                                            产品名称：MM7通道产品
+                                                                        </h5>
+                                                                    </div>
+                                                                    <div class="col-sm-6">
+                                                                        <p style="font-size:12px">业务类型：<a class="btn btn-teal btn-rounded btn-xs waves-effect waves-light">彩信</a></p>
+                                                                        <p style="font-size:12px">
+                                                                            通道数：<a class="btn btn-purple btn-rounded btn-xs waves-effect waves-light">6个</a></p>
+
+                                                                    </div>
+                                                                    <div class="col-sm-6">
+                                                                        <p style="font-size:12px">内容类型：<a class="btn btn-info btn-rounded btn-xs waves-effect waves-light">游戏</a></p>
+                                                                        <p style="font-size:12px"></p>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="property-action">
+                                                                                     <span style="padding-left:10px;font-size:12px">
+                                                                                            产品业务介绍：次产品只能用来发送彩信、地产、有戏、验证码
+                                                                                     </span>
+
+                                                                </div>
+                                                                <!-- end. Card actions -->
+                                                            </div>
+                                                        </div>
+                                                        <!-- /col 8 -->
+                                                    </div>
+                                                    <!-- /inner row -->
+                                                </div>
+
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="property-card property-horizontal">
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <div class="property-content"
+                                                                 style="height:166px">
+                                                                <div class="listingInfo">
+                                                                    <div class="">
+                                                                        <h5 style="padding-left:10px">
+                                                                            产品名称：MM7通道产品
+                                                                        </h5>
+                                                                    </div>
+                                                                    <div class="col-sm-6">
+                                                                        <p style="font-size:12px">业务类型：<a class="btn btn-teal btn-rounded btn-xs waves-effect waves-light">彩信</a></p>
+                                                                        <p style="font-size:12px">
+                                                                            通道数：<a class="btn btn-purple btn-rounded btn-xs waves-effect waves-light">6个</a></p>
+
+                                                                    </div>
+                                                                    <div class="col-sm-6">
+                                                                        <p style="font-size:12px">内容类型：<a class="btn btn-info btn-rounded btn-xs waves-effect waves-light">游戏</a></p>
+                                                                        <p style="font-size:12px"></p>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="property-action">
+                                                                                     <span style="padding-left:10px;font-size:12px">
+                                                                                            产品业务介绍：次产品只能用来发送彩信、地产、有戏、验证码
+                                                                                     </span>
+
+                                                                </div>
+                                                                <!-- end. Card actions -->
+                                                            </div>
+                                                        </div>
+                                                        <!-- /col 8 -->
+                                                    </div>
+                                                    <!-- /inner row -->
+                                                </div>
+
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="property-card property-horizontal">
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <div class="property-content"
+                                                                 style="height:166px">
+                                                                <div class="listingInfo">
+                                                                    <div class="">
+                                                                        <h5 style="padding-left:10px">
+                                                                            产品名称：MM7通道产品
+                                                                        </h5>
+                                                                    </div>
+                                                                    <div class="col-sm-6">
+                                                                        <p style="font-size:12px">业务类型：<a class="btn btn-teal btn-rounded btn-xs waves-effect waves-light">彩信</a></p>
+                                                                        <p style="font-size:12px">
+                                                                            通道数：<a class="btn btn-purple btn-rounded btn-xs waves-effect waves-light">6个</a></p>
+
+                                                                    </div>
+                                                                    <div class="col-sm-6">
+                                                                        <p style="font-size:12px">内容类型：<a class="btn btn-info btn-rounded btn-xs waves-effect waves-light">游戏</a></p>
+                                                                        <p style="font-size:12px"></p>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="property-action">
+                                                                                     <span style="padding-left:10px;font-size:12px">
+                                                                                            产品业务介绍：次产品只能用来发送彩信、地产、有戏、验证码
+                                                                                     </span>
+
+                                                                </div>
+                                                                <!-- end. Card actions -->
+                                                            </div>
+                                                        </div>
+                                                        <!-- /col 8 -->
+                                                    </div>
+                                                    <!-- /inner row -->
+                                                </div>
+
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="property-card property-horizontal">
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <div class="property-content"
+                                                                 style="height:166px">
+                                                                <div class="listingInfo">
+                                                                    <div class="">
+                                                                        <h5 style="padding-left:10px">
+                                                                            产品名称：MM7通道产品
+                                                                        </h5>
+                                                                    </div>
+                                                                    <div class="col-sm-6">
+                                                                        <p style="font-size:12px">业务类型：<a class="btn btn-teal btn-rounded btn-xs waves-effect waves-light">彩信</a></p>
+                                                                        <p style="font-size:12px">
+                                                                            通道数：<a class="btn btn-purple btn-rounded btn-xs waves-effect waves-light">6个</a></p>
+
+                                                                    </div>
+                                                                    <div class="col-sm-6">
+                                                                        <p style="font-size:12px">内容类型：<a class="btn btn-info btn-rounded btn-xs waves-effect waves-light">游戏</a></p>
+                                                                        <p style="font-size:12px"></p>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="property-action">
+                                                                                     <span style="padding-left:10px;font-size:12px">
+                                                                                            产品业务介绍：次产品只能用来发送彩信、地产、有戏、验证码
+                                                                                     </span>
+
+                                                                </div>
+                                                                <!-- end. Card actions -->
+                                                            </div>
+                                                        </div>
+                                                        <!-- /col 8 -->
+                                                    </div>
+                                                    <!-- /inner row -->
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div> <!-- table detail -->
+                    </div>
+                    <!-- end table box -->
+
+                </div> <!-- mails -->
+            </div>
+        </div>
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<th:block th:insert="fragments/common_fragments :: common_submit_form"/>
+<script>
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+</script>
+</body>
+</html>
