@@ -158,6 +158,17 @@ public class ChannelController {
 
         ModelAndView view = new ModelAndView("/configure/channel/channel_product_recode");
 
+        //查询数据
+        PageParams params = new PageParams<>();
+        params.setPages(10);
+        params.setPageSize(8);
+        params.setStartRow(1);
+        params.setEndRow(10);
+        params.setCurrentPage(1);
+        params.setTotalRows(80);
+
+        view.addObject("pageParams",params);
+
         return view;
 
     }
