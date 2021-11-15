@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <link th:href="@{/static/css/header.css}" rel="stylesheet" type="text/css"/>
+</head>
+<body class="bg-transparent">
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- login -->
+<header class="header-container header-container-primary">
+    <div class="header-body">
+        <span class="header-title"
+              style="padding-left: 20px;font-size: 18px"></span>
+    </div>
+</header>
+<section style="margin-top: 50px">
+    <div class="container-alt">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="wrapper-page">
+                    <div class="m-t-40 account-pages">
+                        <div class="text-center account-logo-box">
+                            <h2 class="text-uppercase">
+                                <img th:src="@{/static/favicon.ico}"
+                                     class="img-circle" style="margin-right: 0px;margin-top: 0px" title="北京移动"/>
+                                <span class="header-title">[[${@systemProperties.systemName}]]</span>
+                            </h2>
+                        </div>
+                        <div class="account-content">
+                            <form id="login-form" class="form-horizontal" th:action="@{/security_login}"
+                                  method="POST">
+                                <div class="form-group ">
+                                    <div class="col-xs-12">
+                                        <input class="form-control" type="text" required="" value="administrator"
+                                               name="userName" id="userName" placeholder="用户名">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-12">
+                                        <input class="form-control" type="password" required="" value="Wjho2020.." autocomplete="off"
+                                               name="password" id="password" placeholder="密码">
+                                    </div>
+                                </div>
+                                <div th:if="${@systemProperties.enableVerifyCode}" class="form-group">
+                                    <div class="col-xs-12">
+                                        <input style="float: left;width: 65%;" class="form-control" type="text" required="" value="" autocomplete="off"
+                                                name="verifyCode" id="verifyCode" placeholder="验证码">
+                                        <a th:onClick="'javascript:refreshVerifyCode()'"><img style="float: left;width: 30%;margin-left: 10px;" title="点击图片刷新验证码" id="verifyCodeImg" th:src="@{/verifyCode}"></a>
+                                        <input type="hidden" id="verify" name="verify" value="true">
+                                    </div>
+                                </div>
+                                <div class="form-group ">
+                                    <div class="col-xs-12">
+                                        <div class="checkbox checkbox-success">
+                                            <input id="rmbAuth" type="checkbox"  style="float: left;">
+                                            <label for="rmbAuth" style="float: left;">
+                                                记住用户名
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group" th:if="${!#strings.isEmpty(errorMessage)}">
+                                    <div class="col-xs-12">
+                                        <span style="color: red;">提示：[[${errorMessage}]]</span>
+                                    </div>
+                                </div>
+                                <div class="form-group account-btn text-center m-t-10">
+                                    <div class="col-xs-12">
+                                        <button class="btn w-md btn-bordered btn-teal waves-effect waves-light"
+                                                id="login_submit">登录
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                    <!-- end card-box-->
+                    <div class="row m-t-50">
+                        <div class="col-sm-12 text-center">
+                            <p class="text-muted">[[${@systemProperties.companyName}]] All Rights Reserved</b></a></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- end wrapper -->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- END HOME -->
+<th:block th:insert="fragments/login_fragments :: login_js"/>
+<script language="JavaScript">
+    function refreshVerifyCode() {
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        var url = window.location.protocol + "//" + window.location.host + contextPath
+            + "/verifyCode/" + new Date();
+        $("#verifyCodeImg")[0].src = url;
+    }
+</script>
+</body>
+</html>

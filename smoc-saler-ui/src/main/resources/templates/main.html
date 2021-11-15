@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+
+</head>
+<body class="fixed-left">
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+
+<!-- Begin page -->
+<div id="wrapper">
+
+    <!-- Top Bar Start -->
+    <div class="topbar">
+
+        <!-- LOGO -->
+        <div class="topbar-left">
+            <a href="#" class="logo"><span><span>[[${@systemProperties.systemName}]]</span></span><i
+                    class="mdi mdi-cube"></i></a>
+        </div>
+        <!-- Button mobile view to collapse sidebar menu -->
+        <div class="navbar navbar-default" role="navigation">
+            <div class="container">
+
+                <!-- Navbar-left -->
+                <ul class="nav navbar-nav navbar-left">
+                    <li>
+                        <button class="button-menu-mobile open-left waves-effect waves-light">
+                            <i class="mdi mdi-menu"></i>
+                        </button>
+                    </li>
+                    <li class="hidden-xs">
+                        <!--form role="search" class="app-search">
+                            <input type="text" placeholder="搜索..."
+                                   class="form-control">
+                            <a href=""><i class="fa fa-search"></i></a>
+                        </form-->
+                    </li>
+
+                </ul>
+
+                <!-- Right(Notification) -->
+                <ul class="nav navbar-nav navbar-right">
+                    <li th:remove="${#lists.isEmpty(sysList)}?all:none">
+                        <a href="javascript:void(0);" class="right-bar-toggle right-menu-item" title="其他系统入口">
+                            <i class="glyphicon glyphicon-cog"></i>
+                        </a>
+                    </li>
+                    <li class="dropdown user-box">
+                        <a href="" class="dropdown-toggle right-menu-item" data-toggle="dropdown"
+                           aria-expanded="true" title="个人属性">
+                            <i class="glyphicon glyphicon-user"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-right arrow-dropdown-menu arrow-menu-right user-list notify-list">
+                            <li>
+                                <h5>[[${session.user.userName}]]</h5>
+                            </li>
+                            <!--<li sec:authorize-url="/sysUser/userProfile/*"><a
+                                    th:href="@{/sysUser/userProfile/{userId}(userId=${session.user.id})}"
+                                    target="iframe"><i class="ti-user m-r-5"></i> 个人属性</a></li>-->
+                            <li sec:authorize-url="/sysUser/resetPassword"><a th:href="@{/sysUser/resetPassword}"
+                                                                              target="iframe"><i
+                                    class="ti-lock m-r-5"></i> 重置密码</a></li>
+                            <li sec:authorize-url="/userCache/clearUserCache"><a th:href="@{/userCache/clearUserCache}"
+                                                                                 target="iframe">
+                                <i class="ti-settings m-r-5"></i> 清除缓存</a></li>
+                            <li><a th:href="@{/logout}"><i class="ti-power-off m-r-5"></i> 安全退出</a></li>
+                        </ul>
+                    </li>
+                </ul> <!-- end navbar-right -->
+            </div><!-- end container -->
+        </div><!-- end navbar -->
+    </div>
+    <!-- Top Bar End -->
+
+    <!-- ========== Left Sidebar Start ========== -->
+    <div class="left side-menu">
+        <div class="sidebar-inner slimscrollleft">
+
+            <!--- Sidemenu -->
+            <div id="sidebar-menu" th:remove="${#strings.isEmpty(error)}?none:all">
+                <div class="user-details" style="min-height:62px;padding-top:1px;background-color: #3ac9d6;">
+
+                    <div class="user-info">
+                        <div>
+                            <a href="#setting-dropdown" class="dropdown-toggle" data-toggle="dropdown"
+                               style="background-color:#3ac9d6"
+                               aria-expanded="false">[[${session.user.userName}]] <span
+                                    class="mdi mdi-menu-down"></span></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dropdown" id="setting-dropdown">
+                    <ul class="dropdown-menu">
+                        <!--<li sec:authorize-url="/sysUser/userProfile/*"><a
+                                th:href="@{/sysUser/userProfile/{userId}(userId=${session.user.id})}"
+                                target="iframe"><i class="ti-user m-r-5"></i> 个人属性</a></li>-->
+                        <li sec:authorize-url="/sysUser/resetPassword"><a th:href="@{/sysUser/resetPassword}"
+                                                                          target="iframe"><i
+                                class="ti-lock m-r-5"></i> 重置密码</a></li>
+                        <li sec:authorize-url="/userCache/clearUserCache"><a th:href="@{/userCache/clearUserCache}"
+                                                                             target="iframe">
+                            <i class="ti-settings m-r-5"></i> 清除缓存</a></li>
+                        <li><a th:href="@{/logout}"><i class="ti-power-off m-r-5"></i> 安全退出</a></li>
+                    </ul>
+                </div>
+                <ul>
+                    <div th:each="menu,status:${menus.data}" th:remove="tag">
+                        <li class="menu-title" th:text="${menu.getText()}">Navigation</li>
+                        <li th:each="node:${menu.getNodes()}" th:class="${node.isLazyLoad()} ? 'has_sub':''">
+                            <a th:href="${node.isLazyLoad()}? 'javascript:void(0);': @{/{href}(href=${node.getHref()})}"
+                               th:target="${node.isLazyLoad()} ? '':'iframe'" class="waves-effect"><i
+                                    th:class="${node.getIcon()}" style="color: #3AC9D6"></i>
+                                <span> [[${node.getText()}]] <span th:remove="${node.isLazyLoad()} ?'none':'all'"
+                                                                   class="menu-arrow"></span></span> </a>
+                            <ul th:remove="${node.isLazyLoad()} ? 'none':'all'" class="list-unstyled">
+                                <li th:each="leaf:${node.getNodes()}"><a th:href="@{/{href}(href=${leaf.getHref()})}"
+                                                                         target="iframe"> [[${leaf.getText()}]]</a></li>
+                            </ul>
+                        </li>
+                    </div>
+                </ul>
+            </div>
+            <div class="help-box" th:remove="${#strings.isEmpty(error)}?all:none">
+                <h5 class="text-muted m-t-0">出错了！</h5>
+                <p class="m-b-0">[[${error}]]</p>
+            </div>
+            <!-- Sidebar -->
+            <div class="clearfix"></div>
+            <!--<div th:if="${!#strings.isEmpty(@systemProperties.helpMobile)}" class="help-box">
+                <h5 class="text-muted m-t-0">需要帮助 ?</h5>
+                <p class="m-b-0"> [[${@systemProperties.helpMobile}]] </p>
+            </div>-->
+        </div>
+        <!-- Sidebar -left -->
+    </div>
+    <!-- Left Sidebar End -->
+
+    <!-- Right Sidebar -->
+    <div class="side-bar right-bar">
+        <a href="javascript:void(0);" class="right-bar-toggle">
+            <i class="mdi mdi-close-circle-outline" style="color: #ac2925"></i>
+        </a>
+        <h4 class="">SSO登录其他系统</h4>
+        <div class="row">
+            <div th:each="sys:${sysList}" class="col-lg-12 col-md-12">
+                <div th:class="${'card-box widget-box-two '+ sys.styleClass}">
+                    <div class="wigdet-two-content text-white">
+                        <h3 class="text-white"><i th:if="${sys.icon != null}" th:class="${sys.icon}"
+                                                  style="padding-right: 5px;"></i><a
+                                th:href="@{/token/login/{projectId}(projectId=${sys.projectName})}" target="_blank" style="color: #fff">[[${sys.getSystemName()}]]</a></h3>
+                    </div>
+                </div>
+            </div><!-- end col -->
+        </div>
+    </div>
+    <!-- /Right-bar -->
+
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="content-page">
+        <iframe name="iframe" id="iframe"
+                th:src="@{/index}"
+                style="padding: 0px; width: 100%;margin-bottom: 20px" scrolling="yes" onload="changeFrameHeight()"
+                frameborder="0"></iframe>
+    </div>
+    <footer class="footer text-right">
+        [[${@systemProperties.companyName}]] All Rights Reserved
+    </footer>
+
+</div>
+<!-- END wrapper -->
+
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<!-- ============================================================== -->
+<!-- resize  windows-->
+<!-- ============================================================== -->
+<script>
+
+    function changeFrameHeight() {
+        var ifm = document.getElementById("iframe");
+        ifm.height = document.documentElement.clientHeight - 90;
+    }
+
+    window.onresize = function () {
+        changeFrameHeight();
+    };
+
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+    var resizefunc = [];
+</script>
+</body>
+</html>
