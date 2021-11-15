@@ -11,8 +11,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.smoc.cloud</groupId>
-    <artifactId>com.smoc.cloud.smoc-admin-ui</artifactId>
-    <description>smoc管理中心</description>
+    <artifactId>com.smoc.cloud.smoc-saler-ui</artifactId>
+    <description>smoc销售中心</description>
     <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
 
