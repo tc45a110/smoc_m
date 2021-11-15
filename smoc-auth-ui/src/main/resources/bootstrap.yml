@@ -8,7 +8,7 @@ spring:
   thymeleaf:
     cache: false
 
-# feign调用超时时间配置
+#feign调用超时时间配置
 feign:
   client:
     config:
