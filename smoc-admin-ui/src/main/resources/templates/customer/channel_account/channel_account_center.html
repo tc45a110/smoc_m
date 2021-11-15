@@ -17,7 +17,7 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">EC通道账户配置</h4>
+                    <h4 class="page-title">EC通道账户中心</h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
                             客户管理
@@ -26,7 +26,7 @@
                             EC管理
                         </li>
                         <li class="active">
-                            EC通道账户配置
+                            EC通道账户中心
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -95,10 +95,10 @@
                                 <div class="col-md-12 col-sm-12">
                                     <h4>EC通道账户信息
                                         <div class="pull-right" style="margin-top: -12px;">
-                                            <a
+                                            <a th:href="@{/ec/customer/channel/account/list}"
                                                class="btn btn-default waves-effect waves-light btn-md">
                                                 <i class="glyphicon  glyphicon-share-alt" style="margin-right:5px"></i>
-                                                返回</a>
+                                                返回通道账户列表</a>
                                             <a  th:href="@{/ec/customer/config/0000}"
                                                 style="margin-left:10px;"
                                                 class="btn btn-success waves-effect waves-light btn-md">
@@ -123,225 +123,8 @@
                                                         <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
                                                         普通短信 通道账户信息
                                                         <div class="pull-right">
-                                                            <a style="margin-top: -8px"
-                                                               class="btn btn-purple waves-effect waves-light m-l-10 btn-sm" title="新建普通短信通道账户">
-                                                                <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px" ></i>新建</a>
-                                                        </div>
-                                                    </h3>
-                                                </div>
-                                                <div  class="panel-body" style="display:block">
-                                                    <div class="row">
-                                                        <div class="col-md-6">
-                                                            <div class="property-card property-horizontal">
-                                                                <div class="row">
-                                                                    <div class="col-sm-12">
-                                                                        <div class="property-content"
-                                                                             style="height:206px">
-                                                                            <div class="listingInfo">
-                                                                                <div class="">
-                                                                                    <h5 style="padding-left:10px">
-                                                                                        账号名称：13910941234</h5>
-                                                                                </div>
-                                                                                <div class="col-sm-6">
-                                                                                    <p class="text-muted">账号：<span style="color: #3ac9d6">10691111</span></p>
-                                                                                    <p class="text-muted">内容类型：游戏推广</p>
-                                                                                    <p class="text-muted">扩展码：12354896</p>
-                                                                                </div>
-                                                                                <div class="col-sm-6">
-                                                                                    <p class="text-muted">发送运营商：中国移动</p>
-                                                                                    <p class="text-muted">接口类型：CMPP</p>
-                                                                                    <p class="text-muted">账号状态：正常</p>
-
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="property-action">
-
-                                                                                <div class="pull-right">
-                                                                                    <a class="btn btn-info"
-                                                                                       style="font-size:12px;">编辑并配置</a>
-                                                                                    <a class="btn btn-brown"
-                                                                                       style="font-size:12px;">查看明细</a>
-                                                                                    <a class="btn btn-danger"
-                                                                                       style="font-size:12px;">注销</a>
-                                                                                </div>
-                                                                            </div>
-                                                                            <!-- end. Card actions -->
-                                                                        </div>
-                                                                    </div>
-                                                                    <!-- /col 8 -->
-                                                                </div>
-                                                                <!-- /inner row -->
-                                                            </div>
-
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <div class="property-card property-horizontal">
-                                                                <div class="row">
-                                                                    <div class="col-sm-12">
-                                                                        <div class="property-content"
-                                                                             style="height:206px">
-                                                                            <div class="listingInfo">
-                                                                                <div class="">
-                                                                                    <h5 style="padding-left:10px">
-                                                                                        账号名称：13910941234</h5>
-                                                                                </div>
-                                                                                <div class="col-sm-6">
-                                                                                    <p class="text-muted">账号：<span style="color: #3ac9d6">10691111</span></p>
-                                                                                    <p class="text-muted">内容类型：游戏推广</p>
-                                                                                    <p class="text-muted">扩展码：12354896</p>
-                                                                                </div>
-                                                                                <div class="col-sm-6">
-                                                                                    <p class="text-muted">发送运营商：中国移动</p>
-                                                                                    <p class="text-muted">接口类型：CMPP</p>
-                                                                                    <p class="text-muted">账号状态：正常</p>
-
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="property-action">
-
-                                                                                <div class="pull-right">
-                                                                                    <a class="btn btn-info"
-                                                                                       style="font-size:12px;">编辑并配置</a>
-                                                                                    <a class="btn btn-brown"
-                                                                                       style="font-size:12px;">查看明细</a>
-                                                                                    <a class="btn btn-danger"
-                                                                                       style="font-size:12px;">注销</a>
-                                                                                </div>
-                                                                            </div>
-                                                                            <!-- end. Card actions -->
-                                                                        </div>
-                                                                    </div>
-                                                                    <!-- /col 8 -->
-                                                                </div>
-                                                                <!-- /inner row -->
-                                                            </div>
-
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <div class="property-card property-horizontal">
-                                                                <div class="row">
-                                                                    <div class="col-sm-12">
-                                                                        <div class="property-content"
-                                                                             style="height:206px">
-                                                                            <div class="listingInfo">
-                                                                                <div class="">
-                                                                                    <h5 style="padding-left:10px">
-                                                                                        账号名称：13910941234</h5>
-                                                                                </div>
-                                                                                <div class="col-sm-6">
-                                                                                    <p class="text-muted">账号：<span style="color: #3ac9d6">10691111</span></p>
-                                                                                    <p class="text-muted">内容类型：游戏推广</p>
-                                                                                    <p class="text-muted">扩展码：12354896</p>
-                                                                                </div>
-                                                                                <div class="col-sm-6">
-                                                                                    <p class="text-muted">发送运营商：中国移动</p>
-                                                                                    <p class="text-muted">接口类型：CMPP</p>
-                                                                                    <p class="text-muted">账号状态：正常</p>
-
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="property-action">
-
-                                                                                <div class="pull-right">
-                                                                                    <a class="btn btn-info"
-                                                                                       style="font-size:12px;">编辑并配置</a>
-                                                                                    <a class="btn btn-brown"
-                                                                                       style="font-size:12px;">查看明细</a>
-                                                                                    <a class="btn btn-danger"
-                                                                                       style="font-size:12px;">注销</a>
-                                                                                </div>
-                                                                            </div>
-                                                                            <!-- end. Card actions -->
-                                                                        </div>
-                                                                    </div>
-                                                                    <!-- /col 8 -->
-                                                                </div>
-                                                                <!-- /inner row -->
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row" style="display:block">
-                                        <div class="col-lg-12" style="margin-top:10px">
-                                            <div class="panel panel-color panel-custom">
-                                                <div  class="panel-heading"
-                                                      style="background-color:#00acc1">
-                                                    <h3 class="panel-title">
-                                                        <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
-                                                        多媒体短信 通道账户信息
-                                                        <div class="pull-right">
-                                                            <a style="margin-top: -8px"
-                                                               class="btn btn-purple waves-effect waves-light m-l-10 btn-sm" title="新建多媒体短信通道账户">
-                                                                <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px" ></i>新建</a>
-                                                        </div>
-                                                    </h3>
-                                                </div>
-                                                <div  class="panel-body" style="display:block">
-                                                    <div class="row">
-                                                        <div class="col-md-6">
-                                                            <div class="property-card property-horizontal">
-                                                                <div class="row">
-                                                                    <div class="col-sm-12">
-                                                                        <div class="property-content"
-                                                                             style="height:206px">
-                                                                            <div class="listingInfo">
-                                                                                <div class="">
-                                                                                    <h5 style="padding-left:10px">
-                                                                                        账号名称：13910941234</h5>
-                                                                                </div>
-                                                                                <div class="col-sm-6">
-                                                                                    <p class="text-muted">账号：<span style="color: #3ac9d6">10691111</span></p>
-                                                                                    <p class="text-muted">内容类型：游戏推广</p>
-                                                                                    <p class="text-muted">扩展码：12354896</p>
-                                                                                </div>
-                                                                                <div class="col-sm-6">
-                                                                                    <p class="text-muted">发送运营商：中国移动</p>
-                                                                                    <p class="text-muted">接口类型：CMPP</p>
-                                                                                    <p class="text-muted">账号状态：正常</p>
-
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="property-action">
-
-                                                                                <div class="pull-right">
-                                                                                    <a class="btn btn-custom"
-                                                                                       style="font-size:12px;">编辑并配置</a>
-                                                                                    <a class="btn btn-brown"
-                                                                                       style="font-size:12px;">查看明细</a>
-                                                                                    <a class="btn btn-danger"
-                                                                                       style="font-size:12px;">注销</a>
-                                                                                </div>
-                                                                            </div>
-                                                                            <!-- end. Card actions -->
-                                                                        </div>
-                                                                    </div>
-                                                                    <!-- /col 8 -->
-                                                                </div>
-                                                                <!-- /inner row -->
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row" style="display:block">
-                                        <div class="col-lg-12" style="margin-top:10px">
-                                            <div class="panel panel-color panel-custom">
-                                                <div  class="panel-heading"
-                                                      style="background-color:#26a69a">
-                                                    <h3 class="panel-title">
-                                                        <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
-                                                        彩信 通道账户信息
-                                                        <div class="pull-right">
-                                                            <a style="margin-top: -8px"
+                                                            <a th:href="@{/ec/customer/channel/account/config/base}"
+                                                               style="margin-top: -8px"
                                                                class="btn btn-purple waves-effect waves-light m-l-10 btn-sm" title="新建彩信通道账户">
                                                                 <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>新建</a>
                                                         </div>
@@ -375,9 +158,229 @@
                                                                             <div class="property-action">
 
                                                                                 <div class="pull-right">
-                                                                                    <a class="btn btn-teal"
+                                                                                    <a class="btn btn-info" th:href="@{/ec/customer/channel/account/config/base}"
                                                                                        style="font-size:12px;">编辑并配置</a>
-                                                                                    <a class="btn btn-brown"
+                                                                                    <a class="btn btn-brown" th:href="@{/ec/customer/channel/account/config/view}"
+                                                                                       style="font-size:12px;">查看明细</a>
+                                                                                    <a class="btn btn-danger"
+                                                                                       style="font-size:12px;">注销</a>
+                                                                                </div>
+                                                                            </div>
+                                                                            <!-- end. Card actions -->
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- /col 8 -->
+                                                                </div>
+                                                                <!-- /inner row -->
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="property-card property-horizontal">
+                                                                <div class="row">
+                                                                    <div class="col-sm-12">
+                                                                        <div class="property-content"
+                                                                             style="height:206px">
+                                                                            <div class="listingInfo">
+                                                                                <div class="">
+                                                                                    <h5 style="padding-left:10px">
+                                                                                        账号名称：13910941234</h5>
+                                                                                </div>
+                                                                                <div class="col-sm-6">
+                                                                                    <p class="text-muted">账号：<span style="color: #3ac9d6">10691111</span></p>
+                                                                                    <p class="text-muted">内容类型：游戏推广</p>
+                                                                                    <p class="text-muted">扩展码：12354896</p>
+                                                                                </div>
+                                                                                <div class="col-sm-6">
+                                                                                    <p class="text-muted">发送运营商：中国移动</p>
+                                                                                    <p class="text-muted">接口类型：CMPP</p>
+                                                                                    <p class="text-muted">账号状态：正常</p>
+
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="property-action">
+
+                                                                                <div class="pull-right">
+                                                                                    <a class="btn btn-info" th:href="@{/ec/customer/channel/account/config/base}"
+                                                                                       style="font-size:12px;">编辑并配置</a>
+                                                                                    <a class="btn btn-brown" th:href="@{/ec/customer/channel/account/config/view}"
+                                                                                       style="font-size:12px;">查看明细</a>
+                                                                                    <a class="btn btn-danger"
+                                                                                       style="font-size:12px;">注销</a>
+                                                                                </div>
+                                                                            </div>
+                                                                            <!-- end. Card actions -->
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- /col 8 -->
+                                                                </div>
+                                                                <!-- /inner row -->
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="property-card property-horizontal">
+                                                                <div class="row">
+                                                                    <div class="col-sm-12">
+                                                                        <div class="property-content"
+                                                                             style="height:206px">
+                                                                            <div class="listingInfo">
+                                                                                <div class="">
+                                                                                    <h5 style="padding-left:10px">
+                                                                                        账号名称：13910941234</h5>
+                                                                                </div>
+                                                                                <div class="col-sm-6">
+                                                                                    <p class="text-muted">账号：<span style="color: #3ac9d6">10691111</span></p>
+                                                                                    <p class="text-muted">内容类型：游戏推广</p>
+                                                                                    <p class="text-muted">扩展码：12354896</p>
+                                                                                </div>
+                                                                                <div class="col-sm-6">
+                                                                                    <p class="text-muted">发送运营商：中国移动</p>
+                                                                                    <p class="text-muted">接口类型：CMPP</p>
+                                                                                    <p class="text-muted">账号状态：正常</p>
+
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="property-action">
+
+                                                                                <div class="pull-right">
+                                                                                    <a class="btn btn-info" th:href="@{/ec/customer/channel/account/config/base}"
+                                                                                       style="font-size:12px;">编辑并配置</a>
+                                                                                    <a class="btn btn-brown" th:href="@{/ec/customer/channel/account/config/view}"
+                                                                                       style="font-size:12px;">查看明细</a>
+                                                                                    <a class="btn btn-danger"
+                                                                                       style="font-size:12px;">注销</a>
+                                                                                </div>
+                                                                            </div>
+                                                                            <!-- end. Card actions -->
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- /col 8 -->
+                                                                </div>
+                                                                <!-- /inner row -->
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row" style="display:block">
+                                        <div class="col-lg-12" style="margin-top:10px">
+                                            <div class="panel panel-color panel-custom">
+                                                <div  class="panel-heading"
+                                                      style="background-color:#00acc1">
+                                                    <h3 class="panel-title">
+                                                        <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
+                                                        多媒体短信 通道账户信息
+                                                        <div class="pull-right">
+                                                            <a th:href="@{/ec/customer/channel/account/config/base}"
+                                                               style="margin-top: -8px"
+                                                               class="btn btn-purple waves-effect waves-light m-l-10 btn-sm" title="新建彩信通道账户">
+                                                                <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>新建</a>
+                                                        </div>
+                                                    </h3>
+                                                </div>
+                                                <div  class="panel-body" style="display:block">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="property-card property-horizontal">
+                                                                <div class="row">
+                                                                    <div class="col-sm-12">
+                                                                        <div class="property-content"
+                                                                             style="height:206px">
+                                                                            <div class="listingInfo">
+                                                                                <div class="">
+                                                                                    <h5 style="padding-left:10px">
+                                                                                        账号名称：13910941234</h5>
+                                                                                </div>
+                                                                                <div class="col-sm-6">
+                                                                                    <p class="text-muted">账号：<span style="color: #3ac9d6">10691111</span></p>
+                                                                                    <p class="text-muted">内容类型：游戏推广</p>
+                                                                                    <p class="text-muted">扩展码：12354896</p>
+                                                                                </div>
+                                                                                <div class="col-sm-6">
+                                                                                    <p class="text-muted">发送运营商：中国移动</p>
+                                                                                    <p class="text-muted">接口类型：CMPP</p>
+                                                                                    <p class="text-muted">账号状态：正常</p>
+
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="property-action">
+
+                                                                                <div class="pull-right">
+                                                                                    <a class="btn btn-custom" th:href="@{/ec/customer/channel/account/config/base}"
+                                                                                       style="font-size:12px;">编辑并配置</a>
+                                                                                    <a class="btn btn-brown" th:href="@{/ec/customer/channel/account/config/view}"
+                                                                                       style="font-size:12px;">查看明细</a>
+                                                                                    <a class="btn btn-danger"
+                                                                                       style="font-size:12px;">注销</a>
+                                                                                </div>
+                                                                            </div>
+                                                                            <!-- end. Card actions -->
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- /col 8 -->
+                                                                </div>
+                                                                <!-- /inner row -->
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row" style="display:block">
+                                        <div class="col-lg-12" style="margin-top:10px">
+                                            <div class="panel panel-color panel-custom">
+                                                <div  class="panel-heading"
+                                                      style="background-color:#26a69a">
+                                                    <h3 class="panel-title">
+                                                        <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
+                                                        彩信 通道账户信息
+                                                        <div class="pull-right">
+                                                            <a th:href="@{/ec/customer/channel/account/config/base}"
+                                                               style="margin-top: -8px"
+                                                               class="btn btn-purple waves-effect waves-light m-l-10 btn-sm" title="新建彩信通道账户">
+                                                                <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>新建</a>
+                                                        </div>
+                                                    </h3>
+                                                </div>
+                                                <div  class="panel-body" style="display:block">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="property-card property-horizontal">
+                                                                <div class="row">
+                                                                    <div class="col-sm-12">
+                                                                        <div class="property-content"
+                                                                             style="height:206px">
+                                                                            <div class="listingInfo">
+                                                                                <div class="">
+                                                                                    <h5 style="padding-left:10px">
+                                                                                        账号名称：13910941234</h5>
+                                                                                </div>
+                                                                                <div class="col-sm-6">
+                                                                                    <p class="text-muted">账号：<span style="color: #3ac9d6">10691111</span></p>
+                                                                                    <p class="text-muted">内容类型：游戏推广</p>
+                                                                                    <p class="text-muted">扩展码：12354896</p>
+                                                                                </div>
+                                                                                <div class="col-sm-6">
+                                                                                    <p class="text-muted">发送运营商：中国移动</p>
+                                                                                    <p class="text-muted">接口类型：CMPP</p>
+                                                                                    <p class="text-muted">账号状态：正常</p>
+
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="property-action">
+
+                                                                                <div class="pull-right">
+                                                                                    <a class="btn btn-teal" th:href="@{/ec/customer/channel/account/config/base}"
+                                                                                       style="font-size:12px;">编辑并配置</a>
+                                                                                    <a class="btn btn-brown" th:href="@{/ec/customer/channel/account/config/view}"
                                                                                        style="font-size:12px;">查看明细</a>
                                                                                     <a class="btn btn-danger"
                                                                                        style="font-size:12px;">注销</a>
@@ -407,9 +410,10 @@
                                                         <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
                                                         5G短信 通道账户信息
                                                         <div class="pull-right">
-                                                            <a style="margin-top: -8px"
-                                                               class="btn btn-purple waves-effect waves-light m-l-10 btn-sm" title="新建5G短信通道账户">
-                                                                <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px" ></i>新建</a>
+                                                            <a th:href="@{/ec/customer/channel/account/config/base}"
+                                                               style="margin-top: -8px"
+                                                               class="btn btn-purple waves-effect waves-light m-l-10 btn-sm" title="新建彩信通道账户">
+                                                                <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>新建</a>
                                                         </div>
                                                     </h3>
                                                 </div>
@@ -431,9 +435,10 @@
                                                         <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
                                                         过黑服务 通道账户信息
                                                         <div class="pull-right">
-                                                            <a style="margin-top: -8px"
-                                                               class="btn btn-purple waves-effect waves-light m-l-10 btn-sm" title="新建过黑服务通道账户">
-                                                                <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px" ></i>新建</a>
+                                                            <a th:href="@{/ec/customer/channel/account/config/base}"
+                                                               style="margin-top: -8px"
+                                                               class="btn btn-purple waves-effect waves-light m-l-10 btn-sm" title="新建彩信通道账户">
+                                                                <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>新建</a>
                                                         </div>
                                                     </h3>
                                                 </div>
@@ -464,8 +469,9 @@
                                                         <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
                                                         国际短信 通道账户信息
                                                         <div class="pull-right">
-                                                            <a style="margin-top: -8px"
-                                                               class="btn btn-purple waves-effect waves-light m-l-10 btn-sm"  title="新建国际短信通道账户">
+                                                            <a th:href="@{/ec/customer/channel/account/config/base}"
+                                                               style="margin-top: -8px"
+                                                               class="btn btn-purple waves-effect waves-light m-l-10 btn-sm" title="新建彩信通道账户">
                                                                 <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>新建</a>
                                                         </div>
                                                     </h3>

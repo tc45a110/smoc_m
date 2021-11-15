@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
+
+</head>
+<body style="background-color:#fff">
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+
+<!-- Start content -->
+<div class="content">
+    <div class="container">
+        <!-- start row -->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all" style="background-color:#fff">
+            <div class="col-md-12">
+                    <form  id="submit_form"
+                          method="post" data-parsley-validate="">
+                        <div class="row">
+                            <div class="col-md-12 panel panel-color panel-info" style="padding-left:0px;padding-right:0px">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">过滤信息 维护</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group m-b-20">
+                                                <label>EC名称</label>：北京星语互联科技有限公司
+                                            </div>
+                                            <div class="form-group m-b-20">
+                                                <label>通道账号名称</label>：我也不清楚
+                                            </div>
+                                            <div class="form-group m-b-20">
+                                                <label>发送时间限制<span class="text-danger">*</span>&nbsp;</label>
+                                                <input id="aaa" type="text"  class="form-control"
+                                                       required="" data-parsley-length="[4,30]" autocomplete="off"
+                                                       placeholder="发送时间限制">
+                                            </div>
+                                            <div class="form-group m-b-20">
+                                                <label for="password">屏蔽省份<span class="text-danger">*</span>&nbsp;</label>
+                                                <input id="password" type="text"  class="form-control"
+                                                       required="" data-parsley-length="[6,30]" autocomplete="off"
+                                                       placeholder="屏蔽省份">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="aaaa">限量方式<span class="text-danger">*</span></label>
+                                                <input id="aaaa" type="text"  class="form-control"
+                                                       required="" data-parsley-length="[4,30]" autocomplete="off"
+                                                       placeholder="限量方式">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="links">模板匹配<span class="text-danger">*</span></label>
+                                                <input id="links" type="text"  class="form-control"
+                                                       required="" data-parsley-length="[1,30]" autocomplete="off"
+                                                       placeholder="模板匹配">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="linkss">RE正则表达式<span class="text-danger">*</span></label>
+                                                <input id="linkss" type="text"  class="form-control"
+                                                       required="" data-parsley-length="[1,30]" autocomplete="off"
+                                                       placeholder="RE正则表达式">
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group m-b-20">
+                                                <label for="speed">频次限制<span class="text-danger">*</span>&nbsp;</label>
+                                                <input id="speed" type="text"  class="form-control"
+                                                       required="" data-parsley-length="[2,64]" autocomplete="off"
+                                                       placeholder="频次限制">
+                                            </div>
+                                            <div class="form-group m-b-20">
+                                                <label for="check">黑名单<span class="text-danger">*</span>&nbsp;</label>
+                                                <input id="check" type="text"  class="form-control"
+                                                       required="" data-parsley-length="[2,24]" autocomplete="off"
+                                                       placeholder="黑名单">
+                                            </div>
+                                            <div class="form-group m-b-20">
+                                                <label for="ip">客户鉴权IP<span class="text-danger">*</span>&nbsp;</label>
+                                                <input id="ip" type="text"  class="form-control"
+                                                       required="" data-parsley-length="[2,24]" autocomplete="off"
+                                                       placeholder="客户鉴权IP">
+                                            </div>
+                                            <div class="form-group m-b-20">
+                                                <label for="url">白名单<span class="text-danger">*</span>&nbsp;</label>
+                                                <input id="url" type="text"  class="form-control"
+                                                       required="" data-parsley-length="[2,24]" autocomplete="off"
+                                                       placeholder="白名单">
+                                            </div>
+                                            <div class="form-group m-b-20">
+                                                <label for="upUrl">关键字<span class="text-danger">*</span>&nbsp;</label>
+                                                <input id="upUrl" type="text"  class="form-control"
+                                                       required="" data-parsley-length="[2,24]" autocomplete="off"
+                                                       placeholder="关键字">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div> <!-- end col -->
+                        </div> <!-- end row -->
+                        <div class="text-center" style="margin-bottom:20px">
+                            <a sec:authorize-url="/ec/customer/channel/account/account_config" th:href="@{/ec/customer/channel/account/account_config}"  type="button" class="btn btn-teal waves-effect waves-light">提交</a>
+                            <a class="btn btn-default waves-effect waves-light" style="margin-left:10px">查看明细</a>
+                        </div>
+                    </form>
+                    <!-- end form -->
+
+                </div> <!-- end card-box -->
+            </div> <!-- end col -->
+        </div>
+        <!-- end row -->
+
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<th:block th:insert="fragments/common_fragments :: common_submit_form"/>
+<script>
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+</script>
+</body>
+</html>

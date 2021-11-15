@@ -72,6 +72,8 @@
                                     <a sec:authorize-url="/ec/customer/search/*"  th:href="@{/ec/customer/search/channel_account}"
                                        class="btn btn-success waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>新建EC通道账户</a>
+
+                                     <a id="help_display" style="margin-left:10px"><i class="mdi mdi-help-circle-outline" style="font-size:18px;"></i></a>
                                 </div>
 
                             </div>
@@ -81,6 +83,15 @@
             </div>
         </div>
         <!-- end row -->
+
+        <div id="help" class="alert alert-icon alert-success alert-dismissible fade in"  role="alert">
+            <button id="help_button" type="button" class="close"
+                    aria-label="Close">
+                <span >&times;</span>
+            </button>
+            <i class="mdi mdi-help-circle-outline"></i>
+            <strong>操作提示：</strong> 可以通过 新建EC通道账户 创建一个通道账户，也可以在 EC通道账户管理中心 管理所有EC通道账户。
+        </div>
 
         <!-- start row -->
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
@@ -102,6 +113,7 @@
                                     <th>发送运营商</th>
                                     <th>扩展码</th>
                                     <th>开户完成进度</th>
+                                    <th>状态</th>
                                     <th>操作</th>
                                 </tr>
                                 </thead>
@@ -117,8 +129,7 @@
                                          XY93348334343134343
                                     </td>
                                     <td>
-                                        <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">普通短信</a>
-
+                                        <a class="btn btn-info btn-rounded btn-xs waves-effect waves-light">普通短信</a>
                                     </td>
                                     <td>
                                        信用卡
@@ -140,11 +151,19 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <a   th:href="@{/ec/customer/channel/account/config}"
+                                        <a class="btn btn-warning btn-rounded btn-xs waves-effect waves-light">完善中</a>
+                                    </td>
+                                    <td>
+                                        <a   sec:authorize-url="/ec/customer/channel/account/config/*" th:href="@{/ec/customer/channel/account/config/base}"
                                              class="on-default edit-row"
                                              style="padding-left: 10px;color: #29b6f6;"
-                                             title="修改、配置信息"><i style="font-size: 18px"
+                                             title="修改、配置通道账户信息"><i style="font-size: 18px"
                                                                 class="mdi mdi-table-edit"></i></a>
+                                        <a   th:href="@{/ec/customer/channel/account/center}"
+                                             class="on-default edit-row"
+                                             style="padding-left: 10px;color: #5c4fab;"
+                                             title="EC通道账户管理中心"><i style="font-size: 18px"
+                                                                class="mdi mdi-vector-circle"></i></a>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -168,27 +187,40 @@
 
 <th:block th:insert="fragments/common_fragments :: common_js"/>
 <th:block th:insert="fragments/common_fragments :: select_js"/>
+<th:block th:insert="fragments/cookie_fragments :: cookie_js"/>
 <script>
 
-    function changeBg(id){
+    /**
+     * 处理cookie
+     */
+    $(document).ready(function() {
 
-        $("#"+id).css('background-color', '#F3F3F3');
+        if("none" == $.cookie("help_display_account_list")){
+           $('#help').css('display', 'none');
+        }
 
-    }
+        $('#help_display').on("click", function () {
+           if('block' == $('#help').css('display')){
+             $('#help').css('display', 'none');
+             $.cookie("help_display_account_list", 'none', {
+                expires : 180
+             });
+           }else{
+             $('#help').css('display', 'block');
+             $.cookie("help_display_account_list", 'block', {
+                expires : 180
+             });
+           }
+        });
+        $('#help_button').on("click", function () {
+           $('#help').css('display', 'none');
+           $.cookie("help_display_account_list", 'none', {
+			expires : 180
+		   });
+        });
 
-    function changeBgBack(id){
-        $("#"+id).css('background-color', '#fff');
-    }
+    });
 
-    function confirmDelete(id) {
-        $("#deleteId").val(id);
-    }
-
-    function deleteById() {
-        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
-        $('#preloader').css('display', 'block');
-        location.href = contextPath + '/system/deleteById/' + $("#deleteId").val();
-    }
 
     var resizefunc = [];
     //隐藏进度项
