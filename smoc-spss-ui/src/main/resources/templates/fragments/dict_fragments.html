@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+<th:block th:fragment="dictType">
+    <!-- start menus js -->
+    <script th:src="@{/static/plugins/bootstrap-treeview/bootstrap-treeview.min.js}"></script>
+    <script>
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        var url =  '[[${url}]]';
+
+        $(function () {
+            $('#dict_tree').treeview({
+                data: loadData(),//节点数据
+                expanded: false,//初始是否展开
+                levels: 2,//初始显示层数
+                icon: "glyphicon glyphicon-stop",
+                selectedIcon: "glyphicon glyphicon-stop",
+                color: "#4c4c4c",
+                backColor: "#3ac9d6",
+                selectedColor: "#3ac9d6",
+                iconBackground: "#4c4c4c",
+                onNodeSelected: function (event, data) {
+                    window.frames[0].location.href = contextPath + "/dict/listByDictType/" + data.id + "/" + data.href;
+                }
+            });
+        });
+
+        function loadData() {
+
+            var treeData = {};
+            $.ajax({
+                url: contextPath + url,
+                type: "get",
+                contentType: "application/json",
+                timeout: 30000, //超时时间：30秒
+                async: false,
+                dataType: "text",
+                success: function (data) {
+                    treeData = data;
+                }, error: function (data) {
+                    console.log("error");
+                }
+            });
+            return treeData;
+        }
+
+        function changeFrameHeight() {
+            var ifm = document.getElementById("dictFrame");
+            ifm.height = document.documentElement.clientHeight - 230;
+        }
+
+        window.onresize = function () {
+            changeFrameHeight();
+        }
+    </script>
+    <!-- end menus js -->
+</th:block>
+</body>
+</html>
