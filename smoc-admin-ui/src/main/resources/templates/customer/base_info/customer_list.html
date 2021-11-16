@@ -37,16 +37,16 @@
         <div class="row" style="position: relative;margin-top: 80px" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
                 <div class="card-box">
-                    <form th:action="@{/ec/customer/page}"  id="query_form"  method="post">
+                    <form th:action="@{/ec/customer/base_info/page}"  id="query_form"  method="post">
                         <div class="row m-b-60">
                             <div class="col-sm-12">
                                 <div class="form-group  col-sm-4">
                                     <input type="text" class="form-control"
-                                           placeholder="企业名称" autocomplete="off">
+                                           placeholder="EC名称" autocomplete="off">
                                 </div>
                                 <div class="form-group  col-sm-4">
                                     <input type="text" class="form-control"
-                                           placeholder="联系人" autocomplete="off">
+                                           placeholder="EC联系人" autocomplete="off">
                                 </div>
                                 <div class="form-group  col-sm-4">
                                     <input type="text" class="form-control"
@@ -61,11 +61,11 @@
                                            placeholder="销售码" autocomplete="off">
                                 </div>
                                 <div class="form-group col-sm-4 pull-right" style="text-align: right">
-                                    <button sec:authorize-url="/ec/customer/page" type="submit"
+                                    <button sec:authorize-url="/ec/customer/base_info/page" type="submit"
                                             class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search" style="margin-right:5px"></i> 查询
                                     </button>
-                                    <a sec:authorize-url="/ec/customer/add/*/*"  th:href="@{/ec/customer/add/1/0000}"
+                                    <a sec:authorize-url="/ec/customer/base_info/add/*/*"  th:href="@{/ec/customer/base_info/add/1/0000}"
                                         class="btn btn-success waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>EC开户</a>
                                     <a id="help_display" style="margin-left:10px"><i class="mdi mdi-help-circle-outline" style="font-size:18px;"></i></a>
@@ -99,11 +99,11 @@
                             <table class="table table table-hover m-10" style="margin-top: -12px;">
                                 <thead>
                                 <tr>
-                                    <th>企业名称</th>
-                                    <th>联系人</th>
+                                    <th>EC名称</th>
+                                    <th>EC联系人</th>
                                     <th>销售人员</th>
                                     <th>企业类型</th>
-                                    <th>地址</th>
+                                    <th>EC地址</th>
                                     <th>创建时间</th>
                                     <th>资料完成进度</th>
                                     <th>操作</th>
@@ -112,7 +112,7 @@
                                 <tbody>
                                 <tr>
                                     <td>
-                                        <a  th:href="@{/ec/customer/config/0000}" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="跳转到EC详细信息"> <i class="fa  fa-angle-double-down" style="margin-left:10px;"></i>
+                                        <a  th:href="@{/ec/customer/base_info/config/0000}" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="跳转到EC详细信息"> <i class="fa  fa-angle-double-down" style="margin-left:10px;"></i>
                                           北京星语互联科技有限公司</a>
                                     </td>
                                     <td><p  style="font-size:14px;color:#26A69A">耀中国<span style="font-size:14px;color:#989898;margin-left:5px">(13910916881)</span></p></td>
@@ -132,12 +132,12 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <a   sec:authorize-url="/ec/customer/config/*" th:href="@{/ec/customer/config/0000}"
+                                        <a   sec:authorize-url="/ec/customer/base_info/config/*" th:href="@{/ec/customer/base_info/config/0000}"
                                              class="on-default edit-row"
                                              style="padding-left: 10px;color: #29b6f6;"  data-toggle="tooltip" data-placement="bottom" title="" data-original-title="查看、完善信息"
                                              ><i style="font-size: 18px"
                                                                 class="mdi mdi-table-edit"></i></a>
-                                        <a    sec:authorize-url="/ec/customer/add/*/*"  th:href="@{/ec/customer/add/2/parentId}"
+                                        <a    sec:authorize-url="/ec/customer/base_info/add/*/*"  th:href="@{/ec/customer/base_info/add/2/parentId}"
                                               class="on-default edit-row"
                                               style="padding-left: 5px;color: #4bd396;" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="新建EC子账户"><i style="font-size: 18px"
                                                                 class="mdi mdi-account-plus"></i></a>
@@ -147,7 +147,7 @@
                                 <tr>
                                     <td>
                                         <div style="float:left;margin-top:-12px;margin-left:13px;width:25px;height:25px;border-left:1px solid #DCDCDC;border-bottom:1px solid #DCDCDC"></div>
-                                        <a style="float:left"  th:href="@{/ec/customer/config/0000}" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="跳转到EC详细信息">北京星语互联科技有限公司</a>
+                                        <a style="float:left"  th:href="@{/ec/customer/base_info/config/0000}" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="跳转到EC详细信息">北京星语互联科技有限公司</a>
                                     </td>
                                     <td><p  style="font-size:14px;color:#26A69A">耀中国<span style="font-size:14px;color:#989898;margin-left:5px">(13910916881)</span></p></td>
                                     <td>李世民</td>
@@ -166,7 +166,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <a   sec:authorize-url="/ec/customer/config/*" th:href="@{/ec/customer/config/0000}"
+                                        <a   sec:authorize-url="/ec/customer/base_info/config/*" th:href="@{/ec/customer/base_info/config/0000}"
                                              class="on-default edit-row"
                                              style="padding-left: 10px;color: #29b6f6;"  data-toggle="tooltip" data-placement="bottom" title="" data-original-title="查看、完善信息"
                                         ><i style="font-size: 18px"
@@ -177,7 +177,7 @@
                                 <tr>
                                     <td>
                                         <div style="float:left;margin-top:-12px;margin-left:13px;width:25px;height:25px;border-left:1px solid #DCDCDC;border-bottom:1px solid #DCDCDC"></div>
-                                        <a style="float:left"  th:href="@{/ec/customer/config/0000}" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="跳转到EC详细信息">北京星语互联科技有限公司</a>
+                                        <a style="float:left"  th:href="@{/ec/customer/base_info/config/0000}" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="跳转到EC详细信息">北京星语互联科技有限公司</a>
                                     </td>
                                     <td><p  style="font-size:14px;color:#26A69A">耀中国<span style="font-size:14px;color:#989898;margin-left:5px">(13910916881)</span></p></td>
                                     <td>李世民</td>
@@ -196,7 +196,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <a   sec:authorize-url="/ec/customer/config/*" th:href="@{/ec/customer/config/0000}"
+                                        <a   sec:authorize-url="/ec/customer/base_info/config/*" th:href="@{/ec/customer/base_info/config/0000}"
                                              class="on-default edit-row"
                                              style="padding-left: 10px;color: #29b6f6;"  data-toggle="tooltip" data-placement="bottom" title="" data-original-title="查看、完善信息"
                                         ><i style="font-size: 18px"
@@ -207,7 +207,7 @@
                                 <tr>
                                     <td>
                                         <div style="float:left;margin-top:-12px;margin-left:13px;width:25px;height:25px;border-left:1px solid #DCDCDC;border-bottom:1px solid #DCDCDC"></div>
-                                        <a style="float:left"  th:href="@{/ec/customer/config/0000}" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="跳转到EC详细信息">北京星语互联科技有限公司</a>
+                                        <a style="float:left"  th:href="@{/ec/customer/base_info/config/0000}" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="跳转到EC详细信息">北京星语互联科技有限公司</a>
                                     </td>
                                     <td><p  style="font-size:14px;color:#26A69A">耀中国<span style="font-size:14px;color:#989898;margin-left:5px">(13910916881)</span></p></td>
                                     <td>李世民</td>
@@ -226,7 +226,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <a   sec:authorize-url="/ec/customer/config/*" th:href="@{/ec/customer/config/0000}"
+                                        <a   sec:authorize-url="/ec/customer/base_info/config/*" th:href="@{/ec/customer/base_info/config/0000}"
                                              class="on-default edit-row"
                                              style="padding-left: 10px;color: #29b6f6;"  data-toggle="tooltip" data-placement="bottom" title="" data-original-title="查看、完善信息"
                                         ><i style="font-size: 18px"
@@ -236,7 +236,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <a  th:href="@{/ec/customer/config/0000}" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="跳转到EC详细信息"> <i class="mdi mdi-crosshairs" style="margin-left:10px;"></i>
+                                        <a  th:href="@{/ec/customer/base_info/config/0000}" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="跳转到EC详细信息"> <i class="mdi mdi-crosshairs" style="margin-left:10px;"></i>
                                             北京星语互联科技有限公司</a>
                                     </td>
                                     <td><p  style="font-size:14px;color:#26A69A">耀中国<span style="font-size:14px;color:#989898;margin-left:5px">(13910916881)</span></p></td>
@@ -256,7 +256,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <a   sec:authorize-url="/ec/customer/config/*" th:href="@{/ec/customer/config/0000}"
+                                        <a   sec:authorize-url="/ec/customer/base_info/config/*" th:href="@{/ec/customer/base_info/config/0000}"
                                              class="on-default edit-row"
                                              style="padding-left: 10px;color: #29b6f6;"  data-toggle="tooltip" data-placement="bottom" title="" data-original-title="查看、完善信息"
                                         ><i style="font-size: 18px"
@@ -266,7 +266,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <a  th:href="@{/ec/customer/config/0000}" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="跳转到EC详细信息"> <i class="fa  fa-angle-double-down" style="margin-left:10px;"></i>
+                                        <a  th:href="@{/ec/customer/base_info/config/0000}" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="跳转到EC详细信息"> <i class="fa  fa-angle-double-down" style="margin-left:10px;"></i>
                                            北京星语互联科技有限公司</a>
                                     </td>
                                     <td><p  style="font-size:14px;color:#26A69A">耀中国<span style="font-size:14px;color:#989898;margin-left:5px">(13910916881)</span></p></td>
@@ -284,12 +284,12 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <a   sec:authorize-url="/ec/customer/config/*" th:href="@{/ec/customer/config/0000}"
+                                        <a   sec:authorize-url="/ec/customer/base_info/config/*" th:href="@{/ec/customer/base_info/config/0000}"
                                              class="on-default edit-row"
                                              style="padding-left: 10px;color: #29b6f6;"  data-toggle="tooltip" data-placement="bottom" title="" data-original-title="查看、完善信息"
                                         ><i style="font-size: 18px"
                                             class="mdi mdi-table-edit"></i></a>
-                                        <a    sec:authorize-url="/ec/customer/add/*/*"  th:href="@{/ec/customer/add/2/parentId}"
+                                        <a    sec:authorize-url="/ec/customer/base_info/add/*/*"  th:href="@{/ec/customer/base_info/add/2/parentId}"
                                               class="on-default edit-row"
                                               style="padding-left: 5px;color: #4bd396;" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="新建EC子账户"><i style="font-size: 18px"
                                                                                                                                                                                 class="mdi mdi-account-plus"></i></a>
@@ -299,7 +299,7 @@
                                 <tr>
                                     <td>
                                         <div style="float:left;margin-top:-12px;margin-left:13px;width:25px;height:25px;border-left:1px solid #DCDCDC;border-bottom:1px solid #DCDCDC"></div>
-                                        <a style="float:left"  th:href="@{/ec/customer/config/0000}" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="跳转到EC详细信息">北京星语互联科技有限公司</a>
+                                        <a style="float:left"  th:href="@{/ec/customer/base_info/config/0000}" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="跳转到EC详细信息">北京星语互联科技有限公司</a>
                                     </td>
                                     <td><p  style="font-size:14px;color:#26A69A">耀中国<span style="font-size:14px;color:#989898;margin-left:5px">(13910916881)</span></p></td>
                                     <td>李世民</td>
@@ -318,7 +318,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <a   sec:authorize-url="/ec/customer/config/*" th:href="@{/ec/customer/config/0000}"
+                                        <a   sec:authorize-url="/ec/customer/base_info/config/*" th:href="@{/ec/customer/base_info/config/0000}"
                                              class="on-default edit-row"
                                              style="padding-left: 10px;color: #29b6f6;"  data-toggle="tooltip" data-placement="bottom" title="" data-original-title="查看、完善信息"
                                         ><i style="font-size: 18px"
@@ -329,7 +329,7 @@
                                 <tr>
                                     <td>
                                         <div style="float:left;margin-top:-12px;margin-left:13px;width:25px;height:25px;border-left:1px solid #DCDCDC;border-bottom:1px solid #DCDCDC"></div>
-                                        <a style="float:left"  th:href="@{/ec/customer/config/0000}" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="跳转到EC详细信息">北京星语互联科技有限公司</a>
+                                        <a style="float:left"  th:href="@{/ec/customer/base_info/config/0000}" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="跳转到EC详细信息">北京星语互联科技有限公司</a>
                                     </td>
                                     <td><p  style="font-size:14px;color:#26A69A">耀中国<span style="font-size:14px;color:#989898;margin-left:5px">(13910916881)</span></p></td>
                                     <td>李世民</td>
@@ -348,7 +348,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <a   sec:authorize-url="/ec/customer/config/*" th:href="@{/ec/customer/config/0000}"
+                                        <a   sec:authorize-url="/ec/customer/base_info/config/*" th:href="@{/ec/customer/base_info/config/0000}"
                                              class="on-default edit-row"
                                              style="padding-left: 10px;color: #29b6f6;"  data-toggle="tooltip" data-placement="bottom" title="" data-original-title="查看、完善信息"
                                         ><i style="font-size: 18px"
@@ -359,7 +359,7 @@
                                 <tr>
                                     <td>
                                         <div style="float:left;margin-top:-12px;margin-left:13px;width:25px;height:25px;border-left:1px solid #DCDCDC;border-bottom:1px solid #DCDCDC"></div>
-                                        <a style="float:left"  th:href="@{/ec/customer/config/0000}" >北京星语互联科技有限公司</a>
+                                        <a style="float:left"  th:href="@{/ec/customer/base_info/config/0000}" >北京星语互联科技有限公司</a>
                                     </td>
                                     <td><p  style="font-size:14px;color:#26A69A">耀中国<span style="font-size:14px;color:#989898;margin-left:5px">(13910916881)</span></p></td>
                                     <td>李世民</td>
@@ -378,7 +378,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <a   sec:authorize-url="/ec/customer/config/*" th:href="@{/ec/customer/config/0000}"
+                                        <a   sec:authorize-url="/ec/customer/base_info/config/*" th:href="@{/ec/customer/base_info/config/0000}"
                                              class="on-default edit-row"
                                              style="padding-left: 10px;color: #29b6f6;"  data-toggle="tooltip" data-placement="bottom" title="" data-original-title="查看、完善信息"
                                         ><i style="font-size: 18px"

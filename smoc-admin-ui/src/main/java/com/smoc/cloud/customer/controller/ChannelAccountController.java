@@ -103,9 +103,9 @@ public class ChannelAccountController {
      * 客户通道账号中心
      * @return
      */
-    @RequestMapping(value = "/customer/channel/account/center", method = RequestMethod.GET)
-    public ModelAndView center() {
-        ModelAndView view = new ModelAndView("customer/channel_account/channel_account_center");
+    @RequestMapping(value = "/customer/channel/account/center/{type}", method = RequestMethod.GET)
+    public ModelAndView center(@PathVariable String type, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("customer/channel_account/channel_account_"+type+"_center");
 
         return view;
 
@@ -130,6 +130,50 @@ public class ChannelAccountController {
     @RequestMapping(value = "/customer/channel/account/edit/{type}/{id}", method = RequestMethod.GET)
     public ModelAndView baseEdit(@PathVariable String type,@PathVariable String id, HttpServletRequest request) {
         ModelAndView view = new ModelAndView("customer/channel_account/channel_account_edit_"+type);
+        return view;
+
+    }
+
+    /**
+     * 客户通道账号操作记录
+     * @return
+     */
+    @RequestMapping(value = "/customer/channel/account/operate/record", method = RequestMethod.GET)
+    public ModelAndView record() {
+        ModelAndView view = new ModelAndView("customer/channel_account/channel_account_operate_record");
+
+        //查询数据
+        PageParams params = new PageParams<>();
+        params.setPages(3);
+        params.setPageSize(10);
+        params.setStartRow(1);
+        params.setEndRow(10);
+        params.setCurrentPage(1);
+        params.setTotalRows(22);
+
+        view.addObject("pageParams",params);
+        return view;
+
+    }
+
+    /**
+     * 客户通道账号操作记录分页
+     * @return
+     */
+    @RequestMapping(value = "/customer/channel/account/operate/page", method = RequestMethod.POST)
+    public ModelAndView record_page() {
+        ModelAndView view = new ModelAndView("customer/channel_account/channel_account_operate_record");
+
+        //查询数据
+        PageParams params = new PageParams<>();
+        params.setPages(3);
+        params.setPageSize(10);
+        params.setStartRow(1);
+        params.setEndRow(10);
+        params.setCurrentPage(1);
+        params.setTotalRows(22);
+
+        view.addObject("pageParams",params);
         return view;
 
     }

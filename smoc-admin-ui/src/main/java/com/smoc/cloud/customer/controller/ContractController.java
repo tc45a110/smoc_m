@@ -136,4 +136,100 @@ public class ContractController {
         return view;
 
     }
+
+    /**
+     * EC中心查询EC合同
+     *
+     * @return
+     */
+    @RequestMapping(value = "/customer/contract/list", method = RequestMethod.GET)
+    public ModelAndView customer_list() {
+        ModelAndView view = new ModelAndView("contract/customer_contract_list");
+
+        //查询数据
+        PageParams params = new PageParams<>();
+        params.setPages(10);
+        params.setPageSize(10);
+        params.setStartRow(1);
+        params.setEndRow(10);
+        params.setCurrentPage(1);
+        params.setTotalRows(100);
+
+        view.addObject("pageParams",params);
+        view.addObject("type","contract");
+
+        return view;
+
+    }
+
+    /**
+     * 分页查询EC合同
+     *
+     * @return
+     */
+    @RequestMapping(value = "/customer/contract/page", method = RequestMethod.POST)
+    public ModelAndView customer_page() {
+        ModelAndView view = new ModelAndView("contract/customer_contract_list");
+        //查询数据
+        PageParams params = new PageParams<>();
+        params.setPages(10);
+        params.setPageSize(10);
+        params.setStartRow(1);
+        params.setEndRow(10);
+        params.setCurrentPage(1);
+        params.setTotalRows(100);
+
+        view.addObject("pageParams",params);
+        view.addObject("type","contract");
+        return view;
+
+    }
+
+    /**
+     * EC中心查询EC资料
+     *
+     * @return
+     */
+    @RequestMapping(value = "/customer/data/list", method = RequestMethod.GET)
+    public ModelAndView customer_data_list() {
+        ModelAndView view = new ModelAndView("contract/customer_data_list");
+
+        //查询数据
+        PageParams params = new PageParams<>();
+        params.setPages(10);
+        params.setPageSize(10);
+        params.setStartRow(1);
+        params.setEndRow(10);
+        params.setCurrentPage(1);
+        params.setTotalRows(100);
+
+        view.addObject("pageParams",params);
+        view.addObject("type","contract");
+
+        return view;
+
+    }
+
+    /**
+     * 分页查询EC资料
+     *
+     * @return
+     */
+    @RequestMapping(value = "/customer/data/page", method = RequestMethod.POST)
+    public ModelAndView customer_data_page() {
+        ModelAndView view = new ModelAndView("contract/customer_data_list");
+        //查询数据
+        PageParams params = new PageParams<>();
+        params.setPages(10);
+        params.setPageSize(10);
+        params.setStartRow(1);
+        params.setEndRow(10);
+        params.setCurrentPage(1);
+        params.setTotalRows(100);
+
+        view.addObject("pageParams",params);
+        view.addObject("type","contract");
+        return view;
+
+    }
 }

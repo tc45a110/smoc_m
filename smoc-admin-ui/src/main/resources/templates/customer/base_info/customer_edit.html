@@ -50,7 +50,7 @@
                                         <label for="linkt">上级EC</label>：北京星语互联科技有限公司
                                     </div>
                                     <div class="form-group m-b-20">
-                                        <label for="linkt">联系人<span class="text-danger">*</span>&nbsp;</label>
+                                        <label for="linkt">EC联系人<span class="text-danger">*</span>&nbsp;</label>
                                         <input id="linkt" type="text"  class="form-control"
                                                required="" data-parsley-length="[2,12]" autocomplete="off"
                                                placeholder="输入联系人">
@@ -62,13 +62,13 @@
                                                placeholder="输入联系方式">
                                     </div>
                                     <div class="form-group m-b-20">
-                                        <label for="eName">企业名称<span class="text-danger">*</span>&nbsp;</label>
+                                        <label for="eName">EC名称<span class="text-danger">*</span>&nbsp;</label>
                                         <input id="eName" type="text"  class="form-control"
                                                required="" data-parsley-length="[2,64]" autocomplete="off"
                                                placeholder="输入企业名称">
                                     </div>
                                     <div class="form-group m-b-20">
-                                        <label for="address">企业地址<span class="text-danger">*</span>&nbsp;</label>
+                                        <label for="address">EC地址<span class="text-danger">*</span>&nbsp;</label>
                                         <input id="address" type="text"  class="form-control"
                                                required="" data-parsley-length="[2,128]" autocomplete="off"
                                                placeholder="输入企业地址">
@@ -110,8 +110,8 @@
                         </div> <!-- end row -->
 
                         <div class="text-center">
-                            <a sec:authorize-url="/ec/customer/config/*" th:href="@{/ec/customer/config/0000}"  type="button" class="btn btn-teal waves-effect waves-light">提交</a>
-                            <a sec:authorize-url="/ec/customer/list" th:href="@{/ec/customer/list}" class="btn btn-default waves-effect waves-light">返回</a>
+                            <a sec:authorize-url="/ec/customer/base_info/config/*" th:href="@{/ec/customer/base_info/config/0000}"  type="button" class="btn btn-teal waves-effect waves-light">提交</a>
+                            <a sec:authorize-url="/ec/customer/base_info/list" th:href="@{/ec/customer/base_info/list}" class="btn btn-default waves-effect waves-light">返回</a>
                         </div>
                     </form>
                     <!-- end form -->

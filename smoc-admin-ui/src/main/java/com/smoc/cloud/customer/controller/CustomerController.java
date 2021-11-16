@@ -20,9 +20,9 @@ public class CustomerController {
      *
      * @return
      */
-    @RequestMapping(value = "/customer/list", method = RequestMethod.GET)
+    @RequestMapping(value = "/customer/base_info/list", method = RequestMethod.GET)
     public ModelAndView list() {
-        ModelAndView view = new ModelAndView("customer/customer_list");
+        ModelAndView view = new ModelAndView("customer/base_info/customer_list");
 
         //查询数据
         PageParams params = new PageParams<>();
@@ -44,9 +44,9 @@ public class CustomerController {
      *
      * @return
      */
-    @RequestMapping(value = "/customer/page", method = RequestMethod.POST)
+    @RequestMapping(value = "/customer/base_info/page", method = RequestMethod.POST)
     public ModelAndView page() {
-        ModelAndView view = new ModelAndView("customer/customer_list");
+        ModelAndView view = new ModelAndView("customer/base_info/customer_list");
         //查询数据
         PageParams params = new PageParams<>();
         params.setPages(12);
@@ -66,9 +66,9 @@ public class CustomerController {
      * level表示企业层级
      * @return
      */
-    @RequestMapping(value = "/customer/add/{level}/{parentId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/customer/base_info/add/{level}/{parentId}", method = RequestMethod.GET)
     public ModelAndView add(@PathVariable String level,@PathVariable String parentId) {
-        ModelAndView view = new ModelAndView("customer/customer_edit");
+        ModelAndView view = new ModelAndView("customer/base_info/customer_edit");
         view.addObject("level",level);
         view.addObject("parentId",parentId);
         return view;
@@ -80,9 +80,9 @@ public class CustomerController {
      * level表示企业层级
      * @return
      */
-    @RequestMapping(value = "/customer/config/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/customer/base_info/config/{id}", method = RequestMethod.GET)
     public ModelAndView config(@PathVariable String id) {
-        ModelAndView view = new ModelAndView("customer/customer_config");
+        ModelAndView view = new ModelAndView("customer/base_info/customer_config");
 
         //查询数据
         PageParams params = new PageParams<>();
@@ -109,9 +109,9 @@ public class CustomerController {
      *
      * @return
      */
-    @RequestMapping(value = "/customer/view/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/customer/base_info/view/{id}", method = RequestMethod.GET)
     public ModelAndView view(@PathVariable String id) {
-        ModelAndView view = new ModelAndView("customer/customer_view");
+        ModelAndView view = new ModelAndView("customer/base_info/customer_view");
 
         if("0000".equals(id)){
             view.addObject("parentId","0");
@@ -122,5 +122,7 @@ public class CustomerController {
         return view;
 
     }
+
+
 
 }

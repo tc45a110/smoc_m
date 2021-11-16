@@ -23,7 +23,7 @@
                             客户管理
                         </li>
                         <li>
-                            EC通道管理
+                            EC通道账户管理
                         </li>
                         <li class="active">
                             EC通道账户维护
@@ -45,7 +45,7 @@
                                                class="btn btn-default waves-effect waves-light btn-md">
                                                 <i class="glyphicon  glyphicon-share-alt" style="margin-right:5px"></i>
                                                 返回通道账户列表</a>
-                                            <a  th:href="@{/ec/customer/channel/account/center}"
+                                            <a  th:href="@{/ec/customer/channel/account/center/account}"
                                                 style="margin-left:10px;"
                                                 class="btn btn-success waves-effect waves-light btn-md">
                                                 <i class="mdi mdi-brightness-7" style="margin-right:5px"></i>
@@ -116,8 +116,8 @@
                                                         </a>
                                                     </li>
                                                     <li th:class="${type =='operate'?'active':''}" id="operate">
-                                                        <a onclick="activeTab('operate')"  sec:authorize-url="/ec/customer/channel/account/edit/**/*"
-                                                           th:href="@{/ec/customer/channel/account/edit/operate/id}"
+                                                        <a onclick="activeTab('operate')"  sec:authorize-url="/ec/customer/channel/account/operate/record"
+                                                           th:href="@{/ec/customer/channel/account/operate/record}"
                                                            th:target="tab-content">操作记录
                                                         </a>
                                                     </li>
