@@ -40,27 +40,27 @@
                     <form th:action="@{/ec/customer/page}"  id="query_form"  method="post">
                         <div class="row m-b-60">
                             <div class="col-sm-12">
-                                <div class="form-group  col-sm-3">
+                                <div class="form-group  col-sm-4">
                                     <input type="text" class="form-control"
                                            placeholder="企业名称" autocomplete="off">
                                 </div>
-                                <div class="form-group  col-sm-3">
+                                <div class="form-group  col-sm-4">
                                     <input type="text" class="form-control"
                                            placeholder="联系人" autocomplete="off">
                                 </div>
-                                <div class="form-group  col-sm-3">
+                                <div class="form-group  col-sm-4">
                                     <input type="text" class="form-control"
                                            placeholder="联系方式" autocomplete="off">
                                 </div>
-                                <div class="form-group  col-sm-3">
+                                <div class="form-group  col-sm-4">
                                     <mpm:tag id="enterpriseType" identity="enterpriseType" show-type="select" key="code"
                                              class="form-control" name="enterpriseType" value="" title="企业类型"/>
                                 </div>
-                                <div class="form-group  col-sm-3">
+                                <div class="form-group  col-sm-4">
                                     <input type="text" class="form-control"
                                            placeholder="销售码" autocomplete="off">
                                 </div>
-                                <div class="form-group col-sm-3 pull-right" style="text-align: right">
+                                <div class="form-group col-sm-4 pull-right" style="text-align: right">
                                     <button sec:authorize-url="/ec/customer/page" type="submit"
                                             class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search" style="margin-right:5px"></i> 查询
