@@ -115,16 +115,10 @@
                                                            th:target="tab-content" style="color:#f35864">扩展参数
                                                         </a>
                                                     </li>
-                                                    <li th:class="${type =='check'?'active':''}" id="check">
-                                                        <a onclick="activeTab('check')"  sec:authorize-url="/ec/customer/channel/account/edit/**/*"
-                                                           th:href="@{/ec/customer/channel/account/edit/check/id}"
-                                                           th:target="tab-content">审核记录
-                                                        </a>
-                                                    </li>
                                                     <li th:class="${type =='operate'?'active':''}" id="operate">
                                                         <a onclick="activeTab('operate')"  sec:authorize-url="/ec/customer/channel/account/edit/**/*"
                                                            th:href="@{/ec/customer/channel/account/edit/operate/id}"
-                                                           th:target="tab-content">审核记录
+                                                           th:target="tab-content">操作记录
                                                         </a>
                                                     </li>
                                                 </ul>
