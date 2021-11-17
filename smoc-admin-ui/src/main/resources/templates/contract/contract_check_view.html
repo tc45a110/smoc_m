@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
+
+</head>
+<body>
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <!-- start row -->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title"> EC合同审核</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            EC合同审核
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row -->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-md-6">
+                <div class="panel panel-color panel-teal">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            <i class="mdi mdi-content-save-all" style="margin-right:5px"></i>
+                            EC合同信息
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-10">
+                                <div class="p-20">
+                                    <div class="form-group m-b-20">
+                                        <label>企业名称<span class="text-danger">*</span>&nbsp;</label>
+                                        <input type="text"  class="form-control"
+                                               value="北京星语互联科技有限公司"
+                                               placeholder="企业名称">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>企业类型<span class="text-danger">*</span></label>
+                                        <mpm:tag  identity="enterpriseType" show-type="label" key="code"
+                                                  class="form-control" value="CHANNELCUSTOMER" />
+                                    </div>
+                                    <div class="form-group m-b-20">
+                                        <label>合同编号<span class="text-danger">*</span>&nbsp;</label>
+                                        <input type="text"  class="form-control"
+                                               value="XY001-0876-2223"
+                                               placeholder="输入合同编号">
+                                    </div>
+                                    <div class="form-group m-b-20">
+                                        <label>签订日期<span class="text-danger">*</span>&nbsp;</label>
+                                        <input id="contractDate" class="form-control" type="text"
+                                               value="2021-11-17">
+                                    </div>
+                                    <div class="form-group m-b-20">
+                                        <label>备注关键字(比如：合同里的关键字，方便根据关键字查询)</label>
+                                        <input type="text"  class="form-control" data-parsley-length="[1,48]" autocomplete="off"
+                                               placeholder="关键字">
+                                    </div>
+                                    <div class="form-group m-b-20">
+                                        <p class="text-muted"><i style="font-size: 18px" class="mdi mdi-download"></i><a href="">&nbsp;EC合同文件</a></p>
+                                    </div>
+
+                                </div>
+                                <!-- end class p-20 -->
+                            </div> <!-- end col -->
+
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- end col -->
+            <div class="col-md-6">
+                <div class="panel panel-color panel-brown">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            <i class="mdi mdi-content-save-all" style="margin-right:5px"></i>
+                            审核操作
+                        </h3>
+                    </div>
+                    <div class="panel-body" style="height: 533px">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="p-20">
+                                    <div class="form-group m-b-20">
+                                        <label>审核状态<span class="text-danger">*</span></label>
+                                        <select name="approveStatus" data-style="btn-default"
+                                                class="selectpicker  form-control" tabindex="-98" 　required="true">
+                                            <option data-icon="mdi mdi-buffer">通过审核</option>
+                                            <option data-icon="mdi mdi-buffer">拒绝</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group m-b-20">
+                                        <label>审核意见<span class="text-danger">*</span>&nbsp;
+                                            <span class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                        </label>
+                                        <textarea class="form-control" rows="2"  placeholder="输入审核意见" data-parsley-length="[1,200]" autocomplete="off"></textarea>
+                                    </div>
+                                    <div class="text-right">
+                                        <button sec:authorize-url="/ec/contract/checkSave/*" type="submit" class="btn btn-teal waves-effect waves-light">提交
+                                        </button>
+                                        <a sec:authorize-url="/ec/contract/checkList" th:href="@{/ec/contract/checkList}" class="btn btn-default waves-effect waves-light">返回</a>
+                                    </div>
+                                </div>
+                                <!-- end class p-20 -->
+                            </div> <!-- end col -->
+
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- end col -->
+        </div>
+        <!-- end row -->
+
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<script th:src="@{/static/plugins/moment/moment.js}"></script>
+<th:block th:insert="fragments/common_fragments :: common_submit_form"/>
+
+<script>
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+</script>
+</body>
+</html>

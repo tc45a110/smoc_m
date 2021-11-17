@@ -1,0 +1,66 @@
+server: #服务端口
+  port: 8083
+  servlet:
+    context-path: /saler
+    session:
+      cookie:
+        name: OAUTH2SESSION
+      timeout: 240m
+  connection-timeout: 15000
+
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+  redis: #redis配置
+    host: r-2zegyswwjdbicif2hd.redis.rds.aliyuncs.com
+    port: 6379
+    password: Tsmoc40#RedistEst
+    database: 0
+    timeout: 10000
+    jedis:
+      pool:
+        max-active: 8
+        max-idle: 8
+        max-wait: -1
+        min-idle: 5
+
+#**********************************************************
+# manpuman oauth2 token参数设置
+#**********************************************************
+com:
+  manpuman:
+    cloud:
+      oauth2:
+        clientId: 176C2F4344C24F399FAE56DEE77B987C  #客户端名称
+        clientSecret: DD07521FD58DF5B493A8C6D3F35C3F71F1D49209A79B212466B15AC50EF156390F1EB96599626A02 #客户端密码
+        user-name: authSystemUser    #authSystemUser #用户
+        password: 049CB2A5480C582E54EBB82683F67410 #密码
+      security: #系统信息配置
+        system-marking: smoc-saler #系统标识  本系统和授权管理中心配置的系统标识对应
+        login-post-path: /security_login #spring security 拦截登录Post path   用户字段userName  密码字段 password  验证码字段 verificationCode
+        system-name: smoc销售中心 #系统名称
+        company-name: 北京星语互联科技有限公司  #公司名称
+        enable-verify-code: false #是否启用验证码
+        help-mobile: 联系电话 #帮助电话
+
+    #**********************************************************
+    # 内置tomcat 配置
+    #**********************************************************
+    tomcat:
+      connection-timeout: 15000
+      acceptor-thread-count: 4
+      min-spare-threads: 100
+      max-spare-threads: 300
+      accept-count: 200
+      max-connections: 1000
+      max-threads: 500
+      protocol: org.apache.coyote.http11.Http11NioProtocol #org.apache.coyote.http11.Http11AprProtocol
+
+logging:
+  config: classpath:logback-spring.xml
+  path: /alidata/smoc/smoc-log/smoc--saler-ui-logs
+  level:
+    root: info
+

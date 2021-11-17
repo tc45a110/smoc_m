@@ -90,6 +90,19 @@ public class ContractController {
 
     }
 
+    /**
+     * 显示详情
+     * @return
+     */
+    @RequestMapping(value = "/contract/detail/{id}", method = RequestMethod.GET)
+    public ModelAndView detail(@PathVariable String id, HttpServletRequest request) {
+
+        ModelAndView view = new ModelAndView("contract/contract_detail");
+
+        return view;
+
+    }
+
 
     /**
      * 查询EC合同审核
@@ -133,6 +146,32 @@ public class ContractController {
         params.setTotalRows(100);
 
         view.addObject("pageParams",params);
+        return view;
+
+    }
+
+    /**
+     * 显示审核页面
+     * @return
+     */
+    @RequestMapping(value = "/contract/checkView/{id}", method = RequestMethod.GET)
+    public ModelAndView checkView(@PathVariable String id, HttpServletRequest request) {
+
+        ModelAndView view = new ModelAndView("contract/contract_check_view");
+
+        return view;
+
+    }
+
+    /**
+     * 显示审核详情
+     * @return
+     */
+    @RequestMapping(value = "/contract/checkDetail/{id}", method = RequestMethod.GET)
+    public ModelAndView checkDetail(@PathVariable String id, HttpServletRequest request) {
+
+        ModelAndView view = new ModelAndView("contract/contract_check_detail");
+
         return view;
 
     }

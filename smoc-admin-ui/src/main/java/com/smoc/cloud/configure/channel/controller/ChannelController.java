@@ -26,7 +26,7 @@ public class ChannelController {
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ModelAndView userProfile(HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("/configure/channel/channel_list");
+        ModelAndView view = new ModelAndView("configure/channel/channel_list");
 
         //查询数据
         PageParams params = new PageParams<>();
@@ -50,7 +50,7 @@ public class ChannelController {
      */
     @RequestMapping(value = "/page", method = RequestMethod.POST)
     public ModelAndView page() {
-        ModelAndView view = new ModelAndView("/configure/channel/channel_list");
+        ModelAndView view = new ModelAndView("configure/channel/channel_list");
 
         //查询数据
         PageParams params = new PageParams<>();
@@ -75,7 +75,7 @@ public class ChannelController {
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public ModelAndView add(HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("/configure/channel/channel_edit");
+        ModelAndView view = new ModelAndView("configure/channel/channel_add");
 
         return view;
 
@@ -89,7 +89,7 @@ public class ChannelController {
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public ModelAndView edit(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("/configure/channel/channel_edit");
+        ModelAndView view = new ModelAndView("configure/channel/channel_edit_base");
 
         return view;
 
@@ -100,24 +100,38 @@ public class ChannelController {
      *
      * @return
      */
-    @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/config/{id}", method = RequestMethod.GET)
     public ModelAndView view(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("/configure/channel/channel_view");
+        ModelAndView view = new ModelAndView("configure/channel/channel_config");
 
         return view;
 
     }
 
     /**
-     * 通道详情
+     * 接口信息
      *
      * @return
      */
-    @RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/interface/{id}", method = RequestMethod.GET)
     public ModelAndView detail(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("/configure/channel/channel_detail");
+        ModelAndView view = new ModelAndView("configure/channel/channel_edit_interface");
+
+        return view;
+
+    }
+
+    /**
+     * 过滤信息
+     *
+     * @return
+     */
+    @RequestMapping(value = "/filter/{id}", method = RequestMethod.GET)
+    public ModelAndView filter(@PathVariable String id, HttpServletRequest request) {
+
+        ModelAndView view = new ModelAndView("configure/channel/channel_edit_filter");
 
         return view;
 
@@ -131,7 +145,7 @@ public class ChannelController {
     @RequestMapping(value = "/customerRecode/{id}", method = RequestMethod.GET)
     public ModelAndView customerRecode(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("/configure/channel/channel_customer_recode");
+        ModelAndView view = new ModelAndView("configure/channel/channel_customer_recode");
 
         //查询数据
         PageParams params = new PageParams<>();
@@ -156,7 +170,7 @@ public class ChannelController {
     @RequestMapping(value = "/productRecode/{id}", method = RequestMethod.GET)
     public ModelAndView productRecode(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("/configure/channel/channel_product_recode");
+        ModelAndView view = new ModelAndView("configure/channel/channel_product_recode");
 
         //查询数据
         PageParams params = new PageParams<>();
@@ -181,7 +195,7 @@ public class ChannelController {
     @RequestMapping(value = "/channelPriceList/{id}", method = RequestMethod.GET)
     public ModelAndView channelPriceList(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("/configure/channel/channel_price_list");
+        ModelAndView view = new ModelAndView("configure/channel/channel_price_recode");
 
         return view;
 
@@ -195,7 +209,7 @@ public class ChannelController {
     @RequestMapping(value = "/channelBusinessFeesList/{id}", method = RequestMethod.GET)
     public ModelAndView channelBusinessFeesList(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("/configure/channel/channel_business_fees_list");
+        ModelAndView view = new ModelAndView("configure/channel/channel_business_fees_recode");
 
         return view;
 
@@ -209,7 +223,7 @@ public class ChannelController {
     @RequestMapping(value = "/statisticsSendCount/{id}", method = RequestMethod.GET)
     public ModelAndView statisticsSendCount(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("/configure/channel/channel_statistics_send");
+        ModelAndView view = new ModelAndView("configure/channel/channel_statistics_send");
 
         return view;
 

@@ -91,6 +91,19 @@ public class ResourceController {
     }
 
     /**
+     * 显示详情
+     * @return
+     */
+    @RequestMapping(value = "/resource/detail/{id}", method = RequestMethod.GET)
+    public ModelAndView detail(@PathVariable String id, HttpServletRequest request) {
+
+        ModelAndView view = new ModelAndView("resource/resource_detail");
+
+        return view;
+
+    }
+
+    /**
      * 查询EC资料审核
      *
      * @return

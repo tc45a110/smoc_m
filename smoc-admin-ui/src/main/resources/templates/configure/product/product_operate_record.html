@@ -30,45 +30,47 @@
         <!-- start row -->
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
-                <div class="panel panel-color panel-primary">
+                <div class="panel panel-color panel-info">
                     <div class="panel-heading">
-                        <h3 class="panel-title">产品使用记录</h3>
+                        <h3 class="panel-title">产品操作记录</h3>
                     </div>
                     <div class="panel-body">
                         <div class="table-responsive">
                             <table class="table table table-hover m-10" style="margin-top: -12px;">
                                 <thead>
                                 <tr>
-                                    <th>产品名称</th>
-                                    <th>业务类型</th>
-                                    <th>内容类型</th>
-                                    <th>发送时间限制</th>
-                                    <th>频次</th>
-                                    <th>黑名单</th>
-                                    <th>产品简介</th>
-                                    <th>状态</th>
+                                    <th>操作功能</th>
+                                    <th>操作模块</th>
+                                    <th>动作</th>
+                                    <th>操作人</th>
+                                    <th>操作时间</th>
+                                    <th>操作</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <td>短信-三网产品</td>
-                                    <td><mpm:tag identity="businessType" value="TEXT_SMS" show-type="label"  key="code" /></td>
-                                    <td><mpm:tag identity="contentType" value="NOTICE" show-type="label"  key="code" /></td>
-                                    <td>0</td>
-                                    <td>0/0/0/0</td>
-                                    <td>一级黑名单</td>
-                                    <td>产品只能用来发送彩信、地产、有戏、验证码</td>
-                                    <td><a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">正常</a></td>
+                                    <td>产品管理</td>
+                                    <td>通道配置</td>
+                                    <td>修改</td>
+                                    <td>李先生</td>
+                                    <td>2021-11-17 13:34:50</td>
+                                    <td>
+                                        <a class="on-default edit-row"
+                                             style="padding-left: 10px;color: #29b6f6;"  data-toggle="tooltip" data-placement="bottom" title="" data-original-title="查看操作数据明细"
+                                        ><i style="font-size: 18px" class="glyphicon glyphicon-search"></i></a>
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td>彩信-三网产品</td>
-                                    <td><mpm:tag identity="businessType" value="MMS" show-type="label"  key="code" /></td>
-                                    <td><mpm:tag identity="contentType" value="CREDIT_CARD" show-type="label"  key="code" /></td>
-                                    <td>0</td>
-                                    <td>0/0/0/0</td>
-                                    <td>第三方黑名单</td>
-                                    <td>产品只能用来发送彩信、地产、有戏、验证码</td>
-                                    <td><a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">正常</a></td>
+                                    <td>产品管理</td>
+                                    <td>过滤信息</td>
+                                    <td>修改</td>
+                                    <td>李先生</td>
+                                    <td>2021-11-17 13:34:50</td>
+                                    <td>
+                                        <a class="on-default edit-row"
+                                           style="padding-left: 10px;color: #29b6f6;"  data-toggle="tooltip" data-placement="bottom" title="" data-original-title="查看操作数据明细"
+                                        ><i style="font-size: 18px" class="glyphicon glyphicon-search"></i></a>
+                                    </td>
                                 </tr>
 
 
@@ -90,6 +92,7 @@
 
 <th:block th:insert="fragments/common_fragments :: common_js"/>
 <th:block th:insert="fragments/common_fragments :: select_js"/>
+<th:block th:insert="fragments/cookie_fragments :: cookie_js"/>
 <script>
     var resizefunc = [];
     //隐藏进度项

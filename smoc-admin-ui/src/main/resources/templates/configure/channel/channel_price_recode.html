@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
+    <style>
+    </style>
+</head>
+<body style="background-color:#fff">
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Start content -->
+<div class="content">
+    <div class="container">
+
+        <!-- start row -->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="panel panel-color panel-warning">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">价格历史记录</h3>
+                    </div>
+                    <div class="panel-body">
+                        <article class="pricing-column col-lg-3 col-md-4" style="margin-bottom: 1px;">
+                            <div class="ribbon" ><span>当前价格</span></div>
+                            <div class="inner-box card-box" style="padding: 0 0 20px;">
+                                <div class="property-content"
+                                     style="height:180px">
+                                    <div class="plan-header">
+                                        <h3 class="plan-title" style="font-size: 25px;text-align: center" >￥0.004</h3>
+                                        <p style="font-size:13px;margin-left: 20px">开始时间：2021-11-05</p>
+                                        <p style="font-size:13px;margin-left: 20px">结束时间：</p>
+                                        <p style="font-size:13px;margin-left: 20px">修改原因：</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="pricing-column col-lg-3 col-md-4" style="margin-bottom: 1px;">
+                            <div class="ribbon" ><span style="background: #0b0b0b">历史价格</span></div>
+                            <div class="inner-box card-box" style="padding: 0 0 20px;">
+                                <div class="property-content"
+                                     style="height:180px">
+                                    <div class="plan-header">
+                                        <h3 class="plan-title" style="font-size: 25px;text-align: center" >￥0.003</h3>
+                                        <p style="font-size:13px;margin-left: 20px">开始时间：2020-12-06</p>
+                                        <p style="font-size:13px;margin-left: 20px">结束时间：2021-11-04</p>
+                                        <p style="font-size:13px;margin-left: 20px">修改原因：</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="pricing-column col-lg-3 col-md-4" style="margin-bottom: 1px;">
+                            <div class="ribbon" ><span style="background: #0b0b0b">历史价格</span></div>
+                            <div class="inner-box card-box" style="padding: 0 0 20px;">
+                                <div class="property-content"
+                                     style="height:180px">
+                                    <div class="plan-header">
+                                        <h3 class="plan-title" style="font-size: 25px;text-align: center" >￥0.002</h3>
+                                        <p style="font-size:13px;margin-left: 20px">开始时间：2020-05-06</p>
+                                        <p style="font-size:13px;margin-left: 20px">结束时间：2020-12-05</p>
+                                        <p style="font-size:13px;margin-left: 20px">修改原因：</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                        <article class="pricing-column col-lg-3 col-md-4" style="margin-bottom: 1px;">
+                            <div class="ribbon" ><span style="background: #0b0b0b">历史价格</span></div>
+                            <div class="inner-box card-box" style="padding: 0 0 20px;">
+                                <div class="property-content"
+                                     style="height:180px">
+                                    <div class="plan-header">
+                                        <h3 class="plan-title" style="font-size: 25px;text-align: center" >￥0.001</h3>
+                                        <p style="font-size:13px;margin-left: 20px">开始时间：2020-01-05</p>
+                                        <p style="font-size:13px;margin-left: 20px">结束时间：2020-05-05</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- end row -->
+
+    </div> <!-- container -->
+
+</div> <!-- content -->
+
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<script>
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+</script>
+</body>
+</html>

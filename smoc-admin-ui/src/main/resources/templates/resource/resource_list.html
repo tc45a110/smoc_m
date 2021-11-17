@@ -63,9 +63,9 @@
                                     <button sec:authorize-url="/ec/resource/page" class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search"></i> 查询
                                     </button>
-                                    <a sec:authorize-url="/ec/resource/add" th:href="@{/ec/resource/add}"
+                                    <a sec:authorize-url="/ec/customer/search/*" th:href="@{/ec/customer/search/resource}"
                                        class="btn btn-success waves-effect waves-light m-l-10 btn-md">
-                                        <i class="glyphicon glyphicon-plus-sign"></i> 新建</a>
+                                        <i class="glyphicon glyphicon-plus-sign"></i> 新建EC资料</a>
                                 </div>
                             </form>
                         </div>
@@ -135,10 +135,10 @@
                                         <td>李先生<br>2021-11-3 12:45:47</td>
                                         <td></td>
                                         <td style="line-height: 26px;">
-                                            <a sec:authorize-url="/ec/resource/checkRecord/*"
-                                               data-toggle="modal" data-target="#check-record" class="on-default edit-row"
+                                            <a sec:authorize-url="/ec/resource/detail/*"
+                                               th:href="@{/ec/resource/detail/id}" class="on-default edit-row"
                                                style="padding-left: 5px;color: #4BD396;"
-                                               title="审核记录"><i style="font-size: 18px" class="mdi mdi-book-open-page-variant"></i></a>
+                                               title="审核记录"><i style="font-size: 18px" class="glyphicon glyphicon-search"></i></a>
                                             <a sec:authorize-url="/ec/resource/edit/*" data-toggle="modal" data-target="#download-record"
                                                class="on-default edit-row"
                                                style="padding-left: 5px;color: #6B5FB5;"title="下载附件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
@@ -155,10 +155,10 @@
                                         <td>李先生<br>2021-11-3 12:45:47</td>
                                         <td>张先生<br>2021-11-4 12:45:47</td>
                                         <td style="line-height: 26px;">
-                                            <a sec:authorize-url="/ec/resource/checkRecord/*"
-                                               data-toggle="modal" data-target="#check-record" class="on-default edit-row"
+                                            <a sec:authorize-url="/ec/resource/detail/*"
+                                               th:href="@{/ec/resource/detail/id}" class="on-default edit-row"
                                                style="padding-left: 5px;color: #4BD396;"
-                                               title="审核记录"><i style="font-size: 18px" class="mdi mdi-book-open-page-variant"></i></a>
+                                               title="审核记录"><i style="font-size: 18px" class="glyphicon glyphicon-search"></i></a>
                                             <a sec:authorize-url="/ec/resource/edit/*" data-toggle="modal" data-target="#download-record"
                                                class="on-default edit-row"
                                                style="padding-left: 5px;color: #6B5FB5;"title="下载附件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
@@ -199,10 +199,10 @@
                                         <td>李先生<br>2021-11-3 12:45:47</td>
                                         <td>张先生<br>2021-11-4 12:45:47</td>
                                         <td style="line-height: 26px;">
-                                            <a sec:authorize-url="/ec/resource/checkRecord/*"
-                                               data-toggle="modal" data-target="#check-record" class="on-default edit-row"
+                                            <a sec:authorize-url="/ec/resource/detail/*"
+                                               th:href="@{/ec/resource/detail/id}" class="on-default edit-row"
                                                style="padding-left: 5px;color: #4BD396;"
-                                               title="审核记录"><i style="font-size: 18px" class="mdi mdi-book-open-page-variant"></i></a>
+                                               title="审核记录"><i style="font-size: 18px" class="glyphicon glyphicon-search"></i></a>
                                             <a sec:authorize-url="/ec/resource/edit/*" data-toggle="modal" data-target="#download-record"
                                                class="on-default edit-row"
                                                style="padding-left: 5px;color: #6B5FB5;"title="下载附件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
@@ -219,10 +219,10 @@
                                         <td>李先生<br>2021-11-3 12:45:47</td>
                                         <td>张先生<br>2021-11-4 12:45:47</td>
                                         <td style="line-height: 26px;">
-                                            <a sec:authorize-url="/ec/resource/checkRecord/*"
-                                               data-toggle="modal" data-target="#check-record" class="on-default edit-row"
+                                            <a sec:authorize-url="/ec/resource/detail/*"
+                                               th:href="@{/ec/resource/detail/id}" class="on-default edit-row"
                                                style="padding-left: 5px;color: #4BD396;"
-                                               title="审核记录"><i style="font-size: 18px" class="mdi mdi-book-open-page-variant"></i></a>
+                                               title="审核记录"><i style="font-size: 18px" class="glyphicon glyphicon-search"></i></a>
                                             <a sec:authorize-url="/ec/resource/edit/*" data-toggle="modal" data-target="#download-record"
                                                class="on-default edit-row"
                                                style="padding-left: 5px;color: #6B5FB5;"title="下载附件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
@@ -239,10 +239,10 @@
                                         <td>李先生<br>2021-11-3 12:45:47</td>
                                         <td>张先生<br>2021-11-4 12:45:47</td>
                                         <td style="line-height: 26px;">
-                                            <a sec:authorize-url="/ec/resource/checkRecord/*"
-                                               data-toggle="modal" data-target="#check-record" class="on-default edit-row"
+                                            <a sec:authorize-url="/ec/resource/detail/*"
+                                               th:href="@{/ec/resource/detail/id}" class="on-default edit-row"
                                                style="padding-left: 5px;color: #4BD396;"
-                                               title="审核记录"><i style="font-size: 18px" class="mdi mdi-book-open-page-variant"></i></a>
+                                               title="审核记录"><i style="font-size: 18px" class="glyphicon glyphicon-search"></i></a>
                                             <a sec:authorize-url="/ec/resource/edit/*" data-toggle="modal" data-target="#download-record"
                                                class="on-default edit-row"
                                                style="padding-left: 5px;color: #6B5FB5;"title="下载附件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
@@ -259,10 +259,10 @@
                                         <td>李先生<br>2021-11-3 12:45:47</td>
                                         <td>张先生<br>2021-11-4 12:45:47</td>
                                         <td style="line-height: 26px;">
-                                            <a sec:authorize-url="/ec/resource/checkRecord/*"
-                                               data-toggle="modal" data-target="#check-record" class="on-default edit-row"
+                                            <a sec:authorize-url="/ec/resource/detail/*"
+                                               th:href="@{/ec/resource/detail/id}" class="on-default edit-row"
                                                style="padding-left: 5px;color: #4BD396;"
-                                               title="审核记录"><i style="font-size: 18px" class="mdi mdi-book-open-page-variant"></i></a>
+                                               title="审核记录"><i style="font-size: 18px" class="glyphicon glyphicon-search"></i></a>
                                             <a sec:authorize-url="/ec/resource/edit/*" data-toggle="modal" data-target="#download-record"
                                                class="on-default edit-row"
                                                style="padding-left: 5px;color: #6B5FB5;"title="下载附件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
@@ -279,10 +279,10 @@
                                         <td>李先生<br>2021-11-3 12:45:47</td>
                                         <td>张先生<br>2021-11-4 12:45:47</td>
                                         <td style="line-height: 26px;">
-                                            <a sec:authorize-url="/ec/resource/checkRecord/*"
-                                               data-toggle="modal" data-target="#check-record" class="on-default edit-row"
+                                            <a sec:authorize-url="/ec/resource/detail/*"
+                                               th:href="@{/ec/resource/detail/id}" class="on-default edit-row"
                                                style="padding-left: 5px;color: #4BD396;"
-                                               title="审核记录"><i style="font-size: 18px" class="mdi mdi-book-open-page-variant"></i></a>
+                                               title="审核记录"><i style="font-size: 18px" class="glyphicon glyphicon-search"></i></a>
                                             <a sec:authorize-url="/ec/resource/edit/*" data-toggle="modal" data-target="#download-record"
                                                class="on-default edit-row"
                                                style="padding-left: 5px;color: #6B5FB5;"title="下载附件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
@@ -306,37 +306,7 @@
     </div> <!-- container -->
 
 </div> <!-- content -->
-<div id="check-record" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="a-width-modalLabel" aria-hidden="true" style="display: none;margin: 60px">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title">审核记录</h4>
-            </div>
-            <div class="modal-body">
-                <p id="tip_id" style="display: none;text-align: center">暂无审核记录</p>
-                <table id="table_id" class="table table-striped m-0" style="margin-top: -12px;">
-                    <thead>
-                    <tr>
-                        <th width="10%">提交人</th>
-                        <th width="12%">状态</th>
-                        <th width="22%">提交时间</th>
-                        <th width="36%">描述</th>
-                        <th width="22%">审核人/审核时间</th>
-                    </tr>
-                    <thead>
-                    <tbody id="config">
-                        <td>李先生</td>
-                        <td>审核通过</td>
-                        <td>2021-11-3 12:45:47</td>
-                        <td>资料完整，给予通过</td>
-                        <td>张先生<br>2021-11-4 12:45:47</td>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
+
 <div id="download-record" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="a-width-modalLabel" aria-hidden="true" style="display: none;margin: 60px">
     <div class="modal-dialog modal-md">
         <div class="modal-content">

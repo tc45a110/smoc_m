@@ -38,8 +38,6 @@
                                             <mpm:tag id="businessType" identity="businessType" show-type="select" key="code"
                                                      class="form-control" name="enterpriseType" value="" title="业务类型"/>
                                         </div>
-                                    </div>
-                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <label>内容类型<span class="text-danger">*</span></label>
                                             <mpm:tag id="contentType" identity="contentType" show-type="select" key="code"
@@ -52,6 +50,34 @@
                                                 <option data-icon="mdi mdi-equal-box" >正常</option>
                                                 <option data-icon="mdi mdi-equal-box" >停用</option>
                                             </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>发送时间限制<span class="text-danger">*</span>&nbsp;</label>
+                                            <input type="text"  class="form-control"
+                                                   required="" data-parsley-length="[1,30]" autocomplete="off"
+                                                   placeholder="发送时间限制">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>黑名单<span class="text-danger">*</span></label>
+                                            <input type="text"  class="form-control"
+                                                   required="" data-parsley-length="[1,30]" autocomplete="off"
+                                                   placeholder="黑名单">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>频次<span class="text-danger">*</span>&nbsp;</label>
+                                            <input type="text"  class="form-control"
+                                                   required="" data-parsley-length="[1,30]" autocomplete="off"
+                                                   placeholder="频次">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>RE正则表达式<span class="text-danger">*</span></label>
+                                            <input type="text"  class="form-control"
+                                                   required="" data-parsley-length="[1,30]" autocomplete="off"
+                                                   placeholder="RE正则表达式">
                                         </div>
                                     </div>
                                     <div class="col-md-12">

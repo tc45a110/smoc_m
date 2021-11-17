@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
+
+</head>
+<body style="background-color:#fff">
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+
+<!-- Start content -->
+<div class="content">
+    <div class="container">
+        <!-- start row -->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all" style="background-color:#fff">
+            <div class="col-md-12">
+                <form  id="submit_form"
+                       method="post" data-parsley-validate="">
+                    <div class="row">
+                        <div class="col-md-12 panel panel-color panel-teal" style="padding-left:0px;padding-right:0px">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">过滤信息 维护</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-sm-4 m-b-10" style="padding-left: 10px;">
+                                                    <label class="m-b-20">黑名单</label><br/>
+                                                    <div class="radio radio-info radio-inline">
+                                                        <input type="radio" id="inlineRadio3" name="black" value="0" required>
+                                                        <label for="inlineRadio3"> 否 </label>
+                                                    </div>
+                                                    <div class="radio radio-info radio-inline">
+                                                        <input type="radio" id="inlineRadio4" name="black" value="1">
+                                                        <label for="inlineRadio4"> 是 </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4 m-b-10" style="padding-left: 10px;">
+                                                    <label class="m-b-20">是否支持上行</label><br/>
+                                                    <div class="radio radio-info radio-inline">
+                                                        <input type="radio" id="inlineRadio5" name="up" value="0">
+                                                        <label for="inlineRadio5"> 否 </label>
+                                                    </div>
+                                                    <div class="radio radio-info radio-inline">
+                                                        <input type="radio" id="inlineRadio6" name="up" value="1">
+                                                        <label for="inlineRadio6"> 是 </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4 m-b-10" style="padding-left: 10px;">
+                                                    <label class="m-b-20">是否支持携号转网</label><br/>
+                                                    <div class="radio radio-info radio-inline">
+                                                        <input type="radio" id="inlineRadio7" name="transfer" value="0">
+                                                        <label for="inlineRadio7"> 否 </label>
+                                                    </div>
+                                                    <div class="radio radio-info radio-inline">
+                                                        <input type="radio" id="inlineRadio8" name="transfer" value="1">
+                                                        <label for="inlineRadio8"> 是 </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-sm-4 m-b-10">
+                                                    <label>屏蔽省份<span class="text-danger">*</span>&nbsp;<span
+                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                    </label>
+                                                    <input type="text" required="" class="form-control" autocomplete="off">
+                                                </div>
+                                                <div class="col-sm-4 m-b-10">
+                                                    <label>RE正则表达式<span class="text-danger">*</span>&nbsp;<span
+                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                    </label>
+                                                    <input type="text" required="" class="form-control" autocomplete="off">
+                                                </div>
+                                                <div class="col-sm-4 m-b-10">
+                                                    <label>签名规则<span class="text-danger">*</span>&nbsp;<span
+                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                    </label>
+                                                    <input type="text" required="" class="form-control" autocomplete="off">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-sm-4 m-b-10">
+                                                    <label>单号码流控(条/分钟)<span class="text-danger">*</span>&nbsp;<span
+                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                    </label>
+                                                    <input type="text" required="" class="form-control" autocomplete="off">
+                                                </div>
+                                                <div class="col-sm-4 m-b-10">
+                                                    <label>单号码流控(条/小时)<span class="text-danger">*</span>&nbsp;<span
+                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                    </label>
+                                                    <input type="text" required="" class="form-control" autocomplete="off">
+                                                </div>
+                                                <div class="col-sm-4 m-b-10">
+                                                    <label>单号码流控(条/天)<span class="text-danger">*</span>&nbsp;<span
+                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                    </label>
+                                                    <input type="text" required="" class="form-control" autocomplete="off">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-sm-4 m-b-10">
+                                                    <label>频次限制(条/分钟)<span class="text-danger">*</span>&nbsp;<span
+                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                    </label>
+                                                    <input type="text" required="" class="form-control" autocomplete="off">
+                                                </div>
+                                                <div class="col-sm-4 m-b-10">
+                                                    <label>频次限制(条/小时)<span class="text-danger">*</span>&nbsp;<span
+                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                    </label>
+                                                    <input type="text" required="" class="form-control" autocomplete="off">
+                                                </div>
+                                                <div class="col-sm-4 m-b-10">
+                                                    <label>频次限制(条/天)<span class="text-danger">*</span>&nbsp;<span
+                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                    </label>
+                                                    <input type="text" required="" class="form-control" autocomplete="off">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-sm-4 m-b-10">
+                                                    <label>频次限制(条/月)<span class="text-danger">*</span>&nbsp;<span
+                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                    </label>
+                                                    <input type="text" required="" class="form-control" autocomplete="off">
+                                                </div>
+                                                <div class="col-sm-4 m-b-10">
+                                                    <label>发送时间限制(开始)<span class="text-danger">*</span>&nbsp;<span
+                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                    </label>
+                                                    <input class="form-control" id="single-input" value="" placeholder="Now">
+                                                </div>
+                                                <div class="col-sm-4 m-b-10">
+                                                    <label>发送时间限制(结束)</label>
+                                                    <input type="text" required="" class="form-control" autocomplete="off">
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div> <!-- end col -->
+                    </div> <!-- end row -->
+                    <div class="text-center" style="margin-bottom:20px">
+                        <a type="button" class="btn btn-teal waves-effect waves-light">提交</a>
+                        <a class="btn btn-default waves-effect waves-light" style="margin-left:10px">查看明细</a>
+                    </div>
+                </form>
+                <!-- end form -->
+
+            </div> <!-- end card-box -->
+        </div> <!-- end col -->
+    </div>
+    <!-- end row -->
+
+    <th:block th:insert="fragments/common_fragments :: common_error"/>
+
+</div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<th:block th:insert="fragments/common_fragments :: common_submit_form"/>
+<script>
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+</script>
+</body>
+</html>

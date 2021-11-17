@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <!-- Custom box css -->
+</head>
+<body>
+<!-- Loader -->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">通道管理</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            通道管理
+                        </li>
+                        <li class="active">
+                            通道基础信息维护
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <h4 class="m-b-10">通道管理
+                                <div class="pull-right" style="margin-top: -12px;">
+                                    <a sec:authorize-url="/configure/channel/list" th:href="@{/configure/channel/list}"
+                                       class="btn btn-default waves-effect waves-light btn-md">
+                                        <i class="glyphicon  glyphicon-share-alt" style="margin-right:5px"></i>
+                                        返回通道列表</a>
+                                </div>
+                            </h4>
+                            <div id="help" class="alert alert-icon alert-success alert-dismissible fade in" style="margin-top:20px" role="alert">
+                                <i class="mdi mdi-help-circle-outline"></i>
+                                <strong>通道简介：</strong> 全国移动普通短信通道（全国）
+                            </div>
+                            <div class="row" style="margin-top:20px">
+                                <div class="col-md-12">
+                                    <div class="card-box">
+                                        <ul class="nav nav-pills m-b-30 pull-right">
+                                            <li class="active" id="tab1"><a onclick="active('1')"  sec:authorize-url="/configure/channel/edit/*"
+                                                                            th:href="@{/configure/channel/edit/id}"
+                                                                            th:target="tab-content">通道详细</a></li>
+                                            <li class="" id="tab7"><a onclick="active('7')"  sec:authorize-url="/configure/channel/interface/*"
+                                                                            th:href="@{/configure/channel/interface/id}"
+                                                                            th:target="tab-content">接口信息</a></li>
+                                            <li class="" id="tab8"><a onclick="active('8')"  sec:authorize-url="/configure/channel/filter/*"
+                                                                      th:href="@{/configure/channel/filter/id}"
+                                                                      th:target="tab-content">过滤信息</a></li>
+                                            <li class="" id="tab2"><a onclick="active('2')" sec:authorize-url="/configure/channel/customerRecode/*"
+                                                                      th:href="@{/configure/channel/customerRecode/id}"
+                                                                      th:target="tab-content">用户使用记录</a></li>
+                                            <li class="" id="tab3"><a onclick="active('3')" sec:authorize-url="/configure/channel/productRecode/*"
+                                                                      th:href="@{/configure/channel/productRecode/id}"
+                                                                      th:target="tab-content">产品使用记录</a></li>
+                                            <li class="" id="tab4"><a onclick="active('4')" sec:authorize-url="/configure/channel/channelPriceList/*"
+                                                                      th:href="@{/configure/channel/channelPriceList/id}"
+                                                                      th:target="tab-content">价格历史记录</a></li>
+                                            <li class="" id="tab5"><a onclick="active('5')" sec:authorize-url="/configure/channel/channelBusinessFeesList/*"
+                                                                      th:href="@{/configure/channel/channelBusinessFeesList/id}"
+                                                                      th:target="tab-content">商务费历史记录</a></li>
+                                            <li class="" id="tab6"><a onclick="active('6')" sec:authorize-url="/configure/channel/statisticsSendCount/*"
+                                                                      th:href="@{/configure/channel/statisticsSendCount/id}"
+                                                                      th:target="tab-content">统计发送量</a></li>
+                                        </ul>
+                                        <div class="tab-cotent" style="background-color:#fff">
+                                            <iframe name="tab-content" id="tab-content" th:frameBorder="0" th:scrolling="auto"
+                                                    th:src="@{/configure/channel/edit/id}" style="padding: 0px; width: 100%; height: 2000px;background-color:#fff"> </iframe>
+                                        </div>
+                                    </div>
+                                </div> <!-- end col -->
+                            </div>
+                            <!-- end row -->
+                        </div> <!-- end col -->
+
+                    </div> <!-- end row -->
+
+                </div>
+            </div>
+        </div>
+
+        <!-- end row -->
+
+    </div> <!-- container -->
+
+</div> <!-- content -->
+
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<!-- Modal-Effect -->
+<script>
+
+    function active(tab) {
+        for(var num = 1;num<10;num++){
+            $('#tab'+num).removeClass("active");
+        }
+        $('#tab'+tab).attr("class","active");
+    }
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+</script>
+</body>
+</html>

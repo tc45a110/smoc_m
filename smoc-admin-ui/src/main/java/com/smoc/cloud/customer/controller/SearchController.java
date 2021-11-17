@@ -19,7 +19,7 @@ public class SearchController {
      */
     @RequestMapping(value = "/customer/search/{op}", method = RequestMethod.GET)
     public ModelAndView search(@PathVariable String op) {
-        ModelAndView view = new ModelAndView("customer/search/search_list");
+        ModelAndView view = new ModelAndView("customer/search/search_list_"+op);
 
         //查询数据
         PageParams params = new PageParams<>();
@@ -31,6 +31,7 @@ public class SearchController {
         params.setTotalRows(22);
 
         view.addObject("pageParams",params);
+
         return view;
     }
 
@@ -40,7 +41,7 @@ public class SearchController {
      */
     @RequestMapping(value = "/customer/search/page", method = RequestMethod.POST)
     public ModelAndView page() {
-        ModelAndView view = new ModelAndView("customer/search/search_list");
+        ModelAndView view = new ModelAndView("search_list_channel_account");
 
         //查询数据
         PageParams params = new PageParams<>();
@@ -54,4 +55,6 @@ public class SearchController {
         view.addObject("pageParams",params);
         return view;
     }
+
+
 }

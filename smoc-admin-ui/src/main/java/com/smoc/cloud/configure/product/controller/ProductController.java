@@ -26,7 +26,7 @@ public class ProductController {
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ModelAndView userProfile(HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("/configure/product/product_list");
+        ModelAndView view = new ModelAndView("configure/product/product_list");
 
         //查询数据
         PageParams params = new PageParams<>();
@@ -50,7 +50,7 @@ public class ProductController {
      */
     @RequestMapping(value = "/page", method = RequestMethod.POST)
     public ModelAndView page() {
-        ModelAndView view = new ModelAndView("/configure/product/product_list");
+        ModelAndView view = new ModelAndView("configure/product/product_list");
 
         //查询数据
         PageParams params = new PageParams<>();
@@ -75,7 +75,7 @@ public class ProductController {
     @RequestMapping(value = "/config/{id}", method = RequestMethod.GET)
     public ModelAndView config(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("/configure/product/product_config");
+        ModelAndView view = new ModelAndView("configure/product/product_config");
 
         return view;
 
@@ -89,7 +89,7 @@ public class ProductController {
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public ModelAndView add(HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("/configure/product/product_add");
+        ModelAndView view = new ModelAndView("configure/product/product_add");
 
         return view;
 
@@ -102,7 +102,7 @@ public class ProductController {
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public ModelAndView edit(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("/configure/product/product_edit");
+        ModelAndView view = new ModelAndView("configure/product/product_edit");
 
         return view;
 
@@ -116,7 +116,7 @@ public class ProductController {
     @RequestMapping(value = "/channel/list/{id}", method = RequestMethod.GET)
     public ModelAndView channelList(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("/configure/product/product_config_channel");
+        ModelAndView view = new ModelAndView("configure/product/product_config_channel");
 
         return view;
 
@@ -129,7 +129,7 @@ public class ProductController {
      */
     @RequestMapping(value = "/channel/page", method = RequestMethod.POST)
     public ModelAndView channelPage() {
-        ModelAndView view = new ModelAndView("/configure/product/product_config_channel");
+        ModelAndView view = new ModelAndView("configure/product/product_config_channel");
 
         return view;
 
@@ -143,7 +143,7 @@ public class ProductController {
     @RequestMapping(value = "/filter/edit/{id}", method = RequestMethod.GET)
     public ModelAndView filterEdit(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("/configure/product/product_config_filter");
+        ModelAndView view = new ModelAndView("configure/product/product_config_filter");
 
         return view;
 
@@ -157,7 +157,18 @@ public class ProductController {
     @RequestMapping(value = "/operate/list/{id}", method = RequestMethod.GET)
     public ModelAndView operateList(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("/configure/product/product_config_operate");
+        ModelAndView view = new ModelAndView("configure/product/product_operate_record");
+        //查询数据
+        PageParams params = new PageParams<>();
+        params.setPages(10);
+        params.setPageSize(8);
+        params.setStartRow(1);
+        params.setEndRow(10);
+        params.setCurrentPage(1);
+        params.setTotalRows(80);
+
+        view.addObject("pageParams",params);
+
 
         return view;
 

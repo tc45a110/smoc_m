@@ -25,7 +25,7 @@ public class CodeNumberController {
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ModelAndView userProfile(HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("/configure/codenumber/codenumber_list");
+        ModelAndView view = new ModelAndView("configure/codenumber/codenumber_list");
 
         //查询数据
         PageParams params = new PageParams<>();
@@ -49,7 +49,7 @@ public class CodeNumberController {
      */
     @RequestMapping(value = "/page", method = RequestMethod.POST)
     public ModelAndView page() {
-        ModelAndView view = new ModelAndView("/configure/codenumber/codenumber_list");
+        ModelAndView view = new ModelAndView("configure/codenumber/codenumber_list");
 
         //查询数据
         PageParams params = new PageParams<>();
@@ -74,7 +74,7 @@ public class CodeNumberController {
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public ModelAndView add(HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("/configure/codenumber/codenumber_edit");
+        ModelAndView view = new ModelAndView("configure/codenumber/codenumber_edit");
 
         return view;
 
@@ -88,7 +88,7 @@ public class CodeNumberController {
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
     public ModelAndView edit(HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("/configure/codenumber/codenumber_edit");
+        ModelAndView view = new ModelAndView("configure/codenumber/codenumber_edit");
 
         return view;
 
@@ -102,7 +102,7 @@ public class CodeNumberController {
     @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
     public ModelAndView view(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("/configure/codenumber/codenumber_view");
+        ModelAndView view = new ModelAndView("configure/codenumber/codenumber_view");
 
         return view;
 
@@ -116,7 +116,7 @@ public class CodeNumberController {
     @RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
     public ModelAndView detail(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("/configure/codenumber/codenumber_detail");
+        ModelAndView view = new ModelAndView("configure/codenumber/codenumber_detail");
 
         return view;
 
@@ -130,7 +130,7 @@ public class CodeNumberController {
     @RequestMapping(value = "/channelRecode/{id}", method = RequestMethod.GET)
     public ModelAndView channelRecode(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("/configure/codenumber/codenumber_channel_recode");
+        ModelAndView view = new ModelAndView("configure/codenumber/codenumber_channel_recode");
 
         return view;
 
@@ -144,7 +144,7 @@ public class CodeNumberController {
     @RequestMapping(value = "/statisticsSendCount/{id}", method = RequestMethod.GET)
     public ModelAndView statisticsSendCount(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("/configure/codenumber/codenumber_statistics_send");
+        ModelAndView view = new ModelAndView("configure/codenumber/codenumber_statistics_send");
 
         return view;
 
