@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <!-- Custom box css -->
+    <link th:href="@{/static/plugins/custombox/css/custombox.min.css}" rel="stylesheet">
+</head>
+<body>
+<!-- Loader -->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+        <div class="row fixed-navigation">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">产品管理 </h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            产品管理
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+        <div class="row" style="position: relative;margin-top: 80px"  th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <div class="row m-b-60">
+                        <div class="col-sm-12">
+                            <div class="form-group  col-sm-3">
+                                <input type="text" class="form-control" placeholder="产品名称" autocomplete="off">
+                            </div>
+                            <div class="form-group  col-sm-3">
+                                <mpm:tag id="businessType" identity="businessType" show-type="select" key="code"
+                                         class="form-control" name="enterpriseType" value="" title="业务类型"/>
+                            </div>
+                            <div class="form-group  col-sm-3">
+                                <mpm:tag id="contentType" identity="contentType" show-type="select" key="code"
+                                         class="form-control" name="enterpriseType" value="" title="内容类型"/>
+                            </div>
+                            <form  id="query_form" th:action="@{/configure/product/page}" method="post" class="form-inline">
+                                <div class="form-group pull-right" style="text-align: right">
+                                    <button sec:authorize-url="/configure/product/page" class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-search"></i> 查询
+                                    </button>
+                                    <a sec:authorize-url="/configure/product/add" th:href="@{/configure/product/add}"
+                                       class="btn btn-success waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-plus-sign"></i> 新建产品</a>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="panel panel-color panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">产品列表</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table table-hover m-10" style="margin-top: -12px;">
+                                <thead>
+                                <tr>
+                                    <th>产品名称</th>
+                                    <th>业务类型</th>
+                                    <th>内容类型</th>
+                                    <th>状态</th>
+                                    <th>创建人/创建日期</th>
+                                    <th>操作</th>
+                                </tr>
+                                <thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="line-height: 26px;">三网普通短信产品</td>
+                                        <td style="line-height: 26px;"><a class="btn btn-success btn-rounded btn-sm waves-effect waves-light">普通短信</a></td>
+                                        <td style="line-height: 26px;">通知</td>
+                                        <td><a class="btn btn-success btn-rounded btn-sm waves-effect waves-light">正常</a></td>
+                                        <td>李先生<br>2021-11-3 12:45:47</td>
+                                        <td style="line-height: 26px;">
+                                            <a sec:authorize-url="/configure/product/config/*"
+                                               th:href="@{/configure/product/config/id}"class="on-default edit-row"
+                                               style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip" data-placement="bottom" title="修改、配置产品信息"><i style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="line-height: 26px;">三网彩信产品</td>
+                                        <td style="line-height: 26px;"><a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">彩信</a></td>
+                                        <td style="line-height: 26px;">信用卡</td>
+                                        <td><a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light">停用</a></td>
+                                        <td>李先生<br>2021-11-3 12:45:47</td>
+                                        <td style="line-height: 26px;">
+                                            <a sec:authorize-url="/configure/product/config/*"
+                                               th:href="@{/configure/product/config/id}"class="on-default edit-row"
+                                               style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip" data-placement="bottom" data-original-title="修改、配置产品信息"><i style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+                        </div>
+                        <th:block th:insert="fragments/page_fragments :: page"/>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- end row -->
+
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+
+    </div> <!-- container -->
+
+</div> <!-- content -->
+
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<script th:src="@{/static/plugins/moment/moment.js}"></script>
+<!-- Modal-Effect -->
+
+<script>
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+</script>
+</body>
+</html>
