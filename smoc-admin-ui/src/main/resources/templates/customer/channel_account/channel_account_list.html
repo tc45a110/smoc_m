@@ -19,13 +19,13 @@
         <div class="row fixed-navigation">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">EC通道账户管理 </h4>
+                    <h4 class="page-title">EC账号管理 </h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
                             客户管理
                         </li>
                         <li class="active">
-                            EC通道账户管理
+                            EC账号管理
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -71,7 +71,7 @@
                                     </button>
                                     <a sec:authorize-url="/ec/customer/search/*"  th:href="@{/ec/customer/search/channel_account}"
                                        class="btn btn-success waves-effect waves-light m-l-10 btn-md">
-                                        <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>新建EC通道账户</a>
+                                        <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>新建EC账号</a>
 
                                      <a id="help_display" style="margin-left:10px"><i class="mdi mdi-help-circle-outline" style="font-size:18px;"></i></a>
                                 </div>
@@ -90,7 +90,7 @@
                 <span >&times;</span>
             </button>
             <i class="mdi mdi-help-circle-outline"></i>
-            <strong>操作提示：</strong> 可以通过 新建EC通道账户 创建一个通道账户，也可以在 EC通道账户管理中心 管理所有EC通道账户。
+            <strong>操作提示：</strong> 可以通过 新建EC账号 为EC创建一个账号，也可以在 EC账号管理中心 管理所有EC账号。
         </div>
 
         <!-- start row -->
@@ -98,7 +98,7 @@
             <div class="col-sm-12">
                 <div class="panel panel-color panel-info">
                     <div class="panel-heading">
-                        <h3 class="panel-title">EC通道账号列表</h3>
+                        <h3 class="panel-title">EC账号列表</h3>
                     </div>
                     <div class="panel-body">
                         <div class="table-responsive">
@@ -120,7 +120,7 @@
                                 <tbody>
                                 <tr>
                                     <td>
-                                        <span style="color:#26A69A" >（渠道商）</span><a  th:href="@{/ec/customer/config/0000}"  data-toggle="tooltip" data-placement="bottom" title="" data-original-title="跳转到EC详细信息"> 北京星语互联科技有限公司</a>
+                                        <a  th:href="@{/ec/customer/config/0000}"  data-toggle="tooltip" data-placement="bottom" title="" data-original-title="跳转到EC详细信息"> 北京星语互联科技有限公司</a><span style="color:#26A69A" >（渠道商）</span>
                                     </td>
                                     <td>
                                         普通短信账号
@@ -156,19 +156,19 @@
                                     <td>
                                         <a   sec:authorize-url="/ec/customer/channel/account/config/*" th:href="@{/ec/customer/channel/account/config/base}"
                                              class="on-default edit-row"
-                                             style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="修改、配置通道账户信息"
+                                             style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="修改、配置EC账号信息"
                                              ><i style="font-size: 18px"
                                                                 class="mdi mdi-table-edit"></i></a>
                                         <a   th:href="@{/ec/customer/channel/account/center/account}"
                                              class="on-default edit-row"
-                                             style="padding-left: 10px;color: #5c4fab;" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="EC通道账户管理中心"
+                                             style="padding-left: 10px;color: #5c4fab;" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="EC账号管理中心"
                                              ><i style="font-size: 18px"
                                                                 class="mdi mdi-vector-circle"></i></a>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <span style="color:#26A69A" >（渠道商）</span><a  th:href="@{/ec/customer/config/0000}"  data-toggle="tooltip" data-placement="bottom" title="" data-original-title="跳转到EC详细信息"> 北京星语互联科技有限公司</a>
+                                        <a  th:href="@{/ec/customer/config/0000}"  data-toggle="tooltip" data-placement="bottom" title="" data-original-title="跳转到EC详细信息"> 北京星语互联科技有限公司</a><span style="color:#26A69A" >（渠道商）</span>
                                     </td>
                                     <td>
                                         普通短信账号
@@ -204,19 +204,19 @@
                                     <td>
                                         <a   sec:authorize-url="/ec/customer/channel/account/config/*" th:href="@{/ec/customer/channel/account/config/base}"
                                              class="on-default edit-row"
-                                             style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="修改、配置通道账户信息"
+                                             style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="修改、配置EC账号信息"
                                         ><i style="font-size: 18px"
                                             class="mdi mdi-table-edit"></i></a>
                                         <a   th:href="@{/ec/customer/channel/account/center/account}"
                                              class="on-default edit-row"
-                                             style="padding-left: 10px;color: #5c4fab;" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="EC通道账户管理中心"
+                                             style="padding-left: 10px;color: #5c4fab;" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="EC账号管理中心"
                                         ><i style="font-size: 18px"
                                             class="mdi mdi-vector-circle"></i></a>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <span style="color:#26A69A" >（渠道商）</span><a  th:href="@{/ec/customer/config/0000}"  data-toggle="tooltip" data-placement="bottom" title="" data-original-title="跳转到EC详细信息"> 北京星语互联科技有限公司</a>
+                                        <a  th:href="@{/ec/customer/config/0000}"  data-toggle="tooltip" data-placement="bottom" title="" data-original-title="跳转到EC详细信息"> 北京星语互联科技有限公司</a><span style="color:#26A69A" >（渠道商）</span>
                                     </td>
                                     <td>
                                         普通短信账号
@@ -252,19 +252,19 @@
                                     <td>
                                         <a   sec:authorize-url="/ec/customer/channel/account/config/*" th:href="@{/ec/customer/channel/account/config/base}"
                                              class="on-default edit-row"
-                                             style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="修改、配置通道账户信息"
+                                             style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="修改、配置EC账号信息"
                                         ><i style="font-size: 18px"
                                             class="mdi mdi-table-edit"></i></a>
                                         <a   th:href="@{/ec/customer/channel/account/center/account}"
                                              class="on-default edit-row"
-                                             style="padding-left: 10px;color: #5c4fab;" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="EC通道账户管理中心"
+                                             style="padding-left: 10px;color: #5c4fab;" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="EC账号管理中心"
                                         ><i style="font-size: 18px"
                                             class="mdi mdi-vector-circle"></i></a>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <span style="color:#26A69A" >（渠道商）</span><a  th:href="@{/ec/customer/config/0000}"  data-toggle="tooltip" data-placement="bottom" title="" data-original-title="跳转到EC详细信息"> 北京星语互联科技有限公司</a>
+                                        <a  th:href="@{/ec/customer/config/0000}"  data-toggle="tooltip" data-placement="bottom" title="" data-original-title="跳转到EC详细信息"> 北京星语互联科技有限公司</a><span style="color:#26A69A" >（渠道商）</span>
                                     </td>
                                     <td>
                                         普通短信账号
@@ -300,19 +300,19 @@
                                     <td>
                                         <a   sec:authorize-url="/ec/customer/channel/account/config/*" th:href="@{/ec/customer/channel/account/config/base}"
                                              class="on-default edit-row"
-                                             style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="修改、配置通道账户信息"
+                                             style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="修改、配置EC账号信息"
                                         ><i style="font-size: 18px"
                                             class="mdi mdi-table-edit"></i></a>
                                         <a   th:href="@{/ec/customer/channel/account/center/account}"
                                              class="on-default edit-row"
-                                             style="padding-left: 10px;color: #5c4fab;" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="EC通道账户管理中心"
+                                             style="padding-left: 10px;color: #5c4fab;" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="EC账号管理中心"
                                         ><i style="font-size: 18px"
                                             class="mdi mdi-vector-circle"></i></a>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <span style="color:#26A69A" >（渠道商）</span><a  th:href="@{/ec/customer/config/0000}"  data-toggle="tooltip" data-placement="bottom" title="" data-original-title="跳转到EC详细信息"> 北京星语互联科技有限公司</a>
+                                        <a  th:href="@{/ec/customer/config/0000}"  data-toggle="tooltip" data-placement="bottom" title="" data-original-title="跳转到EC详细信息"> 北京星语互联科技有限公司</a><span style="color:#26A69A" >（渠道商）</span>
                                     </td>
                                     <td>
                                         普通短信账号
@@ -348,19 +348,19 @@
                                     <td>
                                         <a   sec:authorize-url="/ec/customer/channel/account/config/*" th:href="@{/ec/customer/channel/account/config/base}"
                                              class="on-default edit-row"
-                                             style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="修改、配置通道账户信息"
+                                             style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="修改、配置EC账号信息"
                                         ><i style="font-size: 18px"
                                             class="mdi mdi-table-edit"></i></a>
-                                        <a  th:href="@{/ec/customer/channel/account/center/account}"
+                                        <a   th:href="@{/ec/customer/channel/account/center/account}"
                                              class="on-default edit-row"
-                                             style="padding-left: 10px;color: #5c4fab;" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="EC通道账户管理中心"
+                                             style="padding-left: 10px;color: #5c4fab;" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="EC账号管理中心"
                                         ><i style="font-size: 18px"
                                             class="mdi mdi-vector-circle"></i></a>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <span style="color:#26A69A" >（渠道商）</span><a  th:href="@{/ec/customer/config/0000}"  data-toggle="tooltip" data-placement="bottom" title="" data-original-title="跳转到EC详细信息"> 北京星语互联科技有限公司</a>
+                                        <a  th:href="@{/ec/customer/config/0000}"  data-toggle="tooltip" data-placement="bottom" title="" data-original-title="跳转到EC详细信息"> 北京星语互联科技有限公司</a><span style="color:#26A69A" >（渠道商）</span>
                                     </td>
                                     <td>
                                         普通短信账号
@@ -396,19 +396,19 @@
                                     <td>
                                         <a   sec:authorize-url="/ec/customer/channel/account/config/*" th:href="@{/ec/customer/channel/account/config/base}"
                                              class="on-default edit-row"
-                                             style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="修改、配置通道账户信息"
+                                             style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="修改、配置EC账号信息"
                                         ><i style="font-size: 18px"
                                             class="mdi mdi-table-edit"></i></a>
                                         <a   th:href="@{/ec/customer/channel/account/center/account}"
                                              class="on-default edit-row"
-                                             style="padding-left: 10px;color: #5c4fab;" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="EC通道账户管理中心"
+                                             style="padding-left: 10px;color: #5c4fab;" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="EC账号管理中心"
                                         ><i style="font-size: 18px"
                                             class="mdi mdi-vector-circle"></i></a>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <span style="color:#26A69A" >（渠道商）</span><a  th:href="@{/ec/customer/config/0000}"  data-toggle="tooltip" data-placement="bottom" title="" data-original-title="跳转到EC详细信息"> 北京星语互联科技有限公司</a>
+                                        <a  th:href="@{/ec/customer/config/0000}"  data-toggle="tooltip" data-placement="bottom" title="" data-original-title="跳转到EC详细信息"> 北京星语互联科技有限公司</a><span style="color:#26A69A" >（渠道商）</span>
                                     </td>
                                     <td>
                                         普通短信账号
@@ -444,19 +444,19 @@
                                     <td>
                                         <a   sec:authorize-url="/ec/customer/channel/account/config/*" th:href="@{/ec/customer/channel/account/config/base}"
                                              class="on-default edit-row"
-                                             style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="修改、配置通道账户信息"
+                                             style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="修改、配置EC账号信息"
                                         ><i style="font-size: 18px"
                                             class="mdi mdi-table-edit"></i></a>
                                         <a   th:href="@{/ec/customer/channel/account/center/account}"
                                              class="on-default edit-row"
-                                             style="padding-left: 10px;color: #5c4fab;" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="EC通道账户管理中心"
+                                             style="padding-left: 10px;color: #5c4fab;" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="EC账号管理中心"
                                         ><i style="font-size: 18px"
                                             class="mdi mdi-vector-circle"></i></a>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <span style="color:#26A69A" >（渠道商）</span><a  th:href="@{/ec/customer/config/0000}"  data-toggle="tooltip" data-placement="bottom" title="" data-original-title="跳转到EC详细信息"> 北京星语互联科技有限公司</a>
+                                        <a  th:href="@{/ec/customer/config/0000}"  data-toggle="tooltip" data-placement="bottom" title="" data-original-title="跳转到EC详细信息"> 北京星语互联科技有限公司</a><span style="color:#26A69A" >（渠道商）</span>
                                     </td>
                                     <td>
                                         普通短信账号
@@ -492,19 +492,19 @@
                                     <td>
                                         <a   sec:authorize-url="/ec/customer/channel/account/config/*" th:href="@{/ec/customer/channel/account/config/base}"
                                              class="on-default edit-row"
-                                             style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="修改、配置通道账户信息"
+                                             style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="修改、配置EC账号信息"
                                         ><i style="font-size: 18px"
                                             class="mdi mdi-table-edit"></i></a>
                                         <a   th:href="@{/ec/customer/channel/account/center/account}"
                                              class="on-default edit-row"
-                                             style="padding-left: 10px;color: #5c4fab;" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="EC通道账户管理中心"
+                                             style="padding-left: 10px;color: #5c4fab;" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="EC账号管理中心"
                                         ><i style="font-size: 18px"
                                             class="mdi mdi-vector-circle"></i></a>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <span style="color:#26A69A" >（渠道商）</span><a  th:href="@{/ec/customer/config/0000}"  data-toggle="tooltip" data-placement="bottom" title="" data-original-title="跳转到EC详细信息"> 北京星语互联科技有限公司</a>
+                                        <a  th:href="@{/ec/customer/config/0000}"  data-toggle="tooltip" data-placement="bottom" title="" data-original-title="跳转到EC详细信息"> 北京星语互联科技有限公司</a><span style="color:#26A69A" >（渠道商）</span>
                                     </td>
                                     <td>
                                         普通短信账号
@@ -540,12 +540,12 @@
                                     <td>
                                         <a   sec:authorize-url="/ec/customer/channel/account/config/*" th:href="@{/ec/customer/channel/account/config/base}"
                                              class="on-default edit-row"
-                                             style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="修改、配置通道账户信息"
+                                             style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="修改、配置EC账号信息"
                                         ><i style="font-size: 18px"
                                             class="mdi mdi-table-edit"></i></a>
                                         <a   th:href="@{/ec/customer/channel/account/center/account}"
                                              class="on-default edit-row"
-                                             style="padding-left: 10px;color: #5c4fab;" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="EC通道账户管理中心"
+                                             style="padding-left: 10px;color: #5c4fab;" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="EC账号管理中心"
                                         ><i style="font-size: 18px"
                                             class="mdi mdi-vector-circle"></i></a>
                                     </td>
