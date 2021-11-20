@@ -182,12 +182,18 @@
                                             <a sec:authorize-url="/ec/customer/base_info/list" th:href="@{/ec/customer/base_info/list}"
                                                class="btn btn-default waves-effect waves-light btn-md">
                                                 <i class="glyphicon  glyphicon-share-alt" style="margin-right:5px"></i>
-                                                返回</a>
+                                                返回EC列表</a>
                                             <a  th:href="@{/ec/customer/channel/account/center/account}"
                                                     style="margin-left:10px;"
-                                                    class="btn btn-success waves-effect waves-light btn-md">
+                                                    class="btn btn-instagram waves-effect waves-light btn-md">
                                                 <i class="mdi mdi-vector-circle" style="margin-right:5px"></i>
-                                                EC通道账户中心
+                                                EC通道账号中心
+                                            </a>
+                                            <a  sec:authorize-url="/finance/account/center" th:href="@{/finance/account/center}"
+                                                style="margin-left:10px;"
+                                                class="btn btn-tumblr waves-effect waves-light btn-md">
+                                                <i class="mdi mdi-vector-circle" style="margin-right:5px"></i>
+                                                EC财务账号中心
                                             </a>
                                         </div>
                                     </h4>
