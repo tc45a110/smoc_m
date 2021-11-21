@@ -17,10 +17,10 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 @EnableFeignClients
 @EnableOAuth2Client
 @EnableAsync
-class SmocSpssUiApplication {
+class SmocStatisticUiApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SmocSpssUiApplication.class, args);
+        SpringApplication.run(SmocStatisticUiApplication.class, args);
     }
 
 }
