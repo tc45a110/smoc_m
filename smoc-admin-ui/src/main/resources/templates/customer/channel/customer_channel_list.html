@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org"
+>
+<head>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
+    <link th:href="@{/static/css/detail_statistics.css}" rel="stylesheet">
+</head>
+<body>
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">EC通道查询</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            信息查询
+                        </li>
+                        <li>
+                            EC通道查询
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <form th:action="@{/ec/customer/channel/page}"  id="query_form"  method="post">
+                        <div class="row m-b-60">
+                            <div class="col-sm-12">
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control"
+                                           placeholder="企业名称" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control"
+                                           placeholder="通道账号" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control"
+                                           placeholder="通道名称" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control"
+                                           placeholder="码号" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-6">
+                                    <label>协议类型：</label>
+                                    <mpm:tag id="channelProtocolType" identity="channelProtocolType" show-type="checkbox" key="code"
+                                             class="form-control" name="channelProtocolType" value="" title="协议类型"/>
+                                </div>
+                                <div class="form-group  col-sm-6">
+                                    <label>运营商：</label>
+                                    <mpm:tag id="carrier" identity="carrier" show-type="checkbox" key="code"
+                                             class="form-control" name="carrier" value="" title="运营商"/>
+                                </div>
+                                <div class="form-group  col-sm-12">
+                                    <label>内容类型：</label>
+                                    <mpm:tag id="contentType" identity="contentType" show-type="checkbox" key="code"
+                                             class="form-control" name="enterpriseType" value="" title="内容类型"/>
+                                </div>
+                                <div class="form-group  col-sm-9">
+                                    <label>业务类型：</label>
+                                    <mpm:tag id="businessType" identity="businessType" show-type="checkbox" key="code"
+                                             class="form-control" name="enterpriseType" value="" title="业务类型"/>
+                                </div>
+
+                                <div class="form-group col-sm-3 pull-right" style="text-align: right">
+                                    <button sec:authorize-url="/ec/customer/channel/page" type="submit"
+                                            class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-search" style="margin-right:5px"></i> 查询
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="panel panel-color panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">EC通道列表
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="property-card property-horizontal" style="margin-bottom:10px;">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="property-content"
+                                                 style="height:166px">
+                                                <div class="listingInfo">
+                                                    <div class="">
+                                                        <h5 style="padding-left:10px">
+                                                            通道名称：国际短信通道-GJ091000
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">企业名称：北京星网宇达科技有限公司</p>
+                                                        <p style="font-size:12px">内容类型：游戏</p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">通道账号：XY2010232323223200</p>
+                                                        <p style="font-size:12px">协议类型：CMPP</p>
+
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">业务类型：<a class="btn btn-teal waves-effect waves-light btn-xs">国际短信</a></p>
+                                                        <p style="font-size:12px">码号：18610008</p>
+
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">运营商：中国移动</p>
+
+                                                        <p style="font-size:12px">所属产品：</p>
+                                                    </div>
+
+                                                </div>
+                                                <div class="property-action">
+                                                    <span style="padding-left:10px;font-size:12px">
+                                                        通道业务介绍：次产品只能用来发送彩信、地产、有戏、验证码
+                                                    </span>
+                                                    <div class="pull-right">
+                                                        <a data-toggle="modal" data-target="#confirm-add-modal" title="产看通道明细">
+                                                            <i class="glyphicon glyphicon-search" style="margin-right:5px;font-size:16px;color:#0095a8"></i>通道明细</a>
+                                                    </div>
+
+                                                </div>
+                                                <!-- end. Card actions -->
+                                            </div>
+                                        </div>
+                                        <!-- /col 8 -->
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="property-card property-horizontal" style="margin-bottom:10px;">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="property-content"
+                                                 style="height:166px">
+                                                <div class="listingInfo">
+                                                    <div class="">
+                                                        <h5 style="padding-left:10px">
+                                                            通道名称：国际短信通道-GJ091000
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">企业名称：北京星网宇达科技有限公司</p>
+                                                        <p style="font-size:12px">内容类型：游戏</p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">通道账号：XY2010232323223200</p>
+                                                        <p style="font-size:12px">协议类型：CMPP</p>
+
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">业务类型：<a class="btn btn-brown waves-effect waves-light btn-xs">5G消息</a></p>
+                                                        <p style="font-size:12px">码号：18610008</p>
+
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">运营商：中国移动</p>
+
+                                                        <p style="font-size:12px">所属产品：</p>
+                                                    </div>
+
+                                                </div>
+                                                <div class="property-action">
+                                                    <span style="padding-left:10px;font-size:12px">
+                                                        通道业务介绍：次产品只能用来发送彩信、地产、有戏、验证码
+                                                    </span>
+                                                    <div class="pull-right">
+                                                        <a data-toggle="modal" data-target="#confirm-add-modal" title="产看通道明细">
+                                                            <i class="glyphicon glyphicon-search" style="margin-right:5px;font-size:16px;color:#0095a8"></i>通道明细</a>
+                                                    </div>
+
+                                                </div>
+                                                <!-- end. Card actions -->
+                                            </div>
+                                        </div>
+                                        <!-- /col 8 -->
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="property-card property-horizontal" style="margin-bottom:10px;">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="property-content"
+                                                 style="height:166px">
+                                                <div class="listingInfo">
+                                                    <div class="">
+                                                        <h5 style="padding-left:10px">
+                                                            通道名称：国际短信通道-GJ091000
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">企业名称：北京星网宇达科技有限公司</p>
+                                                        <p style="font-size:12px">内容类型：游戏</p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">通道账号：XY2010232323223200</p>
+                                                        <p style="font-size:12px">协议类型：CMPP</p>
+
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">业务类型：<a class="btn btn-success waves-effect waves-light btn-xs">普通短信</a></p>
+                                                        <p style="font-size:12px">码号：18610008</p>
+
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">运营商：中国移动</p>
+
+                                                        <p style="font-size:12px">所属产品：</p>
+                                                    </div>
+
+                                                </div>
+                                                <div class="property-action">
+                                                    <span style="padding-left:10px;font-size:12px">
+                                                        通道业务介绍：次产品只能用来发送彩信、地产、有戏、验证码
+                                                    </span>
+                                                    <div class="pull-right">
+                                                        <a data-toggle="modal" data-target="#confirm-add-modal" title="产看通道明细">
+                                                            <i class="glyphicon glyphicon-search" style="margin-right:5px;font-size:16px;color:#0095a8"></i>通道明细</a>
+                                                    </div>
+
+                                                </div>
+                                                <!-- end. Card actions -->
+                                            </div>
+                                        </div>
+                                        <!-- /col 8 -->
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="property-card property-horizontal" style="margin-bottom:10px;">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="property-content"
+                                                 style="height:166px">
+                                                <div class="listingInfo">
+                                                    <div class="">
+                                                        <h5 style="padding-left:10px">
+                                                            通道名称：国际短信通道-GJ091000
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">企业名称：北京星网宇达科技有限公司</p>
+                                                        <p style="font-size:12px">内容类型：游戏</p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">通道账号：XY2010232323223200</p>
+                                                        <p style="font-size:12px">协议类型：CMPP</p>
+
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">业务类型：<a class="btn btn-purple waves-effect waves-light btn-xs">多媒体短信</a></p>
+                                                        <p style="font-size:12px">码号：18610008</p>
+
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">运营商：中国移动</p>
+
+                                                        <p style="font-size:12px">所属产品：</p>
+                                                    </div>
+
+                                                </div>
+                                                <div class="property-action">
+                                                    <span style="padding-left:10px;font-size:12px">
+                                                        通道业务介绍：次产品只能用来发送彩信、地产、有戏、验证码
+                                                    </span>
+                                                    <div class="pull-right">
+                                                        <a data-toggle="modal" data-target="#confirm-add-modal" title="产看通道明细">
+                                                            <i class="glyphicon glyphicon-search" style="margin-right:5px;font-size:16px;color:#0095a8"></i>通道明细</a>
+                                                    </div>
+
+                                                </div>
+                                                <!-- end. Card actions -->
+                                            </div>
+                                        </div>
+                                        <!-- /col 8 -->
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="property-card property-horizontal" style="margin-bottom:10px;">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="property-content"
+                                                 style="height:166px">
+                                                <div class="listingInfo">
+                                                    <div class="">
+                                                        <h5 style="padding-left:10px">
+                                                            通道名称：国际短信通道-GJ091000
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">企业名称：北京星网宇达科技有限公司</p>
+                                                        <p style="font-size:12px">内容类型：游戏</p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">通道账号：XY2010232323223200</p>
+                                                        <p style="font-size:12px">协议类型：CMPP</p>
+
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">业务类型：<a class="btn btn-teal waves-effect waves-light btn-xs">国际短信</a></p>
+                                                        <p style="font-size:12px">码号：18610008</p>
+
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">运营商：中国移动</p>
+
+                                                        <p style="font-size:12px">所属产品：</p>
+                                                    </div>
+
+                                                </div>
+                                                <div class="property-action">
+                                                    <span style="padding-left:10px;font-size:12px">
+                                                        通道业务介绍：次产品只能用来发送彩信、地产、有戏、验证码
+                                                    </span>
+                                                    <div class="pull-right">
+                                                        <a data-toggle="modal" data-target="#confirm-add-modal" title="产看通道明细">
+                                                            <i class="glyphicon glyphicon-search" style="margin-right:5px;font-size:16px;color:#0095a8"></i>通道明细</a>
+                                                    </div>
+
+                                                </div>
+                                                <!-- end. Card actions -->
+                                            </div>
+                                        </div>
+                                        <!-- /col 8 -->
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="property-card property-horizontal" style="margin-bottom:10px;">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="property-content"
+                                                 style="height:166px">
+                                                <div class="listingInfo">
+                                                    <div class="">
+                                                        <h5 style="padding-left:10px">
+                                                            通道名称：国际短信通道-GJ091000
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">企业名称：北京星网宇达科技有限公司</p>
+                                                        <p style="font-size:12px">内容类型：游戏</p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">通道账号：XY2010232323223200</p>
+                                                        <p style="font-size:12px">协议类型：CMPP</p>
+
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">业务类型：<a class="btn btn-teal waves-effect waves-light btn-xs">国际短信</a></p>
+                                                        <p style="font-size:12px">码号：18610008</p>
+
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">运营商：中国移动</p>
+
+                                                        <p style="font-size:12px">所属产品：</p>
+                                                    </div>
+
+                                                </div>
+                                                <div class="property-action">
+                                                    <span style="padding-left:10px;font-size:12px">
+                                                        通道业务介绍：次产品只能用来发送彩信、地产、有戏、验证码
+                                                    </span>
+                                                    <div class="pull-right">
+                                                        <a data-toggle="modal" data-target="#confirm-add-modal" title="产看通道明细">
+                                                            <i class="glyphicon glyphicon-search" style="margin-right:5px;font-size:16px;color:#0095a8"></i>通道明细</a>
+                                                    </div>
+
+                                                </div>
+                                                <!-- end. Card actions -->
+                                            </div>
+                                        </div>
+                                        <!-- /col 8 -->
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="property-card property-horizontal" style="margin-bottom:10px;">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="property-content"
+                                                 style="height:166px">
+                                                <div class="listingInfo">
+                                                    <div class="">
+                                                        <h5 style="padding-left:10px">
+                                                            通道名称：国际短信通道-GJ091000
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">企业名称：北京星网宇达科技有限公司</p>
+                                                        <p style="font-size:12px">内容类型：游戏</p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">通道账号：XY2010232323223200</p>
+                                                        <p style="font-size:12px">协议类型：CMPP</p>
+
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">业务类型：<a class="btn btn-teal waves-effect waves-light btn-xs">国际短信</a></p>
+                                                        <p style="font-size:12px">码号：18610008</p>
+
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">运营商：中国移动</p>
+
+                                                        <p style="font-size:12px">所属产品：</p>
+                                                    </div>
+
+                                                </div>
+                                                <div class="property-action">
+                                                    <span style="padding-left:10px;font-size:12px">
+                                                        通道业务介绍：次产品只能用来发送彩信、地产、有戏、验证码
+                                                    </span>
+                                                    <div class="pull-right">
+                                                        <a data-toggle="modal" data-target="#confirm-add-modal" title="产看通道明细">
+                                                            <i class="glyphicon glyphicon-search" style="margin-right:5px;font-size:16px;color:#0095a8"></i>通道明细</a>
+                                                    </div>
+
+                                                </div>
+                                                <!-- end. Card actions -->
+                                            </div>
+                                        </div>
+                                        <!-- /col 8 -->
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="property-card property-horizontal" style="margin-bottom:10px;">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="property-content"
+                                                 style="height:166px">
+                                                <div class="listingInfo">
+                                                    <div class="">
+                                                        <h5 style="padding-left:10px">
+                                                            通道名称：国际短信通道-GJ091000
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">企业名称：北京星网宇达科技有限公司</p>
+                                                        <p style="font-size:12px">内容类型：游戏</p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">通道账号：XY2010232323223200</p>
+                                                        <p style="font-size:12px">协议类型：CMPP</p>
+
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">业务类型：<a class="btn btn-teal waves-effect waves-light btn-xs">国际短信</a></p>
+                                                        <p style="font-size:12px">码号：18610008</p>
+
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">运营商：中国移动</p>
+
+                                                        <p style="font-size:12px">所属产品：</p>
+                                                    </div>
+
+                                                </div>
+                                                <div class="property-action">
+                                                    <span style="padding-left:10px;font-size:12px">
+                                                        通道业务介绍：次产品只能用来发送彩信、地产、有戏、验证码
+                                                    </span>
+                                                    <div class="pull-right">
+                                                        <a data-toggle="modal" data-target="#confirm-add-modal" title="产看通道明细">
+                                                            <i class="glyphicon glyphicon-search" style="margin-right:5px;font-size:16px;color:#0095a8"></i>通道明细</a>
+                                                    </div>
+
+                                                </div>
+                                                <!-- end. Card actions -->
+                                            </div>
+                                        </div>
+                                        <!-- /col 8 -->
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="property-card property-horizontal" style="margin-bottom:10px;">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="property-content"
+                                                 style="height:166px">
+                                                <div class="listingInfo">
+                                                    <div class="">
+                                                        <h5 style="padding-left:10px">
+                                                            通道名称：国际短信通道-GJ091000
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">企业名称：北京星网宇达科技有限公司</p>
+                                                        <p style="font-size:12px">内容类型：游戏</p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">通道账号：XY2010232323223200</p>
+                                                        <p style="font-size:12px">协议类型：CMPP</p>
+
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">业务类型：<a class="btn btn-teal waves-effect waves-light btn-xs">国际短信</a></p>
+                                                        <p style="font-size:12px">码号：18610008</p>
+
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">运营商：中国移动</p>
+
+                                                        <p style="font-size:12px">所属产品：</p>
+                                                    </div>
+
+                                                </div>
+                                                <div class="property-action">
+                                                    <span style="padding-left:10px;font-size:12px">
+                                                        通道业务介绍：次产品只能用来发送彩信、地产、有戏、验证码
+                                                    </span>
+                                                    <div class="pull-right">
+                                                        <a data-toggle="modal" data-target="#confirm-add-modal" title="产看通道明细">
+                                                            <i class="glyphicon glyphicon-search" style="margin-right:5px;font-size:16px;color:#0095a8"></i>通道明细</a>
+                                                    </div>
+
+                                                </div>
+                                                <!-- end. Card actions -->
+                                            </div>
+                                        </div>
+                                        <!-- /col 8 -->
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="property-card property-horizontal" style="margin-bottom:10px;">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="property-content"
+                                                 style="height:166px">
+                                                <div class="listingInfo">
+                                                    <div class="">
+                                                        <h5 style="padding-left:10px">
+                                                            通道名称：国际短信通道-GJ091000
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">企业名称：北京星网宇达科技有限公司</p>
+                                                        <p style="font-size:12px">内容类型：游戏</p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">通道账号：XY2010232323223200</p>
+                                                        <p style="font-size:12px">协议类型：CMPP</p>
+
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">业务类型：<a class="btn btn-teal waves-effect waves-light btn-xs">国际短信</a></p>
+                                                        <p style="font-size:12px">码号：18610008</p>
+
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">运营商：中国移动</p>
+
+                                                        <p style="font-size:12px">所属产品：</p>
+                                                    </div>
+
+                                                </div>
+                                                <div class="property-action">
+                                                    <span style="padding-left:10px;font-size:12px">
+                                                        通道业务介绍：次产品只能用来发送彩信、地产、有戏、验证码
+                                                    </span>
+                                                    <div class="pull-right">
+                                                        <a data-toggle="modal" data-target="#confirm-add-modal" title="产看通道明细">
+                                                            <i class="glyphicon glyphicon-search" style="margin-right:5px;font-size:16px;color:#0095a8"></i>通道明细</a>
+                                                    </div>
+
+                                                </div>
+                                                <!-- end. Card actions -->
+                                            </div>
+                                        </div>
+                                        <!-- /col 8 -->
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+
+                        <th:block th:insert="fragments/page_fragments :: page"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+    </div>
+</div> <!-- content -->
+
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<script th:src="@{/static/plugins/moment/moment.js}"></script>
+
+<script>
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+</script>
+</body>
+</html>

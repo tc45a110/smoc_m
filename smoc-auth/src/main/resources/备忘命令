@@ -1,0 +1,3 @@
+mac nacos启动
+/Users/wujihui/desktop/工具/nacos/bin
+sh startup.sh -m standalone

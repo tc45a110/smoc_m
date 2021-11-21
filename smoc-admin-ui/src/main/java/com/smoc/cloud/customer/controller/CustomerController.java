@@ -123,6 +123,104 @@ public class CustomerController {
 
     }
 
+    /**
+     * 用户产品查询
+     *
+     * @return
+     */
+    @RequestMapping(value = "/customer/product/list", method = RequestMethod.GET)
+    public ModelAndView product() {
+        ModelAndView view = new ModelAndView("customer/product/customer_product_list");
+
+        //查询数据
+        PageParams params = new PageParams<>();
+        params.setPages(3);
+        params.setPageSize(10);
+        params.setStartRow(1);
+        params.setEndRow(10);
+        params.setCurrentPage(1);
+        params.setTotalRows(22);
+
+        view.addObject("pageParams",params);
+
+        return view;
+
+    }
+
+    /**
+     * 用户产品分页查询
+     *
+     * @return
+     */
+    @RequestMapping(value = "/customer/product/page", method = RequestMethod.POST)
+    public ModelAndView product_page() {
+        ModelAndView view = new ModelAndView("customer/product/customer_product_list");
+
+        //查询数据
+        PageParams params = new PageParams<>();
+        params.setPages(3);
+        params.setPageSize(10);
+        params.setStartRow(1);
+        params.setEndRow(10);
+        params.setCurrentPage(1);
+        params.setTotalRows(22);
+
+        view.addObject("pageParams",params);
+
+        return view;
+
+    }
+
+    /**
+     * 用户通道查询
+     *
+     * @return
+     */
+    @RequestMapping(value = "/customer/channel/list", method = RequestMethod.GET)
+    public ModelAndView channel() {
+        ModelAndView view = new ModelAndView("customer/channel/customer_channel_list");
+
+        //查询数据
+        PageParams params = new PageParams<>();
+        params.setPages(3);
+        params.setPageSize(10);
+        params.setStartRow(1);
+        params.setEndRow(10);
+        params.setCurrentPage(1);
+        params.setTotalRows(22);
+
+        view.addObject("pageParams",params);
+
+        return view;
+
+    }
+
+    /**
+     * 用户通道分页查询
+     *
+     * @return
+     */
+    @RequestMapping(value = "/customer/channel/page", method = RequestMethod.POST)
+    public ModelAndView channel_page() {
+        ModelAndView view = new ModelAndView("customer/channel/customer_channel_list");
+
+        //查询数据
+        PageParams params = new PageParams<>();
+        params.setPages(3);
+        params.setPageSize(10);
+        params.setStartRow(1);
+        params.setEndRow(10);
+        params.setCurrentPage(1);
+        params.setTotalRows(22);
+
+        view.addObject("pageParams",params);
+
+        return view;
+
+    }
+
+
+
 
 
 }
