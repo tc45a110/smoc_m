@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
+    <style>
+    </style>
+</head>
+<body>
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+        <!-- start row -->
+        <div class="row fixed-navigation">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">投诉溯源搜索 </h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li class="">
+                            投诉管理
+                        </li>
+                        <li class="active">
+                            投诉溯源搜索
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+        <!-- start row -->
+        <div class="row" style="position: relative;margin-top: 80px" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <form th:action="@{/complaint/search/page}"  id="query_form"  method="post">
+                        <div class="row m-b-60">
+                            <div class="col-sm-12">
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control"
+                                           placeholder="举报号码" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control"
+                                           placeholder="被举报号码" autocomplete="off">
+                                </div>
+                                <div class="form-group col-sm-3 pull-right" style="text-align: right">
+                                    <button sec:authorize-url="/complaint/search/page" type="submit"
+                                            class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-search" style="margin-right:5px"></i> 查询
+                                    </button>
+                                    <a id="help_display" style="margin-left:10px"><i class="mdi mdi-help-circle-outline" style="font-size:18px;"></i></a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+        <div id="help" class="alert alert-icon alert-success alert-dismissible fade in"  role="alert">
+            <button id="help_button" type="button" class="close"
+                    aria-label="Close">
+                <span >&times;</span>
+            </button>
+            <i class="mdi mdi-help-circle-outline"></i>
+            <strong>操作提示：</strong> 第一步：根据 "被举报号码" 查询EC账号、码号、短信内容；第二步 选中溯源结果，创建新投诉。 该地方有疑问
+        </div>
+
+        <!-- start row -->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="panel panel-color panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">投诉溯源结果</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table table-hover m-10" style="margin-top: -12px;">
+                                <thead>
+                                <tr>
+                                    <th>EC账号</th>
+                                    <th>被举报号码</th>
+                                    <th>举报号码</th>
+                                    <th>信息下发日期</th>
+                                    <th>短信内容</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        XY2010238349343
+                                    </td>
+                                    <td>106929395555</td>
+                                    <td>18908408860</td>
+                                    <td>2021-11-17 14:45:23</td>
+                                    <td>【招商银行】您有20元消费金已到账，点击 cmbt.cn/N9p 查看。消费金只需微信支付交易满20元即可抵扣。已使用请忽略，退订回#C</td>
+                                    <td>
+                                        <a sec:authorize-url="/complaint/edit" th:href="@{/complaint/edit}"
+                                           class="btn btn-success waves-effect waves-light m-l-10 btn-sm">
+                                            <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>录入投诉</a>
+                                    </td>
+
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <th:block th:insert="fragments/page_fragments :: page"/>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+        <!-- end row -->
+
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+
+        <th:block th:insert="fragments/common_fragments :: confirm-modal"/>
+
+    </div> <!-- container -->
+
+</div> <!-- content -->
+
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<th:block th:insert="fragments/cookie_fragments :: cookie_js"/>
+<script>
+
+    /**
+     * 处理cookie
+     */
+    $(document).ready(function() {
+
+        if("none" == $.cookie("help_display_complaint_search")){
+           $('#help').css('display', 'none');
+        }
+
+        $('#help_display').on("click", function () {
+           if('block' == $('#help').css('display')){
+             $('#help').css('display', 'none');
+             $.cookie("help_display_complaint_search", 'none', {
+                expires : 180
+             });
+           }else{
+             $('#help').css('display', 'block');
+             $.cookie("help_display_complaint_search", 'block', {
+                expires : 180
+             });
+           }
+        });
+        $('#help_button').on("click", function () {
+           $('#help').css('display', 'none');
+           $.cookie("help_display_complaint_search", 'none', {
+			expires : 180
+		   });
+        });
+
+    });
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+</script>
+</body>
+</html>
