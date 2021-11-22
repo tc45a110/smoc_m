@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <link th:href="@{/static/plugins/custombox/css/custombox.min.css}" rel="stylesheet">
+
+    <link th:href="@{/static/plugins/jquery.filer/css/jquery.filer.css}" rel="stylesheet"/>
+    <link th:href="@{/static/plugins/jquery.filer/css/themes/jquery.filer-dragdropbox-theme.css}" rel="stylesheet"/>
+
+</head>
+<body>
+<!-- Loader -->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">黑名单管理</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            过滤管理
+                        </li>
+                        <li class="active">
+                            黑名单管理
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-md-9">
+                <div class="card-box">
+                    <form  id="submit_form"  method="post" data-parsley-validate=""  enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="p-20">
+                                    <div class="form-group">
+                                        <label>下载模版</label>
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                <label><a >黑名单.txt</a></label>
+                                            </div>
+                                            <div class="col-xs-3">
+                                                <label><a >黑名单.xlsx</a></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <label>上传文件</label>
+                                    <div class="form-group">
+                                        <input type="file" name="file" id="input_file"
+                                               multiple="multiple">
+                                    </div>
+
+
+                                </div>
+                                <!-- end class p-20 -->
+                            </div> <!-- end col -->
+
+                            <div class="col-md-6">
+
+                            </div> <!-- end col -->
+                        </div> <!-- end row -->
+
+                        <div class="text-right">
+                            <a class="btn btn-teal waves-effect waves-light">导入
+                            </a>
+                            <a sec:authorize-url="/filter/black/list"
+                               th:href="@{/filter/black/list}"
+                               class="btn btn-default waves-effect waves-light">返回
+                            </a>
+                        </div>
+                    </form>
+                    <!-- end form -->
+
+                </div> <!-- end card-box -->
+            </div> <!-- end col -->
+        </div>
+        <!-- end row -->
+
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<script th:src="@{/static/js/contractUploadFile.js}"></script>
+<script th:src="@{/static/plugins/jquery.filer/js/jquery.filer.min.js}"></script>
+<!-- Jquery filer js -->
+<script>
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+</script>
+</body>
+</html>

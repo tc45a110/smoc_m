@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <!-- Custom box css -->
+    <link th:href="@{/static/plugins/custombox/css/custombox.min.css}" rel="stylesheet">
+</head>
+<body>
+<!-- Loader -->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+        <div class="row fixed-navigation">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">白名单管理 </h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            过滤管理
+                        </li>
+                        <li class="active">
+                            白名单管理
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <div class="row" style="position: relative;margin-top: 80px"  th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <div class="row m-b-60">
+                        <form  id="query_form" th:action="@{/filter/white/page}" method="post">
+                            <div class="col-sm-12">
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control" placeholder="手机号" autocomplete="off">
+                                </div>
+                                <div class="form-group pull-right" style="text-align: right">
+                                    <button sec:authorize-url="/filter/white/page" class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-search"></i> 查询
+                                    </button>
+                                    <a sec:authorize-url="/filter/white/add" th:href="@{/filter/white/add}" class="btn btn-success waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-plus-sign"></i> 新建</a>
+                                    <a sec:authorize-url="/filter/white/upFilesView" th:href="@{/filter/white/upFilesView}" class="btn btn-primary waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-import"></i>
+                                        导入
+                                    </a>
+                                    <a sec:authorize-url="/filter/white/downFilesView"
+                                       th:href="@{/filter/white/downFilesView}"
+                                       class="btn btn-purple waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-export"></i> 导出
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="panel panel-color panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">白名单列表
+                            <span style="padding-left:20px;color: #fff;font-size: 14px">提示：数据状态只有已生效才会加到白名单（5分钟内生效）</span>
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table table-hover m-10" style="margin-top: -12px;">
+                                <thead>
+                                <tr>
+                                    <th>手机号</th>
+                                    <th>状态</th>
+                                    <th>创建人</th>
+                                    <th>创建时间</th>
+                                    <th>操作</th>
+                                </tr>
+                                <thead>
+                                <tbody>
+                                    <tr>
+                                        <td>13583072222</td>
+                                        <td><a class="btn btn-brown waves-effect waves-light btn-xs">待同步</a></td>
+                                        <td>张先生</td>
+                                        <td>2021-11-22 18:47:54</td>
+                                        <td>
+                                            <a sec:authorize-url="/filter/white/edit/*"
+                                               th:href="@{/filter/white/edit/id}"
+                                               class="on-default edit-row"
+                                               style="padding-left: 5px;color: #29b6f6;"
+                                               title="编辑"><i style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
+                                            <a sec:authorize-url="/filter/white/deleteById/*" data-toggle="modal"
+                                               data-target="#confirm-modal" class="on-default remove-row"
+                                               style="padding-left: 5px;color: #f05050"
+                                               title="删除"><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>13583072222</td>
+                                        <td><a class="btn btn-brown waves-effect waves-light btn-xs">待同步</a></td>
+                                        <td>张先生</td>
+                                        <td>2021-11-22 18:47:54</td>
+                                        <td>
+                                            <a sec:authorize-url="/filter/white/edit/*"
+                                               th:href="@{/filter/white/edit/id}"
+                                               class="on-default edit-row"
+                                               style="padding-left: 5px;color: #29b6f6;"
+                                               title="编辑"><i style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
+                                            <a sec:authorize-url="/filter/white/deleteById/*" data-toggle="modal"
+                                               data-target="#confirm-modal" class="on-default remove-row"
+                                               style="padding-left: 5px;color: #f05050"
+                                               title="删除"><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>13583072222</td>
+                                        <td><a class="btn btn-brown waves-effect waves-light btn-xs">待同步</a></td>
+                                        <td>张先生</td>
+                                        <td>2021-11-22 18:47:54</td>
+                                        <td>
+                                            <a sec:authorize-url="/filter/white/edit/*"
+                                               th:href="@{/filter/white/edit/id}"
+                                               class="on-default edit-row"
+                                               style="padding-left: 5px;color: #29b6f6;"
+                                               title="编辑"><i style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
+                                            <a sec:authorize-url="/filter/white/deleteById/*" data-toggle="modal"
+                                               data-target="#confirm-modal" class="on-default remove-row"
+                                               style="padding-left: 5px;color: #f05050"
+                                               title="删除"><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>13611112222</td>
+                                        <td><a class="btn btn-success waves-effect waves-light btn-xs">已生效</a></td>
+                                        <td>张先生</td>
+                                        <td>2021-11-22 18:47:54</td>
+                                        <td>
+                                            <a sec:authorize-url="/filter/white/edit/*"
+                                               th:href="@{/filter/white/edit/id}"
+                                               class="on-default edit-row"
+                                               style="padding-left: 5px;color: #29b6f6;"
+                                               title="编辑"><i style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
+                                            <a sec:authorize-url="/filter/white/deleteById/*" data-toggle="modal"
+                                               data-target="#confirm-modal" class="on-default remove-row"
+                                               style="padding-left: 5px;color: #f05050"
+                                               title="删除"><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>13611112222</td>
+                                        <td><a class="btn btn-success waves-effect waves-light btn-xs">已生效</a></td>
+                                        <td>张先生</td>
+                                        <td>2021-11-22 18:47:54</td>
+                                        <td>
+                                            <a sec:authorize-url="/filter/white/edit/*"
+                                               th:href="@{/filter/white/edit/id}"
+                                               class="on-default edit-row"
+                                               style="padding-left: 5px;color: #29b6f6;"
+                                               title="编辑"><i style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
+                                            <a sec:authorize-url="/filter/white/deleteById/*" data-toggle="modal"
+                                               data-target="#confirm-modal" class="on-default remove-row"
+                                               style="padding-left: 5px;color: #f05050"
+                                               title="删除"><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>13611112222</td>
+                                        <td><a class="btn btn-success waves-effect waves-light btn-xs">已生效</a></td>
+                                        <td>张先生</td>
+                                        <td>2021-11-22 18:47:54</td>
+                                        <td>
+                                            <a sec:authorize-url="/filter/white/edit/*"
+                                               th:href="@{/filter/white/edit/id}"
+                                               class="on-default edit-row"
+                                               style="padding-left: 5px;color: #29b6f6;"
+                                               title="编辑"><i style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
+                                            <a sec:authorize-url="/filter/white/deleteById/*" data-toggle="modal"
+                                               data-target="#confirm-modal" class="on-default remove-row"
+                                               style="padding-left: 5px;color: #f05050"
+                                               title="删除"><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>13611112222</td>
+                                        <td><a class="btn btn-success waves-effect waves-light btn-xs">已生效</a></td>
+                                        <td>张先生</td>
+                                        <td>2021-11-22 18:47:54</td>
+                                        <td>
+                                            <a sec:authorize-url="/filter/white/edit/*"
+                                               th:href="@{/filter/white/edit/id}"
+                                               class="on-default edit-row"
+                                               style="padding-left: 5px;color: #29b6f6;"
+                                               title="编辑"><i style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
+                                            <a sec:authorize-url="/filter/white/deleteById/*" data-toggle="modal"
+                                               data-target="#confirm-modal" class="on-default remove-row"
+                                               style="padding-left: 5px;color: #f05050"
+                                               title="删除"><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>13611112222</td>
+                                        <td><a class="btn btn-success waves-effect waves-light btn-xs">已生效</a></td>
+                                        <td>张先生</td>
+                                        <td>2021-11-22 18:47:54</td>
+                                        <td>
+                                            <a sec:authorize-url="/filter/white/edit/*"
+                                               th:href="@{/filter/white/edit/id}"
+                                               class="on-default edit-row"
+                                               style="padding-left: 5px;color: #29b6f6;"
+                                               title="编辑"><i style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
+                                            <a sec:authorize-url="/filter/white/deleteById/*" data-toggle="modal"
+                                               data-target="#confirm-modal" class="on-default remove-row"
+                                               style="padding-left: 5px;color: #f05050"
+                                               title="删除"><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>13611112222</td>
+                                        <td><a class="btn btn-success waves-effect waves-light btn-xs">已生效</a></td>
+                                        <td>张先生</td>
+                                        <td>2021-11-22 18:47:54</td>
+                                        <td>
+                                            <a sec:authorize-url="/filter/white/edit/*"
+                                               th:href="@{/filter/white/edit/id}"
+                                               class="on-default edit-row"
+                                               style="padding-left: 5px;color: #29b6f6;"
+                                               title="编辑"><i style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
+                                            <a sec:authorize-url="/filter/white/deleteById/*" data-toggle="modal"
+                                               data-target="#confirm-modal" class="on-default remove-row"
+                                               style="padding-left: 5px;color: #f05050"
+                                               title="删除"><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
+                                        </td>
+                                    </tr>
+
+
+
+                                </tbody>
+
+                            </table>
+                        </div>
+                        <th:block th:insert="fragments/page_fragments :: page"/>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- end row -->
+
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+
+    </div> <!-- container -->
+
+</div> <!-- content -->
+
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<script th:src="@{/static/plugins/moment/moment.js}"></script>
+<!-- Modal-Effect -->
+
+<script>
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+</script>
+</body>
+</html>
