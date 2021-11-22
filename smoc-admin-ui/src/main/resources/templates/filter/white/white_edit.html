@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+
+</head>
+<body>
+<!-- Loader -->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">白名单管理</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            过滤管理
+                        </li>
+                        <li class="active">
+                            白名单管理
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-md-6">
+                <div class="card-box">
+                    <form  id="submit_form" method="post">
+                        <div class="row">
+                            <div class="col-md-10">
+                                <div class="p-20">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-sm-12 m-b-10">
+                                                <label>手机号<span class="text-danger">*</span>&nbsp;<span
+                                                        class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input type="text" required="" class="form-control" autocomplete="off"
+                                                       placeholder="手机号">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!-- end class p-20 -->
+                            </div> <!-- end col -->
+
+                            <div class="col-md-6">
+
+                            </div> <!-- end col -->
+                        </div> <!-- end row -->
+
+                        <div class="text-right">
+                            <button  class="btn btn-teal waves-effect waves-light">提交
+                            </button>
+                            <a sec:authorize-url="/filter/white/list" th:href="@{/filter/white/list}"
+                               class="btn btn-default waves-effect waves-light">返回
+                            </a>
+                        </div>
+                    </form>
+                    <!-- end form -->
+
+                </div> <!-- end card-box -->
+            </div> <!-- end col -->
+        </div>
+        <!-- end row -->
+
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<script th:src="@{/static/plugins/moment/moment.js}"></script>
+<!-- Jquery filer js -->
+<th:block th:insert="fragments/common_fragments :: common_submit_form"/>
+<script>
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+</script>
+</body>
+</html>
