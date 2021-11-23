@@ -16,6 +16,16 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/filter/black")
 public class BlackController {
 
+    @RequestMapping(value = "/main", method = RequestMethod.GET)
+    public ModelAndView main(HttpServletRequest request) {
+
+        ModelAndView view = new ModelAndView("filter/black/black_main");
+
+        view.addObject("parentId","black");
+
+        return view;
+    }
+
 
     /**
      * 黑名单列表

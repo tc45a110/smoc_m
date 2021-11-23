@@ -50,6 +50,10 @@
                                     </button>
                                     <a sec:authorize-url="/filter/keyword/add" th:href="@{/filter/keyword/add}" class="btn btn-success waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-plus-sign"></i> 新建</a>
+                                    <a sec:authorize-url="/filter/keyword/upFilesView" th:href="@{/filter/keyword/upFilesView}" class="btn btn-primary waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-import"></i>
+                                        导入
+                                    </a>
                                 </div>
                             </div>
                         </form>

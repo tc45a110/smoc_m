@@ -87,7 +87,7 @@ public class KeyWordController {
      * @return
      */
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
-    public ModelAndView add(@PathVariable String id, HttpServletRequest request) {
+    public ModelAndView edit(@PathVariable String id, HttpServletRequest request) {
 
         ModelAndView view = new ModelAndView("filter/keyword/keyword_edit");
 
@@ -95,4 +95,17 @@ public class KeyWordController {
 
     }
 
+    /**
+     * 导入关键字
+     *
+     * @return
+     */
+    @RequestMapping(value = "/upFilesView", method = RequestMethod.GET)
+    public ModelAndView upFilesView(HttpServletRequest request) {
+
+        ModelAndView view = new ModelAndView("filter/keyword/keyword_upfiles_view");
+
+        return view;
+
+    }
 }

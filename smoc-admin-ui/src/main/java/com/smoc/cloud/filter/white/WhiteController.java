@@ -1,10 +1,10 @@
 package com.smoc.cloud.filter.white;
 
 import com.smoc.cloud.common.page.PageParams;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,10 +12,19 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * 白名单管理
  **/
-@Controller
+@RestController
 @RequestMapping("/filter/white")
 public class WhiteController {
 
+    @RequestMapping(value = "/main", method = RequestMethod.GET)
+    public ModelAndView main(HttpServletRequest request) {
+
+        ModelAndView view = new ModelAndView("filter/white/white_main");
+
+        view.addObject("parentId","white");
+
+        return view;
+    }
 
     /**
      * 白名单列表
