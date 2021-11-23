@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <!-- Custom box css -->
+    <link th:href="@{/static/plugins/custombox/css/custombox.min.css}" rel="stylesheet">
+    <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
+    <link th:href="@{/static/css/detail_statistics.css}" rel="stylesheet">
+</head>
+<body>
+<!-- Loader -->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+        <div class="row fixed-navigation">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">任务单查询 </h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            运营数据
+                        </li>
+                        <li class="active">
+                            任务单查询
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <div class="row" style="position: relative;margin-top: 80px"  th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <div class="row m-b-60">
+                        <form  id="query_form" th:action="@{/message/order/page}" method="post">
+                            <div class="col-sm-12">
+                                <div class="form-group  col-sm-3">
+                                    <input id="reportrange" class="form-control" type="text" />
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control" placeholder="任务ID" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control" placeholder="模板ID" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control" placeholder="企业名称" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control" placeholder="主题" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <mpm:tag id="businessType" identity="businessType"  show-type="select"  key="code" class="form-control"   data-icon="mdi mdi-view-module" title="业务类型" />
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <mpm:tag id="taskStatus" identity="taskStatus"  show-type="select"  key="code" class="form-control"   data-icon="mdi mdi-view-module" title="发送状态" />
+                                </div>
+
+                                <div class="form-group pull-right" style="text-align: right">
+                                    <button sec:authorize-url="/message/order/page" class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-search"></i> 查询
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="panel panel-color panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">任务单列表</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="property-card property-horizontal" style="margin-bottom:10px;">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="property-content"
+                                                 style="height:276px">
+                                                <div class="listingInfo">
+                                                    <div class="">
+                                                        <h5 style="padding-left:10px">
+                                                            主题：广东省广州市车展 <span style="font-size:12px;font-weight:300">(ID:100000353)</span>
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">业务类型： <a class="btn btn-purple  waves-effect waves-light btn-xs">国际短信</a></p>
+                                                        <p style="font-size:12px">提交号码数：50000</p>
+                                                        <p style="font-size:12px">提交条数：50000</p>
+                                                        <p style="font-size:12px">接受条数：50000</p>
+                                                        <p style="font-size:12px">数据来源：CMPP</p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">模板ID：100000353</p>
+                                                        <p style="font-size:12px">企业名称：北京星语互联科技有限公司</p>
+                                                        <p style="font-size:12px">移动提交条数：50000</p>
+                                                        <p style="font-size:12px">移动接受条数：50000</p>
+                                                        <p style="font-size:12px">提交人：屠呦呦</p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">EC账号：XY201023232</p>
+                                                        <p style="font-size:12px">申请发送时间：2021-11-18 14:25:09</p>
+                                                        <p style="font-size:12px">联通提交条数：50000</p>
+                                                        <p style="font-size:12px">联通接受条数：50000</p>
+                                                        <p style="font-size:12px">提交时间：2021-11-18 14:25:09</p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">扩展号：400986</p>
+                                                        <p style="font-size:12px">实际发送时间：2021-11-18 14:25:09</p>
+                                                        <p style="font-size:12px">电信提交条数：50000</p>
+                                                        <p style="font-size:12px">电信接受条数：50000</p>
+                                                        <p style="font-size:12px">状态：<a class="btn btn-info btn-rounded btn-xs waves-effect waves-light">发送完成</a></p>
+                                                    </div>
+
+                                                </div>
+                                                <div class="property-action">
+                                                    <span style="padding-left:10px;font-size:12px">
+                                                        短信内容：【招商银行】您有20元消费金已到账，点击 cmbt.cn/N9p 查看。消费金只需微信支付交易满20元即可抵扣。已使用请忽略，退订回#C
+                                                    </span>
+                                                    <div class="pull-right">
+                                                        <a data-toggle="modal" data-target="#download-record"
+                                                           class="on-default edit-row"
+                                                           style="padding-left: 5px;color: #6B5FB5;" title="下载号码文件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
+                                                    </div>
+
+                                                </div>
+                                                <!-- end. Card actions -->
+                                            </div>
+                                        </div>
+                                        <!-- /col 8 -->
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="property-card property-horizontal" style="margin-bottom:10px;">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="property-content"
+                                                 style="height:276px">
+                                                <div class="listingInfo">
+                                                    <div class="">
+                                                        <h5 style="padding-left:10px">
+                                                            主题：广东省广州市车展 <span style="font-size:12px;font-weight:300">(ID:100000353)</span>
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">业务类型： <a class="btn btn-purple  waves-effect waves-light btn-xs">国际短信</a></p>
+                                                        <p style="font-size:12px">提交号码数：50000</p>
+                                                        <p style="font-size:12px">提交条数：50000</p>
+                                                        <p style="font-size:12px">接受条数：50000</p>
+                                                        <p style="font-size:12px">数据来源：CMPP</p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">模板ID：100000353</p>
+                                                        <p style="font-size:12px">企业名称：北京星语互联科技有限公司</p>
+                                                        <p style="font-size:12px">移动提交条数：50000</p>
+                                                        <p style="font-size:12px">移动接受条数：50000</p>
+                                                        <p style="font-size:12px">提交人：屠呦呦</p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">EC账号：XY201023232</p>
+                                                        <p style="font-size:12px">申请发送时间：2021-11-18 14:25:09</p>
+                                                        <p style="font-size:12px">联通提交条数：50000</p>
+                                                        <p style="font-size:12px">联通接受条数：50000</p>
+                                                        <p style="font-size:12px">提交时间：2021-11-18 14:25:09</p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">扩展号：400986</p>
+                                                        <p style="font-size:12px">实际发送时间：2021-11-18 14:25:09</p>
+                                                        <p style="font-size:12px">电信提交条数：50000</p>
+                                                        <p style="font-size:12px">电信接受条数：50000</p>
+                                                        <p style="font-size:12px">状态：<a class="btn btn-info btn-rounded btn-xs waves-effect waves-light">发送完成</a></p>
+                                                    </div>
+
+                                                </div>
+                                                <div class="property-action">
+                                                    <span style="padding-left:10px;font-size:12px">
+                                                        短信内容：【招商银行】您有20元消费金已到账，点击 cmbt.cn/N9p 查看。消费金只需微信支付交易满20元即可抵扣。已使用请忽略，退订回#C
+                                                    </span>
+                                                    <div class="pull-right">
+                                                        <a data-toggle="modal" data-target="#download-record"
+                                                           class="on-default edit-row"
+                                                           style="padding-left: 5px;color: #6B5FB5;" title="下载号码文件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
+                                                    </div>
+
+                                                </div>
+                                                <!-- end. Card actions -->
+                                            </div>
+                                        </div>
+                                        <!-- /col 8 -->
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="property-card property-horizontal" style="margin-bottom:10px;">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="property-content"
+                                                 style="height:276px">
+                                                <div class="listingInfo">
+                                                    <div class="">
+                                                        <h5 style="padding-left:10px">
+                                                            主题：广东省广州市车展 <span style="font-size:12px;font-weight:300">(ID:100000353)</span>
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">业务类型： <a class="btn btn-purple  waves-effect waves-light btn-xs">国际短信</a></p>
+                                                        <p style="font-size:12px">提交号码数：50000</p>
+                                                        <p style="font-size:12px">提交条数：50000</p>
+                                                        <p style="font-size:12px">接受条数：50000</p>
+                                                        <p style="font-size:12px">数据来源：CMPP</p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">模板ID：100000353</p>
+                                                        <p style="font-size:12px">企业名称：北京星语互联科技有限公司</p>
+                                                        <p style="font-size:12px">移动提交条数：50000</p>
+                                                        <p style="font-size:12px">移动接受条数：50000</p>
+                                                        <p style="font-size:12px">提交人：屠呦呦</p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">EC账号：XY201023232</p>
+                                                        <p style="font-size:12px">申请发送时间：2021-11-18 14:25:09</p>
+                                                        <p style="font-size:12px">联通提交条数：50000</p>
+                                                        <p style="font-size:12px">联通接受条数：50000</p>
+                                                        <p style="font-size:12px">提交时间：2021-11-18 14:25:09</p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">扩展号：400986</p>
+                                                        <p style="font-size:12px">实际发送时间：2021-11-18 14:25:09</p>
+                                                        <p style="font-size:12px">电信提交条数：50000</p>
+                                                        <p style="font-size:12px">电信接受条数：50000</p>
+                                                        <p style="font-size:12px">状态：<a class="btn btn-info btn-rounded btn-xs waves-effect waves-light">发送完成</a></p>
+                                                    </div>
+
+                                                </div>
+                                                <div class="property-action">
+                                                    <span style="padding-left:10px;font-size:12px">
+                                                        短信内容：【招商银行】您有20元消费金已到账，点击 cmbt.cn/N9p 查看。消费金只需微信支付交易满20元即可抵扣。已使用请忽略，退订回#C
+                                                    </span>
+                                                    <div class="pull-right">
+                                                        <a data-toggle="modal" data-target="#download-record"
+                                                           class="on-default edit-row"
+                                                           style="padding-left: 5px;color: #6B5FB5;" title="下载号码文件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
+                                                    </div>
+
+                                                </div>
+                                                <!-- end. Card actions -->
+                                            </div>
+                                        </div>
+                                        <!-- /col 8 -->
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="property-card property-horizontal" style="margin-bottom:10px;">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="property-content"
+                                                 style="height:276px">
+                                                <div class="listingInfo">
+                                                    <div class="">
+                                                        <h5 style="padding-left:10px">
+                                                            主题：广东省广州市车展 <span style="font-size:12px;font-weight:300">(ID:100000353)</span>
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">业务类型： <a class="btn btn-purple  waves-effect waves-light btn-xs">国际短信</a></p>
+                                                        <p style="font-size:12px">提交号码数：50000</p>
+                                                        <p style="font-size:12px">提交条数：50000</p>
+                                                        <p style="font-size:12px">接受条数：50000</p>
+                                                        <p style="font-size:12px">数据来源：CMPP</p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">模板ID：100000353</p>
+                                                        <p style="font-size:12px">企业名称：北京星语互联科技有限公司</p>
+                                                        <p style="font-size:12px">移动提交条数：50000</p>
+                                                        <p style="font-size:12px">移动接受条数：50000</p>
+                                                        <p style="font-size:12px">提交人：屠呦呦</p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">EC账号：XY201023232</p>
+                                                        <p style="font-size:12px">申请发送时间：2021-11-18 14:25:09</p>
+                                                        <p style="font-size:12px">联通提交条数：50000</p>
+                                                        <p style="font-size:12px">联通接受条数：50000</p>
+                                                        <p style="font-size:12px">提交时间：2021-11-18 14:25:09</p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">扩展号：400986</p>
+                                                        <p style="font-size:12px">实际发送时间：2021-11-18 14:25:09</p>
+                                                        <p style="font-size:12px">电信提交条数：50000</p>
+                                                        <p style="font-size:12px">电信接受条数：50000</p>
+                                                        <p style="font-size:12px">状态：<a class="btn btn-info btn-rounded btn-xs waves-effect waves-light">发送完成</a></p>
+                                                    </div>
+
+                                                </div>
+                                                <div class="property-action">
+                                                    <span style="padding-left:10px;font-size:12px">
+                                                        短信内容：【招商银行】您有20元消费金已到账，点击 cmbt.cn/N9p 查看。消费金只需微信支付交易满20元即可抵扣。已使用请忽略，退订回#C
+                                                    </span>
+                                                    <div class="pull-right">
+                                                        <a data-toggle="modal" data-target="#download-record"
+                                                           class="on-default edit-row"
+                                                           style="padding-left: 5px;color: #6B5FB5;" title="下载号码文件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
+                                                    </div>
+
+                                                </div>
+                                                <!-- end. Card actions -->
+                                            </div>
+                                        </div>
+                                        <!-- /col 8 -->
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="property-card property-horizontal" style="margin-bottom:10px;">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="property-content"
+                                                 style="height:276px">
+                                                <div class="listingInfo">
+                                                    <div class="">
+                                                        <h5 style="padding-left:10px">
+                                                            主题：广东省广州市车展 <span style="font-size:12px;font-weight:300">(ID:100000353)</span>
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">业务类型： <a class="btn btn-purple  waves-effect waves-light btn-xs">国际短信</a></p>
+                                                        <p style="font-size:12px">提交号码数：50000</p>
+                                                        <p style="font-size:12px">提交条数：50000</p>
+                                                        <p style="font-size:12px">接受条数：50000</p>
+                                                        <p style="font-size:12px">数据来源：CMPP</p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">模板ID：100000353</p>
+                                                        <p style="font-size:12px">企业名称：北京星语互联科技有限公司</p>
+                                                        <p style="font-size:12px">移动提交条数：50000</p>
+                                                        <p style="font-size:12px">移动接受条数：50000</p>
+                                                        <p style="font-size:12px">提交人：屠呦呦</p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">EC账号：XY201023232</p>
+                                                        <p style="font-size:12px">申请发送时间：2021-11-18 14:25:09</p>
+                                                        <p style="font-size:12px">联通提交条数：50000</p>
+                                                        <p style="font-size:12px">联通接受条数：50000</p>
+                                                        <p style="font-size:12px">提交时间：2021-11-18 14:25:09</p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">扩展号：400986</p>
+                                                        <p style="font-size:12px">实际发送时间：2021-11-18 14:25:09</p>
+                                                        <p style="font-size:12px">电信提交条数：50000</p>
+                                                        <p style="font-size:12px">电信接受条数：50000</p>
+                                                        <p style="font-size:12px">状态：<a class="btn btn-info btn-rounded btn-xs waves-effect waves-light">发送完成</a></p>
+                                                    </div>
+
+                                                </div>
+                                                <div class="property-action">
+                                                    <span style="padding-left:10px;font-size:12px">
+                                                        短信内容：【招商银行】您有20元消费金已到账，点击 cmbt.cn/N9p 查看。消费金只需微信支付交易满20元即可抵扣。已使用请忽略，退订回#C
+                                                    </span>
+                                                    <div class="pull-right">
+                                                        <a data-toggle="modal" data-target="#download-record"
+                                                           class="on-default edit-row"
+                                                           style="padding-left: 5px;color: #6B5FB5;" title="下载号码文件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
+                                                    </div>
+
+                                                </div>
+                                                <!-- end. Card actions -->
+                                            </div>
+                                        </div>
+                                        <!-- /col 8 -->
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="property-card property-horizontal" style="margin-bottom:10px;">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="property-content"
+                                                 style="height:276px">
+                                                <div class="listingInfo">
+                                                    <div class="">
+                                                        <h5 style="padding-left:10px">
+                                                            主题：广东省广州市车展 <span style="font-size:12px;font-weight:300">(ID:100000353)</span>
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">业务类型： <a class="btn btn-purple  waves-effect waves-light btn-xs">国际短信</a></p>
+                                                        <p style="font-size:12px">提交号码数：50000</p>
+                                                        <p style="font-size:12px">提交条数：50000</p>
+                                                        <p style="font-size:12px">接受条数：50000</p>
+                                                        <p style="font-size:12px">数据来源：CMPP</p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">模板ID：100000353</p>
+                                                        <p style="font-size:12px">企业名称：北京星语互联科技有限公司</p>
+                                                        <p style="font-size:12px">移动提交条数：50000</p>
+                                                        <p style="font-size:12px">移动接受条数：50000</p>
+                                                        <p style="font-size:12px">提交人：屠呦呦</p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">EC账号：XY201023232</p>
+                                                        <p style="font-size:12px">申请发送时间：2021-11-18 14:25:09</p>
+                                                        <p style="font-size:12px">联通提交条数：50000</p>
+                                                        <p style="font-size:12px">联通接受条数：50000</p>
+                                                        <p style="font-size:12px">提交时间：2021-11-18 14:25:09</p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">扩展号：400986</p>
+                                                        <p style="font-size:12px">实际发送时间：2021-11-18 14:25:09</p>
+                                                        <p style="font-size:12px">电信提交条数：50000</p>
+                                                        <p style="font-size:12px">电信接受条数：50000</p>
+                                                        <p style="font-size:12px">状态：<a class="btn btn-info btn-rounded btn-xs waves-effect waves-light">发送完成</a></p>
+                                                    </div>
+
+                                                </div>
+                                                <div class="property-action">
+                                                    <span style="padding-left:10px;font-size:12px">
+                                                        短信内容：【招商银行】您有20元消费金已到账，点击 cmbt.cn/N9p 查看。消费金只需微信支付交易满20元即可抵扣。已使用请忽略，退订回#C
+                                                    </span>
+                                                    <div class="pull-right">
+                                                        <a data-toggle="modal" data-target="#download-record"
+                                                           class="on-default edit-row"
+                                                           style="padding-left: 5px;color: #6B5FB5;" title="下载号码文件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
+                                                    </div>
+
+                                                </div>
+                                                <!-- end. Card actions -->
+                                            </div>
+                                        </div>
+                                        <!-- /col 8 -->
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="property-card property-horizontal" style="margin-bottom:10px;">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="property-content"
+                                                 style="height:276px">
+                                                <div class="listingInfo">
+                                                    <div class="">
+                                                        <h5 style="padding-left:10px">
+                                                            主题：广东省广州市车展 <span style="font-size:12px;font-weight:300">(ID:100000353)</span>
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">业务类型： <a class="btn btn-purple  waves-effect waves-light btn-xs">国际短信</a></p>
+                                                        <p style="font-size:12px">提交号码数：50000</p>
+                                                        <p style="font-size:12px">提交条数：50000</p>
+                                                        <p style="font-size:12px">接受条数：50000</p>
+                                                        <p style="font-size:12px">数据来源：CMPP</p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">模板ID：100000353</p>
+                                                        <p style="font-size:12px">企业名称：北京星语互联科技有限公司</p>
+                                                        <p style="font-size:12px">移动提交条数：50000</p>
+                                                        <p style="font-size:12px">移动接受条数：50000</p>
+                                                        <p style="font-size:12px">提交人：屠呦呦</p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">EC账号：XY201023232</p>
+                                                        <p style="font-size:12px">申请发送时间：2021-11-18 14:25:09</p>
+                                                        <p style="font-size:12px">联通提交条数：50000</p>
+                                                        <p style="font-size:12px">联通接受条数：50000</p>
+                                                        <p style="font-size:12px">提交时间：2021-11-18 14:25:09</p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">扩展号：400986</p>
+                                                        <p style="font-size:12px">实际发送时间：2021-11-18 14:25:09</p>
+                                                        <p style="font-size:12px">电信提交条数：50000</p>
+                                                        <p style="font-size:12px">电信接受条数：50000</p>
+                                                        <p style="font-size:12px">状态：<a class="btn btn-info btn-rounded btn-xs waves-effect waves-light">发送完成</a></p>
+                                                    </div>
+
+                                                </div>
+                                                <div class="property-action">
+                                                    <span style="padding-left:10px;font-size:12px">
+                                                        短信内容：【招商银行】您有20元消费金已到账，点击 cmbt.cn/N9p 查看。消费金只需微信支付交易满20元即可抵扣。已使用请忽略，退订回#C
+                                                    </span>
+                                                    <div class="pull-right">
+                                                        <a data-toggle="modal" data-target="#download-record"
+                                                           class="on-default edit-row"
+                                                           style="padding-left: 5px;color: #6B5FB5;" title="下载号码文件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
+                                                    </div>
+
+                                                </div>
+                                                <!-- end. Card actions -->
+                                            </div>
+                                        </div>
+                                        <!-- /col 8 -->
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="property-card property-horizontal" style="margin-bottom:10px;">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="property-content"
+                                                 style="height:276px">
+                                                <div class="listingInfo">
+                                                    <div class="">
+                                                        <h5 style="padding-left:10px">
+                                                            主题：广东省广州市车展 <span style="font-size:12px;font-weight:300">(ID:100000353)</span>
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">业务类型： <a class="btn btn-purple  waves-effect waves-light btn-xs">国际短信</a></p>
+                                                        <p style="font-size:12px">提交号码数：50000</p>
+                                                        <p style="font-size:12px">提交条数：50000</p>
+                                                        <p style="font-size:12px">接受条数：50000</p>
+                                                        <p style="font-size:12px">数据来源：CMPP</p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">模板ID：100000353</p>
+                                                        <p style="font-size:12px">企业名称：北京星语互联科技有限公司</p>
+                                                        <p style="font-size:12px">移动提交条数：50000</p>
+                                                        <p style="font-size:12px">移动接受条数：50000</p>
+                                                        <p style="font-size:12px">提交人：屠呦呦</p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">EC账号：XY201023232</p>
+                                                        <p style="font-size:12px">申请发送时间：2021-11-18 14:25:09</p>
+                                                        <p style="font-size:12px">联通提交条数：50000</p>
+                                                        <p style="font-size:12px">联通接受条数：50000</p>
+                                                        <p style="font-size:12px">提交时间：2021-11-18 14:25:09</p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">扩展号：400986</p>
+                                                        <p style="font-size:12px">实际发送时间：2021-11-18 14:25:09</p>
+                                                        <p style="font-size:12px">电信提交条数：50000</p>
+                                                        <p style="font-size:12px">电信接受条数：50000</p>
+                                                        <p style="font-size:12px">状态：<a class="btn btn-info btn-rounded btn-xs waves-effect waves-light">发送完成</a></p>
+                                                    </div>
+
+                                                </div>
+                                                <div class="property-action">
+                                                    <span style="padding-left:10px;font-size:12px">
+                                                        短信内容：【招商银行】您有20元消费金已到账，点击 cmbt.cn/N9p 查看。消费金只需微信支付交易满20元即可抵扣。已使用请忽略，退订回#C
+                                                    </span>
+                                                    <div class="pull-right">
+                                                        <a data-toggle="modal" data-target="#download-record"
+                                                           class="on-default edit-row"
+                                                           style="padding-left: 5px;color: #6B5FB5;" title="下载号码文件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
+                                                    </div>
+
+                                                </div>
+                                                <!-- end. Card actions -->
+                                            </div>
+                                        </div>
+                                        <!-- /col 8 -->
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="property-card property-horizontal" style="margin-bottom:10px;">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="property-content"
+                                                 style="height:276px">
+                                                <div class="listingInfo">
+                                                    <div class="">
+                                                        <h5 style="padding-left:10px">
+                                                            主题：广东省广州市车展 <span style="font-size:12px;font-weight:300">(ID:100000353)</span>
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">业务类型： <a class="btn btn-purple  waves-effect waves-light btn-xs">国际短信</a></p>
+                                                        <p style="font-size:12px">提交号码数：50000</p>
+                                                        <p style="font-size:12px">提交条数：50000</p>
+                                                        <p style="font-size:12px">接受条数：50000</p>
+                                                        <p style="font-size:12px">数据来源：CMPP</p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">模板ID：100000353</p>
+                                                        <p style="font-size:12px">企业名称：北京星语互联科技有限公司</p>
+                                                        <p style="font-size:12px">移动提交条数：50000</p>
+                                                        <p style="font-size:12px">移动接受条数：50000</p>
+                                                        <p style="font-size:12px">提交人：屠呦呦</p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">EC账号：XY201023232</p>
+                                                        <p style="font-size:12px">申请发送时间：2021-11-18 14:25:09</p>
+                                                        <p style="font-size:12px">联通提交条数：50000</p>
+                                                        <p style="font-size:12px">联通接受条数：50000</p>
+                                                        <p style="font-size:12px">提交时间：2021-11-18 14:25:09</p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">扩展号：400986</p>
+                                                        <p style="font-size:12px">实际发送时间：2021-11-18 14:25:09</p>
+                                                        <p style="font-size:12px">电信提交条数：50000</p>
+                                                        <p style="font-size:12px">电信接受条数：50000</p>
+                                                        <p style="font-size:12px">状态：<a class="btn btn-info btn-rounded btn-xs waves-effect waves-light">发送完成</a></p>
+                                                    </div>
+
+                                                </div>
+                                                <div class="property-action">
+                                                    <span style="padding-left:10px;font-size:12px">
+                                                        短信内容：【招商银行】您有20元消费金已到账，点击 cmbt.cn/N9p 查看。消费金只需微信支付交易满20元即可抵扣。已使用请忽略，退订回#C
+                                                    </span>
+                                                    <div class="pull-right">
+                                                        <a data-toggle="modal" data-target="#download-record"
+                                                           class="on-default edit-row"
+                                                           style="padding-left: 5px;color: #6B5FB5;" title="下载号码文件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
+                                                    </div>
+
+                                                </div>
+                                                <!-- end. Card actions -->
+                                            </div>
+                                        </div>
+                                        <!-- /col 8 -->
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="property-card property-horizontal" style="margin-bottom:10px;">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="property-content"
+                                                 style="height:276px">
+                                                <div class="listingInfo">
+                                                    <div class="">
+                                                        <h5 style="padding-left:10px">
+                                                            主题：广东省广州市车展 <span style="font-size:12px;font-weight:300">(ID:100000353)</span>
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">业务类型： <a class="btn btn-purple  waves-effect waves-light btn-xs">国际短信</a></p>
+                                                        <p style="font-size:12px">提交号码数：50000</p>
+                                                        <p style="font-size:12px">提交条数：50000</p>
+                                                        <p style="font-size:12px">接受条数：50000</p>
+                                                        <p style="font-size:12px">数据来源：CMPP</p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">模板ID：100000353</p>
+                                                        <p style="font-size:12px">企业名称：北京星语互联科技有限公司</p>
+                                                        <p style="font-size:12px">移动提交条数：50000</p>
+                                                        <p style="font-size:12px">移动接受条数：50000</p>
+                                                        <p style="font-size:12px">提交人：屠呦呦</p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">EC账号：XY201023232</p>
+                                                        <p style="font-size:12px">申请发送时间：2021-11-18 14:25:09</p>
+                                                        <p style="font-size:12px">联通提交条数：50000</p>
+                                                        <p style="font-size:12px">联通接受条数：50000</p>
+                                                        <p style="font-size:12px">提交时间：2021-11-18 14:25:09</p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">扩展号：400986</p>
+                                                        <p style="font-size:12px">实际发送时间：2021-11-18 14:25:09</p>
+                                                        <p style="font-size:12px">电信提交条数：50000</p>
+                                                        <p style="font-size:12px">电信接受条数：50000</p>
+                                                        <p style="font-size:12px">状态：<a class="btn btn-info btn-rounded btn-xs waves-effect waves-light">发送完成</a></p>
+                                                    </div>
+
+                                                </div>
+                                                <div class="property-action">
+                                                    <span style="padding-left:10px;font-size:12px">
+                                                        短信内容：【招商银行】您有20元消费金已到账，点击 cmbt.cn/N9p 查看。消费金只需微信支付交易满20元即可抵扣。已使用请忽略，退订回#C
+                                                    </span>
+                                                    <div class="pull-right">
+                                                        <a data-toggle="modal" data-target="#download-record"
+                                                           class="on-default edit-row"
+                                                           style="padding-left: 5px;color: #6B5FB5;" title="下载号码文件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
+                                                    </div>
+
+                                                </div>
+                                                <!-- end. Card actions -->
+                                            </div>
+                                        </div>
+                                        <!-- /col 8 -->
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <th:block th:insert="fragments/page_fragments :: page"/>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- end row -->
+
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+
+    </div> <!-- container -->
+
+</div> <!-- content -->
+
+<div id="download-record" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="a-width-modalLabel" aria-hidden="true" style="display: none;margin: 60px">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">下载附件</h4>
+            </div>
+            <div class="row" style="padding-top: 15px">
+                <div class="col-sm-12 m-b-10">
+                    <p class="text-muted"><i style="font-size: 18px" class="mdi mdi-download"></i><a href="">&nbsp;提交号码文件</a></p>
+                    <p class="text-muted"><i style="font-size: 18px" class="mdi mdi-download"></i><a href="">&nbsp;状态码统计</a></p>
+                    <p class="text-muted"><i style="font-size: 18px" class="mdi mdi-download"></i><a href="">&nbsp;号码报告文件</a></p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<script th:src="@{/static/plugins/moment/moment.js}"></script>
+<script th:src="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.js}"></script>
+<!-- Modal-Effect -->
+
+<script>
+
+    $('#reportrange').daterangepicker({
+        format: 'YYYY-MM-DD',
+        startDate: '2020-11-03',
+        endDate: '2021-11-03',
+        minDate: '2012-01-01',
+        maxDate: '2080-12-31',
+        dateLimit: {
+            days: 720
+        },
+        showDropdowns: true,
+        showWeekNumbers: true,
+        timePicker: false,
+        timePickerIncrement: 1,
+        timePicker12Hour: true,
+        ranges: {
+            '今天': [moment(), moment()],
+            '昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            '最近7天': [moment().subtract(6, 'days'), moment()],
+            '最近30天': [moment().subtract(29, 'days'), moment()],
+            '本月': [moment().startOf('month'), moment().endOf('month')],
+            '上月': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        },
+        opens: 'right',
+        buttonClasses: ['btn btn-default'],
+        applyClass: 'btn-small btn-primary',
+        cancelClass: 'btn-small',
+        format: 'YYYY-MM-DD',
+        separator: ' - ',
+        locale: {
+            applyLabel: '确认',
+            cancelLabel: '取消',
+            fromLabel: '从',
+            toLabel: '到',
+            customRangeLabel: '自定义',
+            format: "YYYY-MM-DD",
+            daysOfWeek: ['日', '一', '二', '三', '四', '五', '六'],
+            monthNames: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+            firstDay: 1
+        }
+    }, function (start, end, label) {
+        //alert('A date range was chosen: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+    });
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+</script>
+</body>
+</html>
