@@ -22,7 +22,7 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">新建、修改EC资质</h4>
+                    <h4 class="page-title">新建、修改签名资质审核</h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
                             EC资质管理
@@ -110,6 +110,7 @@
                                         <input type="text"  class="form-control" data-parsley-length="[1,48]" autocomplete="off"
                                                placeholder="关键字">
                                     </div>
+
                                     <div class="form-group m-b-20">
                                         <label>上传附件</label>
                                         <input type="file" name="file" id="input_file"
@@ -121,14 +122,30 @@
                             </div> <!-- end col -->
 
                             <div class="col-md-6">
+                                <div class="form-group m-b-20">
+                                    <label>审核状态<span class="text-danger">*</span></label>
+                                    <select name="approveStatus" data-style="btn-default"
+                                            class="selectpicker  form-control" tabindex="-98" 　required="true">
+                                        <option data-icon="mdi mdi-buffer">通过审核</option>
+                                        <option data-icon="mdi mdi-buffer">拒绝</option>
+                                    </select>
+                                </div>
+                                <div class="form-group m-b-20">
+                                    <label>审核意见<span class="text-danger">*</span>&nbsp;
+                                        <span class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                    </label>
+                                    <textarea class="form-control" rows="2"  placeholder="输入审核意见" data-parsley-length="[1,200]" autocomplete="off"></textarea>
+                                </div>
+
+                                <div class="text-right">
+                                    <a sec:authorize-url="/ec/resource/save/*" type="button" class="btn btn-teal waves-effect waves-light">提交</a>
+                                    <a sec:authorize-url="/ec/resource/list" th:href="@{/ec/resource/list}" class="btn btn-default waves-effect waves-light">返回</a>
+                                </div>
 
                             </div> <!-- end col -->
                         </div> <!-- end row -->
 
-                        <div class="text-center">
-                            <a sec:authorize-url="/ec/resource/save/*" type="button" class="btn btn-teal waves-effect waves-light">提交</a>
-                            <a sec:authorize-url="/ec/resource/list" th:href="@{/ec/resource/list}" class="btn btn-default waves-effect waves-light">返回</a>
-                        </div>
+
                     </form>
                     <!-- end form -->
 

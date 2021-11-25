@@ -145,7 +145,7 @@ public class ChannelController {
     @RequestMapping(value = "/customerRecode/{id}", method = RequestMethod.GET)
     public ModelAndView customerRecode(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("configure/channel/channel_customer_recode");
+        ModelAndView view = new ModelAndView("configure/channel/channel_customer_record");
 
         //查询数据
         PageParams params = new PageParams<>();
@@ -170,7 +170,7 @@ public class ChannelController {
     @RequestMapping(value = "/productRecode/{id}", method = RequestMethod.GET)
     public ModelAndView productRecode(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("configure/channel/channel_product_recode");
+        ModelAndView view = new ModelAndView("configure/channel/channel_product_record");
 
         //查询数据
         PageParams params = new PageParams<>();
@@ -195,7 +195,7 @@ public class ChannelController {
     @RequestMapping(value = "/channelPriceList/{id}", method = RequestMethod.GET)
     public ModelAndView channelPriceList(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("configure/channel/channel_price_recode");
+        ModelAndView view = new ModelAndView("configure/channel/channel_price_record");
 
         return view;
 
@@ -209,7 +209,7 @@ public class ChannelController {
     @RequestMapping(value = "/channelBusinessFeesList/{id}", method = RequestMethod.GET)
     public ModelAndView channelBusinessFeesList(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("configure/channel/channel_business_fees_recode");
+        ModelAndView view = new ModelAndView("configure/channel/channel_business_fees_record");
 
         return view;
 
@@ -224,6 +224,20 @@ public class ChannelController {
     public ModelAndView statisticsSendCount(@PathVariable String id, HttpServletRequest request) {
 
         ModelAndView view = new ModelAndView("configure/channel/channel_statistics_send");
+
+        return view;
+
+    }
+
+    /**
+     * 失败补发通道
+     *
+     * @return
+     */
+    @RequestMapping(value = "/supplyAgainChannel/{id}", method = RequestMethod.GET)
+    public ModelAndView supplyAgainChannel(@PathVariable String id, HttpServletRequest request) {
+
+        ModelAndView view = new ModelAndView("configure/channel/channel_supply_again");
 
         return view;
 

@@ -18,16 +18,16 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">EC详细信息</h4>
+                    <h4 class="page-title">企业详细详情</h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
                             客户管理
                         </li>
                         <li>
-                            EC管理
+                           企业接入
                         </li>
                         <li class="active">
-                            EC详细信息
+                            企业详细详情
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -57,7 +57,7 @@
                                     <hr/>
 
                                     <div class="text-left">
-                                        <p th:remove="${parentId =='0'}?all:none" class="text-muted font-13"><strong>上级EC :</strong> <span class="m-l-15">北京星语互联科技有限公司</span>
+                                        <p th:remove="${parentId =='0'}?all:none" class="text-muted font-13"><strong>上级企业 :</strong> <span class="m-l-15">北京星语互联科技有限公司</span>
                                         <p class="text-muted font-13"><strong>联系人 :</strong> <span
                                                 class="m-l-15">贾明</span>
                                         </p>
@@ -66,7 +66,7 @@
                                         <p class="text-muted font-13"><strong>企业类型 :</strong><span
                                                 class="m-l-15">渠道商</span>
                                         </p>
-                                        <p class="text-muted font-13"><strong>企业类型 :</strong><span class="m-l-15">北京市朝阳区武汉路23号</span>
+                                        <p class="text-muted font-13"><strong>对接主体公司 :</strong><span class="m-l-15">小舟科技(北京)有限公司</span>
                                         </p>
                                         </p>
                                         <p class="text-muted font-13"><strong>销售码（销售身份） :</strong> <span class="m-l-15">XY0000</span>
@@ -81,10 +81,10 @@
 
                                         <a sec:authorize-url="/ec/customer/base_info/add/*/*"  th:href="@{/ec/customer/base_info/add/1/0000}"
                                            class="btn btn-info waves-effect waves-light m-l-10 btn-sm">
-                                            <i class="mdi mdi-table-edit" style="margin-right:5px"></i>编辑EC</a>
+                                            <i class="mdi mdi-table-edit" style="margin-right:5px"></i>编辑企业</a>
                                         <a  data-toggle="modal" data-target="#confirm-modal"
                                            class="btn btn-danger waves-effect waves-light m-l-10 btn-sm">
-                                            <i class="mdi mdi-delete" style="margin-right:5px"></i>注销EC</a>
+                                            <i class="mdi mdi-delete" style="margin-right:5px"></i>注销企业</a>
 
                                     </div>
 
@@ -182,7 +182,7 @@
                                             <a sec:authorize-url="/ec/customer/base_info/list" th:href="@{/ec/customer/base_info/list}"
                                                class="btn btn-default waves-effect waves-light btn-md">
                                                 <i class="glyphicon  glyphicon-share-alt" style="margin-right:5px"></i>
-                                                返回EC列表</a>
+                                                返回企业列表</a>
                                             <a  th:href="@{/ec/customer/channel/account/center/account}"
                                                     style="margin-left:10px;"
                                                     class="btn btn-instagram waves-effect waves-light btn-md">

@@ -17,16 +17,13 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">EC通道账户维护</h4>
+                    <h4 class="page-title">新建EC账号</h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
                             客户管理
                         </li>
                         <li>
-                            EC通道账户管理
-                        </li>
-                        <li class="active">
-                            EC通道账户维护
+                            新建EC账号
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -39,7 +36,7 @@
                 <div class="card-box">
                             <div class="row">
                                 <div class="col-md-12 col-sm-12">
-                                    <h4 class="m-b-10">EC通道账户维护
+                                    <h4 class="m-b-10">新建EC账号
                                         <div class="pull-right" style="margin-top: -12px;">
                                             <a sec:authorize-url="/ec/customer/channel/account/list" th:href="@{/ec/customer/channel/account/list}"
                                                class="btn btn-default waves-effect waves-light btn-md">
@@ -79,16 +76,16 @@
                                                            th:target="tab-content">基本信息
                                                         </a>
                                                     </li>
-                                                    <li th:class="${type =='interface'?'active':''}" id="interface">
-                                                        <a onclick="activeTab('interface')"  sec:authorize-url="/ec/customer/channel/account/edit/**/*"
-                                                           th:href="@{/ec/customer/channel/account/edit/interface/id}"
-                                                           th:target="tab-content">接口信息
-                                                        </a>
-                                                    </li>
                                                     <li th:class="${type =='finance'?'active':''}" id="finance">
                                                         <a onclick="activeTab('finance')"  sec:authorize-url="/ec/customer/channel/account/edit/**/*"
                                                            th:href="@{/ec/customer/channel/account/edit/finance/id}"
                                                            th:target="tab-content">财务信息
+                                                        </a>
+                                                    </li>
+                                                    <li th:class="${type =='interface'?'active':''}" id="interface">
+                                                        <a onclick="activeTab('interface')"  sec:authorize-url="/ec/customer/channel/account/edit/**/*"
+                                                           th:href="@{/ec/customer/channel/account/edit/interface/id}"
+                                                           th:target="tab-content">接口信息
                                                         </a>
                                                     </li>
                                                     <li th:class="${type =='filter'?'active':''}" id="filter">

@@ -28,10 +28,10 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group m-b-20">
-                                                <label>EC名称</label>：北京星语互联科技有限公司
+                                                <label>EC账号</label>：xycr11
                                             </div>
                                             <div class="form-group m-b-20">
-                                                <label>通道账号名称</label>：我也不清楚
+                                                <label>账号名称</label>：星语-移动-信用卡(小舟dj)
                                             </div>
                                             <div class="form-group m-b-20">
                                                 <label>发送时间限制<span class="text-danger">*</span>&nbsp;</label>
@@ -46,10 +46,15 @@
                                                        placeholder="屏蔽省份">
                                             </div>
                                             <div class="form-group">
-                                                <label for="aaaa">限量方式<span class="text-danger">*</span></label>
-                                                <input id="aaaa" type="text"  class="form-control"
-                                                       required="" data-parsley-length="[4,30]" autocomplete="off"
-                                                       placeholder="限量方式">
+                                                <label>日限量方式<span class="text-danger">*</span></label>
+                                                <mpm:tag id="dayLimit" required="true"  identity="dayLimit" show-type="select" key="code"
+                                                         class="form-control" name="enterpriseType" value="" title="日限量方式"/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="links">日限量条数<span class="text-danger">*</span></label>
+                                                <input id="links" type="text"  class="form-control"
+                                                       required="" data-parsley-length="[1,30]" autocomplete="off"
+                                                       placeholder="模板匹配">
                                             </div>
                                             <div class="form-group">
                                                 <label for="links">模板匹配<span class="text-danger">*</span></label>
@@ -57,20 +62,15 @@
                                                        required="" data-parsley-length="[1,30]" autocomplete="off"
                                                        placeholder="模板匹配">
                                             </div>
-                                            <div class="form-group">
-                                                <label for="linkss">RE正则表达式<span class="text-danger">*</span></label>
-                                                <input id="linkss" type="text"  class="form-control"
-                                                       required="" data-parsley-length="[1,30]" autocomplete="off"
-                                                       placeholder="RE正则表达式">
-                                            </div>
+
 
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group m-b-20">
-                                                <label for="speed">频次限制<span class="text-danger">*</span>&nbsp;</label>
+                                                <label for="speed">账号发送频次限制<span class="text-danger">*</span>&nbsp;</label>
                                                 <input id="speed" type="text"  class="form-control"
                                                        required="" data-parsley-length="[2,64]" autocomplete="off"
-                                                       placeholder="频次限制">
+                                                       placeholder="账号发送频次限制">
                                             </div>
                                             <div class="form-group m-b-20">
                                                 <label for="check">黑名单<span class="text-danger">*</span>&nbsp;</label>
@@ -91,10 +91,22 @@
                                                        placeholder="白名单">
                                             </div>
                                             <div class="form-group m-b-20">
-                                                <label for="upUrl">关键字<span class="text-danger">*</span>&nbsp;</label>
+                                                <label for="upUrl">账号级关键字过滤<span class="text-danger">*</span>&nbsp;</label>
                                                 <input id="upUrl" type="text"  class="form-control"
                                                        required="" data-parsley-length="[2,24]" autocomplete="off"
                                                        placeholder="关键字">
+                                            </div>
+                                            <div class="form-group m-b-20">
+                                                <label for="upUrl">平台级关键字过滤<span class="text-danger">*</span>&nbsp;</label>
+                                                <div class="radio radio-info radio-inline">
+                                                    <input type="radio" id="active1" name="active" value="1" checked
+                                                           required="">
+                                                    <label for="active1"> 是 </label>
+                                                </div>
+                                                <div class="radio radio-info radio-inline">
+                                                    <input type="radio" id="active0" name="active" value="0">
+                                                    <label for="active0"> 否 </label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

@@ -54,13 +54,16 @@
                                         <ul class="nav nav-pills m-b-30 pull-right">
                                             <li class="active" id="tab1"><a onclick="active('1')"  sec:authorize-url="/configure/channel/edit/*"
                                                                             th:href="@{/configure/channel/edit/id}"
-                                                                            th:target="tab-content">通道详细</a></li>
+                                                                            th:target="tab-content">通道基本信息</a></li>
                                             <li class="" id="tab7"><a onclick="active('7')"  sec:authorize-url="/configure/channel/interface/*"
                                                                             th:href="@{/configure/channel/interface/id}"
-                                                                            th:target="tab-content">接口信息</a></li>
+                                                                            th:target="tab-content">通道接口参数</a></li>
                                             <li class="" id="tab8"><a onclick="active('8')"  sec:authorize-url="/configure/channel/filter/*"
                                                                       th:href="@{/configure/channel/filter/id}"
-                                                                      th:target="tab-content">过滤信息</a></li>
+                                                                      th:target="tab-content">通道过滤配置</a></li>
+                                            <li class="" id="tab9"><a onclick="active('9')"  sec:authorize-url="/configure/channel/supplyAgainChannel/*"
+                                                                      th:href="@{/configure/channel/supplyAgainChannel/id}"
+                                                                      th:target="tab-content">配置失败补发通道</a></li>
                                             <li class="" id="tab2"><a onclick="active('2')" sec:authorize-url="/configure/channel/customerRecode/*"
                                                                       th:href="@{/configure/channel/customerRecode/id}"
                                                                       th:target="tab-content">用户使用记录</a></li>

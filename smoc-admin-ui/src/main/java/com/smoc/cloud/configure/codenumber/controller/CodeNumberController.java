@@ -130,7 +130,7 @@ public class CodeNumberController {
     @RequestMapping(value = "/channelRecode/{id}", method = RequestMethod.GET)
     public ModelAndView channelRecode(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("configure/codenumber/codenumber_channel_recode");
+        ModelAndView view = new ModelAndView("configure/codenumber/codenumber_channel_record");
 
         return view;
 
@@ -145,6 +145,20 @@ public class CodeNumberController {
     public ModelAndView statisticsSendCount(@PathVariable String id, HttpServletRequest request) {
 
         ModelAndView view = new ModelAndView("configure/codenumber/codenumber_statistics_send");
+
+        return view;
+
+    }
+
+    /**
+     * 码号历史修改记录
+     *
+     * @return
+     */
+    @RequestMapping(value = "/editRecord/{id}", method = RequestMethod.GET)
+    public ModelAndView editRecords(@PathVariable String id, HttpServletRequest request) {
+
+        ModelAndView view = new ModelAndView("configure/codenumber/codenumber_edit_record");
 
         return view;
 

@@ -21,10 +21,13 @@
         <div class="row fixed-navigation">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">EC资质管理 </h4>
+                    <h4 class="page-title">签名资质审核 </h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
-                            EC资质管理
+                            业务审核
+                        </li>
+                        <li class="active">
+                            签名资质审核
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -55,9 +58,6 @@
                             <div class="form-group  col-sm-3">
                                 <mpm:tag id="enterpriseType" identity="enterpriseType"  show-type="select"  key="code" class="form-control"   data-icon="mdi mdi-view-module" title="企业类型" />
                             </div>
-                            <div class="form-group  col-sm-3">
-                                <mpm:tag id="checkStatus" identity="checkStatus"  show-type="select"  key="code" class="form-control"   data-icon="mdi mdi-view-module" title="审核状态" />
-                            </div>
                             <form  id="query_form" th:action="@{/ec/resource/page}" method="post" class="form-inline">
                                 <div class="form-group pull-right" style="text-align: right">
                                     <button sec:authorize-url="/ec/resource/page" class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
@@ -65,7 +65,7 @@
                                     </button>
                                     <a sec:authorize-url="/ec/customer/search/*" th:href="@{/ec/customer/search/resource}"
                                        class="btn btn-success waves-effect waves-light m-l-10 btn-md">
-                                        <i class="glyphicon glyphicon-plus-sign"></i> 新建EC资质</a>
+                                        <i class="glyphicon glyphicon-plus-sign"></i> 新建签名资质</a>
                                 </div>
                             </form>
                         </div>
@@ -80,7 +80,7 @@
             <div class="col-sm-12">
                 <div class="panel panel-color panel-info">
                     <div class="panel-heading">
-                        <h3 class="panel-title">EC资质列表</h3>
+                        <h3 class="panel-title">签名资质审核列表</h3>
                     </div>
                     <div class="panel-body">
                         <div class="table-responsive">
@@ -91,28 +91,29 @@
                                     <th>企业类型</th>
                                     <th>业务类型</th>
                                     <th>内容类型</th>
-                                    <th>短链</th>
+                                    <th>短链/签名合同链</th>
                                     <th>资料状态</th>
                                     <th>签订日期</th>
                                     <th>创建人/创建日期</th>
-                                    <th>审核人/审核日期</th>
                                     <th>操作</th>
                                 </tr>
                                 <thead>
                                 <tbody>
                                     <tr>
-                                        <td><span style="color:#26A69A">【北京星语】</span><br>北京星语互联科技有限公司</td>
-                                        <td style="line-height: 26px;"><mpm:tag identity="enterpriseType" value="CHANNELCUSTOMER" show-type="label"  key="code" /></td>
-                                        <td style="line-height: 26px;"><mpm:tag identity="businessType" value="TEXT_SMS" show-type="label"  key="code" /></td>
-                                        <td style="line-height: 26px;"><mpm:tag identity="contentType" value="NOTICE" show-type="label"  key="code" /></td>
-                                        <td style="line-height: 26px;">http://mtw.so/6xOaa3</td>
-                                        <td><a class="btn btn-default btn-rounded btn-sm waves-effect waves-light">保存状态</a></td>
-                                        <td style="line-height: 26px;">2021-11-3</td>
-                                        <td>李先生<br>2021-11-3 12:45:47</td>
-                                        <td></td>
+                                        <td style="vertical-align: middle;line-height: 26px"><span style="color:#26A69A">【星语互联科技】</span><br>北京星语互联科技有限公司</td>
+                                        <td style="vertical-align: middle;line-height: 26px"><mpm:tag identity="enterpriseType" value="CHANNELCUSTOMER" show-type="label"  key="code" /></td>
+                                        <td style="vertical-align: middle;line-height: 26px"><mpm:tag identity="businessType" value="INTERNATIONAL_SMS" show-type="label"  key="code" /></td>
+                                        <td style="vertical-align: middle;line-height: 26px"><mpm:tag identity="contentType" value="PERSONAL_LOAN" show-type="label"  key="code" /></td>
+                                        <td style="vertical-align: middle;line-height: 26px">http://mtw.so/6xOaa3<br>360数科-深圳风向-云启通</td>
+                                        <td style="vertical-align: middle;line-height: 26px"><a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a></td>
+                                        <td style="vertical-align: middle;line-height: 26px">2021-11-3</td>
+                                        <td style="vertical-align: middle;line-height: 26px">李先生<br>2021-11-3 12:45:47</td>
+
                                         <td style="line-height: 26px;">
-                                            <a sec:authorize-url="/ec/resource/sendCheck/*" class="on-default edit-row"
-                                               style="padding-left: 5px;color: #8D6E63;"title="发送审核"><i style="font-size: 18px" class="glyphicon glyphicon-send"></i></a>
+                                            <a sec:authorize-url="/ec/resource/detail/*"
+                                               th:href="@{/ec/resource/detail/id}" class="on-default edit-row"
+                                               style="padding-left: 5px;color: #4BD396;"
+                                               title="查看详情"><i style="font-size: 18px" class="glyphicon glyphicon-search"></i></a>
                                             <a sec:authorize-url="/ec/resource/edit/*" data-toggle="modal" data-target="#download-record"
                                                class="on-default edit-row"
                                                style="padding-left: 5px;color: #6B5FB5;"title="下载附件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
@@ -125,58 +126,20 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td><span style="color:#26A69A">【北京星语】</span><br>北京星语互联科技有限公司</td>
-                                        <td style="line-height: 26px;"><mpm:tag identity="enterpriseType" value="DIRECTCUSTOMER" show-type="label"  key="code" /></td>
-                                        <td style="line-height: 26px;"><mpm:tag identity="businessType" value="MMS" show-type="label"  key="code" /></td>
-                                        <td style="line-height: 26px;"><mpm:tag identity="contentType" value="CREDIT_CARD" show-type="label"  key="code" /></td>
-                                        <td style="line-height: 26px;">http://mtw.so/6xOaa3</td>
-                                        <td><a class="btn btn-warning btn-rounded btn-sm waves-effect waves-light">审核中</a></td>
-                                        <td style="line-height: 26px;">2021-11-3</td>
-                                        <td>李先生<br>2021-11-3 12:45:47</td>
-                                        <td></td>
+                                        <td style="vertical-align: middle;line-height: 26px"><span style="color:#26A69A">【星语互联科技】</span><br>北京星语互联科技有限公司</td>
+                                        <td style="vertical-align: middle;line-height: 26px"><mpm:tag identity="enterpriseType" value="CHANNELCUSTOMER" show-type="label"  key="code" /></td>
+                                        <td style="vertical-align: middle;line-height: 26px"><mpm:tag identity="businessType" value="INTERNATIONAL_SMS" show-type="label"  key="code" /></td>
+                                        <td style="vertical-align: middle;line-height: 26px"><mpm:tag identity="contentType" value="PERSONAL_LOAN" show-type="label"  key="code" /></td>
+                                        <td style="vertical-align: middle;line-height: 26px">http://mtw.so/6xOaa3<br>360数科-深圳风向-云启通</td>
+                                        <td style="vertical-align: middle;line-height: 26px"><a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a></td>
+                                        <td style="vertical-align: middle;line-height: 26px">2021-11-3</td>
+                                        <td style="vertical-align: middle;line-height: 26px">李先生<br>2021-11-3 12:45:47</td>
+
                                         <td style="line-height: 26px;">
                                             <a sec:authorize-url="/ec/resource/detail/*"
                                                th:href="@{/ec/resource/detail/id}" class="on-default edit-row"
                                                style="padding-left: 5px;color: #4BD396;"
-                                               title="审核记录"><i style="font-size: 18px" class="glyphicon glyphicon-search"></i></a>
-                                            <a sec:authorize-url="/ec/resource/edit/*" data-toggle="modal" data-target="#download-record"
-                                               class="on-default edit-row"
-                                               style="padding-left: 5px;color: #6B5FB5;"title="下载附件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><span style="color:#26A69A">【星语互联科技】</span><br>北京星语互联科技有限公司</td>
-                                        <td style="line-height: 26px;"><mpm:tag identity="enterpriseType" value="CHANNELCUSTOMER" show-type="label"  key="code" /></td>
-                                        <td style="line-height: 26px;"><mpm:tag identity="businessType" value="INTERNATIONAL_SMS" show-type="label"  key="code" /></td>
-                                        <td style="line-height: 26px;"><mpm:tag identity="contentType" value="PERSONAL_LOAN" show-type="label"  key="code" /></td>
-                                        <td style="line-height: 26px;">http://mtw.so/6xOaa3</td>
-                                        <td><a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a></td>
-                                        <td style="line-height: 26px;">2021-11-3</td>
-                                        <td>李先生<br>2021-11-3 12:45:47</td>
-                                        <td>张先生<br>2021-11-4 12:45:47</td>
-                                        <td style="line-height: 26px;">
-                                            <a sec:authorize-url="/ec/resource/detail/*"
-                                               th:href="@{/ec/resource/detail/id}" class="on-default edit-row"
-                                               style="padding-left: 5px;color: #4BD396;"
-                                               title="审核记录"><i style="font-size: 18px" class="glyphicon glyphicon-search"></i></a>
-                                            <a sec:authorize-url="/ec/resource/edit/*" data-toggle="modal" data-target="#download-record"
-                                               class="on-default edit-row"
-                                               style="padding-left: 5px;color: #6B5FB5;"title="下载附件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><span style="color:#26A69A">【北京星语】</span><br>北京星语互联科技有限公司</td>
-                                        <td style="line-height: 26px;"><mpm:tag identity="enterpriseType" value="DIRECTCUSTOMER" show-type="label"  key="code" /></td>
-                                        <td style="line-height: 26px;"><mpm:tag identity="businessType" value="5G_SMS" show-type="label"  key="code" /></td>
-                                        <td style="line-height: 26px;"><mpm:tag identity="contentType" value="PRESS_MONEY" show-type="label"  key="code" /></td>
-                                        <td style="line-height: 26px;">http://mtw.so/6xOaa3</td>
-                                        <td><a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light">审核拒绝</a></td>
-                                        <td style="line-height: 26px;">2021-11-3</td>
-                                        <td>李先生<br>2021-11-3 12:45:47</td>
-                                        <td>张先生<br>2021-11-4 12:45:47</td>
-                                        <td style="line-height: 26px;">
-                                            <a sec:authorize-url="/ec/resource/sendCheck/*" class="on-default edit-row"
-                                               style="padding-left: 5px;color: #8D6E63;"title="发送审核"><i style="font-size: 18px" class="glyphicon glyphicon-send"></i></a>
+                                               title="查看详情"><i style="font-size: 18px" class="glyphicon glyphicon-search"></i></a>
                                             <a sec:authorize-url="/ec/resource/edit/*" data-toggle="modal" data-target="#download-record"
                                                class="on-default edit-row"
                                                style="padding-left: 5px;color: #6B5FB5;"title="下载附件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
@@ -189,103 +152,159 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td><span style="color:#26A69A">【星语互联科技】</span><br>北京星语互联科技有限公司</td>
-                                        <td style="line-height: 26px;"><mpm:tag identity="enterpriseType" value="DIRECTCUSTOMER" show-type="label"  key="code" /></td>
-                                        <td style="line-height: 26px;"><mpm:tag identity="businessType" value="MULTI_SMS" show-type="label"  key="code" /></td>
-                                        <td style="line-height: 26px;"><mpm:tag identity="contentType" value="GAME" show-type="label"  key="code" /></td>
-                                        <td style="line-height: 26px;">http://mtw.so/6xOaa3</td>
-                                        <td><a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a></td>
-                                        <td style="line-height: 26px;">2021-11-3</td>
-                                        <td>李先生<br>2021-11-3 12:45:47</td>
-                                        <td>张先生<br>2021-11-4 12:45:47</td>
+                                        <td style="vertical-align: middle;line-height: 26px"><span style="color:#26A69A">【星语互联科技】</span><br>北京星语互联科技有限公司</td>
+                                        <td style="vertical-align: middle;line-height: 26px"><mpm:tag identity="enterpriseType" value="CHANNELCUSTOMER" show-type="label"  key="code" /></td>
+                                        <td style="vertical-align: middle;line-height: 26px"><mpm:tag identity="businessType" value="INTERNATIONAL_SMS" show-type="label"  key="code" /></td>
+                                        <td style="vertical-align: middle;line-height: 26px"><mpm:tag identity="contentType" value="PERSONAL_LOAN" show-type="label"  key="code" /></td>
+                                        <td style="vertical-align: middle;line-height: 26px">http://mtw.so/6xOaa3<br>360数科-深圳风向-云启通</td>
+                                        <td style="vertical-align: middle;line-height: 26px"><a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a></td>
+                                        <td style="vertical-align: middle;line-height: 26px">2021-11-3</td>
+                                        <td style="vertical-align: middle;line-height: 26px">李先生<br>2021-11-3 12:45:47</td>
+
                                         <td style="line-height: 26px;">
                                             <a sec:authorize-url="/ec/resource/detail/*"
                                                th:href="@{/ec/resource/detail/id}" class="on-default edit-row"
                                                style="padding-left: 5px;color: #4BD396;"
-                                               title="审核记录"><i style="font-size: 18px" class="glyphicon glyphicon-search"></i></a>
+                                               title="查看详情"><i style="font-size: 18px" class="glyphicon glyphicon-search"></i></a>
                                             <a sec:authorize-url="/ec/resource/edit/*" data-toggle="modal" data-target="#download-record"
                                                class="on-default edit-row"
                                                style="padding-left: 5px;color: #6B5FB5;"title="下载附件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
+                                            <a sec:authorize-url="/ec/resource/edit/*"
+                                               th:href="@{/ec/resource/edit/id}"class="on-default edit-row"
+                                               style="padding-left: 5px;color: #29b6f6;"title="编辑"><i style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
+                                            <a sec:authorize-url="/ec/resource/deleteById/*" data-toggle="modal"
+                                               data-target="#confirm-modal" class="on-default remove-row"
+                                               style="padding-left: 5px;color: #f05050"title="删除"><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td><span style="color:#26A69A">【星语互联科技】</span><br>北京星语互联科技有限公司</td>
-                                        <td style="line-height: 26px;"><mpm:tag identity="enterpriseType" value="CHANNELCUSTOMER" show-type="label"  key="code" /></td>
-                                        <td style="line-height: 26px;"><mpm:tag identity="businessType" value="BLACK_SERVICE" show-type="label"  key="code" /></td>
-                                        <td style="line-height: 26px;"><mpm:tag identity="contentType" value="INSURANCE" show-type="label"  key="code" /></td>
-                                        <td style="line-height: 26px;">http://mtw.so/6xOaa3</td>
-                                        <td><a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a></td>
-                                        <td style="line-height: 26px;">2021-11-3</td>
-                                        <td>李先生<br>2021-11-3 12:45:47</td>
-                                        <td>张先生<br>2021-11-4 12:45:47</td>
+                                        <td style="vertical-align: middle;line-height: 26px"><span style="color:#26A69A">【星语互联科技】</span><br>北京星语互联科技有限公司</td>
+                                        <td style="vertical-align: middle;line-height: 26px"><mpm:tag identity="enterpriseType" value="CHANNELCUSTOMER" show-type="label"  key="code" /></td>
+                                        <td style="vertical-align: middle;line-height: 26px"><mpm:tag identity="businessType" value="INTERNATIONAL_SMS" show-type="label"  key="code" /></td>
+                                        <td style="vertical-align: middle;line-height: 26px"><mpm:tag identity="contentType" value="PERSONAL_LOAN" show-type="label"  key="code" /></td>
+                                        <td style="vertical-align: middle;line-height: 26px">http://mtw.so/6xOaa3<br>360数科-深圳风向-云启通</td>
+                                        <td style="vertical-align: middle;line-height: 26px"><a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a></td>
+                                        <td style="vertical-align: middle;line-height: 26px">2021-11-3</td>
+                                        <td style="vertical-align: middle;line-height: 26px">李先生<br>2021-11-3 12:45:47</td>
+
                                         <td style="line-height: 26px;">
                                             <a sec:authorize-url="/ec/resource/detail/*"
                                                th:href="@{/ec/resource/detail/id}" class="on-default edit-row"
                                                style="padding-left: 5px;color: #4BD396;"
-                                               title="审核记录"><i style="font-size: 18px" class="glyphicon glyphicon-search"></i></a>
+                                               title="查看详情"><i style="font-size: 18px" class="glyphicon glyphicon-search"></i></a>
                                             <a sec:authorize-url="/ec/resource/edit/*" data-toggle="modal" data-target="#download-record"
                                                class="on-default edit-row"
                                                style="padding-left: 5px;color: #6B5FB5;"title="下载附件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
+                                            <a sec:authorize-url="/ec/resource/edit/*"
+                                               th:href="@{/ec/resource/edit/id}"class="on-default edit-row"
+                                               style="padding-left: 5px;color: #29b6f6;"title="编辑"><i style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
+                                            <a sec:authorize-url="/ec/resource/deleteById/*" data-toggle="modal"
+                                               data-target="#confirm-modal" class="on-default remove-row"
+                                               style="padding-left: 5px;color: #f05050"title="删除"><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td><span style="color:#26A69A">【星语互联科技】</span><br>北京星语互联科技有限公司</td>
-                                        <td style="line-height: 26px;"><mpm:tag identity="enterpriseType" value="CHANNELCUSTOMER" show-type="label"  key="code" /></td>
-                                        <td style="line-height: 26px;"><mpm:tag identity="businessType" value="INTERNATIONAL_SMS" show-type="label"  key="code" /></td>
-                                        <td style="line-height: 26px;"><mpm:tag identity="contentType" value="EDUCATION" show-type="label"  key="code" /></td>
-                                        <td style="line-height: 26px;">http://mtw.so/6xOaa3</td>
-                                        <td><a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a></td>
-                                        <td style="line-height: 26px;">2021-11-3</td>
-                                        <td>李先生<br>2021-11-3 12:45:47</td>
-                                        <td>张先生<br>2021-11-4 12:45:47</td>
+                                        <td style="vertical-align: middle;line-height: 26px"><span style="color:#26A69A">【星语互联科技】</span><br>北京星语互联科技有限公司</td>
+                                        <td style="vertical-align: middle;line-height: 26px"><mpm:tag identity="enterpriseType" value="CHANNELCUSTOMER" show-type="label"  key="code" /></td>
+                                        <td style="vertical-align: middle;line-height: 26px"><mpm:tag identity="businessType" value="INTERNATIONAL_SMS" show-type="label"  key="code" /></td>
+                                        <td style="vertical-align: middle;line-height: 26px"><mpm:tag identity="contentType" value="PERSONAL_LOAN" show-type="label"  key="code" /></td>
+                                        <td style="vertical-align: middle;line-height: 26px">http://mtw.so/6xOaa3<br>360数科-深圳风向-云启通</td>
+                                        <td style="vertical-align: middle;line-height: 26px"><a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a></td>
+                                        <td style="vertical-align: middle;line-height: 26px">2021-11-3</td>
+                                        <td style="vertical-align: middle;line-height: 26px">李先生<br>2021-11-3 12:45:47</td>
+
                                         <td style="line-height: 26px;">
                                             <a sec:authorize-url="/ec/resource/detail/*"
                                                th:href="@{/ec/resource/detail/id}" class="on-default edit-row"
                                                style="padding-left: 5px;color: #4BD396;"
-                                               title="审核记录"><i style="font-size: 18px" class="glyphicon glyphicon-search"></i></a>
+                                               title="查看详情"><i style="font-size: 18px" class="glyphicon glyphicon-search"></i></a>
                                             <a sec:authorize-url="/ec/resource/edit/*" data-toggle="modal" data-target="#download-record"
                                                class="on-default edit-row"
                                                style="padding-left: 5px;color: #6B5FB5;"title="下载附件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
+                                            <a sec:authorize-url="/ec/resource/edit/*"
+                                               th:href="@{/ec/resource/edit/id}"class="on-default edit-row"
+                                               style="padding-left: 5px;color: #29b6f6;"title="编辑"><i style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
+                                            <a sec:authorize-url="/ec/resource/deleteById/*" data-toggle="modal"
+                                               data-target="#confirm-modal" class="on-default remove-row"
+                                               style="padding-left: 5px;color: #f05050"title="删除"><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td><span style="color:#26A69A">【星语互联科技】</span><br>北京星语互联科技有限公司</td>
-                                        <td style="line-height: 26px;"><mpm:tag identity="enterpriseType" value="CHANNELCUSTOMER" show-type="label"  key="code" /></td>
-                                        <td style="line-height: 26px;"><mpm:tag identity="businessType" value="INTERNATIONAL_SMS" show-type="label"  key="code" /></td>
-                                        <td style="line-height: 26px;"><mpm:tag identity="contentType" value="FRIEND" show-type="label"  key="code" /></td>
-                                        <td style="line-height: 26px;">http://mtw.so/6xOaa3</td>
-                                        <td><a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a></td>
-                                        <td style="line-height: 26px;">2021-11-3</td>
-                                        <td>李先生<br>2021-11-3 12:45:47</td>
-                                        <td>张先生<br>2021-11-4 12:45:47</td>
+                                        <td style="vertical-align: middle;line-height: 26px"><span style="color:#26A69A">【星语互联科技】</span><br>北京星语互联科技有限公司</td>
+                                        <td style="vertical-align: middle;line-height: 26px"><mpm:tag identity="enterpriseType" value="CHANNELCUSTOMER" show-type="label"  key="code" /></td>
+                                        <td style="vertical-align: middle;line-height: 26px"><mpm:tag identity="businessType" value="INTERNATIONAL_SMS" show-type="label"  key="code" /></td>
+                                        <td style="vertical-align: middle;line-height: 26px"><mpm:tag identity="contentType" value="PERSONAL_LOAN" show-type="label"  key="code" /></td>
+                                        <td style="vertical-align: middle;line-height: 26px">http://mtw.so/6xOaa3<br>360数科-深圳风向-云启通</td>
+                                        <td style="vertical-align: middle;line-height: 26px"><a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a></td>
+                                        <td style="vertical-align: middle;line-height: 26px">2021-11-3</td>
+                                        <td style="vertical-align: middle;line-height: 26px">李先生<br>2021-11-3 12:45:47</td>
+
                                         <td style="line-height: 26px;">
                                             <a sec:authorize-url="/ec/resource/detail/*"
                                                th:href="@{/ec/resource/detail/id}" class="on-default edit-row"
                                                style="padding-left: 5px;color: #4BD396;"
-                                               title="审核记录"><i style="font-size: 18px" class="glyphicon glyphicon-search"></i></a>
+                                               title="查看详情"><i style="font-size: 18px" class="glyphicon glyphicon-search"></i></a>
                                             <a sec:authorize-url="/ec/resource/edit/*" data-toggle="modal" data-target="#download-record"
                                                class="on-default edit-row"
                                                style="padding-left: 5px;color: #6B5FB5;"title="下载附件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
+                                            <a sec:authorize-url="/ec/resource/edit/*"
+                                               th:href="@{/ec/resource/edit/id}"class="on-default edit-row"
+                                               style="padding-left: 5px;color: #29b6f6;"title="编辑"><i style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
+                                            <a sec:authorize-url="/ec/resource/deleteById/*" data-toggle="modal"
+                                               data-target="#confirm-modal" class="on-default remove-row"
+                                               style="padding-left: 5px;color: #f05050"title="删除"><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td><span style="color:#26A69A">【星语互联科技】</span><br>北京星语互联科技有限公司</td>
-                                        <td style="line-height: 26px;"><mpm:tag identity="enterpriseType" value="CHANNELCUSTOMER" show-type="label"  key="code" /></td>
-                                        <td style="line-height: 26px;"><mpm:tag identity="businessType" value="INTERNATIONAL_SMS" show-type="label"  key="code" /></td>
-                                        <td style="line-height: 26px;"><mpm:tag identity="contentType" value="REAL_ESTATE" show-type="label"  key="code" /></td>
-                                        <td style="line-height: 26px;">http://mtw.so/6xOaa3</td>
-                                        <td><a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a></td>
-                                        <td style="line-height: 26px;">2021-11-3</td>
-                                        <td>李先生<br>2021-11-3 12:45:47</td>
-                                        <td>张先生<br>2021-11-4 12:45:47</td>
+                                        <td style="vertical-align: middle;line-height: 26px"><span style="color:#26A69A">【星语互联科技】</span><br>北京星语互联科技有限公司</td>
+                                        <td style="vertical-align: middle;line-height: 26px"><mpm:tag identity="enterpriseType" value="CHANNELCUSTOMER" show-type="label"  key="code" /></td>
+                                        <td style="vertical-align: middle;line-height: 26px"><mpm:tag identity="businessType" value="INTERNATIONAL_SMS" show-type="label"  key="code" /></td>
+                                        <td style="vertical-align: middle;line-height: 26px"><mpm:tag identity="contentType" value="PERSONAL_LOAN" show-type="label"  key="code" /></td>
+                                        <td style="vertical-align: middle;line-height: 26px">http://mtw.so/6xOaa3<br>360数科-深圳风向-云启通</td>
+                                        <td style="vertical-align: middle;line-height: 26px"><a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a></td>
+                                        <td style="vertical-align: middle;line-height: 26px">2021-11-3</td>
+                                        <td style="vertical-align: middle;line-height: 26px">李先生<br>2021-11-3 12:45:47</td>
+
                                         <td style="line-height: 26px;">
                                             <a sec:authorize-url="/ec/resource/detail/*"
                                                th:href="@{/ec/resource/detail/id}" class="on-default edit-row"
                                                style="padding-left: 5px;color: #4BD396;"
-                                               title="审核记录"><i style="font-size: 18px" class="glyphicon glyphicon-search"></i></a>
+                                               title="查看详情"><i style="font-size: 18px" class="glyphicon glyphicon-search"></i></a>
                                             <a sec:authorize-url="/ec/resource/edit/*" data-toggle="modal" data-target="#download-record"
                                                class="on-default edit-row"
                                                style="padding-left: 5px;color: #6B5FB5;"title="下载附件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
+                                            <a sec:authorize-url="/ec/resource/edit/*"
+                                               th:href="@{/ec/resource/edit/id}"class="on-default edit-row"
+                                               style="padding-left: 5px;color: #29b6f6;"title="编辑"><i style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
+                                            <a sec:authorize-url="/ec/resource/deleteById/*" data-toggle="modal"
+                                               data-target="#confirm-modal" class="on-default remove-row"
+                                               style="padding-left: 5px;color: #f05050"title="删除"><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="vertical-align: middle;line-height: 26px"><span style="color:#26A69A">【星语互联科技】</span><br>北京星语互联科技有限公司</td>
+                                        <td style="vertical-align: middle;line-height: 26px"><mpm:tag identity="enterpriseType" value="CHANNELCUSTOMER" show-type="label"  key="code" /></td>
+                                        <td style="vertical-align: middle;line-height: 26px"><mpm:tag identity="businessType" value="INTERNATIONAL_SMS" show-type="label"  key="code" /></td>
+                                        <td style="vertical-align: middle;line-height: 26px"><mpm:tag identity="contentType" value="PERSONAL_LOAN" show-type="label"  key="code" /></td>
+                                        <td style="vertical-align: middle;line-height: 26px">http://mtw.so/6xOaa3<br>360数科-深圳风向-云启通</td>
+                                        <td style="vertical-align: middle;line-height: 26px"><a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a></td>
+                                        <td style="vertical-align: middle;line-height: 26px">2021-11-3</td>
+                                        <td style="vertical-align: middle;line-height: 26px">李先生<br>2021-11-3 12:45:47</td>
+
+                                        <td style="line-height: 26px;">
+                                            <a sec:authorize-url="/ec/resource/detail/*"
+                                               th:href="@{/ec/resource/detail/id}" class="on-default edit-row"
+                                               style="padding-left: 5px;color: #4BD396;"
+                                               title="查看详情"><i style="font-size: 18px" class="glyphicon glyphicon-search"></i></a>
+                                            <a sec:authorize-url="/ec/resource/edit/*" data-toggle="modal" data-target="#download-record"
+                                               class="on-default edit-row"
+                                               style="padding-left: 5px;color: #6B5FB5;"title="下载附件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
+                                            <a sec:authorize-url="/ec/resource/edit/*"
+                                               th:href="@{/ec/resource/edit/id}"class="on-default edit-row"
+                                               style="padding-left: 5px;color: #29b6f6;"title="编辑"><i style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
+                                            <a sec:authorize-url="/ec/resource/deleteById/*" data-toggle="modal"
+                                               data-target="#confirm-modal" class="on-default remove-row"
+                                               style="padding-left: 5px;color: #f05050"title="删除"><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
                                         </td>
                                     </tr>
 

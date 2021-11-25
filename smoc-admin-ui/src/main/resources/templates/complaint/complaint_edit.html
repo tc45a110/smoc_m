@@ -78,7 +78,8 @@
                                     <br>
                                     <br>
                                     <br>
-
+                                    <br>
+                                    <br>
                                 </div>
                                 <!-- end class p-20 -->
                             </div> <!-- end col -->
@@ -106,26 +107,39 @@
                                     被投诉号码：106929395555
                                 </div>
                                 <div class="form-group m-b-20">
-                                    <label for="e3Name">举报省份<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="e3Name" type="text"  class="form-control"
-                                           readonly autocomplete="off"
-                                           placeholder="举报省份">
+                                    <label>12321来源<span class="text-danger">*</span>&nbsp;</label>
+                                    <div class="radio radio-info radio-inline">
+                                        <input type="radio" id="inlineRadio2" name="businessPrrice" value="0">
+                                        <label for="inlineRadio2"> 否 </label>
+                                    </div>
+                                    <div class="radio radio-info radio-inline">
+                                        <input type="radio" id="inlineRadio1" name="businessPrrice" value="1" required>
+                                        <label for="inlineRadio1"> 是 </label>
+                                    </div>
                                 </div>
                                 <div class="form-group m-b-20">
                                     <mpm:tag id="complaintSource" identity="complaintSource" show-type="select" key="code"
-                                             class="form-control" name="complaintSource" value="" title="举报渠道"/>
+                                             class="form-control" name="complaintSource" value="" title="举报来源"/>
                                 </div>
                                 <div class="form-group m-b-20">
-                                    <label for="e32Name">举报频次<span class="text-danger">*</span>&nbsp;</label>
+                                    <label for="e32Name">下发频次<span class="text-danger">*</span>&nbsp;</label>
                                     <input id="e32Name" type="text"  class="form-control"
                                            readonly autocomplete="off"
-                                           placeholder="举报频次">
+                                           placeholder="下发频次">
                                 </div>
                                 <div class="form-group m-b-20">
                                     <label for="linkt">举报日期<span class="text-danger">*</span>&nbsp;</label>
                                     <input id="linkt" type="text"  class="form-control"
                                            required="" data-parsley-length="[2,12]" autocomplete="off"
                                            placeholder="举报日期">
+                                </div>
+                                <div class="form-group m-b-20">
+                                    <label for="linkt">处理标记<span class="text-danger">*</span>&nbsp;</label>
+                                    <select data-style="btn-default" name="complaintSource" data-live-search="true" id="complaintSource" class="selectpicker form-control" tabindex="-98">
+                                        <option value="" data-icon="mdi mdi-equal-box">--请选择处理标记--</option>
+                                        <option data-icon="mdi mdi-equal-box" value="01">系统处理</option>
+                                        <option data-icon="mdi mdi-equal-box" value="02">人工处理</option>
+                                    </select>
                                 </div>
                                 <div class="form-group m-b-20">
                                  <input  name="roleIds" checked  type="checkbox" required=""> 投诉号码 18908408860  同步加入黑名单
