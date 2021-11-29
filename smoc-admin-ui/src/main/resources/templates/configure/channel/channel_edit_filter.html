@@ -29,7 +29,42 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <div class="row">
-                                                <div class="col-sm-4 m-b-10" style="padding-left: 10px;">
+                                                <div class="col-sm-3 m-b-10">
+                                                    <label>单条字数<span class="text-danger">*</span>&nbsp;<span
+                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                    </label>
+                                                    <input type="text" placeholder="单条字数" required="" class="form-control" autocomplete="off">
+                                                </div>
+                                                <div class="col-sm-3 m-b-10">
+                                                    <label>长短信<span class="text-danger">*</span>&nbsp;<span
+                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                    </label>
+                                                    <input type="text" placeholder="长短信" required="" class="form-control" autocomplete="off">
+                                                </div>
+                                                <div class="col-sm-3 m-b-10">
+                                                    <label>最大发送速率（条/秒）<span class="text-danger">*</span>&nbsp;<span
+                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                    </label>
+                                                    <input type="text" placeholder="最大发送速率（条/秒" required="" class="form-control" autocomplete="off">
+                                                </div>
+                                                <div class="col-sm-3 m-b-10">
+                                                    <label>最大并发数<span class="text-danger">*</span>&nbsp;<span
+                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                    </label>
+                                                    <input type="text" placeholder="最大并发数" required="" class="form-control" autocomplete="off">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-sm-3 m-b-10">
+                                                    <label>RE正则表达式&nbsp;<span
+                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                    </label>
+                                                    <input type="text"   placeholder="RE正则表达式" class="form-control" autocomplete="off">
+                                                </div>
+                                                <div class="col-sm-3 m-b-10" style="padding-left: 10px;">
                                                     <label class="m-b-20">黑名单</label><br/>
                                                     <div class="radio radio-info radio-inline">
                                                         <input type="radio" id="inlineRadio3" name="black" value="0" required>
@@ -40,115 +75,63 @@
                                                         <label for="inlineRadio4"> 是 </label>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-4 m-b-10" style="padding-left: 10px;">
-                                                    <label class="m-b-20">是否支持上行</label><br/>
-                                                    <div class="radio radio-info radio-inline">
-                                                        <input type="radio" id="inlineRadio5" name="up" value="0">
-                                                        <label for="inlineRadio5"> 否 </label>
-                                                    </div>
-                                                    <div class="radio radio-info radio-inline">
-                                                        <input type="radio" id="inlineRadio6" name="up" value="1">
-                                                        <label for="inlineRadio6"> 是 </label>
-                                                    </div>
+                                                <div class="col-sm-3 m-b-10">
+                                                    <label>发送时间限制<span class="text-danger">*</span>&nbsp;<span
+                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                    </label>
+                                                    <input type="text" placeholder="用分号隔开；例如00:00:00-08:00:00;20:00:00-24:00:00"  required="" class="form-control" autocomplete="off">
                                                 </div>
-                                                <div class="col-sm-4 m-b-10" style="padding-left: 10px;">
-                                                    <label class="m-b-20">是否支持携号转网</label><br/>
-                                                    <div class="radio radio-info radio-inline">
-                                                        <input type="radio" id="inlineRadio7" name="transfer" value="0">
-                                                        <label for="inlineRadio7"> 否 </label>
-                                                    </div>
-                                                    <div class="radio radio-info radio-inline">
-                                                        <input type="radio" id="inlineRadio8" name="transfer" value="1">
-                                                        <label for="inlineRadio8"> 是 </label>
-                                                    </div>
+                                                <div class="col-sm-3 m-b-10">
+                                                    <label>最大重新发送次数<span class="text-danger">*</span>&nbsp;<span
+                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                    </label>
+                                                    <input type="text" placeholder="最大重新发送次数"  required="" class="form-control" autocomplete="off">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <div class="row">
-                                                <div class="col-sm-4 m-b-10">
-                                                    <label>屏蔽省份<span class="text-danger">*</span>&nbsp;<span
+                                                <div class="col-sm-3 m-b-10">
+                                                    <label>单号码流控（条/分钟）<span class="text-danger">*</span>&nbsp;<span
                                                             class="text-danger" style="font-weight: 200;font-size: 12px"></span>
                                                     </label>
-                                                    <input type="text" required="" class="form-control" autocomplete="off">
+                                                    <input type="text" placeholder="单号码流控（条/分钟）" required="" class="form-control" autocomplete="off">
                                                 </div>
-                                                <div class="col-sm-4 m-b-10">
-                                                    <label>RE正则表达式<span class="text-danger">*</span>&nbsp;<span
+                                                <div class="col-sm-3 m-b-10">
+                                                    <label>单号码流控（条/小时）<span class="text-danger">*</span>&nbsp;<span
                                                             class="text-danger" style="font-weight: 200;font-size: 12px"></span>
                                                     </label>
-                                                    <input type="text" required="" class="form-control" autocomplete="off">
+                                                    <input type="text" placeholder="单号码流控（条/小时）" required="" class="form-control" autocomplete="off">
                                                 </div>
-                                                <div class="col-sm-4 m-b-10">
-                                                    <label>签名规则<span class="text-danger">*</span>&nbsp;<span
+                                                <div class="col-sm-3 m-b-10">
+                                                    <label>单号码流控（条/天）<span class="text-danger">*</span>&nbsp;<span
                                                             class="text-danger" style="font-weight: 200;font-size: 12px"></span>
                                                     </label>
-                                                    <input type="text" required="" class="form-control" autocomplete="off">
+                                                    <input type="text" placeholder="单号码流控（条/天）" required="" class="form-control" autocomplete="off">
+                                                </div>
+                                                <div class="col-sm-3 m-b-10">
+                                                    <label>总发送条数<span class="text-danger">*</span>&nbsp;<span
+                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                    </label>
+                                                    <input type="text" placeholder="总发送条数" required="" class="form-control" autocomplete="off">
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-sm-3 m-b-10">
+                                                    <label>每日发送最大条数<span class="text-danger">*</span>&nbsp;<span
+                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                    </label>
+                                                    <input type="text" placeholder="每日发送最大条数" required="" class="form-control" autocomplete="off">
+                                                </div>
+                                                <div class="col-sm-3 m-b-10">
+                                                    <label>每月发送最大条数<span class="text-danger">*</span>&nbsp;<span
+                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                    </label>
+                                                    <input type="text" placeholder="每月发送最大条数" required="" class="form-control" autocomplete="off">
+                                                </div>
 
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-sm-4 m-b-10">
-                                                    <label>单号码流控(条/分钟)<span class="text-danger">*</span>&nbsp;<span
-                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
-                                                    </label>
-                                                    <input type="text" required="" class="form-control" autocomplete="off">
-                                                </div>
-                                                <div class="col-sm-4 m-b-10">
-                                                    <label>单号码流控(条/小时)<span class="text-danger">*</span>&nbsp;<span
-                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
-                                                    </label>
-                                                    <input type="text" required="" class="form-control" autocomplete="off">
-                                                </div>
-                                                <div class="col-sm-4 m-b-10">
-                                                    <label>单号码流控(条/天)<span class="text-danger">*</span>&nbsp;<span
-                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
-                                                    </label>
-                                                    <input type="text" required="" class="form-control" autocomplete="off">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-sm-4 m-b-10">
-                                                    <label>频次限制(条/分钟)<span class="text-danger">*</span>&nbsp;<span
-                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
-                                                    </label>
-                                                    <input type="text" required="" class="form-control" autocomplete="off">
-                                                </div>
-                                                <div class="col-sm-4 m-b-10">
-                                                    <label>频次限制(条/小时)<span class="text-danger">*</span>&nbsp;<span
-                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
-                                                    </label>
-                                                    <input type="text" required="" class="form-control" autocomplete="off">
-                                                </div>
-                                                <div class="col-sm-4 m-b-10">
-                                                    <label>频次限制(条/天)<span class="text-danger">*</span>&nbsp;<span
-                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
-                                                    </label>
-                                                    <input type="text" required="" class="form-control" autocomplete="off">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-sm-4 m-b-10">
-                                                    <label>频次限制(条/月)<span class="text-danger">*</span>&nbsp;<span
-                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
-                                                    </label>
-                                                    <input type="text" required="" class="form-control" autocomplete="off">
-                                                </div>
-                                                <div class="col-sm-4 m-b-10">
-                                                    <label>发送时间限制(开始)<span class="text-danger">*</span>&nbsp;<span
-                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
-                                                    </label>
-                                                    <input class="form-control" id="single-input" value="" placeholder="Now">
-                                                </div>
-                                                <div class="col-sm-4 m-b-10">
-                                                    <label>发送时间限制(结束)</label>
-                                                    <input type="text" required="" class="form-control" autocomplete="off">
-                                                </div>
 
                                             </div>
                                         </div>
@@ -156,14 +139,13 @@
                                     </div>
 
                                 </div>
-
+                                <div class="text-center" style="margin-bottom:20px">
+                                    <a type="button" class="btn btn-teal waves-effect waves-light">提交</a>
+                                </div>
                             </div>
                         </div> <!-- end col -->
                     </div> <!-- end row -->
-                    <div class="text-center" style="margin-bottom:20px">
-                        <a type="button" class="btn btn-teal waves-effect waves-light">提交</a>
-                        <a class="btn btn-default waves-effect waves-light" style="margin-left:10px">查看明细</a>
-                    </div>
+
                 </form>
                 <!-- end form -->
 
