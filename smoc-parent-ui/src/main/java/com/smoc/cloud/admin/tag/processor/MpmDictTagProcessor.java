@@ -76,6 +76,8 @@ public class MpmDictTagProcessor extends AbstractAttributeTagProcessor {
 
     private static final String ONCHANGE="onchange";
 
+    private static final String STYLE = "style";
+
     //字典数据
     private List<Dict> dictList = new ArrayList<>();
 
@@ -363,6 +365,9 @@ public class MpmDictTagProcessor extends AbstractAttributeTagProcessor {
         final IModelFactory modelFactory = iTemplateContext.getModelFactory();
         final IModel model = modelFactory.createModel();
 
+        //ID
+        String id = attributeMap.get(ID);
+
         //名称
         String name = attributeMap.get(NAME);
         if (StringUtils.isEmpty(name)) {
@@ -420,6 +425,13 @@ public class MpmDictTagProcessor extends AbstractAttributeTagProcessor {
             attriCheckBox.put("name", name);
             attriCheckBox.put("type", "checkbox");
             attriCheckBox.put("value", fieldValue);
+            attriCheckBox.put("id", id+"-"+fieldValue);
+
+            //事件
+            String onchange = attributeMap.get(ONCHANGE);
+            if (!StringUtils.isEmpty(onchange)) {
+                attriCheckBox.put("onchange", onchange);
+            }
 
             if (!StringUtils.isEmpty(required)) {
                 attriCheckBox.put("required", "");
@@ -483,12 +495,16 @@ public class MpmDictTagProcessor extends AbstractAttributeTagProcessor {
         String classValue = attributeMap.get(CLASS);
         if (StringUtils.isEmpty(classValue)) {
 
-            attri.put("class", "radio radio-info");
+            attri.put("class", "radio radio-info checkbox-inline");
         } else {
 
-            attri.put("class", "radio radio-info " + classValue);
+            attri.put("class", "radio radio-info checkbox-inline " + classValue);
         }
 
+        String style =  attributeMap.get(STYLE);
+        if(!StringUtils.isEmpty(style)){
+            attri.put("style", style);
+        }
 
         for (Dict dict : dictList) {
 
@@ -515,6 +531,15 @@ public class MpmDictTagProcessor extends AbstractAttributeTagProcessor {
 
             if (!StringUtils.isEmpty(value) && fieldValue.equals(value)) {
                 attriCheckBox.put("checked", "true");
+            }
+
+            //ID
+            String id = attributeMap.get(ID);
+
+            //事件
+            String onchange = attributeMap.get(ONCHANGE);
+            if (!StringUtils.isEmpty(onchange)) {
+                attriCheckBox.put("onchange", onchange);
             }
 
             model.add(modelFactory.createOpenElementTag("input", attriCheckBox, null, false));

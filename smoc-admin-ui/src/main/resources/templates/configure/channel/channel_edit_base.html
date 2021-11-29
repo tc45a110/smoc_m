@@ -101,7 +101,7 @@
                                                     <label>是否支持携号转网<span class="text-danger">*</span>&nbsp;<span
                                                             class="text-danger" style="font-weight: 200;font-size: 12px"></span>
                                                     </label><br/>
-                                                    <mpm:tag id="isOrNo" identity="isOrNo" name="isOrNo" value="0" show-type="checkbox"  key="code" class="form-control" data-icon="mdi mdi-view-module" title="是否" />
+                                                    <mpm:tag id="isTransfer" identity="isOrNo"  name="isTransfer" value="0" show-type="radio" style="margin-top:0px"   key="code" data-icon="mdi mdi-view-module" title="是否" />
                                                 </div>
                                             </div>
                                         </div>
@@ -111,14 +111,14 @@
                                                 <div class="col-sm-6 m-b-10">
                                                     <label>有无报告<span class="text-danger">*</span>&nbsp;<span
                                                             class="text-danger" style="font-weight: 200;font-size: 12px"></span>
-                                                    </label><br/>
-                                                    <mpm:tag id="yesOrNo" identity="yesOrNo" name="yesOrNo" value="1" show-type="checkbox"  key="code" class="form-control" data-icon="mdi mdi-view-module" title="有无" />
+                                                    </label>
+                                                    <mpm:tag id="yesOrNo" identity="yesOrNo" name="yesOrNo1" value="1" show-type="radio" style="margin-top:0px"  key="code" data-icon="mdi mdi-view-module" title="有无" />
                                                 </div>
                                                 <div class="col-sm-6 m-b-10">
-                                                    <label>有无上行<span class="text-danger">*</span>&nbsp;<span
+                                                    <label class="m-t-10" style="margin-right: 10px">有无上行<span class="text-danger">*</span>&nbsp;<span
                                                             class="text-danger" style="font-weight: 200;font-size: 12px"></span>
-                                                    </label><br/>
-                                                    <mpm:tag id="yesOrNo" identity="yesOrNo" name="yesOrNo" value="1" show-type="checkbox"  key="code" class="form-control" data-icon="mdi mdi-view-module" title="有无" />
+                                                    </label>
+                                                    <mpm:tag id="yesOrNo" identity="yesOrNo" name="yesOrNo2" value="1" show-type="radio" style="margin-top:0px"  key="code"  data-icon="mdi mdi-view-module" title="有无" />
                                                 </div>
 
                                             </div>
@@ -126,50 +126,54 @@
                                         <div class="form-group">
                                             <div class="row">
                                                 <div class="col-sm-6 m-b-10">
-                                                    <label>通道码号来源<span class="text-danger">*</span>&nbsp;<span
+                                                    <label class="m-r-5">通道码号来源<span class="text-danger">*</span>&nbsp;<span
                                                             class="text-danger" style="font-weight: 200;font-size: 12px"></span>
-                                                    </label><br/>
-                                                    <mpm:tag id="codeSource" identity="codeSource" name="codeSource" value="" show-type="checkbox"  key="code" class="form-control" data-icon="mdi mdi-view-module" title="有无" />
+                                                    </label>
+                                                    <mpm:tag id="codeSource" identity="codeSource" name="codeSource" value="OWN" show-type="radio" style="margin-top:0px"  key="code" data-icon="mdi mdi-view-module" title="有无" />
                                                 </div>
                                                 <div class="col-sm-6 m-b-10">
-                                                    <label>通道码号用途<span class="text-danger">*</span>&nbsp;<span
+                                                    <label class="m-r-5">通道码号用途<span class="text-danger">*</span>&nbsp;<span
                                                             class="text-danger" style="font-weight: 200;font-size: 12px"></span>
-                                                    </label><br/>
-                                                    <mpm:tag id="codeUseType" identity="codeUseType" name="codeUseType" value="" show-type="checkbox"  key="code" class="form-control" data-icon="mdi mdi-view-module" title="有无" />
+                                                    </label>
+                                                    <mpm:tag id="codeUseType" identity="codeUseType" name="codeUseType1" value="SELF_USE" show-type="radio"  style="margin-top:0px" key="code"  data-icon="mdi mdi-view-module" title="有无" />
                                                 </div>
                                             </div>
                                         </div>
 
                                     </div>
-                                    <div class="col-md-6" style="m-l-10">
+                                    <div class="col-md-6 p-l-r-10">
 
                                         <div class="form-group">
                                             <div class="row">
                                                 <div class="col-sm-12 m-b-10">
-                                                    <label>业务区域类型<span class="text-danger">*</span>&nbsp;<span
+                                                    <label class="m-r-5">业务区域类型<span class="text-danger">*</span>&nbsp;<span
                                                             class="text-danger" style="font-weight: 200;font-size: 12px"></span>
-                                                    </label><br/>
-                                                    <mpm:tag id="businessAreaType" identity="businessAreaType" value="COUNTRY" name="businessAreaType" show-type="checkbox"  key="code" class="form-control" data-icon="mdi mdi-view-module" title="业务区域类型" />
+                                                    </label>
+                                                    <mpm:tag id="businessAreaType" identity="businessAreaType" value="COUNTRY" onchange="areaSwith()" name="businessAreaType" style="margin-top:0px" show-type="radio"  key="code" data-icon="mdi mdi-view-module" title="业务区域类型" />
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-sm-12 m-b-10" style="text-align:left">
-                                                    <label>屏蔽区域<span
-                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
-                                                    </label><br/>&nbsp;&nbsp;
-                                                    <mpm:tag id="provices" identity="provices" name="provices" show-type="checkbox"  key="code" class="form-control" data-icon="mdi mdi-view-module" title="屏蔽区域" />
-                                                </div>
+                                            <div  class="row">
+                                                <div  class="col-sm-12 m-b-10" style="text-align:left">
+                                                    <label id="maskAreas" style="display:block">屏蔽区域</label>
+                                                    <label id="businessAreas" style="display: none">业务区域<span class="text-danger" style="font-weight: 200;font-size: 12px">*</span></label>
+                                                    <div id="province_areas" style="text-align: left;display:block">&nbsp;
+                                                       <mpm:tag id="provices" identity="provices" name="provices" show-type="checkbox"  key="code" class="form-control" data-icon="mdi mdi-view-module" title="屏蔽区域" />
+                                                    </div>
+                                                    <div id="international_areas" style="text-align: left;display:none">&nbsp;
+                                                        <mpm:tag id="internationalCountry" identity="internationalCountry" name="internationalCountry" show-type="checkbox"  key="code" class="form-control" data-icon="mdi mdi-view-module" title="屏蔽区域" />
+                                                    </div>
+                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <div class="row">
                                                 <div class="col-sm-6 m-b-10">
-                                                    <label>计价方式<span class="text-danger">*</span>&nbsp;<span
+                                                    <label class="m-r-5">计价方式<span class="text-danger">*</span>&nbsp;<span
                                                             class="text-danger" style="font-weight: 200;font-size: 12px"></span>
-                                                    </label><br/>
-                                                    <mpm:tag id="chargeType" identity="chargeType" value="01" name="chargeType" show-type="checkbox"  key="code" class="form-control" data-icon="mdi mdi-view-module" title="计价方式" />
+                                                    </label><br>
+                                                    <mpm:tag id="chargeType" identity="chargeType" value="UNIFIED_PRICE" name="chargeType" onchange="chargeSwith()" style="margin-top:10px" show-type="radio"  key="code" data-icon="mdi mdi-view-module" title="计价方式" />
                                                 </div>
                                                 <div class="col-sm-6 m-b-10">
                                                     <label>资费(元/条)&nbsp;<span
@@ -186,7 +190,7 @@
                                                     <label>签名方式<span class="text-danger">*</span>&nbsp;<span
                                                             class="text-danger" style="font-weight: 200;font-size: 12px"></span>
                                                     </label><br/>
-                                                    <mpm:tag id="signType" identity="signType" value="1" name="signType" show-type="checkbox"  key="code" class="form-control" data-icon="mdi mdi-view-module" title="签名方式" />
+                                                    <mpm:tag id="signType" identity="signType" value="1" name="signType" show-type="radio" style="margin-top:10px"  key="code" data-icon="mdi mdi-view-module" title="签名方式" />
                                                 </div>
                                                 <div class="col-sm-6 m-b-10">
                                                     <label>通道状态<span class="text-danger">*</span>&nbsp;<span
@@ -249,6 +253,36 @@
 <th:block th:insert="fragments/common_fragments :: select_js"/>
 <th:block th:insert="fragments/common_fragments :: common_submit_form"/>
 <script>
+
+    //计价方式 切换
+    function chargeSwith() {
+        var checkedChargeType = $('input:radio[name="chargeType"]:checked').val();
+
+    }
+
+    //业务区域类型切换
+    function areaSwith(){
+        var checkedBusinessAreaType = $('input:radio[name="businessAreaType"]:checked').val();
+        if("COUNTRY" == checkedBusinessAreaType){
+            $('#maskAreas').css('display', 'block');
+            $('#businessAreas').css('display', 'none');
+            $('#province_areas').css('display', 'block');
+            $('#international_areas').css('display', 'none');
+        }
+        if("PROVINCE" == checkedBusinessAreaType){
+            $('#maskAreas').css('display', 'none');
+            $('#businessAreas').css('display', 'block');
+            $('#province_areas').css('display', 'block');
+            $('#international_areas').css('display', 'none');
+        }
+        if("INTERNATIONAL" == checkedBusinessAreaType){
+            $('#maskAreas').css('display', 'none');
+            $('#businessAreas').css('display', 'block');
+            $('#province_areas').css('display', 'none');
+            $('#international_areas').css('display', 'block');
+        }
+    }
+
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
