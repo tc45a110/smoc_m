@@ -1,5 +1,6 @@
 package com.smoc.cloud.configure.channel.controller;
 
+import com.smoc.cloud.common.auth.qo.Dict;
 import com.smoc.cloud.common.page.PageParams;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -8,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 通道管理
@@ -138,7 +141,7 @@ public class ChannelController {
     }
 
     /**
-     * 过滤信息
+     * 计价设置
      *
      * @return
      */
@@ -146,6 +149,25 @@ public class ChannelController {
     public ModelAndView price(@PathVariable String id, HttpServletRequest request) {
 
         ModelAndView view = new ModelAndView("configure/channel/channel_edit_price");
+
+        return view;
+
+    }
+
+    /**
+     * 扩展参数
+     *
+     * @return
+     */
+    @RequestMapping(value = "/extend/{id}", method = RequestMethod.GET)
+    public ModelAndView extend(@PathVariable String id, HttpServletRequest request) {
+
+        ModelAndView view = new ModelAndView("configure/channel/channel_edit_extend_param");
+
+        Map<String, List<Dict>> dictMap = (Map<String, List<Dict>>) request.getSession().getServletContext().getAttribute("dict");
+        List<Dict> dictList = dictMap.get("channelExtendField");
+
+        view.addObject("channelExtendFields",dictList);
 
         return view;
 

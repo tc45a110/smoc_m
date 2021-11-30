@@ -57,10 +57,13 @@
                                             <li class="" id="tab3"><a onclick="active('3')"  sec:authorize-url="/configure/channel/filter/*"
                                                                       th:href="@{/configure/channel/filter/id}"
                                                                       th:target="tab-content">通道过滤配置</a></li>
-                                            <li class="" id="tab4"><a onclick="active('4')"  sec:authorize-url="/configure/channel/filter/*"
+                                            <li class="" id="tab4"><a onclick="active('4')"  sec:authorize-url="/configure/channel/extend/*"
+                                                                      th:href="@{/configure/channel/extend/id}"
+                                                                      th:target="tab-content">通道扩展参数配置</a></li>
+                                            <li class="" id="tab5"><a onclick="active('5')"  sec:authorize-url="/configure/channel/price/*"
                                                                       th:href="@{/configure/channel/price/id}"
                                                                       th:target="tab-content">区域计价配置</a></li>
-                                            <li class="" id="tab5"><a onclick="active('5')"  sec:authorize-url="/configure/channel/supplyAgainChannel/*"
+                                            <li class="" id="tab6"><a onclick="active('6')"  sec:authorize-url="/configure/channel/supplyAgainChannel/*"
                                                                       th:href="@{/configure/channel/supplyAgainChannel/id}"
                                                                       th:target="tab-content">配置失败补发通道</a></li>
                                         </ul>
