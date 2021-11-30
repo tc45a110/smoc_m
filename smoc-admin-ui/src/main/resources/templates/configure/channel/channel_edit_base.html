@@ -179,7 +179,7 @@
                                                     <label>资费(元/条)&nbsp;<span
                                                             class="text-danger" style="font-weight: 200;font-size: 12px"></span>
                                                     </label>
-                                                    <input type="text" required="" class="form-control" autocomplete="off"
+                                                    <input id="fee" type="text"  class="form-control" autocomplete="off"
                                                            placeholder="资费">
                                                 </div>
                                             </div>
@@ -257,24 +257,40 @@
     //计价方式 切换
     function chargeSwith() {
         var checkedChargeType = $('input:radio[name="chargeType"]:checked').val();
-
+        //统一计价
+        if("UNIFIED_PRICE" == checkedChargeType){
+            $('#fee').removeAttr("placeholder");
+            $('#fee').removeAttr("readonly");
+            $('#fee').attr("required","");
+            $('#fee').attr("placeholder","资费");
+        }
+        //区域计价
+        if("AREA_PRICE" == checkedChargeType){
+            $('#fee').removeAttr("placeholder");
+            $('#fee').removeAttr("required","");
+            $('#fee').attr("readonly","true");
+            $('#fee').attr("placeholder","区域计费条数太多，请点\"区域计费\"页签");
+        }
     }
 
     //业务区域类型切换
     function areaSwith(){
         var checkedBusinessAreaType = $('input:radio[name="businessAreaType"]:checked').val();
+        //全国
         if("COUNTRY" == checkedBusinessAreaType){
             $('#maskAreas').css('display', 'block');
             $('#businessAreas').css('display', 'none');
             $('#province_areas').css('display', 'block');
             $('#international_areas').css('display', 'none');
         }
+        //分省
         if("PROVINCE" == checkedBusinessAreaType){
             $('#maskAreas').css('display', 'none');
             $('#businessAreas').css('display', 'block');
             $('#province_areas').css('display', 'block');
             $('#international_areas').css('display', 'none');
         }
+        //国际
         if("INTERNATIONAL" == checkedBusinessAreaType){
             $('#maskAreas').css('display', 'none');
             $('#businessAreas').css('display', 'block');

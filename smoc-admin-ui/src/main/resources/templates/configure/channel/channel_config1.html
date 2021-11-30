@@ -51,18 +51,30 @@
                                             <li class="active" id="tab1"><a onclick="active('1')"  sec:authorize-url="/configure/channel/edit/*"
                                                                             th:href="@{/configure/channel/edit/id}"
                                                                             th:target="tab-content">通道基本信息</a></li>
-                                            <li class="" id="tab2"><a onclick="active('2')"  sec:authorize-url="/configure/channel/interface/*"
+                                            <li class="" id="tab7"><a onclick="active('7')"  sec:authorize-url="/configure/channel/interface/*"
                                                                             th:href="@{/configure/channel/interface/id}"
                                                                             th:target="tab-content">通道接口参数</a></li>
-                                            <li class="" id="tab3"><a onclick="active('3')"  sec:authorize-url="/configure/channel/filter/*"
+                                            <li class="" id="tab8"><a onclick="active('8')"  sec:authorize-url="/configure/channel/filter/*"
                                                                       th:href="@{/configure/channel/filter/id}"
                                                                       th:target="tab-content">通道过滤配置</a></li>
-                                            <li class="" id="tab4"><a onclick="active('4')"  sec:authorize-url="/configure/channel/filter/*"
-                                                                      th:href="@{/configure/channel/price/id}"
-                                                                      th:target="tab-content">区域计价配置</a></li>
-                                            <li class="" id="tab5"><a onclick="active('5')"  sec:authorize-url="/configure/channel/supplyAgainChannel/*"
+                                            <li class="" id="tab9"><a onclick="active('9')"  sec:authorize-url="/configure/channel/supplyAgainChannel/*"
                                                                       th:href="@{/configure/channel/supplyAgainChannel/id}"
                                                                       th:target="tab-content">配置失败补发通道</a></li>
+                                            <li class="" id="tab2"><a onclick="active('2')" sec:authorize-url="/configure/channel/customerRecode/*"
+                                                                      th:href="@{/configure/channel/customerRecode/id}"
+                                                                      th:target="tab-content">用户使用记录</a></li>
+                                            <li class="" id="tab3"><a onclick="active('3')" sec:authorize-url="/configure/channel/productRecode/*"
+                                                                      th:href="@{/configure/channel/productRecode/id}"
+                                                                      th:target="tab-content">产品使用记录</a></li>
+                                            <li class="" id="tab4"><a onclick="active('4')" sec:authorize-url="/configure/channel/channelPriceList/*"
+                                                                      th:href="@{/configure/channel/channelPriceList/id}"
+                                                                      th:target="tab-content">价格历史记录</a></li>
+                                            <li class="" id="tab5"><a onclick="active('5')" sec:authorize-url="/configure/channel/channelBusinessFeesList/*"
+                                                                      th:href="@{/configure/channel/channelBusinessFeesList/id}"
+                                                                      th:target="tab-content">商务费历史记录</a></li>
+                                            <li class="" id="tab6"><a onclick="active('6')" sec:authorize-url="/configure/channel/statisticsSendCount/*"
+                                                                      th:href="@{/configure/channel/statisticsSendCount/id}"
+                                                                      th:target="tab-content">统计发送量</a></li>
                                         </ul>
                                         <div class="tab-cotent" style="background-color:#fff">
                                             <iframe name="tab-content" id="tab-content" th:frameBorder="0" th:scrolling="auto"

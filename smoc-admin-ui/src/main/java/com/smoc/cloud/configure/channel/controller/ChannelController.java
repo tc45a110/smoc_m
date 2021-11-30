@@ -138,6 +138,20 @@ public class ChannelController {
     }
 
     /**
+     * 过滤信息
+     *
+     * @return
+     */
+    @RequestMapping(value = "/price/{id}", method = RequestMethod.GET)
+    public ModelAndView price(@PathVariable String id, HttpServletRequest request) {
+
+        ModelAndView view = new ModelAndView("configure/channel/channel_edit_price");
+
+        return view;
+
+    }
+
+    /**
      * 客户使用记录
      *
      * @return
