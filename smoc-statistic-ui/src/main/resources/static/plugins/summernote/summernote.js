@@ -6239,7 +6239,7 @@
       var $container = options.dialogsInBody ? $(document.body) : $editor;
 
       var body = '<div class="form-group row-fluid">' +
-          '<label>' + lang.video.url + ' <small class="text-muted">' + lang.video.providers + '</small></label>' +
+          '<label>' + lang.video.url + ' <small style="font-size:12px">' + lang.video.providers + '</small></label>' +
           '<input class="note-video-url form-control span12" type="text" />' +
           '</div>';
       var footer = '<button href="#" class="btn btn-primary note-video-btn disabled" disabled>' + lang.video.insert + '</button>';

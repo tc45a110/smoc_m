@@ -71,25 +71,25 @@ public class ChannelController {
     }
 
     /**
-     * 添加通道
+     * 通道配置维护中心
      *
      * @return
      */
-    @RequestMapping(value = "/add", method = RequestMethod.GET)
-    public ModelAndView add(HttpServletRequest request) {
+    @RequestMapping(value = "/edit_center/{id}", method = RequestMethod.GET)
+    public ModelAndView view(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("configure/channel/channel_add");
+        ModelAndView view = new ModelAndView("configure/channel/channel_edit_center");
 
         return view;
 
     }
 
     /**
-     * 编辑通道
+     * 通道基本信息编辑
      *
      * @return
      */
-    @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/edit/base/{id}", method = RequestMethod.GET)
     public ModelAndView edit(@PathVariable String id, HttpServletRequest request) {
 
         ModelAndView view = new ModelAndView("configure/channel/channel_edit_base");
@@ -99,25 +99,11 @@ public class ChannelController {
     }
 
     /**
-     * 查看通道
+     * 通道接口信息维护
      *
      * @return
      */
-    @RequestMapping(value = "/config/{id}", method = RequestMethod.GET)
-    public ModelAndView view(@PathVariable String id, HttpServletRequest request) {
-
-        ModelAndView view = new ModelAndView("configure/channel/channel_config");
-
-        return view;
-
-    }
-
-    /**
-     * 接口信息
-     *
-     * @return
-     */
-    @RequestMapping(value = "/interface/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/edit/interface/{id}", method = RequestMethod.GET)
     public ModelAndView detail(@PathVariable String id, HttpServletRequest request) {
 
         ModelAndView view = new ModelAndView("configure/channel/channel_edit_interface");
@@ -127,11 +113,11 @@ public class ChannelController {
     }
 
     /**
-     * 过滤信息
+     * 通道过滤信息维护
      *
      * @return
      */
-    @RequestMapping(value = "/filter/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/edit/filter/{id}", method = RequestMethod.GET)
     public ModelAndView filter(@PathVariable String id, HttpServletRequest request) {
 
         ModelAndView view = new ModelAndView("configure/channel/channel_edit_filter");
@@ -145,7 +131,7 @@ public class ChannelController {
      *
      * @return
      */
-    @RequestMapping(value = "/price/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/edit/price/{id}", method = RequestMethod.GET)
     public ModelAndView price(@PathVariable String id, HttpServletRequest request) {
 
         ModelAndView view = new ModelAndView("configure/channel/channel_edit_price");
@@ -155,11 +141,11 @@ public class ChannelController {
     }
 
     /**
-     * 扩展参数
+     * 通道扩展参数
      *
      * @return
      */
-    @RequestMapping(value = "/extend/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/edit/extend/{id}", method = RequestMethod.GET)
     public ModelAndView extend(@PathVariable String id, HttpServletRequest request) {
 
         ModelAndView view = new ModelAndView("configure/channel/channel_edit_extend_param");

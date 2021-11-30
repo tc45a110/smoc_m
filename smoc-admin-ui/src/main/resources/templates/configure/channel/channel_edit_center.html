@@ -48,28 +48,25 @@
                                 <div class="col-md-12">
                                     <div class="card-box">
                                         <ul class="nav nav-pills m-b-30 pull-right">
-                                            <li class="active" id="tab1"><a onclick="active('1')"  sec:authorize-url="/configure/channel/edit/*"
-                                                                            th:href="@{/configure/channel/edit/id}"
+                                            <li class="active" id="tab1"><a onclick="active('1')"  sec:authorize-url="/configure/channel/edit/base/*"
+                                                                            th:href="@{/configure/channel/edit/base/id}"
                                                                             th:target="tab-content"><i class="mdi mdi-star" style="margin-right:5px;color:#f35864"></i>通道基本信息</a></li>
-                                            <li class="" id="tab2"><a onclick="active('2')"  sec:authorize-url="/configure/channel/interface/*"
-                                                                            th:href="@{/configure/channel/interface/id}"
+                                            <li class="" id="tab2"><a onclick="active('2')"  sec:authorize-url="/configure/channel/edit/interface/*"
+                                                                            th:href="@{/configure/channel/edit/interface/id}"
                                                                             th:target="tab-content"><i class="mdi mdi-star" style="margin-right:5px;color:#f35864"></i>通道接口参数</a></li>
-                                            <li class="" id="tab3"><a onclick="active('3')"  sec:authorize-url="/configure/channel/filter/*"
-                                                                      th:href="@{/configure/channel/filter/id}"
+                                            <li class="" id="tab3"><a onclick="active('3')"  sec:authorize-url="/configure/channel/edit/filter/*"
+                                                                      th:href="@{/configure/channel/edit/filter/id}"
                                                                       th:target="tab-content"><i class="mdi mdi-star" style="margin-right:5px;color:#f35864"></i>通道过滤配置</a></li>
-                                            <li class="" id="tab4"><a onclick="active('4')"  sec:authorize-url="/configure/channel/extend/*"
-                                                                      th:href="@{/configure/channel/extend/id}"
+                                            <li class="" id="tab4"><a onclick="active('4')"  sec:authorize-url="/configure/channel/edit/price/*"
+                                                                      th:href="@{/configure/channel/edit/price/id}"
+                                                                      th:target="tab-content"><i class="mdi mdi-star" style="margin-right:5px;color:#f35864"></i>区域计价配置</a></li>
+                                            <li class="" id="tab5"><a onclick="active('5')"  sec:authorize-url="/configure/channel/edit/extend/*"
+                                                                      th:href="@{/configure/channel/edit/extend/id}"
                                                                       th:target="tab-content">通道扩展参数配置</a></li>
-                                            <li class="" id="tab5"><a onclick="active('5')"  sec:authorize-url="/configure/channel/price/*"
-                                                                      th:href="@{/configure/channel/price/id}"
-                                                                      th:target="tab-content">区域计价配置</a></li>
-                                            <li class="" id="tab6"><a onclick="active('6')"  sec:authorize-url="/configure/channel/supplyAgainChannel/*"
-                                                                      th:href="@{/configure/channel/supplyAgainChannel/id}"
-                                                                      th:target="tab-content">配置失败补发通道</a></li>
                                         </ul>
                                         <div class="tab-cotent" style="background-color:#fff">
                                             <iframe name="tab-content" id="tab-content" th:frameBorder="0" th:scrolling="auto"
-                                                    th:src="@{/configure/channel/edit/id}" style="padding: 0px; width: 100%; height: 2000px;background-color:#fff"> </iframe>
+                                                    th:src="@{/configure/channel/edit/base/id}" style="padding: 0px; width: 100%; height: 1000px;background-color:#fff"> </iframe>
                                         </div>
                                     </div>
                                 </div> <!-- end col -->

@@ -82,91 +82,43 @@
         <!-- end row -->
 
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
-            <div  class="col-md-6">
-                <div class="property-card property-horizontal">
+            <div  class="col-md-6" >
+                <div class="property-card property-horizontal" style="margin-bottom:15px">
                     <div class="row">
                         <div class="col-sm-12">
-                            <div class="property-content">
+                            <div class="property-content" >
                                 <div class="listingInfo">
                                     <div class="">
-                                        <h4><a href="#" class="text-dark">10691111-移动-北京</a></h4>
+                                        <h4>10691111-联通-湖北</h4>
                                     </div>
                                     <div class="col-sm-6">
-                                        <p class="text-muted"><i class="mdi mdi-blackberry m-r-5"></i>码号：<span style="color: #3ac9d6">10691111</span></p>
-                                        <p class="text-muted"><i class="mdi mdi-access-point m-r-5"></i>接入点：<mpm:tag identity="codePoint" value="GROUP" show-type="label" key="code" /></p>
-                                        <p class="text-muted"><i class="mdi mdi-source-pull m-r-5"></i>码号来源：<mpm:tag identity="codeSource" value="OWN" show-type="label" key="code" /></p>
-                                        <p class="text-muted"><i class="fa fa-money m-r-5"></i>投诉率要求：0.5</p>
+                                        <p style="font-size:12px"><i class="mdi mdi-blackberry m-r-5"></i>码号：<span style="color: #3ac9d6">10692222</span></p>
+                                        <p style="font-size:12px"><i class="mdi mdi-access-point m-r-5"></i>接入点：<mpm:tag identity="codePoint" value="PROVINCE" show-type="label" key="code" /></p>
+                                        <p style="font-size:12px"><i class="mdi mdi-source-pull m-r-5"></i>码号来源：<mpm:tag identity="codeSource" value="RENT" show-type="label" key="code" /></p>
+                                        <p style="font-size:12px"><i class="fa fa-money m-r-5"></i>投诉率要求：0.5</p>
                                     </div>
                                     <div class="col-sm-6">
-                                        <p class="text-muted"><i class="mdi mdi-blackberry m-r-5"></i>计费号码/CA编号：CA000158</p>
-                                        <p class="text-muted"><i class="mdi mdi-calendar-text m-r-5"></i>接入时间：2021-10-29</p>
-                                        <p class="text-muted"><i class="fa fa-money m-r-5"></i>资费(元/条)：0.5</p>
-                                        <p class="text-muted"><i class="mdi mdi-counter m-r-5"></i>低消要求(万条)：10000</p>
+                                        <p style="font-size:12px"><i class="mdi mdi-blackberry m-r-5"></i>计费号码/CA编号：CA000158</p>
+                                        <p style="font-size:12px"><i class="mdi mdi-calendar-text m-r-5"></i>接入时间：2021-10-29</p>
+                                        <p style="font-size:12px"><i class="fa fa-money m-r-5"></i>资费(元/条)：0.5</p>
+                                        <p style="font-size:12px"><i class="mdi mdi-counter m-r-5"></i>低消要求(万条)：10000</p>
 
                                     </div>
                                 </div>
                                 <div class="property-action">
                                     <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="业务类型"
-                                       style="color:#188AE2;border: 1px solid #188AE2">
-                                        <i class="mdi mdi-apps"></i>
-                                        <span><mpm:tag identity="businessType" value="TEXT_SMS" show-type="label"  key="code" /></span>
-                                    </a>
-                                    <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="码号状态"
-                                       style="color:#3AC9D6;border: 1px solid #3AC9D6">
-                                        <i class="mdi mdi-view-module"></i>
-                                        <span> <mpm:tag identity="codeStatus" value="001" show-type="label"  key="code"/></span>
-                                    </a>
-                                    <div class="pull-right">
-                                        <a class="btn btn-primary" sec:authorize-url="/configure/codenumber/view/*" th:href="@{/configure/codenumber/view/id}">查看</a>
-                                        <a class="btn btn-info" sec:authorize-url="/configure/codenumber/add" th:href="@{/configure/codenumber/add}">编辑</a>
-                                    </div>
-                                </div>
-                                <!-- end. Card actions -->
-                            </div>
-                        </div>
-                        <!-- /col 8 -->
-                    </div>
-                    <!-- /inner row -->
-                </div>
-
-            </div> <!-- end col -->
-            <div  class="col-md-6">
-                <div class="property-card property-horizontal">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="property-content">
-                                <div class="listingInfo">
-                                    <div class="">
-                                        <h4><a href="#" class="text-dark">10691111-联通-湖北</a></h4>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <p class="text-muted"><i class="mdi mdi-blackberry m-r-5"></i>码号：<span style="color: #3ac9d6">10692222</span></p>
-                                        <p class="text-muted"><i class="mdi mdi-access-point m-r-5"></i>接入点：<mpm:tag identity="codePoint" value="PROVINCE" show-type="label" key="code" /></p>
-                                        <p class="text-muted"><i class="mdi mdi-source-pull m-r-5"></i>码号来源：<mpm:tag identity="codeSource" value="RENT" show-type="label" key="code" /></p>
-                                        <p class="text-muted"><i class="fa fa-money m-r-5"></i>投诉率要求：0.5</p>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <p class="text-muted"><i class="mdi mdi-blackberry m-r-5"></i>计费号码/CA编号：CA000158</p>
-                                        <p class="text-muted"><i class="mdi mdi-calendar-text m-r-5"></i>接入时间：2021-10-29</p>
-                                        <p class="text-muted"><i class="fa fa-money m-r-5"></i>资费(元/条)：0.5</p>
-                                        <p class="text-muted"><i class="mdi mdi-counter m-r-5"></i>低消要求(万条)：10000</p>
-
-                                    </div>
-                                </div>
-                                <div class="property-action">
-                                    <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="业务类型"
-                                       style="color:#188AE2;border: 1px solid #188AE2">
+                                       style="font-size:12px;color:#188AE2;border: 1px solid #188AE2">
                                         <i class="mdi mdi-apps"></i>
                                         <span><mpm:tag identity="businessType" value="MMS" show-type="label"  key="code" /></span>
                                     </a>
                                     <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="码号状态"
-                                       style="color:#8D6E63;border: 1px solid #8D6E63">
+                                       style="font-size:12px;color:#8D6E63;border: 1px solid #8D6E63">
                                         <i class="mdi mdi-view-module"></i>
                                         <span> <mpm:tag identity="codeStatus" value="002" show-type="label"  key="code"/></span>
                                     </a>
                                     <div class="pull-right">
-                                        <a class="btn btn-primary" sec:authorize-url="/configure/codenumber/view/*" th:href="@{/configure/codenumber/view/id}">查看</a>
-                                        <a class="btn btn-info" sec:authorize-url="/configure/codenumber/add" th:href="@{/configure/codenumber/add}">编辑</a>
+                                        <a class="btn btn-xs btn-primary" sec:authorize-url="/configure/codenumber/view/*" th:href="@{/configure/codenumber/view/id}">查看</a>
+                                        <a class="btn btn-xs btn-info" sec:authorize-url="/configure/codenumber/add" th:href="@{/configure/codenumber/add}">编辑</a>
                                     </div>
                                 </div>
                                 <!-- end. Card actions -->
@@ -174,47 +126,45 @@
                         </div>
                         <!-- /col 8 -->
                     </div>
-                    <!-- /inner row -->
                 </div>
-
-            </div> <!-- end col -->
+            </div>
             <div  class="col-md-6">
-                <div class="property-card property-horizontal">
+                <div class="property-card property-horizontal" style="margin-bottom:15px">
                     <div class="row">
                         <div class="col-sm-12">
-                            <div class="property-content">
+                            <div class="property-content" >
                                 <div class="listingInfo">
                                     <div class="">
-                                        <h4><a href="#" class="text-dark">10691111-电信-湖南</a></h4>
+                                        <h4>10691111-联通-湖北</h4>
                                     </div>
                                     <div class="col-sm-6">
-                                        <p class="text-muted"><i class="mdi mdi-blackberry m-r-5"></i>码号：<span style="color: #3ac9d6">10693333</span></p>
-                                        <p class="text-muted"><i class="mdi mdi-access-point m-r-5"></i>接入点：<mpm:tag identity="codePoint" value="PROVINCE" show-type="label" key="code" /></p>
-                                        <p class="text-muted"><i class="mdi mdi-source-pull m-r-5"></i>码号来源：<mpm:tag identity="codeSource" value="RENT" show-type="label" key="code" /></p>
-                                        <p class="text-muted"><i class="fa fa-money m-r-5"></i>投诉率要求：0.5</p>
+                                        <p style="font-size:12px"><i class="mdi mdi-blackberry m-r-5"></i>码号：<span style="color: #3ac9d6">10692222</span></p>
+                                        <p style="font-size:12px"><i class="mdi mdi-access-point m-r-5"></i>接入点：<mpm:tag identity="codePoint" value="PROVINCE" show-type="label" key="code" /></p>
+                                        <p style="font-size:12px"><i class="mdi mdi-source-pull m-r-5"></i>码号来源：<mpm:tag identity="codeSource" value="RENT" show-type="label" key="code" /></p>
+                                        <p style="font-size:12px"><i class="fa fa-money m-r-5"></i>投诉率要求：0.5</p>
                                     </div>
                                     <div class="col-sm-6">
-                                        <p class="text-muted"><i class="mdi mdi-blackberry m-r-5"></i>计费号码/CA编号：CA000158</p>
-                                        <p class="text-muted"><i class="mdi mdi-calendar-text m-r-5"></i>接入时间：2021-10-29</p>
-                                        <p class="text-muted"><i class="fa fa-money m-r-5"></i>资费(元/条)：0.5</p>
-                                        <p class="text-muted"><i class="mdi mdi-counter m-r-5"></i>低消要求(万条)：10000</p>
+                                        <p style="font-size:12px"><i class="mdi mdi-blackberry m-r-5"></i>计费号码/CA编号：CA000158</p>
+                                        <p style="font-size:12px"><i class="mdi mdi-calendar-text m-r-5"></i>接入时间：2021-10-29</p>
+                                        <p style="font-size:12px"><i class="fa fa-money m-r-5"></i>资费(元/条)：0.5</p>
+                                        <p style="font-size:12px"><i class="mdi mdi-counter m-r-5"></i>低消要求(万条)：10000</p>
 
                                     </div>
                                 </div>
                                 <div class="property-action">
                                     <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="业务类型"
-                                       style="color:#188AE2;border: 1px solid #188AE2">
+                                       style="font-size:12px;color:#188AE2;border: 1px solid #188AE2">
                                         <i class="mdi mdi-apps"></i>
-                                        <span><mpm:tag identity="businessType" value="INTERNATIONAL_SMS" show-type="label"  key="code" /></span>
+                                        <span><mpm:tag identity="businessType" value="MMS" show-type="label"  key="code" /></span>
                                     </a>
                                     <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="码号状态"
-                                       style="color:#F5707A;border: 1px solid #F5707A">
+                                       style="font-size:12px;color:#8D6E63;border: 1px solid #8D6E63">
                                         <i class="mdi mdi-view-module"></i>
-                                        <span> <mpm:tag identity="codeStatus" value="004" show-type="label"  key="code"/></span>
+                                        <span> <mpm:tag identity="codeStatus" value="002" show-type="label"  key="code"/></span>
                                     </a>
                                     <div class="pull-right">
-                                        <a class="btn btn-primary" sec:authorize-url="/configure/codenumber/view/*" th:href="@{/configure/codenumber/view/id}">查看</a>
-                                        <a class="btn btn-info" sec:authorize-url="/configure/codenumber/add" th:href="@{/configure/codenumber/add}">编辑</a>
+                                        <a class="btn btn-xs btn-primary" sec:authorize-url="/configure/codenumber/view/*" th:href="@{/configure/codenumber/view/id}">查看</a>
+                                        <a class="btn btn-xs btn-info" sec:authorize-url="/configure/codenumber/add" th:href="@{/configure/codenumber/add}">编辑</a>
                                     </div>
                                 </div>
                                 <!-- end. Card actions -->
@@ -222,47 +172,45 @@
                         </div>
                         <!-- /col 8 -->
                     </div>
-                    <!-- /inner row -->
                 </div>
-
-            </div> <!-- end col -->
-            <div  class="col-md-6">
-                <div class="property-card property-horizontal">
+            </div>
+            <div  class="col-md-6" >
+                <div class="property-card property-horizontal" style="margin-bottom:15px">
                     <div class="row">
                         <div class="col-sm-12">
-                            <div class="property-content">
+                            <div class="property-content" >
                                 <div class="listingInfo">
                                     <div class="">
-                                        <h4><a href="#" class="text-dark">10691111-移动-北京</h4>
+                                        <h4>10691111-联通-湖北</h4>
                                     </div>
                                     <div class="col-sm-6">
-                                        <p class="text-muted"><i class="mdi mdi-blackberry m-r-5"></i>码号：<span style="color: #3ac9d6">10691111</span></p>
-                                        <p class="text-muted"><i class="mdi mdi-access-point m-r-5"></i>接入点：<mpm:tag identity="codePoint" value="GROUP" show-type="label" key="code" /></p>
-                                        <p class="text-muted"><i class="mdi mdi-source-pull m-r-5"></i>码号来源：<mpm:tag identity="codeSource" value="OWN" show-type="label" key="code" /></p>
-                                        <p class="text-muted"><i class="fa fa-money m-r-5"></i>投诉率要求：0.5</p>
+                                        <p style="font-size:12px"><i class="mdi mdi-blackberry m-r-5"></i>码号：<span style="color: #3ac9d6">10692222</span></p>
+                                        <p style="font-size:12px"><i class="mdi mdi-access-point m-r-5"></i>接入点：<mpm:tag identity="codePoint" value="PROVINCE" show-type="label" key="code" /></p>
+                                        <p style="font-size:12px"><i class="mdi mdi-source-pull m-r-5"></i>码号来源：<mpm:tag identity="codeSource" value="RENT" show-type="label" key="code" /></p>
+                                        <p style="font-size:12px"><i class="fa fa-money m-r-5"></i>投诉率要求：0.5</p>
                                     </div>
                                     <div class="col-sm-6">
-                                        <p class="text-muted"><i class="mdi mdi-blackberry m-r-5"></i>计费号码/CA编号：CA000158</p>
-                                        <p class="text-muted"><i class="mdi mdi-calendar-text m-r-5"></i>接入时间：2021-10-29</p>
-                                        <p class="text-muted"><i class="fa fa-money m-r-5"></i>资费(元/条)：0.5</p>
-                                        <p class="text-muted"><i class="mdi mdi-counter m-r-5"></i>低消要求(万条)：10000</p>
+                                        <p style="font-size:12px"><i class="mdi mdi-blackberry m-r-5"></i>计费号码/CA编号：CA000158</p>
+                                        <p style="font-size:12px"><i class="mdi mdi-calendar-text m-r-5"></i>接入时间：2021-10-29</p>
+                                        <p style="font-size:12px"><i class="fa fa-money m-r-5"></i>资费(元/条)：0.5</p>
+                                        <p style="font-size:12px"><i class="mdi mdi-counter m-r-5"></i>低消要求(万条)：10000</p>
 
                                     </div>
                                 </div>
                                 <div class="property-action">
                                     <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="业务类型"
-                                       style="color:#188AE2;border: 1px solid #188AE2">
+                                       style="font-size:12px;color:#188AE2;border: 1px solid #188AE2">
                                         <i class="mdi mdi-apps"></i>
-                                        <span><mpm:tag identity="businessType" value="TEXT_SMS" show-type="label"  key="code" /></span>
+                                        <span><mpm:tag identity="businessType" value="MMS" show-type="label"  key="code" /></span>
                                     </a>
                                     <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="码号状态"
-                                       style="color:#3AC9D6;border: 1px solid #3AC9D6">
+                                       style="font-size:12px;color:#8D6E63;border: 1px solid #8D6E63">
                                         <i class="mdi mdi-view-module"></i>
-                                        <span> <mpm:tag identity="codeStatus" value="001" show-type="label"  key="code"/></span>
+                                        <span> <mpm:tag identity="codeStatus" value="002" show-type="label"  key="code"/></span>
                                     </a>
                                     <div class="pull-right">
-                                        <a class="btn btn-primary" sec:authorize-url="/configure/codenumber/view/*" th:href="@{/configure/codenumber/view/id}">查看</a>
-                                        <a class="btn btn-info" sec:authorize-url="/configure/codenumber/add" th:href="@{/configure/codenumber/add}">编辑</a>
+                                        <a class="btn btn-xs btn-primary" sec:authorize-url="/configure/codenumber/view/*" th:href="@{/configure/codenumber/view/id}">查看</a>
+                                        <a class="btn btn-xs btn-info" sec:authorize-url="/configure/codenumber/add" th:href="@{/configure/codenumber/add}">编辑</a>
                                     </div>
                                 </div>
                                 <!-- end. Card actions -->
@@ -270,47 +218,45 @@
                         </div>
                         <!-- /col 8 -->
                     </div>
-                    <!-- /inner row -->
                 </div>
-
-            </div> <!-- end col -->
+            </div>
             <div  class="col-md-6">
-                <div class="property-card property-horizontal">
+                <div class="property-card property-horizontal" style="margin-bottom:15px">
                     <div class="row">
                         <div class="col-sm-12">
-                            <div class="property-content">
+                            <div class="property-content" >
                                 <div class="listingInfo">
                                     <div class="">
-                                        <h4><a href="#" class="text-dark">10691111-移动-北京</h4>
+                                        <h4>10691111-联通-湖北</h4>
                                     </div>
                                     <div class="col-sm-6">
-                                        <p class="text-muted"><i class="mdi mdi-blackberry m-r-5"></i>码号：<span style="color: #3ac9d6">10691111</span></p>
-                                        <p class="text-muted"><i class="mdi mdi-access-point m-r-5"></i>接入点：<mpm:tag identity="codePoint" value="GROUP" show-type="label" key="code" /></p>
-                                        <p class="text-muted"><i class="mdi mdi-source-pull m-r-5"></i>码号来源：<mpm:tag identity="codeSource" value="OWN" show-type="label" key="code" /></p>
-                                        <p class="text-muted"><i class="fa fa-money m-r-5"></i>投诉率要求：0.5</p>
+                                        <p style="font-size:12px"><i class="mdi mdi-blackberry m-r-5"></i>码号：<span style="color: #3ac9d6">10692222</span></p>
+                                        <p style="font-size:12px"><i class="mdi mdi-access-point m-r-5"></i>接入点：<mpm:tag identity="codePoint" value="PROVINCE" show-type="label" key="code" /></p>
+                                        <p style="font-size:12px"><i class="mdi mdi-source-pull m-r-5"></i>码号来源：<mpm:tag identity="codeSource" value="RENT" show-type="label" key="code" /></p>
+                                        <p style="font-size:12px"><i class="fa fa-money m-r-5"></i>投诉率要求：0.5</p>
                                     </div>
                                     <div class="col-sm-6">
-                                        <p class="text-muted"><i class="mdi mdi-blackberry m-r-5"></i>计费号码/CA编号：CA000158</p>
-                                        <p class="text-muted"><i class="mdi mdi-calendar-text m-r-5"></i>接入时间：2021-10-29</p>
-                                        <p class="text-muted"><i class="fa fa-money m-r-5"></i>资费(元/条)：0.5</p>
-                                        <p class="text-muted"><i class="mdi mdi-counter m-r-5"></i>低消要求(万条)：10000</p>
+                                        <p style="font-size:12px"><i class="mdi mdi-blackberry m-r-5"></i>计费号码/CA编号：CA000158</p>
+                                        <p style="font-size:12px"><i class="mdi mdi-calendar-text m-r-5"></i>接入时间：2021-10-29</p>
+                                        <p style="font-size:12px"><i class="fa fa-money m-r-5"></i>资费(元/条)：0.5</p>
+                                        <p style="font-size:12px"><i class="mdi mdi-counter m-r-5"></i>低消要求(万条)：10000</p>
 
                                     </div>
                                 </div>
                                 <div class="property-action">
                                     <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="业务类型"
-                                       style="color:#188AE2;border: 1px solid #188AE2">
+                                       style="font-size:12px;color:#188AE2;border: 1px solid #188AE2">
                                         <i class="mdi mdi-apps"></i>
-                                        <span><mpm:tag identity="businessType" value="TEXT_SMS" show-type="label"  key="code" /></span>
+                                        <span><mpm:tag identity="businessType" value="MMS" show-type="label"  key="code" /></span>
                                     </a>
                                     <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="码号状态"
-                                       style="color:#3AC9D6;border: 1px solid #3AC9D6">
+                                       style="font-size:12px;color:#8D6E63;border: 1px solid #8D6E63">
                                         <i class="mdi mdi-view-module"></i>
-                                        <span> <mpm:tag identity="codeStatus" value="001" show-type="label"  key="code"/></span>
+                                        <span> <mpm:tag identity="codeStatus" value="002" show-type="label"  key="code"/></span>
                                     </a>
                                     <div class="pull-right">
-                                        <a class="btn btn-primary" sec:authorize-url="/configure/codenumber/view/*" th:href="@{/configure/codenumber/view/id}">查看</a>
-                                        <a class="btn btn-info" sec:authorize-url="/configure/codenumber/add" th:href="@{/configure/codenumber/add}">编辑</a>
+                                        <a class="btn btn-xs btn-primary" sec:authorize-url="/configure/codenumber/view/*" th:href="@{/configure/codenumber/view/id}">查看</a>
+                                        <a class="btn btn-xs btn-info" sec:authorize-url="/configure/codenumber/add" th:href="@{/configure/codenumber/add}">编辑</a>
                                     </div>
                                 </div>
                                 <!-- end. Card actions -->
@@ -318,47 +264,45 @@
                         </div>
                         <!-- /col 8 -->
                     </div>
-                    <!-- /inner row -->
                 </div>
-
-            </div> <!-- end col -->
-            <div  class="col-md-6">
-                <div class="property-card property-horizontal">
+            </div>
+            <div  class="col-md-6" >
+                <div class="property-card property-horizontal" style="margin-bottom:15px">
                     <div class="row">
                         <div class="col-sm-12">
-                            <div class="property-content">
+                            <div class="property-content" >
                                 <div class="listingInfo">
                                     <div class="">
-                                        <h4><a href="#" class="text-dark">10691111-移动-北京</h4>
+                                        <h4>10691111-联通-湖北</h4>
                                     </div>
                                     <div class="col-sm-6">
-                                        <p class="text-muted"><i class="mdi mdi-blackberry m-r-5"></i>码号：<span style="color: #3ac9d6">10691111</span></p>
-                                        <p class="text-muted"><i class="mdi mdi-access-point m-r-5"></i>接入点：<mpm:tag identity="codePoint" value="GROUP" show-type="label" key="code" /></p>
-                                        <p class="text-muted"><i class="mdi mdi-source-pull m-r-5"></i>码号来源：<mpm:tag identity="codeSource" value="OWN" show-type="label" key="code" /></p>
-                                        <p class="text-muted"><i class="fa fa-money m-r-5"></i>投诉率要求：0.5</p>
+                                        <p style="font-size:12px"><i class="mdi mdi-blackberry m-r-5"></i>码号：<span style="color: #3ac9d6">10692222</span></p>
+                                        <p style="font-size:12px"><i class="mdi mdi-access-point m-r-5"></i>接入点：<mpm:tag identity="codePoint" value="PROVINCE" show-type="label" key="code" /></p>
+                                        <p style="font-size:12px"><i class="mdi mdi-source-pull m-r-5"></i>码号来源：<mpm:tag identity="codeSource" value="RENT" show-type="label" key="code" /></p>
+                                        <p style="font-size:12px"><i class="fa fa-money m-r-5"></i>投诉率要求：0.5</p>
                                     </div>
                                     <div class="col-sm-6">
-                                        <p class="text-muted"><i class="mdi mdi-blackberry m-r-5"></i>计费号码/CA编号：CA000158</p>
-                                        <p class="text-muted"><i class="mdi mdi-calendar-text m-r-5"></i>接入时间：2021-10-29</p>
-                                        <p class="text-muted"><i class="fa fa-money m-r-5"></i>资费(元/条)：0.5</p>
-                                        <p class="text-muted"><i class="mdi mdi-counter m-r-5"></i>低消要求(万条)：10000</p>
+                                        <p style="font-size:12px"><i class="mdi mdi-blackberry m-r-5"></i>计费号码/CA编号：CA000158</p>
+                                        <p style="font-size:12px"><i class="mdi mdi-calendar-text m-r-5"></i>接入时间：2021-10-29</p>
+                                        <p style="font-size:12px"><i class="fa fa-money m-r-5"></i>资费(元/条)：0.5</p>
+                                        <p style="font-size:12px"><i class="mdi mdi-counter m-r-5"></i>低消要求(万条)：10000</p>
 
                                     </div>
                                 </div>
                                 <div class="property-action">
                                     <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="业务类型"
-                                       style="color:#188AE2;border: 1px solid #188AE2">
+                                       style="font-size:12px;color:#188AE2;border: 1px solid #188AE2">
                                         <i class="mdi mdi-apps"></i>
-                                        <span><mpm:tag identity="businessType" value="TEXT_SMS" show-type="label"  key="code" /></span>
+                                        <span><mpm:tag identity="businessType" value="MMS" show-type="label"  key="code" /></span>
                                     </a>
                                     <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="码号状态"
-                                       style="color:#3AC9D6;border: 1px solid #3AC9D6">
+                                       style="font-size:12px;color:#8D6E63;border: 1px solid #8D6E63">
                                         <i class="mdi mdi-view-module"></i>
-                                        <span> <mpm:tag identity="codeStatus" value="001" show-type="label"  key="code"/></span>
+                                        <span> <mpm:tag identity="codeStatus" value="002" show-type="label"  key="code"/></span>
                                     </a>
                                     <div class="pull-right">
-                                        <a class="btn btn-primary" sec:authorize-url="/configure/codenumber/view/*" th:href="@{/configure/codenumber/view/id}">查看</a>
-                                        <a class="btn btn-info" sec:authorize-url="/configure/codenumber/add" th:href="@{/configure/codenumber/add}">编辑</a>
+                                        <a class="btn btn-xs btn-primary" sec:authorize-url="/configure/codenumber/view/*" th:href="@{/configure/codenumber/view/id}">查看</a>
+                                        <a class="btn btn-xs btn-info" sec:authorize-url="/configure/codenumber/add" th:href="@{/configure/codenumber/add}">编辑</a>
                                     </div>
                                 </div>
                                 <!-- end. Card actions -->
@@ -366,47 +310,45 @@
                         </div>
                         <!-- /col 8 -->
                     </div>
-                    <!-- /inner row -->
                 </div>
-
-            </div> <!-- end col -->
+            </div>
             <div  class="col-md-6">
-                <div class="property-card property-horizontal">
+                <div class="property-card property-horizontal" style="margin-bottom:15px">
                     <div class="row">
                         <div class="col-sm-12">
-                            <div class="property-content">
+                            <div class="property-content" >
                                 <div class="listingInfo">
                                     <div class="">
-                                        <h4><a href="#" class="text-dark">10691111-移动-北京</h4>
+                                        <h4>10691111-联通-湖北</h4>
                                     </div>
                                     <div class="col-sm-6">
-                                        <p class="text-muted"><i class="mdi mdi-blackberry m-r-5"></i>码号：<span style="color: #3ac9d6">10691111</span></p>
-                                        <p class="text-muted"><i class="mdi mdi-access-point m-r-5"></i>接入点：<mpm:tag identity="codePoint" value="GROUP" show-type="label" key="code" /></p>
-                                        <p class="text-muted"><i class="mdi mdi-source-pull m-r-5"></i>码号来源：<mpm:tag identity="codeSource" value="OWN" show-type="label" key="code" /></p>
-                                        <p class="text-muted"><i class="fa fa-money m-r-5"></i>投诉率要求：0.5</p>
+                                        <p style="font-size:12px"><i class="mdi mdi-blackberry m-r-5"></i>码号：<span style="color: #3ac9d6">10692222</span></p>
+                                        <p style="font-size:12px"><i class="mdi mdi-access-point m-r-5"></i>接入点：<mpm:tag identity="codePoint" value="PROVINCE" show-type="label" key="code" /></p>
+                                        <p style="font-size:12px"><i class="mdi mdi-source-pull m-r-5"></i>码号来源：<mpm:tag identity="codeSource" value="RENT" show-type="label" key="code" /></p>
+                                        <p style="font-size:12px"><i class="fa fa-money m-r-5"></i>投诉率要求：0.5</p>
                                     </div>
                                     <div class="col-sm-6">
-                                        <p class="text-muted"><i class="mdi mdi-blackberry m-r-5"></i>计费号码/CA编号：CA000158</p>
-                                        <p class="text-muted"><i class="mdi mdi-calendar-text m-r-5"></i>接入时间：2021-10-29</p>
-                                        <p class="text-muted"><i class="fa fa-money m-r-5"></i>资费(元/条)：0.5</p>
-                                        <p class="text-muted"><i class="mdi mdi-counter m-r-5"></i>低消要求(万条)：10000</p>
+                                        <p style="font-size:12px"><i class="mdi mdi-blackberry m-r-5"></i>计费号码/CA编号：CA000158</p>
+                                        <p style="font-size:12px"><i class="mdi mdi-calendar-text m-r-5"></i>接入时间：2021-10-29</p>
+                                        <p style="font-size:12px"><i class="fa fa-money m-r-5"></i>资费(元/条)：0.5</p>
+                                        <p style="font-size:12px"><i class="mdi mdi-counter m-r-5"></i>低消要求(万条)：10000</p>
 
                                     </div>
                                 </div>
                                 <div class="property-action">
                                     <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="业务类型"
-                                       style="color:#188AE2;border: 1px solid #188AE2">
+                                       style="font-size:12px;color:#188AE2;border: 1px solid #188AE2">
                                         <i class="mdi mdi-apps"></i>
-                                        <span><mpm:tag identity="businessType" value="TEXT_SMS" show-type="label"  key="code" /></span>
+                                        <span><mpm:tag identity="businessType" value="MMS" show-type="label"  key="code" /></span>
                                     </a>
                                     <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="码号状态"
-                                       style="color:#3AC9D6;border: 1px solid #3AC9D6">
+                                       style="font-size:12px;color:#8D6E63;border: 1px solid #8D6E63">
                                         <i class="mdi mdi-view-module"></i>
-                                        <span> <mpm:tag identity="codeStatus" value="001" show-type="label"  key="code"/></span>
+                                        <span> <mpm:tag identity="codeStatus" value="002" show-type="label"  key="code"/></span>
                                     </a>
                                     <div class="pull-right">
-                                        <a class="btn btn-primary" sec:authorize-url="/configure/codenumber/view/*" th:href="@{/configure/codenumber/view/id}">查看</a>
-                                        <a class="btn btn-info" sec:authorize-url="/configure/codenumber/add" th:href="@{/configure/codenumber/add}">编辑</a>
+                                        <a class="btn btn-xs btn-primary" sec:authorize-url="/configure/codenumber/view/*" th:href="@{/configure/codenumber/view/id}">查看</a>
+                                        <a class="btn btn-xs btn-info" sec:authorize-url="/configure/codenumber/add" th:href="@{/configure/codenumber/add}">编辑</a>
                                     </div>
                                 </div>
                                 <!-- end. Card actions -->
@@ -414,47 +356,45 @@
                         </div>
                         <!-- /col 8 -->
                     </div>
-                    <!-- /inner row -->
                 </div>
-
-            </div> <!-- end col -->
-            <div  class="col-md-6">
-                <div class="property-card property-horizontal">
+            </div>
+            <div  class="col-md-6" >
+                <div class="property-card property-horizontal" style="margin-bottom:15px">
                     <div class="row">
                         <div class="col-sm-12">
-                            <div class="property-content">
+                            <div class="property-content" >
                                 <div class="listingInfo">
                                     <div class="">
-                                        <h4><a href="#" class="text-dark">10691111-移动-北京</h4>
+                                        <h4>10691111-联通-湖北</h4>
                                     </div>
                                     <div class="col-sm-6">
-                                        <p class="text-muted"><i class="mdi mdi-blackberry m-r-5"></i>码号：<span style="color: #3ac9d6">10691111</span></p>
-                                        <p class="text-muted"><i class="mdi mdi-access-point m-r-5"></i>接入点：<mpm:tag identity="codePoint" value="GROUP" show-type="label" key="code" /></p>
-                                        <p class="text-muted"><i class="mdi mdi-source-pull m-r-5"></i>码号来源：<mpm:tag identity="codeSource" value="OWN" show-type="label" key="code" /></p>
-                                        <p class="text-muted"><i class="fa fa-money m-r-5"></i>投诉率要求：0.5</p>
+                                        <p style="font-size:12px"><i class="mdi mdi-blackberry m-r-5"></i>码号：<span style="color: #3ac9d6">10692222</span></p>
+                                        <p style="font-size:12px"><i class="mdi mdi-access-point m-r-5"></i>接入点：<mpm:tag identity="codePoint" value="PROVINCE" show-type="label" key="code" /></p>
+                                        <p style="font-size:12px"><i class="mdi mdi-source-pull m-r-5"></i>码号来源：<mpm:tag identity="codeSource" value="RENT" show-type="label" key="code" /></p>
+                                        <p style="font-size:12px"><i class="fa fa-money m-r-5"></i>投诉率要求：0.5</p>
                                     </div>
                                     <div class="col-sm-6">
-                                        <p class="text-muted"><i class="mdi mdi-blackberry m-r-5"></i>计费号码/CA编号：CA000158</p>
-                                        <p class="text-muted"><i class="mdi mdi-calendar-text m-r-5"></i>接入时间：2021-10-29</p>
-                                        <p class="text-muted"><i class="fa fa-money m-r-5"></i>资费(元/条)：0.5</p>
-                                        <p class="text-muted"><i class="mdi mdi-counter m-r-5"></i>低消要求(万条)：10000</p>
+                                        <p style="font-size:12px"><i class="mdi mdi-blackberry m-r-5"></i>计费号码/CA编号：CA000158</p>
+                                        <p style="font-size:12px"><i class="mdi mdi-calendar-text m-r-5"></i>接入时间：2021-10-29</p>
+                                        <p style="font-size:12px"><i class="fa fa-money m-r-5"></i>资费(元/条)：0.5</p>
+                                        <p style="font-size:12px"><i class="mdi mdi-counter m-r-5"></i>低消要求(万条)：10000</p>
 
                                     </div>
                                 </div>
                                 <div class="property-action">
                                     <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="业务类型"
-                                       style="color:#188AE2;border: 1px solid #188AE2">
+                                       style="font-size:12px;color:#188AE2;border: 1px solid #188AE2">
                                         <i class="mdi mdi-apps"></i>
-                                        <span><mpm:tag identity="businessType" value="TEXT_SMS" show-type="label"  key="code" /></span>
+                                        <span><mpm:tag identity="businessType" value="MMS" show-type="label"  key="code" /></span>
                                     </a>
                                     <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="码号状态"
-                                       style="color:#3AC9D6;border: 1px solid #3AC9D6">
+                                       style="font-size:12px;color:#8D6E63;border: 1px solid #8D6E63">
                                         <i class="mdi mdi-view-module"></i>
-                                        <span> <mpm:tag identity="codeStatus" value="001" show-type="label"  key="code"/></span>
+                                        <span> <mpm:tag identity="codeStatus" value="002" show-type="label"  key="code"/></span>
                                     </a>
                                     <div class="pull-right">
-                                        <a class="btn btn-primary" sec:authorize-url="/configure/codenumber/view/*" th:href="@{/configure/codenumber/view/id}">查看</a>
-                                        <a class="btn btn-info" sec:authorize-url="/configure/codenumber/add" th:href="@{/configure/codenumber/add}">编辑</a>
+                                        <a class="btn btn-xs btn-primary" sec:authorize-url="/configure/codenumber/view/*" th:href="@{/configure/codenumber/view/id}">查看</a>
+                                        <a class="btn btn-xs btn-info" sec:authorize-url="/configure/codenumber/add" th:href="@{/configure/codenumber/add}">编辑</a>
                                     </div>
                                 </div>
                                 <!-- end. Card actions -->
@@ -462,10 +402,146 @@
                         </div>
                         <!-- /col 8 -->
                     </div>
-                    <!-- /inner row -->
                 </div>
+            </div>
+            <div  class="col-md-6">
+                <div class="property-card property-horizontal" style="margin-bottom:15px">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="property-content" >
+                                <div class="listingInfo">
+                                    <div class="">
+                                        <h4>10691111-联通-湖北</h4>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p style="font-size:12px"><i class="mdi mdi-blackberry m-r-5"></i>码号：<span style="color: #3ac9d6">10692222</span></p>
+                                        <p style="font-size:12px"><i class="mdi mdi-access-point m-r-5"></i>接入点：<mpm:tag identity="codePoint" value="PROVINCE" show-type="label" key="code" /></p>
+                                        <p style="font-size:12px"><i class="mdi mdi-source-pull m-r-5"></i>码号来源：<mpm:tag identity="codeSource" value="RENT" show-type="label" key="code" /></p>
+                                        <p style="font-size:12px"><i class="fa fa-money m-r-5"></i>投诉率要求：0.5</p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p style="font-size:12px"><i class="mdi mdi-blackberry m-r-5"></i>计费号码/CA编号：CA000158</p>
+                                        <p style="font-size:12px"><i class="mdi mdi-calendar-text m-r-5"></i>接入时间：2021-10-29</p>
+                                        <p style="font-size:12px"><i class="fa fa-money m-r-5"></i>资费(元/条)：0.5</p>
+                                        <p style="font-size:12px"><i class="mdi mdi-counter m-r-5"></i>低消要求(万条)：10000</p>
 
-            </div> <!-- end col -->
+                                    </div>
+                                </div>
+                                <div class="property-action">
+                                    <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="业务类型"
+                                       style="font-size:12px;color:#188AE2;border: 1px solid #188AE2">
+                                        <i class="mdi mdi-apps"></i>
+                                        <span><mpm:tag identity="businessType" value="MMS" show-type="label"  key="code" /></span>
+                                    </a>
+                                    <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="码号状态"
+                                       style="font-size:12px;color:#8D6E63;border: 1px solid #8D6E63">
+                                        <i class="mdi mdi-view-module"></i>
+                                        <span> <mpm:tag identity="codeStatus" value="002" show-type="label"  key="code"/></span>
+                                    </a>
+                                    <div class="pull-right">
+                                        <a class="btn btn-xs btn-primary" sec:authorize-url="/configure/codenumber/view/*" th:href="@{/configure/codenumber/view/id}">查看</a>
+                                        <a class="btn btn-xs btn-info" sec:authorize-url="/configure/codenumber/add" th:href="@{/configure/codenumber/add}">编辑</a>
+                                    </div>
+                                </div>
+                                <!-- end. Card actions -->
+                            </div>
+                        </div>
+                        <!-- /col 8 -->
+                    </div>
+                </div>
+            </div>
+            <div  class="col-md-6" >
+                <div class="property-card property-horizontal" style="margin-bottom:15px">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="property-content" >
+                                <div class="listingInfo">
+                                    <div class="">
+                                        <h4>10691111-联通-湖北</h4>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p style="font-size:12px"><i class="mdi mdi-blackberry m-r-5"></i>码号：<span style="color: #3ac9d6">10692222</span></p>
+                                        <p style="font-size:12px"><i class="mdi mdi-access-point m-r-5"></i>接入点：<mpm:tag identity="codePoint" value="PROVINCE" show-type="label" key="code" /></p>
+                                        <p style="font-size:12px"><i class="mdi mdi-source-pull m-r-5"></i>码号来源：<mpm:tag identity="codeSource" value="RENT" show-type="label" key="code" /></p>
+                                        <p style="font-size:12px"><i class="fa fa-money m-r-5"></i>投诉率要求：0.5</p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p style="font-size:12px"><i class="mdi mdi-blackberry m-r-5"></i>计费号码/CA编号：CA000158</p>
+                                        <p style="font-size:12px"><i class="mdi mdi-calendar-text m-r-5"></i>接入时间：2021-10-29</p>
+                                        <p style="font-size:12px"><i class="fa fa-money m-r-5"></i>资费(元/条)：0.5</p>
+                                        <p style="font-size:12px"><i class="mdi mdi-counter m-r-5"></i>低消要求(万条)：10000</p>
+
+                                    </div>
+                                </div>
+                                <div class="property-action">
+                                    <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="业务类型"
+                                       style="font-size:12px;color:#188AE2;border: 1px solid #188AE2">
+                                        <i class="mdi mdi-apps"></i>
+                                        <span><mpm:tag identity="businessType" value="MMS" show-type="label"  key="code" /></span>
+                                    </a>
+                                    <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="码号状态"
+                                       style="font-size:12px;color:#8D6E63;border: 1px solid #8D6E63">
+                                        <i class="mdi mdi-view-module"></i>
+                                        <span> <mpm:tag identity="codeStatus" value="002" show-type="label"  key="code"/></span>
+                                    </a>
+                                    <div class="pull-right">
+                                        <a class="btn btn-xs btn-primary" sec:authorize-url="/configure/codenumber/view/*" th:href="@{/configure/codenumber/view/id}">查看</a>
+                                        <a class="btn btn-xs btn-info" sec:authorize-url="/configure/codenumber/add" th:href="@{/configure/codenumber/add}">编辑</a>
+                                    </div>
+                                </div>
+                                <!-- end. Card actions -->
+                            </div>
+                        </div>
+                        <!-- /col 8 -->
+                    </div>
+                </div>
+            </div>
+            <div  class="col-md-6">
+                <div class="property-card property-horizontal" style="margin-bottom:15px">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="property-content" >
+                                <div class="listingInfo">
+                                    <div class="">
+                                        <h4>10691111-联通-湖北</h4>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p style="font-size:12px"><i class="mdi mdi-blackberry m-r-5"></i>码号：<span style="color: #3ac9d6">10692222</span></p>
+                                        <p style="font-size:12px"><i class="mdi mdi-access-point m-r-5"></i>接入点：<mpm:tag identity="codePoint" value="PROVINCE" show-type="label" key="code" /></p>
+                                        <p style="font-size:12px"><i class="mdi mdi-source-pull m-r-5"></i>码号来源：<mpm:tag identity="codeSource" value="RENT" show-type="label" key="code" /></p>
+                                        <p style="font-size:12px"><i class="fa fa-money m-r-5"></i>投诉率要求：0.5</p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p style="font-size:12px"><i class="mdi mdi-blackberry m-r-5"></i>计费号码/CA编号：CA000158</p>
+                                        <p style="font-size:12px"><i class="mdi mdi-calendar-text m-r-5"></i>接入时间：2021-10-29</p>
+                                        <p style="font-size:12px"><i class="fa fa-money m-r-5"></i>资费(元/条)：0.5</p>
+                                        <p style="font-size:12px"><i class="mdi mdi-counter m-r-5"></i>低消要求(万条)：10000</p>
+
+                                    </div>
+                                </div>
+                                <div class="property-action">
+                                    <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="业务类型"
+                                       style="font-size:12px;color:#188AE2;border: 1px solid #188AE2">
+                                        <i class="mdi mdi-apps"></i>
+                                        <span><mpm:tag identity="businessType" value="MMS" show-type="label"  key="code" /></span>
+                                    </a>
+                                    <a href="#" target="new_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="码号状态"
+                                       style="font-size:12px;color:#8D6E63;border: 1px solid #8D6E63">
+                                        <i class="mdi mdi-view-module"></i>
+                                        <span> <mpm:tag identity="codeStatus" value="002" show-type="label"  key="code"/></span>
+                                    </a>
+                                    <div class="pull-right">
+                                        <a class="btn btn-xs btn-primary" sec:authorize-url="/configure/codenumber/view/*" th:href="@{/configure/codenumber/view/id}">查看</a>
+                                        <a class="btn btn-xs btn-info" sec:authorize-url="/configure/codenumber/add" th:href="@{/configure/codenumber/add}">编辑</a>
+                                    </div>
+                                </div>
+                                <!-- end. Card actions -->
+                            </div>
+                        </div>
+                        <!-- /col 8 -->
+                    </div>
+                </div>
+            </div>
 
         </div>
         <!-- end row -->
