@@ -36,106 +36,56 @@
                                         <div class="form-group">
                                             <div class="row">
                                                 <div class="col-sm-3 m-b-10">
-                                                    <label>北京资费(元/条)<span class="text-danger">*</span>&nbsp;<span
+                                                    <label>北京市资费(元/条)<span class="text-danger">*</span>&nbsp;<span
                                                             class="text-danger" style="font-weight: 200;font-size: 12px"></span>
                                                     </label>
-                                                    <input type="text" placeholder="北京资费(元/条)" required="" class="form-control" autocomplete="off">
+                                                    <input type="text" placeholder="北京市资费(元/条)" required="" class="form-control" autocomplete="off">
                                                 </div>
                                                 <div class="col-sm-3 m-b-10">
-                                                    <label>长短信<span class="text-danger">*</span>&nbsp;<span
+                                                    <label>上海市资费(元/条)<span class="text-danger">*</span>&nbsp;<span
                                                             class="text-danger" style="font-weight: 200;font-size: 12px"></span>
                                                     </label>
-                                                    <input type="text" placeholder="长短信" required="" class="form-control" autocomplete="off">
+                                                    <input type="text" placeholder="上海市资费(元/条)" required="" class="form-control" autocomplete="off">
                                                 </div>
                                                 <div class="col-sm-3 m-b-10">
-                                                    <label>最大发送速率（条/秒）<span class="text-danger">*</span>&nbsp;<span
+                                                    <label>广东省资费(元/条)<span class="text-danger">*</span>&nbsp;<span
                                                             class="text-danger" style="font-weight: 200;font-size: 12px"></span>
                                                     </label>
-                                                    <input type="text" placeholder="最大发送速率（条/秒" required="" class="form-control" autocomplete="off">
+                                                    <input type="text" placeholder="广东省资费(元/条)" required="" class="form-control" autocomplete="off">
                                                 </div>
                                                 <div class="col-sm-3 m-b-10">
-                                                    <label>最大并发数<span class="text-danger">*</span>&nbsp;<span
+                                                    <label>山东省资费(元/条)<span class="text-danger">*</span>&nbsp;<span
                                                             class="text-danger" style="font-weight: 200;font-size: 12px"></span>
                                                     </label>
-                                                    <input type="text" placeholder="最大并发数" required="" class="form-control" autocomplete="off">
-                                                </div>
+                                                    <input type="text" placeholder="山东省资费(元/条)" required="" class="form-control" autocomplete="off">
+                                                </div><div class="col-sm-3 m-b-10">
+                                                <label>河南省资费(元/条)<span class="text-danger">*</span>&nbsp;<span
+                                                        class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input type="text" placeholder="河南省资费(元/条)" required="" class="form-control" autocomplete="off">
+                                            </div><div class="col-sm-3 m-b-10">
+                                                <label>江苏省资费(元/条)<span class="text-danger">*</span>&nbsp;<span
+                                                        class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input type="text" placeholder="江苏省资费(元/条)" required="" class="form-control" autocomplete="off">
+                                            </div><div class="col-sm-3 m-b-10">
+                                                <label>浙江省资费(元/条)<span class="text-danger">*</span>&nbsp;<span
+                                                        class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input type="text" placeholder="浙江省资费(元/条)" required="" class="form-control" autocomplete="off">
+                                            </div><div class="col-sm-3 m-b-10">
+                                                <label>福建省资费(元/条)<span class="text-danger">*</span>&nbsp;<span
+                                                        class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input type="text" placeholder="福建省资费(元/条)" required="" class="form-control" autocomplete="off">
                                             </div>
+                                            </div><div class="col-sm-3 m-b-10">
+                                            <label>江西省资费(元/条)<span class="text-danger">*</span>&nbsp;<span
+                                                    class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                            </label>
+                                            <input type="text" placeholder="江西省资费(元/条)" required="" class="form-control" autocomplete="off">
                                         </div>
 
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-sm-3 m-b-10">
-                                                    <label>RE正则表达式&nbsp;<span
-                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
-                                                    </label>
-                                                    <input type="text"   placeholder="RE正则表达式" class="form-control" autocomplete="off">
-                                                </div>
-
-                                                <div class="col-sm-3 m-b-10">
-                                                    <label>发送时间限制<span class="text-danger">*</span>&nbsp;<span
-                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
-                                                    </label>
-                                                    <input type="text" placeholder="多个用分号隔开；例如00:00:00-08:00:00"  required="" class="form-control" autocomplete="off">
-                                                </div>
-                                                <div class="col-sm-3 m-b-10">
-                                                    <label>最大重新发送次数<span class="text-danger">*</span>&nbsp;<span
-                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
-                                                    </label>
-                                                    <input type="text" placeholder="最大重新发送次数"  required="" class="form-control" autocomplete="off">
-                                                </div>
-                                                <div class="col-sm-3 m-b-10" style="padding-left: 10px;">
-                                                    <label class="m-b-20">黑名单</label><br>
-                                                    <mpm:tag id="isTransfer" identity="isOrNo"  name="isTransfer" style="margin-top:0px" value="0" show-type="radio"  key="code" data-icon="mdi mdi-view-module" title="是否" />
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-sm-3 m-b-10">
-                                                    <label>单号码流控（条/分钟）<span class="text-danger">*</span>&nbsp;<span
-                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
-                                                    </label>
-                                                    <input type="text" placeholder="单号码流控（条/分钟）" required="" class="form-control" autocomplete="off">
-                                                </div>
-                                                <div class="col-sm-3 m-b-10">
-                                                    <label>单号码流控（条/小时）<span class="text-danger">*</span>&nbsp;<span
-                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
-                                                    </label>
-                                                    <input type="text" placeholder="单号码流控（条/小时）" required="" class="form-control" autocomplete="off">
-                                                </div>
-                                                <div class="col-sm-3 m-b-10">
-                                                    <label>单号码流控（条/天）<span class="text-danger">*</span>&nbsp;<span
-                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
-                                                    </label>
-                                                    <input type="text" placeholder="单号码流控（条/天）" required="" class="form-control" autocomplete="off">
-                                                </div>
-                                                <div class="col-sm-3 m-b-10">
-                                                    <label>总发送条数<span class="text-danger">*</span>&nbsp;<span
-                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
-                                                    </label>
-                                                    <input type="text" placeholder="总发送条数" required="" class="form-control" autocomplete="off">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-sm-3 m-b-10">
-                                                    <label>每日发送最大条数<span class="text-danger">*</span>&nbsp;<span
-                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
-                                                    </label>
-                                                    <input type="text" placeholder="每日发送最大条数" required="" class="form-control" autocomplete="off">
-                                                </div>
-                                                <div class="col-sm-3 m-b-10">
-                                                    <label>每月发送最大条数<span class="text-danger">*</span>&nbsp;<span
-                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
-                                                    </label>
-                                                    <input type="text" placeholder="每月发送最大条数" required="" class="form-control" autocomplete="off">
-                                                </div>
-
-
-                                            </div>
-                                        </div>
 
                                     </div>
 
