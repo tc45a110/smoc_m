@@ -160,108 +160,17 @@ public class ChannelController {
     }
 
     /**
-     * 客户使用记录
+     * 补发通道设置
      *
      * @return
      */
-    @RequestMapping(value = "/customerRecode/{id}", method = RequestMethod.GET)
-    public ModelAndView customerRecode(@PathVariable String id, HttpServletRequest request) {
+    @RequestMapping(value = "/edit/spare/{id}", method = RequestMethod.GET)
+    public ModelAndView spare(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("configure/channel/channel_customer_record");
-
-        //查询数据
-        PageParams params = new PageParams<>();
-        params.setPages(10);
-        params.setPageSize(8);
-        params.setStartRow(1);
-        params.setEndRow(10);
-        params.setCurrentPage(1);
-        params.setTotalRows(80);
-
-        view.addObject("pageParams",params);
+        ModelAndView view = new ModelAndView("configure/channel/channel_edit_spare");
 
         return view;
 
     }
 
-    /**
-     * 产品使用记录
-     *
-     * @return
-     */
-    @RequestMapping(value = "/productRecode/{id}", method = RequestMethod.GET)
-    public ModelAndView productRecode(@PathVariable String id, HttpServletRequest request) {
-
-        ModelAndView view = new ModelAndView("configure/channel/channel_product_record");
-
-        //查询数据
-        PageParams params = new PageParams<>();
-        params.setPages(10);
-        params.setPageSize(8);
-        params.setStartRow(1);
-        params.setEndRow(10);
-        params.setCurrentPage(1);
-        params.setTotalRows(80);
-
-        view.addObject("pageParams",params);
-
-        return view;
-
-    }
-
-    /**
-     * 通道历史价格
-     *
-     * @return
-     */
-    @RequestMapping(value = "/channelPriceList/{id}", method = RequestMethod.GET)
-    public ModelAndView channelPriceList(@PathVariable String id, HttpServletRequest request) {
-
-        ModelAndView view = new ModelAndView("configure/channel/channel_price_record");
-
-        return view;
-
-    }
-
-    /**
-     * 通道商务费历史价格
-     *
-     * @return
-     */
-    @RequestMapping(value = "/channelBusinessFeesList/{id}", method = RequestMethod.GET)
-    public ModelAndView channelBusinessFeesList(@PathVariable String id, HttpServletRequest request) {
-
-        ModelAndView view = new ModelAndView("configure/channel/channel_business_fees_record");
-
-        return view;
-
-    }
-
-    /**
-     * 统计发送量
-     *
-     * @return
-     */
-    @RequestMapping(value = "/statisticsSendCount/{id}", method = RequestMethod.GET)
-    public ModelAndView statisticsSendCount(@PathVariable String id, HttpServletRequest request) {
-
-        ModelAndView view = new ModelAndView("configure/channel/channel_statistics_send");
-
-        return view;
-
-    }
-
-    /**
-     * 失败补发通道
-     *
-     * @return
-     */
-    @RequestMapping(value = "/supplyAgainChannel/{id}", method = RequestMethod.GET)
-    public ModelAndView supplyAgainChannel(@PathVariable String id, HttpServletRequest request) {
-
-        ModelAndView view = new ModelAndView("configure/channel/channel_supply_again");
-
-        return view;
-
-    }
 }

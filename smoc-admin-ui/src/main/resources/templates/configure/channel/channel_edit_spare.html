@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
+
+</head>
+<body style="background-color:#fff">
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+
+<!-- Start content -->
+<div class="content">
+    <div class="container">
+        <!-- start row -->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all" style="background-color:#fff">
+            <div class="col-md-12">
+                <form  id="submit_form"
+                       method="post" data-parsley-validate="">
+                    <div class="row">
+                        <div class="col-md-12 panel panel-color panel-teal" style="padding-left:0px;padding-right:0px">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">失败补发通道配置</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-sm-6 m-b-10">
+                                                    <label>补发通道<span
+                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                    </label>
+                                                    <select data-style="btn-default" name data-live-search="true" id="channelSupplier" class="selectpicker form-control"><option value="" data-icon="mdi mdi-view-module">--请选择失败补发通道--</option><option data-icon="mdi mdi-view-module" value="005">短信-移动-会销(小舟dj)</option><option data-icon="mdi mdi-view-module" value="006">短信-移动-会销(小舟dj)</option></select>
+                                                </div>
+                                                <div class="col-sm-6 m-b-10">
+                                                    <label>状态码失败补发<span class="text-danger">*</span><span
+                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                    </label>
+                                                    <input type="text"   placeholder="状态码失败补发" class="form-control" autocomplete="off">
+                                                </div>
+
+                                                <div class="col-sm-6 m-b-10">
+                                                    <label>账号失败补发<span
+                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                    </label>
+                                                    <input type="text" placeholder="账号失败补发"  required="" class="form-control" autocomplete="off">
+                                                </div>
+
+                                                <div class="col-sm-6 m-b-10" style="padding-left: 10px;">
+                                                    <label>内容失败补发</label>
+                                                    <input type="text" placeholder="内容失败补发"  required="" class="form-control" autocomplete="off">
+                                               </div>
+                                            </div>
+                                            <div class="text-center" style="margin-bottom:20px;margin-top:20px">
+                                                <a type="button" class="btn btn-teal waves-effect waves-light">提交</a>
+                                                <a type="button" class="btn btn-default waves-effect waves-light">重置为空</a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div> <!-- end col -->
+                    </div> <!-- end row -->
+
+                </form>
+                <!-- end form -->
+
+            </div> <!-- end card-box -->
+        </div> <!-- end col -->
+    </div>
+    <!-- end row -->
+
+    <th:block th:insert="fragments/common_fragments :: common_error"/>
+
+</div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<th:block th:insert="fragments/common_fragments :: common_submit_form"/>
+<script>
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+</script>
+</body>
+</html>

@@ -63,6 +63,9 @@
                                             <li class="" id="tab5"><a onclick="active('5')"  sec:authorize-url="/configure/channel/edit/extend/*"
                                                                       th:href="@{/configure/channel/edit/extend/id}"
                                                                       th:target="tab-content">通道扩展参数配置</a></li>
+                                            <li class="" id="tab6"><a onclick="active('6')"  sec:authorize-url="/configure/channel/edit/spare/*"
+                                                                      th:href="@{/configure/channel/edit/spare/id}"
+                                                                      th:target="tab-content">失败补发通道配置</a></li>
                                         </ul>
                                         <div class="tab-cotent" style="background-color:#fff">
                                             <iframe name="tab-content" id="tab-content" th:frameBorder="0" th:scrolling="auto"
