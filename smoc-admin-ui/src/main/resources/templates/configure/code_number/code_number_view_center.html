@@ -36,30 +36,41 @@
 
         <div class="row" style="position: relative;margin-top: 80px">
             <div class="col-md-12">
+
                 <div class="card-box">
-                    <ul class="nav nav-tabs">
-                        <li class="active" id="tab1"><a onclick="active('1')"  sec:authorize-url="/configure/codenumber/detail/*"
-                                                        th:href="@{/configure/codenumber/detail/id}"
-                                                        th:target="content1">码号详情</a></li>
-                        <li class="" id="tab4"><a onclick="active('4')"  sec:authorize-url="/configure/codenumber/editRecord/*"
-                                                        th:href="@{/configure/codenumber/editRecord/id}"
-                                                        th:target="content1">码号历史修改记录</a></li>
-                        <li class="" id="tab2"><a onclick="active('2')" sec:authorize-url="/configure/codenumber/channelRecode/*"
-                                                  th:href="@{/configure/codenumber/channelRecode/id}"
-                                                  th:target="content1">通道使用记录</a></li>
-                        <li class="" id="tab3"><a onclick="active('3')" sec:authorize-url="/configure/codenumber/statisticsSendCount/*"
-                                                  th:href="@{/configure/codenumber/statisticsSendCount/id}"
-                                                  th:target="content1">统计发送量</a></li>
-                        <div class="pull-right">
-                            <a sec:authorize-url="/configure/codenumber/list" th:href="@{/configure/codenumber/list}"
-                               class="btn btn-default waves-effect waves-light">
-                                <i class="glyphicon  glyphicon-share-alt" ></i>
-                                返回码号列表</a>
-                        </div>
-                    </ul>
+                    <div class="row" style="margin-bottom:10px">
+                        <h4>
+                            <div class="pull-right" style="margin-top: -12px;margin-right:10pxx">
+                                <a sec:authorize-url="/configure/code/number/list"
+                                   th:href="@{/configure/code/number/list}"
+                                   class="btn btn-default waves-effect waves-light">
+                                    <i class="glyphicon  glyphicon-share-alt"></i>
+                                    返回码号列表</a>
+                            </div>
+                        </h4>
+                    </div>
+                    <div class="row">
+                        <ul class="nav nav-tabs">
+                            <li class="active" id="tab1"><a onclick="active('1')"
+                                                            sec:authorize-url="/configure/code/number/view/base/*"
+                                                            th:href="@{/configure/code/number/view/base/id}"
+                                                            th:target="content1">码号详情</a></li>
+
+                            <li class="" id="tab2"><a onclick="active('2')"
+
+                                                      th:target="content1">通道使用记录</a></li>
+                            <li class="" id="tab3"><a onclick="active('3')"
+
+                                                      th:target="content1">发送量统计</a></li>
+                            <li class="" id="tab4"><a onclick="active('4')"
+                                                      
+                                                      th:target="content1">码号操作日志</a></li>
+                        </ul>
+                    </div>
                     <div class="tab-cotent">
                         <iframe name="content1" id="content1" th:frameBorder="0" th:scrolling="auto"
-                                th:src="@{/configure/codenumber/detail/id}" style="padding: 0px; width: 100%; height: 800px"> </iframe>
+                                th:src="@{/configure/code/number/view/base/id}"
+                                style="padding: 0px; width: 100%; height: 800px"></iframe>
                     </div>
                 </div>
             </div>
@@ -85,6 +96,7 @@
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
+
 </script>
 </body>
 </html>

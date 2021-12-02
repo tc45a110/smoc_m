@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
  * 码号管理
  **/
 @Controller
-@RequestMapping("/configure/codenumber")
+@RequestMapping("/configure/code/number")
 public class CodeNumberController {
 
 
@@ -25,7 +25,7 @@ public class CodeNumberController {
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ModelAndView userProfile(HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("configure/codenumber/codenumber_list");
+        ModelAndView view = new ModelAndView("configure/code_number/code_number_list");
 
         //查询数据
         PageParams params = new PageParams<>();
@@ -49,7 +49,7 @@ public class CodeNumberController {
      */
     @RequestMapping(value = "/page", method = RequestMethod.POST)
     public ModelAndView page() {
-        ModelAndView view = new ModelAndView("configure/codenumber/codenumber_list");
+        ModelAndView view = new ModelAndView("configure/code_number/code_number_list");
 
         //查询数据
         PageParams params = new PageParams<>();
@@ -66,19 +66,6 @@ public class CodeNumberController {
 
     }
 
-    /**
-     * 码号添加
-     *
-     * @return
-     */
-    @RequestMapping(value = "/add", method = RequestMethod.GET)
-    public ModelAndView add(HttpServletRequest request) {
-
-        ModelAndView view = new ModelAndView("configure/codenumber/codenumber_edit");
-
-        return view;
-
-    }
 
     /**
      * 码号编辑
@@ -88,7 +75,7 @@ public class CodeNumberController {
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
     public ModelAndView edit(HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("configure/codenumber/codenumber_edit");
+        ModelAndView view = new ModelAndView("configure/code_number/code_number_edit");
 
         return view;
 
@@ -99,10 +86,10 @@ public class CodeNumberController {
      *
      * @return
      */
-    @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/view/center/{id}", method = RequestMethod.GET)
     public ModelAndView view(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("configure/codenumber/codenumber_view");
+        ModelAndView view = new ModelAndView("configure/code_number/code_number_view_center");
 
         return view;
 
@@ -113,54 +100,13 @@ public class CodeNumberController {
      *
      * @return
      */
-    @RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/view/base/{id}", method = RequestMethod.GET)
     public ModelAndView detail(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("configure/codenumber/codenumber_detail");
+        ModelAndView view = new ModelAndView("configure/code_number/code_number_view_base");
 
         return view;
 
     }
 
-    /**
-     * 通道使用记录
-     *
-     * @return
-     */
-    @RequestMapping(value = "/channelRecode/{id}", method = RequestMethod.GET)
-    public ModelAndView channelRecode(@PathVariable String id, HttpServletRequest request) {
-
-        ModelAndView view = new ModelAndView("configure/codenumber/codenumber_channel_record");
-
-        return view;
-
-    }
-
-    /**
-     * 统计发送量
-     *
-     * @return
-     */
-    @RequestMapping(value = "/statisticsSendCount/{id}", method = RequestMethod.GET)
-    public ModelAndView statisticsSendCount(@PathVariable String id, HttpServletRequest request) {
-
-        ModelAndView view = new ModelAndView("configure/codenumber/codenumber_statistics_send");
-
-        return view;
-
-    }
-
-    /**
-     * 码号历史修改记录
-     *
-     * @return
-     */
-    @RequestMapping(value = "/editRecord/{id}", method = RequestMethod.GET)
-    public ModelAndView editRecords(@PathVariable String id, HttpServletRequest request) {
-
-        ModelAndView view = new ModelAndView("configure/codenumber/codenumber_edit_record");
-
-        return view;
-
-    }
 }
