@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <!-- Custom box css -->
+</head>
+<body>
+<!-- Loader -->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">通道详情</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            通道管理
+                        </li>
+                        <li class="active">
+                            通道详情
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <h4 class="m-b-10">通道详情
+                                <div class="pull-right" style="margin-top: -12px;margin-right:10pxx">
+                                    <a sec:authorize-url="/configure/channel/list" th:href="@{/configure/channel/list}"
+                                       class="btn btn-default waves-effect waves-light btn-md">
+                                        <i class="glyphicon  glyphicon-share-alt" style="margin-right:10px"></i>
+                                        返回通道列表</a>
+                                    <a sec:authorize-url="/configure/channel/edit/center/*" th:href="@{/configure/channel/edit/center/id}"
+                                       class="btn btn-purple waves-effect waves-light btn-md">
+                                        <i class="glyphicon  glyphicon-cog" style="margin-right:5px"></i>
+                                        通道配置</a>
+                                </div>
+                            </h4>
+                            <div class="row" style="margin-top:20px">
+                                <div class="col-md-12">
+                                    <div class="card-box">
+                                        <ul class="nav nav-pills m-b-30 pull-right">
+                                            <li class="active" id="tab1"><a onclick="active('1')"  sec:authorize-url="/configure/channel/view/base/*"
+                                                                            th:href="@{/configure/channel/view/base/id}"
+                                                                            th:target="tab-content">通道信息</a></li>
+                                            <li class="" id="tab2"><a onclick="active('2')"
+
+                                                                            th:target="tab-content">通道价格记录</a></li>
+                                            <li class="" id="tab3"><a onclick="active('3')"
+
+                                                                     th:target="tab-content">通道发送量统计</a></li>
+                                            <li class="" id="tab4"><a onclick="active('4')"
+
+                                                                      th:target="tab-content">通道投诉统计</a></li>
+                                            <li class="" id="tab5"><a onclick="active('5')"
+
+                                                                      th:target="tab-content">通道操作日志</a></li>
+
+                                        </ul>
+                                        <div class="tab-cotent" style="background-color:#fff">
+                                            <iframe name="tab-content" id="tab-content" th:frameBorder="0" th:scrolling="auto"
+                                                    th:src="@{/configure/channel/view/base/id}" style="padding: 0px; width: 100%; height: 2600px;background-color:#fff"> </iframe>
+                                        </div>
+                                    </div>
+                                </div> <!-- end col -->
+                            </div>
+                            <!-- end row -->
+                        </div> <!-- end col -->
+
+                    </div> <!-- end row -->
+
+                </div>
+            </div>
+        </div>
+
+        <!-- end row -->
+
+    </div> <!-- container -->
+
+</div> <!-- content -->
+
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<!-- Modal-Effect -->
+<script>
+
+    function active(tab) {
+        for(var num = 1;num<10;num++){
+            $('#tab'+num).removeClass("active");
+        }
+        $('#tab'+tab).attr("class","active");
+    }
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+</script>
+</body>
+</html>

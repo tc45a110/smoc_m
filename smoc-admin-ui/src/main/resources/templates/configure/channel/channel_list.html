@@ -68,7 +68,7 @@
                                              data-icon="mdi mdi-view-module" title="接入省份"/>
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <label>通道链接状态：</label>
+                                    <label>通道运行状态：</label>
                                     <mpm:tag id="channelLinkStatus" identity="channelLinkStatus"
                                              show-type="checkbox" key="code"
                                              class="form-control" name="channelProtocolType" value="" title="通道链接状态"/>
@@ -95,8 +95,8 @@
                                             class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search" style="margin-right:5px"></i> 查询
                                     </button>
-                                    <a sec:authorize-url="/configure/channel/edit_center/*"
-                                       th:href="@{/configure/channel/edit_center/base}"
+                                    <a sec:authorize-url="/configure/channel/edit/center/*"
+                                       th:href="@{/configure/channel/edit/center/base}"
                                        class="btn btn-success waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-plus-sign"></i> 新建通道</a>
                                 </div>
@@ -184,16 +184,16 @@
                                                         通道业务介绍：次产品只能用来发送彩信、地产、有戏、验证码
                                                     </span>
                                                     <div class="pull-right">
-                                                        <a sec:authorize-url="/configure/channel/view_center/*"
-                                                           th:href="@{/configure/channel/view_center/id}"
+                                                        <a sec:authorize-url="/configure/channel/view/center/*"
+                                                           th:href="@{/configure/channel/view/center/id}"
                                                            data-toggle="tooltip" data-placement="left" title=""
-                                                           data-original-title="查看通道明细" style="font-size:12px">
+                                                           data-original-title="通道详情" style="font-size:12px">
                                                             <i class="glyphicon  glyphicon-search"
-                                                               style="margin-right:5px;font-size:12px;color:#0095a8"></i>明细</a>
-                                                        <a sec:authorize-url="/configure/channel/edit_center/*"
-                                                           th:href="@{/configure/channel/edit_center/id}"
+                                                               style="margin-right:5px;font-size:12px;color:#0095a8"></i>详细</a>
+                                                        <a sec:authorize-url="/configure/channel/edit/center/*"
+                                                           th:href="@{/configure/channel/edit/center/id}"
                                                            data-toggle="tooltip" data-placement="left" title=""
-                                                           data-original-title="通道修改配置" style="font-size:12px">
+                                                           data-original-title="通道配置" style="font-size:12px">
                                                             <i class="glyphicon glyphicon-cog"
                                                                style="margin-right:5px;font-size:12px;color:#0095a8"></i>配置</a>
                                                     </div>
@@ -274,16 +274,16 @@
                                                         通道业务介绍：次产品只能用来发送彩信、地产、有戏、验证码
                                                     </span>
                                                     <div class="pull-right">
-                                                        <a sec:authorize-url="/configure/channel/view_center/*"
-                                                           th:href="@{/configure/channel/view_center/id}"
+                                                        <a sec:authorize-url="/configure/channel/view/center/*"
+                                                           th:href="@{/configure/channel/view/center/id}"
                                                            data-toggle="tooltip" data-placement="left" title=""
-                                                           data-original-title="查看通道明细" style="font-size:12px">
+                                                           data-original-title="通道详情" style="font-size:12px">
                                                             <i class="glyphicon  glyphicon-search"
-                                                               style="margin-right:5px;font-size:12px;color:#0095a8"></i>明细</a>
-                                                        <a sec:authorize-url="/configure/channel/edit_center/*"
-                                                           th:href="@{/configure/channel/edit_center/id}"
+                                                               style="margin-right:5px;font-size:12px;color:#0095a8"></i>详细</a>
+                                                        <a sec:authorize-url="/configure/channel/edit/center/*"
+                                                           th:href="@{/configure/channel/edit/center/id}"
                                                            data-toggle="tooltip" data-placement="left" title=""
-                                                           data-original-title="通道修改配置" style="font-size:12px">
+                                                           data-original-title="通道配置" style="font-size:12px">
                                                             <i class="glyphicon glyphicon-cog"
                                                                style="margin-right:5px;font-size:12px;color:#0095a8"></i>配置</a>
                                                     </div>
@@ -364,16 +364,16 @@
                                                         通道业务介绍：次产品只能用来发送彩信、地产、有戏、验证码
                                                     </span>
                                                     <div class="pull-right">
-                                                        <a sec:authorize-url="/configure/channel/view_center/*"
-                                                           th:href="@{/configure/channel/view_center/id}"
+                                                        <a sec:authorize-url="/configure/channel/view/center/*"
+                                                           th:href="@{/configure/channel/view/center/id}"
                                                            data-toggle="tooltip" data-placement="left" title=""
-                                                           data-original-title="查看通道明细" style="font-size:12px">
+                                                           data-original-title="通道详情" style="font-size:12px">
                                                             <i class="glyphicon  glyphicon-search"
-                                                               style="margin-right:5px;font-size:12px;color:#0095a8"></i>明细</a>
-                                                        <a sec:authorize-url="/configure/channel/edit_center/*"
-                                                           th:href="@{/configure/channel/edit_center/id}"
+                                                               style="margin-right:5px;font-size:12px;color:#0095a8"></i>详细</a>
+                                                        <a sec:authorize-url="/configure/channel/edit/center/*"
+                                                           th:href="@{/configure/channel/edit/center/id}"
                                                            data-toggle="tooltip" data-placement="left" title=""
-                                                           data-original-title="通道修改配置" style="font-size:12px">
+                                                           data-original-title="通道配置" style="font-size:12px">
                                                             <i class="glyphicon glyphicon-cog"
                                                                style="margin-right:5px;font-size:12px;color:#0095a8"></i>配置</a>
                                                     </div>
@@ -454,16 +454,16 @@
                                                         通道业务介绍：次产品只能用来发送彩信、地产、有戏、验证码
                                                     </span>
                                                     <div class="pull-right">
-                                                        <a sec:authorize-url="/configure/channel/view_center/*"
-                                                           th:href="@{/configure/channel/view_center/id}"
+                                                        <a sec:authorize-url="/configure/channel/view/center/*"
+                                                           th:href="@{/configure/channel/view/center/id}"
                                                            data-toggle="tooltip" data-placement="left" title=""
-                                                           data-original-title="查看通道明细" style="font-size:12px">
+                                                           data-original-title="通道详情" style="font-size:12px">
                                                             <i class="glyphicon  glyphicon-search"
-                                                               style="margin-right:5px;font-size:12px;color:#0095a8"></i>明细</a>
-                                                        <a sec:authorize-url="/configure/channel/edit_center/*"
-                                                           th:href="@{/configure/channel/edit_center/id}"
+                                                               style="margin-right:5px;font-size:12px;color:#0095a8"></i>详细</a>
+                                                        <a sec:authorize-url="/configure/channel/edit/center/*"
+                                                           th:href="@{/configure/channel/edit/center/id}"
                                                            data-toggle="tooltip" data-placement="left" title=""
-                                                           data-original-title="通道修改配置" style="font-size:12px">
+                                                           data-original-title="通道配置" style="font-size:12px">
                                                             <i class="glyphicon glyphicon-cog"
                                                                style="margin-right:5px;font-size:12px;color:#0095a8"></i>配置</a>
                                                     </div>
@@ -544,16 +544,16 @@
                                                         通道业务介绍：次产品只能用来发送彩信、地产、有戏、验证码
                                                     </span>
                                                     <div class="pull-right">
-                                                        <a sec:authorize-url="/configure/channel/view_center/*"
-                                                           th:href="@{/configure/channel/view_center/id}"
+                                                        <a sec:authorize-url="/configure/channel/view/center/*"
+                                                           th:href="@{/configure/channel/view/center/id}"
                                                            data-toggle="tooltip" data-placement="left" title=""
-                                                           data-original-title="查看通道明细" style="font-size:12px">
+                                                           data-original-title="通道详情" style="font-size:12px">
                                                             <i class="glyphicon  glyphicon-search"
-                                                               style="margin-right:5px;font-size:12px;color:#0095a8"></i>明细</a>
-                                                        <a sec:authorize-url="/configure/channel/edit_center/*"
-                                                           th:href="@{/configure/channel/edit_center/id}"
+                                                               style="margin-right:5px;font-size:12px;color:#0095a8"></i>详细</a>
+                                                        <a sec:authorize-url="/configure/channel/edit/center/*"
+                                                           th:href="@{/configure/channel/edit/center/id}"
                                                            data-toggle="tooltip" data-placement="left" title=""
-                                                           data-original-title="通道修改配置" style="font-size:12px">
+                                                           data-original-title="通道配置" style="font-size:12px">
                                                             <i class="glyphicon glyphicon-cog"
                                                                style="margin-right:5px;font-size:12px;color:#0095a8"></i>配置</a>
                                                     </div>
@@ -634,16 +634,16 @@
                                                         通道业务介绍：次产品只能用来发送彩信、地产、有戏、验证码
                                                     </span>
                                                     <div class="pull-right">
-                                                        <a sec:authorize-url="/configure/channel/view_center/*"
-                                                           th:href="@{/configure/channel/view_center/id}"
+                                                        <a sec:authorize-url="/configure/channel/view/center/*"
+                                                           th:href="@{/configure/channel/view/center/id}"
                                                            data-toggle="tooltip" data-placement="left" title=""
-                                                           data-original-title="查看通道明细" style="font-size:12px">
+                                                           data-original-title="通道详情" style="font-size:12px">
                                                             <i class="glyphicon  glyphicon-search"
-                                                               style="margin-right:5px;font-size:12px;color:#0095a8"></i>明细</a>
-                                                        <a sec:authorize-url="/configure/channel/edit_center/*"
-                                                           th:href="@{/configure/channel/edit_center/id}"
+                                                               style="margin-right:5px;font-size:12px;color:#0095a8"></i>详细</a>
+                                                        <a sec:authorize-url="/configure/channel/edit/center/*"
+                                                           th:href="@{/configure/channel/edit/center/id}"
                                                            data-toggle="tooltip" data-placement="left" title=""
-                                                           data-original-title="通道修改配置" style="font-size:12px">
+                                                           data-original-title="通道配置" style="font-size:12px">
                                                             <i class="glyphicon glyphicon-cog"
                                                                style="margin-right:5px;font-size:12px;color:#0095a8"></i>配置</a>
                                                     </div>
@@ -724,16 +724,16 @@
                                                         通道业务介绍：次产品只能用来发送彩信、地产、有戏、验证码
                                                     </span>
                                                     <div class="pull-right">
-                                                        <a sec:authorize-url="/configure/channel/view_center/*"
-                                                           th:href="@{/configure/channel/view_center/id}"
+                                                        <a sec:authorize-url="/configure/channel/view/center/*"
+                                                           th:href="@{/configure/channel/view/center/id}"
                                                            data-toggle="tooltip" data-placement="left" title=""
-                                                           data-original-title="查看通道明细" style="font-size:12px">
+                                                           data-original-title="通道详情" style="font-size:12px">
                                                             <i class="glyphicon  glyphicon-search"
-                                                               style="margin-right:5px;font-size:12px;color:#0095a8"></i>明细</a>
-                                                        <a sec:authorize-url="/configure/channel/edit_center/*"
-                                                           th:href="@{/configure/channel/edit_center/id}"
+                                                               style="margin-right:5px;font-size:12px;color:#0095a8"></i>详细</a>
+                                                        <a sec:authorize-url="/configure/channel/edit/center/*"
+                                                           th:href="@{/configure/channel/edit/center/id}"
                                                            data-toggle="tooltip" data-placement="left" title=""
-                                                           data-original-title="通道修改配置" style="font-size:12px">
+                                                           data-original-title="通道配置" style="font-size:12px">
                                                             <i class="glyphicon glyphicon-cog"
                                                                style="margin-right:5px;font-size:12px;color:#0095a8"></i>配置</a>
                                                     </div>
@@ -814,16 +814,16 @@
                                                         通道业务介绍：次产品只能用来发送彩信、地产、有戏、验证码
                                                     </span>
                                                     <div class="pull-right">
-                                                        <a sec:authorize-url="/configure/channel/view_center/*"
-                                                           th:href="@{/configure/channel/view_center/id}"
+                                                        <a sec:authorize-url="/configure/channel/view/center/*"
+                                                           th:href="@{/configure/channel/view/center/id}"
                                                            data-toggle="tooltip" data-placement="left" title=""
-                                                           data-original-title="查看通道明细" style="font-size:12px">
+                                                           data-original-title="通道详情" style="font-size:12px">
                                                             <i class="glyphicon  glyphicon-search"
-                                                               style="margin-right:5px;font-size:12px;color:#0095a8"></i>明细</a>
-                                                        <a sec:authorize-url="/configure/channel/edit_center/*"
-                                                           th:href="@{/configure/channel/edit_center/id}"
+                                                               style="margin-right:5px;font-size:12px;color:#0095a8"></i>详细</a>
+                                                        <a sec:authorize-url="/configure/channel/edit/center/*"
+                                                           th:href="@{/configure/channel/edit/center/id}"
                                                            data-toggle="tooltip" data-placement="left" title=""
-                                                           data-original-title="通道修改配置" style="font-size:12px">
+                                                           data-original-title="通道配置" style="font-size:12px">
                                                             <i class="glyphicon glyphicon-cog"
                                                                style="margin-right:5px;font-size:12px;color:#0095a8"></i>配置</a>
                                                     </div>
@@ -904,16 +904,16 @@
                                                         通道业务介绍：次产品只能用来发送彩信、地产、有戏、验证码
                                                     </span>
                                                     <div class="pull-right">
-                                                        <a sec:authorize-url="/configure/channel/view_center/*"
-                                                           th:href="@{/configure/channel/view_center/id}"
+                                                        <a sec:authorize-url="/configure/channel/view/center/*"
+                                                           th:href="@{/configure/channel/view/center/id}"
                                                            data-toggle="tooltip" data-placement="left" title=""
-                                                           data-original-title="查看通道明细" style="font-size:12px">
+                                                           data-original-title="通道详情" style="font-size:12px">
                                                             <i class="glyphicon  glyphicon-search"
-                                                               style="margin-right:5px;font-size:12px;color:#0095a8"></i>明细</a>
-                                                        <a sec:authorize-url="/configure/channel/edit_center/*"
-                                                           th:href="@{/configure/channel/edit_center/id}"
+                                                               style="margin-right:5px;font-size:12px;color:#0095a8"></i>详细</a>
+                                                        <a sec:authorize-url="/configure/channel/edit/center/*"
+                                                           th:href="@{/configure/channel/edit/center/id}"
                                                            data-toggle="tooltip" data-placement="left" title=""
-                                                           data-original-title="通道修改配置" style="font-size:12px">
+                                                           data-original-title="通道配置" style="font-size:12px">
                                                             <i class="glyphicon glyphicon-cog"
                                                                style="margin-right:5px;font-size:12px;color:#0095a8"></i>配置</a>
                                                     </div>
