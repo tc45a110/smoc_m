@@ -443,7 +443,7 @@ public class MpmDictTagProcessor extends AbstractAttributeTagProcessor {
 
             model.add(modelFactory.createOpenElementTag("input", attriCheckBox, null, false));
 
-            model.add(modelFactory.createOpenElementTag("label", "for", fieldValue));
+            model.add(modelFactory.createOpenElementTag("label"));
             model.add(modelFactory.createText(HtmlEscape.escapeHtml5(dict.getFieldName())));
             model.add(modelFactory.createCloseElementTag("label"));
 
@@ -544,7 +544,7 @@ public class MpmDictTagProcessor extends AbstractAttributeTagProcessor {
 
             model.add(modelFactory.createOpenElementTag("input", attriCheckBox, null, false));
 
-            model.add(modelFactory.createOpenElementTag("label", "for", fieldValue));
+            model.add(modelFactory.createOpenElementTag("label"));
             model.add(modelFactory.createText(HtmlEscape.escapeHtml5(dict.getFieldName())));
             model.add(modelFactory.createCloseElementTag("label"));
 

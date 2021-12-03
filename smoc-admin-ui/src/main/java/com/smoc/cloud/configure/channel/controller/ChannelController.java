@@ -71,12 +71,12 @@ public class ChannelController {
     }
 
     /**
-     * 通道配置维护中心
+     * 通道维护中心
      *
      * @return
      */
-    @RequestMapping(value = "/edit_center/{id}", method = RequestMethod.GET)
-    public ModelAndView view(@PathVariable String id, HttpServletRequest request) {
+    @RequestMapping(value = "/edit/center/{id}", method = RequestMethod.GET)
+    public ModelAndView edit_center(@PathVariable String id, HttpServletRequest request) {
 
         ModelAndView view = new ModelAndView("configure/channel/channel_edit_center");
 
@@ -169,6 +169,33 @@ public class ChannelController {
 
         ModelAndView view = new ModelAndView("configure/channel/channel_edit_spare");
 
+        return view;
+
+    }
+
+    /**
+     * 通道详情中心
+     *
+     * @return
+     */
+    @RequestMapping(value = "/view/center/{id}", method = RequestMethod.GET)
+    public ModelAndView view_center(@PathVariable String id, HttpServletRequest request) {
+
+        ModelAndView view = new ModelAndView("configure/channel/channel_view_center");
+
+        return view;
+
+    }
+
+    /**
+     * 通道详情
+     *
+     * @return
+     */
+    @RequestMapping(value = "/view/base/{id}", method = RequestMethod.GET)
+    public ModelAndView view_base(@PathVariable String id, HttpServletRequest request) {
+
+        ModelAndView view = new ModelAndView("configure/channel/channel_view_base");
         return view;
 
     }

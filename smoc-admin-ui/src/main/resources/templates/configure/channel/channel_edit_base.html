@@ -53,7 +53,7 @@
                                         <div class="form-group">
                                             <div class="row">
                                                 <div class="col-sm-6 m-b-10">
-                                                    <label >发送号码范围<span class="text-danger">*</span>&nbsp;<span
+                                                    <label>发送号码范围<span class="text-danger">*</span>&nbsp;<span
                                                             class="text-danger"
                                                             style="font-weight: 200;font-size: 12px"></span>
                                                     </label><br>
@@ -100,26 +100,19 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="row">
-                                                <div class="col-sm-6 m-b-10">
+                                                <div class="col-sm-12 m-b-10">
                                                     <label style="margin-right:10px">信息分类<span
                                                             class="text-danger">*</span>&nbsp;<span
                                                             class="text-danger"
                                                             style="font-weight: 200;font-size: 12px"></span>
                                                     </label><br>
                                                     <mpm:tag id="infoType" identity="infoType"
-                                                             name="channelProtocolType" show-type="checkbox" key="code"
+                                                             name="infoType" show-type="checkbox" key="code"
                                                              class="form-control" data-icon="mdi mdi-view-module"
                                                              title="信息分类"/>
                                                 </div>
-                                                <div class="col-sm-6 m-b-10">
-                                                    <label>是否支持携号转网<span class="text-danger">*</span>&nbsp;<span
-                                                            class="text-danger"
-                                                            style="font-weight: 200;font-size: 12px"></span>
-                                                    </label><br/>
-                                                    <mpm:tag id="isTransfer" identity="isOrNo" name="isTransfer"
-                                                             value="0" show-type="radio" style="margin-top:0px"
-                                                             key="code" data-icon="mdi mdi-view-module" title="是否"/>
-                                                </div>
+
+
 
                                             </div>
                                         </div>
@@ -135,31 +128,29 @@
                                                              data-icon="mdi mdi-view-module" title="有无"/>
                                                 </div>
                                                 <div class="col-sm-6 m-b-10">
-                                                    <label  style="margin-right: 10px">有无上行<span
-                                                            class="text-danger">*</span>&nbsp;<span
+                                                    <label>签名方式<span class="text-danger">*</span>&nbsp;<span
                                                             class="text-danger"
                                                             style="font-weight: 200;font-size: 12px"></span>
                                                     </label>
-                                                    <mpm:tag id="yesOrNo" identity="yesOrNo" name="yesOrNo2" value="1"
+                                                    <mpm:tag id="signType" identity="signType" value="1" name="signType"
                                                              show-type="radio" style="margin-top:0px" key="code"
-                                                             data-icon="mdi mdi-view-module" title="有无"/>
+                                                             data-icon="mdi mdi-view-module" title="签名方式"/>
                                                 </div>
 
                                             </div>
                                         </div>
 
-
                                         <div class="form-group">
                                             <div class="row">
-
                                                 <div class="col-sm-6 m-b-10">
-                                                    <label>签名方式<span class="text-danger">*</span>&nbsp;<span
+                                                    <label style="margin-right: 10px">有无上行<span
+                                                            class="text-danger">*</span>&nbsp;<span
                                                             class="text-danger"
                                                             style="font-weight: 200;font-size: 12px"></span>
-                                                    </label><br/>
-                                                    <mpm:tag id="signType" identity="signType" value="1" name="signType"
-                                                             show-type="radio" style="margin-top:10px" key="code"
-                                                             data-icon="mdi mdi-view-module" title="签名方式"/>
+                                                    </label><br>
+                                                    <mpm:tag id="yesOrNo" identity="yesOrNo" name="yesOrNo2" value="1"
+                                                             show-type="radio" style="margin-top:0px" key="code"
+                                                             data-icon="mdi mdi-view-module" title="有无"/>
                                                 </div>
                                                 <div class="col-sm-6 m-b-10">
                                                     <label>通道状态<span class="text-danger">*</span>&nbsp;<span
@@ -171,12 +162,37 @@
                                                              class="form-control" data-icon="mdi mdi-view-module"
                                                              title="通道状态"/>
                                                 </div>
+
                                             </div>
                                         </div>
 
                                     </div>
-                                    <div class="col-md-6 p-l-r-10">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-sm-6 m-b-10">
+                                                    <label>是否支持携号转网<span class="text-danger">*</span>&nbsp;<span
+                                                            class="text-danger"
+                                                            style="font-weight: 200;font-size: 12px"></span>
+                                                    </label><br/>
+                                                    <mpm:tag id="isTransfer" identity="isOrNo" name="isTransfer"
+                                                             value="0" show-type="radio" onchange="isTransferSwith()"
+                                                             style="margin-top:0px"
+                                                             key="code" data-icon="mdi mdi-view-module" title="是否"/>
+                                                </div>
+                                                <div class="col-sm-6 m-b-10">
+                                                    <label style="margin-right:10px">携号转网方式&nbsp;<span
+                                                            class="text-danger"
+                                                            style="font-weight: 200;font-size: 12px"></span>
+                                                    </label><br>
+                                                    <mpm:tag id="transferType" identity="transferType"
+                                                             name="transferType" show-type="checkbox" key="code"
+                                                             class="form-control"
+                                                             title="携号转网方式"/>
+                                                </div>
 
+                                            </div>
+                                        </div>
                                         <div class="form-group">
                                             <div class="row">
                                                 <div class="col-sm-12 m-b-10">
@@ -240,8 +256,9 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        
+
                                         <div class="form-group">
+
                                             <div class="row">
                                                 <div class="col-sm-12 m-b-10">
                                                     <label>通道介绍<span class="text-danger">*</span>&nbsp;<span
@@ -253,6 +270,7 @@
                                                            placeholder="通道介绍">
                                                 </div>
                                             </div>
+
                                         </div>
 
                                     </div>
@@ -280,6 +298,22 @@
 <th:block th:insert="fragments/common_fragments :: select_js"/>
 <th:block th:insert="fragments/common_fragments :: common_submit_form"/>
 <script>
+
+     //处理携号转网方式 默认禁止选择
+     $(document).ready(function () {
+       $("[name='transferType']").attr("disabled",'true');
+     });
+    //携号转网方式 切换
+    function isTransferSwith(){
+       var isTransfer = $('input:radio[name="isTransfer"]:checked').val();
+       //支持携号转网
+       if("1" == isTransfer){
+         $("[name='transferType']").removeAttr("disabled");
+       }else{
+        $("[name='transferType']").removeAttr("checked");
+        $("[name='transferType']").attr("disabled",'true');
+       }
+    }
 
     //计价方式 切换
     function chargeSwith() {
@@ -326,9 +360,13 @@
         }
     }
 
+
+
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
+
+
 
 
 
