@@ -10,12 +10,15 @@
 
 </head>
 <body style="background-color:#fff">
+<!-- Loader start 页面加载进度-->
 <th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
 
 <!-- Start content -->
 <div class="content">
     <div class="container">
-        <!-- start row -->
+
+        <!-- start row  页面内容-->
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all" style="background-color:#fff">
             <div class="col-md-12">
                 <form id="submit_form"
@@ -111,7 +114,6 @@
                                                              class="form-control" data-icon="mdi mdi-view-module"
                                                              title="信息分类"/>
                                                 </div>
-
 
 
                                             </div>
@@ -212,7 +214,7 @@
                                         <div class="form-group">
                                             <div class="row">
                                                 <div class="col-sm-12 m-b-10" style="text-align:left">
-                                                    <label id="maskAreas" style="display:block">屏蔽区域</label>
+                                                    <label id="maskAreas" style="display:block">屏蔽省份</label>
                                                     <label id="businessAreas" style="display: none">业务区域<span
                                                             class="text-danger"
                                                             style="font-weight: 200;font-size: 12px">*</span></label>
@@ -281,18 +283,17 @@
                             </div>
                         </div> <!-- end col -->
                     </div> <!-- end row -->
-
                 </form>
                 <!-- end form -->
+            </div>
+        </div>
+        <!-- end row -->
 
-            </div> <!-- end card-box -->
-        </div> <!-- end col -->
-    </div>
-    <!-- end row -->
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
 
-    <th:block th:insert="fragments/common_fragments :: common_error"/>
-
-</div> <!-- container -->
+    </div> <!-- container -->
 </div> <!-- content -->
 <th:block th:insert="fragments/common_fragments :: common_js"/>
 <th:block th:insert="fragments/common_fragments :: select_js"/>
@@ -365,6 +366,13 @@
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
+
+
+
+
+
+
+
 
 
 

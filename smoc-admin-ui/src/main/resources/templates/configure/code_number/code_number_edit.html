@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <th:block th:insert="fragments/common_fragments :: common_header"/>
@@ -8,13 +9,15 @@
 
 </head>
 <body>
-<!-- Loader -->
+<!-- Loader start 页面加载进度-->
 <th:block th:insert="fragments/common_fragments :: common_loader"/>
 <!-- Loader end -->
 
 <!-- Start content -->
 <div class="content" style="margin-top: 60px">
     <div class="container">
+
+        <!-- start row  页面导航-->
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
@@ -32,10 +35,12 @@
             </div>
         </div>
         <!-- end row -->
+
+        <!-- start row  页面内容-->
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-md-12">
                 <div class="card-box">
-                    <form  id="submit_form" method="post">
+                    <form id="submit_form" method="post">
                         <div class="row">
                             <div class="col-md-10">
                                 <div class="p-20">
@@ -43,60 +48,74 @@
                                         <div class="row">
                                             <div class="col-sm-3 m-b-10">
                                                 <label>码号<span class="text-danger">*</span>&nbsp;<span
-                                                        class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                        class="text-danger"
+                                                        style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
                                                 <input type="text" required="" class="form-control" autocomplete="off"
                                                        placeholder="码号">
                                             </div>
                                             <div class="col-sm-3 m-b-10">
                                                 <label>抗诉率(每百万)<span class="text-danger">*</span>&nbsp;<span
-                                                        class="text-danger" placeholder="抗诉率(每百万)" style="font-weight: 200;font-size: 12px"></span>
+                                                        class="text-danger"
+                                                        style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
-                                                <input type="text" class="form-control" autocomplete="off" >
+                                                <input type="text" placeholder="抗诉率(每百万)" class="form-control"
+                                                       autocomplete="off">
                                             </div>
-
                                             <div class="col-sm-3 m-b-10">
                                                 <label>运营商<span class="text-danger">*</span>&nbsp;<span
-                                                        class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                        class="text-danger"
+                                                        style="font-weight: 200;font-size: 12px"></span>
                                                 </label><br/>
-                                                <mpm:tag id="carrier" identity="carrier" name="carrier" show-type="select"  key="code" class="form-control" data-icon="mdi mdi-view-module" title="运营商" />
+                                                <mpm:tag id="carrier" identity="carrier" name="carrier"
+                                                         show-type="select" key="code" class="form-control"
+                                                         data-icon="mdi mdi-view-module" title="运营商"/>
                                             </div>
                                             <div class="col-sm-3 m-b-10">
                                                 <label>业务类型&nbsp;<span
-                                                        class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                        class="text-danger"
+                                                        style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
-                                                <mpm:tag id="businessType" identity="businessType"  show-type="select"  key="code" class="form-control" data-icon="mdi mdi-view-module" title="业务类型" />
+                                                <mpm:tag id="businessType" identity="businessType" show-type="select"
+                                                         key="code" class="form-control" data-icon="mdi mdi-view-module"
+                                                         title="业务类型"/>
                                             </div>
-
-
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-sm-3 m-b-10">
+                                                <label>计费号码/CA编号<span class="text-danger">*</span>&nbsp;<span
+                                                        class="text-danger"
+                                                        style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input type="text" placeholder="计费号码/CA编号" class="form-control"
+                                                       autocomplete="off">
+                                            </div>
+                                            <div class="col-sm-3 m-b-10">
                                                 <label>资费(元/条)<span class="text-danger">*</span>&nbsp;<span
-                                                        class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                        class="text-danger"
+                                                        style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
-                                                <input type="text" class="form-control" autocomplete="off" >
-                                            </div>
-                                            <div class="col-sm-3 m-b-10">
-                                                <label>资费生效时间<span class="text-danger">*</span>&nbsp;<span
-                                                        class="text-danger" style="font-weight: 200;font-size: 12px"></span>
-                                                </label>
-                                                <input type="text" class="form-control" autocomplete="off" >
-                                            </div>
-                                            <div class="col-sm-3 m-b-10">
-                                                <label>用途<span class="text-danger">*</span>&nbsp;<span
-                                                        class="text-danger" style="font-weight: 200;font-size: 12px"></span>
-                                                </label>
-                                                <mpm:tag id="codeUseType" identity="codeUseType"  show-type="select"  key="code" class="form-control" data-icon="mdi mdi-view-module" title="用途" />
+                                                <input type="text" placeholder="资费(元/条)" class="form-control"
+                                                       autocomplete="off">
                                             </div>
 
                                             <div class="col-sm-3 m-b-10">
-                                                <label>码号来源<span class="text-danger">*</span>&nbsp;<span
-                                                        class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                <label>资费生效时间<span class="text-danger">*</span>&nbsp;<span
+                                                        class="text-danger"
+                                                        style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
-                                                <mpm:tag id="codeSource" identity="codeSource"  show-type="select"  key="code" class="form-control" data-icon="mdi mdi-view-module" title="码号来源" />
+                                                <input type="text" placeholder="资费生效时间" class="form-control"
+                                                       autocomplete="off">
+                                            </div>
+                                            <div class="col-sm-3 m-b-10">
+                                                <label>码号状态生效时间<span class="text-danger">*</span>&nbsp;<span
+                                                        class="text-danger"
+                                                        style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input type="text" placeholder="码号状态生效时间" class="form-control"
+                                                       autocomplete="off">
                                             </div>
                                         </div>
                                     </div>
@@ -105,77 +124,91 @@
 
                                             <div class="col-sm-3 m-b-10">
                                                 <label>接入点<span class="text-danger">*</span>&nbsp;<span
-                                                        class="text-danger" placeholder="接入点" style="font-weight: 200;font-size: 12px"></span>
+                                                        class="text-danger" placeholder="接入点"
+                                                        style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
-                                                <input type="text" class="form-control" autocomplete="off" >
+                                                <input type="text" placeholder="接入点" class="form-control"
+                                                       autocomplete="off">
                                             </div>
 
                                             <div class="col-sm-3 m-b-10">
                                                 <label>接入时间<span class="text-danger">*</span>&nbsp;<span
-                                                        class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                        class="text-danger"
+                                                        style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
-                                                <input type="text" class="form-control" autocomplete="off" >
+                                                <input type="text" placeholder="接入时间" class="form-control"
+                                                       autocomplete="off">
                                             </div>
                                             <div class="col-sm-3 m-b-10">
-                                                <label>低消要求(万条)<span class="text-danger">*</span>&nbsp;<span
-                                                        class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                <label>省份/地市<span class="text-danger">*</span>&nbsp;<span
+                                                        class="text-danger"
+                                                        style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
-                                                <input type="text" class="form-control" autocomplete="off" >
+                                                <input type="text" placeholder="省份/地市" class="form-control"
+                                                       autocomplete="off">
                                             </div>
                                             <div class="col-sm-3 m-b-10">
-                                                <label>低消生效时间<span class="text-danger">*</span>&nbsp;<span
-                                                        class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                <label>码号来源<span class="text-danger">*</span>&nbsp;<span
+                                                        class="text-danger"
+                                                        style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
-                                                <input type="text" class="form-control" autocomplete="off" >
+                                                <mpm:tag id="codeSource" identity="codeSource" show-type="select"
+                                                         key="code" class="form-control" data-icon="mdi mdi-view-module"
+                                                         title="码号来源"/>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="row">
-
                                             <div class="col-sm-3 m-b-10">
-                                                <label>码号状态生效时间<span class="text-danger">*</span>&nbsp;<span
-                                                        class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                <label>低消要求(万条)<span class="text-danger">*</span>&nbsp;<span
+                                                        class="text-danger"
+                                                        style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
-                                                <input type="text" class="form-control" autocomplete="off" >
+                                                <input type="text" placeholder="低消要求(万条)" class="form-control"
+                                                       autocomplete="off">
                                             </div>
                                             <div class="col-sm-3 m-b-10">
-                                                <label>计费号码/CA编号<span class="text-danger">*</span>&nbsp;<span
-                                                        class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                <label>低消生效时间<span class="text-danger">*</span>&nbsp;<span
+                                                        class="text-danger"
+                                                        style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
-                                                <input type="text" class="form-control" autocomplete="off" >
+                                                <input type="text" placeholder="低消生效时间" class="form-control"
+                                                       autocomplete="off">
                                             </div>
                                             <div class="col-sm-3 m-b-10">
-                                                <label>省份/地市<span class="text-danger">*</span>&nbsp;<span
-                                                        class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                <label>用途<span class="text-danger">*</span>&nbsp;<span
+                                                        class="text-danger"
+                                                        style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
-                                                <input type="text" class="form-control" autocomplete="off" placeholder="北京/北京">
+                                                <mpm:tag id="codeUseType" identity="codeUseType" show-type="select"
+                                                         key="code" class="form-control" data-icon="mdi mdi-view-module"
+                                                         title="用途"/>
                                             </div>
                                             <div class="col-sm-3 m-b-10">
                                                 <label>码号状态<span class="text-danger">*</span>&nbsp;<span
-                                                        class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                        class="text-danger"
+                                                        style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
-                                                <mpm:tag id="codeStatus" identity="codeStatus"  show-type="select"  key="code" class="form-control" data-icon="mdi mdi-view-module" title="码号状态" />
+                                                <mpm:tag id="codeStatus" identity="codeStatus" show-type="select"
+                                                         key="code" class="form-control" data-icon="mdi mdi-view-module"
+                                                         title="码号状态"/>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group m-b-20">
-                                        <label>备注&nbsp;<span class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                        <label>备注&nbsp;<span class="text-danger"
+                                                             style="font-weight: 200;font-size: 12px"></span>
                                         </label>
                                         <input type="text" class="form-control" autocomplete="off">
                                     </div>
-
                                 </div>
                                 <!-- end class p-20 -->
-                            </div> <!-- end col -->
-
-                            <div class="col-md-6">
-
                             </div> <!-- end col -->
                         </div> <!-- end row -->
 
                         <div class="text-center">
-                            <button  class="btn btn-teal waves-effect waves-light">提交
+                            <button class="btn btn-teal waves-effect waves-light">提交
                             </button>
                             <a sec:authorize-url="/configure/code/number/list" th:href="@{/configure/code/number/list}"
                                class="btn btn-default waves-effect waves-light">返回
@@ -189,20 +222,22 @@
         </div>
         <!-- end row -->
 
+        <!-- start row  错误提示-->
         <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
 
     </div> <!-- container -->
 </div> <!-- content -->
 <th:block th:insert="fragments/common_fragments :: common_js"/>
 <th:block th:insert="fragments/common_fragments :: select_js"/>
 <script th:src="@{/static/plugins/moment/moment.js}"></script>
-<!-- Jquery filer js -->
 <th:block th:insert="fragments/common_fragments :: common_submit_form"/>
 <script>
 
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
+
 </script>
 </body>
 </html>

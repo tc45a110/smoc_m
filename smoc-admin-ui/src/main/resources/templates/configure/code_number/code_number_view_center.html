@@ -9,13 +9,15 @@
     <!-- Custom box css -->
 </head>
 <body>
-<!-- Loader -->
+<!-- Loader start 页面加载进度-->
 <th:block th:insert="fragments/common_fragments :: common_loader"/>
 <!-- Loader end -->
 
 <!-- Start content -->
 <div class="content" style="margin-top: 60px">
     <div class="container">
+
+        <!-- start row  页面导航-->
         <div class="row fixed-navigation">
             <div class="col-xs-12">
                 <div class="page-title-box">
@@ -32,11 +34,11 @@
                 </div>
             </div>
         </div>
+        <!-- end row -->
 
-
-        <div class="row" style="position: relative;margin-top: 80px">
+        <!-- start row  页面内容-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all"  style="position: relative;margin-top: 80px">
             <div class="col-md-12">
-
                 <div class="card-box">
                     <div class="row" style="margin-bottom:10px">
                         <h4>
@@ -55,15 +57,11 @@
                                                             sec:authorize-url="/configure/code/number/view/base/*"
                                                             th:href="@{/configure/code/number/view/base/id}"
                                                             th:target="content1">码号详情</a></li>
-
                             <li class="" id="tab2"><a onclick="active('2')"
-
                                                       th:target="content1">通道使用记录</a></li>
                             <li class="" id="tab3"><a onclick="active('3')"
-
                                                       th:target="content1">发送量统计</a></li>
                             <li class="" id="tab4"><a onclick="active('4')"
-                                                      
                                                       th:target="content1">码号操作日志</a></li>
                         </ul>
                     </div>
@@ -77,10 +75,12 @@
         </div>
         <!-- end row -->
 
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
     </div> <!-- container -->
-
 </div> <!-- content -->
-
 <th:block th:insert="fragments/common_fragments :: common_js"/>
 <th:block th:insert="fragments/common_fragments :: select_js"/>
 <!-- Modal-Effect -->

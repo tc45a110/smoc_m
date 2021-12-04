@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <th:block th:insert="fragments/common_fragments :: common_header"/>
@@ -9,16 +10,19 @@
 
 </head>
 <body style="background-color:#fff">
+<!-- Loader start 页面加载进度-->
 <th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
 
 <!-- Start content -->
 <div class="content">
     <div class="container">
-        <!-- start row -->
+
+        <!-- start row  页面内容-->
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all" style="background-color:#fff">
             <div class="col-md-12">
-                <form  id="submit_form"
-                       method="post" data-parsley-validate="">
+                <form id="submit_form"
+                      method="post" data-parsley-validate="">
                     <div class="row">
                         <div class="col-md-12 panel panel-color panel-teal" style="padding-left:0px;padding-right:0px">
                             <div class="panel-heading">
@@ -32,21 +36,27 @@
                                             <div class="row">
                                                 <div class="col-sm-3 m-b-10">
                                                     <label>RE正则表达式&nbsp;<span
-                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                            class="text-danger"
+                                                            style="font-weight: 200;font-size: 12px"></span>
                                                     </label>
-                                                    <input type="text"   placeholder="RE正则表达式" class="form-control" autocomplete="off">
+                                                    <input type="text" placeholder="RE正则表达式" class="form-control"
+                                                           autocomplete="off">
                                                 </div>
 
                                                 <div class="col-sm-3 m-b-10">
                                                     <label>发送时间限制&nbsp<span
-                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                            class="text-danger"
+                                                            style="font-weight: 200;font-size: 12px"></span>
                                                     </label>
-                                                    <input type="text" placeholder="多个用分号隔开；例如00:00:00-08:00:00"  required="" class="form-control" autocomplete="off">
+                                                    <input type="text" placeholder="多个用分号隔开；例如00:00:00-08:00:00"
+                                                           required="" class="form-control" autocomplete="off">
                                                 </div>
 
                                                 <div class="col-sm-3 m-b-10" style="padding-left: 10px;">
                                                     <label class="m-b-20">黑名单</label><br>
-                                                    <mpm:tag id="isTransfer" identity="isOrNo"  name="isTransfer" style="margin-top:0px" value="0" show-type="radio"  key="code" data-icon="mdi mdi-view-module" title="是否" />
+                                                    <mpm:tag id="isTransfer" identity="isOrNo" name="isTransfer"
+                                                             style="margin-top:0px" value="0" show-type="radio"
+                                                             key="code" data-icon="mdi mdi-view-module" title="是否"/>
 
                                                 </div>
                                             </div>
@@ -55,21 +65,27 @@
                                             <div class="row">
                                                 <div class="col-sm-3 m-b-10">
                                                     <label>单号码流控（条/分钟）<span class="text-danger">*</span>&nbsp;<span
-                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                            class="text-danger"
+                                                            style="font-weight: 200;font-size: 12px"></span>
                                                     </label>
-                                                    <input type="text" placeholder="默认0，表示不限制" required="" class="form-control" autocomplete="off">
+                                                    <input type="text" placeholder="默认0，表示不限制" required=""
+                                                           class="form-control" autocomplete="off">
                                                 </div>
                                                 <div class="col-sm-3 m-b-10">
                                                     <label>单号码流控（条/小时）<span class="text-danger">*</span>&nbsp;<span
-                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                            class="text-danger"
+                                                            style="font-weight: 200;font-size: 12px"></span>
                                                     </label>
-                                                    <input type="text" placeholder="默认0，表示不限制" required="" class="form-control" autocomplete="off">
+                                                    <input type="text" placeholder="默认0，表示不限制" required=""
+                                                           class="form-control" autocomplete="off">
                                                 </div>
                                                 <div class="col-sm-3 m-b-10">
                                                     <label>单号码流控（条/天）<span class="text-danger">*</span>&nbsp;<span
-                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                            class="text-danger"
+                                                            style="font-weight: 200;font-size: 12px"></span>
                                                     </label>
-                                                    <input type="text" placeholder="默认0，表示不限制" required="" class="form-control" autocomplete="off">
+                                                    <input type="text" placeholder="默认0，表示不限制" required=""
+                                                           class="form-control" autocomplete="off">
                                                 </div>
 
                                             </div>
@@ -78,23 +94,23 @@
                                             <div class="row">
                                                 <div class="col-sm-3 m-b-10">
                                                     <label>每日发送最大条数<span class="text-danger">*</span>&nbsp;<span
-                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                            class="text-danger"
+                                                            style="font-weight: 200;font-size: 12px"></span>
                                                     </label>
-                                                    <input type="text" placeholder="默认0，表示不限制" required="" class="form-control" autocomplete="off">
+                                                    <input type="text" placeholder="默认0，表示不限制" required=""
+                                                           class="form-control" autocomplete="off">
                                                 </div>
                                                 <div class="col-sm-3 m-b-10">
                                                     <label>每月发送最大条数<span class="text-danger">*</span>&nbsp;<span
-                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                            class="text-danger"
+                                                            style="font-weight: 200;font-size: 12px"></span>
                                                     </label>
-                                                    <input type="text" placeholder="默认0，表示不限制" required="" class="form-control" autocomplete="off">
+                                                    <input type="text" placeholder="默认0，表示不限制" required=""
+                                                           class="form-control" autocomplete="off">
                                                 </div>
-
-
                                             </div>
                                         </div>
-
                                     </div>
-
                                 </div>
                                 <div class="text-center" style="margin-bottom:20px">
                                     <a type="button" class="btn btn-teal waves-effect waves-light">提交</a>
@@ -102,18 +118,17 @@
                             </div>
                         </div> <!-- end col -->
                     </div> <!-- end row -->
-
                 </form>
                 <!-- end form -->
+            </div> <!-- end col -->
+        </div>
+        <!-- end row -->
 
-            </div> <!-- end card-box -->
-        </div> <!-- end col -->
-    </div>
-    <!-- end row -->
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
 
-    <th:block th:insert="fragments/common_fragments :: common_error"/>
-
-</div> <!-- container -->
+    </div> <!-- container -->
 </div> <!-- content -->
 <th:block th:insert="fragments/common_fragments :: common_js"/>
 <th:block th:insert="fragments/common_fragments :: select_js"/>
@@ -122,6 +137,9 @@
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
+
+
+
 </script>
 </body>
 </html>

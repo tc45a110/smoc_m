@@ -7,13 +7,15 @@
     <!-- Custom box css -->
 </head>
 <body>
-<!-- Loader -->
+<!-- Loader start 页面加载进度-->
 <th:block th:insert="fragments/common_fragments :: common_loader"/>
 <!-- Loader end -->
 
 <!-- Start content -->
 <div class="content" style="margin-top: 60px">
     <div class="container">
+
+        <!-- start row 页面导航-->
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
@@ -30,7 +32,9 @@
                 </div>
             </div>
         </div>
+        <!-- end row -->
 
+        <!-- start row  页面内容-->
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
                 <div class="card-box">
@@ -86,13 +90,14 @@
                 </div>
             </div>
         </div>
+        <!-- end row -->
 
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
         <!-- end row -->
 
     </div> <!-- container -->
-
 </div> <!-- content -->
-
 <th:block th:insert="fragments/common_fragments :: common_js"/>
 <th:block th:insert="fragments/common_fragments :: select_js"/>
 <!-- Modal-Effect -->
