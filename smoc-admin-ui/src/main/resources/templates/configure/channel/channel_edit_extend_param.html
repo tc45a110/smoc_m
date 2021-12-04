@@ -38,7 +38,7 @@
                                         <div class="form-group">
                                             <div class="row">
                                                 <div th:each="dict:${channelExtendFields}" class="col-sm-3 m-b-10">
-                                                    <label>[[${dict.fieldName}]](key:[[${dict.fieldCode}]])</label>
+                                                    <label>[[${dict.fieldName}]]([[${dict.fieldCode}]])</label>
                                                     <input type="text" th:name="${dict.id}"
                                                            th:placeholder="${dict.fieldName}"
                                                            class="form-control" autocomplete="off">
