@@ -1,5 +1,6 @@
 package com.smoc.cloud.configure.product.controller;
 
+import com.smoc.cloud.common.auth.qo.Dict;
 import com.smoc.cloud.common.page.PageParams;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -8,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 产品管理
@@ -15,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 @RequestMapping("/configure/product")
 public class ProductController {
-
 
 
     /**
@@ -37,10 +39,9 @@ public class ProductController {
         params.setCurrentPage(1);
         params.setTotalRows(80);
 
-        view.addObject("pageParams",params);
+        view.addObject("pageParams", params);
 
         return view;
-
     }
 
     /**
@@ -61,117 +62,92 @@ public class ProductController {
         params.setCurrentPage(1);
         params.setTotalRows(80);
 
-        view.addObject("pageParams",params);
+        view.addObject("pageParams", params);
 
         return view;
 
     }
 
     /**
-     * 显示产品配置
+     * 产品维护中心
      *
      * @return
      */
-    @RequestMapping(value = "/config/{id}", method = RequestMethod.GET)
-    public ModelAndView config(@PathVariable String id, HttpServletRequest request) {
+    @RequestMapping(value = "/edit/center/{id}", method = RequestMethod.GET)
+    public ModelAndView edit_center(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("configure/product/product_config");
+        ModelAndView view = new ModelAndView("configure/product/product_edit_center");
 
         return view;
 
     }
 
     /**
-     * 添加产品
+     * 产品基本信息维护
      *
      * @return
      */
-    @RequestMapping(value = "/add", method = RequestMethod.GET)
-    public ModelAndView add(HttpServletRequest request) {
+    @RequestMapping(value = "/edit/base/{id}", method = RequestMethod.GET)
+    public ModelAndView base(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("configure/product/product_add");
+        ModelAndView view = new ModelAndView("configure/product/product_edit_base");
 
-        return view;
+        Map<String, List<Dict>> dictMap = (Map<String, List<Dict>>) request.getSession().getServletContext().getAttribute("dict");
+        List<Dict> dictList = dictMap.get("productExtendField");
 
-    }
-    /**
-     * 编辑产品
-     *
-     * @return
-     */
-    @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
-    public ModelAndView edit(@PathVariable String id, HttpServletRequest request) {
-
-        ModelAndView view = new ModelAndView("configure/product/product_edit");
+        view.addObject("productExtendField",dictList);
 
         return view;
 
     }
 
     /**
-     * 通道配置
+     * 产品通道配置
      *
      * @return
      */
-    @RequestMapping(value = "/channel/list/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/edit/channel/{id}", method = RequestMethod.GET)
     public ModelAndView channelList(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("configure/product/product_config_channel");
+        ModelAndView view = new ModelAndView("configure/product/product_edit_channel");
 
         return view;
 
     }
 
     /**
-     * 通道配置查询
+     * 产品详细中心
      *
      * @return
      */
-    @RequestMapping(value = "/channel/page", method = RequestMethod.POST)
-    public ModelAndView channelPage() {
-        ModelAndView view = new ModelAndView("configure/product/product_config_channel");
+    @RequestMapping(value = "/view/center/{id}", method = RequestMethod.GET)
+    public ModelAndView view_center(@PathVariable String id, HttpServletRequest request) {
+
+        ModelAndView view = new ModelAndView("configure/product/product_view_center");
 
         return view;
 
     }
 
     /**
-     * 过滤信息
+     * 产品基本详细
      *
      * @return
      */
-    @RequestMapping(value = "/filter/edit/{id}", method = RequestMethod.GET)
-    public ModelAndView filterEdit(@PathVariable String id, HttpServletRequest request) {
+    @RequestMapping(value = "/view/base/{id}", method = RequestMethod.GET)
+    public ModelAndView view_base(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("configure/product/product_config_filter");
+        ModelAndView view = new ModelAndView("configure/product/product_view_base");
+
+
+        Map<String, List<Dict>> dictMap = (Map<String, List<Dict>>) request.getSession().getServletContext().getAttribute("dict");
+        List<Dict> dictList = dictMap.get("productExtendField");
+
+        view.addObject("productExtendField",dictList);
 
         return view;
 
     }
 
-    /**
-     * 操作记录
-     *
-     * @return
-     */
-    @RequestMapping(value = "/operate/list/{id}", method = RequestMethod.GET)
-    public ModelAndView operateList(@PathVariable String id, HttpServletRequest request) {
-
-        ModelAndView view = new ModelAndView("configure/product/product_operate_record");
-        //查询数据
-        PageParams params = new PageParams<>();
-        params.setPages(10);
-        params.setPageSize(8);
-        params.setStartRow(1);
-        params.setEndRow(10);
-        params.setCurrentPage(1);
-        params.setTotalRows(80);
-
-        view.addObject("pageParams",params);
-
-
-        return view;
-
-    }
 
 }

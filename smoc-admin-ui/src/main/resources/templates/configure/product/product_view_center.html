@@ -20,13 +20,13 @@
         <div class="row fixed-navigation">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">码号详细信息 </h4>
+                    <h4 class="page-title">产品详细 </h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
-                            码号管理
+                            产品通道设置
                         </li>
                         <li class="active">
-                            码号详细信息
+                            产品管理
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -42,32 +42,31 @@
                     <div class="row" style="margin-bottom:10px">
                         <h4>
                             <div class="pull-right" style="margin-top: -12px;margin-right:10pxx">
-                                <a sec:authorize-url="/configure/code/number/list"
-                                   th:href="@{/configure/code/number/list}"
-                                   class="btn btn-default waves-effect waves-light">
-                                    <i class="glyphicon  glyphicon-share-alt"></i>
-                                    返回码号列表</a>
+                                <a sec:authorize-url="/configure/product/list" th:href="@{/configure/product/list}"
+                                   class="btn btn-default waves-effect waves-light btn-md">
+                                    <i class="glyphicon  glyphicon-share-alt" style="margin-right:5px"></i>
+                                    返回产品列表</a>
                             </div>
                         </h4>
                     </div>
                     <div class="row">
                         <ul class="nav nav-tabs">
                             <li class="active" id="tab1"><a onclick="active('1')"
-                                                            sec:authorize-url="/configure/code/number/view/base/*"
-                                                            th:href="@{/configure/code/number/view/base/id}"
-                                                            th:target="content1">码号详情</a></li>
+                                                            sec:authorize-url="/configure/product/view/base/*"
+                                                            th:href="@{/configure/product/view/base/id}"
+                                                            th:target="content1">产品详情</a></li>
                             <li class="" id="tab2"><a onclick="active('2')"
-                                                      th:target="content1">通道使用记录</a></li>
+                                                      th:target="content1">使用记录</a></li>
                             <li class="" id="tab3"><a onclick="active('3')"
                                                       th:target="content1">发送量统计</a></li>
                             <li class="" id="tab4"><a onclick="active('4')"
-                                                      th:target="content1">码号操作日志</a></li>
+                                                      th:target="content1">操作日志</a></li>
                         </ul>
                     </div>
                     <div class="tab-cotent">
                         <iframe name="content1" id="content1" th:frameBorder="0" th:scrolling="auto"
-                                th:src="@{/configure/code/number/view/base/id}"
-                                style="padding: 0px; width: 100%; height: 800px"></iframe>
+                                th:src="@{/configure/product/view/base/id}"
+                                style="padding: 0px; width: 100%; height: 2200px"></iframe>
                     </div>
                 </div>
             </div>

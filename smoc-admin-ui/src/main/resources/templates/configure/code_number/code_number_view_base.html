@@ -7,58 +7,55 @@
     <th:block th:insert="fragments/common_fragments :: common_css"/>
 </head>
 <body style="background-color:#fff">
-<!-- Loader -->
+<!-- Loader start 页面加载进度-->
 <th:block th:insert="fragments/common_fragments :: common_loader"/>
 <!-- Loader end -->
 
 <!-- Start content -->
 <div class="content" style="margin-top: 40px">
     <div class="container">
-        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
 
+        <!-- start row  页面内容-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-md-12">
                 <div class="property-card property-horizontal" style="margin-top:00px">
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="property-content"
-                                 style="height:234px">
+                                 style="height:226px">
                                 <div class="listingInfo">
                                     <div class="">
                                         <h5 style="padding-left:10px">
-                                           码号详细
+                                            码号详细
                                         </h5>
                                     </div>
                                     <div class="col-sm-3">
                                         <p style="font-size:12px">码号：10692222</p>
-                                        <p style="font-size:12px">业务类型：<a
-                                                class="btn btn-teal waves-effect waves-light btn-xs">短信</a></p>
-                                        <p style="font-size:12px">用途：自用</p>
-                                        <p style="font-size:12px">码号来源：租用</p>
-
+                                        <p style="font-size:12px">计费号码/CA编号：CA000158</p>
+                                        <p style="font-size:12px">接入点：省份</p>
+                                        <p style="font-size:12px">低消要求：10000 万条</p>
                                     </div>
                                     <div class="col-sm-3">
-                                        <p style="font-size:12px">计费号码/CA编号：CA000158</p>
-                                        <p style="font-size:12px">资费：¥ 0.015 元/条</p>
                                         <p style="font-size:12px">抗速率：4/百万</p>
-                                        <p style="font-size:12px">码号生效时间：2021-10-29</p>
-
-
+                                        <p style="font-size:12px">资费：¥ 0.015 元/条</p>
+                                        <p style="font-size:12px">接入时间：2021-10-29</p>
+                                        <p style="font-size:12px">低消生效时间：2021-10-29</p>
                                     </div>
                                     <div class="col-sm-3">
                                         <p style="font-size:12px">运营商：中国移动</p>
-                                        <p style="font-size:12px">接入点：省份</p>
-                                        <p style="font-size:12px">省份：湖北省</p>
-                                        <p style="font-size:12px">码号状态：正常</p>
-
+                                        <p style="font-size:12px">资费生效时间：2021-10-29</p>
+                                        <p style="font-size:12px">接入省市：湖北省</p>
+                                        <p style="font-size:12px">用途：自用</p>
                                     </div>
                                     <div class="col-sm-3">
-                                        <p style="font-size:12px">接入时间：2021-10-29</p>
-                                        <p style="font-size:12px">低消要求：10000 万条</p>
-                                        <p style="font-size:12px">低消生效时间：2021-10-29</p>
-
+                                        <p style="font-size:12px">业务类型：<a
+                                                class="btn btn-teal waves-effect waves-light btn-xs">普通短信</a></p>
+                                        <p style="font-size:12px">码号生效时间：2021-10-29</p>
+                                        <p style="font-size:12px">码号来源：租用</p>
+                                        <p style="font-size:12px">码号状态：正常</p>
                                     </div>
-
                                 </div>
+                                <!-- start. Card actions -->
                                 <div class="property-action">
                                     <span style="padding-left:10px;font-size:12px">
                                         备注：从客户那暂时借用的码号
@@ -70,13 +67,13 @@
                     </div>
                     <!-- /inner row -->
                 </div>
-
             </div>
         </div>
         <!-- End row -->
 
-        <!-- end row -->
+        <!-- start row  错误提示-->
         <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
 
     </div> <!-- container -->
 </div> <!-- content -->
@@ -86,16 +83,6 @@
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
-
-
-
-
-
-
-
-
-
-
 
 </script>
 </body>
