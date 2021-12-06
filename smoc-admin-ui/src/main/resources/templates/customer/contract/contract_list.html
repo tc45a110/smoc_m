@@ -11,13 +11,15 @@
     <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
 </head>
 <body>
-<!-- Loader -->
+<!-- Loader start 页面加载进度-->
 <th:block th:insert="fragments/common_fragments :: common_loader"/>
 <!-- Loader end -->
 
 <!-- Start content -->
 <div class="content" style="margin-top: 60px">
     <div class="container">
+
+        <!-- start row 页面导航-->
         <div class="row fixed-navigation">
             <div class="col-xs-12">
                 <div class="page-title-box">
@@ -35,6 +37,8 @@
             </div>
         </div>
         <!-- end row -->
+
+        <!-- start row  查询条件-->
         <div class="row" style="position: relative;margin-top: 80px"  th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
                 <div class="card-box">
@@ -72,7 +76,9 @@
                 </div>
             </div>
         </div>
+        <!-- end row -->
 
+        <!-- start row  列表数据-->
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
                 <div class="panel panel-color panel-info">
@@ -340,42 +346,13 @@
         </div>
         <!-- end row -->
 
+        <!-- start row  错误提示-->
         <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
 
     </div> <!-- container -->
-
 </div> <!-- content -->
-<div id="check-record" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="a-width-modalLabel" aria-hidden="true" style="display: none;margin: 60px">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title">审核记录</h4>
-            </div>
-            <div class="modal-body">
-                <p id="tip_id" style="display: none;text-align: center">暂无审核记录</p>
-                <table id="table_id" class="table table-striped m-0" style="margin-top: -12px;">
-                    <thead>
-                    <tr>
-                        <th width="10%">提交人</th>
-                        <th width="12%">状态</th>
-                        <th width="22%">提交时间</th>
-                        <th width="36%">描述</th>
-                        <th width="22%">审核人/审核时间</th>
-                    </tr>
-                    <thead>
-                    <tbody id="config">
-                        <td>李先生</td>
-                        <td>审核通过</td>
-                        <td>2021-11-3 12:45:47</td>
-                        <td>资料完整，给予通过</td>
-                        <td>张先生<br>2021-11-4 12:45:47</td>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
+
 <th:block th:insert="fragments/common_fragments :: common_js"/>
 <th:block th:insert="fragments/common_fragments :: select_js"/>
 <script th:src="@{/static/plugins/moment/moment.js}"></script>

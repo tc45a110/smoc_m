@@ -66,7 +66,7 @@ public class CustomerController {
      * level表示企业层级
      * @return
      */
-    @RequestMapping(value = "/customer/base_info/add/{level}/{parentId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/customer/base_info/edit/{level}/{parentId}", method = RequestMethod.GET)
     public ModelAndView add(@PathVariable String level,@PathVariable String parentId) {
         ModelAndView view = new ModelAndView("customer/base_info/customer_edit");
         view.addObject("level",level);
@@ -80,9 +80,9 @@ public class CustomerController {
      * level表示企业层级
      * @return
      */
-    @RequestMapping(value = "/customer/base_info/config/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/customer/base_info/center/{id}", method = RequestMethod.GET)
     public ModelAndView config(@PathVariable String id) {
-        ModelAndView view = new ModelAndView("customer/base_info/customer_config");
+        ModelAndView view = new ModelAndView("customer/base_info/customer_center");
 
         //查询数据
         PageParams params = new PageParams<>();

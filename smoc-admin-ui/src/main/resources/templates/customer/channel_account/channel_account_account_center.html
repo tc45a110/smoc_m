@@ -120,23 +120,23 @@
 
                             <div class="row">
                                 <div class="col-md-12 col-sm-12">
-                                    <h4>EC通道账户信息
+                                    <h4>EC业务账户信息
                                         <div class="pull-right" style="margin-top: -12px;">
                                             <a th:href="@{/ec/customer/channel/account/list}"
                                                class="btn btn-default waves-effect waves-light btn-md">
                                                 <i class="glyphicon  glyphicon-share-alt" style="margin-right:5px"></i>
-                                                返回通道账号列表</a>
-                                            <a  th:href="@{/ec/customer/base_info/config/0000}"
+                                                返回业务账号列表</a>
+                                            <a  th:href="@{/ec/customer/base_info/center/0000}"
                                                 style="margin-left:10px;"
                                                 class="btn btn-facebook waves-effect waves-light btn-md">
                                                 <i class="mdi mdi-vector-circle" style="margin-right:5px"></i>
-                                                EC基本信息
+                                                企业信息中心
                                             </a>
                                             <a  sec:authorize-url="/finance/account/center" th:href="@{/finance/account/center}"
                                                 style="margin-left:10px;"
                                                 class="btn btn-tumblr waves-effect waves-light btn-md">
                                                 <i class="mdi mdi-vector-circle" style="margin-right:5px"></i>
-                                                EC财务账号中心
+                                                企业财务中心
                                             </a>
                                         </div>
                                     </h4>

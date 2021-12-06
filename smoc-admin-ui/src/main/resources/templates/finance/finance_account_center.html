@@ -47,27 +47,27 @@
                                 <div class="col-md-12 col-sm-12">
                                     <h4>EC财务账户
                                         <div class="pull-right" style="margin-top: -12px;">
-                                            <a sec:authorize-url="/finance/account/list" th:href="@{/finance/account/list}"
+                                            <a sec:authorize-url="/finance/account/list"
+                                               th:href="@{/finance/account/list}"
                                                class="btn btn-default waves-effect waves-light btn-md">
                                                 <i class="glyphicon  glyphicon-share-alt" style="margin-right:5px"></i>
                                                 返回财务账户列表</a>
-                                            <a  th:href="@{/ec/customer/base_info/config/0000}"
-                                                style="margin-left:10px;"
-                                                class="btn btn-facebook waves-effect waves-light btn-md">
+                                            <a th:href="@{/ec/customer/base_info/center/0000}"
+                                               style="margin-left:10px;"
+                                               class="btn btn-facebook waves-effect waves-light btn-md">
                                                 <i class="mdi mdi-vector-circle" style="margin-right:5px"></i>
-                                                EC基本信息
+                                                企业基本信息
                                             </a>
-                                            <a  th:href="@{/ec/customer/channel/account/center/account}"
-                                                style="margin-left:10px;"
-                                                class="btn btn-instagram waves-effect waves-light btn-md">
+                                            <a th:href="@{/ec/customer/channel/account/center/account}"
+                                               style="margin-left:10px;"
+                                               class="btn btn-instagram waves-effect waves-light btn-md">
                                                 <i class="mdi mdi-vector-circle" style="margin-right:5px"></i>
-                                                EC通道账号中心
+                                                企业业务账号中心
                                             </a>
-                                            <a id="help_display" style="margin-left:10px"><i class="mdi mdi-help-circle-outline" style="font-size:18px;"></i></a>
                                         </div>
                                     </h4>
 
-                                    <div id="help" class="row" style="margin-top:30px;" >
+                                    <div id="help" class="row" style="margin-top:30px;">
                                         <div class="col-sm-12">
                                             <div class="detail">
                                                 <ul>
@@ -75,17 +75,26 @@
                                                         <h2 style="color: #fff">北京星语互联科技有限公司 账户统计</h2>
                                                         <span></span>
                                                         <div class="detailInner">
-                                                            <a>总可用金额（元）：<span data-d-group="4" data-a-sign="¥ " style="color:#fff;width:80px;background-color:#0095a8;text-align:left" readonly class="autonumber">2045922</span></a><i></i>
-                                                            <a>总冻结金额（元）：<span data-d-group="4" data-a-sign="¥ " style="color:#fff;width:80px;background-color:#0095a8;text-align:left" readonly class="autonumber">20.00</span></a><i></i>
-                                                            <a>总消费金额:元）：<span data-d-group="4" data-a-sign="¥ " style="color:#fff;width:90px;background-color:#0095a8;text-align:left" readonly class="autonumber">20045922</span></a><i></i>
-                                                            <a>总充值金额元）：<span data-d-group="4" data-a-sign="¥ " style="color:#fff;width:90px;background-color:#0095a8;text-align:left" readonly class="autonumber">20045922</span></a>
+                                                            <a>总可用（元）：<span data-d-group="4" data-a-sign="¥ "
+                                                                            style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
+                                                                            readonly
+                                                                            class="autonumber">2045922</span></a><i></i>
+                                                            <a>总冻结（元）：<span data-d-group="4" data-a-sign="¥ "
+                                                                            style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
+                                                                            readonly class="autonumber">20.00</span></a><i></i>
+                                                            <a>总消费（元）：<span data-d-group="4" data-a-sign="¥ "
+                                                                            style="color:#fff;width:120px;background-color:#0095a8;text-align:left"
+                                                                            readonly class="autonumber">20045922</span></a><i></i>
+                                                            <a>总充值（元）：<span data-d-group="4" data-a-sign="¥ "
+                                                                            style="color:#fff;width:120px;background-color:#0095a8;text-align:left"
+                                                                            readonly class="autonumber">20045922</span></a>
                                                         </div>
                                                     </li>
                                                 </ul>
                                             </div>
                                         </div>
                                     </div>
-                                    <div  class="row" style="margin-top:10px">
+                                    <div class="row" style="margin-top:10px">
                                         <div class="col-lg-12" style="margin-top:0px">
                                             <div class="panel panel-color panel-info">
                                                 <div id="login-account-down" class="panel-heading"
@@ -98,7 +107,8 @@
                                                 <div id="login-account" class="panel-body" style="padding-bottom:0px">
                                                     <div class="row">
                                                         <div class="col-md-12">
-                                                            <div class="property-card property-horizontal" style="margin-bottom:15px;">
+                                                            <div class="property-card property-horizontal"
+                                                                 style="margin-bottom:15px;">
                                                                 <div class="row">
                                                                     <div class="col-sm-12">
                                                                         <div class="property-content"
@@ -114,26 +124,36 @@
                                                                                     <p style="font-size:12px">
                                                                                         通道账号名称：XY2010238349343</p>
                                                                                     <p style="font-size:12px">
-                                                                                        业务类型：<a class="btn btn-teal waves-effect waves-light btn-xs">国际短信</a>
+                                                                                        业务类型：<a
+                                                                                            class="btn btn-teal waves-effect waves-light btn-xs">国际短信</a>
                                                                                     </p>
                                                                                 </div>
                                                                                 <div class="col-sm-4">
                                                                                     <p style="font-size:12px">
-                                                                                        账户可用余额：<span data-d-group="4" data-a-sign="¥ "  class="autonumber">100</span>
+                                                                                        账户可用余额：<span data-d-group="4"
+                                                                                                     data-a-sign="¥ "
+                                                                                                     class="autonumber">100</span>
                                                                                     </p>
                                                                                     <p style="font-size:12px">
-                                                                                        账户冻结金额：<span data-d-group="4" data-a-sign="¥ "  class="autonumber">100</span>
+                                                                                        账户冻结金额：<span data-d-group="4"
+                                                                                                     data-a-sign="¥ "
+                                                                                                     class="autonumber">100</span>
                                                                                     </p>
                                                                                     <p style="font-size:12px">
-                                                                                        账户消费总金额：<span data-d-group="4" data-a-sign="¥ "  class="autonumber">100</span>
+                                                                                        账户消费总金额：<span data-d-group="4"
+                                                                                                      data-a-sign="¥ "
+                                                                                                      class="autonumber">100</span>
                                                                                     </p>
                                                                                 </div>
                                                                                 <div class="col-sm-4">
                                                                                     <p style="font-size:12px">
-                                                                                        账户充值总金额：<span data-d-group="4" data-a-sign="¥ "  class="autonumber">100</span>
+                                                                                        账户充值总金额：<span data-d-group="4"
+                                                                                                      data-a-sign="¥ "
+                                                                                                      class="autonumber">100</span>
                                                                                     </p>
                                                                                     <p style="font-size:12px">
-                                                                                        状态：<a class="btn btn-success  waves-effect waves-light btn-xs">有效</a>
+                                                                                        状态：<a
+                                                                                            class="btn btn-success  waves-effect waves-light btn-xs">有效</a>
                                                                                     </p>
                                                                                     <p style="font-size:12px">
                                                                                         创建日期：2021-11-17 14:45:23
@@ -142,10 +162,12 @@
                                                                                 <div class="property-action">
 
                                                                                     <div class="pull-right">
-                                                                                        <a sec:authorize-url="/finance/recharge/edit" th:href="@{/finance/recharge/edit}"
+                                                                                        <a sec:authorize-url="/finance/recharge/edit"
+                                                                                           th:href="@{/finance/recharge/edit}"
                                                                                            class="btn btn-info"
                                                                                            style="font-size:12px;">充值</a>
-                                                                                        <a sec:authorize-url="/finance/account/view" th:href="@{/finance/account/view}"
+                                                                                        <a sec:authorize-url="/finance/account/view"
+                                                                                           th:href="@{/finance/account/view}"
                                                                                            class="btn btn-teal"
                                                                                            style="font-size:12px;">明细</a>
                                                                                     </div>
@@ -162,7 +184,8 @@
                                                     </div>
                                                     <div class="row">
                                                         <div class="col-md-12">
-                                                            <div class="property-card property-horizontal" style="margin-bottom:15px;">
+                                                            <div class="property-card property-horizontal"
+                                                                 style="margin-bottom:15px;">
                                                                 <div class="row">
                                                                     <div class="col-sm-12">
                                                                         <div class="property-content"
@@ -178,26 +201,36 @@
                                                                                     <p style="font-size:12px">
                                                                                         通道账号名称：XY2010238349343</p>
                                                                                     <p style="font-size:12px">
-                                                                                        业务类型：<a class="btn btn-success waves-effect waves-light btn-xs">普通短信</a>
+                                                                                        业务类型：<a
+                                                                                            class="btn btn-success waves-effect waves-light btn-xs">普通短信</a>
                                                                                     </p>
                                                                                 </div>
                                                                                 <div class="col-sm-4">
                                                                                     <p style="font-size:12px">
-                                                                                        账户可用余额：<span data-d-group="4" data-a-sign="¥ "  class="autonumber">100</span>
+                                                                                        账户可用余额：<span data-d-group="4"
+                                                                                                     data-a-sign="¥ "
+                                                                                                     class="autonumber">100</span>
                                                                                     </p>
                                                                                     <p style="font-size:12px">
-                                                                                        账户冻结金额：<span data-d-group="4" data-a-sign="¥ "  class="autonumber">100</span>
+                                                                                        账户冻结金额：<span data-d-group="4"
+                                                                                                     data-a-sign="¥ "
+                                                                                                     class="autonumber">100</span>
                                                                                     </p>
                                                                                     <p style="font-size:12px">
-                                                                                        账户消费总金额：<span data-d-group="4" data-a-sign="¥ "  class="autonumber">100</span>
+                                                                                        账户消费总金额：<span data-d-group="4"
+                                                                                                      data-a-sign="¥ "
+                                                                                                      class="autonumber">100</span>
                                                                                     </p>
                                                                                 </div>
                                                                                 <div class="col-sm-4">
                                                                                     <p style="font-size:12px">
-                                                                                        账户充值总金额：<span data-d-group="4" data-a-sign="¥ "  class="autonumber">100</span>
+                                                                                        账户充值总金额：<span data-d-group="4"
+                                                                                                      data-a-sign="¥ "
+                                                                                                      class="autonumber">100</span>
                                                                                     </p>
                                                                                     <p style="font-size:12px">
-                                                                                        状态：<a class="btn btn-success  waves-effect waves-light btn-xs">有效</a>
+                                                                                        状态：<a
+                                                                                            class="btn btn-success  waves-effect waves-light btn-xs">有效</a>
                                                                                     </p>
                                                                                     <p style="font-size:12px">
                                                                                         创建日期：2021-11-17 14:45:23
@@ -206,10 +239,12 @@
                                                                                 <div class="property-action">
 
                                                                                     <div class="pull-right">
-                                                                                        <a sec:authorize-url="/finance/recharge/edit" th:href="@{/finance/recharge/edit}"
+                                                                                        <a sec:authorize-url="/finance/recharge/edit"
+                                                                                           th:href="@{/finance/recharge/edit}"
                                                                                            class="btn btn-info"
                                                                                            style="font-size:12px;">充值</a>
-                                                                                        <a sec:authorize-url="/finance/account/view" th:href="@{/finance/account/view}"
+                                                                                        <a sec:authorize-url="/finance/account/view"
+                                                                                           th:href="@{/finance/account/view}"
                                                                                            class="btn btn-teal"
                                                                                            style="font-size:12px;">明细</a>
                                                                                     </div>
@@ -226,7 +261,8 @@
                                                     </div>
                                                     <div class="row">
                                                         <div class="col-md-12">
-                                                            <div class="property-card property-horizontal" style="margin-bottom:15px;">
+                                                            <div class="property-card property-horizontal"
+                                                                 style="margin-bottom:15px;">
                                                                 <div class="row">
                                                                     <div class="col-sm-12">
                                                                         <div class="property-content"
@@ -242,26 +278,36 @@
                                                                                     <p style="font-size:12px">
                                                                                         通道账号名称：XY2010238349343</p>
                                                                                     <p style="font-size:12px">
-                                                                                        业务类型：<a class="btn btn-info waves-effect waves-light btn-xs">彩信</a>
+                                                                                        业务类型：<a
+                                                                                            class="btn btn-info waves-effect waves-light btn-xs">彩信</a>
                                                                                     </p>
                                                                                 </div>
                                                                                 <div class="col-sm-4">
                                                                                     <p style="font-size:12px">
-                                                                                        账户可用余额：<span data-d-group="4" data-a-sign="¥ "  class="autonumber">100</span>
+                                                                                        账户可用余额：<span data-d-group="4"
+                                                                                                     data-a-sign="¥ "
+                                                                                                     class="autonumber">100</span>
                                                                                     </p>
                                                                                     <p style="font-size:12px">
-                                                                                        账户冻结金额：<span data-d-group="4" data-a-sign="¥ "  class="autonumber">100</span>
+                                                                                        账户冻结金额：<span data-d-group="4"
+                                                                                                     data-a-sign="¥ "
+                                                                                                     class="autonumber">100</span>
                                                                                     </p>
                                                                                     <p style="font-size:12px">
-                                                                                        账户消费总金额：<span data-d-group="4" data-a-sign="¥ "  class="autonumber">100</span>
+                                                                                        账户消费总金额：<span data-d-group="4"
+                                                                                                      data-a-sign="¥ "
+                                                                                                      class="autonumber">100</span>
                                                                                     </p>
                                                                                 </div>
                                                                                 <div class="col-sm-4">
                                                                                     <p style="font-size:12px">
-                                                                                        账户充值总金额：<span data-d-group="4" data-a-sign="¥ "  class="autonumber">100</span>
+                                                                                        账户充值总金额：<span data-d-group="4"
+                                                                                                      data-a-sign="¥ "
+                                                                                                      class="autonumber">100</span>
                                                                                     </p>
                                                                                     <p style="font-size:12px">
-                                                                                        状态：<a class="btn btn-success  waves-effect waves-light btn-xs">有效</a>
+                                                                                        状态：<a
+                                                                                            class="btn btn-success  waves-effect waves-light btn-xs">有效</a>
                                                                                     </p>
                                                                                     <p style="font-size:12px">
                                                                                         创建日期：2021-11-17 14:45:23
@@ -270,10 +316,12 @@
                                                                                 <div class="property-action">
 
                                                                                     <div class="pull-right">
-                                                                                        <a sec:authorize-url="/finance/recharge/edit" th:href="@{/finance/recharge/edit}"
+                                                                                        <a sec:authorize-url="/finance/recharge/edit"
+                                                                                           th:href="@{/finance/recharge/edit}"
                                                                                            class="btn btn-info"
                                                                                            style="font-size:12px;">充值</a>
-                                                                                        <a sec:authorize-url="/finance/account/view" th:href="@{/finance/account/view}"
+                                                                                        <a sec:authorize-url="/finance/account/view"
+                                                                                           th:href="@{/finance/account/view}"
                                                                                            class="btn btn-teal"
                                                                                            style="font-size:12px;">明细</a>
                                                                                     </div>
@@ -290,7 +338,8 @@
                                                     </div>
                                                     <div class="row">
                                                         <div class="col-md-12">
-                                                            <div class="property-card property-horizontal" style="margin-bottom:15px;">
+                                                            <div class="property-card property-horizontal"
+                                                                 style="margin-bottom:15px;">
                                                                 <div class="row">
                                                                     <div class="col-sm-12">
                                                                         <div class="property-content"
@@ -306,26 +355,36 @@
                                                                                     <p style="font-size:12px">
                                                                                         通道账号名称：XY2010238349343</p>
                                                                                     <p style="font-size:12px">
-                                                                                        业务类型：<a class="btn btn-brown waves-effect waves-light btn-xs">5G消息</a>
+                                                                                        业务类型：<a
+                                                                                            class="btn btn-brown waves-effect waves-light btn-xs">5G消息</a>
                                                                                     </p>
                                                                                 </div>
                                                                                 <div class="col-sm-4">
                                                                                     <p style="font-size:12px">
-                                                                                        账户可用余额：<span data-d-group="4" data-a-sign="¥ "  class="autonumber">100</span>
+                                                                                        账户可用余额：<span data-d-group="4"
+                                                                                                     data-a-sign="¥ "
+                                                                                                     class="autonumber">100</span>
                                                                                     </p>
                                                                                     <p style="font-size:12px">
-                                                                                        账户冻结金额：<span data-d-group="4" data-a-sign="¥ "  class="autonumber">100</span>
+                                                                                        账户冻结金额：<span data-d-group="4"
+                                                                                                     data-a-sign="¥ "
+                                                                                                     class="autonumber">100</span>
                                                                                     </p>
                                                                                     <p style="font-size:12px">
-                                                                                        账户消费总金额：<span data-d-group="4" data-a-sign="¥ "  class="autonumber">100</span>
+                                                                                        账户消费总金额：<span data-d-group="4"
+                                                                                                      data-a-sign="¥ "
+                                                                                                      class="autonumber">100</span>
                                                                                     </p>
                                                                                 </div>
                                                                                 <div class="col-sm-4">
                                                                                     <p style="font-size:12px">
-                                                                                        账户充值总金额：<span data-d-group="4" data-a-sign="¥ "  class="autonumber">100</span>
+                                                                                        账户充值总金额：<span data-d-group="4"
+                                                                                                      data-a-sign="¥ "
+                                                                                                      class="autonumber">100</span>
                                                                                     </p>
                                                                                     <p style="font-size:12px">
-                                                                                        状态：<a class="btn btn-success  waves-effect waves-light btn-xs">有效</a>
+                                                                                        状态：<a
+                                                                                            class="btn btn-success  waves-effect waves-light btn-xs">有效</a>
                                                                                     </p>
                                                                                     <p style="font-size:12px">
                                                                                         创建日期：2021-11-17 14:45:23
@@ -334,10 +393,12 @@
                                                                                 <div class="property-action">
 
                                                                                     <div class="pull-right">
-                                                                                        <a sec:authorize-url="/finance/recharge/edit" th:href="@{/finance/recharge/edit}"
+                                                                                        <a sec:authorize-url="/finance/recharge/edit"
+                                                                                           th:href="@{/finance/recharge/edit}"
                                                                                            class="btn btn-info"
                                                                                            style="font-size:12px;">充值</a>
-                                                                                        <a sec:authorize-url="/finance/account/view" th:href="@{/finance/account/view}"
+                                                                                        <a sec:authorize-url="/finance/account/view"
+                                                                                           th:href="@{/finance/account/view}"
                                                                                            class="btn btn-teal"
                                                                                            style="font-size:12px;">明细</a>
                                                                                     </div>
@@ -354,7 +415,8 @@
                                                     </div>
                                                     <div class="row">
                                                         <div class="col-md-12">
-                                                            <div class="property-card property-horizontal" style="margin-bottom:15px;">
+                                                            <div class="property-card property-horizontal"
+                                                                 style="margin-bottom:15px;">
                                                                 <div class="row">
                                                                     <div class="col-sm-12">
                                                                         <div class="property-content"
@@ -370,26 +432,36 @@
                                                                                     <p style="font-size:12px">
                                                                                         通道账号名称：XY2010238349343</p>
                                                                                     <p style="font-size:12px">
-                                                                                        业务类型：<a class="btn btn-purple waves-effect waves-light btn-xs">多媒体短信</a>
+                                                                                        业务类型：<a
+                                                                                            class="btn btn-purple waves-effect waves-light btn-xs">多媒体短信</a>
                                                                                     </p>
                                                                                 </div>
                                                                                 <div class="col-sm-4">
                                                                                     <p style="font-size:12px">
-                                                                                        账户可用余额：<span data-d-group="4" data-a-sign="¥ "  class="autonumber">100</span>
+                                                                                        账户可用余额：<span data-d-group="4"
+                                                                                                     data-a-sign="¥ "
+                                                                                                     class="autonumber">100</span>
                                                                                     </p>
                                                                                     <p style="font-size:12px">
-                                                                                        账户冻结金额：<span data-d-group="4" data-a-sign="¥ "  class="autonumber">100</span>
+                                                                                        账户冻结金额：<span data-d-group="4"
+                                                                                                     data-a-sign="¥ "
+                                                                                                     class="autonumber">100</span>
                                                                                     </p>
                                                                                     <p style="font-size:12px">
-                                                                                        账户消费总金额：<span data-d-group="4" data-a-sign="¥ "  class="autonumber">100</span>
+                                                                                        账户消费总金额：<span data-d-group="4"
+                                                                                                      data-a-sign="¥ "
+                                                                                                      class="autonumber">100</span>
                                                                                     </p>
                                                                                 </div>
                                                                                 <div class="col-sm-4">
                                                                                     <p style="font-size:12px">
-                                                                                        账户充值总金额：<span data-d-group="4" data-a-sign="¥ "  class="autonumber">100</span>
+                                                                                        账户充值总金额：<span data-d-group="4"
+                                                                                                      data-a-sign="¥ "
+                                                                                                      class="autonumber">100</span>
                                                                                     </p>
                                                                                     <p style="font-size:12px">
-                                                                                        状态：<a class="btn btn-success  waves-effect waves-light btn-xs">有效</a>
+                                                                                        状态：<a
+                                                                                            class="btn btn-success  waves-effect waves-light btn-xs">有效</a>
                                                                                     </p>
                                                                                     <p style="font-size:12px">
                                                                                         创建日期：2021-11-17 14:45:23
@@ -398,10 +470,12 @@
                                                                                 <div class="property-action">
 
                                                                                     <div class="pull-right">
-                                                                                        <a sec:authorize-url="/finance/recharge/edit" th:href="@{/finance/recharge/edit}"
+                                                                                        <a sec:authorize-url="/finance/recharge/edit"
+                                                                                           th:href="@{/finance/recharge/edit}"
                                                                                            class="btn btn-info"
                                                                                            style="font-size:12px;">充值</a>
-                                                                                        <a sec:authorize-url="/finance/account/view" th:href="@{/finance/account/view}"
+                                                                                        <a sec:authorize-url="/finance/account/view"
+                                                                                           th:href="@{/finance/account/view}"
                                                                                            class="btn btn-teal"
                                                                                            style="font-size:12px;">明细</a>
                                                                                     </div>
@@ -447,37 +521,9 @@
 <script th:src="@{/static/plugins/autoNumeric/autoNumeric.js}"></script>
 <script>
 
-    //页签切换
-    function activeTab(id){
-       $("#recharge").removeClass("active");
-       $("#consume").removeClass("active");
-
-       $("#"+id).addClass("active");
-
-    }
-
-    $(document).ready(function() {
-        if("none" == $.cookie("help_display_account_center")){
-           $('#help').css('display', 'none');
-        }
-
-        $('#help_display').on("click", function () {
-           if('block' == $('#help').css('display')){
-             $('#help').css('display', 'none');
-             $.cookie("help_display_account_center", 'none', {
-                expires : 180
-             });
-           }else{
-             $('#help').css('display', 'block');
-             $.cookie("help_display_account_center", 'block', {
-                expires : 180
-             });
-           }
-        });
-
-
-		$('.autonumber').autoNumeric('init');
-	});
+    $(document).ready(function () {
+        $('.autonumber').autoNumeric('init');
+    });
 
 
     var resizefunc = [];

@@ -8,13 +8,15 @@
     <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
 </head>
 <body>
-<!-- Loader -->
+<!-- Loader start 页面加载进度-->
 <th:block th:insert="fragments/common_fragments :: common_loader"/>
 <!-- Loader end -->
 
 <!-- Start content -->
 <div class="content" style="margin-top: 60px">
     <div class="container">
+
+        <!-- start row 页面导航-->
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
@@ -24,7 +26,7 @@
                             客户管理
                         </li>
                         <li>
-                           企业接入
+                            企业接入
                         </li>
                         <li class="active">
                             企业详细详情
@@ -35,6 +37,8 @@
             </div>
         </div>
         <!-- end row -->
+
+        <!-- start row 页面内容-->
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
                 <div class="card-box">
@@ -49,7 +53,6 @@
                                         <i class="mdi mdi-star-circle member-star text-success"
                                            title="verified user"></i>
                                     </div>
-
                                     <div class="">
                                         <h4 class="m-b-5 m-t-5">北京星语互联科技有限公司</h4>
                                         <p class="text-muted"></p>
@@ -57,7 +60,8 @@
                                     <hr/>
 
                                     <div class="text-left">
-                                        <p th:remove="${parentId =='0'}?all:none" class="text-muted font-13"><strong>上级企业 :</strong> <span class="m-l-15">北京星语互联科技有限公司</span>
+                                        <p th:remove="${parentId =='0'}?all:none" class="text-muted font-13"><strong>上级企业
+                                            :</strong> <span class="m-l-15">北京星语互联科技有限公司</span>
                                         <p class="text-muted font-13"><strong>联系人 :</strong> <span
                                                 class="m-l-15">贾明</span>
                                         </p>
@@ -79,15 +83,15 @@
                                     </div>
                                     <div>
 
-                                        <a sec:authorize-url="/ec/customer/base_info/add/*/*"  th:href="@{/ec/customer/base_info/add/1/0000}"
+                                        <a sec:authorize-url="/ec/customer/base_info/edit/*/*"
+                                           th:href="@{/ec/customer/base_info/edit/1/0000}"
                                            class="btn btn-info waves-effect waves-light m-l-10 btn-sm">
                                             <i class="mdi mdi-table-edit" style="margin-right:5px"></i>编辑企业</a>
-                                        <a  data-toggle="modal" data-target="#confirm-modal"
+                                        <a data-toggle="modal" data-target="#confirm-modal"
                                            class="btn btn-danger waves-effect waves-light m-l-10 btn-sm">
                                             <i class="mdi mdi-delete" style="margin-right:5px"></i>注销企业</a>
 
                                     </div>
-
                                 </div>
                             </div> <!-- end card-box -->
                             <div class="row">
@@ -154,7 +158,6 @@
                                                                             </p>
                                                                         </div>
                                                                     </div>
-
                                                                     <!-- end. Card actions -->
                                                                 </div>
                                                             </div>
@@ -162,42 +165,39 @@
                                                         </div>
                                                         <!-- /inner row -->
                                                     </div>
-
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-
                         </div> <!-- end col -->
 
                         <div class="col-md-9">
-
                             <div class="row">
                                 <div class="col-md-12 col-sm-12">
                                     <h4>EC详细信息
                                         <div class="pull-right" style="margin-top: -12px;">
-                                            <a sec:authorize-url="/ec/customer/base_info/list" th:href="@{/ec/customer/base_info/list}"
+                                            <a sec:authorize-url="/ec/customer/base_info/list"
+                                               th:href="@{/ec/customer/base_info/list}"
                                                class="btn btn-default waves-effect waves-light btn-md">
                                                 <i class="glyphicon  glyphicon-share-alt" style="margin-right:5px"></i>
                                                 返回企业列表</a>
-                                            <a  th:href="@{/ec/customer/channel/account/center/account}"
-                                                    style="margin-left:10px;"
-                                                    class="btn btn-instagram waves-effect waves-light btn-md">
+                                            <a th:href="@{/ec/customer/channel/account/center/account}"
+                                               style="margin-left:10px;"
+                                               class="btn btn-instagram waves-effect waves-light btn-md">
                                                 <i class="mdi mdi-vector-circle" style="margin-right:5px"></i>
-                                                EC通道账号中心
+                                                企业业务账号中心
                                             </a>
-                                            <a  sec:authorize-url="/finance/account/center" th:href="@{/finance/account/center}"
-                                                style="margin-left:10px;"
-                                                class="btn btn-tumblr waves-effect waves-light btn-md">
+                                            <a sec:authorize-url="/finance/account/center"
+                                               th:href="@{/finance/account/center}"
+                                               style="margin-left:10px;"
+                                               class="btn btn-tumblr waves-effect waves-light btn-md">
                                                 <i class="mdi mdi-vector-circle" style="margin-right:5px"></i>
-                                                EC财务账号中心
+                                                企业财务中心
                                             </a>
                                         </div>
                                     </h4>
-
                                     <div id="login-panel" class="row" style="display:block">
                                         <div class="col-lg-12" style="margin-top:10px">
                                             <div class="panel panel-color panel-info">
@@ -205,7 +205,7 @@
                                                      style="display:block">
                                                     <h3 class="panel-title">
                                                         <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
-                                                        WEB登录账户信息
+                                                        企业WEB登录账号信息
                                                         <div class="pull-right">
                                                             <i id="login-account-icon-down"
                                                                class="fa fa-angle-double-down"
@@ -216,7 +216,7 @@
                                                 <div id="login-account-up" class="panel-heading" style="display:none">
                                                     <h3 class="panel-title">
                                                         <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
-                                                        WEB登录账户信息
+                                                        企业WEB登录账号信息
                                                         <div class="pull-right">
                                                             <i id="login-account-icon-up"
                                                                class="fa fa-angle-double-down"
@@ -245,11 +245,13 @@
                                                                             <div class="property-action">
 
                                                                                 <div class="pull-right">
-                                                                                    <a data-toggle="modal" data-target="#confirm-reset-password-modal"
+                                                                                    <a data-toggle="modal"
+                                                                                       data-target="#confirm-reset-password-modal"
                                                                                        class="btn btn-info"
                                                                                        style="font-size:12px;">密码重置</a>
-                                                                                    <a  data-toggle="modal" data-target="#confirm-modal"
-                                                                                        class="btn btn-danger"
+                                                                                    <a data-toggle="modal"
+                                                                                       data-target="#confirm-modal"
+                                                                                       class="btn btn-danger"
                                                                                        style="font-size:12px;">注销</a>
                                                                                 </div>
                                                                             </div>
@@ -260,7 +262,6 @@
                                                                 </div>
                                                                 <!-- /inner row -->
                                                             </div>
-
                                                         </div>
                                                         <div class="col-md-4">
                                                             <div class="property-card property-horizontal">
@@ -281,11 +282,13 @@
                                                                             <div class="property-action">
 
                                                                                 <div class="pull-right">
-                                                                                    <a data-toggle="modal" data-target="#confirm-reset-password-modal"
+                                                                                    <a data-toggle="modal"
+                                                                                       data-target="#confirm-reset-password-modal"
                                                                                        class="btn btn-info"
                                                                                        style="font-size:12px;">密码重置</a>
-                                                                                    <a  data-toggle="modal" data-target="#confirm-modal"
-                                                                                        class="btn btn-danger"
+                                                                                    <a data-toggle="modal"
+                                                                                       data-target="#confirm-modal"
+                                                                                       class="btn btn-danger"
                                                                                        style="font-size:12px;">注销</a>
                                                                                 </div>
                                                                             </div>
@@ -296,7 +299,6 @@
                                                                 </div>
                                                                 <!-- /inner row -->
                                                             </div>
-
                                                         </div>
                                                         <div class="col-md-4">
                                                             <div class="property-card property-horizontal">
@@ -310,13 +312,13 @@
                                                                                 </div>
                                                                                 <div class="col-sm-12"
                                                                                      style="line-height:110px;margin:0 auto;">
-                                                                                    <a data-toggle="modal" data-target="#confirm-add-user-modal"
-                                                                                            class="btn btn-info waves-effect waves-light m-l-10 btn-md">
+                                                                                    <a data-toggle="modal"
+                                                                                       data-target="#confirm-add-user-modal"
+                                                                                       class="btn btn-info waves-effect waves-light m-l-10 btn-md">
                                                                                         <i class="glyphicon glyphicon-plus-sign"
-                                                                                           style="margin-right:5px"></i>新建WEB登录账户</a>
+                                                                                           style="margin-right:5px"></i>新建企业WEB登录账号</a>
                                                                                 </div>
                                                                             </div>
-
                                                                             <!-- end. Card actions -->
                                                                         </div>
                                                                     </div>
@@ -385,11 +387,13 @@
                                                                             <div class="property-action">
 
                                                                                 <div class="pull-right">
-                                                                                    <a data-toggle="modal" data-target="#confirm-add-mail-modal"
+                                                                                    <a data-toggle="modal"
+                                                                                       data-target="#confirm-add-mail-modal"
                                                                                        class="btn btn-teal"
                                                                                        style="font-size:12px;">编辑</a>
-                                                                                    <a  data-toggle="modal" data-target="#confirm-modal"
-                                                                                        class="btn btn-danger"
+                                                                                    <a data-toggle="modal"
+                                                                                       data-target="#confirm-modal"
+                                                                                       class="btn btn-danger"
                                                                                        style="font-size:12px;">删除</a>
                                                                                 </div>
                                                                             </div>
@@ -430,11 +434,13 @@
                                                                             <div class="property-action">
 
                                                                                 <div class="pull-right">
-                                                                                    <a  data-toggle="modal" data-target="#confirm-add-mail-modal"
+                                                                                    <a data-toggle="modal"
+                                                                                       data-target="#confirm-add-mail-modal"
                                                                                        class="btn btn-teal"
                                                                                        style="font-size:12px;">编辑</a>
-                                                                                    <a  data-toggle="modal" data-target="#confirm-modal"
-                                                                                        class="btn btn-danger"
+                                                                                    <a data-toggle="modal"
+                                                                                       data-target="#confirm-modal"
+                                                                                       class="btn btn-danger"
                                                                                        style="font-size:12px;">删除</a>
                                                                                 </div>
                                                                             </div>
@@ -459,8 +465,9 @@
                                                                                 </div>
                                                                                 <div class="col-sm-12"
                                                                                      style="line-height:166px;margin:0 auto;">
-                                                                                    <a data-toggle="modal" data-target="#confirm-add-mail-modal"
-                                                                                            class="btn btn-teal waves-effect waves-light m-l-10 btn-md">
+                                                                                    <a data-toggle="modal"
+                                                                                       data-target="#confirm-add-mail-modal"
+                                                                                       class="btn btn-teal waves-effect waves-light m-l-10 btn-md">
                                                                                         <i class="glyphicon glyphicon-plus-sign"
                                                                                            style="margin-right:5px"></i>新建邮寄信息</a>
                                                                                 </div>
@@ -536,10 +543,12 @@
 
                                                                                 <div class="pull-right">
 
-                                                                                    <a data-toggle="modal" data-target="#confirm-set-invoice-modal"
+                                                                                    <a data-toggle="modal"
+                                                                                       data-target="#confirm-set-invoice-modal"
                                                                                        class="btn btn-success"
                                                                                        style="font-size:12px;">设置</a>
-                                                                                    <a  data-toggle="modal" data-target="#confirm-modal"
+                                                                                    <a data-toggle="modal"
+                                                                                       data-target="#confirm-modal"
                                                                                        class="btn btn-danger"
                                                                                        style="font-size:12px;">删除</a>
                                                                                 </div>
@@ -591,10 +600,12 @@
                                                                             <div class="property-action">
 
                                                                                 <div class="pull-right">
-                                                                                    <a data-toggle="modal" data-target="#confirm-set-invoice-special-modal"
+                                                                                    <a data-toggle="modal"
+                                                                                       data-target="#confirm-set-invoice-special-modal"
                                                                                        class="btn btn-success"
                                                                                        style="font-size:12px;">设置</a>
-                                                                                    <a  data-toggle="modal" data-target="#confirm-modal"
+                                                                                    <a data-toggle="modal"
+                                                                                       data-target="#confirm-modal"
                                                                                        class="btn btn-danger"
                                                                                        style="font-size:12px;">删除</a>
                                                                                 </div>
@@ -620,39 +631,43 @@
                                             <div class="card-box">
                                                 <ul class="nav nav-tabs tabs-bordered">
                                                     <li class="active" id="contract">
-                                                        <a onclick="activeTab('contract')"  sec:authorize-url="/ec/customer/contract/list"
+                                                        <a onclick="activeTab('contract')"
+                                                           sec:authorize-url="/ec/customer/contract/list"
                                                            th:href="@{/ec/customer/contract/list}"
                                                            th:target="tab-content">合同信息
                                                         </a>
                                                     </li>
                                                     <li class="" id="data">
-                                                        <a onclick="activeTab('data')"  sec:authorize-url="/ec/customer/data/list"
+                                                        <a onclick="activeTab('data')"
+                                                           sec:authorize-url="/ec/customer/data/list"
                                                            th:href="@{/ec/customer/data/list}"
                                                            th:target="tab-content">资质信息
                                                         </a>
                                                     </li>
-                                                    <li class="">
-                                                        <a href="#ts-b1" data-toggle="tab" aria-expanded="false">
+                                                    <li class="" id="complaint">
+                                                        <a onclick="activeTab('complaint')" href="#ts-b1" data-toggle="tab" aria-expanded="false">
                                                             <span class="visible-xs"><i class="fa fa-cog"></i></span>
                                                             <span class="hidden-xs">投诉记录</span>
                                                         </a>
                                                     </li>
-                                                    <li class="">
-                                                        <a href="#login" data-toggle="tab" aria-expanded="false">
+                                                    <li class="" id="login">
+                                                        <a onclick="activeTab('login')" href="#login" data-toggle="tab" aria-expanded="false">
                                                             <span class="visible-xs"><i class="fa fa-cog"></i></span>
                                                             <span class="hidden-xs">web登录记录</span>
                                                         </a>
                                                     </li>
-                                                    <li class="">
-                                                        <a href="#operate" data-toggle="tab" aria-expanded="false">
+                                                    <li class="" id="logs">
+                                                        <a onclick="activeTab('logs')"  href="#operate" data-toggle="tab" aria-expanded="false">
                                                             <span class="visible-xs"><i class="fa fa-cog"></i></span>
-                                                            <span class="hidden-xs">EC日志</span>
+                                                            <span class="hidden-xs">企业操作日志</span>
                                                         </a>
                                                     </li>
                                                 </ul>
                                                 <div class="tab-cotent" style="background-color:#fff">
-                                                    <iframe name="tab-content" id="tab-content" th:frameBorder="0" th:scrolling="auto"
-                                                            th:src="@{/ec/customer/contract/list}" style="padding: 0px; width: 100%; height: 900px;background-color:#fff"> </iframe>
+                                                    <iframe name="tab-content" id="tab-content" th:frameBorder="0"
+                                                            th:scrolling="auto"
+                                                            th:src="@{/ec/customer/contract/list}"
+                                                            style="padding: 0px; width: 100%; height: 900px;background-color:#fff"></iframe>
                                                 </div>
 
                                             </div>
@@ -672,41 +687,42 @@
         <!-- End row -->
 
         <!-- start confirm add-user modal  -->
-        <div id="confirm-add-user-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="custom-width-modalLabel"
+        <div id="confirm-add-user-modal" class="modal fade" tabindex="-1" role="dialog"
+             aria-labelledby="custom-width-modalLabel"
              aria-hidden="true" style="display: none;margin: 60px;margin-top:68px">
             <div class="modal-dialog" style="width:33%;">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 class="modal-title">新建、编辑WEB登录用户</h4>
+                        <h4 class="modal-title">新建、编辑企业WEB登录账号</h4>
                     </div>
                     <div class="row" style="margin-top:10px">
                         <div class="col-md-12">
-                                <form  id="submit_form" method="post" data-parsley-validate="">
+                            <form id="submit_form" method="post" data-parsley-validate="">
 
-                                            <div class="form-group m-b-20">
-                                                <label for="linkak">用户名<span class="text-danger">*</span>&nbsp;</label>
-                                                <input id="linkak" type="text"  class="form-control"
-                                                       required="" data-parsley-length="[7,30]" autocomplete="off"
-                                                       placeholder="用户名">
-                                            </div>
-                                            <div class="form-group m-b-20">
-                                                <label for="linkk">密码<span class="text-danger">*</span>&nbsp;</label>
-                                                <input id="linkk" type="text"  class="form-control"
-                                                       required="" data-parsley-length="[7,30]" autocomplete="off"
-                                                       placeholder="密码">
-                                            </div>
+                                <div class="form-group m-b-20">
+                                    <label for="linkak">用户名<span class="text-danger">*</span>&nbsp;</label>
+                                    <input id="linkak" type="text" class="form-control"
+                                           required="" data-parsley-length="[7,30]" autocomplete="off"
+                                           placeholder="用户名">
+                                </div>
+                                <div class="form-group m-b-20">
+                                    <label for="linkk">密码<span class="text-danger">*</span>&nbsp;</label>
+                                    <input id="linkk" type="text" class="form-control"
+                                           required="" data-parsley-length="[7,30]" autocomplete="off"
+                                           placeholder="密码">
+                                </div>
 
-                                            <div class="form-group m-b-20">
-                                                <label for="eName">确认密码<span class="text-danger">*</span>&nbsp;</label>
-                                                <input id="eName" type="text"  class="form-control"
-                                                       required="" data-parsley-length="[2,64]" autocomplete="off"
-                                                       placeholder="确认密码">
-                                            </div>
+                                <div class="form-group m-b-20">
+                                    <label for="eName">确认密码<span class="text-danger">*</span>&nbsp;</label>
+                                    <input id="eName" type="text" class="form-control"
+                                           required="" data-parsley-length="[2,64]" autocomplete="off"
+                                           placeholder="确认密码">
+                                </div>
 
 
-                                </form>
-                                <!-- end form -->
+                            </form>
+                            <!-- end form -->
                         </div>
 
                     </div>
@@ -720,7 +736,8 @@
         <!-- end confirm add-user modal  -->
 
         <!-- start confirm reset-password modal  -->
-        <div id="confirm-reset-password-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="custom-width-modalLabel"
+        <div id="confirm-reset-password-modal" class="modal fade" tabindex="-1" role="dialog"
+             aria-labelledby="custom-width-modalLabel"
              aria-hidden="true" style="display: none;margin: 60px;margin-top:68px">
             <div class="modal-dialog" style="width:33%;">
                 <div class="modal-content">
@@ -730,21 +747,21 @@
                     </div>
                     <div class="row" style="margin-top:10px">
                         <div class="col-md-12">
-                            <form  id="submit_form11" method="post" data-parsley-validate="">
+                            <form id="submit_form11" method="post" data-parsley-validate="">
 
                                 <div class="form-group m-b-20">
                                     <label>用户名：13612584587</label>
                                 </div>
                                 <div class="form-group m-b-20">
                                     <label for="111">新密码<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="111" type="text"  class="form-control"
+                                    <input id="111" type="text" class="form-control"
                                            required="" data-parsley-length="[7,30]" autocomplete="off"
                                            placeholder="新密码">
                                 </div>
 
                                 <div class="form-group m-b-20">
                                     <label for="rrrr">确认新密码<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="rrrr" type="text"  class="form-control"
+                                    <input id="rrrr" type="text" class="form-control"
                                            required="" data-parsley-length="[2,64]" autocomplete="off"
                                            placeholder="确认新密码">
                                 </div>
@@ -765,7 +782,8 @@
         <!-- end confirm reset-password modal  -->
 
         <!-- start confirm add-mail modal  -->
-        <div id="confirm-add-mail-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="custom-width-modalLabel"
+        <div id="confirm-add-mail-modal" class="modal fade" tabindex="-1" role="dialog"
+             aria-labelledby="custom-width-modalLabel"
              aria-hidden="true" style="display: none;margin: 60px;margin-top:68px">
             <div class="modal-dialog" style="width:33%;">
                 <div class="modal-content">
@@ -775,30 +793,30 @@
                     </div>
                     <div class="row" style="margin-top:10px">
                         <div class="col-md-12">
-                            <form  id="submit_formq" method="post" data-parsley-validate="">
+                            <form id="submit_formq" method="post" data-parsley-validate="">
 
                                 <div class="form-group m-b-20">
                                     <label for="link1ak">邮寄备注<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="link1ak" type="text"  class="form-control"
+                                    <input id="link1ak" type="text" class="form-control"
                                            required="" data-parsley-length="[7,30]" autocomplete="off"
                                            placeholder="邮寄备注">
                                 </div>
                                 <div class="form-group m-b-20">
                                     <label for="link5k">姓名<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="link5k" type="text"  class="form-control"
+                                    <input id="link5k" type="text" class="form-control"
                                            required="" data-parsley-length="[7,30]" autocomplete="off"
                                            placeholder="姓名">
                                 </div>
 
                                 <div class="form-group m-b-20">
                                     <label for="oo">联系方式<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="oo" type="text"  class="form-control"
+                                    <input id="oo" type="text" class="form-control"
                                            required="" data-parsley-length="[2,64]" autocomplete="off"
                                            placeholder="联系方式">
                                 </div>
                                 <div class="form-group m-b-20">
                                     <label for="oo1">地址<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="oo1" type="text"  class="form-control"
+                                    <input id="oo1" type="text" class="form-control"
                                            required="" data-parsley-length="[2,64]" autocomplete="off"
                                            placeholder="地址">
                                 </div>
@@ -818,7 +836,8 @@
         <!-- end confirm add-mail modal  -->
 
         <!-- start confirm set-invoice modal  -->
-        <div id="confirm-set-invoice-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="custom-width-modalLabel"
+        <div id="confirm-set-invoice-modal" class="modal fade" tabindex="-1" role="dialog"
+             aria-labelledby="custom-width-modalLabel"
              aria-hidden="true" style="display: none;margin: 60px;margin-top:68px">
             <div class="modal-dialog" style="width:33%;">
                 <div class="modal-content">
@@ -828,24 +847,24 @@
                     </div>
                     <div class="row" style="margin-top:10px">
                         <div class="col-md-12">
-                            <form  id="submit_formq2" method="post" data-parsley-validate="">
+                            <form id="submit_formq2" method="post" data-parsley-validate="">
 
                                 <div class="form-group m-b-20">
                                     <label for="link1ako">发票抬头<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="link1ako" type="text"  class="form-control"
+                                    <input id="link1ako" type="text" class="form-control"
                                            required="" data-parsley-length="[7,30]" autocomplete="off"
                                            placeholder="发票抬头">
                                 </div>
                                 <div class="form-group m-b-20">
                                     <label for="link5ko">纳税人税号<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="link5ko" type="text"  class="form-control"
+                                    <input id="link5ko" type="text" class="form-control"
                                            required="" data-parsley-length="[7,30]" autocomplete="off"
                                            placeholder="纳税人税号">
                                 </div>
 
                                 <div class="form-group m-b-20">
                                     <label for="ooo">备注<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="ooo" type="text"  class="form-control"
+                                    <input id="ooo" type="text" class="form-control"
                                            required="" data-parsley-length="[2,64]" autocomplete="off"
                                            placeholder="备注">
                                 </div>
@@ -865,7 +884,8 @@
         <!-- end confirm add-invoice modal  -->
 
         <!-- start confirm set-special-invoice modal  -->
-        <div id="confirm-set-invoice-special-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="custom-width-modalLabel"
+        <div id="confirm-set-invoice-special-modal" class="modal fade" tabindex="-1" role="dialog"
+             aria-labelledby="custom-width-modalLabel"
              aria-hidden="true" style="display: none;margin: 60px;margin-top:68px">
             <div class="modal-dialog" style="width:33%;">
                 <div class="modal-content">
@@ -875,42 +895,42 @@
                     </div>
                     <div class="row" style="margin-top:10px">
                         <div class="col-md-12">
-                            <form  id="submit_formq21" method="post" data-parsley-validate="">
+                            <form id="submit_formq21" method="post" data-parsley-validate="">
 
                                 <div class="form-group m-b-20">
                                     <label for="link1ako">发票抬头<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="link1ako" type="text"  class="form-control"
+                                    <input id="link1ako" type="text" class="form-control"
                                            required="" data-parsley-length="[7,30]" autocomplete="off"
                                            placeholder="发票抬头">
                                 </div>
                                 <div class="form-group m-b-20">
                                     <label for="link5ko">纳税人税号<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="link5ko" type="text"  class="form-control"
+                                    <input id="link5ko" type="text" class="form-control"
                                            required="" data-parsley-length="[7,30]" autocomplete="off"
                                            placeholder="纳税人税号">
                                 </div>
 
                                 <div class="form-group m-b-20">
                                     <label for="oooo">注册地址<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="oooo" type="text"  class="form-control"
+                                    <input id="oooo" type="text" class="form-control"
                                            required="" data-parsley-length="[2,64]" autocomplete="off"
                                            placeholder="注册地址">
                                 </div>
                                 <div class="form-group m-b-20">
                                     <label for="oooo0">注册电话<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="oooo0" type="text"  class="form-control"
+                                    <input id="oooo0" type="text" class="form-control"
                                            required="" data-parsley-length="[2,64]" autocomplete="off"
                                            placeholder="注册电话">
                                 </div>
                                 <div class="form-group m-b-20">
                                     <label for="oooo01">开户银行<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="oooo01" type="text"  class="form-control"
+                                    <input id="oooo01" type="text" class="form-control"
                                            required="" data-parsley-length="[2,64]" autocomplete="off"
                                            placeholder="开户银行">
                                 </div>
                                 <div class="form-group m-b-20">
                                     <label for="oooo011">开户账号<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="oooo011" type="text"  class="form-control"
+                                    <input id="oooo011" type="text" class="form-control"
                                            required="" data-parsley-length="[2,64]" autocomplete="off"
                                            placeholder="开户账号">
                                 </div>
@@ -953,9 +973,9 @@
         </div>
         <!-- end confirm delete modal  -->
 
-        <!-- end row -->
+        <!-- start row  错误提示-->
         <th:block th:insert="fragments/common_fragments :: common_error"/>
-
+        <!-- end row -->
 
     </div> <!-- container -->
 </div> <!-- content -->
@@ -964,11 +984,9 @@
 <script>
 
     //页签切换
-    function activeTab(id){
-       $("#contract").removeClass("active");
-
-       $("#"+id).addClass("active");
-
+    function activeTab(id) {
+        $("#contract").removeClass("active");
+        $("#" + id).addClass("active");
     }
 
     // 切换按钮初始化
@@ -977,7 +995,6 @@
     for (var i = 0; i < elems.length; i++) {
         switchery[i] = new Switchery(elems[i]);
     }
-
 
     $(document).ready(function () {
 

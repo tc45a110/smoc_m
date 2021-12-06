@@ -25,7 +25,7 @@ public class ResourceController {
      */
     @RequestMapping(value = "/resource/list", method = RequestMethod.GET)
     public ModelAndView list() {
-        ModelAndView view = new ModelAndView("resource/resource_list");
+        ModelAndView view = new ModelAndView("customer/resource/resource_list");
 
         //查询数据
         PageParams params = new PageParams<>();
@@ -49,7 +49,7 @@ public class ResourceController {
      */
     @RequestMapping(value = "/resource/page", method = RequestMethod.POST)
     public ModelAndView page() {
-        ModelAndView view = new ModelAndView("resource/resource_list");
+        ModelAndView view = new ModelAndView("customer/resource/resource_list");
         //查询数据
         PageParams params = new PageParams<>();
         params.setPages(10);
@@ -71,7 +71,7 @@ public class ResourceController {
     @RequestMapping(value = "/resource/add", method = RequestMethod.GET)
     public ModelAndView add() {
 
-        ModelAndView view = new ModelAndView("resource/resource_edit");
+        ModelAndView view = new ModelAndView("customer/resource/resource_edit");
 
         return view;
 
@@ -84,7 +84,7 @@ public class ResourceController {
     @RequestMapping(value = "/resource/edit/{id}", method = RequestMethod.GET)
     public ModelAndView edit(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("resource/resource_edit");
+        ModelAndView view = new ModelAndView("customer/resource/resource_edit");
 
         return view;
 
@@ -97,7 +97,7 @@ public class ResourceController {
     @RequestMapping(value = "/resource/detail/{id}", method = RequestMethod.GET)
     public ModelAndView detail(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("resource/resource_detail");
+        ModelAndView view = new ModelAndView("customer/resource/resource_detail");
 
         return view;
 
@@ -110,7 +110,7 @@ public class ResourceController {
      */
     @RequestMapping(value = "/resource/checkList", method = RequestMethod.GET)
     public ModelAndView checkList() {
-        ModelAndView view = new ModelAndView("resource/resource_check_list");
+        ModelAndView view = new ModelAndView("customer/resource/resource_check_list");
 
         //查询数据
         PageParams params = new PageParams<>();
@@ -134,7 +134,7 @@ public class ResourceController {
      */
     @RequestMapping(value = "/resource/checkPage", method = RequestMethod.POST)
     public ModelAndView checkPage() {
-        ModelAndView view = new ModelAndView("resource/resource_check_list");
+        ModelAndView view = new ModelAndView("customer/resource/resource_check_list");
         //查询数据
         PageParams params = new PageParams<>();
         params.setPages(10);
@@ -156,7 +156,7 @@ public class ResourceController {
     @RequestMapping(value = "/resource/checkView/{id}", method = RequestMethod.GET)
     public ModelAndView checkView(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("resource/resource_check_view");
+        ModelAndView view = new ModelAndView("customer/resource/resource_check_view");
 
         return view;
 
@@ -169,7 +169,7 @@ public class ResourceController {
     @RequestMapping(value = "/resource/checkDetail/{id}", method = RequestMethod.GET)
     public ModelAndView checkDetail(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("resource/resource_check_detail");
+        ModelAndView view = new ModelAndView("customer/resource/resource_check_detail");
 
         return view;
 

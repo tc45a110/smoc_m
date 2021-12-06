@@ -12,13 +12,15 @@
 
 </head>
 <body>
+<!-- Loader start 页面加载进度-->
 <th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
 
 <!-- Start content -->
 <div class="content" style="margin-top: 60px">
     <div class="container">
 
-        <!-- start row -->
+        <!-- start row 页面导航-->
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
@@ -37,7 +39,7 @@
         </div>
         <!-- end row -->
 
-        <!-- start row -->
+        <!-- start row 页面内容-->
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-md-12">
                 <div class="card-box">
@@ -72,18 +74,16 @@
                                         <input type="text"  class="form-control" data-parsley-length="[1,48]" autocomplete="off"
                                                placeholder="关键字">
                                     </div>
-                                    <div class="form-group m-b-20">
-                                        <label>上传附件</label>
-                                        <input type="file" name="file" id="input_file"
-                                               multiple="multiple">
-                                    </div>
-
-
                                 </div>
                                 <!-- end class p-20 -->
                             </div> <!-- end col -->
 
                             <div class="col-md-6">
+                                <div class="form-group m-b-20">
+                                    <label>上传附件</label>
+                                    <input type="file" name="file" id="input_file"
+                                           multiple="multiple">
+                                </div>
 
                             </div> <!-- end col -->
                         </div> <!-- end row -->
