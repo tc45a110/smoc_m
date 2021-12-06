@@ -46,145 +46,86 @@
                 <div class="card-box">
                     <form id="submit_form"
                           method="post" data-parsley-validate="">
-                        <div class="row" th:remove="${level =='2'}?all:none">
-                            <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-12">
                                 <div class="p-20">
-                                    <div class="form-group m-b-20">
-                                        <label for="eName">企业名称<span class="text-danger">*</span>&nbsp;</label>
-                                        <input id="eName" type="text" class="form-control"
-                                               required="" data-parsley-length="[2,64]" autocomplete="off"
-                                               placeholder="输入企业名称">
-                                    </div>
-                                    <div class="form-group m-b-20">
-                                        <label for="linkt">企业联系人<span class="text-danger">*</span>&nbsp;</label>
-                                        <input id="linkt" type="text" class="form-control"
-                                               required="" data-parsley-length="[2,12]" autocomplete="off"
-                                               placeholder="输入企业联系人">
-                                    </div>
-                                    <div class="form-group m-b-20">
-                                        <label for="linkk">企业联系方式<span class="text-danger">*</span>&nbsp;</label>
-                                        <input id="linkk" type="text" class="form-control"
-                                               required="" data-parsley-length="[7,24]" autocomplete="off"
-                                               placeholder="输入企业联系方式">
-                                    </div>
-
-                                    <div class="form-group m-b-20">
-                                        <label>对接主体公司<span class="text-danger">*</span>&nbsp;</label>
-                                        <mpm:tag id="corporation" identity="corporation" show-type="select" key="code"
-                                                 class="form-control" data-icon="mdi mdi-view-module" title="对接主体公司"/>
-                                    </div>
                                     <div class="form-group">
-                                        <label>企业类型<span class="text-danger">*</span></label>
-                                        <mpm:tag id="enterpriseType" required="true" identity="enterpriseType"
-                                                 show-type="select" key="code"
-                                                 class="form-control" name="enterpriseType" value="" title="企业类型"/>
-                                    </div>
+                                        <div class="row">
+                                            <div class="col-md-12 form-group m-b-20"
+                                                 th:remove="${level =='1'}?all:none">
+                                                <label>上级企业</label>：北京星语互联科技有限公司
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label for="eName4">企业名称<span class="text-danger">*</span>&nbsp;</label>
+                                                <input id="eName4" type="text" class="form-control"
+                                                       required="" data-parsley-length="[2,64]" autocomplete="off"
+                                                       th:placeholder="${level=='1'?'请输入企业名称':'请输入二级企业名称'}">
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label for="linkt1">企业联系人<span class="text-danger">*</span>&nbsp;</label>
+                                                <input id="linkt1" type="text" class="form-control"
+                                                       required="" data-parsley-length="[2,12]" autocomplete="off"
+                                                       th:placeholder="${level=='1'?'请输入企业联系人':'请输入二级企业联系人'}">
 
-                                    <div class="form-group m-b-20">
-                                        <label for="sale">销售人员（销售身份）</label>
-                                        <input id="sale" type="text" class="form-control"
-                                               data-parsley-length="[7,24]" autocomplete="off"
-                                               placeholder="输入销售人员">
-                                    </div>
-                                    <div class="form-group m-b-20">
-                                        <label class="m-b-10">有效状态</label>
-                                        <br/>
-                                        <div class="radio radio-info radio-inline">
-                                            <input type="radio" id="active1" value="1" checked
-                                                   required="">
-                                            <label for="active1"> 是 </label>
+                                            </div>
+                                            <div class="col-md-6 form-group ">
+                                                <label for="linkk1">企业联系方式<span
+                                                        class="text-danger">*</span>&nbsp;</label>
+                                                <input id="linkk1" type="text" class="form-control"
+                                                       required="" data-parsley-length="[7,24]" autocomplete="off"
+                                                       th:placeholder="${level=='1'?'请输入企业联系方式':'请输入二级企业联系方式'}">
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label>企业类型<span class="text-danger">*</span></label>
+                                                <mpm:tag id="enterpriseType" required="true" identity="enterpriseType"
+                                                         show-type="select" key="code"
+                                                         class="form-control" name="enterpriseType" value=""
+                                                         title="企业类型"/>
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label>对接主体公司<span class="text-danger">*</span>&nbsp;</label>
+                                                <mpm:tag id="corporation" identity="corporation" show-type="select"
+                                                         key="code"
+                                                         class="form-control" data-icon="mdi mdi-view-module"
+                                                         title="对接主体公司"/>
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label for="sale">销售人员（销售身份）</label>
+                                                <input id="sale" type="text" class="form-control"
+                                                       data-parsley-length="[7,24]" autocomplete="off"
+                                                       placeholder="请输入销售人员">
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label class="m-b-10">有效状态</label>
+                                                <br/>
+                                                <div class="radio radio-info radio-inline">
+                                                    <input type="radio" id="active1" value="1" checked
+                                                           required="">
+                                                    <label for="active1"> 是 </label>
+                                                </div>
+                                                <div class="radio radio-info radio-inline">
+                                                    <input type="radio" id="active0" value="0">
+                                                    <label for="active0"> 否 </label>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="col-md-12 text-center">
+                                                <a sec:authorize-url="/ec/customer/base_info/center/*"
+                                                   th:href="@{/ec/customer/base_info/center/0000}" type="button"
+                                                   class="btn btn-teal waves-effect waves-light">提交</a>
+                                                <a sec:authorize-url="/ec/customer/base_info/list"
+                                                   th:href="@{/ec/customer/base_info/list}" style="margin-left:10px"
+                                                   class="btn btn-default waves-effect waves-light">返回</a>
+                                            </div>
                                         </div>
-                                        <div class="radio radio-info radio-inline">
-                                            <input type="radio" id="active0" value="0">
-                                            <label for="active0"> 否 </label>
-                                        </div>
-
                                     </div>
-
                                 </div>
                                 <!-- end class p-20 -->
                             </div> <!-- end col -->
-
-                            <div class="col-md-6">
-
-                            </div> <!-- end col -->
                         </div> <!-- end row -->
-
-                        <div class="row" th:remove="${level =='1'}?all:none">
-                            <div class="col-md-6">
-                                <div class="p-20">
-                                    <div class="form-group m-b-20">
-                                        <label for="linkt">上级企业名称</label>：北京星语互联科技有限公司
-                                    </div>
-                                    <div class="form-group m-b-20">
-                                        <label for="eName">二级企业名称<span class="text-danger">*</span>&nbsp;</label>
-                                        <input id="eName" type="text" class="form-control"
-                                               required="" data-parsley-length="[2,64]" autocomplete="off"
-                                               placeholder="输入二级企业名称">
-                                    </div>
-                                    <div class="form-group m-b-20">
-                                        <label for="linkt">二级企业联系人<span class="text-danger">*</span>&nbsp;</label>
-                                        <input id="linkt" type="text" class="form-control"
-                                               required="" data-parsley-length="[2,12]" autocomplete="off"
-                                               placeholder="输入二级企业联系人">
-                                    </div>
-                                    <div class="form-group m-b-20">
-                                        <label for="linkk">二级企业联系方式<span class="text-danger">*</span>&nbsp;</label>
-                                        <input id="linkk" type="text" class="form-control"
-                                               required="" data-parsley-length="[7,24]" autocomplete="off"
-                                               placeholder="输入二级企业联系方式">
-                                    </div>
-
-                                    <div class="form-group m-b-20">
-                                        <label>二级企业对接主体公司<span class="text-danger">*</span>&nbsp;</label>
-                                        <input id="linkk" type="text" class="form-control"
-                                               required="" value="小舟科技(北京)有限公司" readonly>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>企业类型<span class="text-danger">*</span></label>
-                                        <mpm:tag id="enterpriseType" required="true" identity="enterpriseType"
-                                                 show-type="select" key="code"
-                                                 class="form-control" name="enterpriseType" value="" title="企业类型"/>
-                                    </div>
-
-                                    <div class="form-group m-b-20">
-                                        <label for="sale">销售人员（销售身份）</label>
-                                        <input id="sale" type="text" class="form-control" value="李先生" readonly>
-                                    </div>
-                                    <div class="form-group m-b-20">
-                                        <label class="m-b-10">有效状态</label>
-                                        <br/>
-                                        <div class="radio radio-info radio-inline">
-                                            <input type="radio" id="active1" value="1" checked
-                                                   required="">
-                                            <label for="active1"> 是 </label>
-                                        </div>
-                                        <div class="radio radio-info radio-inline">
-                                            <input type="radio" id="active0" value="0">
-                                            <label for="active0"> 否 </label>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-                                <!-- end class p-20 -->
-                            </div> <!-- end col -->
-
-                            <div class="col-md-6">
-
-                            </div> <!-- end col -->
-                        </div> <!-- end row -->
-
-                        <div class="text-center">
-                            <a sec:authorize-url="/ec/customer/base_info/center/*"
-                               th:href="@{/ec/customer/base_info/center/0000}" type="button"
-                               class="btn btn-teal waves-effect waves-light">提交</a>
-                            <a sec:authorize-url="/ec/customer/base_info/list" th:href="@{/ec/customer/base_info/list}"
-                               class="btn btn-default waves-effect waves-light">返回</a>
-                        </div>
                     </form>
                     <!-- end form -->
-
                 </div> <!-- end card-box -->
             </div> <!-- end col -->
         </div>
@@ -203,6 +144,7 @@
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
+
 </script>
 </body>
 </html>
