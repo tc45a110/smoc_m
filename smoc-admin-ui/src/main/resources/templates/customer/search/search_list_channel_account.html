@@ -11,7 +11,10 @@
     </style>
 </head>
 <body>
+<!-- Loader start 页面加载进度-->
 <th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
 <!-- Start content -->
 <div class="content" style="margin-top: 60px">
     <div class="container">
@@ -30,7 +33,8 @@
             </div>
         </div>
         <!-- end row -->
-        <!-- start row -->
+
+        <!-- start row  查询条件-->
         <div class="row" style="position: relative;margin-top: 80px" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
                 <div class="card-box">
@@ -76,6 +80,8 @@
             </div>
         </div>
         <!-- end row -->
+
+        <!-- start row  操作提示-->
         <div id="help" class="alert alert-icon alert-success alert-dismissible fade in"  role="alert">
             <button id="help_button" type="button" class="close"
                     aria-label="Close">
@@ -84,8 +90,9 @@
             <i class="mdi mdi-help-circle-outline"></i>
             <strong>操作提示：</strong> 第一步：搜索到准备创建通道账户的EC；第二步：选定已搜索到的EC；第三步：为该EC创建新的通道账户。
         </div>
+        <!-- end row -->
 
-        <!-- start row -->
+        <!-- start row  列表数据-->
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
                 <div class="panel panel-color panel-info">
@@ -136,9 +143,9 @@
         </div>
         <!-- end row -->
 
+        <!-- start row  错误提示-->
         <th:block th:insert="fragments/common_fragments :: common_error"/>
-
-        <th:block th:insert="fragments/common_fragments :: confirm-modal"/>
+        <!-- end row -->
 
     </div> <!-- container -->
 

@@ -15,17 +15,17 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Slf4j
 @Controller
-@RequestMapping("/ec")
-public class ResourceController {
+@RequestMapping("/ec/customer")
+public class MaterialController {
 
     /**
      * 查询EC资料
      *
      * @return
      */
-    @RequestMapping(value = "/resource/list", method = RequestMethod.GET)
+    @RequestMapping(value = "/material/list", method = RequestMethod.GET)
     public ModelAndView list() {
-        ModelAndView view = new ModelAndView("customer/resource/resource_list");
+        ModelAndView view = new ModelAndView("customer/material/customer_material_list");
 
         //查询数据
         PageParams params = new PageParams<>();
@@ -47,9 +47,9 @@ public class ResourceController {
      *
      * @return
      */
-    @RequestMapping(value = "/resource/page", method = RequestMethod.POST)
+    @RequestMapping(value = "/material/page", method = RequestMethod.POST)
     public ModelAndView page() {
-        ModelAndView view = new ModelAndView("customer/resource/resource_list");
+        ModelAndView view = new ModelAndView("customer/material/customer_material_list");
         //查询数据
         PageParams params = new PageParams<>();
         params.setPages(10);
@@ -68,10 +68,10 @@ public class ResourceController {
      * 添加
      * @return
      */
-    @RequestMapping(value = "/resource/add", method = RequestMethod.GET)
+    @RequestMapping(value = "/material/add", method = RequestMethod.GET)
     public ModelAndView add() {
 
-        ModelAndView view = new ModelAndView("customer/resource/resource_edit");
+        ModelAndView view = new ModelAndView("customer/material/customer_material_edit");
 
         return view;
 
@@ -81,10 +81,10 @@ public class ResourceController {
      * 编辑
      * @return
      */
-    @RequestMapping(value = "/resource/edit/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/material/edit/{id}", method = RequestMethod.GET)
     public ModelAndView edit(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("customer/resource/resource_edit");
+        ModelAndView view = new ModelAndView("customer/material/customer_material_edit");
 
         return view;
 
@@ -94,23 +94,23 @@ public class ResourceController {
      * 显示详情
      * @return
      */
-    @RequestMapping(value = "/resource/detail/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/material/detail/{id}", method = RequestMethod.GET)
     public ModelAndView detail(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("customer/resource/resource_detail");
+        ModelAndView view = new ModelAndView("customer/material/customer_material_detail");
 
         return view;
 
     }
 
     /**
-     * 查询EC资料审核
+     * EC中心查询EC资料
      *
      * @return
      */
-    @RequestMapping(value = "/resource/checkList", method = RequestMethod.GET)
-    public ModelAndView checkList() {
-        ModelAndView view = new ModelAndView("customer/resource/resource_check_list");
+    @RequestMapping(value = "/center/material/list", method = RequestMethod.GET)
+    public ModelAndView customer_data_list() {
+        ModelAndView view = new ModelAndView("customer/material/customer_center_material_list");
 
         //查询数据
         PageParams params = new PageParams<>();
@@ -122,19 +122,20 @@ public class ResourceController {
         params.setTotalRows(100);
 
         view.addObject("pageParams",params);
+        view.addObject("type","contract");
 
         return view;
 
     }
 
     /**
-     * 分页查询EC资料审核
+     * 分页查询EC资料
      *
      * @return
      */
-    @RequestMapping(value = "/resource/checkPage", method = RequestMethod.POST)
-    public ModelAndView checkPage() {
-        ModelAndView view = new ModelAndView("customer/resource/resource_check_list");
+    @RequestMapping(value = "/center/material/page", method = RequestMethod.POST)
+    public ModelAndView customer_data_page() {
+        ModelAndView view = new ModelAndView("customer/material/customer_center_material_list");
         //查询数据
         PageParams params = new PageParams<>();
         params.setPages(10);
@@ -145,34 +146,11 @@ public class ResourceController {
         params.setTotalRows(100);
 
         view.addObject("pageParams",params);
+        view.addObject("type","contract");
         return view;
 
     }
 
-    /**
-     * 显示审核页面
-     * @return
-     */
-    @RequestMapping(value = "/resource/checkView/{id}", method = RequestMethod.GET)
-    public ModelAndView checkView(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("customer/resource/resource_check_view");
-
-        return view;
-
-    }
-
-    /**
-     * 显示审核详情
-     * @return
-     */
-    @RequestMapping(value = "/resource/checkDetail/{id}", method = RequestMethod.GET)
-    public ModelAndView checkDetail(@PathVariable String id, HttpServletRequest request) {
-
-        ModelAndView view = new ModelAndView("customer/resource/resource_check_detail");
-
-        return view;
-
-    }
 
 }

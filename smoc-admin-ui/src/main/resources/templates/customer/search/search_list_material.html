@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <th:block th:insert="fragments/common_fragments :: common_header"/>
@@ -7,11 +8,12 @@
     <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
     <th:block th:insert="fragments/common_fragments :: select_css"/>
     <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
-    <style>
-    </style>
 </head>
 <body>
+<!-- Loader start 页面加载进度-->
 <th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
 <!-- Start content -->
 <div class="content" style="margin-top: 60px">
     <div class="container">
@@ -30,11 +32,12 @@
             </div>
         </div>
         <!-- end row -->
-        <!-- start row -->
+
+        <!-- start row  查询条件-->
         <div class="row" style="position: relative;margin-top: 80px" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
                 <div class="card-box">
-                    <form th:action="@{/ec/customer/page}"  id="query_form"  method="post">
+                    <form th:action="@{/ec/customer/page}" id="query_form" method="post">
                         <div class="row m-b-60">
                             <div class="col-sm-12">
                                 <div class="form-group  col-sm-3">
@@ -66,7 +69,8 @@
                                             class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search" style="margin-right:5px"></i> 查询
                                     </button>
-                                    <a id="help_display" style="margin-left:10px"><i class="mdi mdi-help-circle-outline" style="font-size:18px;"></i></a>
+                                    <a id="help_display" style="margin-left:10px"><i class="mdi mdi-help-circle-outline"
+                                                                                     style="font-size:18px;"></i></a>
                                 </div>
 
                             </div>
@@ -76,16 +80,19 @@
             </div>
         </div>
         <!-- end row -->
-        <div id="help" class="alert alert-icon alert-success alert-dismissible fade in"  role="alert">
+
+        <!-- start row  操作提示-->
+        <div id="help" class="alert alert-icon alert-success alert-dismissible fade in" role="alert">
             <button id="help_button" type="button" class="close"
                     aria-label="Close">
-                <span >&times;</span>
+                <span>&times;</span>
             </button>
             <i class="mdi mdi-help-circle-outline"></i>
-            <strong>操作提示：</strong> 第一步：搜索企业信息；第二步：选定企业并创建资质。
+            <strong>操作提示：</strong> 第一步：搜索企业信息；第二步：选定企业并新建签名资质。
         </div>
+        <!-- end row -->
 
-        <!-- start row -->
+        <!-- start row  列表数据-->
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
                 <div class="panel panel-color panel-info">
@@ -115,9 +122,10 @@
                                     <td>
                                         <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">渠道商</a>
                                     </td>
-                                    <td>  北京市朝阳区武汉路23号</td>
+                                    <td> 北京市朝阳区武汉路23号</td>
                                     <td>
-                                        <a sec:authorize-url="/ec/resource/add" th:href="@{/ec/resource/add}"
+                                        <a sec:authorize-url="/ec/customer/material/add"
+                                           th:href="@{/ec/customer/material/add}"
                                            class="btn btn-success waves-effect waves-light m-l-10 btn-sm">
                                             <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>新建签名资质</a>
                                     </td>
@@ -136,9 +144,10 @@
         </div>
         <!-- end row -->
 
+        <!-- start row  错误提示-->
         <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
 
-        <th:block th:insert="fragments/common_fragments :: confirm-modal"/>
 
     </div> <!-- container -->
 
@@ -183,6 +192,10 @@
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
+
+
+
+
 
 </script>
 </body>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <th:block th:insert="fragments/common_fragments :: common_header"/>
@@ -9,13 +10,15 @@
 
 </head>
 <body>
+<!-- Loader start 页面加载进度-->
 <th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
 
 <!-- Start content -->
 <div class="content" style="margin-top: 60px">
     <div class="container">
 
-        <!-- start row -->
+        <!-- start row 页面导航-->
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
@@ -31,7 +34,7 @@
         </div>
         <!-- end row -->
 
-        <!-- start row -->
+        <!-- start row 页面内容-->
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-md-6">
                 <div class="panel panel-color panel-teal">
@@ -46,27 +49,30 @@
                             <div class="col-md-10">
                                 <div class="p-20">
                                     <div class="form-group m-b-20">
-                                        <label>企业名称:北京星语互联科技有限公司</label>
+                                        <label>企业名称：</label>北京星语互联科技有限公司
                                     </div>
                                     <div class="form-group">
-                                        <label>企业类型:渠道商</label>
+                                        <label>企业类型：</label>渠道商
 
                                     </div>
                                     <div class="form-group m-b-20">
-                                        <label>合同编号：XY001-0876-2223</label>
+                                        <label>合同编号：</label>XY001-0876-2223
                                     </div>
                                     <div class="form-group m-b-20">
-                                        <label>签订日期：2021-11-17</label>
+                                        <label>签订日期：</label>2021-11-17
                                     </div>
                                     <div class="form-group m-b-20">
-                                        <label>备注关键字</label><br>
+                                        <label>备注关键字：</label>
                                         关键字、关键字
                                     </div>
                                     <div class="form-group m-b-20">
-                                        <p class="text-muted"><i style="font-size: 18px" class="mdi mdi-download"></i><a href="">&nbsp;EC合同文件</a></p>
+                                        <p class="text-muted"><i style="font-size: 18px" class="mdi mdi-download"></i><a
+                                                href="">&nbsp;EC合同文件</a></p>
                                     </div>
                                     <div class="text-center">
-                                        <a sec:authorize-url="/ec/customer/contract/list" th:href="@{/ec/customer/contract/list}" class="btn btn-default waves-effect waves-light">返回</a>
+                                        <a sec:authorize-url="/ec/customer/contract/list"
+                                           th:href="@{/ec/customer/contract/list}"
+                                           class="btn btn-default waves-effect waves-light">返回</a>
                                     </div>
                                 </div>
                                 <!-- end class p-20 -->
@@ -84,7 +90,7 @@
                             操作记录
                         </h3>
                     </div>
-                    <div class="panel-body" style="height: 397px">
+                    <div class="panel-body" style="height: 378px">
                         <div class="table-responsive">
                             <table class="table table table-hover m-10" style="margin-top: -12px;">
                                 <thead>
@@ -121,7 +127,9 @@
         </div>
         <!-- end row -->
 
+        <!-- start row  错误提示-->
         <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
 
     </div> <!-- container -->
 </div> <!-- content -->
@@ -134,6 +142,7 @@
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
+
 </script>
 </body>
 </html>
