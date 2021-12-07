@@ -6,6 +6,7 @@ import com.smoc.cloud.auth.data.provider.entity.BaseCommDictType;
 import com.smoc.cloud.auth.data.provider.repository.BaseCommDictRepository;
 import com.smoc.cloud.auth.data.provider.repository.BaseCommDictTypeRepository;
 import com.smoc.cloud.common.auth.qo.Dict;
+import com.smoc.cloud.common.auth.qo.DictType;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
@@ -40,14 +41,18 @@ public class BaseCommDictService {
      * @param system
      * @return
      */
-    public Map<String, List<Dict>> getDict(String system) {
+    public Map<String, DictType> getDict(String system) {
 
-        Map<String, List<Dict>> resultMap = new HashMap<>();
+        Map<String, DictType> resultMap = new HashMap<>();
 
         List<BaseCommDictType> types = baseCommDictTypeRepository.findBaseCommDictTypeByActiveAndDictTypeSystemLike(1,"%"+system+"%");
+
         for (BaseCommDictType type : types) {
+            DictType dictType = new DictType();
             List<Dict> list = baseCommDictRepository.findDictByTypeId(type.getId());
-            resultMap.put(type.getDictTypeCode(), list);
+            dictType.setDict(list);
+            dictType.setIcon(type.getIcon());
+            resultMap.put(type.getDictTypeCode(), dictType);
         }
 
         return resultMap;

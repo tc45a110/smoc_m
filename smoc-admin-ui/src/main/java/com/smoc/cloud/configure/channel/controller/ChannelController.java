@@ -1,6 +1,7 @@
 package com.smoc.cloud.configure.channel.controller;
 
 import com.smoc.cloud.common.auth.qo.Dict;
+import com.smoc.cloud.common.auth.qo.DictType;
 import com.smoc.cloud.common.page.PageParams;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -150,8 +151,9 @@ public class ChannelController {
 
         ModelAndView view = new ModelAndView("configure/channel/channel_edit_extend_param");
 
-        Map<String, List<Dict>> dictMap = (Map<String, List<Dict>>) request.getSession().getServletContext().getAttribute("dict");
-        List<Dict> dictList = dictMap.get("channelExtendField");
+        Map<String, DictType> dictMap = (Map<String, DictType>) request.getSession().getServletContext().getAttribute("dict");
+        DictType dictType = dictMap.get("channelExtendField");
+        List<Dict> dictList = dictType.getDict();
 
         view.addObject("channelExtendFields",dictList);
 

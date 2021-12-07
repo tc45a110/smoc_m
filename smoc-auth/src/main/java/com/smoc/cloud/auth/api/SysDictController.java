@@ -3,6 +3,7 @@ package com.smoc.cloud.auth.api;
 
 import com.smoc.cloud.auth.data.provider.service.BaseCommDictService;
 import com.smoc.cloud.common.auth.qo.Dict;
+import com.smoc.cloud.common.auth.qo.DictType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -37,9 +38,9 @@ public class SysDictController {
      */
     @PreAuthorize("hasAuthority('SUPER-ROLE')")
     @RequestMapping(value = "/getDict/{system}", method = RequestMethod.GET)
-    public Map<String, List<Dict>> baseCommDictService(@PathVariable String system) {
+    public Map<String, DictType> baseCommDictService(@PathVariable String system) {
 
-        Map<String, List<Dict>> data = baseCommDictService.getDict(system);
+        Map<String, DictType> data = baseCommDictService.getDict(system);
         return data;
     }
 

@@ -1,6 +1,7 @@
 package com.smoc.cloud.configure.product.controller;
 
 import com.smoc.cloud.common.auth.qo.Dict;
+import com.smoc.cloud.common.auth.qo.DictType;
 import com.smoc.cloud.common.page.PageParams;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -92,8 +93,9 @@ public class ProductController {
 
         ModelAndView view = new ModelAndView("configure/product/product_edit_base");
 
-        Map<String, List<Dict>> dictMap = (Map<String, List<Dict>>) request.getSession().getServletContext().getAttribute("dict");
-        List<Dict> dictList = dictMap.get("productExtendField");
+        Map<String, DictType> dictMap = (Map<String, DictType>) request.getSession().getServletContext().getAttribute("dict");
+        DictType dictType = dictMap.get("productExtendField");
+        List<Dict> dictList = dictType.getDict();
 
         view.addObject("productExtendField",dictList);
 
@@ -140,8 +142,9 @@ public class ProductController {
         ModelAndView view = new ModelAndView("configure/product/product_view_base");
 
 
-        Map<String, List<Dict>> dictMap = (Map<String, List<Dict>>) request.getSession().getServletContext().getAttribute("dict");
-        List<Dict> dictList = dictMap.get("productExtendField");
+        Map<String, DictType> dictMap = (Map<String, DictType>) request.getSession().getServletContext().getAttribute("dict");
+        DictType dictType = dictMap.get("productExtendField");
+        List<Dict> dictList = dictType.getDict();
 
         view.addObject("productExtendField",dictList);
 

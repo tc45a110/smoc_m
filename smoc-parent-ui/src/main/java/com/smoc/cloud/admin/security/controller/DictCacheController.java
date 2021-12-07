@@ -3,6 +3,7 @@ package com.smoc.cloud.admin.security.controller;
 import com.smoc.cloud.admin.oauth2.service.OauthTokenService;
 import com.smoc.cloud.admin.security.properties.SystemProperties;
 import com.smoc.cloud.common.auth.qo.Dict;
+import com.smoc.cloud.common.auth.qo.DictType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -52,7 +53,7 @@ public class DictCacheController {
          * 加载系统字典数据
          */
         log.info("[系统启动][数据初始化]数据:重新加载系统公用字典数据");
-        Map<String, List<Dict>> dict = oauthTokenService.loadSysDict(systemProperties.getSystemMarking());
+        Map<String, DictType> dict = oauthTokenService.loadSysDict(systemProperties.getSystemMarking());
         request.getServletContext().setAttribute("dict", dict);
 
         view.addObject("success", "0000:更新字典缓存成功！");

@@ -5,6 +5,7 @@ import com.alibaba.fastjson.TypeReference;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
 import com.smoc.cloud.common.auth.entity.Token;
 import com.smoc.cloud.common.auth.qo.Dict;
+import com.smoc.cloud.common.auth.qo.DictType;
 import com.smoc.cloud.common.auth.qo.Nodes;
 import com.smoc.cloud.common.auth.qo.RoleMenus;
 import com.smoc.cloud.common.auth.validator.SystemValidator;
@@ -125,13 +126,13 @@ public class OauthTokenService {
      *
      * @return
      */
-    public Map<String, List<Dict>> loadSysDict(String system) {
+    public Map<String, DictType> loadSysDict(String system) {
 
-        Map<String, List<Dict>> result = null;
+        Map<String, DictType> result = null;
         try {
             String url = oAuth2TokenUtils.getAuthHost() + "/sysDict/getDict/" + system;
             JSONObject jsonObject = oAuth2TokenUtils.getOAuth2RestTemplate().getForObject(url, JSONObject.class);
-            result = JSONObject.parseObject(jsonObject.toJSONString(), new TypeReference<Map<String, List<Dict>>>() {
+            result = JSONObject.parseObject(jsonObject.toJSONString(), new TypeReference<Map<String, DictType>>() {
             });
 
         } catch (Exception e) {

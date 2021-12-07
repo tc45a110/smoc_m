@@ -1,6 +1,7 @@
 package com.smoc.cloud.admin.tag.processor;
 
 import com.smoc.cloud.common.auth.qo.Dict;
+import com.smoc.cloud.common.auth.qo.DictType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 import org.thymeleaf.context.ITemplateContext;
@@ -138,15 +139,19 @@ public class MpmDictTagProcessor extends AbstractAttributeTagProcessor {
         HttpServletRequest request = webEngineContext.getRequest();
         ServletContext context = request.getServletContext();
 
-        Map<String, List<Dict>> dictMap = (Map<String, List<Dict>>) context.getAttribute("dict");
+        Map<String, DictType> dictMap = (Map<String, DictType>) context.getAttribute("dict");
+
+        DictType dictType  = dictMap.get(identity);
 
         //如果数据或字典标识数据为空
-        if (null == dictMap || dictMap.size() < 1 || null == dictMap.get(identity) || dictMap.get(identity).size() < 1) {
+        if (null == dictMap || dictMap.size() < 1 || StringUtils.isEmpty(dictType) || null == dictType.getDict() || dictType.getDict().size() < 1) {
             //进行处理
             buildError(iTemplateContext, iElementTagStructureHandler, "数据为空或无效" + IDENTITY);
             return;
         }
-        dictList = dictMap.get(identity);
+
+        String dataIcon = dictType.getIcon();
+        dictList = dictType.getDict();
 
         //根据showType组建对应的 元素
         if (showType.equals("label")) {
@@ -154,7 +159,7 @@ public class MpmDictTagProcessor extends AbstractAttributeTagProcessor {
         }
 
         if (showType.equals("select")) {
-            buildSelect(iTemplateContext, iElementTagStructureHandler, dictList, attributeMap);
+            buildSelect(iTemplateContext, iElementTagStructureHandler, dictList, attributeMap,dataIcon);
         }
 
         if (showType.equals("checkbox")) {
@@ -255,7 +260,7 @@ public class MpmDictTagProcessor extends AbstractAttributeTagProcessor {
      * @param dictList
      * @param attributeMap
      */
-    private void buildSelect(ITemplateContext iTemplateContext, IElementTagStructureHandler iElementTagStructureHandler, List<Dict> dictList, Map<String, String> attributeMap) {
+    private void buildSelect(ITemplateContext iTemplateContext, IElementTagStructureHandler iElementTagStructureHandler, List<Dict> dictList, Map<String, String> attributeMap, String dataIcon) {
 
         final IModelFactory modelFactory = iTemplateContext.getModelFactory();
         final IModel model = modelFactory.createModel();
@@ -313,7 +318,7 @@ public class MpmDictTagProcessor extends AbstractAttributeTagProcessor {
         String value = attributeMap.get(VALUE);
 
         //option 图标  默认mdi mdi-send
-        String dataIcon = attributeMap.get(DATAICON);
+        //String dataIcon = attributeMap.get(DATAICON);
         if (StringUtils.isEmpty(dataIcon)) {
             dataIcon = "mdi mdi-equal-box";
         }

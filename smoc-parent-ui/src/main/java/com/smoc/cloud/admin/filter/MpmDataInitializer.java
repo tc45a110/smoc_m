@@ -3,6 +3,7 @@ package com.smoc.cloud.admin.filter;
 import com.smoc.cloud.admin.oauth2.service.OauthTokenService;
 import com.smoc.cloud.admin.security.properties.SystemProperties;
 import com.smoc.cloud.common.auth.qo.Dict;
+import com.smoc.cloud.common.auth.qo.DictType;
 import com.smoc.cloud.common.auth.validator.SystemValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +54,7 @@ public class MpmDataInitializer extends HttpServlet {
 		 * 加载系统字典数据
 		 */
 		log.info("[系统启动][数据初始化]数据:系统启动加载系统公用字典数据");
-		Map<String,List<Dict>> dict = oauthTokenService.loadSysDict(systemProperties.getSystemMarking());
+		Map<String, DictType> dict = oauthTokenService.loadSysDict(systemProperties.getSystemMarking());
 		config.getServletContext().setAttribute("dict", dict);
 
 		log.info("[系统启动][数据初始化]数据:系统启动加载系统SSO列表数据");
