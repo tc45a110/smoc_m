@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 /**
  * 码号管理服务
- * 2019/4/23 16:28
  **/
 @Slf4j
 @Service
