@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Slf4j
 @Controller
-@RequestMapping("/ec")
+@RequestMapping("/ec/customer")
 public class ContractController {
 
     /**
@@ -25,7 +25,7 @@ public class ContractController {
      */
     @RequestMapping(value = "/contract/list", method = RequestMethod.GET)
     public ModelAndView list() {
-        ModelAndView view = new ModelAndView("customer/contract/contract_list");
+        ModelAndView view = new ModelAndView("customer/contract/customer_contract_list");
 
         //查询数据
         PageParams params = new PageParams<>();
@@ -49,7 +49,7 @@ public class ContractController {
      */
     @RequestMapping(value = "/contract/page", method = RequestMethod.POST)
     public ModelAndView page() {
-        ModelAndView view = new ModelAndView("customer/contract/contract_list");
+        ModelAndView view = new ModelAndView("customer/contract/customer_contract_list");
         //查询数据
         PageParams params = new PageParams<>();
         params.setPages(10);
@@ -71,7 +71,7 @@ public class ContractController {
     @RequestMapping(value = "/contract/add", method = RequestMethod.GET)
     public ModelAndView add() {
 
-        ModelAndView view = new ModelAndView("customer/contract/contract_edit");
+        ModelAndView view = new ModelAndView("customer/contract/customer_contract_edit");
 
         return view;
 
@@ -84,7 +84,7 @@ public class ContractController {
     @RequestMapping(value = "/contract/edit/{id}", method = RequestMethod.GET)
     public ModelAndView edit(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("customer/contract/contract_edit");
+        ModelAndView view = new ModelAndView("customer/contract/customer_contract_edit");
 
         return view;
 
@@ -97,80 +97,7 @@ public class ContractController {
     @RequestMapping(value = "/contract/detail/{id}", method = RequestMethod.GET)
     public ModelAndView detail(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("customer/contract/contract_detail");
-
-        return view;
-
-    }
-
-
-    /**
-     * 查询EC合同审核
-     *
-     * @return
-     */
-    @RequestMapping(value = "/contract/checkList", method = RequestMethod.GET)
-    public ModelAndView checkList() {
-        ModelAndView view = new ModelAndView("customer/contract/contract_check_list");
-
-        //查询数据
-        PageParams params = new PageParams<>();
-        params.setPages(10);
-        params.setPageSize(10);
-        params.setStartRow(1);
-        params.setEndRow(10);
-        params.setCurrentPage(1);
-        params.setTotalRows(100);
-
-        view.addObject("pageParams",params);
-
-        return view;
-
-    }
-
-    /**
-     * 分页查询EC合同审核
-     *
-     * @return
-     */
-    @RequestMapping(value = "/contract/checkPage", method = RequestMethod.POST)
-    public ModelAndView checkPage() {
-        ModelAndView view = new ModelAndView("customer/contract/contract_check_list");
-        //查询数据
-        PageParams params = new PageParams<>();
-        params.setPages(10);
-        params.setPageSize(10);
-        params.setStartRow(1);
-        params.setEndRow(10);
-        params.setCurrentPage(1);
-        params.setTotalRows(100);
-
-        view.addObject("pageParams",params);
-        return view;
-
-    }
-
-    /**
-     * 显示审核页面
-     * @return
-     */
-    @RequestMapping(value = "/contract/checkView/{id}", method = RequestMethod.GET)
-    public ModelAndView checkView(@PathVariable String id, HttpServletRequest request) {
-
-        ModelAndView view = new ModelAndView("customer/contract/contract_check_view");
-
-        return view;
-
-    }
-
-    /**
-     * 显示审核详情
-     * @return
-     */
-    @RequestMapping(value = "/contract/checkDetail/{id}", method = RequestMethod.GET)
-    public ModelAndView checkDetail(@PathVariable String id, HttpServletRequest request) {
-
-        ModelAndView view = new ModelAndView("customer/contract/contract_check_detail");
+        ModelAndView view = new ModelAndView("customer/contract/customer_contract_detail");
 
         return view;
 
@@ -181,9 +108,9 @@ public class ContractController {
      *
      * @return
      */
-    @RequestMapping(value = "/customer/contract/list", method = RequestMethod.GET)
+    @RequestMapping(value = "/center/contract/list", method = RequestMethod.GET)
     public ModelAndView customer_list() {
-        ModelAndView view = new ModelAndView("customer/contract/customer_contract_list");
+        ModelAndView view = new ModelAndView("customer/contract/customer_center_contract_list");
 
         //查询数据
         PageParams params = new PageParams<>();
@@ -206,9 +133,9 @@ public class ContractController {
      *
      * @return
      */
-    @RequestMapping(value = "/customer/contract/page", method = RequestMethod.POST)
+    @RequestMapping(value = "/center/contract/page", method = RequestMethod.POST)
     public ModelAndView customer_page() {
-        ModelAndView view = new ModelAndView("customer/contract/customer_contract_list");
+        ModelAndView view = new ModelAndView("customer/contract/customer_center_contract_list");
         //查询数据
         PageParams params = new PageParams<>();
         params.setPages(10);
@@ -229,7 +156,7 @@ public class ContractController {
      *
      * @return
      */
-    @RequestMapping(value = "/customer/data/list", method = RequestMethod.GET)
+    @RequestMapping(value = "/data/list", method = RequestMethod.GET)
     public ModelAndView customer_data_list() {
         ModelAndView view = new ModelAndView("customer/contract/customer_data_list");
 
@@ -254,7 +181,7 @@ public class ContractController {
      *
      * @return
      */
-    @RequestMapping(value = "/customer/data/page", method = RequestMethod.POST)
+    @RequestMapping(value = "/data/page", method = RequestMethod.POST)
     public ModelAndView customer_data_page() {
         ModelAndView view = new ModelAndView("customer/contract/customer_data_list");
         //查询数据

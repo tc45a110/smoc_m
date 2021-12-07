@@ -12,7 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Slf4j
 @Controller
-@RequestMapping("/ec")
+@RequestMapping("/ec/customer")
 public class CustomerController {
 
     /**
@@ -20,7 +20,7 @@ public class CustomerController {
      *
      * @return
      */
-    @RequestMapping(value = "/customer/base_info/list", method = RequestMethod.GET)
+    @RequestMapping(value = "/base_info/list", method = RequestMethod.GET)
     public ModelAndView list() {
         ModelAndView view = new ModelAndView("customer/base_info/customer_list");
 
@@ -44,7 +44,7 @@ public class CustomerController {
      *
      * @return
      */
-    @RequestMapping(value = "/customer/base_info/page", method = RequestMethod.POST)
+    @RequestMapping(value = "/base_info/page", method = RequestMethod.POST)
     public ModelAndView page() {
         ModelAndView view = new ModelAndView("customer/base_info/customer_list");
         //查询数据
@@ -66,7 +66,7 @@ public class CustomerController {
      * level表示企业层级
      * @return
      */
-    @RequestMapping(value = "/customer/base_info/edit/{level}/{parentId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/base_info/edit/{level}/{parentId}", method = RequestMethod.GET)
     public ModelAndView add(@PathVariable String level,@PathVariable String parentId) {
         ModelAndView view = new ModelAndView("customer/base_info/customer_edit");
         view.addObject("level",level);
@@ -80,7 +80,7 @@ public class CustomerController {
      * level表示企业层级
      * @return
      */
-    @RequestMapping(value = "/customer/base_info/center/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/base_info/center/{id}", method = RequestMethod.GET)
     public ModelAndView config(@PathVariable String id) {
         ModelAndView view = new ModelAndView("customer/base_info/customer_center");
 
@@ -109,7 +109,7 @@ public class CustomerController {
      *
      * @return
      */
-    @RequestMapping(value = "/customer/base_info/view/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/base_info/view/{id}", method = RequestMethod.GET)
     public ModelAndView view(@PathVariable String id) {
         ModelAndView view = new ModelAndView("customer/base_info/customer_view");
 
@@ -128,7 +128,7 @@ public class CustomerController {
      *
      * @return
      */
-    @RequestMapping(value = "/customer/product/list", method = RequestMethod.GET)
+    @RequestMapping(value = "/product/list", method = RequestMethod.GET)
     public ModelAndView product() {
         ModelAndView view = new ModelAndView("customer/product/customer_product_list");
 
@@ -152,7 +152,7 @@ public class CustomerController {
      *
      * @return
      */
-    @RequestMapping(value = "/customer/product/page", method = RequestMethod.POST)
+    @RequestMapping(value = "/product/page", method = RequestMethod.POST)
     public ModelAndView product_page() {
         ModelAndView view = new ModelAndView("customer/product/customer_product_list");
 
@@ -176,7 +176,7 @@ public class CustomerController {
      *
      * @return
      */
-    @RequestMapping(value = "/customer/channel/list", method = RequestMethod.GET)
+    @RequestMapping(value = "/channel/list", method = RequestMethod.GET)
     public ModelAndView channel() {
         ModelAndView view = new ModelAndView("customer/channel/customer_channel_list");
 
@@ -200,7 +200,7 @@ public class CustomerController {
      *
      * @return
      */
-    @RequestMapping(value = "/customer/channel/page", method = RequestMethod.POST)
+    @RequestMapping(value = "/channel/page", method = RequestMethod.POST)
     public ModelAndView channel_page() {
         ModelAndView view = new ModelAndView("customer/channel/customer_channel_list");
 
