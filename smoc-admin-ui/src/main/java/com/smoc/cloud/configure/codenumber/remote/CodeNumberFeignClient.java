@@ -3,7 +3,7 @@ package com.smoc.cloud.configure.codenumber.remote;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
-import com.smoc.cloud.common.smoc.validator.CodeNumberInfoValidator;
+import com.smoc.cloud.common.smoc.configuate.validator.CodeNumberInfoValidator;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +24,14 @@ public interface CodeNumberFeignClient {
      */
     @RequestMapping(value = "/configure/code/number/page", method = RequestMethod.POST)
     PageList<CodeNumberInfoValidator> page(@RequestBody PageParams<CodeNumberInfoValidator> pageParams)  throws Exception;
+
+    /**
+     * 根据id获取信息
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/configure/code/number/findById/{id}", method = RequestMethod.GET)
+    ResponseData<CodeNumberInfoValidator> findById(@PathVariable String id) throws Exception;
 
     /**
      * 保存、修改数据

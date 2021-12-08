@@ -4,7 +4,7 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
-import com.smoc.cloud.common.smoc.validator.CodeNumberInfoValidator;
+import com.smoc.cloud.common.smoc.configuate.validator.CodeNumberInfoValidator;
 import com.smoc.cloud.configure.codenumber.remote.CodeNumberFeignClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +41,21 @@ public class CodeNumberService {
     }
 
     /**
+     * 根据id获取信息
+     * @param id
+     * @return
+     */
+    public ResponseData<CodeNumberInfoValidator> findById(String id) {
+        try {
+            ResponseData<CodeNumberInfoValidator> data = this.codeNumberFeignClient.findById(id);
+            return data;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
      * 保存、修改数据
      * op 是类型 表示了保存或修改
      */
@@ -54,6 +69,7 @@ public class CodeNumberService {
             return ResponseDataUtil.buildError(e.getMessage());
         }
     }
+
 
 
 }

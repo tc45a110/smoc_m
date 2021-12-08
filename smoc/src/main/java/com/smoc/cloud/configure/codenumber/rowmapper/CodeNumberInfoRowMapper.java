@@ -1,6 +1,6 @@
 package com.smoc.cloud.configure.codenumber.rowmapper;
 
-import com.smoc.cloud.common.smoc.validator.CodeNumberInfoValidator;
+import com.smoc.cloud.common.smoc.configuate.validator.CodeNumberInfoValidator;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;

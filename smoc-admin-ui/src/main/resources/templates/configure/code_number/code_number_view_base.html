@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
->
+<html xmlns:th="http://www.thymeleaf.org" xmlns:mpm="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <th:block th:insert="fragments/common_fragments :: common_header"/>
@@ -22,7 +21,7 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="property-content"
-                                 style="height:226px">
+                                 style="height:245px">
                                 <div class="listingInfo">
                                     <div class="">
                                         <h5 style="padding-left:10px">
@@ -30,35 +29,44 @@
                                         </h5>
                                     </div>
                                     <div class="col-sm-3">
-                                        <p style="font-size:12px">码号：10692222</p>
-                                        <p style="font-size:12px">计费号码/CA编号：CA000158</p>
-                                        <p style="font-size:12px">接入点：省份</p>
-                                        <p style="font-size:12px">低消要求：10000 万条</p>
+                                        <p style="font-size:12px">码号：[[${info.srcId}]]</p>
+                                        <p style="font-size:12px">计费号码/CA编号：[[${info.caSrcId}]]</p>
+                                        <p style="font-size:12px">接入点：<mpm:tag identity="codePoint" show-type="label" key="code" th:value="${info.accessPoint}"/></p>
+                                        <p style="font-size:12px">低消要求：<span th:if="${info.minConsumeDemand ne 0}">[[${info.minConsumeDemand}]] 万条</span></p>
+                                        <p style="font-size:12px">添加时间：[[${info.createdTime}]]</p>
                                     </div>
                                     <div class="col-sm-3">
-                                        <p style="font-size:12px">抗速率：4/百万</p>
-                                        <p style="font-size:12px">资费：¥ 0.015 元/条</p>
-                                        <p style="font-size:12px">接入时间：2021-10-29</p>
-                                        <p style="font-size:12px">低消生效时间：2021-10-29</p>
+                                        <p style="font-size:12px">抗速率：<span th:if="${not #strings.isEmpty(info.maxComplaintRate)}">[[${info.maxComplaintRate}]]/百万</span></p>
+                                        <p style="font-size:12px">资费：<span th:if="${not #strings.isEmpty(info.srcIdRpice)}">¥ [[${info.srcIdRpice}]] 元/条</span></p>
+                                        <p style="font-size:12px">接入时间：[[${info.accessTime}]]</p>
+                                        <p style="font-size:12px">低消生效时间：[[${info.minConsumeEffectiveDate}]]</p>
+                                        <p style="font-size:12px">添加人：[[${info.createdBy}]]</p>
                                     </div>
                                     <div class="col-sm-3">
-                                        <p style="font-size:12px">运营商：中国移动</p>
-                                        <p style="font-size:12px">资费生效时间：2021-10-29</p>
-                                        <p style="font-size:12px">接入省市：湖北省</p>
-                                        <p style="font-size:12px">用途：自用</p>
+                                        <p style="font-size:12px">运营商：<mpm:tag identity="carrier" show-type="label" key="code" th:value="${info.carrier}"/></p>
+                                        <p style="font-size:12px">资费生效时间：[[${info.priceEffectiveDate}]]</p>
+                                        <p style="font-size:12px">接入省市：<mpm:tag identity="provices" show-type="label" key="code" th:value="${info.province}"/>[[${info.city}]]</p>
+                                        <p style="font-size:12px">用途：<mpm:tag identity="codeUseType" show-type="label" key="code" th:value="${info.useType}"/></p>
                                     </div>
                                     <div class="col-sm-3">
-                                        <p style="font-size:12px">业务类型：<a
-                                                class="btn btn-teal waves-effect waves-light btn-xs">普通短信</a></p>
-                                        <p style="font-size:12px">码号生效时间：2021-10-29</p>
-                                        <p style="font-size:12px">码号来源：租用</p>
-                                        <p style="font-size:12px">码号状态：正常</p>
+                                        <p style="font-size:12px">
+                                            业务类型：<mpm:tag identity="businessType" show-type="button" key="code" th:value="${info.businessType}"
+                                                     class="TEXT_SMS,btn btn-teal waves-effect waves-light btn-xs;MULTI_SMS,btn btn-brown waves-effect waves-light btn-xs;MMS,btn btn-info waves-effect waves-light btn-xs;5G_SMS,btn btn-primary waves-effect waves-light btn-xs;INTERNATIONAL_SMS,btn btn-purple waves-effect waves-light btn-xs;BLACK_SERVICE,btn btn-inverse waves-effect waves-light btn-xs"/>
+                                        </p>
+                                        </p>
+                                        <p style="font-size:12px">码号生效时间：[[${info.srcIdEffectiveDate}]]</p>
+                                        <p style="font-size:12px">码号来源：<mpm:tag identity="codeSource" show-type="label" key="code" th:value="${info.srcIdSource}"/></p>
+                                        <p style="font-size:12px">
+                                            码号状态：<mpm:tag identity="codeStatus" show-type="button" key="code" th:value="${info.srcIdStatus}"
+                                                     class="001,btn btn-success waves-effect waves-light btn-xs;002,btn btn-inverse waves-effect waves-light btn-xs;003,btn btn-warning waves-effect waves-light btn-xs;004,btn btn-danger waves-effect waves-light btn-xs;"/>
+                                        </p>
+                                        </p>
                                     </div>
                                 </div>
                                 <!-- start. Card actions -->
                                 <div class="property-action">
                                     <span style="padding-left:10px;font-size:12px">
-                                        备注：从客户那暂时借用的码号
+                                        备注：[[${info.srcIdRemark}]]
                                     </span>
                                 </div>
                                 <!-- end. Card actions -->

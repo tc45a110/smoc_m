@@ -18,7 +18,7 @@
         <setting name="validation-enabled" value="true" />
         <datasource-mapping>
           <factory-entry name="Entities" />
-          <factory-entry name="entityManagerFactory" value="2a5ee157-2641-4297-9101-41167a92012c" />
+          <factory-entry name="entityManagerFactory" value="675385af-4ef5-42a2-b355-17233444412b" />
           <factory-entry name="noname-a.xml@0" value="80ad461d-297b-442b-9b5b-03d7592a773d" />
         </datasource-mapping>
         <naming-strategy-map />
@@ -36,40 +36,6 @@
     </content>
     <orderEntry type="jdk" jdkName="1.8 (2)" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-web-services:2.1.4.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: com.sun.xml.messaging.saaj:saaj-impl:1.5.0" level="project" />
-    <orderEntry type="library" name="Maven: javax.xml.soap:javax.xml.soap-api:1.4.0" level="project" />
-    <orderEntry type="library" name="Maven: org.jvnet.mimepull:mimepull:1.9.11" level="project" />
-    <orderEntry type="library" name="Maven: org.jvnet.staxex:stax-ex:1.8" level="project" />
-    <orderEntry type="library" name="Maven: javax.xml.ws:jaxws-api:2.3.1" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework.ws:spring-ws-core:3.0.7.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework.ws:spring-xml:3.0.7.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: commons-io:commons-io:2.5" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.cxf:cxf-spring-boot-starter-jaxws:3.4.0" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.cxf:cxf-spring-boot-autoconfigure:3.4.0" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.cxf:cxf-rt-frontend-jaxws:3.4.0" level="project" />
-    <orderEntry type="library" name="Maven: xml-resolver:xml-resolver:1.2" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.cxf:cxf-rt-bindings-soap:3.4.0" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.cxf:cxf-rt-wsdl:3.4.0" level="project" />
-    <orderEntry type="library" name="Maven: wsdl4j:wsdl4j:1.6.3" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.cxf:cxf-rt-databinding-jaxb:3.4.0" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.cxf:cxf-rt-bindings-xml:3.4.0" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.cxf:cxf-rt-frontend-simple:3.4.0" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.cxf:cxf-rt-ws-addr:3.4.0" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.cxf:cxf-rt-ws-policy:3.4.0" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.neethi:neethi:3.1.1" level="project" />
-    <orderEntry type="library" name="Maven: jakarta.validation:jakarta.validation-api:2.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.cxf:cxf-rt-transports-http:3.4.0" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.cxf:cxf-core:3.4.0" level="project" />
-    <orderEntry type="library" name="Maven: org.glassfish.jaxb:jaxb-runtime:2.3.1" level="project" />
-    <orderEntry type="library" name="Maven: org.glassfish.jaxb:txw2:2.3.1" level="project" />
-    <orderEntry type="library" name="Maven: com.sun.istack:istack-commons-runtime:3.0.7" level="project" />
-    <orderEntry type="library" name="Maven: com.sun.xml.fastinfoset:FastInfoset:1.2.15" level="project" />
-    <orderEntry type="library" name="Maven: com.fasterxml.woodstox:woodstox-core:6.2.1" level="project" />
-    <orderEntry type="library" name="Maven: org.codehaus.woodstox:stax2-api:4.2.1" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.ws.xmlschema:xmlschema-core:2.2.5" level="project" />
-    <orderEntry type="library" name="Maven: jakarta.xml.bind:jakarta.xml.bind-api:2.3.3" level="project" />
-    <orderEntry type="library" name="Maven: jakarta.activation:jakarta.activation-api:1.2.2" level="project" />
     <orderEntry type="module" module-name="smoc-common-utils" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-validation:2.1.4.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.apache.tomcat.embed:tomcat-embed-el:9.0.17" level="project" />

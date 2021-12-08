@@ -4,7 +4,7 @@ package com.smoc.cloud.configure.codenumber.repository;
 import com.smoc.cloud.common.BasePageRepository;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
-import com.smoc.cloud.common.smoc.validator.CodeNumberInfoValidator;
+import com.smoc.cloud.common.smoc.configuate.validator.CodeNumberInfoValidator;
 import com.smoc.cloud.configure.codenumber.rowmapper.CodeNumberInfoRowMapper;
 import org.springframework.util.StringUtils;
 

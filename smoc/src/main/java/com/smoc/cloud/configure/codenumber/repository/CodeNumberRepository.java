@@ -3,7 +3,7 @@ package com.smoc.cloud.configure.codenumber.repository;
 
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
-import com.smoc.cloud.common.smoc.validator.CodeNumberInfoValidator;
+import com.smoc.cloud.common.smoc.configuate.validator.CodeNumberInfoValidator;
 import com.smoc.cloud.configure.codenumber.entity.ConfigNumberCodeInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;

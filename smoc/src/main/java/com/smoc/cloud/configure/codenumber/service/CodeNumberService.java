@@ -7,7 +7,7 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
-import com.smoc.cloud.common.smoc.validator.CodeNumberInfoValidator;
+import com.smoc.cloud.common.smoc.configuate.validator.CodeNumberInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.configure.codenumber.entity.ConfigNumberCodeInfo;
 import com.smoc.cloud.configure.codenumber.repository.CodeNumberRepository;
@@ -41,6 +41,39 @@ public class CodeNumberService {
      */
     public PageList<CodeNumberInfoValidator> page(PageParams<CodeNumberInfoValidator> pageParams) {
         return codeNumberRepository.page(pageParams);
+    }
+
+    /**
+     * 根据id获取信息
+     * @param id
+     * @return
+     */
+    public ResponseData findById(String id) {
+        Optional<ConfigNumberCodeInfo> data = codeNumberRepository.findById(id);
+        if(!data.isPresent()){
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_QUERY_ERROR);
+        }
+
+        ConfigNumberCodeInfo entity = data.get();
+        CodeNumberInfoValidator codeNumberInfoValidator = new CodeNumberInfoValidator();
+        BeanUtils.copyProperties(entity, codeNumberInfoValidator);
+
+        //转换日期
+        codeNumberInfoValidator.setCreatedTime(DateTimeUtils.getDateTimeFormat(entity.getCreatedTime()));
+        if(!StringUtils.isEmpty(entity.getPriceEffectiveDate())){
+            codeNumberInfoValidator.setPriceEffectiveDate(DateTimeUtils.getDateFormat(entity.getPriceEffectiveDate()));
+        }
+        if(!StringUtils.isEmpty(entity.getSrcIdEffectiveDate())){
+            codeNumberInfoValidator.setSrcIdEffectiveDate(DateTimeUtils.getDateFormat(entity.getSrcIdEffectiveDate()));
+        }
+        if(!StringUtils.isEmpty(entity.getAccessTime())){
+            codeNumberInfoValidator.setAccessTime(DateTimeUtils.getDateFormat(entity.getAccessTime()));
+        }
+        if(!StringUtils.isEmpty(entity.getMinConsumeEffectiveDate())){
+            codeNumberInfoValidator.setMinConsumeEffectiveDate(DateTimeUtils.getDateFormat(entity.getMinConsumeEffectiveDate()));
+        }
+
+        return ResponseDataUtil.buildSuccess(codeNumberInfoValidator);
     }
 
     /**
@@ -80,6 +113,7 @@ public class CodeNumberService {
         }
 
         //转换日期格式
+        entity.setCreatedTime(DateTimeUtils.getDateTimeFormat(codeNumberInfoValidator.getCreatedTime()));
         if(!StringUtils.isEmpty(codeNumberInfoValidator.getPriceEffectiveDate())){
             entity.setPriceEffectiveDate(DateTimeUtils.getDateFormat(codeNumberInfoValidator.getPriceEffectiveDate()));
         }
@@ -103,6 +137,7 @@ public class CodeNumberService {
         codeNumberRepository.saveAndFlush(entity);
         return ResponseDataUtil.buildSuccess();
     }
+
 
 
 }

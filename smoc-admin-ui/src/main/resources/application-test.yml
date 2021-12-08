@@ -60,7 +60,7 @@ com:
 
 logging:
   config: classpath:logback-spring.xml
-  path: /alidata/smoc/smoc-log/smoc--admin-ui-logs
+  path: /alidata/smoc/smoc-log/smoc-admin-ui-logs
   level:
     root: info
 

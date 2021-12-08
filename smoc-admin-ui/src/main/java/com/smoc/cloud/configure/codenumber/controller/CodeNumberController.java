@@ -2,13 +2,15 @@ package com.smoc.cloud.configure.codenumber.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
-import com.smoc.cloud.common.auth.qo.Users;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
-import com.smoc.cloud.common.smoc.validator.CodeNumberInfoValidator;
+import com.smoc.cloud.common.smoc.configuate.validator.CodeNumberInfoValidator;
+import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.UUID;
+import com.smoc.cloud.common.validator.MpmIdValidator;
+import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.configure.codenumber.service.CodeNumberService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -131,12 +133,29 @@ public class CodeNumberController {
 
         ModelAndView view = new ModelAndView("configure/code_number/code_number_edit");
 
-        return view;
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
 
+        //查询数据
+        ResponseData<CodeNumberInfoValidator> data = codeNumberService.findById(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+        }
+
+        //op操作标记，add表示添加，edit表示修改
+        view.addObject("op", "edit");
+        view.addObject("codeNumberInfoValidator", data.getData());
+
+        return view;
     }
 
     /**
-     * 码号分页查询
+     * 码号保存
      *
      * @return
      */
@@ -155,11 +174,11 @@ public class CodeNumberController {
 
         //初始化其他变量
         if (!StringUtils.isEmpty(op) && "add".equals(op)) {
-            codeNumberInfoValidator.setCreatedTime(new Date());
-            codeNumberInfoValidator.setCreatedBy(user.getId());
+            codeNumberInfoValidator.setCreatedTime(DateTimeUtils.getDateTimeFormat(new Date()));
+            codeNumberInfoValidator.setCreatedBy(user.getRealName());
         } else if (!StringUtils.isEmpty(op) && "edit".equals(op)) {
             codeNumberInfoValidator.setUpdatedTime(new Date());
-            codeNumberInfoValidator.setUpdatedBy(user.getId());
+            codeNumberInfoValidator.setUpdatedBy(user.getRealName());
         } else {
             view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":" + ResponseCode.PARAM_LINK_ERROR.getMessage());
             return view;
@@ -190,6 +209,16 @@ public class CodeNumberController {
 
         ModelAndView view = new ModelAndView("configure/code_number/code_number_view_center");
 
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
+
+        view.addObject("id", id);
+
         return view;
 
     }
@@ -204,8 +233,23 @@ public class CodeNumberController {
 
         ModelAndView view = new ModelAndView("configure/code_number/code_number_view_base");
 
-        return view;
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
 
+        //查询数据
+        ResponseData<CodeNumberInfoValidator> data = codeNumberService.findById(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+        }
+
+        view.addObject("info", data.getData());
+
+        return view;
     }
 
 }

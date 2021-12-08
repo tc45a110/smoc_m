@@ -1,4 +1,4 @@
-package com.smoc.cloud.common.smoc.validator;
+package com.smoc.cloud.common.smoc.configuate.validator;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -80,7 +80,7 @@ public class CodeNumberInfoValidator {
     private String srcIdStatus;
 
     private String createdBy;
-    private Date createdTime;
+    private String createdTime;
     private String updatedBy;
     private Date updatedTime;
 
