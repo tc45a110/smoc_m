@@ -9,3 +9,10 @@ spring:
   main:
     allow-bean-definition-overriding: true
 
+# feign调用超时时间配置
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 10000
+        readTimeout: 600000

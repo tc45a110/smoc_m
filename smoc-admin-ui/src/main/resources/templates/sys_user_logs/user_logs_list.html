@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <!-- Custom box css -->
+    <link th:href="@{/static/plugins/custombox/css/custombox.min.css}" rel="stylesheet">
+    <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
+</head>
+<body style="background-color:#fff">
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top:10px">
+    <div class="container">
+
+        <!-- start row  列表数据-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="panel panel-color panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">信息操作日志</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table table-hover m-10" style="margin-top: -12px;">
+                                <thead>
+                                <tr>
+                                    <th>操作人</th>
+                                    <th>操作类型</th>
+                                    <th>操作简要说明</th>
+                                    <th>操作日期</th>
+                                    <th>操作</th>
+                                </tr>
+                                <thead>
+                                <tbody>
+                                    <tr th:each="logs:${list}">
+                                        <td>[[${logs.userId}]]</td>
+                                        <td>[[${logs.operationType}]]</td>
+                                        <td>[[${logs.simpleIntroduce}]]</td>
+                                        <td>[[${logs.createdTime}]]</td>
+                                        <td style="line-height: 26px;">
+                                            <a class="on-default edit-row"
+                                               style="padding-left: 5px;color: #4BD396;"
+                                               data-toggle="tooltip"
+                                               data-placement="left" title=""  data-original-title="数据详情"><i style="font-size: 18px"
+                                                                                                             class="glyphicon glyphicon-search"></i></a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+
+                            </table>
+                        </div>
+                        <th:block th:insert="fragments/page_fragments :: page"/>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+    </div> <!-- container -->
+</div> <!-- content -->
+
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<script th:src="@{/static/plugins/moment/moment.js}"></script>
+<!-- Modal-Effect -->
+
+<script>
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+</script>
+</body>
+</html>

@@ -5,6 +5,7 @@ import com.smoc.cloud.auth.data.provider.entity.BaseCommDict;
 import com.smoc.cloud.auth.data.provider.entity.BaseCommDictType;
 import com.smoc.cloud.auth.data.provider.repository.BaseCommDictRepository;
 import com.smoc.cloud.auth.data.provider.repository.BaseCommDictTypeRepository;
+import com.smoc.cloud.auth.data.provider.repository.SystemExtendBusinessParamRepository;
 import com.smoc.cloud.common.auth.qo.Dict;
 import com.smoc.cloud.common.auth.qo.DictType;
 import com.smoc.cloud.common.response.ResponseCode;
@@ -35,6 +36,9 @@ public class BaseCommDictService {
     @Resource
     private BaseCommDictTypeRepository baseCommDictTypeRepository;
 
+    @Resource
+    private SystemExtendBusinessParamRepository systemExtendBusinessParamRepository;
+
     /**
      * 根据系统标识查询字典
      *
@@ -54,6 +58,7 @@ public class BaseCommDictService {
             dictType.setIcon(type.getIcon());
             resultMap.put(type.getDictTypeCode(), dictType);
         }
+
 
         return resultMap;
     }
