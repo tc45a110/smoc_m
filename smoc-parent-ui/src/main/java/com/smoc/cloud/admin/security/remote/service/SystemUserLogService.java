@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 
 /**
  *     if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
- *         systemUserLogService.logsAsync("CODE-NUMBER",codeNumberInfoValidator.getId(),"add".equals(op) ? codeNumberInfoValidator.getCreatedBy() : codeNumberInfoValidator.getUpdatedBy(),  op, "add".equals(op) ? "添加码号" : "修改码号", JSON.toJSONString(codeNumberInfoValidator));
+ *         systemUserLogService.logsAsync("CODE_NUMBER",codeNumberInfoValidator.getId(),"add".equals(op) ? codeNumberInfoValidator.getCreatedBy() : codeNumberInfoValidator.getUpdatedBy(),  op, "add".equals(op) ? "添加码号" : "修改码号", JSON.toJSONString(codeNumberInfoValidator));
  *     }
  */
 @Slf4j

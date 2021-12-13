@@ -21,7 +21,7 @@ public class CodeNumberInfoRowMapper implements RowMapper<CodeNumberInfoValidato
         qo.setMaxComplaintRate(resultSet.getBigDecimal("MAX_COMPLAINT_RATE"));
         qo.setCarrier(resultSet.getString("CARRIER"));
         qo.setBusinessType(resultSet.getString("BUSINESS_TYPE"));
-        qo.setSrcIdRpice(resultSet.getBigDecimal("SRC_ID_RPICE"));
+        qo.setSrcIdPrice(resultSet.getBigDecimal("SRC_ID_PRICE"));
         qo.setUseType(resultSet.getString("USE_TYPE"));
         qo.setSrcIdSource(resultSet.getString("SRC_ID_SOURCE"));
         qo.setAccessPoint(resultSet.getString("ACCESS_POINT"));

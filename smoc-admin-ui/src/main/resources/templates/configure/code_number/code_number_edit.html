@@ -90,11 +90,11 @@
                                                        th:field="*{caSrcId}" data-parsley-length="[1,32]" autocomplete="off">
                                             </div>
                                             <div class="col-sm-3 m-b-10">
-                                                <label>资费(元/条)&nbsp;<span class="text-danger"th:if="${#fields.hasErrors('srcIdRpice')}"
-                                                                          th:errors="*{srcIdRpice}" style="font-weight: 200;font-size: 12px"></span>
+                                                <label>资费(元/条)&nbsp;<span class="text-danger"th:if="${#fields.hasErrors('srcIdPrice')}"
+                                                                          th:errors="*{srcIdPrice}" style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
                                                 <input type="text" placeholder="资费(元/条)" class="form-control"
-                                                       th:field="*{srcIdRpice}" min="0"   max="1" autocomplete="off">
+                                                       th:field="*{srcIdPrice}" min="0"   max="1" autocomplete="off">
                                             </div>
 
                                             <div class="col-sm-3 m-b-10">

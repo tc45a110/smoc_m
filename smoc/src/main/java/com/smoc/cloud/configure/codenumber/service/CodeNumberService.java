@@ -88,7 +88,6 @@ public class CodeNumberService {
 
         Iterable<ConfigNumberCodeInfo> data = codeNumberRepository.findBySrcIdAndCarrierAndProvinceAndBusinessType(codeNumberInfoValidator.getSrcId(),codeNumberInfoValidator.getCarrier(),codeNumberInfoValidator.getProvince(),codeNumberInfoValidator.getBusinessType());
 
-        //转BaseUser存放对象
         ConfigNumberCodeInfo entity = new ConfigNumberCodeInfo();
         BeanUtils.copyProperties(codeNumberInfoValidator, entity);
 
@@ -96,7 +95,7 @@ public class CodeNumberService {
         if (data != null && data.iterator().hasNext() && "add".equals(op)) {
             return ResponseDataUtil.buildError(ResponseCode.PARAM_CREATE_ERROR);
         }
-        //edit查重SystemName、ProjectName
+        //edit查重
         else if (data != null && data.iterator().hasNext() && "edit".equals(op)) {
             boolean status = false;
             Iterator iter = data.iterator();

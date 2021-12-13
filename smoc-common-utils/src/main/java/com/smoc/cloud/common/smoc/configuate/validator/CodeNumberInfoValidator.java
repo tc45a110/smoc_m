@@ -37,7 +37,7 @@ public class CodeNumberInfoValidator {
     private String businessType;
 
     @Range(min = 0, max = 1, message = "资费只能是{min}到{max}！")
-    private BigDecimal srcIdRpice;
+    private BigDecimal srcIdPrice;
 
     private String priceEffectiveDate;
 

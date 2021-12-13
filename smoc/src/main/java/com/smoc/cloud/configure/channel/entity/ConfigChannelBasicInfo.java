@@ -12,6 +12,7 @@ public class ConfigChannelBasicInfo {
     private String channelId;
     private String channelName;
     private String carrier;
+    private String businessType;
     private BigDecimal maxComplaintRate;
     private String accessProvince;
     private String channelProvder;
@@ -62,6 +63,16 @@ public class ConfigChannelBasicInfo {
 
     public void setCarrier(String carrier) {
         this.carrier = carrier;
+    }
+
+    @Basic
+    @Column(name = "BUSINESS_TYPE")
+    public String getBusinessType() {
+        return businessType;
+    }
+
+    public void setBusinessType(String businessType) {
+        this.businessType = businessType;
     }
 
     @Basic

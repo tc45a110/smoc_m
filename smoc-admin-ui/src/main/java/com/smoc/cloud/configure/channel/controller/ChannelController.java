@@ -1,26 +1,55 @@
 package com.smoc.cloud.configure.channel.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
+import com.smoc.cloud.common.auth.entity.SecurityUser;
 import com.smoc.cloud.common.auth.qo.Dict;
 import com.smoc.cloud.common.auth.qo.DictType;
 import com.smoc.cloud.common.page.PageParams;
+import com.smoc.cloud.common.response.ResponseCode;
+import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.configuate.validator.ChannelBasicInfoValidator;
+import com.smoc.cloud.common.utils.DateTimeUtils;
+import com.smoc.cloud.common.validator.MpmIdValidator;
+import com.smoc.cloud.common.validator.MpmValidatorUtil;
+import com.smoc.cloud.configure.channel.service.ChannelService;
+import com.smoc.cloud.sequence.service.SequenceService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 /**
  * 通道管理
  **/
+@Slf4j
 @Controller
 @RequestMapping("/configure/channel")
 public class ChannelController {
 
+    @Autowired
+    private ChannelService channelService;
 
+    @Autowired
+    private SequenceService sequenceService;
+
+    @Autowired
+    private SystemUserLogService systemUserLogService;
 
     /**
      * 通道管理列表
@@ -80,9 +109,17 @@ public class ChannelController {
     public ModelAndView edit_center(@PathVariable String id, HttpServletRequest request) {
 
         ModelAndView view = new ModelAndView("configure/channel/channel_edit_center");
+        view.addObject("id",id);
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
 
         return view;
-
     }
 
     /**
@@ -95,8 +132,132 @@ public class ChannelController {
 
         ModelAndView view = new ModelAndView("configure/channel/channel_edit_base");
 
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
+
+        /**
+         * id为base是添加功能
+         */
+        if ("base".equals(id)) {
+            //初始化数据
+            ChannelBasicInfoValidator channelBasicInfoValidator = new ChannelBasicInfoValidator();
+            channelBasicInfoValidator.setChannelStatus("002");//默认编辑中
+            channelBasicInfoValidator.setReportEnable("1");//有无报告：有
+            channelBasicInfoValidator.setSignType("1");//签名方式：通道自签名
+            channelBasicInfoValidator.setUpMessageEnable("1");//有无上行：有
+            channelBasicInfoValidator.setTransferEnable("0");//携号转网:否
+            channelBasicInfoValidator.setBusinessAreaType("COUNTRY");//区域范围默认全国
+            channelBasicInfoValidator.setPriceStyle("UNIFIED_PRICE");//默认统一计价
+            channelBasicInfoValidator.setChannelProcess("1000");//配置进度
+            channelBasicInfoValidator.setChannelRunStatus("1");//正常
+
+            //op操作标记，add表示添加，edit表示修改
+            view.addObject("op", "add");
+            view.addObject("channelBasicInfoValidator", channelBasicInfoValidator);
+            return view;
+        }
+
+        /**
+         * 修改:查询数据
+         */
+        ResponseData<ChannelBasicInfoValidator> data = channelService.findById(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+        }
+
+        //op操作标记，add表示添加，edit表示修改
+        view.addObject("op", "edit");
+        view.addObject("channelBasicInfoValidator", data.getData());
+
+        return view;
+    }
+
+    /**
+     * 通道基本信息提交
+     *
+     * @return
+     */
+    @RequestMapping(value = "/save/{op}", method = RequestMethod.POST)
+    public ModelAndView save(@ModelAttribute @Validated ChannelBasicInfoValidator channelBasicInfoValidator, BindingResult result, @PathVariable String op, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("configure/channel/channel_edit_base");
+
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        //参数验证
+        result = paramsValidator(channelBasicInfoValidator,result);
+        //完成参数规则验证
+        if (result.hasErrors()) {
+            view.addObject("codeNumberInfoValidator", channelBasicInfoValidator);
+            view.addObject("op", op);
+            return view;
+        }
+
+        //初始化其他变量
+        if (!StringUtils.isEmpty(op) && "add".equals(op)) {
+            //生成通道ID:根据业务类型查询序列
+            Integer seq = sequenceService.findSequence(channelBasicInfoValidator.getBusinessType());
+            channelBasicInfoValidator.setChannelId("CHID"+seq);
+            channelBasicInfoValidator.setCreatedTime(DateTimeUtils.getDateTimeFormat(new Date()));
+            channelBasicInfoValidator.setCreatedBy(user.getRealName());
+        } else if (!StringUtils.isEmpty(op) && "edit".equals(op)) {
+            channelBasicInfoValidator.setUpdatedTime(new Date());
+            channelBasicInfoValidator.setUpdatedBy(user.getRealName());
+        } else {
+            view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":" + ResponseCode.PARAM_LINK_ERROR.getMessage());
+            return view;
+        }
+
+        //保存数据
+        ResponseData data = channelService.save(channelBasicInfoValidator, op);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        //保存操作记录
+        if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            systemUserLogService.logsAsync("CHANNEL_BASE", channelBasicInfoValidator.getChannelId(), "add".equals(op) ? channelBasicInfoValidator.getCreatedBy() : channelBasicInfoValidator.getUpdatedBy(), op, "add".equals(op) ? "添加通道" : "修改通道", JSON.toJSONString(channelBasicInfoValidator));
+        }
+
+        //记录日志
+        log.info("[通道管理][通道基本信息][{}][{}]数据:{}", op, user.getUserName(), JSON.toJSONString(channelBasicInfoValidator));
+
+        view.addObject("codeNumberInfoValidator", channelBasicInfoValidator);
+        view.addObject("op", "edit");
+
         return view;
 
+    }
+
+    //通道基本信息：参数验证
+    private BindingResult paramsValidator(ChannelBasicInfoValidator channelBasicInfoValidator, BindingResult result) {
+        //参数验证:支持携号转网，那携号转网方式不能为空
+        if ("1".equals(channelBasicInfoValidator.getTransferEnable()) && StringUtils.isEmpty(channelBasicInfoValidator.getTransferType())) {
+            FieldError err = new FieldError("携号转网方式", "transferType", "携号转网方式不能为空");
+            result.addError(err);
+        }
+        //参数验证:如果通道区域范围是分省，那业务区域不能为空
+        if ("PROVINCE".equals(channelBasicInfoValidator.getBusinessAreaType()) && StringUtils.isEmpty(channelBasicInfoValidator.getProvince())) {
+            FieldError err = new FieldError("业务区域", "supportAreaCodes", "业务区域不能为空");
+            result.addError(err);
+        }
+        //参数验证:如果通道区域范围是国际，那业务区域不能为空
+        if ("INTERNATIONAL".equals(channelBasicInfoValidator.getBusinessAreaType()) && StringUtils.isEmpty(channelBasicInfoValidator.getSupportAreaCodes())) {
+            FieldError err = new FieldError("业务区域", "supportAreaCodes", "业务区域不能为空");
+            result.addError(err);
+        }
+        //参数验证:如果计价方式为统一计价，那资费不能为空
+        if ("UNIFIED_PRICE".equals(channelBasicInfoValidator.getPriceStyle()) && StringUtils.isEmpty(channelBasicInfoValidator.getChannelPrice())) {
+            FieldError err = new FieldError("资费", "channelPrice", "资费不能为空");
+            result.addError(err);
+        }
+
+        return result;
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.smoc.cloud.configure.codenumber.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
@@ -39,8 +40,12 @@ public class CodeNumberController {
     @Autowired
     private CodeNumberService codeNumberService;
 
+    @Autowired
+    private SystemUserLogService systemUserLogService;
+
     /**
      * 码号管理列表
+     *
      * @return
      */
     @RequestMapping(value = "/list", method = RequestMethod.GET)
@@ -64,7 +69,7 @@ public class CodeNumberController {
 
         view.addObject("codeNumberInfoValidator", codeNumberInfoValidator);
         view.addObject("list", data.getData().getList());
-        view.addObject("pageParams",data.getData().getPageParams());
+        view.addObject("pageParams", data.getData().getPageParams());
 
         return view;
 
@@ -90,7 +95,7 @@ public class CodeNumberController {
 
         view.addObject("codeNumberInfoValidator", codeNumberInfoValidator);
         view.addObject("list", data.getData().getList());
-        view.addObject("pageParams",data.getData().getPageParams());
+        view.addObject("pageParams", data.getData().getPageParams());
 
         return view;
 
@@ -189,6 +194,11 @@ public class CodeNumberController {
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;
+        }
+
+        //保存操作记录
+        if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            systemUserLogService.logsAsync("CODE_NUMBER", codeNumberInfoValidator.getId(), "add".equals(op) ? codeNumberInfoValidator.getCreatedBy() : codeNumberInfoValidator.getUpdatedBy(), op, "add".equals(op) ? "添加码号" : "修改码号", JSON.toJSONString(codeNumberInfoValidator));
         }
 
         //记录日志

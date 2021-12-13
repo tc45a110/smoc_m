@@ -2,8 +2,9 @@ package com.smoc.cloud.configure.codenumber.entity;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Objects;
+import java.sql.Timestamp;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Table(name = "config_number_code_info")
@@ -13,7 +14,7 @@ public class ConfigNumberCodeInfo {
     private BigDecimal maxComplaintRate;
     private String carrier;
     private String businessType;
-    private BigDecimal srcIdRpice;
+    private BigDecimal srcIdPrice;
     private Date priceEffectiveDate;
     private String useType;
     private String srcIdSource;
@@ -83,13 +84,13 @@ public class ConfigNumberCodeInfo {
     }
 
     @Basic
-    @Column(name = "SRC_ID_RPICE")
-    public BigDecimal getSrcIdRpice() {
-        return srcIdRpice;
+    @Column(name = "SRC_ID_PRICE")
+    public BigDecimal getSrcIdPrice() {
+        return srcIdPrice;
     }
 
-    public void setSrcIdRpice(BigDecimal srcIdRpice) {
-        this.srcIdRpice = srcIdRpice;
+    public void setSrcIdPrice(BigDecimal srcIdPrice) {
+        this.srcIdPrice = srcIdPrice;
     }
 
     @Basic
@@ -272,7 +273,7 @@ public class ConfigNumberCodeInfo {
                 Objects.equals(maxComplaintRate, that.maxComplaintRate) &&
                 Objects.equals(carrier, that.carrier) &&
                 Objects.equals(businessType, that.businessType) &&
-                Objects.equals(srcIdRpice, that.srcIdRpice) &&
+                Objects.equals(srcIdPrice, that.srcIdPrice) &&
                 Objects.equals(priceEffectiveDate, that.priceEffectiveDate) &&
                 Objects.equals(useType, that.useType) &&
                 Objects.equals(srcIdSource, that.srcIdSource) &&
@@ -294,6 +295,6 @@ public class ConfigNumberCodeInfo {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, srcId, maxComplaintRate, carrier, businessType, srcIdRpice, priceEffectiveDate, useType, srcIdSource, accessPoint, accessTime, minConsumeDemand, minConsumeEffectiveDate, srcIdEffectiveDate, caSrcId, province, city, srcIdRemark, srcIdStatus, createdBy, createdTime, updatedBy, updatedTime);
+        return Objects.hash(id, srcId, maxComplaintRate, carrier, businessType, srcIdPrice, priceEffectiveDate, useType, srcIdSource, accessPoint, accessTime, minConsumeDemand, minConsumeEffectiveDate, srcIdEffectiveDate, caSrcId, province, city, srcIdRemark, srcIdStatus, createdBy, createdTime, updatedBy, updatedTime);
     }
 }

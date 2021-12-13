@@ -29,7 +29,7 @@ public class CodeNumberRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", t.MAX_COMPLAINT_RATE");
         sqlBuffer.append(", t.CARRIER");
         sqlBuffer.append(", t.BUSINESS_TYPE");
-        sqlBuffer.append(", t.SRC_ID_RPICE");
+        sqlBuffer.append(", t.SRC_ID_PRICE");
         sqlBuffer.append(", t.USE_TYPE");
         sqlBuffer.append(", t.SRC_ID_SOURCE");
         sqlBuffer.append(", t.ACCESS_POINT");
@@ -44,7 +44,7 @@ public class CodeNumberRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", DATE_FORMAT(t.MIN_CONSUME_EFFECTIVE_DATE, '%Y-%m-%d')MIN_CONSUME_EFFECTIVE_DATE");
         sqlBuffer.append(", DATE_FORMAT(t.SRC_ID_EFFECTIVE_DATE, '%Y-%m-%d')SRC_ID_EFFECTIVE_DATE");
         sqlBuffer.append(", t.CREATED_BY");
-        sqlBuffer.append(", DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d')CREATED_TIME");
+        sqlBuffer.append(", DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME");
         sqlBuffer.append("  from config_number_code_info t where 1=1 ");
 
         List<Object> paramsList = new ArrayList<Object>();
