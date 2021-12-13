@@ -70,13 +70,22 @@
                                                placeholder="字段的标识">
                                     </div>
                                     <div class="col-md-6 form-group">
-                                        <label for="paramMaxLength">参数最大长度<span
+                                        <label for="paramMaxLength">参数最大长度<span class="text-danger">*</span>&nbsp;<span
                                                 class="text-danger"
                                                 th:if="${#fields.hasErrors('paramMaxLength')}"
                                                 th:errors="*{paramMaxLength}"></span></label>
-                                        <input id="paramMaxLength" data-v-max="128" data-v-min="32" type="text" th:field="*{paramMaxLength}" class="form-control autonumber"
-                                               data-parsley-length="[1,32]" autocomplete="off"
-                                               placeholder="默认长度64，设置最大长度128">
+                                        <input id="paramMaxLength"  data-parsley-type="number" type="text" th:field="*{paramMaxLength}" class="form-control"
+                                               autocomplete="off" required=""
+                                               placeholder="默认长度32，设置最大长度128">
+                                    </div>
+                                    <div class="col-md-6 form-group">
+                                        <label for="placeholder">输入提示<span
+                                                class="text-danger"
+                                                th:if="${#fields.hasErrors('placeholder')}"
+                                                th:errors="*{placeholder}"></span></label>
+                                        <input id="placeholder" type="text" th:field="*{placeholder}" class="form-control"
+                                               data-parsley-maxlength="32" autocomplete="off"
+                                               placeholder="输入提示">
                                     </div>
                                     <div class="col-md-6 form-group">
                                         <label for="dictEnable">应用字典<span
@@ -85,25 +94,34 @@
                                                 th:errors="*{dictEnable}"></span></label>
                                         <input id="dictEnable" data-parsley-maxlength="32" type="text" th:field="*{dictEnable}" class="form-control"
                                                autocomplete="off"
-                                               placeholder="请输入应用字典的类型">
-                                    </div>
-                                    <div class="col-md-6 form-group">
-                                        <label >显示类型<span
-                                                class="text-danger" style="font-weight: 200;font-size: 12px"
-                                                th:if="${#fields.hasErrors('showType')}"
-                                                th:errors="*{showType}"></span></label>
-                                        <mpm:tag id="showType" identity="showType" name="showType"
-                                                 th:value="${systemExtendBusinessParamValidator.showType}" show-type="select"  key="code" class="form-control"  title="显示类型"/>
+                                               placeholder="请输入应用字典的类型,该处与显示类型配合使用">
                                     </div>
                                     <div class="col-md-6 form-group">
                                         <label for="showStyle">样式控制&nbsp;<span
                                                 class="text-danger" style="font-weight: 200;font-size: 12px"
                                                 th:if="${#fields.hasErrors('showStyle')}"
                                                 th:errors="*{showStyle}"></span></label>
-                                        <input id="showStyle" type="text" th:field="*{showStyle}" class="form-control" data-parsley-maxlength="32"
-                                               data-parsley-length="[1,32]" autocomplete="off"
+                                        <input id="showStyle" type="text" th:field="*{showStyle}" class="form-control"
+                                               data-parsley-maxlength="32"  autocomplete="off"
                                                placeholder="直接写样式，用的很少">
                                     </div>
+                                    <div class="col-md-6 form-group">
+                                        <label >显示类型<span class="text-danger">*</span>&nbsp;<span
+                                                class="text-danger" style="font-weight: 200;font-size: 12px"
+                                                th:if="${#fields.hasErrors('showType')}"
+                                                th:errors="*{showType}"></span></label>
+                                        <mpm:tag id="showType" identity="showType" name="showType" required="true"
+                                                 th:value="${systemExtendBusinessParamValidator.showType}" show-type="select"  key="code" class="form-control"  title="显示类型"/>
+                                    </div>
+                                    <div class="col-md-6 form-group">
+                                        <label >数据类型<span class="text-danger">*</span>&nbsp;<span
+                                                class="text-danger" style="font-weight: 200;font-size: 12px"
+                                                th:if="${#fields.hasErrors('dataType')}"
+                                                th:errors="*{dataType}"></span></label>
+                                        <mpm:tag id="dataType" identity="dataType" name="dataType" required="true"
+                                                 th:value="${systemExtendBusinessParamValidator.dataType}" show-type="select"  key="code" class="form-control"  title="数据类型"/>
+                                    </div>
+
                                     <div class="col-md-6 form-group">
                                         <label>是否非空<span class="text-danger">*</span>&nbsp;<span
                                                 class="text-danger" style="font-weight: 200;font-size: 12px"
@@ -111,7 +129,7 @@
                                                 th:errors="*{isNull}"></span></label><br>
                                         <mpm:tag id="isNull" identity="isOrNo" name="isNull"
                                                  value="0" show-type="radio"
-                                                 style="margin-top:0px"
+                                                 style="margin-top:0px"  th:value="${systemExtendBusinessParamValidator.isNull}"
                                                  key="code" data-icon="mdi mdi-view-module" title="是否"/>
                                     </div>
                                     <div class="col-md-6 form-group">
@@ -121,8 +139,17 @@
                                                 th:errors="*{isReadonly}"></span></label><br>
                                         <mpm:tag id="isReadonly" identity="isOrNo" name="isReadonly"
                                                  value="0" show-type="radio"
-                                                 style="margin-top:0px"
+                                                 style="margin-top:0px"  th:value="${systemExtendBusinessParamValidator.isReadonly}"
                                                  key="code" data-icon="mdi mdi-view-module" title="是否"/>
+                                    </div>
+                                    <div class="col-md-6 form-group">
+                                        <label for="displaySort">显示顺序<span class="text-danger">*</span>&nbsp;<span
+                                                class="text-danger"
+                                                th:if="${#fields.hasErrors('displaySort')}"
+                                                th:errors="*{displaySort}"></span></label>
+                                        <input id="displaySort" data-v-max="999999999" data-v-min="10" type="text" th:field="*{displaySort}" class="form-control"
+                                               autocomplete="off" required data-parsley-type="number"
+                                               placeholder="整数，从小到大排列">
                                     </div>
 
                                 </div>
@@ -138,7 +165,6 @@
                             <input type="hidden" th:field="*{businessType}">
                             <input type="hidden" th:field="*{createdTime}">
                             <input type="hidden" th:field="*{createdBy}">
-                            <input type="hidden" th:field="*{dataType}">
                             <input type="hidden" th:field="*{paramStatus}">
                             <button sec:authorize-url="/param/save/*" type="submit"
                                     class="btn btn-teal waves-effect waves-light">提交

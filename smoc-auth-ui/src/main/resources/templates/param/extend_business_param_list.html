@@ -75,8 +75,10 @@
                                     <th>应用字典</th>
                                     <th>参数最大长度</th>
                                     <th>显示类型</th>
-                                    <th>样式控制</th>
                                     <th>是否只读</th>
+                                    <th>显示顺序</th>
+                                    <th>输入提示</th>
+                                    <th>样式控制</th>
                                     <th>操作</th>
                                 </tr>
                                 <thead>
@@ -92,11 +94,16 @@
                                         [[${params.dataType}]]
                                     </td>
                                     <td>
-                                        <mpm:tag id="isNull" identity="isOrNo" name="isNull"
-                                                 value="0" show-type="radio"
-                                                 style="margin-top:0px"
-                                                 th:value="${params.isNull}"
-                                                 key="code" data-icon="mdi mdi-view-module" title="是否"/>
+                                        <div class="radio radio-info radio-inline">
+                                            <input type="radio" value="1"
+                                                   th:checked="${params.isNull == '1'}" disabled>
+                                            <label>是</label>
+                                        </div>
+                                        <div class="radio radio-info radio-inline">
+                                            <input type="radio" value="0"
+                                                   th:checked="${params.isNull == '0'}" disabled>
+                                            <label>否</label>
+                                        </div>
                                     </td>
                                     <td>
                                         [[${params.dictEnable}]]
@@ -108,14 +115,25 @@
                                         [[${params.showType}]]
                                     </td>
                                     <td>
-                                        [[${params.showStyle}]]
+                                        <div class="radio radio-info radio-inline">
+                                            <input type="radio" value="1"
+                                                   th:checked="${params.isReadonly == '1'}" disabled>
+                                            <label>是</label>
+                                        </div>
+                                        <div class="radio radio-info radio-inline">
+                                            <input type="radio"  value="0"
+                                                   th:checked="${params.isReadonly == '0'}" disabled>
+                                            <label>否</label>
+                                        </div>
                                     </td>
                                     <td>
-                                        <mpm:tag id="isReadonly" identity="isOrNo" name="isReadonly"
-                                                 value="0" show-type="radio"
-                                                 style="margin-top:0px"
-                                                 th:value="${params.isReadonly}"
-                                                 key="code" data-icon="mdi mdi-view-module" title="是否"/>
+                                        [[${params.displaySort}]]
+                                    </td>
+                                    <td>
+                                        [[${params.placeholder}]]
+                                    </td>
+                                    <td>
+                                        [[${params.showStyle}]]
                                     </td>
                                     <td>
                                         <a sec:authorize-url="/param/edit/*"

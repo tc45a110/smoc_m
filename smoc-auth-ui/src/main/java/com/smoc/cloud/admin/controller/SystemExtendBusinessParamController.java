@@ -91,9 +91,12 @@ public class SystemExtendBusinessParamController {
         systemExtendBusinessParamValidator.setBusinessType(businessType);
         systemExtendBusinessParamValidator.setShowType("text");
         systemExtendBusinessParamValidator.setParamMaxLength(32);
-        systemExtendBusinessParamValidator.setDataType("string");
-        systemExtendBusinessParamValidator.setCreatedTime(new Date());
+        systemExtendBusinessParamValidator.setDataType("STRING");
+        systemExtendBusinessParamValidator.setIsReadonly("0");
+        systemExtendBusinessParamValidator.setIsNull("0");
+        systemExtendBusinessParamValidator.setDisplaySort(1000);
         systemExtendBusinessParamValidator.setParamStatus("1");
+        systemExtendBusinessParamValidator.setCreatedTime(new Date());
 
         //op操作标记，add表示添加，edit表示修改
         view.addObject("op", "add");

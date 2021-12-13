@@ -38,7 +38,7 @@ public class SystemExtendBusinessParamService {
      */
     public ResponseData findSystemExtendBusinessParamByBusinessTypeAndParamStatus(String businessType, String paramStatus) {
 
-        List<SystemExtendBusinessParam> data = systemExtendBusinessParamRepository.findSystemExtendBusinessParamByBusinessTypeAndParamStatus(businessType, paramStatus);
+        List<SystemExtendBusinessParam> data = systemExtendBusinessParamRepository.findSystemExtendBusinessParamByBusinessTypeAndParamStatusOrderByDisplaySortAsc(businessType, paramStatus);
         return ResponseDataUtil.buildSuccess(data);
 
     }

@@ -25,6 +25,9 @@ public class SystemExtendBusinessParam {
     @Column(name = "DATA_TYPE", nullable = false, length = 64)
     private String dataType;
 
+    @Column(name = "PLACEHOLDER", length = 32)
+    private String placeholder;
+
     @Column(name = "IS_NULL", nullable = false, length = 32)
     private String isNull;
 
@@ -45,6 +48,9 @@ public class SystemExtendBusinessParam {
 
     @Column(name = "PARAM_STATUS", nullable = false, length = 32)
     private String paramStatus;
+
+    @Column(name = "DISPLAY_SORT")
+    private Integer displaySort;
 
     @Column(name = "CREATED_BY", nullable = false, length = 32)
     private String createdBy;
@@ -146,6 +152,14 @@ public class SystemExtendBusinessParam {
         this.isNull = isNull;
     }
 
+    public String getPlaceholder() {
+        return placeholder;
+    }
+
+    public void setPlaceholder(String placeholder) {
+        this.placeholder = placeholder;
+    }
+
     public String getDataType() {
         return dataType;
     }
@@ -184,5 +198,13 @@ public class SystemExtendBusinessParam {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Integer getDisplaySort() {
+        return displaySort;
+    }
+
+    public void setDisplaySort(Integer displaySort) {
+        this.displaySort = displaySort;
     }
 }

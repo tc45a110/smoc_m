@@ -21,6 +21,8 @@ public class SystemExtendBusinessParamValidator {
 
     private String dataType;
 
+    private String placeholder;
+
     private String isNull;
 
     private String dictEnable;
@@ -32,6 +34,8 @@ public class SystemExtendBusinessParamValidator {
     private String showStyle;
 
     private String isReadonly;
+
+    private Integer displaySort;
 
     private String paramStatus;
 
