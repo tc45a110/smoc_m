@@ -5,6 +5,7 @@
     <th:block th:insert="fragments/common_fragments :: common_header"/>
     <th:block th:insert="fragments/common_fragments :: common_css"/>
     <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
     <!-- Jquery filer css -->
     <link th:href="@{/static/plugins/jquery.filer/css/jquery.filer.css}" rel="stylesheet"/>
     <link th:href="@{/static/plugins/jquery.filer/css/themes/jquery.filer-dragdropbox-theme.css}" rel="stylesheet"/>
@@ -49,7 +50,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="p-20">
-                                    <div class="col-md-4 form-group">
+                                    <div class="col-md-6 form-group">
                                         <label for="paramTitle">参数标题<span class="text-danger">*</span>&nbsp;<span
                                                 class="text-danger"
                                                 th:if="${#fields.hasErrors('paramTitle')}"
@@ -59,7 +60,7 @@
                                                placeholder="字段名称">
                                     </div>
 
-                                    <div class="col-md-4 form-group">
+                                    <div class="col-md-6 form-group">
                                         <label for="paramKey">参数键值<span class="text-danger">*</span>&nbsp;<span
                                                 class="text-danger"
                                                 th:if="${#fields.hasErrors('paramKey')}"
@@ -68,44 +69,42 @@
                                                required="" data-parsley-length="[1,32]" autocomplete="off"
                                                placeholder="字段的标识">
                                     </div>
-                                    <div class="col-md-4 form-group">
+                                    <div class="col-md-6 form-group">
                                         <label for="paramMaxLength">参数最大长度<span
                                                 class="text-danger"
                                                 th:if="${#fields.hasErrors('paramMaxLength')}"
                                                 th:errors="*{paramMaxLength}"></span></label>
-                                        <input id="paramMaxLength" type="text" th:field="*{paramMaxLength}" class="form-control"
+                                        <input id="paramMaxLength" data-v-max="128" data-v-min="32" type="text" th:field="*{paramMaxLength}" class="form-control autonumber"
                                                data-parsley-length="[1,32]" autocomplete="off"
                                                placeholder="默认长度64，设置最大长度128">
                                     </div>
-                                    <div class="col-md-4 form-group">
+                                    <div class="col-md-6 form-group">
                                         <label for="dictEnable">应用字典<span
                                                 class="text-danger" style="font-weight: 200;font-size: 12px"
                                                 th:if="${#fields.hasErrors('dictEnable')}"
                                                 th:errors="*{dictEnable}"></span></label>
-                                        <input id="dictEnable" type="text" th:field="*{dictEnable}" class="form-control"
-                                               data-parsley-length="[1,32]" autocomplete="off"
+                                        <input id="dictEnable" data-parsley-maxlength="32" type="text" th:field="*{dictEnable}" class="form-control"
+                                               autocomplete="off"
                                                placeholder="请输入应用字典的类型">
                                     </div>
-                                    <div class="col-md-4 form-group">
+                                    <div class="col-md-6 form-group">
                                         <label >显示类型<span
                                                 class="text-danger" style="font-weight: 200;font-size: 12px"
                                                 th:if="${#fields.hasErrors('showType')}"
                                                 th:errors="*{showType}"></span></label>
                                         <mpm:tag id="showType" identity="showType" name="showType"
-                                                 value="text" show-type="select"
-                                                 style="margin-top:0px"
-                                                 key="code" class="form-control" data-icon="mdi mdi-view-module" title="显示类型"/>
+                                                 th:value="${systemExtendBusinessParamValidator.showType}" show-type="select"  key="code" class="form-control"  title="显示类型"/>
                                     </div>
-                                    <div class="col-md-4 form-group">
+                                    <div class="col-md-6 form-group">
                                         <label for="showStyle">样式控制&nbsp;<span
                                                 class="text-danger" style="font-weight: 200;font-size: 12px"
                                                 th:if="${#fields.hasErrors('showStyle')}"
                                                 th:errors="*{showStyle}"></span></label>
-                                        <input id="showStyle" type="text" th:field="*{showStyle}" class="form-control"
+                                        <input id="showStyle" type="text" th:field="*{showStyle}" class="form-control" data-parsley-maxlength="32"
                                                data-parsley-length="[1,32]" autocomplete="off"
                                                placeholder="直接写样式，用的很少">
                                     </div>
-                                    <div class="col-md-4 form-group">
+                                    <div class="col-md-6 form-group">
                                         <label>是否非空<span class="text-danger">*</span>&nbsp;<span
                                                 class="text-danger" style="font-weight: 200;font-size: 12px"
                                                 th:if="${#fields.hasErrors('isNull')}"
@@ -115,7 +114,7 @@
                                                  style="margin-top:0px"
                                                  key="code" data-icon="mdi mdi-view-module" title="是否"/>
                                     </div>
-                                    <div class="col-md-4 form-group">
+                                    <div class="col-md-6 form-group">
                                         <label>是否只读<span class="text-danger">*</span>&nbsp;<span
                                                 class="text-danger" style="font-weight: 200;font-size: 12px"
                                                 th:if="${#fields.hasErrors('isReadonly')}"
@@ -138,7 +137,9 @@
                             <input type="hidden" th:field="*{id}">
                             <input type="hidden" th:field="*{businessType}">
                             <input type="hidden" th:field="*{createdTime}">
-                            <input type="hidden" th:field="*{dataType}" value="String">
+                            <input type="hidden" th:field="*{createdBy}">
+                            <input type="hidden" th:field="*{dataType}">
+                            <input type="hidden" th:field="*{paramStatus}">
                             <button sec:authorize-url="/param/save/*" type="submit"
                                     class="btn btn-teal waves-effect waves-light">提交
                             </button>
@@ -157,6 +158,7 @@
     </div> <!-- container -->
 </div> <!-- content -->
 <th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
 <th:block th:insert="fragments/common_fragments :: common_submit_form"/>
 <script>
     var resizefunc = [];

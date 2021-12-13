@@ -89,7 +89,11 @@ public class SystemExtendBusinessParamController {
 
         systemExtendBusinessParamValidator.setId(UUID.uuid32());
         systemExtendBusinessParamValidator.setBusinessType(businessType);
+        systemExtendBusinessParamValidator.setShowType("text");
+        systemExtendBusinessParamValidator.setParamMaxLength(32);
+        systemExtendBusinessParamValidator.setDataType("string");
         systemExtendBusinessParamValidator.setCreatedTime(new Date());
+        systemExtendBusinessParamValidator.setParamStatus("1");
 
         //op操作标记，add表示添加，edit表示修改
         view.addObject("op", "add");
@@ -150,6 +154,8 @@ public class SystemExtendBusinessParamController {
         if (!StringUtils.isEmpty(op) && "add".equals(op)) {
             systemExtendBusinessParamValidator.setCreatedTime(new Date());
             systemExtendBusinessParamValidator.setCreatedBy(user.getId());
+            systemExtendBusinessParamValidator.setUpdatedTime(new Date());
+            systemExtendBusinessParamValidator.setUpdatedBy(user.getId());
         } else if (!StringUtils.isEmpty(op) && "edit".equals(op)) {
             systemExtendBusinessParamValidator.setUpdatedTime(new Date());
             systemExtendBusinessParamValidator.setUpdatedBy(user.getId());
