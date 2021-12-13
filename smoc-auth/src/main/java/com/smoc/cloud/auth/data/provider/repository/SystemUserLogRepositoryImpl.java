@@ -21,10 +21,11 @@ public class SystemUserLogRepositoryImpl extends BasePageRepository {
         StringBuilder sqlBuffer = new StringBuilder("select ");
         sqlBuffer.append("  t.ID");
         sqlBuffer.append(", t.USER_ID");
-        sqlBuffer.append(", t.MOUDLE");
+        sqlBuffer.append(", t.MODULE");
+        sqlBuffer.append(", t.MODULE_ID");
         sqlBuffer.append(", t.OPERATION_TYPE");
         sqlBuffer.append(", t.SIMPLE_INTRODUCE");
-        sqlBuffer.append(", DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME");
+        sqlBuffer.append(", t.CREATED_TIME");
         sqlBuffer.append("  from system_user_logs t where 1=1 ");
 
         List<Object> paramsList = new ArrayList<Object>();
@@ -34,9 +35,13 @@ public class SystemUserLogRepositoryImpl extends BasePageRepository {
             paramsList.add(qo.getUserId().trim());
         }
 
-        if (!StringUtils.isEmpty(qo.getMoudle())) {
-            sqlBuffer.append(" and t.MOUDLE = ?");
-            paramsList.add(qo.getMoudle().trim());
+        if (!StringUtils.isEmpty(qo.getModule())) {
+            sqlBuffer.append(" and t.MODULE = ?");
+            paramsList.add(qo.getModule().trim());
+        }
+        if (!StringUtils.isEmpty(qo.getModuleId())) {
+            sqlBuffer.append(" and t.MODULE_ID = ?");
+            paramsList.add(qo.getModuleId().trim());
         }
 
         //排序

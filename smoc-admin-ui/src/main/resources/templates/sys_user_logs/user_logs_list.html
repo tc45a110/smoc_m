@@ -24,7 +24,7 @@
             <div class="col-sm-12">
                 <div class="panel panel-color panel-info">
                     <div class="panel-heading">
-                        <h3 class="panel-title">信息操作日志</h3>
+                        <h3 class="panel-title">操作日志</h3>
                     </div>
                     <div class="panel-body">
                         <div class="table-responsive">
@@ -43,7 +43,7 @@
                                         <td>[[${logs.userId}]]</td>
                                         <td>[[${logs.operationType}]]</td>
                                         <td>[[${logs.simpleIntroduce}]]</td>
-                                        <td>[[${logs.createdTime}]]</td>
+                                        <td th:text="${#dates.format(logs.createdTime,'yyyy-MM-dd HH:mm:ss')}"></td>
                                         <td style="line-height: 26px;">
                                             <a class="on-default edit-row"
                                                style="padding-left: 5px;color: #4BD396;"

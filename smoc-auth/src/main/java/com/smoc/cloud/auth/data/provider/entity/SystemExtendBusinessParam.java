@@ -2,9 +2,10 @@ package com.smoc.cloud.auth.data.provider.entity;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.Date;
 
 @Table(name = "system_extend_business_param", indexes = {
-        @Index(name = "index_system_extend_business_param", columnList = "BUSINESS_TYPE, PARAM_KEY", unique = true)
+        @Index(name = "index_system_extend_business_param", columnList = "BUSINESS_TYPE", unique = true)
 })
 @Entity
 public class SystemExtendBusinessParam {
@@ -49,19 +50,19 @@ public class SystemExtendBusinessParam {
     private String createdBy;
 
     @Column(name = "CREATED_TIME", nullable = false)
-    private Instant createdTime;
+    private Date createdTime;
 
     @Column(name = "UPDATED_BY", nullable = false, length = 32)
     private String updatedBy;
 
     @Column(name = "UPDATED_TIME", nullable = false)
-    private Instant updatedTime;
+    private Date updatedTime;
 
-    public Instant getUpdatedTime() {
+    public Date getUpdatedTime() {
         return updatedTime;
     }
 
-    public void setUpdatedTime(Instant updatedTime) {
+    public void setUpdatedTime(Date updatedTime) {
         this.updatedTime = updatedTime;
     }
 
@@ -73,11 +74,11 @@ public class SystemExtendBusinessParam {
         this.updatedBy = updatedBy;
     }
 
-    public Instant getCreatedTime() {
+    public Date getCreatedTime() {
         return createdTime;
     }
 
-    public void setCreatedTime(Instant createdTime) {
+    public void setCreatedTime(Date createdTime) {
         this.createdTime = createdTime;
     }
 

@@ -2,7 +2,6 @@ package com.smoc.cloud.auth.api;
 
 import com.smoc.cloud.auth.data.provider.entity.SystemUserLog;
 import com.smoc.cloud.auth.data.provider.service.SystemUserLogService;
-import com.smoc.cloud.common.auth.qo.Users;
 import com.smoc.cloud.common.auth.validator.SystemUserLogValidator;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;

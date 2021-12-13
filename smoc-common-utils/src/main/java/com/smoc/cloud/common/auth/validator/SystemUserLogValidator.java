@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.util.Date;
 
 @Setter
 @Getter
@@ -13,7 +14,9 @@ public class SystemUserLogValidator {
 
     private String userId;
 
-    private String moudle;
+    private String module;
+
+    private String moduleId;
 
     private String operationType;
 
@@ -21,6 +24,6 @@ public class SystemUserLogValidator {
 
     private String logData;
 
-    private Instant createdTime;
+    private Date createdTime;
 
 }

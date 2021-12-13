@@ -31,4 +31,10 @@ public interface SystemUserLogClient {
      */
     @RequestMapping(value = "/user/logs/findById/{id}", method = RequestMethod.GET)
     ResponseData<SystemUserLogValidator> findById(@PathVariable(value = "id") String id) throws Exception;
+
+    /**
+     * 保存信息
+     */
+    @RequestMapping(value = "/user/logs/save", method = RequestMethod.POST)
+    ResponseData save(@RequestBody SystemUserLogValidator systemUserLogValidator) throws Exception;
 }

@@ -2,9 +2,10 @@ package com.smoc.cloud.auth.data.provider.entity;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.Date;
 
 @Table(name = "system_user_logs", indexes = {
-        @Index(name = "index_system_user_logs_query", columnList = "USER_ID, MOUDLE")
+        @Index(name = "index_system_user_logs_query", columnList = "MODULE_ID, MODULE")
 })
 @Entity
 public class SystemUserLog {
@@ -15,8 +16,11 @@ public class SystemUserLog {
     @Column(name = "USER_ID", nullable = false, length = 32)
     private String userId;
 
-    @Column(name = "MOUDLE", nullable = false, length = 32)
-    private String moudle;
+    @Column(name = "MODULE", nullable = false, length = 32)
+    private String module;
+
+    @Column(name = "MODULE_ID", nullable = false, length = 32)
+    private String moduleId;
 
     @Column(name = "OPERATION_TYPE", nullable = false, length = 32)
     private String operationType;
@@ -29,13 +33,13 @@ public class SystemUserLog {
     private String logData;
 
     @Column(name = "CREATED_TIME", nullable = false)
-    private Instant createdTime;
+    private Date createdTime;
 
-    public Instant getCreatedTime() {
+    public Date getCreatedTime() {
         return createdTime;
     }
 
-    public void setCreatedTime(Instant createdTime) {
+    public void setCreatedTime(Date createdTime) {
         this.createdTime = createdTime;
     }
 
@@ -63,12 +67,20 @@ public class SystemUserLog {
         this.operationType = operationType;
     }
 
-    public String getMoudle() {
-        return moudle;
+    public String getModuleId() {
+        return moduleId;
     }
 
-    public void setMoudle(String moudle) {
-        this.moudle = moudle;
+    public void setModuleId(String moduleId) {
+        this.moduleId = moduleId;
+    }
+
+    public String getModule() {
+        return module;
+    }
+
+    public void setModule(String module) {
+        this.module = module;
     }
 
     public String getUserId() {

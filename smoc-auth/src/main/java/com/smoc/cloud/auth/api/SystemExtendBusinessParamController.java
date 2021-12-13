@@ -12,8 +12,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -31,7 +34,10 @@ public class SystemExtendBusinessParamController {
      * @return
      */
     @RequestMapping(value = "/list/{businessType}", method = RequestMethod.GET)
-    public ResponseData list(@PathVariable String businessType) {
+    public ResponseData<List<SystemExtendBusinessParam>> list(@PathVariable String businessType) {
+        if (StringUtils.isEmpty(businessType)) {
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR);
+        }
         return systemExtendBusinessParamService.findSystemExtendBusinessParamByBusinessTypeAndParamStatus(businessType, "1");
     }
 

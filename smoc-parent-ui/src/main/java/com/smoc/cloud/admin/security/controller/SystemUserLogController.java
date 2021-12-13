@@ -26,19 +26,25 @@ public class SystemUserLogController {
     @Autowired
     private SystemUserLogService systemUserLogService;
 
-    @RequestMapping(value = "/list/{module}", method = RequestMethod.GET)
-    public ModelAndView list(@PathVariable String module) {
+    /**
+     * 用户操作日志查询
+     *
+     * @param moduleId 数据模块的ID
+     * @return
+     */
+    @RequestMapping(value = "/list/{moduleId}", method = RequestMethod.GET)
+    public ModelAndView list(@PathVariable String moduleId) {
 
         ModelAndView view = new ModelAndView("sys_user_logs/user_logs_list");
 
         //判断module
-        if (StringUtils.isEmpty(module)) {
+        if (StringUtils.isEmpty(moduleId)) {
             view.addObject("error", "module参数不能为空");
             return view;
         }
 
         SystemUserLogValidator systemUserLogValidator = new SystemUserLogValidator();
-        systemUserLogValidator.setMoudle(module);
+        systemUserLogValidator.setModuleId(moduleId);
 
         //查询数据
         PageParams<SystemUserLogValidator> params = new PageParams<>();
@@ -59,13 +65,17 @@ public class SystemUserLogController {
         return view;
     }
 
+    /**
+     * 用户操作日志分页查询
+     * @return
+     */
     @RequestMapping(value = "/page", method = RequestMethod.POST)
     public ModelAndView page(@ModelAttribute SystemUserLogValidator systemUserLogValidator, PageParams pageParams) {
 
         ModelAndView view = new ModelAndView("sys_user_logs/user_logs_list");
 
         //判断module
-        if (StringUtils.isEmpty(systemUserLogValidator.getMoudle())) {
+        if (StringUtils.isEmpty(systemUserLogValidator.getModuleId())) {
             view.addObject("error", "module参数不能为空");
             return view;
         }

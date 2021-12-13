@@ -19,7 +19,7 @@ public interface SystemExtendBusinessParamRepository extends JpaRepository<Syste
      * @param paramStatus
      * @return
      */
-    List<SystemExtendBusinessParam> findSystemExtendBusinessParamByBusinessTypeAndParamStatus(String businessType,String paramStatus);
+    List<SystemExtendBusinessParam> findSystemExtendBusinessParamByBusinessTypeAndParamStatus(String businessType, String paramStatus);
 
     /**
      * 按业务类型,参数key查询系统扩展参数

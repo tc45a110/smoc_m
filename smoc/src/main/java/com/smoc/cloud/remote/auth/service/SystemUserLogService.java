@@ -1,6 +1,7 @@
 package com.smoc.cloud.remote.auth.service;
 
 
+import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.remote.auth.client.SystemUserLogClient;
 import com.smoc.cloud.common.auth.validator.SystemUserLogValidator;
 import com.smoc.cloud.common.response.ResponseData;
@@ -38,11 +39,11 @@ public class SystemUserLogService {
         SystemUserLogValidator systemUserLogValidator = new SystemUserLogValidator();
         systemUserLogValidator.setId(UUID.uuid32());
         systemUserLogValidator.setUserId(userId);
-        systemUserLogValidator.setMoudle(module);
+        systemUserLogValidator.setModule(module);
         systemUserLogValidator.setOperationType(operationType);
         systemUserLogValidator.setSimpleIntroduce(simpleIntroduce);
         systemUserLogValidator.setLogData(data);
-        systemUserLogValidator.setCreatedTime(Instant.now());
+        systemUserLogValidator.setCreatedTime(DateTimeUtils.getNowDateTime());
         this.save(systemUserLogValidator);
 
     }
