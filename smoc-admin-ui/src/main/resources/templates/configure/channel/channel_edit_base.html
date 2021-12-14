@@ -286,6 +286,7 @@
 <script  th:remove="${#strings.isEmpty(error)}?none:all">
 
     $(document).ready(function () {
+
         //处理携号转网方式 默认禁止选择
         if("0" == '[[${channelBasicInfoValidator.transferEnable}]]'){
             $("[name='transferType']").attr("disabled",'true');

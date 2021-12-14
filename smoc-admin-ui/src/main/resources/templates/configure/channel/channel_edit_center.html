@@ -79,7 +79,7 @@
                                             </li>
                                             <li class="" id="tab4"><a onclick="active('4')"
                                                                       sec:authorize-url="/configure/channel/edit/price/*"
-                                                                      th:href="@{/configure/channel/edit/price/id}"
+                                                                      th:href="@{/configure/channel/edit/price/{id}(id=${id})}"
                                                                       th:target="tab-content"><i class="mdi mdi-star"
                                                                                                  style="margin-right:5px;color:#f35864"></i>区域计价配置</a>
                                             </li>
