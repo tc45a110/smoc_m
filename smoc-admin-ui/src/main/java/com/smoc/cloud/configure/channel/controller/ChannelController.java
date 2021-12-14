@@ -26,13 +26,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 通道管理
@@ -297,6 +293,42 @@ public class ChannelController {
     public ModelAndView price(@PathVariable String id, HttpServletRequest request) {
 
         ModelAndView view = new ModelAndView("configure/channel/channel_edit_price");
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
+
+        //查询数据
+        ResponseData<ChannelBasicInfoValidator> data = channelService.findById(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        ChannelBasicInfoValidator channelBasicInfoValidator = data.getData();
+
+        String supportAreaCodes = "";
+        //分省
+        if("PROVINCE".equals(channelBasicInfoValidator.getBusinessAreaType())){
+            supportAreaCodes = channelBasicInfoValidator.getProvince();
+        }
+        //国际
+        if("INTERNATIONAL".equals(channelBasicInfoValidator.getBusinessAreaType())){
+            supportAreaCodes = channelBasicInfoValidator.getSupportAreaCodes();
+        }
+
+        List<String> list = new ArrayList<>();
+        if(!StringUtils.isEmpty(supportAreaCodes)){
+            String[] strArray = supportAreaCodes.split(",");
+            list = Arrays.asList(strArray);
+        }
+
+        view.addObject("list", list);
+        view.addObject("supportAreaCodes", channelBasicInfoValidator.getBusinessAreaType());
 
         return view;
 
