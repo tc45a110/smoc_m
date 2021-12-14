@@ -42,7 +42,7 @@
                                                     <span class="text-danger"
                                                           th:if="${parameter.isNull == '1'}">*</span>
                                                 </label>
-                                                <input th:if="${parameter.dataType == 'STRING'}"
+                                                <input th:if="${(parameter.dataType == 'STRING' && parameter.showType == 'text')}"
                                                        th:id="${parameter.paramKey}"
                                                        type="text" th:name="${parameter.paramKey}"
                                                        th:placeholder="${#strings.isEmpty(parameter.placeholder)?parameter.paramTitle:parameter.placeholder}"
@@ -50,7 +50,7 @@
                                                        th:attr="required=${parameter.isNull == '1'?'true':'false'}"
                                                        th:value="${keyValueMap[parameter.paramKey]}"
                                                        class="form-control" autocomplete="off">
-                                                <input  th:if="${parameter.dataType == 'INT'}"
+                                                <input  th:if="${(parameter.dataType == 'INT' && parameter.showType == 'text')}"
                                                         th:id="${parameter.paramKey}"
                                                         type="text" th:name="${parameter.paramKey}"
                                                         th:placeholder="${#strings.isEmpty(parameter.placeholder)?parameter.paramTitle:parameter.placeholder}"
@@ -59,7 +59,7 @@
                                                         data-parsley-type="number"
                                                         th:value="${keyValueMap[parameter.paramKey]}"
                                                         class="form-control" autocomplete="off">
-                                                <input  th:if="${parameter.dataType == 'DECIMAL'}"
+                                                <input  th:if="${(parameter.dataType == 'DECIMAL' && parameter.showType == 'text')}"
                                                         th:id="${parameter.paramKey}"
                                                         type="text" th:name="${parameter.paramKey}"
                                                         th:placeholder="${#strings.isEmpty(parameter.placeholder)?parameter.paramTitle:parameter.placeholder}"
@@ -68,6 +68,8 @@
                                                         data-parsley-pattern="#[^[1-9]/d*/./d*|0/./d*[1-9]/d*$]"
                                                         th:value="${keyValueMap[parameter.paramKey]}"
                                                         class="form-control" autocomplete="off">
+                                                <mpm:tag th:if="${(parameter.showType != 'text' && #strings.isEmpty(dictEnable))}" th:id="${parameter.paramKey}" th:identity="${parameter.dictEnable}" th:name="${parameter.paramKey}" th:show-type="${parameter.showType}" key="code" class="form-control"
+                                                         th:value="${keyValueMap[parameter.paramKey]}" th:title="${parameter.paramTitle}" th:required="${parameter.isNull == '1'?true:false}"/>
                                                 
 
                                             </div>

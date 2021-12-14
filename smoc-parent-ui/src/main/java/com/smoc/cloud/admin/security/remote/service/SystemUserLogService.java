@@ -83,7 +83,7 @@ public class SystemUserLogService {
     public ResponseData save(SystemUserLogValidator systemUserLogValidator) {
         try {
             ResponseData data = this.systemUserLogFeignClient.save(systemUserLogValidator);
-            log.info("[保存操作日志] 状态：{}", data.getMessage());
+            log.info("[保存操作日志] 状态：{},日志类型:{}", data.getMessage(),systemUserLogValidator.getModule());
             return data;
         } catch (Exception e) {
             log.error(e.getMessage());

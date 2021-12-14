@@ -297,7 +297,7 @@ public class MpmDictTagProcessor extends AbstractAttributeTagProcessor {
 
         //是否必选
         String required = attributeMap.get(REQUIRED);
-        if ("true".equals(required)) {
+        if ("true".equals(required) || "required".equals(required)) {
             attri.put("required", "");
         }
 

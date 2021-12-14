@@ -114,7 +114,7 @@ public class SystemExtendBusinessParamController {
         for (SystemExtendBusinessParamValidator obj : responseData.getData()) {
             String value = request.getParameter(obj.getParamKey());
             if (!StringUtils.isEmpty(value)) {
-                log.info("提交参数值：{}:{}", obj.getParamKey(), value);
+                //log.info("提交参数值：{}:{}", obj.getParamKey(), value);
                 ParameterExtendFiltersValueValidator parameter = new ParameterExtendFiltersValueValidator();
                 parameter.setId(UUID.uuid32());
                 parameter.setBusinessType(businessType);
@@ -128,7 +128,7 @@ public class SystemExtendBusinessParamController {
             }
         }
 
-        ResponseData response = parameterExtendFiltersValueService.save(list,businessId);
+        ResponseData response = parameterExtendFiltersValueService.save(list,businessId,user.getRealName(),businessType);
         if (!ResponseCode.SUCCESS.getCode().equals(response.getCode())) {
             view.addObject("error", response.getCode() + ":" + response.getMessage());
             return view;

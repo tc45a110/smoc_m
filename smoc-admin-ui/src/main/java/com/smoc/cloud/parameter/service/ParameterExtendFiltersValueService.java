@@ -1,5 +1,8 @@
 package com.smoc.cloud.parameter.service;
 
+import com.alibaba.fastjson.JSON;
+import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
+import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.parameter.ParameterExtendFiltersValueValidator;
@@ -10,7 +13,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -24,6 +26,9 @@ public class ParameterExtendFiltersValueService {
 
     @Autowired
     private ParameterExtendFiltersValueFeignClient parameterExtendFiltersValueFeignClient;
+
+    @Autowired
+    private SystemUserLogService systemUserLogService;
 
     /**
      * 查询列表
@@ -48,9 +53,14 @@ public class ParameterExtendFiltersValueService {
      * @param businessId 业务id
      * @return
      */
-    public ResponseData save(List<ParameterExtendFiltersValueValidator> list, String businessId) {
+    public ResponseData save(List<ParameterExtendFiltersValueValidator> list, String businessId,String createdBy,String businessType) {
         try {
             ResponseData data = this.parameterExtendFiltersValueFeignClient.save(list, businessId);
+
+            //记录操作日志
+            if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+                systemUserLogService.logsAsync(businessType, businessId, createdBy, "paramExtend", "通道过滤参数配置", JSON.toJSONString(list));
+            }
             return data;
         } catch (Exception e) {
             log.error(e.getMessage());
