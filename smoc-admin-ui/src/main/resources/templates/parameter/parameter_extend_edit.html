@@ -98,21 +98,8 @@
 <th:block th:insert="fragments/common_fragments :: select_js"/>
 <script th:src="@{/static/plugins/moment/moment.js}"></script>
 <script th:src="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.js}"></script>
-<!--form submit control start-->
-<script th:src="@{/static/plugins/parsleyjs/parsley.min.js}" type="text/javascript"></script>
+<th:block th:insert="fragments/common_fragments :: common_submit_form"/>
 <script type="text/javascript">
-
-    $(function () {
-        $('#submit_form').parsley().on('field:validated', function () {
-            var ok = $('.parsley-error').length === 0;
-            $('.alert-info').toggleClass('hidden', !ok);
-            $('.alert-warning').toggleClass('hidden', ok);
-        })
-            .on('form:submit', function () {
-                $('#preloader').css('display', 'block'); //enable preloader
-                return true; //submit form
-            });
-    });
 
 
     var resizefunc = [];
