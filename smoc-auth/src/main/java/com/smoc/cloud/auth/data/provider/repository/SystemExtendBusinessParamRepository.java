@@ -4,6 +4,9 @@ package com.smoc.cloud.auth.data.provider.repository;
 import com.smoc.cloud.auth.data.provider.entity.SystemExtendBusinessParam;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -27,5 +30,14 @@ public interface SystemExtendBusinessParamRepository extends JpaRepository<Syste
      * @param paramKey
      * @return
      */
-    List<SystemExtendBusinessParam> findSystemExtendBusinessParamByBusinessTypeAndParamKey(String businessType,String paramKey);
+    List<SystemExtendBusinessParam> findSystemExtendBusinessParamByBusinessTypeAndParamKeyAndParamStatus(String businessType,String paramKey,String paramStatus);
+
+    /**
+     *
+     * @param id
+     * @param status
+     */
+    @Modifying
+    @Query(value = "update system_extend_business_param set PARAM_STATUS = :status where ID = :id",nativeQuery = true)
+    void updateSystemExtendBusinessParamStatus(@Param("id") String id,@Param("status") String status);
 }

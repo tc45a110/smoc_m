@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * 用户操作日志
  */
 @FeignClient(name = "smoc-auth", path = "/auth")
-public interface SystemUserLogClient {
+public interface SystemUserLogFeignClient {
 
 
     /**

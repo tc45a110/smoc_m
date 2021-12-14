@@ -69,7 +69,7 @@ public class SystemExtendBusinessParamService {
         /**
          * 查重操作
          */
-        List<SystemExtendBusinessParam> data = systemExtendBusinessParamRepository.findSystemExtendBusinessParamByBusinessTypeAndParamKey(entity.getBusinessType(), entity.getParamKey());
+        List<SystemExtendBusinessParam> data = systemExtendBusinessParamRepository.findSystemExtendBusinessParamByBusinessTypeAndParamKeyAndParamStatus(entity.getBusinessType(), entity.getParamKey(),"1");
         //add查重  businessType、paramKey
         if (data != null && data.iterator().hasNext() && "add".equals(op)) {
             return ResponseDataUtil.buildError(ResponseCode.PARAM_CREATE_ERROR);
@@ -116,7 +116,7 @@ public class SystemExtendBusinessParamService {
         SystemExtendBusinessParam data = systemExtendBusinessParamRepository.findById(id).get();
         //记录日志
         log.info("[业务扩展参数][delete]数据:{}", JSON.toJSONString(data));
-        systemExtendBusinessParamRepository.deleteById(id);
+        systemExtendBusinessParamRepository.updateSystemExtendBusinessParamStatus(id,"0");
         return ResponseDataUtil.buildSuccess();
     }
 

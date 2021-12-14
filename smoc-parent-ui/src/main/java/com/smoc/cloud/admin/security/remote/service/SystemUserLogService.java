@@ -1,7 +1,7 @@
 package com.smoc.cloud.admin.security.remote.service;
 
 
-import com.smoc.cloud.admin.security.remote.client.SystemUserLogClient;
+import com.smoc.cloud.admin.security.remote.client.SystemUserLogFeignClient;
 import com.smoc.cloud.common.auth.validator.SystemUserLogValidator;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
@@ -31,7 +31,7 @@ public class SystemUserLogService {
 
 
     @Autowired
-    private SystemUserLogClient systemUserLogClient;
+    private SystemUserLogFeignClient systemUserLogFeignClient;
 
     /**
      * 分页查询日志信息
@@ -42,7 +42,7 @@ public class SystemUserLogService {
     public ResponseData<PageList<SystemUserLogValidator>> page(PageParams<SystemUserLogValidator> pageParams) {
 
         try {
-            ResponseData<PageList<SystemUserLogValidator>> data = systemUserLogClient.page(pageParams);
+            ResponseData<PageList<SystemUserLogValidator>> data = systemUserLogFeignClient.page(pageParams);
             return data;
         } catch (Exception e) {
             log.info(e.getMessage());
@@ -82,7 +82,7 @@ public class SystemUserLogService {
     @Async
     public ResponseData save(SystemUserLogValidator systemUserLogValidator) {
         try {
-            ResponseData data = this.systemUserLogClient.save(systemUserLogValidator);
+            ResponseData data = this.systemUserLogFeignClient.save(systemUserLogValidator);
             log.info("[保存操作日志] 状态：{}", data.getMessage());
             return data;
         } catch (Exception e) {
