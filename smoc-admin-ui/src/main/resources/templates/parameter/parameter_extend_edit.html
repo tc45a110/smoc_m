@@ -30,13 +30,13 @@
                     </div>
                     <div class="panel-body">
                         <form id="submit_form"
-                              th:action="@{/parameter/filter/save/{businessType}/{businessId}(businessId=${businessId},businessType=${businessType})}"
+                              th:action="@{/parameter/filter/save/{businessType}/{businessId}/{columns}(businessId=${businessId},businessType=${businessType},columns=${columns})}"
                               method="post" data-parsley-validate>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <div class="row">
-                                            <div th:each="parameter:${list}" class="col-sm-3 m-b-20" >
+                                            <div th:each="parameter:${list}" th:class="${'col-sm-'+columns+ ' m-b-20'}">
                                                 <label th:for="${parameter.paramKey}">
                                                     [[${parameter.paramTitle}]]
                                                     <span class="text-danger"
@@ -50,27 +50,35 @@
                                                        th:attr="required=${parameter.isNull == '1'?'true':'false'}"
                                                        th:value="${keyValueMap[parameter.paramKey]}"
                                                        class="form-control" autocomplete="off">
-                                                <input  th:if="${(parameter.dataType == 'INT' && parameter.showType == 'text')}"
+                                                <input th:if="${(parameter.dataType == 'INT' && parameter.showType == 'text')}"
+                                                       th:id="${parameter.paramKey}"
+                                                       type="text" th:name="${parameter.paramKey}"
+                                                       th:placeholder="${#strings.isEmpty(parameter.placeholder)?parameter.paramTitle:parameter.placeholder}"
+                                                       th:data-parsley-maxlength="${parameter.paramMaxLength}"
+                                                       th:attr="required=${parameter.isNull == '1'?'true':'false'}"
+                                                       data-parsley-type="number"
+                                                       th:value="${keyValueMap[parameter.paramKey]}"
+                                                       class="form-control" autocomplete="off">
+                                                <input th:if="${(parameter.dataType == 'DECIMAL' && parameter.showType == 'text')}"
+                                                       th:id="${parameter.paramKey}"
+                                                       type="text" th:name="${parameter.paramKey}"
+                                                       th:placeholder="${#strings.isEmpty(parameter.placeholder)?parameter.paramTitle:parameter.placeholder}"
+                                                       th:data-parsley-maxlength="${parameter.paramMaxLength}"
+                                                       th:attr="required=${parameter.isNull == '1'?'true':'false'}"
+                                                       data-parsley-pattern="#[^[1-9]/d*/./d*|0/./d*[1-9]/d*$]"
+                                                       th:value="${keyValueMap[parameter.paramKey]}"
+                                                       class="form-control" autocomplete="off">
+                                                <mpm:tag
+                                                        th:if="${(parameter.showType != 'text' && !#strings.isEmpty(parameter.dictEnable))}"
                                                         th:id="${parameter.paramKey}"
-                                                        type="text" th:name="${parameter.paramKey}"
-                                                        th:placeholder="${#strings.isEmpty(parameter.placeholder)?parameter.paramTitle:parameter.placeholder}"
-                                                        th:data-parsley-maxlength="${parameter.paramMaxLength}"
-                                                        th:attr="required=${parameter.isNull == '1'?'true':'false'}"
-                                                        data-parsley-type="number"
+                                                        th:identity="${parameter.dictEnable}"
+                                                        th:name="${parameter.paramKey}"
+                                                        th:show-type="${parameter.showType}" key="code"
+                                                        class="form-control"
                                                         th:value="${keyValueMap[parameter.paramKey]}"
-                                                        class="form-control" autocomplete="off">
-                                                <input  th:if="${(parameter.dataType == 'DECIMAL' && parameter.showType == 'text')}"
-                                                        th:id="${parameter.paramKey}"
-                                                        type="text" th:name="${parameter.paramKey}"
-                                                        th:placeholder="${#strings.isEmpty(parameter.placeholder)?parameter.paramTitle:parameter.placeholder}"
-                                                        th:data-parsley-maxlength="${parameter.paramMaxLength}"
-                                                        th:attr="required=${parameter.isNull == '1'?'true':'false'}"
-                                                        data-parsley-pattern="#[^[1-9]/d*/./d*|0/./d*[1-9]/d*$]"
-                                                        th:value="${keyValueMap[parameter.paramKey]}"
-                                                        class="form-control" autocomplete="off">
-                                                <mpm:tag th:if="${(parameter.showType != 'text' && #strings.isEmpty(dictEnable))}" th:id="${parameter.paramKey}" th:identity="${parameter.dictEnable}" th:name="${parameter.paramKey}" th:show-type="${parameter.showType}" key="code" class="form-control"
-                                                         th:value="${keyValueMap[parameter.paramKey]}" th:title="${parameter.paramTitle}" th:required="${parameter.isNull == '1'?true:false}"/>
-                                                
+                                                        th:title="${parameter.paramTitle}"
+                                                        th:required="${parameter.isNull == '1'?true:false}"/>
+
 
                                             </div>
                                         </div>

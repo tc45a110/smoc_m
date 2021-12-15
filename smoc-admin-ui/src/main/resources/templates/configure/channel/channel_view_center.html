@@ -60,6 +60,10 @@
                                             <li class="active" id="tab1"><a onclick="active('1')"  sec:authorize-url="/configure/channel/view/base/*"
                                                                             th:href="@{/configure/channel/view/base/id}"
                                                                             th:target="tab-content">通道信息</a></li>
+                                            <li class="" id="tab6"><a onclick="active('6')"
+                                                                      sec:authorize-url="/parameter/filter/view/CHANNEL_PARAM/*/*"
+                                                                      th:href="@{/parameter/filter/view/CHANNEL_PARAM/CHID10000/3}"
+                                                                      th:target="tab-content">通道过滤参数</a>
                                             <li class="" id="tab2"><a onclick="active('2')"
 
                                                                             th:target="tab-content">通道价格记录</a></li>

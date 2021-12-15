@@ -72,10 +72,10 @@
                                                                                                  style="margin-right:5px;color:#f35864"></i>通道接口参数</a>
                                             </li>
                                             <li class="" id="tab3"><a onclick="active('3')"
-                                                                      sec:authorize-url="/parameter/filter/list/CHANNEL_PARAM/*"
-                                                                      th:href="@{/parameter/filter/list/CHANNEL_PARAM/{businessId}(businessId=${id})}"
+                                                                      sec:authorize-url="/parameter/filter/list/CHANNEL_PARAM/*/*"
+                                                                      th:href="@{/parameter/filter/view/CHANNEL_PARAM/{businessId}/3(businessId=${id})}"
                                                                       th:target="tab-content"><i class="mdi mdi-star"
-                                                                                                 style="margin-right:5px;color:#f35864"></i>通道过滤配置</a>
+                                                                                                 style="margin-right:5px;color:#f35864"></i>通道过滤参数</a>
                                             </li>
                                             <li class="" id="tab4"><a onclick="active('4')"
                                                                       sec:authorize-url="/configure/channel/edit/price/*"
