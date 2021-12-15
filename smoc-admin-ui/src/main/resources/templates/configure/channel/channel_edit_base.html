@@ -287,6 +287,11 @@
 
     $(document).ready(function () {
 
+        if("flag" == '[[${flag}]]'){
+            var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+            parent.location.href = contextPath + '/configure/channel/edit/center/'+'[[${channelBasicInfoValidator.channelId}]]';
+        }
+
         //处理携号转网方式 默认禁止选择
         if("0" == '[[${channelBasicInfoValidator.transferEnable}]]'){
             $("[name='transferType']").attr("disabled",'true');

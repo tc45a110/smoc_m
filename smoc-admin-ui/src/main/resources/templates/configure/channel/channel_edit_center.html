@@ -65,29 +65,29 @@
                                                                             th:target="tab-content"><i
                                                     class="mdi mdi-star" style="margin-right:5px;color:#f35864"></i>通道基本信息</a>
                                             </li>
-                                            <li class="" id="tab2"><a onclick="active('2')"
+                                            <li class="" id="tab2"><a onclick="active('2')" id="a2"
                                                                       sec:authorize-url="/configure/channel/edit/interface/*"
-                                                                      th:href="@{/configure/channel/edit/interface/id}"
+                                                                      th:href="@{/configure/channel/edit/interface/{id}(id=${id})}"
                                                                       th:target="tab-content"><i class="mdi mdi-star"
                                                                                                  style="margin-right:5px;color:#f35864"></i>通道接口参数</a>
                                             </li>
-                                            <li class="" id="tab3"><a onclick="active('3')"
+                                            <li class="" id="tab3"><a onclick="active('3')" id="a3"
                                                                       sec:authorize-url="/parameter/filter/list/CHANNEL_PARAM/*/*"
-                                                                      th:href="@{/parameter/filter/view/CHANNEL_PARAM/{businessId}/3(businessId=${id})}"
+                                                                      th:href="@{/parameter/filter/list/CHANNEL_PARAM/{businessId}/3(businessId=${id})}"
                                                                       th:target="tab-content"><i class="mdi mdi-star"
-                                                                                                 style="margin-right:5px;color:#f35864"></i>通道过滤参数</a>
+                                                                                                 style="margin-right:5px;color:#f35864"></i>通道过滤配置</a>
                                             </li>
-                                            <li class="" id="tab4"><a onclick="active('4')"
+                                            <li class="" id="tab4"><a onclick="active('4')" id="a4"
                                                                       sec:authorize-url="/configure/channel/edit/price/*"
                                                                       th:href="@{/configure/channel/edit/price/{id}(id=${id})}"
                                                                       th:target="tab-content"><i class="mdi mdi-star"
                                                                                                  style="margin-right:5px;color:#f35864"></i>区域计价配置</a>
                                             </li>
-                                            <li class="" id="tab5"><a onclick="active('5')"
+                                            <li class="" id="tab5"><a onclick="active('5')" id="a5"
                                                                       sec:authorize-url="/configure/channel/edit/extend/*"
                                                                       th:href="@{/configure/channel/edit/extend/id}"
                                                                       th:target="tab-content">通道扩展参数配置</a></li>
-                                            <li class="" id="tab6"><a onclick="active('6')"
+                                            <li class="" id="tab6"><a onclick="active('6')" id="a6"
                                                                       sec:authorize-url="/configure/channel/edit/spare/*"
                                                                       th:href="@{/configure/channel/edit/spare/id}"
                                                                       th:target="tab-content">失败补发通道配置</a></li>
@@ -119,6 +119,17 @@
 <th:block th:insert="fragments/common_fragments :: select_js"/>
 <!-- Modal-Effect -->
 <script>
+
+    $(document).ready(function () {
+
+        if("base" == '[[${id}]]'){
+            for(var num = 2;num<7;num++){
+                document.getElementById('tab'+num).style.backgroundColor="#DCDBDC";
+                $("#a"+num).attr("onclick","");
+                $("#a"+num).removeAttr("href");
+            }
+        }
+    });
 
     function active(tab) {
         for(var num = 1;num<10;num++){
