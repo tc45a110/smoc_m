@@ -7,26 +7,28 @@
     <th:block th:insert="fragments/common_fragments :: common_css"/>
 </head>
 <body>
-<!-- Loader -->
+<!-- Loader start 页面加载进度-->
 <th:block th:insert="fragments/common_fragments :: common_loader"/>
 <!-- Loader end -->
 
 <!-- Start content -->
 <div class="content" style="margin-top: 60px">
     <div class="container">
+
+        <!-- start row 页面导航-->
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">企业EC账号中心</h4>
+                    <h4 class="page-title">EC业务账号中心</h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
                             客户管理
                         </li>
                         <li>
-                            EC通道账户管理
+                            EC业务账号管理
                         </li>
                         <li class="active">
-                            企业EC账号中心
+                            EC业务账号中心
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -34,6 +36,8 @@
             </div>
         </div>
         <!-- end row -->
+
+        <!-- start row 页面内容-->
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
                 <div class="card-box">
@@ -59,22 +63,22 @@
                                         <div class="row">
                                             <div class="col-md-12 col-sm-12 col-xs-12">
                                                 <div id="external-events" class="m-t-20">
-                                                    <a href="#" data-toggle="modal" data-target="#add-category" style="text-align:left;" class="btn btn-lg btn-info btn-block waves-effect  waves-light">
+                                                    <a href="#" data-toggle="modal" data-target="#add-category" style="text-align:left;font-size:14px" class="btn btn-lg btn-info btn-block waves-effect  waves-light">
                                                         <i style="padding-left:10px;margin-right:10px" class="mdi mdi-account-circle"></i>普通短信  通道账户<span style="margin-left: 10px">5个</span>
                                                     </a>
-                                                    <a href="#" data-toggle="modal" data-target="#add-category" style="text-align:left;" class="btn btn-lg btn-custom btn-block waves-effect m-t-20 waves-light">
+                                                    <a href="#" data-toggle="modal" data-target="#add-category" style="text-align:left;font-size:14px" class="btn btn-lg btn-custom btn-block waves-effect m-t-20 waves-light">
                                                         <i style="padding-left:10px;margin-right:10px" class="mdi mdi-account-circle"></i>多媒体短信 通道账户<span style="margin-left: 10px">1个</span>
                                                     </a>
-                                                    <a href="#" data-toggle="modal" data-target="#add-category" style="text-align:left;" class="btn btn-lg btn-teal btn-block waves-effect m-t-20 waves-light">
+                                                    <a href="#" data-toggle="modal" data-target="#add-category" style="text-align:left;font-size:14px" class="btn btn-lg btn-teal btn-block waves-effect m-t-20 waves-light">
                                                         <i style="padding-left:10px;margin-right:10px" class="mdi mdi-account-circle"></i>彩信  通道账户<span style="margin-left: 10px">1个</span>
                                                     </a>
-                                                    <a href="#" data-toggle="modal" data-target="#add-category" style="text-align:left;" class="btn btn-lg btn-facebook btn-block waves-effect m-t-20 waves-light">
+                                                    <a href="#" data-toggle="modal" data-target="#add-category" style="text-align:left;font-size:14px" class="btn btn-lg btn-facebook btn-block waves-effect m-t-20 waves-light">
                                                         <i style="padding-left:10px;margin-right:10px" class="mdi mdi-account-circle"></i>5G短信  通道账户<span style="margin-left: 10px">0个</span>
                                                     </a>
-                                                    <a href="#" data-toggle="modal" data-target="#add-category" style="text-align:left;" class="btn btn-lg btn-instagram btn-block waves-effect m-t-20 waves-light">
+                                                    <a href="#" data-toggle="modal" data-target="#add-category" style="text-align:left;font-size:14px" class="btn btn-lg btn-instagram btn-block waves-effect m-t-20 waves-light">
                                                         <i style="padding-left:10px;margin-right:10px" class="mdi mdi-account-circle"></i>过黑服务  通道账户<span style="margin-left: 10px">0个</span>
                                                     </a>
-                                                    <a href="#" data-toggle="modal" data-target="#add-category" style="text-align:left;" class="btn btn-lg btn-tumblr btn-block waves-effect m-t-20 waves-light">
+                                                    <a href="#" data-toggle="modal" data-target="#add-category" style="text-align:left;font-size:14px" class="btn btn-lg btn-tumblr btn-block waves-effect m-t-20 waves-light">
                                                         <i style="padding-left:10px;margin-right:10px" class="mdi mdi-account-circle"></i>国际短信  通道账户<span style="margin-left: 10px">0个</span>
                                                     </a>
 
@@ -94,17 +98,17 @@
                                         <div class="property-content" style="height:86px">
                                             <div class="listingInfo">
                                                 <div class="col-sm-12">
-                                                    <p style="font-size:12px">
-                                                        <i class="mdi mdi-animation" style="margin-right:5px"></i>
-                                                        <a th:href="@{/ec/customer/channel/account/center/product}" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="查看EC配置的产品信息">
-                                                            EC产品视图</a>
+<!--                                                    <p style="font-size:12px">-->
+<!--                                                        <i class="mdi mdi-animation" style="margin-right:5px"></i>-->
+<!--                                                        <a th:href="@{/ec/customer/channel/account/center/product}" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="查看EC配置的产品信息">-->
+<!--                                                            EC产品视图</a>-->
 
-                                                    </p>
-                                                    <p style="font-size:12px">
-                                                        <i class="mdi mdi-arrange-bring-forward" style="margin-right:5px"></i>
-                                                        <a th:href="@{/ec/customer/channel/account/center/channel}" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="查看EC配置的通道信息">
-                                                            EC通道视图</a>
-                                                    </p>
+<!--                                                    </p>-->
+<!--                                                    <p style="font-size:12px">-->
+<!--                                                        <i class="mdi mdi-arrange-bring-forward" style="margin-right:5px"></i>-->
+<!--                                                        <a th:href="@{/ec/customer/channel/account/center/channel}" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="查看EC配置的通道信息">-->
+<!--                                                            EC通道视图</a>-->
+<!--                                                    </p>-->
                                                 </div>
                                             </div>
                                             <!-- end. Card actions -->
@@ -120,12 +124,12 @@
 
                             <div class="row">
                                 <div class="col-md-12 col-sm-12">
-                                    <h4>EC业务账户信息
+                                    <h4>EC业务账号信息
                                         <div class="pull-right" style="margin-top: -12px;">
                                             <a th:href="@{/ec/customer/channel/account/list}"
                                                class="btn btn-default waves-effect waves-light btn-md">
                                                 <i class="glyphicon  glyphicon-share-alt" style="margin-right:5px"></i>
-                                                返回业务账号列表</a>
+                                                返回EC业务账号列表</a>
                                             <a  th:href="@{/ec/customer/base_info/center/0000}"
                                                 style="margin-left:10px;"
                                                 class="btn btn-facebook waves-effect waves-light btn-md">
@@ -136,7 +140,7 @@
                                                 style="margin-left:10px;"
                                                 class="btn btn-tumblr waves-effect waves-light btn-md">
                                                 <i class="mdi mdi-vector-circle" style="margin-right:5px"></i>
-                                                企业财务中心
+                                                EC财务中心
                                             </a>
                                         </div>
                                     </h4>
@@ -149,11 +153,11 @@
                                                      style="display:block">
                                                     <h3 class="panel-title">
                                                         <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
-                                                        普通短信 通道账户信息
+                                                        普通短信 业务账号信息
                                                         <div class="pull-right">
-                                                            <a th:href="@{/ec/customer/channel/account/config/base}"
+                                                            <a sec:authorize-url="/ec/customer/channel/account/edit/center/*" th:href="@{/ec/customer/channel/account/edit/center/enterpriseId}"
                                                                style="margin-top: -8px"
-                                                               class="btn btn-purple waves-effect waves-light m-l-10 btn-sm" title="新建彩信通道账户">
+                                                               class="btn btn-purple waves-effect waves-light m-l-10 btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="新建普通短信EC业务账号">
                                                                 <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>新建</a>
                                                         </div>
                                                     </h3>
@@ -173,23 +177,23 @@
                                                                                         账号名称：13910941234</h5>
                                                                                 </div>
                                                                                 <div class="col-sm-6">
-                                                                                    <p class="text-muted">账号：<span style="color: #3ac9d6">10691111</span></p>
-                                                                                    <p class="text-muted">内容类型：游戏推广</p>
-                                                                                    <p class="text-muted">扩展码：12354896</p>
+                                                                                    <p style="font-size:12px">账号：<span style="color: #3ac9d6">10691111</span></p>
+                                                                                    <p style="font-size:12px">信息分类：行业</p>
+                                                                                    <p style="font-size:12px">扩展码：12354896</p>
                                                                                 </div>
                                                                                 <div class="col-sm-6">
-                                                                                    <p class="text-muted">发送运营商：中国移动</p>
-                                                                                    <p class="text-muted">接口类型：CMPP</p>
-                                                                                    <p class="text-muted">账号状态：正常</p>
+                                                                                    <p style="font-size:12px">发送运营商：移动、联通、电信</p>
+                                                                                    <p style="font-size:12px">接口类型：CMPP</p>
+                                                                                    <p style="font-size:12px">账号状态：正常</p>
 
                                                                                 </div>
                                                                             </div>
                                                                             <div class="property-action">
 
                                                                                 <div class="pull-right">
-                                                                                    <a class="btn btn-info" th:href="@{/ec/customer/channel/account/config/base}"
+                                                                                    <a class="btn btn-info" sec:authorize-url="/ec/customer/channel/account/edit/center/*" th:href="@{/ec/customer/channel/account/edit/center/enterpriseId}"
                                                                                        style="font-size:12px;">编辑并配置</a>
-                                                                                    <a class="btn btn-brown" th:href="@{/ec/customer/channel/account/config/view}"
+                                                                                    <a class="btn btn-brown" th:href="@{/ec/customer/channel/account/view/center/accountId}" sec:authorize-url="/ec/customer/channel/account/view/center/*"
                                                                                        style="font-size:12px;">查看明细</a>
                                                                                     <a   data-toggle="modal" data-target="#confirm-modal" class="btn btn-danger"
                                                                                        style="font-size:12px;">注销</a>
@@ -216,69 +220,26 @@
                                                                                         账号名称：13910941234</h5>
                                                                                 </div>
                                                                                 <div class="col-sm-6">
-                                                                                    <p class="text-muted">账号：<span style="color: #3ac9d6">10691111</span></p>
-                                                                                    <p class="text-muted">内容类型：游戏推广</p>
-                                                                                    <p class="text-muted">扩展码：12354896</p>
+                                                                                    <p style="font-size:12px">账号：<span style="color: #3ac9d6">10691111</span></p>
+                                                                                    <p style="font-size:12px">信息分类：行业</p>
+                                                                                    <p style="font-size:12px">扩展码：12354896</p>
                                                                                 </div>
                                                                                 <div class="col-sm-6">
-                                                                                    <p class="text-muted">发送运营商：中国移动</p>
-                                                                                    <p class="text-muted">接口类型：CMPP</p>
-                                                                                    <p class="text-muted">账号状态：正常</p>
+                                                                                    <p style="font-size:12px">发送运营商：移动、联通、电信</p>
+                                                                                    <p style="font-size:12px">接口类型：CMPP</p>
+                                                                                    <p style="font-size:12px">账号状态：正常</p>
 
                                                                                 </div>
                                                                             </div>
                                                                             <div class="property-action">
 
                                                                                 <div class="pull-right">
-                                                                                    <a class="btn btn-info" th:href="@{/ec/customer/channel/account/config/base}"
+                                                                                    <a class="btn btn-info" sec:authorize-url="/ec/customer/channel/account/edit/center/*" th:href="@{/ec/customer/channel/account/edit/center/enterpriseId}"
                                                                                        style="font-size:12px;">编辑并配置</a>
-                                                                                    <a class="btn btn-brown" th:href="@{/ec/customer/channel/account/config/view}"
+                                                                                    <a class="btn btn-brown" th:href="@{/ec/customer/channel/account/view/center/accountId}" sec:authorize-url="/ec/customer/channel/account/view/center/*"
                                                                                        style="font-size:12px;">查看明细</a>
                                                                                     <a   data-toggle="modal" data-target="#confirm-modal" class="btn btn-danger"
-                                                                                       style="font-size:12px;">注销</a>
-                                                                                </div>
-                                                                            </div>
-                                                                            <!-- end. Card actions -->
-                                                                        </div>
-                                                                    </div>
-                                                                    <!-- /col 8 -->
-                                                                </div>
-                                                                <!-- /inner row -->
-                                                            </div>
-
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <div class="property-card property-horizontal">
-                                                                <div class="row">
-                                                                    <div class="col-sm-12">
-                                                                        <div class="property-content"
-                                                                             style="height:206px">
-                                                                            <div class="listingInfo">
-                                                                                <div class="">
-                                                                                    <h5 style="padding-left:10px">
-                                                                                        账号名称：13910941234</h5>
-                                                                                </div>
-                                                                                <div class="col-sm-6">
-                                                                                    <p class="text-muted">账号：<span style="color: #3ac9d6">10691111</span></p>
-                                                                                    <p class="text-muted">内容类型：游戏推广</p>
-                                                                                    <p class="text-muted">扩展码：12354896</p>
-                                                                                </div>
-                                                                                <div class="col-sm-6">
-                                                                                    <p class="text-muted">发送运营商：中国移动</p>
-                                                                                    <p class="text-muted">接口类型：CMPP</p>
-                                                                                    <p class="text-muted">账号状态：正常</p>
-
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="property-action">
-
-                                                                                <div class="pull-right">
-                                                                                    <a class="btn btn-info" th:href="@{/ec/customer/channel/account/config/base}"
-                                                                                       style="font-size:12px;">编辑并配置</a>
-                                                                                    <a class="btn btn-brown" th:href="@{/ec/customer/channel/account/config/view}"
-                                                                                       style="font-size:12px;">查看明细</a>
-                                                                                    <a   data-toggle="modal" data-target="#confirm-modal" class="btn btn-danger"
-                                                                                       style="font-size:12px;">注销</a>
+                                                                                         style="font-size:12px;">注销</a>
                                                                                 </div>
                                                                             </div>
                                                                             <!-- end. Card actions -->
@@ -303,11 +264,11 @@
                                                       style="background-color:#00acc1">
                                                     <h3 class="panel-title">
                                                         <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
-                                                        多媒体短信 通道账户信息
+                                                        多媒体短信 业务账号信息
                                                         <div class="pull-right">
-                                                            <a th:href="@{/ec/customer/channel/account/config/base}"
+                                                            <a sec:authorize-url="/ec/customer/channel/account/edit/center/*" th:href="@{/ec/customer/channel/account/edit/center/enterpriseId}"
                                                                style="margin-top: -8px"
-                                                               class="btn btn-purple waves-effect waves-light m-l-10 btn-sm" title="新建彩信通道账户">
+                                                               class="btn btn-purple waves-effect waves-light m-l-10 btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="新建多媒体短信EC业务账号">
                                                                 <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>新建</a>
                                                         </div>
                                                     </h3>
@@ -326,26 +287,26 @@
                                                                                         账号名称：13910941234</h5>
                                                                                 </div>
                                                                                 <div class="col-sm-6">
-                                                                                    <p class="text-muted">账号：<span style="color: #3ac9d6">10691111</span></p>
-                                                                                    <p class="text-muted">内容类型：游戏推广</p>
-                                                                                    <p class="text-muted">扩展码：12354896</p>
+                                                                                    <p style="font-size:12px">账号：<span style="color: #3ac9d6">10691111</span></p>
+                                                                                    <p style="font-size:12px">信息分类：行业</p>
+                                                                                    <p style="font-size:12px">扩展码：12354896</p>
                                                                                 </div>
                                                                                 <div class="col-sm-6">
-                                                                                    <p class="text-muted">发送运营商：中国移动</p>
-                                                                                    <p class="text-muted">接口类型：CMPP</p>
-                                                                                    <p class="text-muted">账号状态：正常</p>
+                                                                                    <p style="font-size:12px">发送运营商：移动、联通、电信</p>
+                                                                                    <p style="font-size:12px">接口类型：CMPP</p>
+                                                                                    <p style="font-size:12px">账号状态：正常</p>
 
                                                                                 </div>
                                                                             </div>
                                                                             <div class="property-action">
 
                                                                                 <div class="pull-right">
-                                                                                    <a class="btn btn-custom" th:href="@{/ec/customer/channel/account/config/base}"
+                                                                                    <a class="btn btn-info" sec:authorize-url="/ec/customer/channel/account/edit/center/*" th:href="@{/ec/customer/channel/account/edit/center/enterpriseId}"
                                                                                        style="font-size:12px;">编辑并配置</a>
-                                                                                    <a class="btn btn-brown" th:href="@{/ec/customer/channel/account/config/view}"
+                                                                                    <a class="btn btn-brown" th:href="@{/ec/customer/channel/account/view/center/accountId}" sec:authorize-url="/ec/customer/channel/account/view/center/*"
                                                                                        style="font-size:12px;">查看明细</a>
-                                                                                    <a   data-toggle="modal" data-target="#confirm-modal"  class="btn btn-danger"
-                                                                                       style="font-size:12px;">注销</a>
+                                                                                    <a   data-toggle="modal" data-target="#confirm-modal" class="btn btn-danger"
+                                                                                         style="font-size:12px;">注销</a>
                                                                                 </div>
                                                                             </div>
                                                                             <!-- end. Card actions -->
@@ -370,11 +331,11 @@
                                                       style="background-color:#26a69a">
                                                     <h3 class="panel-title">
                                                         <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
-                                                        彩信 通道账户信息
+                                                        彩信 业务账号信息
                                                         <div class="pull-right">
-                                                            <a th:href="@{/ec/customer/channel/account/config/base}"
+                                                            <a sec:authorize-url="/ec/customer/channel/account/edit/center/*" th:href="@{/ec/customer/channel/account/edit/center/enterpriseId}"
                                                                style="margin-top: -8px"
-                                                               class="btn btn-purple waves-effect waves-light m-l-10 btn-sm" title="新建彩信通道账户">
+                                                               class="btn btn-purple waves-effect waves-light m-l-10 btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="新建彩信EC业务账号">
                                                                 <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>新建</a>
                                                         </div>
                                                     </h3>
@@ -393,26 +354,26 @@
                                                                                         账号名称：13910941234</h5>
                                                                                 </div>
                                                                                 <div class="col-sm-6">
-                                                                                    <p class="text-muted">账号：<span style="color: #3ac9d6">10691111</span></p>
-                                                                                    <p class="text-muted">内容类型：游戏推广</p>
-                                                                                    <p class="text-muted">扩展码：12354896</p>
+                                                                                    <p style="font-size:12px">账号：<span style="color: #3ac9d6">10691111</span></p>
+                                                                                    <p style="font-size:12px">信息分类：行业</p>
+                                                                                    <p style="font-size:12px">扩展码：12354896</p>
                                                                                 </div>
                                                                                 <div class="col-sm-6">
-                                                                                    <p class="text-muted">发送运营商：中国移动</p>
-                                                                                    <p class="text-muted">接口类型：CMPP</p>
-                                                                                    <p class="text-muted">账号状态：正常</p>
+                                                                                    <p style="font-size:12px">发送运营商：移动、联通、电信</p>
+                                                                                    <p style="font-size:12px">接口类型：CMPP</p>
+                                                                                    <p style="font-size:12px">账号状态：正常</p>
 
                                                                                 </div>
                                                                             </div>
                                                                             <div class="property-action">
 
                                                                                 <div class="pull-right">
-                                                                                    <a class="btn btn-teal" th:href="@{/ec/customer/channel/account/config/base}"
+                                                                                    <a class="btn btn-info" sec:authorize-url="/ec/customer/channel/account/edit/center/*" th:href="@{/ec/customer/channel/account/edit/center/enterpriseId}"
                                                                                        style="font-size:12px;">编辑并配置</a>
-                                                                                    <a class="btn btn-brown" th:href="@{/ec/customer/channel/account/config/view}"
+                                                                                    <a class="btn btn-brown" th:href="@{/ec/customer/channel/account/view/center/accountId}" sec:authorize-url="/ec/customer/channel/account/view/center/*"
                                                                                        style="font-size:12px;">查看明细</a>
-                                                                                    <a   data-toggle="modal" data-target="#confirm-modal"  class="btn btn-danger"
-                                                                                       style="font-size:12px;">注销</a>
+                                                                                    <a   data-toggle="modal" data-target="#confirm-modal" class="btn btn-danger"
+                                                                                         style="font-size:12px;">注销</a>
                                                                                 </div>
                                                                             </div>
                                                                             <!-- end. Card actions -->
@@ -437,11 +398,11 @@
                                                       style="background-color:#3b5998">
                                                     <h3 class="panel-title">
                                                         <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
-                                                        5G短信 通道账户信息
+                                                        5G短信 业务账号信息
                                                         <div class="pull-right">
-                                                            <a th:href="@{/ec/customer/channel/account/config/base}"
+                                                            <a sec:authorize-url="/ec/customer/channel/account/edit/center/*" th:href="@{/ec/customer/channel/account/edit/center/enterpriseId}"
                                                                style="margin-top: -8px"
-                                                               class="btn btn-purple waves-effect waves-light m-l-10 btn-sm" title="新建彩信通道账户">
+                                                               class="btn btn-purple waves-effect waves-light m-l-10 btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="新建5G短信EC业务账号">
                                                                 <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>新建</a>
                                                         </div>
                                                     </h3>
@@ -462,11 +423,11 @@
                                                       style="background-color:#517fa4">
                                                     <h3 class="panel-title">
                                                         <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
-                                                        过黑服务 通道账户信息
+                                                        过黑服务 业务账号信息
                                                         <div class="pull-right">
-                                                            <a th:href="@{/ec/customer/channel/account/config/base}"
+                                                            <a sec:authorize-url="/ec/customer/channel/account/edit/center/*" th:href="@{/ec/customer/channel/account/edit/center/enterpriseId}"
                                                                style="margin-top: -8px"
-                                                               class="btn btn-purple waves-effect waves-light m-l-10 btn-sm" title="新建彩信通道账户">
+                                                               class="btn btn-purple waves-effect waves-light m-l-10 btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="新建过黑服务EC业务账号">
                                                                 <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>新建</a>
                                                         </div>
                                                     </h3>
@@ -496,11 +457,11 @@
                                                       style="background-color:#32506d">
                                                     <h3 class="panel-title">
                                                         <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
-                                                        国际短信 通道账户信息
+                                                        国际短信 业务账号信息
                                                         <div class="pull-right">
-                                                            <a th:href="@{/ec/customer/channel/account/config/base}"
+                                                            <a sec:authorize-url="/ec/customer/channel/account/edit/center/*" th:href="@{/ec/customer/channel/account/edit/center/enterpriseId}"
                                                                style="margin-top: -8px"
-                                                               class="btn btn-purple waves-effect waves-light m-l-10 btn-sm" title="新建彩信通道账户">
+                                                               class="btn btn-purple waves-effect waves-light m-l-10 btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="新建国际短信EC业务账号">
                                                                 <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>新建</a>
                                                         </div>
                                                     </h3>
@@ -562,9 +523,9 @@
         </div>
         <!-- end confirm delete modal  -->
 
-        <!-- end row -->
+        <!-- start row  错误提示-->
         <th:block th:insert="fragments/common_fragments :: common_error"/>
-
+        <!-- end row -->
 
 
     </div> <!-- container -->

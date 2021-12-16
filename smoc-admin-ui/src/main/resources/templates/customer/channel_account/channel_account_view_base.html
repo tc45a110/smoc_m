@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <th:block th:insert="fragments/common_fragments :: common_header"/>
@@ -9,24 +10,27 @@
 
 </head>
 <body style="background-color:#fff">
+<!-- Loader start 页面加载进度-->
 <th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
 
 <!-- Start content -->
 <div class="content" style="background-color:#fff">
     <div class="container" style="background-color:#fff">
-        <!-- start row -->
+
+        <!-- start row 页面内容-->
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="row">
                 <div class="col-lg-12" style="margin-top:10px">
                     <div class="panel panel-border panel-info">
-                        <div  class="panel-heading"
-                              style="display:block">
+                        <div class="panel-heading"
+                             style="display:block">
                             <h3 class="panel-title">
                                 <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
                                 基本信息
                             </h3>
                         </div>
-                        <div  class="panel-body" style="padding-bottom:0px">
+                        <div class="panel-body" style="padding-bottom:0px">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="property-card property-horizontal">
@@ -40,7 +44,8 @@
                                                                 账号名称：13910941234</h5>
                                                         </div>
                                                         <div class="col-sm-3">
-                                                            <p class="text-muted">账号：<span style="color: #3ac9d6">10691111</span></p>
+                                                            <p class="text-muted">账号：<span style="color: #3ac9d6">10691111</span>
+                                                            </p>
                                                             <p class="text-muted">内容类型：游戏推广</p>
 
                                                         </div>
@@ -77,14 +82,14 @@
             <div class="row">
                 <div class="col-lg-12" style="margin-top:10px">
                     <div class="panel panel-border panel-primary">
-                        <div  class="panel-heading"
-                              style="display:block">
+                        <div class="panel-heading"
+                             style="display:block">
                             <h3 class="panel-title">
                                 <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
                                 接口信息
                             </h3>
                         </div>
-                        <div  class="panel-body" style="padding-bottom:0px">
+                        <div class="panel-body" style="padding-bottom:0px">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="property-card property-horizontal">
@@ -98,7 +103,8 @@
                                                                 接口类型：CMPP</h5>
                                                         </div>
                                                         <div class="col-sm-3">
-                                                            <p class="text-muted">接口密码： <a class="btn btn-teal btn-rounded btn-sm waves-effect waves-light">******</a>
+                                                            <p class="text-muted">接口密码： <a
+                                                                    class="btn btn-teal btn-rounded btn-sm waves-effect waves-light">******</a>
                                                             <p class="text-muted">最大链接数：5</p>
                                                             <p class="text-muted">客户鉴权IP：192.4.45.126</p>
 
@@ -139,13 +145,13 @@
             <div class="row">
                 <div class="col-lg-12" style="margin-top:10px">
                     <div class="panel panel-border panel-success">
-                        <div  class="panel-heading">
+                        <div class="panel-heading">
                             <h3 class="panel-title">
                                 <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
                                 财务信息
                             </h3>
                         </div>
-                        <div  class="panel-body" style="padding-bottom:0px">
+                        <div class="panel-body" style="padding-bottom:0px">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="property-card property-horizontal">
@@ -159,7 +165,8 @@
                                                                 账号单价：0.025 元</h5>
                                                         </div>
                                                         <div class="col-sm-3">
-                                                            <p class="text-muted">付费方式： <a class="btn btn-teal btn-rounded btn-sm waves-effect waves-light">后付费</a>
+                                                            <p class="text-muted">付费方式： <a
+                                                                    class="btn btn-teal btn-rounded btn-sm waves-effect waves-light">后付费</a>
 
 
                                                         </div>
@@ -172,7 +179,7 @@
                                                         <div class="col-sm-3">
                                                             <p class="text-muted">账号费用：
                                                                 <a class="btn btn-purple btn-rounded btn-sm waves-effect waves-light">账号M1费用</a>
-                                                                </p>
+                                                            </p>
 
                                                         </div>
                                                         <div class="col-sm-3">
@@ -198,13 +205,13 @@
             <div class="row">
                 <div class="col-lg-12" style="margin-top:10px">
                     <div class="panel panel-border panel-purple">
-                        <div  class="panel-heading">
+                        <div class="panel-heading">
                             <h3 class="panel-title">
                                 <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
                                 过滤信息
                             </h3>
                         </div>
-                        <div  class="panel-body" style="padding-bottom:0px">
+                        <div class="panel-body" style="padding-bottom:0px">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="property-card property-horizontal">
@@ -255,13 +262,13 @@
             <div class="row">
                 <div class="col-lg-12" style="margin-top:10px">
                     <div class="panel panel-border panel-teal">
-                        <div  class="panel-heading">
+                        <div class="panel-heading">
                             <h3 class="panel-title">
                                 <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
                                 产品信息
                             </h3>
                         </div>
-                        <div  class="panel-body" style="padding-bottom:0px">
+                        <div class="panel-body" style="padding-bottom:0px">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="property-card property-horizontal">
@@ -283,14 +290,22 @@
                                                                                         </h5>
                                                                                     </div>
                                                                                     <div class="col-sm-6">
-                                                                                        <p style="font-size:12px">业务类型：<a class="btn btn-teal btn-rounded btn-sm waves-effect waves-light">彩信</a></p>
                                                                                         <p style="font-size:12px">
-                                                                                            通道数：<a class="btn btn-purple btn-rounded btn-sm waves-effect waves-light">6个</a></p>
+                                                                                            业务类型：<a
+                                                                                                class="btn btn-teal btn-rounded btn-sm waves-effect waves-light">彩信</a>
+                                                                                        </p>
+                                                                                        <p style="font-size:12px">
+                                                                                            通道数：<a
+                                                                                                class="btn btn-purple btn-rounded btn-sm waves-effect waves-light">6个</a>
+                                                                                        </p>
                                                                                         <p style="font-size:12px">
                                                                                             发送时间限制：7：00：00-24：00：00</p>
                                                                                     </div>
                                                                                     <div class="col-sm-6">
-                                                                                        <p style="font-size:12px">内容类型：<a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">游戏</a></p>
+                                                                                        <p style="font-size:12px">
+                                                                                            内容类型：<a
+                                                                                                class="btn btn-info btn-rounded btn-sm waves-effect waves-light">游戏</a>
+                                                                                        </p>
                                                                                         <p style="font-size:12px">
                                                                                             频次：36678 t/p</p>
                                                                                         <p style="font-size:12px">
@@ -326,14 +341,22 @@
                                                                                         </h5>
                                                                                     </div>
                                                                                     <div class="col-sm-6">
-                                                                                        <p style="font-size:12px">业务类型：<a class="btn btn-teal btn-rounded btn-sm waves-effect waves-light">彩信</a></p>
                                                                                         <p style="font-size:12px">
-                                                                                            通道数：<a class="btn btn-purple btn-rounded btn-sm waves-effect waves-light">6个</a></p>
+                                                                                            业务类型：<a
+                                                                                                class="btn btn-teal btn-rounded btn-sm waves-effect waves-light">彩信</a>
+                                                                                        </p>
+                                                                                        <p style="font-size:12px">
+                                                                                            通道数：<a
+                                                                                                class="btn btn-purple btn-rounded btn-sm waves-effect waves-light">6个</a>
+                                                                                        </p>
                                                                                         <p style="font-size:12px">
                                                                                             发送时间限制：7：00：00-24：00：00</p>
                                                                                     </div>
                                                                                     <div class="col-sm-6">
-                                                                                        <p style="font-size:12px">内容类型：<a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">游戏</a></p>
+                                                                                        <p style="font-size:12px">
+                                                                                            内容类型：<a
+                                                                                                class="btn btn-info btn-rounded btn-sm waves-effect waves-light">游戏</a>
+                                                                                        </p>
                                                                                         <p style="font-size:12px">
                                                                                             频次：36678 t/p</p>
                                                                                         <p style="font-size:12px">
@@ -377,13 +400,13 @@
             <div class="row">
                 <div class="col-lg-12" style="margin-top:10px">
                     <div class="panel panel-border panel-brown">
-                        <div  class="panel-heading">
+                        <div class="panel-heading">
                             <h3 class="panel-title">
                                 <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
                                 通道信息
                             </h3>
                         </div>
-                        <div  class="panel-body" style="padding-bottom:0px">
+                        <div class="panel-body" style="padding-bottom:0px">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="property-card property-horizontal">
@@ -405,14 +428,18 @@
                                                                                         </h5>
                                                                                     </div>
                                                                                     <div class="col-sm-6">
-                                                                                        <p style="font-size:12px">通道ID：ATererere</p>
                                                                                         <p style="font-size:12px">
-                                                                                            业务类型：<a class="btn btn-purple btn-rounded btn-sm waves-effect waves-light">普通短信</a></p>
+                                                                                            通道ID：ATererere</p>
+                                                                                        <p style="font-size:12px">
+                                                                                            业务类型：<a
+                                                                                                class="btn btn-purple btn-rounded btn-sm waves-effect waves-light">普通短信</a>
+                                                                                        </p>
                                                                                         <p style="font-size:12px">
                                                                                             发送省份：北京、上海、广州</p>
                                                                                     </div>
                                                                                     <div class="col-sm-6">
-                                                                                        <p style="font-size:12px">实际终端接收长码号：186108627123232323</p>
+                                                                                        <p style="font-size:12px">
+                                                                                            实际终端接收长码号：186108627123232323</p>
                                                                                         <p style="font-size:12px">
                                                                                             通道协议类型：MM7</p>
                                                                                         <p style="font-size:12px">
@@ -448,14 +475,18 @@
                                                                                         </h5>
                                                                                     </div>
                                                                                     <div class="col-sm-6">
-                                                                                        <p style="font-size:12px">通道ID：ATererere</p>
                                                                                         <p style="font-size:12px">
-                                                                                            业务类型：<a class="btn btn-purple btn-rounded btn-sm waves-effect waves-light">普通短信</a></p>
+                                                                                            通道ID：ATererere</p>
+                                                                                        <p style="font-size:12px">
+                                                                                            业务类型：<a
+                                                                                                class="btn btn-purple btn-rounded btn-sm waves-effect waves-light">普通短信</a>
+                                                                                        </p>
                                                                                         <p style="font-size:12px">
                                                                                             发送省份：北京、上海、广州</p>
                                                                                     </div>
                                                                                     <div class="col-sm-6">
-                                                                                        <p style="font-size:12px">实际终端接收长码号：186108627123232323</p>
+                                                                                        <p style="font-size:12px">
+                                                                                            实际终端接收长码号：186108627123232323</p>
                                                                                         <p style="font-size:12px">
                                                                                             通道协议类型：MM7</p>
                                                                                         <p style="font-size:12px">
@@ -499,13 +530,13 @@
             <div class="row">
                 <div class="col-lg-12" style="margin-top:10px">
                     <div class="panel panel-border panel-pink">
-                        <div  class="panel-heading">
+                        <div class="panel-heading">
                             <h3 class="panel-title">
                                 <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
                                 扩展参数
                             </h3>
                         </div>
-                        <div  class="panel-body" style="padding-bottom:0px">
+                        <div class="panel-body" style="padding-bottom:0px">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="property-card property-horizontal">
@@ -555,7 +586,9 @@
         </div>
         <!-- end row -->
 
+        <!-- start row  错误提示-->
         <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
 
     </div> <!-- container -->
 </div> <!-- content -->
@@ -566,6 +599,8 @@
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
+
+
 </script>
 </body>
 </html>

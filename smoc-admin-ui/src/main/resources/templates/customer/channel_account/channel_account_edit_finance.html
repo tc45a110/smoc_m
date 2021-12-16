@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <th:block th:insert="fragments/common_fragments :: common_header"/>
@@ -9,94 +10,97 @@
 
 </head>
 <body style="background-color:#fff">
+<!-- Loader start 页面加载进度-->
 <th:block th:insert="fragments/common_fragments :: common_loader"/>
-
+<!-- Loader end -->
 <!-- Start content -->
 <div class="content">
     <div class="container">
-        <!-- start row -->
+
+        <!-- start row 页面内容-->
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all" style="background-color:#fff">
             <div class="col-md-12">
-                    <form  id="submit_form"
-                          method="post" data-parsley-validate="">
-                        <div class="row">
-                            <div class="col-md-12 panel panel-color panel-success" style="padding-left:0px;padding-right:0px">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">财务信息 维护</h3>
-                                </div>
-                                <div class="panel-body">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group m-b-20">
-                                                <label>EC账号</label>：xycr11
-                                            </div>
-
-                                            <div class="form-group m-b-20">
-                                                <label for="price">移动单价<span class="text-danger">*</span>&nbsp;</label>
-                                                <input id="price" type="password"  class="form-control"
-                                                       required="" data-parsley-length="[1,30]" autocomplete="off"
-                                                       placeholder="移动单价">
-                                            </div>
-                                            <div class="form-group m-b-20">
-                                                <label for="price">联通单价<span class="text-danger">*</span>&nbsp;</label>
-                                                <input id="price" type="password"  class="form-control"
-                                                       required="" data-parsley-length="[1,30]" autocomplete="off"
-                                                       placeholder="联通单价">
-                                            </div>
-                                            <div class="form-group m-b-20">
-                                                <label for="price">电信单价<span class="text-danger">*</span>&nbsp;</label>
-                                                <input id="price" type="password"  class="form-control"
-                                                       required="" data-parsley-length="[1,30]" autocomplete="off"
-                                                       placeholder="电信单价">
-                                            </div>
+                <form id="submit_form"
+                      method="post" data-parsley-validate="">
+                    <div class="row">
+                        <div class="col-md-12 panel panel-color panel-success"
+                             style="padding-left:0px;padding-right:0px">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">业务账号财务信息 维护</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group m-b-20">
+                                            <label>业务账号名称</label>：星语-移动-信用卡(小舟dj)
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group m-b-20">
-                                                <label>账号名称</label>：星语-移动-信用卡(小舟dj)
+                                        <div class="form-group m-b-20">
+                                            <label for="price">移动单价<span class="text-danger">*</span>&nbsp;</label>
+                                            <input id="price" type="password" class="form-control"
+                                                   required="" data-parsley-length="[1,30]" autocomplete="off"
+                                                   placeholder="移动单价">
+                                        </div>
+                                        <div class="form-group m-b-20">
+                                            <label for="price2">联通单价<span class="text-danger">*</span>&nbsp;</label>
+                                            <input id="price2" type="password" class="form-control"
+                                                   required="" data-parsley-length="[1,30]" autocomplete="off"
+                                                   placeholder="联通单价">
+                                        </div>
+                                        <div class="form-group m-b-20">
+                                            <label for="price1">电信单价<span class="text-danger">*</span>&nbsp;</label>
+                                            <input id="price1" type="password" class="form-control"
+                                                   required="" data-parsley-length="[1,30]" autocomplete="off"
+                                                   placeholder="电信单价">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group m-b-20">
+                                            <label>业务账号</label>：xycr11
+                                        </div>
+                                        <div class="form-group m-b-20">
+                                            <label for="style">付费方式<span class="text-danger">*</span>&nbsp;</label>
+                                            <input id="style" type="password" class="form-control"
+                                                   required="" data-parsley-length="[1,30]" autocomplete="off"
+                                                   placeholder="付费方式">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="jf">计费方式<span class="text-danger">*</span></label>
+                                            <input id="jf" type="text" class="form-control"
+                                                   required="" data-parsley-length="[4,30]" autocomplete="off"
+                                                   placeholder="计费方式">
+                                        </div>
+                                        <div class="form-group m-b-20">
+                                            <label>冻结金额返还时间</label><br><br>
+                                            <div class="radio radio-info radio-inline">
+                                                <input type="radio" id="active1" name="active" value="1" checked
+                                                       required="">
+                                                <label for="active1"> 次日返还 </label>
                                             </div>
-                                            <div class="form-group m-b-20">
-                                                <label for="style">付费方式<span class="text-danger">*</span>&nbsp;</label>
-                                                <input id="style" type="password"  class="form-control"
-                                                       required="" data-parsley-length="[1,30]" autocomplete="off"
-                                                       placeholder="付费方式">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="jf">计费方式<span class="text-danger">*</span></label>
-                                                <input id="jf" type="text"  class="form-control"
-                                                       required="" data-parsley-length="[4,30]" autocomplete="off"
-                                                       placeholder="计费方式">
-                                            </div>
-                                            <div class="form-group m-b-20">
-                                                <label>冻结金额返还时间</label>
-                                                <div class="radio radio-info radio-inline">
-                                                    <input type="radio" id="active1" name="active" value="1" checked
-                                                           required="">
-                                                    <label for="active1"> 次日返还 </label>
-                                                </div>
-                                                <div class="radio radio-info radio-inline">
-                                                    <input type="radio" id="active0" name="active" value="0">
-                                                    <label for="active0"> 三日返还 </label>
-                                                </div>
+                                            <div class="radio radio-info radio-inline">
+                                                <input type="radio" id="active0" name="active" value="0">
+                                                <label for="active0"> 三日返还 </label>
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
-                            </div> <!-- end col -->
-                        </div> <!-- end row -->
-                        <div class="text-center" style="margin-bottom:20px">
-                            <a  th:href="@{/ec/customer/channel/account/edit/finance/id}" type="button" class="btn btn-teal waves-effect waves-light">提交</a>
-                            <a class="btn btn-default waves-effect waves-light" style="margin-left:10px">查看明细</a>
-                        </div>
-                    </form>
-                    <!-- end form -->
+                                <div class="text-center" style="margin-bottom:20px">
+                                    <a th:href="@{/ec/customer/channel/account/edit/finance/id}" type="button"
+                                       class="btn btn-teal waves-effect waves-light">提交</a>
+                                </div>
+                            </div>
+                        </div> <!-- end col -->
+                    </div> <!-- end row -->
 
-                </div> <!-- end card-box -->
-            </div> <!-- end col -->
-        </div>
+                </form>
+                <!-- end form -->
+
+            </div> <!-- end card-box -->
+        </div> <!-- end col -->
         <!-- end row -->
 
+        <!-- start row  错误提示-->
         <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
 
     </div> <!-- container -->
 </div> <!-- content -->
@@ -107,6 +111,9 @@
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
+
+
+
 </script>
 </body>
 </html>

@@ -14,7 +14,7 @@
 <!-- Loader end -->
 
 <!-- Start content -->
-<div class="content" style="margin-top:10px">
+<div class="content">
     <div class="container">
 
         <!-- start row  页面数据-->
@@ -42,6 +42,7 @@
                                                     <span class="text-danger"
                                                           th:if="${parameter.isNull == '1'}">*</span>
                                                 </label>
+
                                                 <input th:if="${(parameter.dataType == 'STRING' && parameter.showType == 'text')}"
                                                        th:id="${parameter.paramKey}"
                                                        type="text" th:name="${parameter.paramKey}"
@@ -69,7 +70,18 @@
                                                        th:value="${keyValueMap[parameter.paramKey]}"
                                                        class="form-control" autocomplete="off">
                                                 <mpm:tag
-                                                        th:if="${(parameter.showType != 'text' && !#strings.isEmpty(parameter.dictEnable))}"
+                                                        th:if="${(parameter.showType == 'select' && !#strings.isEmpty(parameter.dictEnable))}"
+                                                        th:id="${parameter.paramKey}"
+                                                        th:identity="${parameter.dictEnable}"
+                                                        th:name="${parameter.paramKey}"
+                                                        th:show-type="${parameter.showType}" key="code"
+                                                        class="form-control"
+                                                        th:value="${keyValueMap[parameter.paramKey]}"
+                                                        th:title="${parameter.paramTitle}"
+                                                        th:required="${parameter.isNull == '1'?true:false}"/>
+                                                <div th:if="${(parameter.showType == 'checkbox' && !#strings.isEmpty(parameter.dictEnable))}"><br></div>
+                                                <mpm:tag
+                                                        th:if="${(parameter.showType == 'checkbox' && !#strings.isEmpty(parameter.dictEnable))}"
                                                         th:id="${parameter.paramKey}"
                                                         th:identity="${parameter.dictEnable}"
                                                         th:name="${parameter.paramKey}"

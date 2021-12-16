@@ -81,100 +81,108 @@ public class ChannelAccountController {
         return view;
     }
 
+
+
     /**
-     * 客户通道账号配置
+     * EC业务账号配置中心
      * @return
      */
-    @RequestMapping(value = "/customer/channel/account/config/{type}", method = RequestMethod.GET)
-    public ModelAndView config(@PathVariable String type, HttpServletRequest request) {
-        ModelAndView view = new ModelAndView("customer/channel_account/channel_account_config");
-        view.addObject("type",type);
-        view.addObject("url","/ec/customer/channel/account/edit/"+type+"/id");
-        if("view".equals(type)){
-            view.addObject("url","/ec/customer/channel/account/view/detail/id");
-        }
+    @RequestMapping(value = "/customer/channel/account/edit/center/{accountId}", method = RequestMethod.GET)
+    public ModelAndView edit_center(@PathVariable String accountId, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("customer/channel_account/channel_account_edit_center");
+        return view;
 
+    }
+
+    /**
+     * 业务账号基本信息
+     * @return
+     */
+    @RequestMapping(value = "/customer/channel/account/edit/base/{accountId}", method = RequestMethod.GET)
+    public ModelAndView edit_base(@PathVariable String accountId, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("customer/channel_account/channel_account_edit_base");
+        return view;
+
+    }
+
+    /**
+     * 业务账号财务配置
+     * @return
+     */
+    @RequestMapping(value = "/customer/channel/account/edit/finance/{accountId}", method = RequestMethod.GET)
+    public ModelAndView edit_finance(@PathVariable String accountId, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("customer/channel_account/channel_account_edit_finance");
+        return view;
+
+    }
+
+    /**
+     * 业务账号接口配置
+     * @return
+     */
+    @RequestMapping(value = "/customer/channel/account/edit/interface/{accountId}", method = RequestMethod.GET)
+    public ModelAndView edit_interface(@PathVariable String accountId, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("customer/channel_account/channel_account_edit_interface");
+        return view;
+
+    }
+
+    /**
+     * 业务账号产品配置
+     * @return
+     */
+    @RequestMapping(value = "/customer/channel/account/edit/product/{accountId}", method = RequestMethod.GET)
+    public ModelAndView edit_product(@PathVariable String accountId, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("customer/channel_account/channel_account_edit_product");
+        return view;
+
+    }
+    /**
+     * 业务账号通道配置
+     * @return
+     */
+    @RequestMapping(value = "/customer/channel/account/edit/channel/{accountId}", method = RequestMethod.GET)
+    public ModelAndView edit_channel(@PathVariable String accountId, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("customer/channel_account/channel_account_edit_channel");
         return view;
 
     }
 
 
     /**
-     * 客户通道账号中心
+     * EC业务账号中心
      * @return
      */
-    @RequestMapping(value = "/customer/channel/account/center/{type}", method = RequestMethod.GET)
-    public ModelAndView center(@PathVariable String type, HttpServletRequest request) {
-        ModelAndView view = new ModelAndView("customer/channel_account/channel_account_"+type+"_center");
+    @RequestMapping(value = "/customer/channel/account/center/{enterpriseId}", method = RequestMethod.GET)
+    public ModelAndView center(@PathVariable String enterpriseId, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("customer/channel_account/channel_account_account_center");
 
         return view;
 
     }
 
     /**
-     * 客户通道账号明细
+     * EC业务账号查看中心
      * @return
      */
-    @RequestMapping(value = "/customer/channel/account/view/{type}/{id}", method = RequestMethod.GET)
-    public ModelAndView view(@PathVariable String type,@PathVariable String id, HttpServletRequest request) {
-        ModelAndView view = new ModelAndView("customer/channel_account/channel_account_view");
+    @RequestMapping(value = "/customer/channel/account/view/center/{accountId}", method = RequestMethod.GET)
+    public ModelAndView view(@PathVariable String accountId, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("customer/channel_account/channel_account_view_center");
 
         return view;
 
     }
 
     /**
-     * 客户通道账号中心
+     * EC业务账号查看中心
      * @return
      */
-    @RequestMapping(value = "/customer/channel/account/edit/{type}/{id}", method = RequestMethod.GET)
-    public ModelAndView baseEdit(@PathVariable String type,@PathVariable String id, HttpServletRequest request) {
-        ModelAndView view = new ModelAndView("customer/channel_account/channel_account_edit_"+type);
+    @RequestMapping(value = "/customer/channel/account/view/base/{accountId}", method = RequestMethod.GET)
+    public ModelAndView view_base(@PathVariable String accountId, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("customer/channel_account/channel_account_view_base");
+
         return view;
 
     }
 
-    /**
-     * 客户通道账号操作记录
-     * @return
-     */
-    @RequestMapping(value = "/customer/channel/account/operate/record", method = RequestMethod.GET)
-    public ModelAndView record() {
-        ModelAndView view = new ModelAndView("customer/channel_account/channel_account_operate_record");
-
-        //查询数据
-        PageParams params = new PageParams<>();
-        params.setPages(3);
-        params.setPageSize(10);
-        params.setStartRow(1);
-        params.setEndRow(10);
-        params.setCurrentPage(1);
-        params.setTotalRows(22);
-
-        view.addObject("pageParams",params);
-        return view;
-
-    }
-
-    /**
-     * 客户通道账号操作记录分页
-     * @return
-     */
-    @RequestMapping(value = "/customer/channel/account/operate/page", method = RequestMethod.POST)
-    public ModelAndView record_page() {
-        ModelAndView view = new ModelAndView("customer/channel_account/channel_account_operate_record");
-
-        //查询数据
-        PageParams params = new PageParams<>();
-        params.setPages(3);
-        params.setPageSize(10);
-        params.setStartRow(1);
-        params.setEndRow(10);
-        params.setCurrentPage(1);
-        params.setTotalRows(22);
-
-        view.addObject("pageParams",params);
-        return view;
-
-    }
 }

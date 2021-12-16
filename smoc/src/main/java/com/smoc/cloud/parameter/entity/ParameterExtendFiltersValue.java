@@ -24,7 +24,7 @@ public class ParameterExtendFiltersValue {
     @Column(name = "PARAM_KEY", nullable = false, length = 32)
     private String paramKey;
 
-    @Column(name = "PARAM_VALUE", nullable = false, length = 128)
+    @Column(name = "PARAM_VALUE", nullable = false, length = 512)
     private String paramValue;
 
     @Column(name = "CREATED_BY", nullable = false, length = 32)
