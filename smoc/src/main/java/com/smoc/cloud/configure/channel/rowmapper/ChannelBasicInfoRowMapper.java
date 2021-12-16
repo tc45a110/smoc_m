@@ -8,7 +8,6 @@ import java.sql.SQLException;
 
 /**
  * 复杂查询对象封装
- * 2020/5/9 18:59
  **/
 public class ChannelBasicInfoRowMapper implements RowMapper<ChannelBasicInfoValidator> {
 

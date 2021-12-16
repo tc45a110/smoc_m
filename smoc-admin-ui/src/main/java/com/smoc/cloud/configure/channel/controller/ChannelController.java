@@ -5,11 +5,11 @@ import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
 import com.smoc.cloud.common.auth.qo.Dict;
 import com.smoc.cloud.common.auth.qo.DictType;
+import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelBasicInfoValidator;
-import com.smoc.cloud.common.smoc.configuate.validator.ChannelInterfaceValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.common.validator.MpmIdValidator;
@@ -23,10 +23,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -58,20 +55,26 @@ public class ChannelController {
     public ModelAndView userProfile(HttpServletRequest request) {
 
         ModelAndView view = new ModelAndView("configure/channel/channel_list");
-
-        //查询数据
-        PageParams params = new PageParams<>();
-        params.setPages(10);
+/*
+        ///初始化数据
+        PageParams<ChannelBasicInfoValidator> params = new PageParams<ChannelBasicInfoValidator>();
         params.setPageSize(8);
-        params.setStartRow(1);
-        params.setEndRow(10);
         params.setCurrentPage(1);
-        params.setTotalRows(80);
+        ChannelBasicInfoValidator channelBasicInfoValidator = new ChannelBasicInfoValidator();
+        params.setParams(channelBasicInfoValidator);
 
-        view.addObject("pageParams", params);
+        //查询
+        ResponseData<PageList<ChannelBasicInfoValidator>> data = channelService.page(params);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("channelBasicInfoValidator", channelBasicInfoValidator);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());*/
 
         return view;
-
     }
 
     /**
@@ -80,22 +83,23 @@ public class ChannelController {
      * @return
      */
     @RequestMapping(value = "/page", method = RequestMethod.POST)
-    public ModelAndView page() {
+    public ModelAndView page(@ModelAttribute ChannelBasicInfoValidator channelBasicInfoValidator, PageParams pageParams) {
         ModelAndView view = new ModelAndView("configure/channel/channel_list");
+/*
+        //分页查询
+        pageParams.setParams(channelBasicInfoValidator);
 
-        //查询数据
-        PageParams params = new PageParams<>();
-        params.setPages(10);
-        params.setPageSize(8);
-        params.setStartRow(1);
-        params.setEndRow(10);
-        params.setCurrentPage(1);
-        params.setTotalRows(80);
+        ResponseData<PageList<ChannelBasicInfoValidator>> data = channelService.page(pageParams);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
 
-        view.addObject("pageParams", params);
+        view.addObject("channelBasicInfoValidator", channelBasicInfoValidator);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());*/
 
         return view;
-
     }
 
     /**
@@ -263,110 +267,6 @@ public class ChannelController {
     }
 
     /**
-     * 通道接口信息维护
-     *
-     * @return
-     */
-    @RequestMapping(value = "/edit/interface/{id}", method = RequestMethod.GET)
-    public ModelAndView detail(@PathVariable String id, HttpServletRequest request) {
-
-        ModelAndView view = new ModelAndView("configure/channel/channel_edit_interface");
-
-        //完成参数规则验证
-        MpmIdValidator validator = new MpmIdValidator();
-        validator.setId(id);
-        if (!MpmValidatorUtil.validate(validator)) {
-            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
-            return view;
-        }
-
-        //op操作标记，add表示添加，edit表示修改
-        view.addObject("op", "add");
-
-        //查询通道数据是否存在
-        ResponseData<ChannelBasicInfoValidator> data = channelService.findById(id);
-        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            view.addObject("error", data.getCode() + ":" + data.getMessage());
-            return view;
-        }
-
-        //查询通道接口参数
-        ResponseData<ChannelInterfaceValidator> channelInterfaceData = channelService.findChannelInterfaceByChannelId(data.getData().getChannelId());
-        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            view.addObject("error", data.getCode() + ":" + data.getMessage());
-            return view;
-        }
-
-        //有值代表是修改
-        if (!StringUtils.isEmpty(channelInterfaceData.getData())) {
-            view.addObject("op", "edit");
-            view.addObject("channelInterfaceValidator", channelInterfaceData.getData());
-            return view;
-        }
-
-        //添加：初始化数据
-        ChannelInterfaceValidator channelInterfaceValidator = new ChannelInterfaceValidator();
-        channelInterfaceValidator.setId(UUID.uuid32());
-        channelInterfaceValidator.setChannelId(data.getData().getChannelId());
-
-        view.addObject("channelInterfaceValidator", channelInterfaceValidator);
-
-        return view;
-    }
-
-    /**
-     * 通道接口信息维护保存
-     *
-     * @return
-     */
-    @RequestMapping(value = "/interfaceSave/{op}", method = RequestMethod.POST)
-    public ModelAndView interfaceSave(@ModelAttribute @Validated ChannelInterfaceValidator channelInterfaceValidator, BindingResult result, @PathVariable String op, HttpServletRequest request) {
-
-        ModelAndView view = new ModelAndView("configure/channel/channel_edit_interface");
-
-        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
-
-        //完成参数规则验证
-        if (result.hasErrors()) {
-            view.addObject("channelInterfaceValidator", channelInterfaceValidator);
-            view.addObject("op", op);
-            return view;
-        }
-
-        //初始化其他变量
-        if (!StringUtils.isEmpty(op) && "add".equals(op)) {
-            channelInterfaceValidator.setCreatedTime(DateTimeUtils.getDateTimeFormat(new Date()));
-            channelInterfaceValidator.setCreatedBy(user.getRealName());
-        } else if (!StringUtils.isEmpty(op) && "edit".equals(op)) {
-            channelInterfaceValidator.setUpdatedTime(new Date());
-            channelInterfaceValidator.setUpdatedBy(user.getRealName());
-        } else {
-            view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":" + ResponseCode.PARAM_LINK_ERROR.getMessage());
-            return view;
-        }
-
-        //保存数据
-        ResponseData data = channelService.interfaceSave(channelInterfaceValidator, op);
-        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            view.addObject("error", data.getCode() + ":" + data.getMessage());
-            return view;
-        }
-
-        //保存操作记录
-        if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            systemUserLogService.logsAsync("CHANNEL_INTERFACE", channelInterfaceValidator.getChannelId(), "add".equals(op) ? channelInterfaceValidator.getCreatedBy() : channelInterfaceValidator.getUpdatedBy(), op, "add".equals(op) ? "添加通道接口参数" : "修改通道接口参数", JSON.toJSONString(channelInterfaceValidator));
-        }
-
-        //记录日志
-        log.info("[通道管理][通道接口参数][{}][{}]数据:{}", op, user.getUserName(), JSON.toJSONString(channelInterfaceValidator));
-
-        view.addObject("channelInterfaceValidator", channelInterfaceValidator);
-        view.addObject("op", "edit");
-
-        return view;
-    }
-
-    /**
      * 通道过滤信息维护
      *
      * @return
@@ -378,55 +278,6 @@ public class ChannelController {
 
         return view;
 
-    }
-
-    /**
-     * 计价设置
-     *
-     * @return
-     */
-    @RequestMapping(value = "/edit/price/{id}", method = RequestMethod.GET)
-    public ModelAndView price(@PathVariable String id, HttpServletRequest request) {
-
-        ModelAndView view = new ModelAndView("configure/channel/channel_edit_price");
-
-        //完成参数规则验证
-        MpmIdValidator validator = new MpmIdValidator();
-        validator.setId(id);
-        if (!MpmValidatorUtil.validate(validator)) {
-            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
-            return view;
-        }
-
-        //查询数据
-        ResponseData<ChannelBasicInfoValidator> data = channelService.findById(id);
-        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            view.addObject("error", data.getCode() + ":" + data.getMessage());
-            return view;
-        }
-
-        ChannelBasicInfoValidator channelBasicInfoValidator = data.getData();
-
-        String supportAreaCodes = "";
-        //分省
-        if ("PROVINCE".equals(channelBasicInfoValidator.getBusinessAreaType())) {
-            supportAreaCodes = channelBasicInfoValidator.getProvince();
-        }
-        //国际
-        if ("INTERNATIONAL".equals(channelBasicInfoValidator.getBusinessAreaType())) {
-            supportAreaCodes = channelBasicInfoValidator.getSupportAreaCodes();
-        }
-        String[] strArray = null;
-        if (!StringUtils.isEmpty(supportAreaCodes)) {
-            strArray = supportAreaCodes.split(",");
-        }
-        view.addObject("list", strArray);
-        view.addObject("supportAreaCodes", channelBasicInfoValidator.getBusinessAreaType());
-
-        //op操作标记，add表示添加，edit表示修改
-        view.addObject("op", "add");
-
-        return view;
     }
 
     /**

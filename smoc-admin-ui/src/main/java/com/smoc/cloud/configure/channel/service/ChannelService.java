@@ -5,7 +5,6 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelBasicInfoValidator;
-import com.smoc.cloud.common.smoc.configuate.validator.ChannelInterfaceValidator;
 import com.smoc.cloud.configure.channel.remote.ChannelFeignClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +12,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
+
 
 
 /**
@@ -71,32 +71,4 @@ public class ChannelService {
         }
     }
 
-    /**
-     * 根据通道id获取通道接口参数
-     * @param id
-     * @return
-     */
-    public ResponseData<ChannelInterfaceValidator> findChannelInterfaceByChannelId(String id) {
-        try {
-            ResponseData<ChannelInterfaceValidator> data = this.channelFeignClient.findChannelInterfaceByChannelId(id);
-            return data;
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseDataUtil.buildError(e.getMessage());
-        }
-    }
-
-    /**
-     * 保存、修改通道接口参数
-     * op 是类型 表示了保存或修改
-     */
-    public ResponseData interfaceSave(ChannelInterfaceValidator channelInterfaceValidator, String op) {
-        try {
-            ResponseData data = this.channelFeignClient.interfaceSave(channelInterfaceValidator, op);
-            return data;
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseDataUtil.buildError(e.getMessage());
-        }
-    }
 }
