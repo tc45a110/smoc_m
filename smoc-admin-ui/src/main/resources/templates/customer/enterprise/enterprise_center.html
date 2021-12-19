@@ -81,8 +81,8 @@
                                         </p>
                                     </div>
                                     <div>
-                                        <a sec:authorize-url="/ec/customer/base_info/edit/*/*"
-                                           th:href="@{/ec/customer/base_info/edit/1/0000}"
+                                        <a sec:authorize-url="/enterprise/edit/*/*"
+                                           th:href="@{/enterprise/edit/1/0000}"
                                            class="btn btn-info waves-effect waves-light m-l-10 btn-sm">
                                             <i class="mdi mdi-table-edit" style="margin-right:5px"></i>编辑企业</a>
                                         <a data-toggle="modal" data-target="#confirm-modal"
@@ -175,12 +175,12 @@
                                 <div class="col-md-12 col-sm-12">
                                     <h4>EC详细信息
                                         <div class="pull-right" style="margin-top: -12px;">
-                                            <a sec:authorize-url="/ec/customer/base_info/list"
-                                               th:href="@{/ec/customer/base_info/list}"
+                                            <a sec:authorize-url="/enterprise/list"
+                                               th:href="@{/enterprise/list}"
                                                class="btn btn-default waves-effect waves-light btn-md">
                                                 <i class="glyphicon  glyphicon-share-alt" style="margin-right:5px"></i>
                                                 返回企业列表</a>
-                                            <a th:href="@{/ec/customer/channel/account/center/account}"
+                                            <a th:href="@{/account/center/account}"
                                                style="margin-left:10px;"
                                                class="btn btn-instagram waves-effect waves-light btn-md">
                                                 <i class="mdi mdi-vector-circle" style="margin-right:5px"></i>

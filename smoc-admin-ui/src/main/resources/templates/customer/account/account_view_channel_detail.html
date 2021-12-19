@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org"
+>
+<head>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
+</head>
+<body>
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content">
+    <div class="container">
+
+        <!-- start row  列表数据-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="panel panel-color panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">业务账号通道状态
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table table-hover m-10" style="margin-top: -12px;">
+                                <thead>
+                                <tr>
+                                    <th>通道ID</th>
+                                    <th>通道名称</th>
+                                    <th>通道权重</th>
+                                    <th>通道优先级</th>
+                                    <th>通道配置来源</th>
+                                    <th>通道变更来源</th>
+                                    <th>应用状态</th>
+                                    <th>配置时间</th>
+                                    <th>配置人</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        TD1000083
+                                    </td>
+                                    <td>
+                                        联通特别通道
+                                    </td>
+                                    <td>10</td>
+                                    <td>
+                                        <a class="btn btn-success btn-rounded btn-sm waves-effect waves-light">特权</a>
+                                    </td>
+                                    <td>通道切换</td>
+                                    <td>通道切换</td>
+                                    <td><a class="btn btn-teal btn-rounded btn-sm waves-effect waves-light">生效中</a></td>
+                                    <td>2021-12-12 15:25:36</td>
+                                    <td>吴亮</td>
+                                    <td>
+                                        <a  data-toggle="modal"
+                                            data-target="#confirm-modal" class="on-default remove-row"
+                                            style="padding-left: 5px;color: #f05050"
+                                            title="本业务账号暂停该通道"
+                                        ><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        TD1000083
+                                    </td>
+                                    <td>
+                                        联通特别通道
+                                    </td>
+                                    <td>10</td>
+                                    <td>
+                                        <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">正常</a>
+                                    </td>
+                                    <td>通道配置</td>
+                                    <td></td>
+                                    <td><a class="btn btn-teal btn-rounded btn-sm waves-effect waves-light">生效中</a></td>
+                                    <td>2021-12-12 15:25:36</td>
+                                    <td>吴亮</td>
+                                    <td>
+                                        <a  data-toggle="modal"
+                                            data-target="#confirm-modal" class="on-default remove-row"
+                                            style="padding-left: 5px;color: #f05050"
+                                            title="本业务账号暂停该通道"
+                                        ><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        TD1000083
+                                    </td>
+                                    <td>
+                                        移动通道例子
+                                    </td>
+                                    <td>10</td>
+                                    <td>
+                                        <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">正常</a>
+                                    </td>
+                                    <td>通道配置</td>
+                                    <td></td>
+                                    <td><a class="btn btn-teal btn-rounded btn-sm waves-effect waves-light">生效中</a></td>
+                                    <td>2021-12-12 15:25:36</td>
+                                    <td>吴亮</td>
+                                    <td>
+                                        <a  data-toggle="modal"
+                                            data-target="#confirm-modal" class="on-default remove-row"
+                                            style="padding-left: 5px;color: #f05050"
+                                            title="本业务账号暂停该通道"
+                                        ><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        TD1000083
+                                    </td>
+                                    <td>
+                                        移动通道例子
+                                    </td>
+                                    <td>10</td>
+                                    <td>
+                                        <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">正常</a>
+                                    </td>
+                                    <td>产品配置</td>
+                                    <td></td>
+                                    <td><a class="btn btn-teal btn-rounded btn-sm waves-effect waves-light">生效中</a></td>
+                                    <td>2021-12-12 15:25:36</td>
+                                    <td>吴亮</td>
+                                    <td>
+                                        <a  data-toggle="modal"
+                                            data-target="#confirm-modal" class="on-default remove-row"
+                                            style="padding-left: 5px;color: #f05050"
+                                            title="本业务账号暂停该通道"
+                                        ><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        TD1000083
+                                    </td>
+                                    <td>
+                                        移动通道例子
+                                    </td>
+                                    <td>10</td>
+                                    <td>
+                                        <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">正常</a>
+                                    </td>
+                                    <td>产品配置</td>
+                                    <td></td>
+                                    <td><a class="btn btn-teal btn-rounded btn-sm waves-effect waves-light">生效中</a></td>
+                                    <td>2021-12-12 15:25:36</td>
+                                    <td>吴亮</td>
+                                    <td>
+                                        <a  data-toggle="modal"
+                                            data-target="#confirm-modal" class="on-default remove-row"
+                                            style="padding-left: 5px;color: #f05050"
+                                            title="本业务账号暂停该通道"
+                                        ><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        TD1000083
+                                    </td>
+                                    <td>
+                                        移动通道例子
+                                    </td>
+                                    <td>10</td>
+                                    <td>
+                                        <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light">挂起</a>
+                                    </td>
+                                    <td>产品配置</td>
+                                    <td>通道切换</td>
+                                    <td><a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light">已失效</a></td>
+                                    <td>2021-12-12 15:25:36</td>
+                                    <td>吴亮</td>
+                                    <td>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start confirm delete modal  -->
+        <div id="confirm-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="custom-width-modalLabel"
+             aria-hidden="true" style="display: none;margin: 60px">
+            <div class="modal-dialog" style="width:33%;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title" id="custom-width-modalLabel">确认暂定</h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <p>本业务账号暂停该通道！你还是确认暂停？</p>
+
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" id="deleteId">
+                        <a class="btn btn-default waves-effect" data-dismiss="modal">取消</a>
+                        <button class="btn btn-primary waves-effect waves-light">确认暂停</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end confirm delete modal  -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+    </div><!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<script th:src="@{/static/plugins/moment/moment.js}"></script>
+
+<script>
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+</script>
+</body>
+</html>

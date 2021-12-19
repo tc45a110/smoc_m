@@ -40,7 +40,7 @@
         <div class="row" style="position: relative;margin-top: 80px" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
                 <div class="card-box">
-                    <form th:action="@{/ec/customer/base_info/page}" id="query_form" method="post">
+                    <form th:action="@{/enterprise/page}" id="query_form" method="post">
                         <div class="row m-b-60">
                             <div class="col-sm-12">
                                 <div class="form-group  col-sm-3">
@@ -68,12 +68,12 @@
                                              class="form-control" data-icon="mdi mdi-view-module" title="对接主体公司"/>
                                 </div>
                                 <div class="form-group col-sm-4 pull-right" style="text-align: right">
-                                    <button sec:authorize-url="/ec/customer/base_info/page" type="submit"
+                                    <button sec:authorize-url="/enterprise/page" type="submit"
                                             class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search" style="margin-right:5px"></i> 查询
                                     </button>
-                                    <a sec:authorize-url="/ec/customer/base_info/edit/*/*"
-                                       th:href="@{/ec/customer/base_info/edit/1/0000}"
+                                    <a sec:authorize-url="/enterprise/edit/*/*"
+                                       th:href="@{/enterprise/edit/1/0000}"
                                        class="btn btn-success waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>企业开户</a>
                                     <a id="help_display" style="margin-left:10px"><i class="mdi mdi-help-circle-outline"
@@ -126,7 +126,7 @@
                                 <tbody>
                                 <tr>
                                     <td>
-                                        <a th:href="@{/ec/customer/base_info/center/0000}" data-toggle="tooltip"
+                                        <a th:href="@{/enterprise/center/0000}" data-toggle="tooltip"
                                            data-placement="bottom" title="" data-original-title="跳转到企业信息中心"> <i
                                                 class="fa  fa-angle-double-down" style="margin-left:10px;"></i>
                                             <span style="color:#797979">北京星语互联科技有限公司</span></a>
@@ -169,22 +169,22 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <a sec:authorize-url="/ec/customer/base_info/edit/*/*"
-                                           th:href="@{/ec/customer/base_info/edit/2/parentId}"
+                                        <a sec:authorize-url="/enterprise/edit/*/*"
+                                           th:href="@{/enterprise/edit/2/parentId}"
                                            class="on-default edit-row"
                                            style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="修改企业信息"><i
                                                 style="font-size: 18px"
                                                 class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/ec/customer/base_info/center/*"
-                                           th:href="@{/ec/customer/base_info/center/0000}"
+                                        <a sec:authorize-url="/enterprise/center/*"
+                                           th:href="@{/enterprise/center/0000}"
                                            class="on-default edit-row"
                                            style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="企业信息中心"
                                         ><i style="font-size: 18px"
                                             class="glyphicon glyphicon-cog"></i></a>
-                                        <a sec:authorize-url="/ec/customer/base_info/edit/*/*"
-                                           th:href="@{/ec/customer/base_info/edit/2/parentId}"
+                                        <a sec:authorize-url="/enterprise/edit/*/*"
+                                           th:href="@{/enterprise/edit/2/parentId}"
                                            class="on-default edit-row"
                                            style="padding-left: 10px;color: #4bd396;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="新建二级企业"><i
@@ -195,7 +195,7 @@
                                 <tr>
                                     <td>
                                         <div style="float:left;margin-top:-12px;margin-left:13px;width:25px;height:25px;border-left:1px solid #DCDCDC;border-bottom:1px solid #DCDCDC"></div>
-                                        <a style="float:left" th:href="@{/ec/customer/base_info/center/0000}"
+                                        <a style="float:left" th:href="@{/enterprise/center/0000}"
                                            data-toggle="tooltip" data-placement="bottom" title=""
                                            data-original-title="跳转到企业信息中心"> <span style="color:#797979">北京星语互联科技有限公司</span></a></a>
                                     </td>
@@ -232,15 +232,15 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <a sec:authorize-url="/ec/customer/base_info/edit/*/*"
-                                           th:href="@{/ec/customer/base_info/edit/2/parentId}"
+                                        <a sec:authorize-url="/enterprise/edit/*/*"
+                                           th:href="@{/enterprise/edit/2/parentId}"
                                            class="on-default edit-row"
                                            style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="修改企业信息"><i
                                                 style="font-size: 18px"
                                                 class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/ec/customer/base_info/center/*"
-                                           th:href="@{/ec/customer/base_info/center/0000}"
+                                        <a sec:authorize-url="/enterprise/center/*"
+                                           th:href="@{/enterprise/center/0000}"
                                            class="on-default edit-row"
                                            style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="企业信息中心"
@@ -252,7 +252,7 @@
                                 <tr>
                                     <td>
                                         <div style="float:left;margin-top:-12px;margin-left:13px;width:25px;height:25px;border-left:1px solid #DCDCDC;border-bottom:1px solid #DCDCDC"></div>
-                                        <a style="float:left" th:href="@{/ec/customer/base_info/center/0000}"
+                                        <a style="float:left" th:href="@{/enterprise/center/0000}"
                                            data-toggle="tooltip" data-placement="bottom" title=""
                                            data-original-title="跳转到企业信息中心"><span style="color:#797979">北京星语互联科技有限公司</span></a>
                                     </td>
@@ -289,15 +289,15 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <a sec:authorize-url="/ec/customer/base_info/edit/*/*"
-                                           th:href="@{/ec/customer/base_info/edit/2/parentId}"
+                                        <a sec:authorize-url="/enterprise/edit/*/*"
+                                           th:href="@{/enterprise/edit/2/parentId}"
                                            class="on-default edit-row"
                                            style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="修改企业信息"><i
                                                 style="font-size: 18px"
                                                 class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/ec/customer/base_info/center/*"
-                                           th:href="@{/ec/customer/base_info/center/0000}"
+                                        <a sec:authorize-url="/enterprise/center/*"
+                                           th:href="@{/enterprise/center/0000}"
                                            class="on-default edit-row"
                                            style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="企业信息中心"
@@ -308,7 +308,7 @@
                                 <tr>
                                     <td>
                                         <div style="float:left;margin-top:-12px;margin-left:13px;width:25px;height:25px;border-left:1px solid #DCDCDC;border-bottom:1px solid #DCDCDC"></div>
-                                        <a style="float:left" th:href="@{/ec/customer/base_info/center/0000}"
+                                        <a style="float:left" th:href="@{/enterprise/center/0000}"
                                            data-toggle="tooltip" data-placement="bottom" title=""
                                            data-original-title="跳转到企业信息中心"><span style="color:#797979">北京星语互联科技有限公司</span></a>
                                     </td>
@@ -345,15 +345,15 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <a sec:authorize-url="/ec/customer/base_info/edit/*/*"
-                                           th:href="@{/ec/customer/base_info/edit/2/parentId}"
+                                        <a sec:authorize-url="/enterprise/edit/*/*"
+                                           th:href="@{/enterprise/edit/2/parentId}"
                                            class="on-default edit-row"
                                            style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="修改企业信息"><i
                                                 style="font-size: 18px"
                                                 class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/ec/customer/base_info/center/*"
-                                           th:href="@{/ec/customer/base_info/center/0000}"
+                                        <a sec:authorize-url="/enterprise/center/*"
+                                           th:href="@{/enterprise/center/0000}"
                                            class="on-default edit-row"
                                            style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="企业信息中心"
@@ -364,7 +364,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <a th:href="@{/ec/customer/base_info/center/0000}" data-toggle="tooltip"
+                                        <a th:href="@{/enterprise/center/0000}" data-toggle="tooltip"
                                            data-placement="bottom" title="" data-original-title="跳转到企业信息中心"> <i
                                                 class="mdi mdi-crosshairs" style="margin-left:10px;"></i>
                                             <span style="color:#797979">北京星语互联科技有限公司</span></a>
@@ -402,15 +402,15 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <a sec:authorize-url="/ec/customer/base_info/edit/*/*"
-                                           th:href="@{/ec/customer/base_info/edit/2/parentId}"
+                                        <a sec:authorize-url="/enterprise/edit/*/*"
+                                           th:href="@{/enterprise/edit/2/parentId}"
                                            class="on-default edit-row"
                                            style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="修改企业信息"><i
                                                 style="font-size: 18px"
                                                 class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/ec/customer/base_info/center/*"
-                                           th:href="@{/ec/customer/base_info/center/0000}"
+                                        <a sec:authorize-url="/enterprise/center/*"
+                                           th:href="@{/enterprise/center/0000}"
                                            class="on-default edit-row"
                                            style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="企业信息中心"
@@ -420,7 +420,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <a th:href="@{/ec/customer/base_info/center/0000}" data-toggle="tooltip"
+                                        <a th:href="@{/enterprise/center/0000}" data-toggle="tooltip"
                                            data-placement="bottom" title="" data-original-title="跳转到企业信息中心"> <i
                                                 class="fa  fa-angle-double-down" style="margin-left:10px;"></i>
                                             <span style="color:#797979">北京星语互联科技有限公司</span></a>
@@ -456,22 +456,22 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <a sec:authorize-url="/ec/customer/base_info/edit/*/*"
-                                           th:href="@{/ec/customer/base_info/edit/2/parentId}"
+                                        <a sec:authorize-url="/enterprise/edit/*/*"
+                                           th:href="@{/enterprise/edit/2/parentId}"
                                            class="on-default edit-row"
                                            style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="修改企业信息"><i
                                                 style="font-size: 18px"
                                                 class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/ec/customer/base_info/center/*"
-                                           th:href="@{/ec/customer/base_info/center/0000}"
+                                        <a sec:authorize-url="/enterprise/center/*"
+                                           th:href="@{/enterprise/center/0000}"
                                            class="on-default edit-row"
                                            style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="企业信息中心"
                                         ><i style="font-size: 18px"
                                             class="glyphicon glyphicon-cog"></i></a>
-                                        <a sec:authorize-url="/ec/customer/base_info/edit/*/*"
-                                           th:href="@{/ec/customer/base_info/edit/2/parentId}"
+                                        <a sec:authorize-url="/enterprise/edit/*/*"
+                                           th:href="@{/enterprise/edit/2/parentId}"
                                            class="on-default edit-row"
                                            style="padding-left: 10px;color: #4bd396;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="新建二级企业"><i
@@ -482,7 +482,7 @@
                                 <tr>
                                     <td>
                                         <div style="float:left;margin-top:-12px;margin-left:13px;width:25px;height:25px;border-left:1px solid #DCDCDC;border-bottom:1px solid #DCDCDC"></div>
-                                        <a style="float:left" th:href="@{/ec/customer/base_info/center/0000}"
+                                        <a style="float:left" th:href="@{/enterprise/center/0000}"
                                            data-toggle="tooltip" data-placement="bottom" title=""
                                            data-original-title="跳转到企业信息中心"><span style="color:#797979">北京星语互联科技有限公司</span></a>
                                     </td>
@@ -519,15 +519,15 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <a sec:authorize-url="/ec/customer/base_info/edit/*/*"
-                                           th:href="@{/ec/customer/base_info/edit/2/parentId}"
+                                        <a sec:authorize-url="/enterprise/edit/*/*"
+                                           th:href="@{/enterprise/edit/2/parentId}"
                                            class="on-default edit-row"
                                            style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="修改企业信息"><i
                                                 style="font-size: 18px"
                                                 class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/ec/customer/base_info/center/*"
-                                           th:href="@{/ec/customer/base_info/center/0000}"
+                                        <a sec:authorize-url="/enterprise/center/*"
+                                           th:href="@{/enterprise/center/0000}"
                                            class="on-default edit-row"
                                            style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="企业信息中心"
@@ -538,7 +538,7 @@
                                 <tr>
                                     <td>
                                         <div style="float:left;margin-top:-12px;margin-left:13px;width:25px;height:25px;border-left:1px solid #DCDCDC;border-bottom:1px solid #DCDCDC"></div>
-                                        <a style="float:left" th:href="@{/ec/customer/base_info/center/0000}"
+                                        <a style="float:left" th:href="@{/enterprise/center/0000}"
                                            data-toggle="tooltip" data-placement="bottom" title=""
                                            data-original-title="跳转到企业信息中心"><span style="color:#797979">北京星语互联科技有限公司</span></a>
                                     </td>
@@ -575,15 +575,15 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <a sec:authorize-url="/ec/customer/base_info/edit/*/*"
-                                           th:href="@{/ec/customer/base_info/edit/2/parentId}"
+                                        <a sec:authorize-url="/enterprise/edit/*/*"
+                                           th:href="@{/enterprise/edit/2/parentId}"
                                            class="on-default edit-row"
                                            style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="修改企业信息"><i
                                                 style="font-size: 18px"
                                                 class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/ec/customer/base_info/center/*"
-                                           th:href="@{/ec/customer/base_info/center/0000}"
+                                        <a sec:authorize-url="/enterprise/center/*"
+                                           th:href="@{/enterprise/center/0000}"
                                            class="on-default edit-row"
                                            style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="企业信息中心"
@@ -594,7 +594,7 @@
                                 <tr>
                                     <td>
                                         <div style="float:left;margin-top:-12px;margin-left:13px;width:25px;height:25px;border-left:1px solid #DCDCDC;border-bottom:1px solid #DCDCDC"></div>
-                                        <a style="float:left" th:href="@{/ec/customer/base_info/center/0000}"
+                                        <a style="float:left" th:href="@{/enterprise/center/0000}"
                                            data-toggle="tooltip" data-placement="bottom" title=""
                                            data-original-title="跳转到企业信息中心"><span style="color:#797979">北京星语互联科技有限公司</span></a>
                                     </td>
@@ -631,15 +631,15 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <a sec:authorize-url="/ec/customer/base_info/edit/*/*"
-                                           th:href="@{/ec/customer/base_info/edit/2/parentId}"
+                                        <a sec:authorize-url="/enterprise/edit/*/*"
+                                           th:href="@{/enterprise/edit/2/parentId}"
                                            class="on-default edit-row"
                                            style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="修改企业信息"><i
                                                 style="font-size: 18px"
                                                 class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/ec/customer/base_info/center/*"
-                                           th:href="@{/ec/customer/base_info/center/0000}"
+                                        <a sec:authorize-url="/enterprise/center/*"
+                                           th:href="@{/enterprise/center/0000}"
                                            class="on-default edit-row"
                                            style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="企业信息中心"

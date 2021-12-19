@@ -44,25 +44,26 @@
                 <div class="card-box">
                     <div class="row">
                         <div class="col-md-12 col-sm-12">
-                            <h4 class="m-b-10">
-                                <div class="pull-right" style="margin-top: -12px;margin-bottom:10px">
-                                    <a sec:authorize-url="/ec/customer/channel/account/list"
-                                       th:href="@{/ec/customer/channel/account/list}"
-                                       class="btn btn-default waves-effect waves-light btn-md">
-                                        <i class="glyphicon  glyphicon-share-alt" style="margin-right:5px"></i>
-                                        返回通道账户列表</a>
-                                    <a th:href="@{/ec/customer/channel/account/center/account}"
-                                       style="margin-left:10px;"
-                                       class="btn btn-instagram waves-effect waves-light btn-md">
-                                        <i class="mdi mdi-vector-circle" style="margin-right:5px"></i>
-                                        EC业务账号中心
-                                    </a>
-                                    <a id="help_display" style="margin-left:10px"><i
-                                            class="mdi mdi-help-circle-outline"></i></a>
-                                </div>
-                            </h4>
-                            <div id="help" class="alert alert-icon alert-success alert-dismissible fade in"
-                                 style="margin-top:20px" role="alert">
+                            <div class="row">
+                                <h4 class="m-b-10">
+                                    <div class="pull-right">
+                                        <a sec:authorize-url="/account/list"
+                                           th:href="@{/account/list}"
+                                           class="btn btn-default waves-effect waves-light btn-md">
+                                            <i class="glyphicon  glyphicon-share-alt" style="margin-right:5px"></i>
+                                            返回通道账户列表</a>
+                                        <a th:href="@{/account/center/account}"
+                                           style="margin-left:10px;"
+                                           class="btn btn-instagram waves-effect waves-light btn-md">
+                                            <i class="mdi mdi-vector-circle" style="margin-right:5px"></i>
+                                            EC业务账号中心
+                                        </a>
+                                        <a id="help_display" style="margin-left:10px"><i
+                                                class="mdi mdi-help-circle-outline"></i></a>
+                                    </div>
+                                </h4>
+                            </div>
+                            <div id="help" class="row alert alert-icon alert-success alert-dismissible fade in" style="margin-top:10px" role="alert">
                                 <button id="help_button" type="button" class="close"
                                         aria-label="Close">
                                     <span>&times;</span>
@@ -71,59 +72,66 @@
                                 <strong>操作提示：</strong> 完成一个通道账户开户工作，要完成下面一系列工作，红色代表没进行设置。
                             </div>
 
-                            <div class="row" style="margin-top:20px">
+                            <div class="row" style="margin-top:10px">
                                 <div class="col-md-12">
                                     <div class="card-box">
                                         <ul class="nav nav-pills m-b-30 pull-right">
                                             <li class="active" id="tab1">
                                                 <a onclick="active('1')"
-                                                   sec:authorize-url="/ec/customer/channel/account/edit/base/*"
-                                                   th:href="@{/ec/customer/channel/account/edit/base/enterpriseId}"
+                                                   sec:authorize-url="/account/edit/base/*"
+                                                   th:href="@{/account/edit/base/accountId}"
                                                    th:target="tab-content"><i class="mdi mdi-star"
                                                                               style="margin-right:5px;color:#f35864"></i>业务账号基本信息
                                                 </a>
                                             </li>
                                             <li class="" id="tab2">
                                                 <a onclick="active('2')"
-                                                   sec:authorize-url="/ec/customer/channel/account/edit/finance/*"
-                                                   th:href="@{/ec/customer/channel/account/edit/finance/enterpriseId}"
+                                                   sec:authorize-url="/account/edit/finance/*"
+                                                   th:href="@{/account/edit/finance/accountId}"
                                                    th:target="tab-content"><i class="mdi mdi-star"
                                                                               style="margin-right:5px;color:#f35864"></i>业务账号财务信息
                                                 </a>
                                             </li>
                                             <li class="" id="tab3">
                                                 <a onclick="active('3')"
-                                                   sec:authorize-url="/ec/customer/channel/account/edit/interface/*"
-                                                   th:href="@{/ec/customer/channel/account/edit/interface/enterpriseId}"
+                                                   sec:authorize-url="/account/edit/interface/*"
+                                                   th:href="@{/account/edit/interface/accountId}"
                                                    th:target="tab-content"><i class="mdi mdi-star"
                                                                               style="margin-right:5px;color:#f35864"></i>业务账号接口信息
                                                 </a>
                                             </li>
                                             <li class="" id="tab4"><a onclick="active('4')" id="a3"
                                                                       sec:authorize-url="/parameter/filter/list/BUSINESS_ACCOUNT_PARAM/*/*"
-                                                                      th:href="@{/parameter/filter/list/BUSINESS_ACCOUNT_PARAM/enterpriseId/6}"
+                                                                      th:href="@{/parameter/filter/list/BUSINESS_ACCOUNT_PARAM/accountId/6}"
                                                                       th:target="tab-content"><i class="mdi mdi-star"
                                                                                                  style="margin-right:5px;color:#f35864"></i>业务账号过滤参数</a>
                                             <li class="" id="tab5">
                                                 <a onclick="active('5')"
-                                                   sec:authorize-url="/ec/customer/channel/account/edit/product/*"
-                                                   th:href="@{/ec/customer/channel/account/edit/product/enterpriseId}"
+                                                   sec:authorize-url="/account/edit/product/*"
+                                                   th:href="@{/account/edit/product/accountId}"
                                                    th:target="tab-content"><i class="mdi mdi-star"
                                                                               style="margin-right:5px;color:#f35864"></i>业务账号产品配置
                                                 </a>
                                             </li>
                                             <li class="" id="tab6">
                                                 <a onclick="active('6')"
-                                                   sec:authorize-url="/ec/customer/channel/account/edit/channel/*"
-                                                   th:href="@{/ec/customer/channel/account/edit/channel/enterpriseId}"
+                                                   sec:authorize-url="/account/edit/channel/*"
+                                                   th:href="@{/account/edit/channel/accountId}"
                                                    th:target="tab-content">业务账号通道配置
+                                                </a>
+                                            </li>
+                                            <li class="" id="tab7">
+                                                <a onclick="active('7')"
+                                                   sec:authorize-url="/account/view/channel/detail/*"
+                                                   th:href="@{/account/view/channel/detail/accountId}"
+                                                   th:target="tab-content">业务账号通道状态
                                                 </a>
                                             </li>
                                         </ul>
                                         <div class="tab-cotent" style="background-color:#fff">
                                             <iframe name="tab-content" id="tab-content" th:frameBorder="0"
                                                     th:scrolling="auto"
-                                                    th:src="@{/ec/customer/channel/account/edit/base/enterpriseId}"
+                                                    th:src="@{/account/edit/base/enterpriseId}"
                                                     style="padding: 0px; width: 100%; height: 2600px;background-color:#fff"></iframe>
                                         </div>
                                     </div>
@@ -182,7 +190,7 @@
 
     //页签切换
     function active(tab) {
-        for(var num = 1;num<7;num++){
+        for(var num = 1;num<8;num++){
             $('#tab'+num).removeClass("active");
         }
         $('#tab'+tab).attr("class","active");
@@ -192,6 +200,7 @@
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
+
 
 
 
