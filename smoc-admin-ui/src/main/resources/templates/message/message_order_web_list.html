@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <th:block th:insert="fragments/common_fragments :: common_header"/>
@@ -37,14 +38,20 @@
         </div>
         <!-- end row -->
 
-        <div class="row" style="position: relative;margin-top: 80px"  th:remove="${#strings.isEmpty(error)}?none:all">
+        <div class="row" style="position: relative;margin-top: 80px" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
                 <div class="card-box">
                     <div class="row m-b-60">
-                        <form  id="query_form" th:action="@{/message/order/web/page}" method="post">
+                        <form id="query_form" th:action="@{/message/order/web/page}" method="post">
                             <div class="col-sm-12">
                                 <div class="form-group  col-sm-3">
-                                    <input id="reportrange" class="form-control" type="text" />
+                                    <input id="reportrange" class="form-control" type="text"/>
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control" placeholder="企业名称" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control" placeholder="EC业务账号" autocomplete="off">
                                 </div>
                                 <div class="form-group  col-sm-3">
                                     <input type="text" class="form-control" placeholder="任务ID" autocomplete="off">
@@ -53,17 +60,17 @@
                                     <input type="text" class="form-control" placeholder="模板ID" autocomplete="off">
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <input type="text" class="form-control" placeholder="企业名称" autocomplete="off">
+                                    <mpm:tag id="businessType" identity="businessType" show-type="select" key="code"
+                                             class="form-control" data-icon="mdi mdi-view-module" title="业务类型"/>
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <mpm:tag id="businessType" identity="businessType"  show-type="select"  key="code" class="form-control"   data-icon="mdi mdi-view-module" title="业务类型" />
-                                </div>
-                                <div class="form-group  col-sm-3">
-                                    <mpm:tag id="taskStatus" identity="taskStatus"  show-type="select"  key="code" class="form-control"   data-icon="mdi mdi-view-module" title="发送状态" />
+                                    <mpm:tag id="taskStatus" identity="taskStatus" show-type="select" key="code"
+                                             class="form-control" data-icon="mdi mdi-view-module" title="发送状态"/>
                                 </div>
 
                                 <div class="form-group pull-right" style="text-align: right">
-                                    <button sec:authorize-url="/message/order/web/page" class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
+                                    <button sec:authorize-url="/message/order/web/page"
+                                            class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search"></i> 查询
                                     </button>
                                 </div>
@@ -83,9 +90,15 @@
                             <h2 style="color: #fff">汇总统计</h2>
                             <span></span>
                             <div class="detailInner">
-                                <a>任务单数：5000</a><i></i>
-                                <a>总发送条数:1,100,000</a>
-                                <a>总接收条数:1,100,000</a>
+                                <a>任务单数：<span style="color:#fff;width:100px;background-color:#0095a8;text-align:left"  data-d-group="4" data-a-sign=" " data-v-min="0"
+                                              data-v-max="999999999"
+                                              class="autonumber">2045922</span></a><i></i>
+                                <a>总发送条数：<span style="color:#fff;width:100px;background-color:#0095a8;text-align:left"  data-d-group="4" data-a-sign=" " data-v-min="0"
+                                               data-v-max="999999999"
+                                               class="autonumber">2045922</span></a><i></i>
+                                <a>总接收条数：<span style="color:#fff;width:100px;background-color:#0095a8;text-align:left"  data-d-group="4" data-a-sign=" " data-v-min="0"
+                                               data-v-max="999999999"
+                                               class="autonumber">2045922</span></a>
                             </div>
                         </li>
                     </ul>
@@ -104,7 +117,7 @@
                             <table class="table table table-hover m-10" style="margin-top: -12px;">
                                 <thead>
                                 <tr>
-                                    <th>企业账号/名称</th>
+                                    <th>EC业务账号/名称</th>
                                     <th>任务ID/模板ID</th>
                                     <th>发送条数/接收条数</th>
                                     <th>任务类型</th>
@@ -116,156 +129,247 @@
                                 <thead>
                                 <tbody>
                                 <tr>
-                                    <td style="vertical-align: middle;line-height: 26px">XY93348334343134343<br>北京星语互联科技有限公司</td>
+                                    <td style="vertical-align: middle;line-height: 26px">XY93348334343134343<br>北京星语互联科技有限公司
+                                    </td>
                                     <td style="vertical-align: middle;line-height: 26px">100000121<br>100000353</td>
                                     <td style="vertical-align: middle;line-height: 26px">10000<br>10000</td>
-                                    <td style="vertical-align: middle;line-height: 26px"><a class="btn btn-purple  waves-effect waves-light btn-xs">普通短信</a></td>
+                                    <td style="vertical-align: middle;line-height: 26px"><a
+                                            class="btn btn-purple  waves-effect waves-light btn-xs">普通短信</a></td>
                                     <td style="vertical-align: middle;line-height: 26px">即时发送</td>
-                                    <td style="vertical-align: middle;line-height: 26px">2021-11-23 16:25:09<br/>2021-11-12 16:25:09</td>
-                                    <td style="vertical-align: middle;line-height: 26px"><a class="btn btn-info btn-rounded btn-xs waves-effect waves-light">发送完成</a></td>
+                                    <td style="vertical-align: middle;line-height: 26px">2021-11-23 16:25:09<br/>2021-11-12
+                                        16:25:09
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px"><a
+                                            class="btn btn-info btn-rounded btn-xs waves-effect waves-light">发送完成</a>
+                                    </td>
                                     <td style="vertical-align: middle">
                                         <a class="on-default edit-row" title="短信内容">
-                                            <i style="font-size: 18px" class="mdi mdi-stackexchange" data-container="body" title="" data-toggle="popover" data-placement="bottom" data-content="【移动宽带】您的套餐有机会优惠办理一条300M的移动宽带和高清电视服务，您可点击 https://dx.10086.cn/0LjiuYna 进行办理或回复T3进行预约"></i>
+                                            <i style="font-size: 18px" class="mdi mdi-stackexchange"
+                                               data-container="body" title="" data-toggle="popover"
+                                               data-placement="bottom"
+                                               data-content="【移动宽带】您的套餐有机会优惠办理一条300M的移动宽带和高清电视服务，您可点击 https://dx.10086.cn/0LjiuYna 进行办理或回复T3进行预约"></i>
                                         </a>
                                         <a data-toggle="modal" data-target="#download-record"
                                            class="on-default edit-row"
-                                           style="padding-left: 5px;color: #6B5FB5;" title="下载号码文件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
+                                           style="padding-left: 5px;color: #6B5FB5;" title="下载号码文件"><i
+                                                style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="vertical-align: middle;line-height: 26px">XY93348334343134343<br>北京星语互联科技有限公司</td>
+                                    <td style="vertical-align: middle;line-height: 26px">XY93348334343134343<br>北京星语互联科技有限公司
+                                    </td>
                                     <td style="vertical-align: middle;line-height: 26px">100000121<br>100000353</td>
                                     <td style="vertical-align: middle;line-height: 26px">10000<br>10000</td>
-                                    <td style="vertical-align: middle;line-height: 26px"><a class="btn btn-purple  waves-effect waves-light btn-xs">普通短信</a></td>
-                                    <td style="vertical-align: middle;line-height: 26px">定时发送<br>2021-11-30 16:25:09</td>
-                                    <td style="vertical-align: middle;line-height: 26px">2021-11-23 16:25:09<br/>2021-11-12 16:25:09</td>
-                                    <td style="vertical-align: middle;line-height: 26px"><a class="btn btn-info btn-rounded btn-xs waves-effect waves-light">发送完成</a></td>
+                                    <td style="vertical-align: middle;line-height: 26px"><a
+                                            class="btn btn-purple  waves-effect waves-light btn-xs">普通短信</a></td>
+                                    <td style="vertical-align: middle;line-height: 26px">定时发送<br>2021-11-30 16:25:09
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">2021-11-23 16:25:09<br/>2021-11-12
+                                        16:25:09
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px"><a
+                                            class="btn btn-info btn-rounded btn-xs waves-effect waves-light">发送完成</a>
+                                    </td>
                                     <td style="vertical-align: middle">
                                         <a class="on-default edit-row" title="短信内容">
-                                            <i style="font-size: 18px" class="mdi mdi-stackexchange" data-container="body" title="" data-toggle="popover" data-placement="bottom" data-content="【移动宽带】您的套餐有机会优惠办理一条300M的移动宽带和高清电视服务，您可点击 https://dx.10086.cn/0LjiuYna 进行办理或回复T3进行预约"></i>
+                                            <i style="font-size: 18px" class="mdi mdi-stackexchange"
+                                               data-container="body" title="" data-toggle="popover"
+                                               data-placement="bottom"
+                                               data-content="【移动宽带】您的套餐有机会优惠办理一条300M的移动宽带和高清电视服务，您可点击 https://dx.10086.cn/0LjiuYna 进行办理或回复T3进行预约"></i>
                                         </a>
                                         <a data-toggle="modal" data-target="#download-record"
                                            class="on-default edit-row"
-                                           style="padding-left: 5px;color: #6B5FB5;" title="下载号码文件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
+                                           style="padding-left: 5px;color: #6B5FB5;" title="下载号码文件"><i
+                                                style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="vertical-align: middle;line-height: 26px">XY93348334343134343<br>北京星语互联科技有限公司</td>
+                                    <td style="vertical-align: middle;line-height: 26px">XY93348334343134343<br>北京星语互联科技有限公司
+                                    </td>
                                     <td style="vertical-align: middle;line-height: 26px">100000121<br>100000353</td>
                                     <td style="vertical-align: middle;line-height: 26px">10000<br>10000</td>
-                                    <td style="vertical-align: middle;line-height: 26px"><a class="btn btn-purple  waves-effect waves-light btn-xs">普通短信</a></td>
+                                    <td style="vertical-align: middle;line-height: 26px"><a
+                                            class="btn btn-purple  waves-effect waves-light btn-xs">普通短信</a></td>
                                     <td style="vertical-align: middle;line-height: 26px">即时发送</td>
-                                    <td style="vertical-align: middle;line-height: 26px">2021-11-23 16:25:09<br/>2021-11-12 16:25:09</td>
-                                    <td style="vertical-align: middle;line-height: 26px"><a class="btn btn-info btn-rounded btn-xs waves-effect waves-light">发送完成</a></td>
+                                    <td style="vertical-align: middle;line-height: 26px">2021-11-23 16:25:09<br/>2021-11-12
+                                        16:25:09
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px"><a
+                                            class="btn btn-info btn-rounded btn-xs waves-effect waves-light">发送完成</a>
+                                    </td>
                                     <td style="vertical-align: middle">
                                         <a class="on-default edit-row" title="短信内容">
-                                            <i style="font-size: 18px" class="mdi mdi-stackexchange" data-container="body" title="" data-toggle="popover" data-placement="bottom" data-content="【移动宽带】您的套餐有机会优惠办理一条300M的移动宽带和高清电视服务，您可点击 https://dx.10086.cn/0LjiuYna 进行办理或回复T3进行预约"></i>
+                                            <i style="font-size: 18px" class="mdi mdi-stackexchange"
+                                               data-container="body" title="" data-toggle="popover"
+                                               data-placement="bottom"
+                                               data-content="【移动宽带】您的套餐有机会优惠办理一条300M的移动宽带和高清电视服务，您可点击 https://dx.10086.cn/0LjiuYna 进行办理或回复T3进行预约"></i>
                                         </a>
                                         <a data-toggle="modal" data-target="#download-record"
                                            class="on-default edit-row"
-                                           style="padding-left: 5px;color: #6B5FB5;" title="下载号码文件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
+                                           style="padding-left: 5px;color: #6B5FB5;" title="下载号码文件"><i
+                                                style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="vertical-align: middle;line-height: 26px">XY93348334343134343<br>北京星语互联科技有限公司</td>
+                                    <td style="vertical-align: middle;line-height: 26px">XY93348334343134343<br>北京星语互联科技有限公司
+                                    </td>
                                     <td style="vertical-align: middle;line-height: 26px">100000121<br>100000353</td>
                                     <td style="vertical-align: middle;line-height: 26px">10000<br>10000</td>
-                                    <td style="vertical-align: middle;line-height: 26px"><a class="btn btn-purple  waves-effect waves-light btn-xs">普通短信</a></td>
+                                    <td style="vertical-align: middle;line-height: 26px"><a
+                                            class="btn btn-purple  waves-effect waves-light btn-xs">普通短信</a></td>
                                     <td style="vertical-align: middle;line-height: 26px">即时发送</td>
-                                    <td style="vertical-align: middle;line-height: 26px">2021-11-23 16:25:09<br/>2021-11-12 16:25:09</td>
-                                    <td style="vertical-align: middle;line-height: 26px"><a class="btn btn-info btn-rounded btn-xs waves-effect waves-light">发送完成</a></td>
+                                    <td style="vertical-align: middle;line-height: 26px">2021-11-23 16:25:09<br/>2021-11-12
+                                        16:25:09
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px"><a
+                                            class="btn btn-info btn-rounded btn-xs waves-effect waves-light">发送完成</a>
+                                    </td>
                                     <td style="vertical-align: middle">
                                         <a class="on-default edit-row" title="短信内容">
-                                            <i style="font-size: 18px" class="mdi mdi-stackexchange" data-container="body" title="" data-toggle="popover" data-placement="bottom" data-content="【移动宽带】您的套餐有机会优惠办理一条300M的移动宽带和高清电视服务，您可点击 https://dx.10086.cn/0LjiuYna 进行办理或回复T3进行预约"></i>
+                                            <i style="font-size: 18px" class="mdi mdi-stackexchange"
+                                               data-container="body" title="" data-toggle="popover"
+                                               data-placement="bottom"
+                                               data-content="【移动宽带】您的套餐有机会优惠办理一条300M的移动宽带和高清电视服务，您可点击 https://dx.10086.cn/0LjiuYna 进行办理或回复T3进行预约"></i>
                                         </a>
                                         <a data-toggle="modal" data-target="#download-record"
                                            class="on-default edit-row"
-                                           style="padding-left: 5px;color: #6B5FB5;" title="下载号码文件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
+                                           style="padding-left: 5px;color: #6B5FB5;" title="下载号码文件"><i
+                                                style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="vertical-align: middle;line-height: 26px">XY93348334343134343<br>北京星语互联科技有限公司</td>
+                                    <td style="vertical-align: middle;line-height: 26px">XY93348334343134343<br>北京星语互联科技有限公司
+                                    </td>
                                     <td style="vertical-align: middle;line-height: 26px">100000121<br>100000353</td>
                                     <td style="vertical-align: middle;line-height: 26px">10000<br>10000</td>
-                                    <td style="vertical-align: middle;line-height: 26px"><a class="btn btn-purple  waves-effect waves-light btn-xs">普通短信</a></td>
+                                    <td style="vertical-align: middle;line-height: 26px"><a
+                                            class="btn btn-purple  waves-effect waves-light btn-xs">普通短信</a></td>
                                     <td style="vertical-align: middle;line-height: 26px">即时发送</td>
-                                    <td style="vertical-align: middle;line-height: 26px">2021-11-23 16:25:09<br/>2021-11-12 16:25:09</td>
-                                    <td style="vertical-align: middle;line-height: 26px"><a class="btn btn-info btn-rounded btn-xs waves-effect waves-light">发送完成</a></td>
+                                    <td style="vertical-align: middle;line-height: 26px">2021-11-23 16:25:09<br/>2021-11-12
+                                        16:25:09
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px"><a
+                                            class="btn btn-info btn-rounded btn-xs waves-effect waves-light">发送完成</a>
+                                    </td>
                                     <td style="vertical-align: middle">
                                         <a class="on-default edit-row" title="短信内容">
-                                            <i style="font-size: 18px" class="mdi mdi-stackexchange" data-container="body" title="" data-toggle="popover" data-placement="bottom" data-content="【移动宽带】您的套餐有机会优惠办理一条300M的移动宽带和高清电视服务，您可点击 https://dx.10086.cn/0LjiuYna 进行办理或回复T3进行预约"></i>
+                                            <i style="font-size: 18px" class="mdi mdi-stackexchange"
+                                               data-container="body" title="" data-toggle="popover"
+                                               data-placement="bottom"
+                                               data-content="【移动宽带】您的套餐有机会优惠办理一条300M的移动宽带和高清电视服务，您可点击 https://dx.10086.cn/0LjiuYna 进行办理或回复T3进行预约"></i>
                                         </a>
                                         <a data-toggle="modal" data-target="#download-record"
                                            class="on-default edit-row"
-                                           style="padding-left: 5px;color: #6B5FB5;" title="下载号码文件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
+                                           style="padding-left: 5px;color: #6B5FB5;" title="下载号码文件"><i
+                                                style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="vertical-align: middle;line-height: 26px">XY93348334343134343<br>北京星语互联科技有限公司</td>
+                                    <td style="vertical-align: middle;line-height: 26px">XY93348334343134343<br>北京星语互联科技有限公司
+                                    </td>
                                     <td style="vertical-align: middle;line-height: 26px">100000121<br>100000353</td>
                                     <td style="vertical-align: middle;line-height: 26px">10000<br>10000</td>
-                                    <td style="vertical-align: middle;line-height: 26px"><a class="btn btn-purple  waves-effect waves-light btn-xs">普通短信</a></td>
+                                    <td style="vertical-align: middle;line-height: 26px"><a
+                                            class="btn btn-purple  waves-effect waves-light btn-xs">普通短信</a></td>
                                     <td style="vertical-align: middle;line-height: 26px">即时发送</td>
-                                    <td style="vertical-align: middle;line-height: 26px">2021-11-23 16:25:09<br/>2021-11-12 16:25:09</td>
-                                    <td style="vertical-align: middle;line-height: 26px"><a class="btn btn-info btn-rounded btn-xs waves-effect waves-light">发送完成</a></td>
+                                    <td style="vertical-align: middle;line-height: 26px">2021-11-23 16:25:09<br/>2021-11-12
+                                        16:25:09
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px"><a
+                                            class="btn btn-info btn-rounded btn-xs waves-effect waves-light">发送完成</a>
+                                    </td>
                                     <td style="vertical-align: middle">
                                         <a class="on-default edit-row" title="短信内容">
-                                            <i style="font-size: 18px" class="mdi mdi-stackexchange" data-container="body" title="" data-toggle="popover" data-placement="bottom" data-content="【移动宽带】您的套餐有机会优惠办理一条300M的移动宽带和高清电视服务，您可点击 https://dx.10086.cn/0LjiuYna 进行办理或回复T3进行预约"></i>
+                                            <i style="font-size: 18px" class="mdi mdi-stackexchange"
+                                               data-container="body" title="" data-toggle="popover"
+                                               data-placement="bottom"
+                                               data-content="【移动宽带】您的套餐有机会优惠办理一条300M的移动宽带和高清电视服务，您可点击 https://dx.10086.cn/0LjiuYna 进行办理或回复T3进行预约"></i>
                                         </a>
                                         <a data-toggle="modal" data-target="#download-record"
                                            class="on-default edit-row"
-                                           style="padding-left: 5px;color: #6B5FB5;" title="下载号码文件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
+                                           style="padding-left: 5px;color: #6B5FB5;" title="下载号码文件"><i
+                                                style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="vertical-align: middle;line-height: 26px">XY93348334343134343<br>北京星语互联科技有限公司</td>
+                                    <td style="vertical-align: middle;line-height: 26px">XY93348334343134343<br>北京星语互联科技有限公司
+                                    </td>
                                     <td style="vertical-align: middle;line-height: 26px">100000121<br>100000353</td>
                                     <td style="vertical-align: middle;line-height: 26px">10000<br>10000</td>
-                                    <td style="vertical-align: middle;line-height: 26px"><a class="btn btn-purple  waves-effect waves-light btn-xs">普通短信</a></td>
+                                    <td style="vertical-align: middle;line-height: 26px"><a
+                                            class="btn btn-purple  waves-effect waves-light btn-xs">普通短信</a></td>
                                     <td style="vertical-align: middle;line-height: 26px">即时发送</td>
-                                    <td style="vertical-align: middle;line-height: 26px">2021-11-23 16:25:09<br/>2021-11-12 16:25:09</td>
-                                    <td style="vertical-align: middle;line-height: 26px"><a class="btn btn-info btn-rounded btn-xs waves-effect waves-light">发送完成</a></td>
+                                    <td style="vertical-align: middle;line-height: 26px">2021-11-23 16:25:09<br/>2021-11-12
+                                        16:25:09
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px"><a
+                                            class="btn btn-info btn-rounded btn-xs waves-effect waves-light">发送完成</a>
+                                    </td>
                                     <td style="vertical-align: middle">
                                         <a class="on-default edit-row" title="短信内容">
-                                            <i style="font-size: 18px" class="mdi mdi-stackexchange" data-container="body" title="" data-toggle="popover" data-placement="bottom" data-content="【移动宽带】您的套餐有机会优惠办理一条300M的移动宽带和高清电视服务，您可点击 https://dx.10086.cn/0LjiuYna 进行办理或回复T3进行预约"></i>
+                                            <i style="font-size: 18px" class="mdi mdi-stackexchange"
+                                               data-container="body" title="" data-toggle="popover"
+                                               data-placement="bottom"
+                                               data-content="【移动宽带】您的套餐有机会优惠办理一条300M的移动宽带和高清电视服务，您可点击 https://dx.10086.cn/0LjiuYna 进行办理或回复T3进行预约"></i>
                                         </a>
                                         <a data-toggle="modal" data-target="#download-record"
                                            class="on-default edit-row"
-                                           style="padding-left: 5px;color: #6B5FB5;" title="下载号码文件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
+                                           style="padding-left: 5px;color: #6B5FB5;" title="下载号码文件"><i
+                                                style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="vertical-align: middle;line-height: 26px">XY93348334343134343<br>北京星语互联科技有限公司</td>
+                                    <td style="vertical-align: middle;line-height: 26px">XY93348334343134343<br>北京星语互联科技有限公司
+                                    </td>
                                     <td style="vertical-align: middle;line-height: 26px">100000121<br>100000353</td>
                                     <td style="vertical-align: middle;line-height: 26px">10000<br>10000</td>
-                                    <td style="vertical-align: middle;line-height: 26px"><a class="btn btn-purple  waves-effect waves-light btn-xs">普通短信</a></td>
+                                    <td style="vertical-align: middle;line-height: 26px"><a
+                                            class="btn btn-purple  waves-effect waves-light btn-xs">普通短信</a></td>
                                     <td style="vertical-align: middle;line-height: 26px">即时发送</td>
-                                    <td style="vertical-align: middle;line-height: 26px">2021-11-23 16:25:09<br/>2021-11-12 16:25:09</td>
-                                    <td style="vertical-align: middle;line-height: 26px"><a class="btn btn-info btn-rounded btn-xs waves-effect waves-light">发送完成</a></td>
+                                    <td style="vertical-align: middle;line-height: 26px">2021-11-23 16:25:09<br/>2021-11-12
+                                        16:25:09
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px"><a
+                                            class="btn btn-info btn-rounded btn-xs waves-effect waves-light">发送完成</a>
+                                    </td>
                                     <td style="vertical-align: middle">
                                         <a class="on-default edit-row" title="短信内容">
-                                            <i style="font-size: 18px" class="mdi mdi-stackexchange" data-container="body" title="" data-toggle="popover" data-placement="bottom" data-content="【移动宽带】您的套餐有机会优惠办理一条300M的移动宽带和高清电视服务，您可点击 https://dx.10086.cn/0LjiuYna 进行办理或回复T3进行预约"></i>
+                                            <i style="font-size: 18px" class="mdi mdi-stackexchange"
+                                               data-container="body" title="" data-toggle="popover"
+                                               data-placement="bottom"
+                                               data-content="【移动宽带】您的套餐有机会优惠办理一条300M的移动宽带和高清电视服务，您可点击 https://dx.10086.cn/0LjiuYna 进行办理或回复T3进行预约"></i>
                                         </a>
                                         <a data-toggle="modal" data-target="#download-record"
                                            class="on-default edit-row"
-                                           style="padding-left: 5px;color: #6B5FB5;" title="下载号码文件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
+                                           style="padding-left: 5px;color: #6B5FB5;" title="下载号码文件"><i
+                                                style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="vertical-align: middle;line-height: 26px">XY93348334343134343<br>北京星语互联科技有限公司</td>
+                                    <td style="vertical-align: middle;line-height: 26px">XY93348334343134343<br>北京星语互联科技有限公司
+                                    </td>
                                     <td style="vertical-align: middle;line-height: 26px">100000121<br>100000353</td>
                                     <td style="vertical-align: middle;line-height: 26px">10000<br>10000</td>
-                                    <td style="vertical-align: middle;line-height: 26px"><a class="btn btn-purple  waves-effect waves-light btn-xs">普通短信</a></td>
+                                    <td style="vertical-align: middle;line-height: 26px"><a
+                                            class="btn btn-purple  waves-effect waves-light btn-xs">普通短信</a></td>
                                     <td style="vertical-align: middle;line-height: 26px">即时发送</td>
-                                    <td style="vertical-align: middle;line-height: 26px">2021-11-23 16:25:09<br/>2021-11-12 16:25:09</td>
-                                    <td style="vertical-align: middle;line-height: 26px"><a class="btn btn-info btn-rounded btn-xs waves-effect waves-light">发送完成</a></td>
+                                    <td style="vertical-align: middle;line-height: 26px">2021-11-23 16:25:09<br/>2021-11-12
+                                        16:25:09
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px"><a
+                                            class="btn btn-info btn-rounded btn-xs waves-effect waves-light">发送完成</a>
+                                    </td>
                                     <td style="vertical-align: middle">
                                         <a class="on-default edit-row" title="短信内容">
-                                            <i style="font-size: 18px" class="mdi mdi-stackexchange" data-container="body" title="" data-toggle="popover" data-placement="bottom" data-content="【移动宽带】您的套餐有机会优惠办理一条300M的移动宽带和高清电视服务，您可点击 https://dx.10086.cn/0LjiuYna 进行办理或回复T3进行预约"></i>
+                                            <i style="font-size: 18px" class="mdi mdi-stackexchange"
+                                               data-container="body" title="" data-toggle="popover"
+                                               data-placement="bottom"
+                                               data-content="【移动宽带】您的套餐有机会优惠办理一条300M的移动宽带和高清电视服务，您可点击 https://dx.10086.cn/0LjiuYna 进行办理或回复T3进行预约"></i>
                                         </a>
                                         <a data-toggle="modal" data-target="#download-record"
                                            class="on-default edit-row"
-                                           style="padding-left: 5px;color: #6B5FB5;" title="下载号码文件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
+                                           style="padding-left: 5px;color: #6B5FB5;" title="下载号码文件"><i
+                                                style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
                                     </td>
                                 </tr>
 
@@ -285,7 +389,8 @@
 
 </div> <!-- content -->
 
-<div id="download-record" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="a-width-modalLabel" aria-hidden="true" style="display: none;margin: 60px">
+<div id="download-record" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="a-width-modalLabel"
+     aria-hidden="true" style="display: none;margin: 60px">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header">
@@ -294,8 +399,10 @@
             </div>
             <div class="row" style="padding-top: 15px">
                 <div class="col-sm-12 m-b-10">
-                    <p style="font-size:12px"><i style="font-size: 18px" class="mdi mdi-download"></i><a href="">&nbsp;提交号码文件</a></p>
-                    <p style="font-size:12px"><i style="font-size: 18px" class="mdi mdi-download"></i><a href="">&nbsp;号码报告文件</a></p>
+                    <p style="font-size:12px"><i style="font-size: 18px" class="mdi mdi-download"></i><a href="">&nbsp;提交号码文件</a>
+                    </p>
+                    <p style="font-size:12px"><i style="font-size: 18px" class="mdi mdi-download"></i><a href="">&nbsp;号码报告文件</a>
+                    </p>
                 </div>
 
             </div>
@@ -306,9 +413,12 @@
 <th:block th:insert="fragments/common_fragments :: select_js"/>
 <script th:src="@{/static/plugins/moment/moment.js}"></script>
 <script th:src="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.js}"></script>
-<!-- Modal-Effect -->
-
+<script th:src="@{/static/plugins/autoNumeric/autoNumeric.js}"></script>
 <script>
+
+    $(document).ready(function () {
+        $('.autonumber').autoNumeric('init');
+    });
 
     $('#reportrange').daterangepicker({
         format: 'YYYY-MM-DD',
