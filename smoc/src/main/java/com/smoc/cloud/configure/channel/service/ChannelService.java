@@ -66,6 +66,12 @@ public class ChannelService {
         ChannelBasicInfoValidator channelBasicInfoValidator = new ChannelBasicInfoValidator();
         BeanUtils.copyProperties(entity, channelBasicInfoValidator);
 
+        //如果是统一计价，查询价格
+        if ("UNIFIED_PRICE".equals(entity.getPriceStyle())) {
+            ConfigChannelPrice configChannelPrice = channelPriceRepository.findByChannelId(entity.getChannelId());
+            channelBasicInfoValidator.setChannelPrice(configChannelPrice.getChannelPrice());
+        }
+
         return ResponseDataUtil.buildSuccess(channelBasicInfoValidator);
     }
 
@@ -90,7 +96,7 @@ public class ChannelService {
             channelBasicInfoValidator.setSupportAreaCodes("");
         }
 
-        //如果是统一计价，保存价格表
+        //如果是统一计价，查询价格
         if ("UNIFIED_PRICE".equals(entity.getPriceStyle())) {
             ConfigChannelPrice configChannelPrice = channelPriceRepository.findByChannelId(entity.getChannelId());
             channelBasicInfoValidator.setChannelPrice(configChannelPrice.getChannelPrice());

@@ -150,9 +150,21 @@
                                                     <label>有无上行<span class="text-danger">*</span>&nbsp;<span
                                                             class="text-danger" th:if="${#fields.hasErrors('upMessageEnable')}"
                                                             th:errors="*{upMessageEnable}" style="font-weight: 200;font-size: 12px"></span>
-                                                    </label>
+                                                    </label><br/>
                                                     <mpm:tag id="yesOrNo" identity="yesOrNo" name="upMessageEnable" show-type="radio" style="margin-top:0px" key="code"
                                                              th:value="${channelBasicInfoValidator.upMessageEnable}" required="true" title="有无"/>
+                                                </div>
+                                                <div class="col-sm-6 m-b-10">
+                                                    <label>通道对接销售&nbsp;<span
+                                                            class="text-danger" th:if="${#fields.hasErrors('channelAccessSales')}"
+                                                            th:errors="*{channelAccessSales}" style="font-weight: 200;font-size: 12px"></span>
+                                                    </label>
+                                                    <select name="channelAccessSales" data-style="btn-default"
+                                                            class="selectpicker  form-control" tabindex="-98" 　required="true">
+                                                        <option data-icon="mdi mdi-account">--请选择对接销售--</option>
+                                                        <option data-icon="mdi mdi-account" th:each="sales:${salesList}"
+                                                                th:selected="${channelBasicInfoValidator.channelAccessSales eq sales.id}" th:value="${sales.id}">[[${sales.realName}]]</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
@@ -240,7 +252,6 @@
                                         </div>
 
                                         <div class="form-group">
-
                                             <div class="row">
                                                 <div class="col-sm-12 m-b-10">
                                                     <label>通道介绍<span class="text-danger">*</span>&nbsp;<span class="text-danger"
@@ -252,7 +263,20 @@
                                                            placeholder="仔细思考下，怎么用简短、通俗的业务语言描述，尽量让大家都看明白">
                                                 </div>
                                             </div>
+                                        </div>
 
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-sm-12 m-b-10">
+                                                    <label>内容限制&nbsp;<span class="text-danger"
+                                                                     th:if="${#fields.hasErrors('channelRestrictContent')}" th:errors="*{channelRestrictContent}"
+                                                                     style="font-weight: 200;font-size: 12px"></span>
+                                                    </label>
+                                                    <input type="text" class="form-control" autocomplete="off"
+                                                           th:field="*{channelRestrictContent}"  data-parsley-length="[1,128]"
+                                                           placeholder="内容限制">
+                                                </div>
+                                            </div>
                                         </div>
 
                                     </div>

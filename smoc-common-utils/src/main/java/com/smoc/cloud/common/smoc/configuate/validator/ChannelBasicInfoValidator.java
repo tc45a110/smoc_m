@@ -81,4 +81,7 @@ public class ChannelBasicInfoValidator {
     @Range(min = 0, max = 1, message = "资费只能是{min}到{max}！")
     private BigDecimal channelPrice;
     private String province;
+    private String channelAccessSales;
+    @Length(max = 128, message = "通道限制内容最大长度为{max}！")
+    private String channelRestrictContent;
 }

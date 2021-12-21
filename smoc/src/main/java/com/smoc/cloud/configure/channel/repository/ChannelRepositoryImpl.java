@@ -39,9 +39,11 @@ public class ChannelRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", t.CHANNEL_STATUS");
         sqlBuffer.append(", i.MAX_SEND_SECOND");
         sqlBuffer.append(", t.CHANNEL_INTRODUCE ");
+        sqlBuffer.append(", u.REAL_NAME AS CHANNEL_ACCESS_SALES ");
+        sqlBuffer.append(", t.CHANNEL_RESTRICT_CONTENT ");
         sqlBuffer.append("  from config_channel_basic_info t left join config_channel_interface i on t.CHANNEL_ID=i.CHANNEL_ID");
-        sqlBuffer.append("  left join (select t.CHANNEL_ID,t.CHANNEL_PRICE from config_channel_price t where t.PRICE_STYLE='UNIFIED_PRICE')p");
-        sqlBuffer.append("  on t.CHANNEL_ID=p.CHANNEL_ID where 1=1 ");
+        sqlBuffer.append("  left join (select t.CHANNEL_ID,t.CHANNEL_PRICE from config_channel_price t where t.PRICE_STYLE='UNIFIED_PRICE')p on t.CHANNEL_ID=p.CHANNEL_ID ");
+        sqlBuffer.append("  left join smoc_oauth.base_user_extends u on t.CHANNEL_ACCESS_SALES = u.ID where 1=1 ");
 
         List<Object> paramsList = new ArrayList<Object>();
 
@@ -65,10 +67,10 @@ public class ChannelRepositoryImpl extends BasePageRepository {
             paramsList.add( "%"+qo.getChannelAccessAccount().trim()+"%");
         }
 
-        /*if (!StringUtils.isEmpty(qo.getChannelAccessSalse())) {
-            sqlBuffer.append(" and i.CHANNEL_ACCESS_ACCOUNT like ?");
-            paramsList.add( "%"+qo.getChannelAccessSalse().trim()+"%");
-        }*/
+        if (!StringUtils.isEmpty(qo.getChannelAccessSales())) {
+            sqlBuffer.append(" and u.REAL_NAME like ?");
+            paramsList.add( "%"+qo.getChannelAccessSales().trim()+"%");
+        }
 
         if (!StringUtils.isEmpty(qo.getChannelProvder())) {
             sqlBuffer.append(" and t.CHANNEL_PROVDER = ?");

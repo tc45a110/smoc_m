@@ -34,6 +34,8 @@ public class ConfigChannelBasicInfo {
     private Date createdTime;
     private String updatedBy;
     private Date updatedTime;
+    private String channelAccessSales;
+    private String channelRestrictContent;
 
     @Id
     @Column(name = "CHANNEL_ID")
@@ -283,6 +285,26 @@ public class ConfigChannelBasicInfo {
 
     public void setUpdatedTime(Date updatedTime) {
         this.updatedTime = updatedTime;
+    }
+
+    @Basic
+    @Column(name = "CHANNEL_ACCESS_SALES")
+    public String getChannelAccessSales() {
+        return channelAccessSales;
+    }
+
+    public void setChannelAccessSales(String channelAccessSales) {
+        this.channelAccessSales = channelAccessSales;
+    }
+
+    @Basic
+    @Column(name = "CHANNEL_RESTRICT_CONTENT")
+    public String getChannelRestrictContent() {
+        return channelRestrictContent;
+    }
+
+    public void setChannelRestrictContent(String channelRestrictContent) {
+        this.channelRestrictContent = channelRestrictContent;
     }
 
     @Override

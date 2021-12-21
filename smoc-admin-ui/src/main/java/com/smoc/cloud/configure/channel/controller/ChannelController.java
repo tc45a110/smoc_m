@@ -1,25 +1,28 @@
 package com.smoc.cloud.configure.channel.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.smoc.cloud.admin.security.remote.service.SysUserService;
 import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
 import com.smoc.cloud.common.auth.qo.Dict;
 import com.smoc.cloud.common.auth.qo.DictType;
+import com.smoc.cloud.common.auth.qo.Users;
+import com.smoc.cloud.common.auth.validator.UserValidator;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelBasicInfoValidator;
-import com.smoc.cloud.common.smoc.configuate.validator.ChannelPriceValidator;
+import com.smoc.cloud.common.smoc.configuate.validator.ChannelInterfaceValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
+import com.smoc.cloud.configure.channel.service.ChannelInterfaceService;
 import com.smoc.cloud.configure.channel.service.ChannelService;
 import com.smoc.cloud.sequence.service.SequenceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -47,6 +50,12 @@ public class ChannelController {
 
     @Autowired
     private SystemUserLogService systemUserLogService;
+
+    @Autowired
+    private ChannelInterfaceService channelInterfaceService;
+
+    @Autowired
+    private SysUserService sysUserService;
 
     /**
      * 通道管理列表
@@ -144,6 +153,9 @@ public class ChannelController {
             return view;
         }
 
+        //查询销售人员
+        view.addObject("salesList", findSalesList());
+
         /**
          * id为base是添加功能
          */
@@ -163,6 +175,7 @@ public class ChannelController {
             //op操作标记，add表示添加，edit表示修改
             view.addObject("op", "add");
             view.addObject("channelBasicInfoValidator", channelBasicInfoValidator);
+
             return view;
         }
 
@@ -237,6 +250,8 @@ public class ChannelController {
         //保存成功之后，重新加载页面，iframe刷新标识，只有add才会刷新
         if ("add".equals(op)) {
             view.addObject("flag", "flag");
+        } else {
+            view.addObject("salesList", findSalesList());
         }
 
         return view;
@@ -268,8 +283,22 @@ public class ChannelController {
         return result;
     }
 
+    //查询销售人员
+    private List<Users> findSalesList() {
+        PageParams<Users> params = new PageParams<Users>();
+        params.setPageSize(100);
+        params.setCurrentPage(1);
+        Users u = new Users();
+        u.setActive(1);
+        u.setType(3);
+        params.setParams(u);
+        PageList<Users> list = sysUserService.page(params);
+        return list.getList();
+    }
+
     /**
      * 查询通道区域范围
+     *
      * @param channelId
      * @param request
      * @return
@@ -296,25 +325,25 @@ public class ChannelController {
         List<Dict> dictList = new ArrayList<>();
 
         //国际
-        if("INTERNATIONAL".equals(data.getData().getBusinessAreaType())){
-            DictType dictType  = dictMap.get("internationalCountry");
+        if ("INTERNATIONAL".equals(data.getData().getBusinessAreaType())) {
+            DictType dictType = dictMap.get("internationalCountry");
             dictList = dictType.getDict();
-        }else{
-            DictType dictType  = dictMap.get("provices");
+        } else {
+            DictType dictType = dictMap.get("provices");
             dictList = dictType.getDict();
         }
 
-        if(dictList.size()<1){
+        if (dictList.size() < 1) {
             return "数据为空或无效";
         }
 
         String areaType = "业务区域";
         String supportAreaCodes = data.getData().getSupportAreaCodes();
         //如果默认值为ALL并且屏蔽省份为空
-        if("ALL".equals(data.getData().getSupportAreaCodes())  ){
-            if(StringUtils.isEmpty(data.getData().getMaskProvince())){
+        if ("ALL".equals(data.getData().getSupportAreaCodes())) {
+            if (StringUtils.isEmpty(data.getData().getMaskProvince())) {
                 return "无屏蔽省份";
-            }else{
+            } else {
                 areaType = "屏蔽省份";
                 supportAreaCodes = data.getData().getMaskProvince();
             }
@@ -324,19 +353,19 @@ public class ChannelController {
 
         //封装区域数据
         StringBuilder channelArea = new StringBuilder();
-        if(areaCodes.length>1){
-            for (int a=0;a <areaCodes.length;a++) {
+        if (areaCodes.length > 1) {
+            for (int a = 0; a < areaCodes.length; a++) {
                 String name = "";
-                for (int i =0;i<dictList.size();i++) {
+                for (int i = 0; i < dictList.size(); i++) {
                     Dict dict = dictList.get(i);
                     if (areaCodes[a].equals(dict.getFieldCode())) {
                         name += dict.getFieldName();
                         break;
                     }
                 }
-                channelArea.append(name+" ");
+                channelArea.append(name + " ");
             }
-        }else{
+        } else {
             String name = "";
             for (Dict dict : dictList) {
                 if (supportAreaCodes.equals(dict.getFieldCode())) {
@@ -347,7 +376,7 @@ public class ChannelController {
             channelArea.append(name);
         }
 
-        return areaType+"："+channelArea.toString();
+        return areaType + "：" + channelArea.toString();
     }
 
     /**
@@ -408,8 +437,16 @@ public class ChannelController {
 
         ModelAndView view = new ModelAndView("configure/channel/channel_view_center");
 
-        return view;
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            return view;
+        }
 
+        view.addObject("id", id);
+
+        return view;
     }
 
     /**
@@ -421,6 +458,41 @@ public class ChannelController {
     public ModelAndView view_base(@PathVariable String id, HttpServletRequest request) {
 
         ModelAndView view = new ModelAndView("configure/channel/channel_view_base");
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            return view;
+        }
+
+        //查询通道基本信息
+        ResponseData<ChannelBasicInfoValidator> data = channelService.findById(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        //查询对接销售名称
+        String realName = "";
+        if (!StringUtils.isEmpty(data.getData().getChannelAccessSales())) {
+            ResponseData<UserValidator> userData = sysUserService.userProfile(data.getData().getChannelAccessSales());
+            if (ResponseCode.SUCCESS.getCode().equals(userData.getCode()) && !StringUtils.isEmpty(userData.getData())) {
+                realName = userData.getData().getBaseUserExtendsValidator().getRealName();
+            }
+        }
+
+        //查询通道接口参数
+        ChannelInterfaceValidator channelInterfaceValidator = new ChannelInterfaceValidator();
+        ResponseData<ChannelInterfaceValidator> channelInterfaceData = channelInterfaceService.findChannelInterfaceByChannelId(id);
+        if (ResponseCode.SUCCESS.getCode().equals(channelInterfaceData.getCode()) && !StringUtils.isEmpty(channelInterfaceData.getData())) {
+            channelInterfaceValidator = channelInterfaceData.getData();
+        }
+
+        view.addObject("channelBasicInfoValidator", data.getData());
+        view.addObject("channelInterfaceValidator", channelInterfaceValidator);
+        view.addObject("realName", realName);
+
         return view;
 
     }
