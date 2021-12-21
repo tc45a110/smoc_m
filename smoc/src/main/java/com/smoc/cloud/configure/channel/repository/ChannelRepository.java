@@ -3,6 +3,7 @@ package com.smoc.cloud.configure.channel.repository;
 
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
+import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelBasicInfoValidator;
 import com.smoc.cloud.configure.channel.entity.ConfigChannelBasicInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,7 +16,7 @@ public interface ChannelRepository extends CrudRepository<ConfigChannelBasicInfo
 
 
 
-    PageList<ChannelBasicInfoValidator> page(PageParams<ChannelBasicInfoValidator> pageParams);
+    PageList<ChannelBasicInfoQo> page(PageParams<ChannelBasicInfoQo> pageParams);
 
     Iterable<ConfigChannelBasicInfo> findByChannelId(String channelId);
 }

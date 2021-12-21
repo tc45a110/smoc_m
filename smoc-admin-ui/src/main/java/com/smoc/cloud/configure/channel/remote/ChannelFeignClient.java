@@ -3,6 +3,7 @@ package com.smoc.cloud.configure.channel.remote;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelBasicInfoValidator;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,15 +24,15 @@ public interface ChannelFeignClient {
      * @return
      */
     @RequestMapping(value = "/configure/channel/page", method = RequestMethod.POST)
-    PageList<ChannelBasicInfoValidator> page(@RequestBody PageParams<ChannelBasicInfoValidator> pageParams)  throws Exception;
+    PageList<ChannelBasicInfoQo> page(@RequestBody PageParams<ChannelBasicInfoQo> pageParams)  throws Exception;
 
     /**
      * 根据id获取信息
      * @param id
      * @return
      */
-    @RequestMapping(value = "/configure/channel/findById/{id}", method = RequestMethod.GET)
-    ResponseData<ChannelBasicInfoValidator> findById(@PathVariable String id) throws Exception;
+    @RequestMapping(value = "/configure/channel/findChannelById/{id}", method = RequestMethod.GET)
+    ResponseData<ChannelBasicInfoValidator> findChannelById(@PathVariable String id) throws Exception;
 
     /**
      * 保存、修改数据
@@ -40,4 +41,11 @@ public interface ChannelFeignClient {
     @RequestMapping(value = "/configure/channel/save/{op}", method = RequestMethod.POST)
     ResponseData save(@RequestBody ChannelBasicInfoValidator channelBasicInfoValidator, @PathVariable String op) throws Exception;
 
+    /**
+     * 根据id获取信息
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/configure/channel/findById/{id}", method = RequestMethod.GET)
+    ResponseData<ChannelBasicInfoValidator> findById(@PathVariable String id) throws Exception;
 }

@@ -4,6 +4,7 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelBasicInfoValidator;
 import com.smoc.cloud.configure.channel.remote.ChannelFeignClient;
 import lombok.extern.slf4j.Slf4j;
@@ -31,9 +32,9 @@ public class ChannelService {
      * @param pageParams
      * @return
      */
-    public ResponseData<PageList<ChannelBasicInfoValidator>> page(PageParams<ChannelBasicInfoValidator> pageParams) {
+    public ResponseData<PageList<ChannelBasicInfoQo>> page(PageParams<ChannelBasicInfoQo> pageParams) {
         try {
-            PageList<ChannelBasicInfoValidator> pageList = this.channelFeignClient.page(pageParams);
+            PageList<ChannelBasicInfoQo> pageList = this.channelFeignClient.page(pageParams);
             return ResponseDataUtil.buildSuccess(pageList);
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -46,9 +47,9 @@ public class ChannelService {
      * @param id
      * @return
      */
-    public ResponseData<ChannelBasicInfoValidator> findById(String id) {
+    public ResponseData<ChannelBasicInfoValidator> findChannelById(String id) {
         try {
-            ResponseData<ChannelBasicInfoValidator> data = this.channelFeignClient.findById(id);
+            ResponseData<ChannelBasicInfoValidator> data = this.channelFeignClient.findChannelById(id);
             return data;
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -71,4 +72,18 @@ public class ChannelService {
         }
     }
 
+    /**
+     * 根据id获取信息
+     * @param channelId
+     * @return
+     */
+    public ResponseData<ChannelBasicInfoValidator> findById(String channelId) {
+        try {
+            ResponseData<ChannelBasicInfoValidator> data = this.channelFeignClient.findById(channelId);
+            return data;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
 }

@@ -21,7 +21,7 @@ public class ChannelPriceRepositoryImpl extends BasePageRepository {
     @Resource
     public JdbcTemplate jdbcTemplate;
 
-    public List<ChannelPriceValidator> findByChannelIdAndAreaCode(ChannelPriceValidator channelPriceValidator) {
+    public List<ChannelPriceValidator> findChannelPrice(ChannelPriceValidator channelPriceValidator) {
 
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");

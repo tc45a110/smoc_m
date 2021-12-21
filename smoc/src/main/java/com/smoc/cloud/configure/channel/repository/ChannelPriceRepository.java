@@ -20,7 +20,7 @@ public interface ChannelPriceRepository extends CrudRepository<ConfigChannelPric
 
     void deleteByChannelIdAndPriceStyle(String channelId, String unified_price);
 
-    List<ChannelPriceValidator> findByChannelIdAndAreaCode(ChannelPriceValidator channelPriceValidator);
+    List<ChannelPriceValidator> findChannelPrice(ChannelPriceValidator channelPriceValidator);
 
     void deleteByChannelIdAndAreaCode(String channelId, String areaCode);
 

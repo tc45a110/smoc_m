@@ -7,6 +7,7 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelBasicInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.UUID;
@@ -46,7 +47,7 @@ public class ChannelService {
      * @param pageParams
      * @return
      */
-    public PageList<ChannelBasicInfoValidator> page(PageParams<ChannelBasicInfoValidator> pageParams) {
+    public PageList<ChannelBasicInfoQo> page(PageParams<ChannelBasicInfoQo> pageParams) {
         return channelRepository.page(pageParams);
     }
 
@@ -56,6 +57,24 @@ public class ChannelService {
      * @return
      */
     public ResponseData findById(String id) {
+        Optional<ConfigChannelBasicInfo> data = channelRepository.findById(id);
+        if(!data.isPresent()){
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_QUERY_ERROR);
+        }
+
+        ConfigChannelBasicInfo entity = data.get();
+        ChannelBasicInfoValidator channelBasicInfoValidator = new ChannelBasicInfoValidator();
+        BeanUtils.copyProperties(entity, channelBasicInfoValidator);
+
+        return ResponseDataUtil.buildSuccess(channelBasicInfoValidator);
+    }
+
+    /**
+     * 根据id获取信息
+     * @param id
+     * @return
+     */
+    public ResponseData findChannelById(String id) {
         Optional<ConfigChannelBasicInfo> data = channelRepository.findById(id);
         if(!data.isPresent()){
             return ResponseDataUtil.buildError(ResponseCode.PARAM_QUERY_ERROR);
@@ -173,6 +192,7 @@ public class ChannelService {
             channelPriceRepository.deleteByChannelIdAndPriceStyle(channelBasicInfoValidator.getChannelId(),"UNIFIED_PRICE");
         }
     }
+
 
 
 }
