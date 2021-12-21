@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org"
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org"
 >
 <head>
     <th:block th:insert="fragments/common_fragments :: common_header"/>
@@ -10,11 +11,15 @@
     <link th:href="@{/static/css/detail_statistics.css}" rel="stylesheet">
 </head>
 <body style="background-color:#fff">
+<!-- Loader start 页面加载进度-->
 <th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
 <!-- Start content -->
 <div class="content" style="margin-top: 10px">
     <div class="container">
 
+        <!-- start row  汇总统计-->
         <div id="help" class="row" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
                 <div class="detail">
@@ -23,16 +28,24 @@
                             <h2 style="color: #fff">明细统计</h2>
                             <span></span>
                             <div class="detailInner">
-                                <a>冻结中金额（元）：<span data-d-group="4" data-a-sign="¥ " style="color:#fff;width:80px;background-color:#0095a8;text-align:left" readonly class="autonumber">045922</span></a><i></i>
-                                <a>总冻结金额（元）：<span data-d-group="4" data-a-sign="¥ " style="color:#fff;width:80px;background-color:#0095a8;text-align:left" readonly class="autonumber">20.00</span></a><i></i>
-                                <a>成功数量(条）：<span data-d-group="4" data-a-sign="¥ " style="color:#fff;width:90px;background-color:#0095a8;text-align:left" readonly class="autonumber">45922</span></a>
+                                <a>冻结中金额（元）：<span data-d-group="4" data-a-sign="¥ "
+                                                  style="color:#fff;width:80px;background-color:#0095a8;text-align:left"
+                                                  readonly class="autonumber">045922</span></a><i></i>
+                                <a>总冻结金额（元）：<span data-d-group="4" data-a-sign="¥ "
+                                                  style="color:#fff;width:80px;background-color:#0095a8;text-align:left"
+                                                  readonly class="autonumber">20.00</span></a><i></i>
+                                <a>成功数量(条）：<span data-d-group="4" data-a-sign="¥ "
+                                                 style="color:#fff;width:90px;background-color:#0095a8;text-align:left"
+                                                 readonly class="autonumber">45922</span></a>
                             </div>
                         </li>
                     </ul>
                 </div>
             </div>
         </div>
+        <!-- end row -->
 
+        <!-- start row  列表数据-->
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
                 <div class="panel panel-color panel-info">
@@ -56,52 +69,21 @@
                                 <tbody>
                                 <tr>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
-                                        <span data-d-group="4" data-a-sign="¥ "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
-                                        <span data-d-group="4" data-a-sign="¥ "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
-                                        <span data-d-group="4" data-a-sign="¥ "  readonly class="autonumber">45922</span>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        0.024
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <a
-                                           class="btn btn-success  waves-effect waves-light btn-xs">已完成</a>
-
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        2021-11-17 14:45:23<br>2021-11-17 14:45:23
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" "  readonly class="autonumber">45922</span>
-                                        <br>
-                                        <span data-d-group="4" data-a-sign="¥ "  readonly class="autonumber">45922</span>
-                                    </td>
-
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" "  readonly class="autonumber">45922</span>
-                                        <br>
-                                        <span data-d-group="4" data-a-sign="¥ "  readonly class="autonumber">45922</span>
-                                    </td>
-
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" "  readonly class="autonumber">45922</span>
-                                        <br>
-                                        <span data-d-group="4" data-a-sign="¥ "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         0.024
@@ -118,21 +100,21 @@
                                 </tr>
                                 <tr>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
-                                        <span data-d-group="4" data-a-sign="¥ "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
-                                        <span data-d-group="4" data-a-sign="¥ "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
-                                        <span data-d-group="4" data-a-sign="¥ "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         0.024
@@ -149,21 +131,21 @@
                                 </tr>
                                 <tr>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
-                                        <span data-d-group="4" data-a-sign="¥ "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
-                                        <span data-d-group="4" data-a-sign="¥ "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
-                                        <span data-d-group="4" data-a-sign="¥ "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         0.024
@@ -180,21 +162,21 @@
                                 </tr>
                                 <tr>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
-                                        <span data-d-group="4" data-a-sign="¥ "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
-                                        <span data-d-group="4" data-a-sign="¥ "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
-                                        <span data-d-group="4" data-a-sign="¥ "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         0.024
@@ -211,21 +193,21 @@
                                 </tr>
                                 <tr>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
-                                        <span data-d-group="4" data-a-sign="¥ "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
-                                        <span data-d-group="4" data-a-sign="¥ "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
-                                        <span data-d-group="4" data-a-sign="¥ "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         0.024
@@ -242,21 +224,21 @@
                                 </tr>
                                 <tr>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
-                                        <span data-d-group="4" data-a-sign="¥ "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
-                                        <span data-d-group="4" data-a-sign="¥ "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
-                                        <span data-d-group="4" data-a-sign="¥ "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         0.024
@@ -273,21 +255,21 @@
                                 </tr>
                                 <tr>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
-                                        <span data-d-group="4" data-a-sign="¥ "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
-                                        <span data-d-group="4" data-a-sign="¥ "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
-                                        <span data-d-group="4" data-a-sign="¥ "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         0.024
@@ -304,21 +286,21 @@
                                 </tr>
                                 <tr>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
-                                        <span data-d-group="4" data-a-sign="¥ "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
-                                        <span data-d-group="4" data-a-sign="¥ "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
-                                        <span data-d-group="4" data-a-sign="¥ "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         0.024
@@ -335,21 +317,52 @@
                                 </tr>
                                 <tr>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
-                                        <span data-d-group="4" data-a-sign="¥ "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
-                                        <span data-d-group="4" data-a-sign="¥ "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
-                                        <span data-d-group="4" data-a-sign="¥ "  readonly class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        0.024
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <a
+                                                class="btn btn-success  waves-effect waves-light btn-xs">已完成</a>
+
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        2021-11-17 14:45:23<br>2021-11-17 14:45:23
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
+                                        <br>
+                                        <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
+                                    </td>
+
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
+                                        <br>
+                                        <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
+                                    </td>
+
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
+                                        <br>
+                                        <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         0.024
@@ -373,7 +386,12 @@
                 </div>
             </div>
         </div>
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
         <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
     </div>
 </div> <!-- content -->
 
@@ -386,49 +404,6 @@
 <script th:src="@{/static/plugins/autoNumeric/autoNumeric.js}"></script>
 
 <script>
-
-    $('#dateQueryStr').daterangepicker({
-        format: 'YYYY-MM-DD',
-        startDate: '2020-11-17',
-        endDate: '2011-11-17',
-        minDate: '2019-01-01',
-        maxDate: '2080-12-31',
-        dateLimit: {
-            days: 365
-        },
-        showDropdowns: true,
-        showWeekNumbers: true,
-        timePicker: false,
-        timePickerIncrement: 1,
-        timePicker12Hour: true,
-        ranges: {
-            '今天': [moment(), moment()],
-            '昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-            '最近7天': [moment().subtract(6, 'days'), moment()],
-            '最近30天': [moment().subtract(29, 'days'), moment()],
-            '本月': [moment().startOf('month'), moment().endOf('month')],
-            '上月': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-        },
-        opens: 'right',
-        buttonClasses: ['btn btn-default'],
-        applyClass: 'btn-small btn-primary',
-        cancelClass: 'btn-small',
-        format: 'YYYY-MM-DD',
-        separator: ' - ',
-        locale: {
-            applyLabel: '确认',
-            cancelLabel: '取消',
-            fromLabel: '从',
-            toLabel: '到',
-            customRangeLabel: '自定义',
-            format: "YYYY-MM-DD",
-            daysOfWeek: ['日', '一', '二', '三', '四', '五', '六'],
-            monthNames: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
-            firstDay: 1
-        }
-    }, function (start, end, label) {
-        //alert('A date range was chosen: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
-    });
 
 
      $(document).ready(function() {
@@ -458,6 +433,8 @@
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
+
+
 
 </script>
 </body>

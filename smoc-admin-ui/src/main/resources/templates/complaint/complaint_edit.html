@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <th:block th:insert="fragments/common_fragments :: common_header"/>
@@ -9,23 +10,25 @@
 
 </head>
 <body>
+<!-- Loader start 页面加载进度-->
 <th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
 
 <!-- Start content -->
 <div class="content" style="margin-top: 60px">
     <div class="container">
 
-        <!-- start row -->
+        <!-- start row 页面导航-->
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title"> 投诉信息录入</h4>
+                    <h4 class="page-title"> 添加、修改投诉信息</h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
-                           投诉管理
+                            投诉管理
                         </li>
                         <li>
-                           投诉信息录入
+                            添加、修改投诉信息
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -34,7 +37,7 @@
         </div>
         <!-- end row -->
 
-        <!-- start row -->
+        <!-- start row 页面内容-->
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-md-6">
                 <div class="panel panel-color panel-teal">
@@ -97,8 +100,8 @@
                         </h3>
                     </div>
                     <div class="panel-body">
-                        <form  id="submit_form"
-                               method="post" data-parsley-validate="">
+                        <form id="submit_form"
+                              method="post" data-parsley-validate="">
                             <div class="p-20">
                                 <div class="form-group m-b-20">
                                     投诉号码：18908408860
@@ -118,37 +121,41 @@
                                     </div>
                                 </div>
                                 <div class="form-group m-b-20">
-                                    <mpm:tag id="complaintSource" identity="complaintSource" show-type="select" key="code"
+                                    <mpm:tag id="complaintSource" identity="complaintSource" show-type="select"
+                                             key="code"
                                              class="form-control" name="complaintSource" value="" title="举报来源"/>
                                 </div>
                                 <div class="form-group m-b-20">
                                     <label for="e32Name">下发频次<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="e32Name" type="text"  class="form-control"
+                                    <input id="e32Name" type="text" class="form-control"
                                            readonly autocomplete="off"
                                            placeholder="下发频次">
                                 </div>
                                 <div class="form-group m-b-20">
                                     <label for="linkt">举报日期<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="linkt" type="text"  class="form-control"
+                                    <input id="linkt" type="text" class="form-control"
                                            required="" data-parsley-length="[2,12]" autocomplete="off"
                                            placeholder="举报日期">
                                 </div>
                                 <div class="form-group m-b-20">
                                     <label for="linkt">处理标记<span class="text-danger">*</span>&nbsp;</label>
-                                    <select data-style="btn-default" name="complaintSource" data-live-search="true" id="complaintSource" class="selectpicker form-control" tabindex="-98">
+                                    <select data-style="btn-default" name="complaintSource" data-live-search="true"
+                                            id="complaintSource" class="selectpicker form-control" tabindex="-98">
                                         <option value="" data-icon="mdi mdi-equal-box">--请选择处理标记--</option>
                                         <option data-icon="mdi mdi-equal-box" value="01">系统处理</option>
                                         <option data-icon="mdi mdi-equal-box" value="02">人工处理</option>
                                     </select>
                                 </div>
                                 <div class="form-group m-b-20">
-                                 <input  name="roleIds" checked  type="checkbox" required=""> 投诉号码 18908408860  同步加入黑名单
+                                    <input name="roleIds" checked type="checkbox" required=""> 投诉号码 18908408860 同步加入黑名单
                                 </div>
                             </div>
-                        <div class="text-right">
-                            <a sec:authorize-url="/complaint/list" th:href="@{/complaint/list}"  type="button" class="btn btn-teal waves-effect waves-light">提交</a>
-                            <a sec:authorize-url="/complaint/list" th:href="@{/complaint/list}" class="btn btn-default waves-effect waves-light">返回</a>
-                        </div>
+                            <div class="text-right">
+                                <a sec:authorize-url="/complaint/list" th:href="@{/complaint/list}" type="button"
+                                   class="btn btn-teal waves-effect waves-light">提交</a>
+                                <a sec:authorize-url="/complaint/list" th:href="@{/complaint/list}"
+                                   class="btn btn-default waves-effect waves-light">返回</a>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -157,7 +164,9 @@
         </div>
         <!-- end row -->
 
+        <!-- start row  错误提示-->
         <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
 
     </div> <!-- container -->
 </div> <!-- content -->
@@ -170,6 +179,7 @@
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
+
 </script>
 </body>
 </html>

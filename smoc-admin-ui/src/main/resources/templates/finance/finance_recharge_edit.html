@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <th:block th:insert="fragments/common_fragments :: common_header"/>
@@ -9,23 +10,25 @@
 
 </head>
 <body>
+<!-- Loader start 页面加载进度-->
 <th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
 
 <!-- Start content -->
 <div class="content" style="margin-top: 60px">
     <div class="container">
 
-        <!-- start row -->
+        <!-- start row 页面导航-->
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title"> 财务账户充值</h4>
+                    <h4 class="page-title"> EC财务账户充值</h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
                             财务管理
                         </li>
                         <li>
-                            财务账户充值
+                            EC财务账户充值
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -34,7 +37,7 @@
         </div>
         <!-- end row -->
 
-        <!-- start row -->
+        <!-- start row 页面内容-->
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-md-6">
                 <div class="panel panel-color panel-teal">
@@ -61,16 +64,16 @@
                                         通道账号：<label>XY2010238349343</label>
                                     </div>
                                     <div class="form-group m-b-20">
-                                        财务账号余额： <span data-d-group="4" data-a-sign="¥ "  class="autonumber">0</span>
+                                        财务账号余额： <span data-d-group="4" data-a-sign="¥ " class="autonumber">0</span>
                                     </div>
                                     <div class="form-group m-b-20">
-                                        账号冻结金额： <span data-d-group="4" data-a-sign="¥ "  class="autonumber">0</span>
+                                        账号冻结金额： <span data-d-group="4" data-a-sign="¥ " class="autonumber">0</span>
                                     </div>
                                     <div class="form-group m-b-20">
-                                        账号总消费金额： <span data-d-group="4" data-a-sign="¥ "  class="autonumber">100</span>
+                                        账号总消费金额： <span data-d-group="4" data-a-sign="¥ " class="autonumber">100</span>
                                     </div>
                                     <div class="form-group m-b-20">
-                                        账号总充值金额： <span data-d-group="4" data-a-sign="¥ "  class="autonumber">100</span>
+                                        账号总充值金额： <span data-d-group="4" data-a-sign="¥ " class="autonumber">100</span>
                                     </div>
                                     <br>
                                     <br>
@@ -96,44 +99,46 @@
                         </h3>
                     </div>
                     <div class="panel-body" style="height: 533px">
-                        <form  id="submit_form"
-                               method="post" data-parsley-validate="">
+                        <form id="submit_form"
+                              method="post" data-parsley-validate="">
                             <div class="p-20">
                                 <div class="form-group m-b-20">
                                     <label for="e3Name">充值流水号<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="e3Name" type="text"  class="form-control"
+                                    <input id="e3Name" type="text" class="form-control"
                                            readonly autocomplete="off"
                                            placeholder="流水号自动生成">
                                 </div>
                                 <div class="form-group m-b-20">
                                     <label for="eName">充值金额<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="eName" type="text"  class="form-control"
+                                    <input id="eName" type="text" class="form-control"
                                            required="" data-parsley-length="[1,64]" autocomplete="off"
                                            placeholder="充值金额">
                                 </div>
                                 <div class="form-group m-b-20">
                                     <label for="linkt">到期日期<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="linkt" type="text"  class="form-control"
+                                    <input id="linkt" type="text" class="form-control"
                                            required="" data-parsley-length="[2,12]" autocomplete="off"
                                            placeholder="到期日期">
                                 </div>
                                 <div class="form-group m-b-20">
                                     <label for="linkk">操作人<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="linkk" type="text"  class="form-control" value="贾亮"
+                                    <input id="linkk" type="text" class="form-control" value="贾亮"
                                            required="" readonly autocomplete="off">
                                 </div>
 
                                 <div class="form-group m-b-20">
                                     <label for="address">操作时间<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="address" type="text"  class="form-control" value="2021-11-17 14:45:23"
-                                           required="" >
+                                    <input id="address" type="text" class="form-control" value="2021-11-17 14:45:23"
+                                           required="">
                                 </div>
 
                             </div>
-                        <div class="text-right">
-                            <a sec:authorize-url="/finance/account/center" th:href="@{/finance/account/center}"  type="button" class="btn btn-teal waves-effect waves-light">提交</a>
-                            <a sec:authorize-url="/finance/account/list" th:href="@{/finance/account/list}" class="btn btn-default waves-effect waves-light">返回</a>
-                        </div>
+                            <div class="text-right">
+                                <a sec:authorize-url="/finance/account/center" th:href="@{/finance/account/center}"
+                                   type="button" class="btn btn-teal waves-effect waves-light">提交</a>
+                                <a sec:authorize-url="/finance/account/list" th:href="@{/finance/account/list}"
+                                   class="btn btn-default waves-effect waves-light">返回</a>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -142,7 +147,9 @@
         </div>
         <!-- end row -->
 
+        <!-- start row  错误提示-->
         <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
 
     </div> <!-- container -->
 </div> <!-- content -->
@@ -161,6 +168,7 @@
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
+
 </script>
 </body>
 </html>

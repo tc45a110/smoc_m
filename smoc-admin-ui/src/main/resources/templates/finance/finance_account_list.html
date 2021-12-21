@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org"
- >
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org"
+>
 <head>
     <th:block th:insert="fragments/common_fragments :: common_header"/>
     <th:block th:insert="fragments/common_fragments :: common_css"/>
@@ -9,10 +10,15 @@
     <link th:href="@{/static/css/detail_statistics.css}" rel="stylesheet">
 </head>
 <body>
+<!-- Loader start 页面加载进度-->
 <th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
 <!-- Start content -->
 <div class="content" style="margin-top: 60px">
     <div class="container">
+
+        <!-- start row 页面导航-->
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
@@ -29,7 +35,9 @@
                 </div>
             </div>
         </div>
+        <!-- end row -->
 
+        <!-- start row  查询条件-->
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
                 <div class="card-box">
@@ -38,16 +46,12 @@
                             <div class="col-sm-12">
 
                                 <div class="form-group  col-sm-3">
-                                    <input type="text"  class="form-control"
+                                    <input type="text" class="form-control"
                                            placeholder="企业名称" autocomplete="off">
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <input type="text"  class="form-control"
-                                           placeholder="通道账号" autocomplete="off">
-                                </div>
-                                <div class="form-group  col-sm-3">
-                                    <input type="text"  class="form-control"
-                                           placeholder="通道账号名称" autocomplete="off">
+                                    <input type="text" class="form-control"
+                                           placeholder="EC业务账号" autocomplete="off">
                                 </div>
                                 <div class="form-group  col-sm-3">
                                     <mpm:tag id="businessType" identity="businessType" show-type="select" key="code"
@@ -59,7 +63,8 @@
                                             class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search"></i> 查询
                                     </button>
-                                    <a id="help_display" style="margin-left:10px"><i class="mdi mdi-help-circle-outline" style="font-size:18px;"></i></a>
+                                    <a id="help_display" style="margin-left:10px"><i class="mdi mdi-help-circle-outline"
+                                                                                     style="font-size:18px;"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -68,25 +73,36 @@
             </div>
         </div>
 
+        <!-- start row  汇总统计-->
         <div id="help" class="row" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
                 <div class="detail">
                     <ul>
                         <li>
-                            <h2 style="color: #fff">明细统计</h2>
+                            <h2 style="color: #fff">财务账户汇总统计</h2>
                             <span></span>
                             <div class="detailInner">
-                                <a>总可用（元）：<span data-d-group="4" data-a-sign="¥ " style="color:#fff;width:100px;background-color:#0095a8;text-align:left" readonly class="autonumber">2045922</span></a><i></i>
-                                <a>总冻结（元）：<span data-d-group="4" data-a-sign="¥ " style="color:#fff;width:100px;background-color:#0095a8;text-align:left" readonly class="autonumber">20.00</span></a><i></i>
-                                <a>总消费（元）：<span data-d-group="4" data-a-sign="¥ " style="color:#fff;width:120px;background-color:#0095a8;text-align:left" readonly class="autonumber">20045922</span></a><i></i>
-                                <a>总充值（元）：<span data-d-group="4" data-a-sign="¥ " style="color:#fff;width:120px;background-color:#0095a8;text-align:left" readonly class="autonumber">20045922</span></a>
+                                <a>总可用（元）：<span data-d-group="4" data-a-sign="¥ "
+                                                style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
+                                                readonly class="autonumber">2045922</span></a><i></i>
+                                <a>总冻结（元）：<span data-d-group="4" data-a-sign="¥ "
+                                                style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
+                                                readonly class="autonumber">20.00</span></a><i></i>
+                                <a>总消费（元）：<span data-d-group="4" data-a-sign="¥ "
+                                                style="color:#fff;width:120px;background-color:#0095a8;text-align:left"
+                                                readonly class="autonumber">20045922</span></a><i></i>
+                                <a>总充值（元）：<span data-d-group="4" data-a-sign="¥ "
+                                                style="color:#fff;width:120px;background-color:#0095a8;text-align:left"
+                                                readonly class="autonumber">20045922</span></a>
                             </div>
                         </li>
                     </ul>
                 </div>
             </div>
         </div>
+        <!-- end row -->
 
+        <!-- start row  列表数据-->
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
                 <div class="panel panel-color panel-info">
@@ -99,7 +115,7 @@
                                 <thead>
                                 <tr>
                                     <th>企业名称</th>
-                                    <th>通道账号/账号名称</th>
+                                    <th>EC业务账号/业务账号名称</th>
                                     <th>冻结金额/可用余额</th>
                                     <th>消费总金额/充值总金额</th>
                                     <th>业务类型</th>
@@ -136,19 +152,26 @@
                                         <a class="btn btn-success  waves-effect waves-light btn-xs">有效</a>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a  sec:authorize-url="/finance/recharge/edit" th:href="@{/finance/recharge/edit}"
-                                            data-toggle="tooltip" data-placement="bottom"  data-original-title="财务账户充值"
-                                            class="on-default edit-row"
-                                            style="padding-left: 5px;color: #00acc1"><i style="font-size: 20px"
+
+                                        <a sec:authorize-url="/finance/account/view" th:href="@{/finance/account/view}"
+                                           data-toggle="tooltip" data-placement="bottom"
+                                           data-original-title="EC业务账号财务账户明细"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color:#4BD396;"><i style="font-size: 18px"
+                                                                                       class="glyphicon glyphicon-search"></i></a>
+                                        <a sec:authorize-url="/finance/recharge/edit"
+                                           th:href="@{/finance/recharge/edit}"
+                                           data-toggle="tooltip" data-placement="bottom"
+                                           data-original-title="EC业务账号财务账户充值"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 20px"
                                                                                         class="mdi mdi-coin"></i></a>
-                                        <a  sec:authorize-url="/finance/account/view" th:href="@{/finance/account/view}"
-                                            data-toggle="tooltip" data-placement="bottom"  data-original-title="财务账户明细"
-                                            class="on-default edit-row"
-                                            style="padding-left: 5px;color: #3b5998"><i style="font-size: 18px" class="glyphicon glyphicon-search"></i></a>
-                                        <a  sec:authorize-url="/finance/account/center" th:href="@{/finance/account/center}"
-                                            data-toggle="tooltip" data-placement="bottom"  data-original-title="EC财务账户中心"
-                                            class="on-default edit-row"
-                                            style="padding-left: 5px;color: #23527c"><i style="font-size: 18px"
+                                        <a sec:authorize-url="/finance/account/center"
+                                           th:href="@{/finance/account/center}"
+                                           data-toggle="tooltip" data-placement="left"
+                                           data-original-title="EC业务账号财务账户中心"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 18px"
                                                                                         class="glyphicon glyphicon-cog"></i></a>
                                     </td>
                                 </tr>
@@ -179,19 +202,26 @@
                                         <a class="btn btn-success  waves-effect waves-light btn-xs">有效</a>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a  sec:authorize-url="/finance/recharge/edit" th:href="@{/finance/recharge/edit}"
-                                            data-toggle="tooltip" data-placement="bottom"  data-original-title="财务账户充值"
-                                            class="on-default edit-row"
-                                            style="padding-left: 5px;color: #00acc1"><i style="font-size: 20px"
+
+                                        <a sec:authorize-url="/finance/account/view" th:href="@{/finance/account/view}"
+                                           data-toggle="tooltip" data-placement="bottom"
+                                           data-original-title="EC业务账号财务账户明细"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color:#4BD396;"><i style="font-size: 18px"
+                                                                                       class="glyphicon glyphicon-search"></i></a>
+                                        <a sec:authorize-url="/finance/recharge/edit"
+                                           th:href="@{/finance/recharge/edit}"
+                                           data-toggle="tooltip" data-placement="bottom"
+                                           data-original-title="EC业务账号财务账户充值"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 20px"
                                                                                         class="mdi mdi-coin"></i></a>
-                                        <a  sec:authorize-url="/finance/account/view" th:href="@{/finance/account/view}"
-                                            data-toggle="tooltip" data-placement="bottom"  data-original-title="财务账户明细"
-                                            class="on-default edit-row"
-                                            style="padding-left: 5px;color: #3b5998"><i style="font-size: 18px" class="glyphicon glyphicon-search"></i></a>
-                                        <a  sec:authorize-url="/finance/account/center" th:href="@{/finance/account/center}"
-                                            data-toggle="tooltip" data-placement="bottom"  data-original-title="EC财务账户中心"
-                                            class="on-default edit-row"
-                                            style="padding-left: 5px;color: #23527c"><i style="font-size: 18px"
+                                        <a sec:authorize-url="/finance/account/center"
+                                           th:href="@{/finance/account/center}"
+                                           data-toggle="tooltip" data-placement="left"
+                                           data-original-title="EC业务账号财务账户中心"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 18px"
                                                                                         class="glyphicon glyphicon-cog"></i></a>
                                     </td>
                                 </tr>
@@ -222,19 +252,26 @@
                                         <a class="btn btn-success  waves-effect waves-light btn-xs">有效</a>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a  sec:authorize-url="/finance/recharge/edit" th:href="@{/finance/recharge/edit}"
-                                            data-toggle="tooltip" data-placement="bottom"  data-original-title="财务账户充值"
-                                            class="on-default edit-row"
-                                            style="padding-left: 5px;color: #00acc1"><i style="font-size: 20px"
+
+                                        <a sec:authorize-url="/finance/account/view" th:href="@{/finance/account/view}"
+                                           data-toggle="tooltip" data-placement="bottom"
+                                           data-original-title="EC业务账号财务账户明细"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color:#4BD396;"><i style="font-size: 18px"
+                                                                                       class="glyphicon glyphicon-search"></i></a>
+                                        <a sec:authorize-url="/finance/recharge/edit"
+                                           th:href="@{/finance/recharge/edit}"
+                                           data-toggle="tooltip" data-placement="bottom"
+                                           data-original-title="EC业务账号财务账户充值"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 20px"
                                                                                         class="mdi mdi-coin"></i></a>
-                                        <a  sec:authorize-url="/finance/account/view" th:href="@{/finance/account/view}"
-                                            data-toggle="tooltip" data-placement="bottom"  data-original-title="财务账户明细"
-                                            class="on-default edit-row"
-                                            style="padding-left: 5px;color: #3b5998"><i style="font-size: 18px" class="glyphicon glyphicon-search"></i></a>
-                                        <a  sec:authorize-url="/finance/account/center" th:href="@{/finance/account/center}"
-                                            data-toggle="tooltip" data-placement="bottom"  data-original-title="EC财务账户中心"
-                                            class="on-default edit-row"
-                                            style="padding-left: 5px;color: #23527c"><i style="font-size: 18px"
+                                        <a sec:authorize-url="/finance/account/center"
+                                           th:href="@{/finance/account/center}"
+                                           data-toggle="tooltip" data-placement="left"
+                                           data-original-title="EC业务账号财务账户中心"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 18px"
                                                                                         class="glyphicon glyphicon-cog"></i></a>
                                     </td>
                                 </tr>
@@ -265,19 +302,26 @@
                                         <a class="btn btn-success  waves-effect waves-light btn-xs">有效</a>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a  sec:authorize-url="/finance/recharge/edit" th:href="@{/finance/recharge/edit}"
-                                            data-toggle="tooltip" data-placement="bottom"  data-original-title="财务账户充值"
-                                            class="on-default edit-row"
-                                            style="padding-left: 5px;color: #00acc1"><i style="font-size: 20px"
+
+                                        <a sec:authorize-url="/finance/account/view" th:href="@{/finance/account/view}"
+                                           data-toggle="tooltip" data-placement="bottom"
+                                           data-original-title="EC业务账号财务账户明细"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color:#4BD396;"><i style="font-size: 18px"
+                                                                                       class="glyphicon glyphicon-search"></i></a>
+                                        <a sec:authorize-url="/finance/recharge/edit"
+                                           th:href="@{/finance/recharge/edit}"
+                                           data-toggle="tooltip" data-placement="bottom"
+                                           data-original-title="EC业务账号财务账户充值"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 20px"
                                                                                         class="mdi mdi-coin"></i></a>
-                                        <a  sec:authorize-url="/finance/account/view" th:href="@{/finance/account/view}"
-                                            data-toggle="tooltip" data-placement="bottom"  data-original-title="财务账户明细"
-                                            class="on-default edit-row"
-                                            style="padding-left: 5px;color: #3b5998"><i style="font-size: 18px" class="glyphicon glyphicon-search"></i></a>
-                                        <a  sec:authorize-url="/finance/account/center" th:href="@{/finance/account/center}"
-                                            data-toggle="tooltip" data-placement="bottom"  data-original-title="EC财务账户中心"
-                                            class="on-default edit-row"
-                                            style="padding-left: 5px;color: #23527c"><i style="font-size: 18px"
+                                        <a sec:authorize-url="/finance/account/center"
+                                           th:href="@{/finance/account/center}"
+                                           data-toggle="tooltip" data-placement="left"
+                                           data-original-title="EC业务账号财务账户中心"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 18px"
                                                                                         class="glyphicon glyphicon-cog"></i></a>
                                     </td>
                                 </tr>
@@ -308,19 +352,26 @@
                                         <a class="btn btn-success  waves-effect waves-light btn-xs">有效</a>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a  sec:authorize-url="/finance/recharge/edit" th:href="@{/finance/recharge/edit}"
-                                            data-toggle="tooltip" data-placement="bottom"  data-original-title="财务账户充值"
-                                            class="on-default edit-row"
-                                            style="padding-left: 5px;color: #00acc1"><i style="font-size: 20px"
+
+                                        <a sec:authorize-url="/finance/account/view" th:href="@{/finance/account/view}"
+                                           data-toggle="tooltip" data-placement="bottom"
+                                           data-original-title="EC业务账号财务账户明细"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color:#4BD396;"><i style="font-size: 18px"
+                                                                                       class="glyphicon glyphicon-search"></i></a>
+                                        <a sec:authorize-url="/finance/recharge/edit"
+                                           th:href="@{/finance/recharge/edit}"
+                                           data-toggle="tooltip" data-placement="bottom"
+                                           data-original-title="EC业务账号财务账户充值"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 20px"
                                                                                         class="mdi mdi-coin"></i></a>
-                                        <a  sec:authorize-url="/finance/account/view" th:href="@{/finance/account/view}"
-                                            data-toggle="tooltip" data-placement="bottom"  data-original-title="财务账户明细"
-                                            class="on-default edit-row"
-                                            style="padding-left: 5px;color: #3b5998"><i style="font-size: 18px" class="glyphicon glyphicon-search"></i></a>
-                                        <a  sec:authorize-url="/finance/account/center" th:href="@{/finance/account/center}"
-                                            data-toggle="tooltip" data-placement="bottom"  data-original-title="EC财务账户中心"
-                                            class="on-default edit-row"
-                                            style="padding-left: 5px;color: #23527c"><i style="font-size: 18px"
+                                        <a sec:authorize-url="/finance/account/center"
+                                           th:href="@{/finance/account/center}"
+                                           data-toggle="tooltip" data-placement="left"
+                                           data-original-title="EC业务账号财务账户中心"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 18px"
                                                                                         class="glyphicon glyphicon-cog"></i></a>
                                     </td>
                                 </tr>
@@ -351,19 +402,26 @@
                                         <a class="btn btn-success  waves-effect waves-light btn-xs">有效</a>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a  sec:authorize-url="/finance/recharge/edit" th:href="@{/finance/recharge/edit}"
-                                            data-toggle="tooltip" data-placement="bottom"  data-original-title="财务账户充值"
-                                            class="on-default edit-row"
-                                            style="padding-left: 5px;color: #00acc1"><i style="font-size: 20px"
+
+                                        <a sec:authorize-url="/finance/account/view" th:href="@{/finance/account/view}"
+                                           data-toggle="tooltip" data-placement="bottom"
+                                           data-original-title="EC业务账号财务账户明细"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color:#4BD396;"><i style="font-size: 18px"
+                                                                                       class="glyphicon glyphicon-search"></i></a>
+                                        <a sec:authorize-url="/finance/recharge/edit"
+                                           th:href="@{/finance/recharge/edit}"
+                                           data-toggle="tooltip" data-placement="bottom"
+                                           data-original-title="EC业务账号财务账户充值"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 20px"
                                                                                         class="mdi mdi-coin"></i></a>
-                                        <a  sec:authorize-url="/finance/account/view" th:href="@{/finance/account/view}"
-                                            data-toggle="tooltip" data-placement="bottom"  data-original-title="财务账户明细"
-                                            class="on-default edit-row"
-                                            style="padding-left: 5px;color: #3b5998"><i style="font-size: 18px" class="glyphicon glyphicon-search"></i></a>
-                                        <a  sec:authorize-url="/finance/account/center" th:href="@{/finance/account/center}"
-                                            data-toggle="tooltip" data-placement="bottom"  data-original-title="EC财务账户中心"
-                                            class="on-default edit-row"
-                                            style="padding-left: 5px;color: #23527c"><i style="font-size: 18px"
+                                        <a sec:authorize-url="/finance/account/center"
+                                           th:href="@{/finance/account/center}"
+                                           data-toggle="tooltip" data-placement="left"
+                                           data-original-title="EC业务账号财务账户中心"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 18px"
                                                                                         class="glyphicon glyphicon-cog"></i></a>
                                     </td>
                                 </tr>
@@ -394,19 +452,26 @@
                                         <a class="btn btn-success  waves-effect waves-light btn-xs">有效</a>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a  sec:authorize-url="/finance/recharge/edit" th:href="@{/finance/recharge/edit}"
-                                            data-toggle="tooltip" data-placement="bottom"  data-original-title="财务账户充值"
-                                            class="on-default edit-row"
-                                            style="padding-left: 5px;color: #00acc1"><i style="font-size: 20px"
+
+                                        <a sec:authorize-url="/finance/account/view" th:href="@{/finance/account/view}"
+                                           data-toggle="tooltip" data-placement="bottom"
+                                           data-original-title="EC业务账号财务账户明细"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color:#4BD396;"><i style="font-size: 18px"
+                                                                                       class="glyphicon glyphicon-search"></i></a>
+                                        <a sec:authorize-url="/finance/recharge/edit"
+                                           th:href="@{/finance/recharge/edit}"
+                                           data-toggle="tooltip" data-placement="bottom"
+                                           data-original-title="EC业务账号财务账户充值"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 20px"
                                                                                         class="mdi mdi-coin"></i></a>
-                                        <a  sec:authorize-url="/finance/account/view" th:href="@{/finance/account/view}"
-                                            data-toggle="tooltip" data-placement="bottom"  data-original-title="财务账户明细"
-                                            class="on-default edit-row"
-                                            style="padding-left: 5px;color: #3b5998"><i style="font-size: 18px" class="glyphicon glyphicon-search"></i></a>
-                                        <a  sec:authorize-url="/finance/account/center" th:href="@{/finance/account/center}"
-                                            data-toggle="tooltip" data-placement="bottom"  data-original-title="EC财务账户中心"
-                                            class="on-default edit-row"
-                                            style="padding-left: 5px;color: #23527c"><i style="font-size: 18px"
+                                        <a sec:authorize-url="/finance/account/center"
+                                           th:href="@{/finance/account/center}"
+                                           data-toggle="tooltip" data-placement="left"
+                                           data-original-title="EC业务账号财务账户中心"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 18px"
                                                                                         class="glyphicon glyphicon-cog"></i></a>
                                     </td>
                                 </tr>
@@ -437,19 +502,26 @@
                                         <a class="btn btn-success  waves-effect waves-light btn-xs">有效</a>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a  sec:authorize-url="/finance/recharge/edit" th:href="@{/finance/recharge/edit}"
-                                            data-toggle="tooltip" data-placement="bottom"  data-original-title="财务账户充值"
-                                            class="on-default edit-row"
-                                            style="padding-left: 5px;color: #00acc1"><i style="font-size: 20px"
+
+                                        <a sec:authorize-url="/finance/account/view" th:href="@{/finance/account/view}"
+                                           data-toggle="tooltip" data-placement="bottom"
+                                           data-original-title="EC业务账号财务账户明细"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color:#4BD396;"><i style="font-size: 18px"
+                                                                                       class="glyphicon glyphicon-search"></i></a>
+                                        <a sec:authorize-url="/finance/recharge/edit"
+                                           th:href="@{/finance/recharge/edit}"
+                                           data-toggle="tooltip" data-placement="bottom"
+                                           data-original-title="EC业务账号财务账户充值"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 20px"
                                                                                         class="mdi mdi-coin"></i></a>
-                                        <a  sec:authorize-url="/finance/account/view" th:href="@{/finance/account/view}"
-                                            data-toggle="tooltip" data-placement="bottom"  data-original-title="财务账户明细"
-                                            class="on-default edit-row"
-                                            style="padding-left: 5px;color: #3b5998"><i style="font-size: 18px" class="glyphicon glyphicon-search"></i></a>
-                                        <a  sec:authorize-url="/finance/account/center" th:href="@{/finance/account/center}"
-                                            data-toggle="tooltip" data-placement="bottom"  data-original-title="EC财务账户中心"
-                                            class="on-default edit-row"
-                                            style="padding-left: 5px;color: #23527c"><i style="font-size: 18px"
+                                        <a sec:authorize-url="/finance/account/center"
+                                           th:href="@{/finance/account/center}"
+                                           data-toggle="tooltip" data-placement="left"
+                                           data-original-title="EC业务账号财务账户中心"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 18px"
                                                                                         class="glyphicon glyphicon-cog"></i></a>
                                     </td>
                                 </tr>
@@ -480,19 +552,26 @@
                                         <a class="btn btn-success  waves-effect waves-light btn-xs">有效</a>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a  sec:authorize-url="/finance/recharge/edit" th:href="@{/finance/recharge/edit}"
-                                            data-toggle="tooltip" data-placement="bottom"  data-original-title="财务账户充值"
-                                            class="on-default edit-row"
-                                            style="padding-left: 5px;color: #00acc1"><i style="font-size: 20px"
+
+                                        <a sec:authorize-url="/finance/account/view" th:href="@{/finance/account/view}"
+                                           data-toggle="tooltip" data-placement="bottom"
+                                           data-original-title="EC业务账号财务账户明细"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color:#4BD396;"><i style="font-size: 18px"
+                                                                                       class="glyphicon glyphicon-search"></i></a>
+                                        <a sec:authorize-url="/finance/recharge/edit"
+                                           th:href="@{/finance/recharge/edit}"
+                                           data-toggle="tooltip" data-placement="bottom"
+                                           data-original-title="EC业务账号财务账户充值"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 20px"
                                                                                         class="mdi mdi-coin"></i></a>
-                                        <a  sec:authorize-url="/finance/account/view" th:href="@{/finance/account/view}"
-                                            data-toggle="tooltip" data-placement="bottom"  data-original-title="财务账户明细"
-                                            class="on-default edit-row"
-                                            style="padding-left: 5px;color: #3b5998"><i style="font-size: 18px" class="glyphicon glyphicon-search"></i></a>
-                                        <a  sec:authorize-url="/finance/account/center" th:href="@{/finance/account/center}"
-                                            data-toggle="tooltip" data-placement="bottom"  data-original-title="EC财务账户中心"
-                                            class="on-default edit-row"
-                                            style="padding-left: 5px;color: #23527c"><i style="font-size: 18px"
+                                        <a sec:authorize-url="/finance/account/center"
+                                           th:href="@{/finance/account/center}"
+                                           data-toggle="tooltip" data-placement="left"
+                                           data-original-title="EC业务账号财务账户中心"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 18px"
                                                                                         class="glyphicon glyphicon-cog"></i></a>
                                     </td>
                                 </tr>
@@ -523,19 +602,26 @@
                                         <a class="btn btn-success  waves-effect waves-light btn-xs">有效</a>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a  sec:authorize-url="/finance/recharge/edit" th:href="@{/finance/recharge/edit}"
-                                            data-toggle="tooltip" data-placement="bottom"  data-original-title="财务账户充值"
-                                            class="on-default edit-row"
-                                            style="padding-left: 5px;color: #00acc1"><i style="font-size: 20px"
+
+                                        <a sec:authorize-url="/finance/account/view" th:href="@{/finance/account/view}"
+                                           data-toggle="tooltip" data-placement="bottom"
+                                           data-original-title="EC业务账号财务账户明细"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color:#4BD396;"><i style="font-size: 18px"
+                                                                                       class="glyphicon glyphicon-search"></i></a>
+                                        <a sec:authorize-url="/finance/recharge/edit"
+                                           th:href="@{/finance/recharge/edit}"
+                                           data-toggle="tooltip" data-placement="bottom"
+                                           data-original-title="EC业务账号财务账户充值"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 20px"
                                                                                         class="mdi mdi-coin"></i></a>
-                                        <a  sec:authorize-url="/finance/account/view" th:href="@{/finance/account/view}"
-                                            data-toggle="tooltip" data-placement="bottom"  data-original-title="财务账户明细"
-                                            class="on-default edit-row"
-                                            style="padding-left: 5px;color: #3b5998"><i style="font-size: 18px" class="glyphicon glyphicon-search"></i></a>
-                                        <a  sec:authorize-url="/finance/account/center" th:href="@{/finance/account/center}"
-                                            data-toggle="tooltip" data-placement="bottom"  data-original-title="EC财务账户中心"
-                                            class="on-default edit-row"
-                                            style="padding-left: 5px;color: #23527c"><i style="font-size: 18px"
+                                        <a sec:authorize-url="/finance/account/center"
+                                           th:href="@{/finance/account/center}"
+                                           data-toggle="tooltip" data-placement="left"
+                                           data-original-title="EC业务账号财务账户中心"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 18px"
                                                                                         class="glyphicon glyphicon-cog"></i></a>
                                     </td>
                                 </tr>
@@ -548,7 +634,11 @@
                 </div>
             </div>
         </div>
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
         <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
     </div>
 </div> <!-- content -->
 
@@ -587,6 +677,8 @@
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
+
+
 
 </script>
 </body>
