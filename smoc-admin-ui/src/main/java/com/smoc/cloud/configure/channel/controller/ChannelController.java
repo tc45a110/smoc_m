@@ -11,15 +11,15 @@ import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelBasicInfoValidator;
-import com.smoc.cloud.common.smoc.configuate.validator.ChannelPriceValidator;
+import com.smoc.cloud.common.smoc.configuate.validator.ChannelInterfaceValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
+import com.smoc.cloud.configure.channel.service.ChannelInterfaceService;
 import com.smoc.cloud.configure.channel.service.ChannelService;
 import com.smoc.cloud.sequence.service.SequenceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -47,6 +47,9 @@ public class ChannelController {
 
     @Autowired
     private SystemUserLogService systemUserLogService;
+
+    @Autowired
+    private ChannelInterfaceService channelInterfaceService;
 
     /**
      * 通道管理列表
@@ -408,8 +411,16 @@ public class ChannelController {
 
         ModelAndView view = new ModelAndView("configure/channel/channel_view_center");
 
-        return view;
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            return view;
+        }
 
+        view.addObject("id", id);
+
+        return view;
     }
 
     /**
@@ -421,6 +432,31 @@ public class ChannelController {
     public ModelAndView view_base(@PathVariable String id, HttpServletRequest request) {
 
         ModelAndView view = new ModelAndView("configure/channel/channel_view_base");
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            return view;
+        }
+
+        //查询通道基本信息
+        ResponseData<ChannelBasicInfoValidator> data = channelService.findById(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        //查询通道接口参数
+        ResponseData<ChannelInterfaceValidator> channelInterfaceData = channelInterfaceService.findChannelInterfaceByChannelId(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("channelBasicInfoValidator", data.getData());
+        view.addObject("channelInterfaceValidator", channelInterfaceData.getData());
+
         return view;
 
     }

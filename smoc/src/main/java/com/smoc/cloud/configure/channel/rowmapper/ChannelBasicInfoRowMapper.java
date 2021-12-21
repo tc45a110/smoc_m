@@ -32,6 +32,8 @@ public class ChannelBasicInfoRowMapper implements RowMapper<ChannelBasicInfoQo> 
         qo.setChannelStatus(resultSet.getString("CHANNEL_STATUS"));
         qo.setMaxSendSecond(resultSet.getInt("MAX_SEND_SECOND"));
         qo.setChannelIntroduce(resultSet.getString("CHANNEL_INTRODUCE"));
+        qo.setChannelAccessSales(resultSet.getString("CHANNEL_ACCESS_SALES"));
+        qo.setChannelRestrictContent(resultSet.getString("CHANNEL_RESTRICT_CONTENT"));
 
         return qo;
     }

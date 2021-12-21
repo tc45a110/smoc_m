@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
->
+<html xmlns:th="http://www.thymeleaf.org" xmlns:mpm="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <th:block th:insert="fragments/common_fragments :: common_header"/>
@@ -22,49 +21,70 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="property-content"
-                                 style="height:274px">
+                                 style="height:305px">
                                 <div class="listingInfo">
                                     <div class="">
                                         <h5 style="padding-left:10px">通道基本信息</h5>
                                     </div>
                                     <div class="col-sm-4">
-                                        <p style="font-size:12px">通道ID：10691111</p>
-                                        <p style="font-size:12px">抗诉率：4/百万</p>
-                                        <p style="font-size:12px">签名方式：通道自签名</p>
-                                        <p style="font-size:12px">是否支持携号转网：是</p>
-                                        <p style="font-size:12px">计价方式：统一计价</p>
-                                        <p style="font-size:12px">通道运行状态：正常</p>
+                                        <p style="font-size:12px">通道ID：[[${channelBasicInfoValidator.channelId}]]</p>
+                                        <p style="font-size:12px">抗诉率：<span th:if="${not #strings.isEmpty(channelBasicInfoValidator.maxComplaintRate)}">[[${channelBasicInfoValidator.maxComplaintRate}]]/百万</span></p>
+                                        <p style="font-size:12px">签名方式：<mpm:tag identity="signType" show-type="label" key="code"
+                                                                                th:value="${channelBasicInfoValidator.signType}"/></p>
+                                        <p style="font-size:12px">是否支持携号转网：<mpm:tag identity="isOrNo" show-type="label" key="code"
+                                                                                    th:value="${channelBasicInfoValidator.transferEnable}"/></p>
+                                        <p style="font-size:12px">计价方式：<mpm:tag identity="chargeType" show-type="label" key="code"
+                                                                                th:value="${channelBasicInfoValidator.priceStyle}"/></p>
+                                        <p style="font-size:12px">通道对接销售：</p>
                                     </div>
                                     <div class="col-sm-4">
-                                        <p style="font-size:12px">通道名称：短信-移动-会销(小舟dj)</p>
-                                        <p style="font-size:12px">接入省份：湖北省</p>
-                                        <p style="font-size:12px">有无报告：有</p>
-                                        <p style="font-size:12px">携号转网方式 ：支持码号</p>
-                                        <p style="font-size:12px">通道资费(元/条)：¥ 0.015<i data-toggle="tooltip"
-                                                                                      data-placement="right" title=""
-                                                                                      data-original-title="这个位置开发时有业务逻辑，可能多条 在这显示"
-                                                                                      class="mdi mdi-comment-processing"
-                                                                                      style="margin-left:5px"></i></p>
-                                        <p style="font-size:12px">通道状态：正常</p>
-
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <p style="font-size:12px">发送号码范围：联通、移动、电信</p>
-                                        <p style="font-size:12px">通道供应商：移动</p>
-                                        <p style="font-size:12px">有无上行：有</p>
-                                        <p style="font-size:12px"> 通道区域范围：全国
-                                            <i data-toggle="tooltip" data-placement="right" title=""
+                                        <p style="font-size:12px">通道名称：[[${channelBasicInfoValidator.channelName}]]</p>
+                                        <p style="font-size:12px">接入省份：<mpm:tag identity="provices" show-type="label" key="code"
+                                                                                th:value="${channelBasicInfoValidator.accessProvince}"/></p>
+                                        <p style="font-size:12px">有无报告：<mpm:tag identity="yesOrNo" show-type="label" key="code"
+                                                                                th:value="${channelBasicInfoValidator.reportEnable}"/></p>
+                                        <p style="font-size:12px">携号转网方式 ：<mpm:tag identity="transferType" show-type="label" key="code"
+                                                                                   th:value="${channelBasicInfoValidator.transferType}"/></p>
+                                        <p style="font-size:12px">通道资费(元/条)：
+                                            <span th:if="${not #strings.isEmpty(channelBasicInfoValidator.channelPrice)}">¥ [[${channelBasicInfoValidator.channelPrice}]]</span>
+                                            <i th:if="${channelBasicInfoValidator.priceStyle eq 'AREA_PRICE'}" data-toggle="tooltip"
+                                               data-placement="right" title=""
                                                data-original-title="这个位置开发时有业务逻辑，可能多条 在这显示"
+                                               th:id="${'channelPrice'+channelBasicInfoValidator.channelId}" th:onmouseover="channelPrice([[${channelBasicInfoValidator.channelId}]])"
+                                               class="mdi mdi-comment-processing"
+                                               style="margin-left:5px"></i>
+                                        </p>
+                                        <p style="font-size:12px">通道运行状态：<mpm:tag identity="channelLinkStatus" show-type="label" key="code"
+                                                                                  th:value="${channelBasicInfoValidator.channelRunStatus}"/></p>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <p style="font-size:12px">发送号码范围：<mpm:tag identity="carrier" show-type="label" key="code" th:value="${channelBasicInfoValidator.carrier}"/></p>
+                                        <p style="font-size:12px">通道供应商：<mpm:tag identity="channelSupplier" show-type="label" key="code" th:value="${channelBasicInfoValidator.channelProvder}"/></p>
+                                        <p style="font-size:12px">有无上行：<mpm:tag identity="yesOrNo" show-type="label" key="code"
+                                                                                th:value="${channelBasicInfoValidator.upMessageEnable}"/></p>
+                                        <p style="font-size:12px"> 通道区域范围：
+                                            <mpm:tag identity="businessAreaType" show-type="label" key="code" th:value="${channelBasicInfoValidator.businessAreaType}"/>
+                                            <i th:if="${channelBasicInfoValidator.supportAreaCodes ne 'ALL'}" data-toggle="tooltip" data-placement="right" title=""
+                                               data-original-title="这个位置开发时有业务逻辑，可能多条 在这显示" th:id="${channelBasicInfoValidator.channelId}" th:onmouseover="areaCodes([[${channelBasicInfoValidator.channelId}]])"
                                                class="mdi mdi-comment-text" style="margin-left:5px"></i>
-                                            <i data-toggle="tooltip" data-placement="right" title=""
-                                               data-original-title="屏蔽区域，如果存在屏蔽区域的话"
+                                            <i th:if="${not #strings.isEmpty(channelBasicInfoValidator.maskProvince)}" data-toggle="tooltip" data-placement="right" title=""
+                                               data-original-title="屏蔽区域，如果存在屏蔽区域的话" th:id="${channelBasicInfoValidator.channelId}" th:onmouseover="areaCodes([[${channelBasicInfoValidator.channelId}]])"
                                                class="mdi mdi-comment-text-outline"
-                                               style="margin-left:5px"></i></p>
-                                        <p style="font-size:12px">信息分类：行业、拉新</p>
+                                               style="margin-left:5px"></i>
+                                        </p>
+                                        <p style="font-size:12px">信息分类：<mpm:tag identity="infoType" show-type="label" key="code"
+                                                                                th:value="${channelBasicInfoValidator.infoType}"/></p>
+                                        <p style="font-size:12px">通道状态：
+                                            <mpm:tag identity="channelStatus" show-type="button" key="code" th:value="${channelBasicInfoValidator.channelStatus}"
+                                                     class="001,btn btn-success waves-effect waves-light btn-xs;002,btn btn-orange waves-effect waves-light btn-xs;003,btn btn-brown waves-effect waves-light btn-xs;004,btn btn-pink waves-effect waves-light btn-xs;005,btn btn-inverse waves-effect waves-light btn-xs;006,btn btn-danger waves-effect waves-light btn-xs;"/>
+                                        </p>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <p style="font-size:12px">内容限制：[[${channelBasicInfoValidator.channelRestrictContent}]]</p>
                                     </div>
                                     <div class="property-action">
                                                     <span style="padding-left:10px;font-size:12px">
-                                                        通道业务介绍：次产品只能用来发送彩信、地产、有戏、验证码
+                                                        通道业务介绍：[[${channelBasicInfoValidator.channelIntroduce}]]
                                                     </span>
                                     </div>
                                 </div>
@@ -172,6 +192,34 @@
 </div> <!-- content -->
 <th:block th:insert="fragments/common_fragments :: common_js"/>
 <script>
+
+    function areaCodes(channelId){
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $.ajax({
+            url: contextPath + "/configure/channel/findChannelBusinessArea/" + channelId,
+            async: false,
+            success: function (data) {
+                $('#'+channelId).attr({
+                    // 设置提示内容
+                    'data-original-title': data,
+                })
+            }
+        });
+    }
+
+    function channelPrice(channelId){
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $.ajax({
+            url: contextPath + "/configure/channel/findChannelPrice/" + channelId,
+            async: false,
+            success: function (data) {
+                $('#channelPrice'+channelId).attr({
+                    // 设置提示内容
+                    'data-original-title': data,
+                })
+            }
+        });
+    }
 
     var resizefunc = [];
     //隐藏进度项

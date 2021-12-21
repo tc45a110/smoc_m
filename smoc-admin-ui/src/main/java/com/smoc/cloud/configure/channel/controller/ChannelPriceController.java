@@ -76,21 +76,11 @@ public class ChannelPriceController {
 
         ChannelBasicInfoValidator channelBasicInfoValidator = data.getData();
 
-        String supportAreaCodes = "";
-        //分省
-        if ("PROVINCE".equals(channelBasicInfoValidator.getBusinessAreaType())) {
-            supportAreaCodes = channelBasicInfoValidator.getProvince();
-        }
-        //国际
-        if ("INTERNATIONAL".equals(channelBasicInfoValidator.getBusinessAreaType())) {
-            supportAreaCodes = channelBasicInfoValidator.getSupportAreaCodes();
-        }
-
         //如果不是全国，才会去查区域价格数据
         ChannelPriceValidator channelPriceValidator = new ChannelPriceValidator();
         if (!"COUNTRY".equals(channelBasicInfoValidator.getBusinessAreaType())) {
             channelPriceValidator.setChannelId(channelBasicInfoValidator.getChannelId());
-            channelPriceValidator.setAreaCode(supportAreaCodes);
+            channelPriceValidator.setAreaCode(channelBasicInfoValidator.getSupportAreaCodes());
 
             //根据通道id和区域查询价格
             ResponseData<List<ChannelPriceValidator>> list = channelPriceService.findChannelPrice(channelPriceValidator);
@@ -140,15 +130,7 @@ public class ChannelPriceController {
             return view;
         }
 
-        String supportAreaCodes = "";
-        //分省
-        if ("PROVINCE".equals(data.getData().getBusinessAreaType())) {
-            supportAreaCodes = data.getData().getProvince();
-        }
-        //国际
-        if ("INTERNATIONAL".equals(data.getData().getBusinessAreaType())) {
-            supportAreaCodes = data.getData().getSupportAreaCodes();
-        }
+        String supportAreaCodes = data.getData().getSupportAreaCodes();
 
         //如果区域为空直接返回
         if (StringUtils.isEmpty(supportAreaCodes)) {

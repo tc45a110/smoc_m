@@ -40,11 +40,13 @@
                     <div class="row" style="margin-bottom:10px">
                         <h4 >
                             <div class="pull-right" style="margin-top: -12px;margin-right:10px">
-                                <a sec:authorize-url="/configure/channel/list" th:href="@{/configure/channel/list}"
+                                <a sec:authorize-url="/configure/channel/list"
+                                   th:href="@{/configure/channel/list}"
                                    class="btn btn-default waves-effect waves-light btn-md">
                                     <i class="glyphicon  glyphicon-share-alt" style="margin-right:10px"></i>
                                     返回通道列表</a>
-                                <a sec:authorize-url="/configure/channel/edit/center/*" th:href="@{/configure/channel/edit/center/id}"
+                                <a sec:authorize-url="/configure/channel/edit/center/*"
+                                   th:href="@{/configure/channel/edit/center/{id}(id=${id})}"
                                    class="btn btn-purple waves-effect waves-light btn-md" style="margin-right:10px">
                                     <i class="glyphicon glyphicon-cog" style="margin-right:5px"></i>
                                     通道配置</a>
@@ -58,7 +60,7 @@
                                     <div class="card-box">
                                         <ul class="nav nav-tabs m-b-30">
                                             <li class="active" id="tab1"><a onclick="active('1')"  sec:authorize-url="/configure/channel/view/base/*"
-                                                                            th:href="@{/configure/channel/view/base/id}"
+                                                                            th:href="@{/configure/channel/view/base/{id}(id=${id})}"
                                                                             th:target="tab-content">通道信息</a></li>
                                             <li class="" id="tab6"><a onclick="active('6')"
                                                                       sec:authorize-url="/parameter/filter/view/CHANNEL_PARAM/*/*"
@@ -80,7 +82,7 @@
                                         </ul>
                                         <div class="tab-cotent" style="background-color:#fff">
                                             <iframe name="tab-content" id="tab-content" th:frameBorder="0" th:scrolling="auto"
-                                                    th:src="@{/configure/channel/view/base/id}" style="padding: 0px; width: 100%; height: 1200px;background-color:#fff"> </iframe>
+                                                    th:src="@{/configure/channel/view/base/{id}(id=${id})}" style="padding: 0px; width: 100%; height: 1200px;background-color:#fff"> </iframe>
                                         </div>
                                     </div>
                                 </div> <!-- end col -->

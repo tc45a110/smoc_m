@@ -46,7 +46,9 @@ public class ChannelBasicInfoQo {
     //信息分类
     private String infoType;
     //通道对接销售
-    private String channelAccessSalse;
+    private String channelAccessSales;
+    //通道内容限制
+    private String channelRestrictContent;
     //接入省份
     private String accessProvince;
 }

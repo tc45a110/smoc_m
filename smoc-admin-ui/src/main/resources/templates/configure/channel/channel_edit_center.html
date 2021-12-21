@@ -48,7 +48,7 @@
                                             <i class="glyphicon  glyphicon-share-alt" style="margin-right:10px"></i>
                                             返回通道列表</a>
                                         <a sec:authorize-url="/configure/channel/edit/center/*"
-                                           th:href="@{/configure/channel/view/center/id}"
+                                           th:href="@{/configure/channel/view/center/{id}(id=${id})}"
                                            class="btn btn-teal waves-effect waves-light btn-md">
                                             <i class="glyphicon  glyphicon-search" style="margin-right:5px"></i>
                                             通道详情</a>
