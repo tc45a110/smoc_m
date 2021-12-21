@@ -68,6 +68,18 @@ public class BaseUserRepositoryImpl extends BasePageRepository {
                 paramSize++;
             }
 
+            if (!StringUtils.isEmpty(user.getType())) {
+                sqlBuffer.append("and extends.type=? ");
+                tempParams[paramSize] = user.getType();
+                paramSize++;
+            }
+
+            if (!StringUtils.isEmpty(user.getActive())) {
+                sqlBuffer.append("and user.ACTIVE=? ");
+                tempParams[paramSize] = user.getActive();
+                paramSize++;
+            }
+
         }
 
         //根据参数个数，组织参数值

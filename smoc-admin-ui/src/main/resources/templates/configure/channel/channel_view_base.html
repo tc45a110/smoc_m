@@ -35,7 +35,7 @@
                                                                                     th:value="${channelBasicInfoValidator.transferEnable}"/></p>
                                         <p style="font-size:12px">计价方式：<mpm:tag identity="chargeType" show-type="label" key="code"
                                                                                 th:value="${channelBasicInfoValidator.priceStyle}"/></p>
-                                        <p style="font-size:12px">通道对接销售：</p>
+                                        <p style="font-size:12px">通道对接销售：[[${realName}]]</p>
                                     </div>
                                     <div class="col-sm-4">
                                         <p style="font-size:12px">通道名称：[[${channelBasicInfoValidator.channelName}]]</p>
@@ -106,21 +106,24 @@
                                         <h5 style="padding-left:10px">通道接口信息</h5>
                                     </div>
                                     <div class="col-sm-4">
-                                        <p style="font-size:12px">通道对接账号：10691111</p>
-                                        <p style="font-size:12px">企业代码：YS0003</p>
-                                        <p style="font-size:12px">连接数：通道自签名</p>
-                                        <p style="font-size:12px">通道协议类型：CMPP</p>
+                                        <p style="font-size:12px">通道对接账号：[[${channelInterfaceValidator.channelAccessAccount}]]</p>
+                                        <p style="font-size:12px">企业代码：[[${channelInterfaceValidator.spId}]]</p>
+                                        <p style="font-size:12px">连接数：<span th:if="${channelInterfaceValidator.connectNumber ne 0}">[[${channelInterfaceValidator.connectNumber}]]</span></p>
+                                        <p style="font-size:12px">通道协议类型：
+                                            <mpm:tag identity="channelProtocolType" show-type="label" key="code"
+                                                     th:value="${channelInterfaceValidator.protocol}"/>
+                                        </p>
                                     </div>
                                     <div class="col-sm-4">
-                                        <p style="font-size:12px">通道密码：3456RTYU</p>
-                                        <p style="font-size:12px">码号：1851000</p>
-                                        <p style="font-size:12px">最大速率(条/秒)：2000/秒</p>
-                                        <p style="font-size:12px">版本 ：2.0.1</p>
+                                        <p style="font-size:12px">通道密码：[[${channelInterfaceValidator.channelAccessPassword}]]</p>
+                                        <p style="font-size:12px">码号：[[${channelInterfaceValidator.srcId}]]</p>
+                                        <p style="font-size:12px">最大速率(条/秒)：<span th:if="${not #strings.isEmpty(channelInterfaceValidator.maxSendSecond)}">[[${channelInterfaceValidator.maxSendSecond}]]/秒</span></p>
+                                        <p style="font-size:12px">版本 ：[[${channelInterfaceValidator.version}]]</p>
                                     </div>
                                     <div class="col-sm-4">
-                                        <p style="font-size:12px">通道服务地址：http://167.34.23.12:8089</p>
-                                        <p style="font-size:12px">业务代码 ：</p>
-                                        <p style="font-size:12px">心跳间隔单位：秒</p>
+                                        <p style="font-size:12px">通道服务地址：[[${channelInterfaceValidator.channelServiceUrl}]]</p>
+                                        <p style="font-size:12px">业务代码 ：[[${channelInterfaceValidator.serviceCode}]]</p>
+                                        <p style="font-size:12px">心跳间隔单位：<span th:if="${channelInterfaceValidator.heartbeatInterval ne 0}">[[${channelInterfaceValidator.heartbeatInterval}]]</span></p>
 
                                     </div>
                                 </div>

@@ -76,7 +76,8 @@
 
                                                                       th:target="tab-content">通道投诉统计</a></li>
                                             <li class="" id="tab5"><a onclick="active('5')"
-
+                                                                      sec:authorize-url="/user/logs/list/*"
+                                                                      th:href="@{/user/logs/list/{id}(id=${id})}"
                                                                       th:target="tab-content">通道操作日志</a></li>
 
                                         </ul>

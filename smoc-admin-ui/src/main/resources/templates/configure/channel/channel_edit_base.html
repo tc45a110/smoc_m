@@ -159,9 +159,12 @@
                                                             class="text-danger" th:if="${#fields.hasErrors('channelAccessSales')}"
                                                             th:errors="*{channelAccessSales}" style="font-weight: 200;font-size: 12px"></span>
                                                     </label>
-                                                    <input type="text" class="form-control"
-                                                           autocomplete="off" th:field="*{channelAccessSales}"
-                                                           data-parsley-length="[1,20]" placeholder="通道对接销售">
+                                                    <select name="channelAccessSales" data-style="btn-default"
+                                                            class="selectpicker  form-control" tabindex="-98" 　required="true">
+                                                        <option data-icon="mdi mdi-account">--请选择对接销售--</option>
+                                                        <option data-icon="mdi mdi-account" th:each="sales:${salesList}"
+                                                                th:selected="${channelBasicInfoValidator.channelAccessSales eq sales.id}" th:value="${sales.id}">[[${sales.realName}]]</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
