@@ -3,6 +3,8 @@ package com.smoc.cloud.configure.channel.controller;
 import com.alibaba.fastjson.JSON;
 import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
+import com.smoc.cloud.common.auth.qo.Dict;
+import com.smoc.cloud.common.auth.qo.DictType;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelBasicInfoValidator;
@@ -18,12 +20,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.thymeleaf.context.WebEngineContext;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ import java.util.Map;
  * 通道价格管理
  **/
 @Slf4j
-@Controller
+@RestController
 @RequestMapping("/configure/channel")
 public class ChannelPriceController {
 
@@ -92,7 +93,7 @@ public class ChannelPriceController {
             channelPriceValidator.setAreaCode(supportAreaCodes);
 
             //根据通道id和区域查询价格
-            ResponseData<List<ChannelPriceValidator>> list = channelPriceService.findByChannelIdAndAreaCode(channelPriceValidator);
+            ResponseData<List<ChannelPriceValidator>> list = channelPriceService.findChannelPrice(channelPriceValidator);
             if (!StringUtils.isEmpty(list)) {
                 view.addObject("op", "edit");
             } else {
@@ -193,5 +194,72 @@ public class ChannelPriceController {
         return view;
     }
 
+    /**
+     * 查询通道价格
+     * @param channelId
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/findChannelPrice/{channelId}", produces = "text/html;charset=utf-8", method = RequestMethod.GET)
+    public String findChannelPrice(@PathVariable String channelId, HttpServletRequest request) {
 
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(channelId);
+        if (!MpmValidatorUtil.validate(validator)) {
+            return MpmValidatorUtil.validateMessage(validator);
+        }
+
+        //查询通道是否存在
+        ResponseData<ChannelBasicInfoValidator> data = channelService.findById(channelId);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            return data.getMessage();
+        }
+
+        //取字典数据
+        ServletContext context = request.getServletContext();
+        Map<String, DictType> dictMap = (Map<String, DictType>) context.getAttribute("dict");
+        List<Dict> dictList = new ArrayList<>();
+        //分省
+        if("PROVINCE".equals(data.getData().getBusinessAreaType())){
+            DictType dictType  = dictMap.get("provices");
+            dictList = dictType.getDict();
+        }
+        //国际
+        if("INTERNATIONAL".equals(data.getData().getBusinessAreaType())){
+            DictType dictType  = dictMap.get("internationalCountry");
+            dictList = dictType.getDict();
+        }
+        if(dictList.size()<1){
+            return "数据为空或无效";
+        }
+
+        //根据通道id查询区域价格
+        ChannelPriceValidator channelPriceValidator = new ChannelPriceValidator();
+        channelPriceValidator.setChannelId(channelId);
+        ResponseData<List<ChannelPriceValidator>> listData = channelPriceService.findChannelPrice(channelPriceValidator);
+        if (!ResponseCode.SUCCESS.getCode().equals(listData.getCode())) {
+            return listData.getMessage();
+        }
+
+        if(StringUtils.isEmpty(listData.getData())){
+            return "未配置通道价格";
+        }
+
+        //封装区域价格数据
+        StringBuilder channelPrices = new StringBuilder();
+        for (ChannelPriceValidator channelPrice : listData.getData()) {
+            String name = "";
+            for (int i =0;i<dictList.size();i++) {
+                Dict dict = dictList.get(i);
+                if (channelPrice.getAreaCode().equals(dict.getFieldCode())) {
+                    name += dict.getFieldName();
+                    break;
+                }
+            }
+            channelPrices.append(name+"："+channelPrice.getChannelPrice()+"；");
+        }
+
+        return channelPrices.toString();
+    }
 }

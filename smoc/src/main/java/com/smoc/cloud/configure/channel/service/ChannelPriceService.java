@@ -44,7 +44,7 @@ public class ChannelPriceService {
         channelPriceRepository.deleteByChannelIdAndAreaCode(channelPriceValidator.getChannelId(), channelPriceValidator.getAreaCode());
 
         //根据通道id和区域查询已有的价格
-        List<ChannelPriceValidator> list = channelPriceRepository.findByChannelIdAndAreaCode(channelPriceValidator);
+        List<ChannelPriceValidator> list = channelPriceRepository.findChannelPrice(channelPriceValidator);
 
 
         //前台选择的区域
@@ -90,9 +90,9 @@ public class ChannelPriceService {
         return ResponseDataUtil.buildSuccess();
     }
 
-    public ResponseData findByChannelIdAndAreaCode(ChannelPriceValidator channelPriceValidator) {
+    public ResponseData findChannelPrice(ChannelPriceValidator channelPriceValidator) {
 
-        List<ChannelPriceValidator> list = channelPriceRepository.findByChannelIdAndAreaCode(channelPriceValidator);
+        List<ChannelPriceValidator> list = channelPriceRepository.findChannelPrice(channelPriceValidator);
         return ResponseDataUtil.buildSuccess(list);
     }
 }

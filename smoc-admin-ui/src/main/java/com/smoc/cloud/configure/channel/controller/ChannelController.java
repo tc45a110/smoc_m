@@ -9,9 +9,10 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelBasicInfoValidator;
+import com.smoc.cloud.common.smoc.configuate.validator.ChannelPriceValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
-import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.configure.channel.service.ChannelService;
@@ -26,6 +27,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
@@ -33,7 +35,7 @@ import java.util.*;
  * 通道管理
  **/
 @Slf4j
-@Controller
+@RestController
 @RequestMapping("/configure/channel")
 public class ChannelController {
 
@@ -52,27 +54,27 @@ public class ChannelController {
      * @return
      */
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public ModelAndView userProfile(HttpServletRequest request) {
+    public ModelAndView list(HttpServletRequest request) {
 
         ModelAndView view = new ModelAndView("configure/channel/channel_list");
-/*
+
         ///初始化数据
-        PageParams<ChannelBasicInfoValidator> params = new PageParams<ChannelBasicInfoValidator>();
+        PageParams<ChannelBasicInfoQo> params = new PageParams<ChannelBasicInfoQo>();
         params.setPageSize(8);
         params.setCurrentPage(1);
-        ChannelBasicInfoValidator channelBasicInfoValidator = new ChannelBasicInfoValidator();
-        params.setParams(channelBasicInfoValidator);
+        ChannelBasicInfoQo channelBasicInfoQo = new ChannelBasicInfoQo();
+        params.setParams(channelBasicInfoQo);
 
         //查询
-        ResponseData<PageList<ChannelBasicInfoValidator>> data = channelService.page(params);
+        ResponseData<PageList<ChannelBasicInfoQo>> data = channelService.page(params);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;
         }
 
-        view.addObject("channelBasicInfoValidator", channelBasicInfoValidator);
+        view.addObject("channelBasicInfoQo", channelBasicInfoQo);
         view.addObject("list", data.getData().getList());
-        view.addObject("pageParams", data.getData().getPageParams());*/
+        view.addObject("pageParams", data.getData().getPageParams());
 
         return view;
     }
@@ -83,21 +85,21 @@ public class ChannelController {
      * @return
      */
     @RequestMapping(value = "/page", method = RequestMethod.POST)
-    public ModelAndView page(@ModelAttribute ChannelBasicInfoValidator channelBasicInfoValidator, PageParams pageParams) {
+    public ModelAndView page(@ModelAttribute ChannelBasicInfoQo channelBasicInfoQo, PageParams pageParams) {
         ModelAndView view = new ModelAndView("configure/channel/channel_list");
-/*
-        //分页查询
-        pageParams.setParams(channelBasicInfoValidator);
 
-        ResponseData<PageList<ChannelBasicInfoValidator>> data = channelService.page(pageParams);
+        //分页查询
+        pageParams.setParams(channelBasicInfoQo);
+
+        ResponseData<PageList<ChannelBasicInfoQo>> data = channelService.page(pageParams);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;
         }
 
-        view.addObject("channelBasicInfoValidator", channelBasicInfoValidator);
+        view.addObject("channelBasicInfoQo", channelBasicInfoQo);
         view.addObject("list", data.getData().getList());
-        view.addObject("pageParams", data.getData().getPageParams());*/
+        view.addObject("pageParams", data.getData().getPageParams());
 
         return view;
     }
@@ -167,7 +169,7 @@ public class ChannelController {
         /**
          * 修改:查询数据
          */
-        ResponseData<ChannelBasicInfoValidator> data = channelService.findById(id);
+        ResponseData<ChannelBasicInfoValidator> data = channelService.findChannelById(id);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
         }
@@ -264,6 +266,88 @@ public class ChannelController {
         }
 
         return result;
+    }
+
+    /**
+     * 查询通道区域范围
+     * @param channelId
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/findChannelBusinessArea/{channelId}", produces = "text/html;charset=utf-8", method = RequestMethod.GET)
+    public String findChannelPrice(@PathVariable String channelId, HttpServletRequest request) {
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(channelId);
+        if (!MpmValidatorUtil.validate(validator)) {
+            return MpmValidatorUtil.validateMessage(validator);
+        }
+
+        //查询通道是否存在
+        ResponseData<ChannelBasicInfoValidator> data = channelService.findById(channelId);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            return data.getMessage();
+        }
+
+        //取字典数据
+        ServletContext context = request.getServletContext();
+        Map<String, DictType> dictMap = (Map<String, DictType>) context.getAttribute("dict");
+        List<Dict> dictList = new ArrayList<>();
+
+        //国际
+        if("INTERNATIONAL".equals(data.getData().getBusinessAreaType())){
+            DictType dictType  = dictMap.get("internationalCountry");
+            dictList = dictType.getDict();
+        }else{
+            DictType dictType  = dictMap.get("provices");
+            dictList = dictType.getDict();
+        }
+
+        if(dictList.size()<1){
+            return "数据为空或无效";
+        }
+
+        String areaType = "业务区域";
+        String supportAreaCodes = data.getData().getSupportAreaCodes();
+        //如果默认值为ALL并且屏蔽省份为空
+        if("ALL".equals(data.getData().getSupportAreaCodes())  ){
+            if(StringUtils.isEmpty(data.getData().getMaskProvince())){
+                return "无屏蔽省份";
+            }else{
+                areaType = "屏蔽省份";
+                supportAreaCodes = data.getData().getMaskProvince();
+            }
+        }
+
+        String[] areaCodes = supportAreaCodes.split(",");
+
+        //封装区域数据
+        StringBuilder channelArea = new StringBuilder();
+        if(areaCodes.length>1){
+            for (int a=0;a <areaCodes.length;a++) {
+                String name = "";
+                for (int i =0;i<dictList.size();i++) {
+                    Dict dict = dictList.get(i);
+                    if (areaCodes[a].equals(dict.getFieldCode())) {
+                        name += dict.getFieldName();
+                        break;
+                    }
+                }
+                channelArea.append(name+" ");
+            }
+        }else{
+            String name = "";
+            for (Dict dict : dictList) {
+                if (supportAreaCodes.equals(dict.getFieldCode())) {
+                    name += dict.getFieldName();
+                    break;
+                }
+            }
+            channelArea.append(name);
+        }
+
+        return areaType+"："+channelArea.toString();
     }
 
     /**

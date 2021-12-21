@@ -63,9 +63,9 @@ public class ChannelPriceService {
      * @param channelPriceValidator
      * @return
      */
-    public ResponseData<List<ChannelPriceValidator>> findByChannelIdAndAreaCode(ChannelPriceValidator channelPriceValidator) {
+    public ResponseData<List<ChannelPriceValidator>> findChannelPrice(ChannelPriceValidator channelPriceValidator) {
         try {
-            ResponseData<List<ChannelPriceValidator>> list = this.channelPriceFeignClient.findByChannelIdAndAreaCode(channelPriceValidator);
+            ResponseData<List<ChannelPriceValidator>> list = this.channelPriceFeignClient.findChannelPrice(channelPriceValidator);
             return list;
         } catch (Exception e) {
             log.error(e.getMessage());

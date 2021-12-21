@@ -42,6 +42,6 @@ public interface ChannelPriceFeignClient {
      * @param channelPriceValidator
      * @return
      */
-    @RequestMapping(value = "/configure/channel/findByChannelIdAndAreaCode", method = RequestMethod.POST)
-    ResponseData<List<ChannelPriceValidator>> findByChannelIdAndAreaCode(@RequestBody ChannelPriceValidator channelPriceValidator) throws Exception;
+    @RequestMapping(value = "/configure/channel/findChannelPrice", method = RequestMethod.POST)
+    ResponseData<List<ChannelPriceValidator>> findChannelPrice(@RequestBody ChannelPriceValidator channelPriceValidator) throws Exception;
 }

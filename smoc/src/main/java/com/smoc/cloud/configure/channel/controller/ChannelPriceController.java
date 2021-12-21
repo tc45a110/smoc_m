@@ -55,10 +55,10 @@ public class ChannelPriceController {
      * @param channelPriceValidator
      * @return
      */
-    @RequestMapping(value = "/findByChannelIdAndAreaCode", method = RequestMethod.POST)
-    public ResponseData findByChannelIdAndAreaCode(@RequestBody ChannelPriceValidator channelPriceValidator) {
+    @RequestMapping(value = "/findChannelPrice", method = RequestMethod.POST)
+    public ResponseData findChannelPrice(@RequestBody ChannelPriceValidator channelPriceValidator) {
 
-        ResponseData data = channelPriceService.findByChannelIdAndAreaCode(channelPriceValidator);
+        ResponseData data = channelPriceService.findChannelPrice(channelPriceValidator);
 
         return data;
     }

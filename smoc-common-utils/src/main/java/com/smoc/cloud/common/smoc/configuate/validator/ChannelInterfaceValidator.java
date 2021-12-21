@@ -38,7 +38,7 @@ public class ChannelInterfaceValidator {
     @Length(min = 1, max = 128, message = "企业代码长度不符合规则！")
     private String spId;
 
-    @Length(max = 32, message = "企业代码最大长度为{max}")
+    @Length(max = 32, message = "码号最大长度为{max}")
     private String srcId;
 
     @NotNull(message = "业务代码不能为空！")

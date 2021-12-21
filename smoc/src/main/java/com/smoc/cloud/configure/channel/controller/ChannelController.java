@@ -5,6 +5,7 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelBasicInfoValidator;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
@@ -42,7 +43,7 @@ public class ChannelController {
      * @return
      */
     @RequestMapping(value = "/page", method = RequestMethod.POST)
-    public PageList<ChannelBasicInfoValidator> page(@RequestBody PageParams<ChannelBasicInfoValidator> pageParams) {
+    public PageList<ChannelBasicInfoQo> page(@RequestBody PageParams<ChannelBasicInfoQo> pageParams) {
 
         return channelService.page(pageParams);
     }
@@ -63,6 +64,25 @@ public class ChannelController {
         }
 
         ResponseData data = channelService.findById(id);
+        return data;
+    }
+
+    /**
+     * 根据id获取信息
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/findChannelById/{id}", method = RequestMethod.GET)
+    public ResponseData findChannelById(@PathVariable String id) {
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(validator));
+        }
+
+        ResponseData data = channelService.findChannelById(id);
         return data;
     }
 
