@@ -1,7 +1,7 @@
 server: #服务端口
   port: 8084
   servlet:
-    context-path: /spss
+    context-path: /statistic
     session:
       cookie:
         name: OAUTH2SESSION
