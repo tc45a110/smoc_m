@@ -163,7 +163,7 @@
                                                                           th:if="${#fields.hasErrors('minConsumeDemand')}" th:errors="*{minConsumeDemand}" style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
                                                 <input type="text" placeholder="低消要求(万条)" class="form-control"
-                                                       th:field="*{minConsumeDemand}"  data-parsley-type="digits" autocomplete="off">
+                                                       th:field="*{minConsumeDemand}"  data-parsley-type="number" autocomplete="off">
                                             </div>
                                             <div class="col-sm-3 m-b-10">
                                                 <label>低消生效时间&nbsp;<span

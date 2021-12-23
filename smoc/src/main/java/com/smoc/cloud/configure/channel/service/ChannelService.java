@@ -123,6 +123,8 @@ public class ChannelService {
         ConfigChannelBasicInfo entity = new ConfigChannelBasicInfo();
         BeanUtils.copyProperties(channelBasicInfoValidator, entity);
 
+        String priceStyle = "";
+
         //add查重
         if (data != null && data.iterator().hasNext() && "add".equals(op)) {
             return ResponseDataUtil.buildError(ResponseCode.PARAM_CREATE_ERROR);
@@ -133,6 +135,7 @@ public class ChannelService {
             Iterator iter = data.iterator();
             while (iter.hasNext()) {
                 ConfigChannelBasicInfo info = (ConfigChannelBasicInfo) iter.next();
+                priceStyle = info.getPriceStyle();
                 if (!entity.getChannelId().equals(info.getChannelId())) {
                     status = true;
                     break;
@@ -169,6 +172,17 @@ public class ChannelService {
         if (!("edit".equals(op) || "add".equals(op))) {
             return ResponseDataUtil.buildError();
         }
+
+        //设置通道完善进度：计价进度
+        StringBuffer channelProcess = new StringBuffer(channelBasicInfoValidator.getChannelProcess());
+        if ("UNIFIED_PRICE".equals(channelBasicInfoValidator.getPriceStyle())){
+            channelProcess = channelProcess.replace(3, 4, "1");
+        }else {
+            if("edit".equals(op) && !priceStyle.equals(channelBasicInfoValidator.getPriceStyle())){
+                channelProcess = channelProcess.replace(3, 4, "0");
+            }
+        }
+        entity.setChannelProcess(channelProcess.toString());
 
         //记录日志
         log.info("[通道管理][通道基本信息][{}]数据:{}",op,JSON.toJSONString(entity));

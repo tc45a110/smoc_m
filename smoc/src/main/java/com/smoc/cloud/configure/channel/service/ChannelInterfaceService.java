@@ -7,8 +7,10 @@ import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelInterfaceValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
+import com.smoc.cloud.configure.channel.entity.ConfigChannelBasicInfo;
 import com.smoc.cloud.configure.channel.entity.ConfigChannelInterface;
 import com.smoc.cloud.configure.channel.repository.ChannelInterfaceRepository;
+import com.smoc.cloud.configure.channel.repository.ChannelRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -20,6 +22,7 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.Iterator;
+import java.util.Optional;
 
 /**
  * 通道接口参数接口管理
@@ -31,6 +34,9 @@ public class ChannelInterfaceService {
 
     @Resource
     private ChannelInterfaceRepository channelInterfaceRepository;
+
+    @Resource
+    private ChannelRepository channelRepository;
 
 
     /**
@@ -93,6 +99,18 @@ public class ChannelInterfaceService {
         //op 不为 edit 或 add
         if (!("edit".equals(op) || "add".equals(op))) {
             return ResponseDataUtil.buildError();
+        }
+
+        //设置通道完成进度
+        if("add".equals(op)){
+            Optional<ConfigChannelBasicInfo> optional = channelRepository.findById(entity.getChannelId());
+            if(optional.isPresent()){
+                ConfigChannelBasicInfo configChannelBasicInfo = optional.get();
+                StringBuffer channelProcess = new StringBuffer(configChannelBasicInfo.getChannelProcess());
+                channelProcess = channelProcess.replace(1, 2, "1");
+                configChannelBasicInfo.setChannelProcess(channelProcess.toString());
+                channelRepository.save(configChannelBasicInfo);
+            }
         }
 
         //记录日志

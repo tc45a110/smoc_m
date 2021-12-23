@@ -5,7 +5,9 @@ import com.alibaba.fastjson.JSON;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelPriceValidator;
+import com.smoc.cloud.configure.channel.entity.ConfigChannelBasicInfo;
 import com.smoc.cloud.configure.channel.repository.ChannelPriceRepository;
+import com.smoc.cloud.configure.channel.repository.ChannelRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -18,6 +20,7 @@ import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TreeMap;
 
 /**
@@ -30,6 +33,9 @@ public class ChannelPriceService {
 
     @Resource
     private ChannelPriceRepository channelPriceRepository;
+
+    @Resource
+    private ChannelRepository channelRepository;
 
 
     /**
@@ -83,6 +89,16 @@ public class ChannelPriceService {
 
         //批量保存
         channelPriceRepository.batchSave(channelPriceValidator);
+
+        //设置通道完成进度
+        Optional<ConfigChannelBasicInfo> optional = channelRepository.findById(channelPriceValidator.getChannelId());
+        if(optional.isPresent()){
+            ConfigChannelBasicInfo configChannelBasicInfo = optional.get();
+            StringBuffer channelProcess = new StringBuffer(configChannelBasicInfo.getChannelProcess());
+            channelProcess = channelProcess.replace(3, 4, "1");
+            configChannelBasicInfo.setChannelProcess(channelProcess.toString());
+            channelRepository.save(configChannelBasicInfo);
+        }
 
         //记录日志
         log.info("[通道管理][区域计价配置][{}]数据:{}",op, JSON.toJSONString(channelPriceValidator));
