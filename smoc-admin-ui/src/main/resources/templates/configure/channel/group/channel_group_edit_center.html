@@ -20,13 +20,13 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">产品信息维护</h4>
+                    <h4 class="page-title">通道组信息维护</h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
-                            产品管理
+                            通道组管理
                         </li>
                         <li class="active">
-                            产品信息维护
+                            通道组信息维护
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -44,10 +44,10 @@
                             <div class="row" style="margin-bottom:6px">
                                 <h4 class="m-b-10">
                                     <div class="pull-right" style="margin-top: -12px;">
-                                        <a sec:authorize-url="/configure/product/list" th:href="@{/configure/product/list}"
+                                        <a sec:authorize-url="/configure/channel/group/list" th:href="@{/configure/channel/group/list}"
                                            class="btn btn-default waves-effect waves-light btn-md">
                                             <i class="glyphicon  glyphicon-share-alt" style="margin-right:5px"></i>
-                                            返回产品列表</a>
+                                            返回通道组列表</a>
                                     </div>
                                 </h4>
                             </div>
@@ -57,25 +57,29 @@
                                         <ul class="nav nav-pills m-b-30 pull-right">
                                             <li class="active" id="tab1">
                                                 <a onclick="activeTab('1')"
-                                                   sec:authorize-url="/configure/product/edit/base/*"
-                                                   th:href="@{/configure/product/edit/base/id}"
+                                                   sec:authorize-url="/configure/channel/group/edit/base/*"
+                                                   th:href="@{/configure/channel/group/edit/base/id}"
                                                    th:target="tab-content"><i
-                                                        class="mdi mdi-star" style="margin-right:5px;color:#f35864"></i>产品信息
+                                                        class="mdi mdi-star" style="margin-right:5px;color:#f35864"></i>通道组信息
                                                 </a>
                                             </li>
                                             <li class="" id="tab2">
                                                 <a onclick="activeTab('2')"
-                                                   sec:authorize-url="/configure/product/edit/channel/*"
-                                                   th:href="@{/configure/product/edit/channel/id}"
+                                                   sec:authorize-url="/configure/channel/group/edit/channel/*"
+                                                   th:href="@{/configure/channel/group/edit/channel/id}"
                                                    th:target="tab-content"><i
-                                                        class="mdi mdi-star" style="margin-right:5px;color:#f35864"></i>产品通道配置
+                                                        class="mdi mdi-star" style="margin-right:5px;color:#f35864"></i>通道组通道配置
                                                 </a>
                                             </li>
+                                            <li class="" id="tab3"><a onclick="activeTab('3')"
+                                                                      sec:authorize-url="/parameter/filter/list/CHANNEL_GROUP_FILTER/*/*"
+                                                                      th:href="@{/parameter/filter/list/CHANNEL_GROUP_FILTER/channelGroupId/3}"
+                                                                      th:target="tab-content">通道组过滤配置</a>
                                         </ul>
                                         <div class="tab-cotent" style="background-color:#fff">
                                             <iframe name="tab-content" id="tab-content" th:frameBorder="0"
                                                     th:scrolling="auto"
-                                                    th:src="@{/configure/product/edit/base/id}"
+                                                    th:src="@{/configure/channel/group/edit/base/id}"
                                                     style="padding: 0px; width: 100%; height: 2600px;background-color:#fff"></iframe>
                                         </div>
                                     </div>
@@ -102,7 +106,7 @@
 
     //页签切换
     function activeTab(tab) {
-        for(var num = 1;num<3;num++){
+        for(var num = 1;num<4;num++){
             $('#tab'+num).removeClass("active");
         }
         $('#tab'+tab).attr("class","active");

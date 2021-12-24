@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org"
+>
+<head>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
+    <!-- Tooltipster css -->
+    <link rel="stylesheet" th:href="@{/static/plugins/tooltipster/tooltipster.bundle.min.css}">
+</head>
+<body>
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <!-- start row  页面导航-->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">通道组管理</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            通道组通道设置
+                        </li>
+                        <li>
+                            通道组管理
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  查询条件-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <form th:action="@{/configure/channel/group/page}" id="query_form" method="post">
+                        <div class="row m-b-60">
+                            <div class="col-sm-12">
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control"
+                                           placeholder="通道组名称" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <mpm:tag id="carrier" identity="carrier" name="carrier"  show-type="select" key="code" class="form-control"
+                                             value="" title="运营商"/>
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <mpm:tag id="infoType" identity="infoType" show-type="select" key="code"
+                                             class="form-control" name="enterpriseType" value="" title="信息分类"/>
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <mpm:tag id="businessType" identity="businessType" show-type="select" key="code"
+                                             class="form-control" name="enterpriseType" value="" title="业务类型"/>
+                                </div>
+                                <div class="form-group col-sm-3 pull-right" style="text-align: right">
+                                    <button sec:authorize-url="/configure/channel/group/page" type="submit"
+                                            class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-search" style="margin-right:5px"></i> 查询
+                                    </button>
+                                    <a sec:authorize-url="/configure/channel/group/edit/center/*"
+                                       th:href="@{/configure/channel/group/edit/center/*}"
+                                       class="btn btn-success waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-plus-sign"></i> 新建通道组</a>
+                                    <input type="hidden" name="currentPage" id="currentPage">
+                                    <input type="hidden" name="pageSize" id="pageSize">
+                                </div>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  列表数据-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="panel panel-color panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">通道组列表
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="property-card property-horizontal" style="margin-bottom:10px;">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="property-content"
+                                                 style="height:206px">
+                                                <div class="listingInfo">
+                                                    <div class="">
+                                                        <h5 style="padding-left:10px">
+                                                            通道组名称：澳大利亚短信通道组
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <p style="font-size:12px">运营商：<a
+                                                                class="btn btn-purple  waves-effect waves-light btn-xs">移动</a>
+                                                        </p>
+                                                        <p style="font-size:12px">
+                                                            配置通道数：4 个
+                                                            <i data-toggle="tooltip" data-placement="right" title=""
+                                                               data-original-title="显示通道组通道"
+                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                                        </p>
+                                                        <p style="font-size:12px">扩展参数：
+                                                            <i data-toggle="tooltip" data-placement="right" title=""
+                                                               data-original-title="显示扩展参数"
+                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-sm-4">
+
+                                                        <p style="font-size:12px">业务类型：<a
+                                                                class="btn btn-teal waves-effect waves-light btn-xs">普通短信</a>
+                                                        </p>
+                                                        <p style="font-size:12px">屏蔽省份：
+                                                            北京
+                                                            <i data-toggle="tooltip" data-placement="right" title=""
+                                                               data-original-title="这个位置开发时有业务逻辑，可能多条 在这显示"
+                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                                            <i data-toggle="tooltip" data-placement="right" title=""
+                                                               data-original-title="屏蔽省份，如果存在屏蔽省份的话"
+                                                               class="mdi mdi-comment-text-outline"
+                                                               style="margin-left:5px"></i>
+                                                        <p style="font-size:12px">状态：<a
+                                                                class="btn btn-success  waves-effect waves-light btn-xs">正常</a>
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <p style="font-size:12px">信息分类：游戏</p>
+                                                        <p style="font-size:12px">通道组信息过滤：<i data-toggle="tooltip"
+                                                                                             data-placement="right"
+                                                                                             title=""
+                                                                                             data-original-title="点击，显示配置的过滤信息"
+                                                                                             class="mdi mdi-filter-outline"
+                                                                                             style="margin-left:5px"></i>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="property-action">
+                                                    <span style="padding-left:10px;font-size:12px">
+                                                        通道组业务介绍：简短、通俗的业务语言描述，大家都看明白通道组是干嘛的
+                                                    </span>
+                                                    <div class="pull-right">
+                                                        <a sec:authorize-url="/configure/channel/group/view/center/*"
+                                                           th:href="@{/configure/channel/group/view/center/id}"
+                                                           data-toggle="tooltip" data-placement="left" title=""
+                                                           data-original-title="通道组详情" style="font-size:12px">
+                                                            <i class="glyphicon  glyphicon-search"
+                                                               style="margin-right:5px;font-size:12px;color:#0095a8"></i>详细</a>
+                                                        <a sec:authorize-url="/configure/channel/group/edit/center/*"
+                                                           th:href="@{/configure/channel/group/edit/center/id}"
+                                                           data-toggle="tooltip" data-placement="left" title=""
+                                                           data-original-title="通道组配置" style="font-size:12px">
+                                                            <i class="glyphicon glyphicon-cog"
+                                                               style="margin-right:5px;font-size:12px;color:#0095a8"></i>配置</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="property-card property-horizontal" style="margin-bottom:10px;">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="property-content"
+                                                 style="height:206px">
+                                                <div class="listingInfo">
+                                                    <div class="">
+                                                        <h5 style="padding-left:10px">
+                                                            通道组名称：澳大利亚短信通道组
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <p style="font-size:12px">运营商：<a
+                                                                class="btn btn-purple  waves-effect waves-light btn-xs">移动</a>
+                                                        </p>
+                                                        <p style="font-size:12px">
+                                                            配置通道数：4 个
+                                                            <i data-toggle="tooltip" data-placement="right" title=""
+                                                               data-original-title="显示通道组通道"
+                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                                        </p>
+                                                        <p style="font-size:12px">扩展参数：
+                                                            <i data-toggle="tooltip" data-placement="right" title=""
+                                                               data-original-title="显示扩展参数"
+                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-sm-4">
+
+                                                        <p style="font-size:12px">业务类型：<a
+                                                                class="btn btn-teal waves-effect waves-light btn-xs">普通短信</a>
+                                                        </p>
+                                                        <p style="font-size:12px">屏蔽省份：
+                                                            北京
+                                                            <i data-toggle="tooltip" data-placement="right" title=""
+                                                               data-original-title="这个位置开发时有业务逻辑，可能多条 在这显示"
+                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                                            <i data-toggle="tooltip" data-placement="right" title=""
+                                                               data-original-title="屏蔽省份，如果存在屏蔽省份的话"
+                                                               class="mdi mdi-comment-text-outline"
+                                                               style="margin-left:5px"></i>
+                                                        <p style="font-size:12px">状态：<a
+                                                                class="btn btn-success  waves-effect waves-light btn-xs">正常</a>
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <p style="font-size:12px">信息分类：游戏</p>
+                                                        <p style="font-size:12px">通道组信息过滤：<i data-toggle="tooltip"
+                                                                                             data-placement="right"
+                                                                                             title=""
+                                                                                             data-original-title="点击，显示配置的过滤信息"
+                                                                                             class="mdi mdi-filter-outline"
+                                                                                             style="margin-left:5px"></i>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="property-action">
+                                                    <span style="padding-left:10px;font-size:12px">
+                                                        通道组业务介绍：简短、通俗的业务语言描述，大家都看明白通道组是干嘛的
+                                                    </span>
+                                                    <div class="pull-right">
+                                                        <a sec:authorize-url="/configure/channel/group/view/center/*"
+                                                           th:href="@{/configure/channel/group/view/center/id}"
+                                                           data-toggle="tooltip" data-placement="left" title=""
+                                                           data-original-title="通道组详情" style="font-size:12px">
+                                                            <i class="glyphicon  glyphicon-search"
+                                                               style="margin-right:5px;font-size:12px;color:#0095a8"></i>详细</a>
+                                                        <a sec:authorize-url="/configure/channel/group/edit/center/*"
+                                                           th:href="@{/configure/channel/group/edit/center/id}"
+                                                           data-toggle="tooltip" data-placement="left" title=""
+                                                           data-original-title="通道组配置" style="font-size:12px">
+                                                            <i class="glyphicon glyphicon-cog"
+                                                               style="margin-right:5px;font-size:12px;color:#0095a8"></i>配置</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="property-card property-horizontal" style="margin-bottom:10px;">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="property-content"
+                                                 style="height:206px">
+                                                <div class="listingInfo">
+                                                    <div class="">
+                                                        <h5 style="padding-left:10px">
+                                                            通道组名称：澳大利亚短信通道组
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <p style="font-size:12px">运营商：<a
+                                                                class="btn btn-purple  waves-effect waves-light btn-xs">移动</a>
+                                                        </p>
+                                                        <p style="font-size:12px">
+                                                            配置通道数：4 个
+                                                            <i data-toggle="tooltip" data-placement="right" title=""
+                                                               data-original-title="显示通道组通道"
+                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                                        </p>
+                                                        <p style="font-size:12px">扩展参数：
+                                                            <i data-toggle="tooltip" data-placement="right" title=""
+                                                               data-original-title="显示扩展参数"
+                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-sm-4">
+
+                                                        <p style="font-size:12px">业务类型：<a
+                                                                class="btn btn-teal waves-effect waves-light btn-xs">普通短信</a>
+                                                        </p>
+                                                        <p style="font-size:12px">屏蔽省份：
+                                                            北京
+                                                            <i data-toggle="tooltip" data-placement="right" title=""
+                                                               data-original-title="这个位置开发时有业务逻辑，可能多条 在这显示"
+                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                                            <i data-toggle="tooltip" data-placement="right" title=""
+                                                               data-original-title="屏蔽省份，如果存在屏蔽省份的话"
+                                                               class="mdi mdi-comment-text-outline"
+                                                               style="margin-left:5px"></i>
+                                                        <p style="font-size:12px">状态：<a
+                                                                class="btn btn-success  waves-effect waves-light btn-xs">正常</a>
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <p style="font-size:12px">信息分类：游戏</p>
+                                                        <p style="font-size:12px">通道组信息过滤：<i data-toggle="tooltip"
+                                                                                             data-placement="right"
+                                                                                             title=""
+                                                                                             data-original-title="点击，显示配置的过滤信息"
+                                                                                             class="mdi mdi-filter-outline"
+                                                                                             style="margin-left:5px"></i>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="property-action">
+                                                    <span style="padding-left:10px;font-size:12px">
+                                                        通道组业务介绍：简短、通俗的业务语言描述，大家都看明白通道组是干嘛的
+                                                    </span>
+                                                    <div class="pull-right">
+                                                        <a sec:authorize-url="/configure/channel/group/view/center/*"
+                                                           th:href="@{/configure/channel/group/view/center/id}"
+                                                           data-toggle="tooltip" data-placement="left" title=""
+                                                           data-original-title="通道组详情" style="font-size:12px">
+                                                            <i class="glyphicon  glyphicon-search"
+                                                               style="margin-right:5px;font-size:12px;color:#0095a8"></i>详细</a>
+                                                        <a sec:authorize-url="/configure/channel/group/edit/center/*"
+                                                           th:href="@{/configure/channel/group/edit/center/id}"
+                                                           data-toggle="tooltip" data-placement="left" title=""
+                                                           data-original-title="通道组配置" style="font-size:12px">
+                                                            <i class="glyphicon glyphicon-cog"
+                                                               style="margin-right:5px;font-size:12px;color:#0095a8"></i>配置</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="property-card property-horizontal" style="margin-bottom:10px;">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="property-content"
+                                                 style="height:206px">
+                                                <div class="listingInfo">
+                                                    <div class="">
+                                                        <h5 style="padding-left:10px">
+                                                            通道组名称：澳大利亚短信通道组
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <p style="font-size:12px">运营商：<a
+                                                                class="btn btn-purple  waves-effect waves-light btn-xs">移动</a>
+                                                        </p>
+                                                        <p style="font-size:12px">
+                                                            配置通道数：4 个
+                                                            <i data-toggle="tooltip" data-placement="right" title=""
+                                                               data-original-title="显示通道组通道"
+                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                                        </p>
+                                                        <p style="font-size:12px">扩展参数：
+                                                            <i data-toggle="tooltip" data-placement="right" title=""
+                                                               data-original-title="显示扩展参数"
+                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-sm-4">
+
+                                                        <p style="font-size:12px">业务类型：<a
+                                                                class="btn btn-teal waves-effect waves-light btn-xs">普通短信</a>
+                                                        </p>
+                                                        <p style="font-size:12px">屏蔽省份：
+                                                            北京
+                                                            <i data-toggle="tooltip" data-placement="right" title=""
+                                                               data-original-title="这个位置开发时有业务逻辑，可能多条 在这显示"
+                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                                            <i data-toggle="tooltip" data-placement="right" title=""
+                                                               data-original-title="屏蔽省份，如果存在屏蔽省份的话"
+                                                               class="mdi mdi-comment-text-outline"
+                                                               style="margin-left:5px"></i>
+                                                        <p style="font-size:12px">状态：<a
+                                                                class="btn btn-success  waves-effect waves-light btn-xs">正常</a>
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <p style="font-size:12px">信息分类：游戏</p>
+                                                        <p style="font-size:12px">通道组信息过滤：<i data-toggle="tooltip"
+                                                                                             data-placement="right"
+                                                                                             title=""
+                                                                                             data-original-title="点击，显示配置的过滤信息"
+                                                                                             class="mdi mdi-filter-outline"
+                                                                                             style="margin-left:5px"></i>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="property-action">
+                                                    <span style="padding-left:10px;font-size:12px">
+                                                        通道组业务介绍：简短、通俗的业务语言描述，大家都看明白通道组是干嘛的
+                                                    </span>
+                                                    <div class="pull-right">
+                                                        <a sec:authorize-url="/configure/channel/group/view/center/*"
+                                                           th:href="@{/configure/channel/group/view/center/id}"
+                                                           data-toggle="tooltip" data-placement="left" title=""
+                                                           data-original-title="通道组详情" style="font-size:12px">
+                                                            <i class="glyphicon  glyphicon-search"
+                                                               style="margin-right:5px;font-size:12px;color:#0095a8"></i>详细</a>
+                                                        <a sec:authorize-url="/configure/channel/group/edit/center/*"
+                                                           th:href="@{/configure/channel/group/edit/center/id}"
+                                                           data-toggle="tooltip" data-placement="left" title=""
+                                                           data-original-title="通道组配置" style="font-size:12px">
+                                                            <i class="glyphicon glyphicon-cog"
+                                                               style="margin-right:5px;font-size:12px;color:#0095a8"></i>配置</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="property-card property-horizontal" style="margin-bottom:10px;">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="property-content"
+                                                 style="height:206px">
+                                                <div class="listingInfo">
+                                                    <div class="">
+                                                        <h5 style="padding-left:10px">
+                                                            通道组名称：澳大利亚短信通道组
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <p style="font-size:12px">运营商：<a
+                                                                class="btn btn-purple  waves-effect waves-light btn-xs">移动</a>
+                                                        </p>
+                                                        <p style="font-size:12px">
+                                                            配置通道数：4 个
+                                                            <i data-toggle="tooltip" data-placement="right" title=""
+                                                               data-original-title="显示通道组通道"
+                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                                        </p>
+                                                        <p style="font-size:12px">扩展参数：
+                                                            <i data-toggle="tooltip" data-placement="right" title=""
+                                                               data-original-title="显示扩展参数"
+                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-sm-4">
+
+                                                        <p style="font-size:12px">业务类型：<a
+                                                                class="btn btn-teal waves-effect waves-light btn-xs">普通短信</a>
+                                                        </p>
+                                                        <p style="font-size:12px">屏蔽省份：
+                                                            北京
+                                                            <i data-toggle="tooltip" data-placement="right" title=""
+                                                               data-original-title="这个位置开发时有业务逻辑，可能多条 在这显示"
+                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                                            <i data-toggle="tooltip" data-placement="right" title=""
+                                                               data-original-title="屏蔽省份，如果存在屏蔽省份的话"
+                                                               class="mdi mdi-comment-text-outline"
+                                                               style="margin-left:5px"></i>
+                                                        <p style="font-size:12px">状态：<a
+                                                                class="btn btn-success  waves-effect waves-light btn-xs">正常</a>
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <p style="font-size:12px">信息分类：游戏</p>
+                                                        <p style="font-size:12px">通道组信息过滤：<i data-toggle="tooltip"
+                                                                                             data-placement="right"
+                                                                                             title=""
+                                                                                             data-original-title="点击，显示配置的过滤信息"
+                                                                                             class="mdi mdi-filter-outline"
+                                                                                             style="margin-left:5px"></i>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="property-action">
+                                                    <span style="padding-left:10px;font-size:12px">
+                                                        通道组业务介绍：简短、通俗的业务语言描述，大家都看明白通道组是干嘛的
+                                                    </span>
+                                                    <div class="pull-right">
+                                                        <a sec:authorize-url="/configure/channel/group/view/center/*"
+                                                           th:href="@{/configure/channel/group/view/center/id}"
+                                                           data-toggle="tooltip" data-placement="left" title=""
+                                                           data-original-title="通道组详情" style="font-size:12px">
+                                                            <i class="glyphicon  glyphicon-search"
+                                                               style="margin-right:5px;font-size:12px;color:#0095a8"></i>详细</a>
+                                                        <a sec:authorize-url="/configure/channel/group/edit/center/*"
+                                                           th:href="@{/configure/channel/group/edit/center/id}"
+                                                           data-toggle="tooltip" data-placement="left" title=""
+                                                           data-original-title="通道组配置" style="font-size:12px">
+                                                            <i class="glyphicon glyphicon-cog"
+                                                               style="margin-right:5px;font-size:12px;color:#0095a8"></i>配置</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="property-card property-horizontal" style="margin-bottom:10px;">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="property-content"
+                                                 style="height:206px">
+                                                <div class="listingInfo">
+                                                    <div class="">
+                                                        <h5 style="padding-left:10px">
+                                                            通道组名称：澳大利亚短信通道组
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <p style="font-size:12px">运营商：<a
+                                                                class="btn btn-purple  waves-effect waves-light btn-xs">移动</a>
+                                                        </p>
+                                                        <p style="font-size:12px">
+                                                            配置通道数：4 个
+                                                            <i data-toggle="tooltip" data-placement="right" title=""
+                                                               data-original-title="显示通道组通道"
+                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                                        </p>
+                                                        <p style="font-size:12px">扩展参数：
+                                                            <i data-toggle="tooltip" data-placement="right" title=""
+                                                               data-original-title="显示扩展参数"
+                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-sm-4">
+
+                                                        <p style="font-size:12px">业务类型：<a
+                                                                class="btn btn-teal waves-effect waves-light btn-xs">普通短信</a>
+                                                        </p>
+                                                        <p style="font-size:12px">屏蔽省份：
+                                                            北京
+                                                            <i data-toggle="tooltip" data-placement="right" title=""
+                                                               data-original-title="这个位置开发时有业务逻辑，可能多条 在这显示"
+                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                                            <i data-toggle="tooltip" data-placement="right" title=""
+                                                               data-original-title="屏蔽省份，如果存在屏蔽省份的话"
+                                                               class="mdi mdi-comment-text-outline"
+                                                               style="margin-left:5px"></i>
+                                                        <p style="font-size:12px">状态：<a
+                                                                class="btn btn-success  waves-effect waves-light btn-xs">正常</a>
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <p style="font-size:12px">信息分类：游戏</p>
+                                                        <p style="font-size:12px">通道组信息过滤：<i data-toggle="tooltip"
+                                                                                             data-placement="right"
+                                                                                             title=""
+                                                                                             data-original-title="点击，显示配置的过滤信息"
+                                                                                             class="mdi mdi-filter-outline"
+                                                                                             style="margin-left:5px"></i>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="property-action">
+                                                    <span style="padding-left:10px;font-size:12px">
+                                                        通道组业务介绍：简短、通俗的业务语言描述，大家都看明白通道组是干嘛的
+                                                    </span>
+                                                    <div class="pull-right">
+                                                        <a sec:authorize-url="/configure/channel/group/view/center/*"
+                                                           th:href="@{/configure/channel/group/view/center/id}"
+                                                           data-toggle="tooltip" data-placement="left" title=""
+                                                           data-original-title="通道组详情" style="font-size:12px">
+                                                            <i class="glyphicon  glyphicon-search"
+                                                               style="margin-right:5px;font-size:12px;color:#0095a8"></i>详细</a>
+                                                        <a sec:authorize-url="/configure/channel/group/edit/center/*"
+                                                           th:href="@{/configure/channel/group/edit/center/id}"
+                                                           data-toggle="tooltip" data-placement="left" title=""
+                                                           data-original-title="通道组配置" style="font-size:12px">
+                                                            <i class="glyphicon glyphicon-cog"
+                                                               style="margin-right:5px;font-size:12px;color:#0095a8"></i>配置</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="property-card property-horizontal" style="margin-bottom:10px;">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="property-content"
+                                                 style="height:206px">
+                                                <div class="listingInfo">
+                                                    <div class="">
+                                                        <h5 style="padding-left:10px">
+                                                            通道组名称：澳大利亚短信通道组
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <p style="font-size:12px">运营商：<a
+                                                                class="btn btn-purple  waves-effect waves-light btn-xs">移动</a>
+                                                        </p>
+                                                        <p style="font-size:12px">
+                                                            配置通道数：4 个
+                                                            <i data-toggle="tooltip" data-placement="right" title=""
+                                                               data-original-title="显示通道组通道"
+                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                                        </p>
+                                                        <p style="font-size:12px">扩展参数：
+                                                            <i data-toggle="tooltip" data-placement="right" title=""
+                                                               data-original-title="显示扩展参数"
+                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-sm-4">
+
+                                                        <p style="font-size:12px">业务类型：<a
+                                                                class="btn btn-teal waves-effect waves-light btn-xs">普通短信</a>
+                                                        </p>
+                                                        <p style="font-size:12px">屏蔽省份：
+                                                            北京
+                                                            <i data-toggle="tooltip" data-placement="right" title=""
+                                                               data-original-title="这个位置开发时有业务逻辑，可能多条 在这显示"
+                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                                            <i data-toggle="tooltip" data-placement="right" title=""
+                                                               data-original-title="屏蔽省份，如果存在屏蔽省份的话"
+                                                               class="mdi mdi-comment-text-outline"
+                                                               style="margin-left:5px"></i>
+                                                        <p style="font-size:12px">状态：<a
+                                                                class="btn btn-success  waves-effect waves-light btn-xs">正常</a>
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <p style="font-size:12px">信息分类：游戏</p>
+                                                        <p style="font-size:12px">通道组信息过滤：<i data-toggle="tooltip"
+                                                                                             data-placement="right"
+                                                                                             title=""
+                                                                                             data-original-title="点击，显示配置的过滤信息"
+                                                                                             class="mdi mdi-filter-outline"
+                                                                                             style="margin-left:5px"></i>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="property-action">
+                                                    <span style="padding-left:10px;font-size:12px">
+                                                        通道组业务介绍：简短、通俗的业务语言描述，大家都看明白通道组是干嘛的
+                                                    </span>
+                                                    <div class="pull-right">
+                                                        <a sec:authorize-url="/configure/channel/group/view/center/*"
+                                                           th:href="@{/configure/channel/group/view/center/id}"
+                                                           data-toggle="tooltip" data-placement="left" title=""
+                                                           data-original-title="通道组详情" style="font-size:12px">
+                                                            <i class="glyphicon  glyphicon-search"
+                                                               style="margin-right:5px;font-size:12px;color:#0095a8"></i>详细</a>
+                                                        <a sec:authorize-url="/configure/channel/group/edit/center/*"
+                                                           th:href="@{/configure/channel/group/edit/center/id}"
+                                                           data-toggle="tooltip" data-placement="left" title=""
+                                                           data-original-title="通道组配置" style="font-size:12px">
+                                                            <i class="glyphicon glyphicon-cog"
+                                                               style="margin-right:5px;font-size:12px;color:#0095a8"></i>配置</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="property-card property-horizontal" style="margin-bottom:10px;">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="property-content"
+                                                 style="height:206px">
+                                                <div class="listingInfo">
+                                                    <div class="">
+                                                        <h5 style="padding-left:10px">
+                                                            通道组名称：澳大利亚短信通道组
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <p style="font-size:12px">运营商：<a
+                                                                class="btn btn-purple  waves-effect waves-light btn-xs">移动</a>
+                                                        </p>
+                                                        <p style="font-size:12px">
+                                                            配置通道数：4 个
+                                                            <i data-toggle="tooltip" data-placement="right" title=""
+                                                               data-original-title="显示通道组通道"
+                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                                        </p>
+                                                        <p style="font-size:12px">扩展参数：
+                                                            <i data-toggle="tooltip" data-placement="right" title=""
+                                                               data-original-title="显示扩展参数"
+                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-sm-4">
+
+                                                        <p style="font-size:12px">业务类型：<a
+                                                                class="btn btn-teal waves-effect waves-light btn-xs">普通短信</a>
+                                                        </p>
+                                                        <p style="font-size:12px">屏蔽省份：
+                                                            北京
+                                                            <i data-toggle="tooltip" data-placement="right" title=""
+                                                               data-original-title="这个位置开发时有业务逻辑，可能多条 在这显示"
+                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                                            <i data-toggle="tooltip" data-placement="right" title=""
+                                                               data-original-title="屏蔽省份，如果存在屏蔽省份的话"
+                                                               class="mdi mdi-comment-text-outline"
+                                                               style="margin-left:5px"></i>
+                                                        <p style="font-size:12px">状态：<a
+                                                                class="btn btn-success  waves-effect waves-light btn-xs">正常</a>
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <p style="font-size:12px">信息分类：游戏</p>
+                                                        <p style="font-size:12px">通道组信息过滤：<i data-toggle="tooltip"
+                                                                                             data-placement="right"
+                                                                                             title=""
+                                                                                             data-original-title="点击，显示配置的过滤信息"
+                                                                                             class="mdi mdi-filter-outline"
+                                                                                             style="margin-left:5px"></i>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="property-action">
+                                                    <span style="padding-left:10px;font-size:12px">
+                                                        通道组业务介绍：简短、通俗的业务语言描述，大家都看明白通道组是干嘛的
+                                                    </span>
+                                                    <div class="pull-right">
+                                                        <a sec:authorize-url="/configure/channel/group/view/center/*"
+                                                           th:href="@{/configure/channel/group/view/center/id}"
+                                                           data-toggle="tooltip" data-placement="left" title=""
+                                                           data-original-title="通道组详情" style="font-size:12px">
+                                                            <i class="glyphicon  glyphicon-search"
+                                                               style="margin-right:5px;font-size:12px;color:#0095a8"></i>详细</a>
+                                                        <a sec:authorize-url="/configure/channel/group/edit/center/*"
+                                                           th:href="@{/configure/channel/group/edit/center/id}"
+                                                           data-toggle="tooltip" data-placement="left" title=""
+                                                           data-original-title="通道组配置" style="font-size:12px">
+                                                            <i class="glyphicon glyphicon-cog"
+                                                               style="margin-right:5px;font-size:12px;color:#0095a8"></i>配置</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="property-card property-horizontal" style="margin-bottom:10px;">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="property-content"
+                                                 style="height:206px">
+                                                <div class="listingInfo">
+                                                    <div class="">
+                                                        <h5 style="padding-left:10px">
+                                                            通道组名称：澳大利亚短信通道组
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <p style="font-size:12px">运营商：<a
+                                                                class="btn btn-purple  waves-effect waves-light btn-xs">移动</a>
+                                                        </p>
+                                                        <p style="font-size:12px">
+                                                            配置通道数：4 个
+                                                            <i data-toggle="tooltip" data-placement="right" title=""
+                                                               data-original-title="显示通道组通道"
+                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                                        </p>
+                                                        <p style="font-size:12px">扩展参数：
+                                                            <i data-toggle="tooltip" data-placement="right" title=""
+                                                               data-original-title="显示扩展参数"
+                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-sm-4">
+
+                                                        <p style="font-size:12px">业务类型：<a
+                                                                class="btn btn-teal waves-effect waves-light btn-xs">普通短信</a>
+                                                        </p>
+                                                        <p style="font-size:12px">屏蔽省份：
+                                                            北京
+                                                            <i data-toggle="tooltip" data-placement="right" title=""
+                                                               data-original-title="这个位置开发时有业务逻辑，可能多条 在这显示"
+                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                                            <i data-toggle="tooltip" data-placement="right" title=""
+                                                               data-original-title="屏蔽省份，如果存在屏蔽省份的话"
+                                                               class="mdi mdi-comment-text-outline"
+                                                               style="margin-left:5px"></i>
+                                                        <p style="font-size:12px">状态：<a
+                                                                class="btn btn-success  waves-effect waves-light btn-xs">正常</a>
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <p style="font-size:12px">信息分类：游戏</p>
+                                                        <p style="font-size:12px">通道组信息过滤：<i data-toggle="tooltip"
+                                                                                             data-placement="right"
+                                                                                             title=""
+                                                                                             data-original-title="点击，显示配置的过滤信息"
+                                                                                             class="mdi mdi-filter-outline"
+                                                                                             style="margin-left:5px"></i>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="property-action">
+                                                    <span style="padding-left:10px;font-size:12px">
+                                                        通道组业务介绍：简短、通俗的业务语言描述，大家都看明白通道组是干嘛的
+                                                    </span>
+                                                    <div class="pull-right">
+                                                        <a sec:authorize-url="/configure/channel/group/view/center/*"
+                                                           th:href="@{/configure/channel/group/view/center/id}"
+                                                           data-toggle="tooltip" data-placement="left" title=""
+                                                           data-original-title="通道组详情" style="font-size:12px">
+                                                            <i class="glyphicon  glyphicon-search"
+                                                               style="margin-right:5px;font-size:12px;color:#0095a8"></i>详细</a>
+                                                        <a sec:authorize-url="/configure/channel/group/edit/center/*"
+                                                           th:href="@{/configure/channel/group/edit/center/id}"
+                                                           data-toggle="tooltip" data-placement="left" title=""
+                                                           data-original-title="通道组配置" style="font-size:12px">
+                                                            <i class="glyphicon glyphicon-cog"
+                                                               style="margin-right:5px;font-size:12px;color:#0095a8"></i>配置</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="margin-top:10px">
+                            <th:block th:insert="fragments/page_fragments :: page"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+    </div><!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<script th:src="@{/static/plugins/moment/moment.js}"></script>
+<!-- Tooltipster js -->
+<script th:src="@{/static/plugins/tooltipster/tooltipster.bundle.min.js}"></script>
+<script>
+
+    function channelTip(){
+        $('#tooltip-html').tooltipster({
+            content: $('<p style="text-align:left;"><strong>通道组通道配置</strong><br><span style="font-size:12px">短信-移动-会销(小舟dj) 权重：10；优先级 1.</span><br><span style="font-size:12px">短信-移动-会销(小舟dj) 权重：10；优先级 1.</span><br><span style="font-size:12px">短信-移动-会销(小舟dj) 权重：10；优先级 1.</span><br><span style="font-size:12px">短信-移动-会销(小舟dj) 权重：10；优先级 1.</span></p>'),
+            minWidth: 300,
+            maxWidth: 600,
+            position: 'right'
+        });
+    }
+
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+</script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-package com.smoc.cloud.configure.product.controller;
+package com.smoc.cloud.configure.channel.group.controller;
 
 import com.smoc.cloud.common.auth.qo.Dict;
 import com.smoc.cloud.common.auth.qo.DictType;
@@ -17,8 +17,8 @@ import java.util.Map;
  * 产品管理
  **/
 @Controller
-@RequestMapping("/configure/product")
-public class ProductController {
+@RequestMapping("/configure/channel/group")
+public class ChannelGroupController {
 
 
     /**
@@ -29,7 +29,7 @@ public class ProductController {
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ModelAndView userProfile(HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("configure/product/product_list");
+        ModelAndView view = new ModelAndView("configure/channel/group/channel_group_list");
 
         //查询数据
         PageParams params = new PageParams<>();
@@ -52,7 +52,7 @@ public class ProductController {
      */
     @RequestMapping(value = "/page", method = RequestMethod.POST)
     public ModelAndView page() {
-        ModelAndView view = new ModelAndView("configure/product/product_list");
+        ModelAndView view = new ModelAndView("configure/channel/group/channel_group_list");
 
         //查询数据
         PageParams params = new PageParams<>();
@@ -77,7 +77,7 @@ public class ProductController {
     @RequestMapping(value = "/edit/center/{id}", method = RequestMethod.GET)
     public ModelAndView edit_center(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("configure/product/product_edit_center");
+        ModelAndView view = new ModelAndView("configure/channel/group/channel_group_edit_center");
 
         return view;
 
@@ -91,13 +91,8 @@ public class ProductController {
     @RequestMapping(value = "/edit/base/{id}", method = RequestMethod.GET)
     public ModelAndView base(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("configure/product/product_edit_base");
+        ModelAndView view = new ModelAndView("configure/channel/group/channel_group_edit_base");
 
-        Map<String, DictType> dictMap = (Map<String, DictType>) request.getSession().getServletContext().getAttribute("dict");
-        DictType dictType = dictMap.get("productExtendField");
-        List<Dict> dictList = dictType.getDict();
-
-        view.addObject("productExtendField",dictList);
 
         return view;
 
@@ -111,7 +106,7 @@ public class ProductController {
     @RequestMapping(value = "/edit/channel/{id}", method = RequestMethod.GET)
     public ModelAndView channelList(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("configure/product/product_edit_channel");
+        ModelAndView view = new ModelAndView("configure/channel/group/channel_group_edit_channel");
 
         return view;
 
@@ -125,7 +120,7 @@ public class ProductController {
     @RequestMapping(value = "/view/center/{id}", method = RequestMethod.GET)
     public ModelAndView view_center(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("configure/product/product_view_center");
+        ModelAndView view = new ModelAndView("configure/channel/group/channel_group_view_center");
 
         return view;
 
@@ -139,14 +134,8 @@ public class ProductController {
     @RequestMapping(value = "/view/base/{id}", method = RequestMethod.GET)
     public ModelAndView view_base(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("configure/product/product_view_base");
+        ModelAndView view = new ModelAndView("configure/channel/group/channel_group_view_base");
 
-
-        Map<String, DictType> dictMap = (Map<String, DictType>) request.getSession().getServletContext().getAttribute("dict");
-        DictType dictType = dictMap.get("productExtendField");
-        List<Dict> dictList = dictType.getDict();
-
-        view.addObject("productExtendField",dictList);
 
         return view;
 
