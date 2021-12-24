@@ -209,13 +209,15 @@ public class ChannelController {
         result = paramsValidator(channelBasicInfoValidator, result);
         //完成参数规则验证
         if (result.hasErrors()) {
-            view.addObject("codeNumberInfoValidator", channelBasicInfoValidator);
+            view.addObject("channelBasicInfoValidator", channelBasicInfoValidator);
             view.addObject("op", op);
             return view;
         }
 
         //初始化其他变量
         if (!StringUtils.isEmpty(op) && "add".equals(op)) {
+
+
             //生成通道ID:根据业务类型查询序列
             Integer seq = sequenceService.findSequence(channelBasicInfoValidator.getBusinessType());
             channelBasicInfoValidator.setChannelId("CHID" + seq);
@@ -244,8 +246,6 @@ public class ChannelController {
         //记录日志
         log.info("[通道管理][通道基本信息][{}][{}]数据:{}", op, user.getUserName(), JSON.toJSONString(channelBasicInfoValidator));
 
-        view.addObject("codeNumberInfoValidator", channelBasicInfoValidator);
-        view.addObject("op", "edit");
 
         //保存成功之后，重新加载页面，iframe刷新标识，只有add才会刷新
         if ("add".equals(op)) {
@@ -253,6 +253,11 @@ public class ChannelController {
         } else {
             view.addObject("salesList", findSalesList());
         }
+
+        ResponseData<ChannelBasicInfoValidator> channelValidator = channelService.findChannelById(channelBasicInfoValidator.getChannelId());
+
+        view.addObject("channelBasicInfoValidator", channelValidator.getData());
+        view.addObject("op", "edit");
 
         return view;
     }
@@ -277,6 +282,12 @@ public class ChannelController {
         //参数验证:如果计价方式为统一计价，那资费不能为空
         if ("UNIFIED_PRICE".equals(channelBasicInfoValidator.getPriceStyle()) && StringUtils.isEmpty(channelBasicInfoValidator.getChannelPrice())) {
             FieldError err = new FieldError("资费", "channelPrice", "资费不能为空");
+            result.addError(err);
+        }
+
+        //如果通道是正常状态并且通道进度未完善，
+        if("001".equals(channelBasicInfoValidator.getChannelStatus()) && !"1101".equals(channelBasicInfoValidator.getChannelProcess())){
+            FieldError err = new FieldError("通道状态", "channelStatus", "正常状态下需要完善通道配置信息");
             result.addError(err);
         }
 
