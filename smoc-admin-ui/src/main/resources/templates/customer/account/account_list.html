@@ -119,12 +119,11 @@
                                 <thead>
                                 <tr>
                                     <th>企业名称</th>
-                                    <th>业务账号名称</th>
-                                    <th>业务账号</th>
+                                    <th>业务账号/业务账号名称</th>
+                                    <th>信息分类/扩展码</th>
                                     <th>业务类型</th>
-                                    <th>信息分类</th>
                                     <th>发送运营商</th>
-                                    <th>扩展码</th>
+                                    <th>通道组/资费</th>
                                     <th>开户完成进度</th>
                                     <th style="text-align:center">状态</th>
                                     <th>操作</th>
@@ -132,31 +131,37 @@
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <td>
+                                    <td style="line-height:44px">
                                         <a th:href="@{/ec/customer/base_info/center/0000}" data-toggle="tooltip"
                                            data-placement="bottom" title="" data-original-title="跳转到企业信息中心">
                                             <span style="color:#797979">北京星语互联科技有限公司</span></a>
                                     </td>
                                     <td>
+                                        xycr11<br>
                                         星语-移动-信用卡(小舟dj)
                                     </td>
                                     <td>
-                                        xycr11
+                                        行业<br>
+                                        1861086
                                     </td>
-                                    <td>
+                                    <td style="line-height:44px">
                                         <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">普通短信</a>
                                     </td>
-                                    <td>
-                                        行业
+                                    <td style="line-height:44px">
+                                        移动、联通、电信
                                     </td>
                                     <td>
-                                        移动
+                                        <i data-toggle="tooltip" data-placement="right" title=""
+                                           data-original-title="显示通道组及通道"
+                                           class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                        <br>
+                                        <i data-toggle="tooltip" data-placement="right" title=""
+                                           data-original-title="显示资费"
+                                           class="mdi mdi-comment-text-outline"
+                                           style="margin-left:5px"></i>
                                     </td>
-                                    <td>
-                                        98761234
-                                    </td>
-                                    <td>
-                                        <div class="progress" style="margin-top:5px">
+                                    <td style="line-height:44px">
+                                        <div class="progress" style="margin-top:5px;margin-top:16px">
                                             <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
                                                  aria-valuemax="100" style="width: 20%;"
                                                  class="progress-bar progress-bar-success progress-bar-striped"
@@ -183,10 +188,35 @@
                                                  data-original-title="过滤信息"></div>
                                         </div>
                                     </td>
-                                    <td style="text-align:center">
+                                    <td style="text-align:center;line-height:44px">
                                         <a class="btn btn-warning btn-rounded btn-sm waves-effect waves-light">完善中</a>
                                     </td>
                                     <td>
+                                        <a
+                                           data-toggle="tooltip" data-placement="bottom"
+                                           data-original-title="修改资费"
+                                           class="on-default edit-row"
+                                           style="padding-left: 3px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                        class="mdi mdi-coin"></i></a>
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="修改日限量"
+                                                class="on-default edit-row"
+                                                style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                             class="mdi mdi-view-grid"></i></a>
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="修改通道"
+                                                class="on-default edit-row"
+                                                style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                             class=" mdi mdi-view-headline"></i></a>
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="修改过滤参数"
+                                                class="on-default edit-row"
+                                                style="padding-left: 3px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                             class="mdi mdi-window-maximize"></i></a>
+                                        <br>
                                         <a th:href="@{/account/view/center/accountId}"
                                            sec:authorize-url="/account/view/center/*"
                                            style="padding-left: 5px;color: #4BD396;"
@@ -203,7 +233,7 @@
                                             class="mdi mdi-table-edit"></i></a>
                                         <a th:href="@{/account/center/enterpriseId}"
                                            class="on-default edit-row"
-                                           style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
+                                           style="padding-left: 8px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="EC业务账号中心"
                                         ><i style="font-size: 18px" class="glyphicon glyphicon-cog"></i></a>
                                         <a  data-toggle="modal"
@@ -214,31 +244,37 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
+                                    <td style="line-height:44px">
                                         <a th:href="@{/ec/customer/base_info/center/0000}" data-toggle="tooltip"
                                            data-placement="bottom" title="" data-original-title="跳转到企业信息中心">
                                             <span style="color:#797979">北京星语互联科技有限公司</span></a>
                                     </td>
                                     <td>
+                                        xycr11<br>
                                         星语-移动-信用卡(小舟dj)
                                     </td>
                                     <td>
-                                        xycr11
+                                        行业<br>
+                                        1861086
+                                    </td>
+                                    <td style="line-height:44px">
+                                        <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">普通短信</a>
+                                    </td>
+                                    <td style="line-height:44px">
+                                        移动、联通、电信
                                     </td>
                                     <td>
-                                        <a class="btn btn-purple btn-rounded btn-sm waves-effect waves-light">国际短信</a>
+                                        <i data-toggle="tooltip" data-placement="right" title=""
+                                           data-original-title="显示通道组及通道"
+                                           class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                        <br>
+                                        <i data-toggle="tooltip" data-placement="right" title=""
+                                           data-original-title="显示资费"
+                                           class="mdi mdi-comment-text-outline"
+                                           style="margin-left:5px"></i>
                                     </td>
-                                    <td>
-                                        行业
-                                    </td>
-                                    <td>
-                                        移动
-                                    </td>
-                                    <td>
-                                        98761234
-                                    </td>
-                                    <td>
-                                        <div class="progress" style="margin-top:5px">
+                                    <td style="line-height:44px">
+                                        <div class="progress" style="margin-top:5px;margin-top:16px">
                                             <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
                                                  aria-valuemax="100" style="width: 20%;"
                                                  class="progress-bar progress-bar-success progress-bar-striped"
@@ -265,27 +301,52 @@
                                                  data-original-title="过滤信息"></div>
                                         </div>
                                     </td>
-                                    <td style="text-align:center">
+                                    <td style="text-align:center;line-height:44px">
                                         <a class="btn btn-warning btn-rounded btn-sm waves-effect waves-light">完善中</a>
                                     </td>
                                     <td>
-                                        <a th:href="@{/ec/customer/channel/account/view/center/accountId}"
-                                           sec:authorize-url="/ec/customer/channel/account/view/center/*"
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="修改资费"
+                                                class="on-default edit-row"
+                                                style="padding-left: 3px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                             class="mdi mdi-coin"></i></a>
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="修改日限量"
+                                                class="on-default edit-row"
+                                                style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                             class="mdi mdi-view-grid"></i></a>
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="修改通道"
+                                                class="on-default edit-row"
+                                                style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                             class=" mdi mdi-view-headline"></i></a>
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="修改过滤参数"
+                                                class="on-default edit-row"
+                                                style="padding-left: 3px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                             class="mdi mdi-window-maximize"></i></a>
+                                        <br>
+                                        <a th:href="@{/account/view/center/accountId}"
+                                           sec:authorize-url="/account/view/center/*"
                                            style="padding-left: 5px;color: #4BD396;"
                                            data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="查看业务账号详情"><i
                                                 style="font-size: 18px"
                                                 class="glyphicon glyphicon-search"></i></a>
-                                        <a sec:authorize-url="/ec/customer/channel/account/edit/center/*"
-                                           th:href="@{/ec/customer/channel/account/edit/center/enterpriseId}"
+                                        <a sec:authorize-url="/account/edit/center/*"
+                                           th:href="@{/account/edit/center/accountId}"
                                            class="on-default edit-row"
                                            style="padding-left: 6px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="配置、修改EC业务账号信息"
                                         ><i style="font-size: 18px"
                                             class="mdi mdi-table-edit"></i></a>
-                                        <a th:href="@{/ec/customer/channel/account/center/account}"
+                                        <a th:href="@{/account/center/enterpriseId}"
                                            class="on-default edit-row"
-                                           style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
+                                           style="padding-left: 8px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="EC业务账号中心"
                                         ><i style="font-size: 18px" class="glyphicon glyphicon-cog"></i></a>
                                         <a  data-toggle="modal"
@@ -296,31 +357,37 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
+                                    <td style="line-height:44px">
                                         <a th:href="@{/ec/customer/base_info/center/0000}" data-toggle="tooltip"
                                            data-placement="bottom" title="" data-original-title="跳转到企业信息中心">
                                             <span style="color:#797979">北京星语互联科技有限公司</span></a>
                                     </td>
                                     <td>
+                                        xycr11<br>
                                         星语-移动-信用卡(小舟dj)
                                     </td>
                                     <td>
-                                        xycr11
+                                        行业<br>
+                                        1861086
+                                    </td>
+                                    <td style="line-height:44px">
+                                        <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">普通短信</a>
+                                    </td>
+                                    <td style="line-height:44px">
+                                        移动、联通、电信
                                     </td>
                                     <td>
-                                        <a class="btn btn-brown btn-rounded btn-sm waves-effect waves-light">彩信</a>
+                                        <i data-toggle="tooltip" data-placement="right" title=""
+                                           data-original-title="显示通道组及通道"
+                                           class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                        <br>
+                                        <i data-toggle="tooltip" data-placement="right" title=""
+                                           data-original-title="显示资费"
+                                           class="mdi mdi-comment-text-outline"
+                                           style="margin-left:5px"></i>
                                     </td>
-                                    <td>
-                                        行业
-                                    </td>
-                                    <td>
-                                        移动
-                                    </td>
-                                    <td>
-                                        98761234
-                                    </td>
-                                    <td>
-                                        <div class="progress" style="margin-top:5px">
+                                    <td style="line-height:44px">
+                                        <div class="progress" style="margin-top:5px;margin-top:16px">
                                             <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
                                                  aria-valuemax="100" style="width: 20%;"
                                                  class="progress-bar progress-bar-success progress-bar-striped"
@@ -347,27 +414,52 @@
                                                  data-original-title="过滤信息"></div>
                                         </div>
                                     </td>
-                                    <td style="text-align:center">
+                                    <td style="text-align:center;line-height:44px">
                                         <a class="btn btn-warning btn-rounded btn-sm waves-effect waves-light">完善中</a>
                                     </td>
                                     <td>
-                                        <a th:href="@{/ec/customer/channel/account/view/center/accountId}"
-                                           sec:authorize-url="/ec/customer/channel/account/view/center/*"
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="修改资费"
+                                                class="on-default edit-row"
+                                                style="padding-left: 3px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                             class="mdi mdi-coin"></i></a>
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="修改日限量"
+                                                class="on-default edit-row"
+                                                style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                             class="mdi mdi-view-grid"></i></a>
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="修改通道"
+                                                class="on-default edit-row"
+                                                style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                             class=" mdi mdi-view-headline"></i></a>
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="修改过滤参数"
+                                                class="on-default edit-row"
+                                                style="padding-left: 3px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                             class="mdi mdi-window-maximize"></i></a>
+                                        <br>
+                                        <a th:href="@{/account/view/center/accountId}"
+                                           sec:authorize-url="/account/view/center/*"
                                            style="padding-left: 5px;color: #4BD396;"
                                            data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="查看业务账号详情"><i
                                                 style="font-size: 18px"
                                                 class="glyphicon glyphicon-search"></i></a>
-                                        <a sec:authorize-url="/ec/customer/channel/account/edit/center/*"
-                                           th:href="@{/ec/customer/channel/account/edit/center/enterpriseId}"
+                                        <a sec:authorize-url="/account/edit/center/*"
+                                           th:href="@{/account/edit/center/accountId}"
                                            class="on-default edit-row"
                                            style="padding-left: 6px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="配置、修改EC业务账号信息"
                                         ><i style="font-size: 18px"
                                             class="mdi mdi-table-edit"></i></a>
-                                        <a th:href="@{/ec/customer/channel/account/center/account}"
+                                        <a th:href="@{/account/center/enterpriseId}"
                                            class="on-default edit-row"
-                                           style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
+                                           style="padding-left: 8px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="EC业务账号中心"
                                         ><i style="font-size: 18px" class="glyphicon glyphicon-cog"></i></a>
                                         <a  data-toggle="modal"
@@ -378,31 +470,37 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
+                                    <td style="line-height:44px">
                                         <a th:href="@{/ec/customer/base_info/center/0000}" data-toggle="tooltip"
                                            data-placement="bottom" title="" data-original-title="跳转到企业信息中心">
                                             <span style="color:#797979">北京星语互联科技有限公司</span></a>
                                     </td>
                                     <td>
+                                        xycr11<br>
                                         星语-移动-信用卡(小舟dj)
                                     </td>
                                     <td>
-                                        xycr11
+                                        行业<br>
+                                        1861086
+                                    </td>
+                                    <td style="line-height:44px">
+                                        <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">普通短信</a>
+                                    </td>
+                                    <td style="line-height:44px">
+                                        移动、联通、电信
                                     </td>
                                     <td>
-                                        <a class="btn btn-teal btn-rounded btn-sm waves-effect waves-light">5G消息</a>
+                                        <i data-toggle="tooltip" data-placement="right" title=""
+                                           data-original-title="显示通道组及通道"
+                                           class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                        <br>
+                                        <i data-toggle="tooltip" data-placement="right" title=""
+                                           data-original-title="显示资费"
+                                           class="mdi mdi-comment-text-outline"
+                                           style="margin-left:5px"></i>
                                     </td>
-                                    <td>
-                                        行业
-                                    </td>
-                                    <td>
-                                        移动
-                                    </td>
-                                    <td>
-                                        98761234
-                                    </td>
-                                    <td>
-                                        <div class="progress" style="margin-top:5px">
+                                    <td style="line-height:44px">
+                                        <div class="progress" style="margin-top:5px;margin-top:16px">
                                             <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
                                                  aria-valuemax="100" style="width: 20%;"
                                                  class="progress-bar progress-bar-success progress-bar-striped"
@@ -429,27 +527,52 @@
                                                  data-original-title="过滤信息"></div>
                                         </div>
                                     </td>
-                                    <td style="text-align:center">
+                                    <td style="text-align:center;line-height:44px">
                                         <a class="btn btn-warning btn-rounded btn-sm waves-effect waves-light">完善中</a>
                                     </td>
                                     <td>
-                                        <a th:href="@{/ec/customer/channel/account/view/center/accountId}"
-                                           sec:authorize-url="/ec/customer/channel/account/view/center/*"
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="修改资费"
+                                                class="on-default edit-row"
+                                                style="padding-left: 3px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                             class="mdi mdi-coin"></i></a>
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="修改日限量"
+                                                class="on-default edit-row"
+                                                style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                             class="mdi mdi-view-grid"></i></a>
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="修改通道"
+                                                class="on-default edit-row"
+                                                style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                             class=" mdi mdi-view-headline"></i></a>
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="修改过滤参数"
+                                                class="on-default edit-row"
+                                                style="padding-left: 3px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                             class="mdi mdi-window-maximize"></i></a>
+                                        <br>
+                                        <a th:href="@{/account/view/center/accountId}"
+                                           sec:authorize-url="/account/view/center/*"
                                            style="padding-left: 5px;color: #4BD396;"
                                            data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="查看业务账号详情"><i
                                                 style="font-size: 18px"
                                                 class="glyphicon glyphicon-search"></i></a>
-                                        <a sec:authorize-url="/ec/customer/channel/account/edit/center/*"
-                                           th:href="@{/ec/customer/channel/account/edit/center/enterpriseId}"
+                                        <a sec:authorize-url="/account/edit/center/*"
+                                           th:href="@{/account/edit/center/accountId}"
                                            class="on-default edit-row"
                                            style="padding-left: 6px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="配置、修改EC业务账号信息"
                                         ><i style="font-size: 18px"
                                             class="mdi mdi-table-edit"></i></a>
-                                        <a th:href="@{/ec/customer/channel/account/center/account}"
+                                        <a th:href="@{/account/center/enterpriseId}"
                                            class="on-default edit-row"
-                                           style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
+                                           style="padding-left: 8px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="EC业务账号中心"
                                         ><i style="font-size: 18px" class="glyphicon glyphicon-cog"></i></a>
                                         <a  data-toggle="modal"
@@ -460,31 +583,37 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
+                                    <td style="line-height:44px">
                                         <a th:href="@{/ec/customer/base_info/center/0000}" data-toggle="tooltip"
                                            data-placement="bottom" title="" data-original-title="跳转到企业信息中心">
                                             <span style="color:#797979">北京星语互联科技有限公司</span></a>
                                     </td>
                                     <td>
+                                        xycr11<br>
                                         星语-移动-信用卡(小舟dj)
                                     </td>
                                     <td>
-                                        xycr11
+                                        行业<br>
+                                        1861086
+                                    </td>
+                                    <td style="line-height:44px">
+                                        <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">普通短信</a>
+                                    </td>
+                                    <td style="line-height:44px">
+                                        移动、联通、电信
                                     </td>
                                     <td>
-                                        <a class="btn btn-teal btn-rounded btn-sm waves-effect waves-light">5G消息</a>
+                                        <i data-toggle="tooltip" data-placement="right" title=""
+                                           data-original-title="显示通道组及通道"
+                                           class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                        <br>
+                                        <i data-toggle="tooltip" data-placement="right" title=""
+                                           data-original-title="显示资费"
+                                           class="mdi mdi-comment-text-outline"
+                                           style="margin-left:5px"></i>
                                     </td>
-                                    <td>
-                                        行业
-                                    </td>
-                                    <td>
-                                        移动
-                                    </td>
-                                    <td>
-                                        98761234
-                                    </td>
-                                    <td>
-                                        <div class="progress" style="margin-top:5px">
+                                    <td style="line-height:44px">
+                                        <div class="progress" style="margin-top:5px;margin-top:16px">
                                             <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
                                                  aria-valuemax="100" style="width: 20%;"
                                                  class="progress-bar progress-bar-success progress-bar-striped"
@@ -511,27 +640,52 @@
                                                  data-original-title="过滤信息"></div>
                                         </div>
                                     </td>
-                                    <td style="text-align:center">
+                                    <td style="text-align:center;line-height:44px">
                                         <a class="btn btn-warning btn-rounded btn-sm waves-effect waves-light">完善中</a>
                                     </td>
                                     <td>
-                                        <a th:href="@{/ec/customer/channel/account/view/center/accountId}"
-                                           sec:authorize-url="/ec/customer/channel/account/view/center/*"
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="修改资费"
+                                                class="on-default edit-row"
+                                                style="padding-left: 3px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                             class="mdi mdi-coin"></i></a>
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="修改日限量"
+                                                class="on-default edit-row"
+                                                style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                             class="mdi mdi-view-grid"></i></a>
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="修改通道"
+                                                class="on-default edit-row"
+                                                style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                             class=" mdi mdi-view-headline"></i></a>
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="修改过滤参数"
+                                                class="on-default edit-row"
+                                                style="padding-left: 3px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                             class="mdi mdi-window-maximize"></i></a>
+                                        <br>
+                                        <a th:href="@{/account/view/center/accountId}"
+                                           sec:authorize-url="/account/view/center/*"
                                            style="padding-left: 5px;color: #4BD396;"
                                            data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="查看业务账号详情"><i
                                                 style="font-size: 18px"
                                                 class="glyphicon glyphicon-search"></i></a>
-                                        <a sec:authorize-url="/ec/customer/channel/account/edit/center/*"
-                                           th:href="@{/ec/customer/channel/account/edit/center/enterpriseId}"
+                                        <a sec:authorize-url="/account/edit/center/*"
+                                           th:href="@{/account/edit/center/accountId}"
                                            class="on-default edit-row"
                                            style="padding-left: 6px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="配置、修改EC业务账号信息"
                                         ><i style="font-size: 18px"
                                             class="mdi mdi-table-edit"></i></a>
-                                        <a th:href="@{/ec/customer/channel/account/center/account}"
+                                        <a th:href="@{/account/center/enterpriseId}"
                                            class="on-default edit-row"
-                                           style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
+                                           style="padding-left: 8px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="EC业务账号中心"
                                         ><i style="font-size: 18px" class="glyphicon glyphicon-cog"></i></a>
                                         <a  data-toggle="modal"
@@ -542,31 +696,37 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
+                                    <td style="line-height:44px">
                                         <a th:href="@{/ec/customer/base_info/center/0000}" data-toggle="tooltip"
                                            data-placement="bottom" title="" data-original-title="跳转到企业信息中心">
                                             <span style="color:#797979">北京星语互联科技有限公司</span></a>
                                     </td>
                                     <td>
+                                        xycr11<br>
                                         星语-移动-信用卡(小舟dj)
                                     </td>
                                     <td>
-                                        xycr11
+                                        行业<br>
+                                        1861086
+                                    </td>
+                                    <td style="line-height:44px">
+                                        <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">普通短信</a>
+                                    </td>
+                                    <td style="line-height:44px">
+                                        移动、联通、电信
                                     </td>
                                     <td>
-                                        <a class="btn btn-teal btn-rounded btn-sm waves-effect waves-light">5G消息</a>
+                                        <i data-toggle="tooltip" data-placement="right" title=""
+                                           data-original-title="显示通道组及通道"
+                                           class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                        <br>
+                                        <i data-toggle="tooltip" data-placement="right" title=""
+                                           data-original-title="显示资费"
+                                           class="mdi mdi-comment-text-outline"
+                                           style="margin-left:5px"></i>
                                     </td>
-                                    <td>
-                                        行业
-                                    </td>
-                                    <td>
-                                        移动
-                                    </td>
-                                    <td>
-                                        98761234
-                                    </td>
-                                    <td>
-                                        <div class="progress" style="margin-top:5px">
+                                    <td style="line-height:44px">
+                                        <div class="progress" style="margin-top:5px;margin-top:16px">
                                             <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
                                                  aria-valuemax="100" style="width: 20%;"
                                                  class="progress-bar progress-bar-success progress-bar-striped"
@@ -593,27 +753,52 @@
                                                  data-original-title="过滤信息"></div>
                                         </div>
                                     </td>
-                                    <td style="text-align:center">
+                                    <td style="text-align:center;line-height:44px">
                                         <a class="btn btn-warning btn-rounded btn-sm waves-effect waves-light">完善中</a>
                                     </td>
                                     <td>
-                                        <a th:href="@{/ec/customer/channel/account/view/center/accountId}"
-                                           sec:authorize-url="/ec/customer/channel/account/view/center/*"
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="修改资费"
+                                                class="on-default edit-row"
+                                                style="padding-left: 3px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                             class="mdi mdi-coin"></i></a>
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="修改日限量"
+                                                class="on-default edit-row"
+                                                style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                             class="mdi mdi-view-grid"></i></a>
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="修改通道"
+                                                class="on-default edit-row"
+                                                style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                             class=" mdi mdi-view-headline"></i></a>
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="修改过滤参数"
+                                                class="on-default edit-row"
+                                                style="padding-left: 3px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                             class="mdi mdi-window-maximize"></i></a>
+                                        <br>
+                                        <a th:href="@{/account/view/center/accountId}"
+                                           sec:authorize-url="/account/view/center/*"
                                            style="padding-left: 5px;color: #4BD396;"
                                            data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="查看业务账号详情"><i
                                                 style="font-size: 18px"
                                                 class="glyphicon glyphicon-search"></i></a>
-                                        <a sec:authorize-url="/ec/customer/channel/account/edit/center/*"
-                                           th:href="@{/ec/customer/channel/account/edit/center/enterpriseId}"
+                                        <a sec:authorize-url="/account/edit/center/*"
+                                           th:href="@{/account/edit/center/accountId}"
                                            class="on-default edit-row"
                                            style="padding-left: 6px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="配置、修改EC业务账号信息"
                                         ><i style="font-size: 18px"
                                             class="mdi mdi-table-edit"></i></a>
-                                        <a th:href="@{/ec/customer/channel/account/center/account}"
+                                        <a th:href="@{/account/center/enterpriseId}"
                                            class="on-default edit-row"
-                                           style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
+                                           style="padding-left: 8px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="EC业务账号中心"
                                         ><i style="font-size: 18px" class="glyphicon glyphicon-cog"></i></a>
                                         <a  data-toggle="modal"
@@ -624,31 +809,37 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
+                                    <td style="line-height:44px">
                                         <a th:href="@{/ec/customer/base_info/center/0000}" data-toggle="tooltip"
                                            data-placement="bottom" title="" data-original-title="跳转到企业信息中心">
                                             <span style="color:#797979">北京星语互联科技有限公司</span></a>
                                     </td>
                                     <td>
+                                        xycr11<br>
                                         星语-移动-信用卡(小舟dj)
                                     </td>
                                     <td>
-                                        xycr11
+                                        行业<br>
+                                        1861086
+                                    </td>
+                                    <td style="line-height:44px">
+                                        <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">普通短信</a>
+                                    </td>
+                                    <td style="line-height:44px">
+                                        移动、联通、电信
                                     </td>
                                     <td>
-                                        <a class="btn btn-teal btn-rounded btn-sm waves-effect waves-light">5G消息</a>
+                                        <i data-toggle="tooltip" data-placement="right" title=""
+                                           data-original-title="显示通道组及通道"
+                                           class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                        <br>
+                                        <i data-toggle="tooltip" data-placement="right" title=""
+                                           data-original-title="显示资费"
+                                           class="mdi mdi-comment-text-outline"
+                                           style="margin-left:5px"></i>
                                     </td>
-                                    <td>
-                                        行业
-                                    </td>
-                                    <td>
-                                        移动
-                                    </td>
-                                    <td>
-                                        98761234
-                                    </td>
-                                    <td>
-                                        <div class="progress" style="margin-top:5px">
+                                    <td style="line-height:44px">
+                                        <div class="progress" style="margin-top:5px;margin-top:16px">
                                             <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
                                                  aria-valuemax="100" style="width: 20%;"
                                                  class="progress-bar progress-bar-success progress-bar-striped"
@@ -675,27 +866,52 @@
                                                  data-original-title="过滤信息"></div>
                                         </div>
                                     </td>
-                                    <td style="text-align:center">
+                                    <td style="text-align:center;line-height:44px">
                                         <a class="btn btn-warning btn-rounded btn-sm waves-effect waves-light">完善中</a>
                                     </td>
                                     <td>
-                                        <a th:href="@{/ec/customer/channel/account/view/center/accountId}"
-                                           sec:authorize-url="/ec/customer/channel/account/view/center/*"
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="修改资费"
+                                                class="on-default edit-row"
+                                                style="padding-left: 3px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                             class="mdi mdi-coin"></i></a>
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="修改日限量"
+                                                class="on-default edit-row"
+                                                style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                             class="mdi mdi-view-grid"></i></a>
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="修改通道"
+                                                class="on-default edit-row"
+                                                style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                             class=" mdi mdi-view-headline"></i></a>
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="修改过滤参数"
+                                                class="on-default edit-row"
+                                                style="padding-left: 3px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                             class="mdi mdi-window-maximize"></i></a>
+                                        <br>
+                                        <a th:href="@{/account/view/center/accountId}"
+                                           sec:authorize-url="/account/view/center/*"
                                            style="padding-left: 5px;color: #4BD396;"
                                            data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="查看业务账号详情"><i
                                                 style="font-size: 18px"
                                                 class="glyphicon glyphicon-search"></i></a>
-                                        <a sec:authorize-url="/ec/customer/channel/account/edit/center/*"
-                                           th:href="@{/ec/customer/channel/account/edit/center/enterpriseId}"
+                                        <a sec:authorize-url="/account/edit/center/*"
+                                           th:href="@{/account/edit/center/accountId}"
                                            class="on-default edit-row"
                                            style="padding-left: 6px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="配置、修改EC业务账号信息"
                                         ><i style="font-size: 18px"
                                             class="mdi mdi-table-edit"></i></a>
-                                        <a th:href="@{/ec/customer/channel/account/center/account}"
+                                        <a th:href="@{/account/center/enterpriseId}"
                                            class="on-default edit-row"
-                                           style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
+                                           style="padding-left: 8px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="EC业务账号中心"
                                         ><i style="font-size: 18px" class="glyphicon glyphicon-cog"></i></a>
                                         <a  data-toggle="modal"
@@ -706,31 +922,37 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
+                                    <td style="line-height:44px">
                                         <a th:href="@{/ec/customer/base_info/center/0000}" data-toggle="tooltip"
                                            data-placement="bottom" title="" data-original-title="跳转到企业信息中心">
                                             <span style="color:#797979">北京星语互联科技有限公司</span></a>
                                     </td>
                                     <td>
+                                        xycr11<br>
                                         星语-移动-信用卡(小舟dj)
                                     </td>
                                     <td>
-                                        xycr11
+                                        行业<br>
+                                        1861086
+                                    </td>
+                                    <td style="line-height:44px">
+                                        <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">普通短信</a>
+                                    </td>
+                                    <td style="line-height:44px">
+                                        移动、联通、电信
                                     </td>
                                     <td>
-                                        <a class="btn btn-teal btn-rounded btn-sm waves-effect waves-light">5G消息</a>
+                                        <i data-toggle="tooltip" data-placement="right" title=""
+                                           data-original-title="显示通道组及通道"
+                                           class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                        <br>
+                                        <i data-toggle="tooltip" data-placement="right" title=""
+                                           data-original-title="显示资费"
+                                           class="mdi mdi-comment-text-outline"
+                                           style="margin-left:5px"></i>
                                     </td>
-                                    <td>
-                                        行业
-                                    </td>
-                                    <td>
-                                        移动
-                                    </td>
-                                    <td>
-                                        98761234
-                                    </td>
-                                    <td>
-                                        <div class="progress" style="margin-top:5px">
+                                    <td style="line-height:44px">
+                                        <div class="progress" style="margin-top:5px;margin-top:16px">
                                             <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
                                                  aria-valuemax="100" style="width: 20%;"
                                                  class="progress-bar progress-bar-success progress-bar-striped"
@@ -757,27 +979,52 @@
                                                  data-original-title="过滤信息"></div>
                                         </div>
                                     </td>
-                                    <td style="text-align:center">
+                                    <td style="text-align:center;line-height:44px">
                                         <a class="btn btn-warning btn-rounded btn-sm waves-effect waves-light">完善中</a>
                                     </td>
                                     <td>
-                                        <a th:href="@{/ec/customer/channel/account/view/center/accountId}"
-                                           sec:authorize-url="/ec/customer/channel/account/view/center/*"
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="修改资费"
+                                                class="on-default edit-row"
+                                                style="padding-left: 3px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                             class="mdi mdi-coin"></i></a>
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="修改日限量"
+                                                class="on-default edit-row"
+                                                style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                             class="mdi mdi-view-grid"></i></a>
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="修改通道"
+                                                class="on-default edit-row"
+                                                style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                             class=" mdi mdi-view-headline"></i></a>
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="修改过滤参数"
+                                                class="on-default edit-row"
+                                                style="padding-left: 3px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                             class="mdi mdi-window-maximize"></i></a>
+                                        <br>
+                                        <a th:href="@{/account/view/center/accountId}"
+                                           sec:authorize-url="/account/view/center/*"
                                            style="padding-left: 5px;color: #4BD396;"
                                            data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="查看业务账号详情"><i
                                                 style="font-size: 18px"
                                                 class="glyphicon glyphicon-search"></i></a>
-                                        <a sec:authorize-url="/ec/customer/channel/account/edit/center/*"
-                                           th:href="@{/ec/customer/channel/account/edit/center/enterpriseId}"
+                                        <a sec:authorize-url="/account/edit/center/*"
+                                           th:href="@{/account/edit/center/accountId}"
                                            class="on-default edit-row"
                                            style="padding-left: 6px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="配置、修改EC业务账号信息"
                                         ><i style="font-size: 18px"
                                             class="mdi mdi-table-edit"></i></a>
-                                        <a th:href="@{/ec/customer/channel/account/center/account}"
+                                        <a th:href="@{/account/center/enterpriseId}"
                                            class="on-default edit-row"
-                                           style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
+                                           style="padding-left: 8px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="EC业务账号中心"
                                         ><i style="font-size: 18px" class="glyphicon glyphicon-cog"></i></a>
                                         <a  data-toggle="modal"
@@ -788,31 +1035,37 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
+                                    <td style="line-height:44px">
                                         <a th:href="@{/ec/customer/base_info/center/0000}" data-toggle="tooltip"
                                            data-placement="bottom" title="" data-original-title="跳转到企业信息中心">
                                             <span style="color:#797979">北京星语互联科技有限公司</span></a>
                                     </td>
                                     <td>
+                                        xycr11<br>
                                         星语-移动-信用卡(小舟dj)
                                     </td>
                                     <td>
-                                        xycr11
+                                        行业<br>
+                                        1861086
+                                    </td>
+                                    <td style="line-height:44px">
+                                        <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">普通短信</a>
+                                    </td>
+                                    <td style="line-height:44px">
+                                        移动、联通、电信
                                     </td>
                                     <td>
-                                        <a class="btn btn-teal btn-rounded btn-sm waves-effect waves-light">5G消息</a>
+                                        <i data-toggle="tooltip" data-placement="right" title=""
+                                           data-original-title="显示通道组及通道"
+                                           class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                        <br>
+                                        <i data-toggle="tooltip" data-placement="right" title=""
+                                           data-original-title="显示资费"
+                                           class="mdi mdi-comment-text-outline"
+                                           style="margin-left:5px"></i>
                                     </td>
-                                    <td>
-                                        行业
-                                    </td>
-                                    <td>
-                                        移动
-                                    </td>
-                                    <td>
-                                        98761234
-                                    </td>
-                                    <td>
-                                        <div class="progress" style="margin-top:5px">
+                                    <td style="line-height:44px">
+                                        <div class="progress" style="margin-top:5px;margin-top:16px">
                                             <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
                                                  aria-valuemax="100" style="width: 20%;"
                                                  class="progress-bar progress-bar-success progress-bar-striped"
@@ -839,27 +1092,52 @@
                                                  data-original-title="过滤信息"></div>
                                         </div>
                                     </td>
-                                    <td style="text-align:center">
+                                    <td style="text-align:center;line-height:44px">
                                         <a class="btn btn-warning btn-rounded btn-sm waves-effect waves-light">完善中</a>
                                     </td>
                                     <td>
-                                        <a th:href="@{/ec/customer/channel/account/view/center/accountId}"
-                                           sec:authorize-url="/ec/customer/channel/account/view/center/*"
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="修改资费"
+                                                class="on-default edit-row"
+                                                style="padding-left: 3px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                             class="mdi mdi-coin"></i></a>
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="修改日限量"
+                                                class="on-default edit-row"
+                                                style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                             class="mdi mdi-view-grid"></i></a>
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="修改通道"
+                                                class="on-default edit-row"
+                                                style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                             class=" mdi mdi-view-headline"></i></a>
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="修改过滤参数"
+                                                class="on-default edit-row"
+                                                style="padding-left: 3px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                             class="mdi mdi-window-maximize"></i></a>
+                                        <br>
+                                        <a th:href="@{/account/view/center/accountId}"
+                                           sec:authorize-url="/account/view/center/*"
                                            style="padding-left: 5px;color: #4BD396;"
                                            data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="查看业务账号详情"><i
                                                 style="font-size: 18px"
                                                 class="glyphicon glyphicon-search"></i></a>
-                                        <a sec:authorize-url="/ec/customer/channel/account/edit/center/*"
-                                           th:href="@{/ec/customer/channel/account/edit/center/enterpriseId}"
+                                        <a sec:authorize-url="/account/edit/center/*"
+                                           th:href="@{/account/edit/center/accountId}"
                                            class="on-default edit-row"
                                            style="padding-left: 6px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="配置、修改EC业务账号信息"
                                         ><i style="font-size: 18px"
                                             class="mdi mdi-table-edit"></i></a>
-                                        <a th:href="@{/ec/customer/channel/account/center/account}"
+                                        <a th:href="@{/account/center/enterpriseId}"
                                            class="on-default edit-row"
-                                           style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
+                                           style="padding-left: 8px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="EC业务账号中心"
                                         ><i style="font-size: 18px" class="glyphicon glyphicon-cog"></i></a>
                                         <a  data-toggle="modal"
@@ -870,31 +1148,37 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
+                                    <td style="line-height:44px">
                                         <a th:href="@{/ec/customer/base_info/center/0000}" data-toggle="tooltip"
                                            data-placement="bottom" title="" data-original-title="跳转到企业信息中心">
                                             <span style="color:#797979">北京星语互联科技有限公司</span></a>
                                     </td>
                                     <td>
+                                        xycr11<br>
                                         星语-移动-信用卡(小舟dj)
                                     </td>
                                     <td>
-                                        xycr11
+                                        行业<br>
+                                        1861086
+                                    </td>
+                                    <td style="line-height:44px">
+                                        <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">普通短信</a>
+                                    </td>
+                                    <td style="line-height:44px">
+                                        移动、联通、电信
                                     </td>
                                     <td>
-                                        <a class="btn btn-teal btn-rounded btn-sm waves-effect waves-light">5G消息</a>
+                                        <i data-toggle="tooltip" data-placement="right" title=""
+                                           data-original-title="显示通道组及通道"
+                                           class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                        <br>
+                                        <i data-toggle="tooltip" data-placement="right" title=""
+                                           data-original-title="显示资费"
+                                           class="mdi mdi-comment-text-outline"
+                                           style="margin-left:5px"></i>
                                     </td>
-                                    <td>
-                                        行业
-                                    </td>
-                                    <td>
-                                        移动
-                                    </td>
-                                    <td>
-                                        98761234
-                                    </td>
-                                    <td>
-                                        <div class="progress" style="margin-top:5px">
+                                    <td style="line-height:44px">
+                                        <div class="progress" style="margin-top:5px;margin-top:16px">
                                             <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
                                                  aria-valuemax="100" style="width: 20%;"
                                                  class="progress-bar progress-bar-success progress-bar-striped"
@@ -921,27 +1205,52 @@
                                                  data-original-title="过滤信息"></div>
                                         </div>
                                     </td>
-                                    <td style="text-align:center">
+                                    <td style="text-align:center;line-height:44px">
                                         <a class="btn btn-warning btn-rounded btn-sm waves-effect waves-light">完善中</a>
                                     </td>
                                     <td>
-                                        <a th:href="@{/ec/customer/channel/account/view/center/accountId}"
-                                           sec:authorize-url="/ec/customer/channel/account/view/center/*"
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="修改资费"
+                                                class="on-default edit-row"
+                                                style="padding-left: 3px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                             class="mdi mdi-coin"></i></a>
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="修改日限量"
+                                                class="on-default edit-row"
+                                                style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                             class="mdi mdi-view-grid"></i></a>
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="修改通道"
+                                                class="on-default edit-row"
+                                                style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                             class=" mdi mdi-view-headline"></i></a>
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="修改过滤参数"
+                                                class="on-default edit-row"
+                                                style="padding-left: 3px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                             class="mdi mdi-window-maximize"></i></a>
+                                        <br>
+                                        <a th:href="@{/account/view/center/accountId}"
+                                           sec:authorize-url="/account/view/center/*"
                                            style="padding-left: 5px;color: #4BD396;"
                                            data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="查看业务账号详情"><i
                                                 style="font-size: 18px"
                                                 class="glyphicon glyphicon-search"></i></a>
-                                        <a sec:authorize-url="/ec/customer/channel/account/edit/center/*"
-                                           th:href="@{/ec/customer/channel/account/edit/center/enterpriseId}"
+                                        <a sec:authorize-url="/account/edit/center/*"
+                                           th:href="@{/account/edit/center/accountId}"
                                            class="on-default edit-row"
                                            style="padding-left: 6px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="配置、修改EC业务账号信息"
                                         ><i style="font-size: 18px"
                                             class="mdi mdi-table-edit"></i></a>
-                                        <a th:href="@{/ec/customer/channel/account/center/account}"
+                                        <a th:href="@{/account/center/enterpriseId}"
                                            class="on-default edit-row"
-                                           style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
+                                           style="padding-left: 8px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="EC业务账号中心"
                                         ><i style="font-size: 18px" class="glyphicon glyphicon-cog"></i></a>
                                         <a  data-toggle="modal"
@@ -972,9 +1281,7 @@
                         <h4 class="modal-title" id="custom-width-modalLabel">确认注销</h4>
                     </div>
                     <div class="modal-body">
-
                         <p>注销之后数据无法恢复！你还是确认注销？</p>
-
                     </div>
                     <div class="modal-footer">
                         <input type="hidden" id="deleteId">

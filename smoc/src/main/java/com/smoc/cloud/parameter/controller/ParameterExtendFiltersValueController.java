@@ -14,11 +14,11 @@ import java.util.List;
 
 
 /**
- * 业务扩展字段值 接口
+ * 过滤扩展字段值 接口
  */
 @Slf4j
 @RestController
-@RequestMapping("parameter")
+@RequestMapping("parameter/filter")
 @Scope(value = WebApplicationContext.SCOPE_REQUEST)
 public class ParameterExtendFiltersValueController {
 

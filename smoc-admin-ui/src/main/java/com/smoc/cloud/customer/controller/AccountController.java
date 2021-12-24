@@ -133,7 +133,7 @@ public class AccountController {
      */
     @RequestMapping(value = "/edit/product/{accountId}", method = RequestMethod.GET)
     public ModelAndView edit_product(@PathVariable String accountId, HttpServletRequest request) {
-        ModelAndView view = new ModelAndView("customer/account/account_edit_product");
+        ModelAndView view = new ModelAndView("customer/account/account_edit_channel_group");
         return view;
 
     }

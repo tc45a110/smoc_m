@@ -101,8 +101,8 @@
                                                 </a>
                                             </li>
                                             <li class="" id="tab4"><a onclick="active('4')" id="a3"
-                                                                      sec:authorize-url="/parameter/filter/list/BUSINESS_ACCOUNT_PARAM/*/*"
-                                                                      th:href="@{/parameter/filter/list/BUSINESS_ACCOUNT_PARAM/accountId/6}"
+                                                                      sec:authorize-url="/parameter/filter/list/BUSINESS_ACCOUNT_FILTER/*/*"
+                                                                      th:href="@{/parameter/filter/list/BUSINESS_ACCOUNT_FILTER/accountId/6}"
                                                                       th:target="tab-content"><i class="mdi mdi-star"
                                                                                                  style="margin-right:5px;color:#f35864"></i>业务账号过滤参数</a>
                                             <li class="" id="tab5">
@@ -110,14 +110,22 @@
                                                    sec:authorize-url="/account/edit/product/*"
                                                    th:href="@{/account/edit/product/accountId}"
                                                    th:target="tab-content"><i class="mdi mdi-star"
-                                                                              style="margin-right:5px;color:#f35864"></i>业务账号产品配置
+                                                                              style="margin-right:5px;color:#f35864"></i>业务账号通道组配置
                                                 </a>
                                             </li>
                                             <li class="" id="tab6">
                                                 <a onclick="active('6')"
                                                    sec:authorize-url="/account/edit/channel/*"
                                                    th:href="@{/account/edit/channel/accountId}"
-                                                   th:target="tab-content">业务账号通道配置
+                                                   th:target="tab-content"><i class="mdi mdi-star"
+                                                                              style="margin-right:5px;color:#f35864"></i>业务账号通道配置
+                                                </a>
+                                            </li>
+                                            <li class="" id="tab8">
+                                                <a onclick="active('8')"
+                                                   sec:authorize-url="/parameter/business/list/BUSINESS_ACCOUNT/*/*"
+                                                   th:href="@{/parameter/business/list/BUSINESS_ACCOUNT/businessId/4}"
+                                                   th:target="tab-content">业务账号扩展参数
                                                 </a>
                                             </li>
                                             <li class="" id="tab7">
@@ -190,7 +198,7 @@
 
     //页签切换
     function active(tab) {
-        for(var num = 1;num<8;num++){
+        for(var num = 1;num<9;num++){
             $('#tab'+num).removeClass("active");
         }
         $('#tab'+tab).attr("class","active");

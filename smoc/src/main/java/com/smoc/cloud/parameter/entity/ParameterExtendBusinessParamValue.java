@@ -1,11 +1,14 @@
 package com.smoc.cloud.parameter.entity;
 
-import javax.persistence.*;
-import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.time.Instant;
 
 @Entity
-@Table(name = "parameter_extend_filters_value")
-public class ParameterExtendFiltersValue {
+@Table(name = "parameter_extend_business_param_value")
+public class ParameterExtendBusinessParamValue {
     @Id
     @Column(name = "ID", nullable = false, length = 32)
     private String id;
@@ -29,13 +32,13 @@ public class ParameterExtendFiltersValue {
     private String createdBy;
 
     @Column(name = "CREATED_TIME", nullable = false)
-    private Date createdTime;
+    private Instant createdTime;
 
-    public Date getCreatedTime() {
+    public Instant getCreatedTime() {
         return createdTime;
     }
 
-    public void setCreatedTime(Date createdTime) {
+    public void setCreatedTime(Instant createdTime) {
         this.createdTime = createdTime;
     }
 

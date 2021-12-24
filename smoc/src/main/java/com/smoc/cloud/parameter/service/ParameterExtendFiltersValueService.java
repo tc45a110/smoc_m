@@ -54,7 +54,7 @@ public class ParameterExtendFiltersValueService {
         parameterExtendFiltersValueRepository.batchSave(list);
 
         //记录日志
-        log.info("[业务扩展字段][批量保存]数据:{}", JSON.toJSONString(list));
+        log.info("[过滤扩展字段][批量保存]数据:{}", JSON.toJSONString(list));
         return ResponseDataUtil.buildSuccess();
     }
 }

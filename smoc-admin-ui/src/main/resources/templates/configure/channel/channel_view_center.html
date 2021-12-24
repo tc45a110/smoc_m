@@ -64,8 +64,15 @@
                                                                             th:target="tab-content">通道信息</a></li>
                                             <li class="" id="tab6"><a onclick="active('6')"
                                                                       sec:authorize-url="/parameter/filter/view/CHANNEL_FILTER/*/*"
-                                                                      th:href="@{/parameter/filter/view/CHANNEL_FILTER/CHID10000/3}"
+                                                                      th:href="@{/parameter/filter/view/CHANNEL_FILTER/{businessId}/3(businessId=${id})}"
                                                                       th:target="tab-content">通道过滤参数</a>
+                                            <li class="" id="tab7">
+                                                <a onclick="active('7')"
+                                                   sec:authorize-url="/parameter/business/view/CHANNEL/*/*"
+                                                   th:href="@{/parameter/business/view/CHANNEL/{businessId}/3(businessId=${id})}"
+                                                   th:target="tab-content">通道扩展参数
+                                                </a>
+                                            </li>
                                             <li class="" id="tab2"><a onclick="active('2')"
 
                                                                             th:target="tab-content">通道价格记录</a></li>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
+</head>
+<body>
+<body>
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <!-- start row 页面导航-->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">系统级参数设置</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            系统参数配置
+                        </li>
+                        <li>
+                            系统级参数设置
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  页面数据-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="panel panel-color panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            <mpm:tag identity="paramExtendType"
+                                     th:value="${businessType}" show-type="label"
+                                     key="code"/>
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <form id="submit_form"
+                              th:action="@{/parameter/system/save/{businessType}/{businessId}/{columns}(businessId=${businessId},businessType=${businessType},columns=${columns})}"
+                              method="post" data-parsley-validate>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div th:each="parameter:${list}" th:class="${'col-sm-'+columns+ ' m-b-20'}">
+                                                <label th:for="${parameter.paramKey}">
+                                                    [[${parameter.paramTitle}]]
+                                                    <span class="text-danger"
+                                                          th:if="${parameter.isNull == '1'}">*</span>
+                                                </label>
+
+                                                <input th:if="${(parameter.dataType == 'STRING' && parameter.showType == 'text')}"
+                                                       th:id="${parameter.paramKey}"
+                                                       type="text" th:name="${parameter.paramKey}"
+                                                       th:placeholder="${#strings.isEmpty(parameter.placeholder)?parameter.paramTitle:parameter.placeholder}"
+                                                       th:data-parsley-maxlength="${parameter.paramMaxLength}"
+                                                       th:attr="required=${parameter.isNull == '1'?'true':'false'}"
+                                                       th:value="${keyValueMap[parameter.paramKey]}"
+                                                       class="form-control" autocomplete="off">
+                                                <input th:if="${(parameter.dataType == 'INT' && parameter.showType == 'text')}"
+                                                       th:id="${parameter.paramKey}"
+                                                       type="text" th:name="${parameter.paramKey}"
+                                                       th:placeholder="${#strings.isEmpty(parameter.placeholder)?parameter.paramTitle:parameter.placeholder}"
+                                                       th:data-parsley-maxlength="${parameter.paramMaxLength}"
+                                                       th:attr="required=${parameter.isNull == '1'?'true':'false'}"
+                                                       data-parsley-type="number"
+                                                       th:value="${keyValueMap[parameter.paramKey]}"
+                                                       class="form-control" autocomplete="off">
+                                                <input th:if="${(parameter.dataType == 'DECIMAL' && parameter.showType == 'text')}"
+                                                       th:id="${parameter.paramKey}"
+                                                       type="text" th:name="${parameter.paramKey}"
+                                                       th:placeholder="${#strings.isEmpty(parameter.placeholder)?parameter.paramTitle:parameter.placeholder}"
+                                                       th:data-parsley-maxlength="${parameter.paramMaxLength}"
+                                                       th:attr="required=${parameter.isNull == '1'?'true':'false'}"
+                                                       data-parsley-pattern="#[^[1-9]/d*/./d*|0/./d*[1-9]/d*$]"
+                                                       th:value="${keyValueMap[parameter.paramKey]}"
+                                                       class="form-control" autocomplete="off">
+                                                <mpm:tag
+                                                        th:if="${(parameter.showType == 'select' && !#strings.isEmpty(parameter.dictEnable))}"
+                                                        th:id="${parameter.paramKey}"
+                                                        th:identity="${parameter.dictEnable}"
+                                                        th:name="${parameter.paramKey}"
+                                                        th:show-type="${parameter.showType}" key="code"
+                                                        class="form-control"
+                                                        th:value="${keyValueMap[parameter.paramKey]}"
+                                                        th:title="${parameter.paramTitle}"
+                                                        th:required="${parameter.isNull == '1'?true:false}"/>
+                                                <div th:if="${(parameter.showType == 'checkbox' && !#strings.isEmpty(parameter.dictEnable))}">
+                                                    <br></div>
+                                                <mpm:tag
+                                                        th:if="${(parameter.showType == 'checkbox' && !#strings.isEmpty(parameter.dictEnable))}"
+                                                        th:id="${parameter.paramKey}"
+                                                        th:identity="${parameter.dictEnable}"
+                                                        th:name="${parameter.paramKey}"
+                                                        th:show-type="${parameter.showType}" key="code"
+                                                        class="form-control"
+                                                        th:value="${keyValueMap[parameter.paramKey]}"
+                                                        th:title="${parameter.paramTitle}"
+                                                        th:required="${parameter.isNull == '1'?true:false}"/>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-center" style="margin-bottom:20px">
+                                    <button type="submit" class="btn btn-teal waves-effect waves-light">提交</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<script th:src="@{/static/plugins/moment/moment.js}"></script>
+<script th:src="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.js}"></script>
+<th:block th:insert="fragments/common_fragments :: common_submit_form"/>
+<script type="text/javascript">
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+
+
+
+
+</script>
+</body>
+</html>

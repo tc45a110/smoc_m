@@ -6,9 +6,9 @@ import com.smoc.cloud.common.auth.entity.SecurityUser;
 import com.smoc.cloud.common.auth.validator.SystemExtendBusinessParamValidator;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
-import com.smoc.cloud.common.smoc.parameter.ParameterExtendFiltersValueValidator;
+import com.smoc.cloud.common.smoc.parameter.ParameterExtendBusinessParamValueValidator;
 import com.smoc.cloud.common.utils.UUID;
-import com.smoc.cloud.parameter.service.ParameterExtendFiltersValueService;
+import com.smoc.cloud.parameter.service.ParameterExtendBusinessParamValueService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -25,30 +25,31 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * 过滤参数扩展
+ * 业务参数扩展
  **/
 @Slf4j
 @Controller
-@RequestMapping("/parameter/filter")
+@RequestMapping("/parameter/business")
 @Scope(value = WebApplicationContext.SCOPE_REQUEST)
-public class SystemExtendBusinessParamController {
+public class ParameterExtendBusinessParamValueController {
 
     @Autowired
     private SystemExtendBusinessParameterService systemExtendBusinessParameterService;
     @Autowired
-    private ParameterExtendFiltersValueService parameterExtendFiltersValueService;
+    private ParameterExtendBusinessParamValueService parameterExtendBusinessParamValueService;
 
     /**
-     * 过滤业务业务参数 编辑页
+     * 业务参数扩展 编辑页
+     *
      * @param businessType 参数类型
-     * @param businessId 业务ID
-     * @param columns 每列要显示的 列宽  建议值3、4、6、12
+     * @param businessId   业务ID
+     * @param columns      每列要显示的 列宽  建议值3、4、6、12
      * @return
      */
     @RequestMapping(value = "/list/{businessType}/{businessId}/{columns}", method = RequestMethod.GET)
-    public ModelAndView list(@PathVariable String businessType, @PathVariable String businessId,@PathVariable String columns) {
+    public ModelAndView list(@PathVariable String businessType, @PathVariable String businessId, @PathVariable String columns) {
 
-        ModelAndView view = new ModelAndView("parameter/parameter_extend_filter_edit");
+        ModelAndView view = new ModelAndView("parameter/parameter_extend_business_edit");
 
         //判断非空
         if (StringUtils.isEmpty(businessType) || StringUtils.isEmpty(businessId) || StringUtils.isEmpty(columns)) {
@@ -64,7 +65,7 @@ public class SystemExtendBusinessParamController {
         }
 
         //查询业务扩展字段对应的值
-        ResponseData<List<ParameterExtendFiltersValueValidator>> parameterValues = parameterExtendFiltersValueService.findParameterValue(businessId);
+        ResponseData<List<ParameterExtendBusinessParamValueValidator>> parameterValues = parameterExtendBusinessParamValueService.findParameterValue(businessId);
         if (!ResponseCode.SUCCESS.getCode().equals(parameterValues.getCode())) {
             view.addObject("error", parameterValues.getCode() + ":" + parameterValues.getMessage());
             return view;
@@ -73,7 +74,7 @@ public class SystemExtendBusinessParamController {
         //把参数值列表转成map，这样前台容易根据 paramKey 取值
         Map<String, String> keyValueMap = new HashMap<>();
         if (null != parameterValues.getData() && parameterValues.getData().size() > 0) {
-            keyValueMap = parameterValues.getData().stream().collect(Collectors.toMap(ParameterExtendFiltersValueValidator::getParamKey, parameterExtendFiltersValueValidator -> parameterExtendFiltersValueValidator.getParamValue()));
+            keyValueMap = parameterValues.getData().stream().collect(Collectors.toMap(ParameterExtendBusinessParamValueValidator::getParamKey, parameterExtendFiltersValueValidator -> parameterExtendFiltersValueValidator.getParamValue()));
         }
 
         view.addObject("businessId", businessId);
@@ -86,17 +87,18 @@ public class SystemExtendBusinessParamController {
     }
 
     /**
-     * 保存过滤业务业务参数  保存
+     * 保存业务参数扩展  保存
+     *
      * @param businessType 参数类型
-     * @param businessId 业务ID
-     * @param columns 每列要显示的 列宽  建议值3、4、6、12
+     * @param businessId   业务ID
+     * @param columns      每列要显示的 列宽  建议值3、4、6、12
      * @param request
      * @return
      */
     @RequestMapping(value = "/save/{businessType}/{businessId}/{columns}", method = RequestMethod.POST)
-    public ModelAndView save(@PathVariable String businessType, @PathVariable String businessId,@PathVariable String columns, HttpServletRequest request) {
+    public ModelAndView save(@PathVariable String businessType, @PathVariable String businessId, @PathVariable String columns, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("parameter/parameter_extend_filter_edit");
+        ModelAndView view = new ModelAndView("parameter/parameter_extend_business_edit");
 
         //判断非空
         if (StringUtils.isEmpty(businessType) || StringUtils.isEmpty(businessId) || StringUtils.isEmpty(columns)) {
@@ -113,13 +115,13 @@ public class SystemExtendBusinessParamController {
 
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
 
-        List<ParameterExtendFiltersValueValidator> list = new ArrayList<>();
+        List<ParameterExtendBusinessParamValueValidator> list = new ArrayList<>();
 
         for (SystemExtendBusinessParamValidator obj : responseData.getData()) {
             String value = request.getParameter(obj.getParamKey());
             if (!StringUtils.isEmpty(value)) {
                 //log.info("提交参数值：{}:{}", obj.getParamKey(), value);
-                ParameterExtendFiltersValueValidator parameter = new ParameterExtendFiltersValueValidator();
+                ParameterExtendBusinessParamValueValidator parameter = new ParameterExtendBusinessParamValueValidator();
                 parameter.setId(UUID.uuid32());
                 parameter.setBusinessType(businessType);
                 parameter.setBusinessId(businessId);
@@ -132,7 +134,7 @@ public class SystemExtendBusinessParamController {
             }
         }
 
-        ResponseData response = parameterExtendFiltersValueService.save(list,businessId,user.getRealName(),businessType);
+        ResponseData response = parameterExtendBusinessParamValueService.save(list, businessId, user.getRealName(), businessType);
         if (!ResponseCode.SUCCESS.getCode().equals(response.getCode())) {
             view.addObject("error", response.getCode() + ":" + response.getMessage());
             return view;
@@ -141,7 +143,7 @@ public class SystemExtendBusinessParamController {
         //把参数值列表转成map，这样前台容易根据 paramKey 取值
         Map<String, String> keyValueMap = new HashMap<>();
         if (null != list && list.size() > 0) {
-            keyValueMap = list.stream().collect(Collectors.toMap(ParameterExtendFiltersValueValidator::getParamKey, parameterExtendFiltersValueValidator -> parameterExtendFiltersValueValidator.getParamValue()));
+            keyValueMap = list.stream().collect(Collectors.toMap(ParameterExtendBusinessParamValueValidator::getParamKey, parameterExtendBusinessParamValueValidator -> parameterExtendBusinessParamValueValidator.getParamValue()));
         }
 
         view.addObject("businessId", businessId);
@@ -154,16 +156,17 @@ public class SystemExtendBusinessParamController {
     }
 
     /**
-     * 过滤业务业务参数 查看
+     * 业务参数扩展 查看
+     *
      * @param businessType 参数类型
-     * @param businessId 业务ID
-     * @param columns 每列要显示的 列宽  建议值3、4、6、12
+     * @param businessId   业务ID
+     * @param columns      每列要显示的 列宽  建议值3、4、6、12
      * @return
      */
     @RequestMapping(value = "/view/{businessType}/{businessId}/{columns}", method = RequestMethod.GET)
-    public ModelAndView view(@PathVariable String businessType, @PathVariable String businessId,@PathVariable String columns) {
+    public ModelAndView view(@PathVariable String businessType, @PathVariable String businessId, @PathVariable String columns) {
 
-        ModelAndView view = new ModelAndView("parameter/parameter_extend_filter_view");
+        ModelAndView view = new ModelAndView("parameter/parameter_extend_business_view");
 
         //判断非空
         if (StringUtils.isEmpty(businessType) || StringUtils.isEmpty(businessId) || StringUtils.isEmpty(columns)) {
@@ -179,7 +182,7 @@ public class SystemExtendBusinessParamController {
         }
 
         //查询业务扩展字段对应的值
-        ResponseData<List<ParameterExtendFiltersValueValidator>> parameterValues = parameterExtendFiltersValueService.findParameterValue(businessId);
+        ResponseData<List<ParameterExtendBusinessParamValueValidator>> parameterValues = parameterExtendBusinessParamValueService.findParameterValue(businessId);
         if (!ResponseCode.SUCCESS.getCode().equals(parameterValues.getCode())) {
             view.addObject("error", parameterValues.getCode() + ":" + parameterValues.getMessage());
             return view;
@@ -188,7 +191,7 @@ public class SystemExtendBusinessParamController {
         //把参数值列表转成map，这样前台容易根据 paramKey 取值
         Map<String, String> keyValueMap = new HashMap<>();
         if (null != parameterValues.getData() && parameterValues.getData().size() > 0) {
-            keyValueMap = parameterValues.getData().stream().collect(Collectors.toMap(ParameterExtendFiltersValueValidator::getParamKey, parameterExtendFiltersValueValidator -> parameterExtendFiltersValueValidator.getParamValue()));
+            keyValueMap = parameterValues.getData().stream().collect(Collectors.toMap(ParameterExtendBusinessParamValueValidator::getParamKey, parameterExtendBusinessParamValueValidator -> parameterExtendBusinessParamValueValidator.getParamValue()));
         }
 
         view.addObject("businessId", businessId);

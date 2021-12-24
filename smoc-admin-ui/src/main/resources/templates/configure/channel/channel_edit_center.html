@@ -83,10 +83,13 @@
                                                                       th:target="tab-content"><i class="mdi mdi-star"
                                                                                                  style="margin-right:5px;color:#f35864"></i>区域计价配置</a>
                                             </li>
-                                            <li class="" id="tab5"><a onclick="active('5')" id="a5"
-                                                                      sec:authorize-url="/configure/channel/edit/extend/*"
-                                                                      th:href="@{/configure/channel/edit/extend/id}"
-                                                                      th:target="tab-content">通道扩展参数配置</a></li>
+                                            <li class="" id="tab5">
+                                                <a onclick="active('5')" id="a5"
+                                                   sec:authorize-url="/parameter/business/list/CHANNEL/*/*"
+                                                   th:href="@{/parameter/business/list/CHANNEL/{businessId}/3(businessId=${id})}"
+                                                   th:target="tab-content">通道扩展参数
+                                                </a>
+                                            </li>
                                             <li class="" id="tab6"><a onclick="active('6')" id="a6"
                                                                       sec:authorize-url="/configure/channel/edit/spare/*"
                                                                       th:href="@{/configure/channel/edit/spare/id}"
@@ -123,7 +126,7 @@
     $(document).ready(function () {
 
         if("base" == '[[${id}]]'){
-            for(var num = 2;num<7;num++){
+            for(var num = 2;num<8;num++){
                 document.getElementById('tab'+num).style.backgroundColor="#DCDBDC";
                 $("#a"+num).attr("onclick","");
                 $("#a"+num).removeAttr("href");

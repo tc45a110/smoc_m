@@ -30,89 +30,106 @@
                             </div>
                             <div class="panel-body">
                                 <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group m-b-20">
-                                            <label for="enterpriseName">企业名称</label>
-                                            <input id="enterpriseName" type="text" class="form-control"
-                                                   value="北京星语互联科技有限公司" readonly>
+                                    <div class="col-md-4 form-group m-b-20">
+                                        <label for="enterpriseName">企业名称</label>
+                                        <input id="enterpriseName" type="text" class="form-control"
+                                               value="北京星语互联科技有限公司" readonly>
+                                    </div>
+                                    <div class="col-md-4 form-group m-b-20">
+                                        <label for="linkt">业务账号名称<span class="text-danger">*</span>&nbsp;</label>
+                                        <input id="linkt" type="text" class="form-control"
+                                               required="" data-parsley-length="[2,24]" autocomplete="off"
+                                               placeholder="账号名称">
+                                    </div>
+                                    <div class="col-md-4 form-group m-b-20">
+                                        <label for="linkk">业务账号<span class="text-danger">*</span>&nbsp;</label>
+                                        <input id="linkk" type="text" class="form-control"
+                                               required="" data-parsley-length="[7,30]" autocomplete="off"
+                                               placeholder="账号">
+                                    </div>
+                                    <div class="col-md-4 form-group m-b-20">
+                                        <label>业务类型<span class="text-danger">*</span></label>
+                                        <mpm:tag id="enterpriseType" required="true" identity="businessType"
+                                                 show-type="select" key="code"
+                                                 class="form-control" name="enterpriseType" value="" title="业务类型"/>
+                                    </div>
+                                    <div class="col-md-4 form-group m-b-20">
+                                        <label for="code">扩展码<span class="text-danger">*</span>&nbsp;</label>
+                                        <input id="code" type="text" class="form-control"
+                                               required="" data-parsley-length="[2,64]" autocomplete="off"
+                                               placeholder="输入扩展码">
+                                    </div>
+                                    <div class="col-md-4 form-group m-b-20">
+                                        <label for="eName">随机扩展码长度（数字0-12之间）<span
+                                                class="text-danger">*</span>&nbsp;</label>
+                                        <input id="eName" type="text" class="form-control"
+                                               required="" data-parsley-length="[2,64]" autocomplete="off"
+                                               placeholder="0">
+                                    </div>
+                                    <div class="col-md-4 form-group m-b-20">
+                                        <label>发送运营商<span class="text-danger">*</span></label><br>
+                                        <mpm:tag id="enterpriseType" required="true" identity="carrier"
+                                                 show-type="checkbox" key="code"
+                                                 name="enterpriseType" value="" title="运营商"/>
+                                    </div>
+                                    <div class="col-md-4 form-group m-b-20">
+                                        <label>号码指定运营商<span class="text-danger">*</span>&nbsp;</label><br>
+                                        <div class="radio radio-info radio-inline">
+                                            <input type="radio" id="active4" value="1" checked
+                                                   required="">
+                                            <label for="active1">是</label>
                                         </div>
-                                        <div class="form-group m-b-20">
-                                            <label for="linkt">业务账号名称<span class="text-danger">*</span>&nbsp;</label>
-                                            <input id="linkt" type="text" class="form-control"
-                                                   required="" data-parsley-length="[2,24]" autocomplete="off"
-                                                   placeholder="账号名称">
-                                        </div>
-                                        <div class="form-group m-b-20">
-                                            <label for="linkk">业务账号<span class="text-danger">*</span>&nbsp;</label>
-                                            <input id="linkk" type="text" class="form-control"
-                                                   required="" data-parsley-length="[7,30]" autocomplete="off"
-                                                   placeholder="账号">
-                                        </div>
-                                        <div class="form-group m-b-20">
-                                            <label>携号转网<span class="text-danger">*</span>&nbsp;</label><br>
-                                            <div class="radio radio-info radio-inline">
-                                                <input type="radio" id="active2" value="1" checked
-                                                       required="">
-                                                <label for="active1">本地携号转网库 </label>
-                                            </div>
-                                            <div class="radio radio-info radio-inline">
-                                                <input type="radio" id="active3" value="0">
-                                                <label for="active0">EC自有携号转网库 </label>
-                                            </div>
-                                            <div class="radio radio-info radio-inline">
-                                                <input type="radio" id="active5" value="0">
-                                                <label for="active0">不支持携号转网 </label>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group m-b-20">
-                                            <label>信息分类<span class="text-danger">*</span></label><br>
-                                            <mpm:tag id="enterpriseType" required="true" identity="infoType"
-                                                     show-type="checkbox" key="code"
-                                                     class="form-control" name="enterpriseType" value="" title="信息分类"/>
+                                        <div class="radio radio-info radio-inline">
+                                            <input type="radio" id="active6" value="0">
+                                            <label for="active0">否 </label>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group m-b-20">
-                                            <label for="code">扩展码<span class="text-danger">*</span>&nbsp;</label>
-                                            <input id="code" type="text" class="form-control"
-                                                   required="" data-parsley-length="[2,64]" autocomplete="off"
-                                                   placeholder="输入扩展码">
+                                    <div class="col-md-4 form-group m-b-20">
+                                        <label>携号转网<span class="text-danger">*</span>&nbsp;</label><br>
+                                        <div class="radio radio-info radio-inline">
+                                            <input type="radio" id="active2" value="1" checked
+                                                   required="">
+                                            <label for="active1">本地携号转网库 </label>
                                         </div>
-                                        <div class="form-group m-b-20">
-                                            <label for="eName">随机扩展码长度（数字0-12之间）<span class="text-danger">*</span>&nbsp;</label>
-                                            <input id="eName" type="text" class="form-control"
-                                                   required="" data-parsley-length="[2,64]" autocomplete="off"
-                                                   placeholder="0">
-                                        </div>
-                                        <div class="form-group m-b-20">
-                                            <label>发送运营商<span class="text-danger">*</span></label>
-                                            <mpm:tag id="enterpriseType" required="true" identity="carrier"
-                                                     show-type="checkbox" key="code"
-                                                     name="enterpriseType" value="" title="运营商"/>
-                                        </div>
-                                        <div class="form-group m-b-20">
-                                            <label>业务类型<span class="text-danger">*</span></label>
-                                            <mpm:tag id="enterpriseType" required="true" identity="businessType"
-                                                     show-type="select" key="code"
-                                                     class="form-control" name="enterpriseType" value="" title="业务类型"/>
-                                        </div>
-
-                                        <div class="form-group m-b-20">
-                                            <label class="m-b-10">有效状态</label>
-
-                                            <div class="radio radio-info radio-inline">
-                                                <input type="radio" id="active1" value="1" checked
-                                                       required="">
-                                                <label for="active1"> 是 </label>
-                                            </div>
-                                            <div class="radio radio-info radio-inline">
-                                                <input type="radio" id="active0" value="0">
-                                                <label for="active0"> 否 </label>
-                                            </div>
-
+                                        <div class="radio radio-info radio-inline">
+                                            <input type="radio" id="active3" value="0">
+                                            <label for="active0">EC自有携号转网库 </label>
                                         </div>
                                     </div>
+
+                                    <div class="col-md-4 form-group m-b-20">
+                                        <label>信息分类<span class="text-danger">*</span></label><br>
+                                        <mpm:tag id="enterpriseType" required="true" identity="infoType"
+                                                 show-type="checkbox" key="code"
+                                                 class="form-control" name="enterpriseType" value="" title="信息分类"/>
+                                    </div>
+                                    <div class="col-md-4 form-group m-b-20">
+                                        <label>设置通道方式<span class="text-danger">*</span>&nbsp;</label><br>
+                                        <div class="radio radio-info radio-inline">
+                                            <input type="radio" id="active7" value="1" checked
+                                                   required="">
+                                            <label for="active1">选择通道组</label>
+                                        </div>
+                                        <div class="radio radio-info radio-inline">
+                                            <input type="radio" id="active8" value="0">
+                                            <label for="active0">选择通道 </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 form-group m-b-20">
+                                        <label class="m-b-10">有效状态</label><br>
+                                        <div class="radio radio-info radio-inline">
+                                            <input type="radio" id="active1" value="1" checked
+                                                   required="">
+                                            <label for="active1"> 是 </label>
+                                        </div>
+                                        <div class="radio radio-info radio-inline">
+                                            <input type="radio" id="active0" value="0">
+                                            <label for="active0"> 否 </label>
+                                        </div>
+
+                                    </div>
+
                                 </div>
                                 <div class="text-center" style="margin-bottom:20px">
                                     <a th:href="@{/ec/customer/channel/account/edit/base/id}" type="button"
@@ -141,6 +158,9 @@
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
+
+
+
 
 
 

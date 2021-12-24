@@ -30,77 +30,75 @@
                             </div>
                             <div class="panel-body">
                                 <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group m-b-20">
-                                            <label>业务账号名称</label>：星语-移动-信用卡(小舟dj)
-                                        </div>
-                                        <div class="form-group m-b-20">
-                                            <label for="price">移动单价<span class="text-danger">*</span>&nbsp;</label>
-                                            <input id="price" type="password" class="form-control"
-                                                   required="" data-parsley-length="[1,30]" autocomplete="off"
-                                                   placeholder="移动单价">
-                                        </div>
-                                        <div class="form-group m-b-20">
-                                            <label for="price2">联通单价<span class="text-danger">*</span>&nbsp;</label>
-                                            <input id="price2" type="password" class="form-control"
-                                                   required="" data-parsley-length="[1,30]" autocomplete="off"
-                                                   placeholder="联通单价">
-                                        </div>
-                                        <div class="form-group m-b-20">
-                                            <label for="price1">电信单价<span class="text-danger">*</span>&nbsp;</label>
-                                            <input id="price1" type="password" class="form-control"
-                                                   required="" data-parsley-length="[1,30]" autocomplete="off"
-                                                   placeholder="电信单价">
-                                        </div>
-                                        <div class="form-group m-b-20">
-                                            <label for="5g">5G消息单价&nbsp;</label>
-                                            <input id="5g" type="password" class="form-control"
-                                                   required="" data-parsley-length="[1,30]" autocomplete="off"
-                                                   placeholder="5G消息单价">
-                                        </div>
-                                        <div class="form-group m-b-20">
-                                            <label for="inter">国际短信单价&nbsp;</label>
-                                            <input id="inter" type="password" class="form-control"
-                                                   required="" data-parsley-length="[1,30]" autocomplete="off"
-                                                   placeholder="国际短信单价">
-                                        </div>
-
+                                    <div class="col-md-4 form-group m-b-20">
+                                        <label for="enterpriseName">企业名称</label>
+                                        <input id="enterpriseName" type="text" class="form-control"
+                                               value="北京星语互联科技有限公司" readonly>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group m-b-20">
-                                            <label>业务账号</label>：xycr11
+                                    <div class="col-md-4 form-group m-b-20">
+                                        <label for="buAcc">业务账号</label>
+                                        <input id="buAcc" type="text" class="form-control"
+                                               value="yt0002" readonly>
+                                    </div>
+                                    <div class="col-md-4 form-group m-b-20">
+                                        <label for="jf">计费方式<span class="text-danger">*</span></label>
+                                        <input id="jf" type="text" class="form-control"
+                                               required="" data-parsley-length="[4,30]" autocomplete="off"
+                                               placeholder="计费方式">
+                                    </div>
+                                    <div class="col-md-4 form-group m-b-20">
+                                        <label for="edu">授信额度<span class="text-danger">*</span>&nbsp;</label>
+                                        <input id="edu" type="password" class="form-control"
+                                               required="" data-parsley-length="[1,30]" autocomplete="off"
+                                               placeholder="授信额度，默认0">
+                                    </div>
+                                    <div class="col-md-4 form-group m-b-20">
+                                        <label for="style">付费方式<span class="text-danger">*</span>&nbsp;</label>
+                                        <input id="style" type="password" class="form-control"
+                                               required="" data-parsley-length="[1,30]" autocomplete="off"
+                                               placeholder="付费方式">
+                                    </div>
+                                    <div class="col-md-4 form-group m-b-20">
+                                        <label>冻结金额返还时间</label><br><br>
+                                        <div class="radio radio-info radio-inline">
+                                            <input type="radio" id="active1" name="active" value="1" checked
+                                                   required="">
+                                            <label for="active1"> 次日返还 </label>
                                         </div>
-                                        <div class="form-group">
-                                            <label for="jf">计费方式<span class="text-danger">*</span></label>
-                                            <input id="jf" type="text" class="form-control"
-                                                   required="" data-parsley-length="[4,30]" autocomplete="off"
-                                                   placeholder="计费方式">
+                                        <div class="radio radio-info radio-inline">
+                                            <input type="radio" id="active0" name="active" value="0">
+                                            <label for="active0"> 三日返还 </label>
                                         </div>
-                                        <div class="form-group m-b-20">
-                                            <label for="edu">授信额度<span class="text-danger">*</span>&nbsp;</label>
-                                            <input id="edu" type="password" class="form-control"
-                                                   required="" data-parsley-length="[1,30]" autocomplete="off"
-                                                   placeholder="授信额度，默认0">
-                                        </div>
-                                        <div class="form-group m-b-20">
-                                            <label for="style">付费方式<span class="text-danger">*</span>&nbsp;</label>
-                                            <input id="style" type="password" class="form-control"
-                                                   required="" data-parsley-length="[1,30]" autocomplete="off"
-                                                   placeholder="付费方式">
-                                        </div>
-                                        <div class="form-group m-b-20">
-                                            <label>冻结金额返还时间</label><br><br>
-                                            <div class="radio radio-info radio-inline">
-                                                <input type="radio" id="active1" name="active" value="1" checked
-                                                       required="">
-                                                <label for="active1"> 次日返还 </label>
-                                            </div>
-                                            <div class="radio radio-info radio-inline">
-                                                <input type="radio" id="active0" name="active" value="0">
-                                                <label for="active0"> 三日返还 </label>
-                                            </div>
-                                        </div>
-
+                                    </div>
+                                    <div class="col-md-4 form-group m-b-20">
+                                        <label for="price">移动单价<span class="text-danger">*</span>&nbsp;</label>
+                                        <input id="price" type="password" class="form-control"
+                                               required="" data-parsley-length="[1,30]" autocomplete="off"
+                                               placeholder="移动单价">
+                                    </div>
+                                    <div class="col-md-4 form-group m-b-20">
+                                        <label for="price2">联通单价<span class="text-danger">*</span>&nbsp;</label>
+                                        <input id="price2" type="password" class="form-control"
+                                               required="" data-parsley-length="[1,30]" autocomplete="off"
+                                               placeholder="联通单价">
+                                    </div>
+                                    <div class="col-md-4 form-group m-b-20">
+                                        <label for="price1">电信单价<span class="text-danger">*</span>&nbsp;</label>
+                                        <input id="price1" type="password" class="form-control"
+                                               required="" data-parsley-length="[1,30]" autocomplete="off"
+                                               placeholder="电信单价">
+                                    </div>
+                                    <div class="col-md-4 form-group m-b-20">
+                                        <label for="5g">5G消息单价&nbsp;</label>
+                                        <input id="5g" type="password" class="form-control"
+                                               required="" data-parsley-length="[1,30]" autocomplete="off"
+                                               placeholder="5G消息单价">
+                                    </div>
+                                    <div class="col-md-4 form-group m-b-20">
+                                        <label for="inter">国际短信单价&nbsp;</label>
+                                        <input id="inter" type="password" class="form-control"
+                                               required="" data-parsley-length="[1,30]" autocomplete="off"
+                                               placeholder="国际短信单价">
                                     </div>
                                 </div>
                                 <div class="text-center" style="margin-bottom:20px">
@@ -131,6 +129,7 @@
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
+
 
 
 

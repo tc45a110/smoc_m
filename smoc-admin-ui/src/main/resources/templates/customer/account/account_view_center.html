@@ -68,9 +68,16 @@
                                                                             th:href="@{/account/view/base/accountId}"
                                                                             th:target="tab-content">业务账号信息</a></li>
                                             <li class="" id="tab2"><a onclick="active('2')"
-                                                                      sec:authorize-url="/parameter/filter/view/CHANNEL_PARAM/*/*"
-                                                                      th:href="@{/parameter/filter/view/BUSINESS_ACCOUNT_PARAM/accountId/2}"
+                                                                      sec:authorize-url="/parameter/filter/view/BUSINESS_ACCOUNT_FILTER/*/*"
+                                                                      th:href="@{/parameter/filter/view/BUSINESS_ACCOUNT_FILTER/accountId/2}"
                                                                       th:target="tab-content">业务账号过滤参数</a>
+                                            <li class="" id="tab8">
+                                                <a onclick="active('8')"
+                                                   sec:authorize-url="/parameter/business/view/BUSINESS_ACCOUNT/*/*"
+                                                   th:href="@{/parameter/business/view/BUSINESS_ACCOUNT/businessId/4}"
+                                                   th:target="tab-content">业务账号扩展参数
+                                                </a>
+                                            </li>
                                             <li class="" id="tab3">
                                                 <a onclick="active('3')"
                                                    sec:authorize-url="/account/view/channel/detail/*"
@@ -124,7 +131,7 @@
 <script>
 
     function active(tab) {
-        for(var num = 1;num<8;num++){
+        for(var num = 1;num<9;num++){
             $('#tab'+num).removeClass("active");
         }
         $('#tab'+tab).attr("class","active");
