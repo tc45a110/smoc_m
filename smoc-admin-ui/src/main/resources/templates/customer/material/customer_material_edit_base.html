@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
+    <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
+    <link th:href="@{/static/plugins/jquery.filer/css/jquery.filer.css}" rel="stylesheet"/>
+    <link th:href="@{/static/plugins/jquery.filer/css/themes/jquery.filer-dragdropbox-theme.css}" rel="stylesheet"/>
+
+</head>
+<body style="background-color:#fff">
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content">
+    <div class="container">
+
+        <!-- start row 页面内容-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all" style="background-color:#fff">
+            <div class="col-md-12">
+                <form id="submit_form"
+                      method="post" data-parsley-validate="">
+                    <div class="row">
+                        <div class="col-md-12 panel panel-color panel-teal" style="padding-left:0px;padding-right:0px">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">签名资质信息 维护</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-sm-6 m-b-10">
+                                                    <label>企业名称</label><br>
+                                                    北京星语互联科技有限公司
+                                                </div>
+                                                <div class="col-sm-6 m-b-10">
+                                                    <label>企业类型</label>
+                                                    <br>渠道商
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-sm-6 ">
+                                                    <label>签名<span class="text-danger">*</span>&nbsp;</label>
+                                                    <input type="text" class="form-control"
+                                                           required="" data-parsley-length="[2,48]" autocomplete="off"
+                                                           placeholder="签名">
+                                                </div>
+                                                <div class="col-sm-6 ">
+                                                    <label>业务类型<span class="text-danger">*</span></label>
+                                                    <mpm:tag required="true" identity="businessType" show-type="select"
+                                                             key="code"
+                                                             class="form-control" name="businessType" value=""
+                                                             title="业务类型"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-sm-6 ">
+                                                    <label>信息类型<span class="text-danger">*</span></label>
+                                                    <mpm:tag required="true" identity="infoType" show-type="select"
+                                                             key="code"
+                                                             class="form-control" name="infoType" value="" title="信息类型"/>
+                                                </div>
+                                                <div class="col-sm-6 ">
+                                                    <label>短链<span class="text-danger">*</span>&nbsp;</label>
+                                                    <input type="text" class="form-control"
+                                                           required="" data-parsley-length="[2,48]" autocomplete="off"
+                                                           placeholder="短链">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-sm-12 ">
+                                                    <label>签订日期<span class="text-danger">*</span>&nbsp;</label>
+                                                    <input id="contractDate" class="form-control" type="text"
+                                                           required="" autocomplete="off">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group ">
+                                            <label>备注关键字(比如：合同里的关键字，方便根据关键字查询)</label>
+                                            <input type="text" class="form-control" data-parsley-length="[1,48]"
+                                                   autocomplete="off"
+                                                   placeholder="关键字">
+                                        </div>
+
+                                        <div class="form-group ">
+                                            <label>上传附件</label>
+                                            <input type="file" name="file" id="input_file"
+                                                   multiple="multiple">
+                                        </div>
+
+                                    </div> <!-- end col -->
+
+                                    <div class="col-md-6">
+                                        <div class="form-group m-b-20">
+                                            <label>审核状态<span class="text-danger">*</span></label>
+                                            <select name="approveStatus" data-style="btn-default"
+                                                    class="selectpicker  form-control" tabindex="-98" 　required="true">
+                                                <option data-icon="mdi mdi-buffer">审核中</option>
+                                                <option data-icon="mdi mdi-buffer">通过审核</option>
+                                                <option data-icon="mdi mdi-buffer">拒绝</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group m-b-20">
+                                            <label>审核意见<span class="text-danger">*</span>&nbsp;
+                                                <span class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                            </label>
+                                            <textarea class="form-control" rows="2" placeholder="输入审核意见"
+                                                      data-parsley-length="[1,200]" autocomplete="off"></textarea>
+                                        </div>
+                                    </div> <!-- end col -->
+                                </div> <!-- end row -->
+                                <div class="text-center" style="margin-bottom:20px">
+                                    <a type="button" class="btn btn-teal waves-effect waves-light">提交</a>
+                                </div>
+                            </div>
+                        </div> <!-- end col -->
+                    </div> <!-- end row -->
+                </form>
+                <!-- end form -->
+            </div> <!-- end col -->
+        </div>
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<script th:src="@{/static/plugins/moment/moment.js}"></script>
+<script th:src="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.js}"></script>
+<script th:src="@{/static/js/contractUploadFile.js}"></script>
+<script th:src="@{/static/plugins/jquery.filer/js/jquery.filer.min.js}"></script>
+<th:block th:insert="fragments/common_fragments :: common_submit_form"/>
+
+<script>
+
+    $(document).ready(function () {
+        init_select_date_picker($("#contractDate"));
+    });
+
+    function init_select_date_picker(id){
+        id.daterangepicker({
+            autoUpdateInput: false,
+            singleDatePicker: true,
+            showDropdowns: true,
+            locale : {
+                daysOfWeek : [ '日', '一', '二', '三', '四', '五', '六' ],
+                monthNames : [ '01月', '02月', '03月', '04月', '05月', '06月',
+                    '07月', '08月', '09月', '10月', '11月', '12月' ],
+                format : 'YYYY-MM-DD' ,
+                cancelLabel: 'Clear'
+            }
+        });
+        id.on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('YYYY-MM-DD') );
+        });
+    }
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+</script>
+</body>
+</html>

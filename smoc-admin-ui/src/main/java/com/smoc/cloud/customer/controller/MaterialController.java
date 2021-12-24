@@ -68,10 +68,10 @@ public class MaterialController {
      * 添加
      * @return
      */
-    @RequestMapping(value = "/material/add", method = RequestMethod.GET)
+    @RequestMapping(value = "/material/edit/center/{id}", method = RequestMethod.GET)
     public ModelAndView add() {
 
-        ModelAndView view = new ModelAndView("customer/material/customer_material_edit");
+        ModelAndView view = new ModelAndView("customer/material/customer_material_edit_center");
 
         return view;
 
@@ -81,10 +81,49 @@ public class MaterialController {
      * 编辑
      * @return
      */
-    @RequestMapping(value = "/material/edit/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/material/edit/base/{id}", method = RequestMethod.GET)
     public ModelAndView edit(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("customer/material/customer_material_edit");
+        ModelAndView view = new ModelAndView("customer/material/customer_material_edit_base");
+
+        return view;
+
+    }
+
+    /**
+     * 合同链列表
+     * @return
+     */
+    @RequestMapping(value = "/material/chain/list/{id}", method = RequestMethod.GET)
+    public ModelAndView chainList(@PathVariable String id, HttpServletRequest request) {
+
+        ModelAndView view = new ModelAndView("customer/material/customer_material_chain_list");
+
+        return view;
+
+    }
+
+    /**
+     * 新建合同链
+     * @return
+     */
+    @RequestMapping(value = "/material/chain/add/{id}", method = RequestMethod.GET)
+    public ModelAndView addChain(@PathVariable String id, HttpServletRequest request) {
+
+        ModelAndView view = new ModelAndView("customer/material/customer_material_chain_edit");
+
+        return view;
+
+    }
+
+    /**
+     * 编辑合同链
+     * @return
+     */
+    @RequestMapping(value = "/material/chain/edit/{id}", method = RequestMethod.GET)
+    public ModelAndView editChain(@PathVariable String id, HttpServletRequest request) {
+
+        ModelAndView view = new ModelAndView("customer/material/customer_material_chain_edit");
 
         return view;
 

@@ -10,6 +10,8 @@
     <!-- Custom box css -->
     <link th:href="@{/static/plugins/custombox/css/custombox.min.css}" rel="stylesheet">
     <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
+    <!-- Tooltipster css -->
+    <link rel="stylesheet" th:href="@{/static/plugins/tooltipster/tooltipster.bundle.min.css}">
 </head>
 <body>
 <!-- Loader start 页面加载进度-->
@@ -129,7 +131,9 @@
                                     <td style="vertical-align: middle;line-height: 26px">
                                         <mpm:tag identity="infoType" value="001" show-type="label" key="code"/>
                                     </td>
-                                    <td style="vertical-align: middle;line-height: 26px">http://mtw.so/6xOaa3<br>360数科-深圳风向-云启通
+                                    <td style="vertical-align: middle;line-height: 26px">http://mtw.so/6xOaa3<br>
+                                        <i id="tooltip-html"  data-placement="right" title="" th:onmouseover="channelTip()"
+                                           class="mdi mdi-comment-text" style="margin-left:5px"></i>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px"><a
                                             class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a>
@@ -144,13 +148,13 @@
                                            data-toggle="tooltip"
                                            data-placement="left" title=""  data-original-title="查看详情"><i style="font-size: 18px"
                                                            class="glyphicon glyphicon-search"></i></a>
-                                        <a sec:authorize-url="/ec/customer/material/edit/*" data-toggle="modal"
+                                        <a data-toggle="modal"
                                            data-target="#download-record"
                                            class="on-default edit-row"
                                            style="padding-left: 5px;color: #6B5FB5;" title="下载附件"><i
                                                 style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
-                                        <a sec:authorize-url="/ec/customer/material/edit/*"
-                                           th:href="@{/ec/customer/material/edit/id}" class="on-default edit-row"
+                                        <a sec:authorize-url="/ec/customer/material/edit/center/*"
+                                           th:href="@{/ec/customer/material/edit/center/id}" class="on-default edit-row"
                                            style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title=""  data-original-title="编辑"><i
                                                 style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
@@ -177,7 +181,9 @@
                                       <td style="vertical-align: middle;line-height: 26px">
                                           <mpm:tag identity="infoType" value="001" show-type="label" key="code"/>
                                       </td>
-                                      <td style="vertical-align: middle;line-height: 26px">http://mtw.so/6xOaa3<br>360数科-深圳风向-云启通
+                                      <td style="vertical-align: middle;line-height: 26px">http://mtw.so/6xOaa3<br>
+                                          <i id="tooltip-html"  data-placement="right" title="" th:onmouseover="channelTip()"
+                                             class="mdi mdi-comment-text" style="margin-left:5px"></i>
                                       </td>
                                       <td style="vertical-align: middle;line-height: 26px"><a
                                               class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a>
@@ -192,13 +198,13 @@
                                              data-toggle="tooltip"
                                              data-placement="left" title=""  data-original-title="查看详情"><i style="font-size: 18px"
                                                                                                            class="glyphicon glyphicon-search"></i></a>
-                                          <a sec:authorize-url="/ec/customer/material/edit/*" data-toggle="modal"
+                                          <a data-toggle="modal"
                                              data-target="#download-record"
                                              class="on-default edit-row"
                                              style="padding-left: 5px;color: #6B5FB5;" title="下载附件"><i
                                                   style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
-                                          <a sec:authorize-url="/ec/customer/material/edit/*"
-                                             th:href="@{/ec/customer/material/edit/id}" class="on-default edit-row"
+                                          <a sec:authorize-url="/ec/customer/material/edit/center/*"
+                                           th:href="@{/ec/customer/material/edit/center/id}" class="on-default edit-row"
                                              style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
                                              data-placement="left" title=""  data-original-title="编辑"><i
                                                   style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
@@ -225,7 +231,9 @@
                                       <td style="vertical-align: middle;line-height: 26px">
                                           <mpm:tag identity="infoType" value="001" show-type="label" key="code"/>
                                       </td>
-                                      <td style="vertical-align: middle;line-height: 26px">http://mtw.so/6xOaa3<br>360数科-深圳风向-云启通
+                                      <td style="vertical-align: middle;line-height: 26px">http://mtw.so/6xOaa3<br>
+                                          <i id="tooltip-html"  data-placement="right" title="" th:onmouseover="channelTip()"
+                                             class="mdi mdi-comment-text" style="margin-left:5px"></i>
                                       </td>
                                       <td style="vertical-align: middle;line-height: 26px"><a
                                               class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a>
@@ -240,13 +248,13 @@
                                              data-toggle="tooltip"
                                              data-placement="left" title=""  data-original-title="查看详情"><i style="font-size: 18px"
                                                                                                            class="glyphicon glyphicon-search"></i></a>
-                                          <a sec:authorize-url="/ec/customer/material/edit/*" data-toggle="modal"
+                                          <a data-toggle="modal"
                                              data-target="#download-record"
                                              class="on-default edit-row"
                                              style="padding-left: 5px;color: #6B5FB5;" title="下载附件"><i
                                                   style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
-                                          <a sec:authorize-url="/ec/customer/material/edit/*"
-                                             th:href="@{/ec/customer/material/edit/id}" class="on-default edit-row"
+                                          <a sec:authorize-url="/ec/customer/material/edit/center/*"
+                                           th:href="@{/ec/customer/material/edit/center/id}" class="on-default edit-row"
                                              style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
                                              data-placement="left" title=""  data-original-title="编辑"><i
                                                   style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
@@ -273,7 +281,9 @@
                                       <td style="vertical-align: middle;line-height: 26px">
                                           <mpm:tag identity="infoType" value="001" show-type="label" key="code"/>
                                       </td>
-                                      <td style="vertical-align: middle;line-height: 26px">http://mtw.so/6xOaa3<br>360数科-深圳风向-云启通
+                                      <td style="vertical-align: middle;line-height: 26px">http://mtw.so/6xOaa3<br>
+                                          <i id="tooltip-html"  data-placement="right" title="" th:onmouseover="channelTip()"
+                                             class="mdi mdi-comment-text" style="margin-left:5px"></i>
                                       </td>
                                       <td style="vertical-align: middle;line-height: 26px"><a
                                               class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a>
@@ -288,13 +298,13 @@
                                              data-toggle="tooltip"
                                              data-placement="left" title=""  data-original-title="查看详情"><i style="font-size: 18px"
                                                                                                            class="glyphicon glyphicon-search"></i></a>
-                                          <a sec:authorize-url="/ec/customer/material/edit/*" data-toggle="modal"
+                                          <a data-toggle="modal"
                                              data-target="#download-record"
                                              class="on-default edit-row"
                                              style="padding-left: 5px;color: #6B5FB5;" title="下载附件"><i
                                                   style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
-                                          <a sec:authorize-url="/ec/customer/material/edit/*"
-                                             th:href="@{/ec/customer/material/edit/id}" class="on-default edit-row"
+                                          <a sec:authorize-url="/ec/customer/material/edit/center/*"
+                                           th:href="@{/ec/customer/material/edit/center/id}" class="on-default edit-row"
                                              style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
                                              data-placement="left" title=""  data-original-title="编辑"><i
                                                   style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
@@ -321,7 +331,9 @@
                                       <td style="vertical-align: middle;line-height: 26px">
                                           <mpm:tag identity="infoType" value="001" show-type="label" key="code"/>
                                       </td>
-                                      <td style="vertical-align: middle;line-height: 26px">http://mtw.so/6xOaa3<br>360数科-深圳风向-云启通
+                                      <td style="vertical-align: middle;line-height: 26px">http://mtw.so/6xOaa3<br>
+                                          <i id="tooltip-html"  data-placement="right" title="" th:onmouseover="channelTip()"
+                                             class="mdi mdi-comment-text" style="margin-left:5px"></i>
                                       </td>
                                       <td style="vertical-align: middle;line-height: 26px"><a
                                               class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a>
@@ -336,13 +348,13 @@
                                              data-toggle="tooltip"
                                              data-placement="left" title=""  data-original-title="查看详情"><i style="font-size: 18px"
                                                                                                            class="glyphicon glyphicon-search"></i></a>
-                                          <a sec:authorize-url="/ec/customer/material/edit/*" data-toggle="modal"
+                                          <a data-toggle="modal"
                                              data-target="#download-record"
                                              class="on-default edit-row"
                                              style="padding-left: 5px;color: #6B5FB5;" title="下载附件"><i
                                                   style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
-                                          <a sec:authorize-url="/ec/customer/material/edit/*"
-                                             th:href="@{/ec/customer/material/edit/id}" class="on-default edit-row"
+                                          <a sec:authorize-url="/ec/customer/material/edit/center/*"
+                                           th:href="@{/ec/customer/material/edit/center/id}" class="on-default edit-row"
                                              style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
                                              data-placement="left" title=""  data-original-title="编辑"><i
                                                   style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
@@ -369,7 +381,9 @@
                                       <td style="vertical-align: middle;line-height: 26px">
                                           <mpm:tag identity="infoType" value="001" show-type="label" key="code"/>
                                       </td>
-                                      <td style="vertical-align: middle;line-height: 26px">http://mtw.so/6xOaa3<br>360数科-深圳风向-云启通
+                                      <td style="vertical-align: middle;line-height: 26px">http://mtw.so/6xOaa3<br>
+                                          <i id="tooltip-html"  data-placement="right" title="" th:onmouseover="channelTip()"
+                                             class="mdi mdi-comment-text" style="margin-left:5px"></i>
                                       </td>
                                       <td style="vertical-align: middle;line-height: 26px"><a
                                               class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a>
@@ -384,13 +398,13 @@
                                              data-toggle="tooltip"
                                              data-placement="left" title=""  data-original-title="查看详情"><i style="font-size: 18px"
                                                                                                            class="glyphicon glyphicon-search"></i></a>
-                                          <a sec:authorize-url="/ec/customer/material/edit/*" data-toggle="modal"
+                                          <a data-toggle="modal"
                                              data-target="#download-record"
                                              class="on-default edit-row"
                                              style="padding-left: 5px;color: #6B5FB5;" title="下载附件"><i
                                                   style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
-                                          <a sec:authorize-url="/ec/customer/material/edit/*"
-                                             th:href="@{/ec/customer/material/edit/id}" class="on-default edit-row"
+                                          <a sec:authorize-url="/ec/customer/material/edit/center/*"
+                                           th:href="@{/ec/customer/material/edit/center/id}" class="on-default edit-row"
                                              style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
                                              data-placement="left" title=""  data-original-title="编辑"><i
                                                   style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
@@ -417,7 +431,9 @@
                                       <td style="vertical-align: middle;line-height: 26px">
                                           <mpm:tag identity="infoType" value="001" show-type="label" key="code"/>
                                       </td>
-                                      <td style="vertical-align: middle;line-height: 26px">http://mtw.so/6xOaa3<br>360数科-深圳风向-云启通
+                                      <td style="vertical-align: middle;line-height: 26px">http://mtw.so/6xOaa3<br>
+                                          <i id="tooltip-html"  data-placement="right" title="" th:onmouseover="channelTip()"
+                                             class="mdi mdi-comment-text" style="margin-left:5px"></i>
                                       </td>
                                       <td style="vertical-align: middle;line-height: 26px"><a
                                               class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a>
@@ -432,13 +448,13 @@
                                              data-toggle="tooltip"
                                              data-placement="left" title=""  data-original-title="查看详情"><i style="font-size: 18px"
                                                                                                            class="glyphicon glyphicon-search"></i></a>
-                                          <a sec:authorize-url="/ec/customer/material/edit/*" data-toggle="modal"
+                                          <a data-toggle="modal"
                                              data-target="#download-record"
                                              class="on-default edit-row"
                                              style="padding-left: 5px;color: #6B5FB5;" title="下载附件"><i
                                                   style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
-                                          <a sec:authorize-url="/ec/customer/material/edit/*"
-                                             th:href="@{/ec/customer/material/edit/id}" class="on-default edit-row"
+                                          <a sec:authorize-url="/ec/customer/material/edit/center/*"
+                                           th:href="@{/ec/customer/material/edit/center/id}" class="on-default edit-row"
                                              style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
                                              data-placement="left" title=""  data-original-title="编辑"><i
                                                   style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
@@ -465,7 +481,9 @@
                                       <td style="vertical-align: middle;line-height: 26px">
                                           <mpm:tag identity="infoType" value="001" show-type="label" key="code"/>
                                       </td>
-                                      <td style="vertical-align: middle;line-height: 26px">http://mtw.so/6xOaa3<br>360数科-深圳风向-云启通
+                                      <td style="vertical-align: middle;line-height: 26px">http://mtw.so/6xOaa3<br>
+                                          <i id="tooltip-html"  data-placement="right" title="" th:onmouseover="channelTip()"
+                                             class="mdi mdi-comment-text" style="margin-left:5px"></i>
                                       </td>
                                       <td style="vertical-align: middle;line-height: 26px"><a
                                               class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a>
@@ -480,13 +498,13 @@
                                              data-toggle="tooltip"
                                              data-placement="left" title=""  data-original-title="查看详情"><i style="font-size: 18px"
                                                                                                            class="glyphicon glyphicon-search"></i></a>
-                                          <a sec:authorize-url="/ec/customer/material/edit/*" data-toggle="modal"
+                                          <a data-toggle="modal"
                                              data-target="#download-record"
                                              class="on-default edit-row"
                                              style="padding-left: 5px;color: #6B5FB5;" title="下载附件"><i
                                                   style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
-                                          <a sec:authorize-url="/ec/customer/material/edit/*"
-                                             th:href="@{/ec/customer/material/edit/id}" class="on-default edit-row"
+                                          <a sec:authorize-url="/ec/customer/material/edit/center/*"
+                                           th:href="@{/ec/customer/material/edit/center/id}" class="on-default edit-row"
                                              style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
                                              data-placement="left" title=""  data-original-title="编辑"><i
                                                   style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
@@ -513,7 +531,9 @@
                                       <td style="vertical-align: middle;line-height: 26px">
                                           <mpm:tag identity="infoType" value="001" show-type="label" key="code"/>
                                       </td>
-                                      <td style="vertical-align: middle;line-height: 26px">http://mtw.so/6xOaa3<br>360数科-深圳风向-云启通
+                                      <td style="vertical-align: middle;line-height: 26px">http://mtw.so/6xOaa3<br>
+                                          <i id="tooltip-html"  data-placement="right" title="" th:onmouseover="channelTip()"
+                                             class="mdi mdi-comment-text" style="margin-left:5px"></i>
                                       </td>
                                       <td style="vertical-align: middle;line-height: 26px"><a
                                               class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a>
@@ -528,13 +548,13 @@
                                              data-toggle="tooltip"
                                              data-placement="left" title=""  data-original-title="查看详情"><i style="font-size: 18px"
                                                                                                            class="glyphicon glyphicon-search"></i></a>
-                                          <a sec:authorize-url="/ec/customer/material/edit/*" data-toggle="modal"
+                                          <a data-toggle="modal"
                                              data-target="#download-record"
                                              class="on-default edit-row"
                                              style="padding-left: 5px;color: #6B5FB5;" title="下载附件"><i
                                                   style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
-                                          <a sec:authorize-url="/ec/customer/material/edit/*"
-                                             th:href="@{/ec/customer/material/edit/id}" class="on-default edit-row"
+                                          <a sec:authorize-url="/ec/customer/material/edit/center/*"
+                                           th:href="@{/ec/customer/material/edit/center/id}" class="on-default edit-row"
                                              style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
                                              data-placement="left" title=""  data-original-title="编辑"><i
                                                   style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
@@ -561,7 +581,9 @@
                                       <td style="vertical-align: middle;line-height: 26px">
                                           <mpm:tag identity="infoType" value="001" show-type="label" key="code"/>
                                       </td>
-                                      <td style="vertical-align: middle;line-height: 26px">http://mtw.so/6xOaa3<br>360数科-深圳风向-云启通
+                                      <td style="vertical-align: middle;line-height: 26px">http://mtw.so/6xOaa3<br>
+                                          <i id="tooltip-html"  data-placement="right" title="" th:onmouseover="channelTip()"
+                                             class="mdi mdi-comment-text" style="margin-left:5px"></i>
                                       </td>
                                       <td style="vertical-align: middle;line-height: 26px"><a
                                               class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a>
@@ -576,13 +598,13 @@
                                              data-toggle="tooltip"
                                              data-placement="left" title=""  data-original-title="查看详情"><i style="font-size: 18px"
                                                                                                            class="glyphicon glyphicon-search"></i></a>
-                                          <a sec:authorize-url="/ec/customer/material/edit/*" data-toggle="modal"
+                                          <a data-toggle="modal"
                                              data-target="#download-record"
                                              class="on-default edit-row"
                                              style="padding-left: 5px;color: #6B5FB5;" title="下载附件"><i
                                                   style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
-                                          <a sec:authorize-url="/ec/customer/material/edit/*"
-                                             th:href="@{/ec/customer/material/edit/id}" class="on-default edit-row"
+                                          <a sec:authorize-url="/ec/customer/material/edit/center/*"
+                                           th:href="@{/ec/customer/material/edit/center/id}" class="on-default edit-row"
                                              style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
                                              data-placement="left" title=""  data-original-title="编辑"><i
                                                   style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
@@ -648,8 +670,15 @@
 <script th:src="@{/static/plugins/moment/moment.js}"></script>
 <script th:src="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.js}"></script>
 <!-- Modal-Effect -->
-
+<script th:src="@{/static/plugins/tooltipster/tooltipster.bundle.min.js}"></script>
 <script>
+
+    function channelTip(){
+        $('#tooltip-html').tooltipster({
+            content: $('<p style="text-align:left;"><span style="font-size:12px">360数科-深圳风向 到期日期：2022-11-12</span><br><span style="font-size:12px">深圳风向-小舟科技 到期日期：2022-11-12</span></p>'),
+            position: 'right'
+        });
+    }
 
     $('#reportrange').daterangepicker({
         format: 'YYYY-MM-DD',
