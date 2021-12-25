@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+</head>
+<body>
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <!-- start row 页面导航-->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">创建财务共享账户</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            财务管理
+                        </li>
+                        <li>
+                            财务共享账户管理
+                        </li>
+                        <li>
+                           创建财务共享账户
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  页面内容-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <!-- start row  操作提示-->
+                    <div id="help" class="row alert alert-icon alert-success alert-dismissible fade in" role="alert">
+                        <button id="help_button" type="button" class="close"
+                                aria-label="Close">
+                            <span>&times;</span>
+                        </button>
+                        <i class="mdi mdi-help-circle-outline"></i>
+                        <strong>操作提示：</strong> 该操作影响重大，请再三核对业务账号、财务账户信息！
+                    </div>
+                    <!-- end row -->
+
+                    <!-- start row  页面内容-->
+                    <div class="row m-b-0" style="padding-left:20px;padding-right:20px">
+                        <form id="submit_form"
+                              method="post" data-parsley-validate="">
+                            <div class="row">
+                                <div class="col-md-12 panel panel-color panel-info"
+                                >
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="form-group m-b-20">
+                                                    <label for="11">财务账号名称<span class="text-danger">*</span></label>
+                                                    <input id="11" type="text" class="form-control"
+                                                           value="财务共享账户" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group m-b-20">
+                                                    <label>余额归集到共享账户<span class="text-danger">*</span></label><br>
+                                                    <mpm:tag id="isTransfer" identity="isOrNo" name="1transferEnable" show-type="radio"  style="margin-top:0px"
+                                                             key="code" value="1" required="true" title="是否"/>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group m-b-20">
+                                                    <label>冻结归集到共享账户<span class="text-danger">*</span></label><br>
+                                                    <mpm:tag id="isTransfer11" identity="isOrNo" name="transferEnable" show-type="radio"  style="margin-top:0px"
+                                                             key="code" value="1" required="true" title="是否"/>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 pull-right" style="text-align: right">
+                                                <br>
+                                                <button  type="submit"
+                                                        class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
+                                                    提交
+                                                </button>
+                                                <a sec:authorize-url="/finance/account/share/list"
+                                                   th:href="@{/finance/account/share/list}" style="margin-left:10px"
+                                                   class="btn btn-default waves-effect waves-light btn-md">
+                                                    <i class="glyphicon  glyphicon-share-alt" style="margin-right:5px"></i>
+                                                    返回财务共享账户列表</a>
+                                                <a id="help_display" style="margin-left:10px"><i class="mdi mdi-help-circle-outline"
+                                                                                                 style="font-size:18px;"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="panel panel-color panel-info">
+                                                    <div class="panel-heading">
+                                                        <h3 class="panel-title">企业下所有财务账户列表（包括下级企业）</h3>
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <div class="table-responsive">
+                                                            <table class="table table table-hover m-10"
+                                                                   style="margin-top: -10px;">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th>
+                                                                        <div class="btn-switch btn-switch-custom">
+                                                                            <input type="checkbox" id="all"/>
+                                                                            <label for="all"
+                                                                                   class="btn btn-rounded btn-custom waves-effect waves-light">
+                                                                                <em class="glyphicon glyphicon-ok"></em>
+                                                                                <strong>全选</strong>
+                                                                            </label>
+                                                                        </div>
+                                                                    </th>
+                                                                    <th>企业名称</th>
+                                                                    <th>业务账号名称</th>
+                                                                    <th>业务账号</th>
+                                                                    <th>财务账户余额</th>
+                                                                    <th>财务账户冻结金额</th>
+                                                                    <th>是否已共享</th>
+                                                                    <th style="text-align:center">账户状态</th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                <tr>
+                                                                    <td>
+                                                                        <div class="btn-switch btn-switch-custom">
+                                                                            <input type="checkbox"
+                                                                                   id="input-btn-switch-custom"
+                                                                                   checked/>
+                                                                            <label for="input-btn-switch-custom"
+                                                                                   class="btn btn-rounded btn-custom waves-effect waves-light">
+                                                                                <em class="glyphicon glyphicon-ok"></em>
+                                                                            </label>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        北京星语互联科技有限公司
+                                                                    </td>
+                                                                    <td>
+                                                                        星语-移动-信用卡(小舟dj)
+                                                                    </td>
+                                                                    <td>
+                                                                        xycr11
+                                                                    </td>
+                                                                    <td>
+                                                                        2000
+                                                                    </td>
+                                                                    <td>
+                                                                       200
+                                                                    </td>
+                                                                    <td>
+                                                                        否
+                                                                    </td>
+
+                                                                    <td style="text-align:center">
+                                                                        <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">正常</a>
+                                                                    </td>
+
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        <div class="btn-switch btn-switch-custom1">
+                                                                            <input type="checkbox"
+                                                                                   id="input-btn-switch-custom1"
+                                                                                   />
+                                                                            <label for="input-btn-switch-custom1"
+                                                                                   class="btn btn-rounded btn-custom waves-effect waves-light">
+                                                                                <em class="glyphicon glyphicon-ok"></em>
+                                                                            </label>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        北京星语互联科技有限公司
+                                                                    </td>
+                                                                    <td>
+                                                                        星语-移动-信用卡(小舟dj)
+                                                                    </td>
+                                                                    <td>
+                                                                        xycr11
+                                                                    </td>
+                                                                    <td>
+                                                                       111
+                                                                    </td>
+                                                                    <td>
+                                                                        111
+                                                                    </td>
+                                                                    <td>
+                                                                        否
+                                                                    </td>
+
+                                                                    <td style="text-align:center">
+                                                                        <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">正常</a>
+                                                                    </td>
+
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        <div class="btn-switch btn-switch-custom2">
+                                                                            <input type="checkbox"
+                                                                                   id="input-btn-switch-custom2"
+                                                                                   checked/>
+                                                                            <label for="input-btn-switch-custom2"
+                                                                                   class="btn btn-rounded btn-custom waves-effect waves-light">
+                                                                                <em class="glyphicon glyphicon-ok"></em>
+                                                                            </label>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        北京星语互联科技有限公司
+                                                                    </td>
+                                                                    <td>
+                                                                        星语-移动-信用卡(小舟dj)
+                                                                    </td>
+                                                                    <td>
+                                                                        xycr11
+                                                                    </td>
+                                                                    <td>
+                                                                        2000
+                                                                    </td>
+                                                                    <td>
+                                                                       333
+                                                                    </td>
+                                                                    <td>
+                                                                        否
+                                                                    </td>
+
+                                                                    <td style="text-align:center">
+                                                                        <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">正常</a>
+                                                                    </td>
+
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        <div class="btn-switch btn-switch-custom3">
+                                                                            <input type="checkbox"
+                                                                                   id="input-btn-switch-custom3"
+                                                                                   checked/>
+                                                                            <label for="input-btn-switch-custom3"
+                                                                                   class="btn btn-rounded btn-custom waves-effect waves-light">
+                                                                                <em class="glyphicon glyphicon-ok"></em>
+                                                                            </label>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        北京星语互联科技有限公司
+                                                                    </td>
+                                                                    <td>
+                                                                        星语-移动-信用卡(小舟dj)
+                                                                    </td>
+                                                                    <td>
+                                                                        xycr11
+                                                                    </td>
+                                                                    <td>
+                                                                       330034
+                                                                    </td>
+                                                                    <td>
+                                                                     23232
+                                                                    </td>
+                                                                    <td>
+                                                                       否
+                                                                    </td>
+
+                                                                    <td style="text-align:center">
+                                                                        <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">正常</a>
+                                                                    </td>
+
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        <div class="btn-switch btn-switch-custom4">
+                                                                            <input type="checkbox"
+                                                                                   id="input-btn-switch-custom4"
+                                                                                   checked/>
+                                                                            <label for="input-btn-switch-custom4"
+                                                                                   class="btn btn-rounded btn-custom waves-effect waves-light">
+                                                                                <em class="glyphicon glyphicon-ok"></em>
+                                                                            </label>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        北京星语互联科技有限公司
+                                                                    </td>
+                                                                    <td>
+                                                                        星语-移动-信用卡(小舟dj)
+                                                                    </td>
+                                                                    <td>
+                                                                        xycr11
+                                                                    </td>
+                                                                    <td>
+                                                                       23232
+                                                                    </td>
+                                                                    <td>
+                                                                        3433
+                                                                    </td>
+                                                                    <td>
+                                                                        否
+                                                                    </td>
+
+                                                                    <td style="text-align:center">
+                                                                        <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">正常</a>
+                                                                    </td>
+
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                    </td>
+                                                                    <td>
+                                                                        北京星语互联科技有限公司
+                                                                    </td>
+                                                                    <td>
+                                                                        星语-移动-信用卡(小舟dj)
+                                                                    </td>
+                                                                    <td>
+                                                                        xycr11
+                                                                    </td>
+                                                                    <td>
+                                                                        3433
+                                                                    </td>
+                                                                    <td>
+                                                                        3333
+                                                                    </td>
+                                                                    <td>
+                                                                       是
+                                                                    </td>
+
+                                                                    <td style="text-align:center">
+                                                                        <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">正常</a>
+                                                                    </td>
+
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+
+                                                                    </td>
+                                                                    <td>
+                                                                        北京星语互联科技有限公司
+                                                                    </td>
+                                                                    <td>
+                                                                        星语-移动-信用卡(小舟dj)
+                                                                    </td>
+                                                                    <td>
+                                                                        xycr11
+                                                                    </td>
+                                                                    <td>
+                                                                        行业
+                                                                    </td>
+                                                                    <td>
+                                                                        移动
+                                                                    </td>
+                                                                    <td>
+                                                                        98761234
+                                                                    </td>
+
+                                                                    <td style="text-align:center">
+                                                                        <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light">停用</a>
+                                                                    </td>
+
+                                                                </tr>
+
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div> <!-- end col -->
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<th:block th:insert="fragments/cookie_fragments :: cookie_js"/>
+<!-- Modal-Effect -->
+<script>
+
+    /**
+     * 处理cookie
+     */
+    $(document).ready(function() {
+
+        if("none" == $.cookie("finance_account_share_edit")){
+           $('#help').css('display', 'none');
+        }
+
+        $('#help_display').on("click", function () {
+           if('block' == $('#help').css('display')){
+             $('#help').css('display', 'none');
+             $.cookie("finance_account_share_edit", 'none', {
+                expires : 180
+             });
+           }else{
+             $('#help').css('display', 'block');
+             $.cookie("finance_account_share_edit", 'block', {
+                expires : 180
+             });
+           }
+        });
+        $('#help_button').on("click", function () {
+           $('#help').css('display', 'none');
+           $.cookie("finance_account_share_edit", 'none', {
+			expires : 180
+		   });
+        });
+
+
+    });
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+
+
+
+
+</script>
+</body>
+</html>
