@@ -8,21 +8,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
- * 财务账户
+ * 财务共享账户
  */
 @Slf4j
 @Controller
 @RequestMapping("/finance")
-public class FinanceAccountController {
+public class FinanceShareAccountController {
 
     /**
-     * 财务账户列表
+     * 财务共享账户列表
      * @return
      */
-    @RequestMapping(value = "/account/list", method = RequestMethod.GET)
+    @RequestMapping(value = "/account/share/list", method = RequestMethod.GET)
     public ModelAndView list() {
-        ModelAndView view = new ModelAndView("finance/finance_account_list");
+        ModelAndView view = new ModelAndView("finance/finance_account_share_list");
 
         //查询数据
         PageParams params = new PageParams<>();
@@ -42,9 +44,9 @@ public class FinanceAccountController {
      * 财务账户分页
      * @return
      */
-    @RequestMapping(value = "/account/page", method = RequestMethod.POST)
+    @RequestMapping(value = "/account/share/page", method = RequestMethod.POST)
     public ModelAndView page() {
-        ModelAndView view = new ModelAndView("finance/finance_account_list");
+        ModelAndView view = new ModelAndView("finance/finance_account_share_list");
 
         //查询数据
         PageParams params = new PageParams<>();
@@ -60,12 +62,12 @@ public class FinanceAccountController {
     }
 
     /**
-     * 财务账户管理中心
+     * 财务账户编辑
      * @return
      */
-    @RequestMapping(value = "/account/center", method = RequestMethod.GET)
-    public ModelAndView center() {
-        ModelAndView view = new ModelAndView("finance/finance_account_center");
+    @RequestMapping(value = "/account/share/edit/{id}", method = RequestMethod.GET)
+    public ModelAndView edit(@PathVariable String id, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("finance/finance_account_share_edit");
 
         return view;
     }
@@ -74,12 +76,22 @@ public class FinanceAccountController {
      * 财务账户管理中心
      * @return
      */
-    @RequestMapping(value = "/account/view", method = RequestMethod.GET)
-    public ModelAndView view() {
-        ModelAndView view = new ModelAndView("finance/finance_account_view");
+    @RequestMapping(value = "/account/share/center", method = RequestMethod.GET)
+    public ModelAndView center() {
+        ModelAndView view = new ModelAndView("finance/finance_account_share_center");
 
         return view;
     }
 
+    /**
+     * 财务账户查看中心
+     * @return
+     */
+    @RequestMapping(value = "/account/share/view/center/*", method = RequestMethod.GET)
+    public ModelAndView view() {
+        ModelAndView view = new ModelAndView("finance/finance_account_share_view_center");
+
+        return view;
+    }
 
 }

@@ -115,8 +115,8 @@ public class ParameterExtendSystemParamValueController {
 
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
 
+        //获取页面传过来的值，并进行封装
         List<ParameterExtendSystemParamValueValidator> list = new ArrayList<>();
-
         for (SystemExtendBusinessParamValidator obj : responseData.getData()) {
             String value = request.getParameter(obj.getParamKey());
             if (!StringUtils.isEmpty(value)) {
@@ -134,14 +134,14 @@ public class ParameterExtendSystemParamValueController {
             }
         }
 
-
+        //保存操作
         ResponseData response = parameterExtendSystemParamValueService.save(list, businessId, user.getRealName(), businessType);
         if (!ResponseCode.SUCCESS.getCode().equals(response.getCode())) {
             view.addObject("error", response.getCode() + ":" + response.getMessage());
             return view;
         }
 
-        //把参数值列表转成map，这样前台容易根据 paramKey 取值
+        //把参数值列表转成map，进行回显，这样前台容易根据 paramKey 取值
         Map<String, String> keyValueMap = new HashMap<>();
         if (null != list && list.size() > 0) {
             keyValueMap = list.stream().collect(Collectors.toMap(ParameterExtendSystemParamValueValidator::getParamKey, ParameterExtendSystemParamValueValidator -> ParameterExtendSystemParamValueValidator.getParamValue()));

@@ -72,6 +72,8 @@
                                             class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search"></i> 查询
                                     </button>
+                                    <a id="help_display" style="margin-left:10px"><i class="mdi mdi-help-circle-outline"
+                                                                                     style="font-size:18px;"></i></a>
                                 </div>
                             </div>
                         </form>
@@ -83,7 +85,7 @@
         <!-- end row -->
 
         <!-- start row  汇总统计-->
-        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+        <div  id="help"  class="row" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
                 <div class="detail">
                     <ul>
@@ -523,6 +525,7 @@
 </div> <!-- content -->
 <th:block th:insert="fragments/common_fragments :: common_js"/>
 <th:block th:insert="fragments/common_fragments :: select_js"/>
+<th:block th:insert="fragments/cookie_fragments :: cookie_js"/>
 <script th:src="@{/static/plugins/moment/moment.js}"></script>
 <th:block th:insert="fragments/cookie_fragments :: cookie_js"/>
 <script th:src="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.js}"></script>
@@ -574,9 +577,28 @@
         //alert('A date range was chosen: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
     });
 
-    $(document).ready(function() {
-		$('.autonumber').autoNumeric('init');
-	 });
+   $(document).ready(function () {
+
+        if("none" == $.cookie("message_daily_statistics_list")){
+           $('#help').css('display', 'none');
+        }
+
+        $('#help_display').on("click", function () {
+           if('block' == $('#help').css('display')){
+             $('#help').css('display', 'none');
+             $.cookie("message_daily_statistics_list", 'none', {
+                expires : 180
+             });
+           }else{
+             $('#help').css('display', 'block');
+             $.cookie("message_daily_statistics_list", 'block', {
+                expires : 180
+             });
+           }
+        });
+
+        $('.autonumber').autoNumeric('init');
+    });
 
     var resizefunc = [];
     //隐藏进度项

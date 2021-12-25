@@ -286,7 +286,7 @@ public class ChannelController {
         }
 
         //如果通道是正常状态并且通道进度未完善，
-        if("001".equals(channelBasicInfoValidator.getChannelStatus()) && !"1101".equals(channelBasicInfoValidator.getChannelProcess())){
+        if ("001".equals(channelBasicInfoValidator.getChannelStatus()) && !"1101".equals(channelBasicInfoValidator.getChannelProcess())) {
             FieldError err = new FieldError("通道状态", "channelStatus", "正常状态下需要完善通道配置信息");
             result.addError(err);
         }

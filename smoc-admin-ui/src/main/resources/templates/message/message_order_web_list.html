@@ -76,6 +76,8 @@
                                             class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search"></i> 查询
                                     </button>
+                                    <a id="help_display" style="margin-left:10px"><i class="mdi mdi-help-circle-outline"
+                                                                                     style="font-size:18px;"></i></a>
                                 </div>
                             </div>
                         </form>
@@ -87,7 +89,7 @@
         <!-- end row -->
 
         <!-- start row  汇总统计-->
-        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+        <div id="help" class="row" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
                 <div class="detail">
                     <ul>
@@ -621,12 +623,32 @@
 
 <th:block th:insert="fragments/common_fragments :: common_js"/>
 <th:block th:insert="fragments/common_fragments :: select_js"/>
+<th:block th:insert="fragments/cookie_fragments :: cookie_js"/>
 <script th:src="@{/static/plugins/moment/moment.js}"></script>
 <script th:src="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.js}"></script>
 <script th:src="@{/static/plugins/autoNumeric/autoNumeric.js}"></script>
 <script>
 
     $(document).ready(function () {
+
+        if("none" == $.cookie("help_display_web_task_order_list")){
+           $('#help').css('display', 'none');
+        }
+
+        $('#help_display').on("click", function () {
+           if('block' == $('#help').css('display')){
+             $('#help').css('display', 'none');
+             $.cookie("help_display_web_task_order_list", 'none', {
+                expires : 180
+             });
+           }else{
+             $('#help').css('display', 'block');
+             $.cookie("help_display_web_task_order_list", 'block', {
+                expires : 180
+             });
+           }
+        });
+
         $('.autonumber').autoNumeric('init');
     });
 
