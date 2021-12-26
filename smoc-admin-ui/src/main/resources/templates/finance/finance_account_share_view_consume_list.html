@@ -10,73 +10,14 @@
     <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
     <link th:href="@{/static/css/detail_statistics.css}" rel="stylesheet">
 </head>
-<body>
+<body style="background-color:#fff">
 <!-- Loader start 页面加载进度-->
 <th:block th:insert="fragments/common_fragments :: common_loader"/>
 <!-- Loader end -->
 
 <!-- Start content -->
-<div class="content" style="margin-top: 60px">
+<div class="content" style="margin-top: 10px">
     <div class="container">
-
-        <!-- start row 页面导航-->
-        <div class="row">
-            <div class="col-xs-12">
-                <div class="page-title-box">
-                    <h4 class="page-title">消费记录查询</h4>
-                    <ol class="breadcrumb p-0 m-0">
-                        <li>
-                            财务管理
-                        </li>
-                        <li>
-                            消费记录查询
-                        </li>
-                    </ol>
-                    <div class="clearfix"></div>
-                </div>
-            </div>
-        </div>
-        <!-- end row -->
-
-        <!-- start row  查询条件-->
-        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
-            <div class="col-sm-12">
-                <div class="card-box">
-                    <form id="query_form" th:action="@{/finance/consume/page}"
-                          method="post">
-                        <div class="row m-b-60">
-                            <div class="col-sm-12">
-                                <div class="form-group col-sm-3">
-                                    <input id="dateQueryStr" class="form-control" type="text"/>
-                                </div>
-                                <div class="form-group  col-sm-3">
-                                    <input type="text" class="form-control"
-                                           placeholder="企业名称" autocomplete="off">
-                                </div>
-                                <div class="form-group  col-sm-3">
-                                    <input type="text" class="form-control"
-                                           placeholder="EC业务账号" autocomplete="off">
-                                </div>
-                                <div class="form-group  col-sm-3">
-                                    <mpm:tag id="businessType" identity="businessType" show-type="select" key="code"
-                                             class="form-control" name="enterpriseType" value="" title="业务类型"/>
-                                </div>
-
-                                <div class="form-group col-sm-3 pull-right" style="text-align: right">
-                                    <button sec:authorize-url="/finance/consume/page" type="submit"
-                                            class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
-                                        <i class="glyphicon glyphicon-search"></i> 查询
-                                    </button>
-                                    <a id="help_display" style="margin-left:10px"><i class="mdi mdi-help-circle-outline"
-                                                                                     style="font-size:18px;"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <!-- end row -->
 
         <!-- start row  汇总统计-->
         <div id="help" class="row" th:remove="${#strings.isEmpty(error)}?none:all">
@@ -84,18 +25,18 @@
                 <div class="detail">
                     <ul>
                         <li>
-                            <h2 style="color: #fff">消费明细统计</h2>
+                            <h2 style="color: #fff">明细统计</h2>
                             <span></span>
                             <div class="detailInner">
                                 <a>冻结中金额（元）：<span data-d-group="4" data-a-sign="¥ "
                                                   style="color:#fff;width:80px;background-color:#0095a8;text-align:left"
-                                                  class="autonumber">45922</span></a><i></i>
+                                                  readonly class="autonumber">045922</span></a><i></i>
                                 <a>总冻结金额（元）：<span data-d-group="4" data-a-sign="¥ "
                                                   style="color:#fff;width:80px;background-color:#0095a8;text-align:left"
-                                                  class="autonumber">20.00</span></a><i></i>
-                                <a>成功数量(条）：<span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
+                                                  readonly class="autonumber">20.00</span></a><i></i>
+                                <a>成功数量(条）：<span data-d-group="4" data-a-sign="¥ "
                                                  style="color:#fff;width:90px;background-color:#0095a8;text-align:left"
-                                                 class="autonumber">45922</span></a>
+                                                 readonly class="autonumber">45922</span></a>
                             </div>
                         </li>
                     </ul>
@@ -117,52 +58,37 @@
                             <table class="table table table-hover m-10" style="margin-top: -12px;">
                                 <thead>
                                 <tr>
-                                    <th>企业名称</th>
-                                    <th>EC业务账号/业务账号名称</th>
                                     <th>消费数量/冻结中金额(元)</th>
                                     <th>成功数量/消费金额(元)</th>
                                     <th>失败数量/返还金额(元)</th>
-                                    <th>结算单价(元)/结算账号</th>
-                                    <th>业务类型/消费状态</th>
+                                    <th>结算单价(元)</th>
+                                    <th>消费状态</th>
                                     <th>消费日期/更新日期</th>
                                 </tr>
                                 <thead>
                                 <tbody>
                                 <tr>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        北京星语互联科技有限公司
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        XY2010238349343<br>国际短信通道账户
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                              class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
                                         <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                              class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
                                         <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                              class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
                                         <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         0.024
-                                        <br>
-                                        XY2010238349343
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a class="btn btn-teal waves-effect waves-light btn-xs">国际短信</a>
-                                        <br>
                                         <a
                                                 class="btn btn-success  waves-effect waves-light btn-xs">已完成</a>
 
@@ -174,40 +100,26 @@
                                 </tr>
                                 <tr>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        北京星语互联科技有限公司
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        XY2010238349343<br>国际短信通道账户
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                              class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
                                         <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                              class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
                                         <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                              class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
                                         <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         0.024
-                                        <br>
-                                        XY2010238349343
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a
-                                                class="btn btn-teal waves-effect waves-light btn-xs">国际短信</a>
-                                        <br>
                                         <a
                                                 class="btn btn-success  waves-effect waves-light btn-xs">已完成</a>
 
@@ -219,40 +131,26 @@
                                 </tr>
                                 <tr>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        北京星语互联科技有限公司
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        XY2010238349343<br>国际短信通道账户
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                              class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
                                         <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                              class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
                                         <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                              class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
                                         <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         0.024
-                                        <br>
-                                        XY2010238349343
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a
-                                                class="btn btn-teal waves-effect waves-light btn-xs">国际短信</a>
-                                        <br>
                                         <a
                                                 class="btn btn-success  waves-effect waves-light btn-xs">已完成</a>
 
@@ -264,40 +162,26 @@
                                 </tr>
                                 <tr>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        北京星语互联科技有限公司
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        XY2010238349343<br>国际短信通道账户
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                              class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
                                         <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                              class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
                                         <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                              class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
                                         <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         0.024
-                                        <br>
-                                        XY2010238349343
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a
-                                                class="btn btn-teal waves-effect waves-light btn-xs">国际短信</a>
-                                        <br>
                                         <a
                                                 class="btn btn-success  waves-effect waves-light btn-xs">已完成</a>
 
@@ -309,40 +193,26 @@
                                 </tr>
                                 <tr>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        北京星语互联科技有限公司
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        XY2010238349343<br>国际短信通道账户
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                              class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
                                         <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                              class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
                                         <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                              class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
                                         <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         0.024
-                                        <br>
-                                        XY2010238349343
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a
-                                                class="btn btn-teal waves-effect waves-light btn-xs">国际短信</a>
-                                        <br>
                                         <a
                                                 class="btn btn-success  waves-effect waves-light btn-xs">已完成</a>
 
@@ -354,40 +224,26 @@
                                 </tr>
                                 <tr>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        北京星语互联科技有限公司
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        XY2010238349343<br>国际短信通道账户
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                              class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
                                         <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                              class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
                                         <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                              class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
                                         <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         0.024
-                                        <br>
-                                        XY2010238349343
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a
-                                                class="btn btn-teal waves-effect waves-light btn-xs">国际短信</a>
-                                        <br>
                                         <a
                                                 class="btn btn-success  waves-effect waves-light btn-xs">已完成</a>
 
@@ -399,40 +255,26 @@
                                 </tr>
                                 <tr>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        北京星语互联科技有限公司
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        XY2010238349343<br>国际短信通道账户
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                              class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
                                         <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                              class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
                                         <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                              class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
                                         <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         0.024
-                                        <br>
-                                        XY2010238349343
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a
-                                                class="btn btn-teal waves-effect waves-light btn-xs">国际短信</a>
-                                        <br>
                                         <a
                                                 class="btn btn-success  waves-effect waves-light btn-xs">已完成</a>
 
@@ -444,40 +286,26 @@
                                 </tr>
                                 <tr>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        北京星语互联科技有限公司
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        XY2010238349343<br>国际短信通道账户
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                              class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
                                         <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                              class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
                                         <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                              class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
                                         <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         0.024
-                                        <br>
-                                        XY2010238349343
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a
-                                                class="btn btn-teal waves-effect waves-light btn-xs">国际短信</a>
-                                        <br>
                                         <a
                                                 class="btn btn-success  waves-effect waves-light btn-xs">已完成</a>
 
@@ -489,40 +317,26 @@
                                 </tr>
                                 <tr>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        北京星语互联科技有限公司
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        XY2010238349343<br>国际短信通道账户
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                              class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
                                         <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                              class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
                                         <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                              class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
                                         <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         0.024
-                                        <br>
-                                        XY2010238349343
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a
-                                                class="btn btn-teal waves-effect waves-light btn-xs">国际短信</a>
-                                        <br>
                                         <a
                                                 class="btn btn-success  waves-effect waves-light btn-xs">已完成</a>
 
@@ -534,40 +348,26 @@
                                 </tr>
                                 <tr>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        北京星语互联科技有限公司
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        XY2010238349343<br>国际短信通道账户
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                              class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
                                         <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                              class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
                                         <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                              class="autonumber">45922</span>
+                                        <span data-d-group="4" data-a-sign=" " readonly class="autonumber">45922</span>
                                         <br>
                                         <span data-d-group="4" data-a-sign="¥ " readonly class="autonumber">45922</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         0.024
-                                        <br>
-                                        XY2010238349343
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a
-                                                class="btn btn-teal waves-effect waves-light btn-xs">国际短信</a>
-                                        <br>
                                         <a
                                                 class="btn btn-success  waves-effect waves-light btn-xs">已完成</a>
 
@@ -590,6 +390,7 @@
 
         <!-- start row  错误提示-->
         <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
 
     </div>
 </div> <!-- content -->
@@ -603,49 +404,6 @@
 <script th:src="@{/static/plugins/autoNumeric/autoNumeric.js}"></script>
 
 <script>
-
-    $('#dateQueryStr').daterangepicker({
-        format: 'YYYY-MM-DD',
-        startDate: '2020-11-17',
-        endDate: '2011-11-17',
-        minDate: '2019-01-01',
-        maxDate: '2080-12-31',
-        dateLimit: {
-            days: 365
-        },
-        showDropdowns: true,
-        showWeekNumbers: true,
-        timePicker: false,
-        timePickerIncrement: 1,
-        timePicker12Hour: true,
-        ranges: {
-            '今天': [moment(), moment()],
-            '昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-            '最近7天': [moment().subtract(6, 'days'), moment()],
-            '最近30天': [moment().subtract(29, 'days'), moment()],
-            '本月': [moment().startOf('month'), moment().endOf('month')],
-            '上月': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-        },
-        opens: 'right',
-        buttonClasses: ['btn btn-default'],
-        applyClass: 'btn-small btn-primary',
-        cancelClass: 'btn-small',
-        format: 'YYYY-MM-DD',
-        separator: ' - ',
-        locale: {
-            applyLabel: '确认',
-            cancelLabel: '取消',
-            fromLabel: '从',
-            toLabel: '到',
-            customRangeLabel: '自定义',
-            format: "YYYY-MM-DD",
-            daysOfWeek: ['日', '一', '二', '三', '四', '五', '六'],
-            monthNames: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
-            firstDay: 1
-        }
-    }, function (start, end, label) {
-        //alert('A date range was chosen: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
-    });
 
 
      $(document).ready(function() {
@@ -675,7 +433,6 @@
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
-
 
 
 

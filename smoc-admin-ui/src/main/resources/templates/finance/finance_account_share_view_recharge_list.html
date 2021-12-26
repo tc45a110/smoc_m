@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org"
+>
+<head>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
+    <link th:href="@{/static/css/detail_statistics.css}" rel="stylesheet">
+</head>
+<body style="background-color:#fff">
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 10px;">
+    <div class="container">
+
+        <!-- start row  汇总统计-->
+        <div id="help" class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="detail">
+                    <ul>
+                        <li>
+                            <h2 style="color: #fff">明细统计</h2>
+                            <span></span>
+                            <div class="detailInner">
+                                <a>充值总金额（元）：<span data-d-group="4" data-a-sign="¥ "
+                                                  style="color:#fff;width:80px;background-color:#0095a8;text-align:left"
+                                                  readonly class="autonumber">045922</span></a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  列表数据-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="panel panel-color panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">充值记录</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table table-hover m-10" style="margin-top: -12px;">
+                                <thead>
+                                <tr>
+                                    <th>充值流水号</th>
+                                    <th>充值金额(元)</th>
+                                    <th>到期日期</th>
+                                    <th>充值状态</th>
+                                    <th>操作人</th>
+                                    <th>操作时间</th>
+                                </tr>
+                                <thead>
+                                <tbody>
+                                <tr>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        XY10002021111698343
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">50000</span>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        2022-11-17
+                                    </td>
+
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <a class="btn btn-success  waves-effect waves-light btn-xs">已到账</a>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        孙猴子
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        2021-11-17 14:45:23
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        XY10002021111698343
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">50000</span>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        2022-11-17
+                                    </td>
+
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <a class="btn btn-success  waves-effect waves-light btn-xs">已到账</a>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        孙猴子
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        2021-11-17 14:45:23
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        XY10002021111698343
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">50000</span>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        2022-11-17
+                                    </td>
+
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <a class="btn btn-success  waves-effect waves-light btn-xs">已到账</a>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        孙猴子
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        2021-11-17 14:45:23
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        XY10002021111698343
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">50000</span>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        2022-11-17
+                                    </td>
+
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <a class="btn btn-success  waves-effect waves-light btn-xs">已到账</a>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        孙猴子
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        2021-11-17 14:45:23
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        XY10002021111698343
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">50000</span>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        2022-11-17
+                                    </td>
+
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <a class="btn btn-success  waves-effect waves-light btn-xs">已到账</a>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        孙猴子
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        2021-11-17 14:45:23
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        XY10002021111698343
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">50000</span>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        2022-11-17
+                                    </td>
+
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <a class="btn btn-success  waves-effect waves-light btn-xs">已到账</a>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        孙猴子
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        2021-11-17 14:45:23
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        XY10002021111698343
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">50000</span>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        2022-11-17
+                                    </td>
+
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <a class="btn btn-success  waves-effect waves-light btn-xs">已到账</a>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        孙猴子
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        2021-11-17 14:45:23
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        XY10002021111698343
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">50000</span>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        2022-11-17
+                                    </td>
+
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <a class="btn btn-success  waves-effect waves-light btn-xs">已到账</a>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        孙猴子
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        2021-11-17 14:45:23
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        XY10002021111698343
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">50000</span>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        2022-11-17
+                                    </td>
+
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <a class="btn btn-success  waves-effect waves-light btn-xs">已到账</a>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        孙猴子
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        2021-11-17 14:45:23
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        XY10002021111698343
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">50000</span>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        2022-11-17
+                                    </td>
+
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <a class="btn btn-success  waves-effect waves-light btn-xs">已到账</a>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        孙猴子
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        2021-11-17 14:45:23
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <hr>
+                        </div>
+                        <th:block th:insert="fragments/page_fragments :: page"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+    </div>
+</div> <!-- content -->
+
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<script th:src="@{/static/plugins/moment/moment.js}"></script>
+<script th:src="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.js}"></script>
+<script th:src="@{/static/plugins/bootstrap-inputmask/bootstrap-inputmask.min.js}"></script>
+<script th:src="@{/static/plugins/autoNumeric/autoNumeric.js}"></script>
+<script>
+
+    $(document).ready(function() {
+		$('.autonumber').autoNumeric('init');
+	 });
+
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+
+
+</script>
+</body>
+</html>

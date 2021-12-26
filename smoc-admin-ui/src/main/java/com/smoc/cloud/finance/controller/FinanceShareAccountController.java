@@ -20,6 +20,7 @@ public class FinanceShareAccountController {
 
     /**
      * 财务共享账户列表
+     *
      * @return
      */
     @RequestMapping(value = "/account/share/list", method = RequestMethod.GET)
@@ -35,13 +36,14 @@ public class FinanceShareAccountController {
         params.setCurrentPage(1);
         params.setTotalRows(22);
 
-        view.addObject("pageParams",params);
+        view.addObject("pageParams", params);
 
         return view;
     }
 
     /**
-     * 财务账户分页
+     * 财务共享账户分页
+     *
      * @return
      */
     @RequestMapping(value = "/account/share/page", method = RequestMethod.POST)
@@ -57,12 +59,13 @@ public class FinanceShareAccountController {
         params.setCurrentPage(1);
         params.setTotalRows(22);
 
-        view.addObject("pageParams",params);
+        view.addObject("pageParams", params);
         return view;
     }
 
     /**
-     * 财务账户编辑
+     * 财务共享账户编辑
+     *
      * @return
      */
     @RequestMapping(value = "/account/share/edit/{id}", method = RequestMethod.GET)
@@ -73,25 +76,70 @@ public class FinanceShareAccountController {
     }
 
     /**
-     * 财务账户管理中心
+     * 财务共享账户查看中心
+     *
      * @return
      */
-    @RequestMapping(value = "/account/share/center", method = RequestMethod.GET)
+    @RequestMapping(value = "/account/share/view/center/*", method = RequestMethod.GET)
     public ModelAndView center() {
-        ModelAndView view = new ModelAndView("finance/finance_account_share_center");
+        ModelAndView view = new ModelAndView("finance/finance_account_share_view_center");
 
         return view;
     }
 
     /**
-     * 财务账户查看中心
+     * 财务共享账户基本信息明细
+     *
      * @return
      */
-    @RequestMapping(value = "/account/share/view/center/*", method = RequestMethod.GET)
-    public ModelAndView view() {
-        ModelAndView view = new ModelAndView("finance/finance_account_share_view_center");
+    @RequestMapping(value = "/account/share/view/base/{id}", method = RequestMethod.GET)
+    public ModelAndView view_base(@PathVariable String id, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("finance/finance_account_share_view_base");
 
         return view;
     }
+
+    /**
+     * 财务共享账户充值列表
+     *
+     * @return
+     */
+    @RequestMapping(value = "/account/share/view/recharge/{id}", method = RequestMethod.GET)
+    public ModelAndView view_recharge(@PathVariable String id, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("finance/finance_account_share_view_recharge_list");
+        //查询数据
+        PageParams params = new PageParams<>();
+        params.setPages(3);
+        params.setPageSize(10);
+        params.setStartRow(1);
+        params.setEndRow(10);
+        params.setCurrentPage(1);
+        params.setTotalRows(22);
+
+        view.addObject("pageParams", params);
+        return view;
+    }
+
+    /**
+     * 财务共享账户消费列表
+     *
+     * @return
+     */
+    @RequestMapping(value = "/account/share/view/consume/{id}", method = RequestMethod.GET)
+    public ModelAndView view_consume(@PathVariable String id, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("finance/finance_account_share_view_consume_list");
+        //查询数据
+        PageParams params = new PageParams<>();
+        params.setPages(3);
+        params.setPageSize(10);
+        params.setStartRow(1);
+        params.setEndRow(10);
+        params.setCurrentPage(1);
+        params.setTotalRows(22);
+
+        view.addObject("pageParams", params);
+        return view;
+    }
+
 
 }

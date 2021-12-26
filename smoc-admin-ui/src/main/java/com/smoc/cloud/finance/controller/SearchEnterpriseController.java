@@ -14,7 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class SearchEnterpriseController {
 
     /**
-     * EC检索
+     * EC检索 创建财务共享账户
      * @return
      */
     @RequestMapping(value = "/enterprise/search", method = RequestMethod.GET)
