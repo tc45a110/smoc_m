@@ -8,18 +8,22 @@
     <script th:src="@{/static/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js}"></script>
 </head>
 <body>
+<!-- Loader start 页面加载进度-->
 <th:block th:insert="fragments/common_fragments :: common_loader"/>
-<!-- Start content -->
+<!-- Loader end -->
 
+<!-- Start content -->
 <div class="content" style="margin-top: 60px">
     <div class="container">
+
+        <!-- start row 页面导航-->
         <div class="row fixed-navigation">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">首页 </h4>
+                    <h4 class="page-title">运营数据综合日统计 </h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
-                            首页
+                            运营数据综合日统计
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -27,134 +31,44 @@
             </div>
         </div>
         <!-- end row -->
-        <div class="row" style="position: relative;margin-top: 80px">
 
-            <div class="col-lg-3 col-md-6">
-                <div class="card-box widget-box-two widget-two-info">
-                    <i class="mdi mdi-chart-areaspline widget-two-icon"></i>
-                    <div class="wigdet-two-content text-white">
-                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Statistics">
-                            营收总额（2022年）</p>
-                        <h2 class="text-white">
-                            <span data-plugin="counterup">
-                                <span data-d-group="4" data-a-sign="¥ "
-                                                                style="width:100px;text-align:left"
-                                                                class="autonumber">2045922</span>
-                            </span></h2>
-                        <p class="m-0">截止日期: 2022-05-11</p>
-                    </div>
+        <!-- start row  查询条件-->
+        <div class="row" style="position: relative;margin-top: 80px" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <form th:action="@{/account/page}" id="query_form" method="post">
+                        <div class="row m-b-60">
+                            <div class="col-sm-12">
+                                <div class="form-group  col-sm-4">
+                                    <input type="text" class="form-control" value="选择日期"
+                                           placeholder="" autocomplete="off">
+                                </div>
+                                <div class="form-group col-sm-4 pull-right" style="text-align: right">
+                                    <button class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-search" style="margin-right:5px"></i> 查询
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </form>
                 </div>
-            </div><!-- end col -->
-
-            <div class="col-lg-3 col-md-6">
-                <div class="card-box widget-box-two widget-two-success">
-                    <i class="mdi mdi-account-convert widget-two-icon"></i>
-                    <div class="wigdet-two-content text-white">
-                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="User This Month">
-                            毛利总额（2022年）</p>
-                        <h2 class="text-white">
-                            <span data-plugin="counterup">
-                             <span data-d-group="4" data-a-sign="¥ "
-                                   style="width:100px;text-align:left"
-                                   class="autonumber">1492000</span>
-                            </span></h2>
-                        <p class="m-0">截止日期: 2022-05-11</p>
-                    </div>
-                </div>
-            </div><!-- end col -->
-
-            <div class="col-lg-3 col-md-6">
-                <div class="card-box widget-box-two widget-two-primary">
-                    <i class="mdi mdi-layers widget-two-icon"></i>
-                    <div class="wigdet-two-content text-white">
-                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="User This Month">
-                            发送总量（2022年）</p>
-                        <h2 class="text-white">
-                            <span data-plugin="counterup">
-                            <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                  style="width:90px;text-align:left"
-                                  class="autonumber">459322200</span>
-                            </span></h2>
-                        <p class="m-0">截止日期: 2022-05-11</p>
-                    </div>
-                </div>
-            </div><!-- end col -->
-
-            <div class="col-lg-3 col-md-6">
-                <div class="card-box widget-box-two widget-two-danger">
-                    <i class="mdi mdi-access-point-network widget-two-icon"></i>
-                    <div class="wigdet-two-content text-white">
-                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="User This Month">
-                            欠费总额（后付费）</p>
-                        <h2 class="text-white">
-                            <span data-plugin="counterup">
-                             <span data-d-group="4" data-a-sign="¥ "
-                                   style="width:100px;text-align:left"
-                                   class="autonumber">145922</span>
-                            </span></h2>
-                        <p class="m-0">截止日期: 2022-05-11</p>
-                    </div>
-                </div>
-            </div><!-- end col -->
-
-
+            </div>
         </div>
         <!-- end row -->
-        <div class="row text-center" >
 
-            <div class="col-lg-3 col-md-6">
-                <div class="card-box widget-box-one">
-                    <div class="wigdet-one-content">
-                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow">客户总数</p>
-                        <h2 class="text-teal"><i class="mdi mdi-weather-partlycloudy"  style="padding-right: 5px"></i><span data-plugin="counterup">578</span></h2>
-
-                    </div>
-                </div>
-            </div><!-- end col -->
-
-            <div class="col-lg-3 col-md-6">
-                <div class="card-box widget-box-one">
-                    <div class="wigdet-one-content">
-                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow">新增客户（2022年）</p>
-                        <h2 class="text-custom"><i class="mdi mdi-weather-snowy"  style="padding-right: 5px"></i><span data-plugin="counterup">95</span> </h2>
-
-                    </div>
-                </div>
-            </div><!-- end col -->
-            <div class="col-lg-3 col-md-6">
-                <div class="card-box widget-box-one">
-                    <div class="wigdet-one-content">
-                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow">通道总数</p>
-                        <h2 class="text-brown"><i class="mdi mdi-weather-rainy"  style="padding-right: 5px"></i><span data-plugin="counterup">52</span> </h2>
-
-                    </div>
-                </div>
-            </div><!-- end col -->
-            <div class="col-lg-3 col-md-6">
-                <div class="card-box widget-box-one">
-                    <div class="wigdet-one-content">
-                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow">新增通道（2022年）</p>
-                        <h2 class="text-warning"><i class="mdi mdi-weather-night"  style="padding-right: 5px"></i><span data-plugin="counterup">45</span> </h2>
-
-                    </div>
-                </div>
-            </div><!-- end col -->
-
-        </div>
-        <!-- end row -->
+        <!-- start row  页面内容-->
         <div class="row">
             <div class="col-lg-12">
                 <div class="card-box">
-                    <div id="main1" style="height: 400px;"></div>
+                    <div id="main1" style="height: 480px;"></div>
                 </div>
             </div><!-- end col -->
-            <div class="col-lg-12">
-                <div class="card-box">
-                    <div id="main2" style="height: 400px;"></div>
-                </div>
-            </div><!-- end col -->
-
         </div>
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
         <!-- end row -->
 
 
@@ -171,7 +85,7 @@
     option3 = null;
     option3 = {
         title: {
-            text: '近365天运营数据'
+            text: '2021-12-31之前365天运营数据'
         },
         color: ['#71D5DE', '#59A9E7','#F4979E', '#7DDCB1'],
         legend: {
@@ -241,86 +155,6 @@
     ;
     if (option3 && typeof option3 === "object") {
         myChart3.setOption(option3, true);
-    }
-
-    $(document).ready(function() {
-		$('.autonumber').autoNumeric('init');
-	 });
-
-    var dom4 = document.getElementById("main2");
-    var myChart4 = echarts.init(dom4);
-    var app = {};
-    option4 = null;
-    option4 = {
-        title: {
-            text: '近24月运营数据'
-        },
-        color: ['#71D5DE', '#59A9E7','#F4979E', '#7DDCB1'],
-        legend: {
-            data: ['发送量（百万）', '营收（万元）', '成本（万元）','毛利（万元）']
-        },
-        tooltip: {
-            trigger: 'axis'
-        },
-        toolbox: {
-            show: true,
-            feature: {
-                dataView: {show: true, readOnly: false},
-                saveAsImage: {show: true}
-            }
-        },
-        calculable: true,
-        grid: {
-                top: '60px',
-                left: '24px',
-                right: '24px',
-                bottom: '24px',
-                containLabel: true
-            },
-        xAxis: [
-            {
-                type: 'category',
-                axisLabel: {
-                    interval: 'auto',
-                    rotate: 30
-                },
-                data: ['2020-01', '2020-02', '2020-03', '2020-04', '2020-05', '2020-06', '2020-07', '2020-08', '2020-09', '2020-10', '2020-11', '2020-12','2021-01', '2021-02', '2021-03', '2021-04', '2021-05', '2021-06', '2021-07', '2021-08', '2021-09', '2021-10', '2021-11','2021-12']
-            }
-        ],
-        yAxis: [
-            {
-                type: 'value'
-            }
-        ],
-        series: [
-            {
-              name: '发送量（百万）',
-              type: 'line',
-              stack: 'Total',
-              data: [707, 659, 590, 864, 687, 707, 856, 822, 587, 588, 460, 423,526, 459, 490, 764, 887, 707, 756, 822, 487, 488, 460, 423],
-            },
-             {
-                 name: '营收（万元）',
-                 type: 'line',
-                 stack: 'Total',
-                 data: [260, 259, 390, 364, 487, 307, 256, 322, 487, 388, 460, 223,226, 159, 290, 264, 287, 307, 556, 522, 487, 388, 460, 323],
-             },
-             {
-                 name: '成本（万元）',
-                 type: 'line',
-                 stack: 'Total',
-                 data: [130, 200, 120, 164, 187, 207, 156, 222, 287, 188, 120, 131,226, 129,130, 164, 187, 207, 256,222, 187, 288, 220, 210],
-             },
-             {
-                 name: '毛利（万元）',
-                 type: 'line',
-                 stack: 'Total',
-                 data: [116, 119, 119, 164, 187, 177, 156, 122, 187, 188, 116, 113,116, 119, 119, 164, 187, 177, 156, 182, 187, 181, 116, 113],
-             },
-        ]
-    };
-    if (option4 && typeof option4 === "object") {
-        myChart4.setOption(option4, true);
     }
 
     $(document).ready(function() {

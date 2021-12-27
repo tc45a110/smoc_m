@@ -8,18 +8,22 @@
     <script th:src="@{/static/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js}"></script>
 </head>
 <body>
+<!-- Loader start 页面加载进度-->
 <th:block th:insert="fragments/common_fragments :: common_loader"/>
-<!-- Start content -->
+<!-- Loader end -->
 
+<!-- Start content -->
 <div class="content" style="margin-top: 60px">
     <div class="container">
+
+        <!-- start row 页面导航-->
         <div class="row fixed-navigation">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">运营数据综合统计 </h4>
+                    <h4 class="page-title">运营数据综合月统计 </h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
-                            运营数据综合统计
+                            运营数据综合月统计
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -36,8 +40,8 @@
                         <div class="row m-b-60">
                             <div class="col-sm-12">
                                 <div class="form-group  col-sm-4">
-                                    <input type="text" class="form-control"
-                                           placeholder="时间" autocomplete="off">
+                                    <input type="text" class="form-control" value="选择月份"
+                                           placeholder="" autocomplete="off">
                                 </div>
                                 <div class="form-group col-sm-4 pull-right" style="text-align: right">
                                     <button class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
@@ -53,6 +57,7 @@
         </div>
         <!-- end row -->
 
+        <!-- start row  页面内容-->
         <div class="row">
             <div class="col-lg-12">
                 <div class="card-box">
@@ -60,6 +65,10 @@
                 </div>
             </div><!-- end col -->
         </div>
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
         <!-- end row -->
 
 
@@ -70,17 +79,17 @@
 <script th:src="@{/static/plugins/autoNumeric/autoNumeric.js}"></script>
 <script type="text/javascript">
 
-    var dom3 = document.getElementById("main1");
-    var myChart3 = echarts.init(dom3);
+     var dom4 = document.getElementById("main1");
+    var myChart4 = echarts.init(dom4);
     var app = {};
-    option3 = null;
-    option3 = {
+    option4 = null;
+    option4 = {
         title: {
-            text: '近30天运营数据'
+            text: '近24月运营数据'
         },
         color: ['#71D5DE', '#59A9E7','#F4979E', '#7DDCB1'],
         legend: {
-          data: ['发送量（百万）', '营收（万元）', '成本（万元）','毛利（万元）']
+            data: ['发送量（百万）', '营收（万元）', '成本（万元）','毛利（万元）']
         },
         tooltip: {
             trigger: 'axis'
@@ -92,6 +101,7 @@
                 saveAsImage: {show: true}
             }
         },
+        calculable: true,
         grid: {
                 top: '60px',
                 left: '24px',
@@ -99,15 +109,14 @@
                 bottom: '24px',
                 containLabel: true
             },
-        calculable: true,
         xAxis: [
             {
                 type: 'category',
                 axisLabel: {
-                  interval: 'auto',
-                  rotate: 30
-                 },
-                data: ['2020-11-01', '2020-11-02', '2020-11-03', '2020-11-04', '2020-11-05', '2020-11-06', '2020-11-07', '2020-11-08', '2020-11-09', '2020-11-10', '2020-11-11', '2020-11-12','2020-11-13', '2020-11-14', '2020-11-15', '2020-11-16', '2020-11-17', '2020-11-18', '2020-11-19', '2020-11-20', '2020-11-21', '2020-11-22', '2020-11-23','2020-11-24', '2020-11-25', '2020-11-26', '2020-11-27', '2020-11-28', '2020-11-29','2020-11-30']
+                    interval: 'auto',
+                    rotate: 30
+                },
+                data: ['2020-01', '2020-02', '2020-03', '2020-04', '2020-05', '2020-06', '2020-07', '2020-08', '2020-09', '2020-10', '2020-11', '2020-12','2021-01', '2021-02', '2021-03', '2021-04', '2021-05', '2021-06', '2021-07', '2021-08', '2021-09', '2021-10', '2021-11','2021-12']
             }
         ],
         yAxis: [
@@ -115,36 +124,35 @@
                 type: 'value'
             }
         ],
-         series: [
+        series: [
             {
               name: '发送量（百万）',
               type: 'line',
               stack: 'Total',
-              data: [707, 659, 590, 864, 687, 707, 856, 822, 587, 588, 460, 423,526, 459, 490, 764, 887, 707, 756, 822, 487, 488, 460, 423,426, 459, 490, 564, 787, 707],
+              data: [707, 659, 590, 864, 687, 707, 856, 822, 587, 588, 460, 423,526, 459, 490, 764, 887, 707, 756, 822, 487, 488, 460, 423],
             },
              {
                  name: '营收（万元）',
                  type: 'line',
                  stack: 'Total',
-                 data: [260, 259, 390, 364, 487, 307, 256, 322, 487, 388, 460, 223,226, 159, 290, 264, 287, 307, 556, 522, 487, 388, 460, 323,326, 359, 290, 464, 487, 307],
+                 data: [260, 259, 390, 364, 487, 307, 256, 322, 487, 388, 460, 223,226, 159, 290, 264, 287, 307, 556, 522, 487, 388, 460, 323],
              },
              {
                  name: '成本（万元）',
                  type: 'line',
                  stack: 'Total',
-                 data: [130, 200, 120, 164, 187, 207, 156, 222, 287, 188, 120, 131,226, 129,130, 164, 187, 207, 256,222, 187, 288, 220, 210,226, 225, 236, 264, 287, 277],
+                 data: [130, 200, 120, 164, 187, 207, 156, 222, 287, 188, 120, 131,226, 129,130, 164, 187, 207, 256,222, 187, 288, 220, 210],
              },
              {
                  name: '毛利（万元）',
                  type: 'line',
                  stack: 'Total',
-                 data: [116, 119, 119, 164, 187, 177, 156, 122, 187, 188, 116, 113,116, 119, 119, 164, 187, 177, 156, 182, 187, 181, 116, 113,116, 119, 119, 164, 127, 170],
+                 data: [116, 119, 119, 164, 187, 177, 156, 122, 187, 188, 116, 113,116, 119, 119, 164, 187, 177, 156, 182, 187, 181, 116, 113],
              },
         ]
     };
-    ;
-    if (option3 && typeof option3 === "object") {
-        myChart3.setOption(option3, true);
+    if (option4 && typeof option4 === "object") {
+        myChart4.setOption(option4, true);
     }
 
     $(document).ready(function() {

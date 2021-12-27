@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <link th:href="@{/static/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css}" rel="stylesheet">
+    <script th:src="@{/static/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js}"></script>
+    <link th:href="@{/static/css/detail_statistics.css}" rel="stylesheet">
+</head>
+<body>
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <!-- start row 页面导航-->
+        <div class="row fixed-navigation">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">运营数据综合年查询 </h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            运营数据综合年查询
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  查询条件-->
+        <div class="row" style="position: relative;margin-top: 80px" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <form th:action="@{/account/page}" id="query_form" method="post">
+                        <div class="row m-b-60">
+                            <div class="col-sm-12">
+                                <div class="form-group  col-sm-4">
+                                    <input type="text" class="form-control" value="2021"
+                                           placeholder="请选择年份" autocomplete="off">
+                                </div>
+                                <div class="form-group col-sm-4 pull-right" style="text-align: right">
+                                    <button class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-search" style="margin-right:5px"></i> 查询
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  汇总统计-->
+        <div  id="help"  class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="detail">
+                    <ul>
+                        <li>
+                            <h2 style="color: #fff">运营数据年总汇总统计</h2>
+                            <span></span>
+                            <div class="detailInner">
+                                <a>总发送条数：<span style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
+                                               data-d-group="4" data-a-sign=" " data-v-min="0"
+                                               data-v-max="999999999"
+                                               class="autonumber">2045922</span></a><i></i>
+                                <a>总营收金额：<span data-d-group="4" data-a-sign="¥ "
+                                               style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
+                                               class="autonumber">20000000.00</span></a><i></i>
+                                <a>总成本金额：<span data-d-group="4" data-a-sign="¥ "
+                                               style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
+                                               class="autonumber">20000000.00</span></a><i></i>
+                                <a>总利润金额：<span data-d-group="4" data-a-sign="¥ "
+                                               style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
+                                               class="autonumber">20000000.00</span></a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  页面内容-->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card-box">
+                    <div id="main1" style="height: 480px;"></div>
+                </div>
+            </div><!-- end col -->
+        </div>
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<script th:src="@{/static/assets/js/jquery.min.js}"></script>
+<script th:src="@{/static/echarts/echarts.min.js}"></script>
+<script th:src="@{/static/plugins/autoNumeric/autoNumeric.js}"></script>
+<script type="text/javascript">
+
+    $(document).ready(function() {
+		$('.autonumber').autoNumeric('init');
+	 });
+
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+</script>
+
+</body>
+</html>
