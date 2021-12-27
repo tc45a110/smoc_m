@@ -68,7 +68,7 @@
                     <i class="mdi mdi-layers widget-two-icon"></i>
                     <div class="wigdet-two-content text-white">
                         <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="User This Month">
-                            客户发送总量（2022年）</p>
+                            发送总量（2022年）</p>
                         <h2 class="text-white">
                             <span data-plugin="counterup">
                             <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
@@ -97,6 +97,48 @@
                 </div>
             </div><!-- end col -->
 
+
+        </div>
+        <!-- end row -->
+        <div class="row text-center" >
+
+            <div class="col-lg-3 col-md-6">
+                <div class="card-box widget-box-one">
+                    <div class="wigdet-one-content">
+                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow">客户总数</p>
+                        <h2 class="text-teal"><i class="mdi mdi-weather-partlycloudy"  style="padding-right: 5px"></i><span data-plugin="counterup">578</span></h2>
+
+                    </div>
+                </div>
+            </div><!-- end col -->
+
+            <div class="col-lg-3 col-md-6">
+                <div class="card-box widget-box-one">
+                    <div class="wigdet-one-content">
+                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow">新增客户（2022年）</p>
+                        <h2 class="text-custom"><i class="mdi mdi-weather-snowy"  style="padding-right: 5px"></i><span data-plugin="counterup">95</span> </h2>
+
+                    </div>
+                </div>
+            </div><!-- end col -->
+            <div class="col-lg-3 col-md-6">
+                <div class="card-box widget-box-one">
+                    <div class="wigdet-one-content">
+                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow">通道总数</p>
+                        <h2 class="text-brown"><i class="mdi mdi-weather-rainy"  style="padding-right: 5px"></i><span data-plugin="counterup">52</span> </h2>
+
+                    </div>
+                </div>
+            </div><!-- end col -->
+            <div class="col-lg-3 col-md-6">
+                <div class="card-box widget-box-one">
+                    <div class="wigdet-one-content">
+                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow">新增通道（2022年）</p>
+                        <h2 class="text-warning"><i class="mdi mdi-weather-night"  style="padding-right: 5px"></i><span data-plugin="counterup">45</span> </h2>
+
+                    </div>
+                </div>
+            </div><!-- end col -->
 
         </div>
         <!-- end row -->
@@ -133,7 +175,7 @@
         },
         color: ['#71D5DE', '#59A9E7','#F4979E', '#7DDCB1'],
         legend: {
-          data: ['发送量（W）', '营收（元）', '成本（元）','毛利（元）']
+          data: ['发送量（百万）', '营收（万元）', '成本（万元）','毛利（万元）']
         },
         tooltip: {
             trigger: 'axis'
@@ -144,6 +186,13 @@
                 saveAsImage: {show: true}
             }
         },
+        grid: {
+                top: '60px',
+                left: '24px',
+                right: '24px',
+                bottom: '24px',
+                containLabel: true
+            },
         calculable: true,
         xAxis: [
             {
@@ -162,28 +211,28 @@
         ],
          series: [
             {
-              name: '发送量（W）',
+              name: '发送量（百万）',
               type: 'line',
               stack: 'Total',
-              data: [426, 459, 190, 264, 287, 707, 856, 822, 487, 188, 460, 423,126, 459, 490, 264, 287, 707, 1756, 1822, 487, 488, 460, 423,426, 459, 490, 264, 287, 707],
+              data: [707, 659, 590, 864, 687, 707, 856, 822, 587, 588, 460, 423,526, 459, 490, 764, 887, 707, 756, 822, 487, 488, 460, 423,426, 459, 490, 564, 787, 707],
             },
              {
-                 name: '营收（元）',
+                 name: '营收（万元）',
                  type: 'line',
                  stack: 'Total',
-                 data: [26, 59, 90, 264, 287, 707, 1756, 1822, 487, 188, 60, 23,26, 59, 90, 264, 287, 707, 1756, 1822, 487, 188, 60, 23,26, 59, 90, 264, 287, 707],
+                 data: [260, 259, 390, 364, 487, 307, 256, 322, 487, 388, 460, 223,226, 159, 290, 264, 287, 307, 556, 522, 487, 388, 460, 323,326, 359, 290, 464, 487, 307],
              },
              {
-                 name: '成本（元）',
+                 name: '成本（万元）',
                  type: 'line',
                  stack: 'Total',
-                 data: [13, 29, 40, 164, 187, 207, 756, 822, 287, 88, 20, 13,6, 9,30, 64, 87, 207, 656,622, 187, 88, 20, 10,6, 25, 36, 64, 87, 77],
+                 data: [130, 200, 120, 164, 187, 207, 156, 222, 287, 188, 120, 131,226, 129,130, 164, 187, 207, 256,222, 187, 288, 220, 210,226, 225, 236, 264, 287, 277],
              },
              {
-                 name: '毛利（元）',
+                 name: '毛利（万元）',
                  type: 'line',
                  stack: 'Total',
-                 data: [6, 9, 9, 64, 87, 77, 56, 22, 87, 88, 6, 3,6, 9, 9, 64, 87, 77, 56, 182, 87, 18, 6, 3,6, 9, 9, 64, 27, 70],
+                 data: [116, 119, 119, 164, 187, 177, 156, 122, 187, 188, 116, 113,116, 119, 119, 164, 187, 177, 156, 182, 187, 181, 116, 113,116, 119, 119, 164, 127, 170],
              },
         ]
     };
@@ -198,11 +247,11 @@
     option4 = null;
     option4 = {
         title: {
-            text: '近12月运营数据'
+            text: '近24月运营数据'
         },
         color: ['#71D5DE', '#59A9E7','#F4979E', '#7DDCB1'],
         legend: {
-            data: ['发送量（W）', '营收（元）', '成本（元）','毛利（元）']
+            data: ['发送量（百万）', '营收（万元）', '成本（万元）','毛利（万元）']
         },
         tooltip: {
             trigger: 'axis'
@@ -214,6 +263,13 @@
             }
         },
         calculable: true,
+        grid: {
+                top: '60px',
+                left: '24px',
+                right: '24px',
+                bottom: '24px',
+                containLabel: true
+            },
         xAxis: [
             {
                 type: 'category',
@@ -221,7 +277,7 @@
                     interval: 'auto',
                     rotate: 30
                 },
-                data: ['2020-11-01', '2020-11-02', '2020-11-03', '2020-11-04', '2020-11-05', '2020-11-06', '2020-11-07', '2020-11-08', '2020-11-09', '2020-11-10', '2020-11-11', '2020-11-12','2020-11-13', '2020-11-14', '2020-11-15', '2020-11-16', '2020-11-17', '2020-11-18', '2020-11-19', '2020-11-20', '2020-11-21', '2020-11-22', '2020-11-23','2020-11-24', '2020-11-25', '2020-11-26', '2020-11-27', '2020-11-28', '2020-11-29','2020-11-30']
+                data: ['2020-01', '2020-02', '2020-03', '2020-04', '2020-05', '2020-06', '2020-07', '2020-08', '2020-09', '2020-10', '2020-11', '2020-12','2021-01', '2021-02', '2021-03', '2021-04', '2021-05', '2021-06', '2021-07', '2021-08', '2021-09', '2021-10', '2021-11','2021-12']
             }
         ],
         yAxis: [
@@ -231,29 +287,29 @@
         ],
         series: [
             {
-                name: '发送量（W）',
-                type: 'line',
-                stack: 'Total',
-                data: [426, 459, 190, 264, 287, 707, 856, 822, 487, 188, 460, 423,126, 459, 490, 264, 287, 707, 1756, 1822, 487, 488, 460, 423,426, 459, 490, 264, 287, 707],
+              name: '发送量（百万）',
+              type: 'line',
+              stack: 'Total',
+              data: [707, 659, 590, 864, 687, 707, 856, 822, 587, 588, 460, 423,526, 459, 490, 764, 887, 707, 756, 822, 487, 488, 460, 423],
             },
-            {
-                name: '营收（元）',
-                type: 'line',
-                stack: 'Total',
-                data: [26, 59, 90, 264, 287, 707, 1756, 1822, 487, 188, 60, 23,26, 59, 90, 264, 287, 707, 1756, 1822, 487, 188, 60, 23,26, 59, 90, 264, 287, 707],
-            },
-            {
-                name: '成本（元）',
-                type: 'line',
-                stack: 'Total',
-                data: [13, 29, 40, 164, 187, 207, 756, 822, 287, 88, 20, 13,6, 9,30, 64, 87, 207, 656,622, 187, 88, 20, 10,6, 25, 36, 64, 87, 77],
-            },
-            {
-                name: '毛利（元）',
-                type: 'line',
-                stack: 'Total',
-                data: [6, 9, 9, 64, 87, 77, 56, 22, 87, 88, 6, 3,6, 9, 9, 64, 87, 77, 56, 182, 87, 18, 6, 3,6, 9, 9, 64, 27, 70],
-            },
+             {
+                 name: '营收（万元）',
+                 type: 'line',
+                 stack: 'Total',
+                 data: [260, 259, 390, 364, 487, 307, 256, 322, 487, 388, 460, 223,226, 159, 290, 264, 287, 307, 556, 522, 487, 388, 460, 323],
+             },
+             {
+                 name: '成本（万元）',
+                 type: 'line',
+                 stack: 'Total',
+                 data: [130, 200, 120, 164, 187, 207, 156, 222, 287, 188, 120, 131,226, 129,130, 164, 187, 207, 256,222, 187, 288, 220, 210],
+             },
+             {
+                 name: '毛利（万元）',
+                 type: 'line',
+                 stack: 'Total',
+                 data: [116, 119, 119, 164, 187, 177, 156, 122, 187, 188, 116, 113,116, 119, 119, 164, 187, 177, 156, 182, 187, 181, 116, 113],
+             },
         ]
     };
     if (option4 && typeof option4 === "object") {
