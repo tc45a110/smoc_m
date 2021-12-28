@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/js/month-picker/bootstrap-datepicker3.min.css}" rel="stylesheet">
+    <link th:href="@{/static/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css}" rel="stylesheet">
+    <script th:src="@{/static/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js}"></script>
+    <style>
+        .bg{
+            background:-webkit-linear-gradient(left,#fff, #f5707a);/*new gradient for Webkit*/
+            background: -o-linear-gradient(right, #fff, #f5707a); /* Opera 11.1 - 12.0 */
+            background: -moz-linear-gradient(left, #fff, #f5707a);
+            background: linear-gradient(to right, #fff, #f5707a); /* 标准的语法 */
+        }
+
+
+
+
+
+    </style>
+</head>
+<body>
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <!-- start row 页面导航-->
+        <div class="row fixed-navigation">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">投诉全国分布统计 </h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            投诉全国分布统计
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  查询条件-->
+        <div class="row" style="position: relative;margin-top: 80px" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <form id="query_form" method="post">
+                        <div class="row m-b-60">
+                            <div class="col-sm-12">
+                                <div class="form-group  col-sm-4">
+                                    <input id="form_datetime" type="text" class="form-control" value="2021-12"
+                                           placeholder="" autocomplete="off">
+                                </div>
+                                <div class="form-group col-sm-4 pull-right" style="text-align: right">
+                                    <button class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-search" style="margin-right:5px"></i> 查询
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  页面内容-->
+        <div class="row">
+            <div class="col-lg-9">
+                <div class="card-box">
+                    <div id="main1" style="height: 548px;"></div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="panel-body card-box">
+                    <div class="table-responsive">
+                        <table class="table table table-hover m-10" style="margin-top: -12px;">
+                            <tbody>
+                            <tr>
+                                <td style="text-align:left">
+                                    <div style="float:left;line-height:24px;"> <span style="float:left;">北京</span> <span class="bg" style="float:left;width:160px;height:12px;margin-left:10px;margin-top:6px"></span> <span style="float:left;color:#26a69a;font-size:14px;font-weight:600;margin-left:5px">235</span></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:left">
+                                    <div style="float:left;line-height:24px;"> <span style="float:left;">上海</span> <span class="bg" style="float:left;width:120px;height:12px;margin-left:10px;margin-top:6px"></span> <span style="float:left;color:#26a69a;font-size:14px;font-weight:600;margin-left:5px">165</span></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:left">
+                                    <div style="float:left;line-height:24px;"> <span style="float:left;">新疆</span> <span class="bg" style="float:left;width:110px;height:12px;margin-left:10px;margin-top:6px"></span> <span style="float:left;color:#26a69a;font-size:14px;font-weight:600;margin-left:5px">155</span></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:left">
+                                    <div style="float:left;line-height:24px;"> <span style="float:left;">湖北</span> <span class="bg" style="float:left;width:100px;height:12px;margin-left:10px;margin-top:6px"></span> <span style="float:left;color:#26a69a;font-size:14px;font-weight:600;margin-left:5px">145</span></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:left">
+                                    <div style="float:left;line-height:24px;"> <span style="float:left;">广东</span> <span class="bg" style="float:left;width:96px;height:12px;margin-left:10px;margin-top:6px"></span> <span style="float:left;color:#26a69a;font-size:14px;font-weight:600;margin-left:5px">140</span></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:left">
+                                    <div style="float:left;line-height:24px;"> <span style="float:left;">安徽</span> <span class="bg" style="float:left;width:90px;height:12px;margin-left:10px;margin-top:6px"></span> <span style="float:left;color:#26a69a;font-size:14px;font-weight:600;margin-left:5px">130</span></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:left">
+                                    <div style="float:left;line-height:24px;"> <span style="float:left;">江苏</span> <span class="bg" style="float:left;width:80px;height:12px;margin-left:10px;margin-top:6px"></span> <span style="float:left;color:#26a69a;font-size:14px;font-weight:600;margin-left:5px">110</span></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:left">
+                                    <div style="float:left;line-height:24px;"> <span style="float:left;">山东</span> <span class="bg" style="float:left;width:60px;height:12px;margin-left:10px;margin-top:6px"></span> <span style="float:left;color:#26a69a;font-size:14px;font-weight:600;margin-left:5px">96</span></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:left">
+                                    <div style="float:left;line-height:24px;"> <span style="float:left;">河北</span> <span class="bg" style="float:left;width:50px;height:12px;margin-left:10px;margin-top:6px"></span> <span style="float:left;color:#26a69a;font-size:14px;font-weight:600;margin-left:5px">90</span></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:left">
+                                    <div style="float:left;line-height:24px;"> <span style="float:left;">陕西</span> <span class="bg" style="float:left;width:45px;height:12px;margin-left:10px;margin-top:6px"></span> <span style="float:left;color:#26a69a;font-size:14px;font-weight:600;margin-left:5px">86</span></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:left">
+                                    <div style="float:left;line-height:24px;"> <span style="float:left;">宁夏</span> <span class="bg" style="float:left;width:30px;height:12px;margin-left:10px;margin-top:6px"></span> <span style="float:left;color:#26a69a;font-size:14px;font-weight:600;margin-left:5px">66</span></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:left">
+                                    <div style="float:left;line-height:24px;"> <span style="float:left;">青海</span> <span class="bg" style="float:left;width:10px;height:12px;margin-left:10px;margin-top:6px"></span> <span style="float:left;color:#26a69a;font-size:14px;font-weight:600;margin-left:5px">46</span></div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end row -->
+
+    <!-- start row  错误提示-->
+    <th:block th:insert="fragments/common_fragments :: common_error"/>
+    <!-- end row -->
+
+
+</div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<script th:src="@{/static/echarts/echarts.min.js}"></script>
+<script th:src="@{/static/echarts/china.js}"></script>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<script th:src="@{/static/plugins/autoNumeric/autoNumeric.js}"></script>
+<script th:src="@{/static/js/month-picker/bootstrap-datepicker.js}"></script>
+<script th:src="@{/static/js/month-picker/bootstrap-datepicker.zh-CN.js}"></script>
+<script type="text/javascript">
+
+   var dataList=[
+            {name:"南海诸岛",value:0},
+            {name: '北京', value: randomValue()},
+            {name: '天津', value: randomValue()},
+            {name: '上海', value: randomValue()},
+            {name: '重庆', value: randomValue()},
+            {name: '河北', value: randomValue()},
+            {name: '河南', value: randomValue()},
+            {name: '云南', value: randomValue()},
+            {name: '辽宁', value: randomValue()},
+            {name: '黑龙江', value: randomValue()},
+            {name: '湖南', value: randomValue()},
+            {name: '安徽', value: randomValue()},
+            {name: '山东', value: randomValue()},
+            {name: '新疆', value: randomValue()},
+            {name: '江苏', value: randomValue()},
+            {name: '浙江', value: randomValue()},
+            {name: '江西', value: randomValue()},
+            {name: '湖北', value: randomValue()},
+            {name: '广西', value: randomValue()},
+            {name: '甘肃', value: randomValue()},
+            {name: '山西', value: randomValue()},
+            {name: '内蒙古', value: randomValue()},
+            {name: '陕西', value: randomValue()},
+            {name: '吉林', value: randomValue()},
+            {name: '福建', value: randomValue()},
+            {name: '贵州', value: randomValue()},
+            {name: '广东', value: randomValue()},
+            {name: '青海', value: randomValue()},
+            {name: '西藏', value: randomValue()},
+            {name: '四川', value: randomValue()},
+            {name: '宁夏', value: randomValue()},
+            {name: '海南', value: randomValue()},
+            {name: '台湾', value: randomValue()},
+            {name: '香港', value: randomValue()},
+            {name: '澳门', value: randomValue()}
+    ]
+    function randomValue() {
+      return Math.round(Math.random()*1000);
+    }
+
+    var myChart = echarts.init(document.getElementById('main1'));
+    option = {
+            tooltip: {
+                    formatter:function(params,ticket, callback){
+                        return params.seriesName+'<br />'+params.name+'：'+params.value
+                    }//数据格式化
+                },
+            visualMap: {
+                min: 0,
+                max: 1500,
+                left: 'left',
+                top: 'bottom',
+                text: ['高','低'],//取值范围的文字
+                inRange: {
+                    color: ['#fff', '#f5707a']//取值范围的颜色
+                },
+                show:true//图注
+            },
+            geo: {
+                map: 'china',
+                roam: false,//不开启缩放和平移
+                zoom:1.23,//视角缩放比例
+                label: {
+                    normal: {
+                        show: true,
+                        fontSize:'10',
+                        color: 'rgba(0,0,0,0.7)'
+                    }
+                },
+                itemStyle: {
+                    normal:{
+                        borderColor: 'rgba(0, 0, 0, 0.2)'
+                    },
+                    emphasis:{
+                        areaColor: '#F3B329',//鼠标选择区域颜色
+                        shadowOffsetX: 0,
+                        shadowOffsetY: 0,
+                        shadowBlur: 20,
+                        borderWidth: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            },
+            series : [
+                {
+                    name: '投诉量',
+                    type: 'map',
+                    geoIndex: 0,
+                    data:dataList
+                }
+            ]
+        };
+        myChart.setOption(option);
+        myChart.on('click', function (params) {
+            alert(params.name);
+        });
+
+    $(document).ready(function() {
+
+         $("#form_datetime").datepicker({
+            startView: 'years',  //起始选择范围
+            maxViewMode: 'years', //最大选择范围
+            minViewMode: 'months', //最小选择范围
+            todayHighlight: true,// 当前时间高亮显示
+            autoclose: 'true',// 选择时间后弹框自动消失
+            format: 'yyyy-mm',// 时间格式
+            language: 'zh-CN',// 汉化
+            todayBtn: "linked",//显示今天 按钮
+            clearBtn: true,// 清除按钮，和今天 按钮只能显示一个
+        });
+
+		$('.autonumber').autoNumeric('init');
+	 });
+
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+</script>
+
+</body>
+</html>

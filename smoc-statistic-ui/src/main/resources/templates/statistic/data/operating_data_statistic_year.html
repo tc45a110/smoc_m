@@ -37,11 +37,11 @@
         <div class="row" style="position: relative;margin-top: 80px" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
                 <div class="card-box">
-                    <form th:action="@{/account/page}" id="query_form" method="post">
+                    <form id="query_form" method="post">
                         <div class="row m-b-60">
                             <div class="col-sm-12">
                                 <div class="form-group  col-sm-4">
-                                    <input type="text" class="form-control" value="2021"
+                                    <input id="datetimepicker" type="text" class="form-control" value="2021" readonly
                                            placeholder="请选择年份" autocomplete="off">
                                 </div>
                                 <div class="form-group col-sm-4 pull-right" style="text-align: right">
@@ -72,14 +72,14 @@
                                                data-v-max="999999999"
                                                class="autonumber">2045922</span></a><i></i>
                                 <a>总营收金额：<span data-d-group="4" data-a-sign="¥ "
-                                               style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
+                                               style="color:#fff;width:120px;background-color:#0095a8;text-align:left"
                                                class="autonumber">20000000.00</span></a><i></i>
                                 <a>总成本金额：<span data-d-group="4" data-a-sign="¥ "
-                                               style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
-                                               class="autonumber">20000000.00</span></a><i></i>
+                                               style="color:#fff;width:120px;background-color:#0095a8;text-align:left"
+                                               class="autonumber">200000.00</span></a><i></i>
                                 <a>总利润金额：<span data-d-group="4" data-a-sign="¥ "
-                                               style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
-                                               class="autonumber">20000000.00</span></a>
+                                               style="color:#fff;width:120px;background-color:#0095a8;text-align:left"
+                                               class="autonumber">2000000.00</span></a>
                             </div>
                         </li>
                     </ul>
@@ -88,13 +88,218 @@
         </div>
         <!-- end row -->
 
-        <!-- start row  页面内容-->
         <div class="row">
             <div class="col-lg-12">
-                <div class="card-box">
-                    <div id="main1" style="height: 480px;"></div>
-                </div>
+
+                <!--Pricing Column-->
+                <article class="pricing-column col-lg-3 col-md-4" style="margin-bottom: 1px;">
+                    <div class="inner-box card-box" style="padding: 0 0 20px">
+                        <div class="plan-header text-center">
+                            <h3 class="plan-title" style="font-size: 25px">2021-01</h3>
+                        </div>
+                        <ul class="plan-stats list-unstyled" style="padding: 10px 80px 15px;">
+                            <li>发送量：58,892,506</li>
+                            <li>营收额：147,945.20</li>
+                            <li>毛利：2009,5450.35</li>
+                            <li>净毛利：1809,5450.35</li>
+                        </ul>
+
+                        <div class="text-center">
+                            <a class="btn btn-info btn-bordred btn-rounded waves-effect waves-light">详情</a>
+                        </div>
+                    </div>
+                </article>
+                <article class="pricing-column col-lg-3 col-md-4" style="margin-bottom: 1px;">
+                    <div class="inner-box card-box" style="padding: 0 0 20px">
+                        <div class="plan-header text-center">
+                            <h3 class="plan-title" style="font-size: 25px">2021-02</h3>
+                        </div>
+                        <ul class="plan-stats list-unstyled" style="padding: 10px 80px 15px;">
+                            <li>发送量：58,892,506</li>
+                            <li>营收额：147,945.20</li>
+                            <li>毛利：2009,5450.35</li>
+                            <li>净毛利：1809,5450.35</li>
+                        </ul>
+
+                        <div class="text-center">
+                            <a class="btn btn-info btn-bordred btn-rounded waves-effect waves-light">详情</a>
+                        </div>
+                    </div>
+                </article>
+                <article class="pricing-column col-lg-3 col-md-4" style="margin-bottom: 1px;">
+                    <div class="inner-box card-box" style="padding: 0 0 20px">
+                        <div class="plan-header text-center">
+                            <h3 class="plan-title" style="font-size: 25px">2021-03</h3>
+                        </div>
+                        <ul class="plan-stats list-unstyled" style="padding: 10px 80px 15px;">
+                            <li>发送量：58,892,506</li>
+                            <li>营收额：147,945.20</li>
+                            <li>毛利：2009,5450.35</li>
+                            <li>净毛利：1809,5450.35</li>
+                        </ul>
+
+                        <div class="text-center">
+                            <a class="btn btn-info btn-bordred btn-rounded waves-effect waves-light">详情</a>
+                        </div>
+                    </div>
+                </article>
+                <article class="pricing-column col-lg-3 col-md-4" style="margin-bottom: 1px;">
+                    <div class="inner-box card-box" style="padding: 0 0 20px">
+                        <div class="plan-header text-center">
+                            <h3 class="plan-title" style="font-size: 25px">2021-04</h3>
+                        </div>
+                        <ul class="plan-stats list-unstyled" style="padding: 10px 80px 15px;">
+                            <li>发送量：58,892,506</li>
+                            <li>营收额：147,945.20</li>
+                            <li>毛利：2009,5450.35</li>
+                            <li>净毛利：1809,5450.35</li>
+                        </ul>
+
+                        <div class="text-center">
+                            <a class="btn btn-info btn-bordred btn-rounded waves-effect waves-light">详情</a>
+                        </div>
+                    </div>
+                </article>
+                <article class="pricing-column col-lg-3 col-md-4" style="margin-bottom: 1px;">
+                    <div class="inner-box card-box" style="padding: 0 0 20px">
+                        <div class="plan-header text-center">
+                            <h3 class="plan-title" style="font-size: 25px">2021-05</h3>
+                        </div>
+                        <ul class="plan-stats list-unstyled" style="padding: 10px 80px 15px;">
+                            <li>发送量：58,892,506</li>
+                            <li>营收额：147,945.20</li>
+                            <li>毛利：2009,5450.35</li>
+                            <li>净毛利：1809,5450.35</li>
+                        </ul>
+
+                        <div class="text-center">
+                            <a class="btn btn-info btn-bordred btn-rounded waves-effect waves-light">详情</a>
+                        </div>
+                    </div>
+                </article>
+                <article class="pricing-column col-lg-3 col-md-4" style="margin-bottom: 1px;">
+                    <div class="inner-box card-box" style="padding: 0 0 20px">
+                        <div class="plan-header text-center">
+                            <h3 class="plan-title" style="font-size: 25px">2021-06</h3>
+                        </div>
+                        <ul class="plan-stats list-unstyled" style="padding: 10px 80px 15px;">
+                            <li>发送量：58,892,506</li>
+                            <li>营收额：147,945.20</li>
+                            <li>毛利：2009,5450.35</li>
+                            <li>净毛利：1809,5450.35</li>
+                        </ul>
+
+                        <div class="text-center">
+                            <a class="btn btn-info btn-bordred btn-rounded waves-effect waves-light">详情</a>
+                        </div>
+                    </div>
+                </article>
+                <article class="pricing-column col-lg-3 col-md-4" style="margin-bottom: 1px;">
+                    <div class="inner-box card-box" style="padding: 0 0 20px">
+                        <div class="plan-header text-center">
+                            <h3 class="plan-title" style="font-size: 25px">2021-07</h3>
+                        </div>
+                        <ul class="plan-stats list-unstyled" style="padding: 10px 80px 15px;">
+                            <li>发送量：58,892,506</li>
+                            <li>营收额：147,945.20</li>
+                            <li>毛利：2009,5450.35</li>
+                            <li>净毛利：1809,5450.35</li>
+                        </ul>
+
+                        <div class="text-center">
+                            <a class="btn btn-info btn-bordred btn-rounded waves-effect waves-light">详情</a>
+                        </div>
+                    </div>
+                </article>
+                <article class="pricing-column col-lg-3 col-md-4" style="margin-bottom: 1px;">
+                    <div class="inner-box card-box" style="padding: 0 0 20px">
+                        <div class="plan-header text-center">
+                            <h3 class="plan-title" style="font-size: 25px">2021-08</h3>
+                        </div>
+                        <ul class="plan-stats list-unstyled" style="padding: 10px 80px 15px;">
+                            <li>发送量：58,892,506</li>
+                            <li>营收额：147,945.20</li>
+                            <li>毛利：2009,5450.35</li>
+                            <li>净毛利：1809,5450.35</li>
+                        </ul>
+
+                        <div class="text-center">
+                            <a class="btn btn-info btn-bordred btn-rounded waves-effect waves-light">详情</a>
+                        </div>
+                    </div>
+                </article>
+                <article class="pricing-column col-lg-3 col-md-4" style="margin-bottom: 1px;">
+                    <div class="inner-box card-box" style="padding: 0 0 20px">
+                        <div class="plan-header text-center">
+                            <h3 class="plan-title" style="font-size: 25px">2021-09</h3>
+                        </div>
+                        <ul class="plan-stats list-unstyled" style="padding: 10px 80px 15px;">
+                            <li>发送量：58,892,506</li>
+                            <li>营收额：147,945.20</li>
+                            <li>毛利：2009,5450.35</li>
+                            <li>净毛利：1809,5450.35</li>
+                        </ul>
+
+                        <div class="text-center">
+                            <a class="btn btn-info btn-bordred btn-rounded waves-effect waves-light">详情</a>
+                        </div>
+                    </div>
+                </article>
+                <article class="pricing-column col-lg-3 col-md-4" style="margin-bottom: 1px;">
+                    <div class="inner-box card-box" style="padding: 0 0 20px">
+                        <div class="plan-header text-center">
+                            <h3 class="plan-title" style="font-size: 25px">2021-10</h3>
+                        </div>
+                        <ul class="plan-stats list-unstyled" style="padding: 10px 80px 15px;">
+                            <li>发送量：58,892,506</li>
+                            <li>营收额：147,945.20</li>
+                            <li>毛利：2009,5450.35</li>
+                            <li>净毛利：1809,5450.35</li>
+                        </ul>
+
+                        <div class="text-center">
+                            <a class="btn btn-info btn-bordred btn-rounded waves-effect waves-light">详情</a>
+                        </div>
+                    </div>
+                </article>
+                <article class="pricing-column col-lg-3 col-md-4" style="margin-bottom: 1px;">
+                    <div class="inner-box card-box" style="padding: 0 0 20px">
+                        <div class="plan-header text-center">
+                            <h3 class="plan-title" style="font-size: 25px">2021-11</h3>
+                        </div>
+                        <ul class="plan-stats list-unstyled" style="padding: 10px 80px 15px;">
+                            <li>发送量：58,892,506</li>
+                            <li>营收额：147,945.20</li>
+                            <li>毛利：2009,5450.35</li>
+                            <li>净毛利：1809,5450.35</li>
+                        </ul>
+
+                        <div class="text-center">
+                            <a class="btn btn-info btn-bordred btn-rounded waves-effect waves-light">详情</a>
+                        </div>
+                    </div>
+                </article>
+                <article class="pricing-column col-lg-3 col-md-4" style="margin-bottom: 1px;">
+                    <div class="inner-box card-box" style="padding: 0 0 20px">
+                        <div class="plan-header text-center">
+                            <h3 class="plan-title" style="font-size: 25px">2021-12</h3>
+                        </div>
+                        <ul class="plan-stats list-unstyled" style="padding: 10px 80px 15px;">
+                            <li>发送量：58,892,506</li>
+                            <li>营收额：147,945.20</li>
+                            <li>毛利：2009,5450.35</li>
+                            <li>净毛利：1809,5450.35</li>
+                        </ul>
+
+                        <div class="text-center">
+                            <a class="btn btn-info btn-bordred btn-rounded waves-effect waves-light">详情</a>
+                        </div>
+                    </div>
+                </article>
+
+
             </div><!-- end col -->
+            <!-- end row -->
         </div>
         <!-- end row -->
 
@@ -108,11 +313,24 @@
 <script th:src="@{/static/assets/js/jquery.min.js}"></script>
 <script th:src="@{/static/echarts/echarts.min.js}"></script>
 <script th:src="@{/static/plugins/autoNumeric/autoNumeric.js}"></script>
+<script th:src="@{/static/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js}"></script>
 <script type="text/javascript">
 
     $(document).ready(function() {
 		$('.autonumber').autoNumeric('init');
 	 });
+
+	     //年度选择框
+    $('#datetimepicker').datetimepicker({
+        format: 'yyyy',
+        startView:"decade", //表示起始范围 0为日 1为月 2为年
+        minView: "decade", //选择日期后，不会再跳转去选择时分秒
+        language:  'zh-CN',
+        startDate:2018,
+        autoclose:true //选择一个日期之后是否立即关闭此日期选择器
+    }).on('changeDate',function(ev){
+        $("#datetimepicker").datetimepicker('hide');
+    });
 
 
     var resizefunc = [];

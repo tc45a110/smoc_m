@@ -36,24 +36,24 @@ public class OperateDataStatisticController {
         }
 
         //发送量
-        Integer[] sendAmount = new Integer[365];
-        for(int i=0;i<365;i++){
+        Integer[] sendAmount = new Integer[31];
+        for(int i=0;i<31;i++){
             sendAmount[i] = getRandomNumber2(600,700);
         }
 
         //营收
-        Integer[] incomeAmount = new Integer[365];
-        for(int i=0;i<365;i++){
+        Integer[] incomeAmount = new Integer[31];
+        for(int i=0;i<31;i++){
             incomeAmount[i] = getRandomNumber2(400,500);
         }
         //成本
-        Integer[] costAmount = new Integer[365];
-        for(int i=0;i<365;i++){
+        Integer[] costAmount = new Integer[31];
+        for(int i=0;i<31;i++){
             costAmount[i] = getRandomNumber2(250,400);
         }
         //利润
-        Integer[] profitAmount = new Integer[365];
-        for(int i=0;i<365;i++){
+        Integer[] profitAmount = new Integer[31];
+        for(int i=0;i<31;i++){
             profitAmount[i] = getRandomNumber2(150,250);
         }
 
@@ -71,7 +71,7 @@ public class OperateDataStatisticController {
     }
 
     /**
-     * 运营数据综合日统计
+     * 运营数据综合月统计
      * @return
      */
     @RequestMapping(value = "/operating/month", method = RequestMethod.GET)
@@ -81,6 +81,7 @@ public class OperateDataStatisticController {
         return view;
 
     }
+
 
     /**
      * 运营数据综合年查询
