@@ -5,6 +5,9 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 
+/**
+ * 通道基本信息
+ */
 @Setter
 @Getter
 public class ChannelBasicInfoQo {
