@@ -242,7 +242,7 @@
                                                              th:value="${channelBasicInfoValidator.priceStyle}" required="true" title="计价方式"/>
                                                 </div>
                                                 <div class="col-sm-6 m-b-10">
-                                                    <label>资费(元/条)&nbsp;<span class="text-danger"
+                                                    <label>资费(元/条)<span class="text-danger" id="price">*</span>&nbsp;<span class="text-danger"
                                                              th:if="${#fields.hasErrors('channelPrice')}" th:errors="*{channelPrice}" style="font-weight: 200;font-size: 12px"></span>
                                                     </label>
                                                     <input id="fee" type="text" class="form-control" autocomplete="off"
@@ -353,6 +353,7 @@
             $('#fee').removeAttr("required","");
             $('#fee').attr("readonly","true");
             $('#fee').attr("placeholder","区域计费条数太多，请点\"区域计费\"页签");
+            $('#price').hide();
         }
     });
 
@@ -379,6 +380,7 @@
             $('#fee').attr("required","");
             $('#fee').val('[[${channelBasicInfoValidator.channelPrice}]]');
             $('#fee').attr("placeholder","资费");
+            $('#price').show();
         }
         //区域计价
         if("AREA_PRICE" == checkedChargeType){
@@ -387,6 +389,7 @@
             $('#fee').attr("readonly","true");
             $('#fee').val('');
             $('#fee').attr("placeholder","区域计费条数太多，请点\"区域计费\"页签");
+            $('#price').hide();
         }
     }
 

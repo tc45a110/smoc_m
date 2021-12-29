@@ -162,36 +162,37 @@
                                         <div class="row">
                                             <div class="col-sm-12">
                                                 <div class="card-box">
-                                                    <form  id="query_form"
+                                                    <form  id="query_form" th:action="@{/configure/channel/group/edit/channelPage}" th:object="${channelBasicInfoQo}"
                                                           method="post">
                                                         <div class="row m-b-60">
                                                             <div class="col-sm-12">
                                                                 <div class="form-group  col-sm-3">
                                                                     <label>运营商：</label>
-                                                                    移动
+                                                                    <input type="hidden" th:field="*{carrier}">
+                                                                    <mpm:tag identity="carrier" show-type="label" key="code" th:value="${channelBasicInfoQo.carrier}"/>
                                                                 </div>
                                                                 <div class="form-group  col-sm-3">
                                                                     <label>业务类型：</label>
-                                                                    普通短信
+                                                                    <input type="hidden" th:field="*{businessType}">
+                                                                    <mpm:tag identity="businessType" show-type="label" key="code" th:value="${channelBasicInfoQo.businessType}"/>
                                                                 </div>
                                                                 <div class="form-group  col-sm-6">
                                                                     <label>信息分类：</label>
-                                                                    <mpm:tag id="infoType" identity="infoType"
-                                                                             show-type="checkbox" key="code"
-                                                                             class="form-control" name="infoType"
-                                                                             value="001" title="信息分类"/>
+                                                                    <input type="hidden" th:field="*{infoType}">
+                                                                    <mpm:tag identity="infoType" show-type="label" key="code" th:value="${channelBasicInfoQo.infoType}"/>
                                                                 </div>
                                                                 <div class="form-group  col-sm-6">
-                                                                    <input type="text" class="form-control"
+                                                                    <input type="text" class="form-control" th:field="*{channelName}"
                                                                            placeholder="通道名称" autocomplete="off">
                                                                 </div>
                                                                 <div class="form-group  col-sm-6">
-                                                                    <input type="text" class="form-control"
+                                                                    <input type="text" class="form-control" th:field="*{srcId}"
                                                                            placeholder="码号" autocomplete="off">
                                                                 </div>
                                                                 <div class="form-group col-sm-6 pull-right"
                                                                      style="text-align: right">
-                                                                    <button sec:authorize-url="/configure/channel/group/edit/channel/*"
+                                                                    <input type="hidden" name="channelId" th:value="${channelGroupId}">
+                                                                    <button sec:authorize-url="/configure/channel/group/edit/channelPage"
                                                                             class="btn btn-teal waves-effect waves-light m-l-10 btn-md">
                                                                         <i class="glyphicon glyphicon-search"
                                                                            style="margin-right:5px"></i> 查询
@@ -205,7 +206,7 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-6">
+                                            <div class="col-md-6" th:each="info:${list}">
                                                 <div class="property-card property-horizontal">
                                                     <div class="row">
                                                         <div class="col-sm-12">
@@ -214,25 +215,24 @@
                                                                 <div class="listingInfo">
                                                                     <div class="">
                                                                         <h5 style="padding-left:10px">
-                                                                            通道名称：国际短信通道-GJ091000
+                                                                            通道名称：[[${info.channelName}]]
                                                                             <div class="pull-right">
-                                                                                <a data-toggle="modal"
-                                                                                   data-target="#confirm-add-modal"
-                                                                                   title="添加该通道到通道组中心">
+                                                                                <a data-toggle="modal" data-target="#confirm-add-modal"
+                                                                                   th:onclick="openChannel([[${info.channelId}]],[[${info.channelName}]])" title="添加该通道到通道组中心">
                                                                                     <i class="glyphicon glyphicon-plus-sign"
                                                                                        style="margin-right:5px;font-size:16px;color:#26a69a"></i></a>
                                                                             </div>
                                                                         </h5>
                                                                     </div>
                                                                     <div class="col-sm-6">
-                                                                        <p style="font-size:12px">信息类型：行业</p>
+                                                                        <p style="font-size:12px">信息类型：<mpm:tag identity="infoType" show-type="label" key="code" th:value="${info.infoType}"/></p>
                                                                         <p style="font-size:12px">
-                                                                            码号：18610008
+                                                                            码号：[[${info.srcId}]]
 
                                                                     </div>
                                                                     <div class="col-sm-6">
-                                                                        <p style="font-size:12px">发送号码范围：移动 联通 电信</p>
-                                                                        <p style="font-size:12px">通道协议类型：CMPP
+                                                                        <p style="font-size:12px">发送号码范围：<mpm:tag identity="carrier" show-type="label" key="code" th:value="${info.carrier}"/></p>
+                                                                        <p style="font-size:12px">通道协议类型：<mpm:tag identity="channelProtocolType" show-type="label" key="code" th:value="${info.protocol}"/>
                                                                             <i data-toggle="tooltip"
                                                                                data-placement="right" title=""
                                                                                data-original-title="点击可以查看其他详细"
@@ -244,7 +244,7 @@
                                                                 </div>
                                                                 <div class="property-action">
                                                                                      <span style="padding-left:10px;font-size:12px">
-                                                                                            通道业务介绍：简短、通俗的业务语言描述
+                                                                                            通道业务介绍：[[${info.channelIntroduce}]]
                                                                                      </span>
 
                                                                 </div>
@@ -257,890 +257,7 @@
                                                 </div>
 
                                             </div>
-                                            <div class="col-md-6">
-                                                <div class="property-card property-horizontal">
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <div class="property-content"
-                                                                 style="height:166px">
-                                                                <div class="listingInfo">
-                                                                    <div class="">
-                                                                        <h5 style="padding-left:10px">
-                                                                            通道名称：国际短信通道-GJ091000
-                                                                            <div class="pull-right">
-                                                                                <a data-toggle="modal"
-                                                                                   data-target="#confirm-add-modal"
-                                                                                   title="添加该通道到通道组中心">
-                                                                                    <i class="glyphicon glyphicon-plus-sign"
-                                                                                       style="margin-right:5px;font-size:16px;color:#26a69a"></i></a>
-                                                                            </div>
-                                                                        </h5>
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">信息类型：行业</p>
-                                                                        <p style="font-size:12px">
-                                                                            码号：18610008
 
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">发送号码范围：移动 联通 电信</p>
-                                                                        <p style="font-size:12px">通道协议类型：CMPP
-                                                                            <i data-toggle="tooltip"
-                                                                               data-placement="right" title=""
-                                                                               data-original-title="点击可以查看其他详细"
-                                                                               class="mdi mdi-comment-processing"
-                                                                               style="margin-left:20px"></i>
-                                                                        </p>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="property-action">
-                                                                                     <span style="padding-left:10px;font-size:12px">
-                                                                                            通道业务介绍：简短、通俗的业务语言描述
-                                                                                     </span>
-
-                                                                </div>
-                                                                <!-- end. Card actions -->
-                                                            </div>
-                                                        </div>
-                                                        <!-- /col 8 -->
-                                                    </div>
-                                                    <!-- /inner row -->
-                                                </div>
-
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="property-card property-horizontal">
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <div class="property-content"
-                                                                 style="height:166px">
-                                                                <div class="listingInfo">
-                                                                    <div class="">
-                                                                        <h5 style="padding-left:10px">
-                                                                            通道名称：国际短信通道-GJ091000
-                                                                            <div class="pull-right">
-                                                                                <a data-toggle="modal"
-                                                                                   data-target="#confirm-add-modal"
-                                                                                   title="添加该通道到通道组中心">
-                                                                                    <i class="glyphicon glyphicon-plus-sign"
-                                                                                       style="margin-right:5px;font-size:16px;color:#26a69a"></i></a>
-                                                                            </div>
-                                                                        </h5>
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">信息类型：行业</p>
-                                                                        <p style="font-size:12px">
-                                                                            码号：18610008
-
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">发送号码范围：移动 联通 电信</p>
-                                                                        <p style="font-size:12px">通道协议类型：CMPP
-                                                                            <i data-toggle="tooltip"
-                                                                               data-placement="right" title=""
-                                                                               data-original-title="点击可以查看其他详细"
-                                                                               class="mdi mdi-comment-processing"
-                                                                               style="margin-left:20px"></i>
-                                                                        </p>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="property-action">
-                                                                                     <span style="padding-left:10px;font-size:12px">
-                                                                                            通道业务介绍：简短、通俗的业务语言描述
-                                                                                     </span>
-
-                                                                </div>
-                                                                <!-- end. Card actions -->
-                                                            </div>
-                                                        </div>
-                                                        <!-- /col 8 -->
-                                                    </div>
-                                                    <!-- /inner row -->
-                                                </div>
-
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="property-card property-horizontal">
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <div class="property-content"
-                                                                 style="height:166px">
-                                                                <div class="listingInfo">
-                                                                    <div class="">
-                                                                        <h5 style="padding-left:10px">
-                                                                            通道名称：国际短信通道-GJ091000
-                                                                            <div class="pull-right">
-                                                                                <a data-toggle="modal"
-                                                                                   data-target="#confirm-add-modal"
-                                                                                   title="添加该通道到通道组中心">
-                                                                                    <i class="glyphicon glyphicon-plus-sign"
-                                                                                       style="margin-right:5px;font-size:16px;color:#26a69a"></i></a>
-                                                                            </div>
-                                                                        </h5>
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">信息类型：行业</p>
-                                                                        <p style="font-size:12px">
-                                                                            码号：18610008
-
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">发送号码范围：移动 联通 电信</p>
-                                                                        <p style="font-size:12px">通道协议类型：CMPP
-                                                                            <i data-toggle="tooltip"
-                                                                               data-placement="right" title=""
-                                                                               data-original-title="点击可以查看其他详细"
-                                                                               class="mdi mdi-comment-processing"
-                                                                               style="margin-left:20px"></i>
-                                                                        </p>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="property-action">
-                                                                                     <span style="padding-left:10px;font-size:12px">
-                                                                                            通道业务介绍：简短、通俗的业务语言描述
-                                                                                     </span>
-
-                                                                </div>
-                                                                <!-- end. Card actions -->
-                                                            </div>
-                                                        </div>
-                                                        <!-- /col 8 -->
-                                                    </div>
-                                                    <!-- /inner row -->
-                                                </div>
-
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="property-card property-horizontal">
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <div class="property-content"
-                                                                 style="height:166px">
-                                                                <div class="listingInfo">
-                                                                    <div class="">
-                                                                        <h5 style="padding-left:10px">
-                                                                            通道名称：国际短信通道-GJ091000
-                                                                            <div class="pull-right">
-                                                                                <a data-toggle="modal"
-                                                                                   data-target="#confirm-add-modal"
-                                                                                   title="添加该通道到通道组中心">
-                                                                                    <i class="glyphicon glyphicon-plus-sign"
-                                                                                       style="margin-right:5px;font-size:16px;color:#26a69a"></i></a>
-                                                                            </div>
-                                                                        </h5>
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">信息类型：行业</p>
-                                                                        <p style="font-size:12px">
-                                                                            码号：18610008
-
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">发送号码范围：移动 联通 电信</p>
-                                                                        <p style="font-size:12px">通道协议类型：CMPP
-                                                                            <i data-toggle="tooltip"
-                                                                               data-placement="right" title=""
-                                                                               data-original-title="点击可以查看其他详细"
-                                                                               class="mdi mdi-comment-processing"
-                                                                               style="margin-left:20px"></i>
-                                                                        </p>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="property-action">
-                                                                                     <span style="padding-left:10px;font-size:12px">
-                                                                                            通道业务介绍：简短、通俗的业务语言描述
-                                                                                     </span>
-
-                                                                </div>
-                                                                <!-- end. Card actions -->
-                                                            </div>
-                                                        </div>
-                                                        <!-- /col 8 -->
-                                                    </div>
-                                                    <!-- /inner row -->
-                                                </div>
-
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="property-card property-horizontal">
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <div class="property-content"
-                                                                 style="height:166px">
-                                                                <div class="listingInfo">
-                                                                    <div class="">
-                                                                        <h5 style="padding-left:10px">
-                                                                            通道名称：国际短信通道-GJ091000
-                                                                            <div class="pull-right">
-                                                                                <a data-toggle="modal"
-                                                                                   data-target="#confirm-add-modal"
-                                                                                   title="添加该通道到通道组中心">
-                                                                                    <i class="glyphicon glyphicon-plus-sign"
-                                                                                       style="margin-right:5px;font-size:16px;color:#26a69a"></i></a>
-                                                                            </div>
-                                                                        </h5>
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">信息类型：行业</p>
-                                                                        <p style="font-size:12px">
-                                                                            码号：18610008
-
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">发送号码范围：移动 联通 电信</p>
-                                                                        <p style="font-size:12px">通道协议类型：CMPP
-                                                                            <i data-toggle="tooltip"
-                                                                               data-placement="right" title=""
-                                                                               data-original-title="点击可以查看其他详细"
-                                                                               class="mdi mdi-comment-processing"
-                                                                               style="margin-left:20px"></i>
-                                                                        </p>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="property-action">
-                                                                                     <span style="padding-left:10px;font-size:12px">
-                                                                                            通道业务介绍：简短、通俗的业务语言描述
-                                                                                     </span>
-
-                                                                </div>
-                                                                <!-- end. Card actions -->
-                                                            </div>
-                                                        </div>
-                                                        <!-- /col 8 -->
-                                                    </div>
-                                                    <!-- /inner row -->
-                                                </div>
-
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="property-card property-horizontal">
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <div class="property-content"
-                                                                 style="height:166px">
-                                                                <div class="listingInfo">
-                                                                    <div class="">
-                                                                        <h5 style="padding-left:10px">
-                                                                            通道名称：国际短信通道-GJ091000
-                                                                            <div class="pull-right">
-                                                                                <a data-toggle="modal"
-                                                                                   data-target="#confirm-add-modal"
-                                                                                   title="添加该通道到通道组中心">
-                                                                                    <i class="glyphicon glyphicon-plus-sign"
-                                                                                       style="margin-right:5px;font-size:16px;color:#26a69a"></i></a>
-                                                                            </div>
-                                                                        </h5>
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">信息类型：行业</p>
-                                                                        <p style="font-size:12px">
-                                                                            码号：18610008
-
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">发送号码范围：移动 联通 电信</p>
-                                                                        <p style="font-size:12px">通道协议类型：CMPP
-                                                                            <i data-toggle="tooltip"
-                                                                               data-placement="right" title=""
-                                                                               data-original-title="点击可以查看其他详细"
-                                                                               class="mdi mdi-comment-processing"
-                                                                               style="margin-left:20px"></i>
-                                                                        </p>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="property-action">
-                                                                                     <span style="padding-left:10px;font-size:12px">
-                                                                                            通道业务介绍：简短、通俗的业务语言描述
-                                                                                     </span>
-
-                                                                </div>
-                                                                <!-- end. Card actions -->
-                                                            </div>
-                                                        </div>
-                                                        <!-- /col 8 -->
-                                                    </div>
-                                                    <!-- /inner row -->
-                                                </div>
-
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="property-card property-horizontal">
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <div class="property-content"
-                                                                 style="height:166px">
-                                                                <div class="listingInfo">
-                                                                    <div class="">
-                                                                        <h5 style="padding-left:10px">
-                                                                            通道名称：国际短信通道-GJ091000
-                                                                            <div class="pull-right">
-                                                                                <a data-toggle="modal"
-                                                                                   data-target="#confirm-add-modal"
-                                                                                   title="添加该通道到通道组中心">
-                                                                                    <i class="glyphicon glyphicon-plus-sign"
-                                                                                       style="margin-right:5px;font-size:16px;color:#26a69a"></i></a>
-                                                                            </div>
-                                                                        </h5>
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">信息类型：行业</p>
-                                                                        <p style="font-size:12px">
-                                                                            码号：18610008
-
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">发送号码范围：移动 联通 电信</p>
-                                                                        <p style="font-size:12px">通道协议类型：CMPP
-                                                                            <i data-toggle="tooltip"
-                                                                               data-placement="right" title=""
-                                                                               data-original-title="点击可以查看其他详细"
-                                                                               class="mdi mdi-comment-processing"
-                                                                               style="margin-left:20px"></i>
-                                                                        </p>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="property-action">
-                                                                                     <span style="padding-left:10px;font-size:12px">
-                                                                                            通道业务介绍：简短、通俗的业务语言描述
-                                                                                     </span>
-
-                                                                </div>
-                                                                <!-- end. Card actions -->
-                                                            </div>
-                                                        </div>
-                                                        <!-- /col 8 -->
-                                                    </div>
-                                                    <!-- /inner row -->
-                                                </div>
-
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="property-card property-horizontal">
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <div class="property-content"
-                                                                 style="height:166px">
-                                                                <div class="listingInfo">
-                                                                    <div class="">
-                                                                        <h5 style="padding-left:10px">
-                                                                            通道名称：国际短信通道-GJ091000
-                                                                            <div class="pull-right">
-                                                                                <a data-toggle="modal"
-                                                                                   data-target="#confirm-add-modal"
-                                                                                   title="添加该通道到通道组中心">
-                                                                                    <i class="glyphicon glyphicon-plus-sign"
-                                                                                       style="margin-right:5px;font-size:16px;color:#26a69a"></i></a>
-                                                                            </div>
-                                                                        </h5>
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">信息类型：行业</p>
-                                                                        <p style="font-size:12px">
-                                                                            码号：18610008
-
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">发送号码范围：移动 联通 电信</p>
-                                                                        <p style="font-size:12px">通道协议类型：CMPP
-                                                                            <i data-toggle="tooltip"
-                                                                               data-placement="right" title=""
-                                                                               data-original-title="点击可以查看其他详细"
-                                                                               class="mdi mdi-comment-processing"
-                                                                               style="margin-left:20px"></i>
-                                                                        </p>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="property-action">
-                                                                                     <span style="padding-left:10px;font-size:12px">
-                                                                                            通道业务介绍：简短、通俗的业务语言描述
-                                                                                     </span>
-
-                                                                </div>
-                                                                <!-- end. Card actions -->
-                                                            </div>
-                                                        </div>
-                                                        <!-- /col 8 -->
-                                                    </div>
-                                                    <!-- /inner row -->
-                                                </div>
-
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="property-card property-horizontal">
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <div class="property-content"
-                                                                 style="height:166px">
-                                                                <div class="listingInfo">
-                                                                    <div class="">
-                                                                        <h5 style="padding-left:10px">
-                                                                            通道名称：国际短信通道-GJ091000
-                                                                            <div class="pull-right">
-                                                                                <a data-toggle="modal"
-                                                                                   data-target="#confirm-add-modal"
-                                                                                   title="添加该通道到通道组中心">
-                                                                                    <i class="glyphicon glyphicon-plus-sign"
-                                                                                       style="margin-right:5px;font-size:16px;color:#26a69a"></i></a>
-                                                                            </div>
-                                                                        </h5>
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">信息类型：行业</p>
-                                                                        <p style="font-size:12px">
-                                                                            码号：18610008
-
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">发送号码范围：移动 联通 电信</p>
-                                                                        <p style="font-size:12px">通道协议类型：CMPP
-                                                                            <i data-toggle="tooltip"
-                                                                               data-placement="right" title=""
-                                                                               data-original-title="点击可以查看其他详细"
-                                                                               class="mdi mdi-comment-processing"
-                                                                               style="margin-left:20px"></i>
-                                                                        </p>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="property-action">
-                                                                                     <span style="padding-left:10px;font-size:12px">
-                                                                                            通道业务介绍：简短、通俗的业务语言描述
-                                                                                     </span>
-
-                                                                </div>
-                                                                <!-- end. Card actions -->
-                                                            </div>
-                                                        </div>
-                                                        <!-- /col 8 -->
-                                                    </div>
-                                                    <!-- /inner row -->
-                                                </div>
-
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="property-card property-horizontal">
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <div class="property-content"
-                                                                 style="height:166px">
-                                                                <div class="listingInfo">
-                                                                    <div class="">
-                                                                        <h5 style="padding-left:10px">
-                                                                            通道名称：国际短信通道-GJ091000
-                                                                            <div class="pull-right">
-                                                                                <a data-toggle="modal"
-                                                                                   data-target="#confirm-add-modal"
-                                                                                   title="添加该通道到通道组中心">
-                                                                                    <i class="glyphicon glyphicon-plus-sign"
-                                                                                       style="margin-right:5px;font-size:16px;color:#26a69a"></i></a>
-                                                                            </div>
-                                                                        </h5>
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">信息类型：行业</p>
-                                                                        <p style="font-size:12px">
-                                                                            码号：18610008
-
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">发送号码范围：移动 联通 电信</p>
-                                                                        <p style="font-size:12px">通道协议类型：CMPP
-                                                                            <i data-toggle="tooltip"
-                                                                               data-placement="right" title=""
-                                                                               data-original-title="点击可以查看其他详细"
-                                                                               class="mdi mdi-comment-processing"
-                                                                               style="margin-left:20px"></i>
-                                                                        </p>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="property-action">
-                                                                                     <span style="padding-left:10px;font-size:12px">
-                                                                                            通道业务介绍：简短、通俗的业务语言描述
-                                                                                     </span>
-
-                                                                </div>
-                                                                <!-- end. Card actions -->
-                                                            </div>
-                                                        </div>
-                                                        <!-- /col 8 -->
-                                                    </div>
-                                                    <!-- /inner row -->
-                                                </div>
-
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="property-card property-horizontal">
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <div class="property-content"
-                                                                 style="height:166px">
-                                                                <div class="listingInfo">
-                                                                    <div class="">
-                                                                        <h5 style="padding-left:10px">
-                                                                            通道名称：国际短信通道-GJ091000
-                                                                            <div class="pull-right">
-                                                                                <a data-toggle="modal"
-                                                                                   data-target="#confirm-add-modal"
-                                                                                   title="添加该通道到通道组中心">
-                                                                                    <i class="glyphicon glyphicon-plus-sign"
-                                                                                       style="margin-right:5px;font-size:16px;color:#26a69a"></i></a>
-                                                                            </div>
-                                                                        </h5>
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">信息类型：行业</p>
-                                                                        <p style="font-size:12px">
-                                                                            码号：18610008
-
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">发送号码范围：移动 联通 电信</p>
-                                                                        <p style="font-size:12px">通道协议类型：CMPP
-                                                                            <i data-toggle="tooltip"
-                                                                               data-placement="right" title=""
-                                                                               data-original-title="点击可以查看其他详细"
-                                                                               class="mdi mdi-comment-processing"
-                                                                               style="margin-left:20px"></i>
-                                                                        </p>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="property-action">
-                                                                                     <span style="padding-left:10px;font-size:12px">
-                                                                                            通道业务介绍：简短、通俗的业务语言描述
-                                                                                     </span>
-
-                                                                </div>
-                                                                <!-- end. Card actions -->
-                                                            </div>
-                                                        </div>
-                                                        <!-- /col 8 -->
-                                                    </div>
-                                                    <!-- /inner row -->
-                                                </div>
-
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="property-card property-horizontal">
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <div class="property-content"
-                                                                 style="height:166px">
-                                                                <div class="listingInfo">
-                                                                    <div class="">
-                                                                        <h5 style="padding-left:10px">
-                                                                            通道名称：国际短信通道-GJ091000
-                                                                            <div class="pull-right">
-                                                                                <a data-toggle="modal"
-                                                                                   data-target="#confirm-add-modal"
-                                                                                   title="添加该通道到通道组中心">
-                                                                                    <i class="glyphicon glyphicon-plus-sign"
-                                                                                       style="margin-right:5px;font-size:16px;color:#26a69a"></i></a>
-                                                                            </div>
-                                                                        </h5>
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">信息类型：行业</p>
-                                                                        <p style="font-size:12px">
-                                                                            码号：18610008
-
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">发送号码范围：移动 联通 电信</p>
-                                                                        <p style="font-size:12px">通道协议类型：CMPP
-                                                                            <i data-toggle="tooltip"
-                                                                               data-placement="right" title=""
-                                                                               data-original-title="点击可以查看其他详细"
-                                                                               class="mdi mdi-comment-processing"
-                                                                               style="margin-left:20px"></i>
-                                                                        </p>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="property-action">
-                                                                                     <span style="padding-left:10px;font-size:12px">
-                                                                                            通道业务介绍：简短、通俗的业务语言描述
-                                                                                     </span>
-
-                                                                </div>
-                                                                <!-- end. Card actions -->
-                                                            </div>
-                                                        </div>
-                                                        <!-- /col 8 -->
-                                                    </div>
-                                                    <!-- /inner row -->
-                                                </div>
-
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="property-card property-horizontal">
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <div class="property-content"
-                                                                 style="height:166px">
-                                                                <div class="listingInfo">
-                                                                    <div class="">
-                                                                        <h5 style="padding-left:10px">
-                                                                            通道名称：国际短信通道-GJ091000
-                                                                            <div class="pull-right">
-                                                                                <a data-toggle="modal"
-                                                                                   data-target="#confirm-add-modal"
-                                                                                   title="添加该通道到通道组中心">
-                                                                                    <i class="glyphicon glyphicon-plus-sign"
-                                                                                       style="margin-right:5px;font-size:16px;color:#26a69a"></i></a>
-                                                                            </div>
-                                                                        </h5>
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">信息类型：行业</p>
-                                                                        <p style="font-size:12px">
-                                                                            码号：18610008
-
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">发送号码范围：移动 联通 电信</p>
-                                                                        <p style="font-size:12px">通道协议类型：CMPP
-                                                                            <i data-toggle="tooltip"
-                                                                               data-placement="right" title=""
-                                                                               data-original-title="点击可以查看其他详细"
-                                                                               class="mdi mdi-comment-processing"
-                                                                               style="margin-left:20px"></i>
-                                                                        </p>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="property-action">
-                                                                                     <span style="padding-left:10px;font-size:12px">
-                                                                                            通道业务介绍：简短、通俗的业务语言描述
-                                                                                     </span>
-
-                                                                </div>
-                                                                <!-- end. Card actions -->
-                                                            </div>
-                                                        </div>
-                                                        <!-- /col 8 -->
-                                                    </div>
-                                                    <!-- /inner row -->
-                                                </div>
-
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="property-card property-horizontal">
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <div class="property-content"
-                                                                 style="height:166px">
-                                                                <div class="listingInfo">
-                                                                    <div class="">
-                                                                        <h5 style="padding-left:10px">
-                                                                            通道名称：国际短信通道-GJ091000
-                                                                            <div class="pull-right">
-                                                                                <a data-toggle="modal"
-                                                                                   data-target="#confirm-add-modal"
-                                                                                   title="添加该通道到通道组中心">
-                                                                                    <i class="glyphicon glyphicon-plus-sign"
-                                                                                       style="margin-right:5px;font-size:16px;color:#26a69a"></i></a>
-                                                                            </div>
-                                                                        </h5>
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">信息类型：行业</p>
-                                                                        <p style="font-size:12px">
-                                                                            码号：18610008
-
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">发送号码范围：移动 联通 电信</p>
-                                                                        <p style="font-size:12px">通道协议类型：CMPP
-                                                                            <i data-toggle="tooltip"
-                                                                               data-placement="right" title=""
-                                                                               data-original-title="点击可以查看其他详细"
-                                                                               class="mdi mdi-comment-processing"
-                                                                               style="margin-left:20px"></i>
-                                                                        </p>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="property-action">
-                                                                                     <span style="padding-left:10px;font-size:12px">
-                                                                                            通道业务介绍：简短、通俗的业务语言描述
-                                                                                     </span>
-
-                                                                </div>
-                                                                <!-- end. Card actions -->
-                                                            </div>
-                                                        </div>
-                                                        <!-- /col 8 -->
-                                                    </div>
-                                                    <!-- /inner row -->
-                                                </div>
-
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="property-card property-horizontal">
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <div class="property-content"
-                                                                 style="height:166px">
-                                                                <div class="listingInfo">
-                                                                    <div class="">
-                                                                        <h5 style="padding-left:10px">
-                                                                            通道名称：国际短信通道-GJ091000
-                                                                            <div class="pull-right">
-                                                                                <a data-toggle="modal"
-                                                                                   data-target="#confirm-add-modal"
-                                                                                   title="添加该通道到通道组中心">
-                                                                                    <i class="glyphicon glyphicon-plus-sign"
-                                                                                       style="margin-right:5px;font-size:16px;color:#26a69a"></i></a>
-                                                                            </div>
-                                                                        </h5>
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">信息类型：行业</p>
-                                                                        <p style="font-size:12px">
-                                                                            码号：18610008
-
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">发送号码范围：移动 联通 电信</p>
-                                                                        <p style="font-size:12px">通道协议类型：CMPP
-                                                                            <i data-toggle="tooltip"
-                                                                               data-placement="right" title=""
-                                                                               data-original-title="点击可以查看其他详细"
-                                                                               class="mdi mdi-comment-processing"
-                                                                               style="margin-left:20px"></i>
-                                                                        </p>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="property-action">
-                                                                                     <span style="padding-left:10px;font-size:12px">
-                                                                                            通道业务介绍：简短、通俗的业务语言描述
-                                                                                     </span>
-
-                                                                </div>
-                                                                <!-- end. Card actions -->
-                                                            </div>
-                                                        </div>
-                                                        <!-- /col 8 -->
-                                                    </div>
-                                                    <!-- /inner row -->
-                                                </div>
-
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="property-card property-horizontal">
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <div class="property-content"
-                                                                 style="height:166px">
-                                                                <div class="listingInfo">
-                                                                    <div class="">
-                                                                        <h5 style="padding-left:10px">
-                                                                            通道名称：国际短信通道-GJ091000
-                                                                            <div class="pull-right">
-                                                                                <a data-toggle="modal"
-                                                                                   data-target="#confirm-add-modal"
-                                                                                   title="添加该通道到通道组中心">
-                                                                                    <i class="glyphicon glyphicon-plus-sign"
-                                                                                       style="margin-right:5px;font-size:16px;color:#26a69a"></i></a>
-                                                                            </div>
-                                                                        </h5>
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">信息类型：行业</p>
-                                                                        <p style="font-size:12px">
-                                                                            码号：18610008
-
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">发送号码范围：移动 联通 电信</p>
-                                                                        <p style="font-size:12px">通道协议类型：CMPP
-                                                                            <i data-toggle="tooltip"
-                                                                               data-placement="right" title=""
-                                                                               data-original-title="点击可以查看其他详细"
-                                                                               class="mdi mdi-comment-processing"
-                                                                               style="margin-left:20px"></i>
-                                                                        </p>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="property-action">
-                                                                                     <span style="padding-left:10px;font-size:12px">
-                                                                                            通道业务介绍：简短、通俗的业务语言描述
-                                                                                     </span>
-
-                                                                </div>
-                                                                <!-- end. Card actions -->
-                                                            </div>
-                                                        </div>
-                                                        <!-- /col 8 -->
-                                                    </div>
-                                                    <!-- /inner row -->
-                                                </div>
-
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="property-card property-horizontal">
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <div class="property-content"
-                                                                 style="height:166px">
-                                                                <div class="listingInfo">
-                                                                    <div class="">
-                                                                        <h5 style="padding-left:10px">
-                                                                            通道名称：国际短信通道-GJ091000
-                                                                            <div class="pull-right">
-                                                                                <a data-toggle="modal"
-                                                                                   data-target="#confirm-add-modal"
-                                                                                   title="添加该通道到通道组中心">
-                                                                                    <i class="glyphicon glyphicon-plus-sign"
-                                                                                       style="margin-right:5px;font-size:16px;color:#26a69a"></i></a>
-                                                                            </div>
-                                                                        </h5>
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">信息类型：行业</p>
-                                                                        <p style="font-size:12px">
-                                                                            码号：18610008
-
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">发送号码范围：移动 联通 电信</p>
-                                                                        <p style="font-size:12px">通道协议类型：CMPP
-                                                                            <i data-toggle="tooltip"
-                                                                               data-placement="right" title=""
-                                                                               data-original-title="点击可以查看其他详细"
-                                                                               class="mdi mdi-comment-processing"
-                                                                               style="margin-left:20px"></i>
-                                                                        </p>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="property-action">
-                                                                                     <span style="padding-left:10px;font-size:12px">
-                                                                                            通道业务介绍：简短、通俗的业务语言描述
-                                                                                     </span>
-
-                                                                </div>
-                                                                <!-- end. Card actions -->
-                                                            </div>
-                                                        </div>
-                                                        <!-- /col 8 -->
-                                                    </div>
-                                                    <!-- /inner row -->
-                                                </div>
-
-                                            </div>
                                         </div>
 
                                     </div>
@@ -1195,29 +312,33 @@
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                         <h4 class="modal-title">确认添加该通道到通道组中</h4>
                     </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label>通道名称：国际短信通道-GJ091000
-                            </label>
+                    <form th:action="@{/configure/channel/group/saveChannelGroupConfig/add}" id="submit_form"
+                          th:object="${channelGroupConfigValidator}"
+                          method="post" data-parsley-validate="">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label>通道名称：<span id="name"></span>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label>优先级</label>
+                                <input type="text" class="form-control"  required="" id="channelPriority" th:field="*{channelPriority}"
+                                       data-parsley-type="number" min="1"   max="10" autocomplete="off" placeholder="默认 1，数字越小优先级越高">
+                            </div>
+                            <div class="form-group">
+                                <label>权重</label>
+                                <input type="text" class="form-control"   required="" id="channelWeight" th:field="*{channelWeight}"
+                                       data-parsley-type="number" min="10"   max="100" autocomplete="off" placeholder="默认 10，总共100">
+                            </div>
+                            <div class="text-right">
+                                <input type="hidden" id="channelGroupId" name="channelGroupId" th:value="${channelGroupId}">
+                                <input type="hidden" id="channelId" name="channelId">
+                                <a class="btn btn-default waves-effect" data-dismiss="modal">取消</a>
+                                <button sec:authorize-url="/configure/channel/group/saveChannelGroupConfig/*" type="submit"
+                                        class="btn btn-primary waves-effect waves-light">确认添加</button>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label>优先级
-                            </label>
-                            <input type="text" class="form-control"  autocomplete="off" placeholder="默认 1，数字越小优先级越高">
-                        </div>
-                        <div class="form-group">
-                            <label>权重
-                            </label>
-                            <input type="text" class="form-control"  autocomplete="off" placeholder="默认 10，总共100">
-                        </div>
-                        <div class="text-right">
-                            <input type="hidden" id="addId">
-                            <a class="btn btn-default waves-effect" data-dismiss="modal">取消</a>
-                            <button onclick="" class="btn btn-primary waves-effect waves-light">确认添加
-                            </button>
-                            </button>
-                        </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -1229,6 +350,15 @@
 <th:block th:insert="fragments/common_fragments :: select_js"/>
 <th:block th:insert="fragments/common_fragments :: common_submit_form"/>
 <script>
+
+    //打开选择通道
+    function openChannel(channelId,channelName) {
+        $("#channelId").val(channelId);
+        $("#name").html(channelName);
+        $("#channelPriority").val('');
+        $("#channelWeight").val('');
+    }
+
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');

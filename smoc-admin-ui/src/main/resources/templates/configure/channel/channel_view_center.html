@@ -62,27 +62,30 @@
                                             <li class="active" id="tab1"><a onclick="active('1')"  sec:authorize-url="/configure/channel/view/base/*"
                                                                             th:href="@{/configure/channel/view/base/{id}(id=${id})}"
                                                                             th:target="tab-content">通道信息</a></li>
-                                            <li class="" id="tab6"><a onclick="active('6')"
+                                            <li class="" id="tab2"><a onclick="active('2')"
                                                                       sec:authorize-url="/parameter/filter/view/CHANNEL_FILTER/*/*"
                                                                       th:href="@{/parameter/filter/view/CHANNEL_FILTER/{businessId}/3(businessId=${id})}"
                                                                       th:target="tab-content">通道过滤参数</a>
-                                            <li class="" id="tab7">
-                                                <a onclick="active('7')"
+                                            <li class="" id="tab3">
+                                                <a onclick="active('3')"
                                                    sec:authorize-url="/parameter/business/view/CHANNEL/*/*"
                                                    th:href="@{/parameter/business/view/CHANNEL/{businessId}/3(businessId=${id})}"
                                                    th:target="tab-content">通道扩展参数
                                                 </a>
                                             </li>
-                                            <li class="" id="tab2"><a onclick="active('2')"
-
-                                                                            th:target="tab-content">通道价格记录</a></li>
-                                            <li class="" id="tab3"><a onclick="active('3')"
-
-                                                                     th:target="tab-content">通道发送量统计</a></li>
                                             <li class="" id="tab4"><a onclick="active('4')"
 
-                                                                      th:target="tab-content">通道投诉统计</a></li>
+                                                                            th:target="tab-content">通道价格记录</a></li>
                                             <li class="" id="tab5"><a onclick="active('5')"
+
+                                                                     th:target="tab-content">通道发送量统计</a></li>
+                                            <li class="" id="tab6"><a onclick="active('6')"
+
+                                                                      th:target="tab-content">通道投诉统计</a></li>
+                                            <li class="" id="tab7"><a onclick="active('7')"
+
+                                                                      th:target="tab-content">通道使用明细</a></li>
+                                            <li class="" id="tab8"><a onclick="active('8')"
                                                                       sec:authorize-url="/user/logs/list/*"
                                                                       th:href="@{/user/logs/list/{id}(id=${id})}"
                                                                       th:target="tab-content">通道操作日志</a></li>

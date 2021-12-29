@@ -93,8 +93,8 @@ public class ChannelRepositoryImpl extends BasePageRepository {
         }
 
         if (!StringUtils.isEmpty(qo.getCarrier())) {
-            sqlBuffer.append(" and t.CARRIER = ?");
-            paramsList.add(qo.getCarrier().trim());
+            sqlBuffer.append(" and t.CARRIER like ?");
+            paramsList.add( "%"+qo.getCarrier().trim()+"%");
         }
 
         if (!StringUtils.isEmpty(qo.getBusinessType())) {
@@ -103,8 +103,8 @@ public class ChannelRepositoryImpl extends BasePageRepository {
         }
 
         if (!StringUtils.isEmpty(qo.getInfoType())) {
-            sqlBuffer.append(" and t.INFO_TYPE = ?");
-            paramsList.add(qo.getInfoType().trim());
+            sqlBuffer.append(" and t.INFO_TYPE like ?");
+            paramsList.add( "%"+qo.getInfoType().trim()+"%");
         }
 
         sqlBuffer.append(" order by t.CREATED_TIME desc");

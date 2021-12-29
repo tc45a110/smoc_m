@@ -8,8 +8,8 @@ import java.util.Objects;
 @Entity
 @Table(name = "config_channel_group_info")
 public class ConfigChannelGroupInfo {
-    private String productId;
-    private String productName;
+    private String channelGroupId;
+    private String channelGroupName;
     private String carrier;
     private String businessType;
     private String infoType;
@@ -23,23 +23,23 @@ public class ConfigChannelGroupInfo {
     private Date updatedTime;
 
     @Id
-    @Column(name = "PRODUCT_ID")
-    public String getProductId() {
-        return productId;
+    @Column(name = "CHANNEL_GROUP_ID")
+    public String getChannelGroupId() {
+        return channelGroupId;
     }
 
-    public void setProductId(String productId) {
-        this.productId = productId;
+    public void setChannelGroupId(String channelGroupId) {
+        this.channelGroupId = channelGroupId;
     }
 
     @Basic
-    @Column(name = "PRODUCT_NAME")
-    public String getProductName() {
-        return productName;
+    @Column(name = "CHANNEL_GROUP_NAME")
+    public String getChannelGroupName() {
+        return channelGroupName;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setChannelGroupName(String channelGroupName) {
+        this.channelGroupName = channelGroupName;
     }
 
     @Basic
@@ -157,8 +157,8 @@ public class ConfigChannelGroupInfo {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ConfigChannelGroupInfo that = (ConfigChannelGroupInfo) o;
-        return Objects.equals(productId, that.productId) &&
-                Objects.equals(productName, that.productName) &&
+        return Objects.equals(channelGroupId, that.channelGroupId) &&
+                Objects.equals(channelGroupName, that.channelGroupName) &&
                 Objects.equals(carrier, that.carrier) &&
                 Objects.equals(businessType, that.businessType) &&
                 Objects.equals(infoType, that.infoType) &&
@@ -174,6 +174,6 @@ public class ConfigChannelGroupInfo {
 
     @Override
     public int hashCode() {
-        return Objects.hash(productId, productName, carrier, businessType, infoType, maskProvince, channelGroupIntroduce, channelGroupProcess, channelGroupStatus, createdBy, createdTime, updatedBy, updatedTime);
+        return Objects.hash(channelGroupId, channelGroupName, carrier, businessType, infoType, maskProvince, channelGroupIntroduce, channelGroupProcess, channelGroupStatus, createdBy, createdTime, updatedBy, updatedTime);
     }
 }
