@@ -30,10 +30,10 @@
         <div class="row fixed-navigation">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">投诉全国分布统计 </h4>
+                    <h4 class="page-title">通道投诉排行 </h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
-                            投诉全国分布统计
+                            通道投诉排行
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -49,11 +49,35 @@
                     <form id="query_form" method="post">
                         <div class="row m-b-60">
                             <div class="col-sm-12">
-                                <div class="form-group  col-sm-4">
+                                <div class="form-group  col-sm-3">
+                                    <div class="radio radio-info radio-inline" style="margin-top:10px">
+                                        <input type="radio" id="active2" value="1" name="1"
+                                               required="">
+                                        <label>日</label>
+                                    </div>
+                                    <div class="radio radio-info radio-inline" style="margin-top:10px">
+                                        <input type="radio" id="active3" value="1" name="1" checked
+                                               required="">
+                                        <label>月</label>
+                                    </div>
+                                    <div class="radio radio-info radio-inline" style="margin-top:10px">
+                                        <input type="radio" id="active4" value="0" name="1">
+                                        <label>年</label>
+                                    </div>
+                                </div>
+                                <div class="form-group  col-sm-3">
                                     <input id="form_datetime" type="text" class="form-control" value="2021-12"
                                            placeholder="" autocomplete="off">
                                 </div>
-                                <div class="form-group col-sm-4 pull-right" style="text-align: right">
+                                <div class="form-group  col-sm-3">
+                                    <mpm:tag id="provices" identity="provices" name="maskProvince" show-type="select" key="code" class="form-control"
+                                             value="" title="省份"/>
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <input id="signName" type="text" class="form-control" value=""
+                                           placeholder="签名" autocomplete="off">
+                                </div>
+                                <div class="form-group col-sm-3 pull-right" style="text-align: right">
                                     <button class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search" style="margin-right:5px"></i> 查询
                                     </button>

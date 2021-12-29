@@ -21,10 +21,10 @@
         <div class="row fixed-navigation">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">运营数据综合月统计 </h4>
+                    <h4 class="page-title">运营数据日统计 </h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
-                            运营数据综合月统计
+                            运营数据日统计
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -82,49 +82,134 @@
 <script th:src="@{/static/js/month-picker/bootstrap-datepicker.zh-CN.js}"></script>
 <script type="text/javascript">
 
-     var dom4 = document.getElementById("main1");
-    var myChart4 = echarts.init(dom4);
+    var dom = document.getElementById("main1");
+    var myChart = echarts.init(dom);
     var app = {};
-    option4 = null;
-    option4 = {
-        title: {
-            text: '近24月运营数据'
+    option = null;
+    var posList = [
+        'left', 'right', 'top', 'bottom',
+        'inside',
+        'insideTop', 'insideLeft', 'insideRight', 'insideBottom',
+        'insideTopLeft', 'insideTopRight', 'insideBottomLeft', 'insideBottomRight'
+    ];
+
+    app.configParameters = {
+        rotate: {
+            min: -90,
+            max: 90
         },
-        color: ['#71D5DE', '#59A9E7','#F4979E', '#7DDCB1'],
-        legend: {
+        align: {
+            options: {
+                left: 'left',
+                center: 'center',
+                right: 'right'
+            }
+        },
+        verticalAlign: {
+            options: {
+                top: 'top',
+                middle: 'middle',
+                bottom: 'bottom'
+            }
+        },
+        position: {
+            options: echarts.util.reduce(posList, function (map, pos) {
+                map[pos] = pos;
+                return map;
+            }, {})
+        },
+        distance: {
+            min: 0,
+            max: 100
+        }
+    };
+
+    app.config = {
+        rotate: 90,
+        align: 'left',
+        verticalAlign: 'middle',
+        position: 'insideBottom',
+        distance: 15,
+        onChange: function () {
+            var labelOption = {
+                normal: {
+                    rotate: app.config.rotate,
+                    align: app.config.align,
+                    verticalAlign: app.config.verticalAlign,
+                    position: app.config.position,
+                    distance: app.config.distance
+                }
+            };
+            myChart.setOption({
+                series: [{
+                    label: labelOption
+                }, {
+                    label: labelOption
+                }, {
+                    label: labelOption
+                }, {
+                    label: labelOption
+                }]
+            });
+        }
+    };
+
+
+    var labelOption = {
+        show: true,
+        position: app.config.position,
+        distance: app.config.distance,
+        align: app.config.align,
+        verticalAlign: app.config.verticalAlign,
+        rotate: app.config.rotate,
+        formatter: '{c}  {name|{a}}',
+        fontSize: 12,
+        rich: {
+            name: {
+                textBorderColor: '#fff'
+            }
+        }
+    };
+
+    option = {
+        title: {
+            text: '2021-12运营统计'
+        },
+        color: ['#EE6666', '#92CB76', '#FAC858', '#00acc1'],
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+         legend: {
             data: ['发送量（百万）', '营收（万元）', '毛利（万元）','净毛利（万元）']
         },
-        tooltip: {
-            trigger: 'axis'
+        grid: {
+            top: '60px',
+            left: '24px',
+            right: '24px',
+            bottom: '24px',
+            containLabel: true
         },
         toolbox: {
             show: true,
             feature: {
-                magicType: {                       //动态类型切换
-                 show: true,
-                 title:"切换",                   //各个类型的标题文本，可以分别配置。
-                 type: ['line', 'bar'],          //启用的动态类型，包括'line'（切换为折线图）, 'bar'（切换为柱状图）, 'stack'（切换为堆叠模式）, 'tiled'（切换为平铺模式）
-                },
                 dataView: {show: true, readOnly: false},
+                magicType: {show: true, type: ['line', 'bar']},
+                restore: {show: true},
                 saveAsImage: {show: true}
             }
         },
-        calculable: true,
-        grid: {
-                top: '60px',
-                left: '24px',
-                right: '24px',
-                bottom: '24px',
-                containLabel: true
-            },
         xAxis: [
             {
                 type: 'category',
+                axisTick: {show: false},
                 axisLabel: {
-                    interval: 'auto',
-                    rotate: 30
-                },
-                data: ['2020-01', '2020-02', '2020-03', '2020-04', '2020-05', '2020-06', '2020-07', '2020-08', '2020-09', '2020-10', '2020-11', '2020-12','2021-01', '2021-02', '2021-03', '2021-04', '2021-05', '2021-06', '2021-07', '2021-08', '2021-09', '2021-10', '2021-11','2021-12']
+                  interval: 'auto',
+                  rotate: 30
+                 },
+                data: [ "2021-12-01", "2021-12-02", "2021-12-03", "2021-12-04", "2021-12-05", "2021-12-06", "2021-12-07", "2021-12-08", "2021-12-09", "2021-12-10", "2021-12-11", "2021-12-12", "2021-12-13", "2021-12-14", "2021-12-15", "2021-12-16", "2021-12-17", "2021-12-18", "2021-12-19", "2021-12-20", "2021-12-21", "2021-12-22", "2021-12-23", "2021-12-24", "2021-12-25", "2021-12-26", "2021-12-27", "2021-12-28", "2021-12-29", "2021-12-30", "2021-12-31"]
             }
         ],
         yAxis: [
@@ -134,34 +219,32 @@
         ],
         series: [
             {
-              name: '发送量（百万）',
-              type: 'line',
-              stack: 'Total',
-              data: [707, 659, 590, 864, 687, 707, 856, 822, 587, 588, 460, 423,526, 459, 490, 764, 887, 707, 756, 822, 487, 488, 460, 423],
+                name: '发送量（百万）',
+                type: 'bar',
+                barGap: 0,
+                data:  [605, 646, 632, 648, 641, 647, 689, 658, 650, 652, 685, 607, 619, 659, 643, 670, 691, 630, 666, 606, 686, 629, 700, 692, 629, 700, 667, 688, 605, 654, 646],
             },
-             {
-                 name: '营收（万元）',
-                 type: 'line',
-                 stack: 'Total',
-                 data: [260, 259, 390, 364, 487, 307, 256, 322, 487, 388, 460, 223,226, 159, 290, 264, 287, 307, 556, 522, 487, 388, 460, 323],
-             },
-             {
-                 name: '毛利（万元）',
-                 type: 'line',
-                 stack: 'Total',
-                 data: [130, 200, 120, 164, 187, 207, 156, 222, 287, 188, 120, 131,226, 129,130, 164, 187, 207, 256,222, 187, 288, 220, 210],
-             },
-             {
-                 name: '净毛利（万元）',
-                 type: 'line',
-                 stack: 'Total',
-                 data: [116, 119, 119, 164, 187, 177, 156, 122, 187, 188, 116, 113,116, 119, 119, 164, 187, 177, 156, 182, 187, 181, 116, 113],
-             },
+            {
+                name: '营收（万元）',
+                type: 'bar',
+                data: [468, 487, 447, 441, 489, 469, 446, 469, 491, 412, 478, 407, 474, 432, 491, 444, 443, 407, 441, 452, 442, 461, 423, 446, 468, 416, 445, 477, 459, 427, 439]
+            },
+            {
+                name: '毛利（万元）',
+                type: 'bar',
+                data: [341, 370, 262, 320, 317, 263, 270, 343, 302, 345, 293, 318, 255, 336, 344, 268, 370, 289, 360, 383, 286, 285, 274, 326, 323, 335, 258, 287, 294, 400, 336]
+            },
+            {
+                name: '净毛利（万元）',
+                type: 'bar',
+                data: [171, 167, 175, 163, 156, 150, 231, 179, 203, 207, 198, 205, 194, 169, 165, 192, 227, 162, 229, 203, 159, 199, 194, 191, 184, 163, 168, 180, 246, 170, 151]
+            }
         ]
-    };
-    if (option4 && typeof option4 === "object") {
-        myChart4.setOption(option4, true);
+    };;
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
     }
+
 
     $(document).ready(function() {
 

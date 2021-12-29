@@ -1,6 +1,5 @@
 package com.smoc.cloud.statistic.data.controller;
 
-
 import com.google.gson.Gson;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -14,20 +13,20 @@ import java.util.Date;
 import java.util.Random;
 
 /**
- * 运营数据统计
+ * 运营数据统计分析
  */
 @Slf4j
 @Controller
-@RequestMapping("/data/statistic")
-public class OperateDataStatisticController {
+@RequestMapping("/statistic/manager")
+public class ManagerStatisticController {
 
     /**
-     * 运营数据综合日统计
+     * 运营管理综合日统计
      * @return
      */
-    @RequestMapping(value = "/operating/daily", method = RequestMethod.GET)
+    @RequestMapping(value = "/daily", method = RequestMethod.GET)
     public ModelAndView daily() throws ParseException {
-        ModelAndView view = new ModelAndView("statistic/data/operating_data_statistic_daily");
+        ModelAndView view = new ModelAndView("statistic/manager/manager_statistic_daily");
 
         //日期
         String[] date = new String[365];
@@ -71,25 +70,24 @@ public class OperateDataStatisticController {
     }
 
     /**
-     * 运营数据综合月统计
+     * 运营管理综合月统计
      * @return
      */
-    @RequestMapping(value = "/operating/month", method = RequestMethod.GET)
+    @RequestMapping(value = "/month", method = RequestMethod.GET)
     public ModelAndView month() throws ParseException {
-        ModelAndView view = new ModelAndView("statistic/data/operating_data_statistic_month");
+        ModelAndView view = new ModelAndView("statistic/manager/manager_statistic_month");
 
         return view;
 
     }
 
-
     /**
-     * 运营数据综合年查询
+     * 运营管理运营商分类统计
      * @return
      */
-    @RequestMapping(value = "/operating/year", method = RequestMethod.GET)
-    public ModelAndView year() throws ParseException {
-        ModelAndView view = new ModelAndView("statistic/data/operating_data_statistic_year");
+    @RequestMapping(value = "/carrier/month", method = RequestMethod.GET)
+    public ModelAndView manager_month() throws ParseException {
+        ModelAndView view = new ModelAndView("statistic/manager/manager_statistic_carrier_month");
 
         return view;
 
@@ -106,4 +104,7 @@ public class OperateDataStatisticController {
         int result = random.nextInt(max) % (max-min+1) + min;
         return result;
     }
+
+
+
 }

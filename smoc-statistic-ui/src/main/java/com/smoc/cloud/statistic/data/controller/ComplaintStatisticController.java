@@ -14,16 +14,16 @@ import java.text.ParseException;
  */
 @Slf4j
 @Controller
-@RequestMapping("/data/statistic")
+@RequestMapping("/statistic/complaint")
 public class ComplaintStatisticController {
 
     /**
      * 投诉数据全国分布
      * @return
      */
-    @RequestMapping(value = "/complaint/map/china", method = RequestMethod.GET)
+    @RequestMapping(value = "/map/china", method = RequestMethod.GET)
     public ModelAndView manager_china() throws ParseException {
-        ModelAndView view = new ModelAndView("statistic/data/complaint_data_statistic_china");
+        ModelAndView view = new ModelAndView("statistic/complaint/complaint_statistic_china");
 
         return view;
 
@@ -33,9 +33,9 @@ public class ComplaintStatisticController {
      * 投诉 运营商分布
      * @return
      */
-    @RequestMapping(value = "/complaint/carrier", method = RequestMethod.GET)
+    @RequestMapping(value = "/business", method = RequestMethod.GET)
     public ModelAndView manager_carrier() throws ParseException {
-        ModelAndView view = new ModelAndView("statistic/data/complaint_data_statistic_carrier");
+        ModelAndView view = new ModelAndView("statistic/complaint/complaint_statistic_business");
 
         return view;
 
@@ -45,9 +45,9 @@ public class ComplaintStatisticController {
      * 投诉 通道分布
      * @return
      */
-    @RequestMapping(value = "/complaint/channel", method = RequestMethod.GET)
+    @RequestMapping(value = "/channel", method = RequestMethod.GET)
     public ModelAndView manager_channel() throws ParseException {
-        ModelAndView view = new ModelAndView("statistic/data/complaint_data_statistic_channel");
+        ModelAndView view = new ModelAndView("statistic/complaint/complaint_statistic_channel");
 
         return view;
 
