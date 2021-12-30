@@ -3,16 +3,13 @@ package com.smoc.cloud.configure.channel.group.remote;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
-import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelGroupInfoValidator;
-import com.smoc.cloud.common.smoc.configuate.validator.ChannelGroupConfigValidator;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import java.util.List;
 
 
 /**
@@ -44,21 +41,4 @@ public interface ChannelGroupFeignClient {
     @RequestMapping(value = "/configure/channel/group/findById/{id}", method = RequestMethod.GET)
     ResponseData<ChannelGroupInfoValidator> findById(@PathVariable String id) throws Exception;
 
-    /**
-     * 查询通道列表
-     * @param channelBasicInfoQo
-     * @return
-     * @throws Exception
-     */
-    @RequestMapping(value = "/configure/channel/group/findChannelList", method = RequestMethod.POST)
-    ResponseData<List<ChannelBasicInfoQo>> findChannelList(@RequestBody ChannelBasicInfoQo channelBasicInfoQo) throws Exception;
-
-    /**
-     * 保存通道组配置
-     * @param channelGroupConfigValidator
-     * @param op
-     * @return
-     */
-    @RequestMapping(value = "/configure/channel/group/saveChannelGroupConfig/{op}", method = RequestMethod.POST)
-    ResponseData saveChannelGroupConfig(@RequestBody ChannelGroupConfigValidator channelGroupConfigValidator, @PathVariable String op) throws Exception;
 }

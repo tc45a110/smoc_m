@@ -73,7 +73,7 @@
                                             </li>
                                             <li class="" id="tab3"><a onclick="activeTab('3')" id="a3"
                                                                       sec:authorize-url="/parameter/filter/list/CHANNEL_GROUP_FILTER/*/*"
-                                                                      th:href="@{/parameter/filter/list/CHANNEL_GROUP_FILTER/channelGroupId/3}"
+                                                                      th:href="@{/parameter/filter/list/CHANNEL_GROUP_FILTER/{id}/3(id=${id})}"
                                                                       th:target="tab-content">通道组过滤配置</a>
                                         </ul>
                                         <div class="tab-cotent" style="background-color:#fff">

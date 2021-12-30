@@ -42,9 +42,16 @@
                                     </div>
                                     <div class="col-md-4 form-group m-b-20">
                                         <label for="jf">计费方式<span class="text-danger">*</span></label>
-                                        <input id="jf" type="text" class="form-control"
-                                               required="" data-parsley-length="[4,30]" autocomplete="off"
-                                               placeholder="计费方式">
+                                        <br><br>
+                                        <div class="radio radio-info radio-inline">
+                                            <input type="radio" id="jf" name="jf" value="1" checked
+                                                   required="">
+                                            <label for="active1"> 成功接受 </label>
+                                        </div>
+                                        <div class="radio radio-info radio-inline">
+                                            <input type="radio" id="jf0" name="jf" value="0">
+                                            <label for="active0"> 成功发送 </label>
+                                        </div>
                                     </div>
                                     <div class="col-md-4 form-group m-b-20">
                                         <label for="edu">授信额度<span class="text-danger">*</span>&nbsp;</label>
@@ -54,9 +61,16 @@
                                     </div>
                                     <div class="col-md-4 form-group m-b-20">
                                         <label for="style">付费方式<span class="text-danger">*</span>&nbsp;</label>
-                                        <input id="style" type="text" class="form-control"
-                                               required="" data-parsley-length="[1,30]" autocomplete="off"
-                                               placeholder="付费方式">
+                                        <br><br>
+                                        <div class="radio radio-info radio-inline">
+                                            <input type="radio" id="style" name="style" value="1" checked
+                                                   required="">
+                                            <label for="active1"> 预付费 </label>
+                                        </div>
+                                        <div class="radio radio-info radio-inline">
+                                            <input type="radio" id="style0" name="style" value="0">
+                                            <label for="active0"> 后付费 </label>
+                                        </div>
                                     </div>
                                     <div class="col-md-4 form-group m-b-20">
                                         <label>冻结金额返还时间</label><br><br>

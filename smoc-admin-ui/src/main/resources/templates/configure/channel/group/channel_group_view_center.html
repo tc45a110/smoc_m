@@ -41,7 +41,7 @@
                 <div class="card-box">
                     <div class="row" style="margin-bottom:10px">
                         <h4>
-                            <div class="pull-right" style="margin-top: -12px;margin-right:10pxx">
+                            <div class="pull-right" style="margin-top: -12px;margin-right:10px">
                                 <a sec:authorize-url="/configure/channel/group/list" th:href="@{/configure/channel/group/list}"
                                    class="btn btn-default waves-effect waves-light btn-md">
                                     <i class="glyphicon  glyphicon-share-alt" style="margin-right:5px"></i>
@@ -53,15 +53,17 @@
                         <ul class="nav nav-tabs">
                             <li class="active" id="tab1"><a onclick="active('1')"
                                                             sec:authorize-url="/configure/channel/group/view/base/*"
-                                                            th:href="@{/configure/channel/group/view/base/id}"
+                                                            th:href="@{/configure/channel/group/view/base/{id}(id=${id})}"
                                                             th:target="content1">通道组详情</a></li>
-                            <li class="" id="tab6"><a onclick="active('3')"
-                                                      sec:authorize-url="/parameter/filter/view/CHANNEL_GROUP_FILTER/*/*"
-                                                      th:href="@{/parameter/filter/view/CHANNEL_GROUP_FILTER/channelGroupId/3}"
-                                                      th:target="content1">通道组过滤参数</a>
                             <li class="" id="tab2"><a onclick="active('2')"
+                                                      sec:authorize-url="/parameter/filter/view/CHANNEL_GROUP_FILTER/*/*"
+                                                      th:href="@{/parameter/filter/view/CHANNEL_GROUP_FILTER/{id}/3(id=${id})}"
+                                                      th:target="content1">通道组过滤参数</a>
+                            <li class="" id="tab3"><a onclick="active('3')"
                                                       th:target="content1">使用记录</a></li>
                             <li class="" id="tab4"><a onclick="active('4')"
+                                                      sec:authorize-url="/user/logs/list/*"
+                                                      th:href="@{/user/logs/list/{id}(id=${id})}"
                                                       th:target="content1">操作日志</a></li>
                         </ul>
                     </div>

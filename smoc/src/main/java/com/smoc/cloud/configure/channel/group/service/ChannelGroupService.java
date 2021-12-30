@@ -7,13 +7,9 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
-import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelGroupInfoValidator;
-import com.smoc.cloud.common.smoc.configuate.validator.ChannelGroupConfigValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
-import com.smoc.cloud.configure.channel.group.entity.ConfigChannelGroup;
 import com.smoc.cloud.configure.channel.group.entity.ConfigChannelGroupInfo;
-import com.smoc.cloud.configure.channel.group.repository.ChannelGroupConfigRepository;
 import com.smoc.cloud.configure.channel.group.repository.ChannelGroupRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -25,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -38,9 +33,6 @@ public class ChannelGroupService {
 
     @Resource
     private ChannelGroupRepository channelGroupRepository;
-
-    @Resource
-    private ChannelGroupConfigRepository channelGroupConfigRepository;
 
     /**
      * 查询列表
@@ -115,43 +107,10 @@ public class ChannelGroupService {
             return ResponseDataUtil.buildError();
         }
 
-
         //记录日志
         log.info("[通道组管理][通道组基本信息][{}]数据:{}",op,JSON.toJSONString(entity));
         channelGroupRepository.saveAndFlush(entity);
         return ResponseDataUtil.buildSuccess();
     }
 
-    /**
-     * 查询通道列表
-     * @param channelBasicInfoQo
-     * @return
-     */
-    public ResponseData<List<ChannelBasicInfoQo>> findChannelList(ChannelBasicInfoQo channelBasicInfoQo) {
-        List<ChannelBasicInfoQo> list = channelGroupRepository.findChannelList(channelBasicInfoQo);
-        return ResponseDataUtil.buildSuccess(list);
-    }
-
-    /**
-     * 保存通道组配置
-     * @param channelGroupConfigValidator
-     * @param op
-     * @return
-     */
-    public ResponseData saveChannelGroupConfig(ChannelGroupConfigValidator channelGroupConfigValidator, String op) {
-
-        ConfigChannelGroup entity = new ConfigChannelGroup();
-        BeanUtils.copyProperties(channelGroupConfigValidator, entity);
-
-        //op 不为 edit 或 add
-        if (!("edit".equals(op) || "add".equals(op))) {
-            return ResponseDataUtil.buildError();
-        }
-
-        //记录日志
-        log.info("[通道组管理][通道组配置][{}]数据:{}",op,JSON.toJSONString(entity));
-        channelGroupConfigRepository.saveAndFlush(entity);
-
-        return ResponseDataUtil.buildSuccess();
-    }
 }

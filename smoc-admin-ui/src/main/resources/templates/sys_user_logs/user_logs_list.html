@@ -21,6 +21,13 @@
 
         <!-- start row  列表数据-->
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+
+            <form th:action="@{/user/logs/page}" th:object="${systemUserLogValidator}" id="query_form" method="post">
+                <input type="hidden" th:field="*{moduleId}">
+                <input type="hidden" name="currentPage" id="currentPage" th:value="${pageParams.currentPage}">
+                <input type="hidden" name="pageSize" id="pageSize" th:value="${pageParams.pageSize}">
+            </form>
+
             <div class="col-sm-12">
                 <div class="panel panel-color panel-info">
                     <div class="panel-heading">

@@ -11,7 +11,10 @@ import java.util.Date;
 @Setter
 @Getter
 public class ConfigChannelGroupQo {
+
     private String id;
+
+    private String channelId;
 
     //通道名称
     private String channelName;
@@ -31,5 +34,5 @@ public class ConfigChannelGroupQo {
     //权重
     private Integer channelWeight;
 
-
+    private String channelGroupId;
 }

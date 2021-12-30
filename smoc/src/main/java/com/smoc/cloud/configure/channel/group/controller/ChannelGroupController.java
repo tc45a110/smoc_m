@@ -5,9 +5,7 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
-import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelGroupInfoValidator;
-import com.smoc.cloud.common.smoc.configuate.validator.ChannelGroupConfigValidator;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.configure.channel.group.service.ChannelGroupService;
@@ -16,8 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
-
-import java.util.List;
 
 
 /**
@@ -81,34 +77,5 @@ public class ChannelGroupController {
         return data;
     }
 
-    /**
-     * 查询通道列表
-     * @param channelBasicInfoQo
-     * @return
-     */
-    @RequestMapping(value = "/findChannelList", method = RequestMethod.POST)
-    public ResponseData<List<ChannelBasicInfoQo>> findChannelList(@RequestBody ChannelBasicInfoQo channelBasicInfoQo) {
 
-        return channelGroupService.findChannelList(channelBasicInfoQo);
-    }
-
-    /**
-     * 保存通道组配置
-     * @param channelGroupConfigValidator
-     * @param op
-     * @return
-     */
-    @RequestMapping(value = "/saveChannelGroupConfig/{op}", method = RequestMethod.POST)
-    public ResponseData saveChannelGroupConfig(@RequestBody ChannelGroupConfigValidator channelGroupConfigValidator, @PathVariable String op) {
-
-        //完成参数规则验证
-        if (!MpmValidatorUtil.validate(channelGroupConfigValidator)) {
-            return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(channelGroupConfigValidator));
-        }
-
-        //保存操作
-        ResponseData data = channelGroupService.saveChannelGroupConfig(channelGroupConfigValidator, op);
-
-        return data;
-    }
 }

@@ -4,9 +4,7 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
-import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelGroupInfoValidator;
-import com.smoc.cloud.common.smoc.configuate.validator.ChannelGroupConfigValidator;
 import com.smoc.cloud.configure.channel.group.remote.ChannelGroupFeignClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +13,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 
 /**
@@ -74,34 +71,4 @@ public class ChannelGroupService {
         }
     }
 
-    /**
-     * 查询通道列表
-     * @param channelBasicInfoQo
-     * @return
-     */
-    public ResponseData<List<ChannelBasicInfoQo>> findChannelList(ChannelBasicInfoQo channelBasicInfoQo) {
-        try {
-            ResponseData<List<ChannelBasicInfoQo>> list = this.channelGroupFeignClient.findChannelList(channelBasicInfoQo);
-            return list;
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseDataUtil.buildError(e.getMessage());
-        }
-    }
-
-    /**
-     * 保存通道组配置
-     * @param channelGroupConfigValidator
-     * @param op
-     * @return
-     */
-    public ResponseData saveChannelGroupConfig(ChannelGroupConfigValidator channelGroupConfigValidator, String op) {
-        try {
-            ResponseData data = this.channelGroupFeignClient.saveChannelGroupConfig(channelGroupConfigValidator, op);
-            return data;
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseDataUtil.buildError(e.getMessage());
-        }
-    }
 }

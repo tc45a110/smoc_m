@@ -111,15 +111,18 @@
                                                         </p>
                                                         <p style="font-size:12px">
                                                             配置通道数：[[${info.channelNum}]] 个
-                                                            <i  th:id="'tooltip-html'+${info.channelGroupId}" th:onmouseover="channelGroupTip([[${info.channelGroupId}]])"
+                                                            <i th:id="'tooltip'+${info.channelGroupId}" th:onmouseover="channelGroupTip([[${info.channelGroupId}]])"
                                                                th:if="${info.channelNum ne 0}"
                                                                class="mdi mdi-comment-text" style="margin-left:5px"></i>
                                                         </p>
-                                                        <p style="font-size:12px">扩展参数：
-                                                            <i data-toggle="tooltip" data-placement="right" title=""
-                                                               data-original-title="显示扩展参数"
-                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                                        <p style="font-size:12px">通道组信息过滤：<i data-toggle="tooltip"
+                                                                                             data-placement="right"
+                                                                                             title=""
+                                                                                             data-original-title="点击，显示配置的过滤信息"
+                                                                                             class="mdi mdi-filter-outline"
+                                                                                             style="margin-left:5px"></i>
                                                         </p>
+
                                                     </div>
                                                     <div class="col-sm-4">
 
@@ -134,21 +137,14 @@
                                                                class="mdi mdi-comment-text-outline"
                                                                th:if="${not #strings.isEmpty(info.maskProvince)}"
                                                                style="margin-left:5px"></i>
-                                                        <p style="font-size:12px">状态：
-                                                            <mpm:tag identity="dataStatus" show-type="button" key="code" th:value="${info.channelGroupStatus}"
-                                                                 class="1,btn btn-success waves-effect waves-light btn-xs;0,btn btn-danger waves-effect waves-light btn-xs;"/>
-                                                        </p>
                                                     </div>
                                                     <div class="col-sm-4">
                                                         <p style="font-size:12px">信息分类：
                                                             <mpm:tag identity="infoType" show-type="label" key="code" th:value="${info.infoType}"/>
                                                         </p>
-                                                        <p style="font-size:12px">通道组信息过滤：<i data-toggle="tooltip"
-                                                                                             data-placement="right"
-                                                                                             title=""
-                                                                                             data-original-title="点击，显示配置的过滤信息"
-                                                                                             class="mdi mdi-filter-outline"
-                                                                                             style="margin-left:5px"></i>
+                                                        <p style="font-size:12px">状态：
+                                                            <mpm:tag identity="dataStatus" show-type="button" key="code" th:value="${info.channelGroupStatus}"
+                                                                     class="1,btn btn-success waves-effect waves-light btn-xs;0,btn btn-danger waves-effect waves-light btn-xs;"/>
                                                         </p>
                                                     </div>
                                                 </div>
@@ -201,15 +197,14 @@
 <script>
 
     function channelGroupTip(channelGroupId){
-        $('#tooltip-html'+channelGroupId).tooltipster({
+        $('#tooltip'+channelGroupId).tooltipster({
             content: $('<p style="text-align:left;"><strong>通道组通道配置</strong><br><span style="font-size:12px">短信-移动-会销(小舟dj) 权重：10；优先级 1.</span><br><span style="font-size:12px">短信-移动-会销(小舟dj) 权重：10；优先级 1.</span><br><span style="font-size:12px">短信-移动-会销(小舟dj) 权重：10；优先级 1.</span><br><span style="font-size:12px">短信-移动-会销(小舟dj) 权重：10；优先级 1.</span></p>'),
             minWidth: 300,
             maxWidth: 600,
-            onlyOne: false,
+            //trigger: 'hover',
             position: 'right'
         });
     }
-
 
     var resizefunc = [];
     //隐藏进度项

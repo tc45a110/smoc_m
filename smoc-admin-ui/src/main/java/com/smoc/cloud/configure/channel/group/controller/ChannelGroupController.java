@@ -7,9 +7,7 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
-import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelGroupInfoValidator;
-import com.smoc.cloud.common.smoc.configuate.validator.ChannelGroupConfigValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.common.validator.MpmIdValidator;
@@ -26,7 +24,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
-import java.util.List;
 
 /**
  * 通道组管理
@@ -236,14 +233,14 @@ public class ChannelGroupController {
     }
 
     /**
-     * 通道组配置
+     * 产品详细中心
      *
      * @return
      */
-    @RequestMapping(value = "/edit/channel/{id}", method = RequestMethod.GET)
-    public ModelAndView channelList(@PathVariable String id, HttpServletRequest request) {
+    @RequestMapping(value = "/view/center/{id}", method = RequestMethod.GET)
+    public ModelAndView view_center(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("configure/channel/group/channel_group_edit_channel");
+        ModelAndView view = new ModelAndView("configure/channel/group/channel_group_view_center");
 
         //完成参数规则验证
         MpmIdValidator validator = new MpmIdValidator();
@@ -253,136 +250,7 @@ public class ChannelGroupController {
             return view;
         }
 
-        //查询通道组数据
-        ResponseData<ChannelGroupInfoValidator> data = channelGroupService.findById(id);
-        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            view.addObject("error", data.getCode() + ":" + data.getMessage());
-        }
-
-        //查询已配置的通道
-
-        /**
-         * 查询通道列表
-         */
-        ChannelBasicInfoQo channelBasicInfoQo = new ChannelBasicInfoQo();
-        channelBasicInfoQo.setCarrier(data.getData().getCarrier());
-        channelBasicInfoQo.setBusinessType(data.getData().getBusinessType());
-        channelBasicInfoQo.setInfoType(data.getData().getInfoType());
-        channelBasicInfoQo.setChannelStatus("001");//正常
-        ResponseData<List<ChannelBasicInfoQo>> listDate = channelGroupService.findChannelList(channelBasicInfoQo);
-        if (!ResponseCode.SUCCESS.getCode().equals(listDate.getCode())) {
-            view.addObject("error", listDate.getCode() + ":" + listDate.getMessage());
-        }
-
-        view.addObject("list", listDate.getData());
-        view.addObject("channelBasicInfoQo", channelBasicInfoQo);
-        view.addObject("channelGroupConfigValidator", new ChannelGroupConfigValidator());
-        view.addObject("channelGroupId", id);
-
-        return view;
-
-    }
-
-    /**
-     * 通道组配置分页查询
-     *
-     * @return
-     */
-    @RequestMapping(value = "/edit/channelPage", method = RequestMethod.POST)
-    public ModelAndView page(@ModelAttribute ChannelBasicInfoQo channelBasicInfoQo, PageParams pageParams) {
-        ModelAndView view = new ModelAndView("configure/channel/group/channel_group_edit_channel");
-
-        //查询通道组数据
-        ResponseData<ChannelGroupInfoValidator> data = channelGroupService.findById(channelBasicInfoQo.getChannelId());
-        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            view.addObject("error", data.getCode() + ":" + data.getMessage());
-        }
-
-        //查询已配置的通道
-
-        //查询通道列表
-        channelBasicInfoQo.setChannelStatus("001");//正常
-        ResponseData<List<ChannelBasicInfoQo>> listDate = channelGroupService.findChannelList(channelBasicInfoQo);
-        if (!ResponseCode.SUCCESS.getCode().equals(listDate.getCode())) {
-            view.addObject("error", listDate.getCode() + ":" + listDate.getMessage());
-        }
-
-        view.addObject("list", listDate.getData());
-        view.addObject("channelBasicInfoQo", channelBasicInfoQo);
-        view.addObject("channelGroupConfigValidator", new ChannelGroupConfigValidator());
-        view.addObject("channelGroupId", channelBasicInfoQo.getChannelId());
-        return view;
-    }
-
-    /**
-     * 保存通道组配置
-     *
-     * @return
-     */
-    @RequestMapping(value = "/saveChannelGroupConfig/{op}", method = RequestMethod.POST)
-    public ModelAndView saveChannelGroupConfig(@ModelAttribute ChannelGroupConfigValidator channelGroupConfigValidator, @PathVariable String op, HttpServletRequest request) {
-        ModelAndView view = new ModelAndView("configure/channel/group/channel_group_edit_channel");
-
-        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
-
-        //查询通道组数据
-        ResponseData<ChannelGroupInfoValidator> responseData = channelGroupService.findById(channelGroupConfigValidator.getChannelGroupId());
-        if (!ResponseCode.SUCCESS.getCode().equals(responseData.getCode())) {
-            view.addObject("error", responseData.getCode() + ":" + responseData.getMessage());
-        }
-
-        /**
-         * 保存通道组配置
-         */
-        channelGroupConfigValidator.setId(UUID.uuid32());
-        channelGroupConfigValidator.setCreatedBy(user.getRealName());
-        channelGroupConfigValidator.setCreatedTime(new Date());
-        ResponseData data = channelGroupService.saveChannelGroupConfig(channelGroupConfigValidator, op);
-        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            view.addObject("error", data.getCode() + ":" + data.getMessage());
-            return view;
-        }
-
-        //记录日志
-        log.info("[通道组管理][通道组配置][{}][{}]数据:{}", op, user.getUserName(), JSON.toJSONString(channelGroupConfigValidator));
-
-        //保存操作记录
-        if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            systemUserLogService.logsAsync("CHANNEL_GROUIP_CONFIG", channelGroupConfigValidator.getChannelGroupId(), channelGroupConfigValidator.getCreatedBy(), op, "添加通道组配置" , JSON.toJSONString(channelGroupConfigValidator));
-        }
-
-        //查询已配置的通道
-
-        /**
-         * 查询通道列表
-         */
-        ChannelBasicInfoQo channelBasicInfoQo = new ChannelBasicInfoQo();
-        channelBasicInfoQo.setCarrier(responseData.getData().getCarrier());
-        channelBasicInfoQo.setBusinessType(responseData.getData().getBusinessType());
-        channelBasicInfoQo.setInfoType(responseData.getData().getInfoType());
-        channelBasicInfoQo.setChannelStatus("001");//正常
-        ResponseData<List<ChannelBasicInfoQo>> listDate = channelGroupService.findChannelList(channelBasicInfoQo);
-        if (!ResponseCode.SUCCESS.getCode().equals(listDate.getCode())) {
-            view.addObject("error", listDate.getCode() + ":" + listDate.getMessage());
-        }
-
-        view.addObject("list", listDate.getData());
-        view.addObject("channelBasicInfoQo", channelBasicInfoQo);
-        view.addObject("channelGroupConfigValidator", new ChannelGroupConfigValidator());
-        view.addObject("channelGroupId", channelGroupConfigValidator.getChannelGroupId());
-
-        return view;
-    }
-
-    /**
-     * 产品详细中心
-     *
-     * @return
-     */
-    @RequestMapping(value = "/view/center/{id}", method = RequestMethod.GET)
-    public ModelAndView view_center(@PathVariable String id, HttpServletRequest request) {
-
-        ModelAndView view = new ModelAndView("configure/channel/group/channel_group_view_center");
+        view.addObject("id", id);
 
         return view;
 
@@ -398,6 +266,13 @@ public class ChannelGroupController {
 
         ModelAndView view = new ModelAndView("configure/channel/group/channel_group_view_base");
 
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
 
         return view;
 
