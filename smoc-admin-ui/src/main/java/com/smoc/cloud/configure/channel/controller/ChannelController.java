@@ -15,6 +15,7 @@ import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelBasicInfoValidator;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelInterfaceValidator;
+import com.smoc.cloud.common.smoc.utils.ChannelUtils;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
@@ -335,22 +336,12 @@ public class ChannelController {
             return data.getMessage();
         }
 
-        //取字典数据
-        ServletContext context = request.getServletContext();
-        Map<String, DictType> dictMap = (Map<String, DictType>) context.getAttribute("dict");
-        List<Dict> dictList = new ArrayList<>();
-
         //国际
+        String dictType = "";
         if ("INTERNATIONAL".equals(data.getData().getBusinessAreaType())) {
-            DictType dictType = dictMap.get("internationalCountry");
-            dictList = dictType.getDict();
+            dictType = "internationalCountry";
         } else {
-            DictType dictType = dictMap.get("provices");
-            dictList = dictType.getDict();
-        }
-
-        if (dictList.size() < 1) {
-            return "数据为空或无效";
+            dictType = "provices";
         }
 
         String areaType = "业务区域";
@@ -365,34 +356,11 @@ public class ChannelController {
             }
         }
 
-        String[] areaCodes = supportAreaCodes.split(",");
+        //取字典数据
+        ServletContext context = request.getServletContext();
+        Map<String, DictType> dictMap = (Map<String, DictType>) context.getAttribute("dict");
 
-        //封装区域数据
-        StringBuilder channelArea = new StringBuilder();
-        if (areaCodes.length > 1) {
-            for (int a = 0; a < areaCodes.length; a++) {
-                String name = "";
-                for (int i = 0; i < dictList.size(); i++) {
-                    Dict dict = dictList.get(i);
-                    if (areaCodes[a].equals(dict.getFieldCode())) {
-                        name += dict.getFieldName();
-                        break;
-                    }
-                }
-                channelArea.append(name + " ");
-            }
-        } else {
-            String name = "";
-            for (Dict dict : dictList) {
-                if (supportAreaCodes.equals(dict.getFieldCode())) {
-                    name += dict.getFieldName();
-                    break;
-                }
-            }
-            channelArea.append(name);
-        }
-
-        return areaType + "：" + channelArea.toString();
+        return areaType + "：" + ChannelUtils.getAreaProvince(dictMap,dictType,supportAreaCodes);
     }
 
     /**

@@ -5,6 +5,7 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelGroupInfoValidator;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
@@ -14,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
+
+import java.util.List;
 
 
 /**
@@ -77,5 +80,15 @@ public class ChannelGroupController {
         return data;
     }
 
+    /**
+     * 通道组详情里已配置通道列表
+     * @param channelGroupInfoValidator
+     * @return
+     */
+    @RequestMapping(value = "/centerConfigChannelList", method = RequestMethod.POST)
+    public ResponseData<List<ChannelBasicInfoQo>> centerConfigChannelList(@RequestBody ChannelGroupInfoValidator channelGroupInfoValidator) {
+
+        return channelGroupService.centerConfigChannelList(channelGroupInfoValidator);
+    }
 
 }

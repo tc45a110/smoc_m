@@ -7,6 +7,7 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelGroupInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.configure.channel.group.entity.ConfigChannelGroupInfo;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -113,4 +115,13 @@ public class ChannelGroupService {
         return ResponseDataUtil.buildSuccess();
     }
 
+    /**
+     * 通道组详情里已配置通道列表
+     * @param channelGroupInfoValidator
+     * @return
+     */
+    public ResponseData<List<ChannelBasicInfoQo>> centerConfigChannelList(ChannelGroupInfoValidator channelGroupInfoValidator) {
+        List<ChannelBasicInfoQo> list = channelGroupRepository.centerConfigChannelList(channelGroupInfoValidator);
+        return ResponseDataUtil.buildSuccess(list);
+    }
 }

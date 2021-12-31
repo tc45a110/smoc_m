@@ -7,7 +7,8 @@
     <th:block th:insert="fragments/common_fragments :: common_css"/>
     <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
     <th:block th:insert="fragments/common_fragments :: select_css"/>
-    <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
+    <!-- Tooltipster css -->
+    <link rel="stylesheet" th:href="@{/static/plugins/tooltipster/tooltipster.bundle.min.css}">
 </head>
 <body>
 <!-- Loader start 页面加载进度-->
@@ -41,7 +42,8 @@
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
                 <div class="card-box">
-                    <form th:action="@{/configure/channel/page}" th:object="${channelBasicInfoQo}" id="query_form" method="post">
+                    <form th:action="@{/configure/channel/page}" th:object="${channelBasicInfoQo}" id="query_form"
+                          method="post">
                         <div class="row m-b-60">
                             <div class="col-sm-12">
                                 <div class="form-group  col-sm-3">
@@ -65,29 +67,38 @@
                                            placeholder="通道对接销售" autocomplete="off">
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <mpm:tag id="channelSupplier" identity="channelSupplier" show-type="select" key="code" class="form-control"
-                                             name="channelProvder" th:value="${channelBasicInfoQo.channelProvder}" title="通道供应商"/>
+                                    <mpm:tag id="channelSupplier" identity="channelSupplier" show-type="select"
+                                             key="code" class="form-control"
+                                             name="channelProvder" th:value="${channelBasicInfoQo.channelProvder}"
+                                             title="通道供应商"/>
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <mpm:tag id="provicesiii" identity="provices" show-type="select" key="code" class="form-control"
-                                             name="accessProvince" th:value="${channelBasicInfoQo.accessProvince}" title="接入省份"/>
+                                    <mpm:tag id="provicesiii" identity="provices" show-type="select" key="code"
+                                             class="form-control"
+                                             name="accessProvince" th:value="${channelBasicInfoQo.accessProvince}"
+                                             title="接入省份"/>
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <mpm:tag id="channelLinkStatus" identity="channelLinkStatus" show-type="select" key="code" class="form-control"
-                                             name="channelRunStatus" th:value="${channelBasicInfoQo.channelRunStatus}" title="通道运行状态"/>
+                                    <mpm:tag id="channelLinkStatus" identity="channelLinkStatus" show-type="select"
+                                             key="code" class="form-control"
+                                             name="channelRunStatus" th:value="${channelBasicInfoQo.channelRunStatus}"
+                                             title="通道运行状态"/>
                                 </div>
 
                                 <div class="form-group  col-sm-3">
-                                    <mpm:tag id="channelProtocolType" identity="channelProtocolType" show-type="select" key="code" class="form-control"
+                                    <mpm:tag id="channelProtocolType" identity="channelProtocolType" show-type="select"
+                                             key="code" class="form-control"
                                              name="protocol" th:value="${channelBasicInfoQo.protocol}" title="通道协议类型"/>
                                 </div>
                                 <div class="form-group  col-sm-3">
                                     <mpm:tag id="carrier" identity="carrier" show-type="select" key="code"
-                                             name="carrier" class="form-control" th:value="${channelBasicInfoQo.carrier}" title="发送号码范围"/>
+                                             name="carrier" class="form-control"
+                                             th:value="${channelBasicInfoQo.carrier}" title="发送号码范围"/>
                                 </div>
                                 <div class="form-group  col-sm-3">
                                     <mpm:tag id="infoType" identity="infoType" show-type="select" key="code"
-                                             name="infoType" class="form-control" th:value="${channelBasicInfoQo.infoType}" title="信息分类"/>
+                                             name="infoType" class="form-control"
+                                             th:value="${channelBasicInfoQo.infoType}" title="信息分类"/>
                                 </div>
                                 <div class="form-group col-sm-3 pull-right" style="text-align: right">
                                     <button sec:authorize-url="/configure/channel/page" type="submit"
@@ -98,8 +109,10 @@
                                        th:href="@{/configure/channel/edit/center/base}"
                                        class="btn btn-success waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-plus-sign"></i> 新建通道</a>
-                                    <input type="hidden" name="currentPage" id="currentPage" th:value="${pageParams.currentPage}">
-                                    <input type="hidden" name="pageSize" id="pageSize" th:value="${pageParams.pageSize}">
+                                    <input type="hidden" name="currentPage" id="currentPage"
+                                           th:value="${pageParams.currentPage}">
+                                    <input type="hidden" name="pageSize" id="pageSize"
+                                           th:value="${pageParams.pageSize}">
                                 </div>
 
                             </div>
@@ -136,49 +149,88 @@
                                                         <p style="font-size:12px">通道ID：[[${info.channelId}]]</p>
                                                         <p style="font-size:12px">码号：[[${info.srcId}]]</p>
                                                         <p style="font-size:12px">
-                                                            通道资费(元/条)：<span th:if="${not #strings.isEmpty(info.channelPrice)}">¥ [[${info.channelPrice}]]</span>
-                                                                            <i th:if="${info.priceStyle eq 'AREA_PRICE'}" data-toggle="tooltip"
-                                                                                data-placement="right" title=""
-                                                                                data-original-title="这个位置开发时有业务逻辑，可能多条 在这显示"
-                                                                               th:id="${'channelPrice'+info.channelId}" th:onmouseover="channelPrice([[${info.channelId}]])"
-                                                                                class="mdi mdi-comment-processing"
-                                                                                style="margin-left:5px"></i>
+                                                            通道资费(元/条)：
+                                                            <span th:if="${not #strings.isEmpty(info.channelPrice)}">¥ [[${info.channelPrice}]]</span>
+                                                            <i th:if="${info.priceStyle eq 'AREA_PRICE'}"
+                                                               data-toggle="tooltip"
+                                                               data-placement="right"
+                                                               th:id="${'channelPrice'+info.channelId}"
+                                                               th:onmouseover="channelPrice([[${info.channelId}]])"
+                                                               class="mdi mdi-comment-processing"
+                                                               style="margin-left:5px"></i>
                                                         </p>
-                                                        <p style="font-size:12px">最大速率(条/秒)：<span th:if="${info.maxSendSecond ne 0}">[[${info.maxSendSecond}]]/秒</span></p>
+
+                                                        <p style="font-size:12px">业务类型：
+                                                            <mpm:tag identity="businessType" show-type="button"
+                                                                     key="code" th:value="${info.businessType}"
+                                                                     class="TEXT_SMS,btn btn-teal waves-effect waves-light btn-xs;MULTI_SMS,btn btn-brown waves-effect waves-light btn-xs;MMS,btn btn-info waves-effect waves-light btn-xs;5G_SMS,btn btn-primary waves-effect waves-light btn-xs;INTERNATIONAL_SMS,btn btn-purple waves-effect waves-light btn-xs;BLACK_SERVICE,btn btn-inverse waves-effect waves-light btn-xs"/>
+                                                        </p>
                                                     </div>
                                                     <div class="col-sm-3">
                                                         <p style="font-size:12px">通道供应商：
-                                                            <mpm:tag identity="channelSupplier" show-type="button" key="code" th:value="${info.channelProvder}"
-                                                                 class="001,btn btn-teal waves-effect waves-light btn-xs;002,btn btn-info waves-effect waves-light btn-xs;003,btn btn-primary waves-effect waves-light btn-xs;004,btn btn-custom waves-effect waves-light btn-xs;005,btn btn-purple waves-effect waves-light btn-xs;006,btn btn-brown waves-effect waves-light btn-xs;"/>
+                                                            <mpm:tag identity="channelSupplier" show-type="button"
+                                                                     key="code" th:value="${info.channelProvder}"
+                                                                     class="001,btn btn-teal waves-effect waves-light btn-xs;002,btn btn-info waves-effect waves-light btn-xs;003,btn btn-primary waves-effect waves-light btn-xs;004,btn btn-custom waves-effect waves-light btn-xs;005,btn btn-purple waves-effect waves-light btn-xs;006,btn btn-brown waves-effect waves-light btn-xs;"/>
                                                         </p>
-                                                        <p style="font-size:12px">通道协议类型：<mpm:tag identity="channelProtocolType" show-type="label" key="code" th:value="${info.protocol}"/></p>
+                                                        <p style="font-size:12px">通道协议类型：
+                                                            <mpm:tag identity="channelProtocolType" show-type="label"
+                                                                     key="code" th:value="${info.protocol}"/>
+                                                        </p>
                                                         <p style="font-size:12px">
-                                                            通道区域范围：<mpm:tag identity="businessAreaType" show-type="label" key="code" th:value="${info.businessAreaType}"/>
-                                                            <i th:if="${info.supportAreaCodes ne 'ALL'}" data-toggle="tooltip" data-placement="right" title=""
-                                                               data-original-title="这个位置开发时有业务逻辑，可能多条 在这显示" th:id="${info.channelId}" th:onmouseover="areaCodes([[${info.channelId}]])"
+                                                            通道区域范围：
+                                                            <mpm:tag identity="businessAreaType" show-type="label"
+                                                                     key="code" th:value="${info.businessAreaType}"/>
+                                                            <i th:if="${info.supportAreaCodes ne 'ALL'}"
+                                                               data-toggle="tooltip" data-placement="right" title=""
+                                                               data-original-title="这个位置开发时有业务逻辑，可能多条 在这显示"
+                                                               th:id="${info.channelId}"
+                                                               th:onmouseover="areaCodes([[${info.channelId}]])"
                                                                class="mdi mdi-comment-text" style="margin-left:5px"></i>
-                                                            <i th:if="${not #strings.isEmpty(info.maskProvince)}" data-toggle="tooltip" data-placement="right" title=""
-                                                               data-original-title="屏蔽区域，如果存在屏蔽区域的话" th:id="${info.channelId}" th:onmouseover="areaCodes([[${info.channelId}]])"
+                                                            <i th:if="${not #strings.isEmpty(info.maskProvince)}"
+                                                               data-toggle="tooltip" data-placement="right" title=""
+                                                               data-original-title="屏蔽区域，如果存在屏蔽区域的话"
+                                                               th:id="${info.channelId}"
+                                                               th:onmouseover="areaCodes([[${info.channelId}]])"
                                                                class="mdi mdi-comment-text-outline"
                                                                style="margin-left:5px"></i>
                                                         </p>
-                                                        <p style="font-size:12px">内容限制：[[${info.channelRestrictContent}]]</p>
-
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">发送号码范围：<mpm:tag identity="carrier" show-type="label" key="code" th:value="${info.carrier}"/></p>
-                                                        <p style="font-size:12px">通道对接账号：[[${info.channelAccessAccount}]]</p>
-                                                        <p style="font-size:12px">通道运行状态：
-                                                            <sapn th:if="${info.channelRunStatus eq '1'}">正常</sapn>
-                                                            <sapn th:if="${info.channelRunStatus eq '0'}" style="color: red">异常</sapn>
+                                                        <p style="font-size:12px">最大速率(条/秒)：<span
+                                                                th:if="${info.maxSendSecond ne 0}">[[${info.maxSendSecond}]]/秒</span>
                                                         </p>
 
                                                     </div>
                                                     <div class="col-sm-3">
-                                                        <p style="font-size:12px">抗速率：<span th:if="${not #strings.isEmpty(info.maxComplaintRate)}">[[${info.maxComplaintRate}]]/百万</span></p>
-                                                        <p style="font-size:12px">通道对接销售：[[${info.channelAccessSales}]]</p>
+                                                        <p style="font-size:12px">发送号码范围：
+                                                            <mpm:tag identity="carrier" show-type="label" key="code"
+                                                                     th:value="${info.carrier}"/>
+                                                        </p>
+                                                        <p style="font-size:12px">
+                                                            通道对接账号：[[${info.channelAccessAccount}]]</p>
+                                                        <p style="font-size:12px">通道运行状态：
+                                                            <sapn th:if="${info.channelRunStatus eq '1'}">正常</sapn>
+                                                            <sapn th:if="${info.channelRunStatus eq '0'}"
+                                                                  style="color: red">异常
+                                                            </sapn>
+                                                        </p>
+                                                        <p style="font-size:12px">内容限制：
+                                                            <span th:if="${#strings.isEmpty(info.channelRestrictContent)}">无</span>
+                                                            <i data-toggle="tooltip"
+                                                               th:if="${not #strings.isEmpty(info.channelRestrictContent)}"
+                                                               data-placement="right" title=""
+                                                               th:data-original-title="${info.channelRestrictContent}"
+                                                               class="mdi mdi-comment-processing"
+                                                               style="margin-left:5px"></i>
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <p style="font-size:12px">抗速率：<span
+                                                                th:if="${not #strings.isEmpty(info.maxComplaintRate)}">[[${info.maxComplaintRate}]]/百万</span>
+                                                        </p>
+                                                        <p style="font-size:12px">
+                                                            通道对接销售：[[${info.channelAccessSales}]]</p>
                                                         <p style="font-size:12px">通道状态：
-                                                            <mpm:tag identity="channelStatus" show-type="button" key="code" th:value="${info.channelStatus}"
+                                                            <mpm:tag identity="channelStatus" show-type="button"
+                                                                     key="code" th:value="${info.channelStatus}"
                                                                      class="001,btn btn-success waves-effect waves-light btn-xs;002,btn btn-orange waves-effect waves-light btn-xs;003,btn btn-brown waves-effect waves-light btn-xs;004,btn btn-pink waves-effect waves-light btn-xs;005,btn btn-inverse waves-effect waves-light btn-xs;006,btn btn-danger waves-effect waves-light btn-xs;"/>
                                                             <!--<a data-toggle="tooltip"
                                                                   data-placement="bottom"
@@ -234,16 +286,19 @@
 <th:block th:insert="fragments/common_fragments :: common_js"/>
 <th:block th:insert="fragments/common_fragments :: select_js"/>
 <script th:src="@{/static/plugins/moment/moment.js}"></script>
+<!-- Tooltipster js -->
+<script th:src="@{/static/plugins/tooltipster/tooltipster.bundle.min.js}"></script>
 
 <script>
 
-    function areaCodes(channelId){
+    //查看区域
+    function areaCodes(channelId) {
         var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
         $.ajax({
             url: contextPath + "/configure/channel/findChannelBusinessArea/" + channelId,
             async: false,
             success: function (data) {
-                $('#'+channelId).attr({
+                $('#' + channelId).attr({
                     // 设置提示内容
                     'data-original-title': data,
                 })
@@ -251,16 +306,33 @@
         });
     }
 
-    function channelPrice(channelId){
+    //查看区域价格
+    function channelPrice(channelId) {
+
         var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
         $.ajax({
             url: contextPath + "/configure/channel/findChannelPrice/" + channelId,
             async: false,
             success: function (data) {
-                $('#channelPrice'+channelId).attr({
-                    // 设置提示内容
-                    'data-original-title': data,
-                })
+                var prices = data.split("@");
+                var channelPrice = ""
+                if (prices.length > 1) {
+                    for (i = 0; i < prices.length; i++) {
+                        if (i % 3 == 0 && i>0) {
+                            channelPrice += '<br>';
+                        }
+                        channelPrice += '<span style="font-size:12px">' + prices[i] + '</span>';
+                    }
+                } else {
+                    channelPrice = prices;
+                }
+
+                $('#channelPrice' + channelId).tooltipster({
+                    content: $('<p style="text-align:left;"><strong>区域价格</strong><br>' + channelPrice + '</p>'),
+                    maxWidth: 600,
+                    position: 'right',
+                    multiple: true,
+                });
             }
         });
     }

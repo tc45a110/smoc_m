@@ -12,11 +12,11 @@ import com.smoc.cloud.parameter.service.ParameterExtendFiltersValueService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
  * 过滤参数扩展
  **/
 @Slf4j
-@Controller
+@RestController
 @RequestMapping("/parameter/filter")
 @Scope(value = WebApplicationContext.SCOPE_REQUEST)
 public class SystemExtendBusinessParamController {
@@ -201,4 +201,42 @@ public class SystemExtendBusinessParamController {
         return view;
     }
 
+    /**
+     * 过滤业务 查看
+     *
+     * @param businessType 参数类型
+     * @param businessId   业务ID
+     * @return
+     */
+    @RequestMapping(value = "/look/{businessType}/{businessId}", produces = "text/html;charset=utf-8", method = RequestMethod.GET)
+    public String look(@PathVariable String businessType, @PathVariable String businessId) {
+
+        //判断非空
+        if (StringUtils.isEmpty(businessType) || StringUtils.isEmpty(businessId)) {
+            return "businessType参数不能为空";
+        }
+
+        //查询业务扩展字段对应的值
+        ResponseData<List<ParameterExtendFiltersValueValidator>> parameterValues = parameterExtendFiltersValueService.findParameterValue(businessId);
+        if (!ResponseCode.SUCCESS.getCode().equals(parameterValues.getCode())) {
+            return parameterValues.getMessage();
+        }
+
+        List<ParameterExtendFiltersValueValidator> list = parameterValues.getData();
+        if (StringUtils.isEmpty(list) || list.size() <= 0) {
+            return "无过滤参数";
+        }
+
+        //封装过滤参数数据
+        StringBuilder extendBusinessParam = new StringBuilder();
+        for (int i = 0; i < list.size(); i++) {
+            ParameterExtendFiltersValueValidator qo = list.get(i);
+            extendBusinessParam.append(qo.getParamName() + "：" + qo.getParamValue()+"；");
+            if (i != list.size()-1) {
+                extendBusinessParam.append("@");
+            }
+        }
+
+        return extendBusinessParam.toString();
+    }
 }

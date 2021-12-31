@@ -17,6 +17,7 @@ import com.smoc.cloud.configure.channel.group.service.ChannelGroupService;
 import com.smoc.cloud.configure.channel.group.service.ConfigChannelGroupService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
@@ -169,7 +170,7 @@ public class ConfigChannelGroupController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            systemUserLogService.logsAsync("CHANNEL_GROUIP_CONFIG", channelGroupConfigValidator.getChannelGroupId(), channelGroupConfigValidator.getCreatedBy(), op, "添加通道组配置" , JSON.toJSONString(channelGroupConfigValidator));
+            systemUserLogService.logsAsync("CHANNEL_GROUIP_CONFIG", channelGroupConfigValidator.getChannelGroupId(), channelGroupConfigValidator.getCreatedBy(), op, "添加通道组配置", JSON.toJSONString(channelGroupConfigValidator));
         }
 
         //查询已配置的通道
@@ -240,14 +241,60 @@ public class ConfigChannelGroupController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            systemUserLogService.logsAsync("CHANNEL_GROUIP_CONFIG", responseData.getData().getChannelGroupId(), user.getRealName(), "delete", "移除通道组配置" , JSON.toJSONString(responseData));
+            systemUserLogService.logsAsync("CHANNEL_GROUIP_CONFIG", responseData.getData().getChannelGroupId(), user.getRealName(), "delete", "移除通道组配置", JSON.toJSONString(responseData));
         }
 
-        view.setView(new RedirectView("/configure/channel/group/edit/channel/"+responseData.getData().getChannelGroupId(), true, false));
+        view.setView(new RedirectView("/configure/channel/group/edit/channel/" + responseData.getData().getChannelGroupId(), true, false));
 
         return view;
 
     }
 
+    /**
+     * 查看已配置通道数
+     *
+     * @return
+     */
+    @RequestMapping(value = "/configChannelNum/{id}", produces = "text/html;charset=utf-8", method = RequestMethod.GET)
+    public String configChannelNum(@PathVariable String id, HttpServletRequest request) {
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            return MpmValidatorUtil.validateMessage(validator);
+        }
+
+        //查看通道组数据
+        ResponseData<ChannelGroupInfoValidator> data = channelGroupService.findById(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            return data.getMessage();
+        }
+
+        //查询已配置的通道
+        ConfigChannelGroupQo configChannelGroupQo = new ConfigChannelGroupQo();
+        configChannelGroupQo.setChannelGroupId(id);
+        ResponseData<List<ConfigChannelGroupQo>> configChannelGroupDate = configChannelGroupService.findConfigChannelGroupList(configChannelGroupQo);
+        if (!ResponseCode.SUCCESS.getCode().equals(configChannelGroupDate.getCode())) {
+            return configChannelGroupDate.getMessage();
+        }
+
+        List<ConfigChannelGroupQo> list = configChannelGroupDate.getData();
+        if (StringUtils.isEmpty(list) || list.size() <= 0) {
+            return "无配置通道";
+        }
+
+        //封装已配置的通道数据
+        StringBuilder configChannelName = new StringBuilder();
+        for (int i = 0; i < list.size(); i++) {
+            ConfigChannelGroupQo qo = list.get(i);
+            configChannelName.append(qo.getChannelName() + " 优先级：" + qo.getChannelPriority() + "，权重：" + qo.getChannelWeight() + "；");
+            if (i != list.size()-1) {
+                configChannelName.append("@");
+            }
+        }
+
+        return configChannelName.toString();
+    }
 
 }

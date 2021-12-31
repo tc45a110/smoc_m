@@ -4,6 +4,7 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelGroupInfoValidator;
 import com.smoc.cloud.configure.channel.group.remote.ChannelGroupFeignClient;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 
 
 /**
@@ -71,4 +73,18 @@ public class ChannelGroupService {
         }
     }
 
+    /**
+     * 通道组详情里已配置通道列表
+     * @param channelGroupInfoValidator
+     * @return
+     */
+    public ResponseData<List<ChannelBasicInfoQo>> centerConfigChannelList(ChannelGroupInfoValidator channelGroupInfoValidator) {
+        try {
+            ResponseData<List<ChannelBasicInfoQo>> data = this.channelGroupFeignClient.centerConfigChannelList(channelGroupInfoValidator);
+            return data;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
 }

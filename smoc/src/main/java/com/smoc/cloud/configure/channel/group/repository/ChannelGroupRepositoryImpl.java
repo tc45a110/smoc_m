@@ -4,7 +4,9 @@ package com.smoc.cloud.configure.channel.group.repository;
 import com.smoc.cloud.common.BasePageRepository;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
+import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelGroupInfoValidator;
+import com.smoc.cloud.configure.channel.group.rowmapper.CenterConfigChannelInfoRowMapper;
 import com.smoc.cloud.configure.channel.group.rowmapper.ChannelGroupBaseInfoRowMapper;
 import org.springframework.util.StringUtils;
 
@@ -66,4 +68,51 @@ public class ChannelGroupRepositoryImpl extends BasePageRepository {
         return pageList;
     }
 
+    public List<ChannelBasicInfoQo> centerConfigChannelList(ChannelGroupInfoValidator qo) {
+
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append("  t.CHANNEL_ID");
+        sqlBuffer.append(", t.CHANNEL_NAME");
+        sqlBuffer.append(", t.CHANNEL_PROVDER");
+        sqlBuffer.append(", t.CARRIER");
+        sqlBuffer.append(", t.BUSINESS_TYPE");
+        sqlBuffer.append(", t.MAX_COMPLAINT_RATE");
+        sqlBuffer.append(", i.SRC_ID");
+        sqlBuffer.append(", i.PROTOCOL");
+        sqlBuffer.append(", i.CHANNEL_ACCESS_ACCOUNT");
+        sqlBuffer.append(", t.PRICE_STYLE");
+        sqlBuffer.append(", p.CHANNEL_PRICE");
+        sqlBuffer.append(", t.BUSINESS_AREA_TYPE");
+        sqlBuffer.append(", t.MASK_PROVINCE");
+        sqlBuffer.append(", t.SUPPORT_AREA_CODES");
+        sqlBuffer.append(", t.CHANNEL_RUN_STATUS");
+        sqlBuffer.append(", t.CHANNEL_STATUS");
+        sqlBuffer.append(", i.MAX_SEND_SECOND");
+        sqlBuffer.append(", t.CHANNEL_INTRODUCE ");
+        sqlBuffer.append(", u.REAL_NAME AS CHANNEL_ACCESS_SALES ");
+        sqlBuffer.append(", t.CHANNEL_RESTRICT_CONTENT ");
+        sqlBuffer.append(", a.CHANNEL_PRIORITY");
+        sqlBuffer.append(", a.CHANNEL_WEIGHT");
+        sqlBuffer.append("  from config_channel_group a left join config_channel_basic_info t on a.CHANNEL_ID=t.CHANNEL_ID ");
+        sqlBuffer.append("  left join config_channel_interface i on a.CHANNEL_ID=i.CHANNEL_ID ");
+        sqlBuffer.append("  left join (select t.CHANNEL_ID,t.CHANNEL_PRICE from config_channel_price t where t.PRICE_STYLE='UNIFIED_PRICE')p on a.CHANNEL_ID=p.CHANNEL_ID ");
+        sqlBuffer.append("  left join smoc_oauth.base_user_extends u on t.CHANNEL_ACCESS_SALES = u.ID where 1=1 ");
+
+        List<Object> paramsList = new ArrayList<Object>();
+
+        if (!StringUtils.isEmpty(qo.getChannelGroupId())) {
+            sqlBuffer.append(" and a.CHANNEL_GROUP_ID =?");
+            paramsList.add( qo.getChannelGroupId().trim());
+        }
+
+        sqlBuffer.append(" order by a.CHANNEL_PRIORITY,a.CHANNEL_WEIGHT desc");
+
+        //根据参数个数，组织参数值
+        Object[] params = new Object[paramsList.size()];
+        paramsList.toArray(params);
+
+        List<ChannelBasicInfoQo> list = this.queryForObjectList(sqlBuffer.toString(), params, new CenterConfigChannelInfoRowMapper());
+        return list;
+    }
 }

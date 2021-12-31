@@ -1,4 +1,4 @@
-package com.smoc.cloud.configure.channel.rowmapper;
+package com.smoc.cloud.configure.channel.group.rowmapper;
 
 import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
 import org.springframework.jdbc.core.RowMapper;
@@ -9,7 +9,7 @@ import java.sql.SQLException;
 /**
  * 复杂查询对象封装
  **/
-public class ChannelBasicInfoRowMapper implements RowMapper<ChannelBasicInfoQo> {
+public class CenterConfigChannelInfoRowMapper implements RowMapper<ChannelBasicInfoQo> {
 
     @Override
     public ChannelBasicInfoQo mapRow(ResultSet resultSet, int i) throws SQLException {
@@ -35,6 +35,8 @@ public class ChannelBasicInfoRowMapper implements RowMapper<ChannelBasicInfoQo> 
         qo.setChannelIntroduce(resultSet.getString("CHANNEL_INTRODUCE"));
         qo.setChannelAccessSales(resultSet.getString("CHANNEL_ACCESS_SALES"));
         qo.setChannelRestrictContent(resultSet.getString("CHANNEL_RESTRICT_CONTENT"));
+        qo.setChannelPriority(resultSet.getInt("CHANNEL_PRIORITY"));
+        qo.setChannelWeight(resultSet.getInt("CHANNEL_WEIGHT"));
 
         return qo;
     }

@@ -3,13 +3,15 @@ package com.smoc.cloud.configure.channel.group.controller;
 import com.alibaba.fastjson.JSON;
 import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
+import com.smoc.cloud.common.auth.qo.DictType;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelGroupInfoValidator;
+import com.smoc.cloud.common.smoc.utils.ChannelUtils;
 import com.smoc.cloud.common.utils.DateTimeUtils;
-import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.configure.channel.group.service.ChannelGroupService;
@@ -22,8 +24,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 通道组管理
@@ -233,7 +238,41 @@ public class ChannelGroupController {
     }
 
     /**
-     * 产品详细中心
+     * 查看屏蔽省份
+     *
+     * @return
+     */
+    @RequestMapping(value = "/maskProvince/{id}", produces = "text/html;charset=utf-8", method = RequestMethod.GET)
+    public String maskProvince(@PathVariable String id, HttpServletRequest request) {
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            return MpmValidatorUtil.validateMessage(validator);
+        }
+
+        //查看通道组数据
+        ResponseData<ChannelGroupInfoValidator> data = channelGroupService.findById(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            return data.getMessage();
+        }
+
+        String maskProvince = data.getData().getMaskProvince();
+        if(StringUtils.isEmpty(maskProvince)){
+            return "屏蔽省份为空";
+        }
+
+        //取字典数据
+        ServletContext context = request.getServletContext();
+        Map<String, DictType> dictMap = (Map<String, DictType>) context.getAttribute("dict");
+
+        return ChannelUtils.getAreaProvince(dictMap,"provices",maskProvince);
+    }
+
+
+    /**
+     * 通道组详细中心
      *
      * @return
      */
@@ -257,7 +296,7 @@ public class ChannelGroupController {
     }
 
     /**
-     * 产品基本详细
+     * 通道组基本详细
      *
      * @return
      */
@@ -274,6 +313,24 @@ public class ChannelGroupController {
             return view;
         }
 
+        //查看通道组数据
+        ResponseData<ChannelGroupInfoValidator> data = channelGroupService.findById(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        //查询已配置的通道列表
+        ChannelGroupInfoValidator channelGroupInfoValidator = new ChannelGroupInfoValidator();
+        channelGroupInfoValidator.setChannelGroupId(id);
+        ResponseData<List<ChannelBasicInfoQo>> channelData = channelGroupService.centerConfigChannelList(channelGroupInfoValidator);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("channelGroupInfoValidator", data.getData());
+        view.addObject("channelList", channelData.getData());
         return view;
 
     }

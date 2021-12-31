@@ -26,6 +26,7 @@ public class ChannelRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", t.CHANNEL_NAME");
         sqlBuffer.append(", t.CHANNEL_PROVDER");
         sqlBuffer.append(", t.CARRIER");
+        sqlBuffer.append(", t.BUSINESS_TYPE");
         sqlBuffer.append(", t.MAX_COMPLAINT_RATE");
         sqlBuffer.append(", i.SRC_ID");
         sqlBuffer.append(", i.PROTOCOL");

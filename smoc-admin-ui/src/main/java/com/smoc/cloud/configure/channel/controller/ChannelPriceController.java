@@ -230,7 +230,9 @@ public class ChannelPriceController {
 
         //封装区域价格数据
         StringBuilder channelPrices = new StringBuilder();
-        for (ChannelPriceValidator channelPrice : listData.getData()) {
+        List<ChannelPriceValidator> list = listData.getData();
+        for (int a=0;a<list.size();a++) {
+            ChannelPriceValidator channelPrice = list.get(a);
             String name = "";
             for (int i =0;i<dictList.size();i++) {
                 Dict dict = dictList.get(i);
@@ -240,6 +242,9 @@ public class ChannelPriceController {
                 }
             }
             channelPrices.append(name+"："+channelPrice.getChannelPrice()+"；");
+            if (a != list.size()-1) {
+                channelPrices.append("@");
+            }
         }
 
         return channelPrices.toString();

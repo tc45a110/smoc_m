@@ -8,6 +8,7 @@ import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
 import com.smoc.cloud.common.smoc.configuate.qo.ConfigChannelGroupQo;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelGroupConfigValidator;
 import com.smoc.cloud.configure.channel.group.entity.ConfigChannelGroup;
+import com.smoc.cloud.configure.channel.group.repository.ChannelGroupRepository;
 import com.smoc.cloud.configure.channel.group.repository.ConfigChannelGroupRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -15,6 +16,8 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -30,6 +33,9 @@ public class ConfigChannelGroupService {
 
     @Resource
     private ConfigChannelGroupRepository channelGroupConfigRepository;
+
+    @Resource
+    private ChannelGroupRepository channelGroupRepository;
 
     /**
      * 根据id获取信息
@@ -70,6 +76,7 @@ public class ConfigChannelGroupService {
      * @param op
      * @return
      */
+    @Transactional
     public ResponseData saveChannelGroupConfig(ChannelGroupConfigValidator channelGroupConfigValidator, String op) {
 
         ConfigChannelGroup entity = new ConfigChannelGroup();
@@ -84,6 +91,9 @@ public class ConfigChannelGroupService {
         log.info("[通道组管理][通道组配置][{}]数据:{}",op,JSON.toJSONString(entity));
         channelGroupConfigRepository.saveAndFlush(entity);
 
+        //设置通道组进度
+        channelGroupRepository.updateChannelGroupProcessByChannelGroupId(entity.getChannelGroupId(),"11");
+
         return ResponseDataUtil.buildSuccess();
     }
 
@@ -92,11 +102,22 @@ public class ConfigChannelGroupService {
      * @param id
      * @return
      */
+    @Transactional
     public ResponseData deleteById(String id) {
         ConfigChannelGroup data = channelGroupConfigRepository.findById(id).get();
         //记录日志
         log.info("[通道组管理][通道组配置][delete]数据:{}",JSON.toJSONString(data));
         channelGroupConfigRepository.deleteById(id);
+
+        //如果已配置的通道组为空，设置通道组的进度
+        ConfigChannelGroupQo configChannelGroupQo = new ConfigChannelGroupQo();
+        configChannelGroupQo.setChannelGroupId(data.getChannelGroupId());
+        List<ConfigChannelGroupQo> list = channelGroupConfigRepository.findConfigChannelGroupList(configChannelGroupQo);
+        if(StringUtils.isEmpty(list) || list.size()<=0){
+            channelGroupRepository.updateChannelGroupProcessByChannelGroupId(data.getChannelGroupId(),"10");
+        }
+
+
         return ResponseDataUtil.buildSuccess();
     }
 }
