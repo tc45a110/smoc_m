@@ -1,0 +1,90 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+
+    <title>SMOC客户自服务平台</title>
+
+    <meta name="description" content="ProUI is a Responsive Bootstrap Admin Template created by pixelcave and published on Themeforest.">
+    <meta name="author" content="pixelcave">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0">
+    <link rel="shortcut icon" th:href="@{/static/favicon.ico}"/>
+    <!-- Bootstrap is included in its original form, unaltered -->
+    <link rel="stylesheet" th:href="@{/static/login/css/bootstrap.min.css}">
+    <!-- Related styles of various icon packs and plugins -->
+    <link rel="stylesheet" th:href="@{/static/login/css/plugins.css}">
+    <!-- The main stylesheet of this template. All Bootstrap overwrites are defined in here -->
+    <link rel="stylesheet" th:href="@{/static/login/css/main.css}">
+    <!-- The themes stylesheet of this template (for using specific theme color in individual elements - must included last) -->
+    <link rel="stylesheet" th:href="@{/static/login/css/themes.css}">
+    <!-- END Stylesheets -->
+    <link th:href="@{/static/css/fontawesome/font-awesome.min.css}" rel="stylesheet" type="text/css"/>
+    <!-- Modernizr (browser feature detection library) -->
+    <script th:src="@{/static/login/js/vendor/modernizr.min.js}"></script>
+</head>
+<body>
+<!-- Login Full Background -->
+<!-- For best results use an image with a resolution of 1280x1280 pixels (prefer a blurred image for smaller file size) -->
+<img th:src="@{/static/imgs/login_full_bg.jpg}" class="full-bg animation-pulseSlow">
+<!-- END Login Full Background -->
+
+<!-- Login Container -->
+<div id="login-container" class="animation-fadeIn">
+    <!-- Login Title -->
+    <div class="login-title text-center">
+        <h1><img th:src="@{/static/imgs/logo_04.png}" style="width:148px;height:40px;margin-right:8px;margin-top:-8px"> <strong>[[${@systemProperties.systemName}]]</strong><br></h1>
+    </div>
+    <!-- END Login Title -->
+
+    <!-- Login Block -->
+    <div class="block push-bit">
+        <!-- Login Form -->
+        <form th:action="@{/security_login}" method="post" id="form-login" class="form-horizontal form-bordered form-control-borderless">
+            <div class="form-group">
+                <div class="col-xs-12">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                        <input type="text" id="userName"  name="userName" class="form-control input-lg" placeholder="用户名">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-xs-12">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                        <input type="password" id="password" name="password" class="form-control input-lg" placeholder="密码">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group form-actions">
+                <div class="col-xs-4">
+                    <label class="switch switch-primary" data-toggle="tooltip" title="记住用户名?">
+                        <input type="checkbox" id="login-remember-me" name="login-remember-me" checked>
+                        <span></span>
+                    </label>
+                </div>
+                <div class="col-xs-8 text-right">
+                    <button type="submit" class="btn btn-sm btn-primary" style="font-weight:600 "><i class="fa fa-angle-right" style="font-size:16px;margin-right:5px"></i>登录</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-xs-12 text-center" style="font-size:12px">
+                    [[${@systemProperties.companyName}]] All Rights Reserve
+                </div>
+            </div>
+        </form>
+        <!-- END Login Form -->
+    </div>
+    <!-- END Login Block -->
+</div>
+<!-- END Login Container -->
+<!-- jQuery, Bootstrap.js, jQuery plugins and Custom JS code -->
+<script th:src="@{/static/login/js/vendor/jquery.min.js}"></script>
+<script th:src="@{/static/login/js/vendor/bootstrap.min.js}"></script>
+<script th:src="@{/static/login/js/plugins.js}"></script>
+<script th:src="@{/static/login/js/app.js}"></script>
+<!-- Load and execute javascript code used only in this page -->
+<script th:src="@{/static/login/js/pages/login.js}"></script>
+<script>$(function(){ Login.init(); });</script>
+</body>
+</html>

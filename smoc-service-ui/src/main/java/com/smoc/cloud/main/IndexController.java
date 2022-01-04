@@ -1,7 +1,6 @@
 package com.smoc.cloud.main;
 
 import com.smoc.cloud.common.auth.entity.SecurityUser;
-import com.smoc.cloud.common.utils.RSAUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,9 +31,4 @@ public class IndexController {
 
     }
 
-    @RequestMapping(value = "/getPublicKey", method = RequestMethod.GET)
-    public String getKey(HttpServletRequest request){
-        String publicKey = RSAUtils.generateBase64PublicKey();
-        return publicKey;
-    }
 }
