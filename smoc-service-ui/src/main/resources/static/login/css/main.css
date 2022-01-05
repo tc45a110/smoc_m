@@ -2374,11 +2374,11 @@ textarea.form-control {
 }
 
 .switch-primary span {
-    border-color: #1bbae1;
+    border-color: #00b297;
 }
 
 .switch-primary input:checked + span {
-    background-color: #1bbae1;
+    background-color: #00b297;
 }
 
 .switch-info span {
