@@ -244,7 +244,7 @@
                         channelName += '<span style="font-size:12px">' + channels[i] + '</span><br>';
                     }
                 } else {
-                    channelName = channels;
+                    channelName = '<span style="font-size:12px">' + channels + '</span>';
                 }
 
                 $('#tooltip' + channelGroupId).tooltipster({
@@ -270,7 +270,7 @@
                         extendBusinessParam += '<span style="font-size:12px">' + params[i] + '</span><br>';
                     }
                 } else {
-                    extendBusinessParam = params;
+                    extendBusinessParam = '<span style="font-size:12px">' + params + '</span>';
                 }
 
                 $('#paramtip' + channelGroupId).tooltipster({

@@ -79,6 +79,7 @@ public class ConfigChannelGroupController {
          * 查询通道列表
          */
         ChannelBasicInfoQo channelBasicInfoQo = new ChannelBasicInfoQo();
+        channelBasicInfoQo.setChanneGroupId(id);
         channelBasicInfoQo.setCarrier(data.getData().getCarrier());
         channelBasicInfoQo.setBusinessType(data.getData().getBusinessType());
         channelBasicInfoQo.setInfoType(data.getData().getInfoType());
@@ -123,6 +124,7 @@ public class ConfigChannelGroupController {
 
         //查询通道列表
         channelBasicInfoQo.setChannelStatus("001");//正常
+        channelBasicInfoQo.setChanneGroupId(channelBasicInfoQo.getChannelId());
         ResponseData<List<ChannelBasicInfoQo>> listDate = configChannelGroupService.findChannelList(channelBasicInfoQo);
         if (!ResponseCode.SUCCESS.getCode().equals(listDate.getCode())) {
             view.addObject("error", listDate.getCode() + ":" + listDate.getMessage());
@@ -156,7 +158,11 @@ public class ConfigChannelGroupController {
         /**
          * 保存通道组配置
          */
-        channelGroupConfigValidator.setId(UUID.uuid32());
+        if(StringUtils.isEmpty(channelGroupConfigValidator.getId())){
+            channelGroupConfigValidator.setId(UUID.uuid32());
+        }else{
+            op = "edit";
+        }
         channelGroupConfigValidator.setCreatedBy(user.getRealName());
         channelGroupConfigValidator.setCreatedTime(new Date());
         ResponseData data = configChannelGroupService.saveChannelGroupConfig(channelGroupConfigValidator, op);
@@ -170,7 +176,7 @@ public class ConfigChannelGroupController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            systemUserLogService.logsAsync("CHANNEL_GROUIP_CONFIG", channelGroupConfigValidator.getChannelGroupId(), channelGroupConfigValidator.getCreatedBy(), op, "添加通道组配置", JSON.toJSONString(channelGroupConfigValidator));
+            systemUserLogService.logsAsync("CHANNEL_GROUIP_CONFIG", channelGroupConfigValidator.getChannelGroupId(), channelGroupConfigValidator.getCreatedBy(), op, "add".equals(op) ? "添加通道组配置" : "修改通道组权重", JSON.toJSONString(channelGroupConfigValidator));
         }
 
         //查询已配置的通道
@@ -185,6 +191,7 @@ public class ConfigChannelGroupController {
          * 查询通道列表
          */
         ChannelBasicInfoQo channelBasicInfoQo = new ChannelBasicInfoQo();
+        channelBasicInfoQo.setChanneGroupId(responseData.getData().getChannelGroupId());
         channelBasicInfoQo.setCarrier(responseData.getData().getCarrier());
         channelBasicInfoQo.setBusinessType(responseData.getData().getBusinessType());
         channelBasicInfoQo.setInfoType(responseData.getData().getInfoType());

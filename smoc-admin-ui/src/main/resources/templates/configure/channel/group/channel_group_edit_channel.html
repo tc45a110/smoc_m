@@ -7,6 +7,8 @@
     <th:block th:insert="fragments/common_fragments :: common_css"/>
     <th:block th:insert="fragments/common_fragments :: select_css"/>
     <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
+    <!-- Tooltipster css -->
+    <link rel="stylesheet" th:href="@{/static/plugins/tooltipster/tooltipster.bundle.min.css}">
 
 </head>
 <body style="background-color:#fff">
@@ -47,9 +49,14 @@
                                                     </p>
                                                     <p style="font-size:12px"><b>优先级：[[${info.channelPriority}]]</b></p>
                                                     <p style="font-size:12px"><b>权重：[[${info.channelWeight}]]</b>
+                                                        <a style="margin-left: 10px;color: white" title="修改通道优先级、权重"
+                                                           data-toggle="modal" data-target="#confirm-add-modal" href="javascript:void(0);"
+                                                           th:onclick="updateChannelConfig([[${info.id}]],[[${info.channelId}]],[[${info.channelName}]],[[${info.channelPriority}]],[[${info.channelWeight}]])">
+                                                            <i style="font-size: 12px;" class="glyphicon glyphicon-edit"></i>
+                                                        </a>
                                                         <i data-toggle="tooltip"
                                                            data-placement="left"
-                                                           data-original-title="点击可以查看其他详细"
+                                                           th:data-original-title="'通道业务介绍：'+${info.channelIntroduce}"
                                                            class="mdi mdi-comment-processing pull-right"
                                                            style="margin-left:20px"></i>
                                                     </p>
@@ -128,7 +135,7 @@
                                                                         <h5 style="padding-left:10px">
                                                                             通道名称：[[${info.channelName}]]
                                                                             <div class="pull-right">
-                                                                                <a data-toggle="modal" data-target="#confirm-add-modal"
+                                                                                <a data-toggle="modal" data-target="#confirm-add-modal" href="javascript:void(0);"
                                                                                    th:onclick="openChannel([[${info.channelId}]],[[${info.channelName}]])" title="添加该通道到通道组中心">
                                                                                     <i class="glyphicon glyphicon-plus-sign"
                                                                                        style="margin-right:5px;font-size:16px;color:#26a69a"></i></a>
@@ -145,8 +152,9 @@
                                                                         <p style="font-size:12px">发送号码范围：<mpm:tag identity="carrier" show-type="label" key="code" th:value="${info.carrier}"/></p>
                                                                         <p style="font-size:12px">通道协议类型：<mpm:tag identity="channelProtocolType" show-type="label" key="code" th:value="${info.protocol}"/>
                                                                             <i data-toggle="tooltip"
-                                                                               data-placement="right" title=""
-                                                                               data-original-title="点击可以查看其他详细"
+                                                                               data-placement="left"
+                                                                               th:id="${info.channelId}"
+                                                                               th:onmouseover="areaCodes([[${info.channelId}]])"
                                                                                class="mdi mdi-comment-processing"
                                                                                style="margin-left:20px"></i>
                                                                         </p>
@@ -154,7 +162,7 @@
 
                                                                 </div>
                                                                 <div class="property-action">
-                                                                                     <span style="padding-left:10px;font-size:12px">
+                                                                                     <span style="padding-left:10px;font-size:12px" class="text-overflow" th:title="${info.channelIntroduce}">
                                                                                             通道业务介绍：[[${info.channelIntroduce}]]
                                                                                      </span>
 
@@ -221,7 +229,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 class="modal-title">确认添加该通道到通道组中</h4>
+                        <h4 class="modal-title" id="tipTitle">确认添加该通道到通道组中</h4>
                     </div>
                     <form th:action="@{/configure/channel/group/saveChannelGroupConfig/add}" id="submit_form"
                           th:object="${channelGroupConfigValidator}"
@@ -232,21 +240,22 @@
                                 </label>
                             </div>
                             <div class="form-group">
-                                <label>优先级</label>
+                                <label>优先级<span class="text-danger">*</span></label>&nbsp;(默认 1，数字越小优先级越高)
                                 <input type="text" class="form-control"  required="" id="channelPriority" th:field="*{channelPriority}"
                                        data-parsley-type="number" min="1"   max="10" autocomplete="off" placeholder="默认 1，数字越小优先级越高">
                             </div>
                             <div class="form-group">
-                                <label>权重</label>
+                                <label>权重<span class="text-danger">*</span></label>&nbsp;(默认 10，总共100)
                                 <input type="text" class="form-control"   required="" id="channelWeight" th:field="*{channelWeight}"
                                        data-parsley-type="number" min="10"   max="100" autocomplete="off" placeholder="默认 10，总共100">
                             </div>
                             <div class="text-right">
                                 <input type="hidden" id="channelGroupId" name="channelGroupId" th:value="${channelGroupId}">
                                 <input type="hidden" id="channelId" name="channelId">
+                                <input type="hidden" id="id" name="id">
                                 <a class="btn btn-default waves-effect" data-dismiss="modal">取消</a>
                                 <button sec:authorize-url="/configure/channel/group/saveChannelGroupConfig/*" type="submit"
-                                        class="btn btn-primary waves-effect waves-light">确认添加</button>
+                                        class="btn btn-primary waves-effect waves-light" id="subButton">确认添加</button>
                             </div>
                         </div>
                     </form>
@@ -260,14 +269,30 @@
 <th:block th:insert="fragments/common_fragments :: common_js"/>
 <th:block th:insert="fragments/common_fragments :: select_js"/>
 <th:block th:insert="fragments/common_fragments :: common_submit_form"/>
+<!-- Tooltipster js -->
+<script th:src="@{/static/plugins/tooltipster/tooltipster.bundle.min.js}"></script>
 <script>
 
     //打开选择通道
     function openChannel(channelId,channelName) {
         $("#channelId").val(channelId);
         $("#name").html(channelName);
-        $("#channelPriority").val('');
-        $("#channelWeight").val('');
+        $("#channelPriority").val('1');
+        $("#channelWeight").val('10');
+        $("#id").val('');
+        $("#subButton").html("确认添加");
+        $("#tipTitle").html("确认添加该通道到通道组中");
+    }
+
+    //打开修改通道组优先级、权重
+    function updateChannelConfig(id,channelId,channelName,channelPriority,channelWeight) {
+        $("#id").val(id);
+        $("#channelId").val(channelId);
+        $("#name").html(channelName);
+        $("#channelPriority").val(channelPriority);
+        $("#channelWeight").val(channelWeight);
+        $("#subButton").html("确认修改");
+        $("#tipTitle").html("确认修改该通道优先级、权重");
     }
 
     //打开删除通道
@@ -279,6 +304,21 @@
         var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
         $('#preloader').css('display', 'block');
         location.href = contextPath + '/configure/channel/group/deleteConfigChannelById/' + $("#deleteId").val();
+    }
+
+    //查看区域
+    function areaCodes(channelId) {
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $.ajax({
+            url: contextPath + "/configure/channel/findChannelBusinessArea/" + channelId,
+            async: false,
+            success: function (data) {
+                $('#' + channelId).attr({
+                    // 设置提示内容
+                    'data-original-title': data,
+                })
+            }
+        });
     }
 
     var resizefunc = [];

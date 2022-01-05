@@ -34,5 +34,8 @@ public class ConfigChannelGroupQo {
     //权重
     private Integer channelWeight;
 
+    //通道介绍
+    private String channelIntroduce;
+
     private String channelGroupId;
 }

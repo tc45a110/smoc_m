@@ -217,8 +217,6 @@ public class ChannelController {
 
         //初始化其他变量
         if (!StringUtils.isEmpty(op) && "add".equals(op)) {
-
-
             //生成通道ID:根据业务类型查询序列
             Integer seq = sequenceService.findSequence(channelBasicInfoValidator.getBusinessType());
             channelBasicInfoValidator.setChannelId("CHID" + seq);
@@ -246,7 +244,6 @@ public class ChannelController {
 
         //记录日志
         log.info("[通道管理][通道基本信息][{}][{}]数据:{}", op, user.getUserName(), JSON.toJSONString(channelBasicInfoValidator));
-
 
         //保存成功之后，重新加载页面，iframe刷新标识，只有add才会刷新
         if ("add".equals(op)) {

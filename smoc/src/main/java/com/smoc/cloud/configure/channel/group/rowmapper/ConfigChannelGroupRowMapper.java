@@ -23,6 +23,7 @@ public class ConfigChannelGroupRowMapper implements RowMapper<ConfigChannelGroup
         qo.setProtocol(resultSet.getString("PROTOCOL"));
         qo.setChannelPriority(resultSet.getInt("CHANNEL_PRIORITY"));
         qo.setChannelWeight(resultSet.getInt("CHANNEL_WEIGHT"));
+        qo.setChannelIntroduce(resultSet.getString("CHANNEL_INTRODUCE"));
 
         return qo;
     }

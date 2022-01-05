@@ -58,4 +58,6 @@ public class ChannelBasicInfoQo {
     private Integer channelPriority;
     //权重
     private Integer channelWeight;
+
+    private String channeGroupId;
 }

@@ -30,11 +30,12 @@ public class ConfigChannelGroupRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", i.PROTOCOL");
         sqlBuffer.append(", t.CHANNEL_INTRODUCE ");
         sqlBuffer.append("  from config_channel_basic_info t left join config_channel_interface i on t.CHANNEL_ID=i.CHANNEL_ID");
-        sqlBuffer.append("  left join config_channel_group g on t.CHANNEL_ID=g.CHANNEL_ID ");
+        sqlBuffer.append("  left join (select t.id,t.CHANNEL_ID from config_channel_group t where t.CHANNEL_GROUP_ID=? )g ON t.CHANNEL_ID = g.CHANNEL_ID");
         sqlBuffer.append("  where g.ID is null ");
 
         List<Object> paramsList = new ArrayList<Object>();
 
+        paramsList.add( qo.getChanneGroupId());
         if (!StringUtils.isEmpty(qo.getChannelName())) {
             sqlBuffer.append(" and t.CHANNEL_NAME like ?");
             paramsList.add( "%"+qo.getChannelName().trim()+"%");
@@ -87,6 +88,7 @@ public class ConfigChannelGroupRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", i.PROTOCOL");
         sqlBuffer.append(", t.CHANNEL_PRIORITY");
         sqlBuffer.append(", t.CHANNEL_WEIGHT");
+        sqlBuffer.append(", b.CHANNEL_INTRODUCE ");
         sqlBuffer.append("  from config_channel_group t left join config_channel_basic_info b on t.CHANNEL_ID=b.CHANNEL_ID");
         sqlBuffer.append("  left join config_channel_interface i on t.CHANNEL_ID=i.CHANNEL_ID ");
         sqlBuffer.append("  where 1=1 ");
