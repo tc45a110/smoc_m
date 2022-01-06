@@ -5,11 +5,13 @@ import com.smoc.cloud.admin.security.remote.service.SysUserService;
 import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
 import com.smoc.cloud.common.auth.qo.Users;
+import com.smoc.cloud.common.auth.validator.UserValidator;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
+import com.smoc.cloud.common.smoc.customer.validator.EnterpriseWebAccountInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.common.validator.MpmIdValidator;
@@ -126,9 +128,8 @@ public class EnterpriseController {
         enterpriseBasicInfoValidator.setEnterpriseId(UUID.uuid32());
         enterpriseBasicInfoValidator.setEnterpriseStatus("1");//初始状态
         enterpriseBasicInfoValidator.setEnterpriseParentId(parentId);//父ID
-        if ("0000".equals(parentId)) {
-            enterpriseBasicInfoValidator.setEnterpriseProcess("1000");//配置进度
-        } else {
+        enterpriseBasicInfoValidator.setEnterpriseProcess("10000");//配置进度
+        if (!"0000".equals(parentId)) {
             //如果是二级企业，需要回显一级企业信息
             ResponseData<EnterpriseBasicInfoValidator> data = enterpriseService.findById(parentId);
             if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
@@ -178,14 +179,22 @@ public class EnterpriseController {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
         }
 
+        EnterpriseBasicInfoValidator enterpriseBasicInfoValidator = data.getData();
+
         if ("0000".equals(data.getData().getEnterpriseParentId())) {
             level = "1";
         } else {
             level = "2";
+            //查询上级企业
+            ResponseData<EnterpriseBasicInfoValidator> levelData = enterpriseService.findById(data.getData().getEnterpriseParentId());
+            if (!ResponseCode.SUCCESS.getCode().equals(levelData.getCode())) {
+                view.addObject("error", levelData.getCode() + ":" + levelData.getMessage());
+            }
+            enterpriseBasicInfoValidator.setParentEnterpriseName(levelData.getData().getEnterpriseName());
         }
 
         view.addObject("level", level);
-        view.addObject("enterpriseBasicInfoValidator", data.getData());
+        view.addObject("enterpriseBasicInfoValidator", enterpriseBasicInfoValidator);
         //op操作标记，add表示添加，edit表示修改
         view.addObject("op", "edit");
 
@@ -224,6 +233,11 @@ public class EnterpriseController {
             return view;
         }
 
+        //销售为空默认:0000
+        if(StringUtils.isEmpty(enterpriseBasicInfoValidator.getSaler())){
+            enterpriseBasicInfoValidator.setSaler("0000");
+        }
+
         //保存数据
         ResponseData data = enterpriseService.save(enterpriseBasicInfoValidator, op);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
@@ -239,7 +253,7 @@ public class EnterpriseController {
         //记录日志
         log.info("[企业接入][企业开户信息][{}][{}]数据:{}", op, user.getUserName(), JSON.toJSONString(enterpriseBasicInfoValidator));
 
-        view.setView(new RedirectView("/enterprise/center/0000", true, false));
+        view.setView(new RedirectView("/enterprise/center/"+enterpriseBasicInfoValidator.getEnterpriseId(), true, false));
         return view;
 
     }
@@ -254,22 +268,39 @@ public class EnterpriseController {
     public ModelAndView config(@PathVariable String id) {
         ModelAndView view = new ModelAndView("customer/enterprise/enterprise_center");
 
-        //查询数据
-        PageParams params = new PageParams<>();
-        params.setPages(3);
-        params.setPageSize(10);
-        params.setStartRow(1);
-        params.setEndRow(10);
-        params.setCurrentPage(1);
-        params.setTotalRows(22);
-
-        view.addObject("pageParams", params);
-
-        if ("0000".equals(id)) {
-            view.addObject("parentId", "0");
-        } else {
-            view.addObject("parentId", "1");
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
         }
+
+        //查询企业基本数据
+        ResponseData<EnterpriseBasicInfoValidator> data = enterpriseService.findById(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+        }
+
+        //查询销售
+        if(!StringUtils.isEmpty(data.getData().getSaler())){
+            ResponseData<UserValidator> userValidator = sysUserService.userProfile(data.getData().getSaler());
+            if (ResponseCode.SUCCESS.getCode().equals(userValidator.getCode())) {
+                view.addObject("salerName", userValidator.getData().getBaseUserExtendsValidator().getRealName());
+            }
+        }
+
+        //查询WEB登录账号
+        EnterpriseWebAccountInfoValidator enterpriseWebAccountInfoValidator = new EnterpriseWebAccountInfoValidator();
+        enterpriseWebAccountInfoValidator.setEnterpriseId(id);
+        view.addObject("enterpriseWebAccountInfoValidator", enterpriseWebAccountInfoValidator);
+
+        //查询邮寄信息
+
+        //查询开票信息
+
+        view.addObject("enterpriseBasicInfoValidator", data.getData());
+
         return view;
 
     }

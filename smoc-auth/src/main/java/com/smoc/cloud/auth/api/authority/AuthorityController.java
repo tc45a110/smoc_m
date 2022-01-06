@@ -43,14 +43,14 @@ public class AuthorityController {
     @RequestMapping(value = "org/save/{op}", method = RequestMethod.POST)
     public ResponseData saveOrg(@RequestBody OrgValidator orgValidator, @PathVariable String op) {
 
-        log.info("[接口创建组织结构]数据");
+        log.info("[企业接入][企业开户信息-创建组织机构]数据");
 
         //完成参数规则验证
         if (!MpmValidatorUtil.validate(orgValidator)) {
             return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(orgValidator));
         }
 
-        log.info("[接口创建组织结构]数据:{}={}",  JSON.toJSONString(orgValidator));
+        log.info("[企业接入][企业开户信息-创建组织机构]数据:{}",  JSON.toJSONString(orgValidator));
 
         //转BaseUser存放对象
         BaseOrganization baseOrganization = new BaseOrganization();
@@ -84,15 +84,4 @@ public class AuthorityController {
         return baseUserService.save(userValidator, op);
     }
 
-    /**
-     *  注销
-     * @return
-     */
-    @RequestMapping(value = "user/closeUser/{entcode}/{status}", method = RequestMethod.GET)
-    public ResponseData closeUser(@PathVariable String entcode, @PathVariable String status) {
-
-        log.info("[接口请求][帐号欠停销]数据:{}={}",  entcode);
-
-        return baseUserService.closeUser(entcode, status);
-    }
 }

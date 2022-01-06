@@ -54,35 +54,46 @@
                                            title="verified user"></i>
                                     </div>
                                     <div class="">
-                                        <h4 class="m-b-5 m-t-5">北京星语互联科技有限公司</h4>
+                                        <h4 class="m-b-5 m-t-5">[[${enterpriseBasicInfoValidator.enterpriseName}]]</h4>
                                         <p class="text-muted"></p>
                                     </div>
                                     <hr/>
                                     <div class="text-left">
-                                        <p th:remove="${parentId =='0'}?all:none" class="text-muted font-13"><strong>上级企业
-                                            :</strong> <span class="m-l-15">北京星语互联科技有限公司</span>
+                                        <p th:remove="${enterpriseBasicInfoValidator.enterpriseParentId eq '0000'}?all:none"
+                                           class="text-muted font-13"><strong>上级企业
+                                            :</strong> <span class="m-l-15">[[${enterpriseBasicInfoValidator.parentEnterpriseName}]]</span>
                                         <p class="text-muted font-13"><strong>联系人 :</strong> <span
-                                                class="m-l-15">贾明</span>
+                                                class="m-l-15">[[${enterpriseBasicInfoValidator.enterpriseContacts}]]</span>
                                         </p>
-                                        <p class="text-muted font-13"><strong>联系方式 :</strong><span class="m-l-15">13819816885</span>
+                                        <p class="text-muted font-13"><strong>联系方式 :</strong><span class="m-l-15">[[${enterpriseBasicInfoValidator.enterpriseContactsPhone}]]</span>
                                         </p>
-                                        <p class="text-muted font-13"><strong>企业类型 :</strong><span
-                                                class="m-l-15">渠道商</span>
+                                        <p class="text-muted font-13"><strong>企业类型 :</strong>
+                                            <span class="m-l-15">
+                                                <mpm:tag identity="enterpriseType" show-type="label" key="code"
+                                                         th:value="${enterpriseBasicInfoValidator.enterpriseType}"/>
+                                            </span>
                                         </p>
-                                        <p class="text-muted font-13"><strong>对接主体公司 :</strong><span class="m-l-15">小舟科技(北京)有限公司</span>
+                                        <p class="text-muted font-13"><strong>对接主体公司 :</strong>
+                                            <span class="m-l-15">
+                                                <mpm:tag identity="corporation" show-type="label" key="code"
+                                                         th:value="${enterpriseBasicInfoValidator.accessCorporation}"/>
+                                            </span>
                                         </p>
                                         </p>
-                                        <p class="text-muted font-13"><strong>销售码（销售身份） :</strong> <span class="m-l-15">XY0000</span>
+                                        <p class="text-muted font-13"><strong>销售码（销售身份） :</strong> <span class="m-l-15">[[${salerName}]]</span>
                                         </p>
                                         <p class="text-muted font-13"><strong>企业IP :</strong><span class="m-l-15">124.23.5.24</span>
                                         </p>
-                                        <p class="text-muted font-13"><strong>状态 :</strong><span
-                                                class="m-l-15">正常</span>
+                                        <p class="text-muted font-13"><strong>状态 :</strong>
+                                            <span class="m-l-15"
+                                                  th:if="${enterpriseBasicInfoValidator.enterpriseStatus eq '1'}">有效</span>
+                                            <span class="m-l-15"
+                                                  th:if="${enterpriseBasicInfoValidator.enterpriseStatus eq '0'}">无效</span>
                                         </p>
                                     </div>
                                     <div>
                                         <a sec:authorize-url="/enterprise/edit/*/*"
-                                           th:href="@{/enterprise/edit/1/0000}"
+                                           th:href="@{/enterprise/edit/1/{id}(id=${enterpriseBasicInfoValidator.enterpriseId})}"
                                            class="btn btn-info waves-effect waves-light m-l-10 btn-sm">
                                             <i class="mdi mdi-table-edit" style="margin-right:5px"></i>编辑企业</a>
                                         <a data-toggle="modal" data-target="#confirm-modal"
@@ -125,7 +136,8 @@
                                                                                             style="margin-left:5px"/>
                                                                             </p>
 
-                                                                            <p style="font-size:12px">邮&nbsp;&nbsp; 寄&nbsp;&nbsp;&nbsp; 信&nbsp;&nbsp; 息：
+                                                                            <p style="font-size:12px">邮&nbsp;&nbsp; 寄&nbsp;&nbsp;&nbsp;
+                                                                                信&nbsp;&nbsp; 息：
                                                                                 是否显示 <input id="mail-show"
                                                                                             type="checkbox" checked
                                                                                             data-plugin="switchery"
@@ -139,7 +151,8 @@
                                                                                             data-size="small"
                                                                                             style="margin-left:5px"/>
                                                                             </p>
-                                                                            <p style="font-size:12px">开&nbsp;&nbsp; 票&nbsp;&nbsp;&nbsp; 信&nbsp;&nbsp; 息：
+                                                                            <p style="font-size:12px">开&nbsp;&nbsp; 票&nbsp;&nbsp;&nbsp;
+                                                                                信&nbsp;&nbsp; 息：
                                                                                 是否显示 <input id="invoice-show"
                                                                                             type="checkbox" checked
                                                                                             data-plugin="switchery"
@@ -174,12 +187,13 @@
                             <div class="row">
                                 <div class="col-md-12 col-sm-12">
                                     <div class="row">
-                                        <h4>  EC详细信息
+                                        <h4> EC详细信息
                                             <div class="pull-right" style="margin-top: -12px;">
                                                 <a sec:authorize-url="/enterprise/list"
                                                    th:href="@{/enterprise/list}"
                                                    class="btn btn-default waves-effect waves-light btn-md">
-                                                    <i class="glyphicon  glyphicon-share-alt" style="margin-right:5px"></i>
+                                                    <i class="glyphicon  glyphicon-share-alt"
+                                                       style="margin-right:5px"></i>
                                                     返回企业列表</a>
                                                 <a th:href="@{/account/center/account}"
                                                    style="margin-left:10px;"
@@ -246,6 +260,7 @@
                                                                                 <div class="pull-right">
                                                                                     <a data-toggle="modal"
                                                                                        data-target="#confirm-reset-password-modal"
+                                                                                       th:onclick="openPassword('id')"
                                                                                        class="btn btn-info"
                                                                                        style="font-size:12px;">密码重置</a>
                                                                                     <a data-toggle="modal"
@@ -313,6 +328,7 @@
                                                                                      style="line-height:110px;margin:0 auto;">
                                                                                     <a data-toggle="modal"
                                                                                        data-target="#confirm-add-user-modal"
+                                                                                       th:onclick="openPassword('')"
                                                                                        class="btn btn-info waves-effect waves-light m-l-10 btn-md">
                                                                                         <i class="glyphicon glyphicon-plus-sign"
                                                                                            style="margin-right:5px"></i>新建企业WEB登录账号</a>
@@ -644,13 +660,15 @@
                                                         </a>
                                                     </li>
                                                     <li class="" id="tab3">
-                                                        <a onclick="active('3')" href="#ts-b1" data-toggle="tab" aria-expanded="false">
+                                                        <a onclick="active('3')" href="#ts-b1" data-toggle="tab"
+                                                           aria-expanded="false">
                                                             <span class="visible-xs"><i class="fa fa-cog"></i></span>
                                                             <span class="hidden-xs">投诉记录</span>
                                                         </a>
                                                     </li>
                                                     <li class="" id="tab4">
-                                                        <a onclick="active('4')" href="#login" data-toggle="tab" aria-expanded="false">
+                                                        <a onclick="active('4')" href="#login" data-toggle="tab"
+                                                           aria-expanded="false">
                                                             <span class="visible-xs"><i class="fa fa-cog"></i></span>
                                                             <span class="hidden-xs">web登录记录</span>
                                                         </a>
@@ -693,44 +711,44 @@
              aria-hidden="true" style="display: none;margin: 60px;margin-top:68px">
             <div class="modal-dialog" style="width:33%;">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 class="modal-title">新建、编辑企业WEB登录账号</h4>
-                    </div>
-                    <div class="row" style="margin-top:10px">
-                        <div class="col-md-12">
-                            <form id="submit_form" method="post" data-parsley-validate="">
-
+                    <form id="submit_form" method="post" th:action="@{/enterprise/web/save}"
+                          th:object="${enterpriseWebAccountInfoValidator}" data-parsley-validate="">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h4 class="modal-title">新建、编辑企业WEB登录账号</h4>
+                        </div>
+                        <div class="row" style="margin-top:10px">
+                            <div class="col-md-12">
                                 <div class="form-group m-b-20">
-                                    <label for="linkak">用户名<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="linkak" type="text" class="form-control"
-                                           required="" data-parsley-length="[7,30]" autocomplete="off"
+                                    <label>用户名<span class="text-danger">*</span>&nbsp;</label>
+                                    <input type="text" class="form-control" th:field="*{webLoginName}"
+                                           required="" data-parsley-length="[4,30]" autocomplete="off"
                                            placeholder="用户名">
                                 </div>
                                 <div class="form-group m-b-20">
-                                    <label for="linkk">密码<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="linkk" type="text" class="form-control"
-                                           required="" data-parsley-length="[7,30]" autocomplete="off"
+                                    <label>密码<span class="text-danger">*</span>&nbsp;</label>
+                                    <input type="text" class="form-control" th:field="*{webLoginPassword}"
+                                           required="" data-parsley-length="[6,20]" autocomplete="off"
                                            placeholder="密码">
                                 </div>
-
                                 <div class="form-group m-b-20">
-                                    <label for="eName">确认密码<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="eName" type="text" class="form-control"
-                                           required="" data-parsley-length="[2,64]" autocomplete="off"
+                                    <label for="rePassword">确认密码<span class="text-danger">*</span>&nbsp;</label>
+                                    <input id="rePassword" data-parsley-equalto="#webLoginPassword" type="text"
+                                           class="form-control"
+                                           required="" data-parsley-length="[6,20]" autocomplete="off"
                                            placeholder="确认密码">
                                 </div>
-
-
-                            </form>
-                            <!-- end form -->
+                            </div>
                         </div>
-
-                    </div>
-                    <div class="modal-footer">
-                        <a class="btn btn-default waves-effect" data-dismiss="modal">取消</a>
-                        <button class="btn btn-primary waves-effect waves-light">提交</button>
-                    </div>
+                        <div class="modal-footer">
+                            <input type="hidden" th:field="*{enterpriseId}">
+                            <input type="hidden" th:field="*{id}">
+                            <a class="btn btn-default waves-effect" data-dismiss="modal">取消</a>
+                            <button sec:authorize-url="/enterprise/web/save" type="submit"
+                                    class="btn btn-primary waves-effect waves-light">提交
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -982,14 +1000,29 @@
 </div> <!-- content -->
 <th:block th:insert="fragments/common_fragments :: common_js"/>
 <th:block th:insert="fragments/login_fragments :: login_js"/>
+<th:block th:insert="fragments/common_fragments :: common_submit_form"/>
+
 <script>
+
+    //打开密码框
+    function openPassword(id) {
+        $("#id").val(id);
+        $("#webLoginName").val('');
+        $("#webLoginPassword").val('');
+        $("#rePassword").val('');
+    }
+
+</script>
+
+<script>
+
 
     //页签切换
     function active(tab) {
-        for(var num = 1;num<6;num++){
-            $('#tab'+num).removeClass("active");
+        for (var num = 1; num < 6; num++) {
+            $('#tab' + num).removeClass("active");
         }
-        $('#tab'+tab).attr("class","active");
+        $('#tab' + tab).attr("class", "active");
     }
 
     // 切换按钮初始化

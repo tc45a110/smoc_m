@@ -128,529 +128,149 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>
-                                        <a th:href="@{/enterprise/center/0000}" data-toggle="tooltip"
-                                           data-placement="bottom" title="" data-original-title="跳转到企业信息中心"> <i
-                                                class="fa  fa-angle-double-down" style="margin-left:10px;"></i>
-                                            <span style="color:#797979">北京星语互联科技有限公司</span></a>
-                                    </td>
-                                    <td><p style="font-size:14px;">耀中国<span
-                                            style="font-size:14px;color:#989898;margin-left:5px">(13910916881)</span>
-                                    </p></td>
-                                    <td>李世民</td>
-                                    <td>
-                                        <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">渠道商</a>
-                                    </td>
-                                    <td> 小舟科技(北京)有限公司</td>
-                                    <td> 2021-12-12 15:25:36</td>
-                                    <td>
-                                        <div class="progress" style="margin-top:5px">
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-success progress-bar-striped"
-                                                 data-toggle="tooltip" data-placement="bottom" title=""
-                                                 data-original-title="企业基本资料"></div>
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-purple progress-bar-striped active"
-                                                 data-toggle="tooltip" data-placement="bottom" title=""
-                                                 data-original-title="WEB登录账户信息"></div>
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-primary progress-bar-striped active"
-                                                 data-toggle="tooltip" data-placement="bottom" title=""
-                                                 data-original-title="邮寄信息"></div>
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-danger" data-toggle="tooltip"
-                                                 data-placement="bottom" title="" data-original-title="发票信息"></div>
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-teal progress-bar-striped active"
-                                                 data-toggle="tooltip" data-placement="bottom" title=""
-                                                 data-original-title="材料审核信息"></div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <a sec:authorize-url="/enterprise/edit/*/*"
-                                           th:href="@{/enterprise/edit/2/36df72e2184246e4988382b4b18bcae6}"
-                                           class="on-default edit-row"
-                                           style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="left" title="" data-original-title="修改企业信息"><i
-                                                style="font-size: 18px"
-                                                class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/enterprise/center/*"
-                                           th:href="@{/enterprise/center/0000}"
-                                           class="on-default edit-row"
-                                           style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="left" title="" data-original-title="企业信息中心"
-                                        ><i style="font-size: 18px"
-                                            class="glyphicon glyphicon-cog"></i></a>
-                                        <a sec:authorize-url="/enterprise/add/*/*"
-                                           th:href="@{/enterprise/add/2/36df72e2184246e4988382b4b18bcae6}"
-                                           class="on-default edit-row"
-                                           style="padding-left: 10px;color: #4bd396;" data-toggle="tooltip"
-                                           data-placement="left" title="" data-original-title="新建二级企业"><i
-                                                style="font-size: 18px"
-                                                class="mdi mdi-account-plus"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div style="float:left;margin-top:-12px;margin-left:13px;width:25px;height:25px;border-left:1px solid #DCDCDC;border-bottom:1px solid #DCDCDC"></div>
-                                        <a style="float:left" th:href="@{/enterprise/center/0000}"
-                                           data-toggle="tooltip" data-placement="bottom" title=""
-                                           data-original-title="跳转到企业信息中心"> <span style="color:#797979">北京星语互联科技有限公司</span></a></a>
-                                    </td>
-                                    <td><p style="font-size:14px;">耀中国<span
-                                            style="font-size:14px;color:#989898;margin-left:5px">(13910916881)</span>
-                                    </p></td>
-                                    <td>李世民</td>
-                                    <td>
-                                        <a class="btn btn-teal btn-rounded btn-sm waves-effect waves-light">直客</a>
-                                    </td>
-                                    <td> 小舟科技(北京)有限公司</td>
-                                    <td> 2021-12-12 15:25:36</td>
-                                    <td>
-                                        <div class="progress" style="margin-top:5px">
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-success progress-bar-striped"
-                                                 title="企业基本资料"></div>
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-purple progress-bar-striped active"
-                                                 title="WEB登录账户信息"></div>
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-primary progress-bar-striped active"
-                                                 title="邮寄信息"></div>
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-info" title="发票信息"></div>
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-teal progress-bar-striped active"
-                                                 title="材料审核信息"></div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <a sec:authorize-url="/enterprise/edit/*/*"
-                                           th:href="@{/enterprise/edit/2/a16c3aac69564bd7a27e8cc254d80ec4}"
-                                           class="on-default edit-row"
-                                           style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="left" title="" data-original-title="修改企业信息"><i
-                                                style="font-size: 18px"
-                                                class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/enterprise/center/*"
-                                           th:href="@{/enterprise/center/0000}"
-                                           class="on-default edit-row"
-                                           style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="left" title="" data-original-title="企业信息中心"
-                                        ><i style="font-size: 18px"
-                                            class="glyphicon glyphicon-cog"></i></a>
+                                <span  th:each="info:${list}">
+                                    <tr>
+                                        <td>
+                                            <a th:href="@{/enterprise/center/{id}(id=${info.enterpriseId})}" data-toggle="tooltip"
+                                               data-placement="bottom" title="" data-original-title="跳转到企业信息中心"> <i
+                                                    class="fa  fa-angle-double-down" style="margin-left:10px;"></i>
+                                                <span style="color:#797979">[[${info.enterpriseName}]]</span></a>
+                                        </td>
+                                        <td><p style="font-size:14px;">[[${info.enterpriseContacts}]]<span
+                                                style="font-size:14px;color:#989898;margin-left:5px">([[${info.enterpriseContactsPhone}]])</span>
+                                        </p></td>
+                                        <td>[[${info.salerName}]]</td>
+                                        <td>
+                                            <mpm:tag identity="enterpriseType" show-type="button" key="code" th:value="${info.enterpriseType}"
+                                                     class="DIRECTCUSTOMER,btn btn-info btn-rounded btn-sm waves-effect waves-light;CHANNELCUSTOMER,btn btn-teal btn-rounded btn-sm waves-effect waves-light;"/>
+                                        </td>
+                                        <td> <mpm:tag identity="corporation" show-type="label" key="code"
+                                                      th:value="${info.accessCorporation}"/>
+                                        </td>
+                                        <td> [[${info.createdTime}]]</td>
+                                        <td>
+                                            <div class="progress" style="margin-top:5px">
+                                                <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                                                     aria-valuemax="100" style="width: 20%;"
+                                                     class="progress-bar progress-bar-success progress-bar-striped active"
+                                                     data-toggle="tooltip" data-placement="bottom" title=""
+                                                     data-original-title="企业基本资料"></div>
+                                                <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                                                     aria-valuemax="100" style="width: 20%;"
+                                                     th:class="${#strings.substring(info.enterpriseProcess,1,2) == '1'?'progress-bar progress-bar-purple progress-bar-striped active':'progress-bar progress-bar-danger progress-bar-striped active' }"
+                                                     data-toggle="tooltip" data-placement="bottom" title=""
+                                                     data-original-title="WEB登录账户信息"></div>
+                                                <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                                                     aria-valuemax="100" style="width: 20%;"
+                                                     th:class="${#strings.substring(info.enterpriseProcess,2,3) == '1'?'progress-bar progress-bar-primary progress-bar-striped active':'progress-bar progress-bar-danger progress-bar-striped active' }"
+                                                     data-toggle="tooltip" data-placement="bottom" title=""
+                                                     data-original-title="邮寄信息"></div>
+                                                <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                                                     aria-valuemax="100" style="width: 20%;"
+                                                     th:class="${#strings.substring(info.enterpriseProcess,3,4) == '1'?'progress-bar progress-bar-info progress-bar-striped active':'progress-bar progress-bar-danger progress-bar-striped active' }"
+                                                     class="progress-bar progress-bar-danger" data-toggle="tooltip"
+                                                     data-placement="bottom" title="" data-original-title="发票信息"></div>
+                                                <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                                                     aria-valuemax="100" style="width: 20%;"
+                                                     th:class="${#strings.substring(info.enterpriseProcess,4,5) == '1'?'progress-bar progress-bar-teal progress-bar-striped active':'progress-bar progress-bar-danger progress-bar-striped active' }"
+                                                     data-toggle="tooltip" data-placement="bottom" title=""
+                                                     data-original-title="材料审核信息"></div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <a sec:authorize-url="/enterprise/edit/*/*"
+                                               th:href="@{/enterprise/edit/2/{id}(id=${info.enterpriseId})}"
+                                               class="on-default edit-row"
+                                               style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
+                                               data-placement="left" title="" data-original-title="修改企业信息"><i
+                                                    style="font-size: 18px"
+                                                    class="mdi mdi-table-edit"></i></a>
+                                            <a sec:authorize-url="/enterprise/center/*"
+                                               th:href="@{/enterprise/center/{id}(id=${info.enterpriseId})}"
+                                               class="on-default edit-row"
+                                               style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
+                                               data-placement="left" title="" data-original-title="企业信息中心"
+                                            ><i style="font-size: 18px"
+                                                class="glyphicon glyphicon-cog"></i></a>
+                                            <a sec:authorize-url="/enterprise/add/*/*"
+                                               th:href="@{/enterprise/add/2/{id}(id=${info.enterpriseId})}"
+                                               class="on-default edit-row"
+                                               style="padding-left: 10px;color: #4bd396;" data-toggle="tooltip"
+                                               data-placement="left" title="" data-original-title="新建二级企业"><i
+                                                    style="font-size: 18px"
+                                                    class="mdi mdi-account-plus"></i></a>
+                                        </td>
 
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div style="float:left;margin-top:-12px;margin-left:13px;width:25px;height:25px;border-left:1px solid #DCDCDC;border-bottom:1px solid #DCDCDC"></div>
-                                        <a style="float:left" th:href="@{/enterprise/center/0000}"
-                                           data-toggle="tooltip" data-placement="bottom" title=""
-                                           data-original-title="跳转到企业信息中心"><span style="color:#797979">北京星语互联科技有限公司</span></a>
-                                    </td>
-                                    <td><p style="font-size:14px;">耀中国<span
-                                            style="font-size:14px;color:#989898;margin-left:5px">(13910916881)</span>
-                                    </p></td>
-                                    <td>李世民</td>
-                                    <td>
-                                        <a class="btn btn-teal btn-rounded btn-sm waves-effect waves-light">直客</a>
-                                    </td>
-                                    <td> 小舟科技(北京)有限公司</td>
-                                    <td> 2021-12-12 15:25:36</td>
-                                    <td>
-                                        <div class="progress" style="margin-top:5px">
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-success progress-bar-striped"
-                                                 title="企业基本资料"></div>
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-purple progress-bar-striped active"
-                                                 title="WEB登录账户信息"></div>
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-primary progress-bar-striped active"
-                                                 title="邮寄信息"></div>
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-info" title="发票信息"></div>
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-teal progress-bar-striped active"
-                                                 title="材料审核信息"></div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <a sec:authorize-url="/enterprise/edit/*/*"
-                                           th:href="@{/enterprise/edit/2/parentId}"
-                                           class="on-default edit-row"
-                                           style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="left" title="" data-original-title="修改企业信息"><i
-                                                style="font-size: 18px"
-                                                class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/enterprise/center/*"
-                                           th:href="@{/enterprise/center/0000}"
-                                           class="on-default edit-row"
-                                           style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="left" title="" data-original-title="企业信息中心"
-                                        ><i style="font-size: 18px"
-                                            class="glyphicon glyphicon-cog"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div style="float:left;margin-top:-12px;margin-left:13px;width:25px;height:25px;border-left:1px solid #DCDCDC;border-bottom:1px solid #DCDCDC"></div>
-                                        <a style="float:left" th:href="@{/enterprise/center/0000}"
-                                           data-toggle="tooltip" data-placement="bottom" title=""
-                                           data-original-title="跳转到企业信息中心"><span style="color:#797979">北京星语互联科技有限公司</span></a>
-                                    </td>
-                                    <td><p style="font-size:14px;">耀中国<span
-                                            style="font-size:14px;color:#989898;margin-left:5px">(13910916881)</span>
-                                    </p></td>
-                                    <td>李世民</td>
-                                    <td>
-                                        <a class="btn btn-teal btn-rounded btn-sm waves-effect waves-light">直客</a>
-                                    </td>
-                                    <td> 小舟科技(北京)有限公司</td>
-                                    <td> 2021-12-12 15:25:36</td>
-                                    <td>
-                                        <div class="progress" style="margin-top:5px">
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-success progress-bar-striped"
-                                                 title="企业基本资料"></div>
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-purple progress-bar-striped active"
-                                                 title="WEB登录账户信息"></div>
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-primary progress-bar-striped active"
-                                                 title="邮寄信息"></div>
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-info" title="发票信息"></div>
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-danger progress-bar-striped active"
-                                                 title="材料审核信息"></div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <a sec:authorize-url="/enterprise/edit/*/*"
-                                           th:href="@{/enterprise/edit/2/parentId}"
-                                           class="on-default edit-row"
-                                           style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="left" title="" data-original-title="修改企业信息"><i
-                                                style="font-size: 18px"
-                                                class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/enterprise/center/*"
-                                           th:href="@{/enterprise/center/0000}"
-                                           class="on-default edit-row"
-                                           style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="left" title="" data-original-title="企业信息中心"
-                                        ><i style="font-size: 18px"
-                                            class="glyphicon glyphicon-cog"></i></a>
+                                        <tr th:each="enterprise:${info.enterprises}">
+                                            <td>
+                                                <div style="float:left;margin-top:-12px;margin-left:13px;width:25px;height:25px;border-left:1px solid #DCDCDC;border-bottom:1px solid #DCDCDC"></div>
+                                                <a style="float:left" th:href="@{/enterprise/center/{id}(id=${enterprise.enterpriseId})}"
+                                                   data-toggle="tooltip" data-placement="bottom" title=""
+                                                   data-original-title="跳转到企业信息中心"> <span style="color:#797979">[[${enterprise.enterpriseName}]]</span></a></a>
+                                            </td>
+                                            <td><p style="font-size:14px;">[[${enterprise.enterpriseContacts}]]<span
+                                                    style="font-size:14px;color:#989898;margin-left:5px">([[${enterprise.enterpriseContactsPhone}]])</span>
+                                            </p></td>
+                                            <td>[[${enterprise.salerName}]]</td>
+                                        <td>
+                                            <mpm:tag identity="enterpriseType" show-type="button" key="code" th:value="${enterprise.enterpriseType}"
+                                                     class="DIRECTCUSTOMER,btn btn-info btn-rounded btn-sm waves-effect waves-light;CHANNELCUSTOMER,btn btn-teal btn-rounded btn-sm waves-effect waves-light;"/>
+                                        </td>
+                                        <td> <mpm:tag identity="corporation" show-type="label" key="code"
+                                                      th:value="${enterprise.accessCorporation}"
+                                                      title="对接主体公司"/>
+                                        </td>
+                                        <td> [[${enterprise.createdTime}]]</td>
+                                            <td>
+                                                <div class="progress" style="margin-top:5px">
+                                                <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                                                     aria-valuemax="100" style="width: 20%;"
+                                                     class="progress-bar progress-bar-success progress-bar-striped active"
+                                                     data-toggle="tooltip" data-placement="bottom" title=""
+                                                     data-original-title="企业基本资料"></div>
+                                                <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                                                     aria-valuemax="100" style="width: 20%;"
+                                                     th:class="${#strings.substring(enterprise.enterpriseProcess,1,2) == '1'?'progress-bar progress-bar-purple progress-bar-striped active':'progress-bar progress-bar-danger progress-bar-striped active' }"
+                                                     data-toggle="tooltip" data-placement="bottom" title=""
+                                                     data-original-title="WEB登录账户信息"></div>
+                                                <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                                                     aria-valuemax="100" style="width: 20%;"
+                                                     th:class="${#strings.substring(enterprise.enterpriseProcess,2,3) == '1'?'progress-bar progress-bar-primary progress-bar-striped active':'progress-bar progress-bar-danger progress-bar-striped active' }"
+                                                     data-toggle="tooltip" data-placement="bottom" title=""
+                                                     data-original-title="邮寄信息"></div>
+                                                <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                                                     aria-valuemax="100" style="width: 20%;"
+                                                     th:class="${#strings.substring(enterprise.enterpriseProcess,3,4) == '1'?'progress-bar progress-bar-info progress-bar-striped active':'progress-bar progress-bar-danger progress-bar-striped active' }"
+                                                     class="progress-bar progress-bar-danger" data-toggle="tooltip"
+                                                     data-placement="bottom" title="" data-original-title="发票信息"></div>
+                                                <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                                                     aria-valuemax="100" style="width: 20%;"
+                                                     th:class="${#strings.substring(enterprise.enterpriseProcess,4,5) == '1'?'progress-bar progress-bar-teal progress-bar-striped active':'progress-bar progress-bar-danger progress-bar-striped active' }"
+                                                     data-toggle="tooltip" data-placement="bottom" title=""
+                                                     data-original-title="材料审核信息"></div>
+                                            </div>
+                                            </td>
+                                            <td>
+                                                <a sec:authorize-url="/enterprise/edit/*/*"
+                                                   th:href="@{/enterprise/edit/2/{id}(id=${enterprise.enterpriseId})}"
+                                                   class="on-default edit-row"
+                                                   style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
+                                                   data-placement="left" title="" data-original-title="修改企业信息"><i
+                                                        style="font-size: 18px"
+                                                        class="mdi mdi-table-edit"></i></a>
+                                                <a sec:authorize-url="/enterprise/center/*"
+                                                   th:href="@{/enterprise/center/{id}(id=${enterprise.enterpriseId})}"
+                                                   class="on-default edit-row"
+                                                   style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
+                                                   data-placement="left" title="" data-original-title="企业信息中心"
+                                                ><i style="font-size: 18px"
+                                                    class="glyphicon glyphicon-cog"></i></a>
 
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <a th:href="@{/enterprise/center/0000}" data-toggle="tooltip"
-                                           data-placement="bottom" title="" data-original-title="跳转到企业信息中心"> <i
-                                                class="mdi mdi-crosshairs" style="margin-left:10px;"></i>
-                                            <span style="color:#797979">北京星语互联科技有限公司</span></a>
-                                    </td>
-                                    <td><p style="font-size:14px;">耀中国<span
-                                            style="font-size:14px;color:#989898;margin-left:5px">(13910916881)</span>
-                                    </p></td>
-                                    <td>李世民</td>
-                                    <td>
-                                        <a class="btn btn-teal btn-rounded btn-sm waves-effect waves-light">直客</a>
-                                    </td>
-                                    <td> 武汉舟济信息技术有限公司</td>
-                                    <td> 2021-12-12 15:25:36</td>
-                                    <td>
-                                        <div class="progress" style="margin-top:5px">
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-success progress-bar-striped"
-                                                 title="企业基本资料"></div>
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-purple progress-bar-striped active"
-                                                 title="WEB登录账户信息"></div>
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-primary progress-bar-striped active"
-                                                 title="邮寄信息"></div>
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-info" title="发票信息"></div>
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-teal progress-bar-striped active"
-                                                 title="材料审核信息"></div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <a sec:authorize-url="/enterprise/edit/*/*"
-                                           th:href="@{/enterprise/edit/2/parentId}"
-                                           class="on-default edit-row"
-                                           style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="left" title="" data-original-title="修改企业信息"><i
-                                                style="font-size: 18px"
-                                                class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/enterprise/center/*"
-                                           th:href="@{/enterprise/center/0000}"
-                                           class="on-default edit-row"
-                                           style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="left" title="" data-original-title="企业信息中心"
-                                        ><i style="font-size: 18px"
-                                            class="glyphicon glyphicon-cog"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <a th:href="@{/enterprise/center/0000}" data-toggle="tooltip"
-                                           data-placement="bottom" title="" data-original-title="跳转到企业信息中心"> <i
-                                                class="fa  fa-angle-double-down" style="margin-left:10px;"></i>
-                                            <span style="color:#797979">北京星语互联科技有限公司</span></a>
-                                    </td>
-                                    <td><p style="font-size:14px;">耀中国<span
-                                            style="font-size:14px;color:#989898;margin-left:5px">(13910916881)</span>
-                                    </p></td>
-                                    <td>李世民</td>
-                                    <td><a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">渠道商</a></td>
-                                    <td> 北京星语互联科技有限公司</td>
-                                    <td> 2021-12-12 15:25:36</td>
-                                    <td>
-                                        <div class="progress">
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-success progress-bar-striped"
-                                                 title="企业基本资料"></div>
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-purple progress-bar-striped active"
-                                                 title="WEB登录账户信息"></div>
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-primary progress-bar-striped active"
-                                                 title="邮寄信息"></div>
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-info" title="发票信息"></div>
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-teal progress-bar-striped active"
-                                                 title="材料审核信息"></div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <a sec:authorize-url="/enterprise/edit/*/*"
-                                           th:href="@{/enterprise/edit/2/parentId}"
-                                           class="on-default edit-row"
-                                           style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="left" title="" data-original-title="修改企业信息"><i
-                                                style="font-size: 18px"
-                                                class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/enterprise/center/*"
-                                           th:href="@{/enterprise/center/0000}"
-                                           class="on-default edit-row"
-                                           style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="left" title="" data-original-title="企业信息中心"
-                                        ><i style="font-size: 18px"
-                                            class="glyphicon glyphicon-cog"></i></a>
-                                        <a sec:authorize-url="/enterprise/edit/*/*"
-                                           th:href="@{/enterprise/edit/2/parentId}"
-                                           class="on-default edit-row"
-                                           style="padding-left: 10px;color: #4bd396;" data-toggle="tooltip"
-                                           data-placement="left" title="" data-original-title="新建二级企业"><i
-                                                style="font-size: 18px"
-                                                class="mdi mdi-account-plus"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div style="float:left;margin-top:-12px;margin-left:13px;width:25px;height:25px;border-left:1px solid #DCDCDC;border-bottom:1px solid #DCDCDC"></div>
-                                        <a style="float:left" th:href="@{/enterprise/center/0000}"
-                                           data-toggle="tooltip" data-placement="bottom" title=""
-                                           data-original-title="跳转到企业信息中心"><span style="color:#797979">北京星语互联科技有限公司</span></a>
-                                    </td>
-                                    <td><p style="font-size:14px;">耀中国<span
-                                            style="font-size:14px;color:#989898;margin-left:5px">(13910916881)</span>
-                                    </p></td>
-                                    <td>李世民</td>
-                                    <td>
-                                        <a class="btn btn-teal btn-rounded btn-sm waves-effect waves-light">直客</a>
-                                    </td>
-                                    <td> 北京星语互联科技有限公司</td>
-                                    <td> 2021-12-12 15:25:36</td>
-                                    <td>
-                                        <div class="progress" style="margin-top:5px">
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-success progress-bar-striped"
-                                                 title="企业基本资料"></div>
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-purple progress-bar-striped active"
-                                                 title="WEB登录账户信息"></div>
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-danger progress-bar-striped active"
-                                                 title="邮寄信息"></div>
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-info" title="发票信息"></div>
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-teal progress-bar-striped active"
-                                                 title="材料审核信息"></div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <a sec:authorize-url="/enterprise/edit/*/*"
-                                           th:href="@{/enterprise/edit/2/parentId}"
-                                           class="on-default edit-row"
-                                           style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="left" title="" data-original-title="修改企业信息"><i
-                                                style="font-size: 18px"
-                                                class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/enterprise/center/*"
-                                           th:href="@{/enterprise/center/0000}"
-                                           class="on-default edit-row"
-                                           style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="left" title="" data-original-title="企业信息中心"
-                                        ><i style="font-size: 18px"
-                                            class="glyphicon glyphicon-cog"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div style="float:left;margin-top:-12px;margin-left:13px;width:25px;height:25px;border-left:1px solid #DCDCDC;border-bottom:1px solid #DCDCDC"></div>
-                                        <a style="float:left" th:href="@{/enterprise/center/0000}"
-                                           data-toggle="tooltip" data-placement="bottom" title=""
-                                           data-original-title="跳转到企业信息中心"><span style="color:#797979">北京星语互联科技有限公司</span></a>
-                                    </td>
-                                    <td><p style="font-size:14px;">耀中国<span
-                                            style="font-size:14px;color:#989898;margin-left:5px">(13910916881)</span>
-                                    </p></td>
-                                    <td>李世民</td>
-                                    <td>
-                                        <a class="btn btn-teal btn-rounded btn-sm waves-effect waves-light">直客</a>
-                                    </td>
-                                    <td> 北京星语互联科技有限公司</td>
-                                    <td> 2021-12-12 15:25:36</td>
-                                    <td>
-                                        <div class="progress" style="margin-top:5px">
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-success progress-bar-striped"
-                                                 title="企业基本资料"></div>
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-danger progress-bar-striped active"
-                                                 title="WEB登录账户信息"></div>
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-primary progress-bar-striped active"
-                                                 title="邮寄信息"></div>
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-info" title="发票信息"></div>
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-teal progress-bar-striped active"
-                                                 title="材料审核信息"></div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <a sec:authorize-url="/enterprise/edit/*/*"
-                                           th:href="@{/enterprise/edit/2/parentId}"
-                                           class="on-default edit-row"
-                                           style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="left" title="" data-original-title="修改企业信息"><i
-                                                style="font-size: 18px"
-                                                class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/enterprise/center/*"
-                                           th:href="@{/enterprise/center/0000}"
-                                           class="on-default edit-row"
-                                           style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="left" title="" data-original-title="企业信息中心"
-                                        ><i style="font-size: 18px"
-                                            class="glyphicon glyphicon-cog"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div style="float:left;margin-top:-12px;margin-left:13px;width:25px;height:25px;border-left:1px solid #DCDCDC;border-bottom:1px solid #DCDCDC"></div>
-                                        <a style="float:left" th:href="@{/enterprise/center/0000}"
-                                           data-toggle="tooltip" data-placement="bottom" title=""
-                                           data-original-title="跳转到企业信息中心"><span style="color:#797979">北京星语互联科技有限公司</span></a>
-                                    </td>
-                                    <td><p style="font-size:14px;">耀中国<span
-                                            style="font-size:14px;color:#989898;margin-left:5px">(13910916881)</span>
-                                    </p></td>
-                                    <td>李世民</td>
-                                    <td>
-                                        <a class="btn btn-teal btn-rounded btn-sm waves-effect waves-light">直客</a>
-                                    </td>
-                                    <td> 北京星语互联科技有限公司</td>
-                                    <td> 2021-12-12 15:25:36</td>
-                                    <td>
-                                        <div class="progress" style="margin-top:5px">
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-success progress-bar-striped"
-                                                 title="企业基本资料"></div>
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-purple progress-bar-striped active"
-                                                 title="WEB登录账户信息"></div>
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-primary progress-bar-striped active"
-                                                 title="邮寄信息"></div>
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-danger" title="发票信息"></div>
-                                            <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                 aria-valuemax="100" style="width: 20%;"
-                                                 class="progress-bar progress-bar-danger progress-bar-striped active"
-                                                 title="材料审核信息"></div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <a sec:authorize-url="/enterprise/edit/*/*"
-                                           th:href="@{/enterprise/edit/2/parentId}"
-                                           class="on-default edit-row"
-                                           style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="left" title="" data-original-title="修改企业信息"><i
-                                                style="font-size: 18px"
-                                                class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/enterprise/center/*"
-                                           th:href="@{/enterprise/center/0000}"
-                                           class="on-default edit-row"
-                                           style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="left" title="" data-original-title="企业信息中心"
-                                        ><i style="font-size: 18px"
-                                            class="glyphicon glyphicon-cog"></i></a>
-                                    </td>
-                                </tr>
+                                            </td>
+                                        </tr>
+                                    </tr>
+                                </span>
+
                                 </tbody>
                             </table>
                         </div>

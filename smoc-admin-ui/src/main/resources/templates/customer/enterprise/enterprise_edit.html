@@ -80,14 +80,9 @@
                                                           th:errors="*{enterpriseType}"  style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
                                                 <mpm:tag id="enterpriseType" required="true" identity="enterpriseType"
-                                                         show-type="select" key="code" class="form-control" th:if="${level eq '1'}"
+                                                         show-type="select" key="code" class="form-control"
                                                          name="enterpriseType" th:value="${enterpriseBasicInfoValidator.enterpriseType}"
                                                          title="企业类型"/>
-                                                <mpm:tag id="enterpriseType" required="true" identity="enterpriseType"
-                                                         show-type="label" key="code" class="form-control" th:if="${level eq '2'}"
-                                                         name="enterpriseType" th:value="${enterpriseBasicInfoValidator.enterpriseType}"
-                                                         title="企业类型"/>
-                                                <input type="hidden" th:field="*{enterpriseType}" th:if="${level eq '2'}">
                                             </div>
                                             <div class="col-md-6 form-group">
                                                 <label for="enterpriseContactsPhone">企业联系方式<span class="text-danger">*</span>&nbsp;
@@ -102,25 +97,18 @@
                                             <div class="col-md-6 form-group">
                                                 <label>对接主体公司<span class="text-danger">*</span>&nbsp;</label>
                                                 <mpm:tag id="corporation" required="true" identity="corporation"
-                                                         show-type="select" key="code" class="form-control" th:if="${level eq '1'}"
+                                                         show-type="select" key="code" class="form-control"
                                                          name="accessCorporation" th:value="${enterpriseBasicInfoValidator.accessCorporation}"
                                                          title="对接主体公司"/>
-                                                <mpm:tag id="corporation" required="true" identity="corporation"
-                                                         show-type="label" key="code" class="form-control" th:if="${level eq '2'}"
-                                                         name="accessCorporation" th:value="${enterpriseBasicInfoValidator.accessCorporation}"
-                                                         title="对接主体公司"/>
-                                                <input type="hidden" th:field="*{accessCorporation}" th:if="${level eq '2'}">
                                             </div>
                                             <div class="col-md-6 form-group">
                                                 <label>销售人员（销售身份）</label>
-                                                <select name="saler" data-style="btn-default" th:if="${level eq '1'}"
+                                                <select name="saler" data-style="btn-default"
                                                         class="selectpicker  form-control" tabindex="-98">
                                                     <option data-icon="mdi mdi-account" value="">--请选择销售人员--</option>
                                                     <option data-icon="mdi mdi-account" th:each="sales:${salesList}"
                                                             th:selected="${enterpriseBasicInfoValidator.saler eq sales.id}" th:value="${sales.id}">[[${sales.realName}]]</option>
                                                 </select>
-                                                <span class="form-control" th:each="sales:${salesList}" th:if="${enterpriseBasicInfoValidator.saler eq sales.id and level eq '2'}">[[${sales.realName}]]</span>
-                                                <input type="hidden" th:field="*{saler}" th:if="${level eq '2'}">
                                             </div>
                                             <div class="col-md-6 form-group">
                                                 <label class="m-b-10">有效状态</label>

@@ -14,7 +14,7 @@ import org.springframework.data.repository.CrudRepository;
 public interface EnterpriseRepository extends CrudRepository<EnterpriseBasicInfo, String>, JpaRepository<EnterpriseBasicInfo, String> {
 
 
-    Iterable<EnterpriseBasicInfo> findByEnterpriseNameAndEnterpriseParentId(String enterpriseName, String enterpriseParentId);
+    Iterable<EnterpriseBasicInfo> findByEnterpriseName(String enterpriseName);
 
     PageList<EnterpriseBasicInfoValidator> page(PageParams<EnterpriseBasicInfoValidator> pageParams);
 }
