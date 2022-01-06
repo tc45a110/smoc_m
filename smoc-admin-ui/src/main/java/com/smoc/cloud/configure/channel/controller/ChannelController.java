@@ -133,6 +133,17 @@ public class ChannelController {
             return view;
         }
 
+        //判断页面是否显示区域计价
+        String priceStyle = "AREA_PRICE";
+        if(!"base".equals(id)){
+            ResponseData<ChannelBasicInfoValidator> data = channelService.findChannelById(id);
+            if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+                view.addObject("error", data.getCode() + ":" + data.getMessage());
+            }
+            priceStyle = data.getData().getPriceStyle();
+        }
+        view.addObject("priceStyle", priceStyle);
+
         return view;
     }
 
@@ -245,8 +256,8 @@ public class ChannelController {
         //记录日志
         log.info("[通道管理][通道基本信息][{}][{}]数据:{}", op, user.getUserName(), JSON.toJSONString(channelBasicInfoValidator));
 
-        //保存成功之后，重新加载页面，iframe刷新标识，只有add才会刷新
-        if ("add".equals(op)) {
+        //保存成功之后，重新加载页面，iframe刷新标识，只有add和修改区域计价才会刷新
+        if ("add".equals(op) || "AREA_PRICE".equals(channelBasicInfoValidator.getPriceStyle())) {
             view.addObject("flag", "flag");
         } else {
             view.addObject("salesList", findSalesList());

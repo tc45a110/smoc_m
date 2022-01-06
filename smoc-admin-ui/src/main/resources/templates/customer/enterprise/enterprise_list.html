@@ -40,44 +40,48 @@
         <div class="row" style="position: relative;margin-top: 80px" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
                 <div class="card-box">
-                    <form th:action="@{/enterprise/page}" id="query_form" method="post">
+                    <form th:action="@{/enterprise/page}" th:object="${enterpriseBasicInfoValidator}" id="query_form" method="post">
                         <div class="row m-b-60">
                             <div class="col-sm-12">
                                 <div class="form-group  col-sm-3">
-                                    <input type="text" class="form-control"
+                                    <input type="text" class="form-control" th:field="*{enterpriseName}"
                                            placeholder="企业名称" autocomplete="off">
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <input type="text" class="form-control"
+                                    <input type="text" class="form-control" th:field="*{enterpriseContacts}"
                                            placeholder="企业联系人" autocomplete="off">
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <input type="text" class="form-control"
+                                    <input type="text" class="form-control" th:field="*{enterpriseContactsPhone}"
                                            placeholder="联系方式" autocomplete="off">
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <input type="text" class="form-control"
+                                    <input type="text" class="form-control" th:field="*{salerName}"
                                            placeholder="销售人员" autocomplete="off">
                                 </div>
                                 <div class="form-group  col-sm-3">
                                     <mpm:tag id="enterpriseType" identity="enterpriseType" show-type="select" key="code"
-                                             class="form-control" name="enterpriseType" value="" title="企业类型"/>
+                                             class="form-control" name="enterpriseType" th:value="${enterpriseBasicInfoValidator.enterpriseType}" title="企业类型"/>
                                 </div>
                                 <div class="form-group  col-sm-3">
                                     <mpm:tag id="corporation" identity="corporation" show-type="select" key="code"
-                                             class="form-control" data-icon="mdi mdi-view-module" title="对接主体公司"/>
+                                             class="form-control" name="accessCorporation" th:value="${enterpriseBasicInfoValidator.accessCorporation}" title="对接主体公司"/>
                                 </div>
                                 <div class="form-group col-sm-4 pull-right" style="text-align: right">
                                     <button sec:authorize-url="/enterprise/page" type="submit"
                                             class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search" style="margin-right:5px"></i> 查询
                                     </button>
-                                    <a sec:authorize-url="/enterprise/edit/*/*"
-                                       th:href="@{/enterprise/edit/1/0000}"
+                                    <a sec:authorize-url="/enterprise/add/*/*"
+                                       th:href="@{/enterprise/add/1/0000}"
                                        class="btn btn-success waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>企业开户</a>
                                     <a id="help_display" style="margin-left:10px"><i class="mdi mdi-help-circle-outline"
                                                                                      style="font-size:18px;"></i></a>
+                                    <input type="hidden" name="currentPage" id="currentPage"
+                                           th:value="${pageParams.currentPage}">
+                                    <input type="hidden" name="pageSize" id="pageSize"
+                                           th:value="${pageParams.pageSize}">
                                 </div>
 
                             </div>
@@ -170,7 +174,7 @@
                                     </td>
                                     <td>
                                         <a sec:authorize-url="/enterprise/edit/*/*"
-                                           th:href="@{/enterprise/edit/2/parentId}"
+                                           th:href="@{/enterprise/edit/2/36df72e2184246e4988382b4b18bcae6}"
                                            class="on-default edit-row"
                                            style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="修改企业信息"><i
@@ -183,8 +187,8 @@
                                            data-placement="left" title="" data-original-title="企业信息中心"
                                         ><i style="font-size: 18px"
                                             class="glyphicon glyphicon-cog"></i></a>
-                                        <a sec:authorize-url="/enterprise/edit/*/*"
-                                           th:href="@{/enterprise/edit/2/parentId}"
+                                        <a sec:authorize-url="/enterprise/add/*/*"
+                                           th:href="@{/enterprise/add/2/36df72e2184246e4988382b4b18bcae6}"
                                            class="on-default edit-row"
                                            style="padding-left: 10px;color: #4bd396;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="新建二级企业"><i
@@ -233,7 +237,7 @@
                                     </td>
                                     <td>
                                         <a sec:authorize-url="/enterprise/edit/*/*"
-                                           th:href="@{/enterprise/edit/2/parentId}"
+                                           th:href="@{/enterprise/edit/2/a16c3aac69564bd7a27e8cc254d80ec4}"
                                            class="on-default edit-row"
                                            style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="修改企业信息"><i

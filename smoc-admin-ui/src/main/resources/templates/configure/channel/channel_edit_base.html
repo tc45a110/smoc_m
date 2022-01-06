@@ -161,7 +161,7 @@
                                                     </label>
                                                     <select name="channelAccessSales" data-style="btn-default"
                                                             class="selectpicker  form-control" tabindex="-98" 　required="true">
-                                                        <option data-icon="mdi mdi-account">--请选择对接销售--</option>
+                                                        <option data-icon="mdi mdi-account" value="">--请选择对接销售--</option>
                                                         <option data-icon="mdi mdi-account" th:each="sales:${salesList}"
                                                                 th:selected="${channelBasicInfoValidator.channelAccessSales eq sales.id}" th:value="${sales.id}">[[${sales.realName}]]</option>
                                                     </select>

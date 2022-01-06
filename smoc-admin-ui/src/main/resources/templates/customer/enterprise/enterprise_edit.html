@@ -44,7 +44,7 @@
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-md-12">
                 <div class="card-box">
-                    <form id="submit_form"
+                    <form id="submit_form" th:action="@{/enterprise/save/{op}(op=${op})}" th:object="${enterpriseBasicInfoValidator}"
                           method="post" data-parsley-validate="">
                         <div class="row">
                             <div class="col-md-12">
@@ -53,67 +53,91 @@
                                         <div class="row">
                                             <div class="col-md-12 form-group m-b-20"
                                                  th:remove="${level =='1'}?all:none">
-                                                <label>上级企业</label>：北京星语互联科技有限公司
+                                                <label>上级企业</label>：[[${enterpriseBasicInfoValidator.parentEnterpriseName}]]
                                             </div>
                                             <div class="col-md-6 form-group">
-                                                <label for="eName4">企业名称<span class="text-danger">*</span>&nbsp;</label>
-                                                <input id="eName4" type="text" class="form-control"
+                                                <label for="enterpriseName">企业名称<span class="text-danger">*</span>&nbsp;
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('enterpriseName')}"
+                                                          th:errors="*{enterpriseName}"  style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input id="enterpriseName" type="text" class="form-control" th:field="*{enterpriseName}"
                                                        required="" data-parsley-length="[2,64]" autocomplete="off"
                                                        th:placeholder="${level=='1'?'请输入企业名称':'请输入二级企业名称'}">
                                             </div>
                                             <div class="col-md-6 form-group">
-                                                <label for="linkt1">企业联系人<span class="text-danger">*</span>&nbsp;</label>
-                                                <input id="linkt1" type="text" class="form-control"
+                                                <label for="enterpriseContacts">企业联系人<span class="text-danger">*</span>&nbsp;
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('enterpriseContacts')}"
+                                                          th:errors="*{enterpriseContacts}"  style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input id="enterpriseContacts" type="text" class="form-control" th:field="*{enterpriseContacts}"
                                                        required="" data-parsley-length="[2,12]" autocomplete="off"
                                                        th:placeholder="${level=='1'?'请输入企业联系人':'请输入二级企业联系人'}">
 
                                             </div>
-                                            <div class="col-md-6 form-group ">
-                                                <label for="linkk1">企业联系方式<span
-                                                        class="text-danger">*</span>&nbsp;</label>
-                                                <input id="linkk1" type="text" class="form-control"
+                                            <div class="col-md-6 form-group">
+                                                <label>企业类型<span class="text-danger">*</span>&nbsp;
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('enterpriseType')}"
+                                                          th:errors="*{enterpriseType}"  style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <mpm:tag id="enterpriseType" required="true" identity="enterpriseType"
+                                                         show-type="select" key="code" class="form-control" th:if="${level eq '1'}"
+                                                         name="enterpriseType" th:value="${enterpriseBasicInfoValidator.enterpriseType}"
+                                                         title="企业类型"/>
+                                                <mpm:tag id="enterpriseType" required="true" identity="enterpriseType"
+                                                         show-type="label" key="code" class="form-control" th:if="${level eq '2'}"
+                                                         name="enterpriseType" th:value="${enterpriseBasicInfoValidator.enterpriseType}"
+                                                         title="企业类型"/>
+                                                <input type="hidden" th:field="*{enterpriseType}" th:if="${level eq '2'}">
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label for="enterpriseContactsPhone">企业联系方式<span class="text-danger">*</span>&nbsp;
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('enterpriseContactsPhone')}"
+                                                          th:errors="*{enterpriseContactsPhone}"  style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input id="enterpriseContactsPhone" type="text" class="form-control" th:field="*{enterpriseContactsPhone}"
                                                        required="" data-parsley-length="[7,24]" autocomplete="off"
                                                        th:placeholder="${level=='1'?'请输入企业联系方式':'请输入二级企业联系方式'}">
                                             </div>
-                                            <div class="col-md-6 form-group">
-                                                <label>企业类型<span class="text-danger">*</span></label>
-                                                <mpm:tag id="enterpriseType" required="true" identity="enterpriseType"
-                                                         show-type="select" key="code"
-                                                         class="form-control" name="enterpriseType" value=""
-                                                         title="企业类型"/>
-                                            </div>
+
                                             <div class="col-md-6 form-group">
                                                 <label>对接主体公司<span class="text-danger">*</span>&nbsp;</label>
-                                                <mpm:tag id="corporation" identity="corporation" show-type="select"
-                                                         key="code"
-                                                         class="form-control" data-icon="mdi mdi-view-module"
+                                                <mpm:tag id="corporation" required="true" identity="corporation"
+                                                         show-type="select" key="code" class="form-control" th:if="${level eq '1'}"
+                                                         name="accessCorporation" th:value="${enterpriseBasicInfoValidator.accessCorporation}"
                                                          title="对接主体公司"/>
+                                                <mpm:tag id="corporation" required="true" identity="corporation"
+                                                         show-type="label" key="code" class="form-control" th:if="${level eq '2'}"
+                                                         name="accessCorporation" th:value="${enterpriseBasicInfoValidator.accessCorporation}"
+                                                         title="对接主体公司"/>
+                                                <input type="hidden" th:field="*{accessCorporation}" th:if="${level eq '2'}">
                                             </div>
                                             <div class="col-md-6 form-group">
-                                                <label for="sale">销售人员（销售身份）</label>
-                                                <input id="sale" type="text" class="form-control"
-                                                       data-parsley-length="[7,24]" autocomplete="off"
-                                                       placeholder="请输入销售人员">
+                                                <label>销售人员（销售身份）</label>
+                                                <select name="saler" data-style="btn-default" th:if="${level eq '1'}"
+                                                        class="selectpicker  form-control" tabindex="-98">
+                                                    <option data-icon="mdi mdi-account" value="">--请选择销售人员--</option>
+                                                    <option data-icon="mdi mdi-account" th:each="sales:${salesList}"
+                                                            th:selected="${enterpriseBasicInfoValidator.saler eq sales.id}" th:value="${sales.id}">[[${sales.realName}]]</option>
+                                                </select>
+                                                <span class="form-control" th:each="sales:${salesList}" th:if="${enterpriseBasicInfoValidator.saler eq sales.id and level eq '2'}">[[${sales.realName}]]</span>
+                                                <input type="hidden" th:field="*{saler}" th:if="${level eq '2'}">
                                             </div>
                                             <div class="col-md-6 form-group">
                                                 <label class="m-b-10">有效状态</label>
                                                 <br/>
-                                                <div class="radio radio-info radio-inline">
-                                                    <input type="radio" id="active1" value="1" checked
-                                                           required="">
-                                                    <label for="active1"> 是 </label>
-                                                </div>
-                                                <div class="radio radio-info radio-inline">
-                                                    <input type="radio" id="active0" value="0">
-                                                    <label for="active0"> 否 </label>
-                                                </div>
+                                                <mpm:tag id="enterpriseStatus" identity="isOrNo" name="enterpriseStatus" show-type="radio" style="margin-top:0px"
+                                                         key="code" th:value="${enterpriseBasicInfoValidator.enterpriseStatus}" required="true" title="是否"/>
 
                                             </div>
 
                                             <div class="col-md-12 text-center">
-                                                <a sec:authorize-url="/enterprise/center/*"
-                                                   th:href="@{/enterprise/center/0000}" type="button"
-                                                   class="btn btn-teal waves-effect waves-light">提交</a>
+                                                <input type="hidden" th:field="*{enterpriseId}">
+                                                <input type="hidden" th:field="*{enterpriseParentId}">
+                                                <input type="hidden" th:field="*{createdTime}">
+                                                <input type="hidden" th:field="*{createdBy}">
+                                                <input type="hidden" th:field="*{enterpriseProcess}">
+                                                <button sec:authorize-url="/enterprise/save/*" type="submit"
+                                                   class="btn btn-teal waves-effect waves-light">提交</button>
                                                 <a sec:authorize-url="/enterprise/list"
                                                    th:href="@{/enterprise/list}" style="margin-left:20px"
                                                    class="btn btn-default waves-effect waves-light">返回</a>

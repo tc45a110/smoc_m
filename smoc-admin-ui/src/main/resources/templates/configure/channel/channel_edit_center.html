@@ -77,7 +77,7 @@
                                                                       th:target="tab-content"><i class="mdi mdi-star"
                                                                                                  style="margin-right:5px;color:#f35864"></i>通道过滤配置</a>
                                             </li>
-                                            <li class="" id="tab4"><a onclick="active('4')" id="a4"
+                                            <li class="" id="tab4"><a onclick="active('4')" id="a4" th:if="${priceStyle eq 'AREA_PRICE'}"
                                                                       sec:authorize-url="/configure/channel/edit/price/*"
                                                                       th:href="@{/configure/channel/edit/price/{id}(id=${id})}"
                                                                       th:target="tab-content"><i class="mdi mdi-star"
