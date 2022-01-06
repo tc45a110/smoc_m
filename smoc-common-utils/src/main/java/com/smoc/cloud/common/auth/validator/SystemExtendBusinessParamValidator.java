@@ -4,7 +4,6 @@ package com.smoc.cloud.common.auth.validator;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.Instant;
 import java.util.Date;
 
 @Setter
@@ -33,6 +32,8 @@ public class SystemExtendBusinessParamValidator {
 
     private String showStyle;
 
+    private String regularExp;
+
     private String isReadonly;
 
     private Integer displaySort;
@@ -41,7 +42,7 @@ public class SystemExtendBusinessParamValidator {
 
     private String createdBy;
 
-    private Date createdTime;
+    private String createdTime;
 
     private String updatedBy;
 

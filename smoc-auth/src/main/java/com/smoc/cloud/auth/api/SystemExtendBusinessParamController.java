@@ -75,10 +75,8 @@ public class SystemExtendBusinessParamController {
             return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(systemExtendBusinessParamValidator));
         }
 
-        //转SystemExtendBusinessParam存放对象
-        SystemExtendBusinessParam systemExtendBusinessParam = new SystemExtendBusinessParam();
-        BeanUtils.copyProperties(systemExtendBusinessParamValidator, systemExtendBusinessParam);
-        return systemExtendBusinessParamService.save(systemExtendBusinessParam, op);
+
+        return systemExtendBusinessParamService.save(systemExtendBusinessParamValidator, op);
     }
 
     /**

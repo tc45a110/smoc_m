@@ -3,10 +3,13 @@ package com.smoc.cloud.auth.data.provider.service;
 import com.alibaba.fastjson.JSON;
 import com.smoc.cloud.auth.data.provider.entity.SystemExtendBusinessParam;
 import com.smoc.cloud.auth.data.provider.repository.SystemExtendBusinessParamRepository;
+import com.smoc.cloud.common.auth.validator.SystemExtendBusinessParamValidator;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.utils.DateTimeUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -49,12 +52,18 @@ public class SystemExtendBusinessParamService {
      * @param id
      * @return
      */
-    public ResponseData<SystemExtendBusinessParam> findById(String id) {
+    public ResponseData<SystemExtendBusinessParamValidator> findById(String id) {
 
         Optional<SystemExtendBusinessParam> data = systemExtendBusinessParamRepository.findById(id);
 
+        SystemExtendBusinessParamValidator systemExtendBusinessParamValidator = new SystemExtendBusinessParamValidator();
+        BeanUtils.copyProperties(data.get(),systemExtendBusinessParamValidator);
+        //日期转换
+        systemExtendBusinessParamValidator.setCreatedTime(DateTimeUtils.getDateTimeFormat(data.get().getCreatedTime()));
+
+
         //使用了 Optional 的判断方式，判断优雅
-        return ResponseDataUtil.buildSuccess(data.orElse(null));
+        return ResponseDataUtil.buildSuccess(systemExtendBusinessParamValidator);
     }
 
     /**
@@ -64,12 +73,12 @@ public class SystemExtendBusinessParamService {
      * @return
      */
     @Transactional
-    public ResponseData save(SystemExtendBusinessParam entity,String op){
+    public ResponseData save(SystemExtendBusinessParamValidator systemExtendBusinessParamValidator, String op){
 
         /**
          * 查重操作
          */
-        List<SystemExtendBusinessParam> data = systemExtendBusinessParamRepository.findSystemExtendBusinessParamByBusinessTypeAndParamKeyAndParamStatus(entity.getBusinessType(), entity.getParamKey(),"1");
+        List<SystemExtendBusinessParam> data = systemExtendBusinessParamRepository.findSystemExtendBusinessParamByBusinessTypeAndParamKeyAndParamStatus(systemExtendBusinessParamValidator.getBusinessType(), systemExtendBusinessParamValidator.getParamKey(),"1");
         //add查重  businessType、paramKey
         if (data != null && data.iterator().hasNext() && "add".equals(op)) {
             return ResponseDataUtil.buildError(ResponseCode.PARAM_CREATE_ERROR);
@@ -80,7 +89,7 @@ public class SystemExtendBusinessParamService {
             Iterator iterator = data.iterator();
             while (iterator.hasNext()) {
                 SystemExtendBusinessParam record = (SystemExtendBusinessParam) iterator.next();
-                if (!entity.getId().equals(record.getId())) {
+                if (!systemExtendBusinessParamValidator.getId().equals(record.getId())) {
                     status = true;
                     break;
                 }
@@ -90,10 +99,17 @@ public class SystemExtendBusinessParamService {
             }
         }
 
+
         //op 不为 edit 或 add
         if (!("edit".equals(op) || "add".equals(op))) {
             return ResponseDataUtil.buildError();
         }
+
+        //转SystemExtendBusinessParam存放对象
+        SystemExtendBusinessParam entity = new SystemExtendBusinessParam();
+        BeanUtils.copyProperties(systemExtendBusinessParamValidator, entity);
+        //日期转换
+        entity.setCreatedTime(DateTimeUtils.getDateTimeFormat(systemExtendBusinessParamValidator.getCreatedTime()));
 
         //记录日志
         log.info("[业务扩展参数][{}]数据:{}",op, JSON.toJSONString(entity));

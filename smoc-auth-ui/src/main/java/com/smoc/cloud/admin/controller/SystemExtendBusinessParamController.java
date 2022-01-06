@@ -7,6 +7,7 @@ import com.smoc.cloud.common.auth.entity.SecurityUser;
 import com.smoc.cloud.common.auth.validator.SystemExtendBusinessParamValidator;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
@@ -96,7 +97,6 @@ public class SystemExtendBusinessParamController {
         systemExtendBusinessParamValidator.setIsNull("0");
         systemExtendBusinessParamValidator.setDisplaySort(1000);
         systemExtendBusinessParamValidator.setParamStatus("1");
-        systemExtendBusinessParamValidator.setCreatedTime(new Date());
 
         //op操作标记，add表示添加，edit表示修改
         view.addObject("op", "add");
@@ -129,6 +129,8 @@ public class SystemExtendBusinessParamController {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
         }
 
+        SystemExtendBusinessParamValidator model = data.getData();
+        //model.setCreatedTime(DateTimeUtils.getDateTimeFormat(DateTimeUtils.getDateFormat(model.getCreatedTime())));
         //op操作标记，add表示添加，edit表示修改
         view.addObject("op", "edit");
         view.addObject("systemExtendBusinessParamValidator", data.getData());
@@ -155,7 +157,7 @@ public class SystemExtendBusinessParamController {
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
         //初始化其他变量
         if (!StringUtils.isEmpty(op) && "add".equals(op)) {
-            systemExtendBusinessParamValidator.setCreatedTime(new Date());
+            systemExtendBusinessParamValidator.setCreatedTime(DateTimeUtils.getDateTimeFormat(new Date()));
             systemExtendBusinessParamValidator.setCreatedBy(user.getId());
             systemExtendBusinessParamValidator.setUpdatedTime(new Date());
             systemExtendBusinessParamValidator.setUpdatedBy(user.getId());

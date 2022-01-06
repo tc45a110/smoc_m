@@ -70,6 +70,7 @@
                                                        th:data-parsley-maxlength="${parameter.paramMaxLength}"
                                                        th:attr="required=${parameter.isNull == '1'?'true':'false'}"
                                                        th:value="${keyValueMap[parameter.paramKey]}"
+                                                       th:data-parsley-pattern="${#strings.isEmpty(parameter.regularExp)?'':parameter.regularExp}"
                                                        class="form-control" autocomplete="off">
                                                 <input th:if="${(parameter.dataType == 'INT' && parameter.showType == 'text')}"
                                                        th:id="${parameter.paramKey}"

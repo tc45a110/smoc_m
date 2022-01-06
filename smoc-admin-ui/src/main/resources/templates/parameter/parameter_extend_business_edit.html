@@ -49,6 +49,7 @@
                                                        th:placeholder="${#strings.isEmpty(parameter.placeholder)?parameter.paramTitle:parameter.placeholder}"
                                                        th:data-parsley-maxlength="${parameter.paramMaxLength}"
                                                        th:attr="required=${parameter.isNull == '1'?'true':'false'}"
+                                                       th:data-parsley-pattern="${#strings.isEmpty(parameter.regularExp)?'':parameter.regularExp}"
                                                        th:value="${keyValueMap[parameter.paramKey]}"
                                                        class="form-control" autocomplete="off">
                                                 <input th:if="${(parameter.dataType == 'INT' && parameter.showType == 'text')}"

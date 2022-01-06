@@ -3,19 +3,20 @@
 <head>
     <!-- META SECTION -->
     <title>[[${@systemProperties.systemName}]]</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="shortcut icon" th:href="@{/static/favicon.ico}" type="image/x-icon"/>
     <!-- END META SECTION -->
-
     <!-- CSS INCLUDE -->
-    <link rel="stylesheet" th:href="@{/static/css/theme-default.css}"  id="theme">
+    <link rel="stylesheet" th:href="@{/static/css/theme-default.css}" id="theme">
     <!-- EOF CSS INCLUDE -->
     <style>
-        .active-item{
+        .item-active{
             background-color:#e34724;
         }
+
+
     </style>
 </head>
 <body>
@@ -26,17 +27,17 @@
     <div class="page-sidebar">
         <!-- START X-NAVIGATION -->
         <ul class="x-navigation">
-            <li class="xn-logo" >
-                <a href="index.html" style="background-color:#00b297">ATLANT</a>
+            <li class="xn-logo">
+                <a style="background-color:#e3472">星语互联</a>
                 <a href="#" class="x-navigation-control"></a>
             </li>
             <li class="xn-profile">
                 <a href="#" class="profile-mini">
-                    <img th:src="@{/static/assets/images/users/avatar.jpg}">
+                    <img th:src="@{/static/imgs/logo_01.png}" style="background-color:#fff">
                 </a>
                 <div class="profile">
                     <div class="profile-image">
-                        <img th:src="@{/static/assets/images/users/avatar.jpg}">
+                        <img th:src="@{/static/imgs/logo_01.png}" style="background-color:#fff">
                     </div>
                     <div class="profile-data">
                         <div class="profile-data-name">北京星网宇通科技股份有限公司</div>
@@ -46,15 +47,18 @@
                     </div>
                 </div>
             </li>
-            <li class="xn-title">行业短信</li>
-            <li  class="">
+            <li class="xn-title"
+                style="background-color:#e34724;text-align:center;font-size:16px;font-weight：500;color:#fff;line-height:26px;padding-top:10px;padding-bottom:10px">
+                <span class="fa fa-file-text-o" style="margin-right:8px"></span>行业短信
+            </li>
+            <li class="">
                 <a><span class="fa fa-file-text-o"></span> <span class="xn-text">概览</span></a>
             </li>
             <li class="xn-openable">
                 <a href="#"><span class="fa fa-dashboard"></span> <span class="xn-text">素材管理</span></a>
                 <ul>
                     <li><a><span class="xn-text">签名管理</span></a></li>
-                    <li><a ><span class="xn-text">素材管理</span></a></li>
+                    <li><a><span class="xn-text">素材管理</span></a></li>
                     <li><a><span class="xn-text">通讯录</span></a></li>
                 </ul>
             </li>
@@ -62,7 +66,7 @@
                 <a href="#"><span class="fa fa-dashboard"></span> <span class="xn-text">短信群发</span></a>
                 <ul>
                     <li class="active"><a><span class="xn-text">短信发送</span></a></li>
-                    <li><a ><span class="xn-text">变量短信发送</span></a></li>
+                    <li><a><span class="xn-text">变量短信发送</span></a></li>
                     <li><a><span class="xn-text">定时短信</span></a></li>
                 </ul>
             </li>
@@ -70,12 +74,11 @@
                 <a href="#"><span class="fa fa-dashboard"></span> <span class="xn-text">数据统计</span></a>
                 <ul>
                     <li><a><span class="xn-text">提交记录</span></a></li>
-                    <li><a ><span class="xn-text">短信记录</span></a></li>
+                    <li><a><span class="xn-text">短信记录</span></a></li>
                     <li><a><span class="xn-text">发送统计</span></a></li>
                     <li><a><span class="xn-text">数据分析</span></a></li>
                 </ul>
             </li>
-
 
         </ul>
         <!-- END X-NAVIGATION -->
@@ -93,31 +96,49 @@
             <!-- END TOGGLE NAVIGATION -->
 
             <!-- TOGGLE NAVIGATION -->
-            <li class="xn-icon-button active-item" >
-                <a href="#"  style="width:100px"><span  class="fa fa-file-text-o" ></span><span style="margin-left:2px">行业短信</span></a>
+            <li class="xn-icon-button">
+                <a id="item1" onclick="active(1)" class="item item-active" style="width:100px"><span
+                        class="fa fa-file-text-o"></span><span style="margin-left:2px">行业短信</span></a>
             </li>
             <!-- END TOGGLE NAVIGATION -->
             <!-- TOGGLE NAVIGATION -->
-            <li class="xn-icon-button" >
-                <a href="#"  style="width:100px"><span  class="fa fa-bullhorn" ></span><span style="margin-left:2px">会销短信</span></a>
+            <li class="xn-icon-button">
+                <a id="item2" onclick="active(2)" class="item" style="width:100px"><span
+                        class="fa fa-bullhorn"></span><span style="margin-left:2px">会销短信</span></a>
             </li>
             <!-- END TOGGLE NAVIGATION -->
             <!-- TOGGLE NAVIGATION -->
-            <li class="xn-icon-button" >
-                <a href="#" style="width:100px"><span  class="fa fa-bell" ></span><span style="margin-left:2px">拉新短信</span></a>
+            <li class="xn-icon-button">
+                <a id="item3" onclick="active(3)" class="item" style="width:100px"><span class="fa fa-bell"></span><span
+                        style="margin-left:2px">拉新短信</span></a>
             </li>
             <!-- END TOGGLE NAVIGATION -->
             <!-- TOGGLE NAVIGATION -->
-            <li class="xn-icon-button" >
-                <a href="#" style="width:110px"><span  class="fa fa-book" ></span><span style="margin-left:2px">多媒体短信</span></a>
+            <li class="xn-icon-button">
+                <a id="item4" onclick="active(4)" class="item" style="width:110px"><span class="fa fa-book"></span><span
+                        style="margin-left:2px">多媒体短信</span></a>
             </li>
             <!-- END TOGGLE NAVIGATION -->
             <!-- TOGGLE NAVIGATION -->
-            <li class="xn-icon-button" >
-                <a href="#"  style="width:100px"><span  class="fa fa-dribbble" ></span><span style="margin-left:2px">国际短信</span></a>
+            <li class="xn-icon-button">
+                <a id="item5" onclick="active(5)" class="item" style="width:100px"><span
+                        class="fa fa-dribbble"></span><span style="margin-left:2px">国际短信</span></a>
             </li>
             <!-- END TOGGLE NAVIGATION -->
 
+            <!-- MESSAGES -->
+            <li class="xn-icon-button">
+                <a id="item6" onclick="active(6)" class="item" style="width:100px"><span class="fa fa-cny"></span><span
+                        style="margin-left:2px">财务中心</span></a>
+            </li>
+            <!-- END MESSAGES -->
+
+            <!-- MESSAGES -->
+            <li class="xn-icon-button">
+                <a id="item7" onclick="active(7)" class="item" style="width:100px"><span class="fa fa-suitcase"></span><span
+                        style="margin-left:2px">对接帮助</span></a>
+            </li>
+            <!-- END MESSAGES -->
 
 
             <!-- POWER OFF -->
@@ -128,7 +149,8 @@
                                                                       target="iframe"><i
                             class="fa fa-unlock"></i> 重置密码</a></li>
                     <li sec:authorize-url="/userCache/clearUserCache"><a th:href="@{/userCache/clearUserCache}"
-                                                                         target="iframe"><span class="fa fa-eraser"></span>清除缓存</a></li>
+                                                                         target="iframe"><span
+                            class="fa fa-eraser"></span>清除缓存</a></li>
                     <li><a th:href="@{/logout}"><span class="fa fa-sign-out"></span>安全退出</a></li>
                 </ul>
             </li>
@@ -159,11 +181,6 @@
             </li>
             <!-- END MESSAGES -->
 
-            <!-- MESSAGES -->
-            <li class="xn-icon-button pull-right">
-                <a href="#"  style="width:100px"><span  class="fa fa-cny" ></span><span style="margin-left:2px">财务中心</span></a>
-            </li>
-            <!-- END MESSAGES -->
         </ul>
         <!-- END X-NAVIGATION VERTICAL -->
         <iframe name="iframe" id="iframe"
@@ -202,6 +219,15 @@
     window.onresize = function () {
         changeFrameHeight();
     };
+
+    function active(itemId) {
+        for(var num = 1;num<8;num++){
+            $('#item'+num).removeClass("item-active");
+        }
+        $('#item'+itemId).attr("class","item-active");
+    }
+
+
 
 </script>
 </body>

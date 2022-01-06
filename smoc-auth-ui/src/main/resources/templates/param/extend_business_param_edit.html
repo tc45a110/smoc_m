@@ -143,6 +143,15 @@
                                                  key="code" data-icon="mdi mdi-view-module" title="是否"/>
                                     </div>
                                     <div class="col-md-6 form-group">
+                                        <label for="regularExp">数据验证正则表达式&nbsp;<span
+                                                class="text-danger"
+                                                th:if="${#fields.hasErrors('regularExp')}"
+                                                th:errors="*{regularExp}"></span></label>
+                                        <input id="regularExp" type="text" th:field="*{regularExp}" class="form-control"
+                                               autocomplete="off"
+                                               placeholder="技术人员填写，谨慎">
+                                    </div>
+                                    <div class="col-md-6 form-group">
                                         <label for="displaySort">显示顺序<span class="text-danger">*</span>&nbsp;<span
                                                 class="text-danger"
                                                 th:if="${#fields.hasErrors('displaySort')}"

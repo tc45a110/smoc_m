@@ -43,6 +43,9 @@ public class SystemExtendBusinessParam {
     @Column(name = "SHOW_STYLE", length = 64)
     private String showStyle;
 
+    @Column(name = "REGULAR_EXP", nullable = false, length = 32)
+    private String regularExp;
+
     @Column(name = "IS_READONLY", nullable = false, length = 32)
     private String isReadonly;
 
@@ -206,5 +209,13 @@ public class SystemExtendBusinessParam {
 
     public void setDisplaySort(Integer displaySort) {
         this.displaySort = displaySort;
+    }
+
+    public String getRegularExp() {
+        return regularExp;
+    }
+
+    public void setRegularExp(String regularExp) {
+        this.regularExp = regularExp;
     }
 }
