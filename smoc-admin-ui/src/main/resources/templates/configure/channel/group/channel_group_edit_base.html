@@ -32,7 +32,10 @@
                                 <div class="row">
                                     <div class="col-md-12 form-group">
                                         <div class="col-md-3 m-b-20">
-                                            <label for="price">通道组名称<span class="text-danger">*</span>&nbsp;</label>
+                                            <label for="price">通道组名称<span class="text-danger">*</span>&nbsp;
+                                                <span class="text-danger" th:if="${#fields.hasErrors('transferEnable')}"
+                                                        th:errors="*{channelGroupName}" style="font-weight: 200;font-size: 12px"></span>
+                                            </label>
                                             <input id="price" type="text" class="form-control" th:field="*{channelGroupName}"
                                                    required="" data-parsley-length="[1,90]" autocomplete="off"
                                                    placeholder="通道组名称">
@@ -73,7 +76,10 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label for="jf">通道组业务简介<span class="text-danger">*</span></label>
+                                            <label for="jf">通道组业务简介<span class="text-danger">*</span>
+                                                <span class="text-danger" th:if="${#fields.hasErrors('channelGroupIntroduce')}"
+                                                      th:errors="*{channelGroupIntroduce}" style="font-weight: 200;font-size: 12px"></span>
+                                            </label>
                                             <input id="jf" type="text" class="form-control"
                                                    th:field="${channelGroupInfoValidator.channelGroupIntroduce}"
                                                    required="" data-parsley-length="[4,128]" autocomplete="off"

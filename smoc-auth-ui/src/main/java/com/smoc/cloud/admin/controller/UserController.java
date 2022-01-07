@@ -254,6 +254,9 @@ public class UserController {
         if(StringUtils.isEmpty(userValidator.getBaseUserExtendsValidator().getCode())){
             userValidator.getBaseUserExtendsValidator().setCode("XY0000");
         }
+        if(StringUtils.isEmpty(userValidator.getBaseUserExtendsValidator().getParentCode())){
+            userValidator.getBaseUserExtendsValidator().setCode("0");
+        }
 
         //记录日志
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");

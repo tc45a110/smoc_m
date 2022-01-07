@@ -4,10 +4,7 @@ package com.smoc.cloud.customer.service;
 import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 import com.smoc.cloud.auth.service.AuthorityService;
-import com.smoc.cloud.common.auth.validator.BaseUserExtendsValidator;
-import com.smoc.cloud.common.auth.validator.BaseUserValidator;
 import com.smoc.cloud.common.auth.validator.OrgValidator;
-import com.smoc.cloud.common.auth.validator.UserValidator;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
@@ -15,7 +12,6 @@ import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
-import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.customer.entity.EnterpriseBasicInfo;
 import com.smoc.cloud.customer.repository.EnterpriseRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +21,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.Iterator;
@@ -133,7 +128,7 @@ public class EnterpriseService {
         log.info("[企业接入][企业开户信息][{}]数据:{}", op, JSON.toJSONString(entity));
         enterpriseRepository.saveAndFlush(entity);
 
-        //添加企业开户、生成组织机构、生成用户（包含默认授权）
+        //添加企业开户、生成组织机构
         if ("add".equals(op)) {
             saveOrg(entity);
         }
@@ -168,41 +163,5 @@ public class EnterpriseService {
         //记录日志
         log.info("[企业接入][企业开户信息-创建组织机构][{}]数据:{}", "add", JSON.toJSONString(responseOrg));
     }
-/*
-
-    private void saveOrgAndUser(EnterpriseBasicInfo entity) {
-
-        //创建用户信息
-        UserValidator user = new UserValidator();
-
-        //设置角色
-        user.setRoleIds("7da61ba9be8f4f6581c20f5a6d449b85");
-
-        BaseUserValidator baseUser = new BaseUserValidator();
-        String userId = UUID.uuid32();
-        baseUser.setId(userId);
-        baseUser.setUserName(entity.getEnterpriseContactsPhone());
-        baseUser.setPassword("");
-        baseUser.setPhone(entity.getEnterpriseContactsPhone());
-        baseUser.setOrganization(entity.getEnterpriseId());
-        baseUser.setCreateDate(DateTimeUtils.getNowDateTime());
-        baseUser.setUpdateDate(DateTimeUtils.getNowDateTime());
-        baseUser.setActive(1);
-        user.setBaseUserValidator(baseUser);
-
-        BaseUserExtendsValidator baseUserExtendsValidator = new BaseUserExtendsValidator();
-        baseUserExtendsValidator.setId(userId);
-        baseUserExtendsValidator.setRealName(entity.getEnterpriseContacts());
-        baseUserExtendsValidator.setCorporation(entity.getEnterpriseName());
-        baseUserExtendsValidator.setAdministrator(1);
-        baseUserExtendsValidator.setWebChat("smoc-service");
-        baseUserExtendsValidator.setType(4);
-        user.setBaseUserExtendsValidator(baseUserExtendsValidator);
-
-        //新建人员信息
-        ResponseData responseUser = authorityService.saveUser(user, "add");
-    }
-
-*/
 
 }

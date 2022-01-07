@@ -1,22 +1,14 @@
 package com.smoc.cloud.customer.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.smoc.cloud.admin.security.remote.service.SysUserService;
 import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
-import com.smoc.cloud.common.auth.qo.Users;
-import com.smoc.cloud.common.auth.validator.UserValidator;
-import com.smoc.cloud.common.page.PageList;
-import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
-import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseWebAccountInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
-import com.smoc.cloud.common.utils.UUID;
-import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
-import com.smoc.cloud.customer.service.EnterpriseService;
+import com.smoc.cloud.customer.service.EnterpriseWebService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,7 +16,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -32,7 +23,6 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
-import java.util.List;
 
 
 @Slf4j
@@ -41,7 +31,7 @@ import java.util.List;
 public class EnterpriseWebController {
 
     @Autowired
-    private EnterpriseService enterpriseService;
+    private EnterpriseWebService enterpriseWebService;
 
     @Autowired
     private SystemUserLogService systemUserLogService;
@@ -65,8 +55,7 @@ public class EnterpriseWebController {
 
         //完成参数规则验证
         if (result.hasErrors()) {
-            view.addObject("enterpriseWebAccountInfoValidator", enterpriseWebAccountInfoValidator);
-            view.addObject("op", op);
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(enterpriseWebAccountInfoValidator));
             return view;
         }
 
@@ -81,10 +70,10 @@ public class EnterpriseWebController {
             view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":" + ResponseCode.PARAM_LINK_ERROR.getMessage());
             return view;
         }
-/*
+
 
         //保存数据
-        ResponseData data = enterpriseService.save(enterpriseWebAccountInfoValidator, op);
+        ResponseData data = enterpriseWebService.save(enterpriseWebAccountInfoValidator, op);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;
@@ -94,7 +83,7 @@ public class EnterpriseWebController {
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             systemUserLogService.logsAsync("ENTERPRISE_WEB", enterpriseWebAccountInfoValidator.getEnterpriseId(), "add".equals(op) ? enterpriseWebAccountInfoValidator.getCreatedBy() : enterpriseWebAccountInfoValidator.getUpdatedBy(), op, "add".equals(op) ? "添加企业WEB登录账号" : "修改企业WEB登录账号", JSON.toJSONString(enterpriseWebAccountInfoValidator));
         }
-*/
+
 
         //记录日志
         log.info("[企业接入][企业WEB登录账号][{}][{}]数据:{}", op, user.getUserName(), JSON.toJSONString(enterpriseWebAccountInfoValidator));
