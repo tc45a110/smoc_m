@@ -5,7 +5,9 @@ import com.alibaba.fastjson.JSON;
 import com.smoc.cloud.auth.service.AuthorityService;
 import com.smoc.cloud.common.auth.validator.BaseUserExtendsValidator;
 import com.smoc.cloud.common.auth.validator.BaseUserValidator;
+import com.smoc.cloud.common.auth.validator.UserPasswordValidator;
 import com.smoc.cloud.common.auth.validator.UserValidator;
+import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
@@ -21,11 +23,14 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -45,6 +50,17 @@ public class EnterpriseWebService {
     @Resource
     private AuthorityService authorityService;
 
+    /**
+     * 查询列表
+     *
+     * @param enterpriseWebAccountInfoValidator
+     * @return
+     */
+    public ResponseData<List<EnterpriseWebAccountInfoValidator>> page(EnterpriseWebAccountInfoValidator enterpriseWebAccountInfoValidator) {
+
+        List<EnterpriseWebAccountInfoValidator> list = enterpriseWebRepository.page(enterpriseWebAccountInfoValidator);
+        return ResponseDataUtil.buildSuccess(list);
+    }
 
     /**
      * 根据id获取信息
@@ -70,7 +86,7 @@ public class EnterpriseWebService {
      * 保存或修改
      *
      * @param enterpriseWebAccountInfoValidator
-     * @param op   操作类型 为add、edit
+     * @param op  操作类型 为add、edit
      * @return
      */
     @Transactional
@@ -109,12 +125,26 @@ public class EnterpriseWebService {
             return ResponseDataUtil.buildError();
         }
 
+        //密码加密
+        entity.setWebLoginPassword(new BCryptPasswordEncoder().encode(entity.getWebLoginPassword()));
+
         //记录日志
-        log.info("[企业接入][企业WEB登录账号][{}]数据:{}", op, JSON.toJSONString(entity));
+        log.info("[企业接入][企业WEB登录账号][{}]数据:{}",op, JSON.toJSONString(entity));
         enterpriseWebRepository.saveAndFlush(entity);
 
-        //生成用户数据（包含默认授权）
         if ("add".equals(op)) {
+
+            //更新进度
+            Optional<EnterpriseBasicInfo> optional = enterpriseRepository.findById(entity.getEnterpriseId());
+            if (optional.isPresent()) {
+                EnterpriseBasicInfo enterpriseBasicInfo = optional.get();
+                StringBuffer process = new StringBuffer(enterpriseBasicInfo.getEnterpriseProcess());
+                process = process.replace(1, 2, "1");
+                enterpriseBasicInfo.setEnterpriseProcess(process.toString());
+                enterpriseRepository.save(enterpriseBasicInfo);
+            }
+
+            //生成用户数据（包含默认授权）
             saveUser(entity);
         }
 
@@ -126,10 +156,16 @@ public class EnterpriseWebService {
         //查询企业
         Optional<EnterpriseBasicInfo> data = enterpriseRepository.findById(entity.getEnterpriseId());
         String corporation = "";
-        String salerCode = "0";
         if (data.isPresent()) {
             corporation = data.get().getEnterpriseName();
-            salerCode = data.get().getSaler();
+        }
+        //查询销售
+        String parentCode = "0000";
+        if (!StringUtils.isEmpty(data.get().getSaler()) && !"0000".equals(data.get().getSaler())) {
+            ResponseData<UserValidator> userValidator = authorityService.findById(data.get().getSaler());
+            if (!StringUtils.isEmpty(userValidator.getData())) {
+                parentCode = userValidator.getData().getBaseUserExtendsValidator().getCode();
+            }
         }
 
         //创建用户信息
@@ -139,7 +175,7 @@ public class EnterpriseWebService {
         user.setRoleIds("7da61ba9be8f4f6581c20f5a6d449b85");
 
         BaseUserValidator baseUser = new BaseUserValidator();
-        String userId = UUID.uuid32();
+        String userId = entity.getId();
         baseUser.setId(userId);
         baseUser.setUserName(entity.getWebLoginName());
         baseUser.setPassword(entity.getWebLoginPassword());
@@ -155,7 +191,7 @@ public class EnterpriseWebService {
         baseUserExtendsValidator.setRealName(entity.getWebLoginName());
         baseUserExtendsValidator.setCorporation(corporation);
         baseUserExtendsValidator.setCode("0");
-        baseUserExtendsValidator.setParentCode(salerCode);
+        baseUserExtendsValidator.setParentCode(parentCode);
         baseUserExtendsValidator.setAdministrator(1);
         baseUserExtendsValidator.setWebChat("smoc-service");
         baseUserExtendsValidator.setType(4);
@@ -165,6 +201,58 @@ public class EnterpriseWebService {
         ResponseData responseUser = authorityService.saveUser(user, "add");
     }
 
+    /**
+     * 重置密码
+     * @param enterpriseWebAccountInfoValidator
+     * @return
+     */
+    @Transactional
+    public ResponseData resetPassword(EnterpriseWebAccountInfoValidator enterpriseWebAccountInfoValidator) {
 
+        EnterpriseWebAccountInfo entity = enterpriseWebRepository.findById(enterpriseWebAccountInfoValidator.getId()).get();
 
+        entity.setWebLoginPassword(new BCryptPasswordEncoder().encode(entity.getWebLoginPassword()));
+
+        //记录日志
+        log.info("[企业接入][重置WEB账号密码][{}]数据:{}","edit", JSON.toJSONString(entity));
+        enterpriseWebRepository.saveAndFlush(entity);
+
+        //重置用户表密码
+        UserPasswordValidator userPasswordValidator = new UserPasswordValidator();
+        userPasswordValidator.setId(entity.getId());
+        userPasswordValidator.setPassword(enterpriseWebAccountInfoValidator.getWebLoginPassword());
+        authorityService.resetPassword(userPasswordValidator);
+
+        return ResponseDataUtil.buildSuccess();
+    }
+
+    /**
+     * 注销、启用账号
+     * @param id
+     * @param status
+     * @return
+     */
+    @Transactional
+    public ResponseData forbiddenWeb(String id, String status) {
+
+        String op = status;
+        EnterpriseWebAccountInfo entity = enterpriseWebRepository.findById(id).get();
+
+        //账号状态转换
+        if ("0".equals(status) ) {
+            status = "1";
+        } else {
+            status = "0";
+        }
+
+        enterpriseWebRepository.updateAccountStatus(id,status);
+
+        //注销、启用用户表数据
+        authorityService.forbiddenUser(id,status);
+
+        //记录日志
+        log.info("[企业接入][{}]数据:{}", "1".equals(op) ? "注销WEB登录账号":"启用WEB登录账号" ,  JSON.toJSONString(entity));
+
+        return ResponseDataUtil.buildSuccess();
+    }
 }

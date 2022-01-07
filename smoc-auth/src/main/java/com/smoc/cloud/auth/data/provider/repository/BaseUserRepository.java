@@ -57,6 +57,6 @@ public interface BaseUserRepository extends CrudRepository<BaseUser, String>, Jp
     void addCustomer(BaseUser user, BaseUserExtends userExtends);
 
     @Modifying
-    @Query(value = "update base_user set ACTIVE = :status where USER_NAME = :entcode",nativeQuery = true)
-    void updateUserActive(@Param("entcode") String entcode, @Param("status") String status);
+    @Query(value = "update base_user set ACTIVE = :status where ID = :id",nativeQuery = true)
+    void updateUserActive(@Param("id") String id, @Param("status") String status);
 }

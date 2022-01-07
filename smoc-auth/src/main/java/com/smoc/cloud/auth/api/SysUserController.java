@@ -77,11 +77,11 @@ public class SysUserController {
         /**
          * 判断旧密码是否正确
          */
-        BaseUser user = baseUserService.findBaseUserById(userPasswordValidator.getId());
+       /* BaseUser user = baseUserService.findBaseUserById(userPasswordValidator.getId());
         if (!new MpmEncryptPasswordEncoder().getPasswordEncoder().matches(userPasswordValidator.getOldPassword(), user.getPassword())) {
             return ResponseDataUtil.buildError(ResponseCode.USER_PASSWORD_NULL);
         }
-
+*/
         ResponseData data = baseUserService.resetPassword(userPasswordValidator.getId(), userPasswordValidator.getPassword());
 
         return data;

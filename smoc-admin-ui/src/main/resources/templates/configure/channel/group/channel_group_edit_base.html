@@ -33,7 +33,7 @@
                                     <div class="col-md-12 form-group">
                                         <div class="col-md-3 m-b-20">
                                             <label for="price">通道组名称<span class="text-danger">*</span>&nbsp;
-                                                <span class="text-danger" th:if="${#fields.hasErrors('transferEnable')}"
+                                                <span class="text-danger" th:if="${#fields.hasErrors('channelGroupName')}"
                                                         th:errors="*{channelGroupName}" style="font-weight: 200;font-size: 12px"></span>
                                             </label>
                                             <input id="price" type="text" class="form-control" th:field="*{channelGroupName}"

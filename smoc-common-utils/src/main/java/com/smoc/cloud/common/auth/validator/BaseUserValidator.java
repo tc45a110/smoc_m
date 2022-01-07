@@ -41,7 +41,6 @@ public class BaseUserValidator implements Serializable {
     /**
      * male 男、female 女
      */
-    @NotNull(message = "性别不能为空！")
     @Length(min = 1, max = 64, message = "性别长度要在{min}-{max}之间！")
     private String gender;
 

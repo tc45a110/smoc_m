@@ -1,8 +1,11 @@
 package com.smoc.cloud.customer.controller;
 
+import com.smoc.cloud.common.page.PageList;
+import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseWebAccountInfoValidator;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
@@ -12,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
+
+import java.util.List;
 
 /**
  * 企业WE登录账号接口
@@ -24,6 +29,17 @@ public class EnterpriseWebController {
 
     @Autowired
     private EnterpriseWebService enterpriseWebService;
+
+    /**
+     * 查询列表
+     * @param enterpriseWebAccountInfoValidator
+     * @return
+     */
+    @RequestMapping(value = "/page", method = RequestMethod.POST)
+    public ResponseData<List<EnterpriseWebAccountInfoValidator>> page(@RequestBody EnterpriseWebAccountInfoValidator enterpriseWebAccountInfoValidator) {
+
+        return enterpriseWebService.page(enterpriseWebAccountInfoValidator);
+    }
 
     /**
      * 根据id获取信息
@@ -63,4 +79,41 @@ public class EnterpriseWebController {
         return data;
     }
 
+    /**
+     * 重置密码
+     * @param enterpriseWebAccountInfoValidator
+     * @return
+     */
+    @RequestMapping(value = "/resetPassword", method = RequestMethod.POST)
+    public ResponseData  resetPassword(@RequestBody EnterpriseWebAccountInfoValidator enterpriseWebAccountInfoValidator) {
+
+        //完成参数规则验证
+        if (!MpmValidatorUtil.validate(enterpriseWebAccountInfoValidator)) {
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(enterpriseWebAccountInfoValidator));
+        }
+
+        //保存操作
+        ResponseData data = enterpriseWebService.resetPassword(enterpriseWebAccountInfoValidator);
+
+        return data;
+    }
+
+    /**
+     * 注销、启用账号
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/forbiddenWeb/{id}/{status}", method = RequestMethod.GET)
+    public ResponseData forbiddenWeb(@PathVariable String id, @PathVariable String status)  {
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(validator));
+        }
+
+        ResponseData data = enterpriseWebService.forbiddenWeb(id,status);
+        return data;
+    }
 }

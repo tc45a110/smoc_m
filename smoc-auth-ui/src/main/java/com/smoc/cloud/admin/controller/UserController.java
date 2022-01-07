@@ -247,15 +247,12 @@ public class UserController {
         }
 
 
-        //把企业编码付给用户
-       /* ResponseData<OrgValidator> responseData = orgService.findById(userValidator.getBaseUserValidator().getOrganization());
-        userValidator.getBaseUserExtendsValidator().setCode(responseData.getData().getOrgCode());*/
-        //如果销售码为空默认XY0000
+        //如果销售码为空默认0
         if(StringUtils.isEmpty(userValidator.getBaseUserExtendsValidator().getCode())){
-            userValidator.getBaseUserExtendsValidator().setCode("XY0000");
+            userValidator.getBaseUserExtendsValidator().setCode("0");
         }
         if(StringUtils.isEmpty(userValidator.getBaseUserExtendsValidator().getParentCode())){
-            userValidator.getBaseUserExtendsValidator().setCode("0");
+            userValidator.getBaseUserExtendsValidator().setParentCode("XY0000");
         }
 
         //记录日志

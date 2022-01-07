@@ -98,7 +98,9 @@ public class MpmSecurityConfiguation extends WebSecurityConfigurerAdapter {
                 .antMatchers("/auth/token/getUserAuthorizationByToken/*").permitAll()//开放的资源不用授权
                 .antMatchers("/authority/org/save/*").permitAll()//开放的资源不用授权
                 .antMatchers("/authority/user/save/*").permitAll()//开放的资源不用授权
-                .antMatchers("/authority/user/closeUser/*/*").permitAll()//开放的资源不用授权
+                .antMatchers("/authority/user/forbiddenUser/*/*").permitAll()//开放的资源不用授权
+                .antMatchers("/authority/user/resetPassword").permitAll()
+                .antMatchers("/authority/user/findById/*").permitAll()
                 .antMatchers("/auth/oauth/getUser/*").permitAll()
                 .antMatchers("/oauth/getUser/*").permitAll()
                 .antMatchers("/oauth/token").permitAll()

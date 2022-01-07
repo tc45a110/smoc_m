@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "smoc_sequence")
+@Table(name = "system_sequence")
 public class SmocSequence {
     private String seqName;
     private long currentVal;

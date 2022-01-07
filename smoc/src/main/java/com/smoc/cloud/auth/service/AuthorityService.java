@@ -2,6 +2,7 @@ package com.smoc.cloud.auth.service;
 
 import com.smoc.cloud.auth.remote.AuthorityFeignClient;
 import com.smoc.cloud.common.auth.validator.OrgValidator;
+import com.smoc.cloud.common.auth.validator.UserPasswordValidator;
 import com.smoc.cloud.common.auth.validator.UserValidator;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
@@ -49,4 +50,51 @@ public class AuthorityService {
         }
     }
 
+
+    /**
+     * 根据ID查询用户信息
+     */
+    public ResponseData findById(String id) {
+
+        try {
+            ResponseData responseData = this.authorityFeignClient.findById(id);
+            return responseData;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 用户重置密码
+     * @param userPasswordValidator
+     * @return
+     */
+    public ResponseData resetPassword(UserPasswordValidator userPasswordValidator) {
+
+        try {
+            ResponseData responseData = this.authorityFeignClient.resetPassword(userPasswordValidator);
+            return responseData;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 注销、启用用户
+     * @param id
+     * @param status
+     * @return
+     */
+    public ResponseData forbiddenUser(String id,String status) {
+
+        try {
+            ResponseData responseData = this.authorityFeignClient.forbiddenUser(id,status);
+            return responseData;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
 }

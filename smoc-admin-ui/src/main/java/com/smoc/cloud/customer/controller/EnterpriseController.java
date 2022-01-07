@@ -17,6 +17,7 @@ import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.customer.service.EnterpriseService;
+import com.smoc.cloud.customer.service.EnterpriseWebService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -42,6 +43,9 @@ public class EnterpriseController {
 
     @Autowired
     private EnterpriseService enterpriseService;
+
+    @Autowired
+    private EnterpriseWebService enterpriseWebService;
 
     @Autowired
     private SystemUserLogService systemUserLogService;
@@ -234,7 +238,7 @@ public class EnterpriseController {
         }
 
         //销售为空默认:0000
-        if(StringUtils.isEmpty(enterpriseBasicInfoValidator.getSaler())){
+        if (StringUtils.isEmpty(enterpriseBasicInfoValidator.getSaler())) {
             enterpriseBasicInfoValidator.setSaler("0000");
         }
 
@@ -253,7 +257,7 @@ public class EnterpriseController {
         //记录日志
         log.info("[企业接入][企业开户信息][{}][{}]数据:{}", op, user.getUserName(), JSON.toJSONString(enterpriseBasicInfoValidator));
 
-        view.setView(new RedirectView("/enterprise/center/"+enterpriseBasicInfoValidator.getEnterpriseId(), true, false));
+        view.setView(new RedirectView("/enterprise/center/" + enterpriseBasicInfoValidator.getEnterpriseId(), true, false));
         return view;
 
     }
@@ -283,7 +287,7 @@ public class EnterpriseController {
         }
 
         //查询销售
-        if(!StringUtils.isEmpty(data.getData().getSaler())){
+        if (!StringUtils.isEmpty(data.getData().getSaler())) {
             ResponseData<UserValidator> userValidator = sysUserService.userProfile(data.getData().getSaler());
             if (ResponseCode.SUCCESS.getCode().equals(userValidator.getCode())) {
                 view.addObject("salerName", userValidator.getData().getBaseUserExtendsValidator().getRealName());
@@ -291,9 +295,7 @@ public class EnterpriseController {
         }
 
         //查询WEB登录账号
-        EnterpriseWebAccountInfoValidator enterpriseWebAccountInfoValidator = new EnterpriseWebAccountInfoValidator();
-        enterpriseWebAccountInfoValidator.setEnterpriseId(id);
-        view.addObject("enterpriseWebAccountInfoValidator", enterpriseWebAccountInfoValidator);
+        findEnterpriseWebAccountInfo(view, data.getData());
 
         //查询邮寄信息
 
@@ -303,6 +305,18 @@ public class EnterpriseController {
 
         return view;
 
+    }
+
+    //查询WEB登录账号
+    private void findEnterpriseWebAccountInfo(ModelAndView view, EnterpriseBasicInfoValidator enterpriseBasicInfoValidator) {
+        EnterpriseWebAccountInfoValidator enterpriseWebAccountInfoValidator = new EnterpriseWebAccountInfoValidator();
+        enterpriseWebAccountInfoValidator.setEnterpriseId(enterpriseBasicInfoValidator.getEnterpriseId());
+        ResponseData<List<EnterpriseWebAccountInfoValidator>> webData = enterpriseWebService.page(enterpriseWebAccountInfoValidator);
+        if (!ResponseCode.SUCCESS.getCode().equals(webData.getCode())) {
+            view.addObject("error", webData.getCode() + ":" + webData.getMessage());
+        }
+        view.addObject("enterpriseWebAccountInfoValidator", enterpriseWebAccountInfoValidator);
+        view.addObject("webList", webData.getData());
     }
 
 

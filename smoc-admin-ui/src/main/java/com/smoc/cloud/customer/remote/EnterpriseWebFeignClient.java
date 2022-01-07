@@ -1,12 +1,15 @@
 package com.smoc.cloud.customer.remote;
 
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseWebAccountInfoValidator;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import java.util.List;
 
 
 /**
@@ -31,5 +34,29 @@ public interface EnterpriseWebFeignClient {
     @RequestMapping(value = "/enterprise/web/save/{op}", method = RequestMethod.POST)
     ResponseData save(@RequestBody EnterpriseWebAccountInfoValidator enterpriseWebAccountInfoValidator, @PathVariable String op) throws Exception;
 
+    /**
+     * 查询列表
+     * @param enterpriseWebAccountInfoValidator
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/enterprise/web/page", method = RequestMethod.POST)
+    ResponseData<List<EnterpriseWebAccountInfoValidator>> page(@RequestBody EnterpriseWebAccountInfoValidator enterpriseWebAccountInfoValidator) throws Exception;
 
+    /**
+     * 重置密码
+     * @param enterpriseWebAccountInfoValidator
+     * @return
+     */
+    @RequestMapping(value = "/enterprise/web/resetPassword", method = RequestMethod.POST)
+    ResponseData resetPassword(@RequestBody EnterpriseWebAccountInfoValidator enterpriseWebAccountInfoValidator) throws Exception;
+
+    /**
+     * 注销、启用账号
+     * @param id
+     * @param status
+     * @return
+     */
+    @RequestMapping(value = "/enterprise/web/forbiddenWeb/{id}/{status}", method = RequestMethod.GET)
+    ResponseData forbiddenWeb(@PathVariable String id, @PathVariable String status) throws Exception;
 }

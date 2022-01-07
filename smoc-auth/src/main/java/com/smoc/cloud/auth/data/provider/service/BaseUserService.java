@@ -34,6 +34,7 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 完成用户管理模块
@@ -180,31 +181,35 @@ public class BaseUserService {
     public ResponseData<UserValidator> findById(String id) {
 
         //查询主表及扩展表数据
-        BaseUser user = baseUserRepository.findById(id).get();
-        user.setPassword(null);
-        BaseUserExtends userExtends = baseUserExtendsRepository.findById(id).get();
-
-        //对象copy
+        UserValidator userValidator = new UserValidator();
         BaseUserValidator baseUserValidator = new BaseUserValidator();
         BaseUserExtendsValidator baseUserExtendsValidator = new BaseUserExtendsValidator();
-        BeanUtils.copyProperties(user, baseUserValidator);
-        BeanUtils.copyProperties(userExtends, baseUserExtendsValidator);
 
-        UserValidator userValidator = new UserValidator();
-        userValidator.setBaseUserValidator(baseUserValidator);
-        userValidator.setBaseUserExtendsValidator(baseUserExtendsValidator);
+        Optional<BaseUser> data = baseUserRepository.findById(id);
+        if (data.isPresent()) {
+            BaseUser user = data.get();
+            user.setPassword(null);
+            BaseUserExtends userExtends = baseUserExtendsRepository.findById(id).get();
 
-        //查询角色
-        String roleIds = "";
-        List<BaseUserRole> roles = baseUserRoleRepository.findBaseUserRoleByUserId(user.getId());
-        for (BaseUserRole role : roles) {
-            if (StringUtils.isEmpty(roleIds)) {
-                roleIds = role.getRoleId();
-            } else {
-                roleIds += "," + role.getRoleId();
+            //对象copy
+            BeanUtils.copyProperties(user, baseUserValidator);
+            BeanUtils.copyProperties(userExtends, baseUserExtendsValidator);
+
+            userValidator.setBaseUserValidator(baseUserValidator);
+            userValidator.setBaseUserExtendsValidator(baseUserExtendsValidator);
+
+            //查询角色
+            String roleIds = "";
+            List<BaseUserRole> roles = baseUserRoleRepository.findBaseUserRoleByUserId(user.getId());
+            for (BaseUserRole role : roles) {
+                if (StringUtils.isEmpty(roleIds)) {
+                    roleIds = role.getRoleId();
+                } else {
+                    roleIds += "," + role.getRoleId();
+                }
             }
+            userValidator.setRoleIds(roleIds);
         }
-        userValidator.setRoleIds(roleIds);
 
         return ResponseDataUtil.buildSuccess(userValidator);
     }
@@ -382,12 +387,14 @@ public class BaseUserService {
     }
 
     @Transactional
-    public ResponseData closeUser(String entcode, String status) {
+    public ResponseData closeUser(String id, String status) {
 
-        baseUserRepository.updateUserActive(entcode,status);
+        BaseUser user = baseUserRepository.findById(id).get();
+
+        baseUserRepository.updateUserActive(user.getId(),status);
 
         //redis里帐号删除，登录会重新查数据
-        redisTemplate.delete(RedisConstant.AUTH_USERS_PREFIX + ":" + entcode);
+        redisTemplate.delete(RedisConstant.AUTH_USERS_PREFIX + ":" + user.getUserName());
         return ResponseDataUtil.buildSuccess();
     }
 }

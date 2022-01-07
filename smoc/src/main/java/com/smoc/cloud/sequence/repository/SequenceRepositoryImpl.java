@@ -16,7 +16,7 @@ public class SequenceRepositoryImpl extends BasePageRepository {
     public JdbcTemplate jdbcTemplate;
 
     public Integer findSequence(String seqName){
-        String sql = "select smoc_nextval('"+seqName+"')";
+        String sql = "select system_nextval('"+seqName+"')";
         Integer seq = jdbcTemplate.queryForObject(sql,Integer.class);
         return seq;
     }

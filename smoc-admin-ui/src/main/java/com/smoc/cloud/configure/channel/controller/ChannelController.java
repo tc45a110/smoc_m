@@ -293,6 +293,11 @@ public class ChannelController {
             FieldError err = new FieldError("计价方式", "priceStyle", "请选择统一计价");
             result.addError(err);
         }
+        //参数验证:如果通道区域范围是分省，那计价方式必须为区域计价
+        if(!"COUNTRY".equals(channelBasicInfoValidator.getBusinessAreaType()) && !"AREA_PRICE".equals(channelBasicInfoValidator.getPriceStyle())){
+            FieldError err = new FieldError("计价方式", "priceStyle", "请选择区域计价");
+            result.addError(err);
+        }
         //参数验证:如果计价方式为统一计价，那资费不能为空
         if ("UNIFIED_PRICE".equals(channelBasicInfoValidator.getPriceStyle()) && StringUtils.isEmpty(channelBasicInfoValidator.getChannelPrice())) {
             FieldError err = new FieldError("资费", "channelPrice", "资费不能为空");

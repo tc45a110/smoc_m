@@ -6,10 +6,12 @@ import com.smoc.cloud.auth.data.provider.entity.BaseOrganization;
 import com.smoc.cloud.auth.data.provider.service.BaseOrganizationService;
 import com.smoc.cloud.auth.data.provider.service.BaseUserService;
 import com.smoc.cloud.common.auth.validator.OrgValidator;
+import com.smoc.cloud.common.auth.validator.UserPasswordValidator;
 import com.smoc.cloud.common.auth.validator.UserValidator;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -69,7 +71,7 @@ public class AuthorityController {
     @RequestMapping(value = "user/save/{op}", method = RequestMethod.POST)
     public ResponseData saveUser(@RequestBody UserValidator userValidator, @PathVariable String op) {
 
-        log.info("[接口创建用户]数据:{}={}",  JSON.toJSONString(userValidator));
+        log.info("[企业接入][创建用户]数据:{}={}",  JSON.toJSONString(userValidator));
         /**
          * 完成参数规则验证
          */
@@ -84,4 +86,65 @@ public class AuthorityController {
         return baseUserService.save(userValidator, op);
     }
 
+    /**
+     * 根据ID查询用户信息
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "user/findById/{id}", method = RequestMethod.GET)
+    public ResponseData<UserValidator> findUserById(@PathVariable String id) {
+
+        /**
+         * 完成参数规则验证
+         */
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(validator));
+        }
+
+        return baseUserService.findById(id);
+    }
+
+    /**
+     * 重置用户密码
+     * @param userPasswordValidator
+     * @return
+     */
+    @RequestMapping(value = "user/resetPassword", method = RequestMethod.POST)
+    public ResponseData resetPassword(@RequestBody UserPasswordValidator userPasswordValidator) {
+
+        /**
+         * 完成参数规则验证
+         */
+        if (!MpmValidatorUtil.validate(userPasswordValidator)) {
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(userPasswordValidator));
+        }
+
+        ResponseData data = baseUserService.resetPassword(userPasswordValidator.getId(), userPasswordValidator.getPassword());
+
+        return data;
+    }
+
+    /**
+     * 启用、注销用户
+     * @param id
+     * @param status
+     * @return
+     */
+    @RequestMapping(value = "user/forbiddenUser/{id}/{status}", method = RequestMethod.GET)
+    public ResponseData<UserValidator> forbiddenUser(@PathVariable String id,@PathVariable String status) {
+
+        /**
+         * 完成参数规则验证
+         */
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(validator));
+        }
+
+        return baseUserService.closeUser(id,status);
+    }
 }
