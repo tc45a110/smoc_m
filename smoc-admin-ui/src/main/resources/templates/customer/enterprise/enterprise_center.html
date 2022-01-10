@@ -254,7 +254,8 @@
                                                                                     <p style="font-size:12px">
                                                                                         WEB账号状态：
                                                                                         <span th:if="${web.accountStatus eq '1'}">正常</span>
-                                                                                        <span th:if="${web.accountStatus eq '0'}" style="color: red">已注销</span>
+                                                                                        <span th:if="${web.accountStatus eq '0'}"
+                                                                                              style="color: red">已注销</span>
                                                                                     </p>
                                                                                 </div>
                                                                             </div>
@@ -263,6 +264,7 @@
                                                                                     <a data-toggle="modal"
                                                                                        data-target="#confirm-add-user-modal"
                                                                                        class="btn btn-info"
+                                                                                       sec:authorize-url="/enterprise/web/save"
                                                                                        th:onclick="openPassword([[${web.id}]],[[${web.webLoginName}]],'edit')"
                                                                                        style="font-size:12px;">密码重置</a>
                                                                                     <a data-toggle="modal"
@@ -295,6 +297,7 @@
                                                                                      style="line-height:110px;margin:0 auto;">
                                                                                     <a data-toggle="modal"
                                                                                        data-target="#confirm-add-user-modal"
+                                                                                       sec:authorize-url="/enterprise/web/save"
                                                                                        th:onclick="openPassword('','','add')"
                                                                                        class="btn btn-info waves-effect waves-light m-l-10 btn-md">
                                                                                         <i class="glyphicon glyphicon-plus-sign"
@@ -341,7 +344,7 @@
                                                 </div>
                                                 <div id="mail-info" class="panel-body" style="display:block">
                                                     <div class="row">
-                                                        <div class="col-md-4">
+                                                        <div class="col-md-4"  th:each="express:${expressList}">
                                                             <div class="property-card property-horizontal">
                                                                 <div class="row">
                                                                     <div class="col-sm-12">
@@ -350,7 +353,7 @@
                                                                             <div class="listingInfo">
                                                                                 <div class="">
                                                                                     <h5 style="padding-left:10px">
-                                                                                        邮寄备注：寄给公司财务
+                                                                                        联系方式：[[${express.postPhone}]]
                                                                                         <div class="pull-right">
                                                                                             <i class="fa  fa-copy"
                                                                                                style="margin-right:5px;color:#26A59A"
@@ -359,11 +362,11 @@
                                                                                     </h5>
                                                                                 </div>
                                                                                 <div class="col-sm-12">
-                                                                                    <p style="font-size:12px">姓名：马江涛</p>
+                                                                                    <p style="font-size:12px">姓名：[[${express.postContacts}]]</p>
                                                                                     <p style="font-size:12px">
-                                                                                        联系方式：13780236678</p>
+                                                                                        地址：[[${express.postAddress}]]</p>
                                                                                     <p style="font-size:12px">
-                                                                                        地址：湖北省武汉市光谷广场明天大厦A座1209</p>
+                                                                                        邮寄备注：[[${express.postRemark}]]</p>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="property-action">
@@ -371,10 +374,14 @@
                                                                                 <div class="pull-right">
                                                                                     <a data-toggle="modal"
                                                                                        data-target="#confirm-add-mail-modal"
+                                                                                       sec:authorize-url="/enterprise/express/save"
+                                                                                       th:onclick="openExpress([[${express.id}]],[[${express.postContacts}]],[[${express.postPhone}]],[[${express.postAddress}]],[[${express.postRemark}]],'edit')"
                                                                                        class="btn btn-teal"
                                                                                        style="font-size:12px;">编辑</a>
                                                                                     <a data-toggle="modal"
                                                                                        data-target="#confirm-modal"
+                                                                                       sec:authorize-url="/enterprise/express/deleteById/*"
+                                                                                       th:onclick="confirmDelete([[${express.id}]],this)"
                                                                                        class="btn btn-danger"
                                                                                        style="font-size:12px;">删除</a>
                                                                                 </div>
@@ -388,53 +395,7 @@
                                                             </div>
 
                                                         </div>
-                                                        <div class="col-md-4">
-                                                            <div class="property-card property-horizontal">
-                                                                <div class="row">
-                                                                    <div class="col-sm-12">
-                                                                        <div class="property-content"
-                                                                             style="height:206px">
-                                                                            <div class="listingInfo">
-                                                                                <div class="">
-                                                                                    <h5 style="padding-left:10px">
-                                                                                        邮寄备注：寄给公司财务
-                                                                                        <div class="pull-right">
-                                                                                            <i class="fa  fa-copy"
-                                                                                               style="margin-right:5px;color:#26A59A"
-                                                                                               title="复制邮寄信息"></i>
-                                                                                        </div>
-                                                                                    </h5>
-                                                                                </div>
-                                                                                <div class="col-sm-12">
-                                                                                    <p style="font-size:12px">姓名：马江涛</p>
-                                                                                    <p style="font-size:12px">
-                                                                                        联系方式：13780236678</p>
-                                                                                    <p style="font-size:12px">
-                                                                                        地址：湖北省武汉市光谷广场明天大厦A座1209</p>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="property-action">
 
-                                                                                <div class="pull-right">
-                                                                                    <a data-toggle="modal"
-                                                                                       data-target="#confirm-add-mail-modal"
-                                                                                       class="btn btn-teal"
-                                                                                       style="font-size:12px;">编辑</a>
-                                                                                    <a data-toggle="modal"
-                                                                                       data-target="#confirm-modal"
-                                                                                       class="btn btn-danger"
-                                                                                       style="font-size:12px;">删除</a>
-                                                                                </div>
-                                                                            </div>
-                                                                            <!-- end. Card actions -->
-                                                                        </div>
-                                                                    </div>
-                                                                    <!-- /col 8 -->
-                                                                </div>
-                                                                <!-- /inner row -->
-                                                            </div>
-
-                                                        </div>
                                                         <div class="col-md-4">
                                                             <div class="property-card property-horizontal">
                                                                 <div class="row">
@@ -449,6 +410,8 @@
                                                                                      style="line-height:166px;margin:0 auto;">
                                                                                     <a data-toggle="modal"
                                                                                        data-target="#confirm-add-mail-modal"
+                                                                                       sec:authorize-url="/enterprise/express/save"
+                                                                                       th:onclick="openExpress('','','','','','add')"
                                                                                        class="btn btn-teal waves-effect waves-light m-l-10 btn-md">
                                                                                         <i class="glyphicon glyphicon-plus-sign"
                                                                                            style="margin-right:5px"></i>新建邮寄信息</a>
@@ -642,7 +605,7 @@
                                                     </li>
                                                     <li class="" id="tab5">
                                                         <a onclick="active('5')" sec:authorize-url="/user/logs/list/*"
-                                                           th:href="@{/user/logs/list/ENTERPRISE}"
+                                                           th:href="@{/user/logs/list/{id}(id=${enterpriseWebAccountInfoValidator.enterpriseId})}"
                                                            th:target="tab-content">
                                                             <span class="visible-xs"><i class="fa fa-cog"></i></span>
                                                             <span class="hidden-xs">企业信息操作日志</span>
@@ -728,7 +691,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 class="modal-title" id="custom-width-modalLabel">注销、启用用户</h4>
+                        <h4 class="modal-title">注销、启用用户</h4>
                     </div>
                     <div class="modal-body">
                         <h4>注意：</h4>
@@ -753,49 +716,50 @@
              aria-hidden="true" style="display: none;margin: 60px;margin-top:68px">
             <div class="modal-dialog" style="width:33%;">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 class="modal-title">新建、编辑邮寄信息</h4>
-                    </div>
-                    <div class="row" style="margin-top:10px">
-                        <div class="col-md-12">
-                            <form id="submit_formq" method="post" data-parsley-validate="">
-
+                    <form id="submit_formq" method="post" th:action="@{/enterprise/express/save}"
+                          th:object="${enterpriseExpressInfoValidator}" data-parsley-validate="">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h4 class="modal-title">新建、编辑邮寄信息</h4>
+                        </div>
+                        <div class="row" style="margin-top:10px">
+                            <div class="col-md-12">
                                 <div class="form-group m-b-20">
-                                    <label for="link1ak">邮寄备注<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="link1ak" type="text" class="form-control"
-                                           required="" data-parsley-length="[7,30]" autocomplete="off"
-                                           placeholder="邮寄备注">
-                                </div>
-                                <div class="form-group m-b-20">
-                                    <label for="link5k">姓名<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="link5k" type="text" class="form-control"
-                                           required="" data-parsley-length="[7,30]" autocomplete="off"
+                                    <label>姓名<span class="text-danger">*</span>&nbsp;</label>
+                                    <input type="text" class="form-control" th:field="*{postContacts}"
+                                           required="" data-parsley-length="[1,23]" autocomplete="off"
                                            placeholder="姓名">
                                 </div>
-
                                 <div class="form-group m-b-20">
-                                    <label for="oo">联系方式<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="oo" type="text" class="form-control"
-                                           required="" data-parsley-length="[2,64]" autocomplete="off"
+                                    <label>联系方式<span class="text-danger">*</span>&nbsp;</label>
+                                    <input type="text" class="form-control" th:field="*{postPhone}"
+                                           required="" data-parsley-length="[7,11]" autocomplete="off"
                                            placeholder="联系方式">
                                 </div>
                                 <div class="form-group m-b-20">
-                                    <label for="oo1">地址<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="oo1" type="text" class="form-control"
-                                           required="" data-parsley-length="[2,64]" autocomplete="off"
+                                    <label>地址<span class="text-danger">*</span>&nbsp;</label>
+                                    <input type="text" class="form-control" th:field="*{postAddress}"
+                                           required="" data-parsley-length="[4,60]" autocomplete="off"
                                            placeholder="地址">
                                 </div>
-
-                            </form>
-                            <!-- end form -->
+                                <div class="form-group m-b-20">
+                                    <label>邮寄备注&nbsp;</label>
+                                    <input type="text" class="form-control" th:field="*{postRemark}"
+                                           data-parsley-length="[2,60]" autocomplete="off"
+                                           placeholder="邮寄备注">
+                                </div>
+                            </div>
                         </div>
-
-                    </div>
-                    <div class="modal-footer">
-                        <a class="btn btn-default waves-effect" data-dismiss="modal">取消</a>
-                        <button class="btn btn-primary waves-effect waves-light">提交</button>
-                    </div>
+                        <div class="modal-footer">
+                            <input type="hidden" th:field="*{enterpriseId}">
+                            <input type="hidden" th:field="*{expressId}">
+                            <a class="btn btn-default waves-effect" data-dismiss="modal">取消</a>
+                            <button sec:authorize-url="/enterprise/express/save" type="submit"
+                                    class="btn btn-primary waves-effect waves-light">提交
+                            </button>
+                        </div>
+                    </form>
+                    <!-- end form -->
                 </div>
             </div>
         </div>
@@ -932,7 +896,7 @@
                     <div class="modal-footer">
                         <input type="hidden" id="deleteId">
                         <a class="btn btn-default waves-effect" data-dismiss="modal">取消</a>
-                        <button class="btn btn-primary waves-effect waves-light">确认删除</button>
+                        <button class="btn btn-primary waves-effect waves-light" onclick="deleteById()">确认删除</button>
                     </div>
                 </div>
             </div>
@@ -943,6 +907,7 @@
         <th:block th:insert="fragments/common_fragments :: common_error"/>
         <!-- end row -->
 
+
     </div> <!-- container -->
 </div> <!-- content -->
 <th:block th:insert="fragments/common_fragments :: common_js"/>
@@ -952,20 +917,48 @@
 <script>
 
     //打开密码框
-    function openPassword(id,webLoginName,op) {
-        if("add" == op){
-            $("#id").val(id);
+    function openPassword(id, webLoginName, op) {
+        if ("add" == op) {
+            $("#id").val('');
             $("#webLoginName").val('');
-            $("#webLoginName").attr("readOnly",false);
+            $("#webLoginName").attr("readOnly", false);
             $("#webLoginPassword").val('');
             $("#rePassword").val('');
-        }else{
+        } else {
             $("#id").val(id);
             $("#webLoginName").val(webLoginName);
-            $("#webLoginName").attr("readOnly",true);
+            $("#webLoginName").attr("readOnly", true);
             $("#webLoginPassword").val('');
             $("#rePassword").val('');
         }
+    }
+
+    //打开邮寄信息
+    function openExpress(id, postContacts,postPhone,postAddress,postRemark, op) {
+        if ("add" == op) {
+            $("#id").val('');
+            $("#postContacts").val('');
+            $("#postPhone").val('');
+            $("#postAddress").val('');
+            $("#postRemark").val('');
+        } else {
+            $("#expressId").val(id);
+            $("#postContacts").val(postContacts);
+            $("#postPhone").val(postPhone);
+            $("#postAddress").val(postAddress);
+            $("#postRemark").val(postRemark);
+        }
+    }
+
+    function confirmDelete(id) {
+        $("#deleteId").val(id);
+    }
+
+    //删除邮寄信息
+    function deleteById() {
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $('#preloader').css('display', 'block');
+        location.href = contextPath + '/enterprise/express/deleteById/' + $("#deleteId").val();
     }
 
     //确认注销

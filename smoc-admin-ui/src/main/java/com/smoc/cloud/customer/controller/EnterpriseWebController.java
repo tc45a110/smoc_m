@@ -92,11 +92,11 @@ public class EnterpriseWebController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            systemUserLogService.logsAsync("ENTERPRISE_WEB", enterpriseWebAccountInfoValidator.getEnterpriseId(), "add".equals(op) ? enterpriseWebAccountInfoValidator.getCreatedBy() : enterpriseWebAccountInfoValidator.getUpdatedBy(), op, "add".equals(op) ? "企业WEB登录账号":"重置WEB账号密码" , JSON.toJSONString(enterpriseWebAccountInfoValidator));
+            systemUserLogService.logsAsync("ENTERPRISE_WEB", enterpriseWebAccountInfoValidator.getEnterpriseId(), "add".equals(op) ? enterpriseWebAccountInfoValidator.getCreatedBy() : enterpriseWebAccountInfoValidator.getUpdatedBy(), op, "add".equals(op) ? "添加"+enterpriseWebAccountInfoValidator.getWebLoginName()+"WEB登录账号":"重置"+enterpriseWebAccountInfoValidator.getWebLoginName()+"WEB账号密码" , JSON.toJSONString(enterpriseWebAccountInfoValidator));
         }
 
         //记录日志
-        log.info("[企业接入][{}][{}]数据:{}", "add".equals(op) ? "企业WEB登录账号":"重置WEB账号密码", user.getUserName(), JSON.toJSONString(enterpriseWebAccountInfoValidator));
+        log.info("[企业接入][{}][{}][{}]数据:{}", "add".equals(op) ? "添加"+enterpriseWebAccountInfoValidator.getWebLoginName()+"WEB登录账号":"重置"+enterpriseWebAccountInfoValidator.getWebLoginName()+"WEB账号密码",op, user.getUserName(), JSON.toJSONString(enterpriseWebAccountInfoValidator));
 
         view.setView(new RedirectView("/enterprise/center/"+enterpriseWebAccountInfoValidator.getEnterpriseId(), true, false));
         return view;
@@ -136,11 +136,11 @@ public class EnterpriseWebController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            systemUserLogService.logsAsync("ENTERPRISE_WEB", data.getData().getEnterpriseId(), user.getRealName(), "edit", "1".equals(status) ? "注销WEB登录账号":"启用WEB登录账号" , JSON.toJSONString(data.getData()));
+            systemUserLogService.logsAsync("ENTERPRISE_WEB", data.getData().getEnterpriseId(), user.getRealName(), "edit", "1".equals(status) ? "注销"+data.getData().getWebLoginName()+"WEB登录账号":"启用"+data.getData().getWebLoginName()+"WEB登录账号" , JSON.toJSONString(data.getData()));
         }
 
         //记录日志
-        log.info("[企业接入][{}][{}]数据:{}", "1".equals(status) ? "注销WEB登录账号":"启用WEB登录账号" , user.getUserName(), JSON.toJSONString(data.getData()));
+        log.info("[企业接入][{}][{}][{}]数据:{}", "1".equals(status) ? "注销"+data.getData().getWebLoginName()+"WEB登录账号":"启用"+data.getData().getWebLoginName()+"WEB登录账号","edit" , user.getUserName(), JSON.toJSONString(data.getData()));
 
         view.setView(new RedirectView("/enterprise/center/"+data.getData().getEnterpriseId(), true, false));
         return view;
