@@ -11,11 +11,13 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
+import com.smoc.cloud.common.smoc.customer.validator.EnterpriseExpressInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseWebAccountInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
+import com.smoc.cloud.customer.service.EnterpriseExpressService;
 import com.smoc.cloud.customer.service.EnterpriseService;
 import com.smoc.cloud.customer.service.EnterpriseWebService;
 import lombok.extern.slf4j.Slf4j;
@@ -46,6 +48,9 @@ public class EnterpriseController {
 
     @Autowired
     private EnterpriseWebService enterpriseWebService;
+
+    @Autowired
+    private EnterpriseExpressService enterpriseExpressService;
 
     @Autowired
     private SystemUserLogService systemUserLogService;
@@ -298,6 +303,7 @@ public class EnterpriseController {
         findEnterpriseWebAccountInfo(view, data.getData());
 
         //查询邮寄信息
+        findEnterpriseExpressInfo(view, data.getData());
 
         //查询开票信息
 
@@ -305,6 +311,18 @@ public class EnterpriseController {
 
         return view;
 
+    }
+
+    //查询邮寄信息
+    private void findEnterpriseExpressInfo(ModelAndView view, EnterpriseBasicInfoValidator enterpriseBasicInfoValidator) {
+        EnterpriseExpressInfoValidator enterpriseExpressInfoValidator = new EnterpriseExpressInfoValidator();
+        enterpriseExpressInfoValidator.setEnterpriseId(enterpriseBasicInfoValidator.getEnterpriseId());
+        ResponseData<List<EnterpriseExpressInfoValidator>> webData = enterpriseExpressService.page(enterpriseExpressInfoValidator);
+        if (!ResponseCode.SUCCESS.getCode().equals(webData.getCode())) {
+            view.addObject("error", webData.getCode() + ":" + webData.getMessage());
+        }
+        view.addObject("enterpriseExpressInfoValidator", enterpriseExpressInfoValidator);
+        view.addObject("expressList", webData.getData());
     }
 
     //查询WEB登录账号
