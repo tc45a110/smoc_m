@@ -11,6 +11,7 @@
         <module name="smoc-parent-ui" />
         <module name="smoc" />
         <module name="smoc-saler-ui" />
+        <module name="smoc-service-ui" />
         <module name="smoc-auth-ui" />
         <module name="smoc-auth" />
         <module name="smoc-common-utils" />
@@ -26,6 +27,7 @@
       <module name="smoc-parent" target="1.8" />
       <module name="smoc-parent-ui" target="1.8" />
       <module name="smoc-saler-ui" target="1.8" />
+      <module name="smoc-service-ui" target="1.8" />
       <module name="smoc-statistic-ui" target="1.8" />
     </bytecodeTargetLevel>
   </component>
@@ -38,6 +40,7 @@
       <module name="smoc-common-utils" options="-parameters" />
       <module name="smoc-parent-ui" options="-parameters" />
       <module name="smoc-saler-ui" options="-parameters" />
+      <module name="smoc-service-ui" options="-parameters" />
       <module name="smoc-statistic-ui" options="-parameters" />
     </option>
   </component>
