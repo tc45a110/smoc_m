@@ -145,13 +145,13 @@ public class EnterpriseWebService {
             }
 
             //生成用户数据（包含默认授权）
-            saveUser(entity);
+            saveUser(enterpriseWebAccountInfoValidator);
         }
 
         return ResponseDataUtil.buildSuccess();
     }
 
-    private void saveUser(EnterpriseWebAccountInfo entity) {
+    private void saveUser(EnterpriseWebAccountInfoValidator entity) {
 
         //查询企业
         Optional<EnterpriseBasicInfo> data = enterpriseRepository.findById(entity.getEnterpriseId());
