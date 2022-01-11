@@ -83,7 +83,7 @@ public class BaseUserRepositoryImpl extends BasePageRepository {
         }
 
         //排序
-        sqlBuffer.append(" order by t.CREATED_TIME desc");
+        sqlBuffer.append(" order by user.CREATE_DATE desc");
 
         //根据参数个数，组织参数值
         Object[] params = null;
