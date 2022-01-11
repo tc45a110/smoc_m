@@ -85,12 +85,19 @@
                                             </li>
                                             <li class="" id="tab5">
                                                 <a onclick="active('5')" id="a5"
+                                                   sec:authorize-url="/filter/keywords/CHANNEL/list/*"
+                                                   th:href="@{/filter/keywords/CHANNEL/list/{businessId}(businessId=${id})}"
+                                                   th:target="tab-content">通道关键字
+                                                </a>
+                                            </li>
+                                            <li class="" id="tab6">
+                                                <a onclick="active('6')" id="a6"
                                                    sec:authorize-url="/parameter/business/list/CHANNEL/*/*"
                                                    th:href="@{/parameter/business/list/CHANNEL/{businessId}/3(businessId=${id})}"
                                                    th:target="tab-content">通道扩展参数
                                                 </a>
                                             </li>
-                                            <li class="" id="tab6"><a onclick="active('6')" id="a6"
+                                            <li class="" id="tab7"><a onclick="active('7')" id="a7"
                                                                       sec:authorize-url="/configure/channel/edit/spare/*"
                                                                       th:href="@{/configure/channel/edit/spare/id}"
                                                                       th:target="tab-content">失败补发通道配置</a></li>
