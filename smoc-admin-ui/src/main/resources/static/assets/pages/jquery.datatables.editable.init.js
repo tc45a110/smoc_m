@@ -134,7 +134,7 @@
 				'<a href="#" class="on-default remove-row"><i class="fa fa-trash-o"></i></a>'
 			].join(' ');
 
-			data = this.datatable.row.add([ '', '', '', actions ]);
+			data = this.datatable.row.add([ 'a', 'b', 'c', actions ]);
 			$row = this.datatable.row( data[0] ).nodes().to$();
 
 			$row
@@ -198,15 +198,15 @@
 
 			values = $row.find('td').map(function() {
 				var $this = $(this);
-
 				if ( $this.hasClass('actions') ) {
 					_self.rowSetActionsDefault( $row );
 					return _self.datatable.cell( this ).data();
 				} else {
+
 					return $.trim( $this.find('input').val() );
 				}
 			});
-
+            alert(values);
 			this.datatable.row( $row.get(0) ).data( values );
 
 			$actions = $row.find('td.actions');

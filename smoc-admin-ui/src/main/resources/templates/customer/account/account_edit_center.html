@@ -121,6 +121,13 @@
                                                                               style="margin-right:5px;color:#f35864"></i>业务账号通道配置
                                                 </a>
                                             </li>
+                                            <li class="" id="tab7">
+                                                <a onclick="active('7')" id="a7"
+                                                   sec:authorize-url="/filter/keywords/BUSINESS_ACCOUNT/list/*"
+                                                   th:href="@{/filter/keywords/BUSINESS_ACCOUNT/list/businessId}"
+                                                   th:target="tab-content">通道关键字
+                                                </a>
+                                            </li>
                                             <li class="" id="tab8">
                                                 <a onclick="active('8')"
                                                    sec:authorize-url="/parameter/business/list/BUSINESS_ACCOUNT/*/*"
@@ -128,8 +135,8 @@
                                                    th:target="tab-content">业务账号扩展参数
                                                 </a>
                                             </li>
-                                            <li class="" id="tab7">
-                                                <a onclick="active('7')"
+                                            <li class="" id="tab9">
+                                                <a onclick="active('9')"
                                                    sec:authorize-url="/account/view/channel/detail/*"
                                                    th:href="@{/account/view/channel/detail/accountId}"
                                                    th:target="tab-content">业务账号通道状态

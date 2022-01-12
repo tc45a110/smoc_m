@@ -130,7 +130,7 @@ public class KeyWordsController {
     @RequestMapping(value = "/{keywordsType}/add/{businessId}", method = RequestMethod.GET)
     public ModelAndView add(@PathVariable String keywordsType,@PathVariable String businessId,HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("filter/keywords/keyword_edit_batch");
+        ModelAndView view = new ModelAndView("filter/keywords/keyword_edit_batch_common");
 
         return view;
 
@@ -144,7 +144,7 @@ public class KeyWordsController {
     @RequestMapping(value = "/{keywordsType}/edit/{businessId}/{id}", method = RequestMethod.GET)
     public ModelAndView edit(@PathVariable String keywordsType,@PathVariable String businessId,@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("filter/keywords/keyword_edit");
+        ModelAndView view = new ModelAndView("filter/keywords/keyword_edit_common");
 
         return view;
 
