@@ -344,25 +344,29 @@
                                                 </div>
                                                 <div id="mail-info" class="panel-body" style="display:block">
                                                     <div class="row">
-                                                        <div class="col-md-4"  th:each="express:${expressList}">
+                                                        <div class="col-md-4" th:each="express:${expressList}">
                                                             <div class="property-card property-horizontal">
                                                                 <div class="row">
                                                                     <div class="col-sm-12">
                                                                         <div class="property-content"
                                                                              style="height:206px">
-                                                                            <div class="listingInfo">
+                                                                            <div class="listingInfo" th:id="${'expressDiv'+express.id}">
                                                                                 <div class="">
                                                                                     <h5 style="padding-left:10px">
                                                                                         联系方式：[[${express.postPhone}]]
                                                                                         <div class="pull-right">
                                                                                             <i class="fa  fa-copy"
+                                                                                               th:id="${'expressCopy'+express.id}"
+                                                                                               th:data-clipboard-target="${'#expressDiv'+express.id}"
+                                                                                               th:onclick="expressCopy([[${express.id}]])"
                                                                                                style="margin-right:5px;color:#26A59A"
                                                                                                title="复制邮寄信息"></i>
                                                                                         </div>
                                                                                     </h5>
                                                                                 </div>
                                                                                 <div class="col-sm-12">
-                                                                                    <p style="font-size:12px">姓名：[[${express.postContacts}]]</p>
+                                                                                    <p style="font-size:12px">
+                                                                                        姓名：[[${express.postContacts}]]</p>
                                                                                     <p style="font-size:12px">
                                                                                         地址：[[${express.postAddress}]]</p>
                                                                                     <p style="font-size:12px">
@@ -381,7 +385,7 @@
                                                                                     <a data-toggle="modal"
                                                                                        data-target="#confirm-modal"
                                                                                        sec:authorize-url="/enterprise/express/deleteById/*"
-                                                                                       th:onclick="confirmDelete([[${express.id}]],this)"
+                                                                                       th:onclick="confirmDelete([[${express.id}]],'1')"
                                                                                        class="btn btn-danger"
                                                                                        style="font-size:12px;">删除</a>
                                                                                 </div>
@@ -459,7 +463,7 @@
                                                 </div>
                                                 <div id="invoice-info" class="panel-body" style="display:block">
                                                     <div class="row">
-                                                        <div class="col-md-4">
+                                                        <div class="col-md-4" th:if="${commonInvoice != null}">
                                                             <div class="property-card property-horizontal">
                                                                 <div class="row">
                                                                     <div class="col-sm-12">
@@ -471,17 +475,21 @@
                                                                                         增值税普通发票
                                                                                         <div class="pull-right">
                                                                                             <i class="fa fa-copy"
+                                                                                               id="commonCopy"
+                                                                                               data-clipboard-target="#commonDiv"
+                                                                                               th:onclick="invoiceCopy('commonCopy','1')"
                                                                                                style="margin-right:5px;color:#4CD396"
                                                                                                title="复制普通发票信息"></i>
                                                                                         </div>
                                                                                     </h5>
                                                                                 </div>
-                                                                                <div class="col-sm-12">
+                                                                                <div class="col-sm-12" id="commonDiv">
                                                                                     <p style="font-size:12px">
-                                                                                        发票抬头：武汉理工科技部联合企业</p>
+                                                                                        发票抬头：[[${commonInvoice.invoiceTitle}]]</p>
                                                                                     <p style="font-size:12px">
-                                                                                        纳税人税号：91110111MA04GM163P</p>
-                                                                                    <p style="font-size:12px">备注：材料</p>
+                                                                                        纳税人税号：[[${commonInvoice.taxPayerNumber}]]</p>
+                                                                                    <p style="font-size:12px">
+                                                                                        备注：[[${commonInvoice.invoiceMark}]]</p>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="property-action">
@@ -490,10 +498,14 @@
 
                                                                                     <a data-toggle="modal"
                                                                                        data-target="#confirm-set-invoice-modal"
+                                                                                       sec:authorize-url="/enterprise/invoice/save"
+                                                                                       th:onclick="openCommonInvoice([[${commonInvoice.id}]],[[${commonInvoice.invoiceTitle}]],[[${commonInvoice.taxPayerNumber}]],[[${commonInvoice.invoiceMark}]])"
                                                                                        class="btn btn-success"
                                                                                        style="font-size:12px;">设置</a>
                                                                                     <a data-toggle="modal"
                                                                                        data-target="#confirm-modal"
+                                                                                       sec:authorize-url="/enterprise/invoice/deleteById/*"
+                                                                                       th:onclick="confirmDelete([[${commonInvoice.id}]],'2')"
                                                                                        class="btn btn-danger"
                                                                                        style="font-size:12px;">删除</a>
                                                                                 </div>
@@ -507,7 +519,37 @@
                                                             </div>
 
                                                         </div>
-                                                        <div class="col-md-8">
+                                                        <div class="col-md-4" th:if="${commonInvoice == null}">
+                                                            <div class="property-card property-horizontal">
+                                                                <div class="row">
+                                                                    <div class="col-sm-12">
+                                                                        <div class="property-content"
+                                                                             style="height:230px">
+                                                                            <div class="listingInfo">
+                                                                                <div class="">
+
+                                                                                </div>
+                                                                                <div class="col-sm-12"
+                                                                                     style="line-height:166px;margin:0 auto;">
+                                                                                    <a data-toggle="modal"
+                                                                                       data-target="#confirm-set-invoice-modal"
+                                                                                       sec:authorize-url="/enterprise/invoice/save"
+                                                                                       class="btn btn-purple waves-effect waves-light m-l-10 btn-md">
+                                                                                        <i class="glyphicon glyphicon-plus-sign"
+                                                                                           style="margin-right:5px"></i>新建增值税普通发票</a>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <!-- end. Card actions -->
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- /col 8 -->
+                                                                </div>
+                                                                <!-- /inner row -->
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-8" th:if="${specialInvoice != null}">
                                                             <div class="property-card property-horizontal">
                                                                 <div class="row">
                                                                     <div class="col-sm-12">
@@ -519,27 +561,33 @@
                                                                                         增值税专用发票
                                                                                         <div class="pull-right">
                                                                                             <i class="fa  fa-copy"
+                                                                                               id="specialCopy"
+                                                                                               data-clipboard-target="#specialDiv"
+                                                                                               th:onclick="invoiceCopy('specialCopy','2')"
                                                                                                style="margin-right:5px;color:#4CD396"
                                                                                                title="复制增值税发票信息"></i>
                                                                                         </div>
                                                                                     </h5>
                                                                                 </div>
-                                                                                <div class="col-sm-7">
-                                                                                    <p style="font-size:12px">
-                                                                                        发票抬头：武汉理工科技部联合企业</p>
-                                                                                    <p style="font-size:12px">
-                                                                                        注册地址：湖北省武汉市马房山23号武汉理工东院23号楼1502</p>
-                                                                                    <p style="font-size:12px">
-                                                                                        开户银行：中国建设银行湖北分行武汉马房山支行</p>
-                                                                                    <p style="font-size:12px">备注：材料费</p>
-                                                                                </div>
-                                                                                <div class="col-sm-5">
-                                                                                    <p style="font-size:12px">
-                                                                                        纳税人税号：91110111MA04GM163P</p>
-                                                                                    <p style="font-size:12px">
-                                                                                        注册电话：11011011011</p>
-                                                                                    <p style="font-size:12px">开户账号：220
-                                                                                        3303 3334 3334 334333</p>
+                                                                                <div id="specialDiv">
+                                                                                    <div class="col-sm-7">
+                                                                                        <p style="font-size:12px">
+                                                                                            发票抬头：[[${specialInvoice.invoiceTitle}]]</p>
+                                                                                        <p style="font-size:12px">
+                                                                                            注册地址：[[${specialInvoice.registerAddress}]]</p>
+                                                                                        <p style="font-size:12px">
+                                                                                            开户银行：[[${specialInvoice.openBank}]]</p>
+                                                                                        <p style="font-size:12px">
+                                                                                            备注：[[${specialInvoice.invoiceMark}]]</p>
+                                                                                    </div>
+                                                                                    <div class="col-sm-5">
+                                                                                        <p style="font-size:12px">
+                                                                                            纳税人税号：[[${specialInvoice.taxPayerNumber}]]</p>
+                                                                                        <p style="font-size:12px">
+                                                                                            注册电话：[[${specialInvoice.registerPhone}]]</p>
+                                                                                        <p style="font-size:12px">
+                                                                                            开户账号：[[${specialInvoice.openAccount}]]</p>
+                                                                                    </div>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="property-action">
@@ -547,10 +595,14 @@
                                                                                 <div class="pull-right">
                                                                                     <a data-toggle="modal"
                                                                                        data-target="#confirm-set-invoice-special-modal"
+                                                                                       sec:authorize-url="/enterprise/invoice/save"
+                                                                                       th:onclick="openSpecialInvoice([[${specialInvoice.id}]],[[${specialInvoice.invoiceTitle}]],[[${specialInvoice.taxPayerNumber}]],[[${specialInvoice.openBank}]],[[${specialInvoice.openAccount}]],[[${specialInvoice.registerPhone}]],[[${specialInvoice.registerAddress}]],[[${specialInvoice.invoiceMark}]])"
                                                                                        class="btn btn-success"
                                                                                        style="font-size:12px;">设置</a>
                                                                                     <a data-toggle="modal"
                                                                                        data-target="#confirm-modal"
+                                                                                       sec:authorize-url="/enterprise/invoice/deleteById/*"
+                                                                                       th:onclick="confirmDelete([[${specialInvoice.id}]],'2')"
                                                                                        class="btn btn-danger"
                                                                                        style="font-size:12px;">删除</a>
                                                                                 </div>
@@ -562,7 +614,35 @@
                                                                 </div>
                                                                 <!-- /inner row -->
                                                             </div>
+                                                        </div>
+                                                        <div class="col-md-4" th:if="${specialInvoice == null}">
+                                                            <div class="property-card property-horizontal">
+                                                                <div class="row">
+                                                                    <div class="col-sm-12">
+                                                                        <div class="property-content"
+                                                                             style="height:230px">
+                                                                            <div class="listingInfo">
+                                                                                <div class="">
 
+                                                                                </div>
+                                                                                <div class="col-sm-12"
+                                                                                     style="line-height:166px;margin:0 auto;">
+                                                                                    <a data-toggle="modal"
+                                                                                       data-target="#confirm-set-invoice-special-modal"
+                                                                                       sec:authorize-url="/enterprise/invoice/save"
+                                                                                       class="btn btn-brown waves-effect waves-light m-l-10 btn-md">
+                                                                                        <i class="glyphicon glyphicon-plus-sign"
+                                                                                           style="margin-right:5px"></i>新建增值税专用发票</a>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <!-- end. Card actions -->
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- /col 8 -->
+                                                                </div>
+                                                                <!-- /inner row -->
+                                                            </div>
                                                         </div>
 
                                                     </div>
@@ -771,43 +851,46 @@
              aria-hidden="true" style="display: none;margin: 60px;margin-top:68px">
             <div class="modal-dialog" style="width:33%;">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 class="modal-title">新建、编辑增值税普通发票</h4>
-                    </div>
-                    <div class="row" style="margin-top:10px">
-                        <div class="col-md-12">
-                            <form id="submit_formq2" method="post" data-parsley-validate="">
-
+                    <form id="submit_formq2" method="post" th:action="@{/enterprise/invoice/save}"
+                          th:object="${enterpriseInvoiceInfoValidator}" data-parsley-validate="">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h4 class="modal-title">新建、编辑增值税普通发票</h4>
+                        </div>
+                        <div class="row" style="margin-top:10px">
+                            <div class="col-md-12">
                                 <div class="form-group m-b-20">
-                                    <label for="link1ako9">发票抬头<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="link1ako9" type="text" class="form-control"
-                                           required="" data-parsley-length="[7,30]" autocomplete="off"
+                                    <label>发票抬头<span class="text-danger">*</span>&nbsp;</label>
+                                    <input type="text" class="form-control" th:field="*{invoiceTitle}"
+                                           required="" data-parsley-length="[4,60]" autocomplete="off"
                                            placeholder="发票抬头">
                                 </div>
                                 <div class="form-group m-b-20">
-                                    <label for="link5ko8">纳税人税号<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="link5ko8" type="text" class="form-control"
-                                           required="" data-parsley-length="[7,30]" autocomplete="off"
+                                    <label>纳税人税号<span class="text-danger">*</span>&nbsp;</label>
+                                    <input type="text" class="form-control" th:field="*{taxPayerNumber}"
+                                           required="" data-parsley-length="[15,25]" autocomplete="off"
                                            placeholder="纳税人税号">
                                 </div>
 
                                 <div class="form-group m-b-20">
-                                    <label for="ooo">备注<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="ooo" type="text" class="form-control"
-                                           required="" data-parsley-length="[2,64]" autocomplete="off"
+                                    <label>备注&nbsp;</label>
+                                    <input type="text" class="form-control" th:field="*{invoiceMark}"
+                                           data-parsley-length="[1,128]" autocomplete="off"
                                            placeholder="备注">
                                 </div>
-
-                            </form>
-                            <!-- end form -->
+                            </div>
                         </div>
-
-                    </div>
-                    <div class="modal-footer">
-                        <a class="btn btn-default waves-effect" data-dismiss="modal">取消</a>
-                        <button class="btn btn-primary waves-effect waves-light">提交</button>
-                    </div>
+                        <div class="modal-footer">
+                            <input type="hidden" th:field="*{enterpriseId}">
+                            <input type="hidden" th:field="*{commonId}">
+                            <input type="hidden" th:name="invoiceType" th:value="1">
+                            <a class="btn btn-default waves-effect" data-dismiss="modal">取消</a>
+                            <button sec:authorize-url="/enterprise/invoice/save" type="submit"
+                                    class="btn btn-primary waves-effect waves-light">提交
+                            </button>
+                        </div>
+                    </form>
+                    <!-- end form -->
                 </div>
             </div>
         </div>
@@ -817,63 +900,71 @@
         <div id="confirm-set-invoice-special-modal" class="modal fade" tabindex="-1" role="dialog"
              aria-labelledby="custom-width-modalLabel"
              aria-hidden="true" style="display: none;margin: 60px;margin-top:68px">
-            <div class="modal-dialog" style="width:33%;">
+            <div class="modal-dialog" style="width:50%;">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 class="modal-title">新建、编辑增值税专用发票</h4>
-                    </div>
-                    <div class="row" style="margin-top:10px">
-                        <div class="col-md-12">
-                            <form id="submit_formq21" method="post" data-parsley-validate="">
-
-                                <div class="form-group m-b-20">
-                                    <label for="link1ako">发票抬头<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="link1ako" type="text" class="form-control"
-                                           required="" data-parsley-length="[7,30]" autocomplete="off"
+                    <form id="submit_formq21" method="post" th:action="@{/enterprise/invoice/save}"
+                          th:object="${enterpriseInvoiceInfoValidator}" data-parsley-validate="">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h4 class="modal-title">新建、编辑增值税专用发票</h4>
+                        </div>
+                        <div class="row" style="margin-top:10px">
+                            <div class="col-md-12">
+                                <div class="col-md-6 form-group">
+                                    <label>发票抬头<span class="text-danger">*</span>&nbsp;</label>
+                                    <input id="specialInvoiceTitle" type="text" class="form-control" th:field="*{invoiceTitle}"
+                                           required="" data-parsley-length="[4,60]" autocomplete="off"
                                            placeholder="发票抬头">
                                 </div>
-                                <div class="form-group m-b-20">
-                                    <label for="link5ko">纳税人税号<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="link5ko" type="text" class="form-control"
-                                           required="" data-parsley-length="[7,30]" autocomplete="off"
+                                <div class="col-md-6 form-group">
+                                    <label>纳税人税号<span class="text-danger">*</span>&nbsp;</label>
+                                    <input id="specialTaxPayerNumber" type="text" class="form-control" th:field="*{taxPayerNumber}"
+                                           required="" data-parsley-length="[15,25]" autocomplete="off"
                                            placeholder="纳税人税号">
                                 </div>
-
-                                <div class="form-group m-b-20">
-                                    <label for="oooo">注册地址<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="oooo" type="text" class="form-control"
+                                <div class="col-md-6 form-group">
+                                    <label>注册地址<span class="text-danger">*</span>&nbsp;</label>
+                                    <input type="text" class="form-control" th:field="*{registerAddress}"
                                            required="" data-parsley-length="[2,64]" autocomplete="off"
                                            placeholder="注册地址">
                                 </div>
-                                <div class="form-group m-b-20">
-                                    <label for="oooo0">注册电话<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="oooo0" type="text" class="form-control"
-                                           required="" data-parsley-length="[2,64]" autocomplete="off"
+                                <div class="col-md-6 form-group">
+                                    <label>注册电话<span class="text-danger">*</span>&nbsp;</label>
+                                    <input type="text" class="form-control" th:field="*{registerPhone}"
+                                           required="" data-parsley-length="[2,11]" autocomplete="off"
                                            placeholder="注册电话">
                                 </div>
-                                <div class="form-group m-b-20">
-                                    <label for="oooo01">开户银行<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="oooo01" type="text" class="form-control"
+                                <div class="col-md-6 form-group">
+                                    <label>开户银行<span class="text-danger">*</span>&nbsp;</label>
+                                    <input type="text" class="form-control" th:field="*{openBank}"
                                            required="" data-parsley-length="[2,64]" autocomplete="off"
                                            placeholder="开户银行">
                                 </div>
-                                <div class="form-group m-b-20">
-                                    <label for="oooo011">开户账号<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="oooo011" type="text" class="form-control"
+                                <div class="col-md-6 form-group">
+                                    <label>开户账号<span class="text-danger">*</span>&nbsp;</label>
+                                    <input type="text" class="form-control" th:field="*{openAccount}"
                                            required="" data-parsley-length="[2,64]" autocomplete="off"
                                            placeholder="开户账号">
                                 </div>
-
-                            </form>
-                            <!-- end form -->
+                                <div class="col-md-12 form-group">
+                                    <label>备注&nbsp;</label>
+                                    <input id="specialInvoiceMark"type="text" class="form-control" th:field="*{invoiceMark}"
+                                           data-parsley-length="[1,128]" autocomplete="off"
+                                           placeholder="备注">
+                                </div>
+                            </div>
                         </div>
-
-                    </div>
-                    <div class="modal-footer">
-                        <a class="btn btn-default waves-effect" data-dismiss="modal">取消</a>
-                        <button class="btn btn-primary waves-effect waves-light">提交</button>
-                    </div>
+                        <div class="modal-footer">
+                            <input type="hidden" th:field="*{enterpriseId}">
+                            <input type="hidden" th:field="*{specialId}">
+                            <input type="hidden" th:name="invoiceType" th:value="2">
+                            <a class="btn btn-default waves-effect" data-dismiss="modal">取消</a>
+                            <button sec:authorize-url="/enterprise/invoice/save" type="submit"
+                                    class="btn btn-primary waves-effect waves-light">提交
+                            </button>
+                        </div>
+                    </form>
+                    <!-- end form -->
                 </div>
             </div>
         </div>
@@ -895,6 +986,7 @@
                     </div>
                     <div class="modal-footer">
                         <input type="hidden" id="deleteId">
+                        <input type="hidden" id="deleteType">
                         <a class="btn btn-default waves-effect" data-dismiss="modal">取消</a>
                         <button class="btn btn-primary waves-effect waves-light" onclick="deleteById()">确认删除</button>
                     </div>
@@ -913,7 +1005,35 @@
 <th:block th:insert="fragments/common_fragments :: common_js"/>
 <th:block th:insert="fragments/login_fragments :: login_js"/>
 <th:block th:insert="fragments/common_fragments :: common_submit_form"/>
+<script th:src="@{/static/js/clipboard.min.js}"></script>
 
+<script>
+    /*var commonCopy = document.getElementById("commonCopy");
+    var specialCopy = document.getElementById("specialCopy");
+
+    //复制发票信息
+    if(commonCopy !=null){
+        new ClipboardJS(commonCopy);
+    }
+    if(specialCopy !=null){
+        new ClipboardJS(specialCopy);
+    }*/
+
+    function invoiceCopy(data,type){
+        var invoiceCopy = document.getElementById(data);
+        if(invoiceCopy !=null){
+            new ClipboardJS(invoiceCopy);
+        }
+    }
+
+    function expressCopy(id){
+        var expressCopy = document.getElementById("expressCopy"+id);
+        if(expressCopy !=null){
+            new ClipboardJS(expressCopy);
+        }
+    }
+
+</script>
 <script>
 
     //打开密码框
@@ -934,7 +1054,7 @@
     }
 
     //打开邮寄信息
-    function openExpress(id, postContacts,postPhone,postAddress,postRemark, op) {
+    function openExpress(id, postContacts, postPhone, postAddress, postRemark, op) {
         if ("add" == op) {
             $("#id").val('');
             $("#postContacts").val('');
@@ -950,15 +1070,43 @@
         }
     }
 
-    function confirmDelete(id) {
-        $("#deleteId").val(id);
+    //打开普通发票信息
+    function openCommonInvoice(id, invoiceTitle, taxPayerNumber, invoiceMark) {
+        $("#commonId").val(id);
+        $("#invoiceTitle").val(invoiceTitle);
+        $("#taxPayerNumber").val(taxPayerNumber);
+        $("#invoiceMark").val(invoiceMark);
     }
 
-    //删除邮寄信息
+    //打开专用发票信息
+    function openSpecialInvoice(id, invoiceTitle, taxPayerNumber, openBank, openAccount, registerPhone, registerAddress, invoiceMark) {
+        $("#specialId").val(id);
+        $("#specialInvoiceTitle").val(invoiceTitle);
+        $("#specialTaxPayerNumber").val(taxPayerNumber);
+        $("#openBank").val(openBank);
+        $("#openAccount").val(openAccount);
+        $("#registerPhone").val(registerPhone);
+        $("#registerAddress").val(registerAddress);
+        $("#specialInvoiceMark").val(invoiceMark);
+    }
+
+    function confirmDelete(id,deleteType) {
+        $("#deleteId").val(id);
+        $("#deleteType").val(deleteType);
+    }
+
+    //删除邮寄、发票信息
     function deleteById() {
         var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
         $('#preloader').css('display', 'block');
-        location.href = contextPath + '/enterprise/express/deleteById/' + $("#deleteId").val();
+        var deleteType = $("#deleteType").val()
+        if("1" == deleteType){
+            //删除邮寄信息
+            location.href = contextPath + '/enterprise/express/deleteById/' + $("#deleteId").val();
+        }else if("2" == deleteType){
+            //删除发票信息
+            location.href = contextPath + '/enterprise/invoice/deleteById/' + $("#deleteId").val();
+        }
     }
 
     //确认注销

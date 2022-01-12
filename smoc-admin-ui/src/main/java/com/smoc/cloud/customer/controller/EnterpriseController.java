@@ -12,12 +12,14 @@ import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseExpressInfoValidator;
+import com.smoc.cloud.common.smoc.customer.validator.EnterpriseInvoiceInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseWebAccountInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.customer.service.EnterpriseExpressService;
+import com.smoc.cloud.customer.service.EnterpriseInvoiceService;
 import com.smoc.cloud.customer.service.EnterpriseService;
 import com.smoc.cloud.customer.service.EnterpriseWebService;
 import lombok.extern.slf4j.Slf4j;
@@ -51,6 +53,9 @@ public class EnterpriseController {
 
     @Autowired
     private EnterpriseExpressService enterpriseExpressService;
+
+    @Autowired
+    private EnterpriseInvoiceService enterpriseInvoiceService;
 
     @Autowired
     private SystemUserLogService systemUserLogService;
@@ -306,6 +311,8 @@ public class EnterpriseController {
         findEnterpriseExpressInfo(view, data.getData());
 
         //查询开票信息
+        findEnterpriseInvoiceInfo(view, data.getData());
+
 
         view.addObject("enterpriseBasicInfoValidator", data.getData());
 
@@ -317,12 +324,12 @@ public class EnterpriseController {
     private void findEnterpriseExpressInfo(ModelAndView view, EnterpriseBasicInfoValidator enterpriseBasicInfoValidator) {
         EnterpriseExpressInfoValidator enterpriseExpressInfoValidator = new EnterpriseExpressInfoValidator();
         enterpriseExpressInfoValidator.setEnterpriseId(enterpriseBasicInfoValidator.getEnterpriseId());
-        ResponseData<List<EnterpriseExpressInfoValidator>> webData = enterpriseExpressService.page(enterpriseExpressInfoValidator);
-        if (!ResponseCode.SUCCESS.getCode().equals(webData.getCode())) {
-            view.addObject("error", webData.getCode() + ":" + webData.getMessage());
+        ResponseData<List<EnterpriseExpressInfoValidator>> expressData = enterpriseExpressService.page(enterpriseExpressInfoValidator);
+        if (!ResponseCode.SUCCESS.getCode().equals(expressData.getCode())) {
+            view.addObject("error", expressData.getCode() + ":" + expressData.getMessage());
         }
         view.addObject("enterpriseExpressInfoValidator", enterpriseExpressInfoValidator);
-        view.addObject("expressList", webData.getData());
+        view.addObject("expressList", expressData.getData());
     }
 
     //查询WEB登录账号
@@ -335,6 +342,27 @@ public class EnterpriseController {
         }
         view.addObject("enterpriseWebAccountInfoValidator", enterpriseWebAccountInfoValidator);
         view.addObject("webList", webData.getData());
+    }
+
+    //查询开票信息
+    private void findEnterpriseInvoiceInfo(ModelAndView view, EnterpriseBasicInfoValidator enterpriseBasicInfoValidator) {
+        //普通发票
+        ResponseData<EnterpriseInvoiceInfoValidator> commonData = enterpriseInvoiceService.findByEnterpriseIdAndInvoiceType(enterpriseBasicInfoValidator.getEnterpriseId(),"1");
+        if (!ResponseCode.SUCCESS.getCode().equals(commonData.getCode())) {
+            view.addObject("error", commonData.getCode() + ":" + commonData.getMessage());
+        }
+        view.addObject("commonInvoice", commonData.getData());
+
+        //专用发票
+        ResponseData<EnterpriseInvoiceInfoValidator> specialData = enterpriseInvoiceService.findByEnterpriseIdAndInvoiceType(enterpriseBasicInfoValidator.getEnterpriseId(),"2");
+        if (!ResponseCode.SUCCESS.getCode().equals(specialData.getCode())) {
+            view.addObject("error", specialData.getCode() + ":" + specialData.getMessage());
+        }
+        view.addObject("specialInvoice", specialData.getData());
+
+        EnterpriseInvoiceInfoValidator enterpriseInvoiceInfoValidator = new EnterpriseInvoiceInfoValidator();
+        enterpriseInvoiceInfoValidator.setEnterpriseId(enterpriseBasicInfoValidator.getEnterpriseId());
+        view.addObject("enterpriseInvoiceInfoValidator", enterpriseInvoiceInfoValidator);
     }
 
 

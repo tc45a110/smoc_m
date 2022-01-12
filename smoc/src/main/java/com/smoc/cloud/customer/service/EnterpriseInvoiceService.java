@@ -5,10 +5,11 @@ import com.alibaba.fastjson.JSON;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
-import com.smoc.cloud.common.smoc.customer.validator.EnterpriseExpressInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseInvoiceInfoValidator;
+import com.smoc.cloud.customer.entity.EnterpriseBasicInfo;
 import com.smoc.cloud.customer.entity.EnterpriseInvoiceInfo;
 import com.smoc.cloud.customer.repository.EnterpriseInvoiceRepository;
+import com.smoc.cloud.customer.repository.EnterpriseRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -33,15 +34,18 @@ public class EnterpriseInvoiceService {
     @Resource
     private EnterpriseInvoiceRepository enterpriseInvoiceRepository;
 
+    @Resource
+    private EnterpriseRepository enterpriseRepository;
+
     /**
      * 查询列表
      *
      * @param enterpriseInvoiceInfoValidator
      * @return
      */
-    public ResponseData<List<EnterpriseExpressInfoValidator>> page(EnterpriseInvoiceInfoValidator enterpriseInvoiceInfoValidator) {
+    public ResponseData<List<EnterpriseInvoiceInfoValidator>> page(EnterpriseInvoiceInfoValidator enterpriseInvoiceInfoValidator) {
 
-        List<EnterpriseExpressInfoValidator> list = null;//enterpriseInvoiceRepository.page(enterpriseInvoiceInfoValidator);
+        List<EnterpriseInvoiceInfoValidator> list = enterpriseInvoiceRepository.page(enterpriseInvoiceInfoValidator);
         return ResponseDataUtil.buildSuccess(list);
     }
 
@@ -98,6 +102,25 @@ public class EnterpriseInvoiceService {
             return ResponseDataUtil.buildError();
         }
 
+        if ("edit".equals(op)) {
+            EnterpriseInvoiceInfo info = enterpriseInvoiceRepository.findById(entity.getId()).get();
+            entity.setCreatedBy(info.getCreatedBy());
+            entity.setCreatedTime(info.getCreatedTime());
+            entity.setInvoiceStatus(info.getInvoiceStatus());
+        }
+
+        if ("add".equals(op)) {
+            //更新进度
+            Optional<EnterpriseBasicInfo> optional = enterpriseRepository.findById(entity.getEnterpriseId());
+            if (optional.isPresent()) {
+                EnterpriseBasicInfo enterpriseBasicInfo = optional.get();
+                StringBuffer process = new StringBuffer(enterpriseBasicInfo.getEnterpriseProcess());
+                process = process.replace(3, 4, "1");
+                enterpriseBasicInfo.setEnterpriseProcess(process.toString());
+                enterpriseRepository.save(enterpriseBasicInfo);
+            }
+        }
+
         //记录日志
         log.info("[企业接入][企业发票信息][{}]数据:{}",op, JSON.toJSONString(entity));
         enterpriseInvoiceRepository.saveAndFlush(entity);
@@ -121,5 +144,17 @@ public class EnterpriseInvoiceService {
         return ResponseDataUtil.buildSuccess();
     }
 
+    /**
+     * 根据类型和企业id查询数据
+     * @param enterpriseId
+     * @param type
+     * @return
+     */
+    public ResponseData findByEnterpriseIdAndInvoiceType(String enterpriseId, String type) {
 
+        EnterpriseInvoiceInfo data = enterpriseInvoiceRepository.findByEnterpriseIdAndInvoiceType(enterpriseId,type);
+
+        //使用了 Optional 的判断方式，判断优雅
+        return ResponseDataUtil.buildSuccess(data);
+    }
 }

@@ -3,7 +3,6 @@ package com.smoc.cloud.customer.controller;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
-import com.smoc.cloud.common.smoc.customer.validator.EnterpriseExpressInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseInvoiceInfoValidator;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
@@ -34,7 +33,7 @@ public class EnterpriseInvoiceController {
      * @return
      */
     @RequestMapping(value = "/page", method = RequestMethod.POST)
-    public ResponseData<List<EnterpriseExpressInfoValidator>> page(@RequestBody EnterpriseInvoiceInfoValidator enterpriseInvoiceInfoValidator) {
+    public ResponseData<List<EnterpriseInvoiceInfoValidator>> page(@RequestBody EnterpriseInvoiceInfoValidator enterpriseInvoiceInfoValidator) {
 
         return enterpriseInvoiceService.page(enterpriseInvoiceInfoValidator);
     }
@@ -94,5 +93,25 @@ public class EnterpriseInvoiceController {
         }
 
         return enterpriseInvoiceService.deleteById(id);
+    }
+
+    /**
+     * 根据类型和企业id查询数据
+     * @param enterpriseId
+     * @param type
+     * @return
+     */
+    @RequestMapping(value = "/findByEnterpriseIdAndInvoiceType/{enterpriseId}/{type}", method = RequestMethod.GET)
+    public ResponseData<EnterpriseInvoiceInfoValidator> findByEnterpriseIdAndInvoiceType(@PathVariable String enterpriseId, @PathVariable String type) {
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(enterpriseId);
+        if (!MpmValidatorUtil.validate(validator)) {
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(validator));
+        }
+
+        ResponseData data = enterpriseInvoiceService.findByEnterpriseIdAndInvoiceType(enterpriseId,type);
+        return data;
     }
 }

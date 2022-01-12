@@ -15,6 +15,7 @@ public class EnterpriseInvoiceInfo {
     private String taxPayerNumber;
     private String openBank;
     private String openAccount;
+    private String registerPhone;
     private String registerAddress;
     private String invoiceMark;
     private String invoiceStatus;
@@ -101,6 +102,16 @@ public class EnterpriseInvoiceInfo {
 
     public void setRegisterAddress(String registerAddress) {
         this.registerAddress = registerAddress;
+    }
+
+    @Basic
+    @Column(name = "REGISTER_PHONE")
+    public String getRegisterPhone() {
+        return registerPhone;
+    }
+
+    public void setRegisterPhone(String registerPhone) {
+        this.registerPhone = registerPhone;
     }
 
     @Basic
