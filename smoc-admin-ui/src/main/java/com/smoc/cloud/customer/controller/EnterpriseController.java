@@ -37,7 +37,11 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -86,9 +90,18 @@ public class EnterpriseController {
             return view;
         }
 
+        //查询销售
+        List<Users> list = sysUserService.salesList();
+        Map<String, Users> salesMap = new HashMap<>();
+        if(!StringUtils.isEmpty(list) && list.size()>0){
+            salesMap = list.stream().collect(Collectors.toMap(Users::getId, Function.identity()));
+        }
+
         view.addObject("enterpriseBasicInfoValidator", enterpriseBasicInfoValidator);
         view.addObject("list", data.getData().getList());
         view.addObject("pageParams", data.getData().getPageParams());
+        view.addObject("salesMap", salesMap);
+        view.addObject("salesList", list);
 
         return view;
 
@@ -112,9 +125,18 @@ public class EnterpriseController {
             return view;
         }
 
+        //查询销售
+        List<Users> list = sysUserService.salesList();
+        Map<String, Users> salesMap = new HashMap<>();
+        if(!StringUtils.isEmpty(list) && list.size()>0){
+            salesMap = list.stream().collect(Collectors.toMap(Users::getId, Function.identity()));
+        }
+
         view.addObject("enterpriseBasicInfoValidator", enterpriseBasicInfoValidator);
         view.addObject("list", data.getData().getList());
         view.addObject("pageParams", data.getData().getPageParams());
+        view.addObject("salesMap", salesMap);
+        view.addObject("salesList", list);
         return view;
 
     }
@@ -157,7 +179,7 @@ public class EnterpriseController {
         }
 
         //查询销售人员
-        view.addObject("salesList", findSalesList());
+        view.addObject("salesList", sysUserService.salesList());
 
         view.addObject("level", level);
         view.addObject("enterpriseBasicInfoValidator", enterpriseBasicInfoValidator);
@@ -185,7 +207,7 @@ public class EnterpriseController {
         }
 
         //查询销售人员
-        view.addObject("salesList", findSalesList());
+        view.addObject("salesList", sysUserService.salesList());
 
         //修改:查询数据
         ResponseData<EnterpriseBasicInfoValidator> data = enterpriseService.findById(id);
@@ -229,7 +251,7 @@ public class EnterpriseController {
         //完成参数规则验证
         if (result.hasErrors()) {
             //查询销售人员
-            view.addObject("salesList", findSalesList());
+            view.addObject("salesList", sysUserService.salesList());
             view.addObject("enterpriseBasicInfoValidator", enterpriseBasicInfoValidator);
             view.addObject("op", op);
             return view;
@@ -313,7 +335,6 @@ public class EnterpriseController {
         //查询开票信息
         findEnterpriseInvoiceInfo(view, data.getData());
 
-
         view.addObject("enterpriseBasicInfoValidator", data.getData());
 
         return view;
@@ -365,18 +386,48 @@ public class EnterpriseController {
         view.addObject("enterpriseInvoiceInfoValidator", enterpriseInvoiceInfoValidator);
     }
 
+    /**
+     *  注销、启用企业业务
+     * @param id
+     * @param status
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/forbiddenEnterprise/{id}/{status}", method = RequestMethod.GET)
+    public ModelAndView forbiddenEnterprise(@PathVariable String id,@PathVariable String status, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("customer/enterprise/enterprise_edit");
 
-    //查询销售人员
-    private List<Users> findSalesList() {
-        PageParams<Users> params = new PageParams<Users>();
-        params.setPageSize(100);
-        params.setCurrentPage(1);
-        Users u = new Users();
-        u.setActive(1);
-        u.setType(3);
-        params.setParams(u);
-        PageList<Users> list = sysUserService.page(params);
-        return list.getList();
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
+
+        //查询企业信息
+        ResponseData<EnterpriseBasicInfoValidator> enterpriseData = enterpriseService.findById(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(enterpriseData.getCode())) {
+            view.addObject("error", enterpriseData.getCode() + ":" + enterpriseData.getMessage());
+        }
+
+        //注销、启用企业业务
+        ResponseData data = enterpriseService.forbiddenEnterprise(id,status);
+
+        //保存操作记录
+        if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            systemUserLogService.logsAsync("ENTERPRISE_BASE", enterpriseData.getData().getEnterpriseId(), user.getRealName(), "edit", "1".equals(status) ? "注销企业业务及WEB账号":"启用企业业务及WEB账号" , JSON.toJSONString(enterpriseData.getData()));
+        }
+
+        //记录日志
+        log.info("[企业接入][{}][{}][{}]数据:{}", "1".equals(status) ? "注销企业业务及WEB账号":"启用企业业务及WEB账号","edit" , user.getUserName(), JSON.toJSONString(enterpriseData.getData()));
+
+        view.setView(new RedirectView("/enterprise/center/"+enterpriseData.getData().getEnterpriseId(), true, false));
+        return view;
+
     }
+
 
 }

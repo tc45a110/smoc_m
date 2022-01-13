@@ -1,9 +1,11 @@
 package com.smoc.cloud.configure.channel.group.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.smoc.cloud.admin.security.remote.service.SysUserService;
 import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
 import com.smoc.cloud.common.auth.qo.DictType;
+import com.smoc.cloud.common.auth.qo.Users;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
@@ -27,8 +29,11 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * 通道组管理
@@ -43,6 +48,9 @@ public class ChannelGroupController {
 
     @Autowired
     private SystemUserLogService systemUserLogService;
+
+    @Autowired
+    private SysUserService sysUserService;
 
     @Autowired
     private SequenceService sequenceService;
@@ -329,8 +337,17 @@ public class ChannelGroupController {
             return view;
         }
 
+        //查询销售
+        List<Users> list = sysUserService.salesList();
+        Map<String, Users> salesMap = new HashMap<>();
+        if(!StringUtils.isEmpty(list) && list.size()>0){
+            salesMap = list.stream().collect(Collectors.toMap(Users::getId, Function.identity()));
+        }
+
         view.addObject("channelGroupInfoValidator", data.getData());
         view.addObject("channelList", channelData.getData());
+        view.addObject("salesMap", salesMap);
+
         return view;
 
     }

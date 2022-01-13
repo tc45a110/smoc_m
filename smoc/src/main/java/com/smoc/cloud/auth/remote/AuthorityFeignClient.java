@@ -1,5 +1,6 @@
 package com.smoc.cloud.auth.remote;
 
+import com.smoc.cloud.common.auth.entity.SecurityUser;
 import com.smoc.cloud.common.auth.validator.OrgValidator;
 import com.smoc.cloud.common.auth.validator.UserPasswordValidator;
 import com.smoc.cloud.common.auth.validator.UserValidator;
@@ -9,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import java.util.List;
 
 /**
  * 组织管理远程服务接口
@@ -57,4 +60,7 @@ public interface AuthorityFeignClient {
      */
     @RequestMapping(value = "/authority/user/forbiddenUser/{id}/{status}", method = RequestMethod.GET)
     ResponseData forbiddenUser(@PathVariable String id, @PathVariable String status) throws Exception;
+
+    @RequestMapping(value = "/authority/user/batchForbiddenUser/{status}", method = RequestMethod.POST)
+    ResponseData batchForbiddenUser(@RequestBody List<SecurityUser> userList, @PathVariable String status) throws Exception;
 }

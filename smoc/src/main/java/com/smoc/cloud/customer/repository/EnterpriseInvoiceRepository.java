@@ -20,4 +20,6 @@ public interface EnterpriseInvoiceRepository extends CrudRepository<EnterpriseIn
     List<EnterpriseInvoiceInfoValidator> page(EnterpriseInvoiceInfoValidator enterpriseInvoiceInfoValidator);
 
     EnterpriseInvoiceInfo findByEnterpriseIdAndInvoiceType(String enterpriseId, String type);
+
+    List<EnterpriseInvoiceInfo> findByEnterpriseId(String enterpriseId);
 }

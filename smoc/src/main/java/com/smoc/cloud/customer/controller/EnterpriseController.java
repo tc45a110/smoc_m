@@ -76,4 +76,23 @@ public class EnterpriseController {
         return data;
     }
 
+    /**
+     * 注销、启用企业业务
+     * @param id
+     * @param status
+     * @return
+     */
+    @RequestMapping(value = "/forbiddenEnterprise/{id}/{status}", method = RequestMethod.GET)
+    public ResponseData forbiddenEnterprise(@PathVariable String id, @PathVariable String status)  {
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(validator));
+        }
+
+        ResponseData data = enterpriseService.forbiddenEnterprise(id,status);
+        return data;
+    }
 }

@@ -23,7 +23,7 @@ public class EnterpriseBasicInfoRowMapper implements RowMapper<EnterpriseBasicIn
         qo.setAccessCorporation(resultSet.getString("ACCESS_CORPORATION"));
         qo.setEnterpriseContacts(resultSet.getString("ENTERPRISE_CONTACTS"));
         qo.setEnterpriseContactsPhone(resultSet.getString("ENTERPRISE_CONTACTS_PHONE"));
-        qo.setSalerName(resultSet.getString("REAL_NAME"));
+        qo.setSaler(resultSet.getString("SALER"));
         qo.setEnterpriseProcess(resultSet.getString("ENTERPRISE_PROCESS"));
         qo.setEnterpriseStatus(resultSet.getString("ENTERPRISE_STATUS"));
         qo.setCreatedTime(resultSet.getString("CREATED_TIME"));

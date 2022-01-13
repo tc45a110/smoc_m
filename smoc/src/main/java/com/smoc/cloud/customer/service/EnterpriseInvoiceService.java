@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.Iterator;
@@ -141,6 +142,20 @@ public class EnterpriseInvoiceService {
         //记录日志
         log.info("[企业接入][企业发票信息][delete]数据:{}",JSON.toJSONString(data));
         enterpriseInvoiceRepository.deleteById(id);
+
+        List<EnterpriseInvoiceInfo> list = enterpriseInvoiceRepository.findByEnterpriseId(data.getEnterpriseId());
+        if(StringUtils.isEmpty(list) || list.size()<=0){
+            //更新进度
+            Optional<EnterpriseBasicInfo> optional = enterpriseRepository.findById(data.getEnterpriseId());
+            if (optional.isPresent()) {
+                EnterpriseBasicInfo enterpriseBasicInfo = optional.get();
+                StringBuffer process = new StringBuffer(enterpriseBasicInfo.getEnterpriseProcess());
+                process = process.replace(3, 4, "0");
+                enterpriseBasicInfo.setEnterpriseProcess(process.toString());
+                enterpriseRepository.save(enterpriseBasicInfo);
+            }
+        }
+
         return ResponseDataUtil.buildSuccess();
     }
 

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
+    <style>
+    </style>
+</head>
+<body>
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+        <!-- start row -->
+        <div class="row fixed-navigation">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">EC搜索 </h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li class="active">
+                            EC搜索
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  查询条件-->
+        <div class="row" style="position: relative;margin-top: 80px" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <form th:action="@{/ec/customer/search/page}" th:object="${enterpriseBasicInfoValidator}" id="query_form" method="post">
+                        <div class="row m-b-60">
+                            <div class="col-sm-12">
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control" th:field="*{enterpriseName}"
+                                           placeholder="企业名称" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control" th:field="*{enterpriseContacts}"
+                                           placeholder="企业联系人" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control" th:field="*{enterpriseContactsPhone}"
+                                           placeholder="联系方式" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <select name="saler" data-style="btn-default"
+                                            class="selectpicker  form-control" tabindex="-98">
+                                        <option data-icon="mdi mdi-account" value="">--请选择销售人员--</option>
+                                        <option data-icon="mdi mdi-account" th:each="sales:${salesList}"
+                                                th:selected="${enterpriseBasicInfoValidator.saler eq sales.id}" th:value="${sales.id}">[[${sales.realName}]]</option>
+                                    </select>
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <mpm:tag id="enterpriseType" identity="enterpriseType" show-type="select" key="code"
+                                             class="form-control" name="enterpriseType" th:value="${enterpriseBasicInfoValidator.enterpriseType}" title="企业类型"/>
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <mpm:tag id="corporation" identity="corporation" show-type="select" key="code"
+                                             class="form-control" name="accessCorporation" th:value="${enterpriseBasicInfoValidator.accessCorporation}" title="对接主体公司"/>
+                                </div>
+                                <div class="form-group col-sm-4 pull-right" style="text-align: right">
+                                    <button sec:authorize-url="/ec/customer/search/page" type="submit"
+                                            class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-search" style="margin-right:5px"></i> 查询
+                                    </button>
+                                    <a id="help_display" style="margin-left:10px"><i class="mdi mdi-help-circle-outline"
+                                                                                     style="font-size:18px;"></i></a>
+                                    <input type="hidden" name="currentPage" id="currentPage"
+                                           th:value="${pageParams.currentPage}">
+                                    <input type="hidden" name="pageSize" id="pageSize"
+                                           th:value="${pageParams.pageSize}">
+                                    <input type="hidden" name="op"  th:value="${op}">
+                                </div>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  操作提示-->
+        <div id="help" class="alert alert-icon alert-success alert-dismissible fade in"  role="alert">
+            <button id="help_button" type="button" class="close"
+                    aria-label="Close">
+                <span >&times;</span>
+            </button>
+            <i class="mdi mdi-help-circle-outline"></i>
+            <span th:if="${op eq 'channel_account'}"><strong>操作提示：</strong> 第一步：搜索到准备创建通道账户的EC；第二步：选定已搜索到的EC；第三步：为该EC创建新的业务账号。</span>
+            <span th:if="${op eq 'contract'}"><strong>操作提示：</strong> 第一步：搜索企业信息；第二步：选定企业并创建合同。</span>
+            <span th:if="${op eq 'material'}"><strong>操作提示：</strong> 第一步：搜索企业信息；第二步：选定企业并新建签名资质。</span>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  列表数据-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="panel panel-color panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">EC搜索结果</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table table-hover m-10" style="margin-top: -12px;">
+                                <thead>
+                                <tr>
+                                    <th>企业名称</th>
+                                    <th>企业联系人</th>
+                                    <th>销售人员</th>
+                                    <th>企业类型</th>
+                                    <th>对接主体公司</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <span  th:each="info:${list}">
+                                    <tr>
+                                        <td>
+                                            <a th:href="@{/enterprise/center/{id}(id=${info.enterpriseId})}" data-toggle="tooltip"
+                                               data-placement="bottom" title="" data-original-title="跳转到企业信息中心"> <i
+                                                    class="fa  fa-angle-double-down" style="margin-left:10px;"></i>
+                                                <span style="color:#797979">[[${info.enterpriseName}]]</span></a>
+                                        </td>
+                                        <td><p style="font-size:14px;">[[${info.enterpriseContacts}]]<span
+                                                style="font-size:14px;color:#989898;margin-left:5px">([[${info.enterpriseContactsPhone}]])</span>
+                                        </p></td>
+                                        <td><span th:if="${salesMap[info.saler] !=null}">[[${salesMap[info.saler].realName}]]</span></td>
+                                        <td>
+                                            <mpm:tag identity="enterpriseType" show-type="button" key="code" th:value="${info.enterpriseType}"
+                                                     class="DIRECTCUSTOMER,btn btn-info btn-rounded btn-sm waves-effect waves-light;CHANNELCUSTOMER,btn btn-teal btn-rounded btn-sm waves-effect waves-light;"/>
+                                        </td>
+                                        <td> <mpm:tag identity="corporation" show-type="label" key="code"
+                                                      th:value="${info.accessCorporation}"/>
+                                        </td>
+                                        <td>
+                                            <a sec:authorize-url="/account/edit/center/*"
+                                               th:href="@{/account/edit/center/enterpriseId}"
+                                               th:if="${op eq 'channel_account'}" class="btn btn-success waves-effect waves-light m-l-10 btn-sm">
+                                                <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>新建EC业务账号</a>
+                                            <a sec:authorize-url="/ec/customer/contract/add"
+                                               th:href="@{/ec/customer/contract/add}"
+                                               th:if="${op eq 'contract'}" class="btn btn-success waves-effect waves-light m-l-10 btn-sm">
+                                                <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>新建EC合同</a>
+                                            <a sec:authorize-url="/ec/customer/material/edit/center/*"
+                                               th:href="@{/ec/customer/material/edit/center/base}"
+                                               th:if="${op eq 'material'}" class="btn btn-success waves-effect waves-light m-l-10 btn-sm">
+                                                <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>新建签名资质</a>
+                                        </td>
+
+                                        <tr th:each="enterprise:${info.enterprises}">
+                                            <td>
+                                                <div style="float:left;margin-top:-12px;margin-left:13px;width:25px;height:25px;border-left:1px solid #DCDCDC;border-bottom:1px solid #DCDCDC"></div>
+                                                <a style="float:left" th:href="@{/enterprise/center/{id}(id=${enterprise.enterpriseId})}"
+                                                   data-toggle="tooltip" data-placement="bottom" title=""
+                                                   data-original-title="跳转到企业信息中心"> <span style="color:#797979">[[${enterprise.enterpriseName}]]</span></a></a>
+                                            </td>
+                                            <td><p style="font-size:14px;">[[${enterprise.enterpriseContacts}]]<span
+                                                    style="font-size:14px;color:#989898;margin-left:5px">([[${enterprise.enterpriseContactsPhone}]])</span>
+                                            </p></td>
+                                            <td><span th:if="${salesMap[info.saler] !=null}">[[${salesMap[info.saler].realName}]]</span></td>
+                                            <td>
+                                                <mpm:tag identity="enterpriseType" show-type="button" key="code" th:value="${enterprise.enterpriseType}"
+                                                         class="DIRECTCUSTOMER,btn btn-info btn-rounded btn-sm waves-effect waves-light;CHANNELCUSTOMER,btn btn-teal btn-rounded btn-sm waves-effect waves-light;"/>
+                                            </td>
+                                            <td> <mpm:tag identity="corporation" show-type="label" key="code"
+                                                          th:value="${enterprise.accessCorporation}"
+                                                          title="对接主体公司"/>
+                                            </td>
+                                            <td>
+                                                <a sec:authorize-url="/account/edit/center/*"
+                                                   th:href="@{/account/edit/center/enterpriseId}"
+                                                   th:if="${op eq 'channel_account'}" class="btn btn-success waves-effect waves-light m-l-10 btn-sm">
+                                                    <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>新建EC业务账号</a>
+                                                <a sec:authorize-url="/ec/customer/contract/add"
+                                                   th:href="@{/ec/customer/contract/add}"
+                                                   th:if="${op eq 'contract'}" class="btn btn-success waves-effect waves-light m-l-10 btn-sm">
+                                                    <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>新建EC合同</a>
+                                                <a sec:authorize-url="/ec/customer/material/edit/center/*"
+                                                   th:href="@{/ec/customer/material/edit/center/base}"
+                                                   th:if="${op eq 'material'}" class="btn btn-success waves-effect waves-light m-l-10 btn-sm">
+                                                    <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>新建签名资质</a>
+                                            </td>
+                                        </tr>
+                                    </tr>
+                                </span>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <th:block th:insert="fragments/page_fragments :: page"/>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+    </div> <!-- container -->
+
+</div> <!-- content -->
+
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<th:block th:insert="fragments/cookie_fragments :: cookie_js"/>
+<script>
+
+    /**
+     * 处理cookie
+     */
+    $(document).ready(function() {
+
+        if("none" == $.cookie("help_display_account_search")){
+           $('#help').css('display', 'none');
+        }
+
+        $('#help_display').on("click", function () {
+           if('block' == $('#help').css('display')){
+             $('#help').css('display', 'none');
+             $.cookie("help_display_account_search", 'none', {
+                expires : 180
+             });
+           }else{
+             $('#help').css('display', 'block');
+             $.cookie("help_display_account_search", 'block', {
+                expires : 180
+             });
+           }
+        });
+        $('#help_button').on("click", function () {
+           $('#help').css('display', 'none');
+           $.cookie("help_display_account_search", 'none', {
+			expires : 180
+		   });
+        });
+
+    });
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+</script>
+</body>
+</html>

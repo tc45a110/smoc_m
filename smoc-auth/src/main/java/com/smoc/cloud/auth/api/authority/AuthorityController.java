@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSON;
 import com.smoc.cloud.auth.data.provider.entity.BaseOrganization;
 import com.smoc.cloud.auth.data.provider.service.BaseOrganizationService;
 import com.smoc.cloud.auth.data.provider.service.BaseUserService;
+import com.smoc.cloud.common.auth.entity.SecurityUser;
 import com.smoc.cloud.common.auth.validator.OrgValidator;
 import com.smoc.cloud.common.auth.validator.UserPasswordValidator;
 import com.smoc.cloud.common.auth.validator.UserValidator;
@@ -19,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
+
+import java.util.List;
 
 /**
  * 组织管理接口
@@ -146,5 +149,16 @@ public class AuthorityController {
         }
 
         return baseUserService.closeUser(id,status);
+    }
+
+    /**
+     * 批量启用、注销用户
+     * @param status
+     * @return
+     */
+    @RequestMapping(value = "user/batchForbiddenUser/{status}", method = RequestMethod.POST)
+    public ResponseData batchForbiddenUser(@RequestBody List<SecurityUser> userList, @PathVariable String status) {
+
+        return baseUserService.batchForbiddenUser(userList,status);
     }
 }

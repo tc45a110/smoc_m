@@ -214,12 +214,12 @@
                                                     </label>
                                                     <div id="province_areas" style="text-align: left;display:block">
                                                         &nbsp;
-                                                        <mpm:tag id="provices" identity="provices" name="maskProvince" show-type="checkbox" key="code" class="form-control"
+                                                        <mpm:tag id="provices" identity="provices" name="maskProvince" show-type="checkbox" mask-value="ALL" key="code" class="form-control"
                                                                  th:value="${channelBasicInfoValidator.maskProvince}" title="屏蔽省份"/>
                                                     </div>
                                                     <div id="supportAreaCodes" style="text-align: left;display:none">
                                                         &nbsp;
-                                                        <mpm:tag id="province" identity="provices" name="province" show-type="checkbox" key="code" class="form-control"
+                                                        <mpm:tag id="province" identity="provices" name="province" show-type="checkbox" key="code"  mask-value="ALL" class="form-control"
                                                                  th:value="${channelBasicInfoValidator.province}" title="业务区域"/>
                                                     </div>
                                                     <div id="international_areas" style="text-align: left;display:none">
@@ -246,7 +246,7 @@
                                                              th:if="${#fields.hasErrors('channelPrice')}" th:errors="*{channelPrice}" style="font-weight: 200;font-size: 12px"></span>
                                                     </label>
                                                     <input id="fee" type="text" class="form-control" autocomplete="off"
-                                                           th:field="*{channelPrice}" min="0"   max="1" placeholder="资费">
+                                                           th:field="*{channelPrice}" min="0.0001"   max="1" placeholder="资费">
                                                 </div>
                                             </div>
                                         </div>
@@ -265,19 +265,6 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-sm-12 m-b-10">
-                                                    <label>内容限制&nbsp;<span class="text-danger"
-                                                                     th:if="${#fields.hasErrors('channelRestrictContent')}" th:errors="*{channelRestrictContent}"
-                                                                     style="font-weight: 200;font-size: 12px"></span>
-                                                    </label>
-                                                    <input type="text" class="form-control" autocomplete="off"
-                                                           th:field="*{channelRestrictContent}"  data-parsley-length="[1,128]"
-                                                           placeholder="内容限制">
-                                                </div>
-                                            </div>
-                                        </div>
 
                                     </div>
                                 </div>

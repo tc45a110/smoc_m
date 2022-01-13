@@ -5,14 +5,17 @@ import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseWebAccountInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
+import com.smoc.cloud.customer.service.EnterpriseService;
 import com.smoc.cloud.customer.service.EnterpriseWebService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
@@ -24,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
@@ -32,6 +36,9 @@ import java.util.Date;
 @Controller
 @RequestMapping("/enterprise/web")
 public class EnterpriseWebController {
+
+    @Autowired
+    private EnterpriseService enterpriseService;
 
     @Autowired
     private EnterpriseWebService enterpriseWebService;
@@ -50,6 +57,17 @@ public class EnterpriseWebController {
         ModelAndView view = new ModelAndView("customer/enterprise/enterprise_edit");
 
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        //查询企业信息
+        ResponseData<EnterpriseBasicInfoValidator> enterpriseData = enterpriseService.findById(enterpriseWebAccountInfoValidator.getEnterpriseId());
+        if (!ResponseCode.SUCCESS.getCode().equals(enterpriseData.getCode())) {
+            view.addObject("error", enterpriseData.getCode() + ":" + enterpriseData.getMessage());
+        }
+        //企业状态无效
+        if(!"1".equals(enterpriseData.getData().getEnterpriseStatus())){
+            view.addObject("error", "企业状态无效，无法进行操作！");
+            return view;
+        }
 
         String op = "add";
         if(!StringUtils.isEmpty(enterpriseWebAccountInfoValidator.getId())){
@@ -104,7 +122,7 @@ public class EnterpriseWebController {
     }
 
     /**
-     * 保存WEB登录账号
+     * 注销、启用账号
      *
      * @return
      */
@@ -129,13 +147,22 @@ public class EnterpriseWebController {
             return view;
         }
 
-
+        //查询企业信息
+        ResponseData<EnterpriseBasicInfoValidator> enterpriseData = enterpriseService.findById(data.getData().getEnterpriseId());
+        if (!ResponseCode.SUCCESS.getCode().equals(enterpriseData.getCode())) {
+            view.addObject("error", enterpriseData.getCode() + ":" + enterpriseData.getMessage());
+        }
+        //企业状态无效
+        if(!"1".equals(enterpriseData.getData().getEnterpriseStatus())){
+            view.addObject("error", "企业状态无效，无法进行操作！");
+            return view;
+        }
 
         //注销、启用账号
         ResponseData webData = enterpriseWebService.forbiddenWeb(id,status);
 
         //保存操作记录
-        if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+        if (ResponseCode.SUCCESS.getCode().equals(webData.getCode())) {
             systemUserLogService.logsAsync("ENTERPRISE_WEB", data.getData().getEnterpriseId(), user.getRealName(), "edit", "1".equals(status) ? "注销"+data.getData().getWebLoginName()+"WEB登录账号":"启用"+data.getData().getWebLoginName()+"WEB登录账号" , JSON.toJSONString(data.getData()));
         }
 

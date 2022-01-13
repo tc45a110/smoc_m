@@ -249,10 +249,7 @@ public class UserController {
 
         //如果销售码为空默认0
         if(StringUtils.isEmpty(userValidator.getBaseUserExtendsValidator().getCode())){
-            userValidator.getBaseUserExtendsValidator().setCode("0");
-        }
-        if(StringUtils.isEmpty(userValidator.getBaseUserExtendsValidator().getParentCode())){
-            userValidator.getBaseUserExtendsValidator().setParentCode("XY0000");
+            userValidator.getBaseUserExtendsValidator().setCode("0000");
         }
 
         //记录日志

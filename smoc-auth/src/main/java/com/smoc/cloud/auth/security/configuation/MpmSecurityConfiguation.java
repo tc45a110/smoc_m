@@ -100,6 +100,7 @@ public class MpmSecurityConfiguation extends WebSecurityConfigurerAdapter {
                 .antMatchers("/authority/user/save/*").permitAll()//开放的资源不用授权
                 .antMatchers("/authority/user/forbiddenUser/*/*").permitAll()//开放的资源不用授权
                 .antMatchers("/authority/user/resetPassword").permitAll()
+                .antMatchers("/authority/user/batchForbiddenUser/*").permitAll()
                 .antMatchers("/authority/user/findById/*").permitAll()
                 .antMatchers("/auth/oauth/getUser/*").permitAll()
                 .antMatchers("/oauth/getUser/*").permitAll()

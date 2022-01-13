@@ -31,11 +31,11 @@ public class EnterpriseRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", t.ACCESS_CORPORATION");
         sqlBuffer.append(", t.ENTERPRISE_CONTACTS");
         sqlBuffer.append(", t.ENTERPRISE_CONTACTS_PHONE");
-        sqlBuffer.append(", u.REAL_NAME");
+        sqlBuffer.append(", t.SALER");
         sqlBuffer.append(", t.ENTERPRISE_PROCESS");
         sqlBuffer.append(", t.ENTERPRISE_STATUS");
         sqlBuffer.append(", DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME");
-        sqlBuffer.append("  from enterprise_basic_info t left join smoc_oauth.base_user_extends u on t.SALER = u.ID ");
+        sqlBuffer.append("  from enterprise_basic_info t ");
         sqlBuffer.append("  where t.ENTERPRISE_PARENT_ID='0000' ");
 
         List<Object> paramsList = new ArrayList<Object>();
@@ -55,9 +55,9 @@ public class EnterpriseRepositoryImpl extends BasePageRepository {
             paramsList.add( "%"+qo.getEnterpriseContactsPhone().trim()+"%");
         }
 
-        if (!StringUtils.isEmpty(qo.getSalerName())) {
-            sqlBuffer.append(" and u.REAL_NAME like ?");
-            paramsList.add( "%"+qo.getSalerName().trim()+"%");
+        if (!StringUtils.isEmpty(qo.getSaler())) {
+            sqlBuffer.append(" and t.SALER =?");
+            paramsList.add( qo.getSaler().trim());
         }
 
         if (!StringUtils.isEmpty(qo.getEnterpriseType())) {
@@ -100,11 +100,11 @@ public class EnterpriseRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", t.ACCESS_CORPORATION");
         sqlBuffer.append(", t.ENTERPRISE_CONTACTS");
         sqlBuffer.append(", t.ENTERPRISE_CONTACTS_PHONE");
-        sqlBuffer.append(", u.REAL_NAME");
+        sqlBuffer.append(", t.SALER");
         sqlBuffer.append(", t.ENTERPRISE_PROCESS");
         sqlBuffer.append(", t.ENTERPRISE_STATUS");
         sqlBuffer.append(", DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME");
-        sqlBuffer.append("  from enterprise_basic_info t left join smoc_oauth.base_user_extends u on t.SALER = u.ID ");
+        sqlBuffer.append("  from enterprise_basic_info t ");
         sqlBuffer.append("  where 1=1 ");
 
         List<Object> paramsList = new ArrayList<Object>();

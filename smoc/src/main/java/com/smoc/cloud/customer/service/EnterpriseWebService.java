@@ -3,6 +3,7 @@ package com.smoc.cloud.customer.service;
 
 import com.alibaba.fastjson.JSON;
 import com.smoc.cloud.auth.service.AuthorityService;
+import com.smoc.cloud.common.auth.entity.SecurityUser;
 import com.smoc.cloud.common.auth.validator.BaseUserExtendsValidator;
 import com.smoc.cloud.common.auth.validator.BaseUserValidator;
 import com.smoc.cloud.common.auth.validator.UserPasswordValidator;
@@ -49,6 +50,7 @@ public class EnterpriseWebService {
 
     @Resource
     private AuthorityService authorityService;
+
 
     /**
      * 查询列表

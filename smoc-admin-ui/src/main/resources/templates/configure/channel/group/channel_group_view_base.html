@@ -176,7 +176,7 @@
                                                                 th:if="${not #strings.isEmpty(info.maxComplaintRate)}">[[${info.maxComplaintRate}]]/百万</span>
                                                         </p>
                                                         <p style="font-size:12px">
-                                                            通道对接销售：[[${info.channelAccessSales}]]</p>
+                                                            通道对接销售：<span th:if="${salesMap[info.channelAccessSales] !=null}">[[${salesMap[info.channelAccessSales].realName}]]</span></p>
                                                         <p style="font-size:12px">通道状态：
                                                             <mpm:tag identity="channelStatus" show-type="button"
                                                                      key="code" th:value="${info.channelStatus}"

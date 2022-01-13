@@ -93,4 +93,29 @@ public class SysUserService {
 
     }
 
+    /**
+     * 查询销售信息
+     *
+     * @return
+     */
+    public List<Users> salesList() {
+
+        try {
+            PageParams<Users> params = new PageParams<Users>();
+            params.setPageSize(100);
+            params.setCurrentPage(1);
+            Users u = new Users();
+            u.setActive(1);
+            u.setType(3);
+            params.setParams(u);
+            PageList<Users> page = sysUserFeignClient.page(params);
+            List<Users> list = page.getList();
+            return list;
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            return null;
+        }
+
+    }
+
 }
