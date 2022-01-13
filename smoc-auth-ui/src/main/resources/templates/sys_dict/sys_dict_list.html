@@ -56,7 +56,7 @@
                                 <tbody>
                                 <tr th:each="dict:${list}">
                                     <td>
-                                        [[${dict.dictName}]]
+                                        [[${dict.dictName}]] ([[${dict.dictType}]])
                                     </td>
                                     <td th:text="${dict.dictCode}"></td>
                                     <td th:text="${dict.sort}"></td>
