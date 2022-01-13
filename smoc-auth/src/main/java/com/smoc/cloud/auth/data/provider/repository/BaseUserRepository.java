@@ -59,4 +59,6 @@ public interface BaseUserRepository extends CrudRepository<BaseUser, String>, Jp
     @Modifying
     @Query(value = "update base_user set ACTIVE = :status where ID = :id",nativeQuery = true)
     void updateUserActive(@Param("id") String id, @Param("status") String status);
+
+    void batchUpdateUserActive(List<SecurityUser> userList, String status);
 }

@@ -4,8 +4,11 @@ package com.smoc.cloud.customer.repository;
 import com.smoc.cloud.common.BasePageRepository;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseWebAccountInfoValidator;
 import com.smoc.cloud.customer.rowmapper.EnterpriseWebAccountInfoRowMapper;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.util.StringUtils;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 

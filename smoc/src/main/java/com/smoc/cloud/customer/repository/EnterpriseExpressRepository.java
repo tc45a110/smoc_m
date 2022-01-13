@@ -18,4 +18,6 @@ public interface EnterpriseExpressRepository extends CrudRepository<EnterpriseEx
     Iterable<EnterpriseExpressInfo> findByEnterpriseIdAndPostContactsAndPostPhoneAndPostAddress(String enterpriseId, String postContacts, String postPhone, String postAddress);
 
     List<EnterpriseExpressInfoValidator> page(EnterpriseExpressInfoValidator enterpriseExpressInfoValidator);
+
+    List<EnterpriseExpressInfo> findByEnterpriseId(String enterpriseId);
 }

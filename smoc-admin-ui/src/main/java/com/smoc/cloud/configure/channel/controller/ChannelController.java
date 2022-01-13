@@ -34,6 +34,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * 通道管理
@@ -82,9 +84,17 @@ public class ChannelController {
             return view;
         }
 
+        //查询销售
+        List<Users> list = sysUserService.salesList();
+        Map<String, Users> salesMap = new HashMap<>();
+        if(!StringUtils.isEmpty(list) && list.size()>0){
+            salesMap = list.stream().collect(Collectors.toMap(Users::getId, Function.identity()));
+        }
+
         view.addObject("channelBasicInfoQo", channelBasicInfoQo);
         view.addObject("list", data.getData().getList());
         view.addObject("pageParams", data.getData().getPageParams());
+        view.addObject("salesMap", salesMap);
 
         return view;
     }
@@ -107,9 +117,17 @@ public class ChannelController {
             return view;
         }
 
+        //查询销售
+        List<Users> list = sysUserService.salesList();
+        Map<String, Users> salesMap = new HashMap<>();
+        if(!StringUtils.isEmpty(list) && list.size()>0){
+            salesMap = list.stream().collect(Collectors.toMap(Users::getId, Function.identity()));
+        }
+
         view.addObject("channelBasicInfoQo", channelBasicInfoQo);
         view.addObject("list", data.getData().getList());
         view.addObject("pageParams", data.getData().getPageParams());
+        view.addObject("salesMap", salesMap);
 
         return view;
     }
@@ -166,7 +184,7 @@ public class ChannelController {
         }
 
         //查询销售人员
-        view.addObject("salesList", findSalesList());
+        view.addObject("salesList", sysUserService.salesList());
 
         /**
          * id为base是添加功能
@@ -260,7 +278,7 @@ public class ChannelController {
         if ("add".equals(op) || "AREA_PRICE".equals(channelBasicInfoValidator.getPriceStyle())) {
             view.addObject("flag", "flag");
         } else {
-            view.addObject("salesList", findSalesList());
+            view.addObject("salesList", sysUserService.salesList());
         }
 
         ResponseData<ChannelBasicInfoValidator> channelValidator = channelService.findChannelById(channelBasicInfoValidator.getChannelId());
@@ -311,19 +329,6 @@ public class ChannelController {
         }
 
         return result;
-    }
-
-    //查询销售人员
-    private List<Users> findSalesList() {
-        PageParams<Users> params = new PageParams<Users>();
-        params.setPageSize(100);
-        params.setCurrentPage(1);
-        Users u = new Users();
-        u.setActive(1);
-        u.setType(3);
-        params.setParams(u);
-        PageList<Users> list = sysUserService.page(params);
-        return list.getList();
     }
 
     /**

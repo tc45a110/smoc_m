@@ -43,6 +43,5 @@ public class EnterpriseBasicInfoValidator {
     private String updatedBy;
     private Date updatedTime;
 
-    private String salerName;
     private List<EnterpriseBasicInfoValidator> enterprises = new ArrayList<>();
 }

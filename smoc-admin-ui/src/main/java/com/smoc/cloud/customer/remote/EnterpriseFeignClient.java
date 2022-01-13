@@ -40,5 +40,12 @@ public interface EnterpriseFeignClient {
     @RequestMapping(value = "/enterprise/save/{op}", method = RequestMethod.POST)
     ResponseData save(@RequestBody EnterpriseBasicInfoValidator enterpriseBasicInfoValidator, @PathVariable String op) throws Exception;
 
-
+    /**
+     * 注销、启用企业业务
+     * @param id
+     * @param status
+     * @return
+     */
+    @RequestMapping(value = "/enterprise/forbiddenEnterprise/{id}/{status}", method = RequestMethod.GET)
+    ResponseData forbiddenEnterprise(@PathVariable String id, @PathVariable String status) throws Exception;
 }

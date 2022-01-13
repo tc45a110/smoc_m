@@ -70,6 +70,19 @@ public class EnterpriseService {
         }
     }
 
-
-
+    /**
+     * 注销、启用企业业务
+     * @param id
+     * @param status
+     * @return
+     */
+    public ResponseData forbiddenEnterprise(String id, String status) {
+        try {
+            ResponseData data = this.enterpriseFeignClient.forbiddenEnterprise(id, status);
+            return data;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
 }

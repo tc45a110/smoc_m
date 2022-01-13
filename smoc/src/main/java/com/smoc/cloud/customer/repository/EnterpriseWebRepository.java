@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -22,5 +23,10 @@ public interface EnterpriseWebRepository extends CrudRepository<EnterpriseWebAcc
 
     @Modifying
     @Query(value = "update enterprise_web_account_info set ACCOUNT_STATUS = :status where ID = :id",nativeQuery = true)
-    void updateAccountStatus(String id, String status);
+    void updateAccountStatus(@Param("id") String id, @Param("status") String status);
+
+    //注销、启用WEB账号状态
+    @Modifying
+    @Query(value = "update enterprise_web_account_info set ACCOUNT_STATUS = :status where ENTERPRISE_ID = :enterpriseId",nativeQuery = true)
+    void batchWebAccountStatusByentErpriseId(@Param("enterpriseId") String enterpriseId, @Param("status") String status);
 }

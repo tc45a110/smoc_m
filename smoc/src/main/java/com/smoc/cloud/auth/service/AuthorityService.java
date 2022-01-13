@@ -1,6 +1,7 @@
 package com.smoc.cloud.auth.service;
 
 import com.smoc.cloud.auth.remote.AuthorityFeignClient;
+import com.smoc.cloud.common.auth.entity.SecurityUser;
 import com.smoc.cloud.common.auth.validator.OrgValidator;
 import com.smoc.cloud.common.auth.validator.UserPasswordValidator;
 import com.smoc.cloud.common.auth.validator.UserValidator;
@@ -9,6 +10,8 @@ import com.smoc.cloud.common.response.ResponseDataUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * 系统管理服务
@@ -91,6 +94,21 @@ public class AuthorityService {
 
         try {
             ResponseData responseData = this.authorityFeignClient.forbiddenUser(id,status);
+            return responseData;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 批量注销、启用用户
+     * @param userList
+     * @param status
+     */
+    public ResponseData batchForbiddenUser(List<SecurityUser> userList, String status) {
+        try {
+            ResponseData responseData = this.authorityFeignClient.batchForbiddenUser(userList,status);
             return responseData;
         } catch (Exception e) {
             log.error(e.getMessage());

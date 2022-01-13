@@ -56,8 +56,12 @@
                                            placeholder="联系方式" autocomplete="off">
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <input type="text" class="form-control" th:field="*{salerName}"
-                                           placeholder="销售人员" autocomplete="off">
+                                    <select name="saler" data-style="btn-default"
+                                            class="selectpicker  form-control" tabindex="-98">
+                                        <option data-icon="mdi mdi-account" value="">--请选择销售人员--</option>
+                                        <option data-icon="mdi mdi-account" th:each="sales:${salesList}"
+                                                th:selected="${enterpriseBasicInfoValidator.saler eq sales.id}" th:value="${sales.id}">[[${sales.realName}]]</option>
+                                    </select>
                                 </div>
                                 <div class="form-group  col-sm-3">
                                     <mpm:tag id="enterpriseType" identity="enterpriseType" show-type="select" key="code"
@@ -139,7 +143,7 @@
                                         <td><p style="font-size:14px;">[[${info.enterpriseContacts}]]<span
                                                 style="font-size:14px;color:#989898;margin-left:5px">([[${info.enterpriseContactsPhone}]])</span>
                                         </p></td>
-                                        <td>[[${info.salerName}]]</td>
+                                        <td><span th:if="${salesMap[info.saler] !=null}">[[${salesMap[info.saler].realName}]]</span></td>
                                         <td>
                                             <mpm:tag identity="enterpriseType" show-type="button" key="code" th:value="${info.enterpriseType}"
                                                      class="DIRECTCUSTOMER,btn btn-info btn-rounded btn-sm waves-effect waves-light;CHANNELCUSTOMER,btn btn-teal btn-rounded btn-sm waves-effect waves-light;"/>
@@ -211,7 +215,7 @@
                                             <td><p style="font-size:14px;">[[${enterprise.enterpriseContacts}]]<span
                                                     style="font-size:14px;color:#989898;margin-left:5px">([[${enterprise.enterpriseContactsPhone}]])</span>
                                             </p></td>
-                                            <td>[[${enterprise.salerName}]]</td>
+                                            <td><span th:if="${salesMap[info.saler] !=null}">[[${salesMap[info.saler].realName}]]</span></td>
                                         <td>
                                             <mpm:tag identity="enterpriseType" show-type="button" key="code" th:value="${enterprise.enterpriseType}"
                                                      class="DIRECTCUSTOMER,btn btn-info btn-rounded btn-sm waves-effect waves-light;CHANNELCUSTOMER,btn btn-teal btn-rounded btn-sm waves-effect waves-light;"/>
@@ -296,6 +300,7 @@
      * 处理cookie
      */
     $(document).ready(function () {
+
 
         if ("none" == $.cookie("help_display_customer_list")) {
             $('#help').css('display', 'none');

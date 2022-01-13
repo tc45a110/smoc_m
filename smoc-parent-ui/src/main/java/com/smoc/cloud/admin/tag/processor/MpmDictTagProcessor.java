@@ -79,10 +79,11 @@ public class MpmDictTagProcessor extends AbstractAttributeTagProcessor {
 
     private static final String STYLE = "style";
 
+    //屏蔽数值
+    private static final String MASKVALUE = "mask-value";
+
     //字典数据
-    private List<Dict> dictList = new ArrayList<>();
-
-
+    List<Dict> dictList = new ArrayList<>();
 
     /*templateMode: 模板模式，这里使用HTML模板。
      dialectPrefix: 标签前缀。即xxx:text中的xxx。在此例子中prefix为mpm。
@@ -108,7 +109,6 @@ public class MpmDictTagProcessor extends AbstractAttributeTagProcessor {
     //这里处理标签的逻辑
     @Override
     protected void doProcess(ITemplateContext iTemplateContext, IProcessableElementTag iProcessableElementTag, AttributeName attributeName, String s, IElementTagStructureHandler iElementTagStructureHandler) {
-
 
         //获取标签属性
         Map<String, String> attributeMap = iProcessableElementTag.getAttributeMap();
@@ -332,7 +332,15 @@ public class MpmDictTagProcessor extends AbstractAttributeTagProcessor {
         model.add(modelFactory.createText(HtmlEscape.escapeHtml5("--请选择" + title + "--")));
         model.add(modelFactory.createCloseElementTag("option"));
 
+        String mvalue = attributeMap.get(MASKVALUE);
+
         for (Dict dict : dictList) {
+
+            if(!StringUtils.isEmpty(mvalue) && mvalue.equals(dict.getFieldCode())){
+                continue;
+            }
+
+
             Map<String, String> attriOption = new HashMap<String, String>();
             if (status) {
                 attriOption.put("data-icon", dataIcon);
@@ -411,8 +419,14 @@ public class MpmDictTagProcessor extends AbstractAttributeTagProcessor {
             attri.put("class", "checkbox checkbox-info checkbox-inline " );
         }
 
+        //查询屏蔽数值是否有值
+        String mvalue = attributeMap.get(MASKVALUE);
 
         for (Dict dict : dictList) {
+
+            if(!StringUtils.isEmpty(mvalue) && mvalue.equals(dict.getFieldCode())){
+                continue;
+            }
 
             //start div
             model.add(modelFactory.createOpenElementTag("div", attri, null, false));

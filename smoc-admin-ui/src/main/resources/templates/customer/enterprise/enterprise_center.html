@@ -6,6 +6,8 @@
     <th:block th:insert="fragments/common_fragments :: common_header"/>
     <th:block th:insert="fragments/common_fragments :: common_css"/>
     <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
+    <!-- Tooltipster css -->
+    <link rel="stylesheet" th:href="@{/static/plugins/tooltipster/tooltipster.bundle.min.css}">
 </head>
 <body>
 <!-- Loader start 页面加载进度-->
@@ -96,9 +98,11 @@
                                            th:href="@{/enterprise/edit/1/{id}(id=${enterpriseBasicInfoValidator.enterpriseId})}"
                                            class="btn btn-info waves-effect waves-light m-l-10 btn-sm">
                                             <i class="mdi mdi-table-edit" style="margin-right:5px"></i>编辑企业</a>
-                                        <a data-toggle="modal" data-target="#confirm-modal"
-                                           class="btn btn-danger waves-effect waves-light m-l-10 btn-sm">
-                                            <i class="mdi mdi-delete" style="margin-right:5px"></i>注销企业</a>
+                                        <a data-toggle="modal" data-target="#enterprise-forbiden"
+                                           th:class="${enterpriseBasicInfoValidator.enterpriseStatus =='1'?'btn btn-danger waves-effect waves-light m-l-10 btn-sm':'btn btn-inverse waves-effect waves-light m-l-10 btn-sm'}"
+                                           sec:authorize-url="/enterprise/forbiddenEnterprise/*/*"
+                                           th:onclick="confirmforbbenEnterprise([[${enterpriseBasicInfoValidator.enterpriseId}]],[[${enterpriseBasicInfoValidator.enterpriseStatus}]],this)">
+                                            <i class="mdi mdi-delete" style="margin-right:5px"></i>[[${enterpriseBasicInfoValidator.enterpriseStatus =='1'?'注销企业':'启用'}]]</a>
                                     </div>
                                 </div>
                             </div> <!-- end card-box -->
@@ -477,9 +481,9 @@
                                                                                             <i class="fa fa-copy"
                                                                                                id="commonCopy"
                                                                                                data-clipboard-target="#commonDiv"
-                                                                                               th:onclick="invoiceCopy('commonCopy','1')"
-                                                                                               style="margin-right:5px;color:#4CD396"
-                                                                                               title="复制普通发票信息"></i>
+                                                                                               onclick="invoiceCopy('commonCopy','1')"
+                                                                                               data-toggle="tooltip" data-placement="left"
+                                                                                               style="margin-right:5px;color:#4CD396"></i>
                                                                                         </div>
                                                                                     </h5>
                                                                                 </div>
@@ -563,9 +567,9 @@
                                                                                             <i class="fa  fa-copy"
                                                                                                id="specialCopy"
                                                                                                data-clipboard-target="#specialDiv"
-                                                                                               th:onclick="invoiceCopy('specialCopy','2')"
-                                                                                               style="margin-right:5px;color:#4CD396"
-                                                                                               title="复制增值税发票信息"></i>
+                                                                                               onclick="invoiceCopy('specialCopy','2')"
+                                                                                               style="margin-right:5px;color:#4CD396" data-toggle="tooltip"
+                                                                                               data-placement="left"></i>
                                                                                         </div>
                                                                                     </h5>
                                                                                 </div>
@@ -715,6 +719,32 @@
         </div>
         <!-- End row -->
 
+        <!-- start confirm user-forbiden modal  -->
+        <div id="enterprise-forbiden" class="modal fade" tabindex="-1" role="dialog"
+             aria-labelledby="custom-width-modalLabel" aria-hidden="true" style="display: none;margin-top: 80px">
+            <div class="modal-dialog" style="width:33%;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">注销、启用企业</h4>
+                    </div>
+                    <div class="modal-body">
+                        <h4>注意：</h4>
+                        <p id="enterprise-tip">企业被注销后所有的业务、WEB登录账号将无法登陆及操作！</p>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" id="enterprise">
+                        <input type="hidden" id="enterpriseActive">
+                        <button type="button" id="forbbenEnterpriseButton" sec:authorize-url="/enterprise/forbiddenEnterprise/*/*"
+                                onclick="forbbenEnterprise()" class="btn btn-danger waves-effect waves-light">确定注销
+                        </button>
+                        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end confirm user-forbiden modal  -->
+
         <!-- start confirm add-user modal  -->
         <div id="confirm-add-user-modal" class="modal fade" tabindex="-1" role="dialog"
              aria-labelledby="custom-width-modalLabel"
@@ -780,8 +810,8 @@
                     <div class="modal-footer">
                         <input type="hidden" id="forbiddenId">
                         <input type="hidden" id="active">
-                        <button type="button" id="forbbenButton" onclick="forbbenUser()"
-                                class="btn btn-danger waves-effect waves-light">确定注销
+                        <button type="button" id="forbbenButton" sec:authorize-url="/enterprise/web/forbiddenWeb/*/*"
+                                onclick="forbbenUser()" class="btn btn-danger waves-effect waves-light">确定注销
                         </button>
                         <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">关闭</button>
                     </div>
@@ -1006,30 +1036,32 @@
 <th:block th:insert="fragments/login_fragments :: login_js"/>
 <th:block th:insert="fragments/common_fragments :: common_submit_form"/>
 <script th:src="@{/static/js/clipboard.min.js}"></script>
-
+<!-- Tooltipster js -->
+<script th:src="@{/static/plugins/tooltipster/tooltipster.bundle.min.js}"></script>
 <script>
-    /*var commonCopy = document.getElementById("commonCopy");
-    var specialCopy = document.getElementById("specialCopy");
 
     //复制发票信息
-    if(commonCopy !=null){
-        new ClipboardJS(commonCopy);
-    }
-    if(specialCopy !=null){
-        new ClipboardJS(specialCopy);
-    }*/
-
     function invoiceCopy(data,type){
         var invoiceCopy = document.getElementById(data);
         if(invoiceCopy !=null){
-            new ClipboardJS(invoiceCopy);
+            var clipboard =  new ClipboardJS(invoiceCopy);
+            clipboard.on('success', function(e) {
+                $('#commonCopy').tooltipster({
+                    content: "复制成功",
+                });
+            });
+            invoiceCopy.click();
+            clipboard.destroy();
         }
     }
 
+    //复制邮寄信息
     function expressCopy(id){
         var expressCopy = document.getElementById("expressCopy"+id);
         if(expressCopy !=null){
-            new ClipboardJS(expressCopy);
+            var clipboard = new ClipboardJS(expressCopy);
+            expressCopy.click();
+            clipboard.destroy();
         }
     }
 
@@ -1109,7 +1141,28 @@
         }
     }
 
-    //确认注销
+    //确认注销企业
+    function confirmforbbenEnterprise(id, active) {
+        $("#enterprise").val(id);
+        $("#enterpriseActive").val(active);
+        if (0 == active) {
+            document.getElementById("enterprise-tip").innerText = "企业启用后所有的业务、WEB登录账号可以进行登录及操作！";
+            document.getElementById("forbbenEnterpriseButton").setAttribute("class", "btn btn-info waves-effect waves-light");
+            document.getElementById("forbbenEnterpriseButton").innerText = "确定启用";
+        } else {
+            document.getElementById("enterprise-tip").innerText = "企业被注销后所有的业务、WEB登录账号将无法登陆及操作！";
+            document.getElementById("forbbenEnterpriseButton").setAttribute("class", "btn btn-danger waves-effect waves-light");
+            document.getElementById("forbbenEnterpriseButton").innerText = "确定注销";
+        }
+    }
+
+    function forbbenEnterprise() {
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $('#preloader').css('display', 'block');
+        location.href = contextPath + '/enterprise/forbiddenEnterprise/' + $("#enterprise").val() + "/" + $("#enterpriseActive").val();
+    }
+
+    //确认注销WEB登录账号
     function confirmForbidden(id, active) {
         $("#forbiddenId").val(id);
         $("#active").val(active);

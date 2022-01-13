@@ -394,7 +394,31 @@ public class BaseUserService {
         baseUserRepository.updateUserActive(user.getId(),status);
 
         //redis里帐号删除，登录会重新查数据
-        redisTemplate.delete(RedisConstant.AUTH_USERS_PREFIX + ":" + user.getUserName());
+        if("0".equals(status)){
+            redisTemplate.delete(RedisConstant.AUTH_USERS_PREFIX + ":" + user.getUserName());
+        }
+
+        //记录日志
+        log.info("[用户管理][forbidden]数据:{}",JSON.toJSONString(user));
+
+        return ResponseDataUtil.buildSuccess();
+    }
+
+    public ResponseData batchForbiddenUser(List<SecurityUser> userList, String status) {
+
+        if(!StringUtils.isEmpty(userList) && userList.size()>0){
+            baseUserRepository.batchUpdateUserActive(userList,status);
+
+            //redis里帐号删除，登录会重新查数据
+            if("0".equals(status)){
+                for(SecurityUser user:userList){
+                    redisTemplate.delete(RedisConstant.AUTH_USERS_PREFIX + ":" + user.getUserName());
+                }
+            }
+            //记录日志
+            log.info("[用户管理][batchForbidden]数据:{}",JSON.toJSONString(userList));
+        }
+
         return ResponseDataUtil.buildSuccess();
     }
 }

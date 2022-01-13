@@ -9,9 +9,13 @@ import com.smoc.cloud.common.auth.entity.SecurityUser;
 import com.smoc.cloud.common.auth.qo.Users;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
+import com.smoc.cloud.common.smoc.customer.validator.EnterpriseWebAccountInfoValidator;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.util.StringUtils;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -178,4 +182,19 @@ public class BaseUserRepositoryImpl extends BasePageRepository {
         jdbcTemplate.update(sql);
     }
 
+    public void batchUpdateUserActive(List<SecurityUser> userList, String status) {
+        final String sql = "update base_user set ACTIVE = ? where ID = ? ";
+
+        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+            public int getBatchSize() {
+                return userList.size();
+            }
+
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                SecurityUser module = userList.get(i);
+                ps.setString(1, status);
+                ps.setString(2, module.getId());
+            }
+        });
+    }
 }
