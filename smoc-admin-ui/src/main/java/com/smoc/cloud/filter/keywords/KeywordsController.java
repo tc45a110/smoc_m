@@ -10,11 +10,11 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * 关键字管理
+ * 关键词管理
  **/
 @Controller
 @RequestMapping("/filter/keywords")
-public class KeyWordsController {
+public class KeywordsController {
 
 
     /**
@@ -149,4 +149,8 @@ public class KeyWordsController {
         return view;
 
     }
+
+
+
+
 }
