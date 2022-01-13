@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <link th:href="@{/static/plugins/bootstrap-treeview/bootstrap-treeview.min.css}" rel="stylesheet"
+          type="text/css"/>
+</head>
+<body>
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">分类关键词</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            过滤管理
+                        </li>
+                        <li class="active">
+                            分类关键词
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-xs-12">
+                <div class="mails">
+                    <div class="table-box">
+                        <div class="table-detail col-md-3" style="background-color: #FFFFFF">
+                            <div class="row">
+                                <div class="p-20" style="min-width: 300px;">
+                                    <div class="list-group mail-list  m-t-20">
+                                        <div id="group_tree" ></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-detail mail-right col-md-9">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <iframe sec:authorize-url="/filter/keywords/classify/*/list/*" name="group" id="groupFrame"
+                                            th:src="@{/filter/keywords/classify/CARRIER/list/CMCC}"
+                                            style="padding: 0px; width: 100%;margin-bottom: 10px"
+                                            scrolling="yes" onload="changeFrameHeight()"
+                                            frameborder="0"></iframe>
+                                </div>
+                            </div>
+                        </div> <!-- table detail -->
+                    </div>
+                    <!-- end table box -->
+                </div> <!-- mails -->
+            </div>
+        </div>
+        <!-- end row -->
+
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+
+    </div> <!-- container -->
+
+</div> <!-- content -->
+
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<!-- start menus js -->
+<script th:src="@{/static/plugins/bootstrap-treeview/bootstrap-treeview.min.js}"></script>
+<script>
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+
+        $(function () {
+            $('#group_tree').treeview({
+                data: loadData('[[${parentId}]]'),//节点数据
+                expanded: false,//初始是否展开
+                levels: 4,//初始显示层数
+                icon: "glyphicon glyphicon-stop",
+                color: "#4c4c4c",
+                backColor: "#3ac9d6",
+                selectedColor: "#3ac9d6",
+                iconBackground: "#4c4c4c",
+                lazyLoad: loadSubData,
+                onNodeSelected: function (event, data) {
+                  if("leaf"==data.svcType){
+                      window.frames[0].location.href = contextPath + "/filter/keywords/classify/"+data.orgCode+"/list/"+data.id ;
+                  }
+                }
+            });
+        });
+
+        function loadData(id) {
+
+            var treeData = {};
+            $.ajax({
+                url: contextPath + "/filter/keywords/tree/" + id,
+                type: "get",
+                contentType: "application/json",
+                timeout: 30000, //超时时间：30秒
+                async: false,
+                dataType: "text",
+                success: function (data) {
+                    treeData = data;
+                }, error: function (data) {
+                    console.log("error");
+                }
+            });
+            return treeData;
+        }
+
+        function loadSubData(node, func) {//这个技巧真高，即能得到节点数据，又能把节点下级的数据通过函数发回去
+            var subData = loadData(node.id);
+            var array = JSON.parse(subData);
+            $('#group_tree').treeview('addNode', [array, node, 1, {silent: true}]);
+        }
+
+        function changeFrameHeight() {
+            var ifm = document.getElementById("groupFrame");
+            ifm.height = document.documentElement.clientHeight;
+        }
+
+        window.onresize = function () {
+            changeFrameHeight();
+        }
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+</script>
+</body>
+</html>
