@@ -49,4 +49,9 @@ public class ParameterExtendSystemParamValueService {
         log.info("[系统参数扩展字段][批量保存]数据:{}", JSON.toJSONString(list));
         return ResponseDataUtil.buildSuccess();
     }
+
+    public ResponseData findByBusinessTypeAndBusinessIdAndParamKey(String businessType, String businessId, String paramKey) {
+        ParameterExtendSystemParamValue data = parameterExtendSystemParamValueRepository.findByBusinessTypeAndBusinessIdAndParamKey(businessType, businessId, paramKey);
+        return ResponseDataUtil.buildSuccess(data);
+    }
 }

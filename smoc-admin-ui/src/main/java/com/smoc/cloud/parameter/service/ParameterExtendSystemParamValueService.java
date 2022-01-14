@@ -69,4 +69,22 @@ public class ParameterExtendSystemParamValueService {
             return ResponseDataUtil.buildError(e.getMessage());
         }
     }
+
+    /**
+     * 系统配置参数扩展 查看单个参数
+     *
+     * @param businessType 参数类型
+     * @param businessId   业务ID
+     * @param paramKey     参数Key
+     * @return
+     */
+    public ResponseData<ParameterExtendSystemParamValueValidator> findByBusinessTypeAndBusinessIdAndParamKey(String businessType, String businessId, String paramKey) {
+        try {
+            ResponseData<ParameterExtendSystemParamValueValidator> data = this.parameterExtendSystemParamValueFeignClient.findByBusinessTypeAndBusinessIdAndParamKey(businessType,businessId,paramKey);
+            return data;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
 }

@@ -102,7 +102,8 @@
                                            th:class="${enterpriseBasicInfoValidator.enterpriseStatus =='1'?'btn btn-danger waves-effect waves-light m-l-10 btn-sm':'btn btn-inverse waves-effect waves-light m-l-10 btn-sm'}"
                                            sec:authorize-url="/enterprise/forbiddenEnterprise/*/*"
                                            th:onclick="confirmforbbenEnterprise([[${enterpriseBasicInfoValidator.enterpriseId}]],[[${enterpriseBasicInfoValidator.enterpriseStatus}]],this)">
-                                            <i class="mdi mdi-delete" style="margin-right:5px"></i>[[${enterpriseBasicInfoValidator.enterpriseStatus =='1'?'注销企业':'启用'}]]</a>
+                                            <i class="mdi mdi-delete" style="margin-right:5px"></i>[[${enterpriseBasicInfoValidator.enterpriseStatus
+                                            =='1'?'注销企业':'启用'}]]</a>
                                     </div>
                                 </div>
                             </div> <!-- end card-box -->
@@ -354,11 +355,14 @@
                                                                     <div class="col-sm-12">
                                                                         <div class="property-content"
                                                                              style="height:206px">
-                                                                            <div class="listingInfo" th:id="${'expressDiv'+express.id}">
+                                                                            <div class="listingInfo"
+                                                                                 th:id="${'expressDiv'+express.id}">
                                                                                 <div class="">
                                                                                     <h5 style="padding-left:10px">
                                                                                         联系方式：[[${express.postPhone}]]
                                                                                         <div class="pull-right">
+                                                                                            <span style="display:none" class="btn btn-inverse waves-effect waves-light m-l-10 btn-xs"
+                                                                                                  th:id="${'copyId'+express.id}">已复制到剪贴板</span>
                                                                                             <i class="fa  fa-copy"
                                                                                                th:id="${'expressCopy'+express.id}"
                                                                                                th:data-clipboard-target="${'#expressDiv'+express.id}"
@@ -478,11 +482,14 @@
                                                                                     <h5 style="padding-left:10px">
                                                                                         增值税普通发票
                                                                                         <div class="pull-right">
+                                                                                            <span style="display:none" class="btn btn-inverse waves-effect waves-light m-l-10 btn-xs"
+                                                                                                  th:id="${'copyCommonId'}">已复制到剪贴板</span>
                                                                                             <i class="fa fa-copy"
                                                                                                id="commonCopy"
                                                                                                data-clipboard-target="#commonDiv"
                                                                                                onclick="invoiceCopy('commonCopy','1')"
-                                                                                               data-toggle="tooltip" data-placement="left"
+                                                                                               data-toggle="tooltip"
+                                                                                               data-placement="left"
                                                                                                style="margin-right:5px;color:#4CD396"></i>
                                                                                         </div>
                                                                                     </h5>
@@ -564,11 +571,14 @@
                                                                                     <h5 style="padding-left:10px">
                                                                                         增值税专用发票
                                                                                         <div class="pull-right">
+                                                                                            <span style="display:none" class="btn btn-inverse waves-effect waves-light m-l-10 btn-xs"
+                                                                                                  th:id="${'copySpecialId'}">已复制到剪贴板</span>
                                                                                             <i class="fa  fa-copy"
                                                                                                id="specialCopy"
                                                                                                data-clipboard-target="#specialDiv"
                                                                                                onclick="invoiceCopy('specialCopy','2')"
-                                                                                               style="margin-right:5px;color:#4CD396" data-toggle="tooltip"
+                                                                                               style="margin-right:5px;color:#4CD396"
+                                                                                               data-toggle="tooltip"
                                                                                                data-placement="left"></i>
                                                                                         </div>
                                                                                     </h5>
@@ -735,7 +745,8 @@
                     <div class="modal-footer">
                         <input type="hidden" id="enterprise">
                         <input type="hidden" id="enterpriseActive">
-                        <button type="button" id="forbbenEnterpriseButton" sec:authorize-url="/enterprise/forbiddenEnterprise/*/*"
+                        <button type="button" id="forbbenEnterpriseButton"
+                                sec:authorize-url="/enterprise/forbiddenEnterprise/*/*"
                                 onclick="forbbenEnterprise()" class="btn btn-danger waves-effect waves-light">确定注销
                         </button>
                         <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">关闭</button>
@@ -942,13 +953,15 @@
                             <div class="col-md-12">
                                 <div class="col-md-6 form-group">
                                     <label>发票抬头<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="specialInvoiceTitle" type="text" class="form-control" th:field="*{invoiceTitle}"
+                                    <input id="specialInvoiceTitle" type="text" class="form-control"
+                                           th:field="*{invoiceTitle}"
                                            required="" data-parsley-length="[4,60]" autocomplete="off"
                                            placeholder="发票抬头">
                                 </div>
                                 <div class="col-md-6 form-group">
                                     <label>纳税人税号<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="specialTaxPayerNumber" type="text" class="form-control" th:field="*{taxPayerNumber}"
+                                    <input id="specialTaxPayerNumber" type="text" class="form-control"
+                                           th:field="*{taxPayerNumber}"
                                            required="" data-parsley-length="[15,25]" autocomplete="off"
                                            placeholder="纳税人税号">
                                 </div>
@@ -978,7 +991,8 @@
                                 </div>
                                 <div class="col-md-12 form-group">
                                     <label>备注&nbsp;</label>
-                                    <input id="specialInvoiceMark"type="text" class="form-control" th:field="*{invoiceMark}"
+                                    <input id="specialInvoiceMark" type="text" class="form-control"
+                                           th:field="*{invoiceMark}"
                                            data-parsley-length="[1,128]" autocomplete="off"
                                            placeholder="备注">
                                 </div>
@@ -1038,34 +1052,7 @@
 <script th:src="@{/static/js/clipboard.min.js}"></script>
 <!-- Tooltipster js -->
 <script th:src="@{/static/plugins/tooltipster/tooltipster.bundle.min.js}"></script>
-<script>
 
-    //复制发票信息
-    function invoiceCopy(data,type){
-        var invoiceCopy = document.getElementById(data);
-        if(invoiceCopy !=null){
-            var clipboard =  new ClipboardJS(invoiceCopy);
-            clipboard.on('success', function(e) {
-                $('#commonCopy').tooltipster({
-                    content: "复制成功",
-                });
-            });
-            invoiceCopy.click();
-            clipboard.destroy();
-        }
-    }
-
-    //复制邮寄信息
-    function expressCopy(id){
-        var expressCopy = document.getElementById("expressCopy"+id);
-        if(expressCopy !=null){
-            var clipboard = new ClipboardJS(expressCopy);
-            expressCopy.click();
-            clipboard.destroy();
-        }
-    }
-
-</script>
 <script>
 
     //打开密码框
@@ -1122,7 +1109,7 @@
         $("#specialInvoiceMark").val(invoiceMark);
     }
 
-    function confirmDelete(id,deleteType) {
+    function confirmDelete(id, deleteType) {
         $("#deleteId").val(id);
         $("#deleteType").val(deleteType);
     }
@@ -1132,10 +1119,10 @@
         var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
         $('#preloader').css('display', 'block');
         var deleteType = $("#deleteType").val()
-        if("1" == deleteType){
+        if ("1" == deleteType) {
             //删除邮寄信息
             location.href = contextPath + '/enterprise/express/deleteById/' + $("#deleteId").val();
-        }else if("2" == deleteType){
+        } else if ("2" == deleteType) {
             //删除发票信息
             location.href = contextPath + '/enterprise/invoice/deleteById/' + $("#deleteId").val();
         }
@@ -1181,6 +1168,47 @@
         var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
         $('#preloader').css('display', 'block');
         location.href = contextPath + '/enterprise/web/forbiddenWeb/' + $("#forbiddenId").val() + "/" + $("#active").val();
+    }
+
+</script>
+
+<script>
+
+    //复制发票信息
+    function invoiceCopy(data, type) {
+        var invoiceCopy = document.getElementById(data);
+        if (invoiceCopy != null) {
+            var clipboard = new ClipboardJS(invoiceCopy);
+            invoiceCopy.click();
+            clipboard.destroy();
+            if("1"== type){
+                document.getElementById("copyCommonId").style.display="";
+                setTimeout(function(){
+                    document.getElementById("copyCommonId").style.display="none";
+                },1000);
+            }
+            if("2"== type){
+                document.getElementById("copySpecialId").style.display="";
+                setTimeout(function(){
+                    document.getElementById("copySpecialId").style.display="none";
+                },1000);
+            }
+
+        }
+    }
+
+    //复制邮寄信息
+    function expressCopy(id) {
+        var expressCopy = document.getElementById("expressCopy" + id);
+        if (expressCopy != null) {
+            var clipboard = new ClipboardJS(expressCopy);
+            expressCopy.click();
+            clipboard.destroy();
+            document.getElementById("copyId"+id).style.display="";
+            setTimeout(function(){
+                document.getElementById("copyId"+id).style.display="none";
+            },1000);
+        }
     }
 
 </script>

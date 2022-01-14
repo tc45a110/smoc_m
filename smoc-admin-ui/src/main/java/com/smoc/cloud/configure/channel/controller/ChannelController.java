@@ -246,9 +246,9 @@ public class ChannelController {
 
         //初始化其他变量
         if (!StringUtils.isEmpty(op) && "add".equals(op)) {
-            //生成通道ID:根据业务类型查询序列
-            Integer seq = sequenceService.findSequence(channelBasicInfoValidator.getBusinessType());
-            channelBasicInfoValidator.setChannelId("CHID" + seq);
+            //封装通道ID前缀
+            String prefixId = sequenceService.getPrefixId("CHANNEL",channelBasicInfoValidator.getBusinessType(),channelBasicInfoValidator.getCarrier());
+            channelBasicInfoValidator.setChannelId(prefixId);
             channelBasicInfoValidator.setCreatedTime(DateTimeUtils.getDateTimeFormat(new Date()));
             channelBasicInfoValidator.setCreatedBy(user.getRealName());
         } else if (!StringUtils.isEmpty(op) && "edit".equals(op)) {

@@ -35,4 +35,15 @@ public interface ParameterExtendSystemParamValueFeignClient {
      */
     @RequestMapping(value = "/parameter/system/save/{businessId}", method = RequestMethod.POST)
     ResponseData save(@RequestBody List<ParameterExtendSystemParamValueValidator> list, @PathVariable String businessId) throws Exception;
+
+    /**
+     * 系统配置参数扩展 查看单个参数
+     *
+     * @param businessType 参数类型
+     * @param businessId   业务ID
+     * @param paramKey     参数Key
+     * @return
+     */
+    @RequestMapping(value = "/parameter/system/findByBusinessTypeAndBusinessIdAndParamKey/{businessType}/{businessId}/{paramKey}", method = RequestMethod.GET)
+    ResponseData<ParameterExtendSystemParamValueValidator> findByBusinessTypeAndBusinessIdAndParamKey(@PathVariable String businessType, @PathVariable String businessId, @PathVariable String paramKey);
 }

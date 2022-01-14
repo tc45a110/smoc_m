@@ -113,6 +113,7 @@
                                                         </h5>
                                                     </div>
                                                     <div class="col-sm-4">
+                                                        <p style="font-size:12px">通道组ID：[[${info.channelGroupId}]] </p>
                                                         <p style="font-size:12px">运营商：
                                                             <mpm:tag identity="carrier" show-type="button" key="code"
                                                                      th:value="${info.carrier}"
@@ -126,14 +127,6 @@
                                                                th:onmouseover="channelGroupTip([[${info.channelGroupId}]])"
                                                                th:if="${info.channelNum ne 0}"
                                                                class="mdi mdi-comment-text" style="margin-left:5px"></i>
-                                                        </p>
-                                                        <p style="font-size:12px">通道组信息过滤：
-                                                            <i data-toggle="tooltip"
-                                                               data-placement="right"
-                                                               th:id="'paramtip'+${info.channelGroupId}"
-                                                               th:onmouseover="businessParamTip([[${info.channelGroupId}]])"
-                                                               class="mdi mdi-filter-outline"
-                                                               style="margin-left:5px"></i>
                                                         </p>
 
                                                     </div>
@@ -154,6 +147,15 @@
                                                                th:onmouseover="maskProvince([[${info.channelGroupId}]])"
                                                                style="margin-left:5px"></i>
                                                         </p>
+                                                        <p style="font-size:12px">通道组信息过滤：
+                                                            <i data-toggle="tooltip"
+                                                               data-placement="right"
+                                                               th:id="'paramtip'+${info.channelGroupId}"
+                                                               th:onmouseover="businessParamTip([[${info.channelGroupId}]])"
+                                                               class="mdi mdi-filter-outline"
+                                                               style="margin-left:5px"></i>
+                                                        </p>
+
                                                     </div>
                                                     <div class="col-sm-4">
                                                         <p style="font-size:12px">信息分类：

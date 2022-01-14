@@ -250,6 +250,7 @@
                                                     </span>
                                                     <div class="pull-right">
                                                         <a sec:authorize-url="/configure/channel/test/*"
+                                                           th:if="${info.channelStatus eq '001'}"
                                                            th:href="@{/configure/channel/test/{id}(id=${info.channelId})}"
                                                            data-toggle="tooltip" data-placement="left" title=""
                                                            data-original-title="通道状态测试" style="font-size:12px">

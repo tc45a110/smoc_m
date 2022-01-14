@@ -2,7 +2,15 @@ package com.smoc.cloud.customer.controller;
 
 
 import com.smoc.cloud.common.page.PageParams;
+import com.smoc.cloud.common.response.ResponseCode;
+import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.customer.validator.AccountBaseInfoValidator;
+import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
+import com.smoc.cloud.common.validator.MpmIdValidator;
+import com.smoc.cloud.common.validator.MpmValidatorUtil;
+import com.smoc.cloud.customer.service.EnterpriseService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +23,9 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 @RequestMapping("/account")
 public class AccountController {
+
+    @Autowired
+    private EnterpriseService enterpriseService;
 
     /**
      * 客户通道账号列表
@@ -87,9 +98,21 @@ public class AccountController {
      * EC业务账号配置中心
      * @return
      */
-    @RequestMapping(value = "/edit/center/{accountId}", method = RequestMethod.GET)
-    public ModelAndView edit_center(@PathVariable String accountId, HttpServletRequest request) {
+    @RequestMapping(value = "/edit/center/{flag}/{accountId}", method = RequestMethod.GET)
+    public ModelAndView edit_center(@PathVariable String flag, @PathVariable String accountId, HttpServletRequest request) {
         ModelAndView view = new ModelAndView("customer/account/account_edit_center");
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(accountId);
+        if (!MpmValidatorUtil.validate(validator)) {
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
+
+        view.addObject("flag", flag);
+        view.addObject("accountId", accountId);
+
         return view;
 
     }
@@ -98,9 +121,47 @@ public class AccountController {
      * 业务账号基本信息
      * @return
      */
-    @RequestMapping(value = "/edit/base/{accountId}", method = RequestMethod.GET)
-    public ModelAndView edit_base(@PathVariable String accountId, HttpServletRequest request) {
+    @RequestMapping(value = "/edit/base/{flag}/{accountId}", method = RequestMethod.GET)
+    public ModelAndView edit_base(@PathVariable String flag, @PathVariable String accountId, HttpServletRequest request) {
         ModelAndView view = new ModelAndView("customer/account/account_edit_base");
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(accountId);
+        if (!MpmValidatorUtil.validate(validator)) {
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
+
+        /**
+         * 如果flag值为base,那么accountId为企业id
+         */
+        if("base".equals(flag)){
+            AccountBaseInfoValidator accountBaseInfoValidator = new AccountBaseInfoValidator();
+            accountBaseInfoValidator.setEnterpriseId(accountId);
+            accountBaseInfoValidator.setAccountStauts("1");
+            accountBaseInfoValidator.setAccountProcess("10000");
+
+            //查询企业数据
+            ResponseData<EnterpriseBasicInfoValidator> data = enterpriseService.findById(accountId);
+            if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+                view.addObject("error", data.getCode() + ":" + data.getMessage());
+            }
+
+            //op操作标记，add表示添加，edit表示修改
+            view.addObject("op", "add");
+            view.addObject("accountBaseInfoValidator", accountBaseInfoValidator);
+            view.addObject("enterpriseBasicInfoValidator", data.getData());
+            return view;
+        }
+
+        /**
+         * 修改:查询数据
+         */
+        view.addObject("op", "edit");
+        view.addObject("accountBaseInfoValidator", new AccountBaseInfoValidator());
+        view.addObject("enterpriseBasicInfoValidator", new EnterpriseBasicInfoValidator());
+
         return view;
 
     }

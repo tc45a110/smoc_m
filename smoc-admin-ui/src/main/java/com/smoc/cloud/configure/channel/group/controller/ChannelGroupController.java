@@ -203,9 +203,9 @@ public class ChannelGroupController {
 
         //初始化其他变量
         if (!StringUtils.isEmpty(op) && "add".equals(op)) {
-            //生成通道组ID:根据业务类型查询序列
-            Integer seq = sequenceService.findSequence("CHANNEL_GROUP");
-            channelGroupInfoValidator.setChannelGroupId("GRID" + seq);
+            //封装通道ID前缀
+            String prefixId = sequenceService.getPrefixId("CHANNEL_GROUP",channelGroupInfoValidator.getBusinessType(),channelGroupInfoValidator.getCarrier());
+            channelGroupInfoValidator.setChannelGroupId(prefixId);
             channelGroupInfoValidator.setCreatedTime(DateTimeUtils.getDateTimeFormat(new Date()));
             channelGroupInfoValidator.setCreatedBy(user.getRealName());
         } else if (!StringUtils.isEmpty(op) && "edit".equals(op)) {

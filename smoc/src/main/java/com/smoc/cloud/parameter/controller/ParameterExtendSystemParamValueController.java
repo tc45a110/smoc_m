@@ -1,13 +1,16 @@
 package com.smoc.cloud.parameter.controller;
 
 
+import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.parameter.ParameterExtendSystemParamValueValidator;
 import com.smoc.cloud.parameter.entity.ParameterExtendSystemParamValue;
 import com.smoc.cloud.parameter.service.ParameterExtendSystemParamValueService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -44,5 +47,25 @@ public class ParameterExtendSystemParamValueController {
         //保存操作
         ResponseData data = parameterExtendSystemParamValueService.save(list, businessId);
         return data;
+    }
+
+
+    /**
+     * 系统配置参数扩展 查看单个参数
+     *
+     * @param businessType 参数类型
+     * @param businessId   业务ID
+     * @param paramKey     参数Key
+     * @return
+     */
+    @RequestMapping(value = "/findByBusinessTypeAndBusinessIdAndParamKey/{businessType}/{businessId}/{paramKey}", method = RequestMethod.GET)
+    public ResponseData findByBusinessTypeAndBusinessIdAndParamKey(@PathVariable String businessType, @PathVariable String businessId, @PathVariable String paramKey) {
+
+        //完成参数规则验证
+        if (StringUtils.isEmpty(businessType) || StringUtils.isEmpty(businessId) || StringUtils.isEmpty(paramKey)) {
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR);
+        }
+
+        return parameterExtendSystemParamValueService.findByBusinessTypeAndBusinessIdAndParamKey(businessType,businessId,paramKey);
     }
 }

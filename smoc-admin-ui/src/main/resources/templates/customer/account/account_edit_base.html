@@ -21,7 +21,7 @@
         <!-- start row 页面内容-->
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all" style="background-color:#fff">
             <div class="col-md-12">
-                <form id="submit_form"
+                <form id="submit_form"  th:action="@{/account/save/{op}(op=${op})}" th:object="${accountBaseInfoValidator}"
                       method="post" data-parsley-validate="">
                     <div class="row">
                         <div class="col-md-12 panel panel-color panel-info" style="padding-left:0px;padding-right:0px">
@@ -33,7 +33,7 @@
                                     <div class="col-md-4 form-group m-b-20">
                                         <label for="enterpriseName">企业名称</label>
                                         <input id="enterpriseName" type="text" class="form-control"
-                                               value="北京星语互联科技有限公司" readonly>
+                                               th:value="${enterpriseBasicInfoValidator.enterpriseName}" readonly>
                                     </div>
                                     <div class="col-md-4 form-group m-b-20">
                                         <label for="linkt">业务账号名称<span class="text-danger">*</span>&nbsp;</label>
@@ -74,13 +74,13 @@
                                     </div>
                                     <div class="col-md-4 form-group m-b-20">
                                         <label>号码指定运营商&nbsp;</label><br>
-                                        <mpm:tag id="enterpriseType" required="true" identity="carrier"
+                                        <mpm:tag id="enterpriseType" identity="carrier"
                                                  show-type="checkbox" key="code"  mask-value="INTERNATIONAL"
                                                  name="enterpriseType" value="" title="运营商"/>
                                     </div>
                                     <div class="col-md-4 form-group m-b-20">
                                         <label>携号转网标识&nbsp;</label><br>
-                                        <mpm:tag id="enterpriseType" required="true" identity="carrier"
+                                        <mpm:tag id="enterpriseType" identity="carrier"
                                                  show-type="checkbox" key="code"  mask-value="INTERNATIONAL"
                                                  name="enterpriseType" value="" title="运营商"/>
                                     </div>
@@ -89,7 +89,7 @@
                                         <label>信息分类<span class="text-danger">*</span></label><br>
                                         <mpm:tag id="enterpriseType" required="true" identity="infoType"
                                                  show-type="checkbox" key="code"
-                                                 class="form-control" name="enterpriseType" value="" title="信息分类"/>
+                                                 class="form-control" name="infoType" value="" title="信息分类"/>
                                     </div>
                                     <div class="col-md-4 form-group m-b-20">
                                         <label>设置通道方式<span class="text-danger">*</span>&nbsp;</label><br>
@@ -105,7 +105,7 @@
                                     </div>
 
                                     <div class="col-md-4 form-group m-b-20">
-                                        <label class="m-b-10">有效状态</label><br>
+                                        <label class="m-b-10">有效状态<span class="text-danger">*</span></label><br>
                                         <div class="radio radio-info radio-inline">
                                             <input type="radio" id="active1" value="1" checked
                                                    required="">
@@ -120,8 +120,13 @@
 
                                 </div>
                                 <div class="text-center" style="margin-bottom:20px">
-                                    <a th:href="@{/ec/customer/channel/account/edit/base/id}" type="button"
-                                       class="btn btn-teal waves-effect waves-light">提交</a>
+                                    <input type="hidden" th:field="*{accountId}">
+                                    <input type="hidden" th:field="*{enterpriseId}">
+                                    <input type="hidden" th:field="*{accountProcess}">
+                                    <input type="hidden" th:field="*{createdTime}">
+                                    <input type="hidden" th:field="*{createdBy}">
+                                    <button sec:authorize-url="/account/save/*" type="submit"
+                                       class="btn btn-teal waves-effect waves-light">提交</button>
                                 </div>
                             </div>
                         </div> <!-- end col -->

@@ -29,4 +29,6 @@ public interface ParameterExtendSystemParamValueRepository extends JpaRepository
      * @return
      */
     List<ParameterExtendSystemParamValue> findParameterExtendSystemParamValueByBusinessId(String businessId);
+
+    ParameterExtendSystemParamValue findByBusinessTypeAndBusinessIdAndParamKey(String businessType, String businessId, String paramKey);
 }
