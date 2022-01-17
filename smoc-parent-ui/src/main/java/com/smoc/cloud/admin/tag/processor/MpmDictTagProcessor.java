@@ -75,7 +75,7 @@ public class MpmDictTagProcessor extends AbstractAttributeTagProcessor {
     //select 默认选择提示
     private static final String TITLE = "title";
 
-    private static final String ONCHANGE="onchange";
+    private static final String ONCHANGE = "onchange";
 
     private static final String STYLE = "style";
 
@@ -141,7 +141,7 @@ public class MpmDictTagProcessor extends AbstractAttributeTagProcessor {
 
         Map<String, DictType> dictMap = (Map<String, DictType>) context.getAttribute("dict");
 
-        DictType dictType  = dictMap.get(identity);
+        DictType dictType = dictMap.get(identity);
 
         //如果数据或字典标识数据为空
         if (null == dictMap || dictMap.size() < 1 || StringUtils.isEmpty(dictType) || null == dictType.getDict() || dictType.getDict().size() < 1) {
@@ -159,7 +159,7 @@ public class MpmDictTagProcessor extends AbstractAttributeTagProcessor {
         }
 
         if (showType.equals("select")) {
-            buildSelect(iTemplateContext, iElementTagStructureHandler, dictList, attributeMap,dataIcon);
+            buildSelect(iTemplateContext, iElementTagStructureHandler, dictList, attributeMap, dataIcon);
         }
 
         if (showType.equals("checkbox")) {
@@ -212,20 +212,20 @@ public class MpmDictTagProcessor extends AbstractAttributeTagProcessor {
         String showValue = value;
 
         String[] checkValue = value.split(",");
-        if(checkValue.length>1){
+        if (checkValue.length > 1) {
             String checkboxValue = "";
-            for(int a=0;a <checkValue.length;a++){
-                for (int i =0;i<dictList.size();i++) {
+            for (int a = 0; a < checkValue.length; a++) {
+                for (int i = 0; i < dictList.size(); i++) {
                     Dict dict = dictList.get(i);
                     //根据fieldCode
                     if (status && checkValue[a].equals(dict.getFieldCode())) {
-                        checkboxValue += dict.getFieldName()+" ";
+                        checkboxValue += dict.getFieldName() + " ";
                         break;
                     }
                 }
             }
             showValue = checkboxValue;
-        }else{
+        } else {
             if (!StringUtils.isEmpty(value)) {
                 for (Dict dict : dictList) {
 
@@ -336,7 +336,7 @@ public class MpmDictTagProcessor extends AbstractAttributeTagProcessor {
 
         for (Dict dict : dictList) {
 
-            if(!StringUtils.isEmpty(mvalue) && mvalue.equals(dict.getFieldCode())){
+            if (!StringUtils.isEmpty(mvalue) && mvalue.equals(dict.getFieldCode())) {
                 continue;
             }
 
@@ -413,18 +413,20 @@ public class MpmDictTagProcessor extends AbstractAttributeTagProcessor {
         String classValue = attributeMap.get(CLASS);
         if (StringUtils.isEmpty(classValue)) {
 
-            attri.put("class", "checkbox checkbox-info checkbox-inline ");
+            attri.put("class", "btn-switch btn-switch-info");
         } else {
 
-            attri.put("class", "checkbox checkbox-info checkbox-inline " );
+            attri.put("class", "btn-switch btn-switch-info");
         }
+
+        attri.put("style", "margin-left:10px;margin-bottom:10px");
 
         //查询屏蔽数值是否有值
         String mvalue = attributeMap.get(MASKVALUE);
 
         for (Dict dict : dictList) {
 
-            if(!StringUtils.isEmpty(mvalue) && mvalue.equals(dict.getFieldCode())){
+            if (!StringUtils.isEmpty(mvalue) && mvalue.equals(dict.getFieldCode())) {
                 continue;
             }
 
@@ -444,7 +446,7 @@ public class MpmDictTagProcessor extends AbstractAttributeTagProcessor {
             attriCheckBox.put("name", name);
             attriCheckBox.put("type", "checkbox");
             attriCheckBox.put("value", fieldValue);
-            attriCheckBox.put("id", id+"-"+fieldValue);
+            attriCheckBox.put("id", id + "-" + fieldValue);
 
             //事件
             String onchange = attributeMap.get(ONCHANGE);
@@ -456,14 +458,30 @@ public class MpmDictTagProcessor extends AbstractAttributeTagProcessor {
                 attriCheckBox.put("required", "");
             }
 
-            if (selectMap.size()>0 && null != selectMap.get(fieldValue)) {
+            if (selectMap.size() > 0 && null != selectMap.get(fieldValue)) {
                 attriCheckBox.put("checked", "true");
             }
 
             model.add(modelFactory.createOpenElementTag("input", attriCheckBox, null, false));
 
-            model.add(modelFactory.createOpenElementTag("label"));
+
+            //样式
+            Map<String, String> attriLable = new HashMap<String, String>();
+            attriLable.put("for", id + "-" + fieldValue);
+            attriLable.put("class", "btn btn-rounded btn-info waves-effect waves-light");
+            model.add(modelFactory.createOpenElementTag("label", attriLable, null, false));
+
+            //em
+            Map<String, String> attriEm = new HashMap<String, String>();
+            attriEm.put("class", "glyphicon glyphicon-ok");
+            model.add(modelFactory.createOpenElementTag("em", attriEm, null, false));
+            model.add(modelFactory.createCloseElementTag("em"));
+
+            //strong
+            model.add(modelFactory.createOpenElementTag("strong"));
             model.add(modelFactory.createText(HtmlEscape.escapeHtml5(dict.getFieldName())));
+            model.add(modelFactory.createCloseElementTag("strong"));
+
             model.add(modelFactory.createCloseElementTag("label"));
 
             //end div
@@ -520,8 +538,8 @@ public class MpmDictTagProcessor extends AbstractAttributeTagProcessor {
             attri.put("class", "radio radio-info checkbox-inline " + classValue);
         }
 
-        String style =  attributeMap.get(STYLE);
-        if(!StringUtils.isEmpty(style)){
+        String style = attributeMap.get(STYLE);
+        if (!StringUtils.isEmpty(style)) {
             attri.put("style", style);
         }
 
@@ -605,7 +623,7 @@ public class MpmDictTagProcessor extends AbstractAttributeTagProcessor {
                 String[] classValueArray = classValue.split(";");
                 //选中的样式
 
-                for (int i =0;i<classValueArray.length;i++ ) {
+                for (int i = 0; i < classValueArray.length; i++) {
                     if (!StringUtils.isEmpty(classValueArray[i])) {
                         if (value.equals(classValueArray[i].split(",")[0])) {
                             classShow = classValueArray[i].split(",")[1];

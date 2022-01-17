@@ -213,17 +213,14 @@
                                                             th:errors="*{supportAreaCodes}" style="font-weight: 200;font-size: 12px"></span>
                                                     </label>
                                                     <div id="province_areas" style="text-align: left;display:block">
-                                                        &nbsp;
-                                                        <mpm:tag id="provices" identity="provices" name="maskProvince" show-type="checkbox" mask-value="ALL" key="code" class="form-control"
+                                                       <mpm:tag id="provices" identity="provices" name="maskProvince" show-type="checkbox" mask-value="ALL" key="code" class="form-control"
                                                                  th:value="${channelBasicInfoValidator.maskProvince}" title="屏蔽省份"/>
                                                     </div>
                                                     <div id="supportAreaCodes" style="text-align: left;display:none">
-                                                        &nbsp;
                                                         <mpm:tag id="province" identity="provices" name="province" show-type="checkbox" key="code"  mask-value="ALL" class="form-control"
                                                                  th:value="${channelBasicInfoValidator.province}" title="业务区域"/>
                                                     </div>
                                                     <div id="international_areas" style="text-align: left;display:none">
-                                                        &nbsp;
                                                         <mpm:tag id="internationalCountry" identity="internationalCountry"
                                                                  name="supportAreaCodes" show-type="checkbox"  key="code" class="form-control"
                                                                  th:value="${channelBasicInfoValidator.supportAreaCodes}" title="业务区域"/>
