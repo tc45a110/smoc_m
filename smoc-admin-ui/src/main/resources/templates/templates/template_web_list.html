@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+</head>
+<body>
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">WEB模版审核</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            业务审核
+                        </li>
+                        <li>
+                            WEB模版审核
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <form id="query_form" th:action="@{/template/web/page}" method="post">
+                        <div class="row m-b-60">
+                            <div class="form-group  col-sm-4">
+                                <input type="text" class="form-control"
+                                       placeholder="企业名称" autocomplete="off">
+                            </div>
+                            <div class="form-group  col-sm-4">
+                                <input type="text" class="form-control"
+                                       placeholder="业务账号名称" autocomplete="off">
+                            </div>
+                            <div class="form-group  col-sm-4">
+                                <input type="text" class="form-control"
+                                       placeholder="业务账号" autocomplete="off">
+                            </div>
+                            <div class="form-group  col-sm-4">
+                                <input type="text" class="form-control"
+                                       placeholder="模板内容" autocomplete="off">
+                            </div>
+                            <div class="form-group col-sm-4 pull-right" style="text-align: right">
+                                <button sec:authorize-url="/template/web/page" type="submit"
+                                        class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
+                                    <i class="glyphicon glyphicon-search"></i> 查询
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="panel panel-color panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">WEB模版审批列表</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table table-hover m-10" style="margin-top: -12px;table-layout:fixed;">
+                                <thead>
+                                <tr>
+                                    <th style="width:240px">模版ID/企业名称</th>
+                                    <th style="width:180px">业务账号/业务账号名称</th>
+                                    <th style="width:120px">模版类型</th>
+                                    <th style="width:120px">审核状态</th>
+                                    <th>模版内容</th>
+                                    <th style="width:160px">创建人/创建时间</th>
+                                    <th style="width:140px">操作</th>
+                                </tr>
+                                <thead>
+                                <tbody>
+                                <tr>
+                                    <td style="vertical-align: middle;line-height: 26px;">
+                                        TEMP100000431
+                                        <br>
+                                        星语互联科技有限公司
+                                    </td>
+                                    <td style="vertical-align: middle;;line-height: 26px;">
+                                        BA00008
+                                        <br>
+                                        行业短信账号
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px;">
+                                        <p>变量短信模版</p>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px;">
+                                        <a class="btn btn-warning  waves-effect waves-light btn-xs">审核中</a>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
+                                        【结算业务提醒】您于2022年01月06日提报的2022借字1号单据已支付完成，请您关注相关款项到账情况。结算审核状态请登录财务管理综合平台查询。如有疑问请致电010-933117，我们将竭诚为您服务。
+                                    </td>
+                                    <td style="vertical-align: middle;;line-height: 26px;">
+                                        13511039133
+                                        <br>
+                                        2022-01-12 15:24:35
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px;">
+                                        <a sec:authorize-url="/template/web/view/center/*"
+                                           th:href="@{/template/web/view/center/id}"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color: #4BD396;"
+                                           data-toggle="tooltip"
+                                           data-placement="left" title="" data-original-title="WEB模板明细"><i
+                                                style="font-size: 17px" class="glyphicon glyphicon-search"></i></a>
+
+                                        <a sec:authorize-url="/template/web/edit/*"
+                                           th:href="@{/template/web/edit/id}"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color: #29b6f6;"
+                                           data-toggle="tooltip"
+                                           data-placement="left" title="" data-original-title="WEB模板审批"><i
+                                                style="font-size: 18px" class="mdi mdi-book-open-page-variant"></i></a>
+
+                                    </td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                            <hr>
+                        </div>
+                        <th:block th:insert="fragments/page_fragments :: page"/>
+                    </div>
+                </div>
+            </div>
+
+            <th:block th:insert="fragments/common_fragments :: common_error"/>
+            <th:block th:insert="fragments/common_fragments :: confirm-modal"/>
+        </div>
+    </div>
+</div> <!-- content -->
+
+
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<script>
+        var resizefunc = [];
+        //隐藏进度项
+        $('#preloader').css('display', 'none');
+
+
+
+
+
+</script>
+</body>
+</html>
