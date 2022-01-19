@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+</head>
+<body>
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <!-- start row 页面导航-->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">运营商对账单明细</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            运营商对账
+                        </li>
+                        <li class="active">
+                            运营商对账单明细
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  页面内容-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <div class="row m-b-10">
+                        <h4 style="padding-left:12px"> 运营商对账单明细
+                            <div class="pull-right" style="margin-top: -12px;margin-right:10px">
+                                <a sec:authorize-url="/finance/reconciliation/carrier/list"
+                                   th:href="@{/finance/reconciliation/carrier/list}"
+                                   class="btn btn-default waves-effect waves-light btn-md">
+                                    <i class="glyphicon  glyphicon-share-alt" style="margin-right:10px"></i>
+                                    运营商对账列表</a>
+                                <a class="btn btn-primary waves-effect waves-light m-l-10 btn-md">
+                                    <i class="glyphicon glyphicon-export"></i>
+                                    导出EXCEL
+                                </a>
+                            </div>
+                        </h4>
+                    </div>
+                    <div class="row m-b-10">
+                        <div class="col-md-12 col-sm-12">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card-box">
+                                        <ul class="nav nav-tabs m-b-30">
+                                            <li class="active" id="tab1"><a onclick="active('1')"
+                                                                            sec:authorize-url="/finance/reconciliation/carrier/view/*"
+                                                                            th:href="@{/finance/reconciliation/carrier/view/id}"
+                                                                            th:target="tab-content">运营商对账单明细</a></li>
+                                            <li class="" id="tab2"><a onclick="active('2')"
+                                                                      sec:authorize-url="/user/logs/list/*"
+                                                                      th:href="@{/user/logs/list/templateId}"
+                                                                      th:target="tab-content">运营商对账单操作日志</a></li>
+
+                                        </ul>
+                                        <div class="tab-cotent" style="background-color:#fff">
+                                            <iframe name="tab-content" id="tab-content" th:frameBorder="0"
+                                                    th:scrolling="auto"
+                                                    th:src="@{/finance/reconciliation/carrier/view/id}"
+                                                    style="padding: 0px; width: 100%; height: 1200px;background-color:#fff"></iframe>
+                                        </div>
+                                    </div>
+                                </div> <!-- end col -->
+                            </div>
+                            <!-- end row -->
+                        </div> <!-- end col -->
+
+                    </div> <!-- end row -->
+
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<!-- Modal-Effect -->
+<script>
+
+    function active(tab) {
+        for(var num = 1;num<3;num++){
+            $('#tab'+num).removeClass("active");
+        }
+        $('#tab'+tab).attr("class","active");
+    }
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+</script>
+</body>
+</html>
