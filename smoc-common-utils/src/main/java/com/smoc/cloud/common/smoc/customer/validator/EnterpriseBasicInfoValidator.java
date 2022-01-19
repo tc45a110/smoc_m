@@ -43,5 +43,7 @@ public class EnterpriseBasicInfoValidator {
     private String updatedBy;
     private Date updatedTime;
 
+    private String flag;
+
     private List<EnterpriseBasicInfoValidator> enterprises = new ArrayList<>();
 }

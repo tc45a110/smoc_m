@@ -187,6 +187,13 @@ public class ChannelService {
         //记录日志
         log.info("[通道管理][通道基本信息][{}]数据:{}",op,JSON.toJSONString(entity));
         channelRepository.saveAndFlush(entity);
+
+        //如果修改的时候，修改了区域数据
+        if("AREA_PRICE".equals(channelBasicInfoValidator.getPriceStyle()) && "edit".equals(op)){
+            //根据区域编号先删除库里多余的区域(比如：添加的时候选择了5个区域，修改的时候选择了3个区域，那么就得把多余的2个区域删除)
+            channelPriceRepository.deleteByChannelIdAndAreaCode(channelBasicInfoValidator.getChannelId(), entity.getSupportAreaCodes());
+        }
+
         return ResponseDataUtil.buildSuccess();
     }
 

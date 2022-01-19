@@ -1,0 +1,58 @@
+package com.smoc.cloud.common.smoc.customer.validator;
+
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.Range;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+import java.util.Date;
+import java.util.Objects;
+
+@Setter
+@Getter
+public class AccountInterfaceInfoValidator {
+    private String id;
+
+    @NotNull(message = "ID不能为空！")
+    @Pattern(regexp = "^[0-9A-Za-z]{1,32}", message = "ID不符合规则！")
+    @Size(min = 1, max = 32, message = "ID长度不符合规则！")
+    private String accountId;
+
+    @NotNull(message = "接口类型不能为空！")
+    private String protocol;
+    private String accountPassword;
+
+    @NotNull(message = "客户提交速率不能为空！")
+    @Range(min = 1, max = 10000 , message = "客户提交速率长度要在{min}-{max}之间！")
+    private Integer maxSendSecond;
+
+    @NotNull(message = "服务代码不能为空！")
+    @Length(max = 32, message = "服务代码最大长度为{max}！")
+    private String serviceCode;
+
+    @NotNull(message = "客户鉴权IP不能为空！")
+    @Length(max = 128, message = "客户鉴权IP最大长度为{max}！")
+    private String identifyIp;
+
+    @NotNull(message = "连接数不能为空！")
+    @Range(min = 1, max = 10000 , message = "连接数长度要在{min}-{max}之间！")
+    private Integer maxConnect;
+    private String executeCheck;
+
+    @NotNull(message = "上行短信推送地址不能为空！")
+    @Length(max = 128, message = "上行短信推送地址最大长度为{max}！")
+    private String moUrl;
+
+    @NotNull(message = "状态报告推送地址不能为空！")
+    @Length(max = 128, message = "状态报告推送地址最大长度为{max}！")
+    private String statusReportUrl;
+    private String createdBy;
+    private String createdTime;
+    private String updatedBy;
+    private Date updatedTime;
+
+
+}

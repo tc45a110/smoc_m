@@ -84,4 +84,9 @@ public class ChannelBasicInfoValidator {
     private String channelAccessSales;
     @Length(max = 128, message = "通道限制内容最大长度为{max}！")
     private String channelRestrictContent;
+
+    @NotNull(message = "具体供应商不能为空！")
+    private String specificProvder;
+    @NotNull(message = "对账周期不能为空！")
+    private String channelBill;
 }

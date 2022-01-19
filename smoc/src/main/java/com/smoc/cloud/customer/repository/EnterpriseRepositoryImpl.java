@@ -70,6 +70,10 @@ public class EnterpriseRepositoryImpl extends BasePageRepository {
             paramsList.add( qo.getAccessCorporation().trim());
         }
 
+        if(!StringUtils.isEmpty(qo.getFlag()) && "1".equals(qo.getFlag())){
+            sqlBuffer.append(" and t.ENTERPRISE_TYPE !='IDENTIFICATION' ");
+        }
+
         sqlBuffer.append(" order by t.CREATED_TIME desc");
 
         //根据参数个数，组织参数值

@@ -60,4 +60,6 @@ public class ChannelBasicInfoQo {
     private Integer channelWeight;
 
     private String channeGroupId;
+
+    private String specificProvder;
 }

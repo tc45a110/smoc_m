@@ -20,7 +20,7 @@
         <!-- start row 页面内容-->
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all" style="background-color:#fff">
             <div class="col-md-12">
-                <form id="submit_form"
+                <form id="submit_form" th:action="@{/account/finance/save/{op}(op=${op})}" th:object="${accountFinanceInfoValidator}"
                       method="post" data-parsley-validate="">
                     <div class="row">
                         <div class="col-md-12 panel panel-color panel-success"
@@ -33,91 +33,51 @@
                                     <div class="col-md-4 form-group m-b-20">
                                         <label for="enterpriseName">企业名称</label>
                                         <input id="enterpriseName" type="text" class="form-control"
-                                               value="北京星语互联科技有限公司" readonly>
+                                               th:value="${enterpriseBasicInfoValidator.enterpriseName}" readonly>
                                     </div>
                                     <div class="col-md-4 form-group m-b-20">
                                         <label for="buAcc">业务账号</label>
                                         <input id="buAcc" type="text" class="form-control"
-                                               value="yt0002" readonly>
+                                               th:value="${accountBasicInfoValidator.accountId}" readonly>
                                     </div>
                                     <div class="col-md-4 form-group m-b-20">
-                                        <label for="jf">计费方式<span class="text-danger">*</span></label>
-                                        <br><br>
-                                        <div class="radio radio-info radio-inline">
-                                            <input type="radio" id="jf" name="jf" value="1" checked
-                                                   required="">
-                                            <label for="active1"> 成功接受 </label>
-                                        </div>
-                                        <div class="radio radio-info radio-inline">
-                                            <input type="radio" id="jf0" name="jf" value="0">
-                                            <label for="active0"> 成功发送 </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 form-group m-b-20">
-                                        <label for="edu">授信额度<span class="text-danger">*</span>&nbsp;</label>
-                                        <input id="edu" type="text" class="form-control"
-                                               required="" data-parsley-length="[1,30]" autocomplete="off"
+                                        <label for="accountCreditSum">授信额度<span class="text-danger">*</span>&nbsp;</label>
+                                        <input id="accountCreditSum" type="text" class="form-control" th:field="*{accountCreditSum}"
+                                               required="" min="0"   max="1000000" autocomplete="off"
                                                placeholder="授信额度，默认0">
                                     </div>
                                     <div class="col-md-4 form-group m-b-20">
-                                        <label for="style">付费方式<span class="text-danger">*</span>&nbsp;</label>
-                                        <br><br>
-                                        <div class="radio radio-info radio-inline">
-                                            <input type="radio" id="style" name="style" value="1" checked
-                                                   required="">
-                                            <label for="active1"> 预付费 </label>
-                                        </div>
-                                        <div class="radio radio-info radio-inline">
-                                            <input type="radio" id="style0" name="style" value="0">
-                                            <label for="active0"> 后付费 </label>
-                                        </div>
+                                        <label>计费方式<span class="text-danger">*</span></label><br><br>
+                                        <mpm:tag id="chargeType" identity="accountChargeType" name="chargeType" show-type="radio" style="margin-top:0px"
+                                                 key="code" th:value="${accountFinanceInfoValidator.chargeType}" required="true" title="计费方式"/>
                                     </div>
                                     <div class="col-md-4 form-group m-b-20">
-                                        <label>冻结金额返还时间</label><br><br>
-                                        <div class="radio radio-info radio-inline">
-                                            <input type="radio" id="active1" name="active" value="1" checked
-                                                   required="">
-                                            <label for="active1"> 次日返还 </label>
-                                        </div>
-                                        <div class="radio radio-info radio-inline">
-                                            <input type="radio" id="active0" name="active" value="0">
-                                            <label for="active0"> 三日返还 </label>
-                                        </div>
+                                        <label>付费方式<span class="text-danger">*</span>&nbsp;</label><br><br>
+                                        <mpm:tag id="payType" identity="payType" show-type="radio" key="code" style="margin-top:0px"
+                                                 name="payType" th:value="${accountFinanceInfoValidator.payType}" required="true" title="付费方式"/>
                                     </div>
                                     <div class="col-md-4 form-group m-b-20">
-                                        <label for="price">移动单价<span class="text-danger">*</span>&nbsp;</label>
-                                        <input id="price" type="password" class="form-control"
-                                               required="" data-parsley-length="[1,30]" autocomplete="off"
-                                               placeholder="移动单价">
+                                        <label>冻结金额返还时间<span class="text-danger">*</span>&nbsp;</label><br><br>
+                                        <mpm:tag id="frozenReturnDate" identity="frozenReturnDate" show-type="radio" key="code" style="margin-top:0px"
+                                                 name="frozenReturnDate" th:value="${accountFinanceInfoValidator.frozenReturnDate}" required="true" title="额返还时间"/>
                                     </div>
-                                    <div class="col-md-4 form-group m-b-20">
-                                        <label for="price2">联通单价<span class="text-danger">*</span>&nbsp;</label>
-                                        <input id="price2" type="password" class="form-control"
-                                               required="" data-parsley-length="[1,30]" autocomplete="off"
-                                               placeholder="联通单价">
+                                    <div class="col-md-4 form-group m-b-20"  th:each="info:${list}">
+                                        <label><mpm:tag identity="carrier"  show-type="label" key="code"
+                                                        th:value="${info.key}"/>单价<span class="text-danger">*</span>&nbsp;<span
+                                                class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                        </label>
+
+                                        <input type="text" class="form-control" required="" min="0.0001"   max="1"  autocomplete="off"
+                                               th:name="${info.key}" th:value="${info.value}" placeholder="单价">
                                     </div>
-                                    <div class="col-md-4 form-group m-b-20">
-                                        <label for="price1">电信单价<span class="text-danger">*</span>&nbsp;</label>
-                                        <input id="price1" type="password" class="form-control"
-                                               required="" data-parsley-length="[1,30]" autocomplete="off"
-                                               placeholder="电信单价">
-                                    </div>
-                                    <div class="col-md-4 form-group m-b-20">
-                                        <label for="5g">5G消息单价&nbsp;</label>
-                                        <input id="5g" type="password" class="form-control"
-                                               required="" data-parsley-length="[1,30]" autocomplete="off"
-                                               placeholder="5G消息单价">
-                                    </div>
-                                    <div class="col-md-4 form-group m-b-20">
-                                        <label for="inter">国际短信单价&nbsp;</label>
-                                        <input id="inter" type="password" class="form-control"
-                                               required="" data-parsley-length="[1,30]" autocomplete="off"
-                                               placeholder="国际短信单价">
-                                    </div>
+
                                 </div>
                                 <div class="text-center" style="margin-bottom:20px">
-                                    <a th:href="@{/ec/customer/channel/account/edit/finance/id}" type="button"
-                                       class="btn btn-teal waves-effect waves-light">提交</a>
+                                    <input type="hidden" th:field="*{carrierType}">
+                                    <input type="hidden" th:field="*{accountId}">
+                                    <button sec:authorize-url="/account/finance/save/*" type="submit"
+                                            class="btn btn-teal waves-effect waves-light">提交
+                                    </button>
                                 </div>
                             </div>
                         </div> <!-- end col -->

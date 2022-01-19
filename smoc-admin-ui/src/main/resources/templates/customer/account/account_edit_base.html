@@ -21,7 +21,8 @@
         <!-- start row 页面内容-->
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all" style="background-color:#fff">
             <div class="col-md-12">
-                <form id="submit_form"  th:action="@{/account/save/{op}(op=${op})}" th:object="${accountBaseInfoValidator}"
+                <form id="submit_form" th:action="@{/account/save/{op}(op=${op})}"
+                      th:object="${accountBasicInfoValidator}"
                       method="post" data-parsley-validate="">
                     <div class="row">
                         <div class="col-md-12 panel panel-color panel-info" style="padding-left:0px;padding-right:0px">
@@ -30,132 +31,166 @@
                             </div>
                             <div class="panel-body">
                                 <div class="row">
-                                    <div class="col-md-4 form-group m-b-20">
-                                        <label for="enterpriseName">企业名称</label>
-                                        <input id="enterpriseName" type="text" class="form-control"
-                                               th:value="${enterpriseBasicInfoValidator.enterpriseName}" readonly>
-                                    </div>
-                                    <div class="col-md-4 form-group m-b-20">
-                                        <label for="linkt">业务账号名称<span class="text-danger">*</span>&nbsp;</label>
-                                        <input id="linkt" type="text" class="form-control"
-                                               required="" data-parsley-length="[2,24]" autocomplete="off"
-                                               placeholder="账号名称">
-                                    </div>
-                                    <div class="col-md-4 form-group m-b-20">
-                                        <label for="linkk">业务账号<span class="text-danger">*</span>&nbsp;</label>
-                                        <input id="linkk" type="text" class="form-control"
-                                               required="" data-parsley-length="[7,30]" autocomplete="off"
-                                               placeholder="账号">
-                                    </div>
-                                    <div class="col-md-4 form-group m-b-20">
-                                        <label>业务类型<span class="text-danger">*</span></label>
-                                        <mpm:tag id="enterpriseType" required="true" identity="businessType"
-                                                 show-type="select" key="code"
-                                                 class="form-control" name="enterpriseType" value="" title="业务类型"/>
-                                    </div>
-                                    <div class="col-md-4 form-group m-b-20">
-                                        <label for="code">扩展码&nbsp;</label>
-                                        <input id="code" type="text" class="form-control"
-                                               required="" data-parsley-length="[2,64]" autocomplete="off"
-                                               placeholder="输入扩展码">
-                                    </div>
-                                    <div class="col-md-4 form-group m-b-20">
-                                        <label for="eName">随机扩展码长度（数字0-12之间）<span
-                                                class="text-danger">*</span>&nbsp;</label>
-                                        <input id="eName" type="text" class="form-control"
-                                               required="" data-parsley-length="[2,64]" autocomplete="off"
-                                               placeholder="0">
-                                    </div>
-                                    <div class="col-md-4 form-group m-b-20">
-                                        <label>发送运营商<span class="text-danger">*</span></label><br>
-                                        <mpm:tag id="enterpriseType" required="true" identity="carrier"
-                                                 show-type="checkbox" key="code"
-                                                 name="enterpriseType" value="" title="运营商"/>
-                                    </div>
-                                    <div class="col-md-4 form-group m-b-20">
-                                        <label>号码指定运营商&nbsp;</label><br>
-                                        <mpm:tag id="enterpriseType" identity="carrier"
-                                                 show-type="checkbox" key="code"  mask-value="INTERNATIONAL"
-                                                 name="enterpriseType" value="" title="运营商"/>
-                                    </div>
-                                    <div class="col-md-4 form-group m-b-20">
-                                        <label>携号转网标识&nbsp;</label><br>
-                                        <mpm:tag id="enterpriseType" identity="carrier"
-                                                 show-type="checkbox" key="code"  mask-value="INTERNATIONAL"
-                                                 name="enterpriseType" value="" title="运营商"/>
-                                    </div>
-
-                                    <div class="col-md-4 form-group m-b-20">
-                                        <label>信息分类<span class="text-danger">*</span></label><br>
-                                        <mpm:tag id="enterpriseType" required="true" identity="infoType"
-                                                 show-type="checkbox" key="code"
-                                                 class="form-control" name="infoType" value="" title="信息分类"/>
-                                    </div>
-                                    <div class="col-md-4 form-group m-b-20">
-                                        <label>设置通道方式<span class="text-danger">*</span>&nbsp;</label><br>
-                                        <div class="radio radio-info radio-inline">
-                                            <input type="radio" id="active7" value="1" checked
-                                                   required="">
-                                            <label for="active1">选择通道组</label>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-sm-4 m-b-10">
+                                                    <label for="enterpriseName">企业名称</label>
+                                                    <input id="enterpriseName" type="text" class="form-control"
+                                                           th:value="${enterpriseBasicInfoValidator.enterpriseName}"
+                                                           readonly>
+                                                </div>
+                                                <div class="col-sm-4 m-b-10">
+                                                    <label for="accountName">业务账号名称<span class="text-danger">*</span>&nbsp;
+                                                        <span class="text-danger"
+                                                              th:if="${#fields.hasErrors('accountName')}"
+                                                              th:errors="*{accountName}"></span>&nbsp;</label>
+                                                    <input id="accountName" type="text" class="form-control"
+                                                           th:field="*{accountName}"
+                                                           required="" data-parsley-length="[2,64]" autocomplete="off"
+                                                           placeholder="业务账号名称">
+                                                </div>
+                                                <div class="col-sm-4 m-b-10">
+                                                    <label for="account">业务账号<span
+                                                            class="text-danger">*</span>&nbsp;</label>
+                                                    <input id="account" type="text" class="form-control"
+                                                           th:field="*{accountId}"
+                                                           autocomplete="off" placeholder="根据规则自动生成" readonly>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="radio radio-info radio-inline">
-                                            <input type="radio" id="active8" value="0">
-                                            <label for="active0">选择通道 </label>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-sm-4 m-b-10">
+                                                    <label>业务类型<span class="text-danger">*</span>&nbsp;
+                                                        <span class="text-danger" th:if="${#fields.hasErrors('businessType')}"
+                                                              th:errors="*{businessType}"></span></label>
+                                                    <mpm:tag id="businessType" required="true" identity="businessType"
+                                                             show-type="select" key="code" class="form-control"
+                                                             name="businessType"
+                                                             th:value="${accountBasicInfoValidator.businessType}" title="业务类型"/>
+                                                </div>
+                                                <div class="col-sm-4 m-b-10">
+                                                    <label for="extendCode">扩展码&nbsp;</label>
+                                                    <input id="extendCode" type="text" class="form-control"
+                                                           th:field="*{extendCode}"
+                                                           data-parsley-length="[1,32]" data-parsley-type="number"
+                                                           autocomplete="off"
+                                                           placeholder="输入扩展码">
+                                                </div>
+                                                <div class="col-sm-4 m-b-10">
+                                                    <label>随机扩展码长度（数字0-12之间）<span
+                                                            class="text-danger">*</span>&nbsp;</label>
+                                                    <input id="randomExtendCodeLength" type="text" class="form-control"
+                                                           th:field="*{randomExtendCodeLength}"
+                                                           min="0" max="12" data-parsley-type="number" autocomplete="off"
+                                                           placeholder="0">
+                                                </div>
+                                            </div>
                                         </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-sm-4 m-b-10">
+                                                    <label>发送运营商<span class="text-danger">*</span>&nbsp;
+                                                        <span class="text-danger" th:if="${#fields.hasErrors('carrier')}"
+                                                              th:errors="*{carrier}"></span></label><br>
+                                                    <mpm:tag id="carrier" required="true" identity="carrier"
+                                                             show-type="checkbox" key="code" name="carrier"
+                                                             th:value="${accountBasicInfoValidator.carrier}" title="运营商"/>
+                                                </div>
+                                                <div class="col-sm-4 m-b-10">
+                                                    <label>号码指定运营商&nbsp;</label><br>
+                                                    <mpm:tag id="poistCarrier" identity="carrier" show-type="checkbox"
+                                                             key="code" mask-value="INTERNATIONAL"
+                                                             name="poistCarrier"
+                                                             th:value="${accountBasicInfoValidator.poistCarrier}" title="运营商"/>
+                                                </div>
+                                                <div class="col-sm-4 m-b-10">
+                                                    <label>携号转网标识&nbsp;</label><br>
+                                                    <mpm:tag id="transferType" identity="carrier" show-type="checkbox"
+                                                             key="code" mask-value="INTERNATIONAL"
+                                                             name="transferType"
+                                                             th:value="${accountBasicInfoValidator.transferType}" title="运营商"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-sm-4 m-b-10">
+                                                    <label>信息分类<span class="text-danger">*</span>&nbsp;
+                                                        <span class="text-danger" th:if="${#fields.hasErrors('infoType')}"
+                                                              th:errors="*{infoType}">*</span></label><br>
+                                                    <mpm:tag id="infoType" required="true" identity="infoType"
+                                                             show-type="checkbox" key="code" class="form-control"
+                                                             name="infoType"
+                                                             th:value="${accountBasicInfoValidator.infoType}" title="信息分类"/>
+                                                </div>
+                                                <div class="col-sm-4 m-b-10">
+                                                    <label>设置通道方式<span class="text-danger">*</span>&nbsp;</label><br>
+                                                    <mpm:tag id="accountChannelType" required="true"
+                                                             identity="accountChannelType"
+                                                             show-type="radio" key="code" style="margin-top:0px"
+                                                             name="accountChannelType"
+                                                             th:value="${accountBasicInfoValidator.accountChannelType}"
+                                                             title="通道方式"/>
+                                                </div>
+                                                <div class="col-sm-4 m-b-10">
+                                                    <label class="m-b-10">有效状态<span class="text-danger">*</span></label><br>
+                                                    <mpm:tag id="accountStauts" identity="isOrNo" name="accountStauts"
+                                                             show-type="radio" style="margin-top:0px"
+                                                             key="code" th:value="${accountBasicInfoValidator.accountStauts}"
+                                                             required="true" title="是否"/>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                     </div>
-
-                                    <div class="col-md-4 form-group m-b-20">
-                                        <label class="m-b-10">有效状态<span class="text-danger">*</span></label><br>
-                                        <div class="radio radio-info radio-inline">
-                                            <input type="radio" id="active1" value="1" checked
-                                                   required="">
-                                            <label for="active1"> 是 </label>
-                                        </div>
-                                        <div class="radio radio-info radio-inline">
-                                            <input type="radio" id="active0" value="0">
-                                            <label for="active0"> 否 </label>
-                                        </div>
-
+                                    <div class="text-center" style="margin-bottom:20px">
+                                        <input type="hidden" th:field="*{enterpriseId}">
+                                        <input type="hidden" th:field="*{accountProcess}">
+                                        <input type="hidden" th:field="*{createdTime}">
+                                        <input type="hidden" th:field="*{createdBy}">
+                                        <button sec:authorize-url="/account/save/*" type="submit"
+                                                class="btn btn-teal waves-effect waves-light">提交
+                                        </button>
                                     </div>
-
                                 </div>
-                                <div class="text-center" style="margin-bottom:20px">
-                                    <input type="hidden" th:field="*{accountId}">
-                                    <input type="hidden" th:field="*{enterpriseId}">
-                                    <input type="hidden" th:field="*{accountProcess}">
-                                    <input type="hidden" th:field="*{createdTime}">
-                                    <input type="hidden" th:field="*{createdBy}">
-                                    <button sec:authorize-url="/account/save/*" type="submit"
-                                       class="btn btn-teal waves-effect waves-light">提交</button>
-                                </div>
-                            </div>
-                        </div> <!-- end col -->
-                    </div>
+                            </div> <!-- end col -->
+                        </div>
                 </form>
                 <!-- end form -->
-            </div> <!-- end card-box -->
-        </div> <!-- end col -->
+            </div>
+        </div> <!-- end card-box -->
+    </div> <!-- end col -->
 
-        <!-- end row -->
+    <!-- end row -->
 
-        <!-- start row  错误提示-->
-        <th:block th:insert="fragments/common_fragments :: common_error"/>
-        <!-- end row -->
+    <!-- start row  错误提示-->
+    <th:block th:insert="fragments/common_fragments :: common_error"/>
+    <!-- end row -->
 
-    </div> <!-- container -->
+</div> <!-- container -->
 </div> <!-- content -->
 <th:block th:insert="fragments/common_fragments :: common_js"/>
 <th:block th:insert="fragments/common_fragments :: select_js"/>
 <th:block th:insert="fragments/common_fragments :: common_submit_form"/>
+<script th:remove="${#strings.isEmpty(error)}?none:all">
+
+    $(document).ready(function () {
+
+        if("refreshFlag" == '[[${refreshFlag}]]'){
+            var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+            parent.location.href = contextPath + '/account/edit/center/enterprise/'+'[[${accountBasicInfoValidator.accountId}]]';
+        }
+
+    });
+
+</script>
 <script>
+
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
-
-
-
-
-
 
 
 </script>

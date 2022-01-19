@@ -173,10 +173,8 @@
                                                         </p>
                                                     </div>
                                                     <div class="col-sm-3">
-                                                        <p style="font-size:12px">通道供应商：
-                                                            <mpm:tag identity="channelSupplier" show-type="button"
-                                                                     key="code" th:value="${info.channelProvder}"
-                                                                     class="001,btn btn-teal waves-effect waves-light btn-xs;002,btn btn-info waves-effect waves-light btn-xs;003,btn btn-primary waves-effect waves-light btn-xs;004,btn btn-custom waves-effect waves-light btn-xs;005,btn btn-purple waves-effect waves-light btn-xs;006,btn btn-brown waves-effect waves-light btn-xs;"/>
+                                                        <p style="font-size:12px">通道具体供应商：
+                                                            <mpm:tag identity="specificProvder" show-type="label" key="code" th:value="${info.specificProvder}"/>
                                                         </p>
                                                         <p style="font-size:12px"><mpm:tag identity="channelProtocolType" show-type="label"
                                                                                            key="code" th:value="${info.protocol}"/>通道账号：[[${info.channelAccessAccount}]]

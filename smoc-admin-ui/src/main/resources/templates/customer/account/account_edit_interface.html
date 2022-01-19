@@ -21,7 +21,7 @@
         <!-- start row 页面内容-->
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all" style="background-color:#fff">
             <div class="col-md-12">
-                <form id="submit_form"
+                <form id="submit_form" th:action="@{/account/interface/save/{op}(op=${op})}" th:object="${accountInterfaceInfoValidator}"
                       method="post" data-parsley-validate="">
                     <div class="row">
                         <div class="col-md-12 panel panel-color panel-primary"
@@ -33,77 +33,92 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group m-b-20">
-                                            <label>业务账号名称</label>：星语-移动-信用卡(小舟dj)
+                                            <label>业务账号名称</label>：[[${enterpriseBasicInfoValidator.enterpriseName}]]
                                         </div>
                                         <div class="form-group m-b-20">
                                             <label>接口类型<span class="text-danger">*</span>&nbsp;</label>
-                                            <mpm:tag id="inter" required="true" identity="channelProtocolType"
-                                                     show-type="select" key="code"
-                                                     class="form-control" name="inter" value="CMPP" title="接口类型"/>
+                                            <mpm:tag id="inter" required="true" identity="accountInterfaceType" show-type="select" key="code"
+                                                     class="form-control" name="protocol" th:value="${accountInterfaceInfoValidator.protocol}" title="接口类型"/>
                                         </div>
                                         <div class="form-group m-b-20">
-                                            <label for="password">接口密码<span class="text-danger">*</span>&nbsp;</label>
-                                            <input id="password" type="password" class="form-control"
-                                                   required="" data-parsley-length="[6,30]" autocomplete="off"
-                                                   placeholder="接口密码">
+                                            <label for="accountPassword">接口密码<span class="text-danger">*</span>&nbsp;
+                                                <a class="btn btn-success btn-rounded waves-effect waves-light btn-xs"
+                                                   th:onclick="lookPassword([[${accountInterfaceInfoValidator.accountId}]])">查看密码</a>
+                                            </label>
+                                            <input id="accountPassword" type="text" class="form-control"
+                                                   readonly autocomplete="off" placeholder="根据规则自动生成">
                                         </div>
                                         <div class="form-group m-b-20">
-                                            <label for="service">服务代码<span class="text-danger">*</span></label>
-                                            <input id="service" type="text" class="form-control"
-                                                   required="" data-parsley-length="[4,30]" autocomplete="off"
+                                            <label for="service">服务代码<span class="text-danger">*</span>
+                                                <span class="text-danger" th:if="${#fields.hasErrors('serviceCode')}"
+                                                        th:errors="*{serviceCode}" style="font-weight: 200;font-size: 12px"></span></label>
+                                            <input id="service" type="text" class="form-control" required=""
+                                                   th:field="*{serviceCode}" data-parsley-length="[1,32]" autocomplete="off"
                                                    placeholder="服务代码">
                                         </div>
                                         <div class="form-group m-b-20">
-                                            <label for="links">最大链接数<span class="text-danger">*</span></label>
-                                            <input id="links" type="text" class="form-control"
-                                                   required="" data-parsley-length="[1,30]" autocomplete="off"
-                                                   placeholder="最大链接数">
+                                            <label for="maxConnect">最大链接数<span class="text-danger">*</span>
+                                                <span class="text-danger" th:if="${#fields.hasErrors('maxConnect')}"
+                                                      th:errors="*{maxConnect}" style="font-weight: 200;font-size: 12px"></span></label>
+                                            <input id="maxConnect" type="text" class="form-control" required=""
+                                                   th:field="*{maxConnect}" data-parsley-length="[1,10]" data-parsley-type="number"
+                                                   autocomplete="off" placeholder="最大链接数">
                                         </div>
                                         <div class="form-group m-b-20">
-                                            <label for="url">运营商状态报告推送地址url<span
-                                                    class="text-danger">*</span>&nbsp;</label>
-                                            <input id="url" type="text" class="form-control"
-                                                   required="" data-parsley-length="[2,24]" autocomplete="off"
+                                            <label for="statusReportUrl">运营商状态报告推送地址url<span
+                                                    class="text-danger">*</span>&nbsp;
+                                                <span class="text-danger" th:if="${#fields.hasErrors('statusReportUrl')}"
+                                                      th:errors="*{statusReportUrl}" style="font-weight: 200;font-size: 12px"></span></label>
+                                            <input id="statusReportUrl" type="text" class="form-control" required=""
+                                                   th:field="*{statusReportUrl}" data-parsley-length="[2,128]" data-parsley-type="url" autocomplete="off"
                                                    placeholder="运营商状态报告推送地址url">
                                         </div>
 
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group m-b-20">
-                                            <label>业务账号</label>：xycr11
+                                            <label>业务账号</label>：[[${accountBasicInfoValidator.accountId}]]
                                         </div>
                                         <div class="form-group m-b-20">
-                                            <label for="speed">客户提交速率(次/秒)<span
-                                                    class="text-danger">*</span>&nbsp;</label>
-                                            <input id="speed" type="text" class="form-control"
-                                                   required="" data-parsley-length="[2,64]" autocomplete="off"
+                                            <label for="speed">客户提交速率(条/秒)<span
+                                                    class="text-danger">*</span>&nbsp;
+                                                <span class="text-danger" th:if="${#fields.hasErrors('maxSendSecond')}"
+                                                      th:errors="*{maxSendSecond}" style="font-weight: 200;font-size: 12px"></span></label>
+                                            <input id="speed" type="text" class="form-control"  required=""  autocomplete="off"
+                                                   th:field="*{maxSendSecond}" data-parsley-length="[1,10]" data-parsley-type="number"
                                                    placeholder="客户提交速率">
                                         </div>
                                         <div class="form-group m-b-20">
-                                            <label for="check">进入审核<span class="text-danger">*</span>&nbsp;</label>
-                                            <input id="check" type="text" class="form-control"
-                                                   required="" data-parsley-length="[2,24]" autocomplete="off"
-                                                   placeholder="进入审核">
-                                        </div>
-                                        <div class="form-group m-b-20">
-                                            <label for="ip">客户鉴权IP<span class="text-danger">*</span>&nbsp;</label>
-                                            <input id="ip" type="text" class="form-control"
-                                                   required="" data-parsley-length="[2,24]" autocomplete="off"
+                                            <label for="identifyIp">客户鉴权IP<span class="text-danger">*</span>&nbsp;
+                                                <span class="text-danger" th:if="${#fields.hasErrors('identifyIp')}"
+                                                      th:errors="*{identifyIp}" style="font-weight: 200;font-size: 12px"></span></label>
+                                            <input id="identifyIp" type="text" class="form-control" required=""
+                                                   th:field="*{identifyIp}" data-parsley-length="[2,128]" data-parsley-type="url" autocomplete="off"
                                                    placeholder="客户鉴权IP">
                                         </div>
-
                                         <div class="form-group m-b-20">
-                                            <label for="upUrl">上行短信推送地址url<span
-                                                    class="text-danger">*</span>&nbsp;</label>
-                                            <input id="upUrl" type="text" class="form-control"
-                                                   required="" data-parsley-length="[2,24]" autocomplete="off"
+                                            <label for="moUrl">上行短信推送地址url<span
+                                                    class="text-danger">*</span>&nbsp;
+                                                <span class="text-danger" th:if="${#fields.hasErrors('moUrl')}"
+                                                      th:errors="*{moUrl}" style="font-weight: 200;font-size: 12px"></span></label>
+                                            <input id="moUrl" type="text" class="form-control" required=""
+                                                   th:field="*{moUrl}" data-parsley-length="[2,128]" data-parsley-type="url" autocomplete="off"
                                                    placeholder="上行短信推送地址url">
+                                        </div>
+                                        <div class="form-group m-b-20">
+                                            <label class="m-b-10">进入审核<span class="text-danger">*</span>&nbsp;</label><br>
+                                            <mpm:tag id="check" identity="isOrNo" name="executeCheck" th:value="${accountInterfaceInfoValidator.executeCheck}"
+                                                     show-type="radio" style="margin-top:0px" key="code"  required="true" title="是否"/>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="text-center" style="margin-bottom:20px">
-                                    <a th:href="@{/ec/customer/channel/account/edit/interface/id}" type="button"
-                                       class="btn btn-teal waves-effect waves-light">提交</a>
+                                    <input type="hidden" th:field="*{accountId}">
+                                    <input type="hidden" th:field="*{createdTime}">
+                                    <input type="hidden" th:field="*{createdBy}">
+                                    <button sec:authorize-url="/account/interface/save/*" type="submit"
+                                            class="btn btn-teal waves-effect waves-light">提交
+                                    </button>
                                 </div>
                             </div>
                         </div> <!-- end col -->
@@ -126,6 +141,11 @@
 <th:block th:insert="fragments/common_fragments :: select_js"/>
 <th:block th:insert="fragments/common_fragments :: common_submit_form"/>
 <script>
+
+    function lookPassword(accountId){
+        $("#accountPassword").val(accountId);
+    }
+
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');

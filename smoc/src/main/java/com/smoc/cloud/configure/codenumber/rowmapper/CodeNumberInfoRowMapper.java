@@ -2,7 +2,9 @@ package com.smoc.cloud.configure.codenumber.rowmapper;
 
 import com.smoc.cloud.common.smoc.configuate.validator.CodeNumberInfoValidator;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -21,7 +23,6 @@ public class CodeNumberInfoRowMapper implements RowMapper<CodeNumberInfoValidato
         qo.setMaxComplaintRate(resultSet.getBigDecimal("MAX_COMPLAINT_RATE"));
         qo.setCarrier(resultSet.getString("CARRIER"));
         qo.setBusinessType(resultSet.getString("BUSINESS_TYPE"));
-        qo.setSrcIdPrice(resultSet.getBigDecimal("SRC_ID_PRICE"));
         qo.setUseType(resultSet.getString("USE_TYPE"));
         qo.setSrcIdSource(resultSet.getString("SRC_ID_SOURCE"));
         qo.setAccessPoint(resultSet.getString("ACCESS_POINT"));
@@ -35,6 +36,14 @@ public class CodeNumberInfoRowMapper implements RowMapper<CodeNumberInfoValidato
         qo.setAccessTime(resultSet.getString("ACCESS_TIME"));
         qo.setMinConsumeEffectiveDate(resultSet.getString("MIN_CONSUME_EFFECTIVE_DATE"));
         qo.setSrcIdEffectiveDate(resultSet.getString("SRC_ID_EFFECTIVE_DATE"));
+        BigDecimal price = resultSet.getBigDecimal("SRC_ID_PRICE");
+        if(!StringUtils.isEmpty(price)){
+            //去除多余的0
+            qo.setSrcIdPrice(new BigDecimal(price.stripTrailingZeros().toPlainString()));
+        }else{
+            qo.setSrcIdPrice(price);
+        }
+
         return qo;
     }
 }

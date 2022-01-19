@@ -85,28 +85,28 @@
                                                 </a>
                                             </li>
                                             <li class="" id="tab2">
-                                                <a onclick="active('2')"
+                                                <a onclick="active('2')" id="a2"
                                                    sec:authorize-url="/account/edit/finance/*"
-                                                   th:href="@{/account/edit/finance/accountId}"
+                                                   th:href="@{/account/edit/finance/{id}(id=${accountId})}"
                                                    th:target="tab-content"><i class="mdi mdi-star"
                                                                               style="margin-right:5px;color:#f35864"></i>业务账号财务信息
                                                 </a>
                                             </li>
                                             <li class="" id="tab3">
-                                                <a onclick="active('3')"
+                                                <a onclick="active('3')" id="a3"
                                                    sec:authorize-url="/account/edit/interface/*"
-                                                   th:href="@{/account/edit/interface/accountId}"
+                                                   th:href="@{/account/edit/interface/{id}(id=${accountId})}"
                                                    th:target="tab-content"><i class="mdi mdi-star"
                                                                               style="margin-right:5px;color:#f35864"></i>业务账号接口信息
                                                 </a>
                                             </li>
-                                            <li class="" id="tab4"><a onclick="active('4')" id="a3"
+                                            <li class="" id="tab4"><a onclick="active('4')" id="a4"
                                                                       sec:authorize-url="/parameter/filter/list/BUSINESS_ACCOUNT_FILTER/*/*"
                                                                       th:href="@{/parameter/filter/list/BUSINESS_ACCOUNT_FILTER/accountId/6}"
                                                                       th:target="tab-content"><i class="mdi mdi-star"
                                                                                                  style="margin-right:5px;color:#f35864"></i>业务账号过滤参数</a>
                                             <li class="" id="tab5">
-                                                <a onclick="active('5')"
+                                                <a onclick="active('5')" id="a5" th:if="${flag eq 'base' or accountChannelType eq '1'}"
                                                    sec:authorize-url="/account/edit/product/*"
                                                    th:href="@{/account/edit/product/accountId}"
                                                    th:target="tab-content"><i class="mdi mdi-star"
@@ -114,7 +114,7 @@
                                                 </a>
                                             </li>
                                             <li class="" id="tab6">
-                                                <a onclick="active('6')"
+                                                <a onclick="active('6')" id="a6" th:if="${flag eq 'base' or accountChannelType eq '2'}"
                                                    sec:authorize-url="/account/edit/channel/*"
                                                    th:href="@{/account/edit/channel/accountId}"
                                                    th:target="tab-content"><i class="mdi mdi-star"
@@ -129,14 +129,14 @@
                                                 </a>
                                             </li>
                                             <li class="" id="tab8">
-                                                <a onclick="active('8')"
+                                                <a onclick="active('8')" id="a8"
                                                    sec:authorize-url="/parameter/business/list/BUSINESS_ACCOUNT/*/*"
                                                    th:href="@{/parameter/business/list/BUSINESS_ACCOUNT/businessId/4}"
                                                    th:target="tab-content">业务账号扩展参数
                                                 </a>
                                             </li>
                                             <li class="" id="tab9">
-                                                <a onclick="active('9')"
+                                                <a onclick="active('9')" id="a9"
                                                    sec:authorize-url="/account/view/channel/detail/*"
                                                    th:href="@{/account/view/channel/detail/accountId}"
                                                    th:target="tab-content">业务账号通道状态
@@ -176,6 +176,14 @@
      * 处理cookie
      */
     $(document).ready(function() {
+
+        if("base" == '[[${flag}]]'){
+            for(var num = 2;num<10;num++){
+                document.getElementById('tab'+num).style.backgroundColor="#DCDBDC";
+                $("#a"+num).attr("onclick","");
+                $("#a"+num).removeAttr("href");
+            }
+        }
 
         if("none" == $.cookie("help_display_account_config")){
            $('#help').css('display', 'none');

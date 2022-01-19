@@ -48,6 +48,7 @@ public class SearchController {
         params.setPageSize(10);
         params.setCurrentPage(1);
         EnterpriseBasicInfoValidator enterpriseBasicInfoValidator = new EnterpriseBasicInfoValidator();
+        enterpriseBasicInfoValidator.setFlag("1");//不查询认证企业
         params.setParams(enterpriseBasicInfoValidator);
 
         //查询
@@ -83,6 +84,7 @@ public class SearchController {
         ModelAndView view = new ModelAndView("customer/search/search_list");
 
         //分页查询
+        enterpriseBasicInfoValidator.setFlag("1");//不查询认证企业
         pageParams.setParams(enterpriseBasicInfoValidator);
 
         ResponseData<PageList<EnterpriseBasicInfoValidator>> data = enterpriseService.page(pageParams);

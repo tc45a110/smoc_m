@@ -204,7 +204,7 @@ public class ChannelGroupController {
         //初始化其他变量
         if (!StringUtils.isEmpty(op) && "add".equals(op)) {
             //封装通道ID前缀
-            String prefixId = sequenceService.getPrefixId("CHANNEL_GROUP",channelGroupInfoValidator.getBusinessType(),channelGroupInfoValidator.getCarrier());
+            String prefixId = sequenceService.getPrefixId("CHANNEL_GROUP",channelGroupInfoValidator.getBusinessType());
             channelGroupInfoValidator.setChannelGroupId(prefixId);
             channelGroupInfoValidator.setCreatedTime(DateTimeUtils.getDateTimeFormat(new Date()));
             channelGroupInfoValidator.setCreatedBy(user.getRealName());

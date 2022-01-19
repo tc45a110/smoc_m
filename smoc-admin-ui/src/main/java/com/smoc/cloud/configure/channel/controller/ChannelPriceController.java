@@ -84,7 +84,7 @@ public class ChannelPriceController {
 
             //根据通道id和区域查询价格
             ResponseData<List<ChannelPriceValidator>> list = channelPriceService.findChannelPrice(channelPriceValidator);
-            if (!StringUtils.isEmpty(list)) {
+            if (!StringUtils.isEmpty(list.getData())) {
                 view.addObject("op", "edit");
             } else {
                 view.addObject("op", "add");

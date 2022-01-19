@@ -46,14 +46,14 @@ public class ChannelInterfaceValidator {
     private String serviceCode;
 
     @NotNull(message = "连接数不能为空！")
-    @Range(min = 1, max = 10000000 , message = "连接数长度要在{min}-{max}之间！")
+    @Range(min = 1, max = 10000 , message = "连接数长度要在{min}-{max}之间！")
     private Integer connectNumber;
 
-    @Range(max = 10000000, message = "最大速率为{max}！")
+    @Range(max = 10000, message = "最大速率为{max}！")
     private Integer maxSendSecond;
 
     @NotNull(message = "心跳间隔单位不能为空！")
-    @Range(min = 1, max = 10000000, message = "心跳间隔单位长度要在{min}-{max}之间！")
+    @Range(min = 1, max = 10000, message = "心跳间隔单位长度要在{min}-{max}之间！")
     private Integer heartbeatInterval;
 
     @NotNull(message = "通道协议类型不能为空！")

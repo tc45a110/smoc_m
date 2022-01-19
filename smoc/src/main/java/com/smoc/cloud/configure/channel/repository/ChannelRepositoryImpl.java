@@ -42,6 +42,7 @@ public class ChannelRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", t.CHANNEL_INTRODUCE ");
         sqlBuffer.append(", t.CHANNEL_ACCESS_SALES ");
         sqlBuffer.append(", t.CHANNEL_RESTRICT_CONTENT ");
+        sqlBuffer.append(", t.SPECIFIC_PROVDER ");
         sqlBuffer.append("  from config_channel_basic_info t left join config_channel_interface i on t.CHANNEL_ID=i.CHANNEL_ID");
         sqlBuffer.append("  left join (select t.CHANNEL_ID,t.CHANNEL_PRICE from config_channel_price t where t.PRICE_STYLE='UNIFIED_PRICE')p on t.CHANNEL_ID=p.CHANNEL_ID ");
         sqlBuffer.append("  where 1=1 ");

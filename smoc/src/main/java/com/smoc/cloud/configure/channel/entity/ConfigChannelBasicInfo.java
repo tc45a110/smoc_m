@@ -36,6 +36,8 @@ public class ConfigChannelBasicInfo {
     private Date updatedTime;
     private String channelAccessSales;
     private String channelRestrictContent;
+    private String specificProvder;
+    private String channelBill;
 
     @Id
     @Column(name = "CHANNEL_ID")
@@ -305,6 +307,26 @@ public class ConfigChannelBasicInfo {
 
     public void setChannelRestrictContent(String channelRestrictContent) {
         this.channelRestrictContent = channelRestrictContent;
+    }
+
+    @Basic
+    @Column(name = "SPECIFIC_PROVDER")
+    public String getSpecificProvder() {
+        return specificProvder;
+    }
+
+    public void setSpecificProvder(String specificProvder) {
+        this.specificProvder = specificProvder;
+    }
+
+    @Basic
+    @Column(name = "CHANNEL_BILL")
+    public String getChannelBill() {
+        return channelBill;
+    }
+
+    public void setChannelBill(String channelBill) {
+        this.channelBill = channelBill;
     }
 
     @Override

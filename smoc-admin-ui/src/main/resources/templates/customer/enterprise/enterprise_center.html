@@ -126,7 +126,7 @@
                                                                     <div class="listingInfo">
 
                                                                         <div class="col-sm-12">
-                                                                            <p style="font-size:12px">WEB登录账号：
+                                                                            <p style="font-size:12px" th:if="${enterpriseBasicInfoValidator.enterpriseType ne 'IDENTIFICATION'}">WEB登录账号：
                                                                                 是否显示 <input id="login-show"
                                                                                             type="checkbox" checked
                                                                                             data-plugin="switchery"
@@ -216,7 +216,7 @@
                                             </div>
                                         </h4>
                                     </div>
-                                    <div id="login-panel" class="row" style="display:block">
+                                    <div id="login-panel" class="row" style="display:block" th:if="${enterpriseBasicInfoValidator.enterpriseType ne 'IDENTIFICATION'}">
                                         <div class="col-lg-12" style="margin-top:10px">
                                             <div class="panel panel-color panel-info">
                                                 <div id="login-account-down" class="panel-heading"
@@ -677,7 +677,7 @@
                                                         </a>
                                                     </li>
                                                     <li class="" id="tab2">
-                                                        <a onclick="active('2')"
+                                                        <a onclick="active('2')" th:if="${enterpriseBasicInfoValidator.enterpriseType ne 'IDENTIFICATION'}"
                                                            sec:authorize-url="/ec/customer/center/material/list"
                                                            th:href="@{/ec/customer/center/material/list}"
                                                            th:target="tab-content">资质信息
@@ -685,14 +685,14 @@
                                                     </li>
                                                     <li class="" id="tab3">
                                                         <a onclick="active('3')" href="#ts-b1" data-toggle="tab"
-                                                           aria-expanded="false">
+                                                           aria-expanded="false" th:if="${enterpriseBasicInfoValidator.enterpriseType ne 'IDENTIFICATION'}">
                                                             <span class="visible-xs"><i class="fa fa-cog"></i></span>
                                                             <span class="hidden-xs">投诉记录</span>
                                                         </a>
                                                     </li>
                                                     <li class="" id="tab4">
                                                         <a onclick="active('4')" href="#login" data-toggle="tab"
-                                                           aria-expanded="false">
+                                                           aria-expanded="false" th:if="${enterpriseBasicInfoValidator.enterpriseType ne 'IDENTIFICATION'}">
                                                             <span class="visible-xs"><i class="fa fa-cog"></i></span>
                                                             <span class="hidden-xs">web登录记录</span>
                                                         </a>

@@ -46,12 +46,8 @@ public class ChannelPriceService {
      */
     public ResponseData editChannelPrice(ChannelPriceValidator channelPriceValidator) {
 
-        //根据区域编号先删除库里多余的区域(比如：添加的时候选择了5个区域，修改的时候选择了3个区域，那么就得把多余的2个区域删除)
-        channelPriceRepository.deleteByChannelIdAndAreaCode(channelPriceValidator.getChannelId(), channelPriceValidator.getAreaCode());
-
         //根据通道id和区域查询已有的价格
         List<ChannelPriceValidator> list = channelPriceRepository.findChannelPrice(channelPriceValidator);
-
 
         //前台选择的区域
         Map<String, BigDecimal> map = new TreeMap<>();

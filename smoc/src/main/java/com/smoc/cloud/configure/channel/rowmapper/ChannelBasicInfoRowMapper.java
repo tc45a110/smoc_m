@@ -2,7 +2,9 @@ package com.smoc.cloud.configure.channel.rowmapper;
 
 import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -25,7 +27,6 @@ public class ChannelBasicInfoRowMapper implements RowMapper<ChannelBasicInfoQo> 
         qo.setProtocol(resultSet.getString("PROTOCOL"));
         qo.setChannelAccessAccount(resultSet.getString("CHANNEL_ACCESS_ACCOUNT"));
         qo.setPriceStyle(resultSet.getString("PRICE_STYLE"));
-        qo.setChannelPrice(resultSet.getString("CHANNEL_PRICE"));
         qo.setBusinessAreaType(resultSet.getString("BUSINESS_AREA_TYPE"));
         qo.setMaskProvince(resultSet.getString("MASK_PROVINCE"));
         qo.setSupportAreaCodes(resultSet.getString("SUPPORT_AREA_CODES"));
@@ -35,6 +36,13 @@ public class ChannelBasicInfoRowMapper implements RowMapper<ChannelBasicInfoQo> 
         qo.setChannelIntroduce(resultSet.getString("CHANNEL_INTRODUCE"));
         qo.setChannelAccessSales(resultSet.getString("CHANNEL_ACCESS_SALES"));
         qo.setChannelRestrictContent(resultSet.getString("CHANNEL_RESTRICT_CONTENT"));
+        qo.setSpecificProvder(resultSet.getString("SPECIFIC_PROVDER"));
+        BigDecimal channelPrice = resultSet.getBigDecimal("CHANNEL_PRICE");
+        if(!StringUtils.isEmpty(channelPrice)){
+            qo.setChannelPrice(channelPrice.stripTrailingZeros().toPlainString());
+        }else{
+            qo.setChannelPrice("");
+        }
 
         return qo;
     }

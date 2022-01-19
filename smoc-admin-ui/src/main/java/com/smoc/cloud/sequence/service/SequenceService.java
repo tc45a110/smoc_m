@@ -40,10 +40,9 @@ public class SequenceService {
      * 封装ID前缀
      * @param channel
      * @param businessType
-     * @param carrier
      * @return
      */
-    public String getPrefixId(String channel, String businessType, String carrier) {
+    public String getPrefixId(String channel, String businessType) {
 
         StringBuilder prefixId = new StringBuilder();
 
@@ -77,12 +76,12 @@ public class SequenceService {
             seq = sequenceFeignClient.findSequence(channel);
         }
 
-        //运营商第一个字母
+        /*//运营商第一个字母
         String[] carriers = carrier.split(",");
         for (int i = 0; i < carriers.length; i++) {
             String type = carriers[i];
             prefixId.append(type.substring(0, 1));
-        }
+        }*/
 
         if(!StringUtils.isEmpty(seq)){
             prefixId.append(seq);

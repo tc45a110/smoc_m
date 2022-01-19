@@ -247,7 +247,7 @@ public class ChannelController {
         //初始化其他变量
         if (!StringUtils.isEmpty(op) && "add".equals(op)) {
             //封装通道ID前缀
-            String prefixId = sequenceService.getPrefixId("CHANNEL",channelBasicInfoValidator.getBusinessType(),channelBasicInfoValidator.getCarrier());
+            String prefixId = sequenceService.getPrefixId("CHANNEL",channelBasicInfoValidator.getBusinessType());
             channelBasicInfoValidator.setChannelId(prefixId);
             channelBasicInfoValidator.setCreatedTime(DateTimeUtils.getDateTimeFormat(new Date()));
             channelBasicInfoValidator.setCreatedBy(user.getRealName());

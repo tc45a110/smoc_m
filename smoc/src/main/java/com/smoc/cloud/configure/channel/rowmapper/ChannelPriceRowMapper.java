@@ -2,7 +2,9 @@ package com.smoc.cloud.configure.channel.rowmapper;
 
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelPriceValidator;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -18,9 +20,13 @@ public class ChannelPriceRowMapper implements RowMapper<ChannelPriceValidator> {
         qo.setChannelId(resultSet.getString("CHANNEL_ID"));
         qo.setPriceStyle(resultSet.getString("PRICE_STYLE"));
         qo.setAreaCode(resultSet.getString("AREA_CODE"));
-        qo.setChannelPrice(resultSet.getBigDecimal("CHANNEL_PRICE"));
         qo.setLasttimeHistory(resultSet.getString("LASTTIME_HISTORY"));
-
+        BigDecimal channelPrice = resultSet.getBigDecimal("CHANNEL_PRICE");
+        if(!StringUtils.isEmpty(channelPrice)){
+            qo.setChannelPrice(new BigDecimal(channelPrice.stripTrailingZeros().toPlainString()));
+        }else{
+            qo.setChannelPrice(channelPrice);
+        }
         return qo;
     }
 }

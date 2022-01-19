@@ -1,18 +1,15 @@
 package com.smoc.cloud.customer.entity;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Objects;
 
 @Entity
 @Table(name = "account_base_info")
-public class AccountBaseInfo {
+public class AccountBasicInfo {
     private String accountId;
     private String enterpriseId;
     private String accountName;
-    private String account;
-    private String accountPassword;
     private String businessType;
     private String carrier;
     private String infoType;
@@ -56,26 +53,6 @@ public class AccountBaseInfo {
 
     public void setAccountName(String accountName) {
         this.accountName = accountName;
-    }
-
-    @Basic
-    @Column(name = "ACCOUNT")
-    public String getAccount() {
-        return account;
-    }
-
-    public void setAccount(String account) {
-        this.account = account;
-    }
-
-    @Basic
-    @Column(name = "ACCOUNT_PASSWORD")
-    public String getAccountPassword() {
-        return accountPassword;
-    }
-
-    public void setAccountPassword(String accountPassword) {
-        this.accountPassword = accountPassword;
     }
 
     @Basic
@@ -222,12 +199,10 @@ public class AccountBaseInfo {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AccountBaseInfo that = (AccountBaseInfo) o;
+        AccountBasicInfo that = (AccountBasicInfo) o;
         return Objects.equals(accountId, that.accountId) &&
                 Objects.equals(enterpriseId, that.enterpriseId) &&
                 Objects.equals(accountName, that.accountName) &&
-                Objects.equals(account, that.account) &&
-                Objects.equals(accountPassword, that.accountPassword) &&
                 Objects.equals(businessType, that.businessType) &&
                 Objects.equals(carrier, that.carrier) &&
                 Objects.equals(infoType, that.infoType) &&
@@ -244,6 +219,6 @@ public class AccountBaseInfo {
 
     @Override
     public int hashCode() {
-        return Objects.hash(accountId, enterpriseId, accountName, account, accountPassword, businessType, carrier, infoType, extendCode, randomExtendCodeLength, accountChannelType, poistCarrier, transferType, createdBy, createdTime, updatedBy, updatedTime);
+        return Objects.hash(accountId, enterpriseId, accountName, businessType, carrier, infoType, extendCode, randomExtendCodeLength, accountChannelType, poistCarrier, transferType, createdBy, createdTime, updatedBy, updatedTime);
     }
 }
