@@ -2,13 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:mpm="http://www.thymeleaf.org">
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <th:block th:insert="fragments/common_fragments :: common_header"/>
     <th:block th:insert="fragments/common_fragments :: common_css"/>
-    <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
     <th:block th:insert="fragments/common_fragments :: select_css"/>
-    <link th:href="@{/static/js/month-picker/bootstrap-datepicker3.min.css}" rel="stylesheet">
-    <link th:href="@{/static/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css}" rel="stylesheet">
-    <script th:src="@{/static/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js}"></script>
+    <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
     <link th:href="@{/static/css/detail_statistics.css}" rel="stylesheet">
     <style>
         .smoc{
@@ -23,79 +21,32 @@
         .bgRow{
            background-color:#f3f3f3
         }
-
     </style>
 </head>
-<body>
+<body style="background-color:#fff">
 <!-- Loader start 页面加载进度-->
 <th:block th:insert="fragments/common_fragments :: common_loader"/>
 <!-- Loader end -->
 
 <!-- Start content -->
-<div class="content" style="margin-top: 60px">
+<div class="content" style="margin-top: 0px">
     <div class="container">
-
-        <!-- start row 页面导航-->
-        <div class="row fixed-navigation">
-            <div class="col-xs-12">
-                <div class="page-title-box">
-                    <h4 class="page-title">运营商对账 </h4>
-                    <ol class="breadcrumb p-0 m-0">
-                        <li>
-                            财务管理
-                        </li>
-                        <li class="active">
-                            运营商对账
-                        </li>
-                    </ol>
-                    <div class="clearfix"></div>
-                </div>
-            </div>
-        </div>
-        <!-- end row -->
-
-        <!-- start row  查询条件-->
-        <div class="row" style="position: relative;margin-top: 80px" th:remove="${#strings.isEmpty(error)}?none:all">
-            <div class="col-sm-12">
-                <div class="card-box">
-                    <form id="query_form" method="post">
-                        <div class="row m-b-60">
-                            <div class="col-sm-12">
-                                <div class="form-group  col-sm-3">
-                                    <input id="form_datetime" type="text" class="form-control" value="2021-12"
-                                           placeholder="" autocomplete="off">
-                                </div>
-                                <div class="form-group  col-sm-3">
-                                    <input type="text" class="form-control"
-                                           placeholder="运营商" autocomplete="off">
-                                </div>
-                                <div class="form-group col-sm-4 pull-right" style="text-align: right">
-                                    <button type="submit"
-                                            class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
-                                        <i class="glyphicon glyphicon-search" style="margin-right:5px"></i> 查询
-                                    </button>
-                                    <a class="btn btn-primary waves-effect waves-light m-l-10 btn-md">
-                                        <i class="glyphicon glyphicon-export"></i>
-                                        导出EXCEL
-                                    </a>
-                                </div>
-
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <!-- end row -->
-
         <!-- start row  列表数据-->
-        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+        <div class="row"  th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
-                <div class="detail" style="height:80px;margin-bottom:0px">
+                <div class="detail" style="margin-bottom:0px">
                     <ul>
                         <li>
-                            <h2 style="color: #fff;margin-top:20px;font-size:18px;">运营商对账</h2>
+                            <h2 style="color: #fff;font-size:16px;">济南移动 历史 对账单</h2>
                             <span></span>
+                            <div class="detailInner">
+                                <a>近3月发送量差额：<span data-d-group="4" data-a-sign=" "
+                                                style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
+                                                readonly class="autonumber">1</span>%</a><i></i>
+                                <a>近12月发送量差额：<span data-d-group="4" data-a-sign=""
+                                                style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
+                                                readonly class="autonumber">0.3</span>%</a>
+                            </div>
                         </li>
                     </ul>
                 </div>
@@ -117,12 +68,10 @@
                                     <th>运营商条数</th>
                                     <th>条数差额</th>
                                     <th>金额差额</th>
-                                    <th style="text-align:center">对账状态</th>
-                                    <th>操作</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr class="bgRow">
+                                <tr>
                                     <td class="smoc" style="vertical-align: middle;line-height: 26px" rowspan="4">
                                         2022-01
                                     </td>
@@ -154,206 +103,7 @@
                                     <td class="contradiction" style="vertical-align: middle;line-height: 26px">
                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
                                              style="width:90px;text-align:left"
-                                             class="autonumber">405922</span> (1.02%)
-                                    </td>
-                                    <td class="contradiction" style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px" rowspan="4">
-                                        <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light">已就绪</a>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px" rowspan="4">
-                                        <a sec:authorize-url="/finance/reconciliation/carrier/view/center/*"
-                                           th:href="@{/finance/reconciliation/carrier/view/center/id}"
-                                           data-toggle="tooltip" data-placement="bottom"
-                                           data-original-title="查看对账明细"
-                                           class="on-default edit-row"
-                                           style="padding-left: 5px;color:#4BD396;"><i style="font-size: 18px"
-                                                                                       class="glyphicon glyphicon-search"></i></a>
-                                        <a
-                                            data-toggle="tooltip" data-placement="bottom"
-                                            data-original-title="导出EXCEL"
-                                            class="on-default edit-row"
-                                            style="padding-left: 5px;color:#188ae2"><i style="font-size: 18px"
-                                                                                       class="glyphicon glyphicon-export"></i></a>
-                                        <a sec:authorize-url="/finance/reconciliation/carrier/reconciliation/center/*"
-                                           th:href="@{/finance/reconciliation/carrier/reconciliation/center/id}"
-                                           data-toggle="tooltip" data-placement="bottom"
-                                           data-original-title="开始对账"
-                                           class="on-default edit-row"
-                                           style="padding-left: 5px;color:#0095a8"><i style="font-size: 18px"
-                                                                                      class="glyphicon glyphicon-book"></i></a>
-                                    </td>
-
-                                </tr>
-                                <tr class="bgRow">
-                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
-                                        100685(CHID100685)
-                                    </td>
-                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
-                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                             style="width:90px;text-align:left"
-                                             class="autonumber">405922</span>
-                                    </td>
-                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
-                                        ¥0.025
-                                    </td>
-                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
-                                    </td>
-                                    <td class="carrier" style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
-                                    </td>
-                                    <td class="carrier" style="vertical-align: middle;line-height: 26px">
-                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                             style="width:90px;text-align:left"
-                                             class="autonumber">405922</span>
-                                    </td>
-                                    <td class="contradiction" style="vertical-align: middle;line-height: 26px">
-                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                             style="width:90px;text-align:left"
-                                             class="autonumber">405922</span> (1.02%)
-                                    </td>
-                                    <td class="contradiction" style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
-                                    </td>
-                                </tr>
-                                <tr class="bgRow">
-                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
-                                        100685(CHID100685)
-                                    </td>
-                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
-                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                             style="width:90px;text-align:left"
-                                             class="autonumber">405922</span>
-                                    </td>
-                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
-                                        ¥0.025
-                                    </td>
-                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
-                                    </td>
-                                    <td class="carrier" style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
-                                    </td>
-                                    <td class="carrier" style="vertical-align: middle;line-height: 26px">
-                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                             style="width:90px;text-align:left"
-                                             class="autonumber">405922</span>
-                                    </td>
-                                    <td class="contradiction" style="vertical-align: middle;line-height: 26px">
-                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                             style="width:90px;text-align:left"
-                                             class="autonumber">405922</span> (1.02%)
-                                    </td>
-                                    <td class="contradiction" style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
-                                    </td>
-                                </tr>
-                                <tr class="bgRow">
-                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
-                                        100685(CHID100685)
-                                    </td>
-                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
-                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                             style="width:90px;text-align:left"
-                                             class="autonumber">405922</span>
-                                    </td>
-                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
-                                        ¥0.025
-                                    </td>
-                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
-                                    </td>
-                                    <td class="carrier" style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
-                                    </td>
-                                    <td class="carrier" style="vertical-align: middle;line-height: 26px">
-                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                             style="width:90px;text-align:left"
-                                             class="autonumber">405922</span>
-                                    </td>
-                                    <td class="contradiction" style="vertical-align: middle;line-height: 26px">
-                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                             style="width:90px;text-align:left"
-                                             class="autonumber">405922</span> (1.02%)
-                                    </td>
-                                    <td class="contradiction" style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="smoc" style="vertical-align: middle;line-height: 26px" rowspan="3">
-                                        2022-01
-                                    </td>
-                                    <td class="smoc" style="vertical-align: middle;line-height: 26px" rowspan="3">
-                                        青岛移动
-                                    </td>
-                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
-                                        100685(CHID100685)
-                                    </td>
-                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
-                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                             style="width:90px;text-align:left"
-                                             class="autonumber">405922</span>
-                                    </td>
-                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
-                                        ¥0.025
-                                    </td>
-                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
-                                    </td>
-                                    <td class="carrier" style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
-                                    </td>
-                                    <td class="carrier" style="vertical-align: middle;line-height: 26px">
-                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                             style="width:90px;text-align:left"
-                                             class="autonumber">405922</span>
-                                    </td>
-                                    <td class="contradiction" style="vertical-align: middle;line-height: 26px">
-                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                             style="width:90px;text-align:left"
-                                             class="autonumber">405922</span> (1.02%)
-                                    </td>
-                                    <td class="contradiction" style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px" rowspan="3">
-                                        <a class="btn btn-warning btn-rounded btn-sm waves-effect waves-light">审核中</a>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px" rowspan="3">
-
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
-                                        100685(CHID100685)
-                                    </td>
-                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
-                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                             style="width:90px;text-align:left"
-                                             class="autonumber">405922</span>
-                                    </td>
-                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
-                                        ¥0.025
-                                    </td>
-                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
-                                    </td>
-                                    <td class="carrier" style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
-                                    </td>
-                                    <td class="carrier" style="vertical-align: middle;line-height: 26px">
-                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                             style="width:90px;text-align:left"
-                                             class="autonumber">405922</span>
-                                    </td>
-                                    <td class="contradiction" style="vertical-align: middle;line-height: 26px">
-                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                             style="width:90px;text-align:left"
-                                             class="autonumber">405922</span> (1.02%)
+                                             class="autonumber">405922</span> (1%)
                                     </td>
                                     <td class="contradiction" style="vertical-align: middle;line-height: 26px">
                                         <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
@@ -385,96 +135,13 @@
                                     <td class="contradiction" style="vertical-align: middle;line-height: 26px">
                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
                                              style="width:90px;text-align:left"
-                                             class="autonumber">405922</span> (1.02%)
-                                    </td>
-                                    <td class="contradiction" style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
-                                    </td>
-                                </tr>
-                                <tr class="bgRow">
-                                    <td class="smoc" style="vertical-align: middle;line-height: 26px" rowspan="2">
-                                        2022-01
-                                    </td>
-                                    <td class="smoc" style="vertical-align: middle;line-height: 26px" rowspan="2">
-                                        北京移动
-                                    </td>
-                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
-                                        100685(CHID100685)
-                                    </td>
-                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
-                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                             style="width:90px;text-align:left"
-                                             class="autonumber">405922</span>
-                                    </td>
-                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
-                                        ¥0.025
-                                    </td>
-                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
-                                    </td>
-                                    <td class="carrier" style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
-                                    </td>
-                                    <td class="carrier" style="vertical-align: middle;line-height: 26px">
-                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                             style="width:90px;text-align:left"
-                                             class="autonumber">405922</span>
-                                    </td>
-                                    <td class="contradiction" style="vertical-align: middle;line-height: 26px">
-                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                             style="width:90px;text-align:left"
-                                             class="autonumber">405922</span> (1.02%)
-                                    </td>
-                                    <td class="contradiction" style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px" rowspan="2">
-                                        <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">已完成</a>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px" rowspan="2">
-
-                                    </td>
-
-                                </tr>
-                                <tr class="bgRow">
-                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
-                                        100685(CHID100685)
-                                    </td>
-                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
-                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                             style="width:90px;text-align:left"
-                                             class="autonumber">405922</span>
-                                    </td>
-                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
-                                        ¥0.025
-                                    </td>
-                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
-                                    </td>
-                                    <td class="carrier" style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
-                                    </td>
-                                    <td class="carrier" style="vertical-align: middle;line-height: 26px">
-                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                             style="width:90px;text-align:left"
-                                             class="autonumber">405922</span>
-                                    </td>
-                                    <td class="contradiction" style="vertical-align: middle;line-height: 26px">
-                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                             style="width:90px;text-align:left"
-                                             class="autonumber">405922</span> (1.02%)
+                                             class="autonumber">405922</span> (1%)
                                     </td>
                                     <td class="contradiction" style="vertical-align: middle;line-height: 26px">
                                         <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="smoc" style="vertical-align: middle;line-height: 26px" rowspan="2">
-                                        2022-01
-                                    </td>
-                                    <td class="smoc" style="vertical-align: middle;line-height: 26px" rowspan="2">
-                                        大连移动
-                                    </td>
                                     <td class="smoc" style="vertical-align: middle;line-height: 26px">
                                         100685(CHID100685)
                                     </td>
@@ -500,16 +167,10 @@
                                     <td class="contradiction" style="vertical-align: middle;line-height: 26px">
                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
                                              style="width:90px;text-align:left"
-                                             class="autonumber">405922</span> (1.02%)
+                                             class="autonumber">405922</span> (1%)
                                     </td>
                                     <td class="contradiction" style="vertical-align: middle;line-height: 26px">
                                         <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px" rowspan="2">
-                                        <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">已完成</a>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px" rowspan="2">
-
                                     </td>
 
                                 </tr>
@@ -539,83 +200,179 @@
                                     <td class="contradiction" style="vertical-align: middle;line-height: 26px">
                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
                                              style="width:90px;text-align:left"
-                                             class="autonumber">405922</span> (1.02%)
+                                             class="autonumber">405922</span> (1%)
                                     </td>
                                     <td class="contradiction" style="vertical-align: middle;line-height: 26px">
                                         <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
                                     </td>
+
+                                </tr>
+                                <tr class="bgRow">
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px" rowspan="4">
+                                        2021-12
+                                    </td>
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px" rowspan="4">
+                                        济南移动
+                                    </td>
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
+                                        100685(CHID100685)
+                                    </td>
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
+                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
+                                             style="width:90px;text-align:left"
+                                             class="autonumber">405922</span>
+                                    </td>
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
+                                        ¥0.025
+                                    </td>
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
+                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
+                                    </td>
+                                    <td class="carrier" style="vertical-align: middle;line-height: 26px">
+                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
+                                    </td>
+                                    <td class="carrier" style="vertical-align: middle;line-height: 26px">
+                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
+                                             style="width:90px;text-align:left"
+                                             class="autonumber">405922</span>
+                                    </td>
+                                    <td class="contradiction" style="vertical-align: middle;line-height: 26px">
+                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
+                                             style="width:90px;text-align:left"
+                                             class="autonumber">405922</span> (1%)
+                                    </td>
+                                    <td class="contradiction" style="vertical-align: middle;line-height: 26px">
+                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
+                                    </td>
+                                </tr>
+                                <tr class="bgRow">
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
+                                        100685(CHID100685)
+                                    </td>
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
+                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
+                                             style="width:90px;text-align:left"
+                                             class="autonumber">405922</span>
+                                    </td>
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
+                                        ¥0.025
+                                    </td>
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
+                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
+                                    </td>
+                                    <td class="carrier" style="vertical-align: middle;line-height: 26px">
+                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
+                                    </td>
+                                    <td class="carrier" style="vertical-align: middle;line-height: 26px">
+                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
+                                             style="width:90px;text-align:left"
+                                             class="autonumber">405922</span>
+                                    </td>
+                                    <td class="contradiction" style="vertical-align: middle;line-height: 26px">
+                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
+                                             style="width:90px;text-align:left"
+                                             class="autonumber">405922</span> (1%)
+                                    </td>
+                                    <td class="contradiction" style="vertical-align: middle;line-height: 26px">
+                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
+                                    </td>
+                                </tr>
+                                <tr class="bgRow">
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
+                                        100685(CHID100685)
+                                    </td>
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
+                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
+                                             style="width:90px;text-align:left"
+                                             class="autonumber">405922</span>
+                                    </td>
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
+                                        ¥0.025
+                                    </td>
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
+                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
+                                    </td>
+                                    <td class="carrier" style="vertical-align: middle;line-height: 26px">
+                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
+                                    </td>
+                                    <td class="carrier" style="vertical-align: middle;line-height: 26px">
+                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
+                                             style="width:90px;text-align:left"
+                                             class="autonumber">405922</span>
+                                    </td>
+                                    <td class="contradiction" style="vertical-align: middle;line-height: 26px">
+                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
+                                             style="width:90px;text-align:left"
+                                             class="autonumber">405922</span> (1%)
+                                    </td>
+                                    <td class="contradiction" style="vertical-align: middle;line-height: 26px">
+                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
+                                    </td>
+
+                                </tr>
+                                <tr class="bgRow">
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
+                                        100685(CHID100685)
+                                    </td>
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
+                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
+                                             style="width:90px;text-align:left"
+                                             class="autonumber">405922</span>
+                                    </td>
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
+                                        ¥0.025
+                                    </td>
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
+                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
+                                    </td>
+
+                                    <td class="carrier" style="vertical-align: middle;line-height: 26px">
+                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
+                                    </td>
+                                    <td class="carrier" style="vertical-align: middle;line-height: 26px">
+                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
+                                             style="width:90px;text-align:left"
+                                             class="autonumber">405922</span>
+                                    </td>
+                                    <td class="contradiction" style="vertical-align: middle;line-height: 26px">
+                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
+                                             style="width:90px;text-align:left"
+                                             class="autonumber">405922</span> (1%)
+                                    </td>
+                                    <td class="contradiction" style="vertical-align: middle;line-height: 26px">
+                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
+                                    </td>
+
                                 </tr>
                                 </tbody>
                             </table>
                         </div>
-                        <th:block th:insert="fragments/page_fragments :: page"/>
                     </div>
                 </div>
 
             </div>
         </div>
         <!-- end row -->
-
-        <!-- start confirm delete modal  -->
-        <div id="confirm-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="custom-width-modalLabel"
-             aria-hidden="true" style="display: none;margin: 60px">
-            <div class="modal-dialog" style="width:33%;">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 class="modal-title" id="custom-width-modalLabel">确认注销</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p>注销之后数据无法恢复！你还是确认注销？</p>
-                    </div>
-                    <div class="modal-footer">
-                        <input type="hidden" id="deleteId">
-                        <a class="btn btn-default waves-effect" data-dismiss="modal">取消</a>
-                        <button class="btn btn-primary waves-effect waves-light">确认注销</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- end confirm delete modal  -->
 
         <!-- start row  错误提示-->
         <th:block th:insert="fragments/common_fragments :: common_error"/>
         <!-- end row -->
 
     </div> <!-- container -->
-
 </div> <!-- content -->
-
 <th:block th:insert="fragments/common_fragments :: common_js"/>
-<script th:src="@{/static/echarts/echarts.min.js}"></script>
 <th:block th:insert="fragments/common_fragments :: select_js"/>
 <script th:src="@{/static/plugins/autoNumeric/autoNumeric.js}"></script>
-<script th:src="@{/static/js/month-picker/bootstrap-datepicker.js}"></script>
-<script th:src="@{/static/js/month-picker/bootstrap-datepicker.zh-CN.js}"></script>
+
 <script>
 
      $(document).ready(function() {
-
-         $("#form_datetime").datepicker({
-            startView: 'years',  //起始选择范围
-            maxViewMode: 'years', //最大选择范围
-            minViewMode: 'months', //最小选择范围
-            todayHighlight: true,// 当前时间高亮显示
-            autoclose: 'true',// 选择时间后弹框自动消失
-            format: 'yyyy-mm',// 时间格式
-            language: 'zh-CN',// 汉化
-            todayBtn: "linked",//显示今天 按钮
-            clearBtn: true,// 清除按钮，和今天 按钮只能显示一个
-        });
-
 		$('.autonumber').autoNumeric('init');
 	 });
-
 
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
-
 
 </script>
 </body>

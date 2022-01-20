@@ -16,8 +16,8 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Slf4j
 @Controller
-@RequestMapping("/finance/reconciliation/carrier")
-public class ReconciliationCarrierController {
+@RequestMapping("/finance/handle/carrier/")
+public class ReconciliationCarrierHandleController {
 
     /**
      * 运营商对账列表
@@ -26,7 +26,7 @@ public class ReconciliationCarrierController {
      */
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ModelAndView list() {
-        ModelAndView view = new ModelAndView("reconciliation/finance_reconciliation_carrier_list");
+        ModelAndView view = new ModelAndView("reconciliation/finance_handle_carrier_list");
 
         //查询数据
         PageParams params = new PageParams<>();
@@ -49,7 +49,7 @@ public class ReconciliationCarrierController {
      */
     @RequestMapping(value = "/page", method = RequestMethod.POST)
     public ModelAndView page() {
-        ModelAndView view = new ModelAndView("reconciliation/finance_reconciliation_carrier_list");
+        ModelAndView view = new ModelAndView("reconciliation/finance_handle_carrier_list");
 
         //查询数据
         PageParams params = new PageParams<>();

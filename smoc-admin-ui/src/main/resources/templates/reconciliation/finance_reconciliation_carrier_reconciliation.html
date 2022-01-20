@@ -10,36 +10,16 @@
     <link th:href="@{/static/css/detail_statistics.css}" rel="stylesheet">
 
 </head>
-<body>
+<body style="background-color:#fff">
 <!-- Loader start 页面加载进度-->
 <th:block th:insert="fragments/common_fragments :: common_loader"/>
 <!-- Loader end -->
 
 <!-- Start content -->
-<div class="content" style="margin-top: 60px">
+<div class="content" style="margin-top: 0px">
     <div class="container">
-
-        <!-- start row 页面导航-->
-        <div class="row fixed-navigation">
-            <div class="col-xs-12">
-                <div class="page-title-box">
-                    <h4 class="page-title">运营商对账 </h4>
-                    <ol class="breadcrumb p-0 m-0">
-                        <li>
-                            财务管理
-                        </li>
-                        <li class="active">
-                            运营商对账
-                        </li>
-                    </ol>
-                    <div class="clearfix"></div>
-                </div>
-            </div>
-        </div>
-        <!-- end row -->
-
         <!-- start row  列表数据-->
-        <div class="row"  th:remove="${#strings.isEmpty(error)}?none:all" style="position: relative;margin-top: 80px" >
+        <div class="row"  th:remove="${#strings.isEmpty(error)}?none:all" style="position: relative;margin-top: 0px" >
             <div class="col-sm-12">
                 <div class="detail" style="height:80px;margin-bottom:0px">
                     <ul>
@@ -96,17 +76,16 @@
                                                required="" placeholder="请输入运营商账单总金额" autocomplete="off">
                                     </td>
                                     <td class="carrier" style="vertical-align: middle;line-height: 26px">
-                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                             style="width:90px;text-align:left"
-                                             class="autonumber">----</span>
+                                        <input id="expDate112" class="form-control" type="text"
+                                               required="" placeholder="运营商条数" autocomplete="off">
                                     </td>
                                     <td class="contradiction" style="vertical-align: middle;line-height: 26px">
                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
                                              style="width:90px;text-align:left"
-                                             class="autonumber">----</span>
+                                             class="autonumber">0</span>
                                     </td>
                                     <td class="contradiction" style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">----</span>
+                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">0</span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -129,17 +108,16 @@
                                                required="" placeholder="请输入运营商账单总金额" autocomplete="off">
                                     </td>
                                     <td class="carrier" style="vertical-align: middle;line-height: 26px">
-                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                             style="width:90px;text-align:left"
-                                             class="autonumber">----</span>
+                                        <input id="expDate12" class="form-control" type="text"
+                                               required="" placeholder="运营商条数" autocomplete="off">
                                     </td>
                                     <td class="contradiction" style="vertical-align: middle;line-height: 26px">
                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
                                              style="width:90px;text-align:left"
-                                             class="autonumber">----</span>
+                                             class="autonumber">0</span>
                                     </td>
                                     <td class="contradiction" style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">----</span>
+                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">0</span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -162,17 +140,16 @@
                                                required="" placeholder="请输入运营商账单总金额" autocomplete="off">
                                     </td>
                                     <td class="carrier" style="vertical-align: middle;line-height: 26px">
-                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                             style="width:90px;text-align:left"
-                                             class="autonumber">----</span>
+                                        <input id="expDate1211" class="form-control" type="text"
+                                               required="" placeholder="运营商条数" autocomplete="off">
                                     </td>
                                     <td class="contradiction" style="vertical-align: middle;line-height: 26px">
                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
                                              style="width:90px;text-align:left"
-                                             class="autonumber">----</span>
+                                             class="autonumber">0</span>
                                     </td>
                                     <td class="contradiction" style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">----</span>
+                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">0</span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -195,17 +172,16 @@
                                                required="" placeholder="请输入运营商账单总金额" autocomplete="off">
                                     </td>
                                     <td class="carrier" style="vertical-align: middle;line-height: 26px">
-                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                             style="width:90px;text-align:left"
-                                             class="autonumber">----</span>
+                                        <input id="expDate12111" class="form-control" type="text"
+                                               required="" placeholder="运营商条数" autocomplete="off">
                                     </td>
                                     <td class="contradiction" style="vertical-align: middle;line-height: 26px">
                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
                                              style="width:90px;text-align:left"
-                                             class="autonumber">----</span>
+                                             class="autonumber">0</span>
                                     </td>
                                     <td class="contradiction" style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">----</span>
+                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">0</span>
                                     </td>
                                 </tr>
                                 </tbody>
