@@ -42,7 +42,7 @@
                     <h4 class="page-title">运营商对账 </h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
-                            财务管理
+                            对账出账
                         </li>
                         <li class="active">
                             运营商对账
@@ -323,6 +323,19 @@
                                         <a class="btn btn-warning btn-rounded btn-sm waves-effect waves-light">审核中</a>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px" rowspan="3">
+                                        <a sec:authorize-url="/finance/reconciliation/carrier/view/center/*"
+                                           th:href="@{/finance/reconciliation/carrier/view/center/id}"
+                                           data-toggle="tooltip" data-placement="bottom"
+                                           data-original-title="查看对账明细"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color:#4BD396;"><i style="font-size: 18px"
+                                                                                       class="glyphicon glyphicon-search"></i></a>
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="导出EXCEL"
+                                                class="on-default edit-row"
+                                                style="padding-left: 5px;color:#188ae2"><i style="font-size: 18px"
+                                                                                           class="glyphicon glyphicon-export"></i></a>
 
                                     </td>
 
@@ -432,7 +445,19 @@
                                         <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">已完成</a>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px" rowspan="2">
-
+                                        <a sec:authorize-url="/finance/reconciliation/carrier/view/center/*"
+                                           th:href="@{/finance/reconciliation/carrier/view/center/id}"
+                                           data-toggle="tooltip" data-placement="bottom"
+                                           data-original-title="查看对账明细"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color:#4BD396;"><i style="font-size: 18px"
+                                                                                       class="glyphicon glyphicon-search"></i></a>
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="导出EXCEL"
+                                                class="on-default edit-row"
+                                                style="padding-left: 5px;color:#188ae2"><i style="font-size: 18px"
+                                                                                           class="glyphicon glyphicon-export"></i></a>
                                     </td>
 
                                 </tr>
@@ -509,7 +534,19 @@
                                         <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">已完成</a>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px" rowspan="2">
-
+                                        <a sec:authorize-url="/finance/reconciliation/carrier/view/center/*"
+                                           th:href="@{/finance/reconciliation/carrier/view/center/id}"
+                                           data-toggle="tooltip" data-placement="bottom"
+                                           data-original-title="查看对账明细"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color:#4BD396;"><i style="font-size: 18px"
+                                                                                       class="glyphicon glyphicon-search"></i></a>
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="导出EXCEL"
+                                                class="on-default edit-row"
+                                                style="padding-left: 5px;color:#188ae2"><i style="font-size: 18px"
+                                                                                           class="glyphicon glyphicon-export"></i></a>
                                     </td>
 
                                 </tr>

@@ -6,7 +6,9 @@
     <th:block th:insert="fragments/common_fragments :: common_css"/>
     <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
     <th:block th:insert="fragments/common_fragments :: select_css"/>
-    <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
+    <link th:href="@{/static/js/month-picker/bootstrap-datepicker3.min.css}" rel="stylesheet">
+    <link th:href="@{/static/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css}" rel="stylesheet">
+    <script th:src="@{/static/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js}"></script>
     <link th:href="@{/static/css/detail_statistics.css}" rel="stylesheet">
     <style>
         .smoc{
@@ -37,13 +39,13 @@
         <div class="row fixed-navigation">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">运营商手工出账 </h4>
+                    <h4 class="page-title">EC对账 </h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
-                            财务管理
+                            对账出账
                         </li>
                         <li class="active">
-                            运营商手工出账
+                            EC对账
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -59,12 +61,13 @@
                     <form id="query_form" method="post">
                         <div class="row m-b-60">
                             <div class="col-sm-12">
-                                <div class="form-group col-sm-4">
-                                    <input id="dateQueryStr" class="form-control" type="text"/>
+                                <div class="form-group  col-sm-3">
+                                    <input id="form_datetime" type="text" class="form-control" value="2021-12"
+                                           placeholder="" autocomplete="off">
                                 </div>
-                                <div class="form-group  col-sm-4">
-                                    <input type="text" class="form-control" value="吉林移动"
-                                           placeholder="运营商" autocomplete="off">
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control"
+                                           placeholder="企业名称" autocomplete="off">
                                 </div>
                                 <div class="form-group col-sm-4 pull-right" style="text-align: right">
                                     <button type="submit"
@@ -91,7 +94,7 @@
                 <div class="detail" style="height:80px;margin-bottom:0px">
                     <ul>
                         <li>
-                            <h2 style="color: #fff;margin-top:20px;font-size:18px;">运营商手工出账</h2>
+                            <h2 style="color: #fff;margin-top:20px;font-size:18px;">EC对账</h2>
                             <span></span>
                         </li>
                     </ul>
@@ -104,25 +107,27 @@
                             <table class="table table table-hover m-10" style="margin-top: -12px;">
                                 <thead>
                                 <tr>
-                                    <th>时间周期</th>
-                                    <th>运营商</th>
-                                    <th>端口号（计费号码）</th>
+                                    <th>账期</th>
+                                    <th>企业名称</th>
+                                    <th>业务账号</th>
                                     <th>发送量</th>
                                     <th>价格</th>
                                     <th>总金额</th>
+                                    <th>付费方式</th>
+                                    <th style="text-align:center">对账状态</th>
                                     <th>操作</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
+                                <tr class="bgRow">
                                     <td class="smoc" style="vertical-align: middle;line-height: 26px" rowspan="4">
-                                        2022-01-02至2022-02-02
+                                        2022-01
                                     </td>
                                     <td class="smoc" style="vertical-align: middle;line-height: 26px" rowspan="4">
-                                        吉林移动
+                                        北京小舟科技有限公司
                                     </td>
                                     <td class="smoc" style="vertical-align: middle;line-height: 26px">
-                                        100685(CHID100685)
+                                        星语-移动-短信（XYBA100013）
                                     </td>
                                     <td class="smoc" style="vertical-align: middle;line-height: 26px">
                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
@@ -135,7 +140,20 @@
                                     <td class="smoc" style="vertical-align: middle;line-height: 26px">
                                         <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
                                     </td>
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
+                                        后付费
+                                    </td>
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px"  rowspan="4">
+                                        <a class="btn btn-danger btn-rounded btn-xs waves-effect waves-light">已就绪</a>
+                                    </td>
                                     <td style="vertical-align: middle;line-height: 26px" rowspan="4">
+                                        <a sec:authorize-url="/finance/reconciliation/carrier/view/center/*"
+                                           th:href="@{/finance/reconciliation/carrier/view/center/id}"
+                                           data-toggle="tooltip" data-placement="bottom"
+                                           data-original-title="查看对账明细"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color:#4BD396;"><i style="font-size: 18px"
+                                                                                       class="glyphicon glyphicon-search"></i></a>
                                         <a
                                             data-toggle="tooltip" data-placement="bottom"
                                             data-original-title="导出EXCEL"
@@ -152,9 +170,9 @@
                                     </td>
 
                                 </tr>
-                                <tr>
+                                <tr class="bgRow">
                                     <td class="smoc" style="vertical-align: middle;line-height: 26px">
-                                        100685(CHID100685)
+                                        星语-移动-短信（XYBA100013）
                                     </td>
                                     <td class="smoc" style="vertical-align: middle;line-height: 26px">
                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
@@ -166,11 +184,116 @@
                                     </td>
                                     <td class="smoc" style="vertical-align: middle;line-height: 26px">
                                         <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
+                                    </td>
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
+                                        后付费
+                                    </td>
+                                </tr>
+                                <tr class="bgRow">
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
+                                        星语-移动-短信（XYBA100013）
+                                    </td>
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
+                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
+                                             style="width:90px;text-align:left"
+                                             class="autonumber">405922</span>
+                                    </td>
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
+                                        ¥0.025
+                                    </td>
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
+                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
+                                    </td>
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
+                                        后付费
+                                    </td>
+                                </tr>
+                                <tr class="bgRow">
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
+                                        星语-移动-短信（XYBA100013）
+                                    </td>
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
+                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
+                                             style="width:90px;text-align:left"
+                                             class="autonumber">405922</span>
+                                    </td>
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
+                                        ¥0.025
+                                    </td>
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
+                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
+                                    </td>
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
+                                        后付费
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px" rowspan="3">
+                                        2022-01
+                                    </td>
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px" rowspan="3">
+                                        北京认证企业科技有限公司
+                                    </td>
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
+                                        星语-移动-短信（XYBA100013）
+                                    </td>
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
+                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
+                                             style="width:90px;text-align:left"
+                                             class="autonumber">405922</span>
+                                    </td>
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
+                                        ¥0.025
+                                    </td>
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
+                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
+                                    </td>
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
+                                        后付费
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px" rowspan="3">
+                                        <a class="btn btn-warning btn-rounded btn-sm waves-effect waves-light">审核中</a>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px" rowspan="3">
+                                        <a sec:authorize-url="/finance/reconciliation/carrier/view/center/*"
+                                           th:href="@{/finance/reconciliation/carrier/view/center/id}"
+                                           data-toggle="tooltip" data-placement="bottom"
+                                           data-original-title="查看对账明细"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color:#4BD396;"><i style="font-size: 18px"
+                                                                                       class="glyphicon glyphicon-search"></i></a>
+                                        <a
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="导出EXCEL"
+                                                class="on-default edit-row"
+                                                style="padding-left: 5px;color:#188ae2"><i style="font-size: 18px"
+                                                                                           class="glyphicon glyphicon-export"></i></a>
+
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
+                                        星语-移动-短信（XYBA100013）
+                                    </td>
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
+                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
+                                             style="width:90px;text-align:left"
+                                             class="autonumber">405922</span>
+                                    </td>
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
+                                        ¥0.025
+                                    </td>
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
+                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
+                                    </td>
+                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
+                                        后付费
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="smoc" style="vertical-align: middle;line-height: 26px">
-                                        100685(CHID100685)
+                                        星语-移动-短信（XYBA100013）
                                     </td>
                                     <td class="smoc" style="vertical-align: middle;line-height: 26px">
                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
@@ -183,22 +306,10 @@
                                     <td class="smoc" style="vertical-align: middle;line-height: 26px">
                                         <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
                                     </td>
-                                </tr>
-                                <tr>
                                     <td class="smoc" style="vertical-align: middle;line-height: 26px">
-                                        100685(CHID100685)
+                                        后付费
                                     </td>
-                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
-                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                             style="width:90px;text-align:left"
-                                             class="autonumber">405922</span>
-                                    </td>
-                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
-                                        ¥0.025
-                                    </td>
-                                    <td class="smoc" style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">67720.50</span>
-                                    </td>
+
                                 </tr>
                                 </tbody>
                             </table>
@@ -241,57 +352,13 @@
 
 </div> <!-- content -->
 
-
 <th:block th:insert="fragments/common_fragments :: common_js"/>
+<script th:src="@{/static/echarts/echarts.min.js}"></script>
 <th:block th:insert="fragments/common_fragments :: select_js"/>
-<th:block th:insert="fragments/cookie_fragments :: cookie_js"/>
-<script th:src="@{/static/plugins/moment/moment.js}"></script>
-<script th:src="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.js}"></script>
-<script th:src="@{/static/plugins/bootstrap-inputmask/bootstrap-inputmask.min.js}"></script>
 <script th:src="@{/static/plugins/autoNumeric/autoNumeric.js}"></script>
+<script th:src="@{/static/js/month-picker/bootstrap-datepicker.js}"></script>
+<script th:src="@{/static/js/month-picker/bootstrap-datepicker.zh-CN.js}"></script>
 <script>
-      $('#dateQueryStr').daterangepicker({
-        format: 'YYYY-MM-DD',
-        startDate: '2022-01-02',
-        endDate: '2022-02-02',
-        minDate: '2019-01-01',
-        maxDate: '2080-12-31',
-        dateLimit: {
-            days: 365
-        },
-        showDropdowns: true,
-        showWeekNumbers: true,
-        timePicker: false,
-        timePickerIncrement: 1,
-        timePicker12Hour: true,
-        ranges: {
-            '今天': [moment(), moment()],
-            '昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-            '最近7天': [moment().subtract(6, 'days'), moment()],
-            '最近30天': [moment().subtract(29, 'days'), moment()],
-            '本月': [moment().startOf('month'), moment().endOf('month')],
-            '上月': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-        },
-        opens: 'right',
-        buttonClasses: ['btn btn-default'],
-        applyClass: 'btn-small btn-primary',
-        cancelClass: 'btn-small',
-        format: 'YYYY-MM-DD',
-        separator: ' - ',
-        locale: {
-            applyLabel: '确认',
-            cancelLabel: '取消',
-            fromLabel: '从',
-            toLabel: '到',
-            customRangeLabel: '自定义',
-            format: "YYYY-MM-DD",
-            daysOfWeek: ['日', '一', '二', '三', '四', '五', '六'],
-            monthNames: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
-            firstDay: 1
-        }
-    }, function (start, end, label) {
-        //alert('A date range was chosen: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
-    });
 
      $(document).ready(function() {
 
