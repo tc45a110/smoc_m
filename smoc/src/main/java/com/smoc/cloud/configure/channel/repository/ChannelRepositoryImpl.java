@@ -109,6 +109,11 @@ public class ChannelRepositoryImpl extends BasePageRepository {
             paramsList.add( "%"+qo.getInfoType().trim()+"%");
         }
 
+        if (!StringUtils.isEmpty(qo.getSpecificProvder())) {
+            sqlBuffer.append(" and t.SPECIFIC_PROVDER =?");
+            paramsList.add( qo.getSpecificProvder().trim());
+        }
+
         sqlBuffer.append(" order by t.CREATED_TIME desc");
 
         //根据参数个数，组织参数值

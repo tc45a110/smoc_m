@@ -92,7 +92,7 @@ public class AccountFinanceService {
         //修改账户的授信额度
         financeAccountRepository.updateAccountCreditSumByAccountId(accountFinanceInfoValidator.getAccountId(),accountFinanceInfoValidator.getAccountCreditSum());
 
-        //设置通道完成进度
+        //设置账号完成进度
         if("add".equals(op)){
             Optional<AccountBasicInfo> optional = businessAccountRepository.findById(accountFinanceInfoValidator.getAccountId());
             if(optional.isPresent()){

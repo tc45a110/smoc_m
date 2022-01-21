@@ -23,8 +23,8 @@ public interface AccountInterfaceFeignClient {
      * @param accountId
      * @return
      */
-    @RequestMapping(value = "/account/interface/findByAccountId", method = RequestMethod.POST)
-    ResponseData<AccountInterfaceInfoValidator> findByAccountId(@PathVariable String accountId) throws Exception;
+    @RequestMapping(value = "/account/interface/findById/{accountId}", method = RequestMethod.GET)
+    ResponseData<AccountInterfaceInfoValidator> findById(@PathVariable String accountId) throws Exception;
 
     /**
      * 保存、修改数据

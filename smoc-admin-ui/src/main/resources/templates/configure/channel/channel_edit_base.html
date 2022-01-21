@@ -264,7 +264,7 @@
                                                              th:if="${#fields.hasErrors('channelPrice')}" th:errors="*{channelPrice}" style="font-weight: 200;font-size: 12px"></span>
                                                     </label>
                                                     <input id="fee" type="text" class="form-control" autocomplete="off"
-                                                           th:field="*{channelPrice}" min="0.0001"   max="1" placeholder="资费">
+                                                           th:field="*{channelPrice}" min="0.0001"   max="1" maxlength="6" placeholder="资费">
                                                 </div>
                                             </div>
                                         </div>

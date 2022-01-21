@@ -30,9 +30,9 @@ public class AccountInterfaceService {
      * @param accountId
      * @return
      */
-    public ResponseData<AccountInterfaceInfoValidator> findByAccountId(String accountId) {
+    public ResponseData<AccountInterfaceInfoValidator> findById(String accountId) {
         try {
-            ResponseData<AccountInterfaceInfoValidator> list = this.accountInterfaceFeignClient.findByAccountId(accountId);
+            ResponseData<AccountInterfaceInfoValidator> list = this.accountInterfaceFeignClient.findById(accountId);
             return list;
         } catch (Exception e) {
             log.error(e.getMessage());

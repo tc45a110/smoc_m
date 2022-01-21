@@ -21,7 +21,8 @@
         <!-- start row 页面内容-->
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all" style="background-color:#fff">
             <div class="col-md-12">
-                <form id="submit_form" th:action="@{/account/interface/save/{op}(op=${op})}" th:object="${accountInterfaceInfoValidator}"
+                <form id="submit_form" th:action="@{/account/interface/save/{op}(op=${op})}"
+                      th:object="${accountInterfaceInfoValidator}"
                       method="post" data-parsley-validate="">
                     <div class="row">
                         <div class="col-md-12 panel panel-color panel-primary"
@@ -36,81 +37,180 @@
                                             <label>业务账号名称</label>：[[${enterpriseBasicInfoValidator.enterpriseName}]]
                                         </div>
                                         <div class="form-group m-b-20">
-                                            <label>接口类型<span class="text-danger">*</span>&nbsp;</label>
-                                            <mpm:tag id="inter" required="true" identity="accountInterfaceType" show-type="select" key="code"
-                                                     class="form-control" name="protocol" th:value="${accountInterfaceInfoValidator.protocol}" title="接口类型"/>
+                                            <label>业务账号</label>：[[${accountInterfaceInfoValidator.accountId}]]
                                         </div>
                                         <div class="form-group m-b-20">
                                             <label for="accountPassword">接口密码<span class="text-danger">*</span>&nbsp;
                                                 <a class="btn btn-success btn-rounded waves-effect waves-light btn-xs"
+                                                   th:if="${op eq 'edit'}"
                                                    th:onclick="lookPassword([[${accountInterfaceInfoValidator.accountId}]])">查看密码</a>
                                             </label>
                                             <input id="accountPassword" type="text" class="form-control"
                                                    readonly autocomplete="off" placeholder="根据规则自动生成">
                                         </div>
                                         <div class="form-group m-b-20">
-                                            <label for="service">服务代码<span class="text-danger">*</span>
+                                            <label>接口类型<span class="text-danger">*</span>&nbsp;</label>
+                                            <mpm:tag id="inter" required="true" identity="accountInterfaceType"
+                                                     show-type="select" key="code" onchange="changeType(this.value)"
+                                                     class="form-control" name="protocol"
+                                                     th:value="${accountInterfaceInfoValidator.protocol}" title="接口类型"/>
+                                        </div>
+                                        <div class="form-group m-b-20">
+                                            <label for="maxSendSecond">发送速率(条/秒)<span
+                                                    class="text-danger">*</span>&nbsp;
+                                                <span class="text-danger" th:if="${#fields.hasErrors('maxSendSecond')}"
+                                                      th:errors="*{maxSendSecond}"
+                                                      style="font-weight: 200;font-size: 12px"></span></label>
+                                            <input id="maxSendSecond" type="text" class="form-control" required=""
+                                                   autocomplete="off"
+                                                   th:field="*{maxSendSecond}" data-parsley-length="[1,10]"
+                                                   data-parsley-type="number"
+                                                   placeholder="发送速率(条/秒)">
+                                        </div>
+                                        <div class="form-group m-b-20">
+                                            <label for="identifyIp">客户鉴权IP(多个IP用英文逗号隔开)<span class="text-danger">*</span>&nbsp;
+                                                <span class="text-danger" th:if="${#fields.hasErrors('identifyIp')}"
+                                                      th:errors="*{identifyIp}"
+                                                      style="font-weight: 200;font-size: 12px"></span></label>
+                                            <input id="identifyIp" type="text" class="form-control" required=""
+                                                   th:field="*{identifyIp}" data-parsley-length="[7,128]"
+                                                   data-parsley-pattern="/^((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d))|\*)((\/([012]\d|3[012]|\d))?)(,((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d))|\*)((\/([012]\d|3[012]|\d))?))*$/"
+                                                   autocomplete="off" placeholder="客户鉴权IP">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 alert alert-icon" style="background-color: #00acc1">
+                                        <i class="mdi mdi-block-helper"></i>
+                                        <strong>提醒!</strong> 根据选择左侧的接口类型来显示对应的业务参数。
+                                    </div>
+
+                                    <div class="col-md-6" id="CMPP" style="display: none">
+                                        <div class="form-group m-b-20">
+                                            <label>服务代码<span class="text-danger">*</span>
                                                 <span class="text-danger" th:if="${#fields.hasErrors('serviceCode')}"
-                                                        th:errors="*{serviceCode}" style="font-weight: 200;font-size: 12px"></span></label>
-                                            <input id="service" type="text" class="form-control" required=""
-                                                   th:field="*{serviceCode}" data-parsley-length="[1,32]" autocomplete="off"
+                                                      th:errors="*{serviceCode}"
+                                                      style="font-weight: 200;font-size: 12px"></span></label>
+                                            <input type="text" class="form-control" required=""
+                                                   th:field="*{serviceCode}" data-parsley-length="[1,20]"
+                                                   autocomplete="off" data-parsley-type="number"
                                                    placeholder="服务代码">
                                         </div>
                                         <div class="form-group m-b-20">
-                                            <label for="maxConnect">最大链接数<span class="text-danger">*</span>
+                                            <label>最大链接数<span class="text-danger">*</span>
                                                 <span class="text-danger" th:if="${#fields.hasErrors('maxConnect')}"
-                                                      th:errors="*{maxConnect}" style="font-weight: 200;font-size: 12px"></span></label>
-                                            <input id="maxConnect" type="text" class="form-control" required=""
-                                                   th:field="*{maxConnect}" data-parsley-length="[1,10]" data-parsley-type="number"
+                                                      th:errors="*{maxConnect}"
+                                                      style="font-weight: 200;font-size: 12px"></span></label>
+                                            <input type="text" class="form-control" required=""
+                                                   th:field="*{maxConnect}" data-parsley-length="[1,10]"
+                                                   data-parsley-type="number"
                                                    autocomplete="off" placeholder="最大链接数">
                                         </div>
+                                    </div>
+
+                                    <div class="col-md-6" id="HTTP_SMS" style="display: none">
                                         <div class="form-group m-b-20">
-                                            <label for="statusReportUrl">运营商状态报告推送地址url<span
+                                            <label>客户提交速率(次/秒)<span
                                                     class="text-danger">*</span>&nbsp;
-                                                <span class="text-danger" th:if="${#fields.hasErrors('statusReportUrl')}"
-                                                      th:errors="*{statusReportUrl}" style="font-weight: 200;font-size: 12px"></span></label>
-                                            <input id="statusReportUrl" type="text" class="form-control" required=""
-                                                   th:field="*{statusReportUrl}" data-parsley-length="[2,128]" data-parsley-type="url" autocomplete="off"
+                                                <span class="text-danger"
+                                                      th:if="${#fields.hasErrors('maxSubmitSecond')}"
+                                                      th:errors="*{maxSubmitSecond}"
+                                                      style="font-weight: 200;font-size: 12px"></span></label>
+                                            <input type="text" class="form-control" required="" autocomplete="off"
+                                                   th:field="*{maxSubmitSecond}" data-parsley-length="[1,10]"
+                                                   data-parsley-type="number"
+                                                   placeholder="客户提交速率">
+                                        </div>
+                                        <div class="form-group m-b-20">
+                                            <label>上行短信推送地址url<span
+                                                    class="text-danger">*</span>&nbsp;
+                                                <span class="text-danger" th:if="${#fields.hasErrors('moUrl')}"
+                                                      th:errors="*{moUrl}"
+                                                      style="font-weight: 200;font-size: 12px"></span></label>
+                                            <input type="text" class="form-control" required=""
+                                                   th:field="*{moUrl}" data-parsley-length="[2,128]"
+                                                   data-parsley-type="url" autocomplete="off"
+                                                   placeholder="上行短信推送地址url">
+                                        </div>
+                                        <div class="form-group m-b-20">
+                                            <label>运营商状态报告推送地址url<span
+                                                    class="text-danger">*</span>&nbsp;
+                                                <span class="text-danger"
+                                                      th:if="${#fields.hasErrors('statusReportUrl')}"
+                                                      th:errors="*{statusReportUrl}"
+                                                      style="font-weight: 200;font-size: 12px"></span></label>
+                                            <input type="text" class="form-control" required=""
+                                                   th:field="*{statusReportUrl}" data-parsley-length="[2,128]"
+                                                   data-parsley-type="url" autocomplete="off"
                                                    placeholder="运营商状态报告推送地址url">
                                         </div>
 
                                     </div>
-                                    <div class="col-md-6">
+
+                                    <div class="col-md-6" id="MM7" style="display: none">
                                         <div class="form-group m-b-20">
-                                            <label>业务账号</label>：[[${accountBasicInfoValidator.accountId}]]
+                                            <label>服务代码<span class="text-danger">*</span>
+                                                <span class="text-danger" th:if="${#fields.hasErrors('serviceCode')}"
+                                                      th:errors="*{serviceCode}"
+                                                      style="font-weight: 200;font-size: 12px"></span></label>
+                                            <input type="text" class="form-control" required=""
+                                                   th:field="*{serviceCode}" data-parsley-length="[1,20]"
+                                                   autocomplete="off" data-parsley-type="number"
+                                                   placeholder="服务代码">
                                         </div>
                                         <div class="form-group m-b-20">
-                                            <label for="speed">客户提交速率(条/秒)<span
+                                            <label>客户提交速率(次/秒)<span
                                                     class="text-danger">*</span>&nbsp;
-                                                <span class="text-danger" th:if="${#fields.hasErrors('maxSendSecond')}"
-                                                      th:errors="*{maxSendSecond}" style="font-weight: 200;font-size: 12px"></span></label>
-                                            <input id="speed" type="text" class="form-control"  required=""  autocomplete="off"
-                                                   th:field="*{maxSendSecond}" data-parsley-length="[1,10]" data-parsley-type="number"
+                                                <span class="text-danger"
+                                                      th:if="${#fields.hasErrors('maxSubmitSecond')}"
+                                                      th:errors="*{maxSubmitSecond}"
+                                                      style="font-weight: 200;font-size: 12px"></span></label>
+                                            <input type="text" class="form-control" required="" autocomplete="off"
+                                                   th:field="*{maxSubmitSecond}" data-parsley-length="[1,10]"
+                                                   data-parsley-type="number"
                                                    placeholder="客户提交速率">
                                         </div>
+
                                         <div class="form-group m-b-20">
-                                            <label for="identifyIp">客户鉴权IP<span class="text-danger">*</span>&nbsp;
-                                                <span class="text-danger" th:if="${#fields.hasErrors('identifyIp')}"
-                                                      th:errors="*{identifyIp}" style="font-weight: 200;font-size: 12px"></span></label>
-                                            <input id="identifyIp" type="text" class="form-control" required=""
-                                                   th:field="*{identifyIp}" data-parsley-length="[2,128]" data-parsley-type="url" autocomplete="off"
-                                                   placeholder="客户鉴权IP">
-                                        </div>
-                                        <div class="form-group m-b-20">
-                                            <label for="moUrl">上行短信推送地址url<span
+                                            <label>运营商状态报告推送地址url<span
                                                     class="text-danger">*</span>&nbsp;
-                                                <span class="text-danger" th:if="${#fields.hasErrors('moUrl')}"
-                                                      th:errors="*{moUrl}" style="font-weight: 200;font-size: 12px"></span></label>
-                                            <input id="moUrl" type="text" class="form-control" required=""
-                                                   th:field="*{moUrl}" data-parsley-length="[2,128]" data-parsley-type="url" autocomplete="off"
-                                                   placeholder="上行短信推送地址url">
+                                                <span class="text-danger"
+                                                      th:if="${#fields.hasErrors('statusReportUrl')}"
+                                                      th:errors="*{statusReportUrl}"
+                                                      style="font-weight: 200;font-size: 12px"></span></label>
+                                            <input type="text" class="form-control" required=""
+                                                   th:field="*{statusReportUrl}" data-parsley-length="[2,128]"
+                                                   data-parsley-type="url" autocomplete="off"
+                                                   placeholder="运营商状态报告推送地址url">
                                         </div>
+
+                                    </div>
+
+                                    <div class="col-md-6" id="HTTP_BLACK_SERVICE" style="display: none">
                                         <div class="form-group m-b-20">
-                                            <label class="m-b-10">进入审核<span class="text-danger">*</span>&nbsp;</label><br>
-                                            <mpm:tag id="check" identity="isOrNo" name="executeCheck" th:value="${accountInterfaceInfoValidator.executeCheck}"
-                                                     show-type="radio" style="margin-top:0px" key="code"  required="true" title="是否"/>
+                                            <label>客户提交速率(次/秒)<span
+                                                    class="text-danger">*</span>&nbsp;
+                                                <span class="text-danger"
+                                                      th:if="${#fields.hasErrors('maxSubmitSecond')}"
+                                                      th:errors="*{maxSubmitSecond}"
+                                                      style="font-weight: 200;font-size: 12px"></span></label>
+                                            <input type="text" class="form-control" required="" autocomplete="off"
+                                                   th:field="*{maxSubmitSecond}" data-parsley-length="[1,10]"
+                                                   data-parsley-type="number"
+                                                   placeholder="客户提交速率">
                                         </div>
                                     </div>
+                                    <div class="col-md-6" >
+                                        <div class="form-group m-b-20">
+                                            <label class="m-b-10">模板是否审核<span
+                                                    class="text-danger">*</span>&nbsp;</label><br>
+                                            <mpm:tag identity="isOrNo" id="executeCheck" name="executeCheck"
+                                                     th:value="${accountInterfaceInfoValidator.executeCheck}"
+                                                     show-type="radio" style="margin-top:0px" key="code" required="true"
+                                                     title="是否"/>
+                                        </div>
+                                    </div>
+
+
                                 </div>
                                 <div class="text-center" style="margin-bottom:20px">
                                     <input type="hidden" th:field="*{accountId}">
@@ -140,17 +240,130 @@
 <th:block th:insert="fragments/common_fragments :: common_js"/>
 <th:block th:insert="fragments/common_fragments :: select_js"/>
 <th:block th:insert="fragments/common_fragments :: common_submit_form"/>
-<script>
+<script th:remove="${#strings.isEmpty(error)}?none:all">
 
-    function lookPassword(accountId){
+    $(document).ready(function () {
+        var value = '[[${accountInterfaceInfoValidator.protocol}]]'
+        finalChange(value);
+    })
+
+    function lookPassword(accountId) {
         $("#accountPassword").val(accountId);
     }
 
+    function changeType(value) {
+        finalChange(value);
+    }
+
+    function finalChange(value) {
+
+        if ("CMPP" == value || "SGIP" == value || "SMGP" == value || "SMPP" == value) {
+            document.getElementById("CMPP").style.display = "";
+
+            document.getElementById("HTTP_SMS").style.display = "none";
+            document.getElementById("MM7").style.display = "none";
+            document.getElementById("HTTP_BLACK_SERVICE").style.display = "none";
+
+            $("#CMPP :input").each(function(){
+                $(this).attr("required","true")
+                $(this).attr("disabled", false)
+            });
+            $("#HTTP_SMS :input").each(function(){
+                $(this).removeAttr("required")
+                $(this).attr("disabled", "true")
+            });
+            $("#MM7 :input").each(function(){
+                $(this).removeAttr("required")
+                $(this).attr("disabled", "true")
+            });
+            $("#HTTP_BLACK_SERVICE :input").each(function(){
+                $(this).removeAttr("required")
+                $(this).attr("disabled", "true")
+            });
+
+        }
+
+        if ("HTTP_TEXT_SMS" == value || "HTTP_MULTI_SMS" == value) {
+            document.getElementById("HTTP_SMS").style.display = "";
+            document.getElementById("CMPP").style.display = "none";
+            document.getElementById("MM7").style.display = "none";
+            document.getElementById("HTTP_BLACK_SERVICE").style.display = "none";
+
+            $("#HTTP_SMS :input").each(function(){
+                $(this).attr("required","true")
+                $(this).attr("disabled", false)
+            });
+            $("#CMPP :input").each(function(){
+                $(this).removeAttr("required")
+                $(this).attr("disabled", "true")
+            });
+            $("#MM7 :input").each(function(){
+                $(this).removeAttr("required")
+                $(this).attr("disabled", "true")
+            });
+            $("#HTTP_BLACK_SERVICE :input").each(function(){
+                $(this).removeAttr("required")
+                $(this).attr("disabled", "true")
+            });
+
+        }
+
+        if ("MM7" == value) {
+            document.getElementById("MM7").style.display = "";
+            document.getElementById("CMPP").style.display = "none";
+            document.getElementById("HTTP_SMS").style.display = "none";
+            document.getElementById("HTTP_BLACK_SERVICE").style.display = "none";
+
+            $("#MM7 :input").each(function(){
+                $(this).attr("required","true")
+                $(this).attr("disabled", false)
+            });
+            $("#CMPP :input").each(function(){
+                $(this).removeAttr("required")
+                $(this).attr("disabled", "true")
+            });
+            $("#HTTP_SMS :input").each(function(){
+                $(this).removeAttr("required")
+                $(this).attr("disabled", "true")
+            });
+            $("#HTTP_BLACK_SERVICE :input").each(function(){
+                $(this).removeAttr("required")
+                $(this).attr("disabled", "true")
+            });
+
+        }
+
+        if ("HTTP_BLACK_SERVICE" == value) {
+            document.getElementById("HTTP_BLACK_SERVICE").style.display = "";
+            document.getElementById("CMPP").style.display = "none";
+            document.getElementById("HTTP_SMS").style.display = "none";
+            document.getElementById("MM7").style.display = "none";
+
+            $("#HTTP_BLACK_SERVICE :input").each(function(){
+                $(this).attr("required","true")
+                $(this).attr("disabled", false)
+            });
+            $("#CMPP :input").each(function(){
+                $(this).removeAttr("required")
+                $(this).attr("disabled", "true")
+            });
+            $("#HTTP_SMS :input").each(function(){
+                $(this).removeAttr("required")
+                $(this).attr("disabled", "true")
+            });
+            $("#MM7 :input").each(function(){
+                $(this).removeAttr("required")
+                $(this).attr("disabled", "true")
+            });
+        }
+    }
+
+</script>
+
+<script>
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
-
-
 </script>
 </body>
 </html>

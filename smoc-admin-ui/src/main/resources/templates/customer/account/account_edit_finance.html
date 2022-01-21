@@ -68,7 +68,7 @@
                                         </label>
 
                                         <input type="text" class="form-control" required="" min="0.0001"   max="1"  autocomplete="off"
-                                               th:name="${info.key}" th:value="${info.value}" placeholder="单价">
+                                               th:name="${info.key}" th:value="${info.value}" maxlength="6" placeholder="单价">
                                     </div>
 
                                 </div>
@@ -103,7 +103,6 @@
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
-
 
 
 

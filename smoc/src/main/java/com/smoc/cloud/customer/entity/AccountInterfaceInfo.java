@@ -1,21 +1,20 @@
 package com.smoc.cloud.customer.entity;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Objects;
 
 @Entity
 @Table(name = "account_interface_info")
 public class AccountInterfaceInfo {
-    private String id;
     private String accountId;
     private String protocol;
     private String accountPassword;
+    private Integer maxSubmitSecond;
     private int maxSendSecond;
     private String serviceCode;
     private String identifyIp;
-    private int maxConnect;
+    private Integer maxConnect;
     private String executeCheck;
     private String moUrl;
     private String statusReportUrl;
@@ -25,16 +24,6 @@ public class AccountInterfaceInfo {
     private Date updatedTime;
 
     @Id
-    @Column(name = "ID")
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    @Basic
     @Column(name = "ACCOUNT_ID")
     public String getAccountId() {
         return accountId;
@@ -62,6 +51,16 @@ public class AccountInterfaceInfo {
 
     public void setAccountPassword(String accountPassword) {
         this.accountPassword = accountPassword;
+    }
+
+    @Basic
+    @Column(name = "MAX_SUBMIT_SECOND")
+    public Integer getMaxSubmitSecond() {
+        return maxSubmitSecond;
+    }
+
+    public void setMaxSubmitSecond(Integer maxSubmitSecond) {
+        this.maxSubmitSecond = maxSubmitSecond;
     }
 
     @Basic
@@ -96,11 +95,11 @@ public class AccountInterfaceInfo {
 
     @Basic
     @Column(name = "MAX_CONNECT")
-    public int getMaxConnect() {
+    public Integer getMaxConnect() {
         return maxConnect;
     }
 
-    public void setMaxConnect(int maxConnect) {
+    public void setMaxConnect(Integer maxConnect) {
         this.maxConnect = maxConnect;
     }
 
@@ -180,13 +179,13 @@ public class AccountInterfaceInfo {
         if (o == null || getClass() != o.getClass()) return false;
         AccountInterfaceInfo that = (AccountInterfaceInfo) o;
         return maxSendSecond == that.maxSendSecond &&
-                maxConnect == that.maxConnect &&
-                Objects.equals(id, that.id) &&
                 Objects.equals(accountId, that.accountId) &&
                 Objects.equals(protocol, that.protocol) &&
                 Objects.equals(accountPassword, that.accountPassword) &&
+                Objects.equals(maxSubmitSecond, that.maxSubmitSecond) &&
                 Objects.equals(serviceCode, that.serviceCode) &&
                 Objects.equals(identifyIp, that.identifyIp) &&
+                Objects.equals(maxConnect, that.maxConnect) &&
                 Objects.equals(executeCheck, that.executeCheck) &&
                 Objects.equals(moUrl, that.moUrl) &&
                 Objects.equals(statusReportUrl, that.statusReportUrl) &&
@@ -198,6 +197,6 @@ public class AccountInterfaceInfo {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, accountId, protocol, accountPassword, maxSendSecond, serviceCode, identifyIp, maxConnect, executeCheck, moUrl, statusReportUrl, createdBy, createdTime, updatedBy, updatedTime);
+        return Objects.hash(accountId, protocol, accountPassword, maxSubmitSecond, maxSendSecond, serviceCode, identifyIp, maxConnect, executeCheck, moUrl, statusReportUrl, createdBy, createdTime, updatedBy, updatedTime);
     }
 }
