@@ -309,19 +309,6 @@ public class AccountController {
     }
 
     /**
-     * 业务账号通道配置
-     *
-     * @return
-     */
-    @RequestMapping(value = "/edit/channel/{accountId}", method = RequestMethod.GET)
-    public ModelAndView edit_channel(@PathVariable String accountId, HttpServletRequest request) {
-        ModelAndView view = new ModelAndView("customer/account/account_edit_channel");
-        return view;
-
-    }
-
-
-    /**
      * EC业务账号中心
      *
      * @return

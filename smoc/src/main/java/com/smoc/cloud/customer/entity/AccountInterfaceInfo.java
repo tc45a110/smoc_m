@@ -11,7 +11,7 @@ public class AccountInterfaceInfo {
     private String protocol;
     private String accountPassword;
     private Integer maxSubmitSecond;
-    private int maxSendSecond;
+    private Integer maxSendSecond;
     private String serviceCode;
     private String identifyIp;
     private Integer maxConnect;
@@ -65,11 +65,11 @@ public class AccountInterfaceInfo {
 
     @Basic
     @Column(name = "MAX_SEND_SECOND")
-    public int getMaxSendSecond() {
+    public Integer getMaxSendSecond() {
         return maxSendSecond;
     }
 
-    public void setMaxSendSecond(int maxSendSecond) {
+    public void setMaxSendSecond(Integer maxSendSecond) {
         this.maxSendSecond = maxSendSecond;
     }
 

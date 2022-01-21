@@ -14,7 +14,7 @@ import javax.crypto.spec.DESKeySpec;
 public class DES {
 
 	/** 加密、解密key. */
-	private static final String PASSWORD_CRYPT_KEY = "MEDppxWHcttfESxvdvZGqIP";
+	private static final String PASSWORD_CRYPT_KEY = "SMOCppxWHcttfESxvdvZGq";
 	/** 加密 DES,DESede,Blowfish. */
 	private final static String ALGORITHM = "DES";
 
@@ -22,7 +22,7 @@ public class DES {
 		String md5Password = "kk12@34*56";
 		//String str = DES.encrypt(md5Password);
 		//System.out.println("加密: " + str);
-		String str = DES.decrypt("A4A2F865FF6353A059D68DF7CBAD55D1");
+		String str = DES.decrypt("41ACEF98D20A386BA2A769DB539C0976");
 		System.out.println("解密: " + str);
 	}
 

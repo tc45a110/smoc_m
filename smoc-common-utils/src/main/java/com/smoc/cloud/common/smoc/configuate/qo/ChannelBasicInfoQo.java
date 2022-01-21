@@ -62,4 +62,6 @@ public class ChannelBasicInfoQo {
     private String channeGroupId;
 
     private String specificProvder;
+
+    private String accountId;
 }

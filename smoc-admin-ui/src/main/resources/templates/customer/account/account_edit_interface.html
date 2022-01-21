@@ -247,8 +247,17 @@
         finalChange(value);
     })
 
+    //查看密码
     function lookPassword(accountId) {
-        $("#accountPassword").val(accountId);
+
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $.ajax({
+            url: contextPath + "/account/interface/lookPassword/" + accountId,
+            async: false,
+            success: function (data) {
+                $("#accountPassword").val(data);
+            }
+        });
     }
 
     function changeType(value) {

@@ -9,6 +9,7 @@ import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.AccountInterfaceInfoValidator;
+import com.smoc.cloud.common.utils.DES;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.PasswordUtils;
 import com.smoc.cloud.customer.entity.AccountBasicInfo;
@@ -85,7 +86,8 @@ public class AccountInterfaceService {
         BeanUtils.copyProperties(accountInterfaceInfoValidator, entity);
 
         if("add".equals(op)){
-            entity.setAccountPassword(PasswordUtils.getRandomPassword(9));
+            String passWord = PasswordUtils.getRandomPassword(9);
+            entity.setAccountPassword(DES.encrypt(passWord));//加密
         }
 
         //add查重

@@ -8,6 +8,7 @@ import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.AccountInterfaceInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
+import com.smoc.cloud.common.utils.DES;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.common.validator.MpmIdValidator;
@@ -165,5 +166,30 @@ public class AccountInterfaceController {
         view.addObject("op", "edit");
 
         return view;
+    }
+
+    /**
+     * 查询配置运营商价格
+     *
+     * @return
+     */
+    @RequestMapping(value = "/interface/lookPassword/{accountId}", method = RequestMethod.GET)
+    public String lookPassword(@PathVariable String accountId) {
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(accountId);
+        if (!MpmValidatorUtil.validate(validator)) {
+            return MpmValidatorUtil.validateMessage(validator);
+        }
+
+        //查询接口信息
+        ResponseData<AccountInterfaceInfoValidator> interfaceData = accountInterfaceService.findById(accountId);
+        if (!ResponseCode.SUCCESS.getCode().equals(interfaceData.getCode())) {
+            return interfaceData.getMessage();
+        }
+
+        return DES.decrypt(interfaceData.getData().getAccountPassword());//解密
+
     }
 }
