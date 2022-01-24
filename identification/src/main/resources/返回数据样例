@@ -1,0 +1,7 @@
+
+校验不一致
+{"MESSAGE":"不一致，姓名不匹配","guid":"b06ca9b9ed114b57a797fdf02ea9d2bd","RESULT":2}
+一致
+{"MESSAGE":"一致","guid":"3f0837529751436a9a9c17d61a5a11ed","RESULT":1}
+
+{"msg":"appKey和appScrect不正确","code":503}

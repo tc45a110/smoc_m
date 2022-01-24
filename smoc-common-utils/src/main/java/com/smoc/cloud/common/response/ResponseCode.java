@@ -16,11 +16,18 @@ public enum ResponseCode {
     PARAM_CREATE_ERROR("1102", "无法重复创建，关键信息重复！"),
     PARAM_LINK_ERROR("1103", "链接错误！"),
     PRAM_SENSITIVEWORDS_ERROR("1104", "参数含有敏感词！"),
+    PARAM_FORMAT_ERROR("1100", "参数规则输入错误!"),
 
     //鉴权失败
     TOKEN_UNAUTH("2000", "认证、鉴权失败！"),
     TOKEN_ISEMPTY("2001","token不能为空！"),
     TOKEN_INVALID("2002","无效token！"),
+    SIGN_REQUEST_ERROR("2003","签名失败！"),
+    SIGN_PARAM_FORMAT_ERROR("2004","签名格式问题"),
+    SIGN_ERROR("2005","签名错误"),
+    SIGN_LEGAL_ERROR("2006","签名不合法"),
+
+    REQUEST_LEGAL_ERROR("3001","非法请求"),
 
     USER_UNAUTH("3000", "用户无权限信息！"),
     USER_NOT_EXIST("3001","用户不存在！"),

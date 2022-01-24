@@ -1,9 +1,17 @@
 package com.smoc.cloud.identification.controller;
 
 
+import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
+import com.smoc.cloud.common.response.ResponseCode;
+import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.configuate.validator.CodeNumberInfoValidator;
+import com.smoc.cloud.common.smoc.identification.validator.IdentificationAccountInfoValidator;
+import com.smoc.cloud.identification.service.IdentificationAccountInfoService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,6 +27,9 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/identification/account")
 public class IdentificationAccountController {
 
+    @Autowired
+    private IdentificationAccountInfoService identificationAccountInfoService;
+
     /**
      * 认账账号管理列表
      *
@@ -28,16 +39,23 @@ public class IdentificationAccountController {
     public ModelAndView list() {
         ModelAndView view = new ModelAndView("identification/account/identification_account_list");
 
-        //查询数据
-        PageParams params = new PageParams<>();
-        params.setPages(10);
+        //初始化数据
+        PageParams<IdentificationAccountInfoValidator> params = new PageParams<IdentificationAccountInfoValidator>();
         params.setPageSize(10);
-        params.setStartRow(1);
-        params.setEndRow(10);
         params.setCurrentPage(1);
-        params.setTotalRows(100);
+        IdentificationAccountInfoValidator identificationAccountInfoValidator = new IdentificationAccountInfoValidator();
+        params.setParams(identificationAccountInfoValidator);
 
-        view.addObject("pageParams", params);
+        //查询
+        ResponseData<PageList<IdentificationAccountInfoValidator>> data = identificationAccountInfoService.page(params);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("identificationAccountInfoValidator", identificationAccountInfoValidator);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
 
         return view;
 
@@ -49,21 +67,23 @@ public class IdentificationAccountController {
      * @return
      */
     @RequestMapping(value = "/page", method = RequestMethod.POST)
-    public ModelAndView page() {
+    public ModelAndView page(@ModelAttribute IdentificationAccountInfoValidator identificationAccountInfoValidator, PageParams pageParams) {
 
         ModelAndView view = new ModelAndView("identification/account/identification_account_list");
-        //查询数据
-        PageParams params = new PageParams<>();
-        params.setPages(10);
-        params.setPageSize(10);
-        params.setStartRow(1);
-        params.setEndRow(10);
-        params.setCurrentPage(1);
-        params.setTotalRows(100);
+        //分页查询
+        pageParams.setParams(identificationAccountInfoValidator);
 
-        view.addObject("pageParams", params);
+        ResponseData<PageList<CodeNumberInfoValidator>> data = identificationAccountInfoService.page(pageParams);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("identificationAccountInfoValidator", identificationAccountInfoValidator);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
+
         return view;
-
     }
 
     /**
