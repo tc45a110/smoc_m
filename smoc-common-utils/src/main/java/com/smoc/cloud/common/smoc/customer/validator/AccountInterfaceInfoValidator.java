@@ -33,10 +33,6 @@ public class AccountInterfaceInfoValidator {
     @Length(max = 32, message = "服务代码最大长度为{max}！")
     private String serviceCode;
 
-    @NotNull(message = "客户鉴权IP不能为空！")
-    @Length(max = 128, message = "客户鉴权IP最大长度为{max}！")
-    private String identifyIp;
-
     private Integer maxConnect;
     private String executeCheck;
 

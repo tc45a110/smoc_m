@@ -57,4 +57,36 @@ public class AccountChannelService {
             return ResponseDataUtil.buildError(e.getMessage());
         }
     }
+
+    /**
+     * 保存账号通道
+     * @param accountChannelInfoValidator
+     * @param op
+     * @return
+     */
+    public ResponseData save(AccountChannelInfoValidator accountChannelInfoValidator, String op) {
+        try {
+            ResponseData data = this.accountChannelFeignClient.save(accountChannelInfoValidator,op);
+            return data;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 查询账号下运营商是否配置过通道
+     * @param accountId
+     * @param carrier
+     * @return
+     */
+    public ResponseData<AccountChannelInfoValidator> findByAccountIdAndCarrier(String accountId, String carrier) {
+        try {
+            ResponseData data = this.accountChannelFeignClient.findByAccountIdAndCarrier(accountId,carrier);
+            return data;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
 }

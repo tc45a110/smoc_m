@@ -19,7 +19,7 @@
     <div class="container" style="padding-left:0px">
 
         <!-- start row 页面内容-->
-        <div class="row">
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-xs-12">
                 <div class="mails">
                     <div class="table-box">
@@ -32,11 +32,12 @@
                                     <div class="panel-body">
                                         <div class="col-md-12" th:each="info :${channelMap}">
                                             <div th:class="${info.value !=null ?'card-box widget-box-two widget-two-teal':'card-box widget-box-two widget-two-pink'}">
-                                                <div class="wigdet-two-content text-white" >
+                                                <div class="wigdet-two-content text-white">
                                                     <p class="m-0 text-uppercase font-600 font-secondary text-overflow">
                                                         [[${info.value!=null?info.value.channelName:'未配置通道'}]]
                                                         <a data-toggle="modal" data-target="#confirm-delete-modal"
                                                            title="移除该已选中产品" th:if="${info.value !=null}"
+                                                           th:onclick="deleteChannel([[${info.value.id}]])"
                                                            class="pull-right">
                                                             <i class="glyphicon glyphicon-remove"
                                                                style="font-size:16px;color:#fff;"></i>
@@ -44,10 +45,12 @@
                                                     </p>
                                                     <p class="text-white"><b>业务类型：
                                                         <mpm:tag identity="businessType" show-type="label" key="code"
-                                                                 th:value="${accountBasicInfoValidator.businessType}" /></b></p>
+                                                                 th:value="${accountBasicInfoValidator.businessType}"/>
+                                                    </b></p>
                                                     <p class="m-0"><b>运营商：
                                                         <mpm:tag identity="carrier" show-type="label" key="code"
-                                                                 th:value="${info.key}" /></b></p>
+                                                                 th:value="${info.key}"/>
+                                                    </b></p>
                                                     <p class="m-0"><b>通道协议类型：HTTP</b>
                                                         <a data-toggle="tooltip" data-placement="bottom" title=""
                                                            data-original-title="万能通道，想发什么发什么，可能吗？"
@@ -57,8 +60,10 @@
                                                         </a>
                                                         <a sec:authorize-url="/account/channel/findChannelList/*/*"
                                                            th:href="@{/account/channel/findChannelList/{accountId}/{carrier}(accountId=${accountBasicInfoValidator.accountId},carrier=${info.key})}"
-                                                           title="点击查询右侧通道" class="pull-right">
-                                                            <i class="mdi mdi-link-variant" style="font-size:16px;color:#fff;"></i>
+                                                           data-toggle="tooltip" data-placement="left"
+                                                           data-original-title="点击检索右侧通道" class="pull-right">
+                                                            <i class="mdi mdi-link-variant"
+                                                               style="font-size:16px;color:#fff;"></i>
                                                         </a>
                                                     </p>
                                                 </div>
@@ -81,35 +86,38 @@
                                         <div class="row">
                                             <div class="col-sm-12">
                                                 <div class="card-box">
-                                                    <form th:action="@{/account/channel/channelPage}" th:object="${channelBasicInfoQo}"
+                                                    <form th:action="@{/account/channel/channelPage}"
+                                                          th:object="${channelBasicInfoQo}"
                                                           id="query_form" method="post">
                                                         <div class="row m-b-60">
                                                             <div class="col-sm-12">
-                                                                <div class="form-group  col-sm-4">
-                                                                    <input type="text" class="form-control" th:field="*{channelId}"
-                                                                           placeholder="通道ID" autocomplete="off">
-                                                                </div>
-                                                                <div class="form-group  col-sm-4">
-                                                                    <input type="text" class="form-control" th:field="*{channelName}"
+                                                                <div class="form-group  col-sm-6">
+                                                                    <input type="text" class="form-control"
+                                                                           th:field="*{channelName}"
                                                                            placeholder="通道名称" autocomplete="off">
                                                                 </div>
-                                                                <div class="form-group  col-sm-4">
-                                                                    <input type="text" class="form-control" th:field="*{srcId}"
+                                                                <div class="form-group  col-sm-6">
+                                                                    <input type="text" class="form-control"
+                                                                           th:field="*{srcId}"
                                                                            placeholder="码号" autocomplete="off">
                                                                 </div>
-                                                                <div class="form-group  col-sm-4">
+                                                                <div class="form-group  col-sm-6">
                                                                     <label>业务类型：</label>
-                                                                    <mpm:tag identity="businessType" show-type="label" key="code"
-                                                                             th:value="${channelBasicInfoQo.businessType}" />
+                                                                    <mpm:tag identity="businessType" show-type="label"
+                                                                             key="code"
+                                                                             th:value="${channelBasicInfoQo.businessType}"/>
                                                                 </div>
-                                                                <div class="form-group  col-sm-4">
+                                                                <div class="form-group  col-sm-6">
                                                                     <label>运营商：</label>
-                                                                    <mpm:tag identity="carrier" show-type="label" key="code"
-                                                                             th:value="${channelBasicInfoQo.carrier}" />
+                                                                    <mpm:tag identity="carrier" show-type="label"
+                                                                             key="code"
+                                                                             th:value="${channelBasicInfoQo.carrier}"/>
                                                                 </div>
                                                                 <div class="form-group  col-sm-12">
                                                                     <label>信息分类：</label>
-                                                                    <mpm:tag identity="infoType" show-type="label" key="code" th:value="${channelBasicInfoQo.infoType}"/>
+                                                                    <mpm:tag identity="infoType" show-type="label"
+                                                                             key="code"
+                                                                             th:value="${channelBasicInfoQo.infoType}"/>
                                                                 </div>
 
 
@@ -120,7 +128,7 @@
                                                                     <input type="hidden" th:field="*{businessType}">
                                                                     <input type="hidden" th:field="*{infoType}">
                                                                     <button th:href="@{/account/channel/channelPage}"
-                                                                       class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
+                                                                            class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                                                         <i class="glyphicon glyphicon-search"
                                                                            style="margin-right:5px"></i> 查询
                                                                     </button>
@@ -138,7 +146,7 @@
                                                     <div class="row">
                                                         <div class="col-sm-12">
                                                             <div class="property-content"
-                                                                 style="height:160px">
+                                                                 style="height:195px">
                                                                 <div class="listingInfo">
                                                                     <div class="">
                                                                         <h5 style="padding-left:10px">
@@ -146,6 +154,8 @@
                                                                             <div class="pull-right">
                                                                                 <a data-toggle="modal"
                                                                                    data-target="#confirm-add-modal"
+                                                                                   href="javascript:void(0);"
+                                                                                   th:onclick="openChannel([[${channelBasicInfoQo.carrier}]],[[${info.channelId}]],[[${info.channelName}]])"
                                                                                    title="添加该通道到通道账户">
                                                                                     <i class="glyphicon glyphicon-plus-sign"
                                                                                        style="margin-right:5px;font-size:16px;color:#7e6258"></i></a>
@@ -154,20 +164,35 @@
                                                                     </div>
                                                                     <div class="col-sm-6">
                                                                         <p style="font-size:12px">业务类型：
-                                                                            <mpm:tag identity="businessType" show-type="label" key="code"
-                                                                                     th:value="${info.businessType}" /></p>
+                                                                            <mpm:tag identity="businessType"
+                                                                                     show-type="label" key="code"
+                                                                                     th:value="${info.businessType}"/>
+                                                                        </p>
                                                                         <p style="font-size:12px">
                                                                             码号：[[${info.srcId}]]</p>
-
+                                                                        <p style="font-size:12px">信息分类：
+                                                                            <mpm:tag identity="infoType"
+                                                                                     show-type="label" key="code"
+                                                                                     th:value="${info.infoType}"/>
+                                                                        </p>
                                                                     </div>
                                                                     <div class="col-sm-6">
-                                                                        <p style="font-size:12px">运营商：<mpm:tag identity="carrier" show-type="label" key="code" th:value="${info.carrier}"/></p>
-                                                                        <p style="font-size:12px">协议类型：<mpm:tag identity="channelProtocolType" show-type="label" key="code" th:value="${info.protocol}"/></p>
+                                                                        <p style="font-size:12px">运营商：
+                                                                            <mpm:tag identity="carrier"
+                                                                                     show-type="label" key="code"
+                                                                                     th:value="${info.carrier}"/>
+                                                                        </p>
+                                                                        <p style="font-size:12px">协议类型：
+                                                                            <mpm:tag identity="channelProtocolType"
+                                                                                     show-type="label" key="code"
+                                                                                     th:value="${info.protocol}"/>
+                                                                        </p>
                                                                     </div>
 
                                                                 </div>
                                                                 <div class="property-action">
-                                                                                     <span style="padding-left:10px;font-size:12px" class="text-overflow">
+                                                                                     <span style="padding-left:10px;font-size:12px"
+                                                                                           class="text-overflow">
                                                                                             通道业务介绍：[[${info.channelIntroduce}]]
                                                                                      </span>
 
@@ -197,6 +222,10 @@
 
             </div>
         </div>
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
 
         <!-- start confirm delete modal  -->
         <div id="confirm-delete-modal" class="modal fade" tabindex="-1" role="dialog"
@@ -233,28 +262,36 @@
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                         <h4 class="modal-title">确认添加该通道到业务账号</h4>
                     </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label>通道名称：国际短信通道-GJ091000
-                            </label>
+                    <form th:action="@{/account/channel/save}" id="submit_form"
+                          th:object="${accountChannelInfoValidator}"
+                          method="post" data-parsley-validate="">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label>通道名称：<span id="name"></span>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label>优先级：正常
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label>权重
+                                </label>
+                                <input type="text" class="form-control"   required="" id="channelWeight" th:field="*{channelWeight}"
+                                       data-parsley-type="number" min="10"   max="100" autocomplete="off" placeholder="默认 10，总共100">
+                            </div>
+                            <div class="text-right">
+                                <input type="hidden" id="carrier" name="carrier" th:value="${carrier}">
+                                <input type="hidden" id="accountId" name="accountId" th:value="${accountId}">
+                                <input type="hidden" id="channelId" name="channelId" th:value="${channelId}">
+                                <a class="btn btn-default waves-effect" data-dismiss="modal">取消</a>
+                                <button sec:authorize-url="/account/channel/save"
+                                    class="btn btn-primary waves-effect waves-light">确认添加
+                                </button>
+                                </button>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label>优先级：正常
-                            </label>
-                        </div>
-                        <div class="form-group">
-                            <label>权重
-                            </label>
-                            <input type="text" class="form-control" autocomplete="off" placeholder="默认 10">
-                        </div>
-                        <div class="text-right">
-                            <input type="hidden" id="addId">
-                            <a class="btn btn-default waves-effect" data-dismiss="modal">取消</a>
-                            <button onclick="" class="btn btn-primary waves-effect waves-light">确认添加
-                            </button>
-                            </button>
-                        </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -268,16 +305,29 @@
 <th:block th:insert="fragments/common_fragments :: common_submit_form"/>
 <script>
 
-    function channel(accountId,carrier){
+    //打开选择通道
+    function openChannel(carrier, channelId, channelName) {
+        $("#carrier").val(carrier);
+        $("#channelId").val(channelId);
+        $("#channelName").val(channelName);
+        $("#channelWeight").val('10');
+        $("#name").html(channelName);
+    }
 
-        alert(accountId+"=="+carrier)
+    //打开删除通道
+    function deleteChannel(id){
+        $("#deleteId").val(id);
+    }
+
+    function deleteById(){
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $('#preloader').css('display', 'block');
+        location.href = contextPath + '/account/channel/deleteById/' + $("#deleteId").val();
     }
 
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
-
-
 
 
 </script>

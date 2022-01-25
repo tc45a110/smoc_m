@@ -20,6 +20,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
@@ -167,22 +168,7 @@ public class AccountFinanceController {
         //记录日志
         log.info("[EC业务账号管理][业务账号财务信息][{}][{}]数据:{}", op, user.getUserName(), JSON.toJSONString(accountFinanceInfoValidator));
 
-        //查询企业数据
-        ResponseData<EnterpriseBasicInfoValidator> enterpriseData = enterpriseService.findById(data.getData().getEnterpriseId());
-        if (!ResponseCode.SUCCESS.getCode().equals(enterpriseData.getCode())) {
-            view.addObject("error", enterpriseData.getCode() + ":" + enterpriseData.getMessage());
-        }
-
-        //根据运营商和账号ID查询运营商单价
-        accountFinanceInfoValidator.setAccountId(data.getData().getAccountId());
-        accountFinanceInfoValidator.setCarrier(data.getData().getCarrier());
-        ResponseData<Map<String, BigDecimal>> map = accountFinanceService.editCarrierPrice(accountFinanceInfoValidator);
-        view.addObject("list", map.getData());
-
-        view.addObject("op", "edit");
-        view.addObject("accountFinanceInfoValidator", accountFinanceInfoValidator);
-        view.addObject("accountBasicInfoValidator", data.getData());
-        view.addObject("enterpriseBasicInfoValidator", enterpriseData.getData());
+        view.setView(new RedirectView("/account/edit/finance/"+accountFinanceInfoValidator.getAccountId(), true, false));
         return view;
     }
 }

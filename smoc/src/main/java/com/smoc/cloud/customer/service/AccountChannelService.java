@@ -1,25 +1,33 @@
 package com.smoc.cloud.customer.service;
 
 
+import com.alibaba.fastjson.JSON;
+import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
 import com.smoc.cloud.common.smoc.customer.qo.AccountChannelInfoQo;
 import com.smoc.cloud.common.smoc.customer.validator.AccountChannelInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.AccountFinanceInfoValidator;
+import com.smoc.cloud.common.utils.DES;
+import com.smoc.cloud.common.utils.DateTimeUtils;
+import com.smoc.cloud.common.utils.PasswordUtils;
+import com.smoc.cloud.customer.entity.AccountBasicInfo;
+import com.smoc.cloud.customer.entity.AccountChannelInfo;
+import com.smoc.cloud.customer.entity.AccountInterfaceInfo;
 import com.smoc.cloud.customer.repository.AccountChannelRepository;
+import com.smoc.cloud.customer.repository.BusinessAccountRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * 业务账号通道配置管理
@@ -31,6 +39,9 @@ public class AccountChannelService {
 
     @Resource
     private AccountChannelRepository accountChannelRepository;
+
+    @Resource
+    private BusinessAccountRepository businessAccountRepository;
 
 
     /**
@@ -51,7 +62,7 @@ public class AccountChannelService {
         //循环已配置的通道
         if (!StringUtils.isEmpty(list)) {
             for (AccountChannelInfoQo info : list) {
-                map.put(accountChannelInfoQo.getCarrier(), info);
+                map.put(info.getCarrier(), info);
             }
         }
 
@@ -66,5 +77,57 @@ public class AccountChannelService {
     public ResponseData<List<ChannelBasicInfoQo>> findChannelList(ChannelBasicInfoQo channelBasicInfoQo) {
         List<ChannelBasicInfoQo> list = accountChannelRepository.findChannelList(channelBasicInfoQo);
         return ResponseDataUtil.buildSuccess(list);
+    }
+
+    @Transactional
+    public ResponseData save(AccountChannelInfoValidator accountChannelInfoValidator, String op) {
+
+        AccountChannelInfo data = accountChannelRepository.findByAccountIdAndCarrier(accountChannelInfoValidator.getAccountId(),accountChannelInfoValidator.getCarrier());
+
+        AccountChannelInfo entity = new AccountChannelInfo();
+        BeanUtils.copyProperties(accountChannelInfoValidator, entity);
+
+        //add查重
+        if (data != null &&"add".equals(op)) {
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_CREATE_ERROR);
+        }
+        //edit查重
+        else if (data != null && "edit".equals(op)) {
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_CREATE_ERROR);
+        }
+
+
+        //op 不为 edit 或 add
+        if (!("edit".equals(op) || "add".equals(op))) {
+            return ResponseDataUtil.buildError();
+        }
+
+        //设置账号完成进度
+        if("add".equals(op)){
+            Optional<AccountBasicInfo> optional = businessAccountRepository.findById(entity.getAccountId());
+            if(optional.isPresent()){
+                AccountBasicInfo accountBasicInfo = optional.get();
+                StringBuffer accountProcess = new StringBuffer(accountBasicInfo.getAccountProcess());
+                accountProcess = accountProcess.replace(3, 4, "1");
+                accountBasicInfo.setAccountProcess(accountProcess.toString());
+                businessAccountRepository.save(accountBasicInfo);
+            }
+        }
+
+        //记录日志
+        log.info("[EC业务账号管理][业务账号通道配置][{}]数据:{}", op, JSON.toJSONString(entity));
+        accountChannelRepository.saveAndFlush(entity);
+
+        return ResponseDataUtil.buildSuccess();
+
+    }
+
+    public ResponseData findByAccountIdAndCarrier(String accountId, String carrier) {
+        AccountChannelInfo entity = accountChannelRepository.findByAccountIdAndCarrier(accountId,carrier);
+
+        AccountChannelInfoValidator accountChannelInfoValidator = new AccountChannelInfoValidator();
+        BeanUtils.copyProperties(entity, accountChannelInfoValidator);
+
+        return ResponseDataUtil.buildSuccess(accountChannelInfoValidator);
     }
 }

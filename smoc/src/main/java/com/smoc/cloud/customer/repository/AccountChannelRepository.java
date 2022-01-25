@@ -20,4 +20,6 @@ public interface AccountChannelRepository extends CrudRepository<AccountChannelI
     List<AccountChannelInfoQo> findAccountChannelConfig(AccountChannelInfoQo accountChannelInfoQo);
 
     List<ChannelBasicInfoQo> findChannelList(ChannelBasicInfoQo channelBasicInfoQo);
+
+    AccountChannelInfo findByAccountIdAndCarrier(String accountId, String carrier);
 }

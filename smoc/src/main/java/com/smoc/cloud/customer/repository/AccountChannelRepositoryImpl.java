@@ -4,7 +4,6 @@ package com.smoc.cloud.customer.repository;
 import com.smoc.cloud.common.BasePageRepository;
 import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
 import com.smoc.cloud.common.smoc.customer.qo.AccountChannelInfoQo;
-import com.smoc.cloud.configure.channel.group.rowmapper.ChannelInfoRowMapper;
 import com.smoc.cloud.customer.rowmapper.AccountChannelConfigRowMapper;
 import com.smoc.cloud.customer.rowmapper.AccountChannelInfoRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -65,14 +64,13 @@ public class AccountChannelRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", i.PROTOCOL");
         sqlBuffer.append(", t.CHANNEL_INTRODUCE ");
         sqlBuffer.append("  from config_channel_basic_info t left join config_channel_interface i on t.CHANNEL_ID=i.CHANNEL_ID");
-        sqlBuffer.append("  left join (select t.id,t.CHANNEL_ID from account_channel_info t where t.ACCOUNT_ID=? and t.CARRIER=? and t.CHANNEL_ID=? )g ON t.CHANNEL_ID = g.CHANNEL_ID");
+        sqlBuffer.append("  left join (select t.id,t.CHANNEL_ID from account_channel_info t where t.ACCOUNT_ID=? and t.CARRIER=? )g ON t.CHANNEL_ID = g.CHANNEL_ID");
         sqlBuffer.append("  where g.ID is null ");
 
         List<Object> paramsList = new ArrayList<Object>();
 
         paramsList.add( qo.getAccountId());
         paramsList.add( qo.getCarrier());
-        paramsList.add( qo.getChannelId());
         if (!StringUtils.isEmpty(qo.getChannelName())) {
             sqlBuffer.append(" and t.CHANNEL_NAME like ?");
             paramsList.add( "%"+qo.getChannelName().trim()+"%");
@@ -91,6 +89,8 @@ public class AccountChannelRepositoryImpl extends BasePageRepository {
         if (!StringUtils.isEmpty(qo.getCarrier())) {
             sqlBuffer.append(" and t.CARRIER like ?");
             paramsList.add( "%"+qo.getCarrier().trim()+"%");
+        }else{
+            sqlBuffer.append(" and t.CARRIER = 'flag'");
         }
 
         if (!StringUtils.isEmpty(qo.getBusinessType())) {

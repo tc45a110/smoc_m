@@ -23,6 +23,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
@@ -49,7 +50,7 @@ public class AccountInterfaceController {
 
 
     /**
-     * 查询配置运营商价格
+     * 查询接口配置
      *
      * @return
      */
@@ -146,24 +147,7 @@ public class AccountInterfaceController {
         //记录日志
         log.info("[EC业务账号管理][业务账号接口信息][{}][{}]数据:{}", op, user.getUserName(), JSON.toJSONString(accountInterfaceInfoValidator));
 
-        //查询业务账号
-        ResponseData<AccountBasicInfoValidator> basicInfoData = businessAccountService.findById(accountInterfaceInfoValidator.getAccountId());
-        if (!ResponseCode.SUCCESS.getCode().equals(basicInfoData.getCode())) {
-            view.addObject("error", basicInfoData.getCode() + ":" + basicInfoData.getMessage());
-            return view;
-        }
-
-        //查询企业数据
-        ResponseData<EnterpriseBasicInfoValidator> enterpriseData = enterpriseService.findById(basicInfoData.getData().getEnterpriseId());
-        if (!ResponseCode.SUCCESS.getCode().equals(enterpriseData.getCode())) {
-            view.addObject("error", enterpriseData.getCode() + ":" + enterpriseData.getMessage());
-        }
-
-        ResponseData<AccountInterfaceInfoValidator> interfaceData = accountInterfaceService.findById(accountInterfaceInfoValidator.getAccountId());
-
-        view.addObject("accountInterfaceInfoValidator", interfaceData.getData());
-        view.addObject("enterpriseBasicInfoValidator", enterpriseData.getData());
-        view.addObject("op", "edit");
+        view.setView(new RedirectView("/account/edit/interface/"+accountInterfaceInfoValidator.getAccountId(), true, false));
 
         return view;
     }
