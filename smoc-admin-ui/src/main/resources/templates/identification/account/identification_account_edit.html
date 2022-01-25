@@ -25,7 +25,7 @@
                     <h4 class="page-title">新建、修改认证账号</h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
-                            认证管理
+                            认证服务
                         </li>
                         <li>
                             认证账号管理
@@ -65,48 +65,57 @@
                                                 <label for="md5HmacKey">md5Hmac密钥(客户对接参数)<span class="text-danger">*</span>&nbsp;
                                                 </label>
                                                 <input id="md5HmacKey" type="text" class="form-control" th:field="*{md5HmacKey}"
-                                                       required="" data-parsley-length="[2,12]" autocomplete="off" readonly >
+                                                       required="" data-parsley-length="[2,32]" autocomplete="off" readonly >
 
                                             </div>
                                             <div class="col-md-6 form-group">
                                                 <label for="aesKey">AES密钥(客户对接参数)<span class="text-danger">*</span>&nbsp;
                                                 </label>
                                                 <input id="aesKey" type="text" class="form-control" th:field="*{aesKey}"
-                                                       required="" data-parsley-length="[2,12]" autocomplete="off" readonly >
+                                                       required="" data-parsley-length="[2,32]" autocomplete="off" readonly >
                                             </div>
                                             <div class="col-md-6 form-group">
                                                 <label for="aesIv">AES偏移量(客户对接参数)<span class="text-danger">*</span>&nbsp;
                                                 </label>
                                                 <input id="aesIv" type="text" class="form-control" th:field="*{aesIv}"
-                                                       required="" data-parsley-length="[2,12]" autocomplete="off" readonly >
+                                                       required="" data-parsley-length="[2,16]" autocomplete="off" readonly >
                                             </div>
 
                                             <div class="col-md-6 form-group">
-                                                <label for="identificationPrice">身份认证价格<span class="text-danger">*</span>&nbsp;</label>
+                                                <label for="identificationPrice">身份认证价格（每条）<span class="text-danger">*</span>&nbsp;</label>
                                                 <input id="identificationPrice" type="text" class="form-control" th:field="*{identificationPrice}"
-                                                       required="" data-parsley-length="[2,12]" autocomplete="off" >
+                                                       required="" data-parsley-length="[1,12]" data-parsley-min="0.01" autocomplete="off" >
                                             </div>
                                             <div class="col-md-6 form-group">
-                                                <label for="identificationFacePrice">人脸认证价格<span class="text-danger">*</span>&nbsp;</label>
+                                                <label for="identificationFacePrice">人脸认证价格（每条）<span class="text-danger">*</span>&nbsp;</label>
                                                 <input id="identificationFacePrice" type="text" class="form-control" th:field="*{identificationFacePrice}"
-                                                       required="" data-parsley-length="[2,12]" autocomplete="off" >
+                                                       required="" data-parsley-length="[1,12]" data-parsley-min="0.01" autocomplete="off" >
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label for="grantingCredit">账号授信金额</label>
+                                                <input id="grantingCredit" type="text" class="form-control" value="0" th:field="*{grantingCredit}"
+                                                       required="" data-parsley-length="[1,12]" data-parsley-min="0" autocomplete="off" >
+                                            </div>
+                                            <div class="col-md-6 form-group">
+
                                             </div>
                                             <div class="col-md-6 form-group">
                                                 <label class="m-b-10">账号类型</label>
                                                 <br/>
-                                                <mpm:tag id="accountType" identity="isOrNo" name="accountType" show-type="radio" style="margin-top:0px"
-                                                         key="code" th:value="${identificationAccountInfoValidator.accountType}" required="true" title="是否"/>
+                                                <mpm:tag id="accountType" identity="idenAccountType"
+                                                         name="accountType" show-type="radio"  key="code" required="true" style="margin-top:0px"
+                                                         th:value="${identificationAccountInfoValidator.accountType}" title="账号类型"/>
 
                                             </div>
                                             <div class="col-md-6 form-group">
-                                                <label class="m-b-10">账号状态</label>
+                                                <label class="m-b-10">是否有效</label>
                                                 <br/>
-                                                <mpm:tag id="accountStatus" identity="isOrNo" name="accountStatus" show-type="radio" style="margin-top:0px"
-                                                         key="code" th:value="${identificationAccountInfoValidator.accountStatus}" required="true" title="是否"/>
+                                                <mpm:tag id="accountStatus" identity="codeStatus" name="accountStatus" show-type="radio" style="margin-top:0px" mask-value="002,003"
+                                                         key="code" th:value="${identificationAccountInfoValidator.accountStatus}" required="true" />
 
                                             </div>
 
-                                            <div class="col-md-12 text-center">
+                                            <div class="col-md-12 text-center m-t-20">
                                                 <input type="hidden" th:field="*{enterpriseId}">
                                                 <input type="hidden" th:field="*{createdTime}">
                                                 <input type="hidden" th:field="*{createdBy}">
@@ -140,6 +149,13 @@
 <th:block th:insert="fragments/common_fragments :: select_js"/>
 <th:block th:insert="fragments/common_fragments :: common_submit_form"/>
 <script>
+
+    function onCheckBoxChange(id,value){
+      if("accountType" == id){
+          $('#accountType-001').attr("checked", '');
+          $('#accountType-004').attr("checked", '');
+      }
+    }
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');

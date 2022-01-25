@@ -8,6 +8,8 @@ import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.identification.validator.IdentificationAccountInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
+import com.smoc.cloud.finance.entity.FinanceAccount;
+import com.smoc.cloud.finance.repository.FinanceAccountRepository;
 import com.smoc.cloud.identification.entity.IdentificationAccountInfo;
 import com.smoc.cloud.identification.repository.IdentificationAccountInfoRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -16,11 +18,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.Optional;
 
 @Slf4j
 @Service
 public class IdentificationAccountInfoService {
+
+    @Resource
+    private FinanceAccountRepository financeAccountRepository;
 
     @Resource
     private IdentificationAccountInfoRepository identificationAccountInfoRepository;
@@ -83,6 +89,28 @@ public class IdentificationAccountInfoService {
         log.info("[身份认证开户][{}]数据:{}", op, JSON.toJSONString(entity));
         identificationAccountInfoRepository.saveAndFlush(entity);
 
+        //开通身份认证财务账户
+        if ("add".equals(op)) {
+            FinanceAccount financeAccount = new FinanceAccount();
+            financeAccount.setAccountId(entity.getIdentificationAccount());
+            financeAccount.setAccountType("IDENTIFICATION_ACCOUNT");
+            financeAccount.setAccountTotalSum(new BigDecimal("0.00000"));
+            financeAccount.setAccountUsableSum(new BigDecimal("0.00000"));
+            financeAccount.setAccountFrozenSum(new BigDecimal("0.00000"));
+            financeAccount.setAccountConsumeSum(new BigDecimal("0.00000"));
+            financeAccount.setAccountRechargeSum(new BigDecimal("0.00000"));
+            financeAccount.setAccountCreditSum(entity.getGrantingCredit());
+            financeAccount.setAccountStatus("1");
+            financeAccount.setCreatedTime(DateTimeUtils.getNowDateTime());
+            financeAccount.setCreatedBy(entity.getCreatedBy());
+            financeAccountRepository.saveAndFlush(financeAccount);
+        }
+
+        //修改授信额度
+        if ("edit".equals(op)) {
+            financeAccountRepository.updateAccountCreditSumByAccountId(entity.getIdentificationAccount(),entity.getGrantingCredit());
+        }
+
         return ResponseDataUtil.buildSuccess();
     }
 
@@ -91,8 +119,9 @@ public class IdentificationAccountInfoService {
      * @param id
      * @return
      */
+    @Transactional
     public ResponseData logoutAccount(String id){
-        identificationAccountInfoRepository.logoutAccount(id,"LOGOUT");
+        identificationAccountInfoRepository.logoutAccount(id,"004");
         return ResponseDataUtil.buildSuccess();
     }
 

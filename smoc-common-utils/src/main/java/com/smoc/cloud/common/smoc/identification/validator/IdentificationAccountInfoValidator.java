@@ -18,6 +18,7 @@ public class IdentificationAccountInfoValidator {
     private String aesIv;
     private BigDecimal identificationPrice;
     private BigDecimal identificationFacePrice;
+    private BigDecimal grantingCredit;
     private String accountType;
     private String accountStatus;
     private String createdBy;

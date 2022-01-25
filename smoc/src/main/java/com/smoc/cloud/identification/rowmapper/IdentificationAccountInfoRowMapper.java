@@ -19,6 +19,7 @@ public class IdentificationAccountInfoRowMapper implements RowMapper<Identificat
         qo.setAesIv(resultSet.getString("AES_IV"));
         qo.setIdentificationPrice(resultSet.getBigDecimal("IDENTIFICATION_PRICE"));
         qo.setIdentificationFacePrice(resultSet.getBigDecimal("IDENTIFICATION_FACE_PRICE"));
+        qo.setGrantingCredit(resultSet.getBigDecimal("GRANTING_CREDIT"));
         qo.setAccountType(resultSet.getString("ACCOUNT_TYPE"));
         qo.setAccountStatus(resultSet.getString("ACCOUNT_STATUS"));
         qo.setCreatedBy(resultSet.getString("CREATED_BY"));

@@ -26,6 +26,9 @@
                     <h4 class="page-title">认证账号管理</h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
+                            认证服务
+                        </li>
+                        <li>
                             认证账号管理
                         </li>
                     </ol>
@@ -39,17 +42,22 @@
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
                 <div class="card-box">
-                    <form id="query_form" th:action="@{/identification/account/page}"
+                    <form id="query_form" th:action="@{/identification/account/page}" th:object="${identificationAccountInfoValidator}"
                           method="post">
                         <div class="row m-b-60">
                             <div class="col-sm-12">
                                 <div class="form-group  col-sm-3">
-                                    <input type="text" class="form-control"
+                                    <input type="text" class="form-control" th:field="*{enterpriseName}"
                                            placeholder="企业名称" autocomplete="off">
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <input type="text" class="form-control"
+                                    <input type="text" class="form-control" th:field="*{identificationAccount}"
                                            placeholder="认证账号" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <mpm:tag id="accountType" identity="idenAccountType"
+                                             name="accountType" show-type="select"  key="code"
+                                             th:value="${identificationAccountInfoValidator.accountType}" title="账号类型"/>
                                 </div>
                                 <div class="form-group col-sm-3 pull-right" style="text-align: right">
                                     <button sec:authorize-url="/identification/account/page" type="submit"
@@ -61,6 +69,10 @@
                                        class="btn btn-success waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-plus-sign"
                                            style="margin-right:5px"></i>新建认证账号</a>
+                                    <input type="hidden" name="currentPage" id="currentPage"
+                                           th:value="${pageParams.currentPage}">
+                                    <input type="hidden" name="pageSize" id="pageSize"
+                                           th:value="${pageParams.pageSize}">
                                 </div>
                             </div>
                         </div>
@@ -84,40 +96,72 @@
                                 <tr>
                                     <th>企业名称</th>
                                     <th>认证账号</th>
-                                    <th>HMACMD5密钥</th>
-                                    <th>AES密钥</th>
+                                    <th>认证价格（每条）</th>
+                                    <th>人脸认证价格（每条）</th>
+                                    <th>账号授信金额</th>
                                     <th>账号类型</th>
                                     <th>账号状态</th>
+                                    <th>创建人</th>
+                                    <th>创建时间</th>
                                     <th>操作</th>
                                 </tr>
                                 <thead>
                                 <tbody>
-                                <tr>
+                                <tr th:each="info:${list}">
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        北京星语互联科技有限公司
+                                        [[${info.enterpriseName}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        XY2010238349343
+                                        [[${info.identificationAccount}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        tr4Bnk9341IjreWh0BeJHU87RUdaVn98
-                                    </td>
-
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        tr4Bnk9341IjreWh0BeJHU87RUdaVn98
+                                        ¥ [[${#numbers.formatDecimal(info.identificationPrice,1,'COMMA',2,'POINT')}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light">测试账号</a>
+                                        ¥ [[${#numbers.formatDecimal(info.identificationFacePrice,1,'COMMA',2,'POINT')}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a class="btn btn-success btn-rounded btn-sm waves-effect waves-light">正常</a>
+                                        ¥ [[${#numbers.formatDecimal(info.grantingCredit,1,'COMMA',2,'POINT')}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
+                                        <mpm:tag id="accountType" identity="idenAccountType" class="1,btn btn-teal btn-rounded btn-sm waves-effect waves-light;2,btn btn-danger btn-rounded btn-sm waves-effect waves-light;"
+                                                 name="accountType" show-type="button"  key="code"
+                                                 th:value="${info.accountType}" title="账号类型"/>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <mpm:tag id="accountStatus" identity="codeStatus" class="001,btn btn-success btn-rounded btn-sm waves-effect waves-light;004,btn btn-danger btn-rounded btn-sm waves-effect waves-light;"
+                                                 name="accountType" show-type="button"  key="code"
+                                                 th:value="${info.accountStatus}"/>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        [[${info.createdBy}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        [[${info.createdTime}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <a sec:authorize-url="/identification/account/view/center/*" th:href="@{/identification/account/view/center/{id}(id=${info.id})}"
+                                           data-toggle="tooltip" data-placement="bottom"
+                                           data-original-title="认证账户明细"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color:#4BD396;"><i style="font-size: 18px"
+                                                                                       class="glyphicon glyphicon-search"></i></a>
+                                        <a sec:authorize-url="/identification/account/edit/*"
+                                           th:href="@{/identification/account/edit/{id}(id=${info.id})}"
+                                           class="on-default edit-row"
+                                           style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
+                                           data-placement="left" title="" data-original-title="修改认证账户"><i
+                                                style="font-size: 18px"
+                                                class="mdi mdi-table-edit"></i></a>
                                         <a data-toggle="tooltip" data-placement="bottom"
                                            data-original-title="导出EXCEL"
                                            class="on-default edit-row"
-                                           style="padding-left: 5px;color:#188ae2"><i style="font-size: 18px"
-                                                                                      class="glyphicon glyphicon-export"></i></a>
+                                           style="padding-left: 5px;color:#188ae2"><i style="font-size: 18px" class="glyphicon glyphicon-export"></i></a>
+                                        <a  th:if="${info.accountStatus != '004'}" sec:authorize-url="/identification/account/logout/*"
+                                                data-toggle="modal" th:onclick="confirmLogout([[${info.id}]],this)"
+                                                data-target="#confirm-modal" class="on-default remove-row"
+                                                style="padding-left: 5px;color: #f05050"
+                                                title="注销认证账号"><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -130,6 +174,30 @@
             </div>
         </div>
         <!-- end row -->
+
+        <!-- start confirm delete modal  -->
+        <div id="confirm-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="custom-width-modalLabel"
+             aria-hidden="true" style="display: none;margin: 60px">
+            <div class="modal-dialog" style="width:33%;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title" id="custom-width-modalLabel">确认注销</h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <p>注销之后，该账户将无法使用！你还是确认注销？</p>
+
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" id="deleteId">
+                        <a class="btn btn-default waves-effect" data-dismiss="modal">取消</a>
+                        <button onclick="logoutById()" class="btn btn-primary waves-effect waves-light">确认注销</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end confirm delete modal  -->
 
         <!-- start row  错误提示-->
         <th:block th:insert="fragments/common_fragments :: common_error"/>
@@ -146,71 +214,17 @@
 <script th:src="@{/static/plugins/autoNumeric/autoNumeric.js}"></script>
 <script>
 
-        $('#dateQueryStr').daterangepicker({
-        format: 'YYYY-MM-DD',
-        startDate: '2020-11-17',
-        endDate: '2011-11-17',
-        minDate: '2019-01-01',
-        maxDate: '2080-12-31',
-        dateLimit: {
-            days: 365
-        },
-        showDropdowns: true,
-        showWeekNumbers: true,
-        timePicker: false,
-        timePickerIncrement: 1,
-        timePicker12Hour: true,
-        ranges: {
-            '今天': [moment(), moment()],
-            '昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-            '最近7天': [moment().subtract(6, 'days'), moment()],
-            '最近30天': [moment().subtract(29, 'days'), moment()],
-            '本月': [moment().startOf('month'), moment().endOf('month')],
-            '上月': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-        },
-        opens: 'right',
-        buttonClasses: ['btn btn-default'],
-        applyClass: 'btn-small btn-primary',
-        cancelClass: 'btn-small',
-        format: 'YYYY-MM-DD',
-        separator: ' - ',
-        locale: {
-            applyLabel: '确认',
-            cancelLabel: '取消',
-            fromLabel: '从',
-            toLabel: '到',
-            customRangeLabel: '自定义',
-            format: "YYYY-MM-DD",
-            daysOfWeek: ['日', '一', '二', '三', '四', '五', '六'],
-            monthNames: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
-            firstDay: 1
-        }
-    }, function (start, end, label) {
-        //alert('A date range was chosen: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
-    });
+    function confirmLogout(id) {
+        $("#deleteId").val(id);
+    }
 
-    $(document).ready(function() {
+    //注销
+    function logoutById() {
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $('#preloader').css('display', 'block');
+        location.href = contextPath + '/identification/account/logout/' + $("#deleteId").val();
+    }
 
-        if("none" == $.cookie("help_display_recharge_list")){
-           $('#help').css('display', 'none');
-        }
-
-        $('#help_display').on("click", function () {
-           if('block' == $('#help').css('display')){
-             $('#help').css('display', 'none');
-             $.cookie("help_display_recharge_list", 'none', {
-                expires : 180
-             });
-           }else{
-             $('#help').css('display', 'block');
-             $.cookie("help_display_recharge_list", 'block', {
-                expires : 180
-             });
-           }
-        });
-
-		$('.autonumber').autoNumeric('init');
-	 });
 
 
     var resizefunc = [];

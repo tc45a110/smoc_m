@@ -35,6 +35,9 @@ public class IdentificationAccountInfo {
     @Column(name = "IDENTIFICATION_FACE_PRICE", nullable = false, precision = 24, scale = 4)
     private BigDecimal identificationFacePrice;
 
+    @Column(name = "GRANTING_CREDIT", nullable = false, precision = 24, scale = 4)
+    private BigDecimal grantingCredit;
+
     @Column(name = "ACCOUNT_TYPE", nullable = false)
     private String accountType;
 
@@ -115,6 +118,14 @@ public class IdentificationAccountInfo {
 
     public void setIdentificationPrice(BigDecimal identificationPrice) {
         this.identificationPrice = identificationPrice;
+    }
+
+    public BigDecimal getGrantingCredit() {
+        return grantingCredit;
+    }
+
+    public void setGrantingCredit(BigDecimal grantingCredit) {
+        this.grantingCredit = grantingCredit;
     }
 
     public String getAesIv() {

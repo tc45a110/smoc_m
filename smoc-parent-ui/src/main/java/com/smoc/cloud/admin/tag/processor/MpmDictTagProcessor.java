@@ -423,10 +423,8 @@ public class MpmDictTagProcessor extends AbstractAttributeTagProcessor {
 
         //查询屏蔽数值是否有值
         String mvalue = attributeMap.get(MASKVALUE);
-
         for (Dict dict : dictList) {
-
-            if (!StringUtils.isEmpty(mvalue) && mvalue.equals(dict.getFieldCode())) {
+            if (!StringUtils.isEmpty(mvalue) && mvalue.indexOf(dict.getFieldCode())>=0) {
                 continue;
             }
 
@@ -543,7 +541,13 @@ public class MpmDictTagProcessor extends AbstractAttributeTagProcessor {
             attri.put("style", style);
         }
 
+        //查询屏蔽数值是否有值
+        String mvalue = attributeMap.get(MASKVALUE);
         for (Dict dict : dictList) {
+
+            if (!StringUtils.isEmpty(mvalue) && mvalue.indexOf(dict.getFieldCode())>=0) {
+                continue;
+            }
 
             //start div
             model.add(modelFactory.createOpenElementTag("div", attri, null, false));

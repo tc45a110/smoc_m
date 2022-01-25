@@ -28,6 +28,7 @@ public class IdentificationAccountInfoRepositoryImpl extends BasePageRepository 
         sqlBuffer.append("  t.AES_IV,");
         sqlBuffer.append("  t.IDENTIFICATION_PRICE,");
         sqlBuffer.append("  t.IDENTIFICATION_FACE_PRICE,");
+        sqlBuffer.append("  t.GRANTING_CREDIT,");
         sqlBuffer.append("  t.ACCOUNT_TYPE,");
         sqlBuffer.append("  t.ACCOUNT_STATUS,");
         sqlBuffer.append("  t.CREATED_BY,");
@@ -44,21 +45,21 @@ public class IdentificationAccountInfoRepositoryImpl extends BasePageRepository 
         }
         //认证账号
         if (!StringUtils.isEmpty(qo.getIdentificationAccount())) {
-            sqlBuffer.append(" and e.IDENTIFICATION_ACCOUNT =?");
+            sqlBuffer.append(" and t.IDENTIFICATION_ACCOUNT =?");
             paramsList.add(qo.getIdentificationAccount().trim());
         }
         //账号状态
         if (!StringUtils.isEmpty(qo.getAccountStatus())) {
-            sqlBuffer.append(" and e.ACCOUNT_STATUS =?");
+            sqlBuffer.append(" and t.ACCOUNT_STATUS =?");
             paramsList.add(qo.getAccountStatus().trim());
         }
         //账号类型
-        if (!StringUtils.isEmpty(qo.getAccountStatus())) {
-            sqlBuffer.append(" and e.ACCOUNT_TYPE =?");
+        if (!StringUtils.isEmpty(qo.getAccountType())) {
+            sqlBuffer.append(" and t.ACCOUNT_TYPE =?");
             paramsList.add(qo.getAccountType().trim());
         }
 
-        sqlBuffer.append(" order by t.CREATED_TIME desc");
+        sqlBuffer.append(" order by ACCOUNT_STATUS asc, t.CREATED_TIME desc");
 
         //根据参数个数，组织参数值
         Object[] params = new Object[paramsList.size()];

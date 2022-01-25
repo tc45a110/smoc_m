@@ -69,7 +69,7 @@ public class IdentificationOrderController {
         //分页查询
         pageParams.setParams(identificationOrdersInfoValidator);
 
-        ResponseData<PageList<CodeNumberInfoValidator>> data = identificationOrdersInfoService.page(pageParams);
+        ResponseData<PageList<IdentificationOrdersInfoValidator>> data = identificationOrdersInfoService.page(pageParams);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;
