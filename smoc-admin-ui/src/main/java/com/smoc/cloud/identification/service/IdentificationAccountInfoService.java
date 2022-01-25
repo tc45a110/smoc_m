@@ -5,6 +5,7 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.identification.validator.IdentificationAccountInfoValidator;
+import com.smoc.cloud.customer.service.EnterpriseService;
 import com.smoc.cloud.identification.remote.IdentificationAccountInfoFeignClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class IdentificationAccountInfoService {
 
+
     @Autowired
     private IdentificationAccountInfoFeignClient identificationAccountInfoFeignClient;
 
@@ -35,7 +37,7 @@ public class IdentificationAccountInfoService {
 
         try {
             PageList<IdentificationAccountInfoValidator> data = this.identificationAccountInfoFeignClient.page(pageParams);
-            return ResponseDataUtil.buildError(data);
+            return ResponseDataUtil.buildSuccess(data);
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseDataUtil.buildError(e.getMessage());

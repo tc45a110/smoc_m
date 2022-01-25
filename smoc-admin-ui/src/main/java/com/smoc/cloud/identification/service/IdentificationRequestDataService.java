@@ -34,7 +34,7 @@ public class IdentificationRequestDataService {
 
         try {
             PageList<IdentificationRequestDataValidator> data = this.identificationRequestDataFeignClient.page(pageParams);
-            return ResponseDataUtil.buildError(data);
+            return ResponseDataUtil.buildSuccess(data);
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseDataUtil.buildError(e.getMessage());

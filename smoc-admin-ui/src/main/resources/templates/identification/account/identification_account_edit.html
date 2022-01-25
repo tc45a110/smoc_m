@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
+
+</head>
+<body>
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <!-- start row 页面导航-->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">新建、修改认证账号</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            认证管理
+                        </li>
+                        <li>
+                            认证账号管理
+                        </li>
+                        <li class="active">
+                            新建、修改认证账号
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row 页面内容-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-md-12">
+                <div class="card-box">
+                    <form id="submit_form" th:action="@{/identification/account/save/{op}(op=${op})}" th:object="${identificationAccountInfoValidator}"
+                          method="post" data-parsley-validate="">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="p-20">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-12 form-group m-b-20"
+                                                 th:remove="${level =='1'}?all:none">
+                                                <label>企业名称</label>：[[${identificationAccountInfoValidator.enterpriseName}]]
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label for="identificationAccount">认证账号(客户对接参数)<span class="text-danger">*</span>&nbsp;
+                                                </label>
+                                                <input id="identificationAccount" type="text" class="form-control" th:field="*{identificationAccount}"
+                                                       required="" data-parsley-length="[2,64]" readonly autocomplete="off" >
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label for="md5HmacKey">md5Hmac密钥(客户对接参数)<span class="text-danger">*</span>&nbsp;
+                                                </label>
+                                                <input id="md5HmacKey" type="text" class="form-control" th:field="*{md5HmacKey}"
+                                                       required="" data-parsley-length="[2,12]" autocomplete="off" readonly >
+
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label for="aesKey">AES密钥(客户对接参数)<span class="text-danger">*</span>&nbsp;
+                                                </label>
+                                                <input id="aesKey" type="text" class="form-control" th:field="*{aesKey}"
+                                                       required="" data-parsley-length="[2,12]" autocomplete="off" readonly >
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label for="aesIv">AES偏移量(客户对接参数)<span class="text-danger">*</span>&nbsp;
+                                                </label>
+                                                <input id="aesIv" type="text" class="form-control" th:field="*{aesIv}"
+                                                       required="" data-parsley-length="[2,12]" autocomplete="off" readonly >
+                                            </div>
+
+                                            <div class="col-md-6 form-group">
+                                                <label for="identificationPrice">身份认证价格<span class="text-danger">*</span>&nbsp;</label>
+                                                <input id="identificationPrice" type="text" class="form-control" th:field="*{identificationPrice}"
+                                                       required="" data-parsley-length="[2,12]" autocomplete="off" >
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label for="identificationFacePrice">人脸认证价格<span class="text-danger">*</span>&nbsp;</label>
+                                                <input id="identificationFacePrice" type="text" class="form-control" th:field="*{identificationFacePrice}"
+                                                       required="" data-parsley-length="[2,12]" autocomplete="off" >
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label class="m-b-10">账号类型</label>
+                                                <br/>
+                                                <mpm:tag id="accountType" identity="isOrNo" name="accountType" show-type="radio" style="margin-top:0px"
+                                                         key="code" th:value="${identificationAccountInfoValidator.accountType}" required="true" title="是否"/>
+
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label class="m-b-10">账号状态</label>
+                                                <br/>
+                                                <mpm:tag id="accountStatus" identity="isOrNo" name="accountStatus" show-type="radio" style="margin-top:0px"
+                                                         key="code" th:value="${identificationAccountInfoValidator.accountStatus}" required="true" title="是否"/>
+
+                                            </div>
+
+                                            <div class="col-md-12 text-center">
+                                                <input type="hidden" th:field="*{enterpriseId}">
+                                                <input type="hidden" th:field="*{createdTime}">
+                                                <input type="hidden" th:field="*{createdBy}">
+                                                <input type="hidden" th:field="*{id}">
+                                                <button sec:authorize-url="/identification/account/save/*" type="submit"
+                                                   class="btn btn-teal waves-effect waves-light">提交</button>
+                                                <a sec:authorize-url="/identification/account/list"
+                                                   th:href="@{/identification/account/list}" style="margin-left:20px"
+                                                   class="btn btn-default waves-effect waves-light">返回</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end class p-20 -->
+                            </div> <!-- end col -->
+                        </div> <!-- end row -->
+                    </form>
+                    <!-- end form -->
+                </div> <!-- end card-box -->
+            </div> <!-- end col -->
+        </div>
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<th:block th:insert="fragments/common_fragments :: common_submit_form"/>
+<script>
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+</script>
+</body>
+</html>

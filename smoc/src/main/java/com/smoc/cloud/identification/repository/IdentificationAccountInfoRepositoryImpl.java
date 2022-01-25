@@ -19,18 +19,18 @@ public class IdentificationAccountInfoRepositoryImpl extends BasePageRepository 
 
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");
-        sqlBuffer.append("  t.ID ");
-        sqlBuffer.append("  t.ENTERPRISE_ID ");
-        sqlBuffer.append("  e.ENTERPRISE_NAME ");
-        sqlBuffer.append("  t.IDENTIFICATION_ACCOUNT ");
-        sqlBuffer.append("  t.MD5_HMAC_KEY ");
-        sqlBuffer.append("  t.AES_KEY ");
-        sqlBuffer.append("  t.AES_IV ");
-        sqlBuffer.append("  t.IDENTIFICATION_PRICE ");
-        sqlBuffer.append("  t.IDENTIFICATION_FACE_PRICE ");
-        sqlBuffer.append("  t.ACCOUNT_TYPE ");
-        sqlBuffer.append("  t.ACCOUNT_STATUS ");
-        sqlBuffer.append("  t.CREATED_BY ");
+        sqlBuffer.append("  t.ID,");
+        sqlBuffer.append("  t.ENTERPRISE_ID,");
+        sqlBuffer.append("  e.ENTERPRISE_NAME,");
+        sqlBuffer.append("  t.IDENTIFICATION_ACCOUNT,");
+        sqlBuffer.append("  t.MD5_HMAC_KEY,");
+        sqlBuffer.append("  t.AES_KEY,");
+        sqlBuffer.append("  t.AES_IV,");
+        sqlBuffer.append("  t.IDENTIFICATION_PRICE,");
+        sqlBuffer.append("  t.IDENTIFICATION_FACE_PRICE,");
+        sqlBuffer.append("  t.ACCOUNT_TYPE,");
+        sqlBuffer.append("  t.ACCOUNT_STATUS,");
+        sqlBuffer.append("  t.CREATED_BY,");
         sqlBuffer.append("  DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME ");
         sqlBuffer.append("  from identification_account_info t,enterprise_basic_info e ");
         sqlBuffer.append("  where t.ENTERPRISE_ID = e.ENTERPRISE_ID ");

@@ -6,8 +6,13 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.configuate.validator.CodeNumberInfoValidator;
+import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
 import com.smoc.cloud.common.smoc.identification.validator.IdentificationAccountInfoValidator;
+import com.smoc.cloud.common.utils.StringRandom;
+import com.smoc.cloud.common.utils.UUID;
+import com.smoc.cloud.customer.service.EnterpriseService;
 import com.smoc.cloud.identification.service.IdentificationAccountInfoService;
+import com.smoc.cloud.sequence.service.SequenceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +31,12 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 @RequestMapping("/identification/account")
 public class IdentificationAccountController {
+
+    @Autowired
+    private SequenceService sequenceService;
+
+    @Autowired
+    private EnterpriseService enterpriseService;
 
     @Autowired
     private IdentificationAccountInfoService identificationAccountInfoService;
@@ -91,9 +102,36 @@ public class IdentificationAccountController {
      *
      * @return
      */
-    @RequestMapping(value = "/add", method = RequestMethod.GET)
-    public ModelAndView add() {
+    @RequestMapping(value = "/add/{enterpriseId}", method = RequestMethod.GET)
+    public ModelAndView add(@PathVariable String enterpriseId, HttpServletRequest request) {
         ModelAndView view = new ModelAndView("identification/account/identification_account_edit");
+
+        ResponseData<EnterpriseBasicInfoValidator> enterpriseData = enterpriseService.findById(enterpriseId);
+        IdentificationAccountInfoValidator identificationAccountInfoValidator = new IdentificationAccountInfoValidator();
+
+        identificationAccountInfoValidator.setId(UUID.uuid32());
+        identificationAccountInfoValidator.setEnterpriseId(enterpriseData.getData().getEnterpriseId());
+        identificationAccountInfoValidator.setEnterpriseName(enterpriseData.getData().getEnterpriseName());
+        identificationAccountInfoValidator.setAccountStatus("1");
+
+        //自动生成认证账号
+        String identificationAccount = "XYIA"+sequenceService.findSequence("BUSINESS_ACCOUNT");
+        identificationAccountInfoValidator.setIdentificationAccount(identificationAccount);
+
+        //自动生成md5Hmac密钥
+        String md5HmacKey = StringRandom.getStringRandom(32);
+        identificationAccountInfoValidator.setMd5HmacKey(md5HmacKey);
+
+        //自动生成AES密钥
+        String aesKey = StringRandom.getStringRandom(32);
+        identificationAccountInfoValidator.setAesKey(aesKey);
+
+        //自动生成AESIV
+        String aesIv = StringRandom.getStringRandom(16);
+        identificationAccountInfoValidator.setAesIv(aesIv);
+
+        view.addObject("identificationAccountInfoValidator", identificationAccountInfoValidator);
+        view.addObject("op", "add");
 
         return view;
 

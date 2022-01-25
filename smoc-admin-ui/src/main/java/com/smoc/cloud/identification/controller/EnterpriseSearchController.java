@@ -1,9 +1,16 @@
 package com.smoc.cloud.identification.controller;
 
 
+import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
+import com.smoc.cloud.common.response.ResponseCode;
+import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
+import com.smoc.cloud.customer.service.EnterpriseService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -13,6 +20,9 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/identification/enterprise")
 public class EnterpriseSearchController {
 
+    @Autowired
+    private EnterpriseService enterpriseService;
+
     /**
      * 认证开户企业检索
      * @return
@@ -21,16 +31,24 @@ public class EnterpriseSearchController {
     public ModelAndView search() {
         ModelAndView view = new ModelAndView("identification/account/identification_enterprise_search");
 
-        //查询数据
-        PageParams params = new PageParams<>();
-        params.setPages(3);
+        //初始化数据
+        PageParams<EnterpriseBasicInfoValidator> params = new PageParams<EnterpriseBasicInfoValidator>();
         params.setPageSize(10);
-        params.setStartRow(1);
-        params.setEndRow(10);
         params.setCurrentPage(1);
-        params.setTotalRows(22);
+        EnterpriseBasicInfoValidator enterpriseBasicInfoValidator = new EnterpriseBasicInfoValidator();
+        enterpriseBasicInfoValidator.setEnterpriseType("IDENTIFICATION");
+        params.setParams(enterpriseBasicInfoValidator);
 
-        view.addObject("pageParams",params);
+        //查询
+        ResponseData<PageList<EnterpriseBasicInfoValidator>> data = enterpriseService.page(params);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("enterpriseBasicInfoValidator", enterpriseBasicInfoValidator);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
 
         return view;
     }
@@ -40,19 +58,21 @@ public class EnterpriseSearchController {
      * @return
      */
     @RequestMapping(value = "/page", method = RequestMethod.POST)
-    public ModelAndView page() {
+    public ModelAndView page(@ModelAttribute EnterpriseBasicInfoValidator enterpriseBasicInfoValidator, PageParams pageParams) {
         ModelAndView view = new ModelAndView("identification/account/identification_enterprise_search");
 
-        //查询数据
-        PageParams params = new PageParams<>();
-        params.setPages(3);
-        params.setPageSize(10);
-        params.setStartRow(1);
-        params.setEndRow(10);
-        params.setCurrentPage(1);
-        params.setTotalRows(22);
+        //分页查询
+        pageParams.setParams(enterpriseBasicInfoValidator);
 
-        view.addObject("pageParams",params);
+        ResponseData<PageList<EnterpriseBasicInfoValidator>> data = enterpriseService.page(pageParams);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("enterpriseBasicInfoValidator", enterpriseBasicInfoValidator);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
 
         return view;
     }

@@ -1,8 +1,8 @@
 package com.smoc.cloud.admin.filter;
 
+import com.alibaba.nacos.client.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.BooleanUtils;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.BooleanUtils;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;

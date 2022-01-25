@@ -19,17 +19,17 @@ public class IdentificationOrdersInfoRepositoryImpl  extends BasePageRepository 
 
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");
-        sqlBuffer.append("  t.ID ");
-        sqlBuffer.append("  t.IDENTIFICATION_ACCOUNT ");
-        sqlBuffer.append("  e.ENTERPRISE_NAME ");
-        sqlBuffer.append("  t.ORDER_NO ");
-        sqlBuffer.append("  t.ORDER_TYPE ");
-        sqlBuffer.append("  t.IDENTIFICATION_PRICE ");
-        sqlBuffer.append("  t.IDENTIFICATION_PRICE_STATUS ");
-        sqlBuffer.append("  t.IDENTIFICATION_ORDER_NO ");
-        sqlBuffer.append("  t.IDENTIFICATION_STATUS ");
-        sqlBuffer.append("  t.IDENTIFICATION_MESSAGE ");
-        sqlBuffer.append("  t.CREATED_BY ");
+        sqlBuffer.append("  t.ID,");
+        sqlBuffer.append("  t.IDENTIFICATION_ACCOUNT,");
+        sqlBuffer.append("  e.ENTERPRISE_NAME,");
+        sqlBuffer.append("  t.ORDER_NO,");
+        sqlBuffer.append("  t.ORDER_TYPE,");
+        sqlBuffer.append("  t.IDENTIFICATION_PRICE,");
+        sqlBuffer.append("  t.IDENTIFICATION_PRICE_STATUS,");
+        sqlBuffer.append("  t.IDENTIFICATION_ORDER_NO,");
+        sqlBuffer.append("  t.IDENTIFICATION_STATUS,");
+        sqlBuffer.append("  t.IDENTIFICATION_MESSAGE,");
+        sqlBuffer.append("  t.CREATED_BY,");
         sqlBuffer.append("  DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME ");
         sqlBuffer.append("  from identification_orders_info t,identification_account_info i,enterprise_basic_info e  ");
         sqlBuffer.append("  where t.IDENTIFICATION_ACCOUNT= i.IDENTIFICATION_ACCOUNT and i.ENTERPRISE_ID =e.ENTERPRISE_ID  ");

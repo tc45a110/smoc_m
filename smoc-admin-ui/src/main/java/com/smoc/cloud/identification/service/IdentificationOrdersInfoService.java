@@ -33,7 +33,7 @@ public class IdentificationOrdersInfoService {
 
         try {
             PageList<IdentificationOrdersInfoValidator> data = this.identificationOrdersInfoFeignClient.page(pageParams);
-            return ResponseDataUtil.buildError(data);
+            return ResponseDataUtil.buildSuccess(data);
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseDataUtil.buildError(e.getMessage());
