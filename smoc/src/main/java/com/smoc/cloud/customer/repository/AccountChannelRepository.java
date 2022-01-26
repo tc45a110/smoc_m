@@ -2,6 +2,7 @@ package com.smoc.cloud.customer.repository;
 
 
 import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
+import com.smoc.cloud.common.smoc.configuate.validator.ChannelGroupInfoValidator;
 import com.smoc.cloud.common.smoc.customer.qo.AccountChannelInfoQo;
 import com.smoc.cloud.common.smoc.customer.validator.AccountChannelInfoValidator;
 import com.smoc.cloud.customer.entity.AccountChannelInfo;
@@ -22,4 +23,8 @@ public interface AccountChannelRepository extends CrudRepository<AccountChannelI
     List<ChannelBasicInfoQo> findChannelList(ChannelBasicInfoQo channelBasicInfoQo);
 
     AccountChannelInfo findByAccountIdAndCarrier(String accountId, String carrier);
+
+    List<AccountChannelInfoQo> findAccountChannelGroupConfig(AccountChannelInfoQo accountChannelInfoQo);
+
+    List<ChannelGroupInfoValidator> findChannelGroupList(ChannelGroupInfoValidator channelGroupInfoValidator);
 }

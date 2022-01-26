@@ -6,6 +6,8 @@
     <th:block th:insert="fragments/common_fragments :: common_css"/>
     <th:block th:insert="fragments/common_fragments :: select_css"/>
     <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
+    <!-- Tooltipster css -->
+    <link rel="stylesheet" th:href="@{/static/plugins/tooltipster/tooltipster.bundle.min.css}">
 
 </head>
 <body style="background-color:#fff">
@@ -28,56 +30,39 @@
                                             <h3 class="panel-title">业务账号通道组</h3>
                                         </div>
                                         <div class="panel-body">
-                                            <div class="col-md-12">
-                                                <div class="card-box widget-box-two widget-two-info">
+                                            <div class="col-md-12"  th:each="info :${channelMap}">
+                                                <div th:class="${info.value !=null ?'card-box widget-box-two widget-two-info':'card-box widget-box-two widget-two-pink'}">
                                                     <div class="wigdet-two-content text-white">
                                                         <p class="m-0 text-uppercase font-600 font-secondary text-overflow">
-                                                           联通通道（已选中）
+                                                           [[${info.value!=null?info.value.channelName:'未配置通道组'}]]
                                                         </p>
-                                                        <p class="text-white"><b>业务类型：</b> </p>
-                                                        <p class="m-0"><b>信息分类：</b></p>
-                                                        <p class="m-0"><b>业务介绍：</b>
-                                                            <a data-toggle="tooltip" data-placement="bottom" title="" data-original-title="">
-                                                                <i class="mdi mdi-checkbox-multiple-blank-outline" style="font-size:16px;color:#fff;" ></i>
+                                                        <p class="m-0"><b>运营商：
+                                                            <mpm:tag identity="carrier" show-type="label" key="code"
+                                                                     th:value="${info.key}"/>
+                                                        </b></p>
+                                                        <p class="text-white"><b>业务类型：
+                                                            <mpm:tag identity="businessType" show-type="label" key="code"
+                                                                     th:value="${accountBasicInfoValidator.businessType}"/></b> </p>
+                                                        <p class="m-0"><b>信息分类：
+                                                            <mpm:tag identity="infoType" show-type="label" key="code"
+                                                                     th:value="${accountBasicInfoValidator.infoType}"/></b>
+                                                            <a data-toggle="tooltip" data-placement="bottom" title=""
+                                                               th:data-original-title="${info.value.channelIntroduce}"
+                                                               th:if="${info.value !=null}">
+                                                                <i class="mdi mdi-checkbox-multiple-blank-outline"
+                                                                   style="font-size:16px;color:#fff;;margin-left:10px"></i>
+                                                            </a>
+                                                            <a sec:authorize-url="/account/channel/findChannelGroupList/*/*"
+                                                               th:href="@{/account/channel/findChannelGroupList/{accountId}/{carrier}(accountId=${accountBasicInfoValidator.accountId},carrier=${info.key})}"
+                                                               data-toggle="tooltip" data-placement="left"
+                                                               data-original-title="点击检索右侧通道组" class="pull-right">
+                                                                <i class="mdi mdi-link-variant"
+                                                                   style="font-size:16px;color:#fff;"></i>
                                                             </a>
                                                         </p>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-12">
-                                                <div class="card-box widget-box-two widget-two-pink">
-                                                    <div class="wigdet-two-content text-white">
-                                                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow">
-                                                            移动通道（未设置）
-                                                        </p>
-                                                        <p class="text-white"><b>业务类型：</b> </p>
-                                                        <p class="m-0"><b>信息分类：</b></p>
-                                                        <p class="m-0"><b>业务介绍：</b>
-                                                            <a data-toggle="tooltip" data-placement="bottom" title="" data-original-title="">
-                                                                <i class="mdi mdi-checkbox-multiple-blank-outline" style="font-size:16px;color:#fff;" ></i>
-                                                            </a>
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-12">
-                                                <div class="card-box widget-box-two widget-two-pink">
-                                                    <div class="wigdet-two-content text-white">
-                                                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow">
-                                                            电信通道（未设置）
-                                                        </p>
-                                                        <p class="text-white"><b>业务类型：</b> </p>
-                                                        <p class="m-0"><b>信息分类：</b></p>
-                                                        <p class="m-0"><b>业务介绍：</b>
-                                                            <a data-toggle="tooltip" data-placement="bottom" title="" data-original-title="">
-                                                                <i class="mdi mdi-checkbox-multiple-blank-outline" style="font-size:16px;color:#fff;" ></i>
-                                                            </a>
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-
 
                                         </div>
                                     </div>
@@ -95,27 +80,33 @@
                                         <div class="row">
                                             <div class="col-sm-12">
                                                 <div class="card-box">
-                                                    <form th:action="@{/ec/customer/channel/account/page}"  id="query_form"  method="post">
+                                                    <form th:object="${channelGroupInfoValidator}" id="query_form"  method="post">
                                                         <div class="row m-b-60">
                                                             <div class="col-sm-12">
                                                                 <div class="form-group  col-sm-4">
-                                                                    <input type="text" class="form-control"
+                                                                    <label>业务类型：</label>
+                                                                    <mpm:tag identity="businessType" show-type="label"
+                                                                             key="code"
+                                                                             th:value="${channelGroupInfoValidator.businessType}"/>
+                                                                </div>
+                                                                <div class="form-group  col-sm-4">
+                                                                    <label>运营商：</label>
+                                                                    <mpm:tag identity="carrier" show-type="label"
+                                                                             key="code"
+                                                                             th:value="${channelGroupInfoValidator.carrier}"/>
+                                                                </div>
+                                                                <div class="form-group  col-sm-4">
+                                                                    <label>信息分类：</label>
+                                                                    <mpm:tag identity="infoType" show-type="label"
+                                                                             key="code"
+                                                                             th:value="${channelGroupInfoValidator.infoType}"/>
+                                                                </div>
+                                                                <div class="form-group  col-sm-4">
+                                                                    <input type="text" class="form-control" th:field="*{channelGroupName}"
                                                                            placeholder="通道组名称" autocomplete="off">
                                                                 </div>
-                                                                <div class="form-group  col-sm-4">
-                                                                    <mpm:tag id="carrier" identity="carrier" show-type="select" key="code"
-                                                                             class="form-control" name="enterpriseType" value="CMCC" title="运营商"/>
-                                                                </div>
-                                                                <div class="form-group  col-sm-4">
-                                                                    <mpm:tag id="businessType" identity="businessType" show-type="select" key="code"
-                                                                             class="form-control" name="enterpriseType" value="TEXT_SMS" title="业务类型"/>
-                                                                </div>
-                                                                <div class="form-group  col-sm-4">
-                                                                    <mpm:tag id="infoType" identity="infoType" show-type="select" key="code"
-                                                                             class="form-control" name="infoType" value="001" title="信息分类"/>
-                                                                </div>
                                                                 <div class="form-group col-sm-4 pull-right" style="text-align: right">
-                                                                    <a  th:href="@{/ec/customer/channel/account/edit/product/id}"
+                                                                    <a
                                                                             class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                                                         <i class="glyphicon glyphicon-search" style="margin-right:5px"></i> 查询
                                                                     </a>
@@ -128,7 +119,7 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-6">
+                                            <div class="col-md-6" th:each="info :${list}">
                                                 <div class="property-card property-horizontal">
                                                     <div class="row">
                                                         <div class="col-sm-12">
@@ -137,7 +128,7 @@
                                                                 <div class="listingInfo">
                                                                     <div class="">
                                                                         <h5 style="padding-left:10px">
-                                                                            通道组名称：短信-三网-游戏(1150)
+                                                                            通道组名称：[[${info.channelGroupName}]]
                                                                             <div class="pull-right">
                                                                                 <a data-toggle="modal" data-target="#confirm-add-modal" title="添加该通道组到通道账户">
                                                                                     <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px;font-size:16px;color:#0095a8"></i></a>
@@ -145,719 +136,42 @@
                                                                         </h5>
                                                                     </div>
                                                                     <div class="col-sm-6">
-                                                                        <p style="font-size:12px">业务类型：<a class="btn btn-purple  waves-effect waves-light btn-xs">国际短信</a></p>
+                                                                        <p style="font-size:12px">业务类型：
+                                                                            <mpm:tag identity="businessType"
+                                                                                     show-type="label" key="code"
+                                                                                     th:value="${info.businessType}"/>
+                                                                        </p>
                                                                         <p style="font-size:12px">
-                                                                            通道数：6个 <i onclick="channelTip()"
-                                                                                      class="mdi mdi-comment-processing"
-                                                                                      style="margin-left:10px;"></i>
+                                                                            通道数：[[${info.channelNum}]] 个
+                                                                            <i data-toggle="tooltip"
+                                                                               data-placement="right"
+                                                                               th:id="'tooltip'+${info.channelGroupId}"
+                                                                               th:onmouseover="channelGroupTip([[${info.channelGroupId}]])"
+                                                                               th:if="${info.channelNum ne 0}"
+                                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
 
                                                                     </div>
                                                                     <div class="col-sm-6">
-                                                                        <p style="font-size:12px">信息分类：行业、有戏</p>
-                                                                        <p style="font-size:12px">发送号码范围：
-                                                                            全国
-                                                                            <i data-toggle="tooltip" data-placement="right" title=""
-                                                                               data-original-title="这个位置开发时有业务逻辑，可能多条 在这显示"
-                                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                                                        <p style="font-size:12px">信息分类：
+                                                                            <mpm:tag identity="infoType"
+                                                                                     show-type="label" key="code"
+                                                                                     th:value="${info.infoType}"/>
+                                                                        </p>
+                                                                        <p style="font-size:12px">屏蔽省份：
+                                                                            <span th:if="${#strings.isEmpty(info.maskProvince)}">无</span>
                                                                             <i data-toggle="tooltip" data-placement="right" title=""
                                                                                data-original-title="屏蔽省份，如果存在屏蔽省份的话"
                                                                                class="mdi mdi-comment-text-outline"
-                                                                               style="margin-left:5px"></i></p>
+                                                                               th:if="${not #strings.isEmpty(info.maskProvince)}"
+                                                                               th:id="${info.channelGroupId}"
+                                                                               th:onmouseover="maskProvince([[${info.channelGroupId}]])"
+                                                                               style="margin-left:5px"></i>
                                                                     </div>
 
                                                                 </div>
                                                                 <div class="property-action">
                                                                                      <span style="padding-left:10px;font-size:12px">
-                                                                                            通道组业务介绍：次通道组只能用来发送彩信、地产、有戏、验证码
-                                                                                     </span>
-
-                                                                </div>
-                                                                <!-- end. Card actions -->
-                                                            </div>
-                                                        </div>
-                                                        <!-- /col 8 -->
-                                                    </div>
-                                                    <!-- /inner row -->
-                                                </div>
-
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="property-card property-horizontal">
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <div class="property-content"
-                                                                 style="height:166px">
-                                                                <div class="listingInfo">
-                                                                    <div class="">
-                                                                        <h5 style="padding-left:10px">
-                                                                            通道组名称：短信-三网-游戏(1150)
-                                                                            <div class="pull-right">
-                                                                                <a data-toggle="modal" data-target="#confirm-add-modal" title="添加该通道组到通道账户">
-                                                                                    <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px;font-size:16px;color:#0095a8"></i></a>
-                                                                            </div>
-                                                                        </h5>
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">业务类型：<a class="btn btn-purple  waves-effect waves-light btn-xs">国际短信</a></p>
-                                                                        <p style="font-size:12px">
-                                                                            通道数：6个 <i onclick="channelTip()"
-                                                                                      class="mdi mdi-comment-processing"
-                                                                                      style="margin-left:10px;"></i>
-
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">信息分类：行业、有戏</p>
-                                                                        <p style="font-size:12px">发送号码范围：
-                                                                            全国
-                                                                            <i data-toggle="tooltip" data-placement="right" title=""
-                                                                               data-original-title="这个位置开发时有业务逻辑，可能多条 在这显示"
-                                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
-                                                                            <i data-toggle="tooltip" data-placement="right" title=""
-                                                                               data-original-title="屏蔽省份，如果存在屏蔽省份的话"
-                                                                               class="mdi mdi-comment-text-outline"
-                                                                               style="margin-left:5px"></i></p>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="property-action">
-                                                                                     <span style="padding-left:10px;font-size:12px">
-                                                                                            通道组业务介绍：次通道组只能用来发送彩信、地产、有戏、验证码
-                                                                                     </span>
-
-                                                                </div>
-                                                                <!-- end. Card actions -->
-                                                            </div>
-                                                        </div>
-                                                        <!-- /col 8 -->
-                                                    </div>
-                                                    <!-- /inner row -->
-                                                </div>
-
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="property-card property-horizontal">
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <div class="property-content"
-                                                                 style="height:166px">
-                                                                <div class="listingInfo">
-                                                                    <div class="">
-                                                                        <h5 style="padding-left:10px">
-                                                                            通道组名称：短信-三网-游戏(1150)
-                                                                            <div class="pull-right">
-                                                                                <a data-toggle="modal" data-target="#confirm-add-modal" title="添加该通道组到通道账户">
-                                                                                    <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px;font-size:16px;color:#0095a8"></i></a>
-                                                                            </div>
-                                                                        </h5>
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">业务类型：<a class="btn btn-purple  waves-effect waves-light btn-xs">国际短信</a></p>
-                                                                        <p style="font-size:12px">
-                                                                            通道数：6个 <i onclick="channelTip()"
-                                                                                      class="mdi mdi-comment-processing"
-                                                                                      style="margin-left:10px;"></i>
-
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">信息分类：行业、有戏</p>
-                                                                        <p style="font-size:12px">发送号码范围：
-                                                                            全国
-                                                                            <i data-toggle="tooltip" data-placement="right" title=""
-                                                                               data-original-title="这个位置开发时有业务逻辑，可能多条 在这显示"
-                                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
-                                                                            <i data-toggle="tooltip" data-placement="right" title=""
-                                                                               data-original-title="屏蔽省份，如果存在屏蔽省份的话"
-                                                                               class="mdi mdi-comment-text-outline"
-                                                                               style="margin-left:5px"></i></p>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="property-action">
-                                                                                     <span style="padding-left:10px;font-size:12px">
-                                                                                            通道组业务介绍：次通道组只能用来发送彩信、地产、有戏、验证码
-                                                                                     </span>
-
-                                                                </div>
-                                                                <!-- end. Card actions -->
-                                                            </div>
-                                                        </div>
-                                                        <!-- /col 8 -->
-                                                    </div>
-                                                    <!-- /inner row -->
-                                                </div>
-
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="property-card property-horizontal">
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <div class="property-content"
-                                                                 style="height:166px">
-                                                                <div class="listingInfo">
-                                                                    <div class="">
-                                                                        <h5 style="padding-left:10px">
-                                                                            通道组名称：短信-三网-游戏(1150)
-                                                                            <div class="pull-right">
-                                                                                <a data-toggle="modal" data-target="#confirm-add-modal" title="添加该通道组到通道账户">
-                                                                                    <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px;font-size:16px;color:#0095a8"></i></a>
-                                                                            </div>
-                                                                        </h5>
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">业务类型：<a class="btn btn-purple  waves-effect waves-light btn-xs">国际短信</a></p>
-                                                                        <p style="font-size:12px">
-                                                                            通道数：6个 <i onclick="channelTip()"
-                                                                                      class="mdi mdi-comment-processing"
-                                                                                      style="margin-left:10px;"></i>
-
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">信息分类：行业、有戏</p>
-                                                                        <p style="font-size:12px">发送号码范围：
-                                                                            全国
-                                                                            <i data-toggle="tooltip" data-placement="right" title=""
-                                                                               data-original-title="这个位置开发时有业务逻辑，可能多条 在这显示"
-                                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
-                                                                            <i data-toggle="tooltip" data-placement="right" title=""
-                                                                               data-original-title="屏蔽省份，如果存在屏蔽省份的话"
-                                                                               class="mdi mdi-comment-text-outline"
-                                                                               style="margin-left:5px"></i></p>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="property-action">
-                                                                                     <span style="padding-left:10px;font-size:12px">
-                                                                                            通道组业务介绍：次通道组只能用来发送彩信、地产、有戏、验证码
-                                                                                     </span>
-
-                                                                </div>
-                                                                <!-- end. Card actions -->
-                                                            </div>
-                                                        </div>
-                                                        <!-- /col 8 -->
-                                                    </div>
-                                                    <!-- /inner row -->
-                                                </div>
-
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="property-card property-horizontal">
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <div class="property-content"
-                                                                 style="height:166px">
-                                                                <div class="listingInfo">
-                                                                    <div class="">
-                                                                        <h5 style="padding-left:10px">
-                                                                            通道组名称：短信-三网-游戏(1150)
-                                                                            <div class="pull-right">
-                                                                                <a data-toggle="modal" data-target="#confirm-add-modal" title="添加该通道组到通道账户">
-                                                                                    <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px;font-size:16px;color:#0095a8"></i></a>
-                                                                            </div>
-                                                                        </h5>
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">业务类型：<a class="btn btn-purple  waves-effect waves-light btn-xs">国际短信</a></p>
-                                                                        <p style="font-size:12px">
-                                                                            通道数：6个 <i onclick="channelTip()"
-                                                                                      class="mdi mdi-comment-processing"
-                                                                                      style="margin-left:10px;"></i>
-
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">信息分类：行业、有戏</p>
-                                                                        <p style="font-size:12px">发送号码范围：
-                                                                            全国
-                                                                            <i data-toggle="tooltip" data-placement="right" title=""
-                                                                               data-original-title="这个位置开发时有业务逻辑，可能多条 在这显示"
-                                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
-                                                                            <i data-toggle="tooltip" data-placement="right" title=""
-                                                                               data-original-title="屏蔽省份，如果存在屏蔽省份的话"
-                                                                               class="mdi mdi-comment-text-outline"
-                                                                               style="margin-left:5px"></i></p>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="property-action">
-                                                                                     <span style="padding-left:10px;font-size:12px">
-                                                                                            通道组业务介绍：次通道组只能用来发送彩信、地产、有戏、验证码
-                                                                                     </span>
-
-                                                                </div>
-                                                                <!-- end. Card actions -->
-                                                            </div>
-                                                        </div>
-                                                        <!-- /col 8 -->
-                                                    </div>
-                                                    <!-- /inner row -->
-                                                </div>
-
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="property-card property-horizontal">
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <div class="property-content"
-                                                                 style="height:166px">
-                                                                <div class="listingInfo">
-                                                                    <div class="">
-                                                                        <h5 style="padding-left:10px">
-                                                                            通道组名称：短信-三网-游戏(1150)
-                                                                            <div class="pull-right">
-                                                                                <a data-toggle="modal" data-target="#confirm-add-modal" title="添加该通道组到通道账户">
-                                                                                    <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px;font-size:16px;color:#0095a8"></i></a>
-                                                                            </div>
-                                                                        </h5>
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">业务类型：<a class="btn btn-purple  waves-effect waves-light btn-xs">国际短信</a></p>
-                                                                        <p style="font-size:12px">
-                                                                            通道数：6个 <i onclick="channelTip()"
-                                                                                      class="mdi mdi-comment-processing"
-                                                                                      style="margin-left:10px;"></i>
-
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">信息分类：行业、有戏</p>
-                                                                        <p style="font-size:12px">发送号码范围：
-                                                                            全国
-                                                                            <i data-toggle="tooltip" data-placement="right" title=""
-                                                                               data-original-title="这个位置开发时有业务逻辑，可能多条 在这显示"
-                                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
-                                                                            <i data-toggle="tooltip" data-placement="right" title=""
-                                                                               data-original-title="屏蔽省份，如果存在屏蔽省份的话"
-                                                                               class="mdi mdi-comment-text-outline"
-                                                                               style="margin-left:5px"></i></p>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="property-action">
-                                                                                     <span style="padding-left:10px;font-size:12px">
-                                                                                            通道组业务介绍：次通道组只能用来发送彩信、地产、有戏、验证码
-                                                                                     </span>
-
-                                                                </div>
-                                                                <!-- end. Card actions -->
-                                                            </div>
-                                                        </div>
-                                                        <!-- /col 8 -->
-                                                    </div>
-                                                    <!-- /inner row -->
-                                                </div>
-
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="property-card property-horizontal">
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <div class="property-content"
-                                                                 style="height:166px">
-                                                                <div class="listingInfo">
-                                                                    <div class="">
-                                                                        <h5 style="padding-left:10px">
-                                                                            通道组名称：短信-三网-游戏(1150)
-                                                                            <div class="pull-right">
-                                                                                <a data-toggle="modal" data-target="#confirm-add-modal" title="添加该通道组到通道账户">
-                                                                                    <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px;font-size:16px;color:#0095a8"></i></a>
-                                                                            </div>
-                                                                        </h5>
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">业务类型：<a class="btn btn-purple  waves-effect waves-light btn-xs">国际短信</a></p>
-                                                                        <p style="font-size:12px">
-                                                                            通道数：6个 <i onclick="channelTip()"
-                                                                                      class="mdi mdi-comment-processing"
-                                                                                      style="margin-left:10px;"></i>
-
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">信息分类：行业、有戏</p>
-                                                                        <p style="font-size:12px">发送号码范围：
-                                                                            全国
-                                                                            <i data-toggle="tooltip" data-placement="right" title=""
-                                                                               data-original-title="这个位置开发时有业务逻辑，可能多条 在这显示"
-                                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
-                                                                            <i data-toggle="tooltip" data-placement="right" title=""
-                                                                               data-original-title="屏蔽省份，如果存在屏蔽省份的话"
-                                                                               class="mdi mdi-comment-text-outline"
-                                                                               style="margin-left:5px"></i></p>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="property-action">
-                                                                                     <span style="padding-left:10px;font-size:12px">
-                                                                                            通道组业务介绍：次通道组只能用来发送彩信、地产、有戏、验证码
-                                                                                     </span>
-
-                                                                </div>
-                                                                <!-- end. Card actions -->
-                                                            </div>
-                                                        </div>
-                                                        <!-- /col 8 -->
-                                                    </div>
-                                                    <!-- /inner row -->
-                                                </div>
-
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="property-card property-horizontal">
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <div class="property-content"
-                                                                 style="height:166px">
-                                                                <div class="listingInfo">
-                                                                    <div class="">
-                                                                        <h5 style="padding-left:10px">
-                                                                            通道组名称：短信-三网-游戏(1150)
-                                                                            <div class="pull-right">
-                                                                                <a data-toggle="modal" data-target="#confirm-add-modal" title="添加该通道组到通道账户">
-                                                                                    <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px;font-size:16px;color:#0095a8"></i></a>
-                                                                            </div>
-                                                                        </h5>
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">业务类型：<a class="btn btn-purple  waves-effect waves-light btn-xs">国际短信</a></p>
-                                                                        <p style="font-size:12px">
-                                                                            通道数：6个 <i onclick="channelTip()"
-                                                                                      class="mdi mdi-comment-processing"
-                                                                                      style="margin-left:10px;"></i>
-
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">信息分类：行业、有戏</p>
-                                                                        <p style="font-size:12px">发送号码范围：
-                                                                            全国
-                                                                            <i data-toggle="tooltip" data-placement="right" title=""
-                                                                               data-original-title="这个位置开发时有业务逻辑，可能多条 在这显示"
-                                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
-                                                                            <i data-toggle="tooltip" data-placement="right" title=""
-                                                                               data-original-title="屏蔽省份，如果存在屏蔽省份的话"
-                                                                               class="mdi mdi-comment-text-outline"
-                                                                               style="margin-left:5px"></i></p>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="property-action">
-                                                                                     <span style="padding-left:10px;font-size:12px">
-                                                                                            通道组业务介绍：次通道组只能用来发送彩信、地产、有戏、验证码
-                                                                                     </span>
-
-                                                                </div>
-                                                                <!-- end. Card actions -->
-                                                            </div>
-                                                        </div>
-                                                        <!-- /col 8 -->
-                                                    </div>
-                                                    <!-- /inner row -->
-                                                </div>
-
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="property-card property-horizontal">
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <div class="property-content"
-                                                                 style="height:166px">
-                                                                <div class="listingInfo">
-                                                                    <div class="">
-                                                                        <h5 style="padding-left:10px">
-                                                                            通道组名称：短信-三网-游戏(1150)
-                                                                            <div class="pull-right">
-                                                                                <a data-toggle="modal" data-target="#confirm-add-modal" title="添加该通道组到通道账户">
-                                                                                    <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px;font-size:16px;color:#0095a8"></i></a>
-                                                                            </div>
-                                                                        </h5>
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">业务类型：<a class="btn btn-purple  waves-effect waves-light btn-xs">国际短信</a></p>
-                                                                        <p style="font-size:12px">
-                                                                            通道数：6个 <i onclick="channelTip()"
-                                                                                      class="mdi mdi-comment-processing"
-                                                                                      style="margin-left:10px;"></i>
-
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">信息分类：行业、有戏</p>
-                                                                        <p style="font-size:12px">发送号码范围：
-                                                                            全国
-                                                                            <i data-toggle="tooltip" data-placement="right" title=""
-                                                                               data-original-title="这个位置开发时有业务逻辑，可能多条 在这显示"
-                                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
-                                                                            <i data-toggle="tooltip" data-placement="right" title=""
-                                                                               data-original-title="屏蔽省份，如果存在屏蔽省份的话"
-                                                                               class="mdi mdi-comment-text-outline"
-                                                                               style="margin-left:5px"></i></p>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="property-action">
-                                                                                     <span style="padding-left:10px;font-size:12px">
-                                                                                            通道组业务介绍：次通道组只能用来发送彩信、地产、有戏、验证码
-                                                                                     </span>
-
-                                                                </div>
-                                                                <!-- end. Card actions -->
-                                                            </div>
-                                                        </div>
-                                                        <!-- /col 8 -->
-                                                    </div>
-                                                    <!-- /inner row -->
-                                                </div>
-
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="property-card property-horizontal">
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <div class="property-content"
-                                                                 style="height:166px">
-                                                                <div class="listingInfo">
-                                                                    <div class="">
-                                                                        <h5 style="padding-left:10px">
-                                                                            通道组名称：短信-三网-游戏(1150)
-                                                                            <div class="pull-right">
-                                                                                <a data-toggle="modal" data-target="#confirm-add-modal" title="添加该通道组到通道账户">
-                                                                                    <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px;font-size:16px;color:#0095a8"></i></a>
-                                                                            </div>
-                                                                        </h5>
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">业务类型：<a class="btn btn-purple  waves-effect waves-light btn-xs">国际短信</a></p>
-                                                                        <p style="font-size:12px">
-                                                                            通道数：6个 <i onclick="channelTip()"
-                                                                                      class="mdi mdi-comment-processing"
-                                                                                      style="margin-left:10px;"></i>
-
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">信息分类：行业、有戏</p>
-                                                                        <p style="font-size:12px">发送号码范围：
-                                                                            全国
-                                                                            <i data-toggle="tooltip" data-placement="right" title=""
-                                                                               data-original-title="这个位置开发时有业务逻辑，可能多条 在这显示"
-                                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
-                                                                            <i data-toggle="tooltip" data-placement="right" title=""
-                                                                               data-original-title="屏蔽省份，如果存在屏蔽省份的话"
-                                                                               class="mdi mdi-comment-text-outline"
-                                                                               style="margin-left:5px"></i></p>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="property-action">
-                                                                                     <span style="padding-left:10px;font-size:12px">
-                                                                                            通道组业务介绍：次通道组只能用来发送彩信、地产、有戏、验证码
-                                                                                     </span>
-
-                                                                </div>
-                                                                <!-- end. Card actions -->
-                                                            </div>
-                                                        </div>
-                                                        <!-- /col 8 -->
-                                                    </div>
-                                                    <!-- /inner row -->
-                                                </div>
-
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="property-card property-horizontal">
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <div class="property-content"
-                                                                 style="height:166px">
-                                                                <div class="listingInfo">
-                                                                    <div class="">
-                                                                        <h5 style="padding-left:10px">
-                                                                            通道组名称：短信-三网-游戏(1150)
-                                                                            <div class="pull-right">
-                                                                                <a data-toggle="modal" data-target="#confirm-add-modal" title="添加该通道组到通道账户">
-                                                                                    <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px;font-size:16px;color:#0095a8"></i></a>
-                                                                            </div>
-                                                                        </h5>
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">业务类型：<a class="btn btn-purple  waves-effect waves-light btn-xs">国际短信</a></p>
-                                                                        <p style="font-size:12px">
-                                                                            通道数：6个 <i onclick="channelTip()"
-                                                                                      class="mdi mdi-comment-processing"
-                                                                                      style="margin-left:10px;"></i>
-
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">信息分类：行业、有戏</p>
-                                                                        <p style="font-size:12px">发送号码范围：
-                                                                            全国
-                                                                            <i data-toggle="tooltip" data-placement="right" title=""
-                                                                               data-original-title="这个位置开发时有业务逻辑，可能多条 在这显示"
-                                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
-                                                                            <i data-toggle="tooltip" data-placement="right" title=""
-                                                                               data-original-title="屏蔽省份，如果存在屏蔽省份的话"
-                                                                               class="mdi mdi-comment-text-outline"
-                                                                               style="margin-left:5px"></i></p>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="property-action">
-                                                                                     <span style="padding-left:10px;font-size:12px">
-                                                                                            通道组业务介绍：次通道组只能用来发送彩信、地产、有戏、验证码
-                                                                                     </span>
-
-                                                                </div>
-                                                                <!-- end. Card actions -->
-                                                            </div>
-                                                        </div>
-                                                        <!-- /col 8 -->
-                                                    </div>
-                                                    <!-- /inner row -->
-                                                </div>
-
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="property-card property-horizontal">
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <div class="property-content"
-                                                                 style="height:166px">
-                                                                <div class="listingInfo">
-                                                                    <div class="">
-                                                                        <h5 style="padding-left:10px">
-                                                                            通道组名称：短信-三网-游戏(1150)
-                                                                            <div class="pull-right">
-                                                                                <a data-toggle="modal" data-target="#confirm-add-modal" title="添加该通道组到通道账户">
-                                                                                    <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px;font-size:16px;color:#0095a8"></i></a>
-                                                                            </div>
-                                                                        </h5>
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">业务类型：<a class="btn btn-purple  waves-effect waves-light btn-xs">国际短信</a></p>
-                                                                        <p style="font-size:12px">
-                                                                            通道数：6个 <i onclick="channelTip()"
-                                                                                      class="mdi mdi-comment-processing"
-                                                                                      style="margin-left:10px;"></i>
-
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">信息分类：行业、有戏</p>
-                                                                        <p style="font-size:12px">发送号码范围：
-                                                                            全国
-                                                                            <i data-toggle="tooltip" data-placement="right" title=""
-                                                                               data-original-title="这个位置开发时有业务逻辑，可能多条 在这显示"
-                                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
-                                                                            <i data-toggle="tooltip" data-placement="right" title=""
-                                                                               data-original-title="屏蔽省份，如果存在屏蔽省份的话"
-                                                                               class="mdi mdi-comment-text-outline"
-                                                                               style="margin-left:5px"></i></p>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="property-action">
-                                                                                     <span style="padding-left:10px;font-size:12px">
-                                                                                            通道组业务介绍：次通道组只能用来发送彩信、地产、有戏、验证码
-                                                                                     </span>
-
-                                                                </div>
-                                                                <!-- end. Card actions -->
-                                                            </div>
-                                                        </div>
-                                                        <!-- /col 8 -->
-                                                    </div>
-                                                    <!-- /inner row -->
-                                                </div>
-
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="property-card property-horizontal">
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <div class="property-content"
-                                                                 style="height:166px">
-                                                                <div class="listingInfo">
-                                                                    <div class="">
-                                                                        <h5 style="padding-left:10px">
-                                                                            通道组名称：短信-三网-游戏(1150)
-                                                                            <div class="pull-right">
-                                                                                <a data-toggle="modal" data-target="#confirm-add-modal" title="添加该通道组到通道账户">
-                                                                                    <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px;font-size:16px;color:#0095a8"></i></a>
-                                                                            </div>
-                                                                        </h5>
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">业务类型：<a class="btn btn-purple  waves-effect waves-light btn-xs">国际短信</a></p>
-                                                                        <p style="font-size:12px">
-                                                                            通道数：6个 <i onclick="channelTip()"
-                                                                                      class="mdi mdi-comment-processing"
-                                                                                      style="margin-left:10px;"></i>
-
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">信息分类：行业、有戏</p>
-                                                                        <p style="font-size:12px">发送号码范围：
-                                                                            全国
-                                                                            <i data-toggle="tooltip" data-placement="right" title=""
-                                                                               data-original-title="这个位置开发时有业务逻辑，可能多条 在这显示"
-                                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
-                                                                            <i data-toggle="tooltip" data-placement="right" title=""
-                                                                               data-original-title="屏蔽省份，如果存在屏蔽省份的话"
-                                                                               class="mdi mdi-comment-text-outline"
-                                                                               style="margin-left:5px"></i></p>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="property-action">
-                                                                                     <span style="padding-left:10px;font-size:12px">
-                                                                                            通道组业务介绍：次通道组只能用来发送彩信、地产、有戏、验证码
-                                                                                     </span>
-
-                                                                </div>
-                                                                <!-- end. Card actions -->
-                                                            </div>
-                                                        </div>
-                                                        <!-- /col 8 -->
-                                                    </div>
-                                                    <!-- /inner row -->
-                                                </div>
-
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="property-card property-horizontal">
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <div class="property-content"
-                                                                 style="height:166px">
-                                                                <div class="listingInfo">
-                                                                    <div class="">
-                                                                        <h5 style="padding-left:10px">
-                                                                            通道组名称：短信-三网-游戏(1150)
-                                                                            <div class="pull-right">
-                                                                                <a data-toggle="modal" data-target="#confirm-add-modal" title="添加该通道组到通道账户">
-                                                                                    <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px;font-size:16px;color:#0095a8"></i></a>
-                                                                            </div>
-                                                                        </h5>
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">业务类型：<a class="btn btn-purple  waves-effect waves-light btn-xs">国际短信</a></p>
-                                                                        <p style="font-size:12px">
-                                                                            通道数：6个 <i onclick="channelTip()"
-                                                                                      class="mdi mdi-comment-processing"
-                                                                                      style="margin-left:10px;"></i>
-
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">信息分类：行业、有戏</p>
-                                                                        <p style="font-size:12px">发送号码范围：
-                                                                            全国
-                                                                            <i data-toggle="tooltip" data-placement="right" title=""
-                                                                               data-original-title="这个位置开发时有业务逻辑，可能多条 在这显示"
-                                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
-                                                                            <i data-toggle="tooltip" data-placement="right" title=""
-                                                                               data-original-title="屏蔽省份，如果存在屏蔽省份的话"
-                                                                               class="mdi mdi-comment-text-outline"
-                                                                               style="margin-left:5px"></i></p>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="property-action">
-                                                                                     <span style="padding-left:10px;font-size:12px">
-                                                                                            通道组业务介绍：次通道组只能用来发送彩信、地产、有戏、验证码
+                                                                                            通道组业务介绍：[[${info.channelGroupIntroduce}]]
                                                                                      </span>
 
                                                                 </div>
@@ -937,7 +251,54 @@
 <th:block th:insert="fragments/common_fragments :: common_js"/>
 <th:block th:insert="fragments/common_fragments :: select_js"/>
 <th:block th:insert="fragments/common_fragments :: common_submit_form"/>
+<!-- Tooltipster js -->
+<script th:src="@{/static/plugins/tooltipster/tooltipster.bundle.min.js}"></script>
 <script>
+
+    //查看屏蔽省份
+    function maskProvince(channelGroupId) {
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $.ajax({
+            url: contextPath + "/configure/channel/group/maskProvince/" + channelGroupId,
+            async: false,
+            success: function (data) {
+                $('#' + channelGroupId).attr({
+                    // 设置提示内容
+                    'data-original-title': data,
+                })
+            }
+        });
+    }
+
+    //查看通道数
+    function channelGroupTip(channelGroupId) {
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $.ajax({
+            url: contextPath + "/configure/channel/group/configChannelNum/" + channelGroupId,
+            async: false,
+            success: function (data) {
+                var channels = data.split("@");
+                var channelName = ""
+                if (channels.length > 1) {
+                    for (i = 0; i < channels.length; i++) {
+                        channelName += '<span style="font-size:12px">' + channels[i] + '</span><br>';
+                    }
+                } else {
+                    channelName = '<span style="font-size:12px">' + channels + '</span>';
+                }
+
+                $('#tooltip' + channelGroupId).tooltipster({
+                    content: $('<p style="text-align:left;"><strong>通道组通道配置</strong><br>' + channelName + '</p>'),
+                    maxWidth: 600,
+                    position: 'right',
+                });
+            }
+        });
+    }
+
+</script>
+<script>
+
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');

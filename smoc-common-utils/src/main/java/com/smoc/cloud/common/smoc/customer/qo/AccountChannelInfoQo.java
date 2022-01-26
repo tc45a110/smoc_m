@@ -17,4 +17,5 @@ public class AccountChannelInfoQo {
     private String channelIntroduce;
     private String protocol;
 
+    private String accountChannelType;
 }

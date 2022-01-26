@@ -3,6 +3,7 @@ package com.smoc.cloud.customer.service;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
+import com.smoc.cloud.common.smoc.configuate.validator.ChannelGroupInfoValidator;
 import com.smoc.cloud.common.smoc.customer.qo.AccountChannelInfoQo;
 import com.smoc.cloud.common.smoc.customer.validator.AccountChannelInfoValidator;
 import com.smoc.cloud.customer.remote.AccountChannelFeignClient;
@@ -84,6 +85,51 @@ public class AccountChannelService {
         try {
             ResponseData data = this.accountChannelFeignClient.findByAccountIdAndCarrier(accountId,carrier);
             return data;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 根据id获取信息
+     * @param id
+     * @return
+     */
+    public ResponseData<AccountChannelInfoValidator> findById(String id) {
+        try {
+            ResponseData<AccountChannelInfoValidator> data = this.accountChannelFeignClient.findById(id);
+            return data;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 根据id删除信息
+     * @param id
+     * @return
+     */
+    public ResponseData deleteById(String id) {
+        try {
+            ResponseData data = this.accountChannelFeignClient.deleteById(id);
+            return data;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 检索通道组
+     * @param channelGroupInfoValidator
+     * @return
+     */
+    public ResponseData<List<ChannelGroupInfoValidator>> findChannelGroupList(ChannelGroupInfoValidator channelGroupInfoValidator) {
+        try {
+            ResponseData<List<ChannelGroupInfoValidator>> list = this.accountChannelFeignClient.findChannelGroupList(channelGroupInfoValidator);
+            return list;
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseDataUtil.buildError(e.getMessage());

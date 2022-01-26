@@ -296,17 +296,6 @@ public class AccountController {
     }
 
 
-    /**
-     * 业务账号产品配置
-     *
-     * @return
-     */
-    @RequestMapping(value = "/edit/product/{accountId}", method = RequestMethod.GET)
-    public ModelAndView edit_product(@PathVariable String accountId, HttpServletRequest request) {
-        ModelAndView view = new ModelAndView("customer/account/account_edit_channel_group");
-        return view;
-
-    }
 
     /**
      * EC业务账号中心

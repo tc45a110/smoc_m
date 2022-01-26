@@ -51,9 +51,15 @@
                                                         <mpm:tag identity="carrier" show-type="label" key="code"
                                                                  th:value="${info.key}"/>
                                                     </b></p>
-                                                    <p class="m-0"><b>通道协议类型：HTTP</b>
+                                                    <p class="m-0"><b>通道协议类型：
+                                                        <span th:if="${info.value !=null}">
+                                                            <mpm:tag identity="channelProtocolType"
+                                                                     show-type="label" key="code"
+                                                                     th:value="${info.value.protocol}"/>
+                                                        </span>
+                                                    </b>
                                                         <a data-toggle="tooltip" data-placement="bottom" title=""
-                                                           data-original-title="万能通道，想发什么发什么，可能吗？"
+                                                           th:data-original-title="${info.value.channelIntroduce}"
                                                            th:if="${info.value !=null}">
                                                             <i class="mdi mdi-checkbox-multiple-blank-outline"
                                                                style="font-size:16px;color:#fff;;margin-left:10px"></i>
@@ -127,7 +133,8 @@
                                                                     <input type="hidden" th:field="*{carrier}">
                                                                     <input type="hidden" th:field="*{businessType}">
                                                                     <input type="hidden" th:field="*{infoType}">
-                                                                    <button th:href="@{/account/channel/channelPage}"
+                                                                    <button sec:authorize-url="/account/channel/channelPage"
+                                                                            th:href="@{/account/channel/channelPage}"
                                                                             class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                                                         <i class="glyphicon glyphicon-search"
                                                                            style="margin-right:5px"></i> 查询
@@ -155,6 +162,7 @@
                                                                                 <a data-toggle="modal"
                                                                                    data-target="#confirm-add-modal"
                                                                                    href="javascript:void(0);"
+                                                                                   sec:authorize-url="/account/channel/save"
                                                                                    th:onclick="openChannel([[${channelBasicInfoQo.carrier}]],[[${info.channelId}]],[[${info.channelName}]])"
                                                                                    title="添加该通道到通道账户">
                                                                                     <i class="glyphicon glyphicon-plus-sign"
@@ -245,7 +253,9 @@
                     <div class="modal-footer">
                         <input type="hidden" id="deleteId">
                         <a class="btn btn-default waves-effect" data-dismiss="modal">取消</a>
-                        <button onclick="deleteById()" class="btn btn-primary waves-effect waves-light">确认移除</button>
+                        <button onclick="deleteById()" sec:authorize-url="/account/channel/deleteById/*"
+                                class="btn btn-primary waves-effect waves-light">确认移除
+                        </button>
                     </div>
                 </div>
             </div>
@@ -277,8 +287,10 @@
                             <div class="form-group">
                                 <label>权重
                                 </label>
-                                <input type="text" class="form-control"   required="" id="channelWeight" th:field="*{channelWeight}"
-                                       data-parsley-type="number" min="10"   max="100" autocomplete="off" placeholder="默认 10，总共100">
+                                <input type="text" class="form-control" required="" id="channelWeight"
+                                       th:field="*{channelWeight}"
+                                       data-parsley-type="number" min="10" max="100" autocomplete="off"
+                                       placeholder="默认 10，总共100">
                             </div>
                             <div class="text-right">
                                 <input type="hidden" id="carrier" name="carrier" th:value="${carrier}">
@@ -286,7 +298,7 @@
                                 <input type="hidden" id="channelId" name="channelId" th:value="${channelId}">
                                 <a class="btn btn-default waves-effect" data-dismiss="modal">取消</a>
                                 <button sec:authorize-url="/account/channel/save"
-                                    class="btn btn-primary waves-effect waves-light">确认添加
+                                        class="btn btn-primary waves-effect waves-light">确认添加
                                 </button>
                                 </button>
                             </div>
@@ -315,11 +327,11 @@
     }
 
     //打开删除通道
-    function deleteChannel(id){
+    function deleteChannel(id) {
         $("#deleteId").val(id);
     }
 
-    function deleteById(){
+    function deleteById() {
         var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
         $('#preloader').css('display', 'block');
         location.href = contextPath + '/account/channel/deleteById/' + $("#deleteId").val();

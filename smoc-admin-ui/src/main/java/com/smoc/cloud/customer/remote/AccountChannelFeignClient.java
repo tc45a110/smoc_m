@@ -2,6 +2,7 @@ package com.smoc.cloud.customer.remote;
 
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
+import com.smoc.cloud.common.smoc.configuate.validator.ChannelGroupInfoValidator;
 import com.smoc.cloud.common.smoc.customer.qo.AccountChannelInfoQo;
 import com.smoc.cloud.common.smoc.customer.validator.AccountChannelInfoValidator;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -45,7 +46,7 @@ public interface AccountChannelFeignClient {
      * @return
      */
     @RequestMapping(value = "/account/channel/save/{op}", method = RequestMethod.POST)
-    ResponseData save(@RequestBody AccountChannelInfoValidator accountChannelInfoValidator, @PathVariable String op);
+    ResponseData save(@RequestBody AccountChannelInfoValidator accountChannelInfoValidator, @PathVariable String op) throws Exception;
 
     /**
      * 查询账号下运营商是否配置过通道
@@ -54,5 +55,29 @@ public interface AccountChannelFeignClient {
      * @return
      */
     @RequestMapping(value = "/account/channel/findByAccountIdAndCarrier/{accountId}/{carrier}", method = RequestMethod.GET)
-    ResponseData findByAccountIdAndCarrier(@PathVariable String accountId, @PathVariable String carrier);
+    ResponseData findByAccountIdAndCarrier(@PathVariable String accountId, @PathVariable String carrier) throws Exception;
+
+    /**
+     * 根据id获取信息
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/account/channel/findById/{id}", method = RequestMethod.GET)
+    ResponseData<AccountChannelInfoValidator> findById(@PathVariable String id) throws Exception;
+
+    /**
+     * 根据id删除信息
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/account/channel/deleteById/{id}", method = RequestMethod.GET)
+    ResponseData deleteById(@PathVariable String id) throws Exception;
+
+    /**
+     * 检索通道组
+     * @param channelGroupInfoValidator
+     * @return
+     */
+    @RequestMapping(value = "/account/channel/findChannelGroupList", method = RequestMethod.POST)
+    ResponseData<List<ChannelGroupInfoValidator>> findChannelGroupList(@RequestBody ChannelGroupInfoValidator channelGroupInfoValidator) throws Exception;
 }

@@ -4,8 +4,10 @@ import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
+import com.smoc.cloud.common.smoc.configuate.validator.ChannelGroupInfoValidator;
 import com.smoc.cloud.common.smoc.customer.qo.AccountChannelInfoQo;
 import com.smoc.cloud.common.smoc.customer.validator.AccountChannelInfoValidator;
+import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.customer.service.AccountChannelService;
 import lombok.extern.slf4j.Slf4j;
@@ -78,5 +80,54 @@ public class AccountChannelController {
     public ResponseData findByAccountIdAndCarrier(@PathVariable String accountId,@PathVariable String carrier) {
 
         return accountChannelService.findByAccountIdAndCarrier(accountId,carrier);
+    }
+
+    /**
+     * 根据id获取信息
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/findById/{id}", method = RequestMethod.GET)
+    public ResponseData findById(@PathVariable String id) {
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(validator));
+        }
+
+        ResponseData data = accountChannelService.findById(id);
+        return data;
+    }
+
+    /**
+     * 根据id获取信息
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/deleteById/{id}", method = RequestMethod.GET)
+    public ResponseData deleteById(@PathVariable String id) {
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(validator));
+        }
+
+        ResponseData data = accountChannelService.deleteById(id);
+        return data;
+    }
+
+    /**
+     * 检索通道组列表
+     * @param channelGroupInfoValidator
+     * @return
+     */
+    @RequestMapping(value = "/findChannelGroupList", method = RequestMethod.POST)
+    public ResponseData<List<ChannelGroupInfoValidator>> findChannelGroupList(@RequestBody ChannelGroupInfoValidator channelGroupInfoValidator) {
+
+        return accountChannelService.findChannelGroupList(channelGroupInfoValidator);
     }
 }

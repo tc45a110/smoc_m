@@ -6,6 +6,7 @@ import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
+import com.smoc.cloud.common.smoc.configuate.validator.ChannelGroupInfoValidator;
 import com.smoc.cloud.common.smoc.customer.qo.AccountChannelInfoQo;
 import com.smoc.cloud.common.smoc.customer.validator.AccountChannelInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.AccountFinanceInfoValidator;
@@ -58,7 +59,15 @@ public class AccountChannelService {
             map.put(carrier[i], null);
         }
 
-        List<AccountChannelInfoQo> list = accountChannelRepository.findAccountChannelConfig(accountChannelInfoQo);
+        //1:通道组
+        List<AccountChannelInfoQo> list = null;
+        if("1".equals(accountChannelInfoQo.getAccountChannelType())){
+            list = accountChannelRepository.findAccountChannelGroupConfig(accountChannelInfoQo);
+
+        }else{
+            list = accountChannelRepository.findAccountChannelConfig(accountChannelInfoQo);
+        }
+
         //循环已配置的通道
         if (!StringUtils.isEmpty(list)) {
             for (AccountChannelInfoQo info : list) {
@@ -129,5 +138,50 @@ public class AccountChannelService {
         BeanUtils.copyProperties(entity, accountChannelInfoValidator);
 
         return ResponseDataUtil.buildSuccess(accountChannelInfoValidator);
+    }
+
+    public ResponseData findById(String id) {
+        Optional<AccountChannelInfo> data = accountChannelRepository.findById(id);
+
+        if (!data.isPresent()) {
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_QUERY_ERROR);
+        }
+
+        AccountChannelInfoValidator accountChannelInfoValidator = new AccountChannelInfoValidator();
+        BeanUtils.copyProperties(data.get(), accountChannelInfoValidator);
+
+        return ResponseDataUtil.buildSuccess(accountChannelInfoValidator);
+    }
+
+    /**
+     * 根据ID 删除数据
+     *
+     * @param id
+     * @return
+     */
+    @Transactional
+    public ResponseData<AccountChannelInfo> deleteById(String id) {
+
+        AccountChannelInfo data = accountChannelRepository.findById(id).get();
+        //记录日志
+        log.info("[EC业务账号管理][移除账号已配置通道][delete]数据:{}",JSON.toJSONString(data));
+        accountChannelRepository.deleteById(id);
+
+        //设置进度
+        Optional<AccountBasicInfo> optional = businessAccountRepository.findById(data.getAccountId());
+        if(optional.isPresent()){
+            AccountBasicInfo accountBasicInfo = optional.get();
+            StringBuffer accountProcess = new StringBuffer(accountBasicInfo.getAccountProcess());
+            accountProcess = accountProcess.replace(3, 4, "0");
+            accountBasicInfo.setAccountProcess(accountProcess.toString());
+            businessAccountRepository.save(accountBasicInfo);
+        }
+
+        return ResponseDataUtil.buildSuccess();
+    }
+
+    public ResponseData<List<ChannelGroupInfoValidator>> findChannelGroupList(ChannelGroupInfoValidator channelGroupInfoValidator) {
+        List<ChannelGroupInfoValidator> list = accountChannelRepository.findChannelGroupList(channelGroupInfoValidator);
+        return ResponseDataUtil.buildSuccess(list);
     }
 }

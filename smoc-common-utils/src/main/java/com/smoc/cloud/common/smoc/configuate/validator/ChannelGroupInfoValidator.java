@@ -42,4 +42,5 @@ public class ChannelGroupInfoValidator {
     private Date updatedTime;
 
     private Integer channelNum;
+    private String accountId;
 }
