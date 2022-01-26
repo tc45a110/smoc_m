@@ -135,9 +135,11 @@ public class AccountChannelService {
         AccountChannelInfo entity = accountChannelRepository.findByAccountIdAndCarrier(accountId,carrier);
 
         AccountChannelInfoValidator accountChannelInfoValidator = new AccountChannelInfoValidator();
-        BeanUtils.copyProperties(entity, accountChannelInfoValidator);
-
-        return ResponseDataUtil.buildSuccess(accountChannelInfoValidator);
+        if(!StringUtils.isEmpty(entity)){
+            BeanUtils.copyProperties(entity, accountChannelInfoValidator);
+            return ResponseDataUtil.buildSuccess(accountChannelInfoValidator);
+        }
+        return ResponseDataUtil.buildSuccess();
     }
 
     public ResponseData findById(String id) {
