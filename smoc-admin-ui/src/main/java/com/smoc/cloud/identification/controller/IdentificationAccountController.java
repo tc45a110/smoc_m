@@ -17,8 +17,10 @@ import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.customer.service.EnterpriseService;
 import com.smoc.cloud.finance.service.FinanceAccountService;
+import com.smoc.cloud.identification.model.AccountExcelModel;
 import com.smoc.cloud.identification.service.IdentificationAccountInfoService;
 import com.smoc.cloud.sequence.service.SequenceService;
+import com.smoc.cloud.utils.ExcelUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,8 +35,11 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * 认账账号管理
@@ -276,16 +281,46 @@ public class IdentificationAccountController {
 
 
     /**
-     * 认账账号产看
+     * 生成excel
      *
      * @return
      */
-    @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
-    public ModelAndView view(@PathVariable String id, HttpServletRequest request) {
-        ModelAndView view = new ModelAndView("identification/account/identification_account_view");
+    @RequestMapping(value = "/excel/{id}", method = RequestMethod.GET)
+    public void view(@PathVariable String id, HttpServletResponse response) {
 
-        return view;
+        //查询认证账户数据
+        ResponseData<IdentificationAccountInfoValidator> data = identificationAccountInfoService.findById(id);
+        IdentificationAccountInfoValidator identificationAccountInfoValidator = data.getData();
 
+        CopyOnWriteArrayList<AccountExcelModel> list = new CopyOnWriteArrayList<>();
+        AccountExcelModel excelModel = new AccountExcelModel();
+        excelModel.setKey("身份认证账号");
+        excelModel.setValue(identificationAccountInfoValidator.getIdentificationAccount());
+        list.add(excelModel);
+        AccountExcelModel excelModel1 = new AccountExcelModel();
+        excelModel1.setKey("MD5-HMAC-KEY密钥");
+        excelModel1.setValue(identificationAccountInfoValidator.getMd5HmacKey());
+        list.add(excelModel1);
+        AccountExcelModel excelModel2 = new AccountExcelModel();
+        excelModel2.setKey("AES-KEY密钥");
+        excelModel2.setValue(identificationAccountInfoValidator.getAesKey());
+        list.add(excelModel2);
+        AccountExcelModel excelModel3 = new AccountExcelModel();
+        excelModel3.setKey("AES-IV偏移量");
+        excelModel3.setValue(identificationAccountInfoValidator.getAesIv());
+        list.add(excelModel3);
+
+        AccountExcelModel excelModel4 = new AccountExcelModel();
+        excelModel4.setKey("技术对接说明");
+        excelModel4.setValue("用MD5-HMAC签名；AES-256对敏感数据身份证号进行加密；AES加密模式:AES/CBC/PKCS7Padding；AES_NAME为AES");
+        list.add(excelModel4);
+
+        String fileName = identificationAccountInfoValidator.getIdentificationAccount();
+        try {
+            ExcelUtils.writeExcel(fileName, AccountExcelModel.class ,response,list);
+        } catch (Exception e) {
+            log.error("导出excel表格失败:", e);
+        }
     }
 
     /**

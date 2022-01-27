@@ -10,7 +10,8 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>com.smoc.cloud.smoc</artifactId>
+    <groupId>com.smoc.cloud</groupId>
+    <artifactId>com.smoc.cloud.smoc-identity</artifactId>
     <description>smoc 身份认证服务</description>
     <packaging>jar</packaging>
 

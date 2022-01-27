@@ -1,11 +1,9 @@
-package com.smoc.cloud.identification.utils;
+package com.smoc.examples.identity.example;
 
 import com.google.gson.Gson;
-import com.smoc.cloud.common.gateway.utils.AESUtil;
-import com.smoc.cloud.common.gateway.utils.HMACUtil;
-import com.smoc.cloud.common.utils.DateTimeUtils;
-import com.smoc.cloud.common.utils.Utils;
-import lombok.extern.slf4j.Slf4j;
+
+import com.smoc.examples.identity.utils.*;
+
 
 import java.util.Date;
 import java.util.HashMap;
@@ -14,11 +12,11 @@ import java.util.Map;
 /**
  * 身份证号、姓名认证 示例
  */
-@Slf4j
 public class IdentityIdNumberName {
 
    public  static void main(String[] args) throws Exception {
 
+       //请求路径（具体参见技术文档）
        String url = "http://localhost:18088/gateway/identity/idNumberName";
 
        //自定义header协议
@@ -54,12 +52,12 @@ public class IdentityIdNumberName {
        signData.append(requestDataMap.get("cardNo"));
        //签名 MD5_HMAC 签名KEY,参见给的账号EXCEL文件
        String sign = HMACUtil.md5_HMAC_sign(signData.toString(),"lv8T06232vQ409609Bb1pg2z45bVHeg6");
-       log.info("[接口请求][签名数据]数据:{}" ,signData);
-       log.info("[接口请求][签名]数据:{}" ,sign);
+       System.out.println("[接口请求][签名数据]数据:" +signData);
+       System.out.println("[接口请求][签名]数据:" +sign);
 
        header.put("signature", sign);
 
        String result = Okhttp3Utils.postJson(url,requestJsonData,header);
-       log.info("[请求响应]数据:{}" ,result);
+       System.out.println("[请求响应]数据:" +result);
    }
 }

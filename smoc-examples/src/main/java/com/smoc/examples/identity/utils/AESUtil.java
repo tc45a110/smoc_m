@@ -1,6 +1,6 @@
-package com.smoc.cloud.common.gateway.utils;
+package com.smoc.examples.identity.utils;
 
-import lombok.extern.slf4j.Slf4j;
+
 import org.apache.commons.codec.binary.Base64;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
@@ -13,7 +13,6 @@ import java.security.spec.AlgorithmParameterSpec;
 /**
  * AES AES/CBC/PKCS7Padding
  */
-@Slf4j
 public class AESUtil {
     
     private static final String CHARSET_NAME = "UTF-8";
@@ -21,9 +20,9 @@ public class AESUtil {
     // 加密模式
     public static final String ALGORITHM = "AES/CBC/PKCS7Padding";
     // 密钥 32位
-    public static final String KEY = "tr4Bnk9351IjreWh0BeJHU87RUdaVn98";
+    public static final String KEY = "tr4Bnk9341IjreWh0BeJHU87RUdaVn98";
     // 偏移量 16位
-    public static final String IV = "t34v6spU53B9Ro7P";
+    public static final String IV = "t34v6spUZ3B9Ro7P";
 
     static {
         Security.addProvider(new BouncyCastleProvider());
@@ -47,7 +46,6 @@ public class AESUtil {
             result = cipher.doFinal(message.getBytes(CHARSET_NAME));
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("Error AES encrypt：{}", e.getMessage());
         }
         return Base64.encodeBase64String(result);
     }
@@ -73,11 +71,8 @@ public class AESUtil {
     }
 
     public static void main(String[] args) {
-        AESUtil aes = new AESUtil();
-        String contents = "B%4#1F9@5va*8A!5EX0^Cd#*nC#@we83dSV";
-        String encrypt = aes.encrypt(contents, KEY, IV);
-        System.out.println("加密后:" + encrypt);
-//        String decrypt = aes.decrypt("M1zKJ55ioBeZyHPw+3IeXg==");
-//        System.out.println("解密后:" + decrypt);
+        //身份证号 AES 加密
+        String cardNo = AESUtil.encrypt("372523198002165313","fNT44A1FM57Wu8HF5D7C6bHX372699MP","E96nx1xL929I86Te");
+        System.out.println(cardNo);
     }
 }

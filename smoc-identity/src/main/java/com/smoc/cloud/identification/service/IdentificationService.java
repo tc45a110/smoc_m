@@ -72,7 +72,7 @@ public class IdentificationService {
             return ResponseDataUtil.buildError(ResponseCode.EXCEPTION_ID_CARD.getCode(), ResponseCode.EXCEPTION_ID_CARD.getMessage());
         }
 
-        //log.info("[解析后数据]{}", new Gson().toJson(requestModel));
+        log.info("[请求订单]{}", new Gson().toJson(requestModel));
         //身份证规则验证
         if (!ValidatorUtil.validate(requestModel)) {
             String errorMessage = ValidatorUtil.validateMessage(requestModel);
