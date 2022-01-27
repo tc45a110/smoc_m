@@ -29,6 +29,7 @@ public class IdentificationOrdersInfoRepositoryImpl  extends BasePageRepository 
         sqlBuffer.append("  t.IDENTIFICATION_ORDER_NO,");
         sqlBuffer.append("  t.IDENTIFICATION_STATUS,");
         sqlBuffer.append("  t.IDENTIFICATION_MESSAGE,");
+        sqlBuffer.append("  t.COST_PRICE,");
         sqlBuffer.append("  t.CREATED_BY,");
         sqlBuffer.append("  DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME ");
         sqlBuffer.append("  from identification_orders_info t,identification_account_info i,enterprise_basic_info e  ");
@@ -39,6 +40,11 @@ public class IdentificationOrdersInfoRepositoryImpl  extends BasePageRepository 
         if (!StringUtils.isEmpty(qo.getEnterpriseName())) {
             sqlBuffer.append(" and e.ENTERPRISE_NAME like ?");
             paramsList.add("%" + qo.getEnterpriseName().trim() + "%");
+        }
+        //认证账号
+        if (!StringUtils.isEmpty(qo.getIdentificationAccount())) {
+            sqlBuffer.append(" and t.IDENTIFICATION_ACCOUNT =?");
+            paramsList.add(qo.getIdentificationAccount().trim());
         }
         //订单号
         if (!StringUtils.isEmpty(qo.getOrderNo())) {

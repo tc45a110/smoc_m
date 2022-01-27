@@ -173,4 +173,50 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
        return map;
     }
 
+    /**
+     * 检查账户余额，包括了授信金额  true 表示余额 够用
+     * @param accountId
+     * @param ammount 金额
+     * @return
+     */
+    public boolean checkAccountUsableSum(String accountId,BigDecimal ammount){
+
+        String sql="select ACCOUNT_USABLE_SUM+ACCOUNT_CREDIT_SUM from finance_account where ACCOUNT_ID =?";
+        BigDecimal sum = jdbcTemplate.queryForObject(sql,BigDecimal.class,accountId);
+        if(null == sum){
+            return false;
+        }
+        return !(sum.compareTo(ammount)==-1);
+    }
+
+    /**
+     * 冻结金额
+     * @param accountId
+     * @param ammount
+     */
+    public void freeze(String accountId,BigDecimal ammount){
+        String sql ="update finance_account set ACCOUNT_USABLE_SUM = ACCOUNT_USABLE_SUM-"+ammount+",ACCOUNT_FROZEN_SUM = ACCOUNT_FROZEN_SUM+"+ammount+" where ACCOUNT_ID='"+accountId+"'";
+        jdbcTemplate.update(sql);
+    }
+
+    /**
+     * 解冻扣费
+     * @param accountId
+     * @param ammount
+     */
+    public void unfreeze(String accountId,BigDecimal ammount){
+        String sql ="update finance_account set ACCOUNT_FROZEN_SUM = ACCOUNT_FROZEN_SUM-"+ammount+",ACCOUNT_CONSUME_SUM = ACCOUNT_CONSUME_SUM+"+ammount+" where ACCOUNT_ID='"+accountId+"'";
+        jdbcTemplate.update(sql);
+    }
+
+    /**
+     * 解冻不扣费
+     * @param accountId
+     * @param ammount
+     */
+    public void unfreezeFree(String accountId,BigDecimal ammount){
+        String sql ="update finance_account set ACCOUNT_FROZEN_SUM = ACCOUNT_FROZEN_SUM-"+ammount+",ACCOUNT_USABLE_SUM = ACCOUNT_USABLE_SUM+"+ammount+" where ACCOUNT_ID='"+accountId+"'";
+        jdbcTemplate.update(sql);
+    }
+
 }

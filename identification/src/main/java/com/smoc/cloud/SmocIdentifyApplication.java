@@ -12,11 +12,11 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @SpringBootApplication
 @EnableFeignClients
 @EnableAsync
-class SmocIdentificationApplication {
+class SmocIdentifyApplication {
 
 
     public static void main(String[] args) {
-        SpringApplication.run(SmocIdentificationApplication.class, args);
+        SpringApplication.run(SmocIdentifyApplication.class, args);
     }
 
 }

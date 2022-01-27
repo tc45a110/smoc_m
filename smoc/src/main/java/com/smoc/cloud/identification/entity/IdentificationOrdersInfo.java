@@ -29,19 +29,22 @@ public class IdentificationOrdersInfo {
     @Column(name = "IDENTIFICATION_PRICE_STATUS", nullable = false, length = 32)
     private String identificationPriceStatus;
 
-    @Column(name = "IDENTIFICATION_ORDER_NO", nullable = false, length = 64)
+    @Column(name = "IDENTIFICATION_ORDER_NO", length = 64)
     private String identificationOrderNo;
 
-    @Column(name = "IDENTIFICATION_STATUS", nullable = false, length = 325)
+    @Column(name = "IDENTIFICATION_STATUS", length = 325)
     private String identificationStatus;
 
-    @Column(name = "IDENTIFICATION_MESSAGE", nullable = false, length = 128)
+    @Column(name = "IDENTIFICATION_MESSAGE", length = 128)
     private String identificationMessage;
 
-    @Column(name = "CREATED_BY", nullable = false, length = 32)
+    @Column(name = "COST_PRICE", precision = 24, scale = 4)
+    private BigDecimal costPrice;
+
+    @Column(name = "CREATED_BY", length = 32)
     private String createdBy;
 
-    @Column(name = "CREATED_TIME", nullable = false)
+    @Column(name = "CREATED_TIME")
     private Date createdTime;
 
     @Column(name = "UPDATED_BY", length = 32)
@@ -152,5 +155,13 @@ public class IdentificationOrdersInfo {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public BigDecimal getCostPrice() {
+        return costPrice;
+    }
+
+    public void setCostPrice(BigDecimal costPrice) {
+        this.costPrice = costPrice;
     }
 }

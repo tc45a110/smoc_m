@@ -19,6 +19,7 @@ public class IdentificationOrdersInfoValidator {
     private String identificationOrderNo;
     private String identificationStatus;
     private String identificationMessage;
+    private BigDecimal costPrice;
     private String createdBy;
     private String createdTime;
     private String updatedBy;

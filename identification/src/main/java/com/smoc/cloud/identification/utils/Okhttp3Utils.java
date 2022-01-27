@@ -53,11 +53,11 @@ public class Okhttp3Utils {
             if (response.isSuccessful()) {
                 return jsonString;
             }else{
-                return "{\"MESSAGE\":\"响应状态"+response.isSuccessful()+"\",\"guid\":\"3f0837529751436a9a9c17d61a5a11ed\",\"RESULT\":500}";
+                return "{\"code\":500,\"message\":\"系统无响应\"}";
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return "{\"MESSAGE\":\""+e.getMessage()+"\",\"guid\":\"3f0837529751436a9a9c17d61a5a11ed\",\"RESULT\":500}";
+            return "{\"code\":500,\"message\":\""+e.getMessage()+"\"}";
         }
     }
 

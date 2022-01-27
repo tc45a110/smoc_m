@@ -17,4 +17,6 @@ public interface IdentificationAccountInfoRepository extends JpaRepository<Ident
     @Modifying
     @Query(value = "update identification_account_info set ACCOUNT_STATUS = :status where ID = :id",nativeQuery = true)
     void logoutAccount(@Param("id") String id, @Param("status") String status);
+
+
 }

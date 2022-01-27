@@ -23,10 +23,10 @@ public class IdentificationRequestData {
     @Column(name = "ORDER_TYPE", nullable = false, length = 32)
     private String orderType;
 
-    @Column(name = "REQUEST_DATA", length = 1022)
+    @Column(name = "REQUEST_DATA", length = 2046)
     private String requestData;
 
-    @Column(name = "RESPONCE_DATA", length = 1022)
+    @Column(name = "RESPONCE_DATA", length = 2046)
     private String responceData;
 
     @Column(name = "CREATED_BY", length = 32)

@@ -12,6 +12,7 @@ import com.smoc.cloud.identification.entity.IdentificationRequestData;
 import com.smoc.cloud.identification.repository.IdentificationRequestDataRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,22 +27,12 @@ public class IdentificationRequestDataService {
     private IdentificationRequestDataRepository identificationRequestDataRepository;
 
     /**
-     * 查询列表
-     *
-     * @param pageParams
-     * @return
-     */
-    public PageList<IdentificationRequestDataValidator> page(PageParams<IdentificationRequestDataValidator> pageParams) {
-        return identificationRequestDataRepository.page(pageParams);
-    }
-
-    /**
      * 根据id获取信息
      *
      * @param id
      * @return
      */
-    public ResponseData findById(String id) {
+    public ResponseData<IdentificationRequestDataValidator> findById(String id) {
         Optional<IdentificationRequestData> data = identificationRequestDataRepository.findById(id);
 
         if (!data.isPresent()) {
@@ -59,14 +50,14 @@ public class IdentificationRequestDataService {
     }
 
     /**
-     * 保存或修改
+     * 保存
      *
      * @param identificationRequestDataValidator
-     * @param op  操作类型 为add、edit
      * @return
      */
+    @Async
     @Transactional
-    public ResponseData save(IdentificationRequestDataValidator identificationRequestDataValidator, String op) {
+    public void save(IdentificationRequestDataValidator identificationRequestDataValidator) {
 
         IdentificationRequestData entity = new IdentificationRequestData();
         BeanUtils.copyProperties(identificationRequestDataValidator, entity);
@@ -74,15 +65,8 @@ public class IdentificationRequestDataService {
         //转换日期格式
         entity.setCreatedTime(DateTimeUtils.getDateTimeFormat(identificationRequestDataValidator.getCreatedTime()));
 
-        //op 不为 edit 或 add
-        if (!("edit".equals(op) || "add".equals(op))) {
-            return ResponseDataUtil.buildError();
-        }
-
         //记录日志
-        log.info("[身份认证订单][{}]数据:{}", op, JSON.toJSONString(entity));
+        log.info("[身份认证]数据:{}", JSON.toJSONString(entity));
         identificationRequestDataRepository.saveAndFlush(entity);
-
-        return ResponseDataUtil.buildSuccess();
     }
 }

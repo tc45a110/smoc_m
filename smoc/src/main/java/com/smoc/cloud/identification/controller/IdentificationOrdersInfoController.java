@@ -65,13 +65,21 @@ public class IdentificationOrdersInfoController {
     @RequestMapping(value = "/save/{op}", method = RequestMethod.POST)
     public ResponseData save(@RequestBody IdentificationOrdersInfoValidator identificationOrdersInfoValidator, @PathVariable String op) {
 
-        //完成参数规则验证
-        if (!MpmValidatorUtil.validate(identificationOrdersInfoValidator)) {
-            return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(identificationOrdersInfoValidator));
-        }
-
         //保存操作
         ResponseData data = identificationOrdersInfoService.save(identificationOrdersInfoValidator, op);
+
+        return data;
+    }
+
+    /**
+     * 添加、修改
+     * @return
+     */
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public ResponseData update(@RequestBody IdentificationOrdersInfoValidator identificationOrdersInfoValidator) {
+
+        //修改订单
+        ResponseData data = identificationOrdersInfoService.update(identificationOrdersInfoValidator);
 
         return data;
     }

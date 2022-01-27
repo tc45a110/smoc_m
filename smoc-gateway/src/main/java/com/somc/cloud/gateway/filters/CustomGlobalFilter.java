@@ -6,7 +6,9 @@ import com.smoc.cloud.common.gateway.utils.ValidatorUtil;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.somc.cloud.gateway.redis.service.DataService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
@@ -30,6 +32,9 @@ import java.nio.charset.StandardCharsets;
 @Slf4j
 @Component
 public class CustomGlobalFilter implements GlobalFilter, Ordered {
+
+    @Autowired
+    private DataService dataService;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -56,8 +61,14 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
         HttpHeaders headers = request.getHeaders();
         RequestStardardHeaders requestStardardHeaders = new RequestStardardHeaders();
         requestStardardHeaders.setSignatureNonce(headers.getFirst("signature-nonce"));
-        requestStardardHeaders.setSignatureAccount(headers.getFirst("signature-account"));
         requestStardardHeaders.setSignature(headers.getFirst("signature"));
+
+        //处理signatureNonce 重放攻击
+        boolean replayAttacks = dataService.nonce(requestStardardHeaders.getSignatureNonce());
+        if(replayAttacks){
+            return errorHandle(exchange, ResponseCode.NONCE_ERROR.getCode(), ResponseCode.NONCE_ERROR.getMessage());
+        }
+
         //参数规则验证
         if (!ValidatorUtil.validate(requestStardardHeaders)) {
 
@@ -73,6 +84,16 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
         }
 
         return chain.filter(exchange);
+    }
+
+    public Mono<Void> errorHandle(ServerWebExchange exchange, String errorCode, String errorMessage) {
+        //响应信息
+        ServerHttpResponse response = exchange.getResponse();
+        ResponseData responseData = ResponseDataUtil.buildError(errorCode, errorMessage);
+        log.error("[响应数据]数据:{}", new Gson().toJson(responseData));
+        byte[] bytes = new Gson().toJson(responseData).getBytes(StandardCharsets.UTF_16);
+        DataBuffer bodyDataBuffer = response.bufferFactory().wrap(bytes);
+        return exchange.getResponse().writeWith(Flux.just(bodyDataBuffer));
     }
 
     @Override

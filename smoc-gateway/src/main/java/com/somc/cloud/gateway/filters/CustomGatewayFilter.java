@@ -4,11 +4,13 @@ import com.google.gson.Gson;
 import com.smoc.cloud.common.gateway.request.RequestSignModel;
 import com.smoc.cloud.common.gateway.request.RequestStardardHeaders;
 import com.smoc.cloud.common.gateway.utils.ValidatorUtil;
+import com.smoc.cloud.common.redis.smoc.identification.KeyEntity;
 import com.somc.cloud.gateway.configuration.GatewayConfigurationProperties;
 import com.smoc.cloud.common.gateway.utils.HMACUtil;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.somc.cloud.gateway.redis.service.DataService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
@@ -34,6 +36,9 @@ import java.nio.charset.StandardCharsets;
 public class CustomGatewayFilter {
 
     @Autowired
+    private DataService dataService;
+
+    @Autowired
     private GatewayConfigurationProperties gatewayConfigurationProperties;
 
     /**
@@ -47,29 +52,21 @@ public class CustomGatewayFilter {
             @Override
             public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
 
+                //HttpHeaders 自定义的headers 组织签名信息;headers 数据已经经过了非空验证
+                HttpHeaders headers = exchange.getRequest().getHeaders();
+
+                String signatureNonce = headers.getFirst("signature-nonce");
+                String signature = headers.getFirst("signature");
+                RequestStardardHeaders requestHeaderData = new RequestStardardHeaders();
+                requestHeaderData.setSignatureNonce(signatureNonce);
+                requestHeaderData.setSignature(signature);
+
+
                 //获取body内容
                 String requestBody = "";
                 if (HttpMethod.POST.equals(exchange.getRequest().getMethod())) {
                     requestBody = exchange.getAttribute("cachedRequestBodyObject");
                 }
-
-                //HttpHeaders 自定义的headers 组织签名信息
-                HttpHeaders headers = exchange.getRequest().getHeaders();
-
-                String signatureNonce = headers.getFirst("signature-nonce");
-                String signatureAccount = headers.getFirst("signature-account");
-                String signature = headers.getFirst("signature");
-
-                RequestStardardHeaders requestHeaderData = new RequestStardardHeaders();
-                requestHeaderData.setSignatureNonce(signatureNonce);
-                requestHeaderData.setSignatureAccount(signatureAccount);
-                requestHeaderData.setSignature(signature);
-                log.info("[接口请求][账户:{}]header数据:{}", signatureAccount, new Gson().toJson(requestHeaderData));
-
-                //处理signatureNonce 重防攻击
-
-                //判断 signatureAccount 是否存在，如果存在，则取用户的md5_HMAC,密钥
-                String md5HmacKey = "";
 
                 //requestBody 为空
                 if (StringUtils.isEmpty(requestBody)) {
@@ -84,23 +81,32 @@ public class CustomGatewayFilter {
                     return errorHandle(exchange, ResponseCode.PARAM_FORMAT_ERROR.getCode(), ResponseCode.PARAM_FORMAT_ERROR.getMessage());
                 }
 
-                log.info("[接口请求][账户:{}]body数据:{}", signatureAccount, new Gson().toJson(model));
                 //身份证规则验证  验证身证号 及姓名
-                if(!ValidatorUtil.validate(model)){
+                if (!ValidatorUtil.validate(model)) {
                     String errorMessage = ValidatorUtil.validateMessage(model);
                     return errorHandle(exchange, ResponseCode.PARAM_FORMAT_ERROR.getCode(), errorMessage);
                 }
 
+                //log.info("[接口请求][账户:{}]header数据:{}", model.getIdentifyAccount(), new Gson().toJson(requestHeaderData));
+
+                //取密钥数据
+                KeyEntity keyEntity = dataService.getKey(model.getIdentifyAccount());
+                if (null == keyEntity || StringUtils.isEmpty(keyEntity.getMd5HmacKey())) {
+                    return errorHandle(exchange, ResponseCode.USER_NOT_EXIST.getCode(), ResponseCode.USER_NOT_EXIST.getMessage());
+                }
+                //log.info("[签名密钥]{}",new Gson().toJson(keyEntity));
+
+                String md5HmacKey = keyEntity.getMd5HmacKey();
+
                 //签名数据
                 StringBuffer signData = new StringBuffer();
-                signData.append(signatureNonce.trim());
-                signData.append(signatureAccount.trim());
+                signData.append(requestHeaderData.getSignatureNonce().trim());
                 signData.append(model.getOrderNo().trim());
-                signData.append(model.getName().trim());
+                signData.append(model.getIdentifyAccount());
                 signData.append(model.getCardNo().trim());
 
                 //校验签名数据
-                boolean verifySign = HMACUtil.verifySign(signData.toString(), requestHeaderData.getSignature(), gatewayConfigurationProperties.getMd5HmacKey(), gatewayConfigurationProperties.getSignStyle());
+                boolean verifySign = HMACUtil.verifySign(signData.toString(), requestHeaderData.getSignature(), md5HmacKey, gatewayConfigurationProperties.getSignStyle());
                 //签名正确
                 if (verifySign) {
                     return chain.filter(exchange).then(Mono.fromRunnable(() -> {

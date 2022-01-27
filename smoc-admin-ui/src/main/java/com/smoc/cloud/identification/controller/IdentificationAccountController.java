@@ -33,6 +33,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -147,6 +148,8 @@ public class IdentificationAccountController {
         //自动生成AESIV
         String aesIv = StringRandom.getStringRandom(16);
         identificationAccountInfoValidator.setAesIv(aesIv);
+
+        identificationAccountInfoValidator.setGrantingCredit(new BigDecimal("0.00"));
 
         view.addObject("identificationAccountInfoValidator", identificationAccountInfoValidator);
         view.addObject("op", "add");

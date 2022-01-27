@@ -17,6 +17,8 @@ public enum ResponseCode {
     PARAM_LINK_ERROR("1103", "链接错误！"),
     PRAM_SENSITIVEWORDS_ERROR("1104", "参数含有敏感词！"),
     PARAM_FORMAT_ERROR("1100", "参数规则输入错误!"),
+    PARAM_ORDER_ERROR("1103", "订单号重复"),
+    PARAM_ABLE_ERROR("1104", "余额不足"),
 
     //鉴权失败
     TOKEN_UNAUTH("2000", "认证、鉴权失败！"),
@@ -30,7 +32,7 @@ public enum ResponseCode {
     REQUEST_LEGAL_ERROR("3001","非法请求"),
 
     USER_UNAUTH("3000", "用户无权限信息！"),
-    USER_NOT_EXIST("3001","用户不存在！"),
+    USER_NOT_EXIST("3001","用户不存在或已注销"),
     USER_PASSWORD_NULL("3002","密码错误！"),
     USER_LOGIN_FAILURE("3003","登录失败"),
 
@@ -40,9 +42,14 @@ public enum ResponseCode {
     OAUTH2_EXCEPTION_GET_TOKEN("4001", "获取Token失败！"),
     OAUTH2_EXCEPTION_SERVER("4002", "服务器错误！"),
 
+    EXCEPTION_IDCARD("5003",""),
+
     //限流、熔断降级
     HYSTRIX("5000", "触发限流规则或熔断规则！"),
     HYSTRIX_REMOTE("5001", "触发熔断规则！"),
+    NONCE_ERROR("5002", "signature-nonce重复请求！"),
+    EXCEPTION_ID_CARD("5003","身份证解析异常"),
+    EXCEPTION_FACE("5004","人像照片不能为空"),
 
     //系统异常
     SYSTEM_EXCEPTION("9000", "系统异常！");

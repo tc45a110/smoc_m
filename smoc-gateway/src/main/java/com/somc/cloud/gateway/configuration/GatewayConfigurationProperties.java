@@ -31,7 +31,7 @@ public class GatewayConfigurationProperties {
     public void setSignStyle(String signStyle) {
 
         this.signStyle = signStyle;
-        log.info("签名方式:{}",this.signStyle);
+//        log.info("签名方式:{}",this.signStyle);
     }
 
     public String getAesKey() {
@@ -41,7 +41,7 @@ public class GatewayConfigurationProperties {
     public void setAesKey(String aesKey) {
 
         this.aesKey = AESConstUtil.decrypt(aesKey);
-        log.info("aesKey:{}",this.aesKey);
+//        log.info("aesKey:{}",this.aesKey);
     }
 
     public String getAesIv() {
@@ -50,7 +50,7 @@ public class GatewayConfigurationProperties {
 
     public void setAesIv(String aesIv) {
         this.aesIv = AESConstUtil.decrypt(aesIv);
-        log.info("aesIv:{}",this.aesIv);
+//        log.info("aesIv:{}",this.aesIv);
     }
 
     public String getMd5HmacKey() {
@@ -59,7 +59,7 @@ public class GatewayConfigurationProperties {
 
     public void setMd5HmacKey(String md5HmacKey) {
         this.md5HmacKey = AESConstUtil.decrypt(md5HmacKey);
-        log.info("md5HmacKey:{}",this.md5HmacKey);
+//        log.info("md5HmacKey:{}",this.md5HmacKey);
     }
 
     public String getShaHmacKey() {
@@ -68,6 +68,6 @@ public class GatewayConfigurationProperties {
 
     public void setShaHmacKey(String shaHmacKey) {
         this.shaHmacKey = AESConstUtil.decrypt(shaHmacKey);
-        log.info("shaHmacKey:{}",this.shaHmacKey);
+//        log.info("shaHmacKey:{}",this.shaHmacKey);
     }
 }

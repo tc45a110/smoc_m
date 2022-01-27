@@ -1,11 +1,8 @@
 package com.smoc.cloud.identification.controller;
 
-import com.smoc.cloud.common.page.PageList;
-import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
-import com.smoc.cloud.common.smoc.identification.validator.IdentificationOrdersInfoValidator;
 import com.smoc.cloud.common.smoc.identification.validator.IdentificationRequestDataValidator;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
@@ -17,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
 
 /**
- * 认证请求数据
+ * 认证请求原数据
  */
 @Slf4j
 @RestController
@@ -28,17 +25,6 @@ public class IdentificationRequestDataController {
     @Autowired
     private IdentificationRequestDataService identificationRequestDataService;
 
-    /**
-     * 查询列表
-     *
-     * @param pageParams
-     * @return
-     */
-    @RequestMapping(value = "/page", method = RequestMethod.POST)
-    public PageList<IdentificationRequestDataValidator> page(@RequestBody PageParams<IdentificationRequestDataValidator> pageParams) {
-
-        return identificationRequestDataService.page(pageParams);
-    }
 
     /**
      * 根据id获取信息
@@ -47,7 +33,7 @@ public class IdentificationRequestDataController {
      * @return
      */
     @RequestMapping(value = "/findById/{id}", method = RequestMethod.GET)
-    public ResponseData findById(@PathVariable String id) {
+    public ResponseData<IdentificationRequestDataValidator> findById(@PathVariable String id) {
 
         //完成参数规则验证
         MpmIdValidator validator = new MpmIdValidator();
@@ -62,20 +48,12 @@ public class IdentificationRequestDataController {
 
     /**
      * 添加、修改
-     * @param op 操作标记，add表示添加，edit表示修改
      * @return
      */
-    @RequestMapping(value = "/save/{op}", method = RequestMethod.POST)
-    public ResponseData save(@RequestBody IdentificationRequestDataValidator identificationRequestDataValidator, @PathVariable String op) {
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    public void save(@RequestBody IdentificationRequestDataValidator identificationRequestDataValidator) {
 
-        //完成参数规则验证
-        if (!MpmValidatorUtil.validate(identificationRequestDataValidator)) {
-            return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(identificationRequestDataValidator));
-        }
+        identificationRequestDataService.save(identificationRequestDataValidator);
 
-        //保存操作
-        ResponseData data = identificationRequestDataService.save(identificationRequestDataValidator, op);
-
-        return data;
     }
 }

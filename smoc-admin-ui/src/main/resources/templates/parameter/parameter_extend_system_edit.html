@@ -87,7 +87,7 @@
                                                        th:placeholder="${#strings.isEmpty(parameter.placeholder)?parameter.paramTitle:parameter.placeholder}"
                                                        th:data-parsley-maxlength="${parameter.paramMaxLength}"
                                                        th:attr="required=${parameter.isNull == '1'?'true':'false'}"
-                                                       data-parsley-pattern="#[^[1-9]/d*/./d*|0/./d*[1-9]/d*$]"
+                                                       data-parsley-pattern="^\d+(\.\d+)?$"
                                                        th:value="${keyValueMap[parameter.paramKey]}"
                                                        class="form-control" autocomplete="off">
                                                 <mpm:tag

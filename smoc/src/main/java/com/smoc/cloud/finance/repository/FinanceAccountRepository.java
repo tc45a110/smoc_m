@@ -60,4 +60,33 @@ public interface FinanceAccountRepository extends CrudRepository<FinanceAccount,
     @Modifying
     @Query(value = "update finance_account set ACCOUNT_TOTAL_SUM = ACCOUNT_TOTAL_SUM+:rechargeSum,ACCOUNT_USABLE_SUM =ACCOUNT_USABLE_SUM+:rechargeSum,ACCOUNT_RECHARGE_SUM=ACCOUNT_RECHARGE_SUM+:rechargeSum where ACCOUNT_ID = :accountId",nativeQuery = true)
     void recharge(@Param("rechargeSum") BigDecimal rechargeSum,@Param("accountId") String accountId);
+
+    /**
+     * 检查账户余额，包括了授信金额  true 表示余额 够用
+     * @param accountId
+     * @param ammount 金额
+     * @return
+     */
+    boolean checkAccountUsableSum(String accountId,BigDecimal ammount);
+
+    /**
+     * 冻结金额
+     * @param accountId
+     * @param ammount
+     */
+    void freeze(String accountId,BigDecimal ammount);
+
+    /**
+     * 解冻扣费
+     * @param accountId
+     * @param ammount
+     */
+    void unfreeze(String accountId,BigDecimal ammount);
+
+    /**
+     * 解冻不扣费
+     * @param accountId
+     * @param ammount
+     */
+    void unfreezeFree(String accountId,BigDecimal ammount);
 }

@@ -1,6 +1,7 @@
 package com.smoc.cloud.identification.utils;
 
 import com.google.gson.Gson;
+import com.smoc.cloud.common.gateway.utils.AESUtil;
 import com.smoc.cloud.common.gateway.utils.HMACUtil;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.Utils;
@@ -14,29 +15,31 @@ import java.util.Map;
 public class HttpGatewayIdCard {
 
    public  static void main(String[] args) throws Exception {
-       String url = "http://localhost:18088/gateway/identification/idCard/name";
+       String url = "http://localhost:18088/gateway/identity/idNumberName";
 
+       log.info("[请求url]：{}",url);
        //自定义协议header
        Map<String, String> header = new HashMap<>();
        header.put("signature-nonce", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(10));
-       header.put("signature-account", "ddddddddddd");
 
+       //身份证号 AES 加密
+       String cardNo = AESUtil.encrypt("372523198002165313","fNT44A1FM57Wu8HF5D7C6bHX372699MP","E96nx1xL929I86Te");
 
        //请求数据
        Map<String,String> requestDataMap = new HashMap<>();
        requestDataMap.put("orderNo",DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(10));
-       requestDataMap.put("name","基慧");
-       requestDataMap.put("cardNo","372523198002165313");
+       requestDataMap.put("identifyAccount","XYIA100070");
+       requestDataMap.put("name","武基慧");
+       requestDataMap.put("cardNo",cardNo);
        String requestJsonData = new Gson().toJson(requestDataMap);
 
        //签名
        StringBuffer signData = new StringBuffer();
        signData.append(header.get("signature-nonce"));
-       signData.append(header.get("signature-account"));
        signData.append(requestDataMap.get("orderNo"));
-       signData.append(requestDataMap.get("name"));
+       signData.append(requestDataMap.get("identifyAccount"));
        signData.append(requestDataMap.get("cardNo"));
-       String sign = HMACUtil.md5_HMAC_sign(signData.toString(),"Ww7hv8XwKVv904Iauu0026trOle");
+       String sign = HMACUtil.md5_HMAC_sign(signData.toString(),"lv8T06232vQ409609Bb1pg2z45bVHeg6");
        log.info("[接口请求][签名数据]数据:{}" ,signData);
        log.info("[接口请求][签名]数据:{}" ,sign);
 

@@ -5,3 +5,7 @@
 {"MESSAGE":"一致","guid":"3f0837529751436a9a9c17d61a5a11ed","RESULT":1}
 
 {"msg":"appKey和appScrect不正确","code":503}
+
+{"MESSAGE":"异常情况","detail":{"resultCode":"-1002","resultMsg":"请求身份证号不标准：身份证号为空或者不符合身份证校验规范"},"RESULT":-1}
+
+{"MESSAGE":"匹身份证号与姓名配，且比对成功","detail":{"resultCode":"1003","resultInfo":{"score":"9"},"resultMsg":"系统判断为不同人"},"RESULT":1}

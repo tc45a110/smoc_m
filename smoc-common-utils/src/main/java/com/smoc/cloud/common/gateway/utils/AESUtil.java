@@ -37,7 +37,7 @@ public class AESUtil {
      * @param IV
      * @return
      */
-    public String encrypt(String message, String KEY, String IV) {
+    public static String encrypt(String message, String KEY, String IV) {
         byte[] result = null;
         try {
             Cipher cipher = Cipher.getInstance(ALGORITHM);
@@ -60,7 +60,7 @@ public class AESUtil {
      * @param IV
      * @return
      */
-    public String decrypt(String message, String KEY, String IV) {
+    public static String decrypt(String message, String KEY, String IV) throws Exception {
         try {
             Cipher cipher = Cipher.getInstance(ALGORITHM);
             SecretKeySpec keySpec = new SecretKeySpec(KEY.getBytes(CHARSET_NAME), AES_NAME);
@@ -68,9 +68,8 @@ public class AESUtil {
             cipher.init(Cipher.DECRYPT_MODE, keySpec, paramSpec);
             return new String(cipher.doFinal(Base64.decodeBase64(message)), CHARSET_NAME);
         } catch (Exception e) {
-            log.error("Error AES decrypt：{}", e.getMessage());
+            throw new Exception("解析异常");
         }
-        return "";
     }
 
     public static void main(String[] args) {

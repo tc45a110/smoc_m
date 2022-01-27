@@ -1,7 +1,7 @@
 server: #服务端口
   port: 18090
   servlet:
-    context-path: /identification
+    context-path: /identity
   connection-timeout: 15000
 
 spring:
@@ -9,6 +9,22 @@ spring:
     nacos:
       discovery:
         server-addr: 127.0.0.1:8848
+
+  #**********************************************************
+  # Redis
+  #**********************************************************
+  redis: #redis配置
+    host: r-2zegyswwjdbicif2hdpd.redis.rds.aliyuncs.com
+    port: 6379
+    password: Tsmoc40#RedistEst
+    database: 1
+    timeout: 10000
+    lettuce:
+      pool:
+        max-active: 50
+        max-idle: 10
+        max-wait: -1
+        min-idle: 5
 
 com:
   smoc:

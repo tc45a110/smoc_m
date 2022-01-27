@@ -16,8 +16,6 @@ public class RequestStardardHeaders {
     @NotNull(message = "signatureNonce不能为空！")
     @Pattern(regexp = "^[0-9]{27}", message = "signatureNonce不符合规则！")
     private String signatureNonce;
-    @NotNull(message = "signatureAccount不能为空！")
-    private String signatureAccount;
     @NotNull(message = "signature不能为空！")
     private String signature;
 

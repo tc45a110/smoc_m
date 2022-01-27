@@ -95,7 +95,7 @@
                                     <th>计费价格</th>
                                     <th>计费状态</th>
                                     <th>认证状态码</th>
-                                    <th>认证订单号</th>
+                                    <th>订单时间</th>
                                     <th>操作</th>
                                 </tr>
                                 <thead>
@@ -111,19 +111,23 @@
                                         [[${info.orderNo}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        [[${info.orderType}]]
+                                        <mpm:tag id="orderType" identity="identityType" class="NAME,btn btn-teal btn-rounded btn-sm waves-effect waves-light;FACE,btn btn-success btn-rounded btn-sm waves-effect waves-light;"
+                                                 name="accountType" show-type="button"  key="code"
+                                                 th:value="${info.orderType}" title="账号类型"/>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         ¥ [[${#numbers.formatDecimal(info.identificationPrice,1,'COMMA',4,'POINT')}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        [[${info.identificationPriceStatus}]]
+                                        <mpm:tag id="identificationPriceStatus" identity="costStatus" class="02,btn btn-teal btn-rounded btn-sm waves-effect waves-light;00,btn btn-danger btn-rounded btn-sm waves-effect waves-light;0,btn btn-warning btn-rounded btn-sm waves-effect waves-light;"
+                                                 name="accountType" show-type="button"  key="code"
+                                                 th:value="${info.identificationPriceStatus}" title="账号类型"/>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        [[${info.identificationStatus}]]
+                                        ([[${info.identificationStatus}]])[[${info.identificationMessage}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        [[${info.identificationOrderNo}]]
+                                        [[${info.createdTime}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
 

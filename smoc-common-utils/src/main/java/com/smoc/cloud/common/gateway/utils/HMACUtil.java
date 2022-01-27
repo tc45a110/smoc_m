@@ -89,6 +89,7 @@ public class HMACUtil {
         } catch (Exception e) {
             log.error("Error HmacSHA512：{}", e.getMessage());
         }
+        log.info("[网关签名]{}",hash);
         return hash;
     }
 
@@ -154,7 +155,6 @@ public class HMACUtil {
     public static Boolean verifySignatureSha512_HMAC(String message, String signature, String key) {
 
         String sign = sha512_HMAC_sign(message, key);
-
         return sign.equals(signature.trim());
     }
 

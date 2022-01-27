@@ -20,6 +20,7 @@ public class IdentificationOrdersInfoRowMapper implements RowMapper<Identificati
         qo.setIdentificationOrderNo(resultSet.getString("IDENTIFICATION_ORDER_NO"));
         qo.setIdentificationStatus(resultSet.getString("IDENTIFICATION_STATUS"));
         qo.setIdentificationMessage(resultSet.getString("IDENTIFICATION_MESSAGE"));
+        qo.setCostPrice(resultSet.getBigDecimal("COST_PRICE"));
         qo.setCreatedBy(resultSet.getString("CREATED_BY"));
         qo.setCreatedTime(resultSet.getString("CREATED_TIME"));
         return qo;

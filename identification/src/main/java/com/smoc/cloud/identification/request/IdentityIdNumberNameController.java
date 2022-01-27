@@ -11,13 +11,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
 
 /**
- * 身份认证
+ * 身份证号、姓名认证
  */
 @Slf4j
 @RestController
-@RequestMapping("/idCard")
 @Scope(value= WebApplicationContext.SCOPE_REQUEST)
-public class IdentificationController {
+public class IdentityIdNumberNameController {
 
     @Autowired
     private IdentificationService identificationService;
@@ -27,23 +26,12 @@ public class IdentificationController {
      *
      * @return
      */
-    @RequestMapping(value = "/name", method = RequestMethod.POST)
+    @RequestMapping(value = "/idNumberName", method = RequestMethod.POST)
     public ResponseData name(@RequestBody RequestModel requestModel) {
 
         log.info("[身份验证]请求数据：{}",new Gson().toJson(requestModel));
         return identificationService.identification(requestModel);
     }
 
-    /**
-     * 验证身份证姓名、身份证号、人脸照片
-     *
-     * @return
-     */
-    @RequestMapping(value = "/name/face", method = RequestMethod.POST)
-    public ResponseData face(@RequestBody RequestModel requestModel) {
-
-        //log.info("[身份验证]请求数据：{}",new Gson().toJson(requestModel));
-        return identificationService.identificationFace(requestModel);
-    }
 
 }
