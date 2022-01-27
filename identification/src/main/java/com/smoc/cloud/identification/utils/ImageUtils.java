@@ -20,7 +20,6 @@ public class ImageUtils {
         //读取图片字节数组
         try {
             inputStream = new FileInputStream(imgFile);
-            System.out.println("0000000000");
             int count = 0;
             while (count == 0) {
                 count = inputStream.available();

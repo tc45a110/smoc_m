@@ -94,6 +94,11 @@ public class IdentificationOrdersInfoService {
             if(!optional.isPresent()){
                 return ResponseDataUtil.buildError(ResponseCode.USER_NOT_EXIST.getCode(), ResponseCode.USER_NOT_EXIST.getMessage());
             }
+
+            //如果是测试用户 不保存订单
+            if("2".equals(optional.get().getAccountType())){
+                return ResponseDataUtil.buildSuccess("0001","测试已调通，可申请正式账户");
+            }
             //读取价格
             List<ParameterExtendSystemParamValue> costPrice = parameterExtendSystemParamValueRepository.findParameterExtendSystemParamValueByBusinessId("IDENTITY_COST");
             Map<String, BigDecimal> map = costPrice.stream().collect(Collectors.toMap(p -> p.getParamKey(), p -> new BigDecimal(p.getParamValue())));
@@ -126,6 +131,10 @@ public class IdentificationOrdersInfoService {
             log.info("[4身份认证订单][{}]数据:{}", op, JSON.toJSONString(entity));
             identificationOrdersInfoRepository.saveAndFlush(entity);
 
+            //如果是测试用户
+            if("2".equals(optional.get().getAccountType())){
+                return ResponseDataUtil.buildSuccess("0001","测试已调通，可申请正式账户",entity.getOrderNo());
+            }
             return ResponseDataUtil.buildSuccess();
         } catch (Exception e) {
             return ResponseDataUtil.buildError(ResponseCode.SYSTEM_EXCEPTION.getCode(), e.getMessage());
@@ -142,7 +151,6 @@ public class IdentificationOrdersInfoService {
     public ResponseData update(IdentificationOrdersInfoValidator identificationOrdersInfoValidator) {
         try {
             Optional<IdentificationOrdersInfo> optional = identificationOrdersInfoRepository.findIdentificationOrdersInfoByOrderNo(identificationOrdersInfoValidator.getOrderNo());
-            log.info("[33]{}", new Gson().toJson(optional.get()));
 
             IdentificationOrdersInfo entity = optional.get();
 

@@ -210,16 +210,16 @@
 
                                                     <li class="" id="consume">
                                                         <a onclick="activeTab('consume')"
-                                                           sec:authorize-url="/finance/account/consume/list"
-                                                           th:href="@{/finance/account/consume/list}"
-                                                           th:target="tab-content">消费记录
+                                                           sec:authorize-url="/identification/order/list/record/*"
+                                                           th:href="@{/identification/order/list/record/{accountId}(accountId=${identificationAccountInfoValidator.id})}"
+                                                           th:target="tab-content">订单记录
                                                         </a>
                                                     </li>
                                                     <li class="" id="logs">
                                                         <a onclick="activeTab('logs')"
                                                            sec:authorize-url="/user/logs/list/*"
                                                            th:href="@{/user/logs/list/{id}(id=${identificationAccountInfoValidator.id})}"
-                                                           th:target="tab-content">认证账号操作日志
+                                                           th:target="tab-content">操作日志
                                                         </a>
                                                     </li>
                                                 </ul>

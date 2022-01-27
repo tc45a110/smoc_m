@@ -97,13 +97,14 @@ public class IdentificationService {
         order.setCreatedBy("系统");
         order.setCreatedTime(DateTimeUtils.getDateTimeFormat(new Date()));
 
+        log.info("[消费订单]：{}", new Gson().toJson(order));
         //保存订单
         ResponseData data = identificationOrdersService.save(order);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            return ResponseDataUtil.buildError(data.getCode(), data.getMessage());
+            return ResponseDataUtil.buildError(data.getCode(), data.getMessage(),requestModel.getOrderNo());
         }
 
-        log.info("[保存订单]：{}", new Gson().toJson(order));
+
 
         //保存原数据
         IdentificationRequestDataValidator identificationRequestDataValidator = new IdentificationRequestDataValidator();
@@ -222,13 +223,13 @@ public class IdentificationService {
         order.setCreatedBy("系统");
         order.setCreatedTime(DateTimeUtils.getDateTimeFormat(new Date()));
 
+        log.info("[消费订单]：{}", new Gson().toJson(order));
         //保存订单
         ResponseData data = identificationOrdersService.save(order);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            return ResponseDataUtil.buildError(data.getCode(), data.getMessage());
+            return ResponseDataUtil.buildError(data.getCode(), data.getMessage(),requestModel.getOrderNo());
         }
 
-        log.info("[保存订单]：{}", new Gson().toJson(order));
 
         //保存原数据
         IdentificationRequestDataValidator identificationRequestDataValidator = new IdentificationRequestDataValidator();

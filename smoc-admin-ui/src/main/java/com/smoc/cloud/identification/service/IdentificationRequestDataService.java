@@ -1,7 +1,5 @@
 package com.smoc.cloud.identification.service;
 
-import com.smoc.cloud.common.page.PageList;
-import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.identification.validator.IdentificationRequestDataValidator;
@@ -25,31 +23,14 @@ public class IdentificationRequestDataService {
     private IdentificationRequestDataFeignClient identificationRequestDataFeignClient;
 
     /**
-     * 分页查询
-     *
-     * @param pageParams
-     * @return
-     */
-    public ResponseData<PageList<IdentificationRequestDataValidator>> page(PageParams<IdentificationRequestDataValidator> pageParams) {
-
-        try {
-            PageList<IdentificationRequestDataValidator> data = this.identificationRequestDataFeignClient.page(pageParams);
-            return ResponseDataUtil.buildSuccess(data);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseDataUtil.buildError(e.getMessage());
-        }
-    }
-
-    /**
      * 根据id获取信息
      *
-     * @param id
+     * @param orderNo
      * @return
      */
-    public ResponseData<IdentificationRequestDataValidator> findById(String id) {
+    public ResponseData<IdentificationRequestDataValidator> findByOrderNo(String orderNo) {
         try {
-            ResponseData<IdentificationRequestDataValidator> data = this.identificationRequestDataFeignClient.findById(id);
+            ResponseData<IdentificationRequestDataValidator> data = this.identificationRequestDataFeignClient.findByOrderNo(orderNo);
             return data;
         } catch (Exception e) {
             log.error(e.getMessage());

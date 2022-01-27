@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
-public class HttpGatewayFace {
+public class IdentityIdNumberNamePhoto {
 
    public  static void main(String[] args) throws Exception {
        String url = "http://localhost:18088/gateway/identity/idNumberNamePhoto";

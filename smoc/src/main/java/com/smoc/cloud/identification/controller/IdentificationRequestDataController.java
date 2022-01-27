@@ -29,20 +29,14 @@ public class IdentificationRequestDataController {
     /**
      * 根据id获取信息
      *
-     * @param id
+     * @param orderNo
      * @return
      */
-    @RequestMapping(value = "/findById/{id}", method = RequestMethod.GET)
-    public ResponseData<IdentificationRequestDataValidator> findById(@PathVariable String id) {
+    @RequestMapping(value = "/findByOrderNo/{orderNo}", method = RequestMethod.GET)
+    public ResponseData<IdentificationRequestDataValidator> findByOrderNo(@PathVariable String orderNo) {
 
-        //完成参数规则验证
-        MpmIdValidator validator = new MpmIdValidator();
-        validator.setId(id);
-        if (!MpmValidatorUtil.validate(validator)) {
-            return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(validator));
-        }
 
-        ResponseData data = identificationRequestDataService.findById(id);
+        ResponseData data = identificationRequestDataService.findByOrderNo(orderNo);
         return data;
     }
 

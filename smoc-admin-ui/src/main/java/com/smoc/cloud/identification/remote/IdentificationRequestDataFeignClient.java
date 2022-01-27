@@ -16,19 +16,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @FeignClient(name = "smoc", path = "/smoc")
 public interface IdentificationRequestDataFeignClient {
 
-    /**
-     * 分查询列表
-     * @param pageParams
-     * @return
-     */
-    @RequestMapping(value = "/identification/data/page", method = RequestMethod.POST)
-    PageList<IdentificationRequestDataValidator> page(@RequestBody PageParams<IdentificationRequestDataValidator> pageParams)  throws Exception;
 
     /**
-     * 根据id获取信息
-     * @param id
+     * 根据orderNo获取信息
+     * @param orderNo
      * @return
      */
-    @RequestMapping(value = "/identification/data/findById/{id}", method = RequestMethod.GET)
-    ResponseData<IdentificationRequestDataValidator> findById(@PathVariable String id) throws Exception;
+    @RequestMapping(value = "/identification/data/findByOrderNo/{orderNo}", method = RequestMethod.GET)
+    ResponseData<IdentificationRequestDataValidator> findByOrderNo(@PathVariable String orderNo) throws Exception;
 }

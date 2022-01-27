@@ -29,11 +29,11 @@ public class IdentificationRequestDataService {
     /**
      * 根据id获取信息
      *
-     * @param id
+     * @param orderNo
      * @return
      */
-    public ResponseData<IdentificationRequestDataValidator> findById(String id) {
-        Optional<IdentificationRequestData> data = identificationRequestDataRepository.findById(id);
+    public ResponseData<IdentificationRequestDataValidator> findByOrderNo(String orderNo) {
+        Optional<IdentificationRequestData> data = identificationRequestDataRepository.findIdentificationRequestDataByOrderNo(orderNo);
 
         if (!data.isPresent()) {
             return ResponseDataUtil.buildError(ResponseCode.PARAM_QUERY_ERROR);
