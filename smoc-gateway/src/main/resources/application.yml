@@ -1,10 +1,10 @@
 server: #服务端口
   port: 18088
   servlet:
-    context-path: /gateway
+    context-path: /smoc-gateway
 spring:
   application: #服务应用名称
-    name: gateway
+    name: smoc-gateway
   profiles: #指定启动模式
     active: dev
 

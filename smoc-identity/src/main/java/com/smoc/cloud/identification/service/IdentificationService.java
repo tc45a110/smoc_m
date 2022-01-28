@@ -151,7 +151,7 @@ public class IdentificationService {
             if ("-1".equals(result)) {
 
                 identificationOrdersService.update(order);
-                return ResponseDataUtil.buildSuccess("5000", order.getIdentificationMessage(), requestModel.getOrderNo());
+                return ResponseDataUtil.buildSuccess("0004", order.getIdentificationMessage(), requestModel.getOrderNo());
             }
 
             order.setIdentificationOrderNo(jsonObject.get("guid").getAsString());

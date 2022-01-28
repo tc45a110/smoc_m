@@ -15,10 +15,10 @@ public class ResultStatus {
         code.put("2","0002");
         code.put("3","0003");
         code.put("-1","0004");
-        codeMessage.put("0001","一致");
-        codeMessage.put("0002","不一致");
-        codeMessage.put("0003","无记录");
-        codeMessage.put("0004","异常");
+        codeMessage.put("0001","身份证号、姓名一致");
+        codeMessage.put("0002","身份证号、姓名不一致");
+        codeMessage.put("0003","无身份证记录");
+        codeMessage.put("0004","认证方异常");
         faceCode.put("1001","0011");
         faceCode.put("1002","0012");
         faceCode.put("1003","0013");

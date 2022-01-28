@@ -1,7 +1,7 @@
 server: #服务端口
   port: 18090
   servlet:
-    context-path: /identity
+    context-path: /smoc-identity
   connection-timeout: 15000
 
 spring:

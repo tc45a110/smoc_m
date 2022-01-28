@@ -134,8 +134,10 @@ public class IdentificationAccountController {
 
         identificationAccountInfoValidator.setEnterpriseId(enterpriseData.getData().getEnterpriseId());
         identificationAccountInfoValidator.setEnterpriseName(enterpriseData.getData().getEnterpriseName());
+        //默认有效状态
         identificationAccountInfoValidator.setAccountStatus("001");
-        identificationAccountInfoValidator.setAccountType("1");
+        //默认测试账号
+        identificationAccountInfoValidator.setAccountType("2");
 
         //自动生成认证账号
         String identificationAccount = "XYIA"+sequenceService.findSequence("BUSINESS_ACCOUNT");

@@ -47,7 +47,7 @@ public class IdentificationOrdersService {
 
         try {
             ResponseData data = this.identificationOrdersFeignClient.update(identificationOrdersInfoValidator);
-            log.info("[计费状态]:{}",new Gson().toJson(data));
+            log.info("[计费状态]订单号{}:{}",identificationOrdersInfoValidator.getOrderNo(),new Gson().toJson(data));
         } catch (Exception e) {
             log.error("[计费状态]:{}",e.getMessage());
         }

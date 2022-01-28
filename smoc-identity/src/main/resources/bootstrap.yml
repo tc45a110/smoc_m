@@ -1,7 +1,7 @@
 spring:
 
   application: #服务应用名称
-    name: identification
+    name: smoc-identity
 
   profiles: #指定启动模式
     active: dev

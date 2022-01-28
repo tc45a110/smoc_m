@@ -62,7 +62,7 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
         RequestStardardHeaders requestStardardHeaders = new RequestStardardHeaders();
         requestStardardHeaders.setSignatureNonce(headers.getFirst("signature-nonce"));
         requestStardardHeaders.setSignature(headers.getFirst("signature"));
-
+        log.warn("[HttpHeader][数据]{}",new Gson().toJson(requestStardardHeaders));
         //处理signatureNonce 重放攻击
         boolean replayAttacks = dataService.nonce(requestStardardHeaders.getSignatureNonce());
         if(replayAttacks){

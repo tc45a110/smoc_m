@@ -13,7 +13,7 @@ import java.util.Map;
 public class IdentityIdNumberNamePhoto {
 
    public  static void main(String[] args) throws Exception {
-       String url = "http://localhost:18088/gateway/identity/idNumberNamePhoto";
+       String url = "http://localhost:18088/smoc-gateway/smoc-identity/idNumberNamePhoto";
 
        //自定义header协议
        Map<String, String> header = new HashMap<>();

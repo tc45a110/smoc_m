@@ -133,7 +133,7 @@ public class IdentificationOrdersInfoService {
 
             //如果是测试用户
             if("2".equals(optional.get().getAccountType())){
-                return ResponseDataUtil.buildSuccess("0001","测试已调通，可申请正式账户",entity.getOrderNo());
+                return ResponseDataUtil.buildSuccess("0111","测试已调通，可申请正式账户",entity.getOrderNo());
             }
             return ResponseDataUtil.buildSuccess();
         } catch (Exception e) {
