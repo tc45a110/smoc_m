@@ -39,6 +39,8 @@ public class SystemProperties {
     //帮助电话
     private String helpMobile;
 
+    private String mainUrl;
+
 
 
 }

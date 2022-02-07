@@ -69,4 +69,12 @@ public interface BaseModuleResourcesRepository extends CrudRepository<BaseModule
      * @return
      */
     List<Nodes>  getUserMenus(String userId,String projectName);
+
+    /**
+     * 根据 用户ID 父id 关联角色信息，查询 一级菜单
+     * @param userId
+     * @param parentId
+     * @return
+     */
+    List<Nodes> getSubNodes(String userId, String parentId);
 }

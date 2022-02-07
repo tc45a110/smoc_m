@@ -1,234 +1,178 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <!-- META SECTION -->
-    <title>[[${@systemProperties.systemName}]]</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <link rel="shortcut icon" th:href="@{/static/favicon.ico}" type="image/x-icon"/>
-    <!-- END META SECTION -->
-    <!-- CSS INCLUDE -->
-    <link rel="stylesheet" th:href="@{/static/css/theme-default.css}" id="theme">
-    <!-- EOF CSS INCLUDE -->
-    <style>
-        .item-active{
-            background-color:#e34724;
-        }
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
 
-
-    </style>
 </head>
-<body>
-<!-- START PAGE CONTAINER -->
-<div class="page-container">
+<body class="fixed-left">
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
 
-    <!-- START PAGE SIDEBAR -->
-    <div class="page-sidebar">
-        <!-- START X-NAVIGATION -->
-        <ul class="x-navigation">
-            <li class="xn-logo">
-                <a style="background-color:#e3472">星语互联</a>
-                <a href="#" class="x-navigation-control"></a>
-            </li>
-            <li class="xn-profile">
-                <a href="#" class="profile-mini">
-                    <img th:src="@{/static/imgs/logo_01.png}" style="background-color:#fff">
-                </a>
-                <div class="profile">
-                    <div class="profile-image">
-                        <img th:src="@{/static/imgs/logo_01.png}" style="background-color:#fff">
-                    </div>
-                    <div class="profile-data">
-                        <div class="profile-data-name">北京星网宇通科技股份有限公司</div>
-                    </div>
-                    <div class="profile-controls">
+<!-- Begin page -->
+<div id="wrapper">
 
-                    </div>
-                </div>
-            </li>
-            <li class="xn-title"
-                style="background-color:#e34724;text-align:center;font-size:16px;font-weight：500;color:#fff;line-height:26px;padding-top:10px;padding-bottom:10px">
-                <span class="fa fa-file-text-o" style="margin-right:8px"></span>行业短信
-            </li>
-            <li class="">
-                <a><span class="fa fa-file-text-o"></span> <span class="xn-text">概览</span></a>
-            </li>
-            <li class="xn-openable">
-                <a href="#"><span class="fa fa-dashboard"></span> <span class="xn-text">素材管理</span></a>
-                <ul>
-                    <li><a><span class="xn-text">签名管理</span></a></li>
-                    <li><a><span class="xn-text">素材管理</span></a></li>
-                    <li><a><span class="xn-text">通讯录</span></a></li>
+    <!-- Top Bar Start -->
+    <div class="topbar">
+
+        <!-- LOGO -->
+        <div class="topbar-left">
+            <a href="#" class="logo"><span><span>[[${@systemProperties.systemName}]]</span></span><i
+                    class="mdi mdi-cube"></i></a>
+        </div>
+        <!-- Button mobile view to collapse sidebar menu -->
+        <div class="navbar navbar-default" role="navigation">
+            <div class="container">
+
+                <!-- Navbar-left -->
+                <ul class="nav navbar-nav navbar-left">
+                    <li>
+                        <button class="button-menu-mobile open-left waves-effect waves-light">
+                            <i class="mdi mdi-menu"></i>
+                        </button>
+                    </li>
+                    <li th:each="type,typeStat:${businessTypes}"  class="hidden-xs" th:style="${type.id == activeId?'background-color:#e34724':''}" th:id="${typeStat.index+1}" th:onclick="|select(${typeStat.index+1})|">
+                        <a  th:href="@{/message/{id}(id=${type.id})}" class="menu-item waves-effect waves-light" style="font-size:16px;font-weight:600;color:#fff">[[${type.text}]]</a>
+                    </li>
+
+
+
+
                 </ul>
-            </li>
-            <li class="xn-openable active">
-                <a href="#"><span class="fa fa-dashboard"></span> <span class="xn-text">短信群发</span></a>
-                <ul>
-                    <li class="active"><a><span class="xn-text">短信发送</span></a></li>
-                    <li><a><span class="xn-text">变量短信发送</span></a></li>
-                    <li><a><span class="xn-text">定时短信</span></a></li>
-                </ul>
-            </li>
-            <li class="xn-openable">
-                <a href="#"><span class="fa fa-dashboard"></span> <span class="xn-text">数据统计</span></a>
-                <ul>
-                    <li><a><span class="xn-text">提交记录</span></a></li>
-                    <li><a><span class="xn-text">短信记录</span></a></li>
-                    <li><a><span class="xn-text">发送统计</span></a></li>
-                    <li><a><span class="xn-text">数据分析</span></a></li>
-                </ul>
-            </li>
 
-        </ul>
-        <!-- END X-NAVIGATION -->
-    </div>
-    <!-- END PAGE SIDEBAR -->
-
-    <!-- PAGE CONTENT -->
-    <div class="page-content">
-        <!-- START X-NAVIGATION VERTICAL -->
-        <ul class="x-navigation x-navigation-horizontal x-navigation-panel">
-            <!-- TOGGLE NAVIGATION -->
-            <li class="xn-icon-button">
-                <a href="#" class="x-navigation-minimize"><span class="fa fa-dedent"></span></a>
-            </li>
-            <!-- END TOGGLE NAVIGATION -->
-
-            <!-- TOGGLE NAVIGATION -->
-            <li class="xn-icon-button">
-                <a id="item1" onclick="active(1)" class="item item-active" style="width:100px"><span
-                        class="fa fa-file-text-o"></span><span style="margin-left:2px">行业短信</span></a>
-            </li>
-            <!-- END TOGGLE NAVIGATION -->
-            <!-- TOGGLE NAVIGATION -->
-            <li class="xn-icon-button">
-                <a id="item2" onclick="active(2)" class="item" style="width:100px"><span
-                        class="fa fa-bullhorn"></span><span style="margin-left:2px">会销短信</span></a>
-            </li>
-            <!-- END TOGGLE NAVIGATION -->
-            <!-- TOGGLE NAVIGATION -->
-            <li class="xn-icon-button">
-                <a id="item3" onclick="active(3)" class="item" style="width:100px"><span class="fa fa-bell"></span><span
-                        style="margin-left:2px">拉新短信</span></a>
-            </li>
-            <!-- END TOGGLE NAVIGATION -->
-            <!-- TOGGLE NAVIGATION -->
-            <li class="xn-icon-button">
-                <a id="item4" onclick="active(4)" class="item" style="width:110px"><span class="fa fa-book"></span><span
-                        style="margin-left:2px">多媒体短信</span></a>
-            </li>
-            <!-- END TOGGLE NAVIGATION -->
-            <!-- TOGGLE NAVIGATION -->
-            <li class="xn-icon-button">
-                <a id="item5" onclick="active(5)" class="item" style="width:100px"><span
-                        class="fa fa-dribbble"></span><span style="margin-left:2px">国际短信</span></a>
-            </li>
-            <!-- END TOGGLE NAVIGATION -->
-
-            <!-- MESSAGES -->
-            <li class="xn-icon-button">
-                <a id="item6" onclick="active(6)" class="item" style="width:100px"><span class="fa fa-cny"></span><span
-                        style="margin-left:2px">财务中心</span></a>
-            </li>
-            <!-- END MESSAGES -->
-
-            <!-- MESSAGES -->
-            <li class="xn-icon-button">
-                <a id="item7" onclick="active(7)" class="item" style="width:100px"><span class="fa fa-suitcase"></span><span
-                        style="margin-left:2px">对接帮助</span></a>
-            </li>
-            <!-- END MESSAGES -->
-
-
-            <!-- POWER OFF -->
-            <li class="xn-icon-button pull-right last">
-                <a href="#"><span class="glyphicon glyphicon-user"></span></a>
-                <ul class="xn-drop-left animated zoomIn">
-                    <li sec:authorize-url="/sysUser/resetPassword"><a th:href="@{/sysUser/resetPassword}"
-                                                                      target="iframe"><i
-                            class="fa fa-unlock"></i> 重置密码</a></li>
-                    <li sec:authorize-url="/userCache/clearUserCache"><a th:href="@{/userCache/clearUserCache}"
-                                                                         target="iframe"><span
-                            class="fa fa-eraser"></span>清除缓存</a></li>
-                    <li><a th:href="@{/logout}"><span class="fa fa-sign-out"></span>安全退出</a></li>
-                </ul>
-            </li>
-            <!-- END POWER OFF -->
-            <!-- MESSAGES -->
-            <li class="xn-icon-button pull-right">
-                <a href="#" title="系统消息"><span class="fa fa-comments"></span></a>
-                <div class="informer informer-danger">4</div>
-                <div class="panel panel-primary animated zoomIn xn-drop-left xn-panel-dragging">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><span class="fa fa-comments"></span> 系统消息</h3>
-                        <div class="pull-right">
-                            <span class="label label-danger">4 new</span>
-                        </div>
-                    </div>
-                    <div class="panel-body list-group list-group-contacts scroll" style="height: 200px;">
-                        <a href="#" class="list-group-item">
-                            <div class="list-group-status status-online"></div>
-                            <img th:src="@{static/assets/images/users/user2.jpg}" class="pull-left" alt="John Doe"/>
-                            <span class="contacts-title">系统消息</span>
-                            <p>2022年起，平台开通国际短信业务</p>
+                <!-- Right(Notification) -->
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown user-box">
+                        <a href="" class="dropdown-toggle right-menu-item" data-toggle="dropdown"
+                           aria-expanded="true" title="个人属性">
+                            <i class="glyphicon glyphicon-user"></i>
                         </a>
-                    </div>
-                    <div class="panel-footer text-center">
-                        <a href="pages-messages.html">显示所有消息</a>
+                        <ul class="dropdown-menu dropdown-menu-right arrow-dropdown-menu arrow-menu-right user-list notify-list">
+                            <li>
+                                <h5>[[${session.user.userName}]]</h5>
+                            </li>
+                            <!--<li sec:authorize-url="/sysUser/userProfile/*"><a
+                                    th:href="@{/sysUser/userProfile/{userId}(userId=${session.user.id})}"
+                                    target="iframe"><i class="ti-user m-r-5"></i> 个人属性</a></li>-->
+                            <li sec:authorize-url="/sysUser/resetPassword"><a th:href="@{/sysUser/resetPassword}"
+                                                                              target="iframe"><i
+                                    class="ti-lock m-r-5"></i> 重置密码</a></li>
+                            <li sec:authorize-url="/userCache/clearUserCache"><a th:href="@{/userCache/clearUserCache}"
+                                                                                 target="iframe">
+                                <i class="ti-settings m-r-5"></i> 清除缓存</a></li>
+                            <li><a th:href="@{/logout}"><i class="ti-power-off m-r-5"></i> 安全退出</a></li>
+                        </ul>
+                    </li>
+                </ul> <!-- end navbar-right -->
+            </div><!-- end container -->
+        </div><!-- end navbar -->
+    </div>
+    <!-- Top Bar End -->
+
+    <!-- ========== Left Sidebar Start ========== -->
+    <div class="left side-menu">
+        <div class="sidebar-inner slimscrollleft">
+
+            <!--- Sidemenu -->
+            <div id="sidebar-menu" th:remove="${#strings.isEmpty(error)}?none:all">
+                <div class="user-details" style="min-height:62px;padding-top:1px;background-color:#00acc1;">
+                    <div style="font-size:16px;font-weight:600;color:#fff;text-align:center;line-height:62px">
+                        [[${businessTypeName}]]
                     </div>
                 </div>
-            </li>
-            <!-- END MESSAGES -->
 
-        </ul>
-        <!-- END X-NAVIGATION VERTICAL -->
-        <iframe name="iframe" id="iframe"
-                th:src="@{/sysUser/index}"
+                <div class="dropdown" id="setting-dropdown">
+                    <ul class="dropdown-menu">
+                        <!--<li sec:authorize-url="/sysUser/userProfile/*"><a
+                                th:href="@{/sysUser/userProfile/{userId}(userId=${session.user.id})}"
+                                target="iframe"><i class="ti-user m-r-5"></i> 个人属性</a></li>-->
+                        <li sec:authorize-url="/sysUser/resetPassword"><a th:href="@{/sysUser/resetPassword}"
+                                                                          target="iframe"><i
+                                class="ti-lock m-r-5"></i> 重置密码</a></li>
+                        <li sec:authorize-url="/userCache/clearUserCache"><a th:href="@{/userCache/clearUserCache}"
+                                                                             target="iframe">
+                            <i class="ti-settings m-r-5"></i> 清除缓存</a></li>
+                        <li><a th:href="@{/logout}"><i class="ti-power-off m-r-5"></i> 安全退出</a></li>
+                    </ul>
+                </div>
+                <ul>
+                    <div th:each="menu,status:${menus.data}" th:remove="tag">
+                        <li class="menu-title" th:text="${menu.getText()}">Navigation</li>
+                        <li th:each="node:${menu.getNodes()}" th:class="${node.isLazyLoad()} ? 'has_sub':''">
+                            <a th:href="${node.isLazyLoad()}? 'javascript:void(0);': @{/{href}(href=${node.getHref()})}"
+                               th:target="${node.isLazyLoad()} ? '':'iframe'" class="waves-effect"><i
+                                    th:class="${node.getIcon()}" style="color: #3AC9D6"></i>
+                                <span> [[${node.getText()}]] <span th:remove="${node.isLazyLoad()} ?'none':'all'"
+                                                                   class="menu-arrow"></span></span> </a>
+                            <ul th:remove="${node.isLazyLoad()} ? 'none':'all'" class="list-unstyled">
+                                <li th:each="leaf:${node.getNodes()}"><a th:href="@{/{href}(href=${leaf.getHref()})}"
+                                                                         target="iframe"> [[${leaf.getText()}]]</a></li>
+                            </ul>
+                        </li>
+                    </div>
+                </ul>
+            </div>
+            <!-- Sidebar -->
+            <div class="clearfix"></div>
+            <!--<div th:if="${!#strings.isEmpty(@systemProperties.helpMobile)}" class="help-box">
+                <h5 class="text-muted m-t-0">需要帮助 ?</h5>
+                <p class="m-b-0"> [[${@systemProperties.helpMobile}]] </p>
+            </div>-->
+        </div>
+        <!-- Sidebar -left -->
+    </div>
+    <!-- Left Sidebar End -->
+
+
+    <!-- /Right-bar -->
+
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="content-page">
+        <div class="help-box" style="margin-top:160px" th:remove="${#strings.isEmpty(error)}?all:none">
+            <h5 class="text-muted m-t-20">出错了！</h5>
+            <p class="m-b-0">[[${error}]]</p>
+        </div>
+        <iframe name="iframe" id="iframe" th:remove="${#strings.isEmpty(error)}?none:all"
+                th:src="@{/{url}(url=${indexUrl})}"
                 style="padding: 0px; width: 100%;margin-bottom: 20px" scrolling="yes" onload="changeFrameHeight()"
                 frameborder="0"></iframe>
-
     </div>
-    <!-- END PAGE CONTENT -->
+    <footer class="footer text-right">
+        [[${@systemProperties.companyName}]] All Rights Reserved
+    </footer>
+
 </div>
-<!-- END PAGE CONTAINER -->
-<!-- START SCRIPTS -->
-<!-- START PLUGINS -->
-<script type="text/javascript" th:src="@{/static/js/plugins/jquery/jquery.min.js}"></script>
-<script type="text/javascript" th:src="@{/static/js/plugins/jquery/jquery-ui.min.js}"></script>
-<script type="text/javascript" th:src="@{/static/js/plugins/bootstrap/bootstrap.min.js}"></script>
-<!-- END PLUGINS -->
+<!-- END wrapper -->
 
-<!-- START THIS PAGE PLUGINS-->
-<script type='text/javascript' th:src="@{/static/js/plugins/icheck/icheck.min.js}"></script>
-<script type="text/javascript" th:src="@{/static/js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js}"></script>
-<script type="text/javascript" th:src="@{/static/js/plugins/scrolltotop/scrolltopcontrol.js}"></script>
-
-
-<!-- END THIS PAGE PLUGINS-->
-
-<script type="text/javascript" th:src="@{/static/js/plugins.js}"></script>
-<script type="text/javascript" th:src="@{/static/js/actions.js}"></script>
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<!-- ============================================================== -->
+<!-- resize  windows-->
+<!-- ============================================================== -->
 <script>
 
     function changeFrameHeight() {
         var ifm = document.getElementById("iframe");
-        ifm.height = document.documentElement.clientHeight-90;
+        ifm.height = document.documentElement.clientHeight - 90;
     }
 
     window.onresize = function () {
         changeFrameHeight();
     };
 
-    function active(itemId) {
-        for(var num = 1;num<8;num++){
-            $('#item'+num).removeClass("item-active");
-        }
-        $('#item'+itemId).attr("class","item-active");
+    function select(id){
+       for(var i =1;i<5;i++){
+         $("#"+i).removeAttr("style");
+       }
+       $("#"+id).css("background-color","#e34724");
+
+
     }
 
-
-
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+    var resizefunc = [];
 </script>
 </body>
 </html>

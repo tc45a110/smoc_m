@@ -58,8 +58,11 @@ public class MpmAuthenticationSuccessHandler extends SavedRequestAwareAuthentica
                 SmsUtils.sendShortMessage(u,systemProperties.getSystemMarking(),messageConfig);
             }
         }*/
-
-        super.setDefaultTargetUrl("/main");
+        if(StringUtils.isEmpty(systemProperties.getMainUrl())) {
+            super.setDefaultTargetUrl("/main");
+        }else{
+            super.setDefaultTargetUrl(systemProperties.getMainUrl());
+        }
         super.onAuthenticationSuccess(request, response, authentication);
 
     }

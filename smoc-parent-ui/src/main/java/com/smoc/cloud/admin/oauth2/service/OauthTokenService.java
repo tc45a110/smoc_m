@@ -243,6 +243,45 @@ public class OauthTokenService {
             return ResponseDataUtil.buildSuccess(e.getMessage());
         }
 
+    }
+
+    public ResponseData<Nodes[]> getAllSubMenusByParentId(String parentId) {
+
+        Nodes[] nodes = null;
+        try {
+            String url = oAuth2TokenUtils.getAuthHost() + "/menus/getAllMenusByParentId/" +parentId;
+            ResponseEntity<Nodes[]> responseEntity = oAuth2TokenUtils.getOAuth2RestTemplate().getForEntity(url, Nodes[].class);
+            if (null != responseEntity.getBody()) {
+                nodes = responseEntity.getBody();
+            }
+            return ResponseDataUtil.buildSuccess(nodes);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDataUtil.buildSuccess(e.getMessage());
+        }
+
+    }
+
+    /**
+     * 根据 用户ID 父id 关联角色信息，查询 一级菜单
+     * @param userId
+     * @param parentId
+     * @return
+     */
+    public ResponseData<Nodes[]> getSubNodes(String userId,String parentId) {
+
+        Nodes[] nodes = null;
+        try {
+            String url = oAuth2TokenUtils.getAuthHost() + "/menus/getSubNodes/" +userId+"/" +parentId;
+            ResponseEntity<Nodes[]> responseEntity = oAuth2TokenUtils.getOAuth2RestTemplate().getForEntity(url, Nodes[].class);
+            if (null != responseEntity.getBody()) {
+                nodes = responseEntity.getBody();
+            }
+            return ResponseDataUtil.buildSuccess(nodes);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDataUtil.buildSuccess(e.getMessage());
+        }
 
     }
 

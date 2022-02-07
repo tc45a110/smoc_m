@@ -142,6 +142,17 @@ public class BaseModuleResourcesService {
         return ResponseDataUtil.buildSuccess(nodes);
     }
 
+    /**
+     * 根据 用户ID 父id 关联角色信息，查询 一级菜单
+     * @param userId
+     * @param parentId
+     * @return
+     */
+    public List<Nodes> getSubNodes(String userId, String parentId){
+        List<Nodes> nodes = baseModuleResourcesRepository.getSubNodes(userId,parentId);
+        return nodes;
+    }
+
 
     /**
      * 根据父id查询菜单列表

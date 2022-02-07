@@ -1,5 +1,6 @@
 package com.smoc.cloud.auth.api;
 
+import com.google.gson.Gson;
 import com.smoc.cloud.auth.data.provider.entity.BaseModuleResources;
 import com.smoc.cloud.auth.data.provider.service.BaseModuleResourcesService;
 import com.smoc.cloud.common.auth.qo.Nodes;
@@ -55,8 +56,25 @@ public class MenusController {
     public ResponseData getMenusByParentId(@PathVariable String parentId) {
 
         ResponseData<List<Nodes>> data = baseModuleResourcesService.getMenusByParentId(parentId);
+
         return data;
     }
+
+    /**
+     * 根据 用户ID 父id 关联角色信息，查询 一级菜单
+     * @param userId
+     * @param parentId
+     * @return
+     */
+    @RequestMapping(value = "/getSubNodes/{userId}/{parentId}", method = RequestMethod.GET)
+    public List<Nodes> getSubNodes(@PathVariable String userId,@PathVariable String parentId) {
+
+        List<Nodes> data = baseModuleResourcesService.getSubNodes(userId,parentId);
+
+        return data;
+    }
+
+
 
     /**
      * 菜单选择 查询根目录
@@ -80,6 +98,19 @@ public class MenusController {
 
         ResponseData<List<Nodes>> data = baseModuleResourcesService.getAllSubMenusByParentId(parentId);
         return data;
+    }
+
+    /**
+     * 根据父id查询所有 子菜单
+     * @param parentId
+     * @return
+     */
+    @RequestMapping(value = "/getAllMenusByParentId/{parentId}", method = RequestMethod.GET)
+    public List<Nodes> getAllMenusByParentId(@PathVariable String parentId) {
+
+        ResponseData<List<Nodes>> data = baseModuleResourcesService.getAllSubMenusByParentId(parentId);
+        log.info("[resource]:{}",new Gson().toJson(data));
+        return data.getData();
     }
 
 

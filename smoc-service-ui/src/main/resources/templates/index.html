@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <link th:href="@{/static/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css}" rel="stylesheet">
+    <script th:src="@{/static/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js}"></script>
+    <style>
+        .bg{
+            background:-webkit-linear-gradient(left,#fff, #f5707a);/*new gradient for Webkit*/
+            background: -o-linear-gradient(right, #fff, #f5707a); /* Opera 11.1 - 12.0 */
+            background: -moz-linear-gradient(left, #fff, #f5707a);
+            background: linear-gradient(to right, #fff, #f5707a); /* 标准的语法 */
+        }
+    </style>
+</head>
+<body>
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Start content -->
+
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+        <div class="row fixed-navigation">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">概览 </h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            拉新短信
+                        </li>
+                        <li>
+                            概览
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+        <div class="row" style="position: relative;margin-top: 80px">
+
+            <div class="col-lg-3 col-md-6">
+                <div class="card-box widget-box-two widget-two-teal">
+                    <i class="mdi mdi-chart-areaspline widget-two-icon"></i>
+                    <div class="wigdet-two-content text-white">
+                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Statistics">账号：XYBA100015</p>
+                        <h2 class="text-white">
+                            <span data-d-group="4" data-a-sign="¥ "
+                                  style="color:#fff;width:100px;text-align:left"
+                                  readonly class="autonumber">23651.25</span>
+                        </h2>
+                        <p class="m-0">剩余短信数量:
+                            <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
+                                  style="color:#fff;width:90px;text-align:left"
+                                  class="autonumber">4592289</span>
+                        </p>
+                    </div>
+                </div>
+            </div><!-- end col -->
+
+            <div class="col-lg-3 col-md-6">
+                <div class="card-box widget-box-two widget-two-primary">
+                    <i class="mdi mdi-layers widget-two-icon"></i>
+                    <div class="wigdet-two-content text-white">
+                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="User This Month">账号：XYBA100014</p>
+                        <h2 class="text-white">
+                            <span data-d-group="4" data-a-sign="¥ "
+                                  style="color:#fff;width:100px;text-align:left"
+                                  readonly class="autonumber">23651.25</span>
+                        </h2>
+                        <p class="m-0">剩余短信数量:
+                            <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
+                                  style="color:#fff;width:90px;text-align:left"
+                                  class="autonumber">4592289</span>
+                        </p>
+                    </div>
+                </div>
+            </div><!-- end col -->
+
+            <div class="col-lg-3 col-md-6">
+                <div class="card-box widget-box-two widget-two-success">
+                    <i class="mdi mdi-account-convert widget-two-icon"></i>
+                    <div class="wigdet-two-content text-white">
+                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="User Today">账号：XYBA100012</p>
+                        <h2 class="text-white">
+                            <span data-d-group="4" data-a-sign="¥ "
+                                  style="color:#fff;width:100px;text-align:left"
+                                  readonly class="autonumber">23651.25</span>
+                        </h2>
+                        <p class="m-0">剩余短信数量:
+                            <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
+                                  style="color:#fff;width:90px;text-align:left"
+                                  class="autonumber">4592289</span>
+                        </p>
+                    </div>
+                </div>
+            </div><!-- end col -->
+
+            <div class="col-lg-3 col-md-6">
+                <div class="card-box widget-box-two widget-two-danger">
+                    <i class="mdi mdi-access-point-network widget-two-icon"></i>
+                    <div class="wigdet-two-content text-white">
+                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Statistics">账号：XYBA100013</p>
+                        <h2 class="text-white">
+                            <span data-d-group="4" data-a-sign="¥ "
+                                  style="color:#fff;width:100px;text-align:left"
+                                  readonly class="autonumber">23651.25</span>
+                        </h2>
+                        <p class="m-0">剩余短信数量:
+                            <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
+                                  style="color:#fff;width:90px;text-align:left"
+                                  class="autonumber">4592289</span>
+                        </p>
+                    </div>
+                </div>
+            </div><!-- end col -->
+
+
+
+        </div>
+        <!-- end row -->
+
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<script th:src="@{/static/assets/js/jquery.min.js}"></script>
+<script th:src="@{/static/echarts/echarts.min.js}"></script>
+<script th:src="@{/static/plugins/autoNumeric/autoNumeric.js}"></script>
+<script type="text/javascript">
+     $(document).ready(function() {
+		$('.autonumber').autoNumeric('init');
+	 });
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+</script>
+
+</body>
+</html>
