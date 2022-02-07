@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/smoc-identity/com.smoc.cloud.smoc.identity.iml" filepath="$PROJECT_DIR$/smoc-identity/com.smoc.cloud.smoc.identity.iml" />
+      <module fileurl="file://$PROJECT_DIR$/smoc-identity/smoc-identity.iml" filepath="$PROJECT_DIR$/smoc-identity/smoc-identity.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc/smoc.iml" filepath="$PROJECT_DIR$/smoc/smoc.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-admin-ui/smoc-admin-ui.iml" filepath="$PROJECT_DIR$/smoc-admin-ui/smoc-admin-ui.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-auth/smoc-auth.iml" filepath="$PROJECT_DIR$/smoc-auth/smoc-auth.iml" />
@@ -10,7 +10,6 @@
       <module fileurl="file://$PROJECT_DIR$/smoc-common-utils/smoc-common-utils.iml" filepath="$PROJECT_DIR$/smoc-common-utils/smoc-common-utils.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-examples/smoc-examples.iml" filepath="$PROJECT_DIR$/smoc-examples/smoc-examples.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-gateway/smoc-gateway.iml" filepath="$PROJECT_DIR$/smoc-gateway/smoc-gateway.iml" />
-      <module fileurl="file://$PROJECT_DIR$/identification/smoc-identity.iml" filepath="$PROJECT_DIR$/identification/smoc-identity.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-parent/smoc-parent.iml" filepath="$PROJECT_DIR$/smoc-parent/smoc-parent.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-parent-ui/smoc-parent-ui.iml" filepath="$PROJECT_DIR$/smoc-parent-ui/smoc-parent-ui.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-saler-ui/smoc-saler-ui.iml" filepath="$PROJECT_DIR$/smoc-saler-ui/smoc-saler-ui.iml" />

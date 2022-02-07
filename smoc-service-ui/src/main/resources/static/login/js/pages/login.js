@@ -27,34 +27,6 @@ var Login = function() {
                 formReminder    = $('#form-reminder'),
                 formRegister    = $('#form-register');
 
-            $('#link-register-login').click(function(){
-                switchView(formLogin, formRegister, 'register');
-            });
-
-            $('#link-register').click(function(){
-                switchView(formRegister, formLogin, '');
-            });
-
-            $('#link-reminder-login').click(function(){
-                switchView(formLogin, formReminder, 'reminder');
-            });
-
-            $('#link-reminder').click(function(){
-                switchView(formReminder, formLogin, '');
-            });
-
-            // If the link includes the hashtag 'register', show the register form instead of login
-            if (window.location.hash === '#register') {
-                formLogin.hide();
-                formRegister.show();
-            }
-
-            // If the link includes the hashtag 'reminder', show the reminder form instead of login
-            if (window.location.hash === '#reminder') {
-                formLogin.hide();
-                formReminder.show();
-            }
-
             /*
              *  Jquery Validation, Check out more examples and documentation at https://github.com/jzaefferer/jquery-validation
              */
@@ -80,14 +52,14 @@ var Login = function() {
                     },
                     'password': {
                         required: true,
-                        minlength: 5
+                        minlength: 6
                     }
                 },
                 messages: {
                     'userName': '请输入用户名',
                     'password': {
                         required: '请输入密码',
-                        minlength: '密码最小长度为5位'
+                        minlength: '密码最小长度为6位'
                     }
                 }
             });

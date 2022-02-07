@@ -44,7 +44,7 @@
                 <div class="col-xs-12">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                        <input type="text" id="userName"  name="userName" class="form-control input-lg" placeholder="用户名">
+                        <input type="text" id="userName"  name="userName" class="form-control input-lg" placeholder="用户名"  autocomplete="off">
                     </div>
                 </div>
             </div>
@@ -59,13 +59,17 @@
             <div class="form-group form-actions">
                 <div class="col-xs-4">
                     <label class="switch switch-primary"  data-toggle="tooltip" title="记住用户名?">
-                        <input type="checkbox" id="login-remember-me" name="login-remember-me" checked >
+                        <input  type="checkbox" id="login-remember-me" name="login-remember-me" checked >
                         <span></span>
                     </label>
                 </div>
                 <div class="col-xs-8 text-right">
-                    <button type="submit" class="btn btn-sm btn-primary" style="font-weight:600;background-color:#00b297;border-color:#00b297;"><i class="fa fa-angle-right" style="font-size:16px;margin-right:5px"></i>登录</button>
+                    <button type="button" class="btn btn-sm btn-primary" style="font-weight:600;background-color:#00b297;border-color:#00b297;" id="login_submit">登录</button>
                 </div>
+
+            </div>
+            <div class="form-group" th:if="${!#strings.isEmpty(errorMessage)}">
+                <span style="color: red;padding-left:20px">提示：[[${errorMessage}]]</span>
             </div>
             <div class="form-group">
                 <div class="col-xs-12 text-center" style="font-size:12px">
@@ -81,10 +85,12 @@
 <!-- jQuery, Bootstrap.js, jQuery plugins and Custom JS code -->
 <script th:src="@{/static/login/js/vendor/jquery.min.js}"></script>
 <script th:src="@{/static/login/js/vendor/bootstrap.min.js}"></script>
+<script th:src="@{/static/js/jquery.cookie.js}"></script>
 <script th:src="@{/static/login/js/plugins.js}"></script>
 <script th:src="@{/static/login/js/app.js}"></script>
 <!-- Load and execute javascript code used only in this page -->
 <script th:src="@{/static/login/js/pages/login.js}"></script>
+<script th:src="@{/static/login/js/login.js}"></script>
 <script>$(function(){ Login.init(); });</script>
 </body>
 </html>
