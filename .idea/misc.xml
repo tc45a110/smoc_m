@@ -12,8 +12,15 @@
         <option value="$PROJECT_DIR$/smoc-auth/pom.xml" />
         <option value="$PROJECT_DIR$/smoc-auth-ui/pom.xml" />
         <option value="$PROJECT_DIR$/smoc-admin-ui/pom.xml" />
+        <option value="$PROJECT_DIR$/smoc-saler-ui/pom.xml" />
+        <option value="$PROJECT_DIR$/smoc-service-ui/pom.xml" />
+        <option value="$PROJECT_DIR$/smoc-statistic-ui/pom.xml" />
+        <option value="$PROJECT_DIR$/smoc-identity/pom.xml" />
+        <option value="$PROJECT_DIR$/smoc-gateway/pom.xml" />
+        <option value="$PROJECT_DIR$/smoc-examples/pom.xml" />
+        <option value="$PROJECT_DIR$/smoc/pom.xml" />
       </list>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="false" project-jdk-name="1.8 (2)" project-jdk-type="JavaSDK" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8 (2)" project-jdk-type="JavaSDK" />
 </project>
