@@ -104,7 +104,7 @@
                                     th:class="${node.getIcon()}" style="color: #3AC9D6"></i>
                                 <span> [[${node.getText()}]] <span th:remove="${node.isLazyLoad()} ?'none':'all'"
                                                                    class="menu-arrow"></span></span> </a>
-                            <ul th:remove="${node.isLazyLoad()} ? 'none':'all'" class="list-unstyled">
+                            <ul th:remove="${node.isLazyLoad()} ? 'none':'all'" class="list-unstyled" style="display:block">
                                 <li th:each="leaf:${node.getNodes()}"><a th:href="@{/{href}(href=${leaf.getHref()})}"
                                                                          target="iframe"> [[${leaf.getText()}]]</a></li>
                             </ul>

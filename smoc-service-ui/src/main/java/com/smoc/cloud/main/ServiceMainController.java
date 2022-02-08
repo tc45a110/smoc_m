@@ -47,7 +47,7 @@ public class ServiceMainController {
         Map<String, SystemValidator> sysMap = (Map<String, SystemValidator>) request.getServletContext().getAttribute("sysMap");
 
         //授权的短信业务类型
-        ResponseData<Nodes[]> businessTypes = oauthTokenService.getSubNodes(user.getId(),"4c359b5ad9c2466bbfdd1399973f2f86");
+        ResponseData<Nodes[]> businessTypes = oauthTokenService.getSubNodes(user.getId(),"30703d7112a340f9ab4343d10bc2ef9c");
 
         if (!ResponseCode.SUCCESS.getCode().equals(businessTypes.getCode())) {
             view.addObject("error", businessTypes.getCode() + ":" + businessTypes.getMessage());
@@ -106,7 +106,7 @@ public class ServiceMainController {
         Map<String, SystemValidator> sysMap = (Map<String, SystemValidator>) request.getServletContext().getAttribute("sysMap");
 
         //授权的短信业务类型
-        ResponseData<Nodes[]> businessTypes = oauthTokenService.getSubNodes(user.getId(),"4c359b5ad9c2466bbfdd1399973f2f86");
+        ResponseData<Nodes[]> businessTypes = oauthTokenService.getSubNodes(user.getId(),"30703d7112a340f9ab4343d10bc2ef9c");
 
         if (!ResponseCode.SUCCESS.getCode().equals(businessTypes.getCode())) {
             view.addObject("error", businessTypes.getCode() + ":" + businessTypes.getMessage());

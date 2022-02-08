@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org"
+>
+<head>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/css/detail_statistics.css}" rel="stylesheet">
+</head>
+<body>
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <!-- start row 页面导航-->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">签名管理</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            素材管理
+                        </li>
+                        <li>
+                            签名管理
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  查询条件-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <form id="query_form" th:action="@{/sign/page/{signType}(signType=${signType})}" method="post">
+                        <div class="row m-b-60">
+                            <div class="col-sm-12">
+
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control"
+                                           placeholder="签名名称" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control"
+                                           placeholder="账号" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <mpm:tag id="signStatus" identity="signStatus" show-type="select" key="code"
+                                             class="form-control" name="signStatus" value="" title="签名状态"/>
+                                </div>
+
+                                <div class="form-group col-sm-3 pull-right" style="text-align: right">
+                                    <button th:sec:authorize-url="|/sign/page/${signType}|" type="submit"
+                                            class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-search"></i> 查询
+                                    </button>
+                                    <a
+                                       class="btn btn-success waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-plus-sign"
+                                           style="margin-right:5px"></i>新建签名</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  列表数据-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="panel panel-color panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">签名列表</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table table-hover m-10" style="margin-top: -12px;">
+                                <thead>
+                                <tr>
+                                    <th>账号</th>
+                                    <th>签名名称</th>
+                                    <th>行业</th>
+                                    <th>应用场景</th>
+                                    <th>审核状态</th>
+                                    <th>提交时间</th>
+                                    <th>审核时间</th>
+                                    <th>操作</th>
+                                </tr>
+                                <thead>
+                                <tbody>
+                                <tr>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        XYBA100015
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        【北京星语】
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        互联网游戏
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        签名为他人产品名/网站名
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <a class="btn btn-success btn-rounded btn-sm waves-effect waves-light">通过审核</a>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        2021-11-17 14:45:23
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        2021-11-17 14:50:23
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+
+                                        <a
+                                           data-toggle="tooltip" data-placement="bottom"
+                                           data-original-title="明细"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color:#4BD396;"><i style="font-size: 18px"
+                                                                                       class="glyphicon glyphicon-search"></i></a>
+                                        <a
+                                            data-toggle="modal" th:onclick="confirmLogout('',this)"
+                                            data-target="#confirm-modal" class="on-default remove-row"
+                                            style="padding-left: 5px;color: #f05050"
+                                            title="删除"><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <hr>
+                        </div>
+                        <th:block th:insert="fragments/page_fragments :: page"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+    </div>
+</div> <!-- content -->
+
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<th:block th:insert="fragments/cookie_fragments :: cookie_js"/>
+<script th:src="@{/static/plugins/bootstrap-inputmask/bootstrap-inputmask.min.js}"></script>
+
+<script>
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+
+
+</script>
+</body>
+</html>
