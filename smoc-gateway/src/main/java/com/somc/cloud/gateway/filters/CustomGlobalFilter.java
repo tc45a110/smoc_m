@@ -89,6 +89,7 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
     public Mono<Void> errorHandle(ServerWebExchange exchange, String errorCode, String errorMessage) {
         //响应信息
         ServerHttpResponse response = exchange.getResponse();
+        response.getHeaders().set("Content-Type","application/json;charset=utf-8");
         ResponseData responseData = ResponseDataUtil.buildError(errorCode, errorMessage);
         log.error("[响应数据]数据:{}", new Gson().toJson(responseData));
         byte[] bytes = new Gson().toJson(responseData).getBytes(StandardCharsets.UTF_16);

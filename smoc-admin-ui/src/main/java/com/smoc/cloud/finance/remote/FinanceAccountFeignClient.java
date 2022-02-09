@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,7 +24,7 @@ public interface FinanceAccountFeignClient {
     /**
      * 分查询列表
      * @param pageParams
-     * @param flag 1表示业务账号 账户  2表示认证账号 账户
+     * @param flag 1表示业务账号 账户  2表示认证账号 账户 3表示财务共享账号
      * @return
      */
     @RequestMapping(value = "/finance/account/page/{flag}", method = RequestMethod.POST)
@@ -31,7 +32,7 @@ public interface FinanceAccountFeignClient {
 
     /**
      * 统计账户金额
-     * @param flag 1表示业务账号 账户  2表示认证账号 账户
+     * @param flag 1 表示业务账号 账户  2表示认证账号 账户 3表示财务共享账户
      * @return
      */
     @RequestMapping(value = "/finance/account/count/{flag}", method = RequestMethod.GET)
@@ -53,5 +54,22 @@ public interface FinanceAccountFeignClient {
      */
     @RequestMapping(value = "/finance/account/findById/{accountId}", method = RequestMethod.GET)
     ResponseData<FinanceAccountValidator> findById(@PathVariable String accountId) throws Exception;
+
+    /**
+     * 根据enterpriseId，查询企业所有财务账户
+     *
+     * @param enterpriseId
+     * @return
+     */
+    @RequestMapping(value = "/finance/account/findEnterpriseFinanceAccounts/{enterpriseId}", method = RequestMethod.GET)
+    ResponseData<List<FinanceAccountValidator>> findEnterpriseFinanceAccounts(@PathVariable String enterpriseId) throws Exception;
+
+    /**
+     * 根据enterpriseId 汇总企业金额统计
+     * @param enterpriseId
+     * @return
+     */
+    @RequestMapping(value = "/finance/account/countEnterpriseSum/{enterpriseId}", method = RequestMethod.GET)
+    ResponseData<Map<String, Object>> countEnterpriseSum(@PathVariable String enterpriseId) throws Exception;
 
 }

@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,7 +32,7 @@ public class FinanceAccountController {
      * 分页查询
      *
      * @param pageParams
-     * @param flag       1表示业务账号 账户  2表示认证账号 账户
+     * @param flag 1表示业务账号 账户  2表示认证账号 账户 3表示财务共享账号
      * @return
      */
     @RequestMapping(value = "/page/{flag}", method = RequestMethod.POST)
@@ -43,7 +44,7 @@ public class FinanceAccountController {
     /**
      * 统计账户金额
      *
-     * @param flag 1表示业务账号 账户  2表示认证账号 账户
+     * @param flag 1 表示业务账号 账户  2表示认证账号 账户 3表示财务共享账户
      * @return
      */
     @RequestMapping(value = "/count/{flag}", method = RequestMethod.GET)
@@ -74,6 +75,29 @@ public class FinanceAccountController {
     public ResponseData<FinanceAccountValidator> findById(@PathVariable String accountId) {
 
         return financeAccountService.findById(accountId);
+    }
+
+    /**
+     * 根据enterpriseId，查询企业所有财务账户
+     *
+     * @param enterpriseId
+     * @return
+     */
+    @RequestMapping(value = "/findEnterpriseFinanceAccounts/{enterpriseId}", method = RequestMethod.GET)
+    public ResponseData<List<FinanceAccountValidator>> findEnterpriseFinanceAccounts(@PathVariable String enterpriseId) {
+
+        return financeAccountService.findEnterpriseFinanceAccounts(enterpriseId);
+    }
+
+    /**
+     * 根据enterpriseId 汇总企业金额统计
+     * @param enterpriseId
+     * @return
+     */
+    @RequestMapping(value = "/countEnterpriseSum/{enterpriseId}", method = RequestMethod.GET)
+    public ResponseData<Map<String, Object>> countEnterpriseSum(@PathVariable String enterpriseId) {
+
+        return financeAccountService.countEnterpriseSum(enterpriseId);
     }
 
 

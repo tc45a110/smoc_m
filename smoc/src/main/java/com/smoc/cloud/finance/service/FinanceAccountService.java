@@ -1,5 +1,6 @@
 package com.smoc.cloud.finance.service;
 
+import com.google.gson.Gson;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
@@ -8,6 +9,8 @@ import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountConsumeValidat
 import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountRechargeValidator;
 import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
+import com.smoc.cloud.customer.entity.AccountBasicInfo;
+import com.smoc.cloud.customer.repository.BusinessAccountRepository;
 import com.smoc.cloud.finance.entity.FinanceAccount;
 import com.smoc.cloud.finance.entity.FinanceAccountRecharge;
 import com.smoc.cloud.finance.repository.FinanceAccountRechargeRepository;
@@ -18,13 +21,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import static com.smoc.cloud.common.response.ResponseCode.PARAM_QUERY_ERROR;
 
 
 @Slf4j
 @Service
 public class FinanceAccountService {
+
+    @Resource
+    private BusinessAccountRepository businessAccountRepository;
 
     @Resource
     private FinanceAccountRepository financeAccountRepository;
@@ -35,8 +44,9 @@ public class FinanceAccountService {
 
     /**
      * 分页查询
+     *
      * @param pageParams
-     * @param flag  1表示业务账号 账户  2表示认证账号 账户
+     * @param flag  1表示业务账号 账户  2表示认证账号 账户 3表示财务共享账号
      * @return
      */
     public ResponseData<PageList<FinanceAccountValidator>> page(PageParams<FinanceAccountValidator> pageParams, String flag) {
@@ -49,17 +59,22 @@ public class FinanceAccountService {
             PageList<FinanceAccountValidator> data = financeAccountRepository.pageIdentification(pageParams);
             return ResponseDataUtil.buildSuccess(data);
         }
+        if ("3".equals(flag)) {
+            PageList<FinanceAccountValidator> data = financeAccountRepository.pageShare(pageParams);
+            return ResponseDataUtil.buildSuccess(data);
+        }
 
         return ResponseDataUtil.buildError();
     }
 
     /**
      * 统计账户金额
-     * @param flag 1表示业务账号 账户  2表示认证账号 账户
+     *
+     * @param flag 1 表示业务账号 账户  2表示认证账号 账户 3表示财务共享账户
      * @return
      */
-    public ResponseData<Map<String,Object>> countSum(String flag){
-        Map<String,Object> data = financeAccountRepository.countSum(flag);
+    public ResponseData<Map<String, Object>> countSum(String flag) {
+        Map<String, Object> data = financeAccountRepository.countSum(flag);
         return ResponseDataUtil.buildSuccess(data);
     }
 
@@ -71,7 +86,7 @@ public class FinanceAccountService {
     @Transactional
     public ResponseData recharge(FinanceAccountRechargeValidator financeAccountRechargeValidator) {
 
-        financeAccountRepository.recharge(financeAccountRechargeValidator.getRechargeSum(),financeAccountRechargeValidator.getAccountId());
+        financeAccountRepository.recharge(financeAccountRechargeValidator.getRechargeSum(), financeAccountRechargeValidator.getAccountId());
         FinanceAccountRecharge entity = new FinanceAccountRecharge();
         BeanUtils.copyProperties(financeAccountRechargeValidator, entity);
         //转换日期格式
@@ -120,16 +135,43 @@ public class FinanceAccountService {
 
     /**
      * 根据id查询
+     *
      * @param accountId
      * @return
      */
-    public ResponseData<FinanceAccountValidator> findById(String accountId){
-        Optional<FinanceAccount>  optional = financeAccountRepository.findById(accountId);
+    public ResponseData<FinanceAccountValidator> findById(String accountId) {
+        Optional<FinanceAccount> optional = financeAccountRepository.findById(accountId);
         FinanceAccountValidator financeAccountValidator = new FinanceAccountValidator();
         BeanUtils.copyProperties(optional.get(), financeAccountValidator);
         //转换日期
         financeAccountValidator.setCreatedTime(DateTimeUtils.getDateTimeFormat(optional.get().getCreatedTime()));
 
         return ResponseDataUtil.buildSuccess(financeAccountValidator);
+    }
+
+    /**
+     * 根据enterpriseId，查询企业所有财务账户
+     *
+     * @param enterpriseId
+     * @return
+     */
+    public ResponseData<List<FinanceAccountValidator>> findEnterpriseFinanceAccounts(String enterpriseId) {
+
+        List<FinanceAccountValidator> list = financeAccountRepository.findEnterpriseFinanceAccount(enterpriseId);
+        return ResponseDataUtil.buildSuccess(list);
+
+    }
+
+    /**
+     * 根据enterpriseId 汇总企业金额统计
+     *
+     * @param enterpriseId
+     * @return
+     */
+    public ResponseData<Map<String, Object>> countEnterpriseSum(String enterpriseId) {
+
+        Map<String, Object> data = financeAccountRepository.countEnterpriseSum(enterpriseId);
+        return ResponseDataUtil.buildSuccess(data);
+
     }
 }

@@ -12,6 +12,8 @@ public class FinanceAccountValidator {
 
     private String accountId;
     private String accountType;
+    //对应两种账号，一个是短信的业务账号，一种是身份认证的账号
+    private String accountName;
     private BigDecimal accountTotalSum;
     private BigDecimal accountUsableSum;
     private BigDecimal accountFrozenSum;
@@ -19,16 +21,16 @@ public class FinanceAccountValidator {
     private BigDecimal accountRechargeSum;
     private BigDecimal accountCreditSum;
     private String accountStatus;
+    private String isShare;
+    private String shareId;
     private String createdBy;
     private String createdTime;
     private String updatedBy;
     private Date updatedTime;
 
     private String enterpriseName;
-    //对应两种账号，一个是短信的业务账号，一种是身份认证的账号
-    private String accountName;
     private String businessAccount;
 
-    //业务的id，
-    private String id;
+    //企业ID
+    private String enterpriseId;
 }

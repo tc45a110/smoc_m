@@ -13,6 +13,7 @@ public class FinanceAccountRowMapper implements RowMapper<FinanceAccountValidato
         FinanceAccountValidator qo = new FinanceAccountValidator();
         qo.setAccountId(resultSet.getString("ACCOUNT_ID"));
         qo.setEnterpriseName(resultSet.getString("ENTERPRISE_NAME"));
+        qo.setEnterpriseId(resultSet.getString("ENTERPRISE_ID"));
         qo.setAccountName(resultSet.getString("ACCOUNT_NAME"));
         qo.setBusinessAccount("ACCOUNT");
         qo.setAccountType(resultSet.getString("ACCOUNT_TYPE"));
@@ -23,6 +24,7 @@ public class FinanceAccountRowMapper implements RowMapper<FinanceAccountValidato
         qo.setAccountRechargeSum(resultSet.getBigDecimal("ACCOUNT_RECHARGE_SUM"));
         qo.setAccountCreditSum(resultSet.getBigDecimal("ACCOUNT_CREDIT_SUM"));
         qo.setAccountStatus(resultSet.getString("ACCOUNT_STATUS"));
+        qo.setIsShare(resultSet.getString("IS_SHARE"));
         qo.setCreatedBy(resultSet.getString("CREATED_BY"));
         qo.setCreatedTime(resultSet.getString("CREATED_TIME"));
         return qo;

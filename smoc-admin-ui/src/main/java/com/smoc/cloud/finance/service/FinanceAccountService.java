@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
-
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -25,7 +25,7 @@ public class FinanceAccountService {
     /**
      * 分查询列表
      * @param pageParams
-     * @param flag 1表示业务账号 账户  2表示认证账号 账户
+     * @param flag 1表示业务账号 账户  2表示认证账号 账户 3表示财务共享账号
      * @return
      */
     public ResponseData<PageList<FinanceAccountValidator>>  page(PageParams<FinanceAccountValidator> pageParams,String flag) {
@@ -40,7 +40,7 @@ public class FinanceAccountService {
 
     /**
      * 统计账户金额
-     * @param flag 1表示业务账号 账户  2表示认证账号 账户
+     * @param flag 1 表示业务账号 账户  2表示认证账号 账户 3表示财务共享账户
      * @return
      */
     public ResponseData<Map<String,Object>>  count(String flag) {
@@ -75,6 +75,35 @@ public class FinanceAccountService {
     public ResponseData<FinanceAccountValidator> findById( String accountId){
         try {
             return this.financeAccountFeignClient.findById(accountId);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 根据enterpriseId，查询企业所有财务账户
+     *
+     * @param enterpriseId
+     * @return
+     */
+    public ResponseData<List<FinanceAccountValidator>> findEnterpriseFinanceAccounts(String enterpriseId){
+        try {
+            return this.financeAccountFeignClient.findEnterpriseFinanceAccounts(enterpriseId);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 根据enterpriseId 汇总企业金额统计
+     * @param enterpriseId
+     * @return
+     */
+    public ResponseData<Map<String, Object>> countEnterpriseSum(String enterpriseId){
+        try {
+            return this.financeAccountFeignClient.countEnterpriseSum(enterpriseId);
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseDataUtil.buildError(e.getMessage());

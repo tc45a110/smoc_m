@@ -10,6 +10,7 @@ import java.util.Objects;
 public class FinanceAccount {
     private String accountId;
     private String accountType;
+    private String accountName;
     private BigDecimal accountTotalSum;
     private BigDecimal accountUsableSum;
     private BigDecimal accountFrozenSum;
@@ -17,6 +18,9 @@ public class FinanceAccount {
     private BigDecimal accountRechargeSum;
     private BigDecimal accountCreditSum;
     private String accountStatus;
+    private String isShare;
+    private String shareId;
+    private String enterpriseId;
     private String createdBy;
     private Date createdTime;
     private String updatedBy;
@@ -40,6 +44,16 @@ public class FinanceAccount {
 
     public void setAccountType(String accountType) {
         this.accountType = accountType;
+    }
+
+    @Basic
+    @Column(name = "ACCOUNT_NAME")
+    public String getAccountName() {
+        return accountName;
+    }
+
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
     }
 
     @Basic
@@ -150,6 +164,36 @@ public class FinanceAccount {
 
     public void setUpdatedTime(Date updatedTime) {
         this.updatedTime = updatedTime;
+    }
+
+    @Basic
+    @Column(name = "IS_SHARE")
+    public String getIsShare() {
+        return isShare;
+    }
+
+    public void setIsShare(String isShare) {
+        this.isShare = isShare;
+    }
+
+    @Basic
+    @Column(name = "SHARE_ID")
+    public String getShareId() {
+        return shareId;
+    }
+
+    public void setShareId(String shareId) {
+        this.shareId = shareId;
+    }
+
+    @Basic
+    @Column(name = "ENTERPRISE_ID")
+    public String getEnterpriseId() {
+        return enterpriseId;
+    }
+
+    public void setEnterpriseId(String enterpriseId) {
+        this.enterpriseId = enterpriseId;
     }
 
     @Override

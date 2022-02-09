@@ -3,7 +3,6 @@ package com.smoc.cloud.finance.repository;
 
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
-import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountRechargeValidator;
 import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountValidator;
 import com.smoc.cloud.finance.entity.FinanceAccount;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,6 +12,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 
 
@@ -33,22 +33,30 @@ public interface FinanceAccountRepository extends CrudRepository<FinanceAccount,
     void updateAccountCreditSumByAccountId(@Param("accountId") String accountId, @Param("accountCreditSum") BigDecimal accountCreditSum);
 
     /**
-     * 分页查询 身份认证账号
+     * 分页查询 身份认证财务账户
      * @param pageParams
      * @return
      */
     PageList<FinanceAccountValidator> pageIdentification(PageParams<FinanceAccountValidator> pageParams);
 
     /**
-     * 分页查询 业务账号
+     * 分页查询 业务财务账户
      * @param pageParams
      * @return
      */
     PageList<FinanceAccountValidator> pageBusinessType(PageParams<FinanceAccountValidator> pageParams);
 
     /**
+     * 分页查询 共享财务账户
+     *
+     * @param pageParams
+     * @return
+     */
+     PageList<FinanceAccountValidator> pageShare(PageParams<FinanceAccountValidator> pageParams);
+
+    /**
      * 汇总金额统计
-     * @param flag 1表示业务账号 账户  2表示认证账号 账户
+     * @param flag 1 表示业务账号 账户  2表示认证账号 账户 3表示财务共享账户
      * @return
      */
     Map<String,Object> countSum(String flag);
@@ -64,29 +72,43 @@ public interface FinanceAccountRepository extends CrudRepository<FinanceAccount,
     /**
      * 检查账户余额，包括了授信金额  true 表示余额 够用
      * @param accountId
-     * @param ammount 金额
+     * @param amount 金额
      * @return
      */
-    boolean checkAccountUsableSum(String accountId,BigDecimal ammount);
+    boolean checkAccountUsableSum(String accountId,BigDecimal amount);
 
     /**
      * 冻结金额
      * @param accountId
-     * @param ammount
+     * @param amount
      */
-    void freeze(String accountId,BigDecimal ammount);
+    void freeze(String accountId,BigDecimal amount);
 
     /**
-     * 解冻扣费
+     * 解冻并扣费
      * @param accountId
-     * @param ammount
+     * @param amount
      */
-    void unfreeze(String accountId,BigDecimal ammount);
+    void unfreeze(String accountId,BigDecimal amount);
 
     /**
      * 解冻不扣费
      * @param accountId
-     * @param ammount
+     * @param amount
      */
-    void unfreezeFree(String accountId,BigDecimal ammount);
+    void unfreezeFree(String accountId,BigDecimal amount);
+
+    /**
+     * 根据企业id，查询企业所有财务账户
+     * @param enterpriseId
+     * @return
+     */
+    List<FinanceAccountValidator> findEnterpriseFinanceAccount(String enterpriseId);
+
+    /**
+     * 根据enterpriseId 汇总企业金额统计
+     * @param enterpriseId
+     * @return
+     */
+    Map<String,Object> countEnterpriseSum(String enterpriseId);
 }

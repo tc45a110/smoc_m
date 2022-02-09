@@ -1,14 +1,23 @@
 package com.smoc.cloud.finance.controller;
 
+import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
+import com.smoc.cloud.common.response.ResponseCode;
+import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountValidator;
+import com.smoc.cloud.customer.service.EnterpriseService;
+import com.smoc.cloud.finance.service.FinanceAccountService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  * 财务共享账户
@@ -17,6 +26,12 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 @RequestMapping("/finance")
 public class FinanceShareAccountController {
+
+    @Autowired
+    private EnterpriseService enterpriseService;
+
+    @Autowired
+    private FinanceAccountService financeAccountService;
 
     /**
      * 财务共享账户列表
@@ -27,17 +42,26 @@ public class FinanceShareAccountController {
     public ModelAndView list() {
         ModelAndView view = new ModelAndView("finance/finance_account_share_list");
 
-        //查询数据
-        PageParams params = new PageParams<>();
-        params.setPages(3);
+        //初始化数据
+        PageParams<FinanceAccountValidator> params = new PageParams<FinanceAccountValidator>();
         params.setPageSize(10);
-        params.setStartRow(1);
-        params.setEndRow(10);
         params.setCurrentPage(1);
-        params.setTotalRows(22);
+        FinanceAccountValidator financeAccountValidator = new FinanceAccountValidator();
+        params.setParams(financeAccountValidator);
 
-        view.addObject("pageParams", params);
+        //查询
+        ResponseData<PageList<FinanceAccountValidator>> data = financeAccountService.page(params, "3");
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
 
+        ResponseData<Map<String, Object>> count = financeAccountService.count("3");
+
+        view.addObject("financeAccountValidator", financeAccountValidator);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
+        view.addObject("counter", count.getData());
         return view;
     }
 
@@ -47,19 +71,25 @@ public class FinanceShareAccountController {
      * @return
      */
     @RequestMapping(value = "/account/share/page", method = RequestMethod.POST)
-    public ModelAndView page() {
+    public ModelAndView page(@ModelAttribute FinanceAccountValidator financeAccountValidator, PageParams pageParams) {
         ModelAndView view = new ModelAndView("finance/finance_account_share_list");
 
-        //查询数据
-        PageParams params = new PageParams<>();
-        params.setPages(3);
-        params.setPageSize(10);
-        params.setStartRow(1);
-        params.setEndRow(10);
-        params.setCurrentPage(1);
-        params.setTotalRows(22);
+        //分页查询
+        pageParams.setParams(financeAccountValidator);
 
-        view.addObject("pageParams", params);
+        ResponseData<PageList<FinanceAccountValidator>> data = financeAccountService.page(pageParams, "3");
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        ResponseData<Map<String, Object>> count = financeAccountService.count("3");
+
+        view.addObject("financeAccountValidator", financeAccountValidator);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
+        view.addObject("counter", count.getData());
+
         return view;
     }
 
