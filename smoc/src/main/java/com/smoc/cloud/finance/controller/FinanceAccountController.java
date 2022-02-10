@@ -111,5 +111,18 @@ public class FinanceAccountController {
         return financeAccountService.countEnterpriseSum(enterpriseId);
     }
 
+    /**
+     * 创建共享账户
+     *
+     * @param financeAccountValidator
+     * @param op 操作类型 为add、edit
+     * @return
+     */
+    @RequestMapping(value = "/save/{op}", method = RequestMethod.POST)
+    public ResponseData save(@RequestBody FinanceAccountValidator financeAccountValidator,@PathVariable String op) {
+
+        return financeAccountService.save(financeAccountValidator,op);
+    }
+
 
 }

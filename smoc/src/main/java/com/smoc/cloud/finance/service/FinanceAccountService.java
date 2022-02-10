@@ -1,14 +1,19 @@
 package com.smoc.cloud.finance.service;
 
+import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
+import com.smoc.cloud.common.redis.smoc.identification.KeyEntity;
+import com.smoc.cloud.common.redis.smoc.identification.RedisConstant;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountConsumeValidator;
 import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountRechargeValidator;
 import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountValidator;
+import com.smoc.cloud.common.smoc.identification.validator.IdentificationAccountInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
+import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.customer.entity.AccountBasicInfo;
 import com.smoc.cloud.customer.repository.BusinessAccountRepository;
 import com.smoc.cloud.customer.repository.EnterpriseRepository;
@@ -16,15 +21,18 @@ import com.smoc.cloud.finance.entity.FinanceAccount;
 import com.smoc.cloud.finance.entity.FinanceAccountRecharge;
 import com.smoc.cloud.finance.repository.FinanceAccountRechargeRepository;
 import com.smoc.cloud.finance.repository.FinanceAccountRepository;
+import com.smoc.cloud.identification.entity.IdentificationAccountInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import static com.smoc.cloud.common.response.ResponseCode.PARAM_QUERY_ERROR;
 
@@ -197,5 +205,24 @@ public class FinanceAccountService {
         Map<String, Object> data = financeAccountRepository.countEnterpriseSum(enterpriseId);
         return ResponseDataUtil.buildSuccess(data);
 
+    }
+
+    /**
+     * 创建共享账户
+     *
+     * @param financeAccountValidator
+     * @param op 操作类型 为add、edit
+     * @return
+     */
+    @Transactional
+    public ResponseData save(FinanceAccountValidator financeAccountValidator, String op) {
+        //op 不为 edit 或 add
+        if (!("edit".equals(op) || "add".equals(op))) {
+            return ResponseDataUtil.buildError();
+        }
+
+        financeAccountRepository.createShareFinanceAccount(financeAccountValidator);
+
+        return ResponseDataUtil.buildSuccess();
     }
 }

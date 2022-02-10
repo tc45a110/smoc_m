@@ -6,6 +6,7 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountRechargeValidator;
 import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountValidator;
+import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.finance.rowmapper.FinanceAccountRowMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
@@ -45,6 +46,7 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
         sqlBuffer.append("  t.ACCOUNT_RECHARGE_SUM,");
         sqlBuffer.append("  t.ACCOUNT_CREDIT_SUM,");
         sqlBuffer.append("  t.ACCOUNT_STATUS,");
+        sqlBuffer.append("  t.SHARE_ID,");
         sqlBuffer.append("  t.IS_SHARE,");
         sqlBuffer.append("  t.CREATED_BY,");
         sqlBuffer.append("  DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME ");
@@ -110,6 +112,7 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
         sqlBuffer.append("  t.ACCOUNT_RECHARGE_SUM,");
         sqlBuffer.append("  t.ACCOUNT_CREDIT_SUM,");
         sqlBuffer.append("  t.ACCOUNT_STATUS,");
+        sqlBuffer.append("  t.SHARE_ID,");
         sqlBuffer.append("  t.IS_SHARE,");
         sqlBuffer.append("  t.CREATED_BY,");
         sqlBuffer.append("  DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME ");
@@ -176,6 +179,7 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
         sqlBuffer.append("  t.ACCOUNT_RECHARGE_SUM,");
         sqlBuffer.append("  t.ACCOUNT_CREDIT_SUM,");
         sqlBuffer.append("  t.ACCOUNT_STATUS,");
+        sqlBuffer.append("  t.SHARE_ID,");
         sqlBuffer.append("  t.IS_SHARE,");
         sqlBuffer.append("  t.CREATED_BY,");
         sqlBuffer.append("  DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME ");
@@ -324,6 +328,7 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
         sqlBuffer.append("  t.ACCOUNT_RECHARGE_SUM,");
         sqlBuffer.append("  t.ACCOUNT_CREDIT_SUM,");
         sqlBuffer.append("  t.ACCOUNT_STATUS,");
+        sqlBuffer.append("  t.SHARE_ID,");
         sqlBuffer.append("  t.IS_SHARE,");
         sqlBuffer.append("  t.CREATED_BY,");
         sqlBuffer.append("  DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME ");
@@ -340,13 +345,14 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
 
     /**
      * 根据企业enterpriseIds，查询企业所有财务账户(包括子企业财务账户)
+     *
      * @param enterpriseIds
      * @return
      */
-    public List<FinanceAccountValidator> findEnterpriseAndSubsidiaryFinanceAccount(List<String> enterpriseIds){
+    public List<FinanceAccountValidator> findEnterpriseAndSubsidiaryFinanceAccount(List<String> enterpriseIds) {
 
 
-        String con = new Gson().toJson(enterpriseIds).replace("\"","\'").replace("[","").replace("]","");
+        String con = new Gson().toJson(enterpriseIds).replace("\"", "\'").replace("[", "").replace("]", "");
         log.info(con);
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");
@@ -363,13 +369,14 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
         sqlBuffer.append("  t.ACCOUNT_RECHARGE_SUM,");
         sqlBuffer.append("  t.ACCOUNT_CREDIT_SUM,");
         sqlBuffer.append("  t.ACCOUNT_STATUS,");
+        sqlBuffer.append("  t.SHARE_ID,");
         sqlBuffer.append("  t.IS_SHARE,");
         sqlBuffer.append("  t.CREATED_BY,");
         sqlBuffer.append("  DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME ");
         sqlBuffer.append("  from finance_account t,account_base_info i,enterprise_basic_info e ");
         sqlBuffer.append("  where t.ACCOUNT_ID = i.ACCOUNT_ID and i.ENTERPRISE_ID = e.ENTERPRISE_ID");
         sqlBuffer.append("  and t.ACCOUNT_TYPE !='IDENTIFICATION_ACCOUNT' ");
-        sqlBuffer.append("  and i.ENTERPRISE_ID in("+con+")");
+        sqlBuffer.append("  and i.ENTERPRISE_ID in(" + con + ")");
         sqlBuffer.append("  order by t.CREATED_TIME desc");
         log.info(sqlBuffer.toString());
         List<FinanceAccountValidator> list = this.queryForObjectList(sqlBuffer.toString(), null, new FinanceAccountRowMapper());
@@ -378,6 +385,7 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
 
     /**
      * 根据enterpriseId 汇总企业金额统计
+     *
      * @param enterpriseId
      * @return
      */
@@ -393,9 +401,38 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
         sql.append("  and i.ENTERPRISE_ID =?");
         Object[] params = new Object[1];
         params[0] = enterpriseId;
-        Map<String, Object> map = jdbcTemplate.queryForMap(sql.toString(),params);
+        Map<String, Object> map = jdbcTemplate.queryForMap(sql.toString(), params);
         //log.info(new Gson().toJson(map));
         return map;
+    }
+
+    /**
+     * 创建财务共享账户
+     */
+    public void createShareFinanceAccount(FinanceAccountValidator qo) {
+
+        String[] accountIds = qo.getAccountIds().split(",");
+        String[] sql = new String[accountIds.length*2+1];
+        for(int i=0;i<accountIds.length;i++){
+            StringBuffer sqlBuffer  = new StringBuffer(" insert into finance_account_share_detail(ID,SHARE_ACCOUNT_ID,ACCOUNT_ID,IS_USABLE_SUM_POOL,IS_FREEZE_SUM_POOL,USABLE_SUM_POOL,FREEZE_SUM_POOL,CREATED_BY,CREATED_TIME) ");
+            sqlBuffer.append(" select '"+ UUID.uuid32() +"','"+qo.getAccountId()+"',ACCOUNT_ID,'"+qo.getIsUsableSumPool()+"','"+qo.getIsFreezeSumPool()+"',ACCOUNT_USABLE_SUM,ACCOUNT_FROZEN_SUM,'"+qo.getCreatedBy()+"' ,now() from finance_account where ACCOUNT_ID ='"+accountIds[i]+"' ");
+            log.info(sqlBuffer.toString());
+            sql[i] = sqlBuffer.toString();
+        }
+
+        for(int i=accountIds.length,j=0;i<accountIds.length*2;i++,j++){
+            sql[i] = " update finance_account set ACCOUNT_USABLE_SUM =0.00,ACCOUNT_FROZEN_SUM =0.00,IS_SHARE ='1',UPDATED_BY='"+qo.getCreatedBy()+"',UPDATED_TIME=now()  where ACCOUNT_ID ='"+accountIds[j]+"' ";
+            log.info(sql[i]);
+        }
+
+        StringBuffer sb = new StringBuffer("insert into finance_account(ACCOUNT_ID,ACCOUNT_TYPE,ACCOUNT_NAME,ENTERPRISE_ID,ACCOUNT_TOTAL_SUM,ACCOUNT_USABLE_SUM,ACCOUNT_FROZEN_SUM,ACCOUNT_CONSUME_SUM,ACCOUNT_RECHARGE_SUM,ACCOUNT_CREDIT_SUM,ACCOUNT_STATUS,IS_SHARE,SHARE_ID,CREATED_BY,CREATED_TIME) ");
+        sb.append(" select '"+qo.getAccountId()+"','SHARE_ACCOUNT','"+qo.getAccountName()+"','"+qo.getEnterpriseId()+"',0.00,sum(USABLE_SUM_POOL) USABLE_SUM_POOL,sum(FREEZE_SUM_POOL) FREEZE_SUM_POOL,0.00,0.00,"+qo.getAccountCreditSum()+",'1','0','"+qo.getAccountIds()+"','"+qo.getCreatedBy()+"',now() ");
+        sb.append(" from finance_account_share_detail where SHARE_ACCOUNT_ID ='"+qo.getAccountId()+"' ");
+        log.info(sb.toString());
+        sql[accountIds.length*2] = sb.toString();
+
+
+        this.jdbcTemplate.batchUpdate(sql);
     }
 
 }

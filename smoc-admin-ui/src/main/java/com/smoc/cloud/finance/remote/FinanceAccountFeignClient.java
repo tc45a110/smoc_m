@@ -80,4 +80,14 @@ public interface FinanceAccountFeignClient {
     @RequestMapping(value = "/finance/account/countEnterpriseSum/{enterpriseId}", method = RequestMethod.GET)
     ResponseData<Map<String, Object>> countEnterpriseSum(@PathVariable String enterpriseId) throws Exception;
 
+    /**
+     * 创建共享账户
+     *
+     * @param financeAccountValidator
+     * @param op 操作类型 为add、edit
+     * @return
+     */
+    @RequestMapping(value = "/finance/account/save/{op}", method = RequestMethod.POST)
+    public ResponseData save(@RequestBody FinanceAccountValidator financeAccountValidator,@PathVariable String op) throws Exception;
+
 }

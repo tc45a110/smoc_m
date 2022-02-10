@@ -266,7 +266,6 @@
     //检测选中的账户，必须多余一个
     function checkAccountIds(){
         var accountIds ="";
-          alert("tyy========"+accountIds);
         $('input[name="accounts"]:checked').each(function(){
              if(null == accountIds || ""== accountIds){
                accountIds = $(this).val();
@@ -278,7 +277,6 @@
         if(null == accountIds || ''==accountIds){
           return false;
         }
-        alert(accountIds);
         var array =accountIds.split(",");
         if(2>array){
            return false;

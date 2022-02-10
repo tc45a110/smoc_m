@@ -24,14 +24,15 @@ public class FinanceAccountService {
 
     /**
      * 分查询列表
+     *
      * @param pageParams
-     * @param flag 1表示业务账号 账户  2表示认证账号 账户 3表示财务共享账号
+     * @param flag       1表示业务账号 账户  2表示认证账号 账户 3表示财务共享账号
      * @return
      */
-    public ResponseData<PageList<FinanceAccountValidator>>  page(PageParams<FinanceAccountValidator> pageParams,String flag) {
+    public ResponseData<PageList<FinanceAccountValidator>> page(PageParams<FinanceAccountValidator> pageParams, String flag) {
 
         try {
-            return this.financeAccountFeignClient.page(pageParams,flag);
+            return this.financeAccountFeignClient.page(pageParams, flag);
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseDataUtil.buildError(e.getMessage());
@@ -40,10 +41,11 @@ public class FinanceAccountService {
 
     /**
      * 统计账户金额
+     *
      * @param flag 1 表示业务账号 账户  2表示认证账号 账户 3表示财务共享账户
      * @return
      */
-    public ResponseData<Map<String,Object>>  count(String flag) {
+    public ResponseData<Map<String, Object>> count(String flag) {
         try {
             return this.financeAccountFeignClient.count(flag);
         } catch (Exception e) {
@@ -57,7 +59,7 @@ public class FinanceAccountService {
      *
      * @return
      */
-    public ResponseData recharge(FinanceAccountRechargeValidator financeAccountRechargeValidator){
+    public ResponseData recharge(FinanceAccountRechargeValidator financeAccountRechargeValidator) {
         try {
             return this.financeAccountFeignClient.recharge(financeAccountRechargeValidator);
         } catch (Exception e) {
@@ -72,7 +74,7 @@ public class FinanceAccountService {
      * @param accountId
      * @return
      */
-    public ResponseData<FinanceAccountValidator> findById( String accountId){
+    public ResponseData<FinanceAccountValidator> findById(String accountId) {
         try {
             return this.financeAccountFeignClient.findById(accountId);
         } catch (Exception e) {
@@ -87,7 +89,7 @@ public class FinanceAccountService {
      * @param enterpriseId
      * @return
      */
-    public ResponseData<List<FinanceAccountValidator>> findEnterpriseFinanceAccounts(String enterpriseId){
+    public ResponseData<List<FinanceAccountValidator>> findEnterpriseFinanceAccounts(String enterpriseId) {
         try {
             return this.financeAccountFeignClient.findEnterpriseFinanceAccounts(enterpriseId);
         } catch (Exception e) {
@@ -98,10 +100,11 @@ public class FinanceAccountService {
 
     /**
      * 根据企业enterpriseId，查询企业所有财务账户(包括子企业财务账户)
+     *
      * @param enterpriseId
      * @return
      */
-    public ResponseData<List<FinanceAccountValidator>> findEnterpriseAndSubsidiaryFinanceAccount(String enterpriseId){
+    public ResponseData<List<FinanceAccountValidator>> findEnterpriseAndSubsidiaryFinanceAccount(String enterpriseId) {
         try {
             return this.financeAccountFeignClient.findEnterpriseAndSubsidiaryFinanceAccount(enterpriseId);
         } catch (Exception e) {
@@ -112,12 +115,29 @@ public class FinanceAccountService {
 
     /**
      * 根据enterpriseId 汇总企业金额统计
+     *
      * @param enterpriseId
      * @return
      */
-    public ResponseData<Map<String, Object>> countEnterpriseSum(String enterpriseId){
+    public ResponseData<Map<String, Object>> countEnterpriseSum(String enterpriseId) {
         try {
             return this.financeAccountFeignClient.countEnterpriseSum(enterpriseId);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 创建共享账户
+     *
+     * @param financeAccountValidator
+     * @param op                      操作类型 为add、edit
+     * @return
+     */
+    public ResponseData save(FinanceAccountValidator financeAccountValidator, String op) {
+        try {
+            return this.financeAccountFeignClient.save(financeAccountValidator, op);
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseDataUtil.buildError(e.getMessage());

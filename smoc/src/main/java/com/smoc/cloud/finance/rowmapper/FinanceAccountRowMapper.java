@@ -24,6 +24,7 @@ public class FinanceAccountRowMapper implements RowMapper<FinanceAccountValidato
         qo.setAccountRechargeSum(resultSet.getBigDecimal("ACCOUNT_RECHARGE_SUM"));
         qo.setAccountCreditSum(resultSet.getBigDecimal("ACCOUNT_CREDIT_SUM"));
         qo.setAccountStatus(resultSet.getString("ACCOUNT_STATUS"));
+        qo.setShareId(resultSet.getString("SHARE_ID"));
         qo.setIsShare(resultSet.getString("IS_SHARE"));
         qo.setCreatedBy(resultSet.getString("CREATED_BY"));
         qo.setCreatedTime(resultSet.getString("CREATED_TIME"));

@@ -125,6 +125,7 @@
                                     <th>消费总金额/充值总金额</th>
                                     <th>授信额度</th>
                                     <th>共享账户</th>
+                                    <th>账号状态</th>
                                     <th>创建日期</th>
                                     <th>操作</th>
                                 </tr>
@@ -150,10 +151,10 @@
                                     <td style="vertical-align: middle;line-height: 26px">
                                         ¥ [[${#numbers.formatDecimal(info.accountCreditSum,1,'COMMA',2,'POINT')}]]
                                     </td>
-                                    <td>
-                                        <i data-toggle="tooltip" data-placement="right" title=""
-                                           data-original-title="显示共享业务账号财务账号"
-                                           class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                    <td  style="vertical-align: middle;line-height: 26px">
+                                        <i data-toggle="tooltip" data-placement="top" title=""
+                                           th:data-original-title="${info.shareId}"
+                                           class="mdi mdi-comment-text"  style="margin-left:5px;font-size:16px"></i>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         <mpm:tag id="accountStatus" identity="dataStatus" class="1,btn btn-info btn-rounded btn-xs waves-effect waves-light;0,btn btn-danger btn-rounded btn-xs waves-effect waves-light;"

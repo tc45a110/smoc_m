@@ -9,8 +9,11 @@ public class Main {
 
     public static void main(String[] args) {
 
-        String flag= MD5.md5("F6D42B072BA02649A66CB4B94F593686"+"7F6C5E670F4CCDC8591BB91F5054C3DB");
+        String s = "XYBA100014,XYBA100012";
+        String accountIds = "'"+s.replace(",","','")+"'";
 
-        System.out.println(flag);
+        //String flag= MD5.md5("F6D42B072BA02649A66CB4B94F593686"+"7F6C5E670F4CCDC8591BB91F5054C3DB");
+
+        System.out.println(accountIds);
     }
 }

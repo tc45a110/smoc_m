@@ -118,4 +118,9 @@ public interface FinanceAccountRepository extends CrudRepository<FinanceAccount,
      * @return
      */
     Map<String,Object> countEnterpriseSum(String enterpriseId);
+
+    /**
+     * 创建财务共享账户
+     */
+    void createShareFinanceAccount(FinanceAccountValidator qo);
 }

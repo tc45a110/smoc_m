@@ -144,7 +144,6 @@ public class FinanceShareAccountController {
         financeAccountValidator.setAccountType("SHARE_ACCOUNT");
         financeAccountValidator.setAccountCreditSum(new BigDecimal("0.00"));
         financeAccountValidator.setAccountStatus("1");
-        financeAccountValidator.setIsShare("0");
 
         financeAccountValidator.setIsUsableSumPool("1");
         financeAccountValidator.setIsFreezeSumPool("0");
@@ -201,17 +200,17 @@ public class FinanceShareAccountController {
         }
 
 
-//        //保存数据
-//        ResponseData data = financeAccountService.save(financeAccountValidator, op);
-//        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-//            view.addObject("error", data.getCode() + ":" + data.getMessage());
-//            return view;
-//        }
-//
-//        //保存操作记录
-//        if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-//            systemUserLogService.logsAsync("SHARE_ACCOUNT", financeAccountValidator.getAccountId(), user.getUserName(), op, "add".equals(op) ? "认证账号开通" : "修改认证账号", JSON.toJSONString(financeAccountValidator));
-//        }
+        //保存数据
+        ResponseData data = financeAccountService.save(financeAccountValidator, op);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        //保存操作记录
+        if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            systemUserLogService.logsAsync("SHARE_ACCOUNT", financeAccountValidator.getAccountId(), user.getUserName(), op, "add".equals(op) ? "创建财务共享账号" : "修改财务共享账号", JSON.toJSONString(financeAccountValidator));
+        }
 
         //记录日志
         log.info("[财务共享账户][开户信息][{}][{}]数据:{}", op, user.getUserName(), JSON.toJSONString(financeAccountValidator));
