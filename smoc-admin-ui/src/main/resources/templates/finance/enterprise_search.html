@@ -23,13 +23,16 @@
         <div class="row fixed-navigation">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">认证企业检索 </h4>
+                    <h4 class="page-title">企业检索 </h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li class="">
-                            认证开户管理
+                            财务管理
                         </li>
                         <li class="active">
-                            认证企业检索
+                            财务账户共享
+                        </li>
+                        <li class="active">
+                            企业检索
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -42,7 +45,7 @@
         <div class="row" style="position: relative;margin-top: 80px" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
                 <div class="card-box">
-                    <form th:action="@{/identification/enterprise/page}" th:object="${enterpriseBasicInfoValidator}" id="query_form" method="post">
+                    <form th:action="@{/finance/enterprise/page}" th:object="${enterpriseBasicInfoValidator}" id="query_form" method="post">
                         <div class="row m-b-60">
                             <div class="col-sm-12">
                                 <div class="form-group  col-sm-3">
@@ -54,7 +57,7 @@
                                            placeholder="企业联系人" autocomplete="off">
                                 </div>
                                 <div class="form-group col-sm-3 pull-right" style="text-align: right">
-                                    <button sec:authorize-url="/identification/enterprise/page" type="submit"
+                                    <button sec:authorize-url="/finance/enterprise/page" type="submit"
                                             class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search" style="margin-right:5px"></i> 查询
                                     </button>
@@ -78,7 +81,7 @@
             <div class="col-sm-12">
                 <div class="panel panel-color panel-info">
                     <div class="panel-heading">
-                        <h3 class="panel-title">认证企业检索结果</h3>
+                        <h3 class="panel-title">企业检索结果</h3>
                     </div>
                     <div class="panel-body">
                         <div class="table-responsive">
@@ -107,11 +110,11 @@
                                                  class="DIRECTCUSTOMER,btn btn-info btn-rounded btn-sm waves-effect waves-light;CHANNELCUSTOMER,btn btn-teal btn-rounded btn-sm waves-effect waves-light;IDENTIFICATION,btn btn-success btn-rounded btn-sm waves-effect waves-light;"/>
                                     </td>
                                     <td>
-                                        <a sec:authorize-url="/identification/account/add/*"
-                                           th:href="@{/identification/account/add/{id}(id=${info.enterpriseId})}"
+                                        <a sec:authorize-url="/finance/account/share/add/*"
+                                           th:href="@{/finance/account/share/add/{enterpriseId}(enterpriseId=${info.enterpriseId})}"
                                            class="btn btn-success waves-effect waves-light m-l-10 btn-sm">
                                             <i class="glyphicon glyphicon-plus-sign"
-                                               style="margin-right:5px"></i>开通认证账号</a>
+                                               style="margin-right:5px"></i>新建共享财务账户</a>
                                     </td>
                                 </tr>
 
@@ -142,16 +145,9 @@
 <th:block th:insert="fragments/common_fragments :: common_js"/>
 <th:block th:insert="fragments/common_fragments :: select_js"/>
 <script>
-
-
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
-
-
-
-
-
 </script>
 </body>
 </html>

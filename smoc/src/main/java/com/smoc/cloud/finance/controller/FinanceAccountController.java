@@ -90,6 +90,17 @@ public class FinanceAccountController {
     }
 
     /**
+     * 根据企业enterpriseId，查询企业所有财务账户(包括子企业财务账户)
+     * @param enterpriseId
+     * @return
+     */
+    @RequestMapping(value = "/findEnterpriseAndSubsidiaryFinanceAccount/{enterpriseId}", method = RequestMethod.GET)
+    public ResponseData<List<FinanceAccountValidator>> findEnterpriseAndSubsidiaryFinanceAccount(@PathVariable String enterpriseId) {
+
+        return financeAccountService.findEnterpriseAndSubsidiaryFinanceAccount(enterpriseId);
+    }
+
+    /**
      * 根据enterpriseId 汇总企业金额统计
      * @param enterpriseId
      * @return

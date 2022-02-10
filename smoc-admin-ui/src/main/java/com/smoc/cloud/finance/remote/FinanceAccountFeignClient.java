@@ -65,6 +65,14 @@ public interface FinanceAccountFeignClient {
     ResponseData<List<FinanceAccountValidator>> findEnterpriseFinanceAccounts(@PathVariable String enterpriseId) throws Exception;
 
     /**
+     * 根据企业enterpriseId，查询企业所有财务账户(包括子企业财务账户)
+     * @param enterpriseId
+     * @return
+     */
+    @RequestMapping(value = "/finance/account/findEnterpriseAndSubsidiaryFinanceAccount/{enterpriseId}", method = RequestMethod.GET)
+    ResponseData<List<FinanceAccountValidator>> findEnterpriseAndSubsidiaryFinanceAccount(@PathVariable String enterpriseId) throws Exception;
+
+    /**
      * 根据enterpriseId 汇总企业金额统计
      * @param enterpriseId
      * @return

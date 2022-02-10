@@ -11,6 +11,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 /**
  * 企业接入操作类
  */
@@ -24,4 +26,12 @@ public interface EnterpriseRepository extends CrudRepository<EnterpriseBasicInfo
     @Modifying
     @Query(value = "update enterprise_basic_info set ENTERPRISE_STATUS = :status where ENTERPRISE_ID = :id",nativeQuery = true)
     void updateEnterpriseStatus(@Param("id") String id, @Param("status") String status);
+
+
+    /**
+     * 根据企业id，查询企业id和子企业id
+     * @param enterpriseId
+     * @return
+     */
+    List<String> findEnterpriseAndSubsidiaryId(String enterpriseId);
 }

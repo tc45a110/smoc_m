@@ -106,6 +106,13 @@ public interface FinanceAccountRepository extends CrudRepository<FinanceAccount,
     List<FinanceAccountValidator> findEnterpriseFinanceAccount(String enterpriseId);
 
     /**
+     * 根据企业enterpriseIds，查询企业所有财务账户(包括子企业财务账户)
+     * @param enterpriseIds
+     * @return
+     */
+    List<FinanceAccountValidator> findEnterpriseAndSubsidiaryFinanceAccount(List<String> enterpriseIds);
+
+    /**
      * 根据enterpriseId 汇总企业金额统计
      * @param enterpriseId
      * @return

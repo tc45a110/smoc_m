@@ -339,6 +339,44 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
     }
 
     /**
+     * 根据企业enterpriseIds，查询企业所有财务账户(包括子企业财务账户)
+     * @param enterpriseIds
+     * @return
+     */
+    public List<FinanceAccountValidator> findEnterpriseAndSubsidiaryFinanceAccount(List<String> enterpriseIds){
+
+
+        String con = new Gson().toJson(enterpriseIds).replace("\"","\'").replace("[","").replace("]","");
+        log.info(con);
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append("  t.ACCOUNT_ID,");
+        sqlBuffer.append("  e.ENTERPRISE_NAME,");
+        sqlBuffer.append("  e.ENTERPRISE_ID,");
+        sqlBuffer.append("  i.ACCOUNT_NAME,");
+        sqlBuffer.append("  i.ACCOUNT_ID ACCOUNT,");
+        sqlBuffer.append("  t.ACCOUNT_TYPE,");
+        sqlBuffer.append("  t.ACCOUNT_TOTAL_SUM,");
+        sqlBuffer.append("  t.ACCOUNT_USABLE_SUM,");
+        sqlBuffer.append("  t.ACCOUNT_FROZEN_SUM,");
+        sqlBuffer.append("  t.ACCOUNT_CONSUME_SUM,");
+        sqlBuffer.append("  t.ACCOUNT_RECHARGE_SUM,");
+        sqlBuffer.append("  t.ACCOUNT_CREDIT_SUM,");
+        sqlBuffer.append("  t.ACCOUNT_STATUS,");
+        sqlBuffer.append("  t.IS_SHARE,");
+        sqlBuffer.append("  t.CREATED_BY,");
+        sqlBuffer.append("  DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME ");
+        sqlBuffer.append("  from finance_account t,account_base_info i,enterprise_basic_info e ");
+        sqlBuffer.append("  where t.ACCOUNT_ID = i.ACCOUNT_ID and i.ENTERPRISE_ID = e.ENTERPRISE_ID");
+        sqlBuffer.append("  and t.ACCOUNT_TYPE !='IDENTIFICATION_ACCOUNT' ");
+        sqlBuffer.append("  and i.ENTERPRISE_ID in("+con+")");
+        sqlBuffer.append("  order by t.CREATED_TIME desc");
+        log.info(sqlBuffer.toString());
+        List<FinanceAccountValidator> list = this.queryForObjectList(sqlBuffer.toString(), null, new FinanceAccountRowMapper());
+        return list;
+    }
+
+    /**
      * 根据enterpriseId 汇总企业金额统计
      * @param enterpriseId
      * @return

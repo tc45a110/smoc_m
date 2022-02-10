@@ -317,6 +317,11 @@ public class IdentificationAccountController {
         excelModel4.setValue("用MD5-HMAC签名；AES-256对敏感数据身份证号进行加密；AES加密模式:AES/CBC/PKCS7Padding；AES_NAME为AES");
         list.add(excelModel4);
 
+        AccountExcelModel excelModel5 = new AccountExcelModel();
+        excelModel5.setKey("友好提示");
+        excelModel5.setValue("请妥善报关该资料，请无泄露，如有泄露，自行负责");
+        list.add(excelModel5);
+
         String fileName = identificationAccountInfoValidator.getIdentificationAccount();
         try {
             ExcelUtils.writeExcel(fileName, AccountExcelModel.class ,response,list);

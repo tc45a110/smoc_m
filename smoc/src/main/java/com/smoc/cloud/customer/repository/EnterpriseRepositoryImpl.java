@@ -40,24 +40,29 @@ public class EnterpriseRepositoryImpl extends BasePageRepository {
 
         List<Object> paramsList = new ArrayList<Object>();
 
+        if (!StringUtils.isEmpty(qo.getEnterpriseId())) {
+            sqlBuffer.append(" and t.ENTERPRISE_ID = ? ");
+            paramsList.add(qo.getEnterpriseId().trim());
+        }
+
         if (!StringUtils.isEmpty(qo.getEnterpriseName())) {
             sqlBuffer.append(" and t.ENTERPRISE_NAME like ?");
-            paramsList.add( "%"+qo.getEnterpriseName().trim()+"%");
+            paramsList.add("%" + qo.getEnterpriseName().trim() + "%");
         }
 
         if (!StringUtils.isEmpty(qo.getEnterpriseContacts())) {
             sqlBuffer.append(" and t.ENTERPRISE_CONTACTS like ?");
-            paramsList.add( "%"+qo.getEnterpriseContacts().trim()+"%");
+            paramsList.add("%" + qo.getEnterpriseContacts().trim() + "%");
         }
 
         if (!StringUtils.isEmpty(qo.getEnterpriseContactsPhone())) {
             sqlBuffer.append(" and t.ENTERPRISE_CONTACTS_PHONE like ?");
-            paramsList.add( "%"+qo.getEnterpriseContactsPhone().trim()+"%");
+            paramsList.add("%" + qo.getEnterpriseContactsPhone().trim() + "%");
         }
 
         if (!StringUtils.isEmpty(qo.getSaler())) {
             sqlBuffer.append(" and t.SALER =?");
-            paramsList.add( qo.getSaler().trim());
+            paramsList.add(qo.getSaler().trim());
         }
 
         if (!StringUtils.isEmpty(qo.getEnterpriseType())) {
@@ -67,10 +72,11 @@ public class EnterpriseRepositoryImpl extends BasePageRepository {
 
         if (!StringUtils.isEmpty(qo.getAccessCorporation())) {
             sqlBuffer.append(" and t.ACCESS_CORPORATION =?");
-            paramsList.add( qo.getAccessCorporation().trim());
+            paramsList.add(qo.getAccessCorporation().trim());
         }
 
-        if(!StringUtils.isEmpty(qo.getFlag()) && "1".equals(qo.getFlag())){
+        //特殊处理，如果 flag 为1，则不查询 认证企业
+        if (!StringUtils.isEmpty(qo.getFlag()) && "1".equals(qo.getFlag())) {
             sqlBuffer.append(" and t.ENTERPRISE_TYPE !='IDENTIFICATION' ");
         }
 
@@ -85,7 +91,7 @@ public class EnterpriseRepositoryImpl extends BasePageRepository {
 
         //查询二级企业信息
         List<EnterpriseBasicInfoValidator> list = pageList.getList();
-        for(int i =0;i<list.size();i++){
+        for (int i = 0; i < list.size(); i++) {
             EnterpriseBasicInfoValidator basicInfo = list.get(i);
             List<EnterpriseBasicInfoValidator> validator = findByEnterpriseParentId(basicInfo);
             basicInfo.setEnterprises(validator);
@@ -115,7 +121,7 @@ public class EnterpriseRepositoryImpl extends BasePageRepository {
 
         if (!StringUtils.isEmpty(qo.getEnterpriseId())) {
             sqlBuffer.append(" and t.ENTERPRISE_PARENT_ID =?");
-            paramsList.add( qo.getEnterpriseId().trim());
+            paramsList.add(qo.getEnterpriseId().trim());
         }
 
         sqlBuffer.append(" order by t.CREATED_TIME desc");
@@ -126,6 +132,40 @@ public class EnterpriseRepositoryImpl extends BasePageRepository {
 
         List<EnterpriseBasicInfoValidator> list = this.queryForObjectList(sqlBuffer.toString(), params, new EnterpriseBasicInfoRowMapper());
         return list;
+    }
+
+
+    /**
+     * 根据企业id，查询企业id和子企业id
+     *
+     * @param enterpriseId
+     * @return
+     */
+    public List<String> findEnterpriseAndSubsidiaryId(String enterpriseId) {
+
+        List<String> enterpriseIds = new ArrayList<>();
+
+        //查询数据
+        PageParams params = new PageParams<>();
+        params.setPageSize(10000);
+        params.setCurrentPage(1);
+        EnterpriseBasicInfoValidator qo = new EnterpriseBasicInfoValidator();
+        qo.setEnterpriseId(enterpriseId);
+        params.setParams(qo);
+
+        PageList<EnterpriseBasicInfoValidator> pageList = this.page(params);
+        if (null != pageList.getList() && pageList.getList().size() > 0) {
+            for (EnterpriseBasicInfoValidator obj : pageList.getList()) {
+                enterpriseIds.add(obj.getEnterpriseId());
+                if (null != obj.getEnterprises() && obj.getEnterprises().size() > 0) {
+                    for(EnterpriseBasicInfoValidator objj:obj.getEnterprises()){
+                        enterpriseIds.add(objj.getEnterpriseId());
+                    }
+                }
+            }
+        }
+
+        return enterpriseIds;
     }
 
 }

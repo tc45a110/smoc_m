@@ -97,6 +97,20 @@ public class FinanceAccountService {
     }
 
     /**
+     * 根据企业enterpriseId，查询企业所有财务账户(包括子企业财务账户)
+     * @param enterpriseId
+     * @return
+     */
+    public ResponseData<List<FinanceAccountValidator>> findEnterpriseAndSubsidiaryFinanceAccount(String enterpriseId){
+        try {
+            return this.financeAccountFeignClient.findEnterpriseAndSubsidiaryFinanceAccount(enterpriseId);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
      * 根据enterpriseId 汇总企业金额统计
      * @param enterpriseId
      * @return

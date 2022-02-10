@@ -11,6 +11,7 @@ import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.customer.entity.AccountBasicInfo;
 import com.smoc.cloud.customer.repository.BusinessAccountRepository;
+import com.smoc.cloud.customer.repository.EnterpriseRepository;
 import com.smoc.cloud.finance.entity.FinanceAccount;
 import com.smoc.cloud.finance.entity.FinanceAccountRecharge;
 import com.smoc.cloud.finance.repository.FinanceAccountRechargeRepository;
@@ -33,6 +34,9 @@ import static com.smoc.cloud.common.response.ResponseCode.PARAM_QUERY_ERROR;
 public class FinanceAccountService {
 
     @Resource
+    private EnterpriseRepository enterpriseRepository;
+
+    @Resource
     private BusinessAccountRepository businessAccountRepository;
 
     @Resource
@@ -46,7 +50,7 @@ public class FinanceAccountService {
      * 分页查询
      *
      * @param pageParams
-     * @param flag  1表示业务账号 账户  2表示认证账号 账户 3表示财务共享账号
+     * @param flag       1表示业务账号 账户  2表示认证账号 账户 3表示财务共享账号
      * @return
      */
     public ResponseData<PageList<FinanceAccountValidator>> page(PageParams<FinanceAccountValidator> pageParams, String flag) {
@@ -159,6 +163,26 @@ public class FinanceAccountService {
 
         List<FinanceAccountValidator> list = financeAccountRepository.findEnterpriseFinanceAccount(enterpriseId);
         return ResponseDataUtil.buildSuccess(list);
+
+    }
+
+    /**
+     * 根据企业enterpriseId，查询企业所有财务账户(包括子企业财务账户)
+     *
+     * @param enterpriseId
+     * @return
+     */
+    public ResponseData<List<FinanceAccountValidator>> findEnterpriseAndSubsidiaryFinanceAccount(String enterpriseId) {
+
+        List<String> enterpriseIds = enterpriseRepository.findEnterpriseAndSubsidiaryId(enterpriseId);
+        if (null != enterpriseIds && enterpriseIds.size() > 0) {
+            log.info("[enterpriseIds]:{}", new Gson().toJson(enterpriseIds));
+            List<FinanceAccountValidator> data = financeAccountRepository.findEnterpriseAndSubsidiaryFinanceAccount(enterpriseIds);
+            log.info("[data]:{}", new Gson().toJson(data));
+            return ResponseDataUtil.buildSuccess(data);
+        }
+
+        return ResponseDataUtil.buildError();
 
     }
 

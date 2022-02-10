@@ -33,4 +33,13 @@ public class FinanceAccountValidator {
 
     //企业ID
     private String enterpriseId;
+
+    //下面是创建财务共享账户的参数
+    //是否可用余额归集
+    private String isUsableSumPool;
+    //是否冻结金额归集
+    private String isFreezeSumPool;
+
+    //合并账户ids
+    private String accountIds;
 }
