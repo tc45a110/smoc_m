@@ -12,18 +12,18 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 
 /**
- * 路由配置
+ * 身份证验证路由
  */
 @Slf4j
 @Component
-public class CustomRoutes {
+public class IdentityCustomRoutes {
 
     //验签过滤器
     @Resource
     private GatewayFilter verifySignatureGatewayFilter;
 
     @Bean
-    public RouteLocator vmRouteLocator(RouteLocatorBuilder builder) {
+    public RouteLocator identityRouteLocator(RouteLocatorBuilder builder) {
 
 
         return builder.routes()

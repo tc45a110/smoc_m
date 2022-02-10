@@ -29,11 +29,11 @@ import reactor.core.publisher.Mono;
 import java.nio.charset.StandardCharsets;
 
 /**
- * 自定义 GatewayFilter
+ * 验证签名过滤器
  */
 @Slf4j
 @Component
-public class CustomGatewayFilter {
+public class CustomVerifySignatureGatewayFilter {
 
     @Autowired
     private DataService dataService;
@@ -60,7 +60,6 @@ public class CustomGatewayFilter {
                 RequestStardardHeaders requestHeaderData = new RequestStardardHeaders();
                 requestHeaderData.setSignatureNonce(signatureNonce);
                 requestHeaderData.setSignature(signature);
-
 
                 //获取body内容
                 String requestBody = "";
@@ -107,14 +106,15 @@ public class CustomGatewayFilter {
 
                 //校验签名数据
                 boolean verifySign = HMACUtil.verifySign(signData.toString(), requestHeaderData.getSignature(), md5HmacKey, gatewayConfigurationProperties.getSignStyle());
-                //签名正确
-                if (verifySign) {
-                    return chain.filter(exchange).then(Mono.fromRunnable(() -> {
-                        //被执行后调用 post
-                    }));
+                //签名错误
+                if (!verifySign) {
+                    return errorHandle(exchange, ResponseCode.SIGN_ERROR.getCode(), ResponseCode.SIGN_ERROR.getMessage());
                 }
-                //响应信息
-                return errorHandle(exchange, ResponseCode.SIGN_ERROR.getCode(), ResponseCode.SIGN_ERROR.getMessage());
+
+                return chain.filter(exchange).then(Mono.fromRunnable(() -> {
+                    //被执行后调用 post
+                }));
+
             }
         };
     }
@@ -122,7 +122,7 @@ public class CustomGatewayFilter {
     public Mono<Void> errorHandle(ServerWebExchange exchange, String errorCode, String errorMessage) {
         //响应信息
         ServerHttpResponse response = exchange.getResponse();
-        response.getHeaders().set("Content-Type","application/json;charset=utf-8");
+        response.getHeaders().set("Content-Type", "application/json;charset=utf-8");
         ResponseData responseData = ResponseDataUtil.buildError(errorCode, errorMessage);
         log.error("[响应数据]数据:{}", new Gson().toJson(responseData));
         byte[] bytes = new Gson().toJson(responseData).getBytes(StandardCharsets.UTF_16);

@@ -14,7 +14,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 /**
  * redis配置  使用Jackson2JsonRedisSerializer 序列化
- * 2019/4/4 14:52
+ * 2020/4/4 14:52
  **/
 @Configuration
 @EnableCaching

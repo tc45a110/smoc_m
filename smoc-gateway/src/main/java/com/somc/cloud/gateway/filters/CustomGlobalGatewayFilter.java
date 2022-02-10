@@ -31,7 +31,7 @@ import java.nio.charset.StandardCharsets;
  */
 @Slf4j
 @Component
-public class CustomGlobalFilter implements GlobalFilter, Ordered {
+public class CustomGlobalGatewayFilter implements GlobalFilter, Ordered {
 
     @Autowired
     private DataService dataService;
@@ -47,15 +47,8 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
         if(!request.getMethod().equals(HttpMethod.POST)){
             URI uri = request.getURI();
             log.warn("[非法请求][数据]URI:{}",uri.toString());
-
-            //响应信息
-            ServerHttpResponse response = exchange.getResponse();
-            ResponseData responseData = ResponseDataUtil.buildError(ResponseCode.REQUEST_LEGAL_ERROR.getCode(), ResponseCode.REQUEST_LEGAL_ERROR.getMessage());
-            byte[] bytes = new Gson().toJson(responseData).getBytes(StandardCharsets.UTF_16);
-            DataBuffer bodyDataBuffer = response.bufferFactory().wrap(bytes);
-            return exchange.getResponse().writeWith(Flux.just(bodyDataBuffer));
+            return errorHandle(exchange, ResponseCode.REQUEST_LEGAL_ERROR.getCode(), ResponseCode.REQUEST_LEGAL_ERROR.getMessage());
         }
-
 
         //HttpHeaders 自定义的headers 组织签名信息
         HttpHeaders headers = request.getHeaders();
@@ -74,13 +67,7 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
 
             URI uri = request.getURI();
             log.warn("[非法POST请求][数据]URI:{}",uri.toString());
-
-            //响应信息
-            ServerHttpResponse response = exchange.getResponse();
-            ResponseData responseData = ResponseDataUtil.buildError(ResponseCode.REQUEST_LEGAL_ERROR.getCode(), ResponseCode.REQUEST_LEGAL_ERROR.getMessage());
-            byte[] bytes = new Gson().toJson(responseData).getBytes(StandardCharsets.UTF_16);
-            DataBuffer bodyDataBuffer = response.bufferFactory().wrap(bytes);
-            return exchange.getResponse().writeWith(Flux.just(bodyDataBuffer));
+            return errorHandle(exchange, ResponseCode.REQUEST_LEGAL_ERROR.getCode(), ResponseCode.REQUEST_LEGAL_ERROR.getMessage());
         }
 
         return chain.filter(exchange);
