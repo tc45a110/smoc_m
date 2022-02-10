@@ -43,15 +43,15 @@ public class EnterpriseRepositoryImpl extends BasePageRepository {
         if (!StringUtils.isEmpty(qo.getEnterpriseId())) {
             sqlBuffer.append(" and t.ENTERPRISE_ID = ? ");
             paramsList.add(qo.getEnterpriseId().trim());
-        }
-
-        if(!StringUtils.isEmpty(qo.getEnterpriseParentId())){
-            sqlBuffer.append(" and t.ENTERPRISE_PARENT_ID = ? ");
-            paramsList.add(qo.getEnterpriseParentId().trim());
-        }else{
-            sqlBuffer.append(" and t.ENTERPRISE_PARENT_ID = ? ");
-            qo.setEnterpriseParentId("0000");
-            paramsList.add("0000");
+        } else {
+            if (!StringUtils.isEmpty(qo.getEnterpriseParentId())) {
+                sqlBuffer.append(" and t.ENTERPRISE_PARENT_ID = ? ");
+                paramsList.add(qo.getEnterpriseParentId().trim());
+            } else {
+                sqlBuffer.append(" and t.ENTERPRISE_PARENT_ID = ? ");
+                qo.setEnterpriseParentId("0000");
+                paramsList.add("0000");
+            }
         }
 
         if (!StringUtils.isEmpty(qo.getEnterpriseName())) {
@@ -99,7 +99,7 @@ public class EnterpriseRepositoryImpl extends BasePageRepository {
         pageList.getPageParams().setParams(qo);
 
         //查询二级企业信息
-        if("0000".equals(qo.getEnterpriseParentId())){
+        if ("0000".equals(qo.getEnterpriseParentId())) {
             List<EnterpriseBasicInfoValidator> list = pageList.getList();
             for (int i = 0; i < list.size(); i++) {
                 EnterpriseBasicInfoValidator basicInfo = list.get(i);
@@ -169,7 +169,7 @@ public class EnterpriseRepositoryImpl extends BasePageRepository {
             for (EnterpriseBasicInfoValidator obj : pageList.getList()) {
                 enterpriseIds.add(obj.getEnterpriseId());
                 if (null != obj.getEnterprises() && obj.getEnterprises().size() > 0) {
-                    for(EnterpriseBasicInfoValidator objj:obj.getEnterprises()){
+                    for (EnterpriseBasicInfoValidator objj : obj.getEnterprises()) {
                         enterpriseIds.add(objj.getEnterpriseId());
                     }
                 }
