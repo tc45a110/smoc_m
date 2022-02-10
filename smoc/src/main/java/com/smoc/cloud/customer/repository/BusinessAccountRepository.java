@@ -13,6 +13,11 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface BusinessAccountRepository extends CrudRepository<AccountBasicInfo, String>, JpaRepository<AccountBasicInfo, String> {
 
+    /**
+     * 查询-分页
+     * @param pageParams
+     * @return
+     */
     PageList<AccountBasicInfoValidator> page(PageParams<AccountBasicInfoValidator> pageParams);
 
 

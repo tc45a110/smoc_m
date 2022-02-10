@@ -4,6 +4,8 @@ package com.smoc.cloud.customer.controller;
 import com.alibaba.fastjson.JSON;
 import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
+import com.smoc.cloud.common.page.PageList;
+import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
@@ -19,7 +21,6 @@ import com.smoc.cloud.customer.service.BusinessAccountService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -223,8 +224,8 @@ public class AccountChannelController {
         }
 
         //查询账号下得运营商是否配置过通道
-        ResponseData<AccountChannelInfoValidator> infoData = accountChannelService.findByAccountIdAndCarrier(accountChannelInfoValidator.getAccountId(),accountChannelInfoValidator.getCarrier());
-        if (ResponseCode.SUCCESS.getCode().equals(infoData.getCode()) && !StringUtils.isEmpty(infoData.getData())) {
+        ResponseData<List<AccountChannelInfoValidator>> infoData = accountChannelService.findByAccountIdAndCarrier(accountChannelInfoValidator.getAccountId(),accountChannelInfoValidator.getCarrier());
+        if (ResponseCode.SUCCESS.getCode().equals(infoData.getCode()) && infoData.getData().size()>0) {
             view.addObject("error", "该业务账号下的运营商已配置过通道");
             return view;
         }
@@ -239,9 +240,9 @@ public class AccountChannelController {
         //保存账号通道
         String op= "add";
         accountChannelInfoValidator.setId(UUID.uuid32());
-        accountChannelInfoValidator.setConfigType("1");
+        accountChannelInfoValidator.setConfigType("ACCOUNT_CHANNEL");
         accountChannelInfoValidator.setChannelPriority("1");//等级
-        accountChannelInfoValidator.setChannelSource("1");//优先级
+        accountChannelInfoValidator.setChannelSource("CHANNEL");//通道配置
         accountChannelInfoValidator.setChannelStatus("1");
         accountChannelInfoValidator.setCreatedTime(new Date());
         accountChannelInfoValidator.setCreatedBy(user.getRealName());
@@ -358,7 +359,7 @@ public class AccountChannelController {
      * @param request
      * @return
      */
-    @RequestMapping(value = "/channel/findChannelGroupList/{accountId}/{carrier}", method = RequestMethod.GET)
+    @RequestMapping(value = "/channelGroup/channelGroupList/{accountId}/{carrier}", method = RequestMethod.GET)
     public ModelAndView findChannelGroupList(@PathVariable String accountId, @PathVariable String carrier, HttpServletRequest request) {
         ModelAndView view = new ModelAndView("customer/account/account_edit_channel_group");
 
@@ -408,6 +409,206 @@ public class AccountChannelController {
         view.addObject("accountChannelInfoValidator", accountChannelInfoValidator);
 
         return view;
+    }
 
+    /**
+     * 检索通道组-查询
+     * @param channelGroupInfoValidator
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/channelGroup/channelGroupPage", method = RequestMethod.POST)
+    public ModelAndView channelGroupPage(@ModelAttribute ChannelGroupInfoValidator channelGroupInfoValidator, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("customer/account/account_edit_channel_group");
+
+        //查询业务账号
+        ResponseData<AccountBasicInfoValidator> data = businessAccountService.findById(channelGroupInfoValidator.getAccountId());
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        /**
+         * 查询配置的业务账号通道
+         */
+        AccountChannelInfoQo accountChannelInfoQo = new AccountChannelInfoQo();
+        accountChannelInfoQo.setAccountId(data.getData().getAccountId());
+        accountChannelInfoQo.setCarrier(data.getData().getCarrier());
+        accountChannelInfoQo.setAccountChannelType(data.getData().getAccountChannelType());
+        ResponseData<Map<String, AccountChannelInfoQo>> channelData = accountChannelService.findAccountChannelConfig(accountChannelInfoQo);
+        if (!ResponseCode.SUCCESS.getCode().equals(channelData.getCode())) {
+            view.addObject("error", channelData.getCode() + ":" + channelData.getMessage());
+            return view;
+        }
+
+        /**
+         * 检索通道组列表
+         */
+        channelGroupInfoValidator.setChannelGroupStatus("1");//正常
+        ResponseData<List<ChannelGroupInfoValidator>> listDate = accountChannelService.findChannelGroupList(channelGroupInfoValidator);
+        if (!ResponseCode.SUCCESS.getCode().equals(listDate.getCode())) {
+            view.addObject("error", listDate.getCode() + ":" + listDate.getMessage());
+        }
+
+        AccountChannelInfoValidator accountChannelInfoValidator = new AccountChannelInfoValidator();
+        accountChannelInfoValidator.setCarrier(channelGroupInfoValidator.getCarrier());
+        accountChannelInfoValidator.setAccountId(data.getData().getAccountId());
+
+        view.addObject("channelMap", channelData.getData());
+        view.addObject("list", listDate.getData());
+        view.addObject("accountBasicInfoValidator", data.getData());
+        view.addObject("channelGroupInfoValidator", channelGroupInfoValidator);
+        view.addObject("accountChannelInfoValidator", accountChannelInfoValidator);
+
+        return view;
+
+    }
+
+    /**
+     * 业务账号通道組保存
+     * @param accountChannelInfoValidator
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/channelGroup/save", method = RequestMethod.POST)
+    public ModelAndView channelGroupSave(@ModelAttribute AccountChannelInfoValidator accountChannelInfoValidator, BindingResult result, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("customer/account/account_edit_channel_group");
+
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        //完成参数规则验证
+        if (result.hasErrors()) {
+            view.addObject("accountChannelInfoValidator", accountChannelInfoValidator);
+            return view;
+        }
+
+        //查询账号下得运营商是否配置过通道
+        ResponseData<List<AccountChannelInfoValidator>> infoData = accountChannelService.findByAccountIdAndCarrier(accountChannelInfoValidator.getAccountId(),accountChannelInfoValidator.getCarrier());
+        if (ResponseCode.SUCCESS.getCode().equals(infoData.getCode()) && infoData.getData().size()>0) {
+            view.addObject("error", "该业务账号下的运营商已配置过通道組");
+            return view;
+        }
+
+        //查询业务账号
+        ResponseData<AccountBasicInfoValidator> data = businessAccountService.findById(accountChannelInfoValidator.getAccountId());
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        //保存账号通道
+        String op= "add";
+        accountChannelInfoValidator.setId(UUID.uuid32());
+        accountChannelInfoValidator.setConfigType("ACCOUNT_CHANNEL_GROUP");
+        accountChannelInfoValidator.setChannelPriority("1");//等级
+        accountChannelInfoValidator.setChannelSource("CHANNEL_GROUP");//通道组配置
+        accountChannelInfoValidator.setChannelStatus("1");
+        accountChannelInfoValidator.setCreatedTime(new Date());
+        accountChannelInfoValidator.setCreatedBy(user.getRealName());
+        ResponseData resData = accountChannelService.save(accountChannelInfoValidator,op);
+        if (!ResponseCode.SUCCESS.getCode().equals(resData.getCode())) {
+            view.addObject("error", resData.getCode() + ":" + resData.getMessage());
+            return view;
+        }
+
+        //保存操作记录
+        if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            systemUserLogService.logsAsync("ACCOUNT_CHANNEL", accountChannelInfoValidator.getAccountId(), accountChannelInfoValidator.getCreatedBy() , op,  "添加业务账号通道組配置", JSON.toJSONString(accountChannelInfoValidator));
+        }
+
+        //记录日志
+        log.info("[EC业务账号管理][业务账号通道組配置][{}][{}]数据:{}", op, user.getUserName(), JSON.toJSONString(accountChannelInfoValidator));
+
+        view.setView(new RedirectView("/account/channelGroup/channelGroupList/"+accountChannelInfoValidator.getAccountId()+"/"+accountChannelInfoValidator.getCarrier(), true, false));
+
+        return view;
+    }
+
+    /**
+     * 移除账号已配置通道组
+     *
+     * @return
+     */
+    @RequestMapping(value = "/channelGroup/deleteChannelGroup/{accountId}/{carrier}/{channelGroupId}", method = RequestMethod.GET)
+    public ModelAndView deleteChannelGroup(@PathVariable String accountId, @PathVariable String carrier, @PathVariable String channelGroupId, HttpServletRequest request) {
+
+        ModelAndView view = new ModelAndView("customer/account/account_edit_channel");
+
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(accountId);
+        if (!MpmValidatorUtil.validate(validator)) {
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
+
+        //查询业务账号
+        ResponseData<AccountBasicInfoValidator> base = businessAccountService.findById(accountId);
+        if (!ResponseCode.SUCCESS.getCode().equals(base.getCode())) {
+            view.addObject("error", base.getCode() + ":" + base.getMessage());
+            return view;
+        }
+
+        //查询删除的数据
+        ResponseData<List<AccountChannelInfoValidator>> responseData = accountChannelService.findByAccountIdAndCarrierAndChannelGroupId(accountId,carrier,channelGroupId);
+        if (!ResponseCode.SUCCESS.getCode().equals(responseData.getCode())) {
+            view.addObject("error", responseData.getCode() + ":" + responseData.getMessage());
+            return view;
+        }
+
+        //记录日志
+        log.info("[EC业务账号管理][移除账号已配置通道][delete][{}]数据:{}", user.getUserName(), JSON.toJSONString(responseData));
+
+        //删除操作
+        ResponseData data = accountChannelService.deleteChannelGroup(accountId,carrier,channelGroupId);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        //保存操作记录
+        if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            systemUserLogService.logsAsync("ACCOUNT_CHANNEL", accountId, user.getRealName(), "delete", "移除账号已配置通道组", JSON.toJSONString(responseData));
+        }
+
+        view.setView(new RedirectView("/account/channelGroup/channelGroupList/"+accountId+"/"+carrier, true, false));
+
+        return view;
+
+    }
+
+    /**
+     * 业务账号通道明细
+     *
+     * @return
+     */
+    @RequestMapping(value = "/view/channel/detail/{accountId}", method = RequestMethod.GET)
+    public ModelAndView account_channel(@PathVariable String accountId, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("customer/account/account_view_channel_detail");
+
+        //查询业务账号
+        ResponseData<AccountBasicInfoValidator> base = businessAccountService.findById(accountId);
+        if (!ResponseCode.SUCCESS.getCode().equals(base.getCode())) {
+            view.addObject("error", base.getCode() + ":" + base.getMessage());
+            return view;
+        }
+
+        //初始化数据
+        AccountChannelInfoValidator accountChannelInfoValidator = new AccountChannelInfoValidator();
+        accountChannelInfoValidator.setConfigType(base.getData().getAccountChannelType());
+        accountChannelInfoValidator.setAccountId(base.getData().getAccountId());
+
+        //查询
+        ResponseData<List<AccountChannelInfoValidator>> data = accountChannelService.channelDetail(accountChannelInfoValidator);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("accountChannelInfoValidator", accountChannelInfoValidator);
+        view.addObject("list", data.getData());
+        return view;
     }
 }

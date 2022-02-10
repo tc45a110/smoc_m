@@ -95,27 +95,9 @@
                                                         <span class="text-danger" th:if="${#fields.hasErrors('carrier')}"
                                                               th:errors="*{carrier}"></span></label><br>
                                                     <mpm:tag id="carrier" required="true" identity="carrier"
-                                                             show-type="checkbox" key="code" name="carrier"
+                                                             show-type="checkbox" key="code" name="carrier" onchange="isTransferSwith()"
                                                              th:value="${accountBasicInfoValidator.carrier}" title="运营商"/>
                                                 </div>
-                                                <div class="col-sm-4 m-b-10">
-                                                    <label>号码指定运营商&nbsp;</label><br>
-                                                    <mpm:tag id="poistCarrier" identity="carrier" show-type="checkbox"
-                                                             key="code" mask-value="INTERNATIONAL"
-                                                             name="poistCarrier"
-                                                             th:value="${accountBasicInfoValidator.poistCarrier}" title="运营商"/>
-                                                </div>
-                                                <div class="col-sm-4 m-b-10">
-                                                    <label>携号转网标识&nbsp;</label><br>
-                                                    <mpm:tag id="transferType" identity="carrier" show-type="checkbox"
-                                                             key="code" mask-value="INTERNATIONAL"
-                                                             name="transferType"
-                                                             th:value="${accountBasicInfoValidator.transferType}" title="运营商"/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="row">
                                                 <div class="col-sm-4 m-b-10">
                                                     <label>信息分类<span class="text-danger">*</span>&nbsp;
                                                         <span class="text-danger" th:if="${#fields.hasErrors('infoType')}"
@@ -125,6 +107,19 @@
                                                              name="infoType"
                                                              th:value="${accountBasicInfoValidator.infoType}" title="信息分类"/>
                                                 </div>
+                                                <div class="col-sm-4 m-b-10">
+                                                    <label class="m-b-10">是否支持携号转网<span class="text-danger" id="transfer" style="display: none">*</span>&nbsp;
+                                                        <span class="text-danger" th:if="${#fields.hasErrors('transferType')}"
+                                                              th:errors="*{transferType}"></span></label><br>
+                                                    <mpm:tag id="transferType" identity="isOrNo" show-type="radio" style="margin-top:0px"
+                                                             key="code" name="transferType" th:value="${accountBasicInfoValidator.transferType}"/>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+
                                                 <div class="col-sm-4 m-b-10">
                                                     <label>设置通道方式<span class="text-danger">*</span>&nbsp;</label><br>
                                                     <mpm:tag id="accountChannelType" required="true"
@@ -184,6 +179,28 @@
         }
 
     });
+
+    //判断是否支持携号转网
+    function isTransferSwith(){
+        var obj=document.getElementsByName('carrier');
+        var carrier='';
+        for(var i=0; i<obj.length; i++){
+            if(obj[i].checked) carrier+=obj[i].value+',';
+        }
+        var carriers = carrier.split(",");
+
+        //支持携号转网
+        if(carriers.length-1==1){
+            $("[name='transferType']").removeAttr("disabled");
+            $('#transferType').attr("required","");
+            $('#transfer').show();
+        }else{
+            $("[name='transferType']").removeAttr("checked");
+            $("[name='transferType']").attr("disabled",'true');
+            $('#transferType').removeAttr("required","");
+            $('#transfer').hide();
+        }
+    }
 
 </script>
 <script>

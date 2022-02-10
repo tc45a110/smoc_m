@@ -6,6 +6,7 @@ import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelGroupInfoValidator;
 import com.smoc.cloud.common.smoc.customer.qo.AccountChannelInfoQo;
+import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.AccountChannelInfoValidator;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
@@ -24,7 +25,7 @@ import java.util.Map;
  **/
 @Slf4j
 @RestController
-@RequestMapping("account/channel")
+@RequestMapping("account")
 @Scope(value= WebApplicationContext.SCOPE_REQUEST)
 public class AccountChannelController {
 
@@ -36,7 +37,7 @@ public class AccountChannelController {
      * @param accountChannelInfoQo
      * @return
      */
-    @RequestMapping(value = "/findAccountChannelConfig", method = RequestMethod.POST)
+    @RequestMapping(value = "/channel/findAccountChannelConfig", method = RequestMethod.POST)
     public ResponseData<Map<String, AccountChannelInfoQo>> findAccountChannelConfig(@RequestBody AccountChannelInfoQo accountChannelInfoQo) {
 
         return accountChannelService.findAccountChannelConfig(accountChannelInfoQo);
@@ -47,7 +48,7 @@ public class AccountChannelController {
      * @param channelBasicInfoQo
      * @return
      */
-    @RequestMapping(value = "/findChannelList", method = RequestMethod.POST)
+    @RequestMapping(value = "/channel/findChannelList", method = RequestMethod.POST)
     public ResponseData<List<ChannelBasicInfoQo>> findChannelList(@RequestBody ChannelBasicInfoQo channelBasicInfoQo) {
 
         return accountChannelService.findChannelList(channelBasicInfoQo);
@@ -58,7 +59,7 @@ public class AccountChannelController {
      * @param op 操作标记，add表示添加，edit表示修改
      * @return
      */
-    @RequestMapping(value = "/save/{op}", method = RequestMethod.POST)
+    @RequestMapping(value = "/channel/save/{op}", method = RequestMethod.POST)
     public ResponseData save(@RequestBody AccountChannelInfoValidator accountChannelInfoValidator, @PathVariable String op) {
 
         //完成参数规则验证
@@ -76,7 +77,7 @@ public class AccountChannelController {
      * 查询账号下运营商是否配置过通道
      * @return
      */
-    @RequestMapping(value = "/findByAccountIdAndCarrier/{accountId}/{carrier}", method = RequestMethod.GET)
+    @RequestMapping(value = "/channel/findByAccountIdAndCarrier/{accountId}/{carrier}", method = RequestMethod.GET)
     public ResponseData findByAccountIdAndCarrier(@PathVariable String accountId,@PathVariable String carrier) {
 
         return accountChannelService.findByAccountIdAndCarrier(accountId,carrier);
@@ -87,7 +88,7 @@ public class AccountChannelController {
      * @param id
      * @return
      */
-    @RequestMapping(value = "/findById/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/channel/findById/{id}", method = RequestMethod.GET)
     public ResponseData findById(@PathVariable String id) {
 
         //完成参数规则验证
@@ -106,7 +107,7 @@ public class AccountChannelController {
      * @param id
      * @return
      */
-    @RequestMapping(value = "/deleteById/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/channel/deleteById/{id}", method = RequestMethod.GET)
     public ResponseData deleteById(@PathVariable String id) {
 
         //完成参数规则验证
@@ -125,9 +126,55 @@ public class AccountChannelController {
      * @param channelGroupInfoValidator
      * @return
      */
-    @RequestMapping(value = "/findChannelGroupList", method = RequestMethod.POST)
+    @RequestMapping(value = "/channelGroup/findChannelGroupList", method = RequestMethod.POST)
     public ResponseData<List<ChannelGroupInfoValidator>> findChannelGroupList(@RequestBody ChannelGroupInfoValidator channelGroupInfoValidator) {
 
         return accountChannelService.findChannelGroupList(channelGroupInfoValidator);
     }
+
+    /**
+     * 查询已配置通道组数据
+     * @param accountId
+     * @param carrier
+     * @param channelGroupId
+     * @return
+     */
+    @RequestMapping(value = "/channelGroup/findByAccountIdAndCarrierAndChannelGroupId/{accountId}/{carrier}/{channelGroupId}", method = RequestMethod.GET)
+    public ResponseData findByAccountIdAndCarrierAndChannelGroupId(@PathVariable String accountId,@PathVariable String carrier,@PathVariable String channelGroupId) {
+
+        return accountChannelService.findByAccountIdAndCarrierAndChannelGroupId(accountId,carrier,channelGroupId);
+    }
+
+    /**
+     * 移除已配置通道组
+     * @param accountId
+     * @param carrier
+     * @param channelGroupId
+     * @return
+     */
+    @RequestMapping(value = "/channelGroup/deleteChannelGroup/{accountId}/{carrier}/{channelGroupId}", method = RequestMethod.GET)
+    public ResponseData deleteById(@PathVariable String accountId,@PathVariable String carrier,@PathVariable String channelGroupId) {
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(accountId);
+        if (!MpmValidatorUtil.validate(validator)) {
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(validator));
+        }
+
+        ResponseData data = accountChannelService.deleteChannelGroup(accountId,carrier,channelGroupId);
+        return data;
+    }
+
+    /**
+     * 业务账号通道明细
+     * @param accountChannelInfoValidator
+     * @return
+     */
+    @RequestMapping(value = "/channel/channelDetail", method = RequestMethod.POST)
+    public ResponseData<List<AccountChannelInfoValidator>> channelDetail(@RequestBody AccountChannelInfoValidator accountChannelInfoValidator) {
+
+        return accountChannelService.channelDetail(accountChannelInfoValidator);
+    }
+
 }

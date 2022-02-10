@@ -8,14 +8,12 @@ import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelGroupInfoValidator;
 import com.smoc.cloud.common.smoc.customer.qo.AccountChannelInfoQo;
+import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.AccountChannelInfoValidator;
-import com.smoc.cloud.common.smoc.customer.validator.AccountFinanceInfoValidator;
-import com.smoc.cloud.common.utils.DES;
-import com.smoc.cloud.common.utils.DateTimeUtils;
-import com.smoc.cloud.common.utils.PasswordUtils;
+import com.smoc.cloud.configure.channel.group.entity.ConfigChannelGroup;
+import com.smoc.cloud.configure.channel.group.repository.ConfigChannelGroupRepository;
 import com.smoc.cloud.customer.entity.AccountBasicInfo;
 import com.smoc.cloud.customer.entity.AccountChannelInfo;
-import com.smoc.cloud.customer.entity.AccountInterfaceInfo;
 import com.smoc.cloud.customer.repository.AccountChannelRepository;
 import com.smoc.cloud.customer.repository.BusinessAccountRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -44,6 +42,9 @@ public class AccountChannelService {
     @Resource
     private BusinessAccountRepository businessAccountRepository;
 
+    @Resource
+    private ConfigChannelGroupRepository configChannelGroupRepository;
+
 
     /**
      * 查询配置的业务账号通道
@@ -59,12 +60,11 @@ public class AccountChannelService {
             map.put(carrier[i], null);
         }
 
-        //1:通道组
         List<AccountChannelInfoQo> list = null;
-        if("1".equals(accountChannelInfoQo.getAccountChannelType())){
+        if("ACCOUNT_CHANNEL_GROUP".equals(accountChannelInfoQo.getAccountChannelType())){
             list = accountChannelRepository.findAccountChannelGroupConfig(accountChannelInfoQo);
 
-        }else{
+        }else if(("ACCOUNT_CHANNEL".equals(accountChannelInfoQo.getAccountChannelType()))){
             list = accountChannelRepository.findAccountChannelConfig(accountChannelInfoQo);
         }
 
@@ -91,31 +91,41 @@ public class AccountChannelService {
     @Transactional
     public ResponseData save(AccountChannelInfoValidator accountChannelInfoValidator, String op) {
 
-        AccountChannelInfo data = accountChannelRepository.findByAccountIdAndCarrier(accountChannelInfoValidator.getAccountId(),accountChannelInfoValidator.getCarrier());
+        List<AccountChannelInfo> data = accountChannelRepository.findByAccountIdAndCarrier(accountChannelInfoValidator.getAccountId(),accountChannelInfoValidator.getCarrier());
 
         AccountChannelInfo entity = new AccountChannelInfo();
         BeanUtils.copyProperties(accountChannelInfoValidator, entity);
 
         //add查重
-        if (data != null &&"add".equals(op)) {
+        if (!StringUtils.isEmpty(data) && data.size()>0 &&"add".equals(op)) {
             return ResponseDataUtil.buildError(ResponseCode.PARAM_CREATE_ERROR);
         }
-        //edit查重
-        else if (data != null && "edit".equals(op)) {
-            return ResponseDataUtil.buildError(ResponseCode.PARAM_CREATE_ERROR);
-        }
-
 
         //op 不为 edit 或 add
         if (!("edit".equals(op) || "add".equals(op))) {
             return ResponseDataUtil.buildError();
         }
 
+        //记录日志
+        log.info("[EC业务账号管理][业务账号通道配置][{}]数据:{}", op, JSON.toJSONString(entity));
+
+        //保存通道
+        if(!StringUtils.isEmpty(entity.getChannelId())){
+            accountChannelRepository.saveAndFlush(entity);
+        }
+
+        //保存通道组
+        if(!StringUtils.isEmpty(entity.getChannelGroupId())){
+            List<ConfigChannelGroup> list = configChannelGroupRepository.findByChannelGroupId(entity.getChannelGroupId());
+            accountChannelRepository.batchSave(entity,list);
+        }
+
         //设置账号完成进度
         if("add".equals(op)){
-            Optional<AccountBasicInfo> optional = businessAccountRepository.findById(entity.getAccountId());
-            if(optional.isPresent()){
-                AccountBasicInfo accountBasicInfo = optional.get();
+            AccountBasicInfo accountBasicInfo = businessAccountRepository.findById(entity.getAccountId()).get();
+            List<AccountChannelInfoQo> list = accountChannelRepository.accountChannelByAccountIdAndCarrier(entity.getAccountId(),accountBasicInfo.getCarrier(),accountBasicInfo.getAccountChannelType());
+            String[] carrierLength = accountBasicInfo.getCarrier().split(",");
+            if(!StringUtils.isEmpty(list) && list.size()==carrierLength.length){
                 StringBuffer accountProcess = new StringBuffer(accountBasicInfo.getAccountProcess());
                 accountProcess = accountProcess.replace(3, 4, "1");
                 accountBasicInfo.setAccountProcess(accountProcess.toString());
@@ -123,25 +133,26 @@ public class AccountChannelService {
             }
         }
 
-        //记录日志
-        log.info("[EC业务账号管理][业务账号通道配置][{}]数据:{}", op, JSON.toJSONString(entity));
-        accountChannelRepository.saveAndFlush(entity);
-
         return ResponseDataUtil.buildSuccess();
-
     }
 
+    /**
+     * 查询配置通道
+     * @param accountId
+     * @param carrier
+     * @return
+     */
     public ResponseData findByAccountIdAndCarrier(String accountId, String carrier) {
-        AccountChannelInfo entity = accountChannelRepository.findByAccountIdAndCarrier(accountId,carrier);
+        List<AccountChannelInfo> list = accountChannelRepository.findByAccountIdAndCarrier(accountId,carrier);
 
-        AccountChannelInfoValidator accountChannelInfoValidator = new AccountChannelInfoValidator();
-        if(!StringUtils.isEmpty(entity)){
-            BeanUtils.copyProperties(entity, accountChannelInfoValidator);
-            return ResponseDataUtil.buildSuccess(accountChannelInfoValidator);
-        }
-        return ResponseDataUtil.buildSuccess();
+        return ResponseDataUtil.buildSuccess(list);
     }
 
+    /**
+     * 根据ID 查询数据
+     * @param id
+     * @return
+     */
     public ResponseData findById(String id) {
         Optional<AccountChannelInfo> data = accountChannelRepository.findById(id);
 
@@ -184,6 +195,57 @@ public class AccountChannelService {
 
     public ResponseData<List<ChannelGroupInfoValidator>> findChannelGroupList(ChannelGroupInfoValidator channelGroupInfoValidator) {
         List<ChannelGroupInfoValidator> list = accountChannelRepository.findChannelGroupList(channelGroupInfoValidator);
+        return ResponseDataUtil.buildSuccess(list);
+    }
+
+    /**
+     * 查询已配置通道组数据
+     * @param accountId
+     * @param carrier
+     * @param channelGroupId
+     * @return
+     */
+    public ResponseData findByAccountIdAndCarrierAndChannelGroupId(String accountId, String carrier, String channelGroupId) {
+        List<AccountChannelInfo> list = accountChannelRepository.findByAccountIdAndCarrierAndChannelGroupId(accountId,carrier,channelGroupId);
+
+        return ResponseDataUtil.buildSuccess(list);
+    }
+
+    /**
+     * 移除已配置通道组
+     * @param accountId
+     * @param carrier
+     * @param channelGroupId
+     * @return
+     */
+    @Transactional
+    public ResponseData deleteChannelGroup(String accountId, String carrier, String channelGroupId) {
+        List<AccountChannelInfo> list = accountChannelRepository.findByAccountIdAndCarrierAndChannelGroupId(accountId,carrier,channelGroupId);
+        //记录日志
+        log.info("[EC业务账号管理][移除账号已配置通道][delete]数据:{}",JSON.toJSONString(list));
+        accountChannelRepository.deleteByAccountIdAndCarrierAndChannelGroupId(accountId,carrier,channelGroupId);
+
+        //设置进度
+        Optional<AccountBasicInfo> optional = businessAccountRepository.findById(accountId);
+        if(optional.isPresent()){
+            AccountBasicInfo accountBasicInfo = optional.get();
+            StringBuffer accountProcess = new StringBuffer(accountBasicInfo.getAccountProcess());
+            accountProcess = accountProcess.replace(3, 4, "0");
+            accountBasicInfo.setAccountProcess(accountProcess.toString());
+            businessAccountRepository.save(accountBasicInfo);
+        }
+
+        return ResponseDataUtil.buildSuccess();
+    }
+
+    /**
+     * 业务账号通道明细
+     * @param accountChannelInfoValidator
+     * @return
+     */
+    public ResponseData<List<AccountChannelInfoValidator>> channelDetail(AccountChannelInfoValidator accountChannelInfoValidator) {
+        List<AccountChannelInfoValidator> list = accountChannelRepository.channelDetail(accountChannelInfoValidator);
+
         return ResponseDataUtil.buildSuccess(list);
     }
 }

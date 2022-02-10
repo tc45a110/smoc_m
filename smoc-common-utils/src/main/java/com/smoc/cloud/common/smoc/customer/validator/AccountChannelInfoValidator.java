@@ -32,4 +32,7 @@ public class AccountChannelInfoValidator {
     private Date updatedTime;
 
     private String accountChannelType;
+    private String channelName;
+    private String channelGroupName;
+    private String createdTimeStr;
 }

@@ -29,4 +29,5 @@ public interface ConfigChannelGroupRepository extends CrudRepository<ConfigChann
      */
     List<ConfigChannelGroupQo> findConfigChannelGroupList(ConfigChannelGroupQo configChannelGroupQo);
 
+    List<ConfigChannelGroup> findByChannelGroupId(String channelGroupId);
 }

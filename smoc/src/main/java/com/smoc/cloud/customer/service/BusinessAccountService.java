@@ -7,9 +7,12 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.smoc.customer.qo.AccountChannelInfoQo;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.customer.entity.AccountBasicInfo;
+import com.smoc.cloud.customer.entity.AccountChannelInfo;
+import com.smoc.cloud.customer.repository.AccountChannelRepository;
 import com.smoc.cloud.customer.repository.AccountFinanceRepository;
 import com.smoc.cloud.customer.repository.BusinessAccountRepository;
 import com.smoc.cloud.finance.entity.FinanceAccount;
@@ -21,10 +24,12 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -43,6 +48,9 @@ public class BusinessAccountService {
 
     @Resource
     private FinanceAccountRepository financeAccountRepository;
+
+    @Resource
+    private AccountChannelRepository accountChannelRepository;
 
 
     /**
@@ -94,6 +102,8 @@ public class BusinessAccountService {
         BeanUtils.copyProperties(accountBasicInfoValidator, entity);
 
         String accountType = "";
+        String accountChannelType = "";
+        String carrier = "";
 
         //add查重
         if (data != null && data.iterator().hasNext() && "add".equals(op)) {
@@ -106,6 +116,8 @@ public class BusinessAccountService {
             while (iter.hasNext()) {
                 AccountBasicInfo info = (AccountBasicInfo) iter.next();
                 accountType = info.getBusinessType();
+                accountChannelType = info.getAccountChannelType();
+                carrier = info.getCarrier();
                 if (!entity.getAccountId().equals(info.getAccountId())) {
                     status = true;
                     break;
@@ -130,6 +142,17 @@ public class BusinessAccountService {
         if ("edit".equals(op)) {
             //根据运营商先删除库里多余的运营商的价格(比如：添加的时候选择了3个运营商，修改的时候选择了2个运营商，那么就得把多余的1个运营商删除)
             accountFinanceRepository.deleteByAccountIdAndCarrier(accountBasicInfoValidator.getAccountId(), accountBasicInfoValidator.getCarrier());
+
+            //如果修改了通道方式，并且配置了通道，需要删除已经配置得通道
+            if(!accountBasicInfoValidator.getAccountChannelType().equals(accountChannelType)){
+                deleteByAccountId(entity);
+            }
+
+            //如果修改了运营商，并且配置了通道，需要删除通道
+            if(!accountBasicInfoValidator.getCarrier().equals(carrier)){
+                deleteConfigChannelByCarrier(entity);
+            }
+
         }
 
         //记录日志
@@ -138,6 +161,8 @@ public class BusinessAccountService {
 
         return ResponseDataUtil.buildSuccess();
     }
+
+
 
     //添加账户信息
     private void saveFinanceAccount(AccountBasicInfo accountBasicInfo, String op, String accountType) {
@@ -158,10 +183,40 @@ public class BusinessAccountService {
             financeAccountRepository.saveAndFlush(financeAccount);
         }
 
-        //r如果是修改了业务类型，需要修改账户的业务类型
+        //如果是修改了业务类型，需要修改账户的业务类型
         if ("edit".equals(op) && !accountType.equals(accountBasicInfo.getBusinessType())) {
             financeAccountRepository.updateAccountTypeByAccountId(accountBasicInfo.getBusinessType(), accountBasicInfo.getAccountId());
         }
     }
 
+    //修改运营商，并且配置了通道，需要删除通道
+    private void deleteConfigChannelByCarrier(AccountBasicInfo entity) {
+        List<AccountChannelInfoQo> list = accountChannelRepository.accountChannelByAccountIdAndCarrier(entity.getAccountId(),entity.getCarrier(),entity.getAccountChannelType());
+        String[] carrierLength = entity.getCarrier().split(",");
+        if(StringUtils.isEmpty(list) || list.size()<carrierLength.length){
+            //设置进度
+            accountProcess(entity,"0");
+        }else{
+            accountProcess(entity,"1");
+        }
+        accountChannelRepository.deleteConfigChannelByCarrier(entity.getAccountId(),entity.getCarrier());
+    }
+
+    //修改了通道方式，删除已经配置得通道
+    private void deleteByAccountId(AccountBasicInfo entity) {
+        accountChannelRepository.deleteByAccountId(entity.getAccountId());
+        //设置进度
+        accountProcess(entity,"0");
+    }
+
+    //设置进度
+    private void accountProcess(AccountBasicInfo entity,String process) {
+        Optional<AccountBasicInfo> optional = businessAccountRepository.findById(entity.getAccountId());
+        if(optional.isPresent()){
+            AccountBasicInfo accountBasicInfo = optional.get();
+            StringBuffer accountProcess = new StringBuffer(accountBasicInfo.getAccountProcess());
+            accountProcess = accountProcess.replace(3, 4, process);
+            entity.setAccountProcess(accountProcess.toString());
+        }
+    }
 }

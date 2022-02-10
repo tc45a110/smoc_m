@@ -106,7 +106,7 @@
                                                                       th:target="tab-content"><i class="mdi mdi-star"
                                                                                                  style="margin-right:5px;color:#f35864"></i>业务账号过滤参数</a>
                                             <li class="" id="tab5">
-                                                <a onclick="active('5')" id="a5" th:if="${flag eq 'base' or accountChannelType eq '1'}"
+                                                <a onclick="active('5')" id="a5" th:if="${flag eq 'base' or accountChannelType eq 'ACCOUNT_CHANNEL_GROUP'}"
                                                    sec:authorize-url="/account/edit/product/*"
                                                    th:href="@{/account/edit/product/{id}(id=${accountId})}"
                                                    th:target="tab-content"><i class="mdi mdi-star"
@@ -114,7 +114,7 @@
                                                 </a>
                                             </li>
                                             <li class="" id="tab6">
-                                                <a onclick="active('6')" id="a6" th:if="${flag eq 'base' or accountChannelType eq '2'}"
+                                                <a onclick="active('6')" id="a6" th:if="${flag eq 'base' or accountChannelType eq 'ACCOUNT_CHANNEL'}"
                                                    sec:authorize-url="/account/edit/channel/*"
                                                    th:href="@{/account/edit/channel/{id}(id=${accountId})}"
                                                    th:target="tab-content"><i class="mdi mdi-star"
@@ -138,7 +138,7 @@
                                             <li class="" id="tab9">
                                                 <a onclick="active('9')" id="a9"
                                                    sec:authorize-url="/account/view/channel/detail/*"
-                                                   th:href="@{/account/view/channel/detail/accountId}"
+                                                   th:href="@{/account/view/channel/detail/{id}(id=${accountId})}"
                                                    th:target="tab-content">业务账号通道状态
                                                 </a>
                                             </li>
@@ -213,7 +213,7 @@
 
     //页签切换
     function active(tab) {
-        for(var num = 1;num<9;num++){
+        for(var num = 1;num<10;num++){
             $('#tab'+num).removeClass("active");
         }
         $('#tab'+tab).attr("class","active");

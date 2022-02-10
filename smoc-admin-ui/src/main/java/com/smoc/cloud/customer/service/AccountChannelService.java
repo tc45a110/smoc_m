@@ -5,6 +5,7 @@ import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelGroupInfoValidator;
 import com.smoc.cloud.common.smoc.customer.qo.AccountChannelInfoQo;
+import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.AccountChannelInfoValidator;
 import com.smoc.cloud.customer.remote.AccountChannelFeignClient;
 import lombok.extern.slf4j.Slf4j;
@@ -81,9 +82,9 @@ public class AccountChannelService {
      * @param carrier
      * @return
      */
-    public ResponseData<AccountChannelInfoValidator> findByAccountIdAndCarrier(String accountId, String carrier) {
+    public ResponseData<List<AccountChannelInfoValidator>> findByAccountIdAndCarrier(String accountId, String carrier) {
         try {
-            ResponseData data = this.accountChannelFeignClient.findByAccountIdAndCarrier(accountId,carrier);
+            ResponseData<List<AccountChannelInfoValidator>> data = this.accountChannelFeignClient.findByAccountIdAndCarrier(accountId,carrier);
             return data;
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -129,6 +130,55 @@ public class AccountChannelService {
     public ResponseData<List<ChannelGroupInfoValidator>> findChannelGroupList(ChannelGroupInfoValidator channelGroupInfoValidator) {
         try {
             ResponseData<List<ChannelGroupInfoValidator>> list = this.accountChannelFeignClient.findChannelGroupList(channelGroupInfoValidator);
+            return list;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 查询已配置通道组数据
+     * @param accountId
+     * @param carrier
+     * @param channelGroupId
+     * @return
+     */
+    public ResponseData<List<AccountChannelInfoValidator>> findByAccountIdAndCarrierAndChannelGroupId(String accountId, String carrier, String channelGroupId) {
+        try {
+            ResponseData<List<AccountChannelInfoValidator>> list = this.accountChannelFeignClient.findByAccountIdAndCarrierAndChannelGroupId(accountId,carrier,channelGroupId);
+            return list;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 移除已配置通道组
+     * @param accountId
+     * @param carrier
+     * @param channelGroupId
+     * @return
+     */
+    public ResponseData deleteChannelGroup(String accountId, String carrier, String channelGroupId) {
+        try {
+            ResponseData data = this.accountChannelFeignClient.deleteChannelGroup(accountId,carrier,channelGroupId);
+            return data;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 业务账号通道明细
+     * @param accountChannelInfoValidator
+     * @return
+     */
+    public ResponseData<List<AccountChannelInfoValidator>> channelDetail(AccountChannelInfoValidator accountChannelInfoValidator) {
+        try {
+            ResponseData<List<AccountChannelInfoValidator>> list = this.accountChannelFeignClient.channelDetail(accountChannelInfoValidator);
             return list;
         } catch (Exception e) {
             log.error(e.getMessage());

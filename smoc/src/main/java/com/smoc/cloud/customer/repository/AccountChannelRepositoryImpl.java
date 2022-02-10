@@ -5,13 +5,18 @@ import com.smoc.cloud.common.BasePageRepository;
 import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelGroupInfoValidator;
 import com.smoc.cloud.common.smoc.customer.qo.AccountChannelInfoQo;
-import com.smoc.cloud.customer.rowmapper.AccountChannelConfigRowMapper;
-import com.smoc.cloud.customer.rowmapper.AccountChannelGroupInfoRowMapper;
-import com.smoc.cloud.customer.rowmapper.AccountChannelInfoRowMapper;
+import com.smoc.cloud.common.smoc.customer.validator.AccountChannelInfoValidator;
+import com.smoc.cloud.common.utils.UUID;
+import com.smoc.cloud.configure.channel.group.entity.ConfigChannelGroup;
+import com.smoc.cloud.customer.entity.AccountChannelInfo;
+import com.smoc.cloud.customer.rowmapper.*;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,21 +62,17 @@ public class AccountChannelRepositoryImpl extends BasePageRepository {
 
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");
-        sqlBuffer.append("  t.ID");
-        sqlBuffer.append(", t.ACCOUNT_ID");
+        sqlBuffer.append("  t.ACCOUNT_ID");
         sqlBuffer.append(", t.CHANNEL_GROUP_ID");
         sqlBuffer.append(", t.CARRIER");
         sqlBuffer.append(", b.CHANNEL_GROUP_NAME");
         sqlBuffer.append(", b.CHANNEL_GROUP_INTRODUCE");
-        sqlBuffer.append("  from account_channel_info t left join config_channel_group_info b on t.CHANNEL_GROUP_ID=b.CHANNEL_GROUP_ID ");
+        sqlBuffer.append("  from (select a.ACCOUNT_ID,a.CHANNEL_GROUP_ID,a.CARRIER from account_channel_info a where a.ACCOUNT_ID = ? group by a.ACCOUNT_ID,a.CHANNEL_GROUP_ID,a.CARRIER)t ");
+        sqlBuffer.append("  left join config_channel_group_info b on t.CHANNEL_GROUP_ID=b.CHANNEL_GROUP_ID ");
         sqlBuffer.append("  where 1=1 ");
 
         List<Object> paramsList = new ArrayList<Object>();
-
-        if (!StringUtils.isEmpty(accountChannelInfoQo.getAccountId())) {
-            sqlBuffer.append(" and t.ACCOUNT_ID = ?");
-            paramsList.add( accountChannelInfoQo.getAccountId().trim());
-        }
+        paramsList.add( accountChannelInfoQo.getAccountId().trim());
 
         sqlBuffer.append(" order by t.CARRIER ");
 
@@ -79,7 +80,7 @@ public class AccountChannelRepositoryImpl extends BasePageRepository {
         Object[] params = new Object[paramsList.size()];
         paramsList.toArray(params);
 
-        List<AccountChannelInfoQo> list = this.queryForObjectList(sqlBuffer.toString(), params,  new AccountChannelConfigRowMapper());
+        List<AccountChannelInfoQo> list = this.queryForObjectList(sqlBuffer.toString(), params,  new AccountChannelGroupConfigRowMapper());
         return list;
 
     }
@@ -165,16 +166,16 @@ public class AccountChannelRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", t.CHANNEL_GROUP_INTRODUCE ");
         sqlBuffer.append(", IFNULL(a.CHANNEL_NUM,0)CHANNEL_NUM ");
         sqlBuffer.append("  from config_channel_group_info t ");
-        sqlBuffer.append("  left join (select t.id,t.CHANNEL_GROUP_ID from account_channel_info t where t.ACCOUNT_ID=? and t.CARRIER=? )g ON t.CHANNEL_GROUP_ID = g.CHANNEL_GROUP_ID");
+        sqlBuffer.append("  left join (select t.CHANNEL_GROUP_ID from account_channel_info t where t.ACCOUNT_ID=? and t.CARRIER=? group by t.CHANNEL_GROUP_ID)g ON t.CHANNEL_GROUP_ID = g.CHANNEL_GROUP_ID");
         sqlBuffer.append("  left join (select t.CHANNEL_GROUP_ID,count(t.ID)CHANNEL_NUM from config_channel_group t group by t.CHANNEL_GROUP_ID)a  on t.CHANNEL_GROUP_ID=a.CHANNEL_GROUP_ID ");
-        sqlBuffer.append("  where g.ID is null ");
+        sqlBuffer.append("  where g.CHANNEL_GROUP_ID is null and IFNULL(a.CHANNEL_NUM,0)>0 ");
 
         List<Object> paramsList = new ArrayList<Object>();
 
         paramsList.add( qo.getAccountId());
         paramsList.add( qo.getCarrier());
         if (!StringUtils.isEmpty(qo.getChannelGroupName())) {
-            sqlBuffer.append(" and t.CHANNEL_NAME like ?");
+            sqlBuffer.append(" and t.CHANNEL_GROUP_NAME like ?");
             paramsList.add( "%"+qo.getChannelGroupName().trim()+"%");
         }
 
@@ -211,4 +212,116 @@ public class AccountChannelRepositoryImpl extends BasePageRepository {
 
     }
 
+    public void batchSave(AccountChannelInfo entity, List<ConfigChannelGroup> list) {
+
+        final String sql = "insert into account_channel_info(ID,ACCOUNT_ID,CONFIG_TYPE,CARRIER,CHANNEL_GROUP_ID,CHANNEL_ID,CHANNEL_PRIORITY,CHANNEL_WEIGHT,CHANNEL_SOURCE,CHANNEL_STATUS,CREATED_BY,CREATED_TIME) " +
+                " values(?,?,?,?,?,?,?,?,?,?,?,now()) ";
+
+        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+            public int getBatchSize() {
+                return list.size();
+            }
+
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                ConfigChannelGroup qo = list.get(i);
+                ps.setString(1, UUID.uuid32());
+                ps.setString(2, entity.getAccountId());
+                ps.setString(3, entity.getConfigType());
+                ps.setString(4, entity.getCarrier());
+                ps.setString(5, entity.getChannelGroupId());
+                ps.setString(6, qo.getChannelId());
+                ps.setString(7, entity.getChannelPriority());
+                ps.setInt(8, qo.getChannelWeight());
+                ps.setString(9, entity.getChannelSource());
+                ps.setString(10, entity.getChannelStatus());
+                ps.setString(11, entity.getCreatedBy());
+            }
+
+        });
+    }
+
+    public void deleteConfigChannelByCarrier(String accountId, String carrier) {
+        String[] carriers = carrier.split(",");
+
+        StringBuilder sql = new StringBuilder("delete from account_channel_info where ACCOUNT_ID = '"+accountId+"' ");
+        for(int i=0;i<carriers.length;i++){
+            sql.append("and  CARRIER !='"+carriers[i]+"' ");
+        }
+        jdbcTemplate.execute(sql.toString());
+    }
+
+    public List<AccountChannelInfoQo> accountChannelByAccountIdAndCarrier(String accountId, String carrier, String accountChannelType) {
+
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append("  ''ID");
+        sqlBuffer.append(", t.ACCOUNT_ID");
+        sqlBuffer.append(", ''CHANNEL_ID");
+        sqlBuffer.append(", t.CARRIER");
+        sqlBuffer.append(", '' CHANNEL_NAME");
+        sqlBuffer.append(", ''PROTOCOL");
+        sqlBuffer.append(", ''CHANNEL_INTRODUCE");
+        sqlBuffer.append("  from account_channel_info t  where t.ACCOUNT_ID = ? ");
+
+        List<Object> paramsList = new ArrayList<Object>();
+        paramsList.add( accountId.trim());
+
+        String[] carriers = carrier.split(",");
+        sqlBuffer.append(" and (");
+        for(int i=0;i<carriers.length;i++){
+            if(i==0){
+                sqlBuffer.append(" t.CARRIER ='"+carriers[i]+"' ");
+            }else{
+                sqlBuffer.append(" or  t.CARRIER ='"+carriers[i]+"'");
+            }
+        }
+        sqlBuffer.append(") ");
+        if("ACCOUNT_CHANNEL_GROUP".equals(accountChannelType)){
+            sqlBuffer.append(" group by t.ACCOUNT_ID,t.CARRIER");
+        }
+
+        //根据参数个数，组织参数值
+        Object[] params = new Object[paramsList.size()];
+        paramsList.toArray(params);
+
+        List<AccountChannelInfoQo> list = this.queryForObjectList(sqlBuffer.toString(), params,  new AccountChannelConfigRowMapper());
+        return list;
+
+    }
+
+    public List<AccountChannelInfoValidator> channelDetail(AccountChannelInfoValidator qo) {
+
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append("  t.ID");
+        sqlBuffer.append(", t.CONFIG_TYPE");
+        sqlBuffer.append(", t.CARRIER");
+        sqlBuffer.append(", t.CHANNEL_ID");
+        sqlBuffer.append(", t.CHANNEL_PRIORITY");
+        sqlBuffer.append(", t.CHANNEL_WEIGHT");
+        sqlBuffer.append(", t.CHANNEL_SOURCE");
+        sqlBuffer.append(", t.CHANGE_SOURCE");
+        sqlBuffer.append(", t.CHANNEL_STATUS");
+        sqlBuffer.append(", t.CREATED_BY");
+        sqlBuffer.append(", b.CHANNEL_NAME");
+        sqlBuffer.append(", DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME");
+        sqlBuffer.append("  from account_channel_info t left join config_channel_basic_info b on t.CHANNEL_ID = b.CHANNEL_ID where 1=1 ");
+
+        List<Object> paramsList = new ArrayList<Object>();
+
+        if (!StringUtils.isEmpty(qo.getAccountId())) {
+            sqlBuffer.append(" and t.ACCOUNT_ID = ?");
+            paramsList.add(qo.getAccountId().trim());
+        }
+
+        sqlBuffer.append(" order by t.CARRIER ");
+
+        //根据参数个数，组织参数值
+        Object[] params = new Object[paramsList.size()];
+        paramsList.toArray(params);
+
+        List<AccountChannelInfoValidator> list = this.queryForObjectList(sqlBuffer.toString(), params,  new AccountChannelDetailRowMapper());
+        return list;
+
+    }
 }

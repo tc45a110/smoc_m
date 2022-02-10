@@ -15,9 +15,8 @@ public class AccountChannelGroupConfigRowMapper implements RowMapper<AccountChan
     public AccountChannelInfoQo mapRow(ResultSet resultSet, int i) throws SQLException {
 
         AccountChannelInfoQo qo = new AccountChannelInfoQo();
-        qo.setId(resultSet.getString("ID"));
         qo.setAccountId(resultSet.getString("ACCOUNT_ID"));
-        qo.setChannelId(resultSet.getString("CHANNEL_GROUP_ID"));
+        qo.setChannelGroupId(resultSet.getString("CHANNEL_GROUP_ID"));
         qo.setCarrier(resultSet.getString("CARRIER"));
         qo.setChannelName(resultSet.getString("CHANNEL_GROUP_NAME"));
         qo.setChannelIntroduce(resultSet.getString("CHANNEL_GROUP_INTRODUCE"));

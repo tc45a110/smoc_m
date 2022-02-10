@@ -293,9 +293,9 @@
                                        placeholder="默认 10，总共100">
                             </div>
                             <div class="text-right">
-                                <input type="hidden" id="carrier" name="carrier" th:value="${carrier}">
-                                <input type="hidden" id="accountId" name="accountId" th:value="${accountId}">
-                                <input type="hidden" id="channelId" name="channelId" th:value="${channelId}">
+                                <input type="hidden" id="carrier" name="carrier" th:value="${accountChannelInfoValidator.carrier}">
+                                <input type="hidden" id="accountId" name="accountId" th:value="${accountChannelInfoValidator.accountId}">
+                                <input type="hidden" id="channelId" name="channelId" th:value="${accountChannelInfoValidator.channelId}">
                                 <a class="btn btn-default waves-effect" data-dismiss="modal">取消</a>
                                 <button sec:authorize-url="/account/channel/save"
                                         class="btn btn-primary waves-effect waves-light">确认添加

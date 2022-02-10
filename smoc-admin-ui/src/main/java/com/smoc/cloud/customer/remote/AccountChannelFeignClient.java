@@ -4,6 +4,7 @@ import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelGroupInfoValidator;
 import com.smoc.cloud.common.smoc.customer.qo.AccountChannelInfoQo;
+import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.AccountChannelInfoValidator;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -55,7 +56,7 @@ public interface AccountChannelFeignClient {
      * @return
      */
     @RequestMapping(value = "/account/channel/findByAccountIdAndCarrier/{accountId}/{carrier}", method = RequestMethod.GET)
-    ResponseData findByAccountIdAndCarrier(@PathVariable String accountId, @PathVariable String carrier) throws Exception;
+    ResponseData<List<AccountChannelInfoValidator>> findByAccountIdAndCarrier(@PathVariable String accountId, @PathVariable String carrier) throws Exception;
 
     /**
      * 根据id获取信息
@@ -78,6 +79,34 @@ public interface AccountChannelFeignClient {
      * @param channelGroupInfoValidator
      * @return
      */
-    @RequestMapping(value = "/account/channel/findChannelGroupList", method = RequestMethod.POST)
+    @RequestMapping(value = "/account/channelGroup/findChannelGroupList", method = RequestMethod.POST)
     ResponseData<List<ChannelGroupInfoValidator>> findChannelGroupList(@RequestBody ChannelGroupInfoValidator channelGroupInfoValidator) throws Exception;
+
+    /**
+     * 查询已配置通道组数据
+     * @param accountId
+     * @param carrier
+     * @param channelGroupId
+     * @return
+     */
+    @RequestMapping(value = "/account/channelGroup/findByAccountIdAndCarrierAndChannelGroupId/{accountId}/{carrier}/{channelGroupId}", method = RequestMethod.GET)
+    ResponseData<List<AccountChannelInfoValidator>> findByAccountIdAndCarrierAndChannelGroupId(@PathVariable String accountId, @PathVariable String carrier, @PathVariable String channelGroupId) throws Exception;
+
+    /**
+     * 移除已配置通道组
+     * @param accountId
+     * @param carrier
+     * @param channelGroupId
+     * @return
+     */
+    @RequestMapping(value = "/account/channelGroup/deleteChannelGroup/{accountId}/{carrier}/{channelGroupId}", method = RequestMethod.GET)
+    ResponseData deleteChannelGroup(@PathVariable String accountId, @PathVariable String carrier, @PathVariable String channelGroupId) throws Exception;
+
+    /**
+     * 业务账号通道明细
+     * @param accountChannelInfoValidator
+     * @return
+     */
+    @RequestMapping(value = "/account/channel/channelDetail", method = RequestMethod.POST)
+    ResponseData<List<AccountChannelInfoValidator>> channelDetail(@RequestBody AccountChannelInfoValidator accountChannelInfoValidator);
 }

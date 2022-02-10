@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -237,10 +238,21 @@ public class AccountController {
 
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
 
+        String[] carriers= accountBasicInfoValidator.getCarrier().split(",");
+        if(carriers.length==1 && StringUtils.isEmpty(accountBasicInfoValidator.getTransferType())){
+            FieldError err = new FieldError("是否支持携号转网", "transferType", "是否支持携号转网不能为空");
+            result.addError(err);
+        }
+
         //完成参数规则验证
         if (result.hasErrors()) {
             view.addObject("accountBasicInfoValidator", accountBasicInfoValidator);
             view.addObject("op", op);
+            ResponseData<EnterpriseBasicInfoValidator> data = enterpriseService.findById(accountBasicInfoValidator.getEnterpriseId());
+            if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+                view.addObject("error", data.getCode() + ":" + data.getMessage());
+            }
+            view.addObject("enterpriseBasicInfoValidator", data.getData());
             return view;
         }
 
@@ -336,17 +348,6 @@ public class AccountController {
 
     }
 
-    /**
-     * EC业务账号通道明细
-     *
-     * @return
-     */
-    @RequestMapping(value = "/view/channel/detail/{accountId}", method = RequestMethod.GET)
-    public ModelAndView account_channel(@PathVariable String accountId, HttpServletRequest request) {
-        ModelAndView view = new ModelAndView("customer/account/account_view_channel_detail");
 
-        return view;
-
-    }
 
 }

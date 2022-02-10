@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <th:block th:insert="fragments/common_fragments :: common_header"/>
@@ -19,54 +20,70 @@
     <div class="container" style="padding-left:0px">
 
         <!-- start row 页面内容-->
-        <div class="row">
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-xs-12">
                 <div class="mails">
                     <div class="table-box">
                         <div class="table-detail" style="width: 360px;">
-                                <div class="col-lg-12">
-                                    <div class="panel panel-color panel-teal">
-                                        <div class="panel-heading">
-                                            <h3 class="panel-title">业务账号通道组</h3>
-                                        </div>
-                                        <div class="panel-body">
-                                            <div class="col-md-12"  th:each="info :${channelMap}">
-                                                <div th:class="${info.value !=null ?'card-box widget-box-two widget-two-info':'card-box widget-box-two widget-two-pink'}">
-                                                    <div class="wigdet-two-content text-white">
-                                                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow">
-                                                           [[${info.value!=null?info.value.channelName:'未配置通道组'}]]
-                                                        </p>
-                                                        <p class="m-0"><b>运营商：
-                                                            <mpm:tag identity="carrier" show-type="label" key="code"
-                                                                     th:value="${info.key}"/>
-                                                        </b></p>
-                                                        <p class="text-white"><b>业务类型：
-                                                            <mpm:tag identity="businessType" show-type="label" key="code"
-                                                                     th:value="${accountBasicInfoValidator.businessType}"/></b> </p>
-                                                        <p class="m-0"><b>信息分类：
-                                                            <mpm:tag identity="infoType" show-type="label" key="code"
-                                                                     th:value="${accountBasicInfoValidator.infoType}"/></b>
-                                                            <a data-toggle="tooltip" data-placement="bottom" title=""
-                                                               th:data-original-title="${info.value.channelIntroduce}"
-                                                               th:if="${info.value !=null}">
-                                                                <i class="mdi mdi-checkbox-multiple-blank-outline"
-                                                                   style="font-size:16px;color:#fff;;margin-left:10px"></i>
-                                                            </a>
-                                                            <a sec:authorize-url="/account/channel/findChannelGroupList/*/*"
-                                                               th:href="@{/account/channel/findChannelGroupList/{accountId}/{carrier}(accountId=${accountBasicInfoValidator.accountId},carrier=${info.key})}"
-                                                               data-toggle="tooltip" data-placement="left"
-                                                               data-original-title="点击检索右侧通道组" class="pull-right">
-                                                                <i class="mdi mdi-link-variant"
-                                                                   style="font-size:16px;color:#fff;"></i>
-                                                            </a>
-                                                        </p>
-                                                    </div>
+                            <div class="col-lg-12">
+                                <div class="panel panel-color panel-teal">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">业务账号通道组</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="col-md-12" th:each="info :${channelMap}">
+                                            <div th:class="${info.value !=null ?'card-box widget-box-two widget-two-info':'card-box widget-box-two widget-two-pink'}">
+                                                <div class="wigdet-two-content text-white">
+                                                    <p class="m-0 text-uppercase font-600 font-secondary text-overflow">
+                                                        [[${info.value!=null?info.value.channelName:'未配置通道组'}]]
+                                                        <a sec:authorize-url="/account/channelGroup/deleteChannelGroup/*/*/*"
+                                                           data-toggle="modal" data-target="#confirm-delete-modal"
+                                                           title="移除该已选中产品" th:if="${info.value !=null}"
+                                                           th:onclick="deleteChannelGroup([[${info.value.accountId}]],[[${info.value.carrier}]],[[${info.value.channelGroupId}]])"
+                                                           class="pull-right">
+                                                            <i class="glyphicon glyphicon-remove"
+                                                               style="font-size:16px;color:#fff;"></i>
+                                                        </a>
+                                                    </p>
+                                                    <p class="m-0"><b>运营商：
+                                                        <mpm:tag identity="carrier" show-type="label" key="code"
+                                                                 th:value="${info.key}"/>
+                                                    </b></p>
+                                                    <p class="text-white"><b>业务类型：
+                                                        <mpm:tag identity="businessType" show-type="label" key="code"
+                                                                 th:value="${accountBasicInfoValidator.businessType}"/>
+                                                    </b></p>
+                                                    <p class="m-0"><b>信息分类：
+                                                        <mpm:tag identity="infoType" show-type="label" key="code"
+                                                                 th:value="${accountBasicInfoValidator.infoType}"/>
+                                                    </b>
+                                                        <a data-toggle="tooltip" data-placement="bottom" title=""
+                                                           th:data-original-title="${info.value.channelIntroduce}"
+                                                           th:if="${info.value !=null}">
+                                                            <i class="mdi mdi-checkbox-multiple-blank-outline"
+                                                               style="font-size:16px;color:#fff;;margin-left:10px"></i>
+                                                        </a>
+                                                        <i data-toggle="tooltip" data-placement="bottom"
+                                                           th:if="${info.value !=null}"
+                                                           th:id="'tooltip'+${info.value.channelGroupId}"
+                                                           th:onmouseover="channelGroupTip([[${info.value.channelGroupId}]])"
+                                                           class="mdi mdi-comment-text"
+                                                           style="margin-left:5px"></i>
+                                                        <a sec:authorize-url="/account/channelGroup/channelGroupList/*/*"
+                                                           th:href="@{/account/channelGroup/channelGroupList/{accountId}/{carrier}(accountId=${accountBasicInfoValidator.accountId},carrier=${info.key})}"
+                                                           data-toggle="tooltip" data-placement="left"
+                                                           data-original-title="点击检索右侧通道组" class="pull-right">
+                                                            <i class="mdi mdi-link-variant"
+                                                               style="font-size:16px;color:#fff;"></i>
+                                                        </a>
+                                                    </p>
                                                 </div>
                                             </div>
-
                                         </div>
+
                                     </div>
                                 </div>
+                            </div>
 
                         </div>
 
@@ -80,7 +97,9 @@
                                         <div class="row">
                                             <div class="col-sm-12">
                                                 <div class="card-box">
-                                                    <form th:object="${channelGroupInfoValidator}" id="query_form"  method="post">
+                                                    <form id="query_form" th:object="${channelGroupInfoValidator}"
+                                                          th:action="@{/account/channelGroup/channelGroupPage}"
+                                                          method="post">
                                                         <div class="row m-b-60">
                                                             <div class="col-sm-12">
                                                                 <div class="form-group  col-sm-4">
@@ -102,14 +121,21 @@
                                                                              th:value="${channelGroupInfoValidator.infoType}"/>
                                                                 </div>
                                                                 <div class="form-group  col-sm-4">
-                                                                    <input type="text" class="form-control" th:field="*{channelGroupName}"
+                                                                    <input type="text" class="form-control"
+                                                                           th:field="*{channelGroupName}"
                                                                            placeholder="通道组名称" autocomplete="off">
                                                                 </div>
-                                                                <div class="form-group col-sm-4 pull-right" style="text-align: right">
-                                                                    <a
+                                                                <div class="form-group col-sm-4 pull-right"
+                                                                     style="text-align: right">
+                                                                    <input type="hidden" th:field="*{accountId}">
+                                                                    <input type="hidden" th:field="*{carrier}">
+                                                                    <input type="hidden" th:field="*{businessType}">
+                                                                    <input type="hidden" th:field="*{infoType}">
+                                                                    <button sec:authorize-url="/account/channelGroup/channelGroupPage"
                                                                             class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
-                                                                        <i class="glyphicon glyphicon-search" style="margin-right:5px"></i> 查询
-                                                                    </a>
+                                                                        <i class="glyphicon glyphicon-search"
+                                                                           style="margin-right:5px"></i> 查询
+                                                                    </button>
                                                                 </div>
 
                                                             </div>
@@ -130,8 +156,13 @@
                                                                         <h5 style="padding-left:10px">
                                                                             通道组名称：[[${info.channelGroupName}]]
                                                                             <div class="pull-right">
-                                                                                <a data-toggle="modal" data-target="#confirm-add-modal" title="添加该通道组到通道账户">
-                                                                                    <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px;font-size:16px;color:#0095a8"></i></a>
+                                                                                <a data-toggle="modal"
+                                                                                   data-target="#confirm-add-modal"
+                                                                                   title="添加该通道组到通道账户"
+                                                                                   sec:authorize-url="/account/channelGroup/save"
+                                                                                   th:onclick="openChannelGroup([[${accountChannelInfoValidator.carrier}]],[[${info.channelGroupId}]])">
+                                                                                    <i class="glyphicon glyphicon-plus-sign"
+                                                                                       style="margin-right:5px;font-size:16px;color:#0095a8"></i></a>
                                                                             </div>
                                                                         </h5>
                                                                     </div>
@@ -148,7 +179,8 @@
                                                                                th:id="'tooltip'+${info.channelGroupId}"
                                                                                th:onmouseover="channelGroupTip([[${info.channelGroupId}]])"
                                                                                th:if="${info.channelNum ne 0}"
-                                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                                                               class="mdi mdi-comment-text"
+                                                                               style="margin-left:5px"></i>
 
                                                                     </div>
                                                                     <div class="col-sm-6">
@@ -159,7 +191,8 @@
                                                                         </p>
                                                                         <p style="font-size:12px">屏蔽省份：
                                                                             <span th:if="${#strings.isEmpty(info.maskProvince)}">无</span>
-                                                                            <i data-toggle="tooltip" data-placement="right" title=""
+                                                                            <i data-toggle="tooltip"
+                                                                               data-placement="right" title=""
                                                                                data-original-title="屏蔽省份，如果存在屏蔽省份的话"
                                                                                class="mdi mdi-comment-text-outline"
                                                                                th:if="${not #strings.isEmpty(info.maskProvince)}"
@@ -200,8 +233,14 @@
 
             </div>
         </div>
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
         <!-- start confirm delete modal  -->
-        <div id="confirm-delete-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="custom-width-modalLabel"
+        <div id="confirm-delete-modal" class="modal fade" tabindex="-1" role="dialog"
+             aria-labelledby="custom-width-modalLabel"
              aria-hidden="true" style="display: none;margin: 60px;margin-top:200px">
             <div class="modal-dialog" style="width:33%;">
                 <div class="modal-content">
@@ -216,36 +255,49 @@
                     </div>
                     <div class="modal-footer">
                         <input type="hidden" id="deleteId">
+                        <input type="hidden" id="deleteCarrier">
+                        <input type="hidden" id="deleteChannelGroupId">
                         <a class="btn btn-default waves-effect" data-dismiss="modal">取消</a>
-                        <button onclick="deleteById()" class="btn btn-primary waves-effect waves-light">确认移除</button>
+                        <button sec:authorize-url="/account/channelGroup/deleteChannelGroup/*/*/*" onclick="deleteById()"
+                                class="btn btn-primary waves-effect waves-light">确认移除</button>
                     </div>
                 </div>
             </div>
         </div>
         <!-- end confirm delete modal  -->
+
         <!-- start confirm delete modal  -->
-        <div id="confirm-add-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="custom-width-modalLabel"
+        <div id="confirm-add-modal" class="modal fade" tabindex="-1" role="dialog"
+             aria-labelledby="custom-width-modalLabel"
              aria-hidden="true" style="display: none;margin: 60px;margin-top:200px">
             <div class="modal-dialog" style="width:33%;">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 class="modal-title">确认添加该通道组到业务账号</h4>
-                    </div>
-                    <div class="modal-body">
+                <form th:action="@{/account/channelGroup/save}" id="submit_form"
+                      th:object="${accountChannelInfoValidator}"
+                      method="post" data-parsley-validate="">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h4 class="modal-title">确认添加该通道组到业务账号</h4>
+                        </div>
+                        <div class="modal-body">
 
-                        <p>确认添加该通道组到该业务账号！确认添加？</p>
+                            <p>确认添加该通道组到该业务账号！确认添加？</p>
 
+                        </div>
+                        <div class="modal-footer">
+                            <input type="hidden" id="carrier" name="carrier" th:value="${accountChannelInfoValidator.carrier}">
+                            <input type="hidden" id="accountId" name="accountId" th:value="${accountChannelInfoValidator.accountId}">
+                            <input type="hidden" id="channelGroupId" name="channelGroupId" th:value="${accountChannelInfoValidator.channelGroupId}">
+                            <a class="btn btn-default waves-effect" data-dismiss="modal">取消</a>
+                            <button sec:authorize-url="/account/channelGroup/save" class="btn btn-primary waves-effect waves-light">确认添加
+                            </button>
+                        </div>
                     </div>
-                    <div class="modal-footer">
-                        <input type="hidden" id="addId">
-                        <a class="btn btn-default waves-effect" data-dismiss="modal">取消</a>
-                        <button onclick="deleteById()" class="btn btn-primary waves-effect waves-light">确认添加</button>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
         <!-- end confirm delete modal  -->
+
     </div> <!-- container -->
 </div> <!-- content -->
 <th:block th:insert="fragments/common_fragments :: common_js"/>
@@ -254,6 +306,26 @@
 <!-- Tooltipster js -->
 <script th:src="@{/static/plugins/tooltipster/tooltipster.bundle.min.js}"></script>
 <script>
+
+    //打开选择通道组
+    function openChannelGroup(carrier, channelGroupId) {
+        $("#carrier").val(carrier);
+        $("#channelGroupId").val(channelGroupId);
+    }
+
+    //打开删除通道组
+    function deleteChannelGroup(id,carrier,channelGroupId) {
+        $("#deleteId").val(id);
+        $("#deleteCarrier").val(carrier);
+        $("#deleteChannelGroupId").val(channelGroupId);
+    }
+
+    function deleteById() {
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $('#preloader').css('display', 'block');
+        location.href = contextPath + '/account/channelGroup/deleteChannelGroup/' + $("#deleteId").val()+'/'+ $("#deleteCarrier").val()+'/'+ $("#deleteChannelGroupId").val();
+    }
+
 
     //查看屏蔽省份
     function maskProvince(channelGroupId) {
@@ -290,7 +362,7 @@
                 $('#tooltip' + channelGroupId).tooltipster({
                     content: $('<p style="text-align:left;"><strong>通道组通道配置</strong><br>' + channelName + '</p>'),
                     maxWidth: 600,
-                    position: 'right',
+                    position: 'bottom',
                 });
             }
         });

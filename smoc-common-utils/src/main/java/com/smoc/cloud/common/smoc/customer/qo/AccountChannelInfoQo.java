@@ -11,6 +11,7 @@ public class AccountChannelInfoQo {
 
     private String id;
     private String channelId;
+    private String channelGroupId;
     private String accountId;
     private String carrier;
     private String channelName;
