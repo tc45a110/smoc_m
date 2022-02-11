@@ -4,8 +4,8 @@ package com.smoc.cloud.customer.controller;
 import com.alibaba.fastjson.JSON;
 import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
-import com.smoc.cloud.common.page.PageList;
-import com.smoc.cloud.common.page.PageParams;
+import com.smoc.cloud.common.auth.qo.Dict;
+import com.smoc.cloud.common.auth.qo.DictType;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
@@ -20,15 +20,13 @@ import com.smoc.cloud.customer.service.AccountChannelService;
 import com.smoc.cloud.customer.service.BusinessAccountService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
@@ -38,7 +36,7 @@ import java.util.Map;
  * EC业务账号通道管理
  */
 @Slf4j
-@Controller
+@RestController
 @RequestMapping("/account")
 public class AccountChannelController {
 
@@ -610,5 +608,67 @@ public class AccountChannelController {
         view.addObject("accountChannelInfoValidator", accountChannelInfoValidator);
         view.addObject("list", data.getData());
         return view;
+    }
+
+    /**
+     * 查看已配置通道数
+     *
+     * @return
+     */
+    @RequestMapping(value = "/channel/configChannelNum/{accountId}", produces = "text/html;charset=utf-8", method = RequestMethod.GET)
+    public String configChannelNum(@PathVariable String accountId, HttpServletRequest request) {
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(accountId);
+        if (!MpmValidatorUtil.validate(validator)) {
+            return MpmValidatorUtil.validateMessage(validator);
+        }
+
+        //查询业务账号
+        ResponseData<AccountBasicInfoValidator> base = businessAccountService.findById(accountId);
+        if (!ResponseCode.SUCCESS.getCode().equals(base.getCode())) {
+            return "业务账号不存在";
+        }
+
+        //查询已配置的通道
+        AccountChannelInfoValidator accountChannelInfoValidator = new AccountChannelInfoValidator();
+        accountChannelInfoValidator.setConfigType(base.getData().getAccountChannelType());
+        accountChannelInfoValidator.setAccountId(base.getData().getAccountId());
+        ResponseData<List<AccountChannelInfoValidator>> data = accountChannelService.channelDetail(accountChannelInfoValidator);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            return data.getMessage();
+        }
+
+        List<AccountChannelInfoValidator> list = data.getData();
+        if (StringUtils.isEmpty(list) || list.size() <= 0) {
+            return "无配置通道";
+        }
+
+        //取字典数据
+        ServletContext context = request.getServletContext();
+        Map<String, DictType> dictMap = (Map<String, DictType>) context.getAttribute("dict");
+        DictType dictType  = dictMap.get("carrier");
+        List<Dict> dictList = dictType.getDict();
+
+        //封装已配置的通道数据
+        StringBuilder configChannelName = new StringBuilder();
+        for (int a = 0; a < list.size(); a++) {
+            AccountChannelInfoValidator qo = list.get(a);
+            String carrier = "";
+            for (int i =0;i<dictList.size();i++) {
+                Dict dict = dictList.get(i);
+                if (qo.getCarrier().equals(dict.getFieldCode())) {
+                    carrier += dict.getFieldName();
+                    break;
+                }
+            }
+            configChannelName.append(carrier+"："+qo.getChannelName() + "，权重 " + qo.getChannelWeight() + "；");
+            if (a != list.size()-1) {
+                configChannelName.append("@");
+            }
+        }
+
+        return configChannelName.toString();
     }
 }

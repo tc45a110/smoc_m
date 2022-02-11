@@ -41,7 +41,7 @@
                                     <th>应用状态</th>
                                     <th>配置时间</th>
                                     <th>配置人</th>
-                                    <th>操作</th>
+                                    <!--<th>操作</th>-->
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -58,22 +58,22 @@
                                     <td>[[${info.channelWeight}]]</td>
                                     <td>
                                         <mpm:tag identity="accountChannelPriority" show-type="button" key="code" th:value="${info.channelPriority}"
-                                                 class="1,btn btn-info btn-rounded btn-sm waves-effect waves-light;"/>
+                                                 class="1,btn btn-info btn-rounded btn-sm waves-effect waves-light;2,btn btn-success btn-rounded btn-sm waves-effect waves-light;3,btn btn-danger btn-rounded btn-sm waves-effect waves-light;"/>
                                     </td>
                                     <td><mpm:tag identity="channelConfigSource" show-type="label" key="code" th:value="${info.channelSource}"/></td>
                                     <td><mpm:tag identity="accountChannelChangeType" show-type="label" key="code" th:value="${info.changeSource}"/></td>
                                     <td>
-                                        <a class="btn btn-teal btn-rounded btn-sm waves-effect waves-light" th:if="${info.channelStatus eq '1'}">生效中</a>
-                                        <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light" th:if="${info.channelStatus eq '0'}">已失效</a>
+                                        <mpm:tag identity="accountChannelStatus" show-type="button" key="code" th:value="${info.channelPriority}"
+                                                 class="1,btn btn-teal btn-rounded btn-sm waves-effect waves-light;2,btn btn-danger btn-rounded btn-sm waves-effect waves-light;"/>
                                     </td>
                                     <td>[[${info.createdTimeStr}]]</td>
                                     <td>[[${info.createdBy}]]</td>
-                                    <td>
+                                    <!--<td>
                                         <a  data-toggle="modal"  data-target="#confirm-modal" class="on-default remove-row"
                                             style="padding-left: 5px;color: #f05050" title="本业务账号暂停该通道"
                                             th:if="${info.channelStatus eq '1'}"
                                         ><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
-                                    </td>
+                                    </td>-->
                                 </tr>
                                 </tbody>
                             </table>
@@ -91,7 +91,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 class="modal-title" id="custom-width-modalLabel">确认暂定</h4>
+                        <h4 class="modal-title" id="custom-width-modalLabel">确认暂停</h4>
                     </div>
                     <div class="modal-body">
 

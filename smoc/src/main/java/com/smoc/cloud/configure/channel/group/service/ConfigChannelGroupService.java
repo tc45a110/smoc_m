@@ -7,9 +7,13 @@ import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
 import com.smoc.cloud.common.smoc.configuate.qo.ConfigChannelGroupQo;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelGroupConfigValidator;
+import com.smoc.cloud.common.smoc.customer.qo.AccountChannelInfoQo;
+import com.smoc.cloud.common.smoc.customer.validator.AccountChannelInfoValidator;
 import com.smoc.cloud.configure.channel.group.entity.ConfigChannelGroup;
+import com.smoc.cloud.configure.channel.group.entity.ConfigChannelGroupInfo;
 import com.smoc.cloud.configure.channel.group.repository.ChannelGroupRepository;
 import com.smoc.cloud.configure.channel.group.repository.ConfigChannelGroupRepository;
+import com.smoc.cloud.customer.repository.AccountChannelRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -36,6 +40,9 @@ public class ConfigChannelGroupService {
 
     @Resource
     private ChannelGroupRepository channelGroupRepository;
+
+    @Resource
+    private AccountChannelRepository accountChannelRepository;
 
     /**
      * 根据id获取信息
@@ -87,12 +94,33 @@ public class ConfigChannelGroupService {
             return ResponseDataUtil.buildError();
         }
 
+        //设置通道组进度
+        channelGroupRepository.updateChannelGroupProcessByChannelGroupId(entity.getChannelGroupId(),"11");
+
+        if("add".equals(op)){
+            //查询哪些业务账号在使用该通道组，需要把新的通道添加到业务账号里的通道组里
+            ConfigChannelGroupInfo configChannelGroupInfo = channelGroupRepository.findById(entity.getChannelGroupId()).get();
+            List<AccountChannelInfoQo> list = accountChannelRepository.findAccountChannelGroupByChannelGroupIdAndCarrierAndAccountId(configChannelGroupInfo.getChannelGroupId(),configChannelGroupInfo.getCarrier());
+            if(!StringUtils.isEmpty(list) && list.size()>0){
+                //批量添加通道到业务账号里
+                accountChannelRepository.batchSaveAccountChannel(list,entity);
+                log.info("[通道组管理][通道组配置][{}][给业务账号里的通道组添加通道]数据:{}",op,JSON.toJSONString(entity));
+            }
+        }
+
+        if("edit".equals(op)){
+            //如果修改了权重，需要把业务账号通道组里的通道权重修改
+            Optional<ConfigChannelGroup> data = channelGroupConfigRepository.findById(channelGroupConfigValidator.getId());
+            if(channelGroupConfigValidator.getChannelWeight()!=data.get().getChannelWeight()){
+                accountChannelRepository.updateAccountChannelWeight(entity.getChannelGroupId(),entity.getChannelId(),entity.getChannelWeight());
+                log.info("[通道组管理][通道组配置][{}][给业务账号里的通道组里的通道修改权重]数据:{}",op,JSON.toJSONString(entity));
+            }
+
+        }
+
         //记录日志
         log.info("[通道组管理][通道组配置][{}]数据:{}",op,JSON.toJSONString(entity));
         channelGroupConfigRepository.saveAndFlush(entity);
-
-        //设置通道组进度
-        channelGroupRepository.updateChannelGroupProcessByChannelGroupId(entity.getChannelGroupId(),"11");
 
         return ResponseDataUtil.buildSuccess();
     }
@@ -117,6 +145,9 @@ public class ConfigChannelGroupService {
             channelGroupRepository.updateChannelGroupProcessByChannelGroupId(data.getChannelGroupId(),"10");
         }
 
+        //移除通道的时候，需要把通道从业务账号通道组里也移除
+        accountChannelRepository.deleteByChannelGroupIdAndChannelId(data.getChannelGroupId(),data.getChannelId());
+        log.info("[通道组管理][通道组配置][delete][删除业务账号里的通道组里的通道]数据:{}",JSON.toJSONString(data));
 
         return ResponseDataUtil.buildSuccess();
     }

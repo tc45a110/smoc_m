@@ -10,8 +10,10 @@ import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelGroupInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
+import com.smoc.cloud.configure.channel.group.entity.ConfigChannelGroup;
 import com.smoc.cloud.configure.channel.group.entity.ConfigChannelGroupInfo;
 import com.smoc.cloud.configure.channel.group.repository.ChannelGroupRepository;
+import com.smoc.cloud.configure.channel.group.repository.ConfigChannelGroupRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -19,6 +21,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.Iterator;
@@ -35,6 +38,9 @@ public class ChannelGroupService {
 
     @Resource
     private ChannelGroupRepository channelGroupRepository;
+
+    @Resource
+    private ConfigChannelGroupRepository channelGroupConfigRepository;
 
     /**
      * 查询列表
@@ -81,6 +87,10 @@ public class ChannelGroupService {
         ConfigChannelGroupInfo entity = new ConfigChannelGroupInfo();
         BeanUtils.copyProperties(channelGroupInfoValidator, entity);
 
+        String carrier = "";
+        String businessType = "";
+        String infoType = "";
+
         //add查重
         if (data != null && data.iterator().hasNext() && "add".equals(op)) {
             return ResponseDataUtil.buildError(ResponseCode.PARAM_CREATE_ERROR);
@@ -91,6 +101,9 @@ public class ChannelGroupService {
             Iterator iter = data.iterator();
             while (iter.hasNext()) {
                 ConfigChannelGroupInfo info = (ConfigChannelGroupInfo) iter.next();
+                carrier = info.getCarrier();
+                businessType = info.getBusinessType();
+                infoType = info.getInfoType();
                 if (!entity.getChannelGroupId().equals(info.getChannelGroupId())) {
                     status = true;
                     break;
@@ -98,6 +111,16 @@ public class ChannelGroupService {
             }
             if (status) {
                 return ResponseDataUtil.buildError(ResponseCode.PARAM_CREATE_ERROR);
+            }
+        }
+
+        if("edit".equals(op)){
+            //如果该通道组已经配置了通道，不允许修改运营商、业务类型、信息分类
+            List<ConfigChannelGroup> list = channelGroupConfigRepository.findByChannelGroupId(channelGroupInfoValidator.getChannelGroupId());
+            if(!StringUtils.isEmpty(list) && list.size()>0){
+                if(!carrier.equals(channelGroupInfoValidator.getCarrier()) || !businessType.equals(channelGroupInfoValidator.getBusinessType()) || !infoType.equals(channelGroupInfoValidator.getInfoType())){
+                    return ResponseDataUtil.buildError("1000","通道组已配置了通道，不能修改运营商或业务类型或信息分类");
+                }
             }
         }
 

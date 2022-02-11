@@ -7,9 +7,8 @@
     <th:block th:insert="fragments/common_fragments :: common_css"/>
     <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
     <th:block th:insert="fragments/common_fragments :: select_css"/>
-    <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
-    <style>
-    </style>
+    <!-- Tooltipster css -->
+    <link rel="stylesheet" th:href="@{/static/plugins/tooltipster/tooltipster.bundle.min.css}">
 </head>
 <body>
 <!-- Loader start 页面加载进度-->
@@ -157,14 +156,17 @@
                                         <mpm:tag identity="carrier" show-type="label" key="code" th:value="${info.carrier}"/>
                                     </td>
                                     <td>
-                                        <i data-toggle="tooltip" data-placement="right" title=""
-                                           data-original-title="显示通道组及通道"
+                                        <i data-toggle="tooltip"
+                                           data-placement="right"
+                                           th:id="'channelTooltip'+${info.accountId}"
+                                           th:onmouseover="channelTip([[${info.accountId}]])"
                                            class="mdi mdi-comment-text" style="margin-left:5px"></i>
                                         <br>
-                                        <i data-toggle="tooltip" data-placement="right" title=""
-                                           data-original-title="显示资费"
-                                           class="mdi mdi-comment-text-outline"
-                                           style="margin-left:5px"></i>
+                                        <i data-toggle="tooltip"
+                                           data-placement="right"
+                                           th:id="'priceTooltip'+${info.accountId}"
+                                           th:onmouseover="carrierPrice([[${info.accountId}]])"
+                                           class="mdi mdi-comment-text-outline" style="margin-left:5px"></i>
                                     </td>
                                     <td style="line-height:44px">
                                         <div class="progress" style="margin-top:5px;margin-top:16px">
@@ -288,7 +290,70 @@
 
 <th:block th:insert="fragments/common_fragments :: common_js"/>
 <th:block th:insert="fragments/common_fragments :: select_js"/>
-<th:block th:insert="fragments/cookie_fragments :: cookie_js"/>
+<script th:src="@{/static/plugins/moment/moment.js}"></script>
+<script th:src="@{/static/js/jquery.cookie.js}"></script>
+<!-- Tooltipster js -->
+<script th:src="@{/static/plugins/tooltipster/tooltipster.bundle.min.js}"></script>
+
+<script>
+
+    //查看配置的通道
+    function channelTip(accountId) {
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $.ajax({
+            url: contextPath + "/account/channel/configChannelNum/" + accountId,
+            async: false,
+            success: function (data) {
+                var channels = data.split("@");
+                var channelName = ""
+                if (channels.length > 1) {
+                    for (i = 0; i < channels.length; i++) {
+                        channelName += '<span style="font-size:12px">' + channels[i] + '</span><br>';
+                    }
+                } else {
+                    channelName = '<span style="font-size:12px">' + channels + '</span>';
+                }
+
+                $('#channelTooltip' + accountId).tooltipster({
+                    content: $('<p style="text-align:left;">' + channelName + '</p>'),
+                    maxWidth: 600,
+                    position: 'right',
+                });
+            }
+        });
+    }
+
+    //资费
+    function carrierPrice(accountId) {
+
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $.ajax({
+            url: contextPath + "/account/finance/carrierPrice/" + accountId,
+            async: false,
+            success: function (data) {
+                var prices = data.split("@");
+                var channelPrice = ""
+                if (prices.length > 1) {
+                    for (i = 0; i < prices.length; i++) {
+                        if (i % 3 == 0 && i>0) {
+                            channelPrice += '<br>';
+                        }
+                        channelPrice += '<span style="font-size:12px">' + prices[i] + '</span>';
+                    }
+                } else {
+                    channelPrice = '<span style="font-size:12px">' + prices + '</span>';
+                }
+
+                $('#priceTooltip' + accountId).tooltipster({
+                    content: $('<p style="text-align:left;">' + channelPrice + '</p>'),
+                    maxWidth: 600,
+                    position: 'right',
+                });
+            }
+        });
+    }
+
+</script>
 <script>
 
     /**

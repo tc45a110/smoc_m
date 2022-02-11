@@ -178,6 +178,7 @@ public class BusinessAccountService {
             financeAccount.setAccountRechargeSum(new BigDecimal("0.00000"));
             financeAccount.setAccountCreditSum(new BigDecimal("0.00000"));
             financeAccount.setAccountStatus("1");
+            financeAccount.setIsShare("0");
             financeAccount.setCreatedTime(DateTimeUtils.getNowDateTime());
             financeAccount.setCreatedBy(accountBasicInfo.getCreatedBy());
             financeAccountRepository.saveAndFlush(financeAccount);

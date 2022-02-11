@@ -324,4 +324,58 @@ public class AccountChannelRepositoryImpl extends BasePageRepository {
         return list;
 
     }
+
+    public List<AccountChannelInfoQo> findAccountChannelGroupByChannelGroupIdAndCarrierAndAccountId(String channelGroupId, String carrier) {
+
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append("  t.ACCOUNT_ID");
+        sqlBuffer.append(", t.CARRIER");
+        sqlBuffer.append(", t.CHANNEL_GROUP_ID");
+        sqlBuffer.append(", ''CHANNEL_GROUP_NAME");
+        sqlBuffer.append(", ''CHANNEL_GROUP_INTRODUCE");
+        sqlBuffer.append("  from account_channel_info t  where t.CHANNEL_GROUP_ID=? and t.CARRIER=?  ");
+
+        List<Object> paramsList = new ArrayList<Object>();
+        paramsList.add(channelGroupId.trim());
+        paramsList.add(carrier.trim());
+
+        sqlBuffer.append(" group by t.CHANNEL_GROUP_ID,t.CARRIER,t.ACCOUNT_ID ");
+
+        //根据参数个数，组织参数值
+        Object[] params = new Object[paramsList.size()];
+        paramsList.toArray(params);
+
+        List<AccountChannelInfoQo> list = this.queryForObjectList(sqlBuffer.toString(), params,  new AccountChannelGroupConfigRowMapper());
+        return list;
+
+    }
+
+    public void batchSaveAccountChannel(List<AccountChannelInfoQo> list, ConfigChannelGroup entity) {
+
+        final String sql = "insert into account_channel_info(ID,ACCOUNT_ID,CONFIG_TYPE,CARRIER,CHANNEL_GROUP_ID,CHANNEL_ID,CHANNEL_PRIORITY,CHANNEL_WEIGHT,CHANNEL_SOURCE,CHANNEL_STATUS,CREATED_BY,CREATED_TIME) " +
+                " values(?,?,?,?,?,?,?,?,?,?,?,now()) ";
+
+        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+            public int getBatchSize() {
+                return list.size();
+            }
+
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                AccountChannelInfoQo qo = list.get(i);
+                ps.setString(1, UUID.uuid32());
+                ps.setString(2, qo.getAccountId());
+                ps.setString(3, "ACCOUNT_CHANNEL_GROUP");
+                ps.setString(4, qo.getCarrier());
+                ps.setString(5, qo.getChannelGroupId());
+                ps.setString(6, entity.getChannelId());
+                ps.setString(7, "1");
+                ps.setInt(8, entity.getChannelWeight());
+                ps.setString(9, "CHANNEL_GROUP");
+                ps.setString(10, "1");
+                ps.setString(11, entity.getCreatedBy());
+            }
+
+        });
+    }
 }

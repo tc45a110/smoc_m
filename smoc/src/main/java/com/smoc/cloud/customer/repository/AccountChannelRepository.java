@@ -8,7 +8,10 @@ import com.smoc.cloud.common.smoc.customer.validator.AccountChannelInfoValidator
 import com.smoc.cloud.configure.channel.group.entity.ConfigChannelGroup;
 import com.smoc.cloud.customer.entity.AccountChannelInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -93,4 +96,36 @@ public interface AccountChannelRepository extends CrudRepository<AccountChannelI
      * @return
      */
     List<AccountChannelInfoValidator> channelDetail(AccountChannelInfoValidator accountChannelInfoValidator);
+
+    /**
+     * 分组查询业务账号
+     * @param channelGroupId
+     * @param carrier
+     * @return
+     */
+    List<AccountChannelInfoQo> findAccountChannelGroupByChannelGroupIdAndCarrierAndAccountId(String channelGroupId, String carrier);
+
+    /**
+     * 在通道组管理里,在给通道组里添加通道时，要把通道添加到业务账号通道组里
+     * @param list
+     * @param entity
+     */
+    void batchSaveAccountChannel(List<AccountChannelInfoQo> list, ConfigChannelGroup entity);
+
+    /**
+     * 在通道组管理里移除通道的时候，需要把通道从业务账号通道组里也移除
+     * @param channelGroupId
+     * @param channelId
+     */
+    void deleteByChannelGroupIdAndChannelId(String channelGroupId, String channelId);
+
+    /**
+     * 在通道组管理里,如果修改了通道权重，需要把业务账号通道组里的通道权重修改
+     * @param channelGroupId
+     * @param channelId
+     * @param channelWeight
+     */
+    @Modifying
+    @Query(value = "update account_channel_info set CHANNEL_WEIGHT = :channelWeight where CHANNEL_GROUP_ID = :channelGroupId and CHANNEL_ID = :channelId ",nativeQuery = true)
+    void updateAccountChannelWeight(@Param("channelGroupId") String channelGroupId, @Param("channelId") String channelId, @Param("channelWeight") int channelWeight);
 }

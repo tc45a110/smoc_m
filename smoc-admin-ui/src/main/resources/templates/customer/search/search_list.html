@@ -180,7 +180,7 @@
                                             </td>
                                             <td>
                                                 <a sec:authorize-url="/account/edit/center/*/*"
-                                                   th:href="@{/account/edit/center/base/{id}(id=${info.enterpriseId})}"
+                                                   th:href="@{/account/edit/center/base/{id}(id=${enterprise.enterpriseId})}"
                                                    th:if="${op eq 'channel_account'}" class="btn btn-success waves-effect waves-light m-l-10 btn-sm">
                                                     <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>新建EC业务账号</a>
                                                 <a sec:authorize-url="/ec/customer/contract/add"

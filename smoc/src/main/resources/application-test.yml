@@ -27,6 +27,23 @@ spring:
     show-sql: false
     open-in-view: true
 
+  #**********************************************************
+  # Redis
+  #**********************************************************
+  redis: #redis配置
+    host: r-2zegyswwjdbicif2hdpd.redis.rds.aliyuncs.com
+    port: 6379
+    password: Tsmoc40#RedistEst
+    database: 1
+    timeout: 10000
+    lettuce:
+      pool:
+        max-active: 50
+        max-idle: 10
+        max-wait: -1
+        min-idle: 5
+
+
   # ========================================================================================
   #  datasource hikari pool
   # ========================================================================================

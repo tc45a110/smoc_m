@@ -3,6 +3,8 @@ package com.smoc.cloud.customer.controller;
 import com.alibaba.fastjson.JSON;
 import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
+import com.smoc.cloud.common.auth.qo.Dict;
+import com.smoc.cloud.common.auth.qo.DictType;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -170,5 +173,66 @@ public class AccountFinanceController {
 
         view.setView(new RedirectView("/account/edit/finance/"+accountFinanceInfoValidator.getAccountId(), true, false));
         return view;
+    }
+
+    /**
+     * 查看已配置单价
+     * @param accountId
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/finance/carrierPrice/{accountId}", produces = "text/html;charset=utf-8", method = RequestMethod.GET)
+    public String carrierPrice(@PathVariable String accountId, HttpServletRequest request) {
+
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(accountId);
+        if (!MpmValidatorUtil.validate(validator)) {
+            return MpmValidatorUtil.validateMessage(validator);
+        }
+
+        //查询业务账号
+        ResponseData<AccountBasicInfoValidator> data = businessAccountService.findById(accountId);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            return "业务账号不存在";
+        }
+
+        //根据运营商和账号ID查询运营商单价
+        AccountFinanceInfoValidator accountFinanceInfoValidator = new AccountFinanceInfoValidator();
+        accountFinanceInfoValidator.setAccountId(data.getData().getAccountId());
+        accountFinanceInfoValidator.setCarrier(data.getData().getCarrier());
+        ResponseData<List<AccountFinanceInfoValidator>> respList = accountFinanceService.findByAccountId(accountFinanceInfoValidator);
+
+        List<AccountFinanceInfoValidator> list = respList.getData();
+        if (StringUtils.isEmpty(list) || list.size() <= 0) {
+            return "无配置资费";
+        }
+
+        //取字典数据
+        ServletContext context = request.getServletContext();
+        Map<String, DictType> dictMap = (Map<String, DictType>) context.getAttribute("dict");
+        DictType dictType  = dictMap.get("carrier");
+        List<Dict> dictList = dictType.getDict();
+
+        //封装已配置的运营商单价
+        StringBuilder carrierPrices = new StringBuilder();
+        for (int a=0;a<list.size();a++) {
+            AccountFinanceInfoValidator info = list.get(a);
+            String name = "";
+            for (int i =0;i<dictList.size();i++) {
+                Dict dict = dictList.get(i);
+                if (info.getCarrier().equals(dict.getFieldCode())) {
+                    name += dict.getFieldName();
+                    break;
+                }
+            }
+            carrierPrices.append(name+"："+info.getCarrierPrice()+"；");
+            if (a != list.size()-1) {
+                carrierPrices.append("@");
+            }
+        }
+
+        return carrierPrices.toString();
     }
 }
