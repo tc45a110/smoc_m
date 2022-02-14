@@ -22,16 +22,16 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">财务账号充值</h4>
+                    <h4 class="page-title">财务共享账号充值</h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
                             财务管理
                         </li>
                         <li>
-                            财务账户管理
+                            财务账户共享
                         </li>
                         <li>
-                            财务账号充值
+                            财务共享账号充值
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -47,7 +47,7 @@
                     <div class="panel-heading">
                         <h3 class="panel-title">
                             <i class="mdi mdi-content-save-all" style="margin-right:5px"></i>
-                            财务账号充值
+                            财务共享账号充值
                         </h3>
                     </div>
                     <div class="panel-body">
@@ -58,19 +58,10 @@
                                         企业名称：<label>[[${enterprise.enterpriseName}]]</label>
                                     </div>
                                     <div class="form-group m-b-20">
-                                        业务类型：<mpm:tag identity="businessType" show-type="button"
-                                                      key="code" th:value="${accountBasicInfoValidator.businessType}"
-                                                      class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;MULTI_SMS,btn btn-brown btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;5G_SMS,btn btn-primary btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-inverse btn-rounded btn-sm waves-effect waves-light"/>
-                                    </div>
-                                    <div class="form-group m-b-20">
-                                        业务账号：<label>[[${accountBasicInfoValidator.accountId}]]</label>
-                                    </div>
-                                    <div class="form-group m-b-20">
-                                        业务账号名称：[[${accountBasicInfoValidator.accountName}]]</p>
+                                        共享财务账号：<label>[[${financeAccountValidator.accountId}]]</label>
                                     </div>
                                     <div class="form-group m-b-20">
                                         账户可用余额： ¥ [[${#numbers.formatDecimal(financeAccountValidator.accountUsableSum,1,'COMMA',2,'POINT')}]]
-
                                     </div>
                                     <div class="form-group m-b-20">
                                         账户冻结金额： ¥ [[${#numbers.formatDecimal(financeAccountValidator.accountFrozenSum,1,'COMMA',2,'POINT')}]]
@@ -83,6 +74,9 @@
                                     </div>
                                     <div class="form-group m-b-20">
                                         授信额度：¥ [[${#numbers.formatDecimal(financeAccountValidator.accountCreditSum,1,'COMMA',2,'POINT')}]]
+                                    </div>
+                                    <div class="form-group m-b-20">
+                                        共享财务分账号：<label>[[${financeAccountValidator.shareId}]]</label>
                                     </div>
 
                                     <div class="alert alert-icon alert-danger alert-dismissible fade in" role="alert">
@@ -106,8 +100,8 @@
                             充值信息
                         </h3>
                     </div>
-                    <div class="panel-body" style="height: 532px">
-                        <form id="submit_form" th:action="@{/finance/account/recharge/save}" th:object="${financeAccountRechargeValidator}"
+                    <div class="panel-body" style="height: 488px">
+                        <form id="submit_form" th:action="@{/finance/account/share/recharge/save}" th:object="${financeAccountRechargeValidator}"
                               method="post" data-parsley-validate="">
                             <div class="p-20">
                                 <div class="form-group m-b-20">
@@ -139,17 +133,10 @@
                                 <input type="hidden" th:field="*{rechargeSource}">
                                 <input type="hidden" th:field="*{id}">
                                 <input type="hidden" th:field="*{enterpriseId}">
-                                <button sec:authorize-url="/finance/account/recharge/save" type="submit"
+                                <button sec:authorize-url="/finance/account/share/recharge/save" type="submit"
                                         class="btn btn-teal waves-effect waves-light">提交</button>
-                                <a sec:authorize-url="/finance/account/list" th:href="@{/finance/account/list}" style="margin-left:20px"
+                                <a sec:authorize-url="/finance/account/share/list" th:href="@{/finance/account/share/list}" style="margin-left:20px"
                                    class="btn btn-default waves-effect waves-light">返回</a>
-                                <a sec:authorize-url="/finance/account/center/*"
-                                   th:href="@{/finance/account/center/{enterpriseId}(enterpriseId=${enterprise.enterpriseId})}"
-                                   style="margin-left:20px;"
-                                   class="btn btn-tumblr waves-effect waves-light btn-md">
-                                    <i class="mdi mdi-vector-circle" style="margin-right:5px"></i>
-                                    企业财务账户中心
-                                </a>
                             </div>
                         </form>
                     </div>

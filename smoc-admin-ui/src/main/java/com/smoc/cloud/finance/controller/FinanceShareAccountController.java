@@ -7,10 +7,14 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
+import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountRechargeValidator;
 import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountValidator;
 import com.smoc.cloud.common.smoc.identification.validator.IdentificationAccountInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
+import com.smoc.cloud.common.utils.StringRandom;
+import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.customer.service.EnterpriseService;
 import com.smoc.cloud.finance.service.FinanceAccountService;
 import com.smoc.cloud.sequence.service.SequenceService;
@@ -30,6 +34,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,7 +43,7 @@ import java.util.Map;
  */
 @Slf4j
 @Controller
-@RequestMapping("/finance")
+@RequestMapping("/finance/account")
 public class FinanceShareAccountController {
 
     @Autowired
@@ -58,7 +63,7 @@ public class FinanceShareAccountController {
      *
      * @return
      */
-    @RequestMapping(value = "/account/share/list", method = RequestMethod.GET)
+    @RequestMapping(value = "/share/list", method = RequestMethod.GET)
     public ModelAndView list() {
         ModelAndView view = new ModelAndView("finance/finance_account_share_list");
 
@@ -76,7 +81,8 @@ public class FinanceShareAccountController {
             return view;
         }
 
-        ResponseData<Map<String, Object>> count = financeAccountService.count("3");
+        ResponseData<Map<String, Object>> count = financeAccountService.count(financeAccountValidator,"3");
+
 
         view.addObject("financeAccountValidator", financeAccountValidator);
         view.addObject("list", data.getData().getList());
@@ -90,7 +96,7 @@ public class FinanceShareAccountController {
      *
      * @return
      */
-    @RequestMapping(value = "/account/share/page", method = RequestMethod.POST)
+    @RequestMapping(value = "/share/page", method = RequestMethod.POST)
     public ModelAndView page(@ModelAttribute FinanceAccountValidator financeAccountValidator, PageParams pageParams) {
         ModelAndView view = new ModelAndView("finance/finance_account_share_list");
 
@@ -103,7 +109,7 @@ public class FinanceShareAccountController {
             return view;
         }
 
-        ResponseData<Map<String, Object>> count = financeAccountService.count("3");
+        ResponseData<Map<String, Object>> count = financeAccountService.count(financeAccountValidator,"3");
 
         view.addObject("financeAccountValidator", financeAccountValidator);
         view.addObject("list", data.getData().getList());
@@ -118,9 +124,9 @@ public class FinanceShareAccountController {
      *
      * @return
      */
-    @RequestMapping(value = "/account/share/add/{enterpriseId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/share/add/{enterpriseId}", method = RequestMethod.GET)
     public ModelAndView add(@PathVariable String enterpriseId, HttpServletRequest request) {
-        ModelAndView view = new ModelAndView("finance/finance_account_share_edit");
+        ModelAndView view = new ModelAndView("finance/finance_account_share_add");
 
         //查询企业信息
         ResponseData<EnterpriseBasicInfoValidator> enterpriseData = enterpriseService.findById(enterpriseId);
@@ -145,7 +151,7 @@ public class FinanceShareAccountController {
         financeAccountValidator.setAccountCreditSum(new BigDecimal("0.00"));
         financeAccountValidator.setAccountStatus("1");
 
-        financeAccountValidator.setIsUsableSumPool("1");
+        financeAccountValidator.setIsUsableSumPool("0");
         financeAccountValidator.setIsFreezeSumPool("0");
 
         view.addObject("op", "add");
@@ -161,9 +167,42 @@ public class FinanceShareAccountController {
      *
      * @return
      */
-    @RequestMapping(value = "/account/share/edit/{enterpriseId}", method = RequestMethod.GET)
-    public ModelAndView edit(@PathVariable String enterpriseId, HttpServletRequest request) {
+    @RequestMapping(value = "/share/edit/{accountId}", method = RequestMethod.GET)
+    public ModelAndView edit(@PathVariable String accountId, HttpServletRequest request) {
         ModelAndView view = new ModelAndView("finance/finance_account_share_edit");
+
+        ResponseData<FinanceAccountValidator> shareFinanceAccount = financeAccountService.findById(accountId);
+        if (!ResponseCode.SUCCESS.getCode().equals(shareFinanceAccount.getCode())) {
+            view.addObject("error", shareFinanceAccount.getCode() + ":" + shareFinanceAccount.getMessage());
+            return view;
+        }
+
+        //已选中财务账户
+        Map<String,Boolean> selectedMap = new HashMap<>();
+        String[] selectedAccounts = shareFinanceAccount.getData().getShareId().split(",");
+        for(int i=0;i<selectedAccounts.length;i++){
+            selectedMap.put(selectedAccounts[i],true);
+        }
+
+        //查询企业信息
+        ResponseData<EnterpriseBasicInfoValidator> enterpriseData = enterpriseService.findById(shareFinanceAccount.getData().getEnterpriseId());
+        if (!ResponseCode.SUCCESS.getCode().equals(enterpriseData.getCode())) {
+            view.addObject("error", enterpriseData.getCode() + ":" + enterpriseData.getMessage());
+            return view;
+        }
+
+        //查询企业财务账户信息(包括子企业财务账户)
+        ResponseData<List<FinanceAccountValidator>> data = financeAccountService.findEnterpriseAndSubsidiaryFinanceAccount(shareFinanceAccount.getData().getEnterpriseId());
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("op", "edit");
+        view.addObject("selectedMap", selectedMap);
+        view.addObject("financeAccountValidator", shareFinanceAccount.getData());
+        view.addObject("enterprise", enterpriseData.getData());
+        view.addObject("financeAccounts", data.getData());
 
         return view;
     }
@@ -173,7 +212,7 @@ public class FinanceShareAccountController {
      *
      * @return
      */
-    @RequestMapping(value = "/account/share/save/{op}", method = RequestMethod.POST)
+    @RequestMapping(value = "/share/save/{op}", method = RequestMethod.POST)
     public ModelAndView save(@ModelAttribute @Validated FinanceAccountValidator financeAccountValidator, BindingResult result, @PathVariable String op, HttpServletRequest request) {
         ModelAndView view = new ModelAndView("finance/finance_account_share_edit");
 
@@ -225,8 +264,8 @@ public class FinanceShareAccountController {
      *
      * @return
      */
-    @RequestMapping(value = "/account/share/view/center/*", method = RequestMethod.GET)
-    public ModelAndView center() {
+    @RequestMapping(value = "/share/view/center/{accountId}/{enterpriseId}", method = RequestMethod.GET)
+    public ModelAndView center(@PathVariable String accountId,@PathVariable String enterpriseId) {
         ModelAndView view = new ModelAndView("finance/finance_account_share_view_center");
 
         return view;
@@ -237,7 +276,7 @@ public class FinanceShareAccountController {
      *
      * @return
      */
-    @RequestMapping(value = "/account/share/view/base/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/share/view/base/{id}", method = RequestMethod.GET)
     public ModelAndView view_base(@PathVariable String id, HttpServletRequest request) {
         ModelAndView view = new ModelAndView("finance/finance_account_share_view_base");
 
@@ -245,45 +284,100 @@ public class FinanceShareAccountController {
     }
 
     /**
-     * 财务共享账户充值列表
+     * 财务共享账户充值
      *
      * @return
      */
-    @RequestMapping(value = "/account/share/view/recharge/{id}", method = RequestMethod.GET)
-    public ModelAndView view_recharge(@PathVariable String id, HttpServletRequest request) {
-        ModelAndView view = new ModelAndView("finance/finance_account_share_view_recharge_list");
-        //查询数据
-        PageParams params = new PageParams<>();
-        params.setPages(3);
-        params.setPageSize(10);
-        params.setStartRow(1);
-        params.setEndRow(10);
-        params.setCurrentPage(1);
-        params.setTotalRows(22);
+    @RequestMapping(value = "/share/recharge/{accountId}/{enterpriseId}", method = RequestMethod.GET)
+    public ModelAndView recharge(@PathVariable String accountId,@PathVariable String enterpriseId, HttpServletRequest request) {
 
-        view.addObject("pageParams", params);
+        ModelAndView view = new ModelAndView("finance/finance_account_share_recharge");
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        //查询财务账户数据
+        ResponseData<FinanceAccountValidator> finance = financeAccountService.findById(accountId);
+        if (!ResponseCode.SUCCESS.getCode().equals(finance.getCode())) {
+            view.addObject("error", finance.getCode() + ":" + finance.getMessage());
+        }
+
+        //查询企业信息
+        ResponseData<EnterpriseBasicInfoValidator> enterpriseData = enterpriseService.findById(enterpriseId);
+        if (!ResponseCode.SUCCESS.getCode().equals(enterpriseData.getCode())) {
+            view.addObject("error", enterpriseData.getCode() + ":" + enterpriseData.getMessage());
+            return view;
+        }
+
+
+        FinanceAccountRechargeValidator financeAccountRechargeValidator = new FinanceAccountRechargeValidator();
+        financeAccountRechargeValidator.setId(UUID.uuid32());
+        financeAccountRechargeValidator.setAccountId(accountId);
+        financeAccountRechargeValidator.setRechargeFlowNo(StringRandom.getStringRandom(24).toUpperCase());
+        financeAccountRechargeValidator.setRechargeSource("SHARE_ACCOUNT");
+        financeAccountRechargeValidator.setCreatedBy(user.getRealName());
+        financeAccountRechargeValidator.setCreatedTime(DateTimeUtils.getDateTimeFormat(new Date()));
+        financeAccountRechargeValidator.setEnterpriseId(enterpriseId);
+
+        view.addObject("enterprise", enterpriseData.getData());
+        view.addObject("financeAccountValidator", finance.getData());
+        view.addObject("financeAccountRechargeValidator", financeAccountRechargeValidator);
+
         return view;
+
     }
 
     /**
-     * 财务共享账户消费列表
+     * 充值操作
      *
      * @return
      */
-    @RequestMapping(value = "/account/share/view/consume/{id}", method = RequestMethod.GET)
-    public ModelAndView view_consume(@PathVariable String id, HttpServletRequest request) {
-        ModelAndView view = new ModelAndView("finance/finance_account_share_view_consume_list");
-        //查询数据
-        PageParams params = new PageParams<>();
-        params.setPages(3);
-        params.setPageSize(10);
-        params.setStartRow(1);
-        params.setEndRow(10);
-        params.setCurrentPage(1);
-        params.setTotalRows(22);
+    @RequestMapping(value = "/share/recharge/save", method = RequestMethod.POST)
+    public ModelAndView rechargeSave(@ModelAttribute @Validated FinanceAccountRechargeValidator financeAccountRechargeValidator, BindingResult result, HttpServletRequest request) {
 
-        view.addObject("pageParams", params);
+        ModelAndView view = new ModelAndView("finance/finance_account_share_recharge");
+
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        //完成参数规则验证
+        if (result.hasErrors()) {
+
+            //查询财务账户数据
+            ResponseData<FinanceAccountValidator> finance = financeAccountService.findById(financeAccountRechargeValidator.getAccountId());
+            if (!ResponseCode.SUCCESS.getCode().equals(finance.getCode())) {
+                view.addObject("error", finance.getCode() + ":" + finance.getMessage());
+            }
+
+            //查询企业信息
+            ResponseData<EnterpriseBasicInfoValidator> enterpriseData = enterpriseService.findById(financeAccountRechargeValidator.getEnterpriseId());
+            if (!ResponseCode.SUCCESS.getCode().equals(enterpriseData.getCode())) {
+                view.addObject("error", enterpriseData.getCode() + ":" + enterpriseData.getMessage());
+                return view;
+            }
+
+            view.addObject("enterprise", enterpriseData.getData());
+            view.addObject("financeAccountValidator", finance.getData());
+            view.addObject("financeAccountRechargeValidator", financeAccountRechargeValidator);
+            return view;
+        }
+
+        ResponseData data  = financeAccountService.recharge(financeAccountRechargeValidator);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        //保存操作记录
+        if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            systemUserLogService.logsAsync("SHARE_ACCOUNT", financeAccountRechargeValidator.getAccountId(), user.getUserName(), "recharge",  "共享账户充值", JSON.toJSONString(financeAccountRechargeValidator));
+        }
+
+        //记录日志
+        log.info("[财务账户][共享账户充值][充值][{}]数据:{}", user.getUserName(), JSON.toJSONString(financeAccountRechargeValidator));
+
+
+        view.setView(new RedirectView("/finance/account/share/list", true, false));
+
         return view;
+
     }
 
 

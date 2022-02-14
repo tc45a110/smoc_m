@@ -124,7 +124,7 @@
                                     <th>冻结金额/可用余额</th>
                                     <th>消费总金额/充值总金额</th>
                                     <th>授信额度</th>
-                                    <th>共享账户</th>
+                                    <th>共享分账户</th>
                                     <th>账号状态</th>
                                     <th>创建日期</th>
                                     <th>操作</th>
@@ -136,6 +136,8 @@
                                         [[${info.enterpriseName}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
+                                        [[${info.accountId}]]
+                                        <br>
                                         [[${info.accountName}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
@@ -165,26 +167,25 @@
                                         [[${info.createdTime}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a sec:authorize-url="/finance/account/view" th:href="@{/finance/account/view}"
-                                           data-toggle="tooltip" data-placement="bottom"
-                                           data-original-title="财务账户明细"
+                                        <a sec:authorize-url="/finance/account/share/view/center/*/*" th:href="@{/finance/account/share/view/center/{accountId}/{enterpriseId}(enterpriseId=${info.enterpriseId},accountId=${info.accountId})}"
+                                           data-toggle="tooltip" data-placement="top"
+                                           data-original-title="财务共享账户明细"
                                            class="on-default edit-row"
                                            style="padding-left: 5px;color:#4BD396;"><i style="font-size: 18px"
                                                                                        class="glyphicon glyphicon-search"></i></a>
-                                        <a sec:authorize-url="/finance/recharge/edit"
-                                           th:href="@{/finance/recharge/edit}"
-                                           data-toggle="tooltip" data-placement="bottom"
-                                           data-original-title="财务账户充值"
+                                        <a sec:authorize-url="/finance/account/share/recharge/*/*"
+                                           th:href="@{/finance/account/share/recharge/{accountId}/{enterpriseId}(enterpriseId=${info.enterpriseId},accountId=${info.accountId})}"
+                                           data-toggle="tooltip" data-placement="top"
+                                           data-original-title="共享财务账户充值"
                                            class="on-default edit-row"
                                            style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 20px"
                                                                                         class="mdi mdi-coin"></i></a>
-                                        <a sec:authorize-url="/finance/account/center/*"
-                                           th:href="@{/finance/account/center/{enterpriseId}(enterpriseId=${info.enterpriseId})}"
-                                           data-toggle="tooltip" data-placement="left"
-                                           data-original-title="企业财务账户中心"
+                                        <a sec:authorize-url="/finance/account/share/edit/*"
+                                           th:href="@{/finance/account/share/edit/{accountId}(accountId=${info.accountId})}"
                                            class="on-default edit-row"
-                                           style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 18px"
-                                                                                        class="glyphicon glyphicon-cog"></i></a>
+                                           style="padding-left: 6px;color: #29b6f6;" data-toggle="tooltip"
+                                           data-placement="left" title="" data-original-title="修改财务共享账号"
+                                        ><i style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
 
                                     </td>
                                 </tr>

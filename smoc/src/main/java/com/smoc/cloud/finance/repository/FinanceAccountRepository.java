@@ -56,10 +56,10 @@ public interface FinanceAccountRepository extends CrudRepository<FinanceAccount,
 
     /**
      * 汇总金额统计
-     * @param flag 1 表示业务账号 账户  2表示认证账号 账户 3表示财务共享账户
+     * @param flag 1 表示业务账号 账户  2表示认证账号
      * @return
      */
-    Map<String,Object> countSum(String flag);
+    Map<String,Object> countSum(String flag,FinanceAccountValidator qo);
 
     /**
      * 账户充值 改变账户金额

@@ -48,6 +48,8 @@ public class MpmDictTagProcessor extends AbstractAttributeTagProcessor {
     //id
     private static final String ID = "id";
 
+    private static final String  DISABLED = "disabled";
+
     //字典标识  必输项
     private static final String IDENTITY = "identity";
 
@@ -565,6 +567,10 @@ public class MpmDictTagProcessor extends AbstractAttributeTagProcessor {
             attriCheckBox.put("name", name);
             attriCheckBox.put("type", "radio");
             attriCheckBox.put("value", fieldValue);
+            String disabled = attributeMap.get(DISABLED);
+            if("true".equals(disabled)){
+                attriCheckBox.put("disabled","true");
+            }
 
             if (!StringUtils.isEmpty(required)) {
                 attriCheckBox.put("required", "");

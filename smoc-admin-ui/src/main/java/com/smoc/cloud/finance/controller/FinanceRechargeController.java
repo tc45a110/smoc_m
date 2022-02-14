@@ -1,6 +1,7 @@
 package com.smoc.cloud.finance.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
 import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
 import com.smoc.cloud.common.page.PageList;
@@ -34,6 +35,8 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 充值流水
@@ -70,11 +73,11 @@ public class FinanceRechargeController {
         params.setPageSize(10);
         params.setCurrentPage(1);
         FinanceAccountRechargeValidator financeAccountRechargeValidator = new FinanceAccountRechargeValidator();
-        params.setParams(financeAccountRechargeValidator);
 
         Date startDate = DateTimeUtils.getFirstMonth(12);
         financeAccountRechargeValidator.setStartDate(DateTimeUtils.getDateFormat(startDate));
         financeAccountRechargeValidator.setEndDate(DateTimeUtils.getDateFormat(new Date()));
+        params.setParams(financeAccountRechargeValidator);
 
         //查询
         ResponseData<PageList<FinanceAccountRechargeValidator>> data = financeAccountRechargeService.page(params,"1");
@@ -83,6 +86,14 @@ public class FinanceRechargeController {
             return view;
         }
 
+        ResponseData<Map<String, Object>> countData = financeAccountRechargeService.countRechargeSum(financeAccountRechargeValidator);
+        if (!ResponseCode.SUCCESS.getCode().equals(countData.getCode())) {
+            view.addObject("error", countData.getCode() + ":" + countData.getMessage());
+            return view;
+        }
+
+        //log.info("[count]:{}",new Gson().toJson(countData.getData()));
+        view.addObject("count", countData.getData() == null?new HashMap<>():countData.getData());
         view.addObject("financeAccountRechargeValidator", financeAccountRechargeValidator);
         view.addObject("list", data.getData().getList());
         view.addObject("pageParams", data.getData().getPageParams());
@@ -111,6 +122,16 @@ public class FinanceRechargeController {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;
         }
+
+        ResponseData<Map<String, Object>> countData = financeAccountRechargeService.countRechargeSum(financeAccountRechargeValidator);
+        if (!ResponseCode.SUCCESS.getCode().equals(countData.getCode())) {
+            view.addObject("error", countData.getCode() + ":" + countData.getMessage());
+            return view;
+        }
+
+       // log.info("[count]:{}",new Gson().toJson(countData.getData()));
+
+        view.addObject("count", countData.getData() == null?new HashMap<>():countData.getData());
         view.addObject("list", data.getData().getList());
         view.addObject("pageParams", data.getData().getPageParams());
         view.addObject("financeAccountRechargeValidator", financeAccountRechargeValidator);
@@ -215,7 +236,7 @@ public class FinanceRechargeController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            systemUserLogService.logsAsync("BUSINESS_ACCOUNT", financeAccountRechargeValidator.getAccountId(), user.getUserName(), "recharge",  "认证账户充值", JSON.toJSONString(financeAccountRechargeValidator));
+            systemUserLogService.logsAsync("BUSINESS_ACCOUNT", financeAccountRechargeValidator.getAccountId(), user.getUserName(), "recharge",  "账户充值", JSON.toJSONString(financeAccountRechargeValidator));
         }
 
         //记录日志
@@ -236,6 +257,84 @@ public class FinanceRechargeController {
     public ModelAndView view() {
         ModelAndView view = new ModelAndView("finance/finance_recharge_view");
 
+        return view;
+    }
+
+    /**
+     * 财务充值列表
+     * @return
+     */
+    @RequestMapping(value = "/recharge/account/list/{accountId}", method = RequestMethod.GET)
+    public ModelAndView accountList(@PathVariable String accountId) {
+        ModelAndView view = new ModelAndView("finance/finance_account_recharge_list");
+        //初始化数据
+        PageParams<FinanceAccountRechargeValidator> params = new PageParams<FinanceAccountRechargeValidator>();
+        params.setPageSize(10);
+        params.setCurrentPage(1);
+        FinanceAccountRechargeValidator financeAccountRechargeValidator = new FinanceAccountRechargeValidator();
+
+//        Date startDate = DateTimeUtils.getFirstMonth(12);
+//        financeAccountRechargeValidator.setStartDate(DateTimeUtils.getDateFormat(startDate));
+//        financeAccountRechargeValidator.setEndDate(DateTimeUtils.getDateFormat(new Date()));
+        financeAccountRechargeValidator.setAccountId(accountId);
+        params.setParams(financeAccountRechargeValidator);
+
+        //查询
+        ResponseData<PageList<FinanceAccountRechargeValidator>> data = financeAccountRechargeService.page(params,"1");
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        ResponseData<Map<String, Object>> countData = financeAccountRechargeService.countRechargeSum(financeAccountRechargeValidator);
+        if (!ResponseCode.SUCCESS.getCode().equals(countData.getCode())) {
+            view.addObject("error", countData.getCode() + ":" + countData.getMessage());
+            return view;
+        }
+
+        log.info("[count]:{}",new Gson().toJson(countData.getData()));
+        view.addObject("count", countData.getData());
+        view.addObject("financeAccountRechargeValidator", financeAccountRechargeValidator);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
+        return view;
+    }
+
+    /**
+     * 财务充值列表分页
+     * @return
+     */
+    @RequestMapping(value = "/recharge/account/list/page", method = RequestMethod.POST)
+    public ModelAndView accountPage(@ModelAttribute FinanceAccountRechargeValidator financeAccountRechargeValidator, PageParams pageParams) {
+        ModelAndView view = new ModelAndView("finance/finance_account_recharge_list");
+        //分页查询
+        pageParams.setParams(financeAccountRechargeValidator);
+
+//        //日期格式
+//        if (!StringUtils.isEmpty(financeAccountRechargeValidator.getStartDate())) {
+//            String[] date = financeAccountRechargeValidator.getStartDate().split(" - ");
+//            financeAccountRechargeValidator.setStartDate(StringUtils.trimWhitespace(date[0]));
+//            financeAccountRechargeValidator.setEndDate(StringUtils.trimWhitespace(date[1]));
+//        }
+
+        ResponseData<PageList<FinanceAccountRechargeValidator>> data = financeAccountRechargeService.page(pageParams,"1");
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        ResponseData<Map<String, Object>> countData = financeAccountRechargeService.countRechargeSum(financeAccountRechargeValidator);
+        if (!ResponseCode.SUCCESS.getCode().equals(countData.getCode())) {
+            view.addObject("error", countData.getCode() + ":" + countData.getMessage());
+            return view;
+        }
+
+        log.info("[count]:{}",new Gson().toJson(countData.getData()));
+
+        view.addObject("count", countData.getData());
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
+        view.addObject("financeAccountRechargeValidator", financeAccountRechargeValidator);
         return view;
     }
 

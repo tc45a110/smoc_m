@@ -85,8 +85,8 @@ public class FinanceAccountService {
      * @param flag 1 表示业务账号 账户  2表示认证账号 账户 3表示财务共享账户
      * @return
      */
-    public ResponseData<Map<String, Object>> countSum(String flag) {
-        Map<String, Object> data = financeAccountRepository.countSum(flag);
+    public ResponseData<Map<String, Object>> countSum(String flag,FinanceAccountValidator op) {
+        Map<String, Object> data = financeAccountRepository.countSum(flag,op);
         return ResponseDataUtil.buildSuccess(data);
     }
 

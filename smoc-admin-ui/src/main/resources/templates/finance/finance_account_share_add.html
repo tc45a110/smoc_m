@@ -21,7 +21,7 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">修改财务共享账户</h4>
+                    <h4 class="page-title">创建财务共享账户</h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
                             财务管理
@@ -30,7 +30,7 @@
                             财务共享账户管理
                         </li>
                         <li>
-                            修改财务共享账户
+                            创建财务共享账户
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -180,16 +180,6 @@
                                                                 <tbody>
                                                                 <tr th:each="info:${financeAccounts}">
                                                                     <td>
-
-                                                                        <div th:if="${selectedMap.get(info.accountId)}" class="btn-switch btn-switch-success">
-                                                                            <input th:id="${info.accountId}" th:value="${info.accountId}"
-                                                                                   name="accounts" type="checkbox" checked />
-                                                                            <label th:for="${info.accountId}"
-                                                                                   class="btn btn-rounded btn-success waves-effect waves-light">
-                                                                                <em class="glyphicon glyphicon-ok"></em>
-                                                                            </label>
-                                                                        </div>
-
                                                                         <div th:if="${(info.isShare == '0' && info.accountStatus == '1')}" class="btn-switch btn-switch-custom">
                                                                             <input th:id="${info.accountId}" th:value="${info.accountId}"
                                                                                    name="accounts" type="checkbox"/>
@@ -198,7 +188,7 @@
                                                                                 <em class="glyphicon glyphicon-ok"></em>
                                                                             </label>
                                                                         </div>
-                                                                        <div th:if="${(selectedMap.get(info.accountId) == null) && (info.isShare == '1' || info.accountStatus == '0')}" class="btn-switch btn-switch-danger">
+                                                                        <div th:if="${(info.isShare == '1' || info.accountStatus == '0')}" class="btn-switch btn-switch-danger">
                                                                             <input th:id="${info.accountId}" disabled
                                                                                    name="accounts" type="checkbox"/>
                                                                             <label th:for="${info.accountId}"

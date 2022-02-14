@@ -12,6 +12,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.Map;
+
 /**
  * 财务账号
  */
@@ -35,5 +37,17 @@ public class FinanceAccountRechargeController {
     public ResponseData<PageList<FinanceAccountRechargeValidator>> page(@RequestBody PageParams<FinanceAccountRechargeValidator> pageParams, @PathVariable String flag) {
 
         return financeAccountRechargeService.page(pageParams, flag);
+    }
+
+    /**
+     * 统计充值金额
+     *
+     * @param financeAccountRechargeValidator
+     * @return
+     */
+    @RequestMapping(value = "/countRechargeSum", method = RequestMethod.POST)
+    public ResponseData<Map<String, Object>> countRechargeSum(@RequestBody FinanceAccountRechargeValidator financeAccountRechargeValidator) {
+
+        return financeAccountRechargeService.countRechargeSum(financeAccountRechargeValidator);
     }
 }

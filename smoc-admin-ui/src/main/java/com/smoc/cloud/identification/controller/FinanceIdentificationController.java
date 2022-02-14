@@ -77,7 +77,7 @@ public class FinanceIdentificationController {
             return view;
         }
 
-        ResponseData<Map<String,Object>> count = financeAccountService.count("2");
+        ResponseData<Map<String,Object>> count = financeAccountService.count(financeAccountValidator,"2");
 
         view.addObject("financeAccountValidator", financeAccountValidator);
         view.addObject("list", data.getData().getList());
@@ -105,7 +105,7 @@ public class FinanceIdentificationController {
             return view;
         }
 
-        ResponseData<Map<String,Object>> count = financeAccountService.count("2");
+        ResponseData<Map<String,Object>> count = financeAccountService.count(financeAccountValidator,"2");
 
         view.addObject("financeAccountValidator", financeAccountValidator);
         view.addObject("list", data.getData().getList());

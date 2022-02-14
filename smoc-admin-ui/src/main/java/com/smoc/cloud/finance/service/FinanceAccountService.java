@@ -10,6 +10,7 @@ import com.smoc.cloud.finance.remote.FinanceAccountFeignClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 
 import java.util.List;
@@ -45,9 +46,9 @@ public class FinanceAccountService {
      * @param flag 1 表示业务账号 账户  2表示认证账号 账户 3表示财务共享账户
      * @return
      */
-    public ResponseData<Map<String, Object>> count(String flag) {
+    public ResponseData<Map<String, Object>> count(FinanceAccountValidator financeAccountValidator, String flag) {
         try {
-            return this.financeAccountFeignClient.count(flag);
+            return this.financeAccountFeignClient.count(financeAccountValidator,flag);
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseDataUtil.buildError(e.getMessage());

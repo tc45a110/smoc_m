@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.Map;
+
 /**
  * 充值记录
  */
@@ -24,5 +26,14 @@ public interface FinanceAccountRechargeFeignClient {
      */
     @RequestMapping(value = "finance/recharge/page/{flag}", method = RequestMethod.POST)
     ResponseData<PageList<FinanceAccountRechargeValidator>> page(@RequestBody PageParams<FinanceAccountRechargeValidator> pageParams, @PathVariable String flag) throws Exception;
+
+    /**
+     * 统计充值金额
+     *
+     * @param financeAccountRechargeValidator
+     * @return
+     */
+    @RequestMapping(value = "finance/recharge/countRechargeSum", method = RequestMethod.POST)
+    ResponseData<Map<String, Object>> countRechargeSum(@RequestBody FinanceAccountRechargeValidator financeAccountRechargeValidator) throws Exception;
 
 }

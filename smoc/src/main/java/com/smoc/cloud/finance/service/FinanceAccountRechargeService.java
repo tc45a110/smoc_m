@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -22,8 +23,9 @@ public class FinanceAccountRechargeService {
 
     /**
      * 分页查询
+     *
      * @param pageParams
-     * @param flag  1表示业务账号 账户  2表示认证账号 账户
+     * @param flag       1表示业务账号 账户  2表示认证账号 账户
      * @return
      */
     public ResponseData<PageList<FinanceAccountRechargeValidator>> page(PageParams<FinanceAccountRechargeValidator> pageParams, String flag) {
@@ -38,5 +40,16 @@ public class FinanceAccountRechargeService {
         }
 
         return ResponseDataUtil.buildError();
+    }
+
+    /**
+     * 统计充值金额
+     *
+     * @param qo
+     * @return
+     */
+    public ResponseData<Map<String, Object>> countRechargeSum(FinanceAccountRechargeValidator qo) {
+        Map<String, Object> data = financeAccountRechargeRepository.countRechargeSum(qo);
+        return ResponseDataUtil.buildSuccess(data);
     }
 }

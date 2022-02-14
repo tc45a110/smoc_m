@@ -91,7 +91,7 @@
                             <div class="detailInner">
                                 <a>充值总金额（元）：<span data-d-group="4" data-a-sign="¥ "
                                                   style="color:#fff;width:80px;background-color:#0095a8;text-align:left"
-                                                  class="autonumber">45922</span></a>
+                                                  class="autonumber">[[${count.get('RECHARGE_SUM')}]]</span></a>
                             </div>
                         </li>
                     </ul>
@@ -128,15 +128,16 @@
 
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        [[${recharge.accountId}]]<br>
-                                        [[${recharge.accountName}]]
+                                        [[${recharge.accountId}]]
+                                        <p th:if="'SHARE' != ${recharge.businessType}">[[${recharge.accountName}]]</p>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         ¥ [[${#numbers.formatDecimal(recharge.rechargeSum,1,'COMMA',2,'POINT')}]]
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <mpm:tag identity="businessType" show-type="button"
+                                        <a th:if="'SHARE'== ${recharge.businessType}" class="btn btn-danger btn-rounded waves-effect waves-light btn-sm">共享账户</a>
+                                        <mpm:tag th:if="'SHARE' != ${recharge.businessType}" identity="businessType" show-type="button"
                                                  key="code" th:value="${recharge.businessType}"
                                                  class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;MULTI_SMS,btn btn-brown btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;5G_SMS,btn btn-primary btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-inverse btn-rounded btn-sm waves-effect waves-light"/>
 

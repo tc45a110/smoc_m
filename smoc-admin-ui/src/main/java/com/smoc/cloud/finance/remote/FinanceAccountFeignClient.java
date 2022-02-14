@@ -35,8 +35,8 @@ public interface FinanceAccountFeignClient {
      * @param flag 1 表示业务账号 账户  2表示认证账号 账户 3表示财务共享账户
      * @return
      */
-    @RequestMapping(value = "/finance/account/count/{flag}", method = RequestMethod.GET)
-    ResponseData<Map<String,Object>> count(@PathVariable String flag) throws Exception;
+    @RequestMapping(value = "/finance/account/count/{flag}", method = RequestMethod.POST)
+    ResponseData<Map<String,Object>> count(@RequestBody FinanceAccountValidator financeAccountValidator,@PathVariable String flag) throws Exception;
 
     /**
      * 账户充值,保存充值记录，变更财务账户

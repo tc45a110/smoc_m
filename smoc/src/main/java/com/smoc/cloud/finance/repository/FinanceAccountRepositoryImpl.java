@@ -190,27 +190,27 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
 
         //企业名称
         if (!StringUtils.isEmpty(qo.getEnterpriseName())) {
-            sqlBuffer.append(" and e.ENTERPRISE_NAME like ?");
+            sqlBuffer.append(" and e.ENTERPRISE_NAME like ? ");
             paramsList.add("%" + qo.getEnterpriseName().trim() + "%");
         }
         //账号
         if (!StringUtils.isEmpty(qo.getAccountId())) {
-            sqlBuffer.append(" and t.ACCOUNT_ID =?");
+            sqlBuffer.append(" and t.ACCOUNT_ID =? ");
             paramsList.add(qo.getAccountId().trim());
         }
         //业务账号名称
         if (!StringUtils.isEmpty(qo.getAccountName())) {
-            sqlBuffer.append(" and t.ACCOUNT_NAME like ?");
+            sqlBuffer.append(" and i.ACCOUNT_NAME like ? ");
             paramsList.add("%" + qo.getAccountName().trim() + "%");
         }
         //账号状态
         if (!StringUtils.isEmpty(qo.getAccountStatus())) {
-            sqlBuffer.append(" and t.ACCOUNT_STATUS = ?");
+            sqlBuffer.append(" and t.ACCOUNT_STATUS = ? ");
             paramsList.add(qo.getAccountStatus().trim());
         }
         //账号类型
         if (!StringUtils.isEmpty(qo.getAccountType())) {
-            sqlBuffer.append(" and t.ACCOUNT_TYPE =?");
+            sqlBuffer.append(" and t.ACCOUNT_TYPE =? ");
             paramsList.add(qo.getAccountType().trim());
         } else {
             sqlBuffer.append(" and t.ACCOUNT_TYPE !='IDENTIFICATION_ACCOUNT' and t.ACCOUNT_TYPE !='SHARE_ACCOUNT' ");
@@ -232,25 +232,70 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
      * @param flag 1表示业务账号 账户  2表示认证账号 账户 3表示财务共享账户
      * @return
      */
-    public Map<String, Object> countSum(String flag) {
+    public Map<String, Object> countSum(String flag,FinanceAccountValidator qo) {
 
         StringBuffer sql = new StringBuffer("select");
         sql.append("  sum(t.ACCOUNT_USABLE_SUM) ACCOUNT_USABLE_SUM,");
         sql.append("  sum(t.ACCOUNT_FROZEN_SUM) ACCOUNT_FROZEN_SUM,");
         sql.append("  sum(t.ACCOUNT_CONSUME_SUM) ACCOUNT_CONSUME_SUM,");
         sql.append("  sum(t.ACCOUNT_RECHARGE_SUM) ACCOUNT_RECHARGE_SUM");
-        sql.append("  from finance_account t ");
+
         if ("1".equals(flag)) {
-            sql.append(" where ACCOUNT_TYPE !='IDENTIFICATION_ACCOUNT' and ACCOUNT_TYPE !='SHARE_ACCOUNT' ");
+            sql.append("  from finance_account t,account_base_info i,enterprise_basic_info e ");
+            sql.append("  where t.ACCOUNT_ID = i.ACCOUNT_ID and i.ENTERPRISE_ID = e.ENTERPRISE_ID ");
+            sql.append("  and t.ACCOUNT_TYPE !='IDENTIFICATION_ACCOUNT' and  t.ACCOUNT_TYPE !='SHARE_ACCOUNT' ");
         }
         if ("2".equals(flag)) {
-            sql.append(" where ACCOUNT_TYPE ='IDENTIFICATION_ACCOUNT'");
-        }
-        if ("3".equals(flag)) {
-            sql.append(" where ACCOUNT_TYPE ='SHARE_ACCOUNT'");
+            sql.append("  from finance_account t,identification_account_info i,enterprise_basic_info e ");
+            sql.append("  where t.ACCOUNT_ID = i.IDENTIFICATION_ACCOUNT and i.ENTERPRISE_ID = e.ENTERPRISE_ID and t.ACCOUNT_TYPE ='IDENTIFICATION_ACCOUNT' ");
         }
 
-        Map<String, Object> map = jdbcTemplate.queryForMap(sql.toString());
+        if ("3".equals(flag)) {
+            sql.append("  from finance_account t,enterprise_basic_info e ");
+            sql.append("  where  t.ENTERPRISE_ID = e.ENTERPRISE_ID and t.ACCOUNT_TYPE ='SHARE_ACCOUNT'");
+        }
+
+        List<Object> paramsList = new ArrayList<Object>();
+
+        //企业名称
+        if (!StringUtils.isEmpty(qo.getEnterpriseName())) {
+            sql.append(" and e.ENTERPRISE_NAME like ? ");
+            paramsList.add("%" + qo.getEnterpriseName().trim() + "%");
+        }
+        //账号
+        if (!StringUtils.isEmpty(qo.getAccountId())) {
+            sql.append(" and t.ACCOUNT_ID = ? ");
+            paramsList.add(qo.getAccountId().trim());
+        }
+
+        if ("1".equals(flag)) {
+            //业务账号名称
+            if (!StringUtils.isEmpty(qo.getAccountName())) {
+                sql.append(" and i.ACCOUNT_NAME like ? ");
+                paramsList.add("%" + qo.getAccountName().trim() + "%");
+            }
+        }
+
+        if ("3".equals(flag)) {
+            //业务账号名称
+            if (!StringUtils.isEmpty(qo.getAccountName())) {
+                sql.append(" and t.ACCOUNT_NAME like ?");
+                paramsList.add("%" + qo.getAccountName().trim() + "%");
+            }
+        }
+        //账号状态
+        if (!StringUtils.isEmpty(qo.getAccountStatus())) {
+            sql.append(" and t.ACCOUNT_STATUS = ? ");
+            paramsList.add(qo.getAccountStatus().trim());
+        }
+
+        //根据参数个数，组织参数值
+        Object[] params = new Object[paramsList.size()];
+        paramsList.toArray(params);
+
+        //log.info("[count sql]:{}",sql.toString());
+
+        Map<String, Object> map = jdbcTemplate.queryForMap(sql.toString(),params);
         //log.info(new Gson().toJson(map));
         return map;
     }

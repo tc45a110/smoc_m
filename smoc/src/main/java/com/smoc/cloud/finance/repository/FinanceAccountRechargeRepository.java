@@ -6,6 +6,8 @@ import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountRechargeValida
 import com.smoc.cloud.finance.entity.FinanceAccountRecharge;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Map;
+
 public interface FinanceAccountRechargeRepository extends JpaRepository<FinanceAccountRecharge, String> {
 
     /**
@@ -21,4 +23,12 @@ public interface FinanceAccountRechargeRepository extends JpaRepository<FinanceA
      * @return
      */
     PageList<FinanceAccountRechargeValidator> pageBusiness(PageParams<FinanceAccountRechargeValidator> pageParams);
+
+    /**
+     * 统计充值金额
+     *
+     * @param qo
+     * @return
+     */
+     Map<String, Object> countRechargeSum(FinanceAccountRechargeValidator qo);
 }

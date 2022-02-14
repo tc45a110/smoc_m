@@ -47,10 +47,10 @@ public class FinanceAccountController {
      * @param flag 1 表示业务账号 账户  2表示认证账号 账户 3表示财务共享账户
      * @return
      */
-    @RequestMapping(value = "/count/{flag}", method = RequestMethod.GET)
-    public ResponseData<Map<String, Object>> count(@PathVariable String flag) {
+    @RequestMapping(value = "/count/{flag}", method = RequestMethod.POST)
+    public ResponseData<Map<String, Object>> count(@RequestBody FinanceAccountValidator financeAccountValidator,@PathVariable String flag) {
 
-        return financeAccountService.countSum(flag);
+        return financeAccountService.countSum(flag,financeAccountValidator);
     }
 
     /**

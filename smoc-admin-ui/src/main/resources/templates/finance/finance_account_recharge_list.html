@@ -19,262 +19,53 @@
 <div class="content" style="margin-top: 10px;">
     <div class="container">
 
-        <!-- start row  汇总统计-->
-        <div id="help" class="row" th:remove="${#strings.isEmpty(error)}?none:all">
-            <div class="col-sm-12">
-                <div class="detail">
-                    <ul>
-                        <li>
-                            <h2 style="color: #fff">明细统计</h2>
-                            <span></span>
-                            <div class="detailInner">
-                                <a>充值总金额（元）：<span data-d-group="4" data-a-sign="¥ "
-                                                  style="color:#fff;width:80px;background-color:#0095a8;text-align:left"
-                                                  readonly class="autonumber">045922</span></a>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <!-- end row -->
-
         <!-- start row  列表数据-->
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
                 <div class="panel panel-color panel-info">
                     <div class="panel-heading">
-                        <h3 class="panel-title">充值记录</h3>
+                        <h3 class="panel-title">账号充值记录</h3>
                     </div>
-                    <div class="panel-body">
-                        <div class="table-responsive">
-                            <table class="table table table-hover m-10" style="margin-top: -12px;">
-                                <thead>
-                                <tr>
-                                    <th>充值流水号</th>
-                                    <th>充值金额(元)</th>
-                                    <th>充值状态</th>
-                                    <th>操作人</th>
-                                    <th>操作时间</th>
-                                </tr>
-                                <thead>
-                                <tbody>
-                                <tr th:each="recharge:${list}">
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        [[${recharge.rechargeFlowNo}]]
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        ¥ [[${#numbers.formatDecimal(recharge.rechargeSum,1,'COMMA',2,'POINT')}]]
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        [[${recharge.createdTime}]]
-                                    </td>
+                    <form id="query_form" th:action="@{/identification/finance/recharge/page}" th:object="${financeAccountRechargeValidator}" method="post">
+                        <input type="hidden" name="currentPage" id="currentPage"
+                               th:value="${pageParams.currentPage}">
+                        <input type="hidden" name="pageSize" id="pageSize"
+                               th:value="${pageParams.pageSize}">
+                        <input type="hidden" th:field="*{accountId}" >
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table table-hover m-10" style="margin-top: -12px;">
+                                    <thead>
+                                    <tr>
+                                        <th>充值流水号</th>
+                                        <th>充值金额(元)</th>
+                                        <th>操作人</th>
+                                        <th>操作时间</th>
+                                    </tr>
+                                    <thead>
+                                    <tbody>
+                                    <tr th:each="info:${list}">
+                                        <td style="vertical-align: middle;line-height: 26px">
+                                            [[${info.rechargeFlowNo}]]
+                                        </td>
+                                        <td style="vertical-align: middle;line-height: 26px">
+                                            ¥ [[${#numbers.formatDecimal(info.rechargeSum,0,'COMMA',2,'POINT')}]]
 
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <a class="btn btn-success  waves-effect waves-light btn-xs">已到账</a>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        孙猴子
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        2021-11-17 14:45:23
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        XY10002021111698343
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">50000</span>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        2022-11-17
-                                    </td>
-
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <a class="btn btn-success  waves-effect waves-light btn-xs">已到账</a>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        孙猴子
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        2021-11-17 14:45:23
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        XY10002021111698343
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">50000</span>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        2022-11-17
-                                    </td>
-
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <a class="btn btn-success  waves-effect waves-light btn-xs">已到账</a>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        孙猴子
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        2021-11-17 14:45:23
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        XY10002021111698343
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">50000</span>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        2022-11-17
-                                    </td>
-
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <a class="btn btn-success  waves-effect waves-light btn-xs">已到账</a>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        孙猴子
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        2021-11-17 14:45:23
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        XY10002021111698343
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">50000</span>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        2022-11-17
-                                    </td>
-
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <a class="btn btn-success  waves-effect waves-light btn-xs">已到账</a>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        孙猴子
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        2021-11-17 14:45:23
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        XY10002021111698343
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">50000</span>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        2022-11-17
-                                    </td>
-
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <a class="btn btn-success  waves-effect waves-light btn-xs">已到账</a>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        孙猴子
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        2021-11-17 14:45:23
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        XY10002021111698343
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">50000</span>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        2022-11-17
-                                    </td>
-
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <a class="btn btn-success  waves-effect waves-light btn-xs">已到账</a>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        孙猴子
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        2021-11-17 14:45:23
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        XY10002021111698343
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">50000</span>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        2022-11-17
-                                    </td>
-
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <a class="btn btn-success  waves-effect waves-light btn-xs">已到账</a>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        孙猴子
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        2021-11-17 14:45:23
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        XY10002021111698343
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">50000</span>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        2022-11-17
-                                    </td>
-
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <a class="btn btn-success  waves-effect waves-light btn-xs">已到账</a>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        孙猴子
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        2021-11-17 14:45:23
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        XY10002021111698343
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ " class="autonumber">50000</span>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        2022-11-17
-                                    </td>
-
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <a class="btn btn-success  waves-effect waves-light btn-xs">已到账</a>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        孙猴子
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        2021-11-17 14:45:23
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                            <hr>
+                                        </td>
+                                        <td style="vertical-align: middle;line-height: 26px">
+                                            [[${info.createdBy}]]
+                                        </td>
+                                        <td style="vertical-align: middle;line-height: 26px">
+                                            [[${info.createdTime}]]
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <hr>
+                            </div>
+                            <th:block th:insert="fragments/page_fragments :: page"/>
                         </div>
-                        <th:block th:insert="fragments/page_fragments :: page"/>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -290,7 +81,6 @@
 <th:block th:insert="fragments/common_fragments :: common_js"/>
 <th:block th:insert="fragments/common_fragments :: select_js"/>
 <script th:src="@{/static/plugins/moment/moment.js}"></script>
-<script th:src="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.js}"></script>
 <script th:src="@{/static/plugins/bootstrap-inputmask/bootstrap-inputmask.min.js}"></script>
 <script th:src="@{/static/plugins/autoNumeric/autoNumeric.js}"></script>
 <script>
