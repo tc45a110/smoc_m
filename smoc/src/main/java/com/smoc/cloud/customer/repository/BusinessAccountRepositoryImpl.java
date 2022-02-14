@@ -33,6 +33,7 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", t.EXTEND_CODE");
         sqlBuffer.append(", t.ACCOUNT_PROCESS");
         sqlBuffer.append(", t.ACCOUNT_STATUS");
+        sqlBuffer.append(", t.ACCOUNT_CHANNEL_TYPE");
         sqlBuffer.append(", e.ENTERPRISE_NAME");
         sqlBuffer.append("  from account_base_info t left join enterprise_basic_info e on t.ENTERPRISE_ID = e.ENTERPRISE_ID");
         sqlBuffer.append("  where 1=1 ");

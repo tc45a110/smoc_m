@@ -144,9 +144,29 @@
                                             </li>
                                         </ul>
                                         <div class="tab-cotent" style="background-color:#fff">
-                                            <iframe name="tab-content" id="tab-content" th:frameBorder="0"
-                                                    th:scrolling="auto"
+                                            <iframe name="tab-content" th:frameBorder="0"
+                                                    th:scrolling="auto" th:if="${flag eq 'base'}"
                                                     th:src="@{/account/edit/base/{flag}/{id}(id=${accountId},flag=${flag})}"
+                                                    style="padding: 0px; width: 100%; height: 2600px;background-color:#fff"></iframe>
+                                            <iframe name="tab-content" th:frameBorder="0"
+                                                    th:scrolling="auto" th:if="${flag eq 'finance'}"
+                                                    th:src="@{/account/edit/finance/{id}(id=${accountId})}"
+                                                    style="padding: 0px; width: 100%; height: 2600px;background-color:#fff"></iframe>
+                                            <iframe name="tab-content" th:frameBorder="0"
+                                                    th:scrolling="auto" th:if="${flag eq 'interface'}"
+                                                    th:src="@{/account/edit/interface/{id}(id=${accountId})}"
+                                                    style="padding: 0px; width: 100%; height: 2600px;background-color:#fff"></iframe>
+                                            <iframe name="tab-content" th:frameBorder="0"
+                                                    th:scrolling="auto" th:if="${flag eq 'filter'}"
+                                                    th:src="@{/parameter/filter/list/BUSINESS_ACCOUNT_FILTER/accountId/6}"
+                                                    style="padding: 0px; width: 100%; height: 2600px;background-color:#fff"></iframe>
+                                            <iframe name="tab-content" th:frameBorder="0"
+                                                    th:scrolling="auto" th:if="${flag eq 'channel'}"
+                                                    th:src="@{/account/edit/channel/{id}(id=${accountId})}"
+                                                    style="padding: 0px; width: 100%; height: 2600px;background-color:#fff"></iframe>
+                                            <iframe name="tab-content" th:frameBorder="0"
+                                                    th:scrolling="auto" th:if="${flag eq 'product'}"
+                                                    th:src="@{/account/edit/product/{id}(id=${accountId})}"
                                                     style="padding: 0px; width: 100%; height: 2600px;background-color:#fff"></iframe>
                                         </div>
                                     </div>
@@ -177,13 +197,31 @@
      */
     $(document).ready(function() {
 
-        if("base" == '[[${flag}]]'){
+        for(var num = 1;num<10;num++){
+            $('#tab'+num).removeClass("active");
+        }
+
+        if("base" == '[[${flag}]]' || "enterprise"=='[[${flag}]]'){
             for(var num = 2;num<10;num++){
                 document.getElementById('tab'+num).style.backgroundColor="#DCDBDC";
                 $("#a"+num).attr("onclick","");
                 $("#a"+num).removeAttr("href");
             }
+            $('#tab1').attr("class","active");
         }
+
+        if("finance" == '[[${flag}]]'){
+            $('#tab2').attr("class","active");
+        }else if("interface" == '[[${flag}]]'){
+            $('#tab3').attr("class","active");
+        }else if("filter" == '[[${flag}]]'){
+            $('#tab4').attr("class","active");
+        }else if("channel" == '[[${flag}]]'){
+            $('#tab6').attr("class","active");
+        }else if("product" == '[[${flag}]]'){
+            $('#tab5').attr("class","active");
+        }
+
 
         if("none" == $.cookie("help_display_account_config")){
            $('#help').css('display', 'none');
