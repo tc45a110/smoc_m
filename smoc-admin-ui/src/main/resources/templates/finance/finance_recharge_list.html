@@ -41,30 +41,34 @@
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
                 <div class="card-box">
-                    <form id="query_form" th:action="@{/finance/recharge/page}"
-                          method="post">
+                    <form id="query_form" th:action="@{/finance/account/recharge/page}"
+                           th:object="${financeAccountRechargeValidator}" method="post">
                         <div class="row m-b-60">
                             <div class="col-sm-12">
-                                <div class="form-group col-sm-3">
+                                <div class="form-group col-sm-4">
                                     <input id="dateQueryStr" class="form-control" type="text"/>
                                 </div>
-                                <div class="form-group  col-sm-3">
-                                    <input type="text"  class="form-control"
+                                <div class="form-group  col-sm-4">
+                                    <input type="text"  class="form-control" th:field="*{enterpriseName}"
                                            placeholder="企业名称" autocomplete="off">
                                 </div>
-                                <div class="form-group  col-sm-3">
-                                    <input type="text"  class="form-control"
-                                           placeholder="EC业务账号" autocomplete="off">
+                                <div class="form-group  col-sm-4">
+                                    <input type="text"  class="form-control" th:field="*{accountId}"
+                                           placeholder="业务账号" autocomplete="off">
                                 </div>
-                                <div class="form-group  col-sm-3">
+                                <div class="form-group  col-sm-4">
                                     <mpm:tag id="businessType" identity="businessType" show-type="select" key="code"
-                                             class="form-control" name="enterpriseType" value="" title="业务类型"/>
+                                             class="form-control" name="businessType" th:value="${financeAccountRechargeValidator.businessType}" title="业务类型"/>
                                 </div>
-                                <div class="form-group col-sm-3 pull-right" style="text-align: right">
-                                    <button sec:authorize-url="/finance/recharge/page" type="submit"
+                                <div class="form-group col-sm-4 pull-right" style="text-align: right">
+                                    <button sec:authorize-url="/finance/account/recharge/page" type="submit"
                                             class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search"></i> 查询
                                     </button>
+                                    <input type="hidden" name="currentPage" id="currentPage"
+                                           th:value="${pageParams.currentPage}">
+                                    <input type="hidden" name="pageSize" id="pageSize"
+                                           th:value="${pageParams.pageSize}">
                                     <a id="help_display" style="margin-left:10px"><i class="mdi mdi-help-circle-outline"
                                                                                      style="font-size:18px;"></i></a>
                                 </div>
@@ -108,276 +112,40 @@
                             <table class="table table table-hover m-10" style="margin-top: -12px;">
                                 <thead>
                                 <tr>
-                                    <th>充值流水号/企业名称</th>
-                                    <th>EC业务账号/业务账号名称</th>
+                                    <th>企业名称/充值流水号</th>
+                                    <th>业务账号/业务账号名称</th>
                                     <th>充值金额(元)</th>
                                     <th>业务类型</th>
-                                    <th>充值日期/到期日期</th>
-                                    <th>充值状态</th>
                                     <th>操作人</th>
                                     <th>操作时间</th>
                                 </tr>
                                 <thead>
                                 <tbody>
-                                <tr>
+                                <tr th:each="recharge:${list}">
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        XY2010238349343<br>
-                                        北京星语互联科技有限公司
+                                        [[${recharge.enterpriseName}]]<br>
+                                        [[${recharge.rechargeFlowNo}]]
+
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        XY2010238349343<br>国际短信通道账户
+                                        [[${recharge.accountId}]]<br>
+                                        [[${recharge.accountName}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ "  class="autonumber">50000</span>
+                                        ¥ [[${#numbers.formatDecimal(recharge.rechargeSum,1,'COMMA',2,'POINT')}]]
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a class="btn btn-teal waves-effect waves-light btn-xs">国际短信</a>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        2021-11-17<br>2022-11-17
-                                    </td>
+                                        <mpm:tag identity="businessType" show-type="button"
+                                                 key="code" th:value="${recharge.businessType}"
+                                                 class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;MULTI_SMS,btn btn-brown btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;5G_SMS,btn btn-primary btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-inverse btn-rounded btn-sm waves-effect waves-light"/>
 
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <a  class="btn btn-success  waves-effect waves-light btn-xs">已到账</a>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        孙猴子
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        2021-11-17 14:45:23
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        XY2010238349343<br>
-                                        北京星语互联科技有限公司
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        XY2010238349343<br>国际短信通道账户
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ "  class="autonumber">50000</span>
-                                    </td>
-
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <a class="btn btn-teal waves-effect waves-light btn-xs">国际短信</a>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        2021-11-17<br>2022-11-17
-                                    </td>
-
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <a  class="btn btn-success  waves-effect waves-light btn-xs">已到账</a>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        孙猴子
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        2021-11-17 14:45:23
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        XY2010238349343<br>
-                                        北京星语互联科技有限公司
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        XY2010238349343<br>国际短信通道账户
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ "  class="autonumber">50000</span>
-                                    </td>
-
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <a class="btn btn-teal waves-effect waves-light btn-xs">国际短信</a>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        2021-11-17<br>2022-11-17
-                                    </td>
-
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <a  class="btn btn-success  waves-effect waves-light btn-xs">已到账</a>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        孙猴子
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        2021-11-17 14:45:23
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        XY2010238349343<br>
-                                        北京星语互联科技有限公司
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        XY2010238349343<br>国际短信通道账户
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ "  class="autonumber">50000</span>
-                                    </td>
-
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <a class="btn btn-teal waves-effect waves-light btn-xs">国际短信</a>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        2021-11-17<br>2022-11-17
-                                    </td>
-
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <a  class="btn btn-success  waves-effect waves-light btn-xs">已到账</a>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        孙猴子
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        2021-11-17 14:45:23
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        XY2010238349343<br>
-                                        北京星语互联科技有限公司
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        XY2010238349343<br>国际短信通道账户
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ "  class="autonumber">50000</span>
-                                    </td>
-
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <a class="btn btn-teal waves-effect waves-light btn-xs">国际短信</a>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        2021-11-17<br>2022-11-17
-                                    </td>
-
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <a  class="btn btn-success  waves-effect waves-light btn-xs">已到账</a>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        孙猴子
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        2021-11-17 14:45:23
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        XY2010238349343<br>
-                                        北京星语互联科技有限公司
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        XY2010238349343<br>国际短信通道账户
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ "  class="autonumber">50000</span>
-                                    </td>
-
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <a class="btn btn-teal waves-effect waves-light btn-xs">国际短信</a>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        2021-11-17<br>2022-11-17
-                                    </td>
-
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <a  class="btn btn-success  waves-effect waves-light btn-xs">已到账</a>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        孙猴子
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        2021-11-17 14:45:23
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        XY2010238349343<br>
-                                        北京星语互联科技有限公司
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        XY2010238349343<br>国际短信通道账户
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ "  class="autonumber">50000</span>
-                                    </td>
-
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <a class="btn btn-teal waves-effect waves-light btn-xs">国际短信</a>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        2021-11-17<br>2022-11-17
-                                    </td>
-
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <a  class="btn btn-success  waves-effect waves-light btn-xs">已到账</a>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        孙猴子
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        2021-11-17 14:45:23
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        XY2010238349343<br>
-                                        北京星语互联科技有限公司
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        XY2010238349343<br>国际短信通道账户
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ "  class="autonumber">50000</span>
-                                    </td>
-
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <a class="btn btn-teal waves-effect waves-light btn-xs">国际短信</a>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        2021-11-17<br>2022-11-17
-                                    </td>
-
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <a  class="btn btn-success  waves-effect waves-light btn-xs">已到账</a>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        孙猴子
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        2021-11-17 14:45:23
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        XY2010238349343<br>
-                                        北京星语互联科技有限公司
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        XY2010238349343<br>国际短信通道账户
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign="¥ "  class="autonumber">50000</span>
-                                    </td>
-
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <a class="btn btn-teal waves-effect waves-light btn-xs">国际短信</a>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        2021-11-17<br>2022-11-17
-                                    </td>
-
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <a  class="btn btn-success  waves-effect waves-light btn-xs">已到账</a>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        孙猴子
+                                        [[${recharge.createdBy}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        2021-11-17 14:45:23
+                                        [[${recharge.createdTime}]]
                                     </td>
                                 </tr>
                                 </tbody>

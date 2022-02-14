@@ -1,11 +1,13 @@
 package com.smoc.cloud.customer.repository;
 
 
+import com.google.gson.Gson;
 import com.smoc.cloud.common.BasePageRepository;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
 import com.smoc.cloud.customer.rowmapper.EnterpriseBasicInfoRowMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ import java.util.List;
 /**
  * 2020/5/28 15:44
  **/
+@Slf4j
 public class EnterpriseRepositoryImpl extends BasePageRepository {
 
 
@@ -91,6 +94,7 @@ public class EnterpriseRepositoryImpl extends BasePageRepository {
 
         sqlBuffer.append(" order by t.CREATED_TIME desc");
 
+        log.info("[EnterpriseBasicInfoValidator]:{}", new Gson().toJson(qo));
         //根据参数个数，组织参数值
         Object[] params = new Object[paramsList.size()];
         paramsList.toArray(params);
@@ -99,14 +103,14 @@ public class EnterpriseRepositoryImpl extends BasePageRepository {
         pageList.getPageParams().setParams(qo);
 
         //查询二级企业信息
-        if ("0000".equals(qo.getEnterpriseParentId())) {
-            List<EnterpriseBasicInfoValidator> list = pageList.getList();
-            for (int i = 0; i < list.size(); i++) {
-                EnterpriseBasicInfoValidator basicInfo = list.get(i);
-                List<EnterpriseBasicInfoValidator> validator = findByEnterpriseParentId(basicInfo);
-                basicInfo.setEnterprises(validator);
-            }
+        List<EnterpriseBasicInfoValidator> list = pageList.getList();
+        for (int i = 0; i < list.size(); i++) {
+            EnterpriseBasicInfoValidator basicInfo = list.get(i);
+            List<EnterpriseBasicInfoValidator> validator = findByEnterpriseParentId(basicInfo);
+            basicInfo.setEnterprises(validator);
         }
+
+        log.info("[pageList]:{}", new Gson().toJson(pageList));
 
         return pageList;
     }

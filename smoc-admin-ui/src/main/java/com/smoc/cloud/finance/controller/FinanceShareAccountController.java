@@ -215,6 +215,7 @@ public class FinanceShareAccountController {
         //记录日志
         log.info("[财务共享账户][开户信息][{}][{}]数据:{}", op, user.getUserName(), JSON.toJSONString(financeAccountValidator));
 
+        view.setView(new RedirectView("/finance/account/share/list", true, false));
         return view;
 
     }

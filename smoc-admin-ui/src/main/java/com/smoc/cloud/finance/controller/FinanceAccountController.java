@@ -4,9 +4,11 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
 import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountRechargeValidator;
 import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountValidator;
+import com.smoc.cloud.customer.service.BusinessAccountService;
 import com.smoc.cloud.customer.service.EnterpriseService;
 import com.smoc.cloud.finance.service.FinanceAccountService;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +37,9 @@ public class FinanceAccountController {
 
     @Autowired
     private FinanceAccountService financeAccountService;
+
+    @Autowired
+    private BusinessAccountService businessAccountService;
 
     /**
      * 财务账户列表
@@ -137,9 +142,32 @@ public class FinanceAccountController {
      *
      * @return
      */
-    @RequestMapping(value = "/view", method = RequestMethod.GET)
-    public ModelAndView view() {
+    @RequestMapping(value = "/view/{accountId}/{enterpriseId}", method = RequestMethod.GET)
+    public ModelAndView view(@PathVariable String accountId,@PathVariable String enterpriseId) {
         ModelAndView view = new ModelAndView("finance/finance_account_view");
+
+        //查询企业信息
+        ResponseData<EnterpriseBasicInfoValidator> enterpriseData = enterpriseService.findById(enterpriseId);
+        if (!ResponseCode.SUCCESS.getCode().equals(enterpriseData.getCode())) {
+            view.addObject("error", enterpriseData.getCode() + ":" + enterpriseData.getMessage());
+            return view;
+        }
+
+        ResponseData<FinanceAccountValidator> accountData = financeAccountService.findById(accountId);
+        if (!ResponseCode.SUCCESS.getCode().equals(accountData.getCode())) {
+            view.addObject("error", accountData.getCode() + ":" + accountData.getMessage());
+            return view;
+        }
+
+        ResponseData<AccountBasicInfoValidator> businessAccountData = businessAccountService.findById(accountId);
+        if (!ResponseCode.SUCCESS.getCode().equals(businessAccountData.getCode())) {
+            view.addObject("error", businessAccountData.getCode() + ":" + businessAccountData.getMessage());
+            return view;
+        }
+
+        view.addObject("enterprise", enterpriseData.getData());
+        view.addObject("accountBasicInfoValidator", businessAccountData.getData());
+        view.addObject("financeAccountValidator", accountData.getData());
 
         return view;
     }

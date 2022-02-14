@@ -20,4 +20,8 @@ public class FinanceAccountRechargeValidator {
     private String createdTime;
 
     private String enterpriseName;
+    private String enterpriseId;
+
+    private String businessType;
+    private String accountName;
 }

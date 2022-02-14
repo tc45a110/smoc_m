@@ -113,7 +113,7 @@
                                                                 <div class="row">
                                                                     <div class="col-sm-12">
                                                                         <div class="property-content"
-                                                                             style="height:206px">
+                                                                             style="height:232px">
                                                                             <div class="listingInfo">
                                                                                 <div class="">
                                                                                     <h5 style="padding-left:10px"></h5>
@@ -127,6 +127,11 @@
                                                                                         业务类型：  <mpm:tag id="businessType" identity="businessType" class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-danger btn-rounded btn-sm waves-effect waves-light;"
                                                                                                         name="businessType" show-type="button"  key="code"
                                                                                                         th:value="${account.accountType}" title="业务类型"/>
+                                                                                    </p>
+                                                                                    <p style="font-size:12px">
+                                                                                        共享状态：  <mpm:tag id="isOrNo" identity="isOrNo" class="0,btn btn-info btn-rounded btn-ms waves-effect waves-light;1,btn btn-danger btn-rounded btn-ms waves-effect waves-light;"
+                                                                                                        name="isOrNo" show-type="button"  key="code"
+                                                                                                        th:value="${account.isShare}" title="共享状态"/>
                                                                                     </p>
                                                                                 </div>
                                                                                 <div class="col-sm-4">
@@ -148,7 +153,7 @@
                                                                                         授信额度： ¥ [[${#numbers.formatDecimal(account.accountCreditSum,1,'COMMA',2,'POINT')}]]
                                                                                     </p>
                                                                                     <p style="font-size:12px">
-                                                                                        状态： <mpm:tag id="accountStatus" identity="dataStatus" class="1,btn btn-info btn-rounded btn-xs waves-effect waves-light;0,btn btn-danger btn-rounded btn-xs waves-effect waves-light;"
+                                                                                        状态： <mpm:tag id="accountStatus" identity="dataStatus" class="1,btn btn-info btn-rounded btn-ms waves-effect waves-light;0,btn btn-danger btn-rounded btn-ms waves-effect waves-light;"
                                                                                                      name="accountStatus" show-type="button"  key="code"
                                                                                                      th:value="${account.accountStatus}" title="账号状态"/>
                                                                                     </p>
@@ -157,12 +162,11 @@
                                                                                 <div class="property-action">
 
                                                                                     <div class="pull-right">
-                                                                                        <a sec:authorize-url="/finance/recharge/edit"
-                                                                                           th:href="@{/finance/recharge/edit}"
+                                                                                        <a sec:authorize-url="/finance/account/recharge/*/*"
+                                                                                           th:href="@{/finance/account/recharge/{accountId}/{enterpriseId}(enterpriseId=${enterprise.enterpriseId},accountId=${account.accountId})}"
                                                                                            class="btn btn-info"
                                                                                            style="font-size:12px;">充值</a>
-                                                                                        <a sec:authorize-url="/finance/account/view"
-                                                                                           th:href="@{/finance/account/view}"
+                                                                                        <a sec:authorize-url="/finance/account/view/*/*" th:href="@{/finance/account/view/{accountId}/{enterpriseId}(enterpriseId=${enterprise.enterpriseId},accountId=${account.accountId})}"
                                                                                            class="btn btn-teal"
                                                                                            style="font-size:12px;">明细</a>
                                                                                     </div>

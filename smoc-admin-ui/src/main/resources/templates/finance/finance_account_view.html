@@ -54,12 +54,12 @@
                                                class="btn btn-default waves-effect waves-light btn-md">
                                                 <i class="glyphicon  glyphicon-share-alt" style="margin-right:5px"></i>
                                                 返回财务账户列表</a>
-                                            <a sec:authorize-url="/finance/account/center"
-                                               th:href="@{/finance/account/center}"
+                                            <a sec:authorize-url="/finance/account/center/*"
+                                            th:href="@{/finance/account/center/{enterpriseId}(enterpriseId=${enterprise.enterpriseId})}"
                                                style="margin-left:10px;"
                                                class="btn btn-tumblr waves-effect waves-light btn-md">
                                                 <i class="mdi mdi-vector-circle" style="margin-right:5px"></i>
-                                                EC财务账号中心
+                                                企业财务账户中心
                                             </a>
                                         </div>
                                     </h4>
@@ -71,7 +71,7 @@
                                                      style="display:block">
                                                     <h3 class="panel-title">
                                                         <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
-                                                        EC业务账号财务账户信息
+                                                        [[${accountBasicInfoValidator.accountId}]] 财务账户信息
                                                     </h3>
                                                 </div>
                                                 <div id="login-account" class="panel-body" style="padding-bottom:0px">
@@ -81,54 +81,50 @@
                                                                 <div class="row">
                                                                     <div class="col-sm-12">
                                                                         <div class="property-content"
-                                                                             style="height:196px">
+                                                                             style="height:232px">
                                                                             <div class="listingInfo">
                                                                                 <div class="">
                                                                                     <h5 style="padding-left:10px">
-                                                                                        企业：北京星语互联科技有限公司</h5>
+                                                                                        企业：[[${enterprise.enterpriseName}]]</h5>
                                                                                 </div>
                                                                                 <div class="col-sm-4">
                                                                                     <p style="font-size:12px">
-                                                                                        EC业务账号：XY2010238349343</p>
+                                                                                        业务账号：[[${accountBasicInfoValidator.accountId}]]</p>
                                                                                     <p style="font-size:12px">
-                                                                                        EC业务账号名称：XY2010238349343</p>
+                                                                                        业务账号名称：[[${accountBasicInfoValidator.accountName}]]</p>
                                                                                     <p style="font-size:12px">
-                                                                                        业务类型：<a
-                                                                                            class="btn btn-teal waves-effect waves-light btn-xs">国际短信</a>
+                                                                                        业务类型： <mpm:tag identity="businessType" show-type="button"
+                                                                                                       key="code" th:value="${accountBasicInfoValidator.businessType}"
+                                                                                                       class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;MULTI_SMS,btn btn-brown btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;5G_SMS,btn btn-primary btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-inverse btn-rounded btn-sm waves-effect waves-light"/>
+
                                                                                     </p>
                                                                                     <p style="font-size:12px">
                                                                                         状态：<a
-                                                                                            class="btn btn-success  waves-effect waves-light btn-xs">正常</a>
+                                                                                            class="btn btn-success btn-rounded  waves-effect waves-light btn-ms">正常</a>
                                                                                     </p>
                                                                                 </div>
                                                                                 <div class="col-sm-4">
                                                                                     <p style="font-size:12px">
-                                                                                        账户可用余额：<span data-d-group="4"
-                                                                                                     data-a-sign="¥ "
-                                                                                                     class="autonumber">100</span>
+                                                                                        账户可用余额： ¥ [[${#numbers.formatDecimal(financeAccountValidator.accountUsableSum,1,'COMMA',2,'POINT')}]]
                                                                                     </p>
                                                                                     <p style="font-size:12px">
-                                                                                        账户冻结金额：<span data-d-group="4"
-                                                                                                     data-a-sign="¥ "
-                                                                                                     class="autonumber">100</span>
+                                                                                        账户冻结金额： ¥ [[${#numbers.formatDecimal(financeAccountValidator.accountFrozenSum,1,'COMMA',2,'POINT')}]]
                                                                                     </p>
                                                                                     <p style="font-size:12px">
-                                                                                        账户消费总金额：<span data-d-group="4"
-                                                                                                      data-a-sign="¥ "
-                                                                                                      class="autonumber">100</span>
+                                                                                        账户消费总金额：¥ [[${#numbers.formatDecimal(financeAccountValidator.accountConsumeSum,1,'COMMA',2,'POINT')}]]
                                                                                     </p>
                                                                                 </div>
                                                                                 <div class="col-sm-4">
                                                                                     <p style="font-size:12px">
-                                                                                        账户充值总金额：<span data-d-group="4"
-                                                                                                      data-a-sign="¥ "
-                                                                                                      class="autonumber">100</span>
+                                                                                        账户充值总金额：¥ [[${#numbers.formatDecimal(financeAccountValidator.accountRechargeSum,1,'COMMA',2,'POINT')}]]
                                                                                     </p>
                                                                                     <p style="font-size:12px">
-                                                                                        授信额度：<span data-d-group="4" data-a-sign="¥ " class="autonumber">100.00</span>
+                                                                                        授信额度：¥ [[${#numbers.formatDecimal(financeAccountValidator.accountCreditSum,1,'COMMA',2,'POINT')}]]
                                                                                     </p>
                                                                                     <p style="font-size:12px">
-                                                                                        是否共享：否
+                                                                                        是否共享： <mpm:tag id="isOrNo" identity="isOrNo" class="0,btn btn-info btn-rounded btn-ms waves-effect waves-light;1,btn btn-danger btn-rounded btn-ms waves-effect waves-light;"
+                                                                                                       name="isOrNo" show-type="button"  key="code"
+                                                                                                       th:value="${financeAccountValidator.isShare}" title="共享状态"/>
                                                                                     </p>
                                                                                 </div>
                                                                             </div>
@@ -165,9 +161,10 @@
                                                         </a>
                                                     </li>
                                                     <li class="" id="logs">
-                                                        <a href="#logs" data-toggle="tab" aria-expanded="false">
+                                                        <a  sec:authorize-url="/user/logs/list/*"
+                                                            th:href="@{/user/logs/list/{accountId}(accountId=${financeAccountValidator.accountId})}" th:target="tab-content">
                                                             <span class="visible-xs"><i class="fa fa-cog"></i></span>
-                                                            <span class="hidden-xs">财务账户操作日志</span>
+                                                            <span class="hidden-xs">操作日志</span>
                                                         </a>
                                                     </li>
                                                 </ul>

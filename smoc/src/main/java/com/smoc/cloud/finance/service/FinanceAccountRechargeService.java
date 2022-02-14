@@ -28,9 +28,9 @@ public class FinanceAccountRechargeService {
      */
     public ResponseData<PageList<FinanceAccountRechargeValidator>> page(PageParams<FinanceAccountRechargeValidator> pageParams, String flag) {
 
-
         if ("1".equals(flag)) {
-
+            PageList<FinanceAccountRechargeValidator> data = financeAccountRechargeRepository.pageBusiness(pageParams);
+            return ResponseDataUtil.buildSuccess(data);
         }
         if ("2".equals(flag)) {
             PageList<FinanceAccountRechargeValidator> data = financeAccountRechargeRepository.pageIdentification(pageParams);

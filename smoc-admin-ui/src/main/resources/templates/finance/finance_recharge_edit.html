@@ -22,13 +22,16 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title"> EC财务账户充值</h4>
+                    <h4 class="page-title">财务账号充值</h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
                             财务管理
                         </li>
                         <li>
-                            EC财务账户充值
+                            财务账户管理
+                        </li>
+                        <li>
+                            财务账号充值
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -44,7 +47,7 @@
                     <div class="panel-heading">
                         <h3 class="panel-title">
                             <i class="mdi mdi-content-save-all" style="margin-right:5px"></i>
-                            充值账户信息
+                            财务账号充值
                         </h3>
                     </div>
                     <div class="panel-body">
@@ -52,31 +55,36 @@
                             <div class="col-md-10">
                                 <div class="p-20">
                                     <div class="form-group m-b-20">
-                                        企业名称：<label>北京星语互联科技有限公司</label>
+                                        企业名称：<label>[[${enterprise.enterpriseName}]]</label>
                                     </div>
                                     <div class="form-group m-b-20">
-                                        业务类型：<a class="btn btn-teal waves-effect waves-light btn-xs">国际短信</a>
+                                        业务类型：<mpm:tag identity="businessType" show-type="button"
+                                                      key="code" th:value="${accountBasicInfoValidator.businessType}"
+                                                      class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;MULTI_SMS,btn btn-brown btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;5G_SMS,btn btn-primary btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-inverse btn-rounded btn-sm waves-effect waves-light"/>
                                     </div>
                                     <div class="form-group m-b-20">
-                                        通道账号名称：<label>星语国际通道账号</label>
+                                        业务账号：<label>[[${accountBasicInfoValidator.accountId}]]</label>
                                     </div>
                                     <div class="form-group m-b-20">
-                                        通道账号：<label>XY2010238349343</label>
+                                        业务账号名称：[[${accountBasicInfoValidator.accountName}]]</p>
                                     </div>
                                     <div class="form-group m-b-20">
-                                        财务账号余额： <span data-d-group="4" data-a-sign="¥ " class="autonumber">0</span>
+                                        账户可用余额： ¥ [[${#numbers.formatDecimal(financeAccountValidator.accountUsableSum,1,'COMMA',2,'POINT')}]]
+
                                     </div>
                                     <div class="form-group m-b-20">
-                                        账号冻结金额： <span data-d-group="4" data-a-sign="¥ " class="autonumber">0</span>
+                                        账户冻结金额： ¥ [[${#numbers.formatDecimal(financeAccountValidator.accountFrozenSum,1,'COMMA',2,'POINT')}]]
                                     </div>
                                     <div class="form-group m-b-20">
-                                        账号总消费金额： <span data-d-group="4" data-a-sign="¥ " class="autonumber">100</span>
+                                        账户消费总金额：¥ [[${#numbers.formatDecimal(financeAccountValidator.accountConsumeSum,1,'COMMA',2,'POINT')}]]
                                     </div>
                                     <div class="form-group m-b-20">
-                                        账号总充值金额： <span data-d-group="4" data-a-sign="¥ " class="autonumber">100</span>
+                                        账户充值总金额：¥ [[${#numbers.formatDecimal(financeAccountValidator.accountRechargeSum,1,'COMMA',2,'POINT')}]]
                                     </div>
-                                    <br>
-                                    <br>
+                                    <div class="form-group m-b-20">
+                                        授信额度：¥ [[${#numbers.formatDecimal(financeAccountValidator.accountCreditSum,1,'COMMA',2,'POINT')}]]
+                                    </div>
+
                                     <div class="alert alert-icon alert-danger alert-dismissible fade in" role="alert">
                                         <i class="mdi mdi-block-helper"></i>
                                         <strong>提醒!</strong> 请在充值前，认真确认以上账号信息。
@@ -98,46 +106,50 @@
                             充值信息
                         </h3>
                     </div>
-                    <div class="panel-body" style="height: 533px">
-                        <form id="submit_form"
+                    <div class="panel-body" style="height: 532px">
+                        <form id="submit_form" th:action="@{/finance/account/recharge/save}" th:object="${financeAccountRechargeValidator}"
                               method="post" data-parsley-validate="">
                             <div class="p-20">
                                 <div class="form-group m-b-20">
                                     <label for="e3Name">充值流水号<span class="text-danger">*</span>&nbsp;</label>
                                     <input id="e3Name" type="text" class="form-control"
-                                           readonly autocomplete="off"
+                                           readonly autocomplete="off" th:field="*{rechargeFlowNo}"
                                            placeholder="流水号自动生成">
                                 </div>
                                 <div class="form-group m-b-20">
                                     <label for="eName">充值金额<span class="text-danger">*</span>&nbsp;</label>
                                     <input id="eName" type="text" class="form-control"
-                                           required="" data-parsley-length="[1,64]" autocomplete="off"
+                                           required="" data-parsley-length="[1,24]" data-parsley-min="0.01" autocomplete="off" th:field="*{rechargeSum}"
                                            placeholder="充值金额">
                                 </div>
                                 <div class="form-group m-b-20">
-                                    <label for="linkt">到期日期<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="linkt" type="text" class="form-control"
-                                           required="" data-parsley-length="[2,12]" autocomplete="off"
-                                           placeholder="到期日期">
-                                </div>
-                                <div class="form-group m-b-20">
                                     <label for="linkk">操作人<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="linkk" type="text" class="form-control" value="贾亮"
+                                    <input id="linkk" type="text" class="form-control" th:field="*{createdBy}"
                                            required="" readonly autocomplete="off">
                                 </div>
 
                                 <div class="form-group m-b-20">
                                     <label for="address">操作时间<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="address" type="text" class="form-control" value="2021-11-17 14:45:23"
+                                    <input id="address" type="text" class="form-control" th:field="*{createdTime}" readonly
                                            required="">
                                 </div>
-
                             </div>
-                            <div class="text-right">
-                                <a sec:authorize-url="/finance/account/center" th:href="@{/finance/account/center}"
-                                   type="button" class="btn btn-teal waves-effect waves-light">提交</a>
-                                <a sec:authorize-url="/finance/account/list" th:href="@{/finance/account/list}"
+                            <div class="text-center" style="margin-bottom:30px">
+                                <input type="hidden" th:field="*{accountId}">
+                                <input type="hidden" th:field="*{rechargeSource}">
+                                <input type="hidden" th:field="*{id}">
+                                <input type="hidden" th:field="*{enterpriseId}">
+                                <button sec:authorize-url="/finance/account/recharge/save" type="submit"
+                                        class="btn btn-teal waves-effect waves-light">提交</button>
+                                <a sec:authorize-url="/finance/account/list" th:href="@{/finance/account/list}" style="margin-left:20px"
                                    class="btn btn-default waves-effect waves-light">返回</a>
+                                <a sec:authorize-url="/finance/account/center/*"
+                                   th:href="@{/finance/account/center/{enterpriseId}(enterpriseId=${enterprise.enterpriseId})}"
+                                   style="margin-left:10px;"
+                                   class="btn btn-tumblr waves-effect waves-light btn-md">
+                                    <i class="mdi mdi-vector-circle" style="margin-right:5px"></i>
+                                    企业财务账户中心
+                                </a>
                             </div>
                         </form>
                     </div>
@@ -156,7 +168,7 @@
 <th:block th:insert="fragments/common_fragments :: common_js"/>
 <th:block th:insert="fragments/common_fragments :: select_js"/>
 <script th:src="@{/static/plugins/moment/moment.js}"></script>
-<script th:src="@{/static/plugins/bootstrap-inputmask/bootstrap-inputmask.min.js}"></script>
+<th:block th:insert="fragments/common_fragments :: common_submit_form"/>
 <script th:src="@{/static/plugins/autoNumeric/autoNumeric.js}"></script>
 
 <script>

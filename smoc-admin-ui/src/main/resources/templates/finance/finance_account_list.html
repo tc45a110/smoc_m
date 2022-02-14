@@ -127,7 +127,7 @@
                                     <th>消费总金额/充值总金额</th>
                                     <th>授信额度</th>
                                     <th>业务类型</th>
-                                    <th>共享</th>
+                                    <th>是否共享</th>
                                     <th>创建日期</th>
                                     <th>操作</th>
                                 </tr>
@@ -155,28 +155,28 @@
                                     <td style="vertical-align: middle;line-height: 26px">
                                         ¥ [[${#numbers.formatDecimal(info.accountCreditSum,1,'COMMA',2,'POINT')}]]
                                     </td>
-                                    <td>
+                                    <td style="vertical-align: middle;line-height: 26px">
                                         <mpm:tag id="businessType" identity="businessType" class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-danger btn-rounded btn-sm waves-effect waves-light;"
                                                  name="businessType" show-type="button"  key="code"
                                                  th:value="${info.accountType}" title="业务类型"/>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <mpm:tag id="isOrNo" identity="isOrNo"
-                                                 name="isOrNo" show-type="label"  key="code"
-                                                 th:value="${info.isShare}"/>
+                                        <mpm:tag id="isOrNo" identity="isOrNo" class="0,btn btn-info btn-rounded btn-ms waves-effect waves-light;1,btn btn-danger btn-rounded btn-ms waves-effect waves-light;"
+                                                 name="isOrNo" show-type="button"  key="code"
+                                                 th:value="${info.isShare}" title="共享状态"/>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         [[${info.createdTime}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a sec:authorize-url="/finance/account/view" th:href="@{/finance/account/view}"
+                                        <a sec:authorize-url="/finance/account/view/*/*" th:href="@{/finance/account/view/{accountId}/{enterpriseId}(enterpriseId=${info.enterpriseId},accountId=${info.accountId})}"
                                            data-toggle="tooltip" data-placement="bottom"
                                            data-original-title="财务账户明细"
                                            class="on-default edit-row"
                                            style="padding-left: 5px;color:#4BD396;"><i style="font-size: 18px"
                                                                                        class="glyphicon glyphicon-search"></i></a>
-                                        <a sec:authorize-url="/finance/recharge/edit"
-                                           th:href="@{/finance/recharge/edit}"
+                                        <a sec:authorize-url="/finance/account/recharge/*/*"
+                                           th:href="@{/finance/account/recharge/{accountId}/{enterpriseId}(enterpriseId=${info.enterpriseId},accountId=${info.accountId})}"
                                            data-toggle="tooltip" data-placement="bottom"
                                            data-original-title="财务账户充值"
                                            class="on-default edit-row"

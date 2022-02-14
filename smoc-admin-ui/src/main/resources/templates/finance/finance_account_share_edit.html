@@ -156,7 +156,14 @@
                                                                 <thead>
                                                                 <tr>
                                                                     <th>
-
+<!--                                                                        <div  class="btn-switch btn-switch-custom">-->
+<!--                                                                            <input id="btn-switch-custom"  disabled-->
+<!--                                                                                   name="accounts" type="checkbox"/>-->
+<!--                                                                            <label for="btn-switch-custom"-->
+<!--                                                                                   class="btn btn-rounded btn-custom waves-effect waves-light">-->
+<!--                                                                                <em class="glyphicon glyphicon-ok"></em>-->
+<!--                                                                            </label>-->
+<!--                                                                        </div>-->
                                                                     </th>
                                                                     <th>企业名称</th>
                                                                     <th>业务账号名称</th>
@@ -164,17 +171,26 @@
                                                                     <th>财务账户余额</th>
                                                                     <th>财务账户冻结金额</th>
                                                                     <th>是否已共享</th>
+                                                                    <th>共享账户</th>
                                                                     <th style="text-align:center">账户状态</th>
                                                                 </tr>
                                                                 </thead>
                                                                 <tbody>
                                                                 <tr th:each="info:${financeAccounts}">
                                                                     <td>
-                                                                        <div class="btn-switch btn-switch-custom">
+                                                                        <div th:if="${(info.isShare == '0' && info.accountStatus == '1')}" class="btn-switch btn-switch-custom">
                                                                             <input th:id="${info.accountId}" th:value="${info.accountId}"
                                                                                    name="accounts" type="checkbox"/>
                                                                             <label th:for="${info.accountId}"
                                                                                    class="btn btn-rounded btn-custom waves-effect waves-light">
+                                                                                <em class="glyphicon glyphicon-ok"></em>
+                                                                            </label>
+                                                                        </div>
+                                                                        <div th:if="${(info.isShare == '1' || info.accountStatus == '0')}" class="btn-switch btn-switch-danger">
+                                                                            <input th:id="${info.accountId}" disabled
+                                                                                   name="accounts" type="checkbox"/>
+                                                                            <label th:for="${info.accountId}"
+                                                                                   class="btn btn-rounded btn-danger waves-effect waves-light">
                                                                                 <em class="glyphicon glyphicon-ok"></em>
                                                                             </label>
                                                                         </div>
@@ -197,12 +213,13 @@
                                                                         [[${#numbers.formatDecimal(info.accountFrozenSum,1,'COMMA',2,'POINT')}]]
                                                                     </td>
                                                                     <td>
-                                                                        <mpm:tag id="isOrNo" identity="isOrNo"
-                                                                                 name="isOrNo" show-type="label"
-                                                                                 key="code"
-                                                                                 th:value="${info.isShare}"/>
+                                                                        <mpm:tag id="isOrNo" identity="isOrNo" class="0,btn btn-info btn-rounded btn-ms waves-effect waves-light;1,btn btn-danger btn-rounded btn-ms waves-effect waves-light;"
+                                                                                 name="isOrNo" show-type="button"  key="code"
+                                                                                 th:value="${info.isShare}" title="共享状态"/>
                                                                     </td>
-
+                                                                    <td>
+                                                                        [[${info.shareId}]]
+                                                                    </td>
                                                                     <td style="text-align:center">
                                                                         <mpm:tag id="accountStatus"
                                                                                  identity="dataStatus"
@@ -278,12 +295,11 @@
           return false;
         }
         var array =accountIds.split(",");
-        if(2>array){
+        if(2>array.length){
            return false;
         }
         $("#accountIds").val(accountIds);
         return true;
-
     }
 
     var resizefunc = [];

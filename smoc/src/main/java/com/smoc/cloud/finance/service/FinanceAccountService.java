@@ -181,8 +181,9 @@ public class FinanceAccountService {
      * @return
      */
     public ResponseData<List<FinanceAccountValidator>> findEnterpriseAndSubsidiaryFinanceAccount(String enterpriseId) {
-
+        log.info("[enterpriseId]:{}", new Gson().toJson(enterpriseId));
         List<String> enterpriseIds = enterpriseRepository.findEnterpriseAndSubsidiaryId(enterpriseId);
+        log.info("[enterpriseIds]:{}", new Gson().toJson(enterpriseIds));
         if (null != enterpriseIds && enterpriseIds.size() > 0) {
             log.info("[enterpriseIds]:{}", new Gson().toJson(enterpriseIds));
             List<FinanceAccountValidator> data = financeAccountRepository.findEnterpriseAndSubsidiaryFinanceAccount(enterpriseIds);
@@ -209,13 +210,15 @@ public class FinanceAccountService {
 
     /**
      * 创建共享账户
+     * 包括了创建共享账户流水记录，修改原账户状态，并创建共享账户
      *
      * @param financeAccountValidator
-     * @param op 操作类型 为add、edit
+     * @param op                      操作类型 为add、edit
      * @return
      */
     @Transactional
     public ResponseData save(FinanceAccountValidator financeAccountValidator, String op) {
+
         //op 不为 edit 或 add
         if (!("edit".equals(op) || "add".equals(op))) {
             return ResponseDataUtil.buildError();

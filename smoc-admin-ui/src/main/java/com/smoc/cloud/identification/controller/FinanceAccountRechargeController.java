@@ -76,6 +76,7 @@ public class FinanceAccountRechargeController {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;
         }
+        view.addObject("financeAccountRechargeValidator", financeAccountRechargeValidator);
         view.addObject("list", data.getData().getList());
         view.addObject("pageParams", data.getData().getPageParams());
 

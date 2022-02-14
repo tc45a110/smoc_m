@@ -14,6 +14,9 @@ public class FinanceAccountRechargeRowMapper implements RowMapper<FinanceAccount
         qo.setId(resultSet.getString("ID"));
         qo.setAccountId(resultSet.getString("ACCOUNT_ID"));
         qo.setEnterpriseName(resultSet.getString("ENTERPRISE_NAME"));
+        qo.setEnterpriseId(resultSet.getString("ENTERPRISE_ID"));
+        qo.setBusinessType(resultSet.getString("BUSINESS_TYPE"));
+        qo.setAccountName(resultSet.getString("ACCOUNT_NAME"));
         qo.setRechargeFlowNo(resultSet.getString("RECHARGE_FLOW_NO"));
         qo.setRechargeSource(resultSet.getString("RECHARGE_SOURCE"));
         qo.setRechargeSum(resultSet.getBigDecimal("RECHARGE_SUM"));

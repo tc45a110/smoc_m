@@ -121,6 +121,7 @@ public interface FinanceAccountRepository extends CrudRepository<FinanceAccount,
 
     /**
      * 创建财务共享账户
+     * 包括了创建共享账户流水记录，修改原账户状态，并创建共享账户
      */
     void createShareFinanceAccount(FinanceAccountValidator qo);
 }
