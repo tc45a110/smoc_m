@@ -24,4 +24,7 @@ public class FinanceAccountRechargeValidator {
 
     private String businessType;
     private String accountName;
+
+    private String startDate;
+    private String endDate;
 }

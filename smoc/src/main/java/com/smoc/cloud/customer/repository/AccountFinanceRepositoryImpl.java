@@ -34,6 +34,7 @@ public class AccountFinanceRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", t.ACCOUNT_CREDIT_SUM");
         sqlBuffer.append(", t.CARRIER");
         sqlBuffer.append(", t.CARRIER_PRICE");
+        sqlBuffer.append(", t.CARRIER_TYPE");
         sqlBuffer.append("  from account_finance_info t where 1=1 ");
 
         List<Object> paramsList = new ArrayList<Object>();

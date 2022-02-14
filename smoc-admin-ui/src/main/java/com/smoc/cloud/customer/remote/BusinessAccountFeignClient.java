@@ -40,4 +40,12 @@ public interface BusinessAccountFeignClient {
     @RequestMapping(value = "/account/save/{op}", method = RequestMethod.POST)
     ResponseData save(@RequestBody AccountBasicInfoValidator accountBasicInfoValidator, @PathVariable String op) throws Exception;
 
+    /**
+     * 注销、启用账号
+     * @param id
+     * @param status
+     * @return
+     */
+    @RequestMapping(value = "/account/forbiddenAccountById/{id}/{status}", method = RequestMethod.GET)
+    ResponseData forbiddenAccountById(@PathVariable String id, @PathVariable String status) throws Exception;
 }

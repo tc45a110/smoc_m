@@ -22,6 +22,7 @@ import com.smoc.cloud.finance.service.FinanceAccountService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -71,6 +72,10 @@ public class FinanceRechargeController {
         FinanceAccountRechargeValidator financeAccountRechargeValidator = new FinanceAccountRechargeValidator();
         params.setParams(financeAccountRechargeValidator);
 
+        Date startDate = DateTimeUtils.getFirstMonth(12);
+        financeAccountRechargeValidator.setStartDate(DateTimeUtils.getDateFormat(startDate));
+        financeAccountRechargeValidator.setEndDate(DateTimeUtils.getDateFormat(new Date()));
+
         //查询
         ResponseData<PageList<FinanceAccountRechargeValidator>> data = financeAccountRechargeService.page(params,"1");
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
@@ -93,6 +98,13 @@ public class FinanceRechargeController {
         ModelAndView view = new ModelAndView("finance/finance_recharge_list");
         //分页查询
         pageParams.setParams(financeAccountRechargeValidator);
+
+        //日期格式
+        if (!StringUtils.isEmpty(financeAccountRechargeValidator.getStartDate())) {
+            String[] date = financeAccountRechargeValidator.getStartDate().split(" - ");
+            financeAccountRechargeValidator.setStartDate(StringUtils.trimWhitespace(date[0]));
+            financeAccountRechargeValidator.setEndDate(StringUtils.trimWhitespace(date[1]));
+        }
 
         ResponseData<PageList<FinanceAccountRechargeValidator>> data = financeAccountRechargeService.page(pageParams,"1");
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {

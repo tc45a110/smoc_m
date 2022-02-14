@@ -41,29 +41,95 @@
                                                     <div class="listingInfo">
                                                         <div class="">
                                                             <h5 style="padding-left:10px">
-                                                                业务账号名称：为了发才行创建的账号</h5>
+                                                                业务账号名称：[[${accountBasicInfoValidator.accountName}]]</h5>
                                                         </div>
                                                         <div class="col-sm-3">
-                                                            <p class="text-muted">业务账号：<span style="color: #3ac9d6">10691111</span>
+                                                            <p class="text-muted">业务账号：<span style="color: #3ac9d6">[[${accountBasicInfoValidator.accountId}]]</span>
                                                             </p>
-                                                            <p class="text-muted">信息分类：行业</p>
+                                                            <p class="text-muted">信息分类：<mpm:tag identity="infoType" show-type="label" key="code" th:value="${accountBasicInfoValidator.infoType}"/></p>
 
                                                         </div>
                                                         <div class="col-sm-3">
                                                             <p class="text-muted">业务类型：
-                                                                <a class="btn btn-purple btn-rounded btn-sm waves-effect waves-light">国际短信</a>
+                                                                <mpm:tag identity="businessType" show-type="button"
+                                                                         key="code" th:value="${accountBasicInfoValidator.businessType}"
+                                                                         class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;MULTI_SMS,btn btn-brown btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;5G_SMS,btn btn-primary btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-inverse btn-rounded btn-sm waves-effect waves-light"/>
                                                             </p>
-                                                            <p class="text-muted">扩展码：12354896</p>
+                                                            <p class="text-muted">扩展码：[[${accountBasicInfoValidator.extendCode}]]</p>
                                                         </div>
                                                         <div class="col-sm-3">
-                                                            <p class="text-muted">发送运营商：中国移动、联通、电信</p>
-                                                            <p class="text-muted">携号转网：不支持携号转网</p>
+                                                            <p class="text-muted">发送运营商： <mpm:tag identity="carrier" show-type="label" key="code" th:value="${accountBasicInfoValidator.carrier}"/></p>
+                                                            <p class="text-muted">是否支持携号转网：
+                                                                <mpm:tag id="transferType" identity="isOrNo" show-type="label" key="code" th:value="${accountBasicInfoValidator.transferType}"/></p>
                                                         </div>
                                                         <div class="col-sm-3">
                                                             <p class="text-muted">账号状态：正常</p>
 
                                                         </div>
                                                     </div>
+                                                    <!-- end. Card actions -->
+                                                </div>
+                                            </div>
+                                            <!-- /col 8 -->
+                                        </div>
+                                        <!-- /inner row -->
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12" style="margin-top:10px">
+                    <div class="panel panel-border panel-success">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
+                                财务信息
+                            </h3>
+                        </div>
+                        <div class="panel-body" style="padding-bottom:0px">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="property-card property-horizontal">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="property-content"
+                                                     style="height:140px">
+                                                    <div class="">
+                                                        <h5 style="padding-left:10px"></h5>
+                                                    </div>
+                                                    <div class="col-md-3 form-group" th:each="info:${list}">
+                                                        <p class="text-muted"><mpm:tag identity="carrier"  show-type="label" key="code"
+                                                                                       th:value="${info.key}"/>单价：[[${info.value}]]
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-md-3 form-group">
+                                                        <p class="text-muted">付费方式：
+                                                            <mpm:tag identity="payType" show-type="button" key="code" style="margin-top:0px" th:value="${accountFinanceInfoValidator.payType}"
+                                                                     class="1,btn btn-teal btn-rounded btn-sm waves-effect waves-light;2,btn btn-brown btn-rounded btn-sm waves-effect waves-light;"/>
+                                                    </div>
+                                                    <div class="col-md-3 form-group">
+                                                        <p class="text-muted">计费方式：
+                                                            <mpm:tag identity="accountChargeType" show-type="button" key="code" style="margin-top:0px" th:value="${accountFinanceInfoValidator.chargeType}"
+                                                                     class="1,btn btn-info btn-rounded btn-sm waves-effect waves-light;2,btn btn-success btn-rounded btn-sm waves-effect waves-light;"/>
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-md-3 form-group">
+                                                        <p class="text-muted">冻结金额返还时间：
+                                                            <mpm:tag identity="frozenReturnDate" show-type="button" key="code" style="margin-top:0px" th:value="${accountFinanceInfoValidator.frozenReturnDate}"
+                                                                     class="1,btn btn-primary btn-rounded btn-sm waves-effect waves-light;2,btn btn-purple btn-rounded btn-sm waves-effect waves-light;"/>
+                                                        </p>
+
+                                                    </div>
+                                                    <div class="col-md-3 form-group">
+                                                        <p class="text-muted">授信额度：[[${accountFinanceInfoValidator.accountCreditSum}]]
+                                                        </p>
+                                                    </div>
+
                                                     <!-- end. Card actions -->
                                                 </div>
                                             </div>
@@ -100,149 +166,25 @@
                                                     <div class="listingInfo">
                                                         <div class="">
                                                             <h5 style="padding-left:10px">
-                                                                接口类型：CMPP</h5>
+                                                                接口类型：<mpm:tag id="inter" identity="accountInterfaceType"
+                                                                              show-type="label" key="code" th:value="${accountInterfaceInfoValidator.protocol}"/></h5>
                                                         </div>
-                                                        <div class="col-sm-3">
-                                                            <p class="text-muted">接口密码： <a
-                                                                    class="btn btn-teal btn-rounded btn-sm waves-effect waves-light">******</a>
-                                                            <p class="text-muted">最大链接数：5</p>
-                                                            <p class="text-muted">客户鉴权IP：192.4.45.126</p>
-
+                                                        <div th:if="${accountInterfaceInfoValidator.protocol eq 'cmpp'}">
+                                                            <div class="col-sm-3">
+                                                                <p class="text-muted">接口密码： <a
+                                                                        class="btn btn-teal btn-rounded btn-sm waves-effect waves-light">******</a>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <p class="text-muted">发送速率(条/秒)：5</p>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <p class="text-muted">进入审核：过黑</p>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <p class="text-muted">运营商状态报告推送地址url：https://baidu.com</p>
+                                                            </div>
                                                         </div>
-                                                        <div class="col-sm-3">
-                                                            <p class="text-muted">服务代码：
-                                                                34866
-                                                            </p>
-                                                            <p class="text-muted">客户提交速率：4896 t/s</p>
 
-
-                                                        </div>
-                                                        <div class="col-sm-3">
-                                                            <p class="text-muted">进入审核：过黑</p>
-                                                            <p class="text-muted">模板匹配：签名模版</p>
-                                                        </div>
-                                                        <div class="col-sm-3">
-                                                            <p class="text-muted">运营商状态报告推送地址url：https://baidu.com</p>
-                                                            <p class="text-muted">上行短信推送地址url：https://baidu.com</p>
-
-                                                        </div>
-                                                    </div>
-                                                    <!-- end. Card actions -->
-                                                </div>
-                                            </div>
-                                            <!-- /col 8 -->
-                                        </div>
-                                        <!-- /inner row -->
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-lg-12" style="margin-top:10px">
-                    <div class="panel panel-border panel-success">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">
-                                <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
-                                财务信息
-                            </h3>
-                        </div>
-                        <div class="panel-body" style="padding-bottom:0px">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="property-card property-horizontal">
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                <div class="property-content"
-                                                     style="height:140px">
-                                                    <div class="listingInfo">
-                                                        <div class="">
-                                                            <h5 style="padding-left:10px">
-                                                                账号单价：0.025 元</h5>
-                                                        </div>
-                                                        <div class="col-sm-3">
-                                                            <p class="text-muted">付费方式： <a
-                                                                    class="btn btn-teal btn-rounded btn-sm waves-effect waves-light">后付费</a>
-
-
-                                                        </div>
-                                                        <div class="col-sm-3">
-                                                            <p class="text-muted">计费方式：
-                                                                <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">客户成功提交计费</a>
-                                                            </p>
-
-                                                        </div>
-                                                        <div class="col-sm-3">
-                                                            <p class="text-muted">账号费用：
-                                                                <a class="btn btn-purple btn-rounded btn-sm waves-effect waves-light">账号M1费用</a>
-                                                            </p>
-
-                                                        </div>
-                                                        <div class="col-sm-3">
-
-
-                                                        </div>
-                                                    </div>
-                                                    <!-- end. Card actions -->
-                                                </div>
-                                            </div>
-                                            <!-- /col 8 -->
-                                        </div>
-                                        <!-- /inner row -->
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-lg-12" style="margin-top:10px">
-                    <div class="panel panel-border panel-purple">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">
-                                <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
-                                过滤信息
-                            </h3>
-                        </div>
-                        <div class="panel-body" style="padding-bottom:0px">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="property-card property-horizontal">
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                <div class="property-content"
-                                                     style="height:130px">
-                                                    <div class="listingInfo">
-                                                        <div class="col-sm-3">
-                                                            <p class="text-muted">发送时间限制： 7：00-24：00
-                                                            <p class="text-muted">频次限制：5</p>
-                                                            <p class="text-muted">RE正则表达：^${1-9}/n</p>
-
-                                                        </div>
-                                                        <div class="col-sm-3">
-                                                            <p class="text-muted">屏蔽省份：
-                                                                北京
-                                                            </p>
-                                                            <p class="text-muted">黑名单：是</p>
-
-
-                                                        </div>
-                                                        <div class="col-sm-3">
-                                                            <p class="text-muted">限量方：每日最高发送量</p>
-                                                            <p class="text-muted">白名单：是</p>
-                                                        </div>
-                                                        <div class="col-sm-3">
-                                                            <p class="text-muted">模板匹配：模版113</p>
-                                                            <p class="text-muted">关键字：毛邓习</p>
-
-                                                        </div>
                                                     </div>
                                                     <!-- end. Card actions -->
                                                 </div>
@@ -527,63 +469,7 @@
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-lg-12" style="margin-top:10px">
-                    <div class="panel panel-border panel-pink">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">
-                                <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
-                                扩展参数
-                            </h3>
-                        </div>
-                        <div class="panel-body" style="padding-bottom:0px">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="property-card property-horizontal">
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                <div class="property-content"
-                                                     style="height:130px">
-                                                    <div class="listingInfo">
-                                                        <div class="col-sm-3">
-                                                            <p class="text-muted">动态扩展字段： 7：00-24：00
-                                                            <p class="text-muted">动态扩展字段：5</p>
-                                                            <p class="text-muted">动态扩展字段：^${1-9}/n</p>
 
-                                                        </div>
-                                                        <div class="col-sm-3">
-                                                            <p class="text-muted">动态扩展字段：
-                                                                北京
-                                                            </p>
-                                                            <p class="text-muted">动态扩展字段：是</p>
-
-
-                                                        </div>
-                                                        <div class="col-sm-3">
-                                                            <p class="text-muted">动态扩展字段：每日最高发送量</p>
-                                                            <p class="text-muted">动态扩展字段：是</p>
-                                                        </div>
-                                                        <div class="col-sm-3">
-                                                            <p class="text-muted">动态扩展字段：模版113</p>
-                                                            <p class="text-muted">动态扩展字段：毛邓习</p>
-
-                                                        </div>
-                                                    </div>
-                                                    <!-- end. Card actions -->
-                                                </div>
-                                            </div>
-                                            <!-- /col 8 -->
-                                        </div>
-                                        <!-- /inner row -->
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
         <!-- end row -->
 
         <!-- start row  错误提示-->

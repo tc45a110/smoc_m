@@ -220,4 +220,30 @@ public class BusinessAccountService {
             entity.setAccountProcess(accountProcess.toString());
         }
     }
+
+    /**
+     * 注销、启用业务账号
+     * @param id
+     * @param status
+     * @return
+     */
+    @Transactional
+    public ResponseData forbiddenAccountById(String id, String status) {
+        String op = status;
+        AccountBasicInfo entity = businessAccountRepository.findById(id).get();
+
+        //账号状态转换
+        if ("0".equals(status) ) {
+            status = "1";
+        } else {
+            status = "0";
+        }
+
+        businessAccountRepository.updateAccountStatusById(id,status);
+
+        //记录日志
+        log.info("[EC业务账号管理][{}]数据:{}", "1".equals(op) ? "注销业务账号":"启用业务账号" ,  JSON.toJSONString(entity));
+
+        return ResponseDataUtil.buildSuccess();
+    }
 }

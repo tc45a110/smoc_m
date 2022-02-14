@@ -23,6 +23,7 @@ public class AccountFinanceInfoRowMapper implements RowMapper<AccountFinanceInfo
         qo.setFrozenReturnDate(resultSet.getString("FROZEN_RETURN_DATE"));
         qo.setAccountCreditSum(resultSet.getBigDecimal("ACCOUNT_CREDIT_SUM"));
         qo.setCarrier(resultSet.getString("CARRIER"));
+        qo.setCarrierType(resultSet.getString("CARRIER_TYPE"));
         BigDecimal price = resultSet.getBigDecimal("CARRIER_PRICE");
         if(!StringUtils.isEmpty(price)){
             qo.setCarrierPrice(new BigDecimal(price.stripTrailingZeros().toPlainString()));

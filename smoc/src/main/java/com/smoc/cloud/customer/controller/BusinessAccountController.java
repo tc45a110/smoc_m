@@ -76,4 +76,23 @@ public class BusinessAccountController {
         return data;
     }
 
+    /**
+     * 注销、启用业务账号
+     * @param id
+     * @param status
+     * @return
+     */
+    @RequestMapping(value = "/forbiddenAccountById/{id}/{status}", method = RequestMethod.GET)
+    public ResponseData forbiddenAccountById(@PathVariable String id, @PathVariable String status)  {
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(validator));
+        }
+
+        ResponseData data = businessAccountService.forbiddenAccountById(id,status);
+        return data;
+    }
 }

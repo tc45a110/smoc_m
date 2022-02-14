@@ -9,15 +9,20 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
+import com.smoc.cloud.common.smoc.customer.validator.AccountFinanceInfoValidator;
+import com.smoc.cloud.common.smoc.customer.validator.AccountInterfaceInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
+import com.smoc.cloud.customer.service.AccountFinanceService;
+import com.smoc.cloud.customer.service.AccountInterfaceService;
 import com.smoc.cloud.customer.service.BusinessAccountService;
 import com.smoc.cloud.customer.service.EnterpriseService;
 import com.smoc.cloud.sequence.service.SequenceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
@@ -28,9 +33,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * EC业务账号管理
@@ -51,6 +60,12 @@ public class AccountController {
 
     @Autowired
     private SequenceService sequenceService;
+
+    @Autowired
+    private AccountFinanceService accountFinanceService;
+
+    @Autowired
+    private AccountInterfaceService accountInterfaceService;
 
     /**
      * 业务账号列表
@@ -284,7 +299,7 @@ public class AccountController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            systemUserLogService.logsAsync("BUSINESS_ACCOUNT", accountBasicInfoValidator.getAccountId(), "add".equals(op) ? accountBasicInfoValidator.getCreatedBy() : accountBasicInfoValidator.getUpdatedBy(), op, "add".equals(op) ? "添加业务账号" : "修改业务账号", JSON.toJSONString(accountBasicInfoValidator));
+            systemUserLogService.logsAsync("BUSINESS_ACCOUNT", accountBasicInfoValidator.getAccountId(), "add".equals(op) ? accountBasicInfoValidator.getCreatedBy() : accountBasicInfoValidator.getUpdatedBy(), op, "add".equals(op) ? "添加业务账号基本信息" : "修改业务账号基本信息", JSON.toJSONString(accountBasicInfoValidator));
         }
 
         //记录日志
@@ -307,6 +322,46 @@ public class AccountController {
         return view;
     }
 
+    /**
+     * 注销、启用账号
+     *
+     * @return
+     */
+    @RequestMapping(value = "/forbiddenAccountById/{id}/{status}", method = RequestMethod.GET)
+    public ModelAndView forbiddenAccountById(@PathVariable String id,@PathVariable String status, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("customer/account/account_list");
+
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
+
+        //查询账号
+        ResponseData<AccountBasicInfoValidator> data = businessAccountService.findById(id);
+        if (!StringUtils.isEmpty(data) && !ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        //注销、启用账号
+        ResponseData webData = businessAccountService.forbiddenAccountById(id,status);
+
+        //保存操作记录
+        if (ResponseCode.SUCCESS.getCode().equals(webData.getCode())) {
+            systemUserLogService.logsAsync("BUSINESS_ACCOUNT", data.getData().getEnterpriseId(), user.getRealName(), "edit", "1".equals(status) ? "注销EC业务账号":"启用EC业务账号账号", JSON.toJSONString(data.getData()));
+        }
+
+        //记录日志
+        log.info("[EC业务账号管理][{}][{}][{}]数据:{}", "1".equals(status) ? "注销EC业务账号":"启用EC业务账号账号","edit" , user.getUserName(), JSON.toJSONString(data.getData()));
+        view.setView(new RedirectView("/account/list", true, false));
+        return view;
+
+    }
 
 
     /**
@@ -331,6 +386,22 @@ public class AccountController {
     public ModelAndView view(@PathVariable String accountId, HttpServletRequest request) {
         ModelAndView view = new ModelAndView("customer/account/account_view_center");
 
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(accountId);
+        if (!MpmValidatorUtil.validate(validator)) {
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
+
+        //查询业务账号
+        ResponseData<AccountBasicInfoValidator> info = businessAccountService.findById(accountId);
+        if (!ResponseCode.SUCCESS.getCode().equals(info.getCode())) {
+            view.addObject("error", info.getCode() + ":" + info.getMessage());
+            return view;
+        }
+
+        view.addObject("accountId", info.getData().getAccountId());
         return view;
 
     }
@@ -343,6 +414,46 @@ public class AccountController {
     @RequestMapping(value = "/view/base/{accountId}", method = RequestMethod.GET)
     public ModelAndView view_base(@PathVariable String accountId, HttpServletRequest request) {
         ModelAndView view = new ModelAndView("customer/account/account_view_base");
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(accountId);
+        if (!MpmValidatorUtil.validate(validator)) {
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
+
+        /**
+         * 查询账号配置的是通道组还是通道
+         */
+        ResponseData<AccountBasicInfoValidator> data = businessAccountService.findById(accountId);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        /**
+         * 查询财务信息
+         */
+        AccountFinanceInfoValidator accountFinanceInfoValidator = new AccountFinanceInfoValidator();
+        accountFinanceInfoValidator.setAccountId(data.getData().getAccountId());
+        accountFinanceInfoValidator.setCarrier(data.getData().getCarrier());
+        ResponseData<Map<String, BigDecimal>> map = accountFinanceService.editCarrierPrice(accountFinanceInfoValidator);
+        view.addObject("list", map.getData());
+        //查询账号配置的运营商价格
+        ResponseData<List<AccountFinanceInfoValidator>> list = accountFinanceService.findByAccountId(accountFinanceInfoValidator);
+        if(!StringUtils.isEmpty(list) && list.getData().size()>0){
+            accountFinanceInfoValidator = list.getData().get(0);
+        }
+
+        /**
+         * 查询接口信息
+         */
+        ResponseData<AccountInterfaceInfoValidator> accountInterfaceInfoValidator = accountInterfaceService.findById(data.getData().getAccountId());
+
+        view.addObject("accountBasicInfoValidator", data.getData());
+        view.addObject("accountFinanceInfoValidator", accountFinanceInfoValidator);
+        view.addObject("accountInterfaceInfoValidator", accountInterfaceInfoValidator.getData());
 
         return view;
 
