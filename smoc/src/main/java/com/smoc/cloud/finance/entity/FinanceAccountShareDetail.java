@@ -5,7 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.util.Date;
 
 @Entity
 @Table(name = "finance_account_share_detail")
@@ -39,19 +39,19 @@ public class FinanceAccountShareDetail {
     private String createdBy;
 
     @Column(name = "CREATED_TIME")
-    private Instant createdTime;
+    private Date createdTime;
 
     @Column(name = "UPDATED_BY", length = 32)
     private String updatedBy;
 
     @Column(name = "UPDATED_TIME")
-    private Instant updatedTime;
+    private Date updatedTime;
 
-    public Instant getUpdatedTime() {
+    public Date getUpdatedTime() {
         return updatedTime;
     }
 
-    public void setUpdatedTime(Instant updatedTime) {
+    public void setUpdatedTime(Date updatedTime) {
         this.updatedTime = updatedTime;
     }
 
@@ -63,11 +63,11 @@ public class FinanceAccountShareDetail {
         this.updatedBy = updatedBy;
     }
 
-    public Instant getCreatedTime() {
+    public Date getCreatedTime() {
         return createdTime;
     }
 
-    public void setCreatedTime(Instant createdTime) {
+    public void setCreatedTime(Date createdTime) {
         this.createdTime = createdTime;
     }
 
