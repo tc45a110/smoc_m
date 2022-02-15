@@ -176,6 +176,9 @@ public class FinanceShareAccountController {
             view.addObject("error", shareFinanceAccount.getCode() + ":" + shareFinanceAccount.getMessage());
             return view;
         }
+        FinanceAccountValidator financeAccountValidator = shareFinanceAccount.getData();
+        financeAccountValidator.setIsFreezeSumPool("0");
+        financeAccountValidator.setIsUsableSumPool("0");
 
         //已选中财务账户
         Map<String,Boolean> selectedMap = new HashMap<>();
@@ -200,7 +203,7 @@ public class FinanceShareAccountController {
 
         view.addObject("op", "edit");
         view.addObject("selectedMap", selectedMap);
-        view.addObject("financeAccountValidator", shareFinanceAccount.getData());
+        view.addObject("financeAccountValidator", financeAccountValidator);
         view.addObject("enterprise", enterpriseData.getData());
         view.addObject("financeAccounts", data.getData());
 

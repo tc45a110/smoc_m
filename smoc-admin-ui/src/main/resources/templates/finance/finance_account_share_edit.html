@@ -89,7 +89,6 @@
                                                              name="isUsableSumPool" show-type="radio"
                                                              style="margin-top:0px"
                                                              key="code"
-                                                             disabled="true"
                                                              th:value="${financeAccountValidator.isUsableSumPool}"
                                                              required="true" title="是否"/>
                                                 </div>
@@ -104,7 +103,6 @@
                                                              name="isFreezeSumPool" show-type="radio"
                                                              style="margin-top:0px"
                                                              key="code"
-                                                             disabled="true"
                                                              th:value="${financeAccountValidator.isFreezeSumPool}"
                                                              required="true" title="是否"/>
                                                 </div>
@@ -307,7 +305,7 @@
           return false;
         }
         var array =accountIds.split(",");
-        if(2>array.length){
+        if(1>array.length){
            return false;
         }
         $("#accountIds").val(accountIds);

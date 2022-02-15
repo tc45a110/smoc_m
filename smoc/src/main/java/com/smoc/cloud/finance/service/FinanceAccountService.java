@@ -85,8 +85,8 @@ public class FinanceAccountService {
      * @param flag 1 表示业务账号 账户  2表示认证账号 账户 3表示财务共享账户
      * @return
      */
-    public ResponseData<Map<String, Object>> countSum(String flag,FinanceAccountValidator op) {
-        Map<String, Object> data = financeAccountRepository.countSum(flag,op);
+    public ResponseData<Map<String, Object>> countSum(String flag, FinanceAccountValidator op) {
+        Map<String, Object> data = financeAccountRepository.countSum(flag, op);
         return ResponseDataUtil.buildSuccess(data);
     }
 
@@ -224,8 +224,13 @@ public class FinanceAccountService {
             return ResponseDataUtil.buildError();
         }
 
-        financeAccountRepository.createShareFinanceAccount(financeAccountValidator);
-
-        return ResponseDataUtil.buildSuccess();
+        if ("add".equals(op)) {
+            financeAccountRepository.createShareFinanceAccount(financeAccountValidator);
+            return ResponseDataUtil.buildSuccess();
+        } else {
+            ResponseData<FinanceAccountValidator> financeAccountValidatorResponseData = this.findById(financeAccountValidator.getAccountId());
+            financeAccountRepository.editShareFinanceAccount(financeAccountValidator, financeAccountValidatorResponseData.getData());
+            return ResponseDataUtil.buildSuccess();
+        }
     }
 }

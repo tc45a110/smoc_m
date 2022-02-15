@@ -32,19 +32,20 @@ public class SystemUserLogController {
      * @param moduleId 数据模块的ID
      * @return
      */
-    @RequestMapping(value = "/list/{moduleId}", method = RequestMethod.GET)
-    public ModelAndView list(@PathVariable String moduleId) {
+    @RequestMapping(value = "/list/{module}/{moduleId}", method = RequestMethod.GET)
+    public ModelAndView list(@PathVariable String module,@PathVariable String moduleId) {
 
         ModelAndView view = new ModelAndView("sys_user_logs/user_logs_list");
 
         //判断module
-        if (StringUtils.isEmpty(moduleId)) {
+        if (StringUtils.isEmpty(moduleId) || StringUtils.isEmpty(module)) {
             view.addObject("error", "module参数不能为空");
             return view;
         }
 
         SystemUserLogValidator systemUserLogValidator = new SystemUserLogValidator();
         systemUserLogValidator.setModuleId(moduleId);
+        systemUserLogValidator.setModule(module);
 
         //查询数据
         PageParams<SystemUserLogValidator> params = new PageParams<>();
