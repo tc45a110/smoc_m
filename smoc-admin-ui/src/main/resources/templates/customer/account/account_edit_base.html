@@ -130,11 +130,18 @@
                                                              title="通道方式"/>
                                                 </div>
                                                 <div class="col-sm-4 m-b-10">
-                                                    <label class="m-b-10">有效状态<span class="text-danger">*</span></label><br>
-                                                    <mpm:tag id="accountStauts" identity="isOrNo" name="accountStauts"
+                                                    <label class="m-b-10">账号状态<span class="text-danger" style="display: none">*</span>&nbsp;
+                                                        <span class="text-danger" th:if="${#fields.hasErrors('accountStauts')}"
+                                                              th:errors="*{accountStauts}"></span></label><br>
+                                                    <!--<mpm:tag id="accountStauts" identity="isOrNo" name="accountStauts"
                                                              show-type="radio" style="margin-top:0px"  onchange="confirmModal()"
                                                              key="code" th:value="${accountBasicInfoValidator.accountStauts}"
-                                                             required="true" title="是否"/>
+                                                             required="true" title="是否"/>-->
+                                                    <select data-style="btn-default" name="accountStauts" id="accountStauts" class="selectpicker form-control" required="" tabindex="-98" onchange="confirmModal()">
+                                                        <option data-icon="mdi mdi-apps" value="2" th:selected="${accountBasicInfoValidator.accountStauts eq '2'}">完善中</option>
+                                                        <option data-icon="mdi mdi-apps" value="1" th:selected="${accountBasicInfoValidator.accountStauts eq '1'}">正常</option>
+                                                        <option data-icon="mdi mdi-apps" value="0" th:selected="${accountBasicInfoValidator.accountStauts eq '0'}">注销</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
@@ -142,7 +149,7 @@
                                     </div>
                                     <div class="text-center" style="margin-bottom:20px">
                                         <input type="hidden" th:field="*{enterpriseId}">
-                                        <input type="hidden" th:field="*{accountProcess}">
+                                        <input type="hidden" th:field="*{accountProcess}" id="accountProcess">
                                         <input type="hidden" th:field="*{createdTime}">
                                         <input type="hidden" th:field="*{createdBy}">
                                         <button sec:authorize-url="/account/save/*" type="submit"
@@ -222,11 +229,13 @@
     }
 
     function confirmModal(){
-        var accountStauts = $('input:radio[name="accountStauts"]:checked').val()
+        var accountStauts = $('#accountStauts').val();
         if(0 ==accountStauts){
             $('#confirm-modal').modal();
         }
+
     }
+
 
 </script>
 <script>

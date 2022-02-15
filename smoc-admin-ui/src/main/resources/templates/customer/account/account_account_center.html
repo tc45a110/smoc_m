@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org"
 >
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -54,7 +55,7 @@
                                     </div>
 
                                     <div class="">
-                                        <h4 class="m-b-5">北京星语互联科技有限公司</h4>
+                                        <h4 class="m-b-5">[[${enterpriseBasicInfoValidator.enterpriseName}]]</h4>
                                         <p class="text-muted"></p>
                                     </div>
                                     <hr style="margin-bottom: 0px"/>
@@ -64,22 +65,22 @@
                                             <div class="col-md-12 col-sm-12 col-xs-12">
                                                 <div id="external-events" class="m-t-20">
                                                     <a href="#" data-toggle="modal" data-target="#add-category" style="text-align:left;font-size:14px" class="btn btn-lg btn-info btn-block waves-effect  waves-light">
-                                                        <i style="padding-left:10px;margin-right:10px" class="mdi mdi-account-circle"></i>普通短信  通道账户<span style="margin-left: 10px">5个</span>
+                                                        <i style="padding-left:10px;margin-right:10px" class="mdi mdi-account-circle"></i>普通短信  通道账户<span style="margin-left: 10px">[[${TEXT_SMS}]]个</span>
                                                     </a>
                                                     <a href="#" data-toggle="modal" data-target="#add-category" style="text-align:left;font-size:14px" class="btn btn-lg btn-custom btn-block waves-effect m-t-20 waves-light">
-                                                        <i style="padding-left:10px;margin-right:10px" class="mdi mdi-account-circle"></i>多媒体短信 通道账户<span style="margin-left: 10px">1个</span>
+                                                        <i style="padding-left:10px;margin-right:10px" class="mdi mdi-account-circle"></i>多媒体短信 通道账户<span style="margin-left: 10px">[[${MULTI_SMS}]]个</span>
                                                     </a>
                                                     <a href="#" data-toggle="modal" data-target="#add-category" style="text-align:left;font-size:14px" class="btn btn-lg btn-teal btn-block waves-effect m-t-20 waves-light">
-                                                        <i style="padding-left:10px;margin-right:10px" class="mdi mdi-account-circle"></i>彩信  通道账户<span style="margin-left: 10px">1个</span>
+                                                        <i style="padding-left:10px;margin-right:10px" class="mdi mdi-account-circle"></i>彩信  通道账户<span style="margin-left: 10px">[[${MMS}]]个</span>
                                                     </a>
                                                     <a href="#" data-toggle="modal" data-target="#add-category" style="text-align:left;font-size:14px" class="btn btn-lg btn-facebook btn-block waves-effect m-t-20 waves-light">
-                                                        <i style="padding-left:10px;margin-right:10px" class="mdi mdi-account-circle"></i>5G短信  通道账户<span style="margin-left: 10px">0个</span>
+                                                        <i style="padding-left:10px;margin-right:10px" class="mdi mdi-account-circle"></i>5G短信  通道账户<span style="margin-left: 10px">[[${SMS_5G}]]个</span>
                                                     </a>
                                                     <a href="#" data-toggle="modal" data-target="#add-category" style="text-align:left;font-size:14px" class="btn btn-lg btn-instagram btn-block waves-effect m-t-20 waves-light">
-                                                        <i style="padding-left:10px;margin-right:10px" class="mdi mdi-account-circle"></i>过黑服务  通道账户<span style="margin-left: 10px">0个</span>
+                                                        <i style="padding-left:10px;margin-right:10px" class="mdi mdi-account-circle"></i>过黑服务  通道账户<span style="margin-left: 10px">[[${BLACK_SERVICE}]]个</span>
                                                     </a>
                                                     <a href="#" data-toggle="modal" data-target="#add-category" style="text-align:left;font-size:14px" class="btn btn-lg btn-tumblr btn-block waves-effect m-t-20 waves-light">
-                                                        <i style="padding-left:10px;margin-right:10px" class="mdi mdi-account-circle"></i>国际短信  通道账户<span style="margin-left: 10px">0个</span>
+                                                        <i style="padding-left:10px;margin-right:10px" class="mdi mdi-account-circle"></i>国际短信  通道账户<span style="margin-left: 10px">[[${INTERNATIONAL_SMS}]]个</span>
                                                     </a>
 
                                                 </div>
@@ -130,13 +131,13 @@
                                                class="btn btn-default waves-effect waves-light btn-md">
                                                 <i class="glyphicon  glyphicon-share-alt" style="margin-right:5px"></i>
                                                 返回EC业务账号列表</a>
-                                            <a  th:href="@{/enterprise/center/0000}"
+                                            <a  th:href="@{/enterprise/center/{id}(id=${enterpriseBasicInfoValidator.enterpriseId})}"
                                                 style="margin-left:10px;"
                                                 class="btn btn-facebook waves-effect waves-light btn-md">
                                                 <i class="mdi mdi-vector-circle" style="margin-right:5px"></i>
                                                 企业信息中心
                                             </a>
-                                            <a  sec:authorize-url="/finance/account/center" th:href="@{/finance/account/center}"
+                                            <a  th:href="@{/finance/account/center}"
                                                 style="margin-left:10px;"
                                                 class="btn btn-tumblr waves-effect waves-light btn-md">
                                                 <i class="mdi mdi-vector-circle" style="margin-right:5px"></i>
@@ -154,18 +155,18 @@
                                                     <h3 class="panel-title">
                                                         <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
                                                         普通短信 业务账号信息
-                                                        <div class="pull-right">
-                                                            <a sec:authorize-url="/account/edit/center/*" th:href="@{/account/edit/center/enterpriseId}"
+                                                        <!--<div class="pull-right">
+                                                            <a  th:href="@{/account/edit/center/enterpriseId}"
                                                                style="margin-top: -8px"
                                                                class="btn btn-purple waves-effect waves-light m-l-10 btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="新建普通短信EC业务账号">
                                                                 <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>新建</a>
-                                                        </div>
+                                                        </div>-->
                                                     </h3>
                                                 </div>
 
                                                 <div  class="panel-body" style="display:block">
                                                     <div class="row">
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6"  th:each="info:${list}" th:if="${info.businessType eq 'TEXT_SMS'}">
                                                             <div class="property-card property-horizontal">
                                                                 <div class="row">
                                                                     <div class="col-sm-12">
@@ -174,29 +175,39 @@
                                                                             <div class="listingInfo">
                                                                                 <div class="">
                                                                                     <h5 style="padding-left:10px">
-                                                                                        账号名称：13910941234</h5>
+                                                                                        账号名称：[[${info.accountName}]]</h5>
                                                                                 </div>
                                                                                 <div class="col-sm-6">
-                                                                                    <p style="font-size:12px">账号：<span style="color: #3ac9d6">10691111</span></p>
-                                                                                    <p style="font-size:12px">信息分类：行业</p>
-                                                                                    <p style="font-size:12px">扩展码：12354896</p>
+                                                                                    <p style="font-size:12px">账号：<span style="color: #3ac9d6">[[${info.accountId}]]</span></p>
+                                                                                    <p style="font-size:12px">信息分类：<mpm:tag identity="infoType" show-type="label" key="code" th:value="${info.infoType}"/></p>
+                                                                                    <p style="font-size:12px">扩展码：[[${info.extendCode}]]</p>
                                                                                 </div>
                                                                                 <div class="col-sm-6">
-                                                                                    <p style="font-size:12px">发送运营商：移动、联通、电信</p>
-                                                                                    <p style="font-size:12px">接口类型：CMPP</p>
-                                                                                    <p style="font-size:12px">账号状态：正常</p>
+                                                                                    <p style="font-size:12px">发送运营商：<mpm:tag identity="carrier" show-type="label" key="code" th:value="${info.carrier}"/></p>
+                                                                                    <p style="font-size:12px">接口类型：<mpm:tag id="inter" identity="accountInterfaceType"
+                                                                                                                            show-type="label" key="code" th:value="${info.protocol}"/></p>
+                                                                                    <span style="font-size:12px">账号状态：
+                                                                                        <span th:if="${info.accountStauts eq '2'}">完善中</span>
+                                                                                        <span th:if="${info.accountStauts eq '1'}">有效</span>
+                                                                                        <span th:if="${info.accountStauts eq '0'}">已注销</span>
+                                                                                    </span>
 
                                                                                 </div>
                                                                             </div>
                                                                             <div class="property-action">
 
                                                                                 <div class="pull-right">
-                                                                                    <a class="btn btn-info" sec:authorize-url="/account/edit/center/*" th:href="@{/account/edit/center/enterpriseId}"
+                                                                                    <a class="btn btn-info" sec:authorize-url="/account/edit/center/*/*"
+                                                                                       th:href="@{/account/edit/center/enterprise/{accountId}(accountId=${info.accountId})}"
                                                                                        style="font-size:12px;">编辑并配置</a>
-                                                                                    <a class="btn btn-brown" th:href="@{/account/view/center/accountId}" sec:authorize-url="/account/view/center/*"
+                                                                                    <a class="btn btn-brown" sec:authorize-url="/account/view/center/*"
+                                                                                       th:href="@{/account/view/center/{accountId}(accountId=${info.accountId})}"
                                                                                        style="font-size:12px;">查看明细</a>
-                                                                                    <a   data-toggle="modal" data-target="#confirm-modal" class="btn btn-danger"
-                                                                                       style="font-size:12px;">注销</a>
+                                                                                    <a   data-toggle="modal" data-target="#confirm-modal"
+                                                                                         th:class="${(info.accountStauts eq '1' or info.accountStauts eq '2')?'btn btn-danger':'btn btn-info'}"
+                                                                                         sec:authorize-url="/account/forbiddenAccountById/*/*"
+                                                                                         th:onclick="confirmDelete([[${info.accountId}]],[[${info.accountStauts}]])"
+                                                                                       style="font-size:12px;">[[${(info.accountStauts eq '1' or info.accountStauts eq '2') ?'注销':'启用'}]]</a>
                                                                                 </div>
                                                                             </div>
                                                                             <!-- end. Card actions -->
@@ -208,49 +219,7 @@
                                                             </div>
 
                                                         </div>
-                                                        <div class="col-md-6">
-                                                            <div class="property-card property-horizontal">
-                                                                <div class="row">
-                                                                    <div class="col-sm-12">
-                                                                        <div class="property-content"
-                                                                             style="height:206px">
-                                                                            <div class="listingInfo">
-                                                                                <div class="">
-                                                                                    <h5 style="padding-left:10px">
-                                                                                        账号名称：13910941234</h5>
-                                                                                </div>
-                                                                                <div class="col-sm-6">
-                                                                                    <p style="font-size:12px">账号：<span style="color: #3ac9d6">10691111</span></p>
-                                                                                    <p style="font-size:12px">信息分类：行业</p>
-                                                                                    <p style="font-size:12px">扩展码：12354896</p>
-                                                                                </div>
-                                                                                <div class="col-sm-6">
-                                                                                    <p style="font-size:12px">发送运营商：移动、联通、电信</p>
-                                                                                    <p style="font-size:12px">接口类型：CMPP</p>
-                                                                                    <p style="font-size:12px">账号状态：正常</p>
 
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="property-action">
-
-                                                                                <div class="pull-right">
-                                                                                    <a class="btn btn-info" sec:authorize-url="/account/edit/center/*" th:href="@{/account/edit/center/enterpriseId}"
-                                                                                       style="font-size:12px;">编辑并配置</a>
-                                                                                    <a class="btn btn-brown" th:href="@{/account/view/center/accountId}" sec:authorize-url="/account/view/center/*"
-                                                                                       style="font-size:12px;">查看明细</a>
-                                                                                    <a   data-toggle="modal" data-target="#confirm-modal" class="btn btn-danger"
-                                                                                         style="font-size:12px;">注销</a>
-                                                                                </div>
-                                                                            </div>
-                                                                            <!-- end. Card actions -->
-                                                                        </div>
-                                                                    </div>
-                                                                    <!-- /col 8 -->
-                                                                </div>
-                                                                <!-- /inner row -->
-                                                            </div>
-
-                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -265,17 +234,11 @@
                                                     <h3 class="panel-title">
                                                         <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
                                                         多媒体短信 业务账号信息
-                                                        <div class="pull-right">
-                                                            <a sec:authorize-url="/account/edit/center/*" th:href="@{/account/edit/center/enterpriseId}"
-                                                               style="margin-top: -8px"
-                                                               class="btn btn-purple waves-effect waves-light m-l-10 btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="新建多媒体短信EC业务账号">
-                                                                <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>新建</a>
-                                                        </div>
                                                     </h3>
                                                 </div>
                                                 <div  class="panel-body" style="display:block">
                                                     <div class="row">
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6" th:each="info:${list}" th:if="${info.businessType eq 'MULTI_SMS'}">
                                                             <div class="property-card property-horizontal">
                                                                 <div class="row">
                                                                     <div class="col-sm-12">
@@ -284,29 +247,39 @@
                                                                             <div class="listingInfo">
                                                                                 <div class="">
                                                                                     <h5 style="padding-left:10px">
-                                                                                        账号名称：13910941234</h5>
+                                                                                        账号名称：[[${info.accountName}]]</h5>
                                                                                 </div>
                                                                                 <div class="col-sm-6">
-                                                                                    <p style="font-size:12px">账号：<span style="color: #3ac9d6">10691111</span></p>
-                                                                                    <p style="font-size:12px">信息分类：行业</p>
-                                                                                    <p style="font-size:12px">扩展码：12354896</p>
+                                                                                    <p style="font-size:12px">账号：<span style="color: #3ac9d6">[[${info.accountId}]]</span></p>
+                                                                                    <p style="font-size:12px">信息分类：<mpm:tag identity="infoType" show-type="label" key="code" th:value="${info.infoType}"/></p>
+                                                                                    <p style="font-size:12px">扩展码：[[${info.extendCode}]]</p>
                                                                                 </div>
                                                                                 <div class="col-sm-6">
-                                                                                    <p style="font-size:12px">发送运营商：移动、联通、电信</p>
-                                                                                    <p style="font-size:12px">接口类型：CMPP</p>
-                                                                                    <p style="font-size:12px">账号状态：正常</p>
+                                                                                    <p style="font-size:12px">发送运营商：<mpm:tag identity="carrier" show-type="label" key="code" th:value="${info.carrier}"/></p>
+                                                                                    <p style="font-size:12px">接口类型：<mpm:tag id="inter" identity="accountInterfaceType"
+                                                                                                                            show-type="label" key="code" th:value="${info.protocol}"/></p>
+                                                                                    <span style="font-size:12px">账号状态：
+                                                                                        <span th:if="${info.accountStauts eq '2'}">完善中</span>
+                                                                                        <span th:if="${info.accountStauts eq '1'}">有效</span>
+                                                                                        <span th:if="${info.accountStauts eq '0'}">已注销</span>
+                                                                                    </span>
 
                                                                                 </div>
                                                                             </div>
                                                                             <div class="property-action">
 
                                                                                 <div class="pull-right">
-                                                                                    <a class="btn btn-info" sec:authorize-url="/account/edit/center/*" th:href="@{/account/edit/center/enterpriseId}"
+                                                                                    <a class="btn btn-info" sec:authorize-url="/account/edit/center/*/*"
+                                                                                       th:href="@{/account/edit/center/enterprise/{accountId}(accountId=${info.accountId})}"
                                                                                        style="font-size:12px;">编辑并配置</a>
-                                                                                    <a class="btn btn-brown" th:href="@{/account/view/center/accountId}" sec:authorize-url="/account/view/center/*"
+                                                                                    <a class="btn btn-brown" sec:authorize-url="/account/view/center/*"
+                                                                                       th:href="@{/account/view/center/{accountId}(accountId=${info.accountId})}"
                                                                                        style="font-size:12px;">查看明细</a>
-                                                                                    <a   data-toggle="modal" data-target="#confirm-modal" class="btn btn-danger"
-                                                                                         style="font-size:12px;">注销</a>
+                                                                                    <a   data-toggle="modal" data-target="#confirm-modal"
+                                                                                         th:class="${(info.accountStauts eq '1' or info.accountStauts eq '2')?'btn btn-danger':'btn btn-info'}"
+                                                                                         sec:authorize-url="/account/forbiddenAccountById/*/*"
+                                                                                         th:onclick="confirmDelete([[${info.accountId}]],[[${info.accountStauts}]])"
+                                                                                         style="font-size:12px;">[[${(info.accountStauts eq '1' or info.accountStauts eq '2') ?'注销':'启用'}]]</a>
                                                                                 </div>
                                                                             </div>
                                                                             <!-- end. Card actions -->
@@ -332,17 +305,12 @@
                                                     <h3 class="panel-title">
                                                         <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
                                                         彩信 业务账号信息
-                                                        <div class="pull-right">
-                                                            <a sec:authorize-url="/account/edit/center/*" th:href="@{/account/edit/center/enterpriseId}"
-                                                               style="margin-top: -8px"
-                                                               class="btn btn-purple waves-effect waves-light m-l-10 btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="新建彩信EC业务账号">
-                                                                <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>新建</a>
-                                                        </div>
+
                                                     </h3>
                                                 </div>
                                                 <div  class="panel-body" style="display:block">
                                                     <div class="row">
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6" th:each="info:${list}" th:if="${info.businessType eq 'MMS'}">
                                                             <div class="property-card property-horizontal">
                                                                 <div class="row">
                                                                     <div class="col-sm-12">
@@ -351,29 +319,39 @@
                                                                             <div class="listingInfo">
                                                                                 <div class="">
                                                                                     <h5 style="padding-left:10px">
-                                                                                        账号名称：13910941234</h5>
+                                                                                        账号名称：[[${info.accountName}]]</h5>
                                                                                 </div>
                                                                                 <div class="col-sm-6">
-                                                                                    <p style="font-size:12px">账号：<span style="color: #3ac9d6">10691111</span></p>
-                                                                                    <p style="font-size:12px">信息分类：行业</p>
-                                                                                    <p style="font-size:12px">扩展码：12354896</p>
+                                                                                    <p style="font-size:12px">账号：<span style="color: #3ac9d6">[[${info.accountId}]]</span></p>
+                                                                                    <p style="font-size:12px">信息分类：<mpm:tag identity="infoType" show-type="label" key="code" th:value="${info.infoType}"/></p>
+                                                                                    <p style="font-size:12px">扩展码：[[${info.extendCode}]]</p>
                                                                                 </div>
                                                                                 <div class="col-sm-6">
-                                                                                    <p style="font-size:12px">发送运营商：移动、联通、电信</p>
-                                                                                    <p style="font-size:12px">接口类型：CMPP</p>
-                                                                                    <p style="font-size:12px">账号状态：正常</p>
+                                                                                    <p style="font-size:12px">发送运营商：<mpm:tag identity="carrier" show-type="label" key="code" th:value="${info.carrier}"/></p>
+                                                                                    <p style="font-size:12px">接口类型：<mpm:tag id="inter" identity="accountInterfaceType"
+                                                                                                                            show-type="label" key="code" th:value="${info.protocol}"/></p>
+                                                                                    <span style="font-size:12px">账号状态：
+                                                                                        <span th:if="${info.accountStauts eq '2'}">完善中</span>
+                                                                                        <span th:if="${info.accountStauts eq '1'}">有效</span>
+                                                                                        <span th:if="${info.accountStauts eq '0'}">已注销</span>
+                                                                                    </span>
 
                                                                                 </div>
                                                                             </div>
                                                                             <div class="property-action">
 
                                                                                 <div class="pull-right">
-                                                                                    <a class="btn btn-info" sec:authorize-url="/account/edit/center/*" th:href="@{/account/edit/center/enterpriseId}"
+                                                                                    <a class="btn btn-info" sec:authorize-url="/account/edit/center/*/*"
+                                                                                       th:href="@{/account/edit/center/enterprise/{accountId}(accountId=${info.accountId})}"
                                                                                        style="font-size:12px;">编辑并配置</a>
-                                                                                    <a class="btn btn-brown" th:href="@{/account/view/center/accountId}" sec:authorize-url="/account/view/center/*"
+                                                                                    <a class="btn btn-brown" sec:authorize-url="/account/view/center/*"
+                                                                                       th:href="@{/account/view/center/{accountId}(accountId=${info.accountId})}"
                                                                                        style="font-size:12px;">查看明细</a>
-                                                                                    <a   data-toggle="modal" data-target="#confirm-modal" class="btn btn-danger"
-                                                                                         style="font-size:12px;">注销</a>
+                                                                                    <a   data-toggle="modal" data-target="#confirm-modal"
+                                                                                         th:class="${(info.accountStauts eq '1' or info.accountStauts eq '2')?'btn btn-danger':'btn btn-info'}"
+                                                                                         sec:authorize-url="/account/forbiddenAccountById/*/*"
+                                                                                         th:onclick="confirmDelete([[${info.accountId}]],[[${info.accountStauts}]])"
+                                                                                         style="font-size:12px;">[[${(info.accountStauts eq '1' or info.accountStauts eq '2') ?'注销':'启用'}]]</a>
                                                                                 </div>
                                                                             </div>
                                                                             <!-- end. Card actions -->
@@ -399,17 +377,65 @@
                                                     <h3 class="panel-title">
                                                         <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
                                                         5G短信 业务账号信息
-                                                        <div class="pull-right">
-                                                            <a sec:authorize-url="/account/edit/center/*" th:href="@{/account/edit/center/enterpriseId}"
-                                                               style="margin-top: -8px"
-                                                               class="btn btn-purple waves-effect waves-light m-l-10 btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="新建5G短信EC业务账号">
-                                                                <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>新建</a>
-                                                        </div>
+
                                                     </h3>
                                                 </div>
                                                 <div  class="panel-body" style="display:block">
                                                     <div class="row">
+                                                        <div class="col-md-6" th:each="info:${list}" th:if="${info.businessType eq '5G_SMS'}">
+                                                            <div class="property-card property-horizontal">
+                                                                <div class="row">
+                                                                    <div class="col-sm-12">
+                                                                        <div class="property-content"
+                                                                             style="height:206px">
+                                                                            <div class="listingInfo">
+                                                                                <div class="">
+                                                                                    <h5 style="padding-left:10px">
+                                                                                        账号名称：[[${info.accountName}]]</h5>
+                                                                                </div>
+                                                                                <div class="col-sm-6">
+                                                                                    <p style="font-size:12px">账号：<span style="color: #3ac9d6">[[${info.accountId}]]</span></p>
+                                                                                    <p style="font-size:12px">信息分类：<mpm:tag identity="infoType" show-type="label" key="code" th:value="${info.infoType}"/></p>
+                                                                                    <p style="font-size:12px">扩展码：[[${info.extendCode}]]</p>
+                                                                                </div>
+                                                                                <div class="col-sm-6">
+                                                                                    <p style="font-size:12px">发送运营商：<mpm:tag identity="carrier" show-type="label" key="code" th:value="${info.carrier}"/></p>
+                                                                                    <p style="font-size:12px">接口类型：<mpm:tag id="inter" identity="accountInterfaceType"
+                                                                                                                            show-type="label" key="code" th:value="${info.protocol}"/></p>
+                                                                                    <span style="font-size:12px">账号状态：
+                                                                                        <span th:if="${info.accountStauts eq '2'}">完善中</span>
+                                                                                        <span th:if="${info.accountStauts eq '1'}">有效</span>
+                                                                                        <span th:if="${info.accountStauts eq '0'}">已注销</span>
+                                                                                    </span>
 
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="property-action">
+
+                                                                                <div class="pull-right">
+                                                                                    <a class="btn btn-info" sec:authorize-url="/account/edit/center/*/*"
+                                                                                       th:href="@{/account/edit/center/enterprise/{accountId}(accountId=${info.accountId})}"
+                                                                                       style="font-size:12px;">编辑并配置</a>
+                                                                                    <a class="btn btn-brown" sec:authorize-url="/account/view/center/*"
+                                                                                       th:href="@{/account/view/center/{accountId}(accountId=${info.accountId})}"
+                                                                                       style="font-size:12px;">查看明细</a>
+                                                                                    <a   data-toggle="modal" data-target="#confirm-modal"
+                                                                                         th:class="${(info.accountStauts eq '1' or info.accountStauts eq '2')?'btn btn-danger':'btn btn-info'}"
+                                                                                         sec:authorize-url="/account/forbiddenAccountById/*/*"
+                                                                                         th:onclick="confirmDelete([[${info.accountId}]],[[${info.accountStauts}]])"
+                                                                                         style="font-size:12px;">[[${(info.accountStauts eq '1' or info.accountStauts eq '2') ?'注销':'启用'}]]</a>
+                                                                                </div>
+                                                                            </div>
+                                                                            <!-- end. Card actions -->
+                                                                        </div>
+                                                                    </div>
+
+
+                                                                </div>
+                                                                <!-- /inner row -->
+                                                            </div>
+
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -424,19 +450,57 @@
                                                     <h3 class="panel-title">
                                                         <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
                                                         过黑服务 业务账号信息
-                                                        <div class="pull-right">
-                                                            <a sec:authorize-url="/account/edit/center/*" th:href="@{/account/edit/center/enterpriseId}"
-                                                               style="margin-top: -8px"
-                                                               class="btn btn-purple waves-effect waves-light m-l-10 btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="新建过黑服务EC业务账号">
-                                                                <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>新建</a>
-                                                        </div>
                                                     </h3>
                                                 </div>
                                                 <div  class="panel-body" style="display:block">
                                                     <div class="row">
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6" th:each="info:${list}" th:if="${info.businessType eq 'BLACK_SERVICE'}">
                                                             <div class="property-card property-horizontal">
                                                                 <div class="row">
+                                                                    <div class="col-sm-12">
+                                                                        <div class="property-content"
+                                                                             style="height:206px">
+                                                                            <div class="listingInfo">
+                                                                                <div class="">
+                                                                                    <h5 style="padding-left:10px">
+                                                                                        账号名称：[[${info.accountName}]]</h5>
+                                                                                </div>
+                                                                                <div class="col-sm-6">
+                                                                                    <p style="font-size:12px">账号：<span style="color: #3ac9d6">[[${info.accountId}]]</span></p>
+                                                                                    <p style="font-size:12px">信息分类：<mpm:tag identity="infoType" show-type="label" key="code" th:value="${info.infoType}"/></p>
+                                                                                    <p style="font-size:12px">扩展码：[[${info.extendCode}]]</p>
+                                                                                </div>
+                                                                                <div class="col-sm-6">
+                                                                                    <p style="font-size:12px">发送运营商：<mpm:tag identity="carrier" show-type="label" key="code" th:value="${info.carrier}"/></p>
+                                                                                    <p style="font-size:12px">接口类型：<mpm:tag id="inter" identity="accountInterfaceType"
+                                                                                                                            show-type="label" key="code" th:value="${info.protocol}"/></p>
+                                                                                    <span style="font-size:12px">账号状态：
+                                                                                        <span th:if="${info.accountStauts eq '2'}">完善中</span>
+                                                                                        <span th:if="${info.accountStauts eq '1'}">有效</span>
+                                                                                        <span th:if="${info.accountStauts eq '0'}">已注销</span>
+                                                                                    </span>
+
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="property-action">
+
+                                                                                <div class="pull-right">
+                                                                                    <a class="btn btn-info" sec:authorize-url="/account/edit/center/*/*"
+                                                                                       th:href="@{/account/edit/center/enterprise/{accountId}(accountId=${info.accountId})}"
+                                                                                       style="font-size:12px;">编辑并配置</a>
+                                                                                    <a class="btn btn-brown" sec:authorize-url="/account/view/center/*"
+                                                                                       th:href="@{/account/view/center/{accountId}(accountId=${info.accountId})}"
+                                                                                       style="font-size:12px;">查看明细</a>
+                                                                                    <a   data-toggle="modal" data-target="#confirm-modal"
+                                                                                         th:class="${(info.accountStauts eq '1' or info.accountStauts eq '2')?'btn btn-danger':'btn btn-info'}"
+                                                                                         sec:authorize-url="/account/forbiddenAccountById/*/*"
+                                                                                         th:onclick="confirmDelete([[${info.accountId}]],[[${info.accountStauts}]])"
+                                                                                         style="font-size:12px;">[[${(info.accountStauts eq '1' or info.accountStauts eq '2') ?'注销':'启用'}]]</a>
+                                                                                </div>
+                                                                            </div>
+                                                                            <!-- end. Card actions -->
+                                                                        </div>
+                                                                    </div>
 
 
                                                                 </div>
@@ -458,19 +522,58 @@
                                                     <h3 class="panel-title">
                                                         <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
                                                         国际短信 业务账号信息
-                                                        <div class="pull-right">
-                                                            <a sec:authorize-url="/account/edit/center/*" th:href="@{/account/edit/center/enterpriseId}"
-                                                               style="margin-top: -8px"
-                                                               class="btn btn-purple waves-effect waves-light m-l-10 btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="新建国际短信EC业务账号">
-                                                                <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>新建</a>
-                                                        </div>
                                                     </h3>
                                                 </div>
                                                 <div  class="panel-body" style="display:block">
                                                     <div class="row">
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6" th:each="info:${list}" th:if="${info.businessType eq 'INTERNATIONAL_SMS'}">
                                                             <div class="property-card property-horizontal">
                                                                 <div class="row">
+
+                                                                    <div class="col-sm-12">
+                                                                        <div class="property-content"
+                                                                             style="height:206px">
+                                                                            <div class="listingInfo">
+                                                                                <div class="">
+                                                                                    <h5 style="padding-left:10px">
+                                                                                        账号名称：[[${info.accountName}]]</h5>
+                                                                                </div>
+                                                                                <div class="col-sm-6">
+                                                                                    <p style="font-size:12px">账号：<span style="color: #3ac9d6">[[${info.accountId}]]</span></p>
+                                                                                    <p style="font-size:12px">信息分类：<mpm:tag identity="infoType" show-type="label" key="code" th:value="${info.infoType}"/></p>
+                                                                                    <p style="font-size:12px">扩展码：[[${info.extendCode}]]</p>
+                                                                                </div>
+                                                                                <div class="col-sm-6">
+                                                                                    <p style="font-size:12px">发送运营商：<mpm:tag identity="carrier" show-type="label" key="code" th:value="${info.carrier}"/></p>
+                                                                                    <p style="font-size:12px">接口类型：<mpm:tag id="inter" identity="accountInterfaceType"
+                                                                                                                            show-type="label" key="code" th:value="${info.protocol}"/></p>
+                                                                                    <span style="font-size:12px">账号状态：
+                                                                                        <span th:if="${info.accountStauts eq '2'}">完善中</span>
+                                                                                        <span th:if="${info.accountStauts eq '1'}">有效</span>
+                                                                                        <span th:if="${info.accountStauts eq '0'}">已注销</span>
+                                                                                    </span>
+
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="property-action">
+
+                                                                                <div class="pull-right">
+                                                                                    <a class="btn btn-info" sec:authorize-url="/account/edit/center/*/*"
+                                                                                       th:href="@{/account/edit/center/enterprise/{accountId}(accountId=${info.accountId})}"
+                                                                                       style="font-size:12px;">编辑并配置</a>
+                                                                                    <a class="btn btn-brown" sec:authorize-url="/account/view/center/*"
+                                                                                       th:href="@{/account/view/center/{accountId}(accountId=${info.accountId})}"
+                                                                                       style="font-size:12px;">查看明细</a>
+                                                                                    <a   data-toggle="modal" data-target="#confirm-modal"
+                                                                                         th:class="${(info.accountStauts eq '1' or info.accountStauts eq '2')?'btn btn-danger':'btn btn-info'}"
+                                                                                         sec:authorize-url="/account/forbiddenAccountById/*/*"
+                                                                                         th:onclick="confirmDelete([[${info.accountId}]],[[${info.accountStauts}]])"
+                                                                                         style="font-size:12px;">[[${(info.accountStauts eq '1' or info.accountStauts eq '2') ?'注销':'启用'}]]</a>
+                                                                                </div>
+                                                                            </div>
+                                                                            <!-- end. Card actions -->
+                                                                        </div>
+                                                                    </div>
 
                                                                 </div>
                                                                 <!-- /inner row -->
@@ -506,17 +609,18 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 class="modal-title" id="custom-width-modalLabel">确认删除</h4>
+                        <h4 class="modal-title" id="custom-width-modalLabel">注销、启用帐号</h4>
                     </div>
                     <div class="modal-body">
-
-                        <p>删除之后数据无法恢复！你还是确认删除？</p>
-
+                        <p id="enterprise-tip">注销之后数据无法恢复！你还是确认注销？</p>
                     </div>
                     <div class="modal-footer">
                         <input type="hidden" id="deleteId">
+                        <input type="hidden" id="active">
                         <a class="btn btn-default waves-effect" data-dismiss="modal">取消</a>
-                        <button class="btn btn-primary waves-effect waves-light">确认删除</button>
+                        <button class="btn btn-primary waves-effect waves-light"
+                                sec:authorize-url="/account/forbiddenAccountById/*/*"
+                                onclick="deleteById()" id="forbbenButton">确认注销</button>
                     </div>
                 </div>
             </div>
@@ -532,6 +636,26 @@
 </div> <!-- content -->
 <th:block th:insert="fragments/common_fragments :: common_js"/>
 <script>
+
+    function confirmDelete(id,active) {
+        $("#deleteId").val(id);
+        $("#active").val(active);
+        if (0 == active) {
+            document.getElementById("enterprise-tip").innerText = "业务账号启用后所有的业务都将恢复！";
+            document.getElementById("forbbenButton").setAttribute("class", "btn btn-info waves-effect waves-light");
+            document.getElementById("forbbenButton").innerText = "确定启用";
+        } else {
+            document.getElementById("enterprise-tip").innerText = "注销之后数据无法恢复！你还是确认注销？";
+            document.getElementById("forbbenButton").setAttribute("class", "btn btn-danger waves-effect waves-light");
+            document.getElementById("forbbenButton").innerText = "确定注销";
+        }
+    }
+
+    function deleteById() {
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $('#preloader').css('display', 'block');
+        location.href = contextPath + '/account/forbiddenAccountById/' + $("#deleteId").val()+'/' + $("#active").val();
+    }
 
     var resizefunc = [];
     //隐藏进度项

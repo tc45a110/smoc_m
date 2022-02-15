@@ -235,6 +235,9 @@ public class BusinessAccountService {
         //账号状态转换
         if ("0".equals(status) ) {
             status = "1";
+            if(Integer.parseInt(entity.getAccountProcess())<=11100){
+                status = "2";
+            }
         } else {
             status = "0";
         }
@@ -242,8 +245,18 @@ public class BusinessAccountService {
         businessAccountRepository.updateAccountStatusById(id,status);
 
         //记录日志
-        log.info("[EC业务账号管理][{}]数据:{}", "1".equals(op) ? "注销业务账号":"启用业务账号" ,  JSON.toJSONString(entity));
+        log.info("[EC业务账号管理][{}]数据:{}", ("1".equals(op) || "2".equals(op))  ? "注销业务账号":"启用业务账号" ,  JSON.toJSONString(entity));
 
         return ResponseDataUtil.buildSuccess();
+    }
+
+    /**
+     * 查询企业所有的业务账号
+     * @param enterpriseId
+     * @return
+     */
+    public ResponseData<List<AccountBasicInfoValidator>> findBusinessAccountByEnterpriseId(String enterpriseId) {
+        List<AccountBasicInfoValidator> list = businessAccountRepository.findBusinessAccountByEnterpriseId(enterpriseId);
+        return ResponseDataUtil.buildSuccess(list);
     }
 }

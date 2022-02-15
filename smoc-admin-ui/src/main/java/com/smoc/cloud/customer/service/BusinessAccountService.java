@@ -13,6 +13,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 /**
  * 业务账号管理服务
@@ -79,6 +81,21 @@ public class BusinessAccountService {
     public ResponseData forbiddenAccountById(String id, String status) {
         try {
             ResponseData data = this.businessAccountFeignClient.forbiddenAccountById(id,status);
+            return data;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 查询企业所有的业务账号
+     * @param enterpriseId
+     * @return
+     */
+    public ResponseData<List<AccountBasicInfoValidator>> findBusinessAccountByEnterpriseId(String enterpriseId) {
+        try {
+            ResponseData<List<AccountBasicInfoValidator>> data = this.businessAccountFeignClient.findBusinessAccountByEnterpriseId(enterpriseId);
             return data;
         } catch (Exception e) {
             log.error(e.getMessage());
