@@ -206,7 +206,7 @@ public class IdentificationAccountController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            systemUserLogService.logsAsync("IDENTIFICATION_ACCOUNT", identificationAccountInfoValidator.getId(), user.getUserName(), op, "add".equals(op) ? "认证账号开通" : "修改认证账号", JSON.toJSONString(identificationAccountInfoValidator));
+            systemUserLogService.logsAsync("IDENTIFICATION_ACCOUNT", identificationAccountInfoValidator.getId(), user.getRealName(), op, "add".equals(op) ? "认证账号开通" : "修改认证账号", JSON.toJSONString(identificationAccountInfoValidator));
         }
 
         //记录日志
@@ -349,7 +349,7 @@ public class IdentificationAccountController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            systemUserLogService.logsAsync("IDENTIFICATION_ACCOUNT", id, user.getUserName(), "logout", "注销认证账户", id);
+            systemUserLogService.logsAsync("IDENTIFICATION_ACCOUNT", id, user.getRealName(), "logout", "注销认证账户", id);
         }
 
         view.setView(new RedirectView("/identification/account/list", true, false));

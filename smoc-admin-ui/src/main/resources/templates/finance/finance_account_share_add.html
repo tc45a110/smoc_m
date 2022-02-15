@@ -21,16 +21,16 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">创建财务共享账户</h4>
+                    <h4 class="page-title">创建共享财务账户</h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
                             财务管理
                         </li>
                         <li>
-                            财务共享账户管理
+                            共享财务账户管理
                         </li>
                         <li>
-                            创建财务共享账户
+                            创建共享财务账户
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -66,7 +66,7 @@
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <div class="form-group m-b-20">
-                                                    <label for="accountId">财务共享账号ID<span
+                                                    <label for="accountId">财务共享账户ID<span
                                                             class="text-danger">*</span></label>
                                                     <input id="accountId" type="text" class="form-control"
                                                            th:field="*{accountId}" readonly>
@@ -74,7 +74,7 @@
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-group m-b-20">
-                                                    <label for="accountName">财务共享账号名称<span
+                                                    <label for="accountName">财务共享账户名称<span
                                                             class="text-danger">*</span></label>
                                                     <input id="accountName" type="text" class="form-control"
                                                            th:field="*{accountName}" autocomplete="off"
@@ -89,6 +89,7 @@
                                                              name="isUsableSumPool" show-type="radio"
                                                              style="margin-top:0px"
                                                              key="code"
+                                                             disabled="true"
                                                              th:value="${financeAccountValidator.isUsableSumPool}"
                                                              required="true" title="是否"/>
                                                 </div>
@@ -103,6 +104,7 @@
                                                              name="isFreezeSumPool" show-type="radio"
                                                              style="margin-top:0px"
                                                              key="code"
+                                                             disabled="true"
                                                              th:value="${financeAccountValidator.isFreezeSumPool}"
                                                              required="true" title="是否"/>
                                                 </div>

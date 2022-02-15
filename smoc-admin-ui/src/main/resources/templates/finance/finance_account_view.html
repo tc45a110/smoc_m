@@ -74,7 +74,7 @@
                                                         [[${accountBasicInfoValidator.accountId}]] 财务账户信息
                                                     </h3>
                                                 </div>
-                                                <div id="login-account" class="panel-body" style="padding-bottom:0px">
+                                                <div  class="panel-body" style="padding-bottom:0px">
                                                     <div class="row">
                                                         <div class="col-md-12">
                                                             <div class="property-card property-horizontal">
@@ -161,8 +161,8 @@
                                                         </a>
                                                     </li>
                                                     <li class="" id="logs">
-                                                        <a  sec:authorize-url="/user/logs/list/*"
-                                                            th:href="@{/user/logs/list/{accountId}(accountId=${financeAccountValidator.accountId})}" th:target="tab-content">
+                                                        <a  sec:authorize-url="/user/logs/list/*/*"
+                                                            th:href="@{/user/logs/list/ACCOUNT_FINANCE/{accountId}(accountId=${financeAccountValidator.accountId})}" th:target="tab-content">
                                                             <span class="visible-xs"><i class="fa fa-cog"></i></span>
                                                             <span class="hidden-xs">操作日志</span>
                                                         </a>

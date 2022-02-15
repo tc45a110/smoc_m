@@ -24,9 +24,9 @@
             <div class="col-sm-12">
                 <div class="panel panel-color panel-info">
                     <div class="panel-heading">
-                        <h3 class="panel-title">账号充值记录</h3>
+                        <h3 class="panel-title">账户充值记录</h3>
                     </div>
-                    <form id="query_form" th:action="@{/identification/finance/recharge/page}" th:object="${financeAccountRechargeValidator}" method="post">
+                    <form id="query_form" th:action="@{/finance/account/recharge/account/list/page}" th:object="${financeAccountRechargeValidator}" method="post">
                         <input type="hidden" name="currentPage" id="currentPage"
                                th:value="${pageParams.currentPage}">
                         <input type="hidden" name="pageSize" id="pageSize"

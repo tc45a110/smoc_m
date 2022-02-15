@@ -199,7 +199,7 @@ public class FinanceIdentificationController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            systemUserLogService.logsAsync("IDENTIFICATION_ACCOUNT", financeAccountRechargeValidator.getAccountId(), user.getUserName(), "recharge",  "认证账户充值", JSON.toJSONString(financeAccountRechargeValidator));
+            systemUserLogService.logsAsync("IDENTIFICATION_ACCOUNT", financeAccountRechargeValidator.getAccountId(), user.getRealName(), "recharge",  "认证账户充值", JSON.toJSONString(financeAccountRechargeValidator));
         }
 
         //记录日志

@@ -22,13 +22,13 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">财务账户共享</h4>
+                    <h4 class="page-title">共享财务账户</h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
                             财务管理
                         </li>
                         <li>
-                            财务账户共享
+                            共享财务账户
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -62,7 +62,7 @@
                                     <a sec:authorize-url="/finance/enterprise/search"
                                     th:href="@{/finance/enterprise/search}"
                                     class="btn btn-success waves-effect waves-light m-l-10 btn-md">
-                                    <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>创建财务共享账户</a>
+                                    <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>创建共享财务账户</a>
                                     <input type="hidden" name="currentPage" id="currentPage"
                                            th:value="${pageParams.currentPage}">
                                     <input type="hidden" name="pageSize" id="pageSize"
@@ -84,7 +84,7 @@
                 <div class="detail">
                     <ul>
                         <li>
-                            <h2 style="color: #fff">财务共享账户汇总统计</h2>
+                            <h2 style="color: #fff">共享财务账户汇总统计</h2>
                             <span></span>
                             <div class="detailInner">
                                 <a>总可用（元）：<span data-d-group="4" data-a-sign="¥ "
@@ -112,7 +112,7 @@
             <div class="col-sm-12">
                 <div class="panel panel-color panel-info">
                     <div class="panel-heading">
-                        <h3 class="panel-title">财务账户列表</h3>
+                        <h3 class="panel-title">共享财务账户列表</h3>
                     </div>
                     <div class="panel-body">
                         <div class="table-responsive">
@@ -120,12 +120,12 @@
                                 <thead>
                                 <tr>
                                     <th>企业名称</th>
-                                    <th>共享财务账户名称</th>
+                                    <th>共享财务账户ID、名称</th>
                                     <th>冻结金额/可用余额</th>
                                     <th>消费总金额/充值总金额</th>
                                     <th>授信额度</th>
                                     <th>共享分账户</th>
-                                    <th>账号状态</th>
+                                    <th>账户状态</th>
                                     <th>创建日期</th>
                                     <th>操作</th>
                                 </tr>

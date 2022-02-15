@@ -12,10 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 public class FinanceAccountRepositoryImpl extends BasePageRepository {
@@ -457,6 +454,10 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
      */
     public void createShareFinanceAccount(FinanceAccountValidator qo) {
 
+        if (null == qo.getIsFreezeSumPool()) qo.setIsFreezeSumPool("0");
+        if (null == qo.getIsUsableSumPool()) qo.setIsUsableSumPool("0");
+
+
         String[] accountIds = qo.getAccountIds().split(",");
         String[] sql = new String[accountIds.length * 2 + 1];
 
@@ -530,7 +531,7 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
             }
         }
 
-        log.info(new Gson().toJson(qo));
+        //log.info(new Gson().toJson(qo));
 
 
         //创建共享账户语句
@@ -552,6 +553,9 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
      */
     public void editShareFinanceAccount(FinanceAccountValidator qo, FinanceAccountValidator financeAccountValidator) {
 
+        if (null == qo.getIsFreezeSumPool()) qo.setIsFreezeSumPool("0");
+        if (null == qo.getIsUsableSumPool()) qo.setIsUsableSumPool("0");
+
         /**
          * 对比 新的共享分帐号 及 现有共享分帐号关系
          */
@@ -568,27 +572,28 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
         //现有共享分账户  所有的现有分财务账户，在map 中初始化为false
         String[] shareIds = financeAccountValidator.getShareId().split(",");
         for (int i = 0; i < shareIds.length; i++) {
-            shareIdsMap.put(shareIds[i], false);
+            shareIdsMap.put(shareIds[i].trim(), false);
             delteLength++;
         }
+
         //新共享分账户
         String[] accountIds = qo.getAccountIds().split(",");
         for (int i = 0; i < accountIds.length; i++) {
             //表示该共享分账户，存在现有数据中
-            if (null != shareIdsMap.get(accountIds[i])) {
+            if (null != shareIdsMap.get(accountIds[i].trim())) {
                 shareIdsMap.put(accountIds[i], true);
                 delteLength--;
             } else {
                 addLength++;
-                newShareIdMap.put(accountIds[i], true);
+                newShareIdMap.put(accountIds[i].trim(), true);
             }
         }
 
         int arrayLength = delteLength + addLength;
 
-        if(0==arrayLength){
+        if (0 == arrayLength) {
             StringBuffer updateShareFinanceAccount = new StringBuffer();
-            updateShareFinanceAccount.append("update finance_account set ACCOUNT_NAME='"+qo.getAccountName()+"',ACCOUNT_CREDIT_SUM ="+qo.getAccountCreditSum()+" ,UPDATED_BY='" + qo.getCreatedBy() + "',UPDATED_TIME=now() where ACCOUNT_ID ='" + qo.getAccountId()+"'");
+            updateShareFinanceAccount.append("update finance_account set ACCOUNT_NAME='" + qo.getAccountName() + "',ACCOUNT_CREDIT_SUM =" + qo.getAccountCreditSum() + " ,UPDATED_BY='" + qo.getCreatedBy() + "',UPDATED_TIME=now() where ACCOUNT_ID ='" + qo.getAccountId() + "'");
             this.jdbcTemplate.batchUpdate(updateShareFinanceAccount.toString());
             return;
         }
@@ -655,6 +660,7 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
             ;
         }
 
+
         //余额不归集、冻结金额归集
         if ("0".equals(qo.getIsUsableSumPool()) && "1".equals(qo.getIsFreezeSumPool())) {
 
@@ -690,6 +696,8 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
                     String update = " update finance_account set IS_SHARE ='1',SHARE_ID='" + qo.getAccountId() + "',UPDATED_BY='" + qo.getCreatedBy() + "',UPDATED_TIME=now()  where ACCOUNT_ID ='" + key + "' ";
                     sql[index] = update;
                     index++;
+
+                    //log.info(sql.toString());
                 }
             }
             ;
@@ -708,7 +716,7 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
         }
 
         StringBuffer updateShareFinanceAccount = new StringBuffer();
-        updateShareFinanceAccount.append("update finance_account set ACCOUNT_USABLE_SUM = ACCOUNT_USABLE_SUM+" + map.get("USABLE_SUM_POOL") + ",ACCOUNT_FROZEN_SUM = ACCOUNT_FROZEN_SUM+" + map.get("FREEZE_SUM_POOL") + ",SHARE_ID='"+qo.getAccountIds()+"' ,UPDATED_BY='" + qo.getCreatedBy() + "',UPDATED_TIME=now() where ACCOUNT_ID ='" + qo.getAccountId()+"'");
+        updateShareFinanceAccount.append("update finance_account set ACCOUNT_USABLE_SUM = ACCOUNT_USABLE_SUM+" + map.get("USABLE_SUM_POOL") + ",ACCOUNT_FROZEN_SUM = ACCOUNT_FROZEN_SUM+" + map.get("FREEZE_SUM_POOL") + ",SHARE_ID='" + qo.getAccountIds() + "' ,UPDATED_BY='" + qo.getCreatedBy() + "',UPDATED_TIME=now() where ACCOUNT_ID ='" + qo.getAccountId() + "'");
 
         this.jdbcTemplate.batchUpdate(updateShareFinanceAccount.toString());
     }

@@ -1,6 +1,7 @@
 package com.smoc.cloud.finance.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
 import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
 import com.smoc.cloud.common.page.PageList;
@@ -81,7 +82,7 @@ public class FinanceShareAccountController {
             return view;
         }
 
-        ResponseData<Map<String, Object>> count = financeAccountService.count(financeAccountValidator,"3");
+        ResponseData<Map<String, Object>> count = financeAccountService.count(financeAccountValidator, "3");
 
 
         view.addObject("financeAccountValidator", financeAccountValidator);
@@ -109,7 +110,7 @@ public class FinanceShareAccountController {
             return view;
         }
 
-        ResponseData<Map<String, Object>> count = financeAccountService.count(financeAccountValidator,"3");
+        ResponseData<Map<String, Object>> count = financeAccountService.count(financeAccountValidator, "3");
 
         view.addObject("financeAccountValidator", financeAccountValidator);
         view.addObject("list", data.getData().getList());
@@ -143,7 +144,7 @@ public class FinanceShareAccountController {
         }
 
         FinanceAccountValidator financeAccountValidator = new FinanceAccountValidator();
-        financeAccountValidator.setAccountId("XYSH"+sequenceService.findSequence("BUSINESS_ACCOUNT"));
+        financeAccountValidator.setAccountId("XYSH" + sequenceService.findSequence("BUSINESS_ACCOUNT"));
         financeAccountValidator.setEnterpriseId(enterpriseId);
         financeAccountValidator.setAccountName("财务共享账号");
 
@@ -181,10 +182,10 @@ public class FinanceShareAccountController {
         financeAccountValidator.setIsUsableSumPool("0");
 
         //已选中财务账户
-        Map<String,Boolean> selectedMap = new HashMap<>();
+        Map<String, Boolean> selectedMap = new HashMap<>();
         String[] selectedAccounts = shareFinanceAccount.getData().getShareId().split(",");
-        for(int i=0;i<selectedAccounts.length;i++){
-            selectedMap.put(selectedAccounts[i],true);
+        for (int i = 0; i < selectedAccounts.length; i++) {
+            selectedMap.put(selectedAccounts[i], true);
         }
 
         //查询企业信息
@@ -229,6 +230,16 @@ public class FinanceShareAccountController {
             return view;
         }
 
+        //保存数据之前，要处理日志问题
+        ResponseData<FinanceAccountValidator> shareFinanceAccount = null;
+        if (op.equals("edit")) {
+            shareFinanceAccount = financeAccountService.findById(financeAccountValidator.getAccountId());
+            if (!ResponseCode.SUCCESS.getCode().equals(shareFinanceAccount.getCode())) {
+                view.addObject("error", shareFinanceAccount.getCode() + ":" + shareFinanceAccount.getMessage());
+                return view;
+            }
+        }
+
         //初始化其他变量
         if (!StringUtils.isEmpty(op) && "add".equals(op)) {
             financeAccountValidator.setCreatedTime(DateTimeUtils.getDateTimeFormat(new Date()));
@@ -242,6 +253,8 @@ public class FinanceShareAccountController {
         }
 
 
+        financeAccountValidator.setIsFreezeSumPool("0");
+        financeAccountValidator.setIsUsableSumPool("0");
         //保存数据
         ResponseData data = financeAccountService.save(financeAccountValidator, op);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
@@ -251,7 +264,15 @@ public class FinanceShareAccountController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            systemUserLogService.logsAsync("SHARE_ACCOUNT", financeAccountValidator.getAccountId(), user.getUserName(), op, "add".equals(op) ? "创建财务共享账号" : "修改财务共享账号", JSON.toJSONString(financeAccountValidator));
+            systemUserLogService.logsAsync("SHARE_ACCOUNT", financeAccountValidator.getAccountId(), user.getRealName(), op, "add".equals(op) ? "创建财务共享账号" : "修改财务共享账号", JSON.toJSONString(financeAccountValidator));
+        }
+
+        //集中记录日志
+        if (op.equals("add")) {
+            this.logs(financeAccountValidator, null, user);
+        }
+        if (op.equals("edit")) {
+            this.logs(financeAccountValidator, shareFinanceAccount.getData(), user);
         }
 
         //记录日志
@@ -268,8 +289,24 @@ public class FinanceShareAccountController {
      * @return
      */
     @RequestMapping(value = "/share/view/center/{accountId}/{enterpriseId}", method = RequestMethod.GET)
-    public ModelAndView center(@PathVariable String accountId,@PathVariable String enterpriseId) {
+    public ModelAndView center(@PathVariable String accountId, @PathVariable String enterpriseId) {
         ModelAndView view = new ModelAndView("finance/finance_account_share_view_center");
+
+        //保存数据之前，要处理日志问题
+        ResponseData<FinanceAccountValidator> shareFinanceAccount = financeAccountService.findById(accountId);
+        if (!ResponseCode.SUCCESS.getCode().equals(shareFinanceAccount.getCode())) {
+            view.addObject("error", shareFinanceAccount.getCode() + ":" + shareFinanceAccount.getMessage());
+            return view;
+        }
+
+        ResponseData<EnterpriseBasicInfoValidator> enterpriseData = enterpriseService.findById(shareFinanceAccount.getData().getEnterpriseId());
+        if (!ResponseCode.SUCCESS.getCode().equals(enterpriseData.getCode())) {
+            view.addObject("error", enterpriseData.getCode() + ":" + enterpriseData.getMessage());
+            return view;
+        }
+
+        view.addObject("financeAccountValidator", shareFinanceAccount.getData());
+        view.addObject("enterprise", enterpriseData.getData());
 
         return view;
     }
@@ -279,9 +316,41 @@ public class FinanceShareAccountController {
      *
      * @return
      */
-    @RequestMapping(value = "/share/view/base/{id}", method = RequestMethod.GET)
-    public ModelAndView view_base(@PathVariable String id, HttpServletRequest request) {
+    @RequestMapping(value = "/share/view/base/{accountId}", method = RequestMethod.GET)
+    public ModelAndView view_base(@PathVariable String accountId, HttpServletRequest request) {
         ModelAndView view = new ModelAndView("finance/finance_account_share_view_base");
+
+        ResponseData<FinanceAccountValidator> shareFinanceAccount = financeAccountService.findById(accountId);
+        if (!ResponseCode.SUCCESS.getCode().equals(shareFinanceAccount.getCode())) {
+            view.addObject("error", shareFinanceAccount.getCode() + ":" + shareFinanceAccount.getMessage());
+            return view;
+        }
+        FinanceAccountValidator financeAccountValidator = shareFinanceAccount.getData();
+
+        //已选中财务账户
+        Map<String, Boolean> selectedMap = new HashMap<>();
+        String[] selectedAccounts = shareFinanceAccount.getData().getShareId().split(",");
+        for (int i = 0; i < selectedAccounts.length; i++) {
+            selectedMap.put(selectedAccounts[i], true);
+        }
+
+        //查询企业财务账户信息(包括子企业财务账户)
+        ResponseData<List<FinanceAccountValidator>> data = financeAccountService.findEnterpriseAndSubsidiaryFinanceAccount(shareFinanceAccount.getData().getEnterpriseId());
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        //查询企业信息
+        ResponseData<EnterpriseBasicInfoValidator> enterpriseData = enterpriseService.findById(shareFinanceAccount.getData().getEnterpriseId());
+        if (!ResponseCode.SUCCESS.getCode().equals(enterpriseData.getCode())) {
+            view.addObject("error", enterpriseData.getCode() + ":" + enterpriseData.getMessage());
+            return view;
+        }
+
+        view.addObject("enterprise", enterpriseData.getData());
+        view.addObject("selectedMap", selectedMap);
+        view.addObject("financeAccounts", data.getData());
 
         return view;
     }
@@ -292,7 +361,7 @@ public class FinanceShareAccountController {
      * @return
      */
     @RequestMapping(value = "/share/recharge/{accountId}/{enterpriseId}", method = RequestMethod.GET)
-    public ModelAndView recharge(@PathVariable String accountId,@PathVariable String enterpriseId, HttpServletRequest request) {
+    public ModelAndView recharge(@PathVariable String accountId, @PathVariable String enterpriseId, HttpServletRequest request) {
 
         ModelAndView view = new ModelAndView("finance/finance_account_share_recharge");
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
@@ -362,7 +431,7 @@ public class FinanceShareAccountController {
             return view;
         }
 
-        ResponseData data  = financeAccountService.recharge(financeAccountRechargeValidator);
+        ResponseData data = financeAccountService.recharge(financeAccountRechargeValidator);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;
@@ -370,7 +439,7 @@ public class FinanceShareAccountController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            systemUserLogService.logsAsync("SHARE_ACCOUNT", financeAccountRechargeValidator.getAccountId(), user.getUserName(), "recharge",  "共享账户充值", JSON.toJSONString(financeAccountRechargeValidator));
+            systemUserLogService.logsAsync("SHARE_ACCOUNT", financeAccountRechargeValidator.getAccountId(), user.getRealName(), "recharge", "共享账户充值", JSON.toJSONString(financeAccountRechargeValidator));
         }
 
         //记录日志
@@ -380,6 +449,62 @@ public class FinanceShareAccountController {
         view.setView(new RedirectView("/finance/account/share/list", true, false));
 
         return view;
+
+    }
+
+    /**
+     * 批量记录日志
+     *
+     * @param qo
+     * @param financeAccountRechargeValidator
+     */
+    public void logs(FinanceAccountValidator qo, FinanceAccountValidator financeAccountRechargeValidator, SecurityUser user) {
+
+        if (null == financeAccountRechargeValidator) {
+            //新共享分账户
+            String[] accountIds = qo.getAccountIds().split(",");
+            for (int i = 0; i < accountIds.length; i++) {
+                systemUserLogService.logsAsync("ACCOUNT_FINANCE", accountIds[i], user.getRealName(), "share", "账户共享", JSON.toJSONString(qo));
+            }
+            //systemUserLogService.logsAsync("SHARE_ACCOUNT", qo.getAccountId(), user.getRealName(), "add", "创建共享账户", JSON.toJSONString(qo));
+            return;
+        }
+
+        //Boolean 为true 表示，新数据中，仍然有该财务账户
+        Map<String, Boolean> shareIdsMap = new HashMap<>();
+        //要新创建的 分财务账号   结合shareIdsMap 就能分辨出，那些是被删除的分财务账户，那些是新加进来的分财务账户， 新的和原来的都存在的财务账户，不动
+        Map<String, Boolean> newShareIdMap = new HashMap<>();
+
+        //现有共享分账户  所有的现有分财务账户，在map 中初始化为false
+        String[] shareIds = financeAccountRechargeValidator.getShareId().split(",");
+        for (int i = 0; i < shareIds.length; i++) {
+            shareIdsMap.put(shareIds[i], false);
+        }
+        //新共享分账户
+        String[] accountIds = qo.getAccountIds().split(",");
+        for (int i = 0; i < accountIds.length; i++) {
+            //表示该共享分账户，存在现有数据中
+            if (null != shareIdsMap.get(accountIds[i])) {
+                shareIdsMap.put(accountIds[i], true);
+            } else {
+                newShareIdMap.put(accountIds[i], true);
+            }
+        }
+
+        //删除共享
+        for (String key : shareIdsMap.keySet()) {
+            if (!shareIdsMap.get(key))
+                systemUserLogService.logsAsync("ACCOUNT_FINANCE", key, user.getRealName(), "delete share", "删除共享", JSON.toJSONString(qo));
+        }
+
+        //添加共享
+        for (String key : newShareIdMap.keySet()) {
+            if (newShareIdMap.get(key))
+                systemUserLogService.logsAsync("ACCOUNT_FINANCE", key, user.getRealName(), "share", "账户共享", JSON.toJSONString(qo));
+        }
+
+       // systemUserLogService.logsAsync("SHARE_ACCOUNT", qo.getAccountId(), user.getRealName(), "edit", "共享账户变更", JSON.toJSONString(financeAccountRechargeValidator));
+
 
     }
 

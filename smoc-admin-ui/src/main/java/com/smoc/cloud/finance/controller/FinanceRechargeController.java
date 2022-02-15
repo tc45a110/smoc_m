@@ -236,7 +236,7 @@ public class FinanceRechargeController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            systemUserLogService.logsAsync("BUSINESS_ACCOUNT", financeAccountRechargeValidator.getAccountId(), user.getUserName(), "recharge",  "账户充值", JSON.toJSONString(financeAccountRechargeValidator));
+            systemUserLogService.logsAsync("ACCOUNT_FINANCE", financeAccountRechargeValidator.getAccountId(), user.getRealName(), "recharge",  "账户充值", JSON.toJSONString(financeAccountRechargeValidator));
         }
 
         //记录日志

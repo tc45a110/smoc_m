@@ -217,8 +217,8 @@
                                                     </li>
                                                     <li class="" id="logs">
                                                         <a onclick="activeTab('logs')"
-                                                           sec:authorize-url="/user/logs/list/*"
-                                                           th:href="@{/user/logs/list/{id}(id=${identificationAccountInfoValidator.id})}"
+                                                           sec:authorize-url="/user/logs/list/*/*"
+                                                           th:href="@{/user/logs/list/IDENTIFICATION_ACCOUNT/{id}(id=${identificationAccountInfoValidator.id})}"
                                                            th:target="tab-content">操作日志
                                                         </a>
                                                     </li>

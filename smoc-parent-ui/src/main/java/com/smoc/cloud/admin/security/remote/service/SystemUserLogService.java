@@ -91,5 +91,18 @@ public class SystemUserLogService {
         }
     }
 
+    /**
+     * 根据id获取信息
+     */
+    public ResponseData<SystemUserLogValidator> findById(String id) {
+        try {
+            ResponseData data = this.systemUserLogFeignClient.findById(id);
+            return data;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
 
 }

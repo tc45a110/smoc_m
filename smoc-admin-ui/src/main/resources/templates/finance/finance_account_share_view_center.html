@@ -41,7 +41,7 @@
         <!-- end row -->
 
         <!-- start row  页面内容-->
-        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all"  style="position: relative;margin-top: 80px">
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all" style="position: relative;margin-top: 80px">
             <div class="col-md-12">
                 <div class="card-box">
                     <div class="row" style="margin-bottom:10px">
@@ -51,7 +51,7 @@
                                    th:href="@{/finance/account/share/list}" style="margin-left:10px"
                                    class="btn btn-default waves-effect waves-light btn-md">
                                     <i class="glyphicon  glyphicon-share-alt" style="margin-right:5px"></i>
-                                    返回财务账户共享列表</a>
+                                    返回共享财务账户列表</a>
                             </div>
                         </h4>
                     </div>
@@ -62,61 +62,54 @@
                                      style="display:block">
                                     <h3 class="panel-title">
                                         <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
-                                        财务共享账户信息
+                                        共享财务账户信息
                                     </h3>
                                 </div>
-                                <div id="login-account" class="panel-body" style="padding-bottom:0px">
+                                <div class="panel-body" style="padding-bottom:0px">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="property-card property-horizontal">
                                                 <div class="row">
                                                     <div class="col-sm-12">
                                                         <div class="property-content"
-                                                             style="height:176px">
+                                                             style="height:188px">
                                                             <div class="listingInfo">
                                                                 <div class="">
                                                                     <h5 style="padding-left:10px">
-                                                                        企业：北京星语互联科技有限公司</h5>
+                                                                        企业：[[${enterprise.enterpriseName}]]</h5>
                                                                 </div>
                                                                 <div class="col-sm-4">
                                                                     <p style="font-size:12px">
-                                                                        共享账户名称：财务共享账户</p>
+                                                                        共享财务账户ID：[[${financeAccountValidator.accountId}]]</p>
                                                                     <p style="font-size:12px">
-                                                                        余额是否归集：是</p>
-                                                                    <p style="font-size:12px">
-                                                                        冻结金额是否归集：是
-                                                                    </p>
-
-                                                                </div>
-                                                                <div class="col-sm-4">
-                                                                    <p style="font-size:12px">
-                                                                        账户可用余额：<span data-d-group="4"
-                                                                                     data-a-sign="¥ "
-                                                                                     class="autonumber">100</span>
-                                                                    </p>
-                                                                    <p style="font-size:12px">
-                                                                        账户冻结金额：<span data-d-group="4"
-                                                                                     data-a-sign="¥ "
-                                                                                     class="autonumber">100</span>
-                                                                    </p>
-                                                                    <p style="font-size:12px">
-                                                                        账户消费总金额：<span data-d-group="4"
-                                                                                      data-a-sign="¥ "
-                                                                                      class="autonumber">100</span>
-                                                                    </p>
-                                                                </div>
-                                                                <div class="col-sm-4">
-                                                                    <p style="font-size:12px">
-                                                                        账户充值总金额：<span data-d-group="4"
-                                                                                      data-a-sign="¥ "
-                                                                                      class="autonumber">100</span>
-                                                                    </p>
-                                                                    <p style="font-size:12px">
-                                                                        授信额度：<span data-d-group="4" data-a-sign="¥ " class="autonumber">100.00</span>
-                                                                    </p>
+                                                                        共享财务账户名称：[[${financeAccountValidator.accountName}]]</p>
                                                                     <p style="font-size:12px">
                                                                         状态：<a
-                                                                            class="btn btn-success  waves-effect waves-light btn-xs">正常</a>
+                                                                            class="btn btn-success btn-rounded  waves-effect waves-light btn-ms">正常</a>
+                                                                    </p>
+                                                                </div>
+                                                                <div class="col-sm-4">
+                                                                    <p style="font-size:12px">
+                                                                        账户可用余额： ¥
+                                                                        [[${#numbers.formatDecimal(financeAccountValidator.accountUsableSum,1,'COMMA',2,'POINT')}]]
+                                                                    </p>
+                                                                    <p style="font-size:12px">
+                                                                        账户冻结金额： ¥
+                                                                        [[${#numbers.formatDecimal(financeAccountValidator.accountFrozenSum,1,'COMMA',2,'POINT')}]]
+                                                                    </p>
+                                                                    <p style="font-size:12px">
+                                                                        账户消费总金额：¥
+                                                                        [[${#numbers.formatDecimal(financeAccountValidator.accountConsumeSum,1,'COMMA',2,'POINT')}]]
+                                                                    </p>
+                                                                </div>
+                                                                <div class="col-sm-4">
+                                                                    <p style="font-size:12px">
+                                                                        账户充值总金额：¥
+                                                                        [[${#numbers.formatDecimal(financeAccountValidator.accountRechargeSum,1,'COMMA',2,'POINT')}]]
+                                                                    </p>
+                                                                    <p style="font-size:12px">
+                                                                        授信额度：¥
+                                                                        [[${#numbers.formatDecimal(financeAccountValidator.accountCreditSum,1,'COMMA',2,'POINT')}]]
                                                                     </p>
                                                                 </div>
                                                             </div>
@@ -137,21 +130,28 @@
                     <div class="row">
                         <ul class="nav nav-tabs">
                             <li class="active" id="tab1"><a onclick="active('1')"
-                                                            sec:authorize-url="/finance/account/share/view/base/*" th:href="@{/finance/account/share/view/base/id}"
+                                                            sec:authorize-url="/finance/account/share/view/base/*"
+                                                            th:href="@{/finance/account/share/view/base/{accountId}(accountId=${financeAccountValidator.accountId})}"
                                                             th:target="content1">财务共享账户</a></li>
                             <li class="" id="tab2"><a onclick="active('2')"
-                                                      sec:authorize-url="/finance/account/share/view/recharge/*" th:href="@{/finance/account/share/view/recharge/id}"
-                                                      th:target="content1">财务共享充值记录</a>
+                                                      sec:authorize-url="/finance/account/recharge/account/list/*"
+                                                      th:href="@{/finance/account/recharge/account/list/{accountId}(accountId=${financeAccountValidator.accountId})}"
+                                                      th:target="content1">充值记录</a>
                             <li class="" id="tab3"><a onclick="active('3')"
-                                                      sec:authorize-url="/finance/account/share/view/consume/*" th:href="@{/finance/account/share/view/consume/id}"
-                                                      th:target="content1">财务共享消费记录</a>
+                                                      sec:authorize-url="/finance/account/share/view/consume/*"
+                                                      th:href="@{/finance/account/share/view/consume/id}"
+                                                      th:target="content1">消费记录</a>
                             <li class="" id="tab4"><a onclick="active('4')"
-                                                      th:target="content1">财务共享账户操作日志</a></li>
+                                                      th:target="content1">共享记录</a>
+                            <li class="" id="tab5"><a onclick="active('5')"
+                                                      sec:authorize-url="/user/logs/list/*/*"
+                                                      th:href="@{/user/logs/list/SHARE_ACCOUNT/{accountId}(accountId=${financeAccountValidator.accountId})}"
+                                                      th:target="content1">操作日志</a></li>
                         </ul>
                     </div>
                     <div class="tab-cotent">
                         <iframe name="content1" id="content1" th:frameBorder="0" th:scrolling="auto"
-                                th:src="@{/finance/account/share/view/base/id}"
+                                th:src="@{/finance/account/share/view/base/{accountId}(accountId=${financeAccountValidator.accountId})}"
                                 style="padding: 0px; width: 100%; height: 2200px"></iframe>
                     </div>
                 </div>
@@ -180,6 +180,8 @@
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
+
+
 
 </script>
 </body>

@@ -45,7 +45,7 @@ public class SystemUserLogController {
      * @return
      */
     @RequestMapping(value = "/findById/{id}", method = RequestMethod.GET)
-    public ResponseData findById(@PathVariable String id) {
+    public ResponseData<SystemUserLog> findById(@PathVariable String id) {
 
         //完成参数规则验证
         MpmIdValidator validator = new MpmIdValidator();

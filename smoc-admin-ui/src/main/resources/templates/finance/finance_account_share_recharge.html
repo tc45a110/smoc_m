@@ -22,16 +22,16 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">财务共享账号充值</h4>
+                    <h4 class="page-title">共享财务账户充值</h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
                             财务管理
                         </li>
                         <li>
-                            财务账户共享
+                            共享财务账户
                         </li>
                         <li>
-                            财务共享账号充值
+                            共享财务账户充值
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -58,7 +58,10 @@
                                         企业名称：<label>[[${enterprise.enterpriseName}]]</label>
                                     </div>
                                     <div class="form-group m-b-20">
-                                        共享财务账号：<label>[[${financeAccountValidator.accountId}]]</label>
+                                        共享财务账户名称：<label>[[${financeAccountValidator.accountName}]]</label>
+                                    </div>
+                                    <div class="form-group m-b-20">
+                                        共享财务账户ID：<label>[[${financeAccountValidator.accountId}]]</label>
                                     </div>
                                     <div class="form-group m-b-20">
                                         账户可用余额： ¥ [[${#numbers.formatDecimal(financeAccountValidator.accountUsableSum,1,'COMMA',2,'POINT')}]]
@@ -100,7 +103,7 @@
                             充值信息
                         </h3>
                     </div>
-                    <div class="panel-body" style="height: 488px">
+                    <div class="panel-body" style="height: 532px">
                         <form id="submit_form" th:action="@{/finance/account/share/recharge/save}" th:object="${financeAccountRechargeValidator}"
                               method="post" data-parsley-validate="">
                             <div class="p-20">

@@ -1,11 +1,13 @@
 package com.smoc.cloud.admin.security.controller;
 
+import com.google.gson.Gson;
 import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
 import com.smoc.cloud.common.auth.validator.SystemUserLogValidator;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.identification.validator.IdentificationRequestDataValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -13,6 +15,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 操作日志查询
@@ -92,5 +96,25 @@ public class SystemUserLogController {
         view.addObject("list", responseData.getData().getList());
         view.addObject("pageParams", responseData.getData().getPageParams());
         return view;
+    }
+
+    /**
+     * 查看请求订单数据
+     *
+     * @return
+     */
+    @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
+    public ModelAndView edit(@PathVariable String id, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("sys_user_logs/user_logs_json_view");
+
+        //修改:查询数据
+        ResponseData<SystemUserLogValidator> data = systemUserLogService.findById(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+        }
+        log.info("[log]:{}",data.getData().getLogData());
+        view.addObject("jsonData",data.getData().getLogData());
+        return view;
+
     }
 }
