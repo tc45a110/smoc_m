@@ -15,6 +15,8 @@ public class AccountChannelInfoQo {
     private String accountId;
     private String carrier;
     private String channelName;
+    private String channelCarrier;
+    private String channelInfoType;
     private String channelIntroduce;
     private String protocol;
 

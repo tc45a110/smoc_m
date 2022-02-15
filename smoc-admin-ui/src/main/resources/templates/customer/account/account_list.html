@@ -195,7 +195,9 @@
                                         </div>
                                     </td>
                                     <td style="text-align:center;line-height:44px">
-                                        <a class="btn btn-warning btn-rounded btn-sm waves-effect waves-light">完善中</a>
+                                        <a class="btn btn-warning btn-rounded btn-sm waves-effect waves-light" th:if="${info.accountStauts eq '2'}">完善中</a>
+                                        <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light" th:if="${info.accountStauts eq '1'}">有效</a>
+                                        <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light" th:if="${info.accountStauts eq '0'}">已注销</a>
                                     </td>
                                     <td>
                                         <a sec:authorize-url="/account/edit/center/*/*"
@@ -249,7 +251,8 @@
                                            style="padding-left: 6px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="配置、修改EC业务账号信息"
                                         ><i style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                        <a th:href="@{/account/center/enterpriseId}"
+                                        <a sec:authorize-url="/account/center/*"
+                                           th:href="@{/account/center/{enterpriseId}(enterpriseId=${info.enterpriseId})}"
                                            class="on-default edit-row"
                                            style="padding-left: 8px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="EC业务账号中心"
@@ -258,8 +261,8 @@
                                             th:onclick="confirmDelete([[${info.accountId}]],[[${info.accountStauts}]])"
                                             data-toggle="modal"
                                            data-target="#confirm-modal" class="on-default remove-row"
-                                           th:style="${info.accountStauts eq '1'?'padding-left: 5px;color: #f05050':'padding-left: 5px;color: #29b6f6'}"
-                                           th:title="${info.accountStauts eq '1'?'注销EC业务账号':'启用EC业务账号'}"
+                                           th:style="${(info.accountStauts eq '1' or info.accountStauts eq '2')?'padding-left: 5px;color: #f05050':'padding-left: 5px;color: #29b6f6'}"
+                                           th:title="${(info.accountStauts eq '1' or info.accountStauts eq '2') ?'注销EC业务账号':'启用EC业务账号'}"
                                         ><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
                                     </td>
                                 </tr>

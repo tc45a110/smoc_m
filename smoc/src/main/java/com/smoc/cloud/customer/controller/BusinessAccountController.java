@@ -15,6 +15,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.List;
+
 /**
  * 业务账号接口
  **/
@@ -93,6 +95,25 @@ public class BusinessAccountController {
         }
 
         ResponseData data = businessAccountService.forbiddenAccountById(id,status);
+        return data;
+    }
+
+    /**
+     *  查询企业所有的业务账号
+     * @param enterpriseId
+     * @return
+     */
+    @RequestMapping(value = "/forbiddenAccountById/{enterpriseId}", method = RequestMethod.GET)
+    public ResponseData<List<AccountBasicInfoValidator>> findBusinessAccountByEnterpriseId(@PathVariable String enterpriseId)  {
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(enterpriseId);
+        if (!MpmValidatorUtil.validate(validator)) {
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(validator));
+        }
+
+        ResponseData<List<AccountBasicInfoValidator>> data = businessAccountService.findBusinessAccountByEnterpriseId(enterpriseId);
         return data;
     }
 }

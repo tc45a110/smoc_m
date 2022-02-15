@@ -6,6 +6,7 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.customer.rowmapper.AccountBasicInfoRowMapper;
+import com.smoc.cloud.customer.rowmapper.AccountCenterInfoRowMapper;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -81,5 +82,31 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
         return pageList;
     }
 
+    public  List<AccountBasicInfoValidator> findBusinessAccountByEnterpriseId(String enterpriseId) {
 
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append("  t.ACCOUNT_ID");
+        sqlBuffer.append(", t.ACCOUNT_NAME");
+        sqlBuffer.append(", t.BUSINESS_TYPE");
+        sqlBuffer.append(", t.CARRIER");
+        sqlBuffer.append(", t.INFO_TYPE");
+        sqlBuffer.append(", t.EXTEND_CODE");
+        sqlBuffer.append(", t.ACCOUNT_STATUS");
+        sqlBuffer.append(", e.PROTOCOL");
+        sqlBuffer.append("  from account_base_info t left join account_interface_info e on t.ACCOUNT_ID = e.ACCOUNT_ID");
+        sqlBuffer.append("  where t.ENTERPRISE_ID = ? ");
+
+        List<Object> paramsList = new ArrayList<Object>();
+        paramsList.add(enterpriseId);
+
+        sqlBuffer.append("  order by t.BUSINESS_TYPE,t.CREATED_TIME desc");
+
+        //根据参数个数，组织参数值
+        Object[] params = new Object[paramsList.size()];
+        paramsList.toArray(params);
+
+        List<AccountBasicInfoValidator> list = this.queryForObjectList(sqlBuffer.toString(), params, new AccountCenterInfoRowMapper());
+        return list;
+    }
 }

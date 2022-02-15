@@ -107,7 +107,7 @@
                                     </div>
                                 </div>
                             </div> <!-- end card-box -->
-                            <div class="row">
+                            <!--<div class="row">
                                 <div class="col-lg-12">
                                     <div class="panel panel-color panel-default">
                                         <div class="panel-heading">
@@ -173,19 +173,19 @@
                                                                             </p>
                                                                         </div>
                                                                     </div>
-                                                                    <!-- end. Card actions -->
+                                                                    &lt;!&ndash; end. Card actions &ndash;&gt;
                                                                 </div>
                                                             </div>
-                                                            <!-- /col 8 -->
+                                                            &lt;!&ndash; /col 8 &ndash;&gt;
                                                         </div>
-                                                        <!-- /inner row -->
+                                                        &lt;!&ndash; /inner row &ndash;&gt;
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>-->
                         </div> <!-- end col -->
 
                         <div class="col-md-9">
@@ -200,7 +200,8 @@
                                                     <i class="glyphicon  glyphicon-share-alt"
                                                        style="margin-right:5px"></i>
                                                     返回企业列表</a>
-                                                <a th:href="@{/account/center/account}"
+                                                <a sec:authorize-url="/account/center/*"
+                                                   th:href="@{/account/center/{enterpriseId}(enterpriseId=${enterpriseBasicInfoValidator.enterpriseId})}"
                                                    style="margin-left:10px;"
                                                    class="btn btn-instagram waves-effect waves-light btn-md">
                                                     <i class="mdi mdi-vector-circle" style="margin-right:5px"></i>

@@ -20,7 +20,8 @@ public class AccountChannelGroupConfigRowMapper implements RowMapper<AccountChan
         qo.setCarrier(resultSet.getString("CARRIER"));
         qo.setChannelName(resultSet.getString("CHANNEL_GROUP_NAME"));
         qo.setChannelIntroduce(resultSet.getString("CHANNEL_GROUP_INTRODUCE"));
-
+        qo.setChannelCarrier(resultSet.getString("CHANNEL_GROUP_CARRIER"));
+        qo.setChannelInfoType(resultSet.getString("CHANNEL_GROUP_INFO_TYPE"));
         return qo;
     }
 }

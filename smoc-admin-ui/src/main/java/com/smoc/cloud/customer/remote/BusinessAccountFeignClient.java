@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.List;
+
 
 /**
  * 业务账号管理远程服务接口
@@ -48,4 +50,13 @@ public interface BusinessAccountFeignClient {
      */
     @RequestMapping(value = "/account/forbiddenAccountById/{id}/{status}", method = RequestMethod.GET)
     ResponseData forbiddenAccountById(@PathVariable String id, @PathVariable String status) throws Exception;
+
+    /**
+     * 查询企业所有的业务账号
+     * @param enterpriseId
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/account/forbiddenAccountById/{enterpriseId}", method = RequestMethod.GET)
+    ResponseData<List<AccountBasicInfoValidator>> findBusinessAccountByEnterpriseId(@PathVariable String enterpriseId) throws Exception;
 }

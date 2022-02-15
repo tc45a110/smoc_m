@@ -11,6 +11,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 /**
  * 业务账号操作类
  */
@@ -34,4 +36,11 @@ public interface BusinessAccountRepository extends CrudRepository<AccountBasicIn
     @Modifying
     @Query(value = "update account_base_info set ACCOUNT_STATUS = :status where ACCOUNT_ID = :id",nativeQuery = true)
     void updateAccountStatusById(@Param("id") String id, @Param("status") String status);
+
+    /**
+     * 查询企业所有的业务账号
+     * @param enterpriseId
+     * @return
+     */
+    List<AccountBasicInfoValidator> findBusinessAccountByEnterpriseId(String enterpriseId);
 }

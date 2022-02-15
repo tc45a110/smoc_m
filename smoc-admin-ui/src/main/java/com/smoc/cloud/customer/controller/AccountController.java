@@ -8,6 +8,7 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.customer.qo.AccountChannelInfoQo;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.AccountFinanceInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.AccountInterfaceInfoValidator;
@@ -15,10 +16,7 @@ import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidato
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
-import com.smoc.cloud.customer.service.AccountFinanceService;
-import com.smoc.cloud.customer.service.AccountInterfaceService;
-import com.smoc.cloud.customer.service.BusinessAccountService;
-import com.smoc.cloud.customer.service.EnterpriseService;
+import com.smoc.cloud.customer.service.*;
 import com.smoc.cloud.sequence.service.SequenceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +64,9 @@ public class AccountController {
 
     @Autowired
     private AccountInterfaceService accountInterfaceService;
+
+    @Autowired
+    private AccountChannelService accountChannelService;
 
     /**
      * 业务账号列表
@@ -202,7 +203,7 @@ public class AccountController {
         if ("base".equals(flag)) {
             AccountBasicInfoValidator accountBasicInfoValidator = new AccountBasicInfoValidator();
             accountBasicInfoValidator.setEnterpriseId(accountId);
-            accountBasicInfoValidator.setAccountStauts("1");
+            accountBasicInfoValidator.setAccountStauts("2");
             accountBasicInfoValidator.setRandomExtendCodeLength(0);
             accountBasicInfoValidator.setAccountProcess("10000");
 
@@ -256,6 +257,11 @@ public class AccountController {
         String[] carriers= accountBasicInfoValidator.getCarrier().split(",");
         if(carriers.length==1 && StringUtils.isEmpty(accountBasicInfoValidator.getTransferType())){
             FieldError err = new FieldError("是否支持携号转网", "transferType", "是否支持携号转网不能为空");
+            result.addError(err);
+        }
+        //如果正常状态并且账号进度未完善，
+        if ("1".equals(accountBasicInfoValidator.getAccountStauts()) && Integer.parseInt(accountBasicInfoValidator.getAccountProcess())<=11100) {
+            FieldError err = new FieldError("账号状态", "accountStauts", "正常状态下需要完善账号配置信息");
             result.addError(err);
         }
 
@@ -353,11 +359,11 @@ public class AccountController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(webData.getCode())) {
-            systemUserLogService.logsAsync("BUSINESS_ACCOUNT", data.getData().getEnterpriseId(), user.getRealName(), "edit", "1".equals(status) ? "注销EC业务账号":"启用EC业务账号账号", JSON.toJSONString(data.getData()));
+            systemUserLogService.logsAsync("BUSINESS_ACCOUNT", data.getData().getEnterpriseId(), user.getRealName(), "edit", ("1".equals(status) || "2".equals(status)) ? "注销EC业务账号":"启用EC业务账号账号", JSON.toJSONString(data.getData()));
         }
 
         //记录日志
-        log.info("[EC业务账号管理][{}][{}][{}]数据:{}", "1".equals(status) ? "注销EC业务账号":"启用EC业务账号账号","edit" , user.getUserName(), JSON.toJSONString(data.getData()));
+        log.info("[EC业务账号管理][{}][{}][{}]数据:{}", ("1".equals(status) || "2".equals(status)) ? "注销EC业务账号":"启用EC业务账号账号","edit" , user.getUserName(), JSON.toJSONString(data.getData()));
         view.setView(new RedirectView("/account/list", true, false));
         return view;
 
@@ -372,6 +378,65 @@ public class AccountController {
     @RequestMapping(value = "/center/{enterpriseId}", method = RequestMethod.GET)
     public ModelAndView center(@PathVariable String enterpriseId, HttpServletRequest request) {
         ModelAndView view = new ModelAndView("customer/account/account_account_center");
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(enterpriseId);
+        if (!MpmValidatorUtil.validate(validator)) {
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
+
+        //查询企业数据
+        ResponseData<EnterpriseBasicInfoValidator> data = enterpriseService.findById(enterpriseId);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+        }
+
+        //查询企业所有的业务账号
+        ResponseData<List<AccountBasicInfoValidator>> info = businessAccountService.findBusinessAccountByEnterpriseId(data.getData().getEnterpriseId());
+        if (!ResponseCode.SUCCESS.getCode().equals(info.getCode())) {
+            view.addObject("error", info.getCode() + ":" + info.getMessage());
+            return view;
+        }
+
+        /**
+         * 账号数量
+         */
+        int TEXT_SMS = 0;
+        int MULTI_SMS = 0;
+        int MMS = 0;
+        int SMS_5G = 0;
+        int INTERNATIONAL_SMS = 0;
+        int BLACK_SERVICE = 0;
+
+        if(!StringUtils.isEmpty(info.getData()) && info.getData().size()>0){
+            for(int i=0;i<info.getData().size();i++){
+                AccountBasicInfoValidator accountBasicInfoValidator = info.getData().get(i);
+                if("TEXT_SMS".equals(accountBasicInfoValidator.getBusinessType())){
+                    TEXT_SMS+=1;
+                }else if("MULTI_SMS".equals(accountBasicInfoValidator.getBusinessType())){
+                    TEXT_SMS+=1;
+                }else if("MMS".equals(accountBasicInfoValidator.getBusinessType())){
+                    MMS+=1;
+                }else if("5G_SMS".equals(accountBasicInfoValidator.getBusinessType())){
+                    SMS_5G+=1;
+                }else if("INTERNATIONAL_SMS".equals(accountBasicInfoValidator.getBusinessType())){
+                    INTERNATIONAL_SMS+=1;
+                }else if("BLACK_SERVICE".equals(accountBasicInfoValidator.getBusinessType())){
+                    BLACK_SERVICE+=1;
+                }
+            }
+        }
+
+        view.addObject("enterpriseBasicInfoValidator", data.getData());
+        view.addObject("list", info.getData());
+        view.addObject("TEXT_SMS", TEXT_SMS);
+        view.addObject("MULTI_SMS", MULTI_SMS);
+        view.addObject("MMS", MMS);
+        view.addObject("SMS_5G", SMS_5G);
+        view.addObject("INTERNATIONAL_SMS", INTERNATIONAL_SMS);
+        view.addObject("BLACK_SERVICE", BLACK_SERVICE);
 
         return view;
 
@@ -442,7 +507,7 @@ public class AccountController {
         view.addObject("list", map.getData());
         //查询账号配置的运营商价格
         ResponseData<List<AccountFinanceInfoValidator>> list = accountFinanceService.findByAccountId(accountFinanceInfoValidator);
-        if(!StringUtils.isEmpty(list) && list.getData().size()>0){
+        if(!StringUtils.isEmpty(list.getData()) && list.getData().size()>0){
             accountFinanceInfoValidator = list.getData().get(0);
         }
 
@@ -450,10 +515,28 @@ public class AccountController {
          * 查询接口信息
          */
         ResponseData<AccountInterfaceInfoValidator> accountInterfaceInfoValidator = accountInterfaceService.findById(data.getData().getAccountId());
+        if(StringUtils.isEmpty(accountInterfaceInfoValidator.getData())){
+            view.addObject("accountInterfaceInfoValidator", new AccountInterfaceInfoValidator());
+        }else{
+            view.addObject("accountInterfaceInfoValidator",  accountInterfaceInfoValidator.getData());
+        }
+
+        /**
+         * 查询通道
+         */
+        AccountChannelInfoQo accountChannelInfoQo = new AccountChannelInfoQo();
+        accountChannelInfoQo.setAccountId(data.getData().getAccountId());
+        accountChannelInfoQo.setCarrier(data.getData().getCarrier());
+        accountChannelInfoQo.setAccountChannelType(data.getData().getAccountChannelType());
+        ResponseData<Map<String, AccountChannelInfoQo>> channelData = accountChannelService.findAccountChannelConfig(accountChannelInfoQo);
+        if (!ResponseCode.SUCCESS.getCode().equals(channelData.getCode())) {
+            view.addObject("error", channelData.getCode() + ":" + channelData.getMessage());
+            return view;
+        }
 
         view.addObject("accountBasicInfoValidator", data.getData());
         view.addObject("accountFinanceInfoValidator", accountFinanceInfoValidator);
-        view.addObject("accountInterfaceInfoValidator", accountInterfaceInfoValidator.getData());
+        view.addObject("channelData", channelData.getData());
 
         return view;
 

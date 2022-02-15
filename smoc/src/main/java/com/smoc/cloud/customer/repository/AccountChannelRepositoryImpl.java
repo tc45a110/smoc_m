@@ -37,6 +37,8 @@ public class AccountChannelRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", b.CHANNEL_NAME");
         sqlBuffer.append(", i.PROTOCOL");
         sqlBuffer.append(", b.CHANNEL_INTRODUCE");
+        sqlBuffer.append(", b.CARRIER AS CHANNEL_CARRIER");
+        sqlBuffer.append(", b.INFO_TYPE AS CHANNEL_INFO_TYPE");
         sqlBuffer.append("  from account_channel_info t left join config_channel_basic_info b on t.CHANNEL_ID=b.CHANNEL_ID ");
         sqlBuffer.append("  left join config_channel_interface i on t.CHANNEL_ID=i.CHANNEL_ID where 1=1 ");
 
@@ -67,6 +69,8 @@ public class AccountChannelRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", t.CARRIER");
         sqlBuffer.append(", b.CHANNEL_GROUP_NAME");
         sqlBuffer.append(", b.CHANNEL_GROUP_INTRODUCE");
+        sqlBuffer.append(", b.CARRIER as CHANNEL_GROUP_CARRIER");
+        sqlBuffer.append(", b.INFO_TYPE as CHANNEL_GROUP_INFO_TYPE");
         sqlBuffer.append("  from (select a.ACCOUNT_ID,a.CHANNEL_GROUP_ID,a.CARRIER from account_channel_info a where a.ACCOUNT_ID = ? group by a.ACCOUNT_ID,a.CHANNEL_GROUP_ID,a.CARRIER)t ");
         sqlBuffer.append("  left join config_channel_group_info b on t.CHANNEL_GROUP_ID=b.CHANNEL_GROUP_ID ");
         sqlBuffer.append("  where 1=1 ");
@@ -261,6 +265,8 @@ public class AccountChannelRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", '' CHANNEL_NAME");
         sqlBuffer.append(", ''PROTOCOL");
         sqlBuffer.append(", ''CHANNEL_INTRODUCE");
+        sqlBuffer.append(", ''CHANNEL_CARRIER");
+        sqlBuffer.append(", ''CHANNEL_INFO_TYPE");
         sqlBuffer.append("  from account_channel_info t  where t.ACCOUNT_ID = ? ");
 
         List<Object> paramsList = new ArrayList<Object>();
@@ -334,6 +340,8 @@ public class AccountChannelRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", t.CHANNEL_GROUP_ID");
         sqlBuffer.append(", ''CHANNEL_GROUP_NAME");
         sqlBuffer.append(", ''CHANNEL_GROUP_INTRODUCE");
+        sqlBuffer.append(", '' CHANNEL_GROUP_CARRIER");
+        sqlBuffer.append(", ''CHANNEL_GROUP_INFO_TYPE");
         sqlBuffer.append("  from account_channel_info t  where t.CHANNEL_GROUP_ID=? and t.CARRIER=?  ");
 
         List<Object> paramsList = new ArrayList<Object>();
