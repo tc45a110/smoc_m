@@ -67,7 +67,7 @@
                                                               th:errors="*{businessType}"></span></label>
                                                     <mpm:tag id="businessType" required="true" identity="businessType"
                                                              show-type="select" key="code" class="form-control"
-                                                             name="businessType"
+                                                             name="businessType"  mask-value="INTERNATIONAL_SMS"
                                                              th:value="${accountBasicInfoValidator.businessType}" title="业务类型"/>
                                                 </div>
                                                 <div class="col-sm-4 m-b-10">
@@ -94,7 +94,7 @@
                                                     <label>发送运营商<span class="text-danger">*</span>&nbsp;
                                                         <span class="text-danger" th:if="${#fields.hasErrors('carrier')}"
                                                               th:errors="*{carrier}"></span></label><br>
-                                                    <mpm:tag id="carrier" required="true" identity="carrier"
+                                                    <mpm:tag id="carrier" required="true" identity="carrier" mask-value="INTERNATIONAL"
                                                              show-type="checkbox" key="code" name="carrier" onchange="isTransferSwith()"
                                                              th:value="${accountBasicInfoValidator.carrier}" title="运营商"/>
                                                 </div>
@@ -131,17 +131,17 @@
                                                 </div>
                                                 <div class="col-sm-4 m-b-10">
                                                     <label class="m-b-10">账号状态<span class="text-danger" style="display: none">*</span>&nbsp;
-                                                        <span class="text-danger" th:if="${#fields.hasErrors('accountStauts')}"
-                                                              th:errors="*{accountStauts}"></span></label><br>
-                                                    <!--<mpm:tag id="accountStauts" identity="isOrNo" name="accountStauts"
-                                                             show-type="radio" style="margin-top:0px"  onchange="confirmModal()"
-                                                             key="code" th:value="${accountBasicInfoValidator.accountStauts}"
-                                                             required="true" title="是否"/>-->
-                                                    <select data-style="btn-default" name="accountStauts" id="accountStauts" class="selectpicker form-control" required="" tabindex="-98" onchange="confirmModal()">
+                                                        <span class="text-danger" th:if="${#fields.hasErrors('accountStatus')}"
+                                                              th:errors="*{accountStatus}"></span></label><br>
+                                                    <mpm:tag id="accountStatus" identity="accountStatus" name="accountStatus"
+                                                             show-type="select" style="margin-top:0px"  onchange="confirmModal()"
+                                                             key="code" th:value="${accountBasicInfoValidator.accountStatus}"
+                                                             required="true"/>
+                                                    <!--<select data-style="btn-default" name="accountStauts" id="accountStauts" class="selectpicker form-control" required="" tabindex="-98" onchange="confirmModal()">
                                                         <option data-icon="mdi mdi-apps" value="2" th:selected="${accountBasicInfoValidator.accountStauts eq '2'}">完善中</option>
                                                         <option data-icon="mdi mdi-apps" value="1" th:selected="${accountBasicInfoValidator.accountStauts eq '1'}">正常</option>
                                                         <option data-icon="mdi mdi-apps" value="0" th:selected="${accountBasicInfoValidator.accountStauts eq '0'}">注销</option>
-                                                    </select>
+                                                    </select>-->
                                                 </div>
                                             </div>
                                         </div>

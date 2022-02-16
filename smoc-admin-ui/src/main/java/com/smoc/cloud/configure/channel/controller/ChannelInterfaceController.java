@@ -147,7 +147,7 @@ public class ChannelInterfaceController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            systemUserLogService.logsAsync("CHANNEL_INTERFACE", channelInterfaceValidator.getChannelId(), "add".equals(op) ? channelInterfaceValidator.getCreatedBy() : channelInterfaceValidator.getUpdatedBy(), op, "add".equals(op) ? "添加通道接口参数" : "修改通道接口参数", JSON.toJSONString(channelInterfaceValidator));
+            systemUserLogService.logsAsync("CHANNEL_BASE", channelInterfaceValidator.getChannelId(), "add".equals(op) ? channelInterfaceValidator.getCreatedBy() : channelInterfaceValidator.getUpdatedBy(), op, "add".equals(op) ? "添加通道接口参数" : "修改通道接口参数", JSON.toJSONString(channelInterfaceValidator));
         }
 
         //记录日志

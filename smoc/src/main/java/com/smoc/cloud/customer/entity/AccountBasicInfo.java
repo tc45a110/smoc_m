@@ -19,7 +19,7 @@ public class AccountBasicInfo {
     private String poistCarrier;
     private String transferType;
     private String accountProcess;
-    private String accountStauts;
+    private String accountStatus;
     private String createdBy;
     private Date createdTime;
     private String updatedBy;
@@ -147,12 +147,12 @@ public class AccountBasicInfo {
 
     @Basic
     @Column(name = "ACCOUNT_STATUS")
-    public String getAccountStauts() {
-        return accountStauts;
+    public String getAccountStatus() {
+        return accountStatus;
     }
 
-    public void setAccountStauts(String accountStauts) {
-        this.accountStauts = accountStauts;
+    public void setAccountStatus(String accountStatus) {
+        this.accountStatus = accountStatus;
     }
 
     @Basic

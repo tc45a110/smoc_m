@@ -225,7 +225,7 @@ public class ChannelGroupController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            systemUserLogService.logsAsync("CHANNEL_GROUIP_BASE", channelGroupInfoValidator.getChannelGroupId(), "add".equals(op) ? channelGroupInfoValidator.getCreatedBy() : channelGroupInfoValidator.getUpdatedBy(), op, "add".equals(op) ? "添加通道组" : "修改通道组", JSON.toJSONString(channelGroupInfoValidator));
+            systemUserLogService.logsAsync("CHANNEL_GROUIP", channelGroupInfoValidator.getChannelGroupId(), "add".equals(op) ? channelGroupInfoValidator.getCreatedBy() : channelGroupInfoValidator.getUpdatedBy(), op, "add".equals(op) ? "添加通道组" : "修改通道组", JSON.toJSONString(channelGroupInfoValidator));
         }
 
         //记录日志

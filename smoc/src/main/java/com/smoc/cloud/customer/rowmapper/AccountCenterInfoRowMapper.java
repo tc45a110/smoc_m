@@ -21,7 +21,7 @@ public class AccountCenterInfoRowMapper implements RowMapper<AccountBasicInfoVal
         qo.setBusinessType(resultSet.getString("BUSINESS_TYPE"));
         qo.setInfoType(resultSet.getString("INFO_TYPE"));
         qo.setExtendCode(resultSet.getString("EXTEND_CODE"));
-        qo.setAccountStauts(resultSet.getString("ACCOUNT_STATUS"));
+        qo.setAccountStatus(resultSet.getString("ACCOUNT_STATUS"));
         qo.setProtocol(resultSet.getString("PROTOCOL"));
         return qo;
     }

@@ -446,7 +446,15 @@ public class ChannelController {
             return view;
         }
 
+        //查询通道基本信息
+        ResponseData<ChannelBasicInfoValidator> data = channelService.findById(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
         view.addObject("id", id);
+        view.addObject("flag", data.getData().getCarrier());
 
         return view;
     }

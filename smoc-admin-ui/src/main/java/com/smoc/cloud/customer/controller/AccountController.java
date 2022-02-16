@@ -171,10 +171,14 @@ public class AccountController {
                 return view;
             }
             view.addObject("accountChannelType", info.getData().getAccountChannelType());
+            view.addObject("enterpriseId", info.getData().getEnterpriseId());
+        }else{
+            view.addObject("enterpriseId", accountId);
         }
 
         view.addObject("flag", flag);
         view.addObject("accountId", accountId);
+
 
         return view;
 
@@ -203,7 +207,7 @@ public class AccountController {
         if ("base".equals(flag)) {
             AccountBasicInfoValidator accountBasicInfoValidator = new AccountBasicInfoValidator();
             accountBasicInfoValidator.setEnterpriseId(accountId);
-            accountBasicInfoValidator.setAccountStauts("2");
+            accountBasicInfoValidator.setAccountStatus("2");
             accountBasicInfoValidator.setRandomExtendCodeLength(0);
             accountBasicInfoValidator.setAccountProcess("10000");
 
@@ -260,7 +264,7 @@ public class AccountController {
             result.addError(err);
         }
         //如果正常状态并且账号进度未完善，
-        if ("1".equals(accountBasicInfoValidator.getAccountStauts()) && Integer.parseInt(accountBasicInfoValidator.getAccountProcess())<=11100) {
+        if ("1".equals(accountBasicInfoValidator.getAccountStatus()) && Integer.parseInt(accountBasicInfoValidator.getAccountProcess())<=11100) {
             FieldError err = new FieldError("账号状态", "accountStauts", "正常状态下需要完善账号配置信息");
             result.addError(err);
         }
@@ -467,6 +471,7 @@ public class AccountController {
         }
 
         view.addObject("accountId", info.getData().getAccountId());
+        view.addObject("enterpriseId", info.getData().getEnterpriseId());
         return view;
 
     }

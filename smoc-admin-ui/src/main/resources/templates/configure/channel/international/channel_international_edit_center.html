@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+</head>
+<body>
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <!-- start row 页面导航-->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">国际通道信息维护</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            国际通道管理
+                        </li>
+                        <li class="active">
+                            国际通道信息维护
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  页面内容-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <div class="row" style="margin-bottom:10px">
+                                <h4 class="m-b-10">
+                                    <div class="pull-right" style="margin-top: -12px;margin-right:10px">
+                                        <a sec:authorize-url="/configure/channel/international/list"
+                                           th:href="@{/configure/channel/international/list}"
+                                           class="btn btn-default waves-effect waves-light btn-md">
+                                            <i class="glyphicon  glyphicon-share-alt" style="margin-right:10px"></i>
+                                            返回国际通道列表</a>
+                                        <a sec:authorize-url="/configure/channel/edit/center/*"
+                                           th:href="@{/configure/channel/view/center/{id}(id=${id})}"
+                                           class="btn btn-teal waves-effect waves-light btn-md">
+                                            <i class="glyphicon  glyphicon-search" style="margin-right:5px"></i>
+                                            国际通道详情</a>
+                                    </div>
+                                </h4>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card-box">
+                                        <ul class="nav nav-pills m-b-30 pull-right">
+                                            <li class="active" id="tab1"><a onclick="active('1')"
+                                                                            sec:authorize-url="/configure/channel/international/edit/base/*"
+                                                                            th:href="@{/configure/channel/international/edit/base/{id}(id=${id})}"
+                                                                            th:target="tab-content"><i
+                                                    class="mdi mdi-star" style="margin-right:5px;color:#f35864"></i>国际通道基本信息</a>
+                                            </li>
+                                            <li class="" id="tab2"><a onclick="active('2')" id="a2"
+                                                                      sec:authorize-url="/configure/channel/edit/interface/*"
+                                                                      th:href="@{/configure/channel/edit/interface/{id}(id=${id})}"
+                                                                      th:target="tab-content"><i class="mdi mdi-star"
+                                                                                                 style="margin-right:5px;color:#f35864"></i>国际通道接口参数</a>
+                                            </li>
+                                            <li class="" id="tab3"><a onclick="active('3')" id="a3"
+                                                                      sec:authorize-url="/parameter/filter/list/CHANNEL_FILTER/*/*"
+                                                                      th:href="@{/parameter/filter/list/CHANNEL_FILTER/{businessId}/3(businessId=${id})}"
+                                                                      th:target="tab-content"><i class="mdi mdi-star"
+                                                                                                 style="margin-right:5px;color:#f35864"></i>国际通道过滤配置</a>
+                                            </li>
+                                            <li class="" id="tab4"><a onclick="active('4')" id="a4"
+                                                                      sec:authorize-url="/configure/channel/edit/price/*"
+                                                                      th:href="@{/configure/channel/edit/price/{id}(id=${id})}"
+                                                                      th:target="tab-content"><i class="mdi mdi-star"
+                                                                                                 style="margin-right:5px;color:#f35864"></i>国际通道计价配置</a>
+                                            </li>
+                                            <li class="" id="tab5">
+                                                <a onclick="active('5')" id="a5"
+                                                   sec:authorize-url="/filter/keywords/CHANNEL/list/*"
+                                                   th:href="@{/filter/keywords/CHANNEL/list/{businessId}(businessId=${id})}"
+                                                   th:target="tab-content">国际通道关键词
+                                                </a>
+                                            </li>
+                                            <li class="" id="tab6">
+                                                <a onclick="active('6')" id="a6"
+                                                   sec:authorize-url="/parameter/business/list/CHANNEL/*/*"
+                                                   th:href="@{/parameter/business/list/CHANNEL/{businessId}/3(businessId=${id})}"
+                                                   th:target="tab-content">国际通道扩展参数
+                                                </a>
+                                            </li>
+                                            <li class="" id="tab7"><a onclick="active('7')" id="a7"
+                                                                      sec:authorize-url="/configure/channel/edit/spare/*"
+                                                                      th:href="@{/configure/channel/edit/spare/id}"
+                                                                      th:target="tab-content">失败补发国际通道配置</a></li>
+                                        </ul>
+                                        <div class="tab-cotent" style="background-color:#fff">
+                                            <iframe name="tab-content" id="tab-content" th:frameBorder="0"
+                                                    th:scrolling="auto"
+                                                    th:src="@{/configure/channel/international/edit/base/{id}(id=${id})}"
+                                                    style="padding: 0px; width: 100%; height: 1000px;background-color:#fff"></iframe>
+                                        </div>
+                                    </div>
+                                </div> <!-- end col -->
+                            </div>
+                            <!-- end row -->
+                        </div> <!-- end col -->
+                    </div> <!-- end row -->
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<!-- Modal-Effect -->
+<script>
+
+    $(document).ready(function () {
+
+        if("base" == '[[${id}]]'){
+            for(var num = 2;num<8;num++){
+                document.getElementById('tab'+num).style.backgroundColor="#DCDBDC";
+                $("#a"+num).attr("onclick","");
+                $("#a"+num).removeAttr("href");
+            }
+        }
+    });
+
+    function active(tab) {
+        for(var num = 1;num<10;num++){
+            $('#tab'+num).removeClass("active");
+        }
+        $('#tab'+tab).attr("class","active");
+    }
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+</script>
+</body>
+</html>

@@ -92,9 +92,9 @@ public class EnterpriseInvoiceController {
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             if("1".equals(enterpriseInvoiceInfoValidator.getInvoiceType())){
-                systemUserLogService.logsAsync("ENTERPRISE_INVOICE", enterpriseInvoiceInfoValidator.getEnterpriseId(), "add".equals(op) ? enterpriseInvoiceInfoValidator.getCreatedBy() : enterpriseInvoiceInfoValidator.getUpdatedBy(), op, "add".equals(op) ? "添加普通发票":"修改普通发票" , JSON.toJSONString(enterpriseInvoiceInfoValidator));
+                systemUserLogService.logsAsync("ENTERPRISE_INFO", enterpriseInvoiceInfoValidator.getEnterpriseId(), "add".equals(op) ? enterpriseInvoiceInfoValidator.getCreatedBy() : enterpriseInvoiceInfoValidator.getUpdatedBy(), op, "add".equals(op) ? "添加普通发票":"修改普通发票" , JSON.toJSONString(enterpriseInvoiceInfoValidator));
             }else{
-                systemUserLogService.logsAsync("ENTERPRISE_INVOICE", enterpriseInvoiceInfoValidator.getEnterpriseId(), "add".equals(op) ? enterpriseInvoiceInfoValidator.getCreatedBy() : enterpriseInvoiceInfoValidator.getUpdatedBy(), op, "add".equals(op) ? "添加专用发票":"修改专用发票" , JSON.toJSONString(enterpriseInvoiceInfoValidator));
+                systemUserLogService.logsAsync("ENTERPRISE_INFO", enterpriseInvoiceInfoValidator.getEnterpriseId(), "add".equals(op) ? enterpriseInvoiceInfoValidator.getCreatedBy() : enterpriseInvoiceInfoValidator.getUpdatedBy(), op, "add".equals(op) ? "添加专用发票":"修改专用发票" , JSON.toJSONString(enterpriseInvoiceInfoValidator));
             }
         }
 
@@ -146,9 +146,9 @@ public class EnterpriseInvoiceController {
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             if("1".equals(invoiceData.getData().getInvoiceType())){
-                systemUserLogService.logsAsync("ENTERPRISE_INVOICE", invoiceData.getData().getEnterpriseId(), user.getRealName(), "delete", "删除普通发票" , JSON.toJSONString(invoiceData.getData()));
+                systemUserLogService.logsAsync("ENTERPRISE_INFO", invoiceData.getData().getEnterpriseId(), user.getRealName(), "delete", "删除普通发票" , JSON.toJSONString(invoiceData.getData()));
             }else{
-                systemUserLogService.logsAsync("ENTERPRISE_INVOICE", invoiceData.getData().getEnterpriseId(), user.getRealName(), "delete", "删除专用发票" , JSON.toJSONString(invoiceData.getData()));
+                systemUserLogService.logsAsync("ENTERPRISE_INFO", invoiceData.getData().getEnterpriseId(), user.getRealName(), "delete", "删除专用发票" , JSON.toJSONString(invoiceData.getData()));
             }
         }
 

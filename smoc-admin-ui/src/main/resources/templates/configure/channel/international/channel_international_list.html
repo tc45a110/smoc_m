@@ -23,13 +23,13 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">通道管理</h4>
+                    <h4 class="page-title">国际通道管理</h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
                             产品通道设置
                         </li>
                         <li>
-                            通道管理
+                            国际通道管理
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -42,7 +42,7 @@
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
                 <div class="card-box">
-                    <form th:action="@{/configure/channel/page}" th:object="${channelBasicInfoQo}" id="query_form"
+                    <form th:action="@{/configure/channel/international/page}" th:object="${channelBasicInfoQo}" id="query_form"
                           method="post">
                         <div class="row m-b-60">
                             <div class="col-sm-12">
@@ -73,7 +73,7 @@
                                              title="通道供应商"/>
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <mpm:tag id="provicesiii" identity="specificProvder" show-type="select" key="code"
+                                    <mpm:tag id="provicesiii" identity="internationalSupplier" show-type="select" key="code"
                                              class="form-control"
                                              name="specificProvder" th:value="${channelBasicInfoQo.specificProvder}"
                                              title="通道具体供应商"/>
@@ -91,11 +91,6 @@
                                              name="protocol" th:value="${channelBasicInfoQo.protocol}" title="通道协议类型"/>
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <mpm:tag id="carrier" identity="carrier" show-type="select" key="code"
-                                             name="carrier" class="form-control" mask-value="INTERNATIONAL"
-                                             th:value="${channelBasicInfoQo.carrier}" title="发送号码范围"/>
-                                </div>
-                                <div class="form-group  col-sm-3">
                                     <mpm:tag id="infoType" identity="infoType" show-type="select" key="code"
                                              name="infoType" class="form-control"
                                              th:value="${channelBasicInfoQo.infoType}" title="信息分类"/>
@@ -105,8 +100,8 @@
                                             class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search" style="margin-right:5px"></i> 查询
                                     </button>
-                                    <a sec:authorize-url="/configure/channel/edit/center/*"
-                                       th:href="@{/configure/channel/edit/center/base}"
+                                    <a sec:authorize-url="/configure/channel/international/edit/center/*"
+                                       th:href="@{/configure/channel/international/edit/center/base}"
                                        class="btn btn-success waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-plus-sign"></i> 新建通道</a>
                                     <input type="hidden" name="currentPage" id="currentPage"
@@ -260,8 +255,8 @@
                                                            data-original-title="通道详情" style="font-size:12px">
                                                             <i class="glyphicon  glyphicon-search"
                                                                style="margin-right:5px;font-size:12px;color:#0095a8"></i>详细</a>
-                                                        <a sec:authorize-url="/configure/channel/edit/center/*"
-                                                           th:href="@{/configure/channel/edit/center/{id}(id=${info.channelId})}"
+                                                        <a sec:authorize-url="/configure/channel/international/edit/center/*"
+                                                           th:href="@{/configure/channel/international/edit/center/{id}(id=${info.channelId})}"
                                                            data-toggle="tooltip" data-placement="left" title=""
                                                            data-original-title="通道配置" style="font-size:12px">
                                                             <i class="glyphicon glyphicon-cog"

@@ -85,7 +85,7 @@ public class EnterpriseExpressController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            systemUserLogService.logsAsync("ENTERPRISE_EXPRESS", enterpriseExpressInfoValidator.getEnterpriseId(), "add".equals(op) ? enterpriseExpressInfoValidator.getCreatedBy() : enterpriseExpressInfoValidator.getUpdatedBy(), op, "add".equals(op) ? "添加邮寄信息-"+enterpriseExpressInfoValidator.getPostContacts():"修改邮寄信息-"+enterpriseExpressInfoValidator.getPostContacts() , JSON.toJSONString(enterpriseExpressInfoValidator));
+            systemUserLogService.logsAsync("ENTERPRISE_INFO", enterpriseExpressInfoValidator.getEnterpriseId(), "add".equals(op) ? enterpriseExpressInfoValidator.getCreatedBy() : enterpriseExpressInfoValidator.getUpdatedBy(), op, "add".equals(op) ? "添加邮寄信息-"+enterpriseExpressInfoValidator.getPostContacts():"修改邮寄信息-"+enterpriseExpressInfoValidator.getPostContacts() , JSON.toJSONString(enterpriseExpressInfoValidator));
         }
 
         //记录日志
@@ -131,7 +131,7 @@ public class EnterpriseExpressController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            systemUserLogService.logsAsync("ENTERPRISE_EXPRESS", expressData.getData().getEnterpriseId(), user.getRealName(), "delete", "删除邮寄信息-"+expressData.getData().getPostContacts() , JSON.toJSONString(expressData.getData()));
+            systemUserLogService.logsAsync("ENTERPRISE_INFO", expressData.getData().getEnterpriseId(), user.getRealName(), "delete", "删除邮寄信息-"+expressData.getData().getPostContacts() , JSON.toJSONString(expressData.getData()));
         }
 
         //记录日志

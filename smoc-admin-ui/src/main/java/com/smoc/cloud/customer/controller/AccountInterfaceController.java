@@ -141,7 +141,7 @@ public class AccountInterfaceController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            systemUserLogService.logsAsync("ACCOUNT_INTERFACE", accountInterfaceInfoValidator.getAccountId(), "add".equals(op) ? accountInterfaceInfoValidator.getCreatedBy() : accountInterfaceInfoValidator.getUpdatedBy(), op, "add".equals(op) ? "添加业务账号接口信息" : "修改业务账号接口信息", JSON.toJSONString(accountInterfaceInfoValidator));
+            systemUserLogService.logsAsync("BUSINESS_ACCOUNT", accountInterfaceInfoValidator.getAccountId(), "add".equals(op) ? accountInterfaceInfoValidator.getCreatedBy() : accountInterfaceInfoValidator.getUpdatedBy(), op, "add".equals(op) ? "添加业务账号接口信息" : "修改业务账号接口信息", JSON.toJSONString(accountInterfaceInfoValidator));
         }
 
         //记录日志
