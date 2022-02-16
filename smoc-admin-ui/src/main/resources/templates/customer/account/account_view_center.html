@@ -48,7 +48,8 @@
                                    class="btn btn-default waves-effect waves-light btn-md">
                                     <i class="glyphicon  glyphicon-share-alt" style="margin-right:10px"></i>
                                     返回通道列表</a>
-                                <a th:href="@{/account/center/account}"
+                                <a  sec:authorize-url="/account/center/*"
+                                    th:href="@{/account/center/{enterpriseId}(enterpriseId=${enterpriseId})}"
                                    style="margin-left:10px;"
                                    class="btn btn-instagram waves-effect waves-light btn-md">
                                     <i class="mdi mdi-vector-circle" style="margin-right:5px"></i>
@@ -95,8 +96,8 @@
 
                                                                       th:target="tab-content">业务账号投诉统计</a></li>
                                             <li class="" id="tab7"><a onclick="active('7')"
-                                                                      sec:authorize-url="/user/logs/list/*"
-                                                                      th:href="@{/user/logs/list/{accountId}(accountId=${accountId})}"
+                                                                      sec:authorize-url="/user/logs/list/*/*"
+                                                                      th:href="@{/user/logs/list/BUSINESS_ACCOUNT/{accountId}(accountId=${accountId})}"
                                                                       th:target="tab-content">业务账号操作日志</a></li>
 
                                         </ul>

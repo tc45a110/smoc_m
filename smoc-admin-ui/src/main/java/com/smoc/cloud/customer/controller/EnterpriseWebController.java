@@ -110,7 +110,7 @@ public class EnterpriseWebController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            systemUserLogService.logsAsync("ENTERPRISE_WEB", enterpriseWebAccountInfoValidator.getEnterpriseId(), "add".equals(op) ? enterpriseWebAccountInfoValidator.getCreatedBy() : enterpriseWebAccountInfoValidator.getUpdatedBy(), op, "add".equals(op) ? "添加"+enterpriseWebAccountInfoValidator.getWebLoginName()+"WEB登录账号":"重置"+enterpriseWebAccountInfoValidator.getWebLoginName()+"WEB账号密码" , JSON.toJSONString(enterpriseWebAccountInfoValidator));
+            systemUserLogService.logsAsync("ENTERPRISE_INFO", enterpriseWebAccountInfoValidator.getEnterpriseId(), "add".equals(op) ? enterpriseWebAccountInfoValidator.getCreatedBy() : enterpriseWebAccountInfoValidator.getUpdatedBy(), op, "add".equals(op) ? "添加"+enterpriseWebAccountInfoValidator.getWebLoginName()+"WEB登录账号":"重置"+enterpriseWebAccountInfoValidator.getWebLoginName()+"WEB账号密码" , JSON.toJSONString(enterpriseWebAccountInfoValidator));
         }
 
         //记录日志
@@ -163,7 +163,7 @@ public class EnterpriseWebController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(webData.getCode())) {
-            systemUserLogService.logsAsync("ENTERPRISE_WEB", data.getData().getEnterpriseId(), user.getRealName(), "edit", "1".equals(status) ? "注销"+data.getData().getWebLoginName()+"WEB登录账号":"启用"+data.getData().getWebLoginName()+"WEB登录账号" , JSON.toJSONString(data.getData()));
+            systemUserLogService.logsAsync("ENTERPRISE_INFO", data.getData().getEnterpriseId(), user.getRealName(), "edit", "1".equals(status) ? "注销"+data.getData().getWebLoginName()+"WEB登录账号":"启用"+data.getData().getWebLoginName()+"WEB登录账号" , JSON.toJSONString(data.getData()));
         }
 
         //记录日志

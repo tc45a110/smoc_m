@@ -176,7 +176,7 @@ public class ConfigChannelGroupController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            systemUserLogService.logsAsync("CHANNEL_GROUIP_CONFIG", channelGroupConfigValidator.getChannelGroupId(), channelGroupConfigValidator.getCreatedBy(), op, "add".equals(op) ? "添加通道组配置" : "修改通道组权重", JSON.toJSONString(channelGroupConfigValidator));
+            systemUserLogService.logsAsync("CHANNEL_GROUIP", channelGroupConfigValidator.getChannelGroupId(), channelGroupConfigValidator.getCreatedBy(), op, "add".equals(op) ? "添加通道组配置" : "修改通道组权重", JSON.toJSONString(channelGroupConfigValidator));
         }
 
         //查询已配置的通道
@@ -248,7 +248,7 @@ public class ConfigChannelGroupController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            systemUserLogService.logsAsync("CHANNEL_GROUIP_CONFIG", responseData.getData().getChannelGroupId(), user.getRealName(), "delete", "移除通道组配置", JSON.toJSONString(responseData));
+            systemUserLogService.logsAsync("CHANNEL_GROUIP", responseData.getData().getChannelGroupId(), user.getRealName(), "delete", "移除通道组配置", JSON.toJSONString(responseData));
         }
 
         view.setView(new RedirectView("/configure/channel/group/edit/channel/" + responseData.getData().getChannelGroupId(), true, false));

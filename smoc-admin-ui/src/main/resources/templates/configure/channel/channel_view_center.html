@@ -41,15 +41,25 @@
                         <h4 >
                             <div class="pull-right" style="margin-top: -12px;margin-right:10px">
                                 <a sec:authorize-url="/configure/channel/list"
-                                   th:href="@{/configure/channel/list}"
+                                   th:href="@{/configure/channel/list}" th:if="${flag ne 'INTERNATIONAL'}"
                                    class="btn btn-default waves-effect waves-light btn-md">
                                     <i class="glyphicon  glyphicon-share-alt" style="margin-right:10px"></i>
                                     返回通道列表</a>
+                                <a sec:authorize-url="/configure/channel/international/list"
+                                   th:href="@{/configure/channel/international/list}" th:if="${flag eq 'INTERNATIONAL'}"
+                                   class="btn btn-default waves-effect waves-light btn-md">
+                                    <i class="glyphicon  glyphicon-share-alt" style="margin-right:10px"></i>
+                                    返回国际通道列表</a>
                                 <a sec:authorize-url="/configure/channel/edit/center/*"
-                                   th:href="@{/configure/channel/edit/center/{id}(id=${id})}"
+                                   th:href="@{/configure/channel/edit/center/{id}(id=${id})}" th:if="${flag ne 'INTERNATIONAL'}"
                                    class="btn btn-purple waves-effect waves-light btn-md" style="margin-right:10px">
                                     <i class="glyphicon glyphicon-cog" style="margin-right:5px"></i>
                                     通道配置</a>
+                                <a sec:authorize-url="/configure/channel/international/edit/center/*"
+                                   th:href="@{/configure/channel/international/edit/center/{id}(id=${id})}" th:if="${flag eq 'INTERNATIONAL'}"
+                                   class="btn btn-purple waves-effect waves-light btn-md" style="margin-right:10px">
+                                    <i class="glyphicon glyphicon-cog" style="margin-right:5px"></i>
+                                    国际通道配置</a>
                             </div>
                         </h4>
                     </div>
@@ -86,8 +96,8 @@
 
                                                                       th:target="tab-content">通道使用明细</a></li>
                                             <li class="" id="tab8"><a onclick="active('8')"
-                                                                      sec:authorize-url="/user/logs/list/*"
-                                                                      th:href="@{/user/logs/list/{id}(id=${id})}"
+                                                                      sec:authorize-url="/user/logs/list/*/*"
+                                                                      th:href="@{/user/logs/list/CHANNEL_BASE/{id}(id=${id})}"
                                                                       th:target="tab-content">通道操作日志</a></li>
 
                                         </ul>

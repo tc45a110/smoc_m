@@ -40,7 +40,7 @@ public class AccountBasicInfoValidator {
     private String transferType;
     private String accountProcess;
     @NotNull(message = "状态不能为空！")
-    private String accountStauts;
+    private String accountStatus;
     private String createdBy;
     private String createdTime;
     private String updatedBy;

@@ -252,7 +252,7 @@ public class AccountChannelController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            systemUserLogService.logsAsync("ACCOUNT_CHANNEL", accountChannelInfoValidator.getAccountId(), accountChannelInfoValidator.getCreatedBy() , op,  "添加业务账号通道配置", JSON.toJSONString(accountChannelInfoValidator));
+            systemUserLogService.logsAsync("BUSINESS_ACCOUNT", accountChannelInfoValidator.getAccountId(), accountChannelInfoValidator.getCreatedBy() , op,  "添加业务账号通道配置", JSON.toJSONString(accountChannelInfoValidator));
         }
 
         //记录日志
@@ -302,7 +302,7 @@ public class AccountChannelController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            systemUserLogService.logsAsync("ACCOUNT_CHANNEL", responseData.getData().getAccountId(), user.getRealName(), "delete", "移除账号已配置通道", JSON.toJSONString(responseData));
+            systemUserLogService.logsAsync("BUSINESS_ACCOUNT", responseData.getData().getAccountId(), user.getRealName(), "delete", "移除账号已配置通道", JSON.toJSONString(responseData));
         }
 
         view.setView(new RedirectView("/account/channel/findChannelList/"+responseData.getData().getAccountId()+"/"+responseData.getData().getCarrier(), true, false));
@@ -511,7 +511,7 @@ public class AccountChannelController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            systemUserLogService.logsAsync("ACCOUNT_CHANNEL", accountChannelInfoValidator.getAccountId(), accountChannelInfoValidator.getCreatedBy() , op,  "添加业务账号通道組配置", JSON.toJSONString(accountChannelInfoValidator));
+            systemUserLogService.logsAsync("BUSINESS_ACCOUNT", accountChannelInfoValidator.getAccountId(), accountChannelInfoValidator.getCreatedBy() , op,  "添加业务账号通道組配置", JSON.toJSONString(accountChannelInfoValidator));
         }
 
         //记录日志
@@ -568,7 +568,7 @@ public class AccountChannelController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            systemUserLogService.logsAsync("ACCOUNT_CHANNEL", accountId, user.getRealName(), "delete", "移除账号已配置通道组", JSON.toJSONString(responseData));
+            systemUserLogService.logsAsync("BUSINESS_ACCOUNT", accountId, user.getRealName(), "delete", "移除账号已配置通道组", JSON.toJSONString(responseData));
         }
 
         view.setView(new RedirectView("/account/channelGroup/channelGroupList/"+accountId+"/"+carrier, true, false));

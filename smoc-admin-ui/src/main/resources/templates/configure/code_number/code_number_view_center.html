@@ -61,8 +61,8 @@
                             <li class="" id="tab3"><a onclick="active('3')"
                                                       th:target="content1">发送量统计</a></li>
                             <li class="" id="tab4"><a onclick="active('4')"
-                                                      sec:authorize-url="/user/logs/list/*"
-                                                      th:href="@{/user/logs/list/{id}(id=${id})}"
+                                                      sec:authorize-url="/user/logs/list/*/*"
+                                                      th:href="@{/user/logs/list/CODE_NUMBER/{id}(id=${id})}"
                                                       th:target="content1">码号操作日志</a></li>
                         </ul>
                     </div>

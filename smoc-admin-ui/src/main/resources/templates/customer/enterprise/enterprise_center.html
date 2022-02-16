@@ -699,8 +699,8 @@
                                                         </a>
                                                     </li>
                                                     <li class="" id="tab5">
-                                                        <a onclick="active('5')" sec:authorize-url="/user/logs/list/*"
-                                                           th:href="@{/user/logs/list/{id}(id=${enterpriseWebAccountInfoValidator.enterpriseId})}"
+                                                        <a onclick="active('5')" sec:authorize-url="/user/logs/list/*/*"
+                                                           th:href="@{/user/logs/list/ENTERPRISE_INFO/{id}(id=${enterpriseWebAccountInfoValidator.enterpriseId})}"
                                                            th:target="tab-content">
                                                             <span class="visible-xs"><i class="fa fa-cog"></i></span>
                                                             <span class="hidden-xs">企业信息操作日志</span>

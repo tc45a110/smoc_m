@@ -52,7 +52,8 @@
                                            class="btn btn-default waves-effect waves-light btn-md">
                                             <i class="glyphicon  glyphicon-share-alt" style="margin-right:5px"></i>
                                             返回EC业务账号列表</a>
-                                        <a th:href="@{/account/center/account}"
+                                        <a sec:authorize-url="/account/center/*"
+                                           th:href="@{/account/center/{enterpriseId}(enterpriseId=${enterpriseId})}"
                                            style="margin-left:10px;"
                                            class="btn btn-instagram waves-effect waves-light btn-md">
                                             <i class="mdi mdi-vector-circle" style="margin-right:5px"></i>

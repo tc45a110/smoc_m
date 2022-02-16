@@ -158,7 +158,7 @@ public class ChannelPriceController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(pricedata.getCode())) {
-            systemUserLogService.logsAsync("CHANNEL_PRICE", channelPriceValidator.getChannelId(), "add".equals(op) ? user.getRealName() : user.getRealName(), op, "add".equals(op) ? "添加区域计价配置" : "修改区域计价配置", JSON.toJSONString(channelPriceValidator));
+            systemUserLogService.logsAsync("CHANNEL_BASE", channelPriceValidator.getChannelId(), "add".equals(op) ? user.getRealName() : user.getRealName(), op, "add".equals(op) ? "添加区域计价配置" : "修改区域计价配置", JSON.toJSONString(channelPriceValidator));
         }
 
         //记录日志

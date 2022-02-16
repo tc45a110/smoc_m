@@ -283,7 +283,7 @@ public class EnterpriseController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            systemUserLogService.logsAsync("ENTERPRISE_BASE", enterpriseBasicInfoValidator.getEnterpriseId(), "add".equals(op) ? enterpriseBasicInfoValidator.getCreatedBy() : enterpriseBasicInfoValidator.getUpdatedBy(), op, "add".equals(op) ? "添加企业开户" : "修改企业开户", JSON.toJSONString(enterpriseBasicInfoValidator));
+            systemUserLogService.logsAsync("ENTERPRISE_INFO", enterpriseBasicInfoValidator.getEnterpriseId(), "add".equals(op) ? enterpriseBasicInfoValidator.getCreatedBy() : enterpriseBasicInfoValidator.getUpdatedBy(), op, "add".equals(op) ? "添加企业开户" : "修改企业开户", JSON.toJSONString(enterpriseBasicInfoValidator));
         }
 
         //记录日志
@@ -418,7 +418,7 @@ public class EnterpriseController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            systemUserLogService.logsAsync("ENTERPRISE_BASE", enterpriseData.getData().getEnterpriseId(), user.getRealName(), "edit", "1".equals(status) ? "注销企业业务及WEB账号":"启用企业业务及WEB账号" , JSON.toJSONString(enterpriseData.getData()));
+            systemUserLogService.logsAsync("ENTERPRISE_INFO", enterpriseData.getData().getEnterpriseId(), user.getRealName(), "edit", "1".equals(status) ? "注销企业业务及WEB账号":"启用企业业务及WEB账号" , JSON.toJSONString(enterpriseData.getData()));
         }
 
         //记录日志

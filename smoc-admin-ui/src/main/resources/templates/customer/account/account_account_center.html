@@ -187,9 +187,7 @@
                                                                                     <p style="font-size:12px">接口类型：<mpm:tag id="inter" identity="accountInterfaceType"
                                                                                                                             show-type="label" key="code" th:value="${info.protocol}"/></p>
                                                                                     <span style="font-size:12px">账号状态：
-                                                                                        <span th:if="${info.accountStauts eq '2'}">完善中</span>
-                                                                                        <span th:if="${info.accountStauts eq '1'}">有效</span>
-                                                                                        <span th:if="${info.accountStauts eq '0'}">已注销</span>
+                                                                                        <mpm:tag identity="accountStatus" show-type="label" key="code" th:value="${info.accountStatus}"/>
                                                                                     </span>
 
                                                                                 </div>
@@ -204,10 +202,10 @@
                                                                                        th:href="@{/account/view/center/{accountId}(accountId=${info.accountId})}"
                                                                                        style="font-size:12px;">查看明细</a>
                                                                                     <a   data-toggle="modal" data-target="#confirm-modal"
-                                                                                         th:class="${(info.accountStauts eq '1' or info.accountStauts eq '2')?'btn btn-danger':'btn btn-info'}"
+                                                                                         th:class="${(info.accountStatus eq '1' or info.accountStatus eq '2' or info.accountStatus eq '3')?'btn btn-danger':'btn btn-info'}"
                                                                                          sec:authorize-url="/account/forbiddenAccountById/*/*"
-                                                                                         th:onclick="confirmDelete([[${info.accountId}]],[[${info.accountStauts}]])"
-                                                                                       style="font-size:12px;">[[${(info.accountStauts eq '1' or info.accountStauts eq '2') ?'注销':'启用'}]]</a>
+                                                                                         th:onclick="confirmDelete([[${info.accountId}]],[[${info.accountStatus}]])"
+                                                                                         style="font-size:12px;">[[${(info.accountStatus eq '1' or info.accountStatus eq '2' or info.accountStatus eq '3') ?'注销':'启用'}]]</a>
                                                                                 </div>
                                                                             </div>
                                                                             <!-- end. Card actions -->
@@ -259,9 +257,7 @@
                                                                                     <p style="font-size:12px">接口类型：<mpm:tag id="inter" identity="accountInterfaceType"
                                                                                                                             show-type="label" key="code" th:value="${info.protocol}"/></p>
                                                                                     <span style="font-size:12px">账号状态：
-                                                                                        <span th:if="${info.accountStauts eq '2'}">完善中</span>
-                                                                                        <span th:if="${info.accountStauts eq '1'}">有效</span>
-                                                                                        <span th:if="${info.accountStauts eq '0'}">已注销</span>
+                                                                                        <mpm:tag identity="accountStatus" show-type="label" key="code" th:value="${info.accountStatus}"/>
                                                                                     </span>
 
                                                                                 </div>
@@ -276,10 +272,10 @@
                                                                                        th:href="@{/account/view/center/{accountId}(accountId=${info.accountId})}"
                                                                                        style="font-size:12px;">查看明细</a>
                                                                                     <a   data-toggle="modal" data-target="#confirm-modal"
-                                                                                         th:class="${(info.accountStauts eq '1' or info.accountStauts eq '2')?'btn btn-danger':'btn btn-info'}"
+                                                                                         th:class="${(info.accountStatus eq '1' or info.accountStatus eq '2' or info.accountStatus eq '3')?'btn btn-danger':'btn btn-info'}"
                                                                                          sec:authorize-url="/account/forbiddenAccountById/*/*"
-                                                                                         th:onclick="confirmDelete([[${info.accountId}]],[[${info.accountStauts}]])"
-                                                                                         style="font-size:12px;">[[${(info.accountStauts eq '1' or info.accountStauts eq '2') ?'注销':'启用'}]]</a>
+                                                                                         th:onclick="confirmDelete([[${info.accountId}]],[[${info.accountStatus}]])"
+                                                                                         style="font-size:12px;">[[${(info.accountStatus eq '1' or info.accountStatus eq '2' or info.accountStatus eq '3') ?'注销':'启用'}]]</a>
                                                                                 </div>
                                                                             </div>
                                                                             <!-- end. Card actions -->
@@ -331,9 +327,7 @@
                                                                                     <p style="font-size:12px">接口类型：<mpm:tag id="inter" identity="accountInterfaceType"
                                                                                                                             show-type="label" key="code" th:value="${info.protocol}"/></p>
                                                                                     <span style="font-size:12px">账号状态：
-                                                                                        <span th:if="${info.accountStauts eq '2'}">完善中</span>
-                                                                                        <span th:if="${info.accountStauts eq '1'}">有效</span>
-                                                                                        <span th:if="${info.accountStauts eq '0'}">已注销</span>
+                                                                                        <mpm:tag identity="accountStatus" show-type="label" key="code" th:value="${info.accountStatus}"/>
                                                                                     </span>
 
                                                                                 </div>
@@ -348,10 +342,10 @@
                                                                                        th:href="@{/account/view/center/{accountId}(accountId=${info.accountId})}"
                                                                                        style="font-size:12px;">查看明细</a>
                                                                                     <a   data-toggle="modal" data-target="#confirm-modal"
-                                                                                         th:class="${(info.accountStauts eq '1' or info.accountStauts eq '2')?'btn btn-danger':'btn btn-info'}"
+                                                                                         th:class="${(info.accountStatus eq '1' or info.accountStatus eq '2' or info.accountStatus eq '3')?'btn btn-danger':'btn btn-info'}"
                                                                                          sec:authorize-url="/account/forbiddenAccountById/*/*"
-                                                                                         th:onclick="confirmDelete([[${info.accountId}]],[[${info.accountStauts}]])"
-                                                                                         style="font-size:12px;">[[${(info.accountStauts eq '1' or info.accountStauts eq '2') ?'注销':'启用'}]]</a>
+                                                                                         th:onclick="confirmDelete([[${info.accountId}]],[[${info.accountStatus}]])"
+                                                                                         style="font-size:12px;">[[${(info.accountStatus eq '1' or info.accountStatus eq '2' or info.accountStatus eq '3') ?'注销':'启用'}]]</a>
                                                                                 </div>
                                                                             </div>
                                                                             <!-- end. Card actions -->
@@ -403,9 +397,7 @@
                                                                                     <p style="font-size:12px">接口类型：<mpm:tag id="inter" identity="accountInterfaceType"
                                                                                                                             show-type="label" key="code" th:value="${info.protocol}"/></p>
                                                                                     <span style="font-size:12px">账号状态：
-                                                                                        <span th:if="${info.accountStauts eq '2'}">完善中</span>
-                                                                                        <span th:if="${info.accountStauts eq '1'}">有效</span>
-                                                                                        <span th:if="${info.accountStauts eq '0'}">已注销</span>
+                                                                                        <mpm:tag identity="accountStatus" show-type="label" key="code" th:value="${info.accountStatus}"/>
                                                                                     </span>
 
                                                                                 </div>
@@ -420,10 +412,10 @@
                                                                                        th:href="@{/account/view/center/{accountId}(accountId=${info.accountId})}"
                                                                                        style="font-size:12px;">查看明细</a>
                                                                                     <a   data-toggle="modal" data-target="#confirm-modal"
-                                                                                         th:class="${(info.accountStauts eq '1' or info.accountStauts eq '2')?'btn btn-danger':'btn btn-info'}"
+                                                                                         th:class="${(info.accountStatus eq '1' or info.accountStatus eq '2' or info.accountStatus eq '3')?'btn btn-danger':'btn btn-info'}"
                                                                                          sec:authorize-url="/account/forbiddenAccountById/*/*"
-                                                                                         th:onclick="confirmDelete([[${info.accountId}]],[[${info.accountStauts}]])"
-                                                                                         style="font-size:12px;">[[${(info.accountStauts eq '1' or info.accountStauts eq '2') ?'注销':'启用'}]]</a>
+                                                                                         th:onclick="confirmDelete([[${info.accountId}]],[[${info.accountStatus}]])"
+                                                                                         style="font-size:12px;">[[${(info.accountStatus eq '1' or info.accountStatus eq '2' or info.accountStatus eq '3') ?'注销':'启用'}]]</a>
                                                                                 </div>
                                                                             </div>
                                                                             <!-- end. Card actions -->
@@ -475,9 +467,7 @@
                                                                                     <p style="font-size:12px">接口类型：<mpm:tag id="inter" identity="accountInterfaceType"
                                                                                                                             show-type="label" key="code" th:value="${info.protocol}"/></p>
                                                                                     <span style="font-size:12px">账号状态：
-                                                                                        <span th:if="${info.accountStauts eq '2'}">完善中</span>
-                                                                                        <span th:if="${info.accountStauts eq '1'}">有效</span>
-                                                                                        <span th:if="${info.accountStauts eq '0'}">已注销</span>
+                                                                                        <mpm:tag identity="accountStatus" show-type="label" key="code" th:value="${info.accountStatus}"/>
                                                                                     </span>
 
                                                                                 </div>
@@ -492,10 +482,10 @@
                                                                                        th:href="@{/account/view/center/{accountId}(accountId=${info.accountId})}"
                                                                                        style="font-size:12px;">查看明细</a>
                                                                                     <a   data-toggle="modal" data-target="#confirm-modal"
-                                                                                         th:class="${(info.accountStauts eq '1' or info.accountStauts eq '2')?'btn btn-danger':'btn btn-info'}"
+                                                                                         th:class="${(info.accountStatus eq '1' or info.accountStatus eq '2' or info.accountStatus eq '3')?'btn btn-danger':'btn btn-info'}"
                                                                                          sec:authorize-url="/account/forbiddenAccountById/*/*"
-                                                                                         th:onclick="confirmDelete([[${info.accountId}]],[[${info.accountStauts}]])"
-                                                                                         style="font-size:12px;">[[${(info.accountStauts eq '1' or info.accountStauts eq '2') ?'注销':'启用'}]]</a>
+                                                                                         th:onclick="confirmDelete([[${info.accountId}]],[[${info.accountStatus}]])"
+                                                                                         style="font-size:12px;">[[${(info.accountStatus eq '1' or info.accountStatus eq '2' or info.accountStatus eq '3') ?'注销':'启用'}]]</a>
                                                                                 </div>
                                                                             </div>
                                                                             <!-- end. Card actions -->
@@ -548,9 +538,7 @@
                                                                                     <p style="font-size:12px">接口类型：<mpm:tag id="inter" identity="accountInterfaceType"
                                                                                                                             show-type="label" key="code" th:value="${info.protocol}"/></p>
                                                                                     <span style="font-size:12px">账号状态：
-                                                                                        <span th:if="${info.accountStauts eq '2'}">完善中</span>
-                                                                                        <span th:if="${info.accountStauts eq '1'}">有效</span>
-                                                                                        <span th:if="${info.accountStauts eq '0'}">已注销</span>
+                                                                                        <mpm:tag identity="accountStatus" show-type="label" key="code" th:value="${info.accountStatus}"/>
                                                                                     </span>
 
                                                                                 </div>
@@ -565,10 +553,10 @@
                                                                                        th:href="@{/account/view/center/{accountId}(accountId=${info.accountId})}"
                                                                                        style="font-size:12px;">查看明细</a>
                                                                                     <a   data-toggle="modal" data-target="#confirm-modal"
-                                                                                         th:class="${(info.accountStauts eq '1' or info.accountStauts eq '2')?'btn btn-danger':'btn btn-info'}"
+                                                                                         th:class="${(info.accountStatus eq '1' or info.accountStatus eq '2' or info.accountStatus eq '3')?'btn btn-danger':'btn btn-info'}"
                                                                                          sec:authorize-url="/account/forbiddenAccountById/*/*"
-                                                                                         th:onclick="confirmDelete([[${info.accountId}]],[[${info.accountStauts}]])"
-                                                                                         style="font-size:12px;">[[${(info.accountStauts eq '1' or info.accountStauts eq '2') ?'注销':'启用'}]]</a>
+                                                                                         th:onclick="confirmDelete([[${info.accountId}]],[[${info.accountStatus}]])"
+                                                                                         style="font-size:12px;">[[${(info.accountStatus eq '1' or info.accountStatus eq '2' or info.accountStatus eq '3') ?'注销':'启用'}]]</a>
                                                                                 </div>
                                                                             </div>
                                                                             <!-- end. Card actions -->

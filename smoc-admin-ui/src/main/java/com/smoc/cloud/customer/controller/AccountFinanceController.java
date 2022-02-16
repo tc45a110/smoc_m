@@ -165,7 +165,7 @@ public class AccountFinanceController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(pricedata.getCode())) {
-            systemUserLogService.logsAsync("ACCOUNT_FINANCE", accountFinanceInfoValidator.getAccountId(), "add".equals(op) ? user.getRealName() : user.getRealName(), op, "add".equals(op) ? "添加账号财务信息" : "修改账号财务信息", JSON.toJSONString(accountFinanceInfoValidator));
+            systemUserLogService.logsAsync("BUSINESS_ACCOUNT", accountFinanceInfoValidator.getAccountId(), "add".equals(op) ? user.getRealName() : user.getRealName(), op, "add".equals(op) ? "添加账号财务信息" : "修改账号财务信息", JSON.toJSONString(accountFinanceInfoValidator));
         }
 
         //记录日志
