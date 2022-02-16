@@ -246,6 +246,7 @@ public class FinanceShareAccountController {
             financeAccountValidator.setCreatedBy(user.getRealName());
         } else if (!StringUtils.isEmpty(op) && "edit".equals(op)) {
             financeAccountValidator.setUpdatedTime(new Date());
+            financeAccountValidator.setCreatedBy(user.getRealName());
             financeAccountValidator.setUpdatedBy(user.getRealName());
         } else {
             view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":" + ResponseCode.PARAM_LINK_ERROR.getMessage());

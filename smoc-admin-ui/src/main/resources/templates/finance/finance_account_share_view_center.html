@@ -137,12 +137,14 @@
                                                       sec:authorize-url="/finance/account/recharge/account/list/*"
                                                       th:href="@{/finance/account/recharge/account/list/{accountId}(accountId=${financeAccountValidator.accountId})}"
                                                       th:target="content1">充值记录</a>
-                            <li class="" id="tab3"><a onclick="active('3')"
-                                                      sec:authorize-url="/finance/account/share/view/consume/*"
-                                                      th:href="@{/finance/account/share/view/consume/id}"
-                                                      th:target="content1">消费记录</a>
+<!--                            <li class="" id="tab3"><a onclick="active('3')"-->
+<!--                                                      sec:authorize-url="/finance/account/share/view/consume/*"-->
+<!--                                                      th:href="@{/finance/account/share/view/consume/id}"-->
+<!--                                                      th:target="content1">消费记录</a>-->
                             <li class="" id="tab4"><a onclick="active('4')"
-                                                      th:target="content1">共享记录</a>
+                                                      sec:authorize-url="/finance/account/share/record/list/*"
+                                                      th:href="@{/finance/account/share/record/list/{accountId}(accountId=${financeAccountValidator.accountId})}"
+                                                      th:target="content1">共享日志</a>
                             <li class="" id="tab5"><a onclick="active('5')"
                                                       sec:authorize-url="/user/logs/list/*/*"
                                                       th:href="@{/user/logs/list/SHARE_ACCOUNT/{accountId}(accountId=${financeAccountValidator.accountId})}"
@@ -180,8 +182,6 @@
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
-
-
 
 </script>
 </body>

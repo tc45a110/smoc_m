@@ -457,6 +457,7 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
         if (null == qo.getIsFreezeSumPool()) qo.setIsFreezeSumPool("0");
         if (null == qo.getIsUsableSumPool()) qo.setIsUsableSumPool("0");
 
+        //log.info("[qo]:{}",new Gson().toJson(qo));
 
         String[] accountIds = qo.getAccountIds().split(",");
         String[] sql = new String[accountIds.length * 2 + 1];
@@ -552,6 +553,8 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
      * 包括了修改共享账户流水记录，修改原账户状态，并修改共享账户
      */
     public void editShareFinanceAccount(FinanceAccountValidator qo, FinanceAccountValidator financeAccountValidator) {
+
+        //log.info("[qo]:{}",new Gson().toJson(qo));
 
         if (null == qo.getIsFreezeSumPool()) qo.setIsFreezeSumPool("0");
         if (null == qo.getIsUsableSumPool()) qo.setIsUsableSumPool("0");
