@@ -181,13 +181,13 @@ public class FinanceAccountService {
      * @return
      */
     public ResponseData<List<FinanceAccountValidator>> findEnterpriseAndSubsidiaryFinanceAccount(String enterpriseId) {
-        log.info("[enterpriseId]:{}", new Gson().toJson(enterpriseId));
+        //log.info("[enterpriseId]:{}", new Gson().toJson(enterpriseId));
         List<String> enterpriseIds = enterpriseRepository.findEnterpriseAndSubsidiaryId(enterpriseId);
-        log.info("[enterpriseIds]:{}", new Gson().toJson(enterpriseIds));
+        //log.info("[enterpriseIds]:{}", new Gson().toJson(enterpriseIds));
         if (null != enterpriseIds && enterpriseIds.size() > 0) {
-            log.info("[enterpriseIds]:{}", new Gson().toJson(enterpriseIds));
+            //log.info("[enterpriseIds]:{}", new Gson().toJson(enterpriseIds));
             List<FinanceAccountValidator> data = financeAccountRepository.findEnterpriseAndSubsidiaryFinanceAccount(enterpriseIds);
-            log.info("[data]:{}", new Gson().toJson(data));
+            //log.info("[data]:{}", new Gson().toJson(data));
             return ResponseDataUtil.buildSuccess(data);
         }
 

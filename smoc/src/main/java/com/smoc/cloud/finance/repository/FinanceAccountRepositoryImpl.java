@@ -420,7 +420,7 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
         sqlBuffer.append("  and t.ACCOUNT_TYPE !='IDENTIFICATION_ACCOUNT' ");
         sqlBuffer.append("  and i.ENTERPRISE_ID in(" + con + ")");
         sqlBuffer.append("  order by t.CREATED_TIME desc");
-        log.info(sqlBuffer.toString());
+        //log.info(sqlBuffer.toString());
         List<FinanceAccountValidator> list = this.queryForObjectList(sqlBuffer.toString(), null, new FinanceAccountRowMapper());
         return list;
     }
@@ -458,6 +458,15 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
         if (null == qo.getIsUsableSumPool()) qo.setIsUsableSumPool("0");
 
         //log.info("[qo]:{}",new Gson().toJson(qo));
+
+        //如果没有选择 共享分账号 则只创建 共享账号本身信息
+        if(StringUtils.isEmpty(qo.getAccountIds())){
+            //创建共享账户语句
+            StringBuffer sb = new StringBuffer("insert into finance_account(ACCOUNT_ID,ACCOUNT_TYPE,ACCOUNT_NAME,ENTERPRISE_ID,ACCOUNT_TOTAL_SUM,ACCOUNT_USABLE_SUM,ACCOUNT_FROZEN_SUM,ACCOUNT_CONSUME_SUM,ACCOUNT_RECHARGE_SUM,ACCOUNT_CREDIT_SUM,ACCOUNT_STATUS,IS_SHARE,SHARE_ID,CREATED_BY,CREATED_TIME) ");
+            sb.append(" values('" + qo.getAccountId() + "','SHARE_ACCOUNT','" + qo.getAccountName() + "','" + qo.getEnterpriseId() + "',0.00,0.00,0.00,0.00,0.00," + qo.getAccountCreditSum() + ",'1','0','" + qo.getAccountIds() + "','" + qo.getCreatedBy() + "',now()) ");
+            this.jdbcTemplate.batchUpdate(sb.toString());
+            return;
+        }
 
         String[] accountIds = qo.getAccountIds().split(",");
         String[] sql = new String[accountIds.length * 2 + 1];
@@ -559,10 +568,19 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
         if (null == qo.getIsFreezeSumPool()) qo.setIsFreezeSumPool("0");
         if (null == qo.getIsUsableSumPool()) qo.setIsUsableSumPool("0");
 
+
+        //新共享与 原来共享的账户 都为空，则只修改 共享账号本身信息
+        if(StringUtils.isEmpty(qo.getAccountIds()) && StringUtils.isEmpty(financeAccountValidator.getShareId())){
+            //更新共享账户语句
+            StringBuffer updateShareFinanceAccount = new StringBuffer();
+            updateShareFinanceAccount.append("update finance_account set ACCOUNT_NAME='" + qo.getAccountName() + "',ACCOUNT_CREDIT_SUM =" + qo.getAccountCreditSum() + " ,UPDATED_BY='" + qo.getCreatedBy() + "',UPDATED_TIME=now() where ACCOUNT_ID ='" + qo.getAccountId() + "'");
+            this.jdbcTemplate.batchUpdate(updateShareFinanceAccount.toString());
+            return;
+        }
+
         /**
          * 对比 新的共享分帐号 及 现有共享分帐号关系
          */
-
         //统计要执行sql的个数
         int delteLength = 0;
         int addLength = 0;
@@ -573,23 +591,55 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
         Map<String, Boolean> newShareIdMap = new HashMap<>();
 
         //现有共享分账户  所有的现有分财务账户，在map 中初始化为false
-        String[] shareIds = financeAccountValidator.getShareId().split(",");
-        for (int i = 0; i < shareIds.length; i++) {
-            shareIdsMap.put(shareIds[i].trim(), false);
-            delteLength++;
+        String[] shareIds = null;
+        //原来共享账户不为空
+        if(!StringUtils.isEmpty(financeAccountValidator.getShareId())) {
+            shareIds = financeAccountValidator.getShareId().split(",");
+            for (int i = 0; i < shareIds.length; i++) {
+                shareIdsMap.put(shareIds[i].trim(), false);
+                delteLength++;
+            }
         }
 
         //新共享分账户
-        String[] accountIds = qo.getAccountIds().split(",");
-        for (int i = 0; i < accountIds.length; i++) {
-            //表示该共享分账户，存在现有数据中
-            if (null != shareIdsMap.get(accountIds[i].trim())) {
-                shareIdsMap.put(accountIds[i], true);
-                delteLength--;
-            } else {
-                addLength++;
-                newShareIdMap.put(accountIds[i].trim(), true);
+        String[] accountIds = null;
+        if(!StringUtils.isEmpty(qo.getAccountIds())){
+            accountIds = qo.getAccountIds().split(",");
+            for (int i = 0; i < accountIds.length; i++) {
+                //表示该共享分账户，存在现有数据中
+                if (null != shareIdsMap.get(accountIds[i].trim())) {
+                    shareIdsMap.put(accountIds[i], true);
+                    delteLength--;
+                } else {
+                    addLength++;
+                    newShareIdMap.put(accountIds[i].trim(), true);
+                }
             }
+        }
+
+
+        //新数据没有选择共享账户，原数据有共享账户，则删除原共享账户共享的账户
+        if(null ==accountIds && shareIds !=null){
+            String[] sql = new String[shareIdsMap.size()*2+1];
+            int deleteIndex=0;
+            //现有的分共享账户被删除,所以要恢复被删除的分财务账户
+            for (String key : shareIdsMap.keySet()) {
+                //修改原来合并账户明细 的状态
+                String updateDetail = " update finance_account_share_detail set SHARE_STATUS ='0',UPDATED_BY='" + qo.getCreatedBy() + "',UPDATED_TIME=now()  where ACCOUNT_ID ='" + key + "' ";
+                sql[deleteIndex] = updateDetail;
+                deleteIndex++;
+                //回复原来账号状态
+                String update = " update finance_account set IS_SHARE ='0',SHARE_ID='',UPDATED_BY='" + qo.getCreatedBy() + "',UPDATED_TIME=now()  where ACCOUNT_ID ='" + key + "' ";
+                sql[deleteIndex] = update;
+                deleteIndex++;
+            }
+
+            StringBuffer updateShareFinanceAccount = new StringBuffer();
+            updateShareFinanceAccount.append("update finance_account set SHARE_ID='', ACCOUNT_NAME='" + qo.getAccountName() + "',ACCOUNT_CREDIT_SUM =" + qo.getAccountCreditSum() + " ,UPDATED_BY='" + qo.getCreatedBy() + "',UPDATED_TIME=now() where ACCOUNT_ID ='" + qo.getAccountId() + "'");
+            sql[deleteIndex] = updateShareFinanceAccount.toString();
+            log.info("[slq]:{}", sql);
+            this.jdbcTemplate.batchUpdate(sql);
+            return;
         }
 
         int arrayLength = delteLength + addLength;
@@ -700,13 +750,14 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
                     sql[index] = update;
                     index++;
 
-                    //log.info(sql.toString());
+
                 }
             }
             ;
 
         }
 
+        //log.info("[sq-------------]:{}",sql);
         this.jdbcTemplate.batchUpdate(sql);
 
         //查询 要处理的金额
@@ -715,13 +766,15 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
         selectCount.append(" from finance_account_share_detail where SHARE_ACCOUNT_ID ='" + qo.getAccountId() + "' ");
         Map<String, Object> map = jdbcTemplate.queryForMap(selectCount.toString());
         if (null == map || map.size() < 1) {
-            return;
+           map = new HashMap<>();
+           map.put("USABLE_SUM_POOL",0.00);
+           map.put("FREEZE_SUM_POOL",0.00);
         }
 
         StringBuffer updateShareFinanceAccount = new StringBuffer();
-        updateShareFinanceAccount.append("update finance_account set ACCOUNT_USABLE_SUM = ACCOUNT_USABLE_SUM+" + map.get("USABLE_SUM_POOL") + ",ACCOUNT_FROZEN_SUM = ACCOUNT_FROZEN_SUM+" + map.get("FREEZE_SUM_POOL") + ",SHARE_ID='" + qo.getAccountIds() + "' ,UPDATED_BY='" + qo.getCreatedBy() + "',UPDATED_TIME=now() where ACCOUNT_ID ='" + qo.getAccountId() + "'");
-
-        this.jdbcTemplate.batchUpdate(updateShareFinanceAccount.toString());
+        updateShareFinanceAccount.append("update finance_account set ACCOUNT_USABLE_SUM = ACCOUNT_USABLE_SUM+" + map.get("USABLE_SUM_POOL") + ",ACCOUNT_FROZEN_SUM = ACCOUNT_FROZEN_SUM+" + map.get("FREEZE_SUM_POOL") + ",SHARE_ID='" + qo.getAccountIds() + "' , ACCOUNT_NAME='" + qo.getAccountName() + "',ACCOUNT_CREDIT_SUM =" + qo.getAccountCreditSum() + " ,UPDATED_BY='" + qo.getCreatedBy() + "',UPDATED_TIME=now() where ACCOUNT_ID ='" + qo.getAccountId() + "'");
+        //log.info("[sq++++++++++]:{}",updateShareFinanceAccount.toString());
+        this.jdbcTemplate.update(updateShareFinanceAccount.toString());
     }
 
 }

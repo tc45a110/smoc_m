@@ -94,7 +94,7 @@ public class EnterpriseRepositoryImpl extends BasePageRepository {
 
         sqlBuffer.append(" order by t.CREATED_TIME desc");
 
-        log.info("[EnterpriseBasicInfoValidator]:{}", new Gson().toJson(qo));
+        //log.info("[EnterpriseBasicInfoValidator]:{}", new Gson().toJson(qo));
         //根据参数个数，组织参数值
         Object[] params = new Object[paramsList.size()];
         paramsList.toArray(params);
@@ -110,7 +110,7 @@ public class EnterpriseRepositoryImpl extends BasePageRepository {
             basicInfo.setEnterprises(validator);
         }
 
-        log.info("[pageList]:{}", new Gson().toJson(pageList));
+        //log.info("[pageList]:{}", new Gson().toJson(pageList));
 
         return pageList;
     }

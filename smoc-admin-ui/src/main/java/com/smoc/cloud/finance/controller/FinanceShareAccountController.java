@@ -146,7 +146,6 @@ public class FinanceShareAccountController {
         FinanceAccountValidator financeAccountValidator = new FinanceAccountValidator();
         financeAccountValidator.setAccountId("XYSH" + sequenceService.findSequence("BUSINESS_ACCOUNT"));
         financeAccountValidator.setEnterpriseId(enterpriseId);
-        financeAccountValidator.setAccountName("财务共享账号");
 
         financeAccountValidator.setAccountType("SHARE_ACCOUNT");
         financeAccountValidator.setAccountCreditSum(new BigDecimal("0.00"));
@@ -461,7 +460,12 @@ public class FinanceShareAccountController {
      */
     public void logs(FinanceAccountValidator qo, FinanceAccountValidator financeAccountRechargeValidator, SecurityUser user) {
 
+
         if (null == financeAccountRechargeValidator) {
+
+            if (StringUtils.isEmpty(StringUtils.isEmpty(qo.getAccountIds()))) {
+                return;
+            }
             //新共享分账户
             String[] accountIds = qo.getAccountIds().split(",");
             for (int i = 0; i < accountIds.length; i++) {
@@ -471,24 +475,34 @@ public class FinanceShareAccountController {
             return;
         }
 
+        if (StringUtils.isEmpty(qo.getAccountIds()) && StringUtils.isEmpty(financeAccountRechargeValidator.getShareId())) {
+            return;
+        }
+
         //Boolean 为true 表示，新数据中，仍然有该财务账户
         Map<String, Boolean> shareIdsMap = new HashMap<>();
         //要新创建的 分财务账号   结合shareIdsMap 就能分辨出，那些是被删除的分财务账户，那些是新加进来的分财务账户， 新的和原来的都存在的财务账户，不动
         Map<String, Boolean> newShareIdMap = new HashMap<>();
 
         //现有共享分账户  所有的现有分财务账户，在map 中初始化为false
-        String[] shareIds = financeAccountRechargeValidator.getShareId().split(",");
-        for (int i = 0; i < shareIds.length; i++) {
-            shareIdsMap.put(shareIds[i], false);
+        String[] shareIds = null;
+        if (StringUtils.isEmpty(financeAccountRechargeValidator.getShareId())) {
+            shareIds = financeAccountRechargeValidator.getShareId().split(",");
+            for (int i = 0; i < shareIds.length; i++) {
+                shareIdsMap.put(shareIds[i], false);
+            }
         }
         //新共享分账户
-        String[] accountIds = qo.getAccountIds().split(",");
-        for (int i = 0; i < accountIds.length; i++) {
-            //表示该共享分账户，存在现有数据中
-            if (null != shareIdsMap.get(accountIds[i])) {
-                shareIdsMap.put(accountIds[i], true);
-            } else {
-                newShareIdMap.put(accountIds[i], true);
+        String[] accountIds = null;
+        if (StringUtils.isEmpty(qo.getAccountIds())) {
+            accountIds = qo.getAccountIds().split(",");
+            for (int i = 0; i < accountIds.length; i++) {
+                //表示该共享分账户，存在现有数据中
+                if (null != shareIdsMap.get(accountIds[i])) {
+                    shareIdsMap.put(accountIds[i], true);
+                } else {
+                    newShareIdMap.put(accountIds[i], true);
+                }
             }
         }
 
@@ -504,7 +518,7 @@ public class FinanceShareAccountController {
                 systemUserLogService.logsAsync("ACCOUNT_FINANCE", key, user.getRealName(), "share", "账户共享", JSON.toJSONString(qo));
         }
 
-       // systemUserLogService.logsAsync("SHARE_ACCOUNT", qo.getAccountId(), user.getRealName(), "edit", "共享账户变更", JSON.toJSONString(financeAccountRechargeValidator));
+        // systemUserLogService.logsAsync("SHARE_ACCOUNT", qo.getAccountId(), user.getRealName(), "edit", "共享账户变更", JSON.toJSONString(financeAccountRechargeValidator));
 
 
     }
