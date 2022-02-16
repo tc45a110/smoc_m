@@ -167,6 +167,11 @@ public class ChannelInternationalController {
             channelBasicInfoValidator.setReportEnable("1");//有无报告：有
             channelBasicInfoValidator.setChannelProcess("1000");//配置进度
             channelBasicInfoValidator.setChannelRunStatus("1");//正常
+            channelBasicInfoValidator.setBusinessAreaType("INTERNATIONAL");//国际
+            channelBasicInfoValidator.setPriceStyle("AREA_PRICE");//区域计价
+            channelBasicInfoValidator.setSignType("0");//签名方式:国际没有，默认给个值
+            channelBasicInfoValidator.setTransferEnable("0");//携号转网:国际默认值
+            channelBasicInfoValidator.setSpecificProvder("INTERNATIONAL");//具体供应商
 
             //op操作标记，add表示添加，edit表示修改
             view.addObject("op", "add");

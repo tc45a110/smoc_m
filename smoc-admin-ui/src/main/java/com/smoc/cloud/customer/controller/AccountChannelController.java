@@ -70,6 +70,10 @@ public class AccountChannelController {
         accountChannelInfoQo.setCarrier(data.getData().getCarrier());
         accountChannelInfoQo.setAccountChannelType(data.getData().getAccountChannelType());
 
+        if("INTERNATIONAL".equals(data.getData().getCarrier())){
+            accountChannelInfoQo.setCarrier(data.getData().getCountryCode());
+        }
+
         //查询配置的业务账号通道
         ResponseData<Map<String, AccountChannelInfoQo>> channelData = accountChannelService.findAccountChannelConfig(accountChannelInfoQo);
         if (!ResponseCode.SUCCESS.getCode().equals(channelData.getCode())) {

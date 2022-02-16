@@ -20,10 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  *  账号财务接口管理
@@ -54,7 +51,7 @@ public class AccountFinanceService {
         List<AccountFinanceInfoValidator> list = accountFinanceRepository.findByAccountId(accountFinanceInfoValidator);
 
         //前台选择的运营商
-        Map<String, BigDecimal> map = new TreeMap<>();
+        Map<String, BigDecimal> map = new LinkedHashMap<>();
         String[] carrier = accountFinanceInfoValidator.getCarrier().split(",");
         for (int i = 0; i < carrier.length; i++) {
             map.put(carrier[i], null);

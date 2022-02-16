@@ -48,8 +48,12 @@
                                                                  th:value="${accountBasicInfoValidator.businessType}"/>
                                                     </b></p>
                                                     <p class="m-0"><b>运营商：
-                                                        <mpm:tag identity="carrier" show-type="label" key="code"
-                                                                 th:value="${info.key}"/>
+                                                        <span th:if="${'INTERNATIONAL' ne accountBasicInfoValidator.carrier}">
+                                                            <mpm:tag identity="carrier" show-type="label" key="code" th:value="${info.key}"/>
+                                                        </span>
+                                                        <span th:if="${'INTERNATIONAL' eq accountBasicInfoValidator.carrier}">
+                                                            <mpm:tag identity="internationalArea" show-type="label" key="code" th:value="${info.key}"/>
+                                                        </span>
                                                     </b></p>
                                                     <p class="m-0"><b>通道协议类型：
                                                         <span th:if="${info.value !=null}">

@@ -3,6 +3,7 @@ package com.smoc.cloud.admin.tag.processor;
 import com.smoc.cloud.common.auth.qo.Dict;
 import com.smoc.cloud.common.auth.qo.DictType;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.ArrayUtils;
 import org.springframework.util.StringUtils;
 import org.thymeleaf.context.ITemplateContext;
 import org.thymeleaf.context.WebEngineContext;
@@ -17,10 +18,7 @@ import org.unbescape.html.HtmlEscape;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * mpm字典标签方言处理器
@@ -48,7 +46,7 @@ public class MpmDictTagProcessor extends AbstractAttributeTagProcessor {
     //id
     private static final String ID = "id";
 
-    private static final String  DISABLED = "disabled";
+    private static final String DISABLED = "disabled";
 
     //字典标识  必输项
     private static final String IDENTITY = "identity";
@@ -338,10 +336,12 @@ public class MpmDictTagProcessor extends AbstractAttributeTagProcessor {
 
         for (Dict dict : dictList) {
 
-            if (!StringUtils.isEmpty(mvalue) && mvalue.equals(dict.getFieldCode())) {
-                continue;
+            if (!StringUtils.isEmpty(mvalue)) {
+                String[] mvalues = mvalue.split(",");
+                if (ArrayUtils.contains(mvalues,dict.getFieldCode())){
+                    continue;
+                }
             }
-
 
             Map<String, String> attriOption = new HashMap<String, String>();
             if (status) {
@@ -426,7 +426,7 @@ public class MpmDictTagProcessor extends AbstractAttributeTagProcessor {
         //查询屏蔽数值是否有值
         String mvalue = attributeMap.get(MASKVALUE);
         for (Dict dict : dictList) {
-            if (!StringUtils.isEmpty(mvalue) && mvalue.indexOf(dict.getFieldCode())>=0) {
+            if (!StringUtils.isEmpty(mvalue) && mvalue.indexOf(dict.getFieldCode()) >= 0) {
                 continue;
             }
 
@@ -547,7 +547,7 @@ public class MpmDictTagProcessor extends AbstractAttributeTagProcessor {
         String mvalue = attributeMap.get(MASKVALUE);
         for (Dict dict : dictList) {
 
-            if (!StringUtils.isEmpty(mvalue) && mvalue.indexOf(dict.getFieldCode())>=0) {
+            if (!StringUtils.isEmpty(mvalue) && mvalue.indexOf(dict.getFieldCode()) >= 0) {
                 continue;
             }
 
@@ -568,8 +568,8 @@ public class MpmDictTagProcessor extends AbstractAttributeTagProcessor {
             attriCheckBox.put("type", "radio");
             attriCheckBox.put("value", fieldValue);
             String disabled = attributeMap.get(DISABLED);
-            if("true".equals(disabled)){
-                attriCheckBox.put("disabled","true");
+            if ("true".equals(disabled)) {
+                attriCheckBox.put("disabled", "true");
             }
 
             if (!StringUtils.isEmpty(required)) {

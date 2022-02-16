@@ -107,7 +107,7 @@
                                                                       th:target="tab-content"><i class="mdi mdi-star"
                                                                                                  style="margin-right:5px;color:#f35864"></i>业务账号过滤参数</a>
                                             <li class="" id="tab5">
-                                                <a onclick="active('5')" id="a5" th:if="${flag eq 'base' or accountChannelType eq 'ACCOUNT_CHANNEL_GROUP'}"
+                                                <a onclick="active('5')" id="a5" th:if="${(flag eq 'base' or flag eq 'international') or accountChannelType eq 'ACCOUNT_CHANNEL_GROUP'}"
                                                    sec:authorize-url="/account/edit/product/*"
                                                    th:href="@{/account/edit/product/{id}(id=${accountId})}"
                                                    th:target="tab-content"><i class="mdi mdi-star"
@@ -115,7 +115,7 @@
                                                 </a>
                                             </li>
                                             <li class="" id="tab6">
-                                                <a onclick="active('6')" id="a6" th:if="${flag eq 'base' or accountChannelType eq 'ACCOUNT_CHANNEL'}"
+                                                <a onclick="active('6')" id="a6" th:if="${(flag eq 'base' or flag eq 'international') or accountChannelType eq 'ACCOUNT_CHANNEL'}"
                                                    sec:authorize-url="/account/edit/channel/*"
                                                    th:href="@{/account/edit/channel/{id}(id=${accountId})}"
                                                    th:target="tab-content"><i class="mdi mdi-star"
@@ -146,7 +146,7 @@
                                         </ul>
                                         <div class="tab-cotent" style="background-color:#fff">
                                             <iframe name="tab-content" th:frameBorder="0"
-                                                    th:scrolling="auto" th:if="${flag eq 'base' or flag eq 'enterprise'}"
+                                                    th:scrolling="auto" th:if="${flag eq 'base' or flag eq 'enterprise' or flag eq 'international'}"
                                                     th:src="@{/account/edit/base/{flag}/{id}(id=${accountId},flag=${flag})}"
                                                     style="padding: 0px; width: 100%; height: 2600px;background-color:#fff"></iframe>
                                             <iframe name="tab-content" th:frameBorder="0"
@@ -202,7 +202,7 @@
             $('#tab'+num).removeClass("active");
         }
 
-        if("base" == '[[${flag}]]'){
+        if("base" == '[[${flag}]]' || "international" =='[[${flag}]]' ){
             for(var num = 2;num<10;num++){
                 document.getElementById('tab'+num).style.backgroundColor="#DCDBDC";
                 $("#a"+num).attr("onclick","");

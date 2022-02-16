@@ -58,12 +58,18 @@
                                     </div>
                                     <div class="col-md-4 form-group m-b-20">
                                         <label>冻结金额返还时间<span class="text-danger">*</span>&nbsp;</label><br><br>
-                                        <mpm:tag id="frozenReturnDate" identity="frozenReturnDate" show-type="radio" key="code" style="margin-top:0px"
+                                        <mpm:tag id="frozenReturnDate" identity="frozenReturnDate" show-type="radio" key="code" style="margin-top:0px" mask-value="2"
                                                  name="frozenReturnDate" th:value="${accountFinanceInfoValidator.frozenReturnDate}" required="true" title="额返还时间"/>
                                     </div>
                                     <div class="col-md-4 form-group m-b-20"  th:each="info:${list}">
-                                        <label><mpm:tag identity="carrier"  show-type="label" key="code"
+                                        <label th:if="${'INTERNATIONAL' ne accountBasicInfoValidator.carrier}">
+                                            <mpm:tag identity="carrier"  show-type="label" key="code"
                                                         th:value="${info.key}"/>单价<span class="text-danger">*</span>&nbsp;<span
+                                                class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                        </label>
+                                        <label th:if="${'INTERNATIONAL' eq accountBasicInfoValidator.carrier}">
+                                            <mpm:tag identity="internationalArea"  show-type="label" key="code"
+                                                         th:value="${info.key}"/>单价<span class="text-danger">*</span>&nbsp;<span
                                                 class="text-danger" style="font-weight: 200;font-size: 12px"></span>
                                         </label>
 

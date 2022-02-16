@@ -68,7 +68,7 @@
                                 </div>
                                 <div class="form-group  col-sm-3">
                                     <mpm:tag id="channelSupplier" identity="channelSupplier" show-type="select"
-                                             key="code" class="form-control"
+                                             key="code" class="form-control"  mask-value="007,008"
                                              name="channelProvder" th:value="${channelBasicInfoQo.channelProvder}"
                                              title="通道供应商"/>
                                 </div>
@@ -197,9 +197,7 @@
                                                                class="mdi mdi-comment-text-outline"
                                                                style="margin-left:5px"></i>
                                                         </p>
-                                                        <p style="font-size:12px">最大速率(条/秒)：<span
-                                                                th:if="${info.maxSendSecond ne 0}">[[${info.maxSendSecond}]]/秒</span>
-                                                        </p>
+
 
                                                     </div>
                                                     <div class="col-sm-3">
@@ -214,14 +212,8 @@
                                                                   style="color: red">异常
                                                             </sapn>
                                                         </p>
-                                                        <p style="font-size:12px">内容限制：
-                                                            <span th:if="${#strings.isEmpty(info.channelRestrictContent)}">无</span>
-                                                            <i data-toggle="tooltip"
-                                                               th:if="${not #strings.isEmpty(info.channelRestrictContent)}"
-                                                               data-placement="right" title=""
-                                                               th:data-original-title="${info.channelRestrictContent}"
-                                                               class="mdi mdi-comment-processing"
-                                                               style="margin-left:5px"></i>
+                                                        <p style="font-size:12px">最大速率(条/秒)：<span
+                                                                th:if="${info.maxSendSecond ne 0}">[[${info.maxSendSecond}]]/秒</span>
                                                         </p>
                                                     </div>
                                                     <div class="col-sm-3">

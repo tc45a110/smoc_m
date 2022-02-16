@@ -84,12 +84,12 @@
                                         <div class="form-group">
                                             <div class="row">
                                                 <div class="col-sm-6 m-b-10">
-                                                    <label>具体供应商&nbsp;<span
-                                                            class="text-danger" th:if="${#fields.hasErrors('specificProvder')}"
-                                                            th:errors="*{specificProvder}" style="font-weight: 200;font-size: 12px"></span>
+                                                    <label>通道供应商<span class="text-danger">*</span>&nbsp;<span
+                                                            class="text-danger" th:if="${#fields.hasErrors('channelProvder')}"
+                                                            th:errors="*{channelProvder}" style="font-weight: 200;font-size: 12px"></span>
                                                     </label>
-                                                    <mpm:tag id="specificProvder" identity="internationalSupplier" name="specificProvder" required="true"  show-type="select" key="code" class="form-control"
-                                                             th:value="${channelBasicInfoValidator.specificProvder}" title="具体供应商"/>
+                                                    <mpm:tag id="channelSupplier" identity="channelSupplier" name="channelProvder" show-type="select" key="code" class="form-control"
+                                                             mask-value="001,002,003,004,005,006" th:value="${channelBasicInfoValidator.channelProvder}" required="true" title="通道供应商"/>
                                                 </div>
                                                 <div class="col-sm-6 m-b-10">
                                                     <label class="m-r-5">对账周期<span class="text-danger">*</span>&nbsp;<span
@@ -100,26 +100,6 @@
                                                              th:value="${channelBasicInfoValidator.channelBill}" required="true" title="对账周期"/>
                                                 </div>
 
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-sm-6 m-b-10">
-                                                    <label>接入国家&nbsp;<span
-                                                            class="text-danger" th:if="${#fields.hasErrors('accessProvince')}"
-                                                            th:errors="*{accessProvince}" style="font-weight: 200;font-size: 12px"></span>
-                                                    </label>
-                                                    <mpm:tag id="accessProvince" identity="internationalArea" name="accessProvince" show-type="select" key="code" class="form-control"
-                                                             th:value="${channelBasicInfoValidator.accessProvince}" title="接入国家"/>
-                                                </div>
-                                                <div class="col-sm-6 m-b-10">
-                                                    <label>通道供应商<span class="text-danger">*</span>&nbsp;<span
-                                                            class="text-danger" th:if="${#fields.hasErrors('channelProvder')}"
-                                                            th:errors="*{channelProvder}" style="font-weight: 200;font-size: 12px"></span>
-                                                    </label>
-                                                    <mpm:tag id="channelSupplier" identity="channelSupplier" name="channelProvder" show-type="select" key="code" class="form-control"
-                                                             th:value="${channelBasicInfoValidator.channelProvder}" required="true" title="通道供应商"/>
-                                                </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -186,12 +166,12 @@
                                         <div class="form-group">
                                             <div class="row">
                                                 <div class="col-sm-12 m-b-10" style="text-align:left">
-                                                    <label id="businessAreas">业务区域<span class="text-danger">*</span>&nbsp;<span
+                                                    <label id="businessAreas">支持国家<span class="text-danger">*</span>&nbsp;<span
                                                             class="text-danger" th:if="${#fields.hasErrors('supportAreaCodes')}"
                                                             th:errors="*{supportAreaCodes}" style="font-weight: 200;font-size: 12px"></span>
                                                     </label>
                                                     <div style="text-align: left;">
-                                                        <mpm:tag id="supportAreaCodes" identity="internationalArea"
+                                                        <mpm:tag id="supportAreaCodes" identity="internationalArea" required="true"
                                                                  name="supportAreaCodes" show-type="checkbox"  key="code" class="form-control"
                                                                  th:value="${channelBasicInfoValidator.supportAreaCodes}" title="业务区域"/>
                                                     </div>
@@ -199,6 +179,21 @@
                                             </div>
                                         </div>
 
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-sm-12 m-b-10" style="text-align:left">
+                                                    <label id="maskProvince">屏蔽国家&nbsp;<span
+                                                            class="text-danger" th:if="${#fields.hasErrors('maskProvince')}"
+                                                            th:errors="*{maskProvince}" style="font-weight: 200;font-size: 12px"></span>
+                                                    </label>
+                                                    <div style="text-align: left;">
+                                                        <mpm:tag id="maskProvince" identity="internationalArea"
+                                                                 name="maskProvince" show-type="checkbox"  key="code" class="form-control"
+                                                                 th:value="${channelBasicInfoValidator.maskProvince}"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
                                         <div class="form-group">
                                             <div class="row">
@@ -214,14 +209,20 @@
                                             </div>
                                         </div>
 
-
                                     </div>
                                 </div>
                                 <div class="text-center" style="margin-bottom:20px">
+                                    <input type="hidden" th:field="*{carrier}">
+                                    <input type="hidden" th:field="*{businessType}">
                                     <input type="hidden" th:field="*{createdTime}">
                                     <input type="hidden" th:field="*{createdBy}">
                                     <input type="hidden" th:field="*{channelProcess}">
                                     <input type="hidden" th:field="*{channelRunStatus}">
+                                    <input type="hidden" th:field="*{businessAreaType}">
+                                    <input type="hidden" th:field="*{priceStyle}">
+                                    <input type="hidden" th:field="*{signType}">
+                                    <input type="hidden" th:field="*{transferEnable}">
+                                    <input type="hidden" th:field="*{specificProvder}">
                                     <button sec:authorize-url="/configure/channel/save/*" type="submit" class="btn btn-teal waves-effect waves-light">提交
                                     </button>
                                 </div>
@@ -250,7 +251,7 @@
 
         if("flag" == '[[${flag}]]'){
             var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
-            parent.location.href = contextPath + '/configure/channel/edit/center/'+'[[${channelBasicInfoValidator.channelId}]]';
+            parent.location.href = contextPath + '/configure/channel/international/edit/center/'+'[[${channelBasicInfoValidator.channelId}]]';
         }
 
     });

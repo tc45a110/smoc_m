@@ -43,9 +43,13 @@
                         <h4>
                             <div class="pull-right" style="margin-top: -12px;margin-right:10px">
                                 <a sec:authorize-url="/configure/channel/group/list" th:href="@{/configure/channel/group/list}"
-                                   class="btn btn-default waves-effect waves-light btn-md">
+                                   class="btn btn-default waves-effect waves-light btn-md" th:if="${flag ne 'INTERNATIONAL'}">
                                     <i class="glyphicon  glyphicon-share-alt" style="margin-right:5px"></i>
                                     返回通道组列表</a>
+                                <a sec:authorize-url="/configure/channel/group/international/list" th:href="@{/configure/channel/group/international/list}"
+                                   class="btn btn-default waves-effect waves-light btn-md" th:if="${flag eq 'INTERNATIONAL'}">
+                                    <i class="glyphicon  glyphicon-share-alt" style="margin-right:5px"></i>
+                                    返回国际通道组列表</a>
                             </div>
                         </h4>
                     </div>

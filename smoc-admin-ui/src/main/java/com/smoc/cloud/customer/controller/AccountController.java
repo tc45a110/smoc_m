@@ -20,7 +20,6 @@ import com.smoc.cloud.customer.service.*;
 import com.smoc.cloud.sequence.service.SequenceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
@@ -164,21 +163,24 @@ public class AccountController {
         }
 
         //查询账号配置的是通道组还是通道
-        if(!"base".equals(flag)){
-            ResponseData<AccountBasicInfoValidator> info = businessAccountService.findById(accountId);
-            if (!ResponseCode.SUCCESS.getCode().equals(info.getCode())) {
-                view.addObject("error", info.getCode() + ":" + info.getMessage());
-                return view;
-            }
-            view.addObject("accountChannelType", info.getData().getAccountChannelType());
-            view.addObject("enterpriseId", info.getData().getEnterpriseId());
-        }else{
+        if("base".equals(flag) || "international".equals(flag) ){
             view.addObject("enterpriseId", accountId);
+            view.addObject("flag", flag);
+            view.addObject("accountId", accountId);
+            return view;
         }
 
+        //查询账号
+        ResponseData<AccountBasicInfoValidator> info = businessAccountService.findById(accountId);
+        if (!ResponseCode.SUCCESS.getCode().equals(info.getCode())) {
+            view.addObject("error", info.getCode() + ":" + info.getMessage());
+            return view;
+        }
+
+        view.addObject("accountChannelType", info.getData().getAccountChannelType());
+        view.addObject("enterpriseId", info.getData().getEnterpriseId());
         view.addObject("flag", flag);
         view.addObject("accountId", accountId);
-
 
         return view;
 
@@ -204,7 +206,7 @@ public class AccountController {
         /**
          * 如果flag值为base,那么accountId为企业id
          */
-        if ("base".equals(flag)) {
+        if ("base".equals(flag) || "international".equals(flag)) {
             AccountBasicInfoValidator accountBasicInfoValidator = new AccountBasicInfoValidator();
             accountBasicInfoValidator.setEnterpriseId(accountId);
             accountBasicInfoValidator.setAccountStatus("2");
@@ -215,6 +217,14 @@ public class AccountController {
             ResponseData<EnterpriseBasicInfoValidator> data = enterpriseService.findById(accountId);
             if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
                 view.addObject("error", data.getCode() + ":" + data.getMessage());
+            }
+
+            //国际账号
+            if("international".equals(flag)){
+                accountBasicInfoValidator.setCarrier("INTERNATIONAL");
+                accountBasicInfoValidator.setBusinessType("INTERNATIONAL_SMS");
+                accountBasicInfoValidator.setTransferType("0");
+                view.setViewName("customer/account/international/account_international_edit_base");
             }
 
             //op操作标记，add表示添加，edit表示修改
@@ -243,6 +253,10 @@ public class AccountController {
         view.addObject("accountBasicInfoValidator", info.getData());
         view.addObject("enterpriseBasicInfoValidator", data.getData());
 
+        if("INTERNATIONAL".equals(info.getData().getCarrier())){
+            view.setViewName("customer/account/international/account_international_edit_base");
+        }
+
         return view;
 
     }
@@ -257,6 +271,11 @@ public class AccountController {
         ModelAndView view = new ModelAndView("customer/account/account_edit_base");
 
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        //国际
+        if("INTERNATIONAL".equals(accountBasicInfoValidator.getCarrier())){
+            view.setViewName("customer/account/international/account_international_edit_base");
+        }
 
         String[] carriers= accountBasicInfoValidator.getCarrier().split(",");
         if(carriers.length==1 && StringUtils.isEmpty(accountBasicInfoValidator.getTransferType())){

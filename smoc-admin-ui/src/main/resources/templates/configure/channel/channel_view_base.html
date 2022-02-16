@@ -34,8 +34,11 @@
                                                 th:if="${not #strings.isEmpty(channelBasicInfoValidator.maxComplaintRate)}">[[${channelBasicInfoValidator.maxComplaintRate}]]/百万</span>
                                         </p>
                                         <p style="font-size:12px">签名方式：
-                                            <mpm:tag identity="signType" show-type="label" key="code"
-                                                     th:value="${channelBasicInfoValidator.signType}"/>
+                                            <span th:if="${channelBasicInfoValidator.businessAreaType ne 'INTERNATIONAL'} ">
+                                                <mpm:tag identity="signType" show-type="label" key="code"
+                                                    th:value="${channelBasicInfoValidator.signType}"/>
+                                            </span>
+
                                         </p>
                                         <p style="font-size:12px">是否支持携号转网：
                                             <mpm:tag identity="isOrNo" show-type="label" key="code"
