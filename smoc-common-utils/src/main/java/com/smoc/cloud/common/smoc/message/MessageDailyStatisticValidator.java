@@ -3,7 +3,6 @@ package com.smoc.cloud.common.smoc.message;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
 
 @Setter
 @Getter
@@ -35,13 +34,13 @@ public class MessageDailyStatisticValidator {
 
     private Integer messageNoReportNum;
 
-    private Date messageDate;
+    private String messageDate;
 
     private String createdBy;
 
-    private Date createdTime;
+    private String createdTime;
 
     private String updatedBy;
 
-    private Date updatedTime;
+    private String updatedTime;
 }
