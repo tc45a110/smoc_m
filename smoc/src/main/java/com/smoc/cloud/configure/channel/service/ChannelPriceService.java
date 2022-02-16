@@ -18,10 +18,7 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * 通道价格接口管理
@@ -50,7 +47,7 @@ public class ChannelPriceService {
         List<ChannelPriceValidator> list = channelPriceRepository.findChannelPrice(channelPriceValidator);
 
         //前台选择的区域
-        Map<String, BigDecimal> map = new TreeMap<>();
+        Map<String, BigDecimal> map = new LinkedHashMap<>();
         String[] areaCode = channelPriceValidator.getAreaCode().split(",");
         for (int i = 0; i < areaCode.length; i++) {
             map.put(areaCode[i], null);

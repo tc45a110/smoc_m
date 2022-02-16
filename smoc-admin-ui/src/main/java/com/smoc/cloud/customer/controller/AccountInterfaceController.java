@@ -59,6 +59,7 @@ public class AccountInterfaceController {
 
         ModelAndView view = new ModelAndView("customer/account/account_edit_interface");
 
+
         //完成参数规则验证
         MpmIdValidator validator = new MpmIdValidator();
         validator.setId(accountId);
@@ -72,6 +73,12 @@ public class AccountInterfaceController {
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;
+        }
+
+        //国际
+        if("INTERNATIONAL".equals(data.getData().getCarrier())){
+            view.setViewName("customer/account/international/account_international_edit_interface");
+
         }
 
         //查询企业数据

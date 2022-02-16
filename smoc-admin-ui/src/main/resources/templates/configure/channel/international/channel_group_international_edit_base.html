@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
+
+</head>
+<body style="background-color:#fff">
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content">
+    <div class="container">
+
+        <!-- start row  页面内容-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all" style="background-color:#fff">
+            <div class="col-md-12">
+                <form id="submit_form" th:action="@{/configure/channel/group/save/{op}(op=${op})}" th:object="${channelGroupInfoValidator}"
+                      method="post" data-parsley-validate="">
+                    <div class="row">
+                        <div class="col-md-12 panel panel-color panel-info" style="padding-left:0px;padding-right:0px">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">国际通道组基本信息 维护</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-12 form-group">
+                                        <div class="col-md-3 m-b-20">
+                                            <label for="price">通道组名称<span class="text-danger">*</span>&nbsp;
+                                                <span class="text-danger" th:if="${#fields.hasErrors('channelGroupName')}"
+                                                        th:errors="*{channelGroupName}" style="font-weight: 200;font-size: 12px"></span>
+                                            </label>
+                                            <input id="price" type="text" class="form-control" th:field="*{channelGroupName}"
+                                                   required="" data-parsley-length="[1,90]" autocomplete="off"
+                                                   placeholder="通道组名称">
+                                        </div>
+                                        <div class="col-sm-3 m-b-20">
+                                            <label>运营商<span class="text-danger">*</span>&nbsp;</label><br>
+                                            <div class="btn-switch btn-switch-info">
+                                                <input name="carrier" checked="true" id="carrier" type="checkbox" value="INTERNATIONAL" required="" disabled>
+                                                <label for="carrier" class="btn btn-rounded btn-info waves-effect waves-light">
+                                                    <em class="glyphicon glyphicon-ok"></em>
+                                                    <strong><mpm:tag identity="carrier" show-type="label" key="code" th:value="${channelGroupInfoValidator.carrier}"/></strong>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 m-b-20">
+                                            <label>业务类型<span class="text-danger">*</span>&nbsp;</label><br>
+                                            <div class="btn-switch btn-switch-info">
+                                                <input name="businessType" checked="true" id="businessType" type="checkbox" value="INTERNATIONAL_SMS" required="" disabled>
+                                                <label for="businessType" class="btn btn-rounded btn-info waves-effect waves-light">
+                                                    <em class="glyphicon glyphicon-ok"></em>
+                                                    <strong><mpm:tag identity="businessType" show-type="label" key="code" th:value="${channelGroupInfoValidator.businessType}"/></strong>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 m-b-20">
+                                            <label>信息类型<span class="text-danger">*</span></label>
+                                            <mpm:tag id="infoType" identity="infoType" show-type="select"
+                                                     key="code" th:value="${channelGroupInfoValidator.infoType}"
+                                                     required="true" class="form-control" name="infoType" title="信息类型"/>
+                                        </div>
+
+                                        <div class="col-md-3 m-b-20">
+                                            <label>状态<span class="text-danger">*</span></label><br>
+                                            <mpm:tag id="dataStatus" identity="dataStatus" name="channelGroupStatus" show-type="radio" style="margin-top:0px" key="code"
+                                                     th:value="${channelGroupInfoValidator.channelGroupStatus}" required="true" title="数据状态"/>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <label for="jf">通道组业务简介<span class="text-danger">*</span>
+                                                <span class="text-danger" th:if="${#fields.hasErrors('channelGroupIntroduce')}"
+                                                      th:errors="*{channelGroupIntroduce}" style="font-weight: 200;font-size: 12px"></span>
+                                            </label>
+                                            <input id="jf" type="text" class="form-control"
+                                                   th:field="${channelGroupInfoValidator.channelGroupIntroduce}"
+                                                   required="" data-parsley-length="[2,128]" autocomplete="off"
+                                                   placeholder="简短、通俗的业务语言描述，大家都看明白通道组是干嘛的">
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="text-center" style="margin-bottom:20px">
+                                    <input type="hidden" th:field="*{carrier}">
+                                    <input type="hidden" th:field="*{businessType}">
+                                    <input type="hidden" th:field="*{channelGroupId}">
+                                    <input type="hidden" th:field="*{createdTime}">
+                                    <input type="hidden" th:field="*{createdBy}">
+                                    <input type="hidden" th:field="*{channelGroupProcess}">
+                                    <button sec:authorize-url="/configure/channel/group/save/*" type="submit" class="btn btn-teal waves-effect waves-light">提交
+                                    </button>
+                                </div>
+                            </div>
+                        </div> <!-- end col -->
+
+                    </div> <!-- end row -->
+
+                </form>
+                <!-- end form -->
+            </div> <!-- end col -->
+        </div>
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<th:block th:insert="fragments/common_fragments :: common_submit_form"/>
+<script th:remove="${#strings.isEmpty(error)}?none:all">
+
+    $(document).ready(function () {
+
+        if("flag" == '[[${flag}]]'){
+            var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+            parent.location.href = contextPath + '/configure/channel/group/international/edit/center/'+'[[${channelGroupInfoValidator.channelGroupId}]]';
+        }
+
+    });
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+</script>
+<script>
+
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+</script>
+</body>
+</html>

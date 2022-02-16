@@ -45,6 +45,7 @@ public class AccountBasicInfoValidator {
     private String createdTime;
     private String updatedBy;
     private Date updatedTime;
+    private String countryCode;
 
     private String enterpriseName;
     private String protocol;

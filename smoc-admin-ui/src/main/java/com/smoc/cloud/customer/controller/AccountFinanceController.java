@@ -87,7 +87,17 @@ public class AccountFinanceController {
         accountFinanceInfoValidator.setCarrierType("1");
         accountFinanceInfoValidator.setAccountCreditSum(new BigDecimal("0"));
         accountFinanceInfoValidator.setAccountId(data.getData().getAccountId());
-        accountFinanceInfoValidator.setCarrier(data.getData().getCarrier());
+        accountFinanceInfoValidator.setFrozenReturnDate("1");//返还时间
+
+        //国际取国家代码
+        if("INTERNATIONAL".equals(data.getData().getCarrier())){
+            accountFinanceInfoValidator.setCarrier(data.getData().getCountryCode());
+            accountFinanceInfoValidator.setPayType("2");//付费方式
+            accountFinanceInfoValidator.setChargeType("2");//计费方式
+
+        }else{
+            accountFinanceInfoValidator.setCarrier(data.getData().getCarrier());
+        }
         ResponseData<Map<String, BigDecimal>> map = accountFinanceService.editCarrierPrice(accountFinanceInfoValidator);
         view.addObject("list", map.getData());
 
@@ -103,7 +113,6 @@ public class AccountFinanceController {
         view.addObject("accountFinanceInfoValidator", accountFinanceInfoValidator);
         view.addObject("accountBasicInfoValidator", data.getData());
         view.addObject("enterpriseBasicInfoValidator", enterpriseData.getData());
-
         return view;
     }
 
@@ -142,7 +151,13 @@ public class AccountFinanceController {
             return view;
         }
 
-        String carrier = data.getData().getCarrier();
+        //国际得区分字段查
+        String carrier = "";
+        if("INTERNATIONAL".equals(data.getData().getCarrier())){
+            carrier = data.getData().getCountryCode();
+        }else{
+            carrier = data.getData().getCarrier();
+        }
 
         //封装运营商价格数据
         List<AccountFinanceInfoValidator> list = new ArrayList<>();

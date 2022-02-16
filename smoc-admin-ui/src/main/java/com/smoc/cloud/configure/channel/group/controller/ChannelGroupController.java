@@ -194,6 +194,10 @@ public class ChannelGroupController {
 
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
 
+        if("INTERNATIONAL".equals(channelGroupInfoValidator.getCarrier())){
+            view.setViewName("configure/channel/international/channel_group_international_edit_base");
+        }
+
         //完成参数规则验证
         if (result.hasErrors()) {
             view.addObject("channelGroupInfoValidator", channelGroupInfoValidator);
@@ -297,7 +301,15 @@ public class ChannelGroupController {
             return view;
         }
 
+        //查看通道组数据
+        ResponseData<ChannelGroupInfoValidator> data = channelGroupService.findById(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
         view.addObject("id", id);
+        view.addObject("flag", data.getData().getCarrier());
 
         return view;
 

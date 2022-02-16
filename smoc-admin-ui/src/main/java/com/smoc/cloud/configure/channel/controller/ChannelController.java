@@ -233,6 +233,11 @@ public class ChannelController {
     public ModelAndView save(@ModelAttribute @Validated ChannelBasicInfoValidator channelBasicInfoValidator, BindingResult result, @PathVariable String op, HttpServletRequest request) {
         ModelAndView view = new ModelAndView("configure/channel/channel_edit_base");
 
+        //国际
+        if("INTERNATIONAL".equals(channelBasicInfoValidator.getCarrier())){
+            view.setViewName("configure/channel/international/channel_international_edit_base");
+        }
+
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
 
         //参数验证
@@ -244,6 +249,8 @@ public class ChannelController {
             return view;
         }
 
+        String priceStyle = "";
+
         //初始化其他变量
         if (!StringUtils.isEmpty(op) && "add".equals(op)) {
             //封装通道ID前缀
@@ -254,6 +261,8 @@ public class ChannelController {
         } else if (!StringUtils.isEmpty(op) && "edit".equals(op)) {
             channelBasicInfoValidator.setUpdatedTime(new Date());
             channelBasicInfoValidator.setUpdatedBy(user.getRealName());
+            ResponseData<ChannelBasicInfoValidator> channelValidator = channelService.findChannelById(channelBasicInfoValidator.getChannelId());
+            priceStyle = channelValidator.getData().getPriceStyle();
         } else {
             view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":" + ResponseCode.PARAM_LINK_ERROR.getMessage());
             return view;
@@ -274,8 +283,9 @@ public class ChannelController {
         //记录日志
         log.info("[通道管理][通道基本信息][{}][{}]数据:{}", op, user.getUserName(), JSON.toJSONString(channelBasicInfoValidator));
 
-        //保存成功之后，重新加载页面，iframe刷新标识，只有add和修改区域计价才会刷新
-        if ("add".equals(op) || "AREA_PRICE".equals(channelBasicInfoValidator.getPriceStyle())) {
+        //保存成功之后，重新加载页面，iframe刷新标识，只有add和修改计价方式才会刷新
+        if ("add".equals(op) || !priceStyle.equals(channelBasicInfoValidator.getPriceStyle() )) {
+
             view.addObject("flag", "flag");
         } else {
             view.addObject("salesList", sysUserService.salesList());
@@ -303,7 +313,7 @@ public class ChannelController {
         }
         //参数验证:如果通道区域范围是国际，那业务区域不能为空
         if ("INTERNATIONAL".equals(channelBasicInfoValidator.getBusinessAreaType()) && StringUtils.isEmpty(channelBasicInfoValidator.getSupportAreaCodes())) {
-            FieldError err = new FieldError("业务区域", "supportAreaCodes", "业务区域不能为空");
+            FieldError err = new FieldError("支持国家", "supportAreaCodes", "支持国家不能为空");
             result.addError(err);
         }
         //参数验证:如果通道区域范围是全国，那计价方式必须为统一计价
@@ -357,7 +367,7 @@ public class ChannelController {
         //国际
         String dictType = "";
         if ("INTERNATIONAL".equals(data.getData().getBusinessAreaType())) {
-            dictType = "internationalCountry";
+            dictType = "internationalArea";
         } else {
             dictType = "provices";
         }
@@ -365,11 +375,11 @@ public class ChannelController {
         String areaType = "业务区域";
         String supportAreaCodes = data.getData().getSupportAreaCodes();
         //如果默认值为ALL并且屏蔽省份为空
-        if ("ALL".equals(data.getData().getSupportAreaCodes())) {
+        if ("ALL".equals(data.getData().getSupportAreaCodes()) || "INTERNATIONAL".equals(data.getData().getCarrier())) {
             if (StringUtils.isEmpty(data.getData().getMaskProvince())) {
                 return "无屏蔽省份";
             } else {
-                areaType = "屏蔽省份";
+                areaType = "屏蔽";
                 supportAreaCodes = data.getData().getMaskProvince();
             }
         }

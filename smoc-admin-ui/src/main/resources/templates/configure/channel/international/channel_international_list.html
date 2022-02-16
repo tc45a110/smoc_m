@@ -68,15 +68,9 @@
                                 </div>
                                 <div class="form-group  col-sm-3">
                                     <mpm:tag id="channelSupplier" identity="channelSupplier" show-type="select"
-                                             key="code" class="form-control"
+                                             key="code" class="form-control"  mask-value="001,002,003,004,005,006"
                                              name="channelProvder" th:value="${channelBasicInfoQo.channelProvder}"
                                              title="通道供应商"/>
-                                </div>
-                                <div class="form-group  col-sm-3">
-                                    <mpm:tag id="provicesiii" identity="internationalSupplier" show-type="select" key="code"
-                                             class="form-control"
-                                             name="specificProvder" th:value="${channelBasicInfoQo.specificProvder}"
-                                             title="通道具体供应商"/>
                                 </div>
                                 <div class="form-group  col-sm-3">
                                     <mpm:tag id="channelLinkStatus" identity="channelLinkStatus" show-type="select"
@@ -103,7 +97,7 @@
                                     <a sec:authorize-url="/configure/channel/international/edit/center/*"
                                        th:href="@{/configure/channel/international/edit/center/base}"
                                        class="btn btn-success waves-effect waves-light m-l-10 btn-md">
-                                        <i class="glyphicon glyphicon-plus-sign"></i> 新建通道</a>
+                                        <i class="glyphicon glyphicon-plus-sign"></i> 新建国际通道</a>
                                     <input type="hidden" name="currentPage" id="currentPage"
                                            th:value="${pageParams.currentPage}">
                                     <input type="hidden" name="pageSize" id="pageSize"
@@ -123,7 +117,7 @@
             <div class="col-sm-12">
                 <div class="panel panel-color panel-info">
                     <div class="panel-heading">
-                        <h3 class="panel-title">通道列表
+                        <h3 class="panel-title">国际通道列表
                         </h3>
                     </div>
                     <div class="panel-body">
@@ -168,8 +162,8 @@
                                                         </p>
                                                     </div>
                                                     <div class="col-sm-3">
-                                                        <p style="font-size:12px">通道具体供应商：
-                                                            <mpm:tag identity="specificProvder" show-type="label" key="code" th:value="${info.specificProvder}"/>
+                                                        <p style="font-size:12px">通道供应商：
+                                                            <mpm:tag identity="channelSupplier" show-type="label" key="code" th:value="${info.channelProvder}"/>
                                                         </p>
                                                         <p style="font-size:12px"><mpm:tag identity="channelProtocolType" show-type="label"
                                                                                            key="code" th:value="${info.protocol}"/>通道账号：[[${info.channelAccessAccount}]]
@@ -178,12 +172,6 @@
                                                             通道区域范围：
                                                             <mpm:tag identity="businessAreaType" show-type="label"
                                                                      key="code" th:value="${info.businessAreaType}"/>
-                                                            <i th:if="${info.supportAreaCodes ne 'ALL'}"
-                                                               data-toggle="tooltip" data-placement="right" title=""
-                                                               data-original-title="这个位置开发时有业务逻辑，可能多条 在这显示"
-                                                               th:id="${info.channelId}"
-                                                               th:onmouseover="areaCodes([[${info.channelId}]])"
-                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
                                                             <i th:if="${not #strings.isEmpty(info.maskProvince)}"
                                                                data-toggle="tooltip" data-placement="right" title=""
                                                                data-original-title="屏蔽区域，如果存在屏蔽区域的话"
@@ -192,10 +180,6 @@
                                                                class="mdi mdi-comment-text-outline"
                                                                style="margin-left:5px"></i>
                                                         </p>
-                                                        <p style="font-size:12px">最大速率(条/秒)：<span
-                                                                th:if="${info.maxSendSecond ne 0}">[[${info.maxSendSecond}]]/秒</span>
-                                                        </p>
-
                                                     </div>
                                                     <div class="col-sm-3">
                                                         <p style="font-size:12px">发送号码范围：
@@ -209,20 +193,12 @@
                                                                   style="color: red">异常
                                                             </sapn>
                                                         </p>
-                                                        <p style="font-size:12px">内容限制：
-                                                            <span th:if="${#strings.isEmpty(info.channelRestrictContent)}">无</span>
-                                                            <i data-toggle="tooltip"
-                                                               th:if="${not #strings.isEmpty(info.channelRestrictContent)}"
-                                                               data-placement="right" title=""
-                                                               th:data-original-title="${info.channelRestrictContent}"
-                                                               class="mdi mdi-comment-processing"
-                                                               style="margin-left:5px"></i>
+                                                        <p style="font-size:12px">最大速率(条/秒)：<span
+                                                                th:if="${info.maxSendSecond ne 0}">[[${info.maxSendSecond}]]/秒</span>
                                                         </p>
                                                     </div>
                                                     <div class="col-sm-3">
-                                                        <p style="font-size:12px">抗速率：<span
-                                                                th:if="${not #strings.isEmpty(info.maxComplaintRate)}">[[${info.maxComplaintRate}]]/百万</span>
-                                                        </p>
+
                                                         <p style="font-size:12px">
                                                             通道对接销售：<span th:if="${salesMap[info.channelAccessSales] !=null}">[[${salesMap[info.channelAccessSales].realName}]]</span></p>
                                                         <p style="font-size:12px">通道状态：
@@ -300,7 +276,7 @@
 
     }
 
-    //查看区域
+    //查看屏蔽
     function areaCodes(channelId) {
         var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
         $.ajax({

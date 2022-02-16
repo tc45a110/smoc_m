@@ -108,7 +108,7 @@
                                                             th:errors="*{channelProvder}" style="font-weight: 200;font-size: 12px"></span>
                                                     </label>
                                                     <mpm:tag id="channelSupplier" identity="channelSupplier" name="channelProvder" show-type="select" key="code" class="form-control"
-                                                             th:value="${channelBasicInfoValidator.channelProvder}" required="true" title="通道供应商"/>
+                                                             mask-value="007,008"th:value="${channelBasicInfoValidator.channelProvder}" required="true" title="通道供应商"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -219,7 +219,7 @@
                                                             class="text-danger" th:if="${#fields.hasErrors('businessAreaType')}"
                                                             th:errors="*{businessAreaType}" style="font-weight: 200;font-size: 12px"></span>
                                                     </label>
-                                                    <mpm:tag id="businessAreaType" identity="businessAreaType"
+                                                    <mpm:tag id="businessAreaType" identity="businessAreaType" mask-value="INTERNATIONAL"
                                                              onchange="areaSwith()" name="businessAreaType" style="margin-top:0px" show-type="radio" key="code"
                                                              th:value="${channelBasicInfoValidator.businessAreaType}" required="true" title="业务区域类型"/>
                                                 </div>
@@ -241,11 +241,7 @@
                                                         <mpm:tag id="province" identity="provices" name="province" show-type="checkbox" key="code"  mask-value="ALL" class="form-control"
                                                                  th:value="${channelBasicInfoValidator.province}" title="业务区域"/>
                                                     </div>
-                                                    <div id="international_areas" style="text-align: left;display:none">
-                                                        <mpm:tag id="internationalCountry" identity="internationalCountry"
-                                                                 name="supportAreaCodes" show-type="checkbox"  key="code" class="form-control"
-                                                                 th:value="${channelBasicInfoValidator.supportAreaCodes}" title="业务区域"/>
-                                                    </div>
+
                                                 </div>
                                             </div>
                                         </div>
@@ -331,7 +327,6 @@
             $('#maskAreas').css('display', 'block');
             $('#businessAreas').css('display', 'none');
             $('#province_areas').css('display', 'block');
-            $('#international_areas').css('display', 'none');
             $('#supportAreaCodes').css('display', 'none');
         }
         //分省
@@ -339,17 +334,9 @@
             $('#maskAreas').css('display', 'none');
             $('#businessAreas').css('display', 'block');
             $('#province_areas').css('display', 'none');
-            $('#international_areas').css('display', 'none');
             $('#supportAreaCodes').css('display', 'block');
         }
-        //国际
-        if("INTERNATIONAL" == '[[${channelBasicInfoValidator.businessAreaType}]]'){
-            $('#maskAreas').css('display', 'none');
-            $('#businessAreas').css('display', 'block');
-            $('#province_areas').css('display', 'none');
-            $('#supportAreaCodes').css('display', 'none');
-            $('#international_areas').css('display', 'block');
-        }
+
 
         var checkedChargeType = '[[${channelBasicInfoValidator.priceStyle}]]';
         //区域计价
@@ -406,7 +393,6 @@
             $('#maskAreas').css('display', 'block');
             $('#businessAreas').css('display', 'none');
             $('#province_areas').css('display', 'block');
-            $('#international_areas').css('display', 'none');
             $('#supportAreaCodes').css('display', 'none');
         }
         //分省
@@ -415,16 +401,8 @@
             $('#businessAreas').css('display', 'block');
             $('#supportAreaCodes').css('display', 'block');
             $('#province_areas').css('display', 'none');
-            $('#international_areas').css('display', 'none');
         }
-        //国际
-        if("INTERNATIONAL" == checkedBusinessAreaType){
-            $('#maskAreas').css('display', 'none');
-            $('#businessAreas').css('display', 'block');
-            $('#province_areas').css('display', 'none');
-            $('#supportAreaCodes').css('display', 'none');
-            $('#international_areas').css('display', 'block');
-        }
+
     }
 
 </script>

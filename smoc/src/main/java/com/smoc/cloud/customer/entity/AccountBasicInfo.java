@@ -24,6 +24,7 @@ public class AccountBasicInfo {
     private Date createdTime;
     private String updatedBy;
     private Date updatedTime;
+    private String countryCode;
 
     @Id
     @Column(name = "ACCOUNT_ID")
@@ -193,6 +194,16 @@ public class AccountBasicInfo {
 
     public void setUpdatedTime(Date updatedTime) {
         this.updatedTime = updatedTime;
+    }
+
+    @Basic
+    @Column(name = "COUNTRY_CODE")
+    public String getCountryCode() {
+        return countryCode;
+    }
+
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
     }
 
     @Override
