@@ -123,8 +123,12 @@ public class AccountChannelService {
         //设置账号完成进度
         if("add".equals(op)){
             AccountBasicInfo accountBasicInfo = businessAccountRepository.findById(entity.getAccountId()).get();
-            List<AccountChannelInfoQo> list = accountChannelRepository.accountChannelByAccountIdAndCarrier(entity.getAccountId(),accountBasicInfo.getCarrier(),accountBasicInfo.getAccountChannelType());
-            String[] carrierLength = accountBasicInfo.getCarrier().split(",");
+            String carrier = accountBasicInfo.getCarrier();
+            if("INTERNATIONAL".equals(accountBasicInfo.getCarrier())){
+                carrier = accountBasicInfo.getCountryCode();
+            }
+            List<AccountChannelInfoQo> list = accountChannelRepository.accountChannelByAccountIdAndCarrier(entity.getAccountId(),carrier,accountBasicInfo.getAccountChannelType());
+            String[] carrierLength = carrier.split(",");
             if(!StringUtils.isEmpty(list) && list.size()==carrierLength.length){
                 StringBuffer accountProcess = new StringBuffer(accountBasicInfo.getAccountProcess());
                 accountProcess = accountProcess.replace(3, 4, "1");

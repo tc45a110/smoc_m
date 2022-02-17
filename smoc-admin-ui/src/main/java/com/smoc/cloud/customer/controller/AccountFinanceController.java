@@ -228,6 +228,10 @@ public class AccountFinanceController {
         ServletContext context = request.getServletContext();
         Map<String, DictType> dictMap = (Map<String, DictType>) context.getAttribute("dict");
         DictType dictType  = dictMap.get("carrier");
+        if("INTERNATIONAL".equals(data.getData().getCarrier())){
+            dictType  = dictMap.get("internationalArea");
+        }
+
         List<Dict> dictList = dictType.getDict();
 
         //封装已配置的运营商单价

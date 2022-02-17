@@ -284,7 +284,7 @@ public class AccountController {
         }
         //如果正常状态并且账号进度未完善，
         if ("1".equals(accountBasicInfoValidator.getAccountStatus()) && Integer.parseInt(accountBasicInfoValidator.getAccountProcess())<=11100) {
-            FieldError err = new FieldError("账号状态", "accountStauts", "正常状态下需要完善账号配置信息");
+            FieldError err = new FieldError("账号状态", "accountStatus", "正常状态下需要完善账号配置信息");
             result.addError(err);
         }
 
@@ -527,6 +527,9 @@ public class AccountController {
         AccountFinanceInfoValidator accountFinanceInfoValidator = new AccountFinanceInfoValidator();
         accountFinanceInfoValidator.setAccountId(data.getData().getAccountId());
         accountFinanceInfoValidator.setCarrier(data.getData().getCarrier());
+        if("INTERNATIONAL".equals(data.getData().getCarrier())){
+            accountFinanceInfoValidator.setCarrier(data.getData().getCountryCode());
+        }
         ResponseData<Map<String, BigDecimal>> map = accountFinanceService.editCarrierPrice(accountFinanceInfoValidator);
         view.addObject("list", map.getData());
         //查询账号配置的运营商价格

@@ -43,4 +43,5 @@ public class ChannelGroupInfoValidator {
 
     private Integer channelNum;
     private String accountId;
+    private String countryCode;
 }

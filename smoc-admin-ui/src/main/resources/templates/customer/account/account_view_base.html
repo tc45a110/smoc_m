@@ -65,8 +65,7 @@
                                                                 <mpm:tag id="transferType" identity="isOrNo" show-type="label" key="code" th:value="${accountBasicInfoValidator.transferType}"/></p>
                                                         </div>
                                                         <div class="col-sm-3">
-                                                            <p class="text-muted">账号状态：正常</p>
-
+                                                            <p class="text-muted">账号状态：<mpm:tag identity="accountStatus" show-type="label" key="code" th:value="${accountBasicInfoValidator.accountStatus}"/></p>
                                                         </div>
                                                     </div>
                                                     <!-- end. Card actions -->
@@ -105,8 +104,11 @@
                                                         <h5 style="padding-left:10px"></h5>
                                                     </div>
                                                     <div class="col-md-3 form-group" th:each="info:${list}">
-                                                        <p class="text-muted"><mpm:tag identity="carrier"  show-type="label" key="code"
-                                                                                       th:value="${info.key}"/>单价：[[${info.value}]]
+                                                        <p class="text-muted" th:if="${'INTERNATIONAL' ne accountBasicInfoValidator.carrier}">
+                                                            <mpm:tag identity="carrier"  show-type="label" key="code" th:value="${info.key}"/>单价：[[${info.value}]]
+                                                        </p>
+                                                        <p class="text-muted" th:if="${'INTERNATIONAL' eq accountBasicInfoValidator.carrier}">
+                                                            <mpm:tag identity="internationalArea"  show-type="label" key="code" th:value="${info.key}"/>单价：[[${info.value}]]
                                                         </p>
                                                     </div>
                                                     <div class="col-md-3 form-group">
@@ -185,7 +187,7 @@
                                                         <div class="col-sm-3 form-group">
                                                             <p class="text-muted">发送速率(条/秒)：[[${accountInterfaceInfoValidator.maxSendSecond}]]</p>
                                                         </div>
-                                                        <div th:if="${accountInterfaceInfoValidator.protocol eq 'CMPP' or accountInterfaceInfoValidator.protocol eq 'SGIP' or accountInterfaceInfoValidator.protocol eq 'SMGP' or accountInterfaceInfoValidator.protocol eq 'SMPP'}">
+                                                        <div th:if="${accountInterfaceInfoValidator.protocol eq 'CMPP' or accountInterfaceInfoValidator.protocol eq 'SGIP' or accountInterfaceInfoValidator.protocol eq 'SMGP'}">
                                                             <div class="col-sm-3 form-group">
                                                                 <p class="text-muted">最大链接数：[[${accountInterfaceInfoValidator.maxConnect}]]</p>
                                                             </div>
@@ -215,6 +217,32 @@
                                                             </div>
                                                             <div class="col-sm-3 form-group">
                                                                 <p class="text-muted">客户提交速率(次/秒)：[[${accountInterfaceInfoValidator.maxSubmitSecond}]]</p>
+                                                            </div>
+                                                            <div class="col-sm-3 form-group">
+                                                                <p class="text-muted">运营商状态报告推送地址url：[[${accountInterfaceInfoValidator.statusReportUrl}]]</p>
+                                                            </div>
+                                                        </div>
+
+                                                        <div th:if="${accountInterfaceInfoValidator.protocol eq 'SMPP'}">
+                                                            <div class="col-sm-3 form-group">
+                                                                <p class="text-muted">服务代码：[[${accountInterfaceInfoValidator.serviceCode}]]</p>
+                                                            </div>
+                                                            <div class="col-sm-3 form-group">
+                                                                <p class="text-muted">客户提交速率(次/秒)：[[${accountInterfaceInfoValidator.maxSubmitSecond}]]</p>
+                                                            </div>
+                                                            <div class="col-sm-3 form-group">
+                                                                <p class="text-muted">运营商状态报告推送地址url：[[${accountInterfaceInfoValidator.statusReportUrl}]]</p>
+                                                            </div>
+                                                        </div>
+                                                        <div th:if="${accountInterfaceInfoValidator.protocol eq 'HTTP_INTERNATIONAL'}">
+                                                            <div class="col-sm-3 form-group">
+                                                                <p class="text-muted">服务代码：[[${accountInterfaceInfoValidator.serviceCode}]]</p>
+                                                            </div>
+                                                            <div class="col-sm-3 form-group">
+                                                                <p class="text-muted">客户提交速率(次/秒)：[[${accountInterfaceInfoValidator.maxSubmitSecond}]]</p>
+                                                            </div>
+                                                            <div class="col-sm-3 form-group">
+                                                                <p class="text-muted">上行短信推送地址url：[[${accountInterfaceInfoValidator.moUrl}]]</p>
                                                             </div>
                                                             <div class="col-sm-3 form-group">
                                                                 <p class="text-muted">运营商状态报告推送地址url：[[${accountInterfaceInfoValidator.statusReportUrl}]]</p>

@@ -47,12 +47,12 @@
                                                         <mpm:tag identity="businessType" show-type="label" key="code"
                                                                  th:value="${accountBasicInfoValidator.businessType}"/>
                                                     </b></p>
-                                                    <p class="m-0"><b>运营商：
+                                                    <p class="m-0"><b>
                                                         <span th:if="${'INTERNATIONAL' ne accountBasicInfoValidator.carrier}">
-                                                            <mpm:tag identity="carrier" show-type="label" key="code" th:value="${info.key}"/>
+                                                            运营商：<mpm:tag identity="carrier" show-type="label" key="code" th:value="${info.key}"/>
                                                         </span>
                                                         <span th:if="${'INTERNATIONAL' eq accountBasicInfoValidator.carrier}">
-                                                            <mpm:tag identity="internationalArea" show-type="label" key="code" th:value="${info.key}"/>
+                                                            国家：<mpm:tag identity="internationalArea" show-type="label" key="code" th:value="${info.key}"/>
                                                         </span>
                                                     </b></p>
                                                     <p class="m-0"><b>通道协议类型：
@@ -117,17 +117,28 @@
                                                                              key="code"
                                                                              th:value="${channelBasicInfoQo.businessType}"/>
                                                                 </div>
-                                                                <div class="form-group  col-sm-6">
+                                                                <div class="form-group  col-sm-6" th:if="${'INTERNATIONAL' ne accountBasicInfoValidator.carrier}">
                                                                     <label>运营商：</label>
                                                                     <mpm:tag identity="carrier" show-type="label"
                                                                              key="code"
                                                                              th:value="${channelBasicInfoQo.carrier}"/>
                                                                 </div>
-                                                                <div class="form-group  col-sm-12">
+                                                                <div class="form-group  col-sm-6" th:if="${'INTERNATIONAL' eq accountBasicInfoValidator.carrier}">
+                                                                    <label>运营商：</label>
+                                                                    <mpm:tag identity="carrier" show-type="label"
+                                                                             key="code" th:value="INTERNATIONAL"/>
+                                                                </div>
+                                                                <div class="form-group  col-sm-6">
                                                                     <label>信息分类：</label>
                                                                     <mpm:tag identity="infoType" show-type="label"
                                                                              key="code"
                                                                              th:value="${channelBasicInfoQo.infoType}"/>
+                                                                </div>
+                                                                <div class="form-group  col-sm-6" th:if="${'INTERNATIONAL' eq accountBasicInfoValidator.carrier}">
+                                                                    <label>国家：</label>
+                                                                    <mpm:tag identity="internationalArea" show-type="label"
+                                                                             key="code"
+                                                                             th:value="${channelBasicInfoQo.countryCode}"/>
                                                                 </div>
 
 
@@ -137,6 +148,7 @@
                                                                     <input type="hidden" th:field="*{carrier}">
                                                                     <input type="hidden" th:field="*{businessType}">
                                                                     <input type="hidden" th:field="*{infoType}">
+                                                                    <input type="hidden" th:field="*{countryCode}">
                                                                     <button sec:authorize-url="/account/channel/channelPage"
                                                                             th:href="@{/account/channel/channelPage}"
                                                                             class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
@@ -199,6 +211,7 @@
                                                                                      show-type="label" key="code"
                                                                                      th:value="${info.protocol}"/>
                                                                         </p>
+
                                                                     </div>
 
                                                                 </div>

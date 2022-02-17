@@ -104,8 +104,7 @@
                                             <li class="" id="tab4"><a onclick="active('4')" id="a4"
                                                                       sec:authorize-url="/parameter/filter/list/BUSINESS_ACCOUNT_FILTER/*/*"
                                                                       th:href="@{/parameter/filter/list/BUSINESS_ACCOUNT_FILTER/accountId/6}"
-                                                                      th:target="tab-content"><i class="mdi mdi-star"
-                                                                                                 style="margin-right:5px;color:#f35864"></i>业务账号过滤参数</a>
+                                                                      th:target="tab-content">业务账号过滤参数</a>
                                             <li class="" id="tab5">
                                                 <a onclick="active('5')" id="a5" th:if="${(flag eq 'base' or flag eq 'international') or accountChannelType eq 'ACCOUNT_CHANNEL_GROUP'}"
                                                    sec:authorize-url="/account/edit/product/*"

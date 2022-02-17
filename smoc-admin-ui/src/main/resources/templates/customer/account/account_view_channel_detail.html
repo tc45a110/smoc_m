@@ -49,8 +49,11 @@
                                     <td>
                                         [[${info.channelId}]]
                                     </td>
-                                    <td>
+                                    <td th:if="${'INTERNATIONAL' ne accountBasicInfoValidator.carrier}">
                                         <mpm:tag identity="carrier" show-type="label" key="code" th:value="${info.carrier}"/>
+                                    </td>
+                                    <td th:if="${'INTERNATIONAL' eq accountBasicInfoValidator.carrier}">
+                                        <mpm:tag identity="internationalArea" show-type="label" key="code" th:value="${info.carrier}"/>
                                     </td>
                                     <td>
                                         [[${info.channelName}]]

@@ -118,6 +118,10 @@ public class AccountChannelController {
         accountChannelInfoQo.setAccountId(data.getData().getAccountId());
         accountChannelInfoQo.setCarrier(data.getData().getCarrier());
         accountChannelInfoQo.setAccountChannelType(data.getData().getAccountChannelType());
+        //国际
+        if("INTERNATIONAL".equals(data.getData().getCarrier())){
+            accountChannelInfoQo.setCarrier(data.getData().getCountryCode());
+        }
         ResponseData<Map<String, AccountChannelInfoQo>> channelData = accountChannelService.findAccountChannelConfig(accountChannelInfoQo);
         if (!ResponseCode.SUCCESS.getCode().equals(channelData.getCode())) {
             view.addObject("error", channelData.getCode() + ":" + channelData.getMessage());
@@ -133,6 +137,11 @@ public class AccountChannelController {
         channelBasicInfoQo.setBusinessType(data.getData().getBusinessType());
         channelBasicInfoQo.setInfoType(data.getData().getInfoType());
         channelBasicInfoQo.setChannelStatus("001");//正常
+        //国际
+        if("INTERNATIONAL".equals(data.getData().getCarrier())){
+            channelBasicInfoQo.setCarrier(data.getData().getCarrier());
+            channelBasicInfoQo.setCountryCode(carrier);//国家代码
+        }
         ResponseData<List<ChannelBasicInfoQo>> listDate = accountChannelService.findChannelList(channelBasicInfoQo);
         if (!ResponseCode.SUCCESS.getCode().equals(listDate.getCode())) {
             view.addObject("error", listDate.getCode() + ":" + listDate.getMessage());
@@ -178,6 +187,10 @@ public class AccountChannelController {
         accountChannelInfoQo.setAccountId(data.getData().getAccountId());
         accountChannelInfoQo.setCarrier(data.getData().getCarrier());
         accountChannelInfoQo.setAccountChannelType(data.getData().getAccountChannelType());
+        //国际
+        if("INTERNATIONAL".equals(data.getData().getCarrier())){
+            accountChannelInfoQo.setCarrier(data.getData().getCountryCode());
+        }
         ResponseData<Map<String, AccountChannelInfoQo>> channelData = accountChannelService.findAccountChannelConfig(accountChannelInfoQo);
         if (!ResponseCode.SUCCESS.getCode().equals(channelData.getCode())) {
             view.addObject("error", channelData.getCode() + ":" + channelData.getMessage());
@@ -188,13 +201,22 @@ public class AccountChannelController {
          * 检索通道列表
          */
         channelBasicInfoQo.setChannelStatus("001");//正常
+        //国际
+        if("INTERNATIONAL".equals(data.getData().getCarrier())){
+            channelBasicInfoQo.setCarrier(data.getData().getCarrier());
+        }
+
         ResponseData<List<ChannelBasicInfoQo>> listDate = accountChannelService.findChannelList(channelBasicInfoQo);
         if (!ResponseCode.SUCCESS.getCode().equals(listDate.getCode())) {
             view.addObject("error", listDate.getCode() + ":" + listDate.getMessage());
         }
 
         AccountChannelInfoValidator accountChannelInfoValidator = new AccountChannelInfoValidator();
-        accountChannelInfoValidator.setCarrier(channelBasicInfoQo.getCarrier());
+        if("INTERNATIONAL".equals(data.getData().getCarrier())){
+            accountChannelInfoValidator.setCarrier(channelBasicInfoQo.getCountryCode());
+        }else{
+            accountChannelInfoValidator.setCarrier(channelBasicInfoQo.getCarrier());
+        }
         accountChannelInfoValidator.setAccountId(data.getData().getAccountId());
 
         view.addObject("channelMap", channelData.getData());
@@ -337,6 +359,9 @@ public class AccountChannelController {
         accountChannelInfoQo.setAccountId(data.getData().getAccountId());
         accountChannelInfoQo.setCarrier(data.getData().getCarrier());
         accountChannelInfoQo.setAccountChannelType(data.getData().getAccountChannelType());
+        if("INTERNATIONAL".equals(data.getData().getCarrier())){
+            accountChannelInfoQo.setCarrier(data.getData().getCountryCode());
+        }
         ResponseData<Map<String, AccountChannelInfoQo>> channelData = accountChannelService.findAccountChannelConfig(accountChannelInfoQo);
         if (!ResponseCode.SUCCESS.getCode().equals(channelData.getCode())) {
             view.addObject("error", channelData.getCode() + ":" + channelData.getMessage());
@@ -379,6 +404,9 @@ public class AccountChannelController {
         accountChannelInfoQo.setAccountId(data.getData().getAccountId());
         accountChannelInfoQo.setCarrier(data.getData().getCarrier());
         accountChannelInfoQo.setAccountChannelType(data.getData().getAccountChannelType());
+        if("INTERNATIONAL".equals(data.getData().getCarrier())){
+            accountChannelInfoQo.setCarrier(data.getData().getCountryCode());
+        }
         ResponseData<Map<String, AccountChannelInfoQo>> channelData = accountChannelService.findAccountChannelConfig(accountChannelInfoQo);
         if (!ResponseCode.SUCCESS.getCode().equals(channelData.getCode())) {
             view.addObject("error", channelData.getCode() + ":" + channelData.getMessage());
@@ -394,6 +422,11 @@ public class AccountChannelController {
         channelGroupInfoValidator.setBusinessType(data.getData().getBusinessType());
         channelGroupInfoValidator.setInfoType(data.getData().getInfoType());
         channelGroupInfoValidator.setChannelGroupStatus("1");//正常
+        //国际
+        if("INTERNATIONAL".equals(data.getData().getCarrier())){
+            channelGroupInfoValidator.setCarrier(data.getData().getCarrier());
+            channelGroupInfoValidator.setCountryCode(carrier);//国家代码
+        }
         ResponseData<List<ChannelGroupInfoValidator>> listDate = accountChannelService.findChannelGroupList(channelGroupInfoValidator);
         if (!ResponseCode.SUCCESS.getCode().equals(listDate.getCode())) {
             view.addObject("error", listDate.getCode() + ":" + listDate.getMessage());
@@ -437,6 +470,9 @@ public class AccountChannelController {
         accountChannelInfoQo.setAccountId(data.getData().getAccountId());
         accountChannelInfoQo.setCarrier(data.getData().getCarrier());
         accountChannelInfoQo.setAccountChannelType(data.getData().getAccountChannelType());
+        if("INTERNATIONAL".equals(data.getData().getCarrier())){
+            accountChannelInfoQo.setCarrier(data.getData().getCountryCode());
+        }
         ResponseData<Map<String, AccountChannelInfoQo>> channelData = accountChannelService.findAccountChannelConfig(accountChannelInfoQo);
         if (!ResponseCode.SUCCESS.getCode().equals(channelData.getCode())) {
             view.addObject("error", channelData.getCode() + ":" + channelData.getMessage());
@@ -453,8 +489,12 @@ public class AccountChannelController {
         }
 
         AccountChannelInfoValidator accountChannelInfoValidator = new AccountChannelInfoValidator();
-        accountChannelInfoValidator.setCarrier(channelGroupInfoValidator.getCarrier());
         accountChannelInfoValidator.setAccountId(data.getData().getAccountId());
+        if("INTERNATIONAL".equals(data.getData().getCarrier())){
+            accountChannelInfoValidator.setCarrier(channelGroupInfoValidator.getCountryCode());
+        }else{
+            accountChannelInfoValidator.setCarrier(channelGroupInfoValidator.getCarrier());
+        }
 
         view.addObject("channelMap", channelData.getData());
         view.addObject("list", listDate.getData());
@@ -609,7 +649,7 @@ public class AccountChannelController {
             return view;
         }
 
-        view.addObject("accountChannelInfoValidator", accountChannelInfoValidator);
+        view.addObject("accountBasicInfoValidator", base.getData());
         view.addObject("list", data.getData());
         return view;
     }
@@ -653,6 +693,9 @@ public class AccountChannelController {
         ServletContext context = request.getServletContext();
         Map<String, DictType> dictMap = (Map<String, DictType>) context.getAttribute("dict");
         DictType dictType  = dictMap.get("carrier");
+        if("INTERNATIONAL".equals(base.getData().getCarrier())){
+            dictType  = dictMap.get("internationalArea");
+        }
         List<Dict> dictList = dictType.getDict();
 
         //封装已配置的通道数据

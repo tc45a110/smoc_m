@@ -104,6 +104,7 @@ public class BusinessAccountService {
         String accountType = "";
         String accountChannelType = "";
         String carrier = "";
+        String countryCode = "";
 
         //add查重
         if (data != null && data.iterator().hasNext() && "add".equals(op)) {
@@ -118,6 +119,7 @@ public class BusinessAccountService {
                 accountType = info.getBusinessType();
                 accountChannelType = info.getAccountChannelType();
                 carrier = info.getCarrier();
+                countryCode = info.getCountryCode();
                 if (!entity.getAccountId().equals(info.getAccountId())) {
                     status = true;
                     break;
@@ -141,7 +143,12 @@ public class BusinessAccountService {
 
         if ("edit".equals(op)) {
             //根据运营商先删除库里多余的运营商的价格(比如：添加的时候选择了3个运营商，修改的时候选择了2个运营商，那么就得把多余的1个运营商删除)
-            accountFinanceRepository.deleteByAccountIdAndCarrier(accountBasicInfoValidator.getAccountId(), accountBasicInfoValidator.getCarrier());
+            if("INTERNATIONAL".equals(accountBasicInfoValidator.getCarrier())){
+                accountFinanceRepository.deleteByAccountIdAndCarrier(accountBasicInfoValidator.getAccountId(), accountBasicInfoValidator.getCountryCode());
+            }else{
+                accountFinanceRepository.deleteByAccountIdAndCarrier(accountBasicInfoValidator.getAccountId(), accountBasicInfoValidator.getCarrier());
+            }
+
 
             //如果修改了通道方式，并且配置了通道，需要删除已经配置得通道
             if(!accountBasicInfoValidator.getAccountChannelType().equals(accountChannelType)){
@@ -149,10 +156,15 @@ public class BusinessAccountService {
             }
 
             //如果修改了运营商，并且配置了通道，需要删除通道
-            if(!accountBasicInfoValidator.getCarrier().equals(carrier)){
-                deleteConfigChannelByCarrier(entity);
+            if("INTERNATIONAL".equals(accountBasicInfoValidator.getCarrier())){
+                if(!accountBasicInfoValidator.getCountryCode().equals(countryCode)){
+                    deleteConfigChannelByCarrier(entity);
+                }
+            }else{
+                if(!accountBasicInfoValidator.getCarrier().equals(carrier)){
+                    deleteConfigChannelByCarrier(entity);
+                }
             }
-
         }
 
         //记录日志
@@ -161,7 +173,6 @@ public class BusinessAccountService {
 
         return ResponseDataUtil.buildSuccess();
     }
-
 
 
     //添加账户信息
@@ -192,15 +203,19 @@ public class BusinessAccountService {
 
     //修改运营商，并且配置了通道，需要删除通道
     private void deleteConfigChannelByCarrier(AccountBasicInfo entity) {
-        List<AccountChannelInfoQo> list = accountChannelRepository.accountChannelByAccountIdAndCarrier(entity.getAccountId(),entity.getCarrier(),entity.getAccountChannelType());
-        String[] carrierLength = entity.getCarrier().split(",");
+        String carrier = entity.getCarrier();
+        if("INTERNATIONAL".equals(entity.getCarrier())){
+            carrier = entity.getCountryCode();
+        }
+        List<AccountChannelInfoQo> list = accountChannelRepository.accountChannelByAccountIdAndCarrier(entity.getAccountId(),carrier,entity.getAccountChannelType());
+        String[] carrierLength = carrier.split(",");
         if(StringUtils.isEmpty(list) || list.size()<carrierLength.length){
             //设置进度
             accountProcess(entity,"0");
         }else{
             accountProcess(entity,"1");
         }
-        accountChannelRepository.deleteConfigChannelByCarrier(entity.getAccountId(),entity.getCarrier());
+        accountChannelRepository.deleteConfigChannelByCarrier(entity.getAccountId(),carrier);
     }
 
     //修改了通道方式，删除已经配置得通道

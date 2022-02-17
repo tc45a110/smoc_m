@@ -100,13 +100,13 @@
                                         <div class="form-group">
                                             <div class="row">
                                                 <div class="col-sm-4 m-b-10">
-                                                    <label class="m-b-10">账号状态<span class="text-danger" style="display: none">*</span>&nbsp;
+                                                    <label class="m-b-10">账号状态<span class="text-danger">*</span>&nbsp;
                                                         <span class="text-danger" th:if="${#fields.hasErrors('accountStatus')}"
                                                               th:errors="*{accountStatus}"></span></label><br>
                                                     <mpm:tag id="accountStatus" identity="accountStatus" name="accountStatus"
                                                              show-type="select" style="margin-top:0px"  onchange="confirmModal()"
                                                              key="code" th:value="${accountBasicInfoValidator.accountStatus}"
-                                                             required="true"/>
+                                                             required="true" title="账号状态"/>
 
                                                 </div>
                                                 <div class="col-sm-8 m-b-10">
@@ -203,7 +203,7 @@
     });
 
     function confirmModal(){
-        var accountStauts = $('#accountStauts').val();
+        var accountStauts = $('#accountStatus').val();
         if(0 ==accountStauts){
             $('#confirm-modal').modal();
         }

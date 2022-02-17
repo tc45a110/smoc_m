@@ -136,7 +136,7 @@
                                                     <mpm:tag id="accountStatus" identity="accountStatus" name="accountStatus"
                                                              show-type="select" style="margin-top:0px"  onchange="confirmModal()"
                                                              key="code" th:value="${accountBasicInfoValidator.accountStatus}"
-                                                             required="true"/>
+                                                             required="true" title="账号状态"/>
                                                     <!--<select data-style="btn-default" name="accountStauts" id="accountStauts" class="selectpicker form-control" required="" tabindex="-98" onchange="confirmModal()">
                                                         <option data-icon="mdi mdi-apps" value="2" th:selected="${accountBasicInfoValidator.accountStauts eq '2'}">完善中</option>
                                                         <option data-icon="mdi mdi-apps" value="1" th:selected="${accountBasicInfoValidator.accountStauts eq '1'}">正常</option>
@@ -229,7 +229,7 @@
     }
 
     function confirmModal(){
-        var accountStauts = $('#accountStauts').val();
+        var accountStauts = $('#accountStatus').val();
         if(0 ==accountStauts){
             $('#confirm-modal').modal();
         }

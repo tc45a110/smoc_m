@@ -64,4 +64,5 @@ public class ChannelBasicInfoQo {
     private String specificProvder;
 
     private String accountId;
+    private String countryCode;
 }

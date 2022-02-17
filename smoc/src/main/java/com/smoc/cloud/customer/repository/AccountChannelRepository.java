@@ -128,4 +128,5 @@ public interface AccountChannelRepository extends CrudRepository<AccountChannelI
     @Modifying
     @Query(value = "update account_channel_info set CHANNEL_WEIGHT = :channelWeight where CHANNEL_GROUP_ID = :channelGroupId and CHANNEL_ID = :channelId ",nativeQuery = true)
     void updateAccountChannelWeight(@Param("channelGroupId") String channelGroupId, @Param("channelId") String channelId, @Param("channelWeight") int channelWeight);
+
 }

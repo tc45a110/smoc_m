@@ -108,7 +108,12 @@ public class AccountChannelRepositoryImpl extends BasePageRepository {
         List<Object> paramsList = new ArrayList<Object>();
 
         paramsList.add( qo.getAccountId());
-        paramsList.add( qo.getCarrier());
+        if("INTERNATIONAL".equals(qo.getCarrier()) && !StringUtils.isEmpty(qo.getCountryCode())){
+            paramsList.add( qo.getCountryCode());
+        }else{
+            paramsList.add( qo.getCarrier());
+        }
+
         if (!StringUtils.isEmpty(qo.getChannelName())) {
             sqlBuffer.append(" and t.CHANNEL_NAME like ?");
             paramsList.add( "%"+qo.getChannelName().trim()+"%");
@@ -127,6 +132,13 @@ public class AccountChannelRepositoryImpl extends BasePageRepository {
         if (!StringUtils.isEmpty(qo.getCarrier())) {
             sqlBuffer.append(" and t.CARRIER like ?");
             paramsList.add( "%"+qo.getCarrier().trim()+"%");
+
+            //国际：用国家代码查询
+            if("INTERNATIONAL".equals(qo.getCarrier()) && !StringUtils.isEmpty(qo.getCountryCode())){
+                sqlBuffer.append(" and t.SUPPORT_AREA_CODES like ?");
+                paramsList.add( "%"+qo.getCountryCode().trim()+"%");
+            }
+
         }else{
             sqlBuffer.append(" and t.CARRIER = 'flag'");
         }
@@ -177,7 +189,11 @@ public class AccountChannelRepositoryImpl extends BasePageRepository {
         List<Object> paramsList = new ArrayList<Object>();
 
         paramsList.add( qo.getAccountId());
-        paramsList.add( qo.getCarrier());
+        if("INTERNATIONAL".equals(qo.getCarrier()) && !StringUtils.isEmpty(qo.getCountryCode())){
+            paramsList.add( qo.getCountryCode());
+        }else{
+            paramsList.add( qo.getCarrier());
+        }
         if (!StringUtils.isEmpty(qo.getChannelGroupName())) {
             sqlBuffer.append(" and t.CHANNEL_GROUP_NAME like ?");
             paramsList.add( "%"+qo.getChannelGroupName().trim()+"%");
