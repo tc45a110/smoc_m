@@ -43,21 +43,25 @@
             <div class="col-sm-12">
                 <div class="card-box">
                     <div class="row m-b-60">
-                        <form  id="query_form" th:action="@{/message/detail/page}" method="post">
+                        <form  id="query_form" th:action="@{/message/detail/page}" th:object="${messageDetailInfoValidator}" method="post">
                             <div class="col-sm-12">
                                 <div class="form-group  col-sm-3">
-                                    <input id="reportrange" class="form-control" type="text" />
+                                    <input id="reportrange" class="form-control" type="text"  th:field="*{startDate}" />
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <input type="text" class="form-control" placeholder="EC业务账号" autocomplete="off">
+                                    <input type="text" class="form-control" placeholder="业务账号"  th:field="*{businessAccount}" autocomplete="off">
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <input type="text" class="form-control" placeholder="手机号" autocomplete="off">
+                                    <input type="text" class="form-control" placeholder="手机号" th:field="*{phoneNumber}" autocomplete="off">
                                 </div>
                                 <div class="form-group pull-right" style="text-align: right">
                                     <button sec:authorize-url="/message/detail/page" class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search"></i> 查询
                                     </button>
+                                    <input type="hidden" name="currentPage" id="currentPage"
+                                           th:value="${pageParams.currentPage}">
+                                    <input type="hidden" name="pageSize" id="pageSize"
+                                           th:value="${pageParams.pageSize}">
                                 </div>
                             </div>
                         </form>
@@ -76,7 +80,7 @@
                         <h3 class="panel-title">发送日志明细列表</h3>
                     </div>
                     <div class="panel-body">
-                        <div class="row">
+                        <div class="row" th:each="info:${list}">
                             <div class="col-md-12">
                                 <div class="property-card property-horizontal" style="margin-bottom:10px;">
                                     <div class="row">
@@ -86,39 +90,39 @@
                                                 <div class="listingInfo">
                                                     <div class="">
                                                         <h5 style="padding-left:10px">
-                                                            手机号：13910660688
+                                                            手机号：[[${info.phoneNumber}]]
                                                         </h5>
                                                     </div>
                                                     <div class="col-sm-3">
-                                                        <p style="font-size:12px">EC业务账号：XY201023232</p>
-                                                        <p style="font-size:12px">提交时间：2021-11-18 14:25:09</p>
-                                                        <p style="font-size:12px">下发时间：2021-11-18 14:25:12</p>
-                                                        <p style="font-size:12px">下发延迟时间：3秒</p>
+                                                        <p style="font-size:12px">业务账号：[[${info.businessAccount}]]</p>
+                                                        <p style="font-size:12px">提交时间：[[${info.submitTime}]]</p>
+                                                        <p style="font-size:12px">下发时间：[[${info.sendTime}]]</p>
+                                                        <p style="font-size:12px">下发延迟时间：[[${info.delayTimes}]]秒</p>
                                                     </div>
                                                     <div class="col-sm-3">
-                                                        <p style="font-size:12px">客户发送号码：000353</p>
-                                                        <p style="font-size:12px">运营商：联通</p>
-                                                        <p style="font-size:12px">通道ID：XYCID0023</p>
-                                                        <p style="font-size:12px">总延迟时间：4秒</p>
+                                                        <p style="font-size:12px">客户发送号码：[[${info.sendNumber}]]</p>
+                                                        <p style="font-size:12px">运营商：[[${info.carrier}]]</p>
+                                                        <p style="font-size:12px">通道ID：[[${info.channelId}]]</p>
+                                                        <p style="font-size:12px">总延迟时间：[[${info.totalDelayTimes}]]秒</p>
                                                     </div>
                                                     <div class="col-sm-3">
-                                                        <p style="font-size:12px">客户提交方式：CMPP</p>
-                                                        <p style="font-size:12px">省份：海南省</p>
-                                                        <p style="font-size:12px">状态报告回执时间：2021-11-18 14:25:12</p>
-                                                        <p style="font-size:12px">报告状态：<a class="btn btn-info btn-rounded btn-xs waves-effect waves-light">成功</a></p>
+                                                        <p style="font-size:12px">客户提交方式：[[${info.submitStyle}]]</p>
+                                                        <p style="font-size:12px">地域：[[${info.area}]]</p>
+                                                        <p style="font-size:12px">状态报告回执时间：[[${info.reportTime}]]</p>
+                                                        <p style="font-size:12px">报告状态：[[${info.reportStatus}]]</p>
                                                     </div>
                                                     <div class="col-sm-3">
-                                                        <p style="font-size:12px">签名：【满扑满】</p>
+                                                        <p style="font-size:12px">签名：[[${info.sign}]]</p>
                                                         <p style="font-size:12px">
-                                                           客户提交状态：成功
+                                                           客户提交状态：[[${info.customerSubmitStatus}]]
                                                         </p>
-                                                        <p style="font-size:12px">客户状态回执时间：2021-11-18 14:25:12</p>
-                                                        <p style="font-size:12px">客户状态回执：DILIVRD</p>
+                                                        <p style="font-size:12px">客户状态回执时间：[[${info.customerReportTime}]]</p>
+                                                        <p style="font-size:12px">客户状态回执：[[${info.customerStatus}]]</p>
                                                     </div>
                                                 </div>
                                                 <div class="property-action">
                                                     <span style="padding-left:10px;font-size:12px">
-                                                        短信内容：【招商银行】您有20元消费金已到账，点击 cmbt.cn/N9p 查看。消费金只需微信支付交易满20元即可抵扣。已使用请忽略，退订回#C
+                                                        短信内容：[[${info.messageContent}]]
                                                     </span>
                                                 </div>
                                                 <!-- end. Card actions -->
@@ -130,547 +134,6 @@
 
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="property-card property-horizontal" style="margin-bottom:10px;">
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <div class="property-content"
-                                                 style="height:240px">
-                                                <div class="listingInfo">
-                                                    <div class="">
-                                                        <h5 style="padding-left:10px">
-                                                            手机号：13910660688
-                                                        </h5>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">EC业务账号：XY201023232</p>
-                                                        <p style="font-size:12px">提交时间：2021-11-18 14:25:09</p>
-                                                        <p style="font-size:12px">下发时间：2021-11-18 14:25:12</p>
-                                                        <p style="font-size:12px">下发延迟时间：3秒</p>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">客户发送号码：000353</p>
-                                                        <p style="font-size:12px">运营商：联通</p>
-                                                        <p style="font-size:12px">通道ID：XYCID0023</p>
-                                                        <p style="font-size:12px">总延迟时间：4秒</p>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">客户提交方式：CMPP</p>
-                                                        <p style="font-size:12px">省份：海南省</p>
-                                                        <p style="font-size:12px">状态报告回执时间：2021-11-18 14:25:12</p>
-                                                        <p style="font-size:12px">报告状态：<a class="btn btn-info btn-rounded btn-xs waves-effect waves-light">成功</a></p>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">签名：【满扑满】</p>
-                                                        <p style="font-size:12px">
-                                                            客户提交状态：成功
-                                                        </p>
-                                                        <p style="font-size:12px">客户状态回执时间：2021-11-18 14:25:12</p>
-                                                        <p style="font-size:12px">客户状态回执：DILIVRD</p>
-                                                    </div>
-                                                </div>
-                                                <div class="property-action">
-                                                    <span style="padding-left:10px;font-size:12px">
-                                                        短信内容：【招商银行】您有20元消费金已到账，点击 cmbt.cn/N9p 查看。消费金只需微信支付交易满20元即可抵扣。已使用请忽略，退订回#C
-                                                    </span>
-                                                </div>
-                                                <!-- end. Card actions -->
-                                            </div>
-                                        </div>
-                                        <!-- /col 8 -->
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="property-card property-horizontal" style="margin-bottom:10px;">
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <div class="property-content"
-                                                 style="height:240px">
-                                                <div class="listingInfo">
-                                                    <div class="">
-                                                        <h5 style="padding-left:10px">
-                                                            手机号：13910660688
-                                                        </h5>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">EC业务账号：XY201023232</p>
-                                                        <p style="font-size:12px">提交时间：2021-11-18 14:25:09</p>
-                                                        <p style="font-size:12px">下发时间：2021-11-18 14:25:12</p>
-                                                        <p style="font-size:12px">下发延迟时间：3秒</p>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">客户发送号码：000353</p>
-                                                        <p style="font-size:12px">运营商：联通</p>
-                                                        <p style="font-size:12px">通道ID：XYCID0023</p>
-                                                        <p style="font-size:12px">总延迟时间：4秒</p>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">客户提交方式：CMPP</p>
-                                                        <p style="font-size:12px">省份：海南省</p>
-                                                        <p style="font-size:12px">状态报告回执时间：2021-11-18 14:25:12</p>
-                                                        <p style="font-size:12px">报告状态：<a class="btn btn-info btn-rounded btn-xs waves-effect waves-light">成功</a></p>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">签名：【满扑满】</p>
-                                                        <p style="font-size:12px">
-                                                            客户提交状态：成功
-                                                        </p>
-                                                        <p style="font-size:12px">客户状态回执时间：2021-11-18 14:25:12</p>
-                                                        <p style="font-size:12px">客户状态回执：DILIVRD</p>
-                                                    </div>
-                                                </div>
-                                                <div class="property-action">
-                                                    <span style="padding-left:10px;font-size:12px">
-                                                        短信内容：【招商银行】您有20元消费金已到账，点击 cmbt.cn/N9p 查看。消费金只需微信支付交易满20元即可抵扣。已使用请忽略，退订回#C
-                                                    </span>
-                                                </div>
-                                                <!-- end. Card actions -->
-                                            </div>
-                                        </div>
-                                        <!-- /col 8 -->
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="property-card property-horizontal" style="margin-bottom:10px;">
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <div class="property-content"
-                                                 style="height:240px">
-                                                <div class="listingInfo">
-                                                    <div class="">
-                                                        <h5 style="padding-left:10px">
-                                                            手机号：13910660688
-                                                        </h5>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">EC业务账号：XY201023232</p>
-                                                        <p style="font-size:12px">提交时间：2021-11-18 14:25:09</p>
-                                                        <p style="font-size:12px">下发时间：2021-11-18 14:25:12</p>
-                                                        <p style="font-size:12px">下发延迟时间：3秒</p>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">客户发送号码：000353</p>
-                                                        <p style="font-size:12px">运营商：联通</p>
-                                                        <p style="font-size:12px">通道ID：XYCID0023</p>
-                                                        <p style="font-size:12px">总延迟时间：4秒</p>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">客户提交方式：CMPP</p>
-                                                        <p style="font-size:12px">省份：海南省</p>
-                                                        <p style="font-size:12px">状态报告回执时间：2021-11-18 14:25:12</p>
-                                                        <p style="font-size:12px">报告状态：<a class="btn btn-info btn-rounded btn-xs waves-effect waves-light">成功</a></p>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">签名：【满扑满】</p>
-                                                        <p style="font-size:12px">
-                                                            客户提交状态：成功
-                                                        </p>
-                                                        <p style="font-size:12px">客户状态回执时间：2021-11-18 14:25:12</p>
-                                                        <p style="font-size:12px">客户状态回执：DILIVRD</p>
-                                                    </div>
-                                                </div>
-                                                <div class="property-action">
-                                                    <span style="padding-left:10px;font-size:12px">
-                                                        短信内容：【招商银行】您有20元消费金已到账，点击 cmbt.cn/N9p 查看。消费金只需微信支付交易满20元即可抵扣。已使用请忽略，退订回#C
-                                                    </span>
-                                                </div>
-                                                <!-- end. Card actions -->
-                                            </div>
-                                        </div>
-                                        <!-- /col 8 -->
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="property-card property-horizontal" style="margin-bottom:10px;">
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <div class="property-content"
-                                                 style="height:240px">
-                                                <div class="listingInfo">
-                                                    <div class="">
-                                                        <h5 style="padding-left:10px">
-                                                            手机号：13910660688
-                                                        </h5>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">EC业务账号：XY201023232</p>
-                                                        <p style="font-size:12px">提交时间：2021-11-18 14:25:09</p>
-                                                        <p style="font-size:12px">下发时间：2021-11-18 14:25:12</p>
-                                                        <p style="font-size:12px">下发延迟时间：3秒</p>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">客户发送号码：000353</p>
-                                                        <p style="font-size:12px">运营商：联通</p>
-                                                        <p style="font-size:12px">通道ID：XYCID0023</p>
-                                                        <p style="font-size:12px">总延迟时间：4秒</p>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">客户提交方式：CMPP</p>
-                                                        <p style="font-size:12px">省份：海南省</p>
-                                                        <p style="font-size:12px">状态报告回执时间：2021-11-18 14:25:12</p>
-                                                        <p style="font-size:12px">报告状态：<a class="btn btn-info btn-rounded btn-xs waves-effect waves-light">成功</a></p>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">签名：【满扑满】</p>
-                                                        <p style="font-size:12px">
-                                                            客户提交状态：成功
-                                                        </p>
-                                                        <p style="font-size:12px">客户状态回执时间：2021-11-18 14:25:12</p>
-                                                        <p style="font-size:12px">客户状态回执：DILIVRD</p>
-                                                    </div>
-                                                </div>
-                                                <div class="property-action">
-                                                    <span style="padding-left:10px;font-size:12px">
-                                                        短信内容：【招商银行】您有20元消费金已到账，点击 cmbt.cn/N9p 查看。消费金只需微信支付交易满20元即可抵扣。已使用请忽略，退订回#C
-                                                    </span>
-                                                </div>
-                                                <!-- end. Card actions -->
-                                            </div>
-                                        </div>
-                                        <!-- /col 8 -->
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="property-card property-horizontal" style="margin-bottom:10px;">
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <div class="property-content"
-                                                 style="height:240px">
-                                                <div class="listingInfo">
-                                                    <div class="">
-                                                        <h5 style="padding-left:10px">
-                                                            手机号：13910660688
-                                                        </h5>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">EC业务账号：XY201023232</p>
-                                                        <p style="font-size:12px">提交时间：2021-11-18 14:25:09</p>
-                                                        <p style="font-size:12px">下发时间：2021-11-18 14:25:12</p>
-                                                        <p style="font-size:12px">下发延迟时间：3秒</p>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">客户发送号码：000353</p>
-                                                        <p style="font-size:12px">运营商：联通</p>
-                                                        <p style="font-size:12px">通道ID：XYCID0023</p>
-                                                        <p style="font-size:12px">总延迟时间：4秒</p>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">客户提交方式：CMPP</p>
-                                                        <p style="font-size:12px">省份：海南省</p>
-                                                        <p style="font-size:12px">状态报告回执时间：2021-11-18 14:25:12</p>
-                                                        <p style="font-size:12px">报告状态：<a class="btn btn-info btn-rounded btn-xs waves-effect waves-light">成功</a></p>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">签名：【满扑满】</p>
-                                                        <p style="font-size:12px">
-                                                            客户提交状态：成功
-                                                        </p>
-                                                        <p style="font-size:12px">客户状态回执时间：2021-11-18 14:25:12</p>
-                                                        <p style="font-size:12px">客户状态回执：DILIVRD</p>
-                                                    </div>
-                                                </div>
-                                                <div class="property-action">
-                                                    <span style="padding-left:10px;font-size:12px">
-                                                        短信内容：【招商银行】您有20元消费金已到账，点击 cmbt.cn/N9p 查看。消费金只需微信支付交易满20元即可抵扣。已使用请忽略，退订回#C
-                                                    </span>
-                                                </div>
-                                                <!-- end. Card actions -->
-                                            </div>
-                                        </div>
-                                        <!-- /col 8 -->
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="property-card property-horizontal" style="margin-bottom:10px;">
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <div class="property-content"
-                                                 style="height:240px">
-                                                <div class="listingInfo">
-                                                    <div class="">
-                                                        <h5 style="padding-left:10px">
-                                                            手机号：13910660688
-                                                        </h5>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">EC业务账号：XY201023232</p>
-                                                        <p style="font-size:12px">提交时间：2021-11-18 14:25:09</p>
-                                                        <p style="font-size:12px">下发时间：2021-11-18 14:25:12</p>
-                                                        <p style="font-size:12px">下发延迟时间：3秒</p>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">客户发送号码：000353</p>
-                                                        <p style="font-size:12px">运营商：联通</p>
-                                                        <p style="font-size:12px">通道ID：XYCID0023</p>
-                                                        <p style="font-size:12px">总延迟时间：4秒</p>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">客户提交方式：CMPP</p>
-                                                        <p style="font-size:12px">省份：海南省</p>
-                                                        <p style="font-size:12px">状态报告回执时间：2021-11-18 14:25:12</p>
-                                                        <p style="font-size:12px">报告状态：<a class="btn btn-info btn-rounded btn-xs waves-effect waves-light">成功</a></p>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">签名：【满扑满】</p>
-                                                        <p style="font-size:12px">
-                                                            客户提交状态：成功
-                                                        </p>
-                                                        <p style="font-size:12px">客户状态回执时间：2021-11-18 14:25:12</p>
-                                                        <p style="font-size:12px">客户状态回执：DILIVRD</p>
-                                                    </div>
-                                                </div>
-                                                <div class="property-action">
-                                                    <span style="padding-left:10px;font-size:12px">
-                                                        短信内容：【招商银行】您有20元消费金已到账，点击 cmbt.cn/N9p 查看。消费金只需微信支付交易满20元即可抵扣。已使用请忽略，退订回#C
-                                                    </span>
-                                                </div>
-                                                <!-- end. Card actions -->
-                                            </div>
-                                        </div>
-                                        <!-- /col 8 -->
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="property-card property-horizontal" style="margin-bottom:10px;">
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <div class="property-content"
-                                                 style="height:240px">
-                                                <div class="listingInfo">
-                                                    <div class="">
-                                                        <h5 style="padding-left:10px">
-                                                            手机号：13910660688
-                                                        </h5>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">EC业务账号：XY201023232</p>
-                                                        <p style="font-size:12px">提交时间：2021-11-18 14:25:09</p>
-                                                        <p style="font-size:12px">下发时间：2021-11-18 14:25:12</p>
-                                                        <p style="font-size:12px">下发延迟时间：3秒</p>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">客户发送号码：000353</p>
-                                                        <p style="font-size:12px">运营商：联通</p>
-                                                        <p style="font-size:12px">通道ID：XYCID0023</p>
-                                                        <p style="font-size:12px">总延迟时间：4秒</p>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">客户提交方式：CMPP</p>
-                                                        <p style="font-size:12px">省份：海南省</p>
-                                                        <p style="font-size:12px">状态报告回执时间：2021-11-18 14:25:12</p>
-                                                        <p style="font-size:12px">报告状态：<a class="btn btn-info btn-rounded btn-xs waves-effect waves-light">成功</a></p>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">签名：【满扑满】</p>
-                                                        <p style="font-size:12px">
-                                                            客户提交状态：成功
-                                                        </p>
-                                                        <p style="font-size:12px">客户状态回执时间：2021-11-18 14:25:12</p>
-                                                        <p style="font-size:12px">客户状态回执：DILIVRD</p>
-                                                    </div>
-                                                </div>
-                                                <div class="property-action">
-                                                    <span style="padding-left:10px;font-size:12px">
-                                                        短信内容：【招商银行】您有20元消费金已到账，点击 cmbt.cn/N9p 查看。消费金只需微信支付交易满20元即可抵扣。已使用请忽略，退订回#C
-                                                    </span>
-                                                </div>
-                                                <!-- end. Card actions -->
-                                            </div>
-                                        </div>
-                                        <!-- /col 8 -->
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="property-card property-horizontal" style="margin-bottom:10px;">
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <div class="property-content"
-                                                 style="height:240px">
-                                                <div class="listingInfo">
-                                                    <div class="">
-                                                        <h5 style="padding-left:10px">
-                                                            手机号：13910660688
-                                                        </h5>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">EC业务账号：XY201023232</p>
-                                                        <p style="font-size:12px">提交时间：2021-11-18 14:25:09</p>
-                                                        <p style="font-size:12px">下发时间：2021-11-18 14:25:12</p>
-                                                        <p style="font-size:12px">下发延迟时间：3秒</p>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">客户发送号码：000353</p>
-                                                        <p style="font-size:12px">运营商：联通</p>
-                                                        <p style="font-size:12px">通道ID：XYCID0023</p>
-                                                        <p style="font-size:12px">总延迟时间：4秒</p>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">客户提交方式：CMPP</p>
-                                                        <p style="font-size:12px">省份：海南省</p>
-                                                        <p style="font-size:12px">状态报告回执时间：2021-11-18 14:25:12</p>
-                                                        <p style="font-size:12px">报告状态：<a class="btn btn-info btn-rounded btn-xs waves-effect waves-light">成功</a></p>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">签名：【满扑满】</p>
-                                                        <p style="font-size:12px">
-                                                            客户提交状态：成功
-                                                        </p>
-                                                        <p style="font-size:12px">客户状态回执时间：2021-11-18 14:25:12</p>
-                                                        <p style="font-size:12px">客户状态回执：DILIVRD</p>
-                                                    </div>
-                                                </div>
-                                                <div class="property-action">
-                                                    <span style="padding-left:10px;font-size:12px">
-                                                        短信内容：【招商银行】您有20元消费金已到账，点击 cmbt.cn/N9p 查看。消费金只需微信支付交易满20元即可抵扣。已使用请忽略，退订回#C
-                                                    </span>
-                                                </div>
-                                                <!-- end. Card actions -->
-                                            </div>
-                                        </div>
-                                        <!-- /col 8 -->
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="property-card property-horizontal" style="margin-bottom:10px;">
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <div class="property-content"
-                                                 style="height:240px">
-                                                <div class="listingInfo">
-                                                    <div class="">
-                                                        <h5 style="padding-left:10px">
-                                                            手机号：13910660688
-                                                        </h5>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">EC业务账号：XY201023232</p>
-                                                        <p style="font-size:12px">提交时间：2021-11-18 14:25:09</p>
-                                                        <p style="font-size:12px">下发时间：2021-11-18 14:25:12</p>
-                                                        <p style="font-size:12px">下发延迟时间：3秒</p>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">客户发送号码：000353</p>
-                                                        <p style="font-size:12px">运营商：联通</p>
-                                                        <p style="font-size:12px">通道ID：XYCID0023</p>
-                                                        <p style="font-size:12px">总延迟时间：4秒</p>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">客户提交方式：CMPP</p>
-                                                        <p style="font-size:12px">省份：海南省</p>
-                                                        <p style="font-size:12px">状态报告回执时间：2021-11-18 14:25:12</p>
-                                                        <p style="font-size:12px">报告状态：<a class="btn btn-info btn-rounded btn-xs waves-effect waves-light">成功</a></p>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">签名：【满扑满】</p>
-                                                        <p style="font-size:12px">
-                                                            客户提交状态：成功
-                                                        </p>
-                                                        <p style="font-size:12px">客户状态回执时间：2021-11-18 14:25:12</p>
-                                                        <p style="font-size:12px">客户状态回执：DILIVRD</p>
-                                                    </div>
-                                                </div>
-                                                <div class="property-action">
-                                                    <span style="padding-left:10px;font-size:12px">
-                                                        短信内容：【招商银行】您有20元消费金已到账，点击 cmbt.cn/N9p 查看。消费金只需微信支付交易满20元即可抵扣。已使用请忽略，退订回#C
-                                                    </span>
-                                                </div>
-                                                <!-- end. Card actions -->
-                                            </div>
-                                        </div>
-                                        <!-- /col 8 -->
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="property-card property-horizontal" style="margin-bottom:10px;">
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <div class="property-content"
-                                                 style="height:240px">
-                                                <div class="listingInfo">
-                                                    <div class="">
-                                                        <h5 style="padding-left:10px">
-                                                            手机号：13910660688
-                                                        </h5>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">EC业务账号：XY201023232</p>
-                                                        <p style="font-size:12px">提交时间：2021-11-18 14:25:09</p>
-                                                        <p style="font-size:12px">下发时间：2021-11-18 14:25:12</p>
-                                                        <p style="font-size:12px">下发延迟时间：3秒</p>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">客户发送号码：000353</p>
-                                                        <p style="font-size:12px">运营商：联通</p>
-                                                        <p style="font-size:12px">通道ID：XYCID0023</p>
-                                                        <p style="font-size:12px">总延迟时间：4秒</p>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">客户提交方式：CMPP</p>
-                                                        <p style="font-size:12px">省份：海南省</p>
-                                                        <p style="font-size:12px">状态报告回执时间：2021-11-18 14:25:12</p>
-                                                        <p style="font-size:12px">报告状态：<a class="btn btn-info btn-rounded btn-xs waves-effect waves-light">成功</a></p>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">签名：【满扑满】</p>
-                                                        <p style="font-size:12px">
-                                                            客户提交状态：成功
-                                                        </p>
-                                                        <p style="font-size:12px">客户状态回执时间：2021-11-18 14:25:12</p>
-                                                        <p style="font-size:12px">客户状态回执：DILIVRD</p>
-                                                    </div>
-                                                </div>
-                                                <div class="property-action">
-                                                    <span style="padding-left:10px;font-size:12px">
-                                                        短信内容：【招商银行】您有20元消费金已到账，点击 cmbt.cn/N9p 查看。消费金只需微信支付交易满20元即可抵扣。已使用请忽略，退订回#C
-                                                    </span>
-                                                </div>
-                                                <!-- end. Card actions -->
-                                            </div>
-                                        </div>
-                                        <!-- /col 8 -->
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-
                         <th:block th:insert="fragments/page_fragments :: page"/>
                     </div>
                 </div>
@@ -695,8 +158,8 @@
 
     $('#reportrange').daterangepicker({
         format: 'YYYY-MM-DD',
-        startDate: '2020-11-03',
-        endDate: '2021-11-03',
+        startDate: '[[${messageDetailInfoValidator.startDate}]]',
+        endDate: '[[${messageDetailInfoValidator.endDate}]]',
         minDate: '2012-01-01',
         maxDate: '2080-12-31',
         dateLimit: {

@@ -37,6 +37,9 @@ public class MessageDetailInfo {
     @Column(name = "CUSTOMER_SUBMIT_STATUS", length = 32)
     private String customerSubmitStatus;
 
+    @Column(name = "SUBMIT_TIME", length = 32)
+    private String submitTime;
+
     @Column(name = "SEND_TIME", length = 32)
     private String sendTime;
 
@@ -239,5 +242,13 @@ public class MessageDetailInfo {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getSubmitTime() {
+        return submitTime;
+    }
+
+    public void setSubmitTime(String submitTime) {
+        this.submitTime = submitTime;
     }
 }

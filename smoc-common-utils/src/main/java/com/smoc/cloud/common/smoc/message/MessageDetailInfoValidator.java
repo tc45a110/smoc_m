@@ -25,6 +25,8 @@ public class MessageDetailInfoValidator {
 
     private String customerSubmitStatus;
 
+    private String submitTime;
+
     private String sendTime;
 
     private String channelId;
@@ -48,4 +50,7 @@ public class MessageDetailInfoValidator {
     private String createdTime;
 
     private String updatedTime;
+
+    private String startDate;
+    private String endDate;
 }

@@ -43,4 +43,9 @@ public class MessageDailyStatisticValidator {
     private String updatedBy;
 
     private String updatedTime;
+
+
+    private String enterpriseName;
+    private String startDate;
+    private String endDate;
 }

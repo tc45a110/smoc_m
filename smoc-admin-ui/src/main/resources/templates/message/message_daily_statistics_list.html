@@ -45,25 +45,27 @@
             <div class="col-sm-12">
                 <div class="card-box">
                     <div class="row m-b-60">
-                        <form id="query_form" th:action="@{/message/daily/statistics/page}" method="post">
+                        <form id="query_form" th:action="@{/message/daily/statistics/page}"
+                              th:object="${messageDailyStatisticValidator}" method="post">
                             <div class="col-sm-12">
                                 <div class="form-group  col-sm-3">
-                                    <input id="reportrange" class="form-control" type="text"/>
+                                    <input id="reportrange" class="form-control" type="text" th:field="*{startDate}"/>
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <input type="text" class="form-control" placeholder="企业名称" autocomplete="off">
+                                    <input type="text" class="form-control" placeholder="企业名称"
+                                           th:field="*{enterpriseName}" autocomplete="off">
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <input type="text" class="form-control" placeholder="业务账号" autocomplete="off">
+                                    <input type="text" class="form-control" placeholder="业务账号"
+                                           th:field="*{businessAccount}" autocomplete="off">
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <input type="text" class="form-control" placeholder="码号" autocomplete="off">
+                                    <input type="text" class="form-control" placeholder="通道ID" th:field="*{channelId}"
+                                           autocomplete="off">
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <input type="text" class="form-control" placeholder="通道ID" autocomplete="off">
-                                </div>
-                                <div class="form-group  col-sm-3">
-                                    <mpm:tag id="businessType" identity="businessType" show-type="select" key="code"
+                                    <mpm:tag id="businessType" identity="businessType" show-type="select" key="code" name="businessType"
+                                             th:value="${messageDailyStatisticValidator.businessType}"
                                              class="form-control" data-icon="mdi mdi-view-module" title="业务类型"/>
                                 </div>
 
@@ -72,6 +74,10 @@
                                             class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search"></i> 查询
                                     </button>
+                                    <input type="hidden" name="currentPage" id="currentPage"
+                                           th:value="${pageParams.currentPage}">
+                                    <input type="hidden" name="pageSize" id="pageSize"
+                                           th:value="${pageParams.pageSize}">
                                     <a id="help_display" style="margin-left:10px"><i class="mdi mdi-help-circle-outline"
                                                                                      style="font-size:18px;"></i></a>
                                 </div>
@@ -85,7 +91,7 @@
         <!-- end row -->
 
         <!-- start row  汇总统计-->
-        <div  id="help"  class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+        <div id="help" class="row" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
                 <div class="detail">
                     <ul>
@@ -93,18 +99,22 @@
                             <h2 style="color: #fff">日汇总汇总统计</h2>
                             <span></span>
                             <div class="detailInner">
-                                <a>总提交失败数：<span style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
-                                               data-d-group="4" data-a-sign=" " data-v-min="0"
-                                               data-v-max="999999999"
-                                               class="autonumber">2045922</span></a><i></i>
+                                <a>总成功提交数：<span style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
+                                                data-d-group="4" data-a-sign=" " data-v-min="0"
+                                                data-v-max="999999999"
+                                                class="autonumber">[[${countMap.get('SUCCESS_SUBMIT_NUM')}]]</span></a><i></i>
                                 <a>总成功发送数：<span style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
-                                               data-d-group="4" data-a-sign=" " data-v-min="0"
-                                               data-v-max="999999999"
-                                               class="autonumber">2045922</span></a><i></i>
+                                                data-d-group="4" data-a-sign=" " data-v-min="0"
+                                                data-v-max="999999999"
+                                                class="autonumber">[[${countMap.get('MESSAGE_SUCCESS_NUM')}]]</span></a><i></i>
                                 <a>总发送失败数：<span style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
-                                               data-d-group="4" data-a-sign=" " data-v-min="0"
-                                               data-v-max="999999999"
-                                               class="autonumber">20459</span></a>
+                                                data-d-group="4" data-a-sign=" " data-v-min="0"
+                                                data-v-max="999999999"
+                                                class="autonumber">[[${countMap.get('MESSAGE_FAILURE_NUM')}]]</span></a><i></i>
+                                <a>总未知数：<span style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
+                                                data-d-group="4" data-a-sign=" " data-v-min="0"
+                                                data-v-max="999999999"
+                                                class="autonumber">[[${countMap.get('MESSAGE_NO_REPORT_NUM')}]]</span></a>
                             </div>
                         </li>
                     </ul>
@@ -127,7 +137,7 @@
                                 <tr>
                                     <th>汇总日期</th>
                                     <th>业务账号/企业名称</th>
-                                    <th>码号/通道ID</th>
+                                    <th>通道ID</th>
                                     <th>客户提交数/提交失败数</th>
                                     <th>成功发送数/成功提交数</th>
                                     <th>发送失败数/未知数</th>
@@ -138,50 +148,50 @@
                                 </tr>
                                 <thead>
                                 <tbody>
-                                <tr>
+                                <tr th:each="info:${list}">
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        2021-11-17
+                                        [[${info.messageDate}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        XYBA100000280
+                                        [[${info.businessAccount}]]
                                         <br>
-                                        北京星语互联科技有限公司
+                                        [[${info.enterpriseName}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        18610007<br>CH100000280
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                              class="autonumber">633443300</span>
-                                        <br>
-                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                              class="autonumber">64000</span>
+                                        [[${info.channelId}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                              class="autonumber">1000000</span>
+                                              class="autonumber">[[${info.customerSubmitNum}]]</span>
                                         <br>
                                         <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                              class="autonumber">20000000</span>
+                                              class="autonumber">[[${info.failureSubmitNum}]]</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                              class="autonumber">1000</span>
+                                              class="autonumber">[[${info.messageSuccessNum}]]</span>
                                         <br>
                                         <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                              class="autonumber">200</span>
+                                              class="autonumber">[[${info.messageFailureNum}]]</span>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
+                                              class="autonumber">[[${info.messageFailureNum}]]</span>
+                                        <br>
+                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
+                                              class="autonumber">[[${info.messageNoReportNum}]]</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         <a class="btn btn-purple btn-rounded  waves-effect waves-light btn-ms">国际短信</a>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        新加坡电信
+                                        [[${info.carrier}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                       新加坡
+                                        [[${info.areaCode}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        新加坡
+                                        [[${info.priceAreaCode}]]
                                     </td>
                                 </tr>
                                 </tbody>
@@ -215,8 +225,8 @@
 
     $('#reportrange').daterangepicker({
         format: 'YYYY-MM-DD',
-        startDate: '2020-11-03',
-        endDate: '2021-11-03',
+        startDate: '[[${messageDailyStatisticValidator.startDate}]]',
+        endDate: '[[${messageDailyStatisticValidator.endDate}]]',
         minDate: '2012-01-01',
         maxDate: '2080-12-31',
         dateLimit: {
@@ -282,6 +292,7 @@
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
+
 
 
 </script>
