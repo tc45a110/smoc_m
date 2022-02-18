@@ -1,12 +1,23 @@
 package com.smoc.cloud.message.controller;
 
+import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
+import com.smoc.cloud.common.response.ResponseCode;
+import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.template.MessageWebTaskInfoValidator;
+import com.smoc.cloud.common.utils.DateTimeUtils;
+import com.smoc.cloud.message.service.MessageWebTaskInfoService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
+
 
 /**
  * web短消息任务单
@@ -14,6 +25,9 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 @RequestMapping("/message/order/web")
 public class MessageWebOrderController {
+
+    @Autowired
+    private MessageWebTaskInfoService messageWebTaskInfoService;
 
     /**
      * web短消息任务单查询
@@ -25,17 +39,27 @@ public class MessageWebOrderController {
 
         ModelAndView view = new ModelAndView("message/message_order_web_list");
 
-        //查询数据
-        PageParams params = new PageParams<>();
-        params.setPages(10);
-        params.setPageSize(8);
-        params.setStartRow(1);
-        params.setEndRow(10);
+        //初始化数据
+        PageParams<MessageWebTaskInfoValidator> params = new PageParams<MessageWebTaskInfoValidator>();
+        params.setPageSize(10);
         params.setCurrentPage(1);
-        params.setTotalRows(80);
+        MessageWebTaskInfoValidator messageWebTaskInfoValidator = new MessageWebTaskInfoValidator();
 
-        view.addObject("pageParams",params);
+        Date startDate = DateTimeUtils.getFirstMonth(12);
+        messageWebTaskInfoValidator.setStartDate(DateTimeUtils.getDateFormat(startDate));
+        messageWebTaskInfoValidator.setEndDate(DateTimeUtils.getDateFormat(new Date()));
+        params.setParams(messageWebTaskInfoValidator);
 
+        //查询
+        ResponseData<PageList<MessageWebTaskInfoValidator>> data = messageWebTaskInfoService.page(params);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("messageWebTaskInfoValidator", messageWebTaskInfoValidator);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
         return view;
 
     }
@@ -46,19 +70,31 @@ public class MessageWebOrderController {
      * @return
      */
     @RequestMapping(value = "/page", method = RequestMethod.POST)
-    public ModelAndView page() {
+    public ModelAndView page(@ModelAttribute MessageWebTaskInfoValidator messageWebTaskInfoValidator, PageParams pageParams) {
         ModelAndView view = new ModelAndView("message/message_order_web_list");
 
-        //查询数据
-        PageParams params = new PageParams<>();
-        params.setPages(10);
-        params.setPageSize(8);
-        params.setStartRow(1);
-        params.setEndRow(10);
-        params.setCurrentPage(1);
-        params.setTotalRows(80);
 
-        view.addObject("pageParams",params);
+        //日期格式
+        if (!StringUtils.isEmpty(messageWebTaskInfoValidator.getStartDate())) {
+            String[] date = messageWebTaskInfoValidator.getStartDate().split(" - ");
+            messageWebTaskInfoValidator.setStartDate(StringUtils.trimWhitespace(date[0]));
+            messageWebTaskInfoValidator.setEndDate(StringUtils.trimWhitespace(date[1]));
+        }
+
+        //分页查询
+        pageParams.setParams(messageWebTaskInfoValidator);
+
+        //log.info("[messageDailyStatisticValidator]:{}",new Gson().toJson(messageDailyStatisticValidator));
+
+        ResponseData<PageList<MessageWebTaskInfoValidator>> data = messageWebTaskInfoService.page(pageParams);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("messageWebTaskInfoValidator", messageWebTaskInfoValidator);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
 
         return view;
 

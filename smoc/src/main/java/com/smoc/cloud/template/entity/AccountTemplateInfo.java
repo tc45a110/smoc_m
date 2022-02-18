@@ -1,7 +1,7 @@
-package com.smoc.cloud.message.entity;
+package com.smoc.cloud.template.entity;
 
 import javax.persistence.*;
-import java.time.Instant;
+import java.util.Date;
 
 @Entity
 @Table(name = "account_template_info")
@@ -21,7 +21,7 @@ public class AccountTemplateInfo {
     private String templateContent;
 
     @Column(name = "CHECK_DATE")
-    private Instant checkDate;
+    private Date checkDate;
 
     @Column(name = "CHECK_BY", length = 32)
     private String checkBy;
@@ -42,19 +42,19 @@ public class AccountTemplateInfo {
     private String createdBy;
 
     @Column(name = "CREATED_TIME", nullable = false)
-    private Instant createdTime;
+    private Date createdTime;
 
     @Column(name = "UPDATED_BY", length = 32)
     private String updatedBy;
 
     @Column(name = "UPDATED_TIME")
-    private Instant updatedTime;
+    private Date updatedTime;
 
-    public Instant getUpdatedTime() {
+    public Date getUpdatedTime() {
         return updatedTime;
     }
 
-    public void setUpdatedTime(Instant updatedTime) {
+    public void setUpdatedTime(Date updatedTime) {
         this.updatedTime = updatedTime;
     }
 
@@ -66,11 +66,11 @@ public class AccountTemplateInfo {
         this.updatedBy = updatedBy;
     }
 
-    public Instant getCreatedTime() {
+    public Date getCreatedTime() {
         return createdTime;
     }
 
-    public void setCreatedTime(Instant createdTime) {
+    public void setCreatedTime(Date createdTime) {
         this.createdTime = createdTime;
     }
 
@@ -122,11 +122,11 @@ public class AccountTemplateInfo {
         this.checkBy = checkBy;
     }
 
-    public Instant getCheckDate() {
+    public Date getCheckDate() {
         return checkDate;
     }
 
-    public void setCheckDate(Instant checkDate) {
+    public void setCheckDate(Date checkDate) {
         this.checkDate = checkDate;
     }
 

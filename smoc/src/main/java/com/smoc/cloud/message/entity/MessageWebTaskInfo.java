@@ -4,7 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.time.Instant;
+import java.util.Date;
 
 @Entity
 @Table(name = "message_web_task_info")
@@ -19,11 +19,11 @@ public class MessageWebTaskInfo {
     @Column(name = "TEMPLATE_ID", nullable = false, length = 32)
     private String templateId;
 
-    @Column(name = "BUSINESS", nullable = false, length = 32)
-    private String business;
+    @Column(name = "BUSINESS_ACCOUNT", nullable = false, length = 32)
+    private String businessAccount;
 
-    @Column(name = "TASK_TYPE", nullable = false, length = 32)
-    private String taskType;
+    @Column(name = "BUSINESS_TYPE", nullable = false, length = 32)
+    private String businessType;
 
     @Column(name = "SEND_TYPE", nullable = false, length = 32)
     private String sendType;
@@ -71,19 +71,19 @@ public class MessageWebTaskInfo {
     private String createdBy;
 
     @Column(name = "CREATED_TIME", nullable = false)
-    private Instant createdTime;
+    private Date createdTime;
 
     @Column(name = "UPDATED_BY", length = 32)
     private String updatedBy;
 
     @Column(name = "UPDATED_TIME")
-    private Instant updatedTime;
+    private Date updatedTime;
 
-    public Instant getUpdatedTime() {
+    public Date getUpdatedTime() {
         return updatedTime;
     }
 
-    public void setUpdatedTime(Instant updatedTime) {
+    public void setUpdatedTime(Date updatedTime) {
         this.updatedTime = updatedTime;
     }
 
@@ -95,11 +95,11 @@ public class MessageWebTaskInfo {
         this.updatedBy = updatedBy;
     }
 
-    public Instant getCreatedTime() {
+    public Date getCreatedTime() {
         return createdTime;
     }
 
-    public void setCreatedTime(Instant createdTime) {
+    public void setCreatedTime(Date createdTime) {
         this.createdTime = createdTime;
     }
 
@@ -223,20 +223,20 @@ public class MessageWebTaskInfo {
         this.sendType = sendType;
     }
 
-    public String getTaskType() {
-        return taskType;
+    public String getBusinessType() {
+        return businessType;
     }
 
-    public void setTaskType(String taskType) {
-        this.taskType = taskType;
+    public void setBusinessType(String businessType) {
+        this.businessType = businessType;
     }
 
-    public String getBusiness() {
-        return business;
+    public String getBusinessAccount() {
+        return businessAccount;
     }
 
-    public void setBusiness(String business) {
-        this.business = business;
+    public void setBusinessAccount(String businessAccount) {
+        this.businessAccount = businessAccount;
     }
 
     public String getTemplateId() {
