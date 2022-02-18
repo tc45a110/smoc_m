@@ -20,7 +20,7 @@
                         <div class="col-sm-12">
                             <div class="col-sm-12">
                                 <div class="form-group pull-right" style="text-align: right">
-                                    <a sec:authorize-url="/filter/group/add/*" th:href="@{/filter/group/add/id}" class="btn btn-success waves-effect waves-light m-l-10 btn-md">
+                                    <a sec:authorize-url="/filter/group/add/*" th:href="@{/filter/group/add/{parentId}(parentId=${svcType})}" class="btn btn-success waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-plus-sign"></i> 新建分类</a>
                                 </div>
                             </div>
@@ -44,169 +44,32 @@
                         <div class="table-responsive">
                             <table class="table table table-hover m-10" style="margin-top: -12px;">
                                 <thead>
-                                    <tr>
-                                        <th>名称</th>
-                                        <th>备注</th>
-                                        <th>创建人</th>
-                                        <th>创建时间</th>
-                                        <th>操作</th>
-                                    </tr>
+                                <tr>
+                                    <th>组名称</th>
+                                    <th>组编码</th>
+                                    <th>创建日期</th>
+                                    <th>操作</th>
+                                </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>征信名单</td>
-                                    <td></td>
-                                    <td>张先生</td>
-                                    <td>2021-11-23 18:47:54</td>
+                                <tr th:each="group:${list}">
+                                    <td>[[${group.groupName}]]</td>
+                                    <td>[[${group.groupCode}]]</td>
+                                    <td  th:text="${#dates.format(group.createdTime,'yyyy-MM-dd HH:mm:ss')}"></td>
                                     <td>
-                                        <a sec:authorize-url="/filter/group/edit/*"
-                                           th:href="@{/filter/group/edit/id}"
+                                        <a sec:authorize-url="/filter/group/edit/*" th:href="@{/filter/group/edit/{id}(id=${group.id})}"
                                            class="on-default edit-row"
                                            style="padding-left: 5px;color: #29b6f6;"
-                                           title="编辑"><i style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/filter/group/deleteById/*" data-toggle="modal"
+                                           title="编辑"><i style="font-size: 18px" class="mdi mdi-table-edit"></i>
+                                        </a>
+                                        <a sec:authorize-url="/filter/group/deleteById/*"
+                                           th:onclick="confirmDelete([[${group.id}]],this)" data-toggle="modal"
                                            data-target="#confirm-modal" class="on-default remove-row"
                                            style="padding-left: 5px;color: #f05050"
-                                           title="删除"><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
+                                           title="删除"><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i>
+                                        </a>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td>征信名单</td>
-                                    <td></td>
-                                    <td>张先生</td>
-                                    <td>2021-11-23 18:47:54</td>
-                                    <td>
-                                        <a sec:authorize-url="/filter/group/edit/*"
-                                           th:href="@{/filter/group/edit/id}"
-                                           class="on-default edit-row"
-                                           style="padding-left: 5px;color: #29b6f6;"
-                                           title="编辑"><i style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/filter/group/deleteById/*" data-toggle="modal"
-                                           data-target="#confirm-modal" class="on-default remove-row"
-                                           style="padding-left: 5px;color: #f05050"
-                                           title="删除"><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>征信名单</td>
-                                    <td></td>
-                                    <td>张先生</td>
-                                    <td>2021-11-23 18:47:54</td>
-                                    <td>
-                                        <a sec:authorize-url="/filter/group/edit/*"
-                                           th:href="@{/filter/group/edit/id}"
-                                           class="on-default edit-row"
-                                           style="padding-left: 5px;color: #29b6f6;"
-                                           title="编辑"><i style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/filter/group/deleteById/*" data-toggle="modal"
-                                           data-target="#confirm-modal" class="on-default remove-row"
-                                           style="padding-left: 5px;color: #f05050"
-                                           title="删除"><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>征信名单</td>
-                                    <td></td>
-                                    <td>张先生</td>
-                                    <td>2021-11-23 18:47:54</td>
-                                    <td>
-                                        <a sec:authorize-url="/filter/group/edit/*"
-                                           th:href="@{/filter/group/edit/id}"
-                                           class="on-default edit-row"
-                                           style="padding-left: 5px;color: #29b6f6;"
-                                           title="编辑"><i style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/filter/group/deleteById/*" data-toggle="modal"
-                                           data-target="#confirm-modal" class="on-default remove-row"
-                                           style="padding-left: 5px;color: #f05050"
-                                           title="删除"><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>征信名单</td>
-                                    <td></td>
-                                    <td>张先生</td>
-                                    <td>2021-11-23 18:47:54</td>
-                                    <td>
-                                        <a sec:authorize-url="/filter/group/edit/*"
-                                           th:href="@{/filter/group/edit/id}"
-                                           class="on-default edit-row"
-                                           style="padding-left: 5px;color: #29b6f6;"
-                                           title="编辑"><i style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/filter/group/deleteById/*" data-toggle="modal"
-                                           data-target="#confirm-modal" class="on-default remove-row"
-                                           style="padding-left: 5px;color: #f05050"
-                                           title="删除"><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>征信名单</td>
-                                    <td></td>
-                                    <td>张先生</td>
-                                    <td>2021-11-23 18:47:54</td>
-                                    <td>
-                                        <a sec:authorize-url="/filter/group/edit/*"
-                                           th:href="@{/filter/group/edit/id}"
-                                           class="on-default edit-row"
-                                           style="padding-left: 5px;color: #29b6f6;"
-                                           title="编辑"><i style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/filter/group/deleteById/*" data-toggle="modal"
-                                           data-target="#confirm-modal" class="on-default remove-row"
-                                           style="padding-left: 5px;color: #f05050"
-                                           title="删除"><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>征信名单</td>
-                                    <td></td>
-                                    <td>张先生</td>
-                                    <td>2021-11-23 18:47:54</td>
-                                    <td>
-                                        <a sec:authorize-url="/filter/group/edit/*"
-                                           th:href="@{/filter/group/edit/id}"
-                                           class="on-default edit-row"
-                                           style="padding-left: 5px;color: #29b6f6;"
-                                           title="编辑"><i style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/filter/group/deleteById/*" data-toggle="modal"
-                                           data-target="#confirm-modal" class="on-default remove-row"
-                                           style="padding-left: 5px;color: #f05050"
-                                           title="删除"><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>征信名单</td>
-                                    <td></td>
-                                    <td>张先生</td>
-                                    <td>2021-11-23 18:47:54</td>
-                                    <td>
-                                        <a sec:authorize-url="/filter/group/edit/*"
-                                           th:href="@{/filter/group/edit/id}"
-                                           class="on-default edit-row"
-                                           style="padding-left: 5px;color: #29b6f6;"
-                                           title="编辑"><i style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/filter/group/deleteById/*" data-toggle="modal"
-                                           data-target="#confirm-modal" class="on-default remove-row"
-                                           style="padding-left: 5px;color: #f05050"
-                                           title="删除"><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>征信名单</td>
-                                    <td></td>
-                                    <td>张先生</td>
-                                    <td>2021-11-23 18:47:54</td>
-                                    <td>
-                                        <a sec:authorize-url="/filter/group/edit/*"
-                                           th:href="@{/filter/group/edit/id}"
-                                           class="on-default edit-row"
-                                           style="padding-left: 5px;color: #29b6f6;"
-                                           title="编辑"><i style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/filter/group/deleteById/*" data-toggle="modal"
-                                           data-target="#confirm-modal" class="on-default remove-row"
-                                           style="padding-left: 5px;color: #f05050"
-                                           title="删除"><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
-                                    </td>
-                                </tr>
-
 
                                 </tbody>
                             </table>
@@ -218,6 +81,7 @@
         </div>
         <!-- end row -->
         <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <th:block th:insert="fragments/common_fragments :: confirm-modal"/>
 
     </div> <!-- container -->
 
@@ -226,6 +90,28 @@
 <th:block th:insert="fragments/common_fragments :: common_js"/>
 <script th:src="@{/static/plugins/moment/moment.js}"></script>
 <script>
+
+    function confirmDelete(id) {
+        $("#deleteId").val(id);
+    }
+
+    function deleteById() {
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $('#preloader').css('display', 'block');
+        $.ajax({
+            url: contextPath + "/filter/group/deleteById/" + $("#deleteId").val(),
+            success: function (data) {
+                if("1"==data){
+                    parent.location.reload();
+                }else{
+                    alert(data);
+                }
+
+            }, error: function (data) {
+                console.log("error");
+            }
+        });
+    }
 
     var resizefunc = [];
     //隐藏进度项

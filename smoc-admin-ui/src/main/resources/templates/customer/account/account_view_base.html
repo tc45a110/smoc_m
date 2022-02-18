@@ -228,16 +228,10 @@
                                                                 <p class="text-muted">服务代码：[[${accountInterfaceInfoValidator.serviceCode}]]</p>
                                                             </div>
                                                             <div class="col-sm-3 form-group">
-                                                                <p class="text-muted">客户提交速率(次/秒)：[[${accountInterfaceInfoValidator.maxSubmitSecond}]]</p>
-                                                            </div>
-                                                            <div class="col-sm-3 form-group">
-                                                                <p class="text-muted">运营商状态报告推送地址url：[[${accountInterfaceInfoValidator.statusReportUrl}]]</p>
+                                                                <p class="text-muted">最大链接数：[[${accountInterfaceInfoValidator.maxConnect}]]</p>
                                                             </div>
                                                         </div>
                                                         <div th:if="${accountInterfaceInfoValidator.protocol eq 'HTTP_INTERNATIONAL'}">
-                                                            <div class="col-sm-3 form-group">
-                                                                <p class="text-muted">服务代码：[[${accountInterfaceInfoValidator.serviceCode}]]</p>
-                                                            </div>
                                                             <div class="col-sm-3 form-group">
                                                                 <p class="text-muted">客户提交速率(次/秒)：[[${accountInterfaceInfoValidator.maxSubmitSecond}]]</p>
                                                             </div>

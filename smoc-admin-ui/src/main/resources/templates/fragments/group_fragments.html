@@ -22,13 +22,13 @@
                 lazyLoad: loadSubData,
                 onNodeSelected: function (event, data) {
                     if("root"==data.id){
-                        window.frames[0].location.href = contextPath + "/filter/group/list" ;
+                        window.frames[0].location.href = contextPath + "/filter/group/list/"+data.id+"/"+data.svcType ;
                     }else{
-                        if("white"==data.svcType){
-                            window.frames[0].location.href = contextPath + "/filter/white/list" ;
+                        if("smoc_white"==data.svcType){
+                            window.frames[0].location.href = contextPath + "/filter/white/list/"+data.id;
                         }
-                        if("black"==data.svcType){
-                            window.frames[0].location.href = contextPath + "/filter/black/list" ;
+                        if("smoc_black"==data.svcType){
+                            window.frames[0].location.href = contextPath + "/filter/black/list/"+data.id;
                         }
                     }
                 }

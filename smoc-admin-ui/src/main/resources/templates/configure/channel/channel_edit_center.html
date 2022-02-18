@@ -74,8 +74,7 @@
                                             <li class="" id="tab3"><a onclick="active('3')" id="a3"
                                                                       sec:authorize-url="/parameter/filter/list/CHANNEL_FILTER/*/*"
                                                                       th:href="@{/parameter/filter/list/CHANNEL_FILTER/{businessId}/3(businessId=${id})}"
-                                                                      th:target="tab-content"><i class="mdi mdi-star"
-                                                                                                 style="margin-right:5px;color:#f35864"></i>通道过滤配置</a>
+                                                                      th:target="tab-content">通道过滤配置</a>
                                             </li>
                                             <li class="" id="tab4"><a onclick="active('4')" id="a4" th:if="${priceStyle eq 'AREA_PRICE'}"
                                                                       sec:authorize-url="/configure/channel/edit/price/*"

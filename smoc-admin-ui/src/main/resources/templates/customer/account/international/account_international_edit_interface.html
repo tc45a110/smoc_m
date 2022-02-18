@@ -84,8 +84,8 @@
                                         <strong>提醒!</strong> 根据选择左侧的接口类型来显示对应的业务参数。
                                     </div>
 
-                                    <div class="col-md-6">
-                                        <div class="form-group m-b-20">
+                                    <div class="col-md-6" id="SMPP" style="display: none">
+                                        <div class="form-group m-b-20" >
                                             <label>服务代码<span class="text-danger">*</span>
                                                 <span class="text-danger" th:if="${#fields.hasErrors('serviceCode')}"
                                                       th:errors="*{serviceCode}"
@@ -95,6 +95,19 @@
                                                    autocomplete="off" data-parsley-type="number"
                                                    placeholder="服务代码">
                                         </div>
+                                        <div class="form-group m-b-20">
+                                            <label>最大链接数<span class="text-danger">*</span>
+                                                <span class="text-danger" th:if="${#fields.hasErrors('maxConnect')}"
+                                                      th:errors="*{maxConnect}"
+                                                      style="font-weight: 200;font-size: 12px"></span></label>
+                                            <input type="text" class="form-control" required=""
+                                                   th:field="*{maxConnect}" data-parsley-length="[1,10]"
+                                                   data-parsley-type="number"
+                                                   autocomplete="off" placeholder="最大链接数">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6" id="HTTP_INTERNATIONAL" style="display: none">
                                         <div class="form-group m-b-20">
                                             <label>客户提交速率(次/秒)<span
                                                     class="text-danger">*</span>&nbsp;
@@ -107,8 +120,7 @@
                                                    data-parsley-type="number"
                                                    placeholder="客户提交速率">
                                         </div>
-
-                                        <div class="form-group m-b-20"  id="HTTP_INTERNATIONAL" style="display: none">
+                                        <div class="form-group m-b-20">
                                             <label>上行短信推送地址url&nbsp;
                                                 <span class="text-danger" th:if="${#fields.hasErrors('moUrl')}"
                                                       th:errors="*{moUrl}"
@@ -131,6 +143,8 @@
                                                    placeholder="运营商状态报告推送地址url">
                                         </div>
 
+                                    </div>
+                                    <div class="col-md-6" >
                                         <div class="form-group m-b-20">
                                             <label class="m-b-10">模板是否审核<span
                                                     class="text-danger">*</span>&nbsp;</label><br>
@@ -139,7 +153,6 @@
                                                      show-type="radio" style="margin-top:0px" key="code" required="true"
                                                      title="是否"/>
                                         </div>
-
                                     </div>
 
                                 </div>
@@ -199,10 +212,13 @@
 
         if ("HTTP_INTERNATIONAL" == value) {
             document.getElementById("HTTP_INTERNATIONAL").style.display = "";
-        }else{
-            document.getElementById("HTTP_INTERNATIONAL").style.display = "none";
+            document.getElementById("SMPP").style.display = "none";
         }
 
+        if ("SMPP" == value) {
+            document.getElementById("SMPP").style.display = "";
+            document.getElementById("HTTP_INTERNATIONAL").style.display = "none";
+        }
     }
 
 </script>

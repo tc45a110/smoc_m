@@ -94,6 +94,7 @@ public class AccountFinanceController {
             accountFinanceInfoValidator.setCarrier(data.getData().getCountryCode());
             accountFinanceInfoValidator.setPayType("2");//付费方式
             accountFinanceInfoValidator.setChargeType("2");//计费方式
+            accountFinanceInfoValidator.setCarrierType("2");//国际运营商
 
         }else{
             accountFinanceInfoValidator.setCarrier(data.getData().getCarrier());
