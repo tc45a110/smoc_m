@@ -6,6 +6,7 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.smoc.filter.ExcelModel;
 import com.smoc.cloud.common.smoc.filter.FilterWhiteListValidator;
 import com.smoc.cloud.filter.entity.FilterWhiteList;
 import com.smoc.cloud.filter.repository.WhiteRepository;
@@ -14,6 +15,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -118,5 +120,23 @@ public class WhiteService {
         return ResponseDataUtil.buildSuccess();
     }
 
+    /**
+     * 批量保存
+     * @param filterWhiteListValidator
+     * @return
+     */
+    @Async
+    public void bathSave(FilterWhiteListValidator filterWhiteListValidator) {
+        whiteRepository.bathSave(filterWhiteListValidator);
+    }
 
+    /**
+     * 查询导出数据
+     * @param pageParams
+     * @return
+     */
+    public ResponseData<List<ExcelModel>> excelModel(PageParams<FilterWhiteListValidator> pageParams) {
+        List<ExcelModel> list = whiteRepository.excelModel(pageParams);
+        return ResponseDataUtil.buildSuccess(list);
+    }
 }

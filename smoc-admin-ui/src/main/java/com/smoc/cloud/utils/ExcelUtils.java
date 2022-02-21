@@ -8,7 +8,7 @@ import org.springframework.http.MediaType;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import java.io.*;
 import java.net.URLEncoder;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -18,10 +18,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Slf4j
 public class ExcelUtils {
 
-    public static void writeExcel(String fileName , Class head,
+    public static void writeExcel(String fileName, Class head,
                                   HttpServletResponse response, CopyOnWriteArrayList list) {
         try {
-            ServletOutputStream outputStream = getOutputStream(fileName,response);
+            ServletOutputStream outputStream = getOutputStream(fileName, response);
             ExcelWriterBuilder writeBook = EasyExcel.write(outputStream, head);
             ExcelWriterSheetBuilder sheet = writeBook.sheet(fileName);
             sheet.doWrite(list);
@@ -56,4 +56,5 @@ public class ExcelUtils {
             throw new Exception("导出excel表格失败!", e);
         }
     }
+
 }

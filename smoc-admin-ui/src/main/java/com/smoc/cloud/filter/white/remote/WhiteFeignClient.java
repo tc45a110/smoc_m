@@ -3,6 +3,7 @@ package com.smoc.cloud.filter.white.remote;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.filter.ExcelModel;
 import com.smoc.cloud.common.smoc.filter.FilterWhiteListValidator;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.List;
 
 
 /**
@@ -56,12 +58,16 @@ public interface WhiteFeignClient {
 
     /**
      * 批量保存
-     * @param meipFileData
-     * @param op
+     * @param filterWhiteListValidator
+     */
+    @RequestMapping(value = "/filter/white/bathSave", method = RequestMethod.POST)
+    void bathSave(@RequestBody FilterWhiteListValidator filterWhiteListValidator);
+
+    /**
+     * 查询导出数据
+     * @param pageParams
      * @return
      */
-   /* @RequestMapping(value = "/filter/white/bathSave/{op}", method = RequestMethod.POST)
-    void bathSave(@RequestBody MeipFileData meipFileData, @PathVariable String op);*/
-
-
+    @RequestMapping(value = "/filter/white/excelModel", method = RequestMethod.POST)
+    ResponseData<List<ExcelModel>> excelModel(@RequestBody PageParams<FilterWhiteListValidator> pageParams);
 }

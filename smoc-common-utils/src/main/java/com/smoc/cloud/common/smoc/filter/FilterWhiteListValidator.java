@@ -6,7 +6,9 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Setter
 @Getter
@@ -28,4 +30,6 @@ public class FilterWhiteListValidator {
     private String updatedBy;
     private Date updatedTime;
     private String createdTimeStr;
+
+    List<ExcelModel> excelModelList = new ArrayList<ExcelModel>();
 }

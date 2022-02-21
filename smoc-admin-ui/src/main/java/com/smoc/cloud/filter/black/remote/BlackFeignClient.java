@@ -3,12 +3,16 @@ package com.smoc.cloud.filter.black.remote;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.filter.ExcelModel;
 import com.smoc.cloud.common.smoc.filter.FilterBlackListValidator;
+import com.smoc.cloud.common.smoc.filter.FilterWhiteListValidator;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import java.util.List;
 
 
 /**
@@ -55,12 +59,16 @@ public interface BlackFeignClient {
 
     /**
      * 批量保存
-     * @param meipFileData
-     * @param op
+     * @param filterBlackListValidator
+     */
+    @RequestMapping(value = "/filter/black/bathSave", method = RequestMethod.POST)
+    void bathSave(@RequestBody FilterBlackListValidator filterBlackListValidator);
+
+    /**
+     * 查询导出数据
+     * @param pageParams
      * @return
      */
-   /* @RequestMapping(value = "/filter/white/bathSave/{op}", method = RequestMethod.POST)
-    void bathSave(@RequestBody MeipFileData meipFileData, @PathVariable String op);*/
-
-
+    @RequestMapping(value = "/filter/black/excelModel", method = RequestMethod.POST)
+    ResponseData<List<ExcelModel>> excelModel(@RequestBody PageParams<FilterWhiteListValidator> pageParams);
 }

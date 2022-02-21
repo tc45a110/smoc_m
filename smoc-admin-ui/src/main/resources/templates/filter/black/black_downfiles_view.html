@@ -26,7 +26,7 @@
                         <h3 class="panel-title">征信黑名单</h3>
                     </div>
                     <div class="panel-body">
-                        <form  id="submit_form" method="post" data-parsley-validate="" >
+                        <form  id="submit_form" th:action="@{/filter/black/downFiles}" method="post" data-parsley-validate="" >
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="p-20">
@@ -35,27 +35,21 @@
                                                 <label class="m-b-20">导出文件类型</label>
                                                 <br/>
                                                 <div class="radio radio-info radio-inline">
-                                                    <input type="radio" value="1" name="type">
+                                                    <input type="radio" value="1"
+                                                           name="expType"
+                                                           th:attr="checked=${type}=='1'">
                                                     <label> txt </label>
                                                 </div>
                                                 <div class="radio radio-info radio-inline">
-                                                    <input type="radio" value="2" name="type">
+                                                    <input type="radio" value="2"
+                                                           name="expType"
+                                                           th:attr="checked=${type}=='2'">
                                                     <label> xlsx、xls </label>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div class="form-group">
-                                            <label>导出页数区间数据（总页数：100）</label>
-                                            <div class="row">
-                                                <div class="col-xs-3">
-                                                    <input type="tel" id="minValue" name="minValue" th:value="0"  class="form-control" autocomplete="off" >
-                                                </div>
-                                                <div class="col-xs-3">
-                                                    <input type="tel" id="maxValue" name="maxValue" th:value="10"  class="form-control" autocomplete="off" >
-                                                </div>
-                                            </div>
-                                        </div>
+
                                     </div>
                                     <!-- end class p-20 -->
                                 </div> <!-- end col -->
@@ -63,9 +57,9 @@
                             </div> <!-- end row -->
 
                             <div class="text-right">
-                                <a class="btn btn-teal waves-effect waves-light">导出</a>
-                                <a sec:authorize-url="/filter/black/list"
-                                   th:href="@{/filter/black/list}"
+                                <input type="hidden" name="groupId" th:value="${parentId}">
+                                <a sec:authorize-url="/filter/black/downFiles" th:onclick="exp()" class="btn btn-teal waves-effect waves-light">导出</a>
+                                <a sec:authorize-url="/filter/black/list/*" th:href="@{/filter/black/list/{groupId}(groupId=${parentId})}"
                                    class="btn btn-default waves-effect waves-light">返回
                                 </a>
                             </div>
@@ -89,6 +83,10 @@
 <th:block th:insert="fragments/common_fragments :: common_submit_form"/>
 <script th:src="@{/static/js/exp.js}"></script>
 <script>
+
+    function exp(){
+        document.getElementById('submit_form').submit();
+    }
 
     var resizefunc = [];
     //隐藏进度项

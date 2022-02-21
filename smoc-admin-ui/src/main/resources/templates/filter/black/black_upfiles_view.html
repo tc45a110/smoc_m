@@ -26,7 +26,7 @@
                         <h3 class="panel-title">征信黑名单</h3>
                     </div>
                     <div class="panel-body">
-                        <form  id="submit_form"  method="post" data-parsley-validate=""  enctype="multipart/form-data">
+                        <form  id="submit_form"  th:action="@{/filter/black/upFiles}" method="post" data-parsley-validate=""  enctype="multipart/form-data">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="p-20">
@@ -34,10 +34,10 @@
                                             <label>下载模版</label>
                                             <div class="row">
                                                 <div class="col-xs-3">
-                                                    <label><a >黑名单.txt</a></label>
+                                                    <label><a sec:authorize-url="/filter/group/downFileTemp/*" th:onclick="downFile('1')">模板.txt</a></label>
                                                 </div>
                                                 <div class="col-xs-3">
-                                                    <label><a >黑名单.xlsx</a></label>
+                                                    <label><a sec:authorize-url="/filter/group/downFileTemp/*" th:onclick="downFile('2')">模板.xlsx</a></label>
                                                 </div>
                                             </div>
                                         </div>
@@ -54,10 +54,10 @@
                             </div> <!-- end row -->
 
                             <div class="text-right">
-                                <a class="btn btn-teal waves-effect waves-light">导入
-                                </a>
-                                <a sec:authorize-url="/filter/black/list"
-                                   th:href="@{/filter/black/list}"
+                                <input type="hidden" name="groupId" th:value="${parentId}">
+                                <button sec:authorize-url="/filter/black/upFiles" type="submit"
+                                        class="btn btn-teal waves-effect waves-light">导入</button>
+                                <a sec:authorize-url="/filter/black/list/*" th:href="@{/filter/black/list/{parentId}(parentId=${parentId})}"
                                    class="btn btn-default waves-effect waves-light">返回
                                 </a>
                             </div>
@@ -82,6 +82,11 @@
 <script th:src="@{/static/plugins/jquery.filer/js/jquery.filer.min.js}"></script>
 <!-- Jquery filer js -->
 <script>
+
+    function downFile(type) {
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        location.href = contextPath + "/filter/black/downFileTemp/" + type;
+    }
 
     var resizefunc = [];
     //隐藏进度项

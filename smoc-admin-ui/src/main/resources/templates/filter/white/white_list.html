@@ -33,12 +33,12 @@
                                         </button>
                                         <a sec:authorize-url="/filter/white/add/*" th:href="@{/filter/white/add/{parentId}(parentId=${parentId})}" class="btn btn-success waves-effect waves-light m-l-10 btn-md">
                                             <i class="glyphicon glyphicon-plus-sign"></i> 新建</a>
-                                        <a sec:authorize-url="/filter/white/upFilesView" th:href="@{/filter/white/upFilesView}" class="btn btn-primary waves-effect waves-light m-l-10 btn-md">
+                                        <a sec:authorize-url="/filter/white/upFilesView/*" th:href="@{/filter/white/upFilesView/{parentId}(parentId=${parentId})}" class="btn btn-primary waves-effect waves-light m-l-10 btn-md">
                                             <i class="glyphicon glyphicon-import"></i>
                                             导入
                                         </a>
-                                        <a sec:authorize-url="/filter/white/downFilesView"
-                                           th:href="@{/filter/white/downFilesView}"
+                                        <a sec:authorize-url="/filter/white/downFilesView/*"
+                                           th:href="@{/filter/white/downFilesView/{parentId}(parentId=${parentId})}"
                                            class="btn btn-purple waves-effect waves-light m-l-10 btn-md">
                                             <i class="glyphicon glyphicon-export"></i> 导出
                                         </a>
@@ -59,7 +59,7 @@
             <div class="col-sm-12">
                 <div class="panel panel-color panel-info">
                     <div class="panel-heading">
-                        <h3 class="panel-title">白名单列表
+                        <h3 class="panel-title">[[${filterGroupListValidator.groupName}]]列表
                             <span style="padding-left:20px;color: #fff;font-size: 14px">提示：数据状态只有已生效才会加到白名单（5分钟内生效）</span>
                         </h3>
                     </div>

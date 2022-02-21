@@ -3,6 +3,7 @@ package com.smoc.cloud.filter.repository;
 
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
+import com.smoc.cloud.common.smoc.filter.ExcelModel;
 import com.smoc.cloud.common.smoc.filter.FilterWhiteListValidator;
 import com.smoc.cloud.filter.entity.FilterWhiteList;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -29,4 +30,17 @@ public interface WhiteRepository extends CrudRepository<FilterWhiteList, String>
      * @return
      */
     List<FilterWhiteList> findByGroupIdAndMobileAndStatus(String groupId, String mobile, String status);
+
+    /**
+     * 批量保存
+     * @param filterWhiteListValidator
+     */
+    void bathSave(FilterWhiteListValidator filterWhiteListValidator);
+
+    /**
+     * 查询导出数据
+     * @param pageParams
+     * @return
+     */
+    List<ExcelModel> excelModel(PageParams<FilterWhiteListValidator> pageParams);
 }

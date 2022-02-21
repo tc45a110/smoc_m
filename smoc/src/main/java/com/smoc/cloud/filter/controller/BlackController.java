@@ -6,7 +6,9 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.smoc.filter.ExcelModel;
 import com.smoc.cloud.common.smoc.filter.FilterBlackListValidator;
+import com.smoc.cloud.common.smoc.filter.FilterWhiteListValidator;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.filter.service.BlackService;
@@ -15,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
+
+import java.util.List;
 
 /**
  * 黑名单管理接口
@@ -99,13 +103,24 @@ public class BlackController {
 
     /**
      * 批量保存
-     * @param meipFileData
-     * @param op
+     *
+     * @param filterBlackListValidator
      * @return
      */
-    /*@RequestMapping(value = "/bathSave/{op}", method = RequestMethod.POST)
-    public void bathSave(@RequestBody MeipFileData meipFileData, @PathVariable String op) {
-        whiteService.bathSave(meipFileData, op);
+    @RequestMapping(value = "/bathSave", method = RequestMethod.POST)
+    public void bathSave(@RequestBody FilterBlackListValidator filterBlackListValidator) {
+
+        blackService.bathSave(filterBlackListValidator);
     }
-*/
+
+    /**
+     * 查询导出数据
+     * @param pageParams
+     * @return
+     */
+    @RequestMapping(value = "/excelModel", method = RequestMethod.POST)
+    public ResponseData<List<ExcelModel>> excelModel(@RequestBody PageParams<FilterBlackListValidator> pageParams) {
+
+        return blackService.excelModel(pageParams);
+    }
 }

@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 
 /**
- * 企信通管理中心
+ * smoc管理中心
  *
  * @EnableFeignClients 开启FeignClient功能
  * @EnableOAuth2Client 开启OAuth2客户端

@@ -36,12 +36,12 @@
                                     </button>
                                     <a sec:authorize-url="/filter/black/add/*" th:href="@{/filter/black/add/{parentId}(parentId=${parentId})}" class="btn btn-success waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-plus-sign"></i> 新建</a>
-                                    <a sec:authorize-url="/filter/black/upFilesView" th:href="@{/filter/black/upFilesView}" class="btn btn-primary waves-effect waves-light m-l-10 btn-md">
+                                    <a sec:authorize-url="/filter/black/upFilesView/*" th:href="@{/filter/black/upFilesView/{parentId}(parentId=${parentId})}" class="btn btn-primary waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-import"></i>
                                         导入
                                     </a>
-                                    <a sec:authorize-url="/filter/black/downFilesView"
-                                       th:href="@{/filter/black/downFilesView}"
+                                    <a sec:authorize-url="/filter/black/downFilesView/*"
+                                       th:href="@{/filter/black/downFilesView/{parentId}(parentId=${parentId})}"
                                        class="btn btn-purple waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-export"></i> 导出
                                     </a>
@@ -57,7 +57,7 @@
             <div class="col-sm-12">
                 <div class="panel panel-color panel-info">
                     <div class="panel-heading">
-                        <h3 class="panel-title">黑名单列表
+                        <h3 class="panel-title">[[${filterGroupListValidator.groupName}]]列表
                             <span style="padding-left:20px;color: #fff;font-size: 14px">提示：黑名单过滤，数据状态只有已生效才起作用（10分钟内生效）</span>
                         </h3>
                     </div>

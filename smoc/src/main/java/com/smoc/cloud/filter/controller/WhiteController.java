@@ -6,6 +6,7 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.smoc.filter.ExcelModel;
 import com.smoc.cloud.common.smoc.filter.FilterWhiteListValidator;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
@@ -17,6 +18,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.List;
+
 /**
  * 白名单管理接口
  * 2019/4/16 20:26
@@ -24,7 +27,7 @@ import org.springframework.web.context.WebApplicationContext;
 @Slf4j
 @RestController
 @RequestMapping("/filter/white")
-@Scope(value= WebApplicationContext.SCOPE_REQUEST)
+@Scope(value = WebApplicationContext.SCOPE_REQUEST)
 public class WhiteController {
 
     @Autowired
@@ -32,6 +35,7 @@ public class WhiteController {
 
     /**
      * 根据群id查询通讯录
+     *
      * @param pageParams
      * @return
      */
@@ -100,13 +104,24 @@ public class WhiteController {
 
     /**
      * 批量保存
-     * @param meipFileData
-     * @param op
+     *
+     * @param filterWhiteListValidator
      * @return
      */
-    /*@RequestMapping(value = "/bathSave/{op}", method = RequestMethod.POST)
-    public void bathSave(@RequestBody MeipFileData meipFileData, @PathVariable String op) {
-        whiteService.bathSave(meipFileData, op);
+    @RequestMapping(value = "/bathSave", method = RequestMethod.POST)
+    public void bathSave(@RequestBody FilterWhiteListValidator filterWhiteListValidator) {
+
+        whiteService.bathSave(filterWhiteListValidator);
     }
-*/
+
+    /**
+     * 查询导出数据
+     * @param pageParams
+     * @return
+     */
+    @RequestMapping(value = "/excelModel", method = RequestMethod.POST)
+    public ResponseData<List<ExcelModel>> excelModel(@RequestBody PageParams<FilterWhiteListValidator> pageParams) {
+
+        return whiteService.excelModel(pageParams);
+    }
 }

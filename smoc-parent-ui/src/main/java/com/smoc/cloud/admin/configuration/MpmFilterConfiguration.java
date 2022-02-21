@@ -77,7 +77,7 @@ public class MpmFilterConfiguration {
 
 
     //显示声明CommonsMultipartResolver为mutipartResolver
-    @Bean(name = "multipartResolver")
+    /*@Bean(name = "multipartResolver")
     public MultipartResolver multipartResolver(){
         CommonsMultipartResolver resolver = new CommonsMultipartResolver();
         resolver.setDefaultEncoding("UTF-8");
@@ -85,5 +85,5 @@ public class MpmFilterConfiguration {
         resolver.setMaxInMemorySize(2048);
         resolver.setMaxUploadSize(50*1024*1024);//上传文件大小 50M 50*1024*1024
         return resolver;
-    }
+    }*/
 }

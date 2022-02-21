@@ -6,13 +6,16 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.filter.ExcelModel;
 import com.smoc.cloud.common.smoc.filter.FilterBlackListValidator;
 import com.smoc.cloud.common.smoc.filter.FilterGroupListValidator;
+import com.smoc.cloud.common.smoc.filter.FilterWhiteListValidator;
 import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.filter.black.service.BlackService;
 import com.smoc.cloud.filter.group.service.GroupService;
+import com.smoc.cloud.filter.utils.FileUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,11 +26,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 黑名单管理
@@ -79,9 +86,17 @@ public class BlackController {
             return view;
         }
 
+        //查询组
+        ResponseData<FilterGroupListValidator> groupData = groupService.findById(parentId);
+        if (!ResponseCode.SUCCESS.getCode().equals(groupData.getCode())) {
+            view.addObject("error", groupData.getCode() + ":" + groupData.getMessage());
+            return view;
+        }
+
         view.addObject("filterBlackListValidator", filterBlackListValidator);
         view.addObject("list", data.getData().getList());
         view.addObject("pageParams", data.getData().getPageParams());
+        view.addObject("filterGroupListValidator",groupData.getData());
         view.addObject("parentId",parentId);
 
         return view;
@@ -107,9 +122,17 @@ public class BlackController {
             return view;
         }
 
+        //查询组
+        ResponseData<FilterGroupListValidator> groupData = groupService.findById(filterBlackListValidator.getGroupId());
+        if (!ResponseCode.SUCCESS.getCode().equals(groupData.getCode())) {
+            view.addObject("error", groupData.getCode() + ":" + groupData.getMessage());
+            return view;
+        }
+
         view.addObject("filterBlackListValidator", filterBlackListValidator);
         view.addObject("list", data.getData().getList());
         view.addObject("pageParams", data.getData().getPageParams());
+        view.addObject("filterGroupListValidator",groupData.getData());
         view.addObject("parentId",filterBlackListValidator.getGroupId());
 
         return view;
@@ -283,13 +306,88 @@ public class BlackController {
      *
      * @return
      */
-    @RequestMapping(value = "/upFilesView", method = RequestMethod.GET)
-    public ModelAndView upFilesView(HttpServletRequest request) {
+    @RequestMapping(value = "/upFilesView/{parentId}", method = RequestMethod.GET)
+    public ModelAndView upFilesView(@PathVariable String parentId, HttpServletRequest request) {
 
         ModelAndView view = new ModelAndView("filter/black/black_upfiles_view");
 
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(parentId);
+        if (!MpmValidatorUtil.validate(validator)) {
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
+
+        //查询组
+        ResponseData<FilterGroupListValidator> groupData = groupService.findById(parentId);
+        if (!ResponseCode.SUCCESS.getCode().equals(groupData.getCode())) {
+            view.addObject("error", groupData.getCode() + ":" + groupData.getMessage());
+            return view;
+        }
+
+        view.addObject("parentId", groupData.getData().getId());
+
         return view;
 
+    }
+
+    /**
+     * 导入
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/upFiles", method = RequestMethod.POST)
+    public ModelAndView save(String groupId, HttpServletRequest request) {
+        SecurityUser user = (SecurityUser)request.getSession().getAttribute("user");
+
+        ModelAndView view = new ModelAndView("filter/black/black_upfiles_view");
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(groupId);
+        if (!MpmValidatorUtil.validate(validator)) {
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
+
+        //查询组
+        ResponseData<FilterGroupListValidator> groupData = groupService.findById(groupId);
+        if (!ResponseCode.SUCCESS.getCode().equals(groupData.getCode())) {
+            view.addObject("error", groupData.getCode() + ":" + groupData.getMessage());
+            return view;
+        }
+
+        /**
+         * 获取文件信息
+         */
+        MultipartHttpServletRequest mRequest = (MultipartHttpServletRequest) request;
+        List<MultipartFile> file = mRequest.getFiles("file[]");
+        if(!StringUtils.isEmpty(file) && file.size()>0){
+
+            List<ExcelModel> list = FileUtils.readFile(file.get(0));
+
+            //批量保存
+            if(!StringUtils.isEmpty(list) && list.size()>0){
+                FilterBlackListValidator filterBlackListValidator = new FilterBlackListValidator();
+                filterBlackListValidator.setGroupId(groupData.getData().getGroupId());
+                filterBlackListValidator.setExcelModelList(list);
+                filterBlackListValidator.setIsSync("0");
+                filterBlackListValidator.setStatus("1");
+                filterBlackListValidator.setCreatedBy(user.getRealName());
+                ResponseData data  = blackService.batchSave(filterBlackListValidator);
+                if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+                    view.addObject("error", data.getCode() + ":" + data.getMessage());
+                    return view;
+                }
+            }
+
+            log.info("[黑名单管理][导入][{}]数据::{}", user.getUserName(), list.size());
+        }
+
+        view.setView(new RedirectView("/filter/black/list/" + groupId, true, false));
+
+        return view;
     }
 
     /**
@@ -297,13 +395,66 @@ public class BlackController {
      *
      * @return
      */
-    @RequestMapping(value = "/downFilesView", method = RequestMethod.GET)
-    public ModelAndView downFilesView(HttpServletRequest request) {
+    @RequestMapping(value = "/downFilesView/{parentId}", method = RequestMethod.GET)
+    public ModelAndView downFilesView(@PathVariable String parentId,HttpServletRequest request) {
 
         ModelAndView view = new ModelAndView("filter/black/black_downfiles_view");
 
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(parentId);
+        if (!MpmValidatorUtil.validate(validator)) {
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
+
+        //查询组
+        ResponseData<FilterGroupListValidator> groupData = groupService.findById(parentId);
+        if (!ResponseCode.SUCCESS.getCode().equals(groupData.getCode())) {
+            view.addObject("error", groupData.getCode() + ":" + groupData.getMessage());
+            return view;
+        }
+
+        view.addObject("parentId", groupData.getData().getId());
+        view.addObject("type", "1");
+
         return view;
 
+    }
+
+    /**
+     * 导出
+     * @param expType
+     * @param groupId
+     * @param request
+     * @param response
+     */
+    @RequestMapping(value = "/downFiles", method = RequestMethod.POST)
+    public void exceBookData(String groupId,String expType,HttpServletRequest request, HttpServletResponse response) {
+
+        //查询组
+        ResponseData<FilterGroupListValidator> groupData = groupService.findById(groupId);
+        if (!ResponseCode.SUCCESS.getCode().equals(groupData.getCode())) {
+            return ;
+        }
+
+        /**
+         * 查询要导出的数据
+         */
+        PageParams<FilterWhiteListValidator> params = new PageParams<FilterWhiteListValidator>();
+        params.setPageSize(100000);
+        params.setCurrentPage(1);
+        FilterWhiteListValidator filterWhiteListValidator = new FilterWhiteListValidator();
+        filterWhiteListValidator.setGroupId(groupData.getData().getGroupId());
+        params.setParams(filterWhiteListValidator);
+        ResponseData<List<ExcelModel>> data = blackService.excelModel(params);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            return ;
+        }
+
+        String excelname = groupData.getData().getGroupName();
+
+        FileUtils.downFiles(excelname,expType,data.getData(),request,response);
     }
 
 }

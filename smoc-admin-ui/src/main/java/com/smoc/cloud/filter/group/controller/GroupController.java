@@ -13,13 +13,19 @@ import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.filter.group.service.GroupService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.net.URLEncoder;
 import java.util.*;
 
 /**
@@ -258,5 +264,65 @@ public class GroupController {
 
         return "1";
 
+    }
+
+
+    /**
+     * 下载模板
+     */
+    @RequestMapping(value = "/downFileTemp/{type}", method = RequestMethod.GET)
+    public void downFileTemp(@PathVariable String type,HttpServletRequest request, HttpServletResponse response) {
+
+        String fileName = "模版.txt";
+
+        if("1".equals(type)){
+            fileName = "模版.txt";
+        }
+        if("2".equals(type)){
+            fileName = "模版.xlsx";
+        }
+
+        //设置文件路径
+        ClassPathResource classPathResource = new ClassPathResource("static/files/" + fileName);
+        try {
+            response.setHeader("content-type", "application/octet-stream");
+            response.setContentType("application/octet-stream");
+            // 下载文件能正常显示中文
+            response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        // 实现文件下载
+        byte[] buffer = new byte[1024];
+        InputStream fis = null;
+        BufferedInputStream bis = null;
+        try {
+            fis = classPathResource.getInputStream();;
+            bis = new BufferedInputStream(fis);
+            OutputStream os = response.getOutputStream();
+            int i = bis.read(buffer);
+            while (i != -1) {
+                os.write(buffer, 0, i);
+                i = bis.read(buffer);
+            }
+            return ;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (bis != null) {
+                try {
+                    bis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (fis != null) {
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

@@ -4,7 +4,9 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.smoc.filter.ExcelModel;
 import com.smoc.cloud.common.smoc.filter.FilterBlackListValidator;
+import com.smoc.cloud.common.smoc.filter.FilterWhiteListValidator;
 import com.smoc.cloud.filter.black.remote.BlackFeignClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,8 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 /**
@@ -83,22 +87,33 @@ public class BlackService {
         }
     }
 
-
-
     /**
      * 批量保存
-     * @param meipFileData
-     * @param op
+     * @param filterBlackListValidator
      * @return
      */
-    /*public ResponseData bathSave(MeipFileData meipFileData, String op) {
+    public ResponseData batchSave(FilterBlackListValidator filterBlackListValidator) {
         try {
-            this.whiteFeignClient.bathSave(meipFileData, op);
+            this.blackFeignClient.bathSave(filterBlackListValidator);
             return ResponseDataUtil.buildSuccess();
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseDataUtil.buildError(e.getMessage());
         }
     }
-*/
+
+    /**
+     * 查询要导出的数据
+     * @param pageParams
+     * @return
+     */
+    public ResponseData<List<ExcelModel>> excelModel(PageParams<FilterWhiteListValidator> pageParams) {
+        try {
+            ResponseData<List<ExcelModel>> list = this.blackFeignClient.excelModel(pageParams);
+            return list;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
 }

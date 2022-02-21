@@ -4,6 +4,7 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.smoc.filter.ExcelModel;
 import com.smoc.cloud.common.smoc.filter.FilterWhiteListValidator;
 import com.smoc.cloud.filter.white.remote.WhiteFeignClient;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 
 
 /**
@@ -84,22 +86,33 @@ public class WhiteService {
         }
     }
 
-
-
     /**
      * 批量保存
-     * @param meipFileData
-     * @param op
+     * @param filterWhiteListValidator
      * @return
      */
-    /*public ResponseData bathSave(MeipFileData meipFileData, String op) {
+    public ResponseData batchSave(FilterWhiteListValidator filterWhiteListValidator) {
         try {
-            this.whiteFeignClient.bathSave(meipFileData, op);
+            this.whiteFeignClient.bathSave(filterWhiteListValidator);
             return ResponseDataUtil.buildSuccess();
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseDataUtil.buildError(e.getMessage());
         }
     }
-*/
+
+    /**
+     * 查询导出数据
+     * @param pageParams
+     * @return
+     */
+    public ResponseData<List<ExcelModel>> excelModel(PageParams<FilterWhiteListValidator> pageParams) {
+        try {
+            ResponseData<List<ExcelModel>> list = this.whiteFeignClient.excelModel(pageParams);
+            return list;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
 }
