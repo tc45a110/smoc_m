@@ -40,8 +40,8 @@
                     <div class="row m-b-10">
                         <h4 style="padding-left:12px">CMPP模板明细
                             <div class="pull-right" style="margin-top: -12px;margin-right:10px">
-                                <a sec:authorize-url="/template/list"
-                                   th:href="@{/template/list}"
+                                <a sec:authorize-url="/template/list/*"
+                                   th:href="@{/template/list/{protocol}(protocol=${protocol})}"
                                    class="btn btn-default waves-effect waves-light btn-md">
                                     <i class="glyphicon  glyphicon-share-alt" style="margin-right:10px"></i>
                                     返回模板列表</a>
@@ -56,18 +56,18 @@
                                         <ul class="nav nav-tabs m-b-30">
                                             <li class="active" id="tab1"><a onclick="active('1')"
                                                                             sec:authorize-url="/template/view/*"
-                                                                            th:href="@{/template/view/id}"
+                                                                            th:href="@{/template/view/{templateId}(templateId=${templateId})}"
                                                                             th:target="tab-content">模板明细</a></li>
                                             <li class="" id="tab2"><a onclick="active('2')"
-                                                                      sec:authorize-url="/user/logs/list/*"
-                                                                      th:href="@{/user/logs/list/templateId}"
-                                                                      th:target="tab-content">模板操作日志</a></li>
+                                                                      sec:authorize-url="/user/logs/list/*/*"
+                                                                      th:href="@{/user/logs/list/TEMPLATE_INFO/{templateId}(templateId=${templateId})}"
+                                                                      th:target="tab-content">操作日志</a></li>
 
                                         </ul>
                                         <div class="tab-cotent" style="background-color:#fff">
                                             <iframe name="tab-content" id="tab-content" th:frameBorder="0"
                                                     th:scrolling="auto"
-                                                    th:src="@{/template/view/id}"
+                                                    th:src="@{/template/view/{templateId}(templateId=${templateId})}"
                                                     style="padding: 0px; width: 100%; height: 1200px;background-color:#fff"></iframe>
                                         </div>
                                     </div>

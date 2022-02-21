@@ -1,4 +1,4 @@
-package com.smoc.cloud.template;
+package com.smoc.cloud.template.controller;
 
 
 import com.smoc.cloud.common.page.PageParams;

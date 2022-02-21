@@ -1,6 +1,5 @@
 package com.smoc.cloud.message.controller;
 
-import com.google.gson.Gson;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
@@ -68,16 +67,7 @@ public class MessageDailyStatisticsController {
             return view;
         }
 
-        Map<String,Object> countMap = new HashMap<>();
-        if(null != count.getData() || (count.getData().size())<1){
-            countMap.put("SUCCESS_SUBMIT_NUM",0);
-            countMap.put("MESSAGE_SUCCESS_NUM",0);
-            countMap.put("MESSAGE_FAILURE_NUM",0);
-            countMap.put("MESSAGE_NO_REPORT_NUM",0);
-        }else{
-            countMap = count.getData();
-        }
-
+        Map<String,Object> countMap =  count.getData();
         //log.info("countMap：{}",new Gson().toJson(countMap));
 
         view.addObject("countMap", countMap);
@@ -122,18 +112,9 @@ public class MessageDailyStatisticsController {
             return view;
         }
 
-        Map<String,Object> countMap = new HashMap<>();
-        if(null != count.getData() || (count.getData().size())<1){
-            countMap.put("SUCCESS_SUBMIT_NUM",0);
-            countMap.put("MESSAGE_SUCCESS_NUM",0);
-            countMap.put("MESSAGE_FAILURE_NUM",0);
-            countMap.put("MESSAGE_NO_REPORT_NUM",0);
-        }else{
-            countMap = count.getData();
-        }
+        Map<String,Object>  countMap = count.getData();
 
         //log.info("countMap：{}",new Gson().toJson(countMap));
-
         view.addObject("countMap", countMap);
         view.addObject("messageDailyStatisticValidator", messageDailyStatisticValidator);
         view.addObject("list", data.getData().getList());

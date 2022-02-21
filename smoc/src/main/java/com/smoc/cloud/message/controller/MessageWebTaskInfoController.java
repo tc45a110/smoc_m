@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 /**
  * web任务单
  */
@@ -34,5 +36,17 @@ public class MessageWebTaskInfoController {
     public ResponseData<PageList<MessageWebTaskInfoValidator>> page(@RequestBody PageParams<MessageWebTaskInfoValidator> pageParams) {
 
         return messageWebTaskInfoService.page(pageParams);
+    }
+
+    /**
+     * 统计发送数量
+     *
+     * @param qo
+     * @return
+     */
+    @RequestMapping(value = "/count", method = RequestMethod.POST)
+    public ResponseData<Map<String, Object>> count(@RequestBody MessageWebTaskInfoValidator qo) {
+
+        return messageWebTaskInfoService.countSum(qo);
     }
 }

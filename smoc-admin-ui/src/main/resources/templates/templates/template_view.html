@@ -23,37 +23,45 @@
             <div class="col-md-12">
                 <div class="card-box">
                     <form id="submit_form"
-                          method="post" data-parsley-validate="">
+                          method="post" data-parsley-validate="" th:object="${accountTemplateInfoValidator}">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="p-20">
                                     <div class="form-group">
                                         <div class="row">
-                                            <div class="col-md-4 form-group">
-                                                <label>企业名称： <span style="color:#00acc1">星语互联科技有限公司</span>
+                                            <div class="col-md-3 form-group">
+                                                <label>企业名称： <span style="color:#00acc1">[[${enterpriseBasicInfoValidator.enterpriseName}]]</span>
                                                 </label>
                                             </div>
-                                            <div class="col-md-4 form-group">
-                                                <label>业务账号名称：<span style="color:#00acc1">行业短信账号</span>
+                                            <div class="col-md-3 form-group">
+                                                <label>业务账号： <span style="color:#00acc1">[[${accountBasicInfoValidator.accountId}]]</span>
                                                 </label>
                                             </div>
-                                            <div class="col-md-4 form-group">
-                                                <label>业务账号： <span style="color:#00acc1">BA00008</span>
+                                            <div class="col-md-3 form-group">
+                                                <label>业务账号名称：<span style="color:#00acc1">[[${accountBasicInfoValidator.accountName}]]</span>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-3 form-group">
+                                                <label>业务类型：<span style="color:#00acc1">
+                                                    <mpm:tag id="templateType" identity="businessType"
+                                                             class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-danger btn-rounded btn-sm waves-effect waves-light;"
+                                                             name="businessType" show-type="button" key="code"
+                                                             th:value="${accountBasicInfoValidator.businessType}" title="业务类型"/></span>
                                                 </label>
                                             </div>
                                             <div class="col-md-12 form-group">
-                                                <label>模板内容</label> <span style="margin-left：20px;color:#f5707a"> 如果内容包括多个模板内容，请用 " | " 隔开</span>
+                                                <label>模板内容</label> <span style="margin-left:20px;color:#f5707a"> 如果内容包括多个模板内容，请用 " | " 隔开</span>
                                             </div>
                                             <div class="col-md-12 form-group">
-                                                <textarea class="form-control" rows="15">【结算业务提醒】您于2022年01月06日提报的2022借字1号单据已支付完成，请您关注相关款项到账情况。结算审核状态请登录财务管理综合平台查询。如有疑问请致电010-933117，我们将竭诚为您服务。
-                                                </textarea>
+                                                <textarea class="form-control" required th:field="*{templateContent}"
+                                                          rows="15">[[${accountTemplateInfoValidator.templateContent}]]</textarea>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <!-- end class p-20 -->
                             </div> <!-- end col -->
-                        </div> <!-- end row -->
+                        </div>
                     </form>
                     <!-- end form -->
                 </div> <!-- end card-box -->

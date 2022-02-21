@@ -7,6 +7,7 @@ import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.template.MessageWebTaskInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.message.service.MessageWebTaskInfoService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -17,11 +18,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.Map;
 
 
 /**
  * web短消息任务单
  **/
+@Slf4j
 @Controller
 @RequestMapping("/message/order/web")
 public class MessageWebOrderController {
@@ -50,13 +53,23 @@ public class MessageWebOrderController {
         messageWebTaskInfoValidator.setEndDate(DateTimeUtils.getDateFormat(new Date()));
         params.setParams(messageWebTaskInfoValidator);
 
-        //查询
+        //分页查询
         ResponseData<PageList<MessageWebTaskInfoValidator>> data = messageWebTaskInfoService.page(params);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;
         }
 
+        //数量统计
+        ResponseData<Map<String, Object>> count = messageWebTaskInfoService.count(messageWebTaskInfoValidator);
+        if (!ResponseCode.SUCCESS.getCode().equals(count.getCode())) {
+            view.addObject("error", count.getCode() + ":" + count.getMessage());
+            return view;
+        }
+
+        Map<String,Object>  countMap = count.getData();
+        //log.info("[map]:{}",new Gson().toJson(countMap));
+        view.addObject("countMap", countMap);
         view.addObject("messageWebTaskInfoValidator", messageWebTaskInfoValidator);
         view.addObject("list", data.getData().getList());
         view.addObject("pageParams", data.getData().getPageParams());
@@ -81,17 +94,26 @@ public class MessageWebOrderController {
             messageWebTaskInfoValidator.setEndDate(StringUtils.trimWhitespace(date[1]));
         }
 
-        //分页查询
         pageParams.setParams(messageWebTaskInfoValidator);
 
         //log.info("[messageDailyStatisticValidator]:{}",new Gson().toJson(messageDailyStatisticValidator));
-
+        //分页查询
         ResponseData<PageList<MessageWebTaskInfoValidator>> data = messageWebTaskInfoService.page(pageParams);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;
         }
 
+        //数量统计
+        ResponseData<Map<String, Object>> count = messageWebTaskInfoService.count(messageWebTaskInfoValidator);
+        if (!ResponseCode.SUCCESS.getCode().equals(count.getCode())) {
+            view.addObject("error", count.getCode() + ":" + count.getMessage());
+            return view;
+        }
+
+        Map<String,Object>  countMap = count.getData();
+        //log.info("[map]:{}",new Gson().toJson(countMap));
+        view.addObject("countMap", countMap);
         view.addObject("messageWebTaskInfoValidator", messageWebTaskInfoValidator);
         view.addObject("list", data.getData().getList());
         view.addObject("pageParams", data.getData().getPageParams());

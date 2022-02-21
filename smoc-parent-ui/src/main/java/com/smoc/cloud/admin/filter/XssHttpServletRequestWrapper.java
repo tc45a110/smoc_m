@@ -2,6 +2,8 @@ package com.smoc.cloud.admin.filter;
 
 import com.alibaba.nacos.client.utils.StringUtils;
 import com.smoc.cloud.admin.utils.JsoupUtil;
+import com.smoc.cloud.admin.utils.SqlInjectionConstant;
+import lombok.extern.slf4j.Slf4j;
 
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +14,8 @@ import javax.servlet.http.HttpServletRequestWrapper;
  * 防止xss注入实现，自己又扩展了 数据库关键字的过滤
  * Description:拦截防止xss注入 通过Jsoup过滤请求参数内的特定字符，更详细的内容，请参考Jsoup插件。同时自己又扩展了
  */
+
+@Slf4j
 public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
 
     HttpServletRequest orgRequest = null;
@@ -38,6 +42,8 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
         if (StringUtils.isNotBlank(value)) {
             value = JsoupUtil.clean(value);
         }
+
+        //log.info("[value]:{}",value);
         return value;
     }
 
@@ -47,9 +53,12 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
         if (arr != null) {
             for (int i = 0; i < arr.length; i++) {
                 arr[i] = JsoupUtil.clean(arr[i]);
-
+                //增加sql注入初步过滤
+                arr[i] = SqlInjectionConstant.clean(arr[i]);
+                //log.info("[value]:{}",arr[i]);
             }
         }
+
         return arr;
     }
 

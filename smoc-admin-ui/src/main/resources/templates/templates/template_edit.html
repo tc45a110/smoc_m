@@ -22,13 +22,13 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">CMPP模板维护</h4>
+                    <h4 class="page-title">[[${accountTemplateInfoValidator.templateAgreementType}]]模板维护</h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
                             模板管理
                         </li>
                         <li class="active">
-                            CMPP模板维护
+                            [[${accountTemplateInfoValidator.templateAgreementType}]]模板维护
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -41,36 +41,54 @@
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-md-12">
                 <div class="card-box">
-                    <form id="submit_form"
+                    <form id="submit_form" th:action="@{/template/save/{op}(op=${op})}"
+                          th:object="${accountTemplateInfoValidator}"
                           method="post" data-parsley-validate="">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="p-20">
                                     <div class="form-group">
                                         <div class="row">
-                                            <div class="col-md-4 form-group">
-                                                <label>企业名称： <span style="color:#00acc1">星语互联科技有限公司</span>
+                                            <div class="col-md-3 form-group">
+                                                <label>企业名称： <span style="color:#00acc1">[[${enterpriseBasicInfoValidator.enterpriseName}]]</span>
                                                 </label>
                                             </div>
-                                            <div class="col-md-4 form-group">
-                                                <label>业务账号名称：<span style="color:#00acc1">行业短信账号</span>
+                                            <div class="col-md-3 form-group">
+                                                <label>业务账号： <span style="color:#00acc1">[[${accountBasicInfoValidator.accountId}]]</span>
                                                 </label>
                                             </div>
-                                            <div class="col-md-4 form-group">
-                                                <label>业务账号： <span style="color:#00acc1">BA00008</span>
+                                            <div class="col-md-3 form-group">
+                                                <label>业务账号名称：<span style="color:#00acc1">[[${accountBasicInfoValidator.accountName}]]</span>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-3 form-group">
+                                                <label>业务类型：<span style="color:#00acc1">
+                                                    <mpm:tag id="templateType" identity="businessType"
+                                                             class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-danger btn-rounded btn-sm waves-effect waves-light;"
+                                                             name="businessType" show-type="button" key="code"
+                                                             th:value="${accountBasicInfoValidator.businessType}" title="业务类型"/></span>
                                                 </label>
                                             </div>
                                             <div class="col-md-12 form-group">
                                                 <label>模板内容</label> <span style="margin-left:20px;color:#f5707a"> 如果内容包括多个模板内容，请用 " | " 隔开</span>
                                             </div>
                                             <div class="col-md-12 form-group">
-                                                <textarea class="form-control" rows="15"></textarea>
+                                                <textarea class="form-control" required th:field="*{templateContent}"
+                                                          rows="15">[[${accountTemplateInfoValidator.templateContent}]]</textarea>
                                             </div>
                                             <div class="col-md-12 text-center" style="margin-top:20px">
-                                                <button type="button"
-                                                   class="btn btn-teal waves-effect waves-light">提交</button>
-                                                <a sec:authorize-url="/template/list"
-                                                   th:href="@{/template/list}" style="margin-left:20px"
+                                                <input type="hidden" th:field="*{templateId}">
+                                                <input type="hidden" th:field="*{businessAccount}">
+                                                <input type="hidden" th:field="*{templateAgreementType}">
+                                                <input type="hidden" th:field="*{templateType}">
+                                                <input type="hidden" th:field="*{templateStatus}">
+                                                <input type="hidden" th:field="*{createdTime}">
+                                                <input type="hidden" th:field="*{createdBy}">
+                                                <button sec:authorize-url="/template/save/*" type="submit"
+                                                        class="btn btn-teal waves-effect waves-light">提交
+                                                </button>
+                                                <a th:href="@{/template/list/{protocol}(protocol=${accountTemplateInfoValidator.templateAgreementType})}"
+                                                   style="margin-left:20px"
                                                    class="btn btn-default waves-effect waves-light">返回</a>
                                             </div>
                                         </div>
@@ -78,7 +96,7 @@
                                 </div>
                                 <!-- end class p-20 -->
                             </div> <!-- end col -->
-                        </div> <!-- end row -->
+                        </div>
                     </form>
                     <!-- end form -->
                 </div> <!-- end card-box -->
@@ -99,6 +117,7 @@
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
+
 
 </script>
 </body>

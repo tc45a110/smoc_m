@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.Map;
+
 /**
  * web任务单
  */
@@ -24,4 +26,13 @@ public interface MessageWebTaskInfoFeignClient {
      */
     @RequestMapping(value = "/message/web/task/page", method = RequestMethod.POST)
     ResponseData<PageList<MessageWebTaskInfoValidator>> page(@RequestBody PageParams<MessageWebTaskInfoValidator> pageParams) throws Exception;
+
+    /**
+     * 统计发送数量
+     *
+     * @param qo
+     * @return
+     */
+    @RequestMapping(value = "/message/web/task/count", method = RequestMethod.POST)
+    ResponseData<Map<String, Object>> count(@RequestBody MessageWebTaskInfoValidator qo) throws Exception;
 }

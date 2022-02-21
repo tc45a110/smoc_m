@@ -84,11 +84,11 @@ public class MessageDetailInfoRepositoryImpl extends BasePageRepository {
         }
 
         sqlBuffer.append(" order by t.CREATED_TIME desc");
-        log.info("[SQL]:{}",sqlBuffer);
+        //log.info("[SQL]:{}",sqlBuffer);
         //根据参数个数，组织参数值
         Object[] params = new Object[paramsList.size()];
         paramsList.toArray(params);
-        log.info("[SQL1]:{}",sqlBuffer);
+        //log.info("[SQL1]:{}",sqlBuffer);
         PageList<MessageDetailInfoValidator> pageList = this.queryByPageForMySQL(sqlBuffer.toString(), params, pageParams.getCurrentPage(), pageParams.getPageSize(), new MessageDetailInfoRowMapper());
         pageList.getPageParams().setParams(qo);
         return pageList;

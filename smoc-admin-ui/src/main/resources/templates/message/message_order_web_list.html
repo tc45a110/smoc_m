@@ -109,18 +109,22 @@
                             <h2 style="color: #fff">WEB任务单汇总统计</h2>
                             <span></span>
                             <div class="detailInner">
-                                <a>总发送条数：<span style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
+                                <a>总提交号码数：<span style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
                                                data-d-group="4" data-a-sign=" " data-v-min="0"
                                                data-v-max="999999999"
-                                               class="autonumber">2045922</span></a><i></i>
-                                <a>总接收条数：<span style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
+                                               class="autonumber">[[${countMap.get('SUBMIT_NUMBER')}]]</span></a><i></i>
+                                <a>总成功提数：<span style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
                                                data-d-group="4" data-a-sign=" " data-v-min="0"
                                                data-v-max="999999999"
-                                               class="autonumber">2045922</span></a><i></i>
-                                <a>总失败条数：<span style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
+                                               class="autonumber">[[${countMap.get('SUCCESS_NUMBER')}]]</span></a><i></i>
+                                <a>总成功发送数：<span style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
                                                data-d-group="4" data-a-sign=" " data-v-min="0"
                                                data-v-max="999999999"
-                                               class="autonumber">20459</span></a>
+                                               class="autonumber">[[${countMap.get('SUCCESS_SEND_NUMBER')}]]</span></a><i></i>
+                                <a>总失败数：<span style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
+                                                 data-d-group="4" data-a-sign=" " data-v-min="0"
+                                                 data-v-max="999999999"
+                                                 class="autonumber">[[${countMap.get('FAILURE_NUMBER')}]]</span></a>
                             </div>
                         </li>
                     </ul>

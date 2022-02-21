@@ -8,7 +8,7 @@ import java.util.Date;
 public class AccountTemplateInfo {
     @Id
     @Column(name = "TEMPLATE_ID", nullable = false, length = 32)
-    private String id;
+    private String templateId;
 
     @Column(name = "TEMPLATE_TYPE", nullable = false, length = 32)
     private String templateType;
@@ -154,11 +154,11 @@ public class AccountTemplateInfo {
         this.templateType = templateType;
     }
 
-    public String getId() {
-        return id;
+    public String getTemplateId() {
+        return templateId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setTemplateId(String templateId) {
+        this.templateId = templateId;
     }
 }

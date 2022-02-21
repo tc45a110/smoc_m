@@ -1,5 +1,6 @@
 package com.smoc.cloud.message.repository;
 
+import com.google.gson.Gson;
 import com.smoc.cloud.common.BasePageRepository;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
@@ -7,13 +8,16 @@ import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountRechargeValida
 import com.smoc.cloud.common.smoc.message.MessageDailyStatisticValidator;
 
 import com.smoc.cloud.message.rowmapper.MessageDailyStatisticRowMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 public class MessageDailyStatisticRepositoryImpl extends BasePageRepository {
 
     /**
@@ -184,7 +188,13 @@ public class MessageDailyStatisticRepositoryImpl extends BasePageRepository {
         paramsList.toArray(params);
 
         Map<String, Object> map = jdbcTemplate.queryForMap(sqlBuffer.toString(), params);
-        //log.info(new Gson().toJson(map));
+        if(null == map || map.size()<1 || null == map.get("SUCCESS_SUBMIT_NUM")){
+            map = new HashMap<>();
+            map.put("SUCCESS_SUBMIT_NUM",0);
+            map.put("MESSAGE_SUCCESS_NUM",0);
+            map.put("MESSAGE_FAILURE_NUM",0);
+            map.put("MESSAGE_NO_REPORT_NUM",0);
+        }
         return map;
 
     }

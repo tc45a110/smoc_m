@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Map;
 
 /**
  * web任务单
@@ -33,5 +34,17 @@ public class MessageWebTaskInfoService {
 
         return ResponseDataUtil.buildSuccess(page);
 
+    }
+
+    /**
+     * 统计发送数量
+     *
+     * @param qo
+     * @return
+     */
+    public ResponseData<Map<String, Object>> countSum(MessageWebTaskInfoValidator qo){
+
+        Map<String, Object> map = messageWebTaskInfoRepository.countSum(qo);
+        return ResponseDataUtil.buildSuccess(map);
     }
 }
