@@ -76,6 +76,12 @@ public class AccountTemplateInfoRepositoryImpl extends BasePageRepository {
             paramsList.add(qo.getTemplateStatus().trim());
         }
 
+        //业务类型
+        if (!StringUtils.isEmpty(qo.getTemplateAgreementType())) {
+            sqlBuffer.append(" and t.TEMPLATE_AGREEMENT_TYPE =?");
+            paramsList.add(qo.getTemplateAgreementType().trim());
+        }
+
         //模板内容
         if (!StringUtils.isEmpty(qo.getTemplateContent())) {
             sqlBuffer.append(" and t.TEMPLATE_CONTENT like ? ");
@@ -93,7 +99,7 @@ public class AccountTemplateInfoRepositoryImpl extends BasePageRepository {
             paramsList.add(qo.getEndDate().trim());
         }
 
-        sqlBuffer.append(" order by t.CREATED_TIME desc");
+        sqlBuffer.append(" order by t.TEMPLATE_STATUS desc,t.CREATED_TIME desc");
 
         //根据参数个数，组织参数值
         Object[] params = new Object[paramsList.size()];

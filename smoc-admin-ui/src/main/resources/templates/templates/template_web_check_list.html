@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <!-- Custom box css -->
+    <link th:href="@{/static/plugins/custombox/css/custombox.min.css}" rel="stylesheet">
+    <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
+</head>
+<body style="background-color:#fff">
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top:10px">
+    <div class="container">
+
+        <!-- start row  列表数据-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+
+            <div class="col-sm-12">
+                <div class="panel panel-color panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">审核记录</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table table-hover m-10" style="margin-top: -12px;table-layout:fixed;">
+                                <thead>
+                                <tr>
+                                    <th>操作人</th>
+                                    <th>操作类型</th>
+                                    <th>意见</th>
+                                    <th>操作时间</th>
+                                </tr>
+                                <thead>
+                                <tr th:each="approve:${checkRecord}">
+                                    <td style="vertical-align: middle;line-height: 26px;">
+                                        [[${approve.userName}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px;">
+                                        <a th:if="${4 == approve.approveStatus}"
+                                           class="btn btn-teal btn-rounded btn-sm waves-effect waves-light">
+                                            新建
+                                        </a>
+                                        <mpm:tag th:if="${4 != approve.approveStatus}" id="templateStatus"
+                                                 identity="checkStatus"
+                                                 class="1,btn btn-success btn-rounded btn-sm waves-effect waves-light;2,btn btn-warning btn-rounded btn-sm waves-effect waves-light;0,btn btn-danger btn-rounded btn-sm waves-effect waves-light;"
+                                                 name="businessType" show-type="button" key="code"
+                                                 th:value="${approve.approveStatus}" title="审核状态"/>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px;">
+                                        [[${approve.approveAdvice}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px;">
+                                        [[${approve.submitTimeStr}]]
+                                    </td>
+                                </tr>
+                                <tbody>
+                                </tbody>
+                            </table>
+                            <hr>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+    </div> <!-- container -->
+</div> <!-- content -->
+
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<script th:src="@{/static/plugins/moment/moment.js}"></script>
+<!-- Modal-Effect -->
+
+<script>
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+</script>
+</body>
+</html>

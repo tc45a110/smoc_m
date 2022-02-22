@@ -50,6 +50,6 @@ public interface AccountTemplateInfoFeignClient {
      * @param id
      * @return
      */
-    @RequestMapping(value = "/account/template/cancelTemplate/{id}", method = RequestMethod.GET)
-    ResponseData cancelTemplate(@PathVariable String id) throws Exception;
+    @RequestMapping(value = "/account/template/cancelTemplate/{id}/{templateStatus}", method = RequestMethod.GET)
+    ResponseData cancelTemplate(@PathVariable String id,@PathVariable String templateStatus) throws Exception;
 }

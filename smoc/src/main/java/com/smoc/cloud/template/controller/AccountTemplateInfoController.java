@@ -87,8 +87,8 @@ public class AccountTemplateInfoController {
      * @param id
      * @return
      */
-    @RequestMapping(value = "/cancelTemplate/{id}", method = RequestMethod.GET)
-    public ResponseData cancelTemplate(@PathVariable String id) {
+    @RequestMapping(value = "/cancelTemplate/{id}/{templateStatus}", method = RequestMethod.GET)
+    public ResponseData cancelTemplate(@PathVariable String id,@PathVariable String templateStatus) {
 
         //完成参数规则验证
         MpmIdValidator validator = new MpmIdValidator();
@@ -96,7 +96,7 @@ public class AccountTemplateInfoController {
         if (!MpmValidatorUtil.validate(validator)) {
             return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(validator));
         }
-        ResponseData data = accountTemplateInfoService.cancelTemplate(id);
+        ResponseData data = accountTemplateInfoService.cancelTemplate(id,templateStatus);
         return data;
     }
 }

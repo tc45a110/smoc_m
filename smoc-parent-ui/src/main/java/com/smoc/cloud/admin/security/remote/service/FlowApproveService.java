@@ -92,6 +92,21 @@ public class FlowApproveService {
         }
     }
 
+    /**
+     * 审核记录
+     * @param approveId
+     * @return
+     */
+    public ResponseData<List<FlowApproveValidator>> checkRecord(String approveId) {
+        try {
+            List<FlowApproveValidator> pageList = flowApproveFeignClient.checkRecord(approveId);
+            return ResponseDataUtil.buildSuccess(pageList);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
     public ResponseData saveFlowApprove(FlowApproveValidator flowValidator, String op) {
         try {
             flowValidator.setId(UUID.uuid32());

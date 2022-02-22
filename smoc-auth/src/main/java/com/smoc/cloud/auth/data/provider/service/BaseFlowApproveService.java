@@ -54,7 +54,7 @@ public class BaseFlowApproveService {
     public ResponseData<BaseFlowApprove> save(BaseFlowApprove entity, String op) {
 
         //记录日志
-        log.info("[业务审核管理][{}]数据:{}",op,JSON.toJSONString(entity));
+        log.info("[业务审核管理][{}]数据:{}", op, JSON.toJSONString(entity));
         baseFlowApproveRepository.saveAndFlush(entity);
         return ResponseDataUtil.buildSuccess();
     }
@@ -71,7 +71,7 @@ public class BaseFlowApproveService {
         BaseFlowApprove data = baseFlowApproveRepository.findById(id).get();
 
         //记录日志
-        log.info("[业务审核管理][delete]数据:{}",JSON.toJSONString(data));
+        log.info("[业务审核管理][delete]数据:{}", JSON.toJSONString(data));
         baseFlowApproveRepository.deleteById(id);
         return ResponseDataUtil.buildSuccess();
     }
@@ -88,10 +88,21 @@ public class BaseFlowApproveService {
 
     /**
      * 审核记录
+     *
      * @param flowApproveValidator
      * @return
      */
     public List<FlowApproveValidator> checkRecord(FlowApproveValidator flowApproveValidator) {
         return baseFlowApproveRepository.checkRecord(flowApproveValidator);
+    }
+
+    /**
+     * 根据业务id查询审核记录
+     *
+     * @param approveId
+     * @return
+     */
+    public List<FlowApproveValidator> checkRecord(String approveId) {
+        return baseFlowApproveRepository.checkRecord(approveId);
     }
 }

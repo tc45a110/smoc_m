@@ -103,8 +103,8 @@ public class AccountTemplateInfoService {
      * @return
      */
     @Transactional
-    public ResponseData cancelTemplate(String templateId){
-        accountTemplateInfoRepository.cancelTemplate(templateId);
+    public ResponseData cancelTemplate(String templateId,String templateStatus){
+        accountTemplateInfoRepository.cancelTemplate(templateId,templateStatus);
         return ResponseDataUtil.buildSuccess();
     }
 }

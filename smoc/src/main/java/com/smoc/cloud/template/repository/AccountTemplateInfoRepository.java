@@ -24,7 +24,7 @@ public interface AccountTemplateInfoRepository extends JpaRepository<AccountTemp
      * @param templateId
      */
     @Modifying
-    @Query(value = "update account_template_info set TEMPLATE_STATUS = '0' where TEMPLATE_ID=:templateId ",nativeQuery = true)
-    void cancelTemplate(@Param("templateId") String templateId);
+    @Query(value = "update account_template_info set TEMPLATE_STATUS = :templateStatus where TEMPLATE_ID=:templateId ",nativeQuery = true)
+    void cancelTemplate(@Param("templateId") String templateId,@Param("templateStatus") String templateStatus);
 
 }

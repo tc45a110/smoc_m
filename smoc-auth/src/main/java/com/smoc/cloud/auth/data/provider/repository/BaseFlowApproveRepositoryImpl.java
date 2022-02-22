@@ -24,4 +24,20 @@ public class BaseFlowApproveRepositoryImpl {
         List<FlowApproveValidator> list = jdbcTemplate.query(sql,params, new FlowApproveRowMapper());
         return list;
     }
+
+    /**
+     * 根据业务id查询审核记录
+     * @param approveId
+     * @return
+     */
+    public List<FlowApproveValidator> checkRecord(String  approveId){
+        Object[] params = new Object[1];
+        params[0] = approveId;
+        String  sql = "select t.BUSI_URL REAL_NAME,t.USER_ID AS CHECK_NAME,t.APPROVE_STATUS,DATE_FORMAT(t.SUBMIT_TIME, '%Y-%m-%d %H:%i:%s')SUBMIT_TIME,DATE_FORMAT(t.APPROVE_TIME, '%Y-%m-%d %H:%i:%s')APPROVE_TIME,t.APPROVE_ADVICE " +
+                " from base_flow_approve t " +
+                " where t.APPROVE_ID=? order by t.SUBMIT_TIME asc ";
+
+        List<FlowApproveValidator> list = jdbcTemplate.query(sql,params, new FlowApproveRowMapper());
+        return list;
+    }
 }

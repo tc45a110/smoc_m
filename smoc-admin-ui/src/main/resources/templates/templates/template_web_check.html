@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
+
+</head>
+<body>
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <!-- start row 页面导航-->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                        <h4 class="page-title">WEB模板审核</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            模板管理
+                        </li>
+                        <li class="active">
+                            WEB模板审核
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row 页面内容-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-md-12">
+                <div class="card-box">
+                    <form id="submit_form" th:action="@{/template/web/save}"
+                          th:object="${accountTemplateInfoValidator}"
+                          method="post" data-parsley-validate="">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="p-20">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-6 form-group">
+                                                <label>企业名称： <span style="color:#00acc1">[[${enterpriseBasicInfoValidator.enterpriseName}]]</span>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label>业务账号： <span style="color:#00acc1">[[${accountBasicInfoValidator.accountId}]]</span>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label>业务账号名称：<span style="color:#00acc1">[[${accountBasicInfoValidator.accountName}]]</span>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label>业务类型：<span style="color:#00acc1">
+                                                    <mpm:tag id="templateType" identity="businessType"
+                                                             class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-danger btn-rounded btn-sm waves-effect waves-light;"
+                                                             name="businessType" show-type="button" key="code"
+                                                             th:value="${accountBasicInfoValidator.businessType}" title="业务类型"/></span>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-12 form-group">
+                                                <label>模板内容</label>
+                                            </div>
+                                            <div class="col-md-12 form-group">
+                                                <textarea class="form-control" readonly
+                                                          rows="15">[[${accountTemplateInfoValidator.templateContent}]]</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="panel panel-color panel-info">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">审核记录</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="table-responsive">
+                                            <table class="table table table-hover m-10" style="margin-top: -12px;table-layout:fixed;">
+                                                <thead>
+                                                <tr>
+                                                    <th>操作人</th>
+                                                    <th>操作类型</th>
+                                                    <th>意见</th>
+                                                    <th>操作时间</th>
+                                                </tr>
+                                                <thead>
+                                                  <tr th:each="approve:${checkRecord}">
+                                                      <td style="vertical-align: middle;line-height: 26px;">
+                                                          [[${approve.userName}]]
+                                                      </td>
+                                                      <td  style="vertical-align: middle;line-height: 26px;">
+                                                          <a th:if="${4 == approve.approveStatus}" class="btn btn-teal btn-rounded btn-sm waves-effect waves-light">
+                                                              新建
+                                                          </a>
+                                                          <mpm:tag th:if="${4 != approve.approveStatus}" id="templateStatus" identity="checkStatus"
+                                                                   class="1,btn btn-success btn-rounded btn-sm waves-effect waves-light;2,btn btn-warning btn-rounded btn-sm waves-effect waves-light;0,btn btn-danger btn-rounded btn-sm waves-effect waves-light;"
+                                                                   name="businessType" show-type="button" key="code"
+                                                                   th:value="${approve.approveStatus}" title="审核状态"/>
+                                                      </td>
+                                                      <td style="vertical-align: middle;line-height: 26px;">
+                                                          [[${approve.approveAdvice}]]
+                                                      </td>
+                                                      <td style="vertical-align: middle;line-height: 26px;">
+                                                          [[${approve.submitTimeStr}]]
+                                                      </td>
+                                                  </tr>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                            <hr>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-10">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-12 form-group">
+                                                <label>审核状态：<span class="text-danger">*</span>&nbsp;</label>
+                                                <mpm:tag id="checkStatus" identity="checkStatus" required="true"
+                                                         name="checkStatus" show-type="select" key="code"
+                                                         title="审核状态"/>
+                                            </div>
+                                            <div class="col-md-12 form-group">
+                                                <label>审核意见：<span class="text-danger">*</span>&nbsp
+                                                </label>
+                                                <textarea class="form-control" th:field="*{checkOpinions}" required
+                                                          rows="3"></textarea>
+                                            </div>
+                                            <div class="col-md-12 text-center" style="margin-top:20px">
+                                                <input type="hidden" th:field="*{templateId}">
+                                                <button sec:authorize-url="/template/web/save" type="submit"
+                                                        class="btn btn-teal waves-effect waves-light">提交
+                                                </button>
+                                                <a th:href="@{/template/web/list/HTTP}"
+                                                   style="margin-left:20px"
+                                                   class="btn btn-default waves-effect waves-light">返回</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- end form -->
+                </div> <!-- end card-box -->
+            </div> <!-- end col -->
+        </div>
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<th:block th:insert="fragments/common_fragments :: common_submit_form"/>
+<script>
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+
+</script>
+</body>
+</html>

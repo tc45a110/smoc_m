@@ -18,13 +18,13 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">WEB模版明细</h4>
+                    <h4 class="page-title">WEB模板明细</h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
-                            WEB模版审核
+                            模板管理
                         </li>
                         <li class="active">
-                            WEB模版明细
+                            WEB模板明细
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -38,10 +38,10 @@
             <div class="col-sm-12">
                 <div class="card-box">
                     <div class="row m-b-10">
-                        <h4 style="padding-left:12px"> WEB模版审核
+                        <h4 style="padding-left:12px">WEB模板明细
                             <div class="pull-right" style="margin-top: -12px;margin-right:10px">
-                                <a sec:authorize-url="/template/web/list"
-                                   th:href="@{/template/list}"
+                                <a sec:authorize-url="/template/web/list/HTTP"
+                                   th:href="@{/template/web/list/HTTP}"
                                    class="btn btn-default waves-effect waves-light btn-md">
                                     <i class="glyphicon  glyphicon-share-alt" style="margin-right:10px"></i>
                                     返回WEB模板列表</a>
@@ -56,18 +56,22 @@
                                         <ul class="nav nav-tabs m-b-30">
                                             <li class="active" id="tab1"><a onclick="active('1')"
                                                                             sec:authorize-url="/template/web/view/*"
-                                                                            th:href="@{/template/web/view/id}"
+                                                                            th:href="@{/template/web/view/{templateId}(templateId=${templateId})}"
                                                                             th:target="tab-content">WEB模板明细</a></li>
                                             <li class="" id="tab2"><a onclick="active('2')"
-                                                                      sec:authorize-url="/user/logs/list/*"
-                                                                      th:href="@{/user/logs/list/templateId}"
-                                                                      th:target="tab-content">WEB模板操作日志</a></li>
+                                                                      sec:authorize-url="/template/web/check/list/*"
+                                                                      th:href="@{/template/web/check/list/{templateId}(templateId=${templateId})}"
+                                                                      th:target="tab-content">审核记录</a></li>
+                                            <li class="" id="tab3"><a onclick="active('3')"
+                                                                      sec:authorize-url="/user/logs/list/*/*"
+                                                                      th:href="@{/user/logs/list/TEMPLATE_INFO/{templateId}(templateId=${templateId})}"
+                                                                      th:target="tab-content">操作日志</a></li>
 
                                         </ul>
                                         <div class="tab-cotent" style="background-color:#fff">
                                             <iframe name="tab-content" id="tab-content" th:frameBorder="0"
                                                     th:scrolling="auto"
-                                                    th:src="@{/template/web/view/id}"
+                                                    th:src="@{/template/web/view/{templateId}(templateId=${templateId})}"
                                                     style="padding: 0px; width: 100%; height: 1200px;background-color:#fff"></iframe>
                                         </div>
                                     </div>
@@ -95,7 +99,7 @@
 <script>
 
     function active(tab) {
-        for(var num = 1;num<3;num++){
+        for(var num = 1;num<4;num++){
             $('#tab'+num).removeClass("active");
         }
         $('#tab'+tab).attr("class","active");

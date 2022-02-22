@@ -84,7 +84,7 @@ public class TemplateController {
             return view;
         }
 
-        log.info("[page]:{}", new Gson().toJson(data));
+        //log.info("[page]:{}", new Gson().toJson(data));
 
         view.addObject("accountTemplateInfoValidator", accountTemplateInfoValidator);
         view.addObject("list", data.getData().getList());
@@ -162,7 +162,7 @@ public class TemplateController {
      *
      * @return
      */
-    @RequestMapping(value = "/copy/{businessAccountId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/copy/{business}", method = RequestMethod.GET)
     public ModelAndView copy(@PathVariable String businessAccountId, HttpServletRequest request) {
         ModelAndView view = new ModelAndView("templates/template_edit");
 
@@ -285,7 +285,7 @@ public class TemplateController {
         }
 
         //保存数据
-        ResponseData data = accountTemplateInfoService.save(accountTemplateInfoValidator, op);
+        ResponseData data = accountTemplateInfoService.save(accountTemplateInfoValidator, op,user.getId());
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;
@@ -322,7 +322,7 @@ public class TemplateController {
             return view;
         }
 
-        ResponseData deleteResponseData = accountTemplateInfoService.cancelTemplate(templateId);
+        ResponseData deleteResponseData = accountTemplateInfoService.cancelTemplate(templateId,"0");
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(deleteResponseData.getCode())) {
             systemUserLogService.logsAsync("TEMPLATE_INFO", templateId, user.getRealName(),"delete","删除模板", JSON.toJSONString(data.getData()));

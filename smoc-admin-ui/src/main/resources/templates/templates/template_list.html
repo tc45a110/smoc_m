@@ -16,13 +16,13 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">[[${accountTemplateInfoValidator.templateAgreementType}]]模版管理</h4>
+                    <h4 class="page-title">CMPP模版管理</h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
                             模板管理
                         </li>
                         <li>
-                            [[${accountTemplateInfoValidator.templateAgreementType}]]模版管理
+                            CMPP模版管理
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -42,11 +42,11 @@
                             </div>
                             <div class="form-group  col-sm-4">
                                 <input type="text" class="form-control"
-                                       placeholder="业务账号名称" autocomplete="off" th:field="*{accountName}">
+                                       placeholder="业务账号" autocomplete="off" th:field="*{businessAccount}">
                             </div>
                             <div class="form-group  col-sm-4">
                                 <input type="text" class="form-control"
-                                       placeholder="业务账号" autocomplete="off" th:field="*{businessAccount}">
+                                       placeholder="业务账号名称" autocomplete="off" th:field="*{accountName}">
                             </div>
                             <div class="form-group  col-sm-4">
                                 <mpm:tag id="templateType" identity="businessType" show-type="select" key="code"
@@ -67,7 +67,7 @@
                                    th:href="@{/template/business/account/search/{protocol}(protocol=${accountTemplateInfoValidator.templateAgreementType})}"
                                    class="btn btn-success waves-effect waves-light m-l-10 m-r-20 btn-md">
                                     <i class="glyphicon glyphicon-plus-sign"></i>
-                                    新建[[${accountTemplateInfoValidator.templateAgreementType}]]模板
+                                    新建CMPP模板
                                 </a>
                                 <input type="hidden" name="currentPage" id="currentPage"
                                        th:value="${pageParams.currentPage}">
@@ -85,7 +85,7 @@
             <div class="col-sm-12">
                 <div class="panel panel-color panel-info">
                     <div class="panel-heading">
-                        <h3 class="panel-title">[[${accountTemplateInfoValidator.templateAgreementType}]]模版列表</h3>
+                        <h3 class="panel-title">CMPP模版列表</h3>
                     </div>
                     <div class="panel-body">
                         <div class="table-responsive">
@@ -141,8 +141,8 @@
                                            data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="修改模板">
                                             <i style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/template/copy/*"
-                                           th:href="@{/template/copy/businessAccountId}"
+                                        <a sec:authorize-url="/template/add/*/*"
+                                           th:href="@{/template/add/{businessAccount}/{protocol}(protocol=${info.templateAgreementType},businessAccount=${info.businessAccount})}"
                                            class="on-default edit-row"
                                            style="padding-left: 5px;color: #4bd396;"
                                            data-toggle="tooltip"
@@ -167,7 +167,8 @@
 
             <th:block th:insert="fragments/common_fragments :: common_error"/>
             <!-- start confirm delete modal  -->
-            <div id="confirm-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="custom-width-modalLabel"
+            <div id="confirm-modal" class="modal fade" tabindex="-1" role="dialog"
+                 aria-labelledby="custom-width-modalLabel"
                  aria-hidden="true" style="display: none;margin: 60px">
                 <div class="modal-dialog" style="width:33%;">
                     <div class="modal-content">
@@ -183,7 +184,8 @@
                         <div class="modal-footer">
                             <input type="hidden" id="deleteId">
                             <a class="btn btn-default waves-effect" data-dismiss="modal">取消</a>
-                            <button onclick="logoutById()" class="btn btn-primary waves-effect waves-light">确认注销</button>
+                            <button onclick="logoutById()" class="btn btn-primary waves-effect waves-light">确认注销
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -212,6 +214,7 @@
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
+
 
 </script>
 </body>

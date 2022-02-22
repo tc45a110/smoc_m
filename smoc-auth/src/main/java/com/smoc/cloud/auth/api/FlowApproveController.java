@@ -40,6 +40,17 @@ public class FlowApproveController {
     }
 
     /**
+     * 根据业务id查询审核记录
+     *
+     * @param approveId
+     * @return
+     */
+    @RequestMapping(value = "/checkRecord/{approveId}", method = RequestMethod.GET)
+    public List<FlowApproveValidator> checkRecord(@PathVariable String approveId) {
+        return baseFlowApproveService.checkRecord(approveId);
+    }
+
+    /**
      * 根据ID 查询
      *
      * @param id

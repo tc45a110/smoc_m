@@ -45,4 +45,13 @@ public interface FlowApproveFeignClient {
      */
     @RequestMapping(value = "/flow/checkRecord", method = RequestMethod.POST)
     List<FlowApproveValidator> checkRecord(@RequestBody FlowApproveValidator flowApproveValidator);
+
+    /**
+     * 根据业务id查询审核记录
+     *
+     * @param approveId
+     * @return
+     */
+    @RequestMapping(value = "/flow/checkRecord/{approveId}", method = RequestMethod.GET)
+    List<FlowApproveValidator> checkRecord(@PathVariable String approveId)  throws Exception;
 }

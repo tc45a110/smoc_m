@@ -16,4 +16,11 @@ public interface BaseFlowApproveRepository extends CrudRepository<BaseFlowApprov
      * @return
      */
     List<FlowApproveValidator> checkRecord(FlowApproveValidator flowApproveValidator);
+
+    /**
+     * 根据业务id查询审核记录
+     * @param approveId
+     * @return
+     */
+    List<FlowApproveValidator> checkRecord(String  approveId);
 }
