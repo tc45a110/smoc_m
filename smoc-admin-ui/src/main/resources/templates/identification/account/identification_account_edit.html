@@ -69,13 +69,13 @@
 
                                             </div>
                                             <div class="col-md-6 form-group">
-                                                <label for="aesKey">AES密钥(客户对接参数)<span class="text-danger">*</span>&nbsp;
+                                                <label for="aesKey">AES(256)密钥(客户对接参数)<span class="text-danger">*</span>&nbsp;
                                                 </label>
                                                 <input id="aesKey" type="text" class="form-control" th:field="*{aesKey}"
                                                        required="" data-parsley-length="[2,32]" autocomplete="off" readonly >
                                             </div>
                                             <div class="col-md-6 form-group">
-                                                <label for="aesIv">AES偏移量(客户对接参数)<span class="text-danger">*</span>&nbsp;
+                                                <label for="aesIv">AES(256)偏移量(客户对接参数)<span class="text-danger">*</span>&nbsp;
                                                 </label>
                                                 <input id="aesIv" type="text" class="form-control" th:field="*{aesIv}"
                                                        required="" data-parsley-length="[2,16]" autocomplete="off" readonly >

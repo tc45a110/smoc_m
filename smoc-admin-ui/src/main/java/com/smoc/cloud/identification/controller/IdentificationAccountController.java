@@ -304,17 +304,17 @@ public class IdentificationAccountController {
         excelModel1.setValue(identificationAccountInfoValidator.getMd5HmacKey());
         list.add(excelModel1);
         AccountExcelModel excelModel2 = new AccountExcelModel();
-        excelModel2.setKey("AES-KEY密钥");
+        excelModel2.setKey("AES(256)-KEY密钥");
         excelModel2.setValue(identificationAccountInfoValidator.getAesKey());
         list.add(excelModel2);
         AccountExcelModel excelModel3 = new AccountExcelModel();
-        excelModel3.setKey("AES-IV偏移量");
+        excelModel3.setKey("AES(256)-IV偏移量");
         excelModel3.setValue(identificationAccountInfoValidator.getAesIv());
         list.add(excelModel3);
 
         AccountExcelModel excelModel4 = new AccountExcelModel();
         excelModel4.setKey("技术对接说明");
-        excelModel4.setValue("用MD5-HMAC签名；AES-256对敏感数据身份证号进行加密；AES加密模式:AES/CBC/PKCS7Padding；AES_NAME为AES");
+        excelModel4.setValue("用MD5-HMAC签名；AES(256)对敏感数据身份证号进行加密；AES(256)加密模式:AES/CBC/PKCS7Padding；AES_NAME为AES");
         list.add(excelModel4);
 
         AccountExcelModel excelModel5 = new AccountExcelModel();
