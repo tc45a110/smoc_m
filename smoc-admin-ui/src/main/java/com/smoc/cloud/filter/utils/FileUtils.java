@@ -27,14 +27,14 @@ import java.util.List;
 @Slf4j
 public class FileUtils {
 
-    public static List<ExcelModel> readFile(MultipartFile file) {
+    public static List<ExcelModel> readFile(MultipartFile file,String type) {
 
         try {
             InputStream in = file.getInputStream();
             String fileName = file.getOriginalFilename();
             String fileType = fileName.substring(fileName.lastIndexOf("."));
             if (".xls".equals(fileType) || ".xlsx".equals(fileType)) {
-                return readExcel(in);
+                return readExcel(in,type);
             } else if (".txt".equals(fileType)) {
                 return readerTxt(in);
             }
@@ -84,12 +84,29 @@ public class FileUtils {
 
     /**
      * 异步EXCEL
+     * 1:白黑名单 2：关键词
      */
-    public static List<ExcelModel> readExcel(InputStream inputStream) {
+    public static List<ExcelModel> readExcel(InputStream inputStream,String type) {
         try {
-            ExcelModelListener excelModelListener = new ExcelModelListener();
-            readEasyExcel(inputStream, excelModelListener);
-            List<ExcelModel> list = excelModelListener.getExcelModelList();
+            List<ExcelModel> list = new ArrayList<>();
+            if("1".equals(type)){
+                ExcelModelListener excelModelListener = new ExcelModelListener();
+                ExcelReader excelReader = EasyExcel.read(inputStream, ExcelModel.class, excelModelListener).build();
+                ReadSheet readSheet = EasyExcel.readSheet(0).build();
+                excelReader.read(readSheet);
+                excelReader.finish();
+                list = excelModelListener.getExcelModelList();
+            }
+
+            if("2".equals(type)){
+                KeywordsExcelModelListener keywordsExcelModelListener = new KeywordsExcelModelListener();
+                ExcelReader excelReader = EasyExcel.read(inputStream, ExcelModel.class, keywordsExcelModelListener).build();
+                ReadSheet readSheet = EasyExcel.readSheet(0).build();
+                excelReader.read(readSheet);
+                excelReader.finish();
+                list = keywordsExcelModelListener.getExcelModelList();
+            }
+
             return list;
         } catch (Exception e) {
             log.error("读取excel表格失败:", e);

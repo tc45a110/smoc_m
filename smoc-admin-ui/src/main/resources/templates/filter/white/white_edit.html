@@ -20,7 +20,7 @@
             <div class="col-md-12">
                 <div class="panel panel-color panel-info">
                     <div class="panel-heading">
-                        <h3 class="panel-title">[[${filterGroupListValidator.groupName}]]名单</h3>
+                        <h3 class="panel-title">[[${filterGroupListValidator.groupName}]]</h3>
                     </div>
                     <div class="panel-body">
                         <form th:action="@{/filter/white/save/{op}(op=${op})}" id="submit_form" th:object="${filterWhiteListValidator}" method="post">

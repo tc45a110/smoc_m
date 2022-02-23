@@ -1,4 +1,4 @@
-package com.smoc.cloud.filter.keywords;
+package com.smoc.cloud.filter.keywords.controller;
 
 import com.smoc.cloud.common.auth.qo.Dict;
 import com.smoc.cloud.common.auth.qo.DictType;

@@ -52,7 +52,7 @@
                                             <label>接口类型<span class="text-danger">*</span>&nbsp;</label>
                                             <mpm:tag id="inter" required="true" identity="accountInterfaceType"
                                                      show-type="select" key="code" onchange="changeType(this.value)"
-                                                     class="form-control" name="protocol" mask-value="HTTP_INTERNATIONAL"
+                                                     class="form-control" name="protocol" mask-value="HTTP_INTERNATIONAL,SMPP"
                                                      th:value="${accountInterfaceInfoValidator.protocol}" title="接口类型"/>
                                         </div>
                                         <div class="form-group m-b-20">
@@ -68,7 +68,7 @@
                                                    placeholder="发送速率(条/秒)">
                                         </div>
                                         <div class="form-group m-b-20">
-                                            <label for="identifyIp">客户鉴权IP(多个IP用英文逗号隔开)<span class="text-danger">*</span>&nbsp;
+                                            <label for="identifyIp">客户鉴权IP(多个IP用英文逗号隔开，不填写，代表所有所有IP)<span class="text-danger">*</span>&nbsp;
                                                 <span class="text-danger" th:if="${#fields.hasErrors('identifyIp')}"
                                                       th:errors="*{identifyIp}"
                                                       style="font-weight: 200;font-size: 12px"></span></label>
@@ -104,6 +104,14 @@
                                                    th:field="*{maxConnect}" data-parsley-length="[1,10]"
                                                    data-parsley-type="number"
                                                    autocomplete="off" placeholder="最大链接数">
+                                        </div>
+                                        <div class="form-group m-b-20">
+                                            <label class="m-b-10">模板是否审核<span
+                                                    class="text-danger">*</span>&nbsp;</label><br>
+                                            <mpm:tag identity="isOrNo" id="executeCheck" name="executeCheck"
+                                                     th:value="${accountInterfaceInfoValidator.executeCheck}"
+                                                     show-type="radio" style="margin-top:0px" key="code" required="true"
+                                                     title="是否"/>
                                         </div>
                                     </div>
 
@@ -142,6 +150,14 @@
                                                    th:field="*{statusReportUrl}" data-parsley-length="[2,128]"
                                                    data-parsley-type="url" autocomplete="off"
                                                    placeholder="运营商状态报告推送地址url">
+                                        </div>
+                                        <div class="form-group m-b-20">
+                                            <label class="m-b-10">模板是否审核<span
+                                                    class="text-danger">*</span>&nbsp;</label><br>
+                                            <mpm:tag identity="isOrNo" id="executeCheck" name="executeCheck"
+                                                     th:value="${accountInterfaceInfoValidator.executeCheck}"
+                                                     show-type="radio" style="margin-top:0px" key="code" required="true"
+                                                     title="是否"/>
                                         </div>
 
                                     </div>
@@ -182,6 +198,14 @@
                                                    data-parsley-type="url" autocomplete="off"
                                                    placeholder="运营商状态报告推送地址url">
                                         </div>
+                                        <div class="form-group m-b-20">
+                                            <label class="m-b-10">模板是否审核<span
+                                                    class="text-danger">*</span>&nbsp;</label><br>
+                                            <mpm:tag identity="isOrNo" id="executeCheck" name="executeCheck"
+                                                     th:value="${accountInterfaceInfoValidator.executeCheck}"
+                                                     show-type="radio" style="margin-top:0px" key="code" required="true"
+                                                     title="是否"/>
+                                        </div>
 
                                     </div>
 
@@ -199,17 +223,6 @@
                                                    placeholder="客户提交速率">
                                         </div>
                                     </div>
-                                    <div class="col-md-6" >
-                                        <div class="form-group m-b-20">
-                                            <label class="m-b-10">模板是否审核<span
-                                                    class="text-danger">*</span>&nbsp;</label><br>
-                                            <mpm:tag identity="isOrNo" id="executeCheck" name="executeCheck"
-                                                     th:value="${accountInterfaceInfoValidator.executeCheck}"
-                                                     show-type="radio" style="margin-top:0px" key="code" required="true"
-                                                     title="是否"/>
-                                        </div>
-                                    </div>
-
 
                                 </div>
                                 <div class="text-center" style="margin-bottom:20px">

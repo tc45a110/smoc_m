@@ -15,16 +15,16 @@ public class BlackRowMapper implements RowMapper<FilterBlackListValidator> {
     @Override
     public FilterBlackListValidator mapRow(ResultSet resultSet, int i) throws SQLException {
 
-        FilterBlackListValidator meipGroupPersonValidator = new FilterBlackListValidator();
-        meipGroupPersonValidator.setId(resultSet.getString("ID"));
-        meipGroupPersonValidator.setGroupId(resultSet.getString("GROUP_ID"));
+        FilterBlackListValidator data = new FilterBlackListValidator();
+        data.setId(resultSet.getString("ID"));
+        data.setGroupId(resultSet.getString("GROUP_ID"));
         String userName = resultSet.getString("NAME");
-        meipGroupPersonValidator.setName(userName);
+        data.setName(userName);
         String mobile = resultSet.getString("MOBILE");
-        meipGroupPersonValidator.setMobile(mobile);
-        meipGroupPersonValidator.setStatus(resultSet.getString("STATUS"));
-        meipGroupPersonValidator.setCreatedTimeStr(resultSet.getString("CREATED_TIME"));
-        meipGroupPersonValidator.setCreatedBy(resultSet.getString("CREATED_BY"));
-        return meipGroupPersonValidator;
+        data.setMobile(mobile);
+        data.setStatus(resultSet.getString("STATUS"));
+        data.setCreatedTimeStr(resultSet.getString("CREATED_TIME"));
+        data.setCreatedBy(resultSet.getString("CREATED_BY"));
+        return data;
     }
 }

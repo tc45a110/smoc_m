@@ -248,6 +248,8 @@ public class WhiteController {
         } else if (!StringUtils.isEmpty(op) && "edit".equals(op)) {
             ResponseData<FilterWhiteListValidator> data = whiteService.findById(filterWhiteListValidator.getId());
             filterWhiteListValidator.setCreatedTime(data.getData().getCreatedTime());
+            filterWhiteListValidator.setUpdatedBy(user.getRealName());
+            filterWhiteListValidator.setUpdatedTime(new Date());
         } else {
             view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":" + ResponseCode.PARAM_LINK_ERROR.getMessage());
             return view;
@@ -329,6 +331,7 @@ public class WhiteController {
         }
 
         view.addObject("parentId", groupData.getData().getId());
+        view.addObject("filterGroupListValidator", groupData.getData());
 
         return view;
 
@@ -367,7 +370,7 @@ public class WhiteController {
         List<MultipartFile> file = mRequest.getFiles("file[]");
         if(!StringUtils.isEmpty(file) && file.size()>0){
 
-            List<ExcelModel> list = FileUtils.readFile(file.get(0));
+            List<ExcelModel> list = FileUtils.readFile(file.get(0),"1");
 
             //批量保存
             if(!StringUtils.isEmpty(list) && list.size()>0){
@@ -419,7 +422,7 @@ public class WhiteController {
 
         view.addObject("parentId", groupData.getData().getId());
         view.addObject("type", "1");
-
+        view.addObject("filterGroupListValidator", groupData.getData());
         return view;
 
     }

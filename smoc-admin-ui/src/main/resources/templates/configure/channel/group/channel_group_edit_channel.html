@@ -47,9 +47,9 @@
                                                     <p style="font-size:12px"><b>发送号码范围：<mpm:tag identity="carrier" show-type="label" key="code" th:value="${info.carrier}"/></b></p>
                                                     <p style="font-size:12px"><b>通道协议类型：<mpm:tag identity="channelProtocolType" show-type="label" key="code" th:value="${info.protocol}"/></b>
                                                     </p>
-                                                    <p style="font-size:12px"><b>优先级：[[${info.channelPriority}]]</b></p>
+                                                    <!--<p style="font-size:12px"><b>优先级：[[${info.channelPriority}]]</b></p>-->
                                                     <p style="font-size:12px"><b>权重：[[${info.channelWeight}]]</b>
-                                                        <a style="margin-left: 10px;color: white" title="修改通道优先级、权重"
+                                                        <a style="margin-left: 10px;color: white" title="修改通道权重"
                                                            data-toggle="modal" data-target="#confirm-add-modal" href="javascript:void(0);"
                                                            th:onclick="updateChannelConfig([[${info.id}]],[[${info.channelId}]],[[${info.channelName}]],[[${info.channelPriority}]],[[${info.channelWeight}]])">
                                                             <i style="font-size: 12px;" class="glyphicon glyphicon-edit"></i>
@@ -240,9 +240,8 @@
                                 </label>
                             </div>
                             <div class="form-group">
-                                <label>优先级<span class="text-danger">*</span></label>&nbsp;(默认 1，数字越小优先级越高)
-                                <input type="text" class="form-control"  required="" id="channelPriority" th:field="*{channelPriority}"
-                                       data-parsley-type="number" min="1"   max="10" autocomplete="off" placeholder="默认 1，数字越小优先级越高">
+                                <label>优先级：正常</label>
+
                             </div>
                             <div class="form-group">
                                 <label>权重<span class="text-danger">*</span></label>&nbsp;(默认 10，总共100)
@@ -292,7 +291,7 @@
         $("#channelPriority").val(channelPriority);
         $("#channelWeight").val(channelWeight);
         $("#subButton").html("确认修改");
-        $("#tipTitle").html("确认修改该通道优先级、权重");
+        $("#tipTitle").html("确认修改该通道权重");
     }
 
     //打开删除通道

@@ -165,6 +165,7 @@ public class ConfigChannelGroupController {
         }
         channelGroupConfigValidator.setCreatedBy(user.getRealName());
         channelGroupConfigValidator.setCreatedTime(new Date());
+        channelGroupConfigValidator.setChannelPriority(1);//优先级默认正常
         ResponseData data = configChannelGroupService.saveChannelGroupConfig(channelGroupConfigValidator, op);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());

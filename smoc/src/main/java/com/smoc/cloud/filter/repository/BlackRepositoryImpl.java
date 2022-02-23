@@ -17,6 +17,7 @@ import javax.annotation.Resource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,36 +36,25 @@ public class BlackRepositoryImpl extends BasePageRepository {
         //查询sql
         StringBuffer sqlBuffer = new StringBuffer("select t.ID,t.GROUP_ID,t.NAME,t.MOBILE,t.STATUS,str_to_date(t.CREATED_TIME,'%Y-%m-%d %H:%i:%S')CREATED_TIME,t.CREATED_BY " +
                 " from filter_black_list t where t.GROUP_ID=? ");
-        int paramSize = 0;
-        Object[] tempParams = new Object[3];
+
+        List<Object> paramsList = new ArrayList<Object>();
         if (null != filterBlackListValidator) {
-            tempParams[paramSize] = filterBlackListValidator.getGroupId();
-            paramSize++;
+            paramsList.add( filterBlackListValidator.getGroupId().trim());
+
             if (!StringUtils.isEmpty(filterBlackListValidator.getName())) {
                 sqlBuffer.append(" and t.NAME like ? ");
-                tempParams[paramSize] = "%" + filterBlackListValidator.getName().trim() + "%";
-                paramSize++;
+                paramsList.add( "%" + filterBlackListValidator.getName().trim() + "%");
             }
             if (!StringUtils.isEmpty(filterBlackListValidator.getMobile())) {
                 sqlBuffer.append(" and t.MOBILE like ? ");
-                tempParams[paramSize] = "%" + filterBlackListValidator.getMobile().trim()+ "%";
-                paramSize++;
+                paramsList.add( "%" + filterBlackListValidator.getMobile().trim()+ "%");
             }
         }
         sqlBuffer.append(" order by t.CREATED_TIME desc,t.ID ");
 
         //根据参数个数，组织参数值
-        Object[] params = null;
-        if (!(0 == paramSize)) {
-            params = new Object[paramSize];
-            int j = 0;
-            for (int i = 0; i < tempParams.length; i++) {
-                if (null != tempParams[i]) {
-                    params[j] = tempParams[i];
-                    j++;
-                }
-            }
-        }
+        Object[] params = new Object[paramsList.size()];
+        paramsList.toArray(params);
 
         PageList<FilterBlackListValidator> pageList = this.queryByPageForMySQL(sqlBuffer.toString(), params, pageParams.getCurrentPage(), pageParams.getPageSize(), new BlackRowMapper());
         return pageList;
@@ -130,26 +120,16 @@ public class BlackRepositoryImpl extends BasePageRepository {
 
         //查询sql
         StringBuffer sqlBuffer = new StringBuffer("select t.NAME,t.MOBILE from filter_black_list t where t.GROUP_ID=? ");
-        int paramSize = 0;
-        Object[] tempParams = new Object[3];
+
+        List<Object> paramsList = new ArrayList<Object>();
         if (null != filterBlackListValidator) {
-            tempParams[paramSize] = filterBlackListValidator.getGroupId();
-            paramSize++;
+            paramsList.add( filterBlackListValidator.getGroupId().trim());
         }
         sqlBuffer.append(" order by t.CREATED_TIME desc,t.ID ");
 
         //根据参数个数，组织参数值
-        Object[] params = null;
-        if (!(0 == paramSize)) {
-            params = new Object[paramSize];
-            int j = 0;
-            for (int i = 0; i < tempParams.length; i++) {
-                if (null != tempParams[i]) {
-                    params[j] = tempParams[i];
-                    j++;
-                }
-            }
-        }
+        Object[] params = new Object[paramsList.size()];
+        paramsList.toArray(params);
 
         PageList<ExcelModel> pageList = this.queryByPageForMySQL(sqlBuffer.toString(), params, pageParams.getCurrentPage(), pageParams.getPageSize(), new ExcelModelRowMapper());
         return pageList.getList();

@@ -281,6 +281,9 @@ public class GroupController {
         if("2".equals(type)){
             fileName = "模版.xlsx";
         }
+        if("3".equals(type)){
+            fileName = "关键词模板.xlsx";
+        }
 
         //设置文件路径
         ClassPathResource classPathResource = new ClassPathResource("static/files/" + fileName);
