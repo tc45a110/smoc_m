@@ -316,6 +316,7 @@ public class AccountChannelRepositoryImpl extends BasePageRepository {
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");
         sqlBuffer.append("  t.ID");
+        sqlBuffer.append(", t.ACCOUNT_ID");
         sqlBuffer.append(", t.CONFIG_TYPE");
         sqlBuffer.append(", t.CARRIER");
         sqlBuffer.append(", t.CHANNEL_ID");
@@ -331,9 +332,15 @@ public class AccountChannelRepositoryImpl extends BasePageRepository {
 
         List<Object> paramsList = new ArrayList<Object>();
 
+        //业务账号
         if (!StringUtils.isEmpty(qo.getAccountId())) {
             sqlBuffer.append(" and t.ACCOUNT_ID = ?");
             paramsList.add(qo.getAccountId().trim());
+        }
+        //通道ID
+        if (!StringUtils.isEmpty(qo.getChannelId())) {
+            sqlBuffer.append(" and t.CHANNEL_ID = ?");
+            paramsList.add(qo.getChannelId().trim());
         }
 
         sqlBuffer.append(" order by t.CARRIER ");

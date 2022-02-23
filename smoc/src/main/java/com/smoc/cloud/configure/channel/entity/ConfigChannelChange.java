@@ -1,7 +1,7 @@
 package com.smoc.cloud.configure.channel.entity;
 
 import javax.persistence.*;
-import java.time.Instant;
+import java.util.Date;
 
 @Entity
 @Table(name = "config_channel_change")
@@ -30,19 +30,19 @@ public class ConfigChannelChange {
     private String createdBy;
 
     @Column(name = "CREATED_TIME", nullable = false)
-    private Instant createdTime;
+    private Date createdTime;
 
     @Column(name = "UPDATED_BY", length = 32)
     private String updatedBy;
 
     @Column(name = "UPDATED_TIME")
-    private Instant updatedTime;
+    private Date updatedTime;
 
-    public Instant getUpdatedTime() {
+    public Date getUpdatedTime() {
         return updatedTime;
     }
 
-    public void setUpdatedTime(Instant updatedTime) {
+    public void setUpdatedTime(Date updatedTime) {
         this.updatedTime = updatedTime;
     }
 
@@ -54,11 +54,11 @@ public class ConfigChannelChange {
         this.updatedBy = updatedBy;
     }
 
-    public Instant getCreatedTime() {
+    public Date getCreatedTime() {
         return createdTime;
     }
 
-    public void setCreatedTime(Instant createdTime) {
+    public void setCreatedTime(Date createdTime) {
         this.createdTime = createdTime;
     }
 

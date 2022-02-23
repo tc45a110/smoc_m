@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
+    <style>
+    </style>
+</head>
+<body>
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <!-- start row 页面导航-->
+        <div class="row fixed-navigation">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">业务账号挂起通道 </h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            通道切换
+                        </li>
+                        <li class="active">
+                            业务账号挂起通道
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  查询条件-->
+        <div class="row" style="position: relative;margin-top: 80px" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <form th:action="@{/configure/channel/suspend/page}" th:object="${configChannelChangeValidator}"
+                          id="query_form" method="post">
+                        <div class="row m-b-60">
+                            <div class="col-sm-12">
+                                <div class="form-group  col-sm-4">
+                                    <input type="text" class="form-control" th:field="*{channelId}"
+                                           placeholder="通道ID" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-4">
+                                    <input type="text" class="form-control" th:field="*{channelName}"
+                                           placeholder="通道名称" autocomplete="off">
+                                </div>
+                                <div class="form-group col-sm-4 pull-right" style="text-align: right">
+                                    <button sec:authorize-url="/configure/channel/suspend/page" type="submit"
+                                            class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-search" style="margin-right:5px"></i> 查询
+                                    </button>
+                                    <a sec:authorize-url="/channel/search/suspend/list"
+                                       th:href="@{/channel/search/suspend/list}"
+                                       class="btn btn-success waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-plus-sign"
+                                           style="margin-right:5px"></i>新建挂起通道</a>
+                                    <input type="hidden" name="currentPage" id="currentPage"
+                                           th:value="${pageParams.currentPage}">
+                                    <input type="hidden" name="pageSize" id="pageSize"
+                                           th:value="${pageParams.pageSize}">
+                                    <input type="hidden" th:field="*{changeType}">
+                                    <a id="help_display" style="margin-left:10px"><i class="mdi mdi-help-circle-outline"
+                                                                                     style="font-size:18px;"></i></a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  操作提示-->
+        <div id="help" class="alert alert-icon alert-danger alert-dismissible fade in" role="alert">
+            <button id="help_button" type="button" class="close"
+                    aria-label="Close">
+                <span>&times;</span>
+            </button>
+            <i class="mdi mdi-help-circle-outline"></i>
+            <strong>操作提示：</strong> 挂起通道 表示 暂停全部或部分业务账号对该通道的使用。
+        </div>
+        <!-- end row -->
+
+        <!-- start row  列表数据-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="panel panel-color panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">挂起通道列表</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table table-hover m-10" style="margin-top: -12px;">
+                                <thead>
+                                <tr>
+                                    <th>通道ID</th>
+                                    <th>通道名称</th>
+                                    <th>影响业务账号数</th>
+                                    <th>通道切换类型</th>
+                                    <th>通道挂起原因</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="info:${list}">
+                                    <td>
+                                        [[${info.channelId}]]
+                                    </td>
+                                    <td>
+                                        [[${info.channelName}]]
+                                    </td>
+                                    <td>
+                                        [[${info.accountNum}]]
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light">挂起通道</a>
+                                    </td>
+                                    <td>
+                                        [[${info.changeReason}]]
+                                    </td>
+                                    <td>
+                                        <mpm:tag id="dataStatus" identity="dataStatus"
+                                                 class="1,btn btn-info btn-rounded btn-ms waves-effect waves-light;0,btn btn-danger btn-rounded btn-ms waves-effect waves-light;"
+                                                 name="dataStatus" show-type="button" key="code"
+                                                 th:value="${info.changeStatus}" title="通用数据状态"/>
+                                    </td>
+                                    <td>
+                                        <a th:href="@{/configure/channel/suspend/view/center/id}"
+                                           sec:authorize-url="/configure/channel/suspend/view/center/*"
+                                           style="padding-left: 5px;color: #4BD396;"
+                                           data-toggle="tooltip"
+                                           data-placement="left" title="" data-original-title="业务账号挂起通道明细"><i
+                                                style="font-size: 18px"
+                                                class="glyphicon glyphicon-search"></i></a>
+                                        <a sec:authorize-url="/configure/channel/suspend/edit/*"
+                                           th:href="@{/configure/channel/suspend/edit/id}"
+                                           class="on-default edit-row"
+                                           style="padding-left: 6px;color: #29b6f6;" data-toggle="tooltip"
+                                           data-placement="left" title="" data-original-title="修改业务账号挂起通道"
+                                        ><i style="font-size: 18px"
+                                            class="mdi mdi-table-edit"></i></a>
+                                        <a data-toggle="modal"
+                                           data-target="#confirm-modal" class="on-default remove-row"
+                                           style="padding-left: 5px;color: #f05050"
+                                           title="注销通道挂起"
+                                        ><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <th:block th:insert="fragments/page_fragments :: page"/>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start confirm delete modal  -->
+        <div id="confirm-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="custom-width-modalLabel"
+             aria-hidden="true" style="display: none;margin: 60px">
+            <div class="modal-dialog" style="width:33%;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title" id="custom-width-modalLabel">确认注销</h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <p>注销通道挂起后，所有关联业务账号，将恢复到挂起前状态。你确认要注销？</p>
+
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" id="deleteId">
+                        <a class="btn btn-default waves-effect" data-dismiss="modal">取消</a>
+                        <button class="btn btn-primary waves-effect waves-light">确认注销</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end confirm delete modal  -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+    </div> <!-- container -->
+
+</div> <!-- content -->
+
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<th:block th:insert="fragments/cookie_fragments :: cookie_js"/>
+<script>
+
+    /**
+     * 处理cookie
+     */
+    $(document).ready(function() {
+
+        if("none" == $.cookie("help_display_account_channel_suspend_list")){
+           $('#help').css('display', 'none');
+        }
+
+        $('#help_display').on("click", function () {
+           if('block' == $('#help').css('display')){
+             $('#help').css('display', 'none');
+             $.cookie("help_display_account_channel_suspend_list", 'none', {
+                expires : 180
+             });
+           }else{
+             $('#help').css('display', 'block');
+             $.cookie("help_display_account_channel_suspend_list", 'block', {
+                expires : 180
+             });
+           }
+        });
+        $('#help_button').on("click", function () {
+           $('#help').css('display', 'none');
+           $.cookie("help_display_account_channel_suspend_list", 'none', {
+			expires : 180
+		   });
+        });
+
+    });
+
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+
+
+
+</script>
+</body>
+</html>

@@ -17,6 +17,7 @@ public class AccountChannelDetailRowMapper implements RowMapper<AccountChannelIn
         AccountChannelInfoValidator qo = new AccountChannelInfoValidator();
         qo.setId(resultSet.getString("ID"));
         qo.setConfigType(resultSet.getString("CONFIG_TYPE"));
+        qo.setAccountId(resultSet.getString("ACCOUNT_ID"));
         qo.setCarrier(resultSet.getString("CARRIER"));
         qo.setChannelId(resultSet.getString("CHANNEL_ID"));
         qo.setChannelName(resultSet.getString("CHANNEL_NAME"));

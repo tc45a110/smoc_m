@@ -21,7 +21,7 @@
                     <h4 class="page-title">挂起通道</h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
-                            业务账号管理
+                           通道切换
                         </li>
                         <li class="active">
                             业务账号挂起通道
@@ -43,11 +43,11 @@
                     <div class="row m-b-10">
                         <h4>
                             <div class="pull-right" style="margin-top: -12px;margin-right:10px">
-                                <a sec:authorize-url="/account/channel/suspend/list"
-                                   th:href="@{/account/channel/suspend/list}"
+                                <a sec:authorize-url="/configure/channel/suspend/list"
+                                   th:href="@{/configure/channel/suspend/list}" style="margin-left:10px"
                                    class="btn btn-default waves-effect waves-light btn-md">
-                                    <i class="glyphicon  glyphicon-share-alt" style="margin-right:10px"></i>
-                                    返回挂起通道列表</a>
+                                    <i class="glyphicon  glyphicon-share-alt" style="margin-right:5px"></i>
+                                    返回列表</a>
                                 <a id="help_display" style="margin-left:10px"><i class="mdi mdi-help-circle-outline"
                                                                                  style="font-size:18px;"></i></a>
                             </div>
@@ -55,7 +55,7 @@
                     </div>
 
                     <!-- start row  操作提示-->
-                    <div id="help" class="row alert alert-icon alert-success alert-dismissible fade in" role="alert">
+                    <div id="help" class="row alert alert-icon alert-danger alert-dismissible fade in" role="alert">
                         <button id="help_button" type="button" class="close"
                                 aria-label="Close">
                             <span>&times;</span>

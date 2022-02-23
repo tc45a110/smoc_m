@@ -1,4 +1,4 @@
-package com.smoc.cloud.customer.controller;
+package com.smoc.cloud.configure.channel.controller;
 
 import com.smoc.cloud.common.page.PageParams;
 import lombok.extern.slf4j.Slf4j;
@@ -11,22 +11,22 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * 业务账号普通通道
+ * 业务账号特权通道
  */
 @Slf4j
 @Controller
-@RequestMapping("/account/channel/normal")
-public class AccountChannelNormalController {
+@RequestMapping("/configure/channel/privilege")
+public class AccountChannelPrivilegeController {
 
     /**
-     * 业务账号普通通道列表
+     * 业务账号特权通道列表
      *
      * @return
      */
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ModelAndView list() {
 
-        ModelAndView view = new ModelAndView("customer/account_channel_change/account_channel_normal_list");
+        ModelAndView view = new ModelAndView("configure/account_channel_change/account_channel_privilege_list");
 
         //查询数据
         PageParams params = new PageParams<>();
@@ -43,13 +43,13 @@ public class AccountChannelNormalController {
     }
 
     /**
-     * 业务账号普通通道分页查询
+     * 业务账号特权通道分页查询
      *
      * @return
      */
     @RequestMapping(value = "/page", method = RequestMethod.POST)
     public ModelAndView page() {
-        ModelAndView view = new ModelAndView("customer/account_channel_change/account_channel_normal_list");
+        ModelAndView view = new ModelAndView("configure/account_channel_change/account_channel_privilege_list");
 
         //查询数据
         PageParams params = new PageParams<>();
@@ -66,42 +66,42 @@ public class AccountChannelNormalController {
     }
 
     /**
-     * 业务账号普通通道明细中心
+     * 业务账号特权通道明细中心
      *
      * @return
      */
     @RequestMapping(value = "/view/center/{id}", method = RequestMethod.GET)
     public ModelAndView view_center(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("customer/account_channel_change/account_channel_normal_view_center");
+        ModelAndView view = new ModelAndView("configure/account_channel_change/account_channel_privilege_view_center");
 
         return view;
 
     }
 
     /**
-     * 业务账号普通通道明细
+     * 业务账号特权通道明细
      *
      * @return
      */
     @RequestMapping(value = "/view/base/{id}", method = RequestMethod.GET)
     public ModelAndView view(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("customer/account_channel_change/account_channel_normal_view");
+        ModelAndView view = new ModelAndView("configure/account_channel_change/account_channel_privilege_view");
 
         return view;
 
     }
 
     /**
-     * 业务账号普通通道维护
+     * 业务账号特权通道维护
      *
      * @return
      */
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public ModelAndView edit(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("customer/account_channel_change/account_channel_normal_edit");
+        ModelAndView view = new ModelAndView("configure/account_channel_change/account_channel_privilege_edit");
 
         return view;
 

@@ -4,7 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.time.Instant;
+import java.util.Date;
 
 @Entity
 @Table(name = "config_channel_change_items")
@@ -28,23 +28,29 @@ public class ConfigChannelChangeItem {
     @Column(name = "CHANGE_AFTER_PRIORITY", nullable = false, length = 32)
     private String changeAfterPriority;
 
+    @Column(name = "ACCOUNT_CHANNEL_ID", nullable = false, length = 32)
+    private String accountChannelId;
+
+    @Column(name = "STATUS", nullable = false, length = 32)
+    private String status;
+
     @Column(name = "CREATED_BY", nullable = false, length = 32)
     private String createdBy;
 
     @Column(name = "CREATED_TIME", nullable = false)
-    private Instant createdTime;
+    private Date createdTime;
 
     @Column(name = "UPDATED_BY", length = 32)
     private String updatedBy;
 
     @Column(name = "UPDATED_TIME")
-    private Instant updatedTime;
+    private Date updatedTime;
 
-    public Instant getUpdatedTime() {
+    public Date getUpdatedTime() {
         return updatedTime;
     }
 
-    public void setUpdatedTime(Instant updatedTime) {
+    public void setUpdatedTime(Date updatedTime) {
         this.updatedTime = updatedTime;
     }
 
@@ -56,11 +62,11 @@ public class ConfigChannelChangeItem {
         this.updatedBy = updatedBy;
     }
 
-    public Instant getCreatedTime() {
+    public Date getCreatedTime() {
         return createdTime;
     }
 
-    public void setCreatedTime(Instant createdTime) {
+    public void setCreatedTime(Date createdTime) {
         this.createdTime = createdTime;
     }
 
@@ -118,5 +124,21 @@ public class ConfigChannelChangeItem {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getAccountChannelId() {
+        return accountChannelId;
+    }
+
+    public void setAccountChannelId(String accountChannelId) {
+        this.accountChannelId = accountChannelId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
