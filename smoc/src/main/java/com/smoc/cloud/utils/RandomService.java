@@ -1,15 +1,20 @@
 package com.smoc.cloud.utils;
 
 import com.smoc.cloud.common.utils.RandomUtil;
+import com.smoc.cloud.sequence.repository.SequenceRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 
 @Slf4j
 @Service
 public class RandomService {
+
+    @Resource
+    private SequenceRepository sequenceRepository;
 
     /**
      * Redis key前缀
@@ -19,6 +24,17 @@ public class RandomService {
 
     @Resource
     private RedisTemplate<String, String> stringRedisTemplate;
+
+    public String getBusinessAccount(String code){
+
+        if(StringUtils.isEmpty(code)){
+            return sequenceRepository.findSequence("BUSINESS_ACCOUNT")+"";
+        }
+
+        String prefix = code.substring(0,1);
+        return ""+sequenceRepository.findSequence(prefix);
+
+    }
 
     /**
      * 获取len位字母字符串

@@ -219,6 +219,10 @@ public class AccountController {
                 view.addObject("error", data.getCode() + ":" + data.getMessage());
             }
 
+            //生成业务账号
+            ResponseData<String> bussinessAccountId = businessAccountService.createAccountId(data.getData().getEnterpriseFlag());
+            accountBasicInfoValidator.setAccountId(data.getData().getEnterpriseFlag()+bussinessAccountId.getMessage());
+
             //国际账号
             if("international".equals(flag)){
                 accountBasicInfoValidator.setCarrier("INTERNATIONAL");
@@ -304,9 +308,6 @@ public class AccountController {
 
         //初始化其他变量
         if (!StringUtils.isEmpty(op) && "add".equals(op)) {
-            //封装业务账号前缀
-            String prefixId = sequenceService.getPrefixId("BUSINESS_ACCOUNT", accountBasicInfoValidator.getBusinessType());
-            accountBasicInfoValidator.setAccountId(prefixId);
             accountBasicInfoValidator.setCreatedTime(DateTimeUtils.getDateTimeFormat(new Date()));
             accountBasicInfoValidator.setCreatedBy(user.getRealName());
         } else if (!StringUtils.isEmpty(op) && "edit".equals(op)) {

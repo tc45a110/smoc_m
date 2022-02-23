@@ -117,6 +117,11 @@
                                                          key="code" th:value="${enterpriseBasicInfoValidator.enterpriseStatus}" required="true" title="是否"/>
 
                                             </div>
+                                            <div class="col-md-6 form-group">
+                                                <label>企业标识(随机三位)<span class="text-danger">*</span>&nbsp;</label>
+                                                <input type="text" class="form-control" th:field="*{enterpriseFlag}"
+                                                       readonly autocomplete="off">
+                                            </div>
 
                                             <div class="col-md-12 text-center">
                                                 <input type="hidden" th:field="*{enterpriseId}">

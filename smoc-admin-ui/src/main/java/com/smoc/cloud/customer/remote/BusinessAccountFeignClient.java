@@ -59,4 +59,12 @@ public interface BusinessAccountFeignClient {
      */
     @RequestMapping(value = "/account/forbiddenAccountById/{enterpriseId}", method = RequestMethod.GET)
     ResponseData<List<AccountBasicInfoValidator>> findBusinessAccountByEnterpriseId(@PathVariable String enterpriseId) throws Exception;
+
+    /**
+     * 生成业务账号
+     * @param enterpriseFlag
+     * @return
+     */
+    @RequestMapping(value = "/account/createAccountId/{enterpriseFlag}", method = RequestMethod.GET)
+    ResponseData<String> createAccountId(@PathVariable String enterpriseFlag)throws Exception;
 }

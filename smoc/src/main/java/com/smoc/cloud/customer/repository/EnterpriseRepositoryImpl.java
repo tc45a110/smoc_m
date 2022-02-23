@@ -29,6 +29,7 @@ public class EnterpriseRepositoryImpl extends BasePageRepository {
         StringBuilder sqlBuffer = new StringBuilder("select ");
         sqlBuffer.append("  t.ENTERPRISE_ID");
         sqlBuffer.append(", t.ENTERPRISE_PARENT_ID");
+        sqlBuffer.append(", t.ENTERPRISE_FLAG");
         sqlBuffer.append(", t.ENTERPRISE_NAME");
         sqlBuffer.append(", t.ENTERPRISE_TYPE");
         sqlBuffer.append(", t.ACCESS_CORPORATION");
@@ -120,6 +121,7 @@ public class EnterpriseRepositoryImpl extends BasePageRepository {
         StringBuilder sqlBuffer = new StringBuilder("select ");
         sqlBuffer.append("  t.ENTERPRISE_ID");
         sqlBuffer.append(", t.ENTERPRISE_PARENT_ID");
+        sqlBuffer.append(", t.ENTERPRISE_FLAG");
         sqlBuffer.append(", t.ENTERPRISE_NAME");
         sqlBuffer.append(", t.ENTERPRISE_TYPE");
         sqlBuffer.append(", t.ACCESS_CORPORATION");

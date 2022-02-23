@@ -19,7 +19,7 @@ import java.util.List;
 public interface EnterpriseRepository extends CrudRepository<EnterpriseBasicInfo, String>, JpaRepository<EnterpriseBasicInfo, String> {
 
 
-    Iterable<EnterpriseBasicInfo> findByEnterpriseName(String enterpriseName);
+    Iterable<EnterpriseBasicInfo> findByEnterpriseNameAndEnterpriseFlag(String enterpriseName,String enterpriseFlag);
 
     PageList<EnterpriseBasicInfoValidator> page(PageParams<EnterpriseBasicInfoValidator> pageParams);
 

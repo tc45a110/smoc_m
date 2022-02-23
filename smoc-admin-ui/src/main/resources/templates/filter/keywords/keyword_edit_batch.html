@@ -39,7 +39,7 @@
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all" style="margin-top:80px">
             <div class="col-md-12">
                 <div class="card-box">
-                    <form id="submit_form" th:action="@{/filter/keywords/SYSTEM/batchSave/{op}(op=${op})}"
+                    <form id="submit_form" th:action="@{/filter/keywords/batchSave/SYSTEM/system/{op}(op=${op})}"
                           method="post" data-parsley-validate="">
                         <div class="row">
                             <div class="col-md-12">
@@ -68,7 +68,7 @@
 
 
                                             <div class="col-md-12 text-center">
-                                                <button sec:authorize-url="/filter/keywords/SYSTEM/batchSave/*" type="submit" class="btn btn-teal waves-effect waves-light">提交
+                                                <button sec:authorize-url="/filter/keywords/batchSave/*/*/*" type="submit" class="btn btn-teal waves-effect waves-light">提交
                                                 </button>
                                                 <a  sec:authorize-url="/filter/keywords/SYSTEM/list"
                                                     th:href="@{/filter/keywords/SYSTEM/list}" style="margin-left:20px"

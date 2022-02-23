@@ -51,6 +51,11 @@ public class KeywordsRepositoryImpl extends BasePageRepository {
                 paramsList.add(data.getKeyWordsBusinessType().trim());
             }
 
+            if (!StringUtils.isEmpty(data.getBusinessId())) {
+                sqlBuffer.append(" and t.BUSINESS_ID = ? ");
+                paramsList.add(data.getBusinessId().trim());
+            }
+
             if (!StringUtils.isEmpty(data.getKeyWordsType())) {
                 sqlBuffer.append(" and t.KEY_WORDS_TYPE = ? ");
                 paramsList.add(data.getKeyWordsType().trim());

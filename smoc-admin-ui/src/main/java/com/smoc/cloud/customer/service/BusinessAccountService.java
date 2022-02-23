@@ -102,4 +102,19 @@ public class BusinessAccountService {
             return ResponseDataUtil.buildError(e.getMessage());
         }
     }
+
+    /**
+     * 生成业务账号
+     * @param enterpriseFlag
+     * @return
+     */
+    public ResponseData<String> createAccountId(String enterpriseFlag) {
+        try {
+            ResponseData<String> accountId = this.businessAccountFeignClient.createAccountId(enterpriseFlag);
+            return accountId;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
 }

@@ -54,8 +54,9 @@
                                                     <label for="account">业务账号<span
                                                             class="text-danger">*</span>&nbsp;</label>
                                                     <input id="account" type="text" class="form-control"
-                                                           th:field="*{accountId}"
-                                                           autocomplete="off" placeholder="根据规则自动生成" readonly>
+                                                           th:field="*{accountId}" data-parsley-pattern="[A-Z]{3}(\d){3}"
+                                                           data-parsley-minlength="6" data-parsley-maxlength="6"
+                                                           autocomplete="off" placeholder="根据规则自动生成" >
                                                 </div>
                                             </div>
                                         </div>

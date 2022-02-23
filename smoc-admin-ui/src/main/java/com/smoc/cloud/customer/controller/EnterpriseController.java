@@ -15,6 +15,7 @@ import com.smoc.cloud.common.smoc.customer.validator.EnterpriseExpressInfoValida
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseInvoiceInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseWebAccountInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
+import com.smoc.cloud.common.utils.RandomUtil;
 import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
@@ -177,6 +178,10 @@ public class EnterpriseController {
             enterpriseBasicInfoValidator.setSaler(data.getData().getSaler());
             enterpriseBasicInfoValidator.setAccessCorporation(data.getData().getAccessCorporation());
         }
+
+        //生成企业标识
+        ResponseData<String> enterpriseFlag = enterpriseService.createEnterpriseFlag();
+        enterpriseBasicInfoValidator.setEnterpriseFlag(enterpriseFlag.getMessage());
 
         //查询销售人员
         view.addObject("salesList", sysUserService.salesList());

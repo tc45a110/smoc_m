@@ -265,7 +265,7 @@ public class AccountChannelController {
         String op= "add";
         accountChannelInfoValidator.setId(UUID.uuid32());
         accountChannelInfoValidator.setConfigType("ACCOUNT_CHANNEL");
-        accountChannelInfoValidator.setChannelPriority("1");//等级
+        accountChannelInfoValidator.setChannelPriority("NORMAL");//等级:NORMAL表示正常
         accountChannelInfoValidator.setChannelSource("CHANNEL");//通道配置
         accountChannelInfoValidator.setChannelStatus("1");
         accountChannelInfoValidator.setCreatedTime(new Date());
@@ -542,7 +542,7 @@ public class AccountChannelController {
         String op= "add";
         accountChannelInfoValidator.setId(UUID.uuid32());
         accountChannelInfoValidator.setConfigType("ACCOUNT_CHANNEL_GROUP");
-        accountChannelInfoValidator.setChannelPriority("1");//等级
+        accountChannelInfoValidator.setChannelPriority("NORMAL");//等级
         accountChannelInfoValidator.setChannelSource("CHANNEL_GROUP");//通道组配置
         accountChannelInfoValidator.setChannelStatus("1");
         accountChannelInfoValidator.setCreatedTime(new Date());

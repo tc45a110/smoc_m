@@ -9,6 +9,7 @@ import java.util.Objects;
 public class EnterpriseBasicInfo {
     private String enterpriseId;
     private String enterpriseParentId;
+    private String enterpriseFlag;
     private String enterpriseName;
     private String enterpriseType;
     private String accessCorporation;
@@ -40,6 +41,16 @@ public class EnterpriseBasicInfo {
 
     public void setEnterpriseParentId(String enterpriseParentId) {
         this.enterpriseParentId = enterpriseParentId;
+    }
+
+    @Basic
+    @Column(name = "ENTERPRISE_FLAG")
+    public String getEnterpriseFlag() {
+        return enterpriseFlag;
+    }
+
+    public void setEnterpriseFlag(String enterpriseFlag) {
+        this.enterpriseFlag = enterpriseFlag;
     }
 
     @Basic

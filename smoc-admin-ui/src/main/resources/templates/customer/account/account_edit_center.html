@@ -123,15 +123,15 @@
                                             </li>
                                             <li class="" id="tab7">
                                                 <a onclick="active('7')" id="a7"
-                                                   sec:authorize-url="/filter/keywords/BUSINESS_ACCOUNT/list/*"
-                                                   th:href="@{/filter/keywords/BUSINESS_ACCOUNT/list/businessId}"
+                                                   sec:authorize-url="/filter/keywords/list/BUSINESS_ACCOUNT/*"
+                                                   th:href="@{/filter/keywords/list/BUSINESS_ACCOUNT/{id}(id=${accountId})}"
                                                    th:target="tab-content">业务账号关键词
                                                 </a>
                                             </li>
                                             <li class="" id="tab8">
                                                 <a onclick="active('8')" id="a8"
                                                    sec:authorize-url="/parameter/business/list/BUSINESS_ACCOUNT/*/*"
-                                                   th:href="@{/parameter/business/list/BUSINESS_ACCOUNT/businessId/4}"
+                                                   th:href="@{/parameter/business/list/BUSINESS_ACCOUNT/{id}/4(id=${accountId})}"
                                                    th:target="tab-content">业务账号扩展参数
                                                 </a>
                                             </li>

@@ -16,6 +16,8 @@ public class EnterpriseBasicInfoValidator {
     private String enterpriseId;
     private String enterpriseParentId;
 
+    private String enterpriseFlag;
+
     @NotNull(message = "企业名称不能为空！")
     @Length(min = 2, max = 64, message = "企业名称长度不符合规则！")
     private String enterpriseName;

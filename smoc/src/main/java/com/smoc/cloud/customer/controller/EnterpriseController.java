@@ -9,6 +9,7 @@ import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidato
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.customer.service.EnterpriseService;
+import com.smoc.cloud.utils.RandomService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -26,6 +27,9 @@ public class EnterpriseController {
 
     @Autowired
     private EnterpriseService enterpriseService;
+
+    @Autowired
+    private RandomService randomService;
 
     /**
      * 查询列表
@@ -94,5 +98,16 @@ public class EnterpriseController {
 
         ResponseData data = enterpriseService.forbiddenEnterprise(id,status);
         return data;
+    }
+
+    /**
+     * 生成企业标识
+     * @return
+     */
+    @RequestMapping(value = "/createEnterpriseFlag", method = RequestMethod.GET)
+    public ResponseData<String> createEnterpriseFlag(){
+
+        String  enterpriseFlag = randomService.getRandomStr(3);
+        return ResponseDataUtil.buildSuccess(enterpriseFlag);
     }
 }

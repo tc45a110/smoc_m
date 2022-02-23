@@ -9,6 +9,7 @@ import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.customer.service.BusinessAccountService;
+import com.smoc.cloud.utils.RandomService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -115,5 +116,17 @@ public class BusinessAccountController {
 
         ResponseData<List<AccountBasicInfoValidator>> data = businessAccountService.findBusinessAccountByEnterpriseId(enterpriseId);
         return data;
+    }
+
+    /**
+     * 生成业务账号
+     * @param enterpriseFlag
+     * @return
+     */
+    @RequestMapping(value = "/createAccountId/{enterpriseFlag}", method = RequestMethod.GET)
+    public ResponseData<String> createAccountId(@PathVariable String enterpriseFlag){
+
+        return businessAccountService.createAccountId(enterpriseFlag);
+
     }
 }

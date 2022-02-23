@@ -27,6 +27,7 @@ public class EnterpriseBasicInfoRowMapper implements RowMapper<EnterpriseBasicIn
         qo.setEnterpriseProcess(resultSet.getString("ENTERPRISE_PROCESS"));
         qo.setEnterpriseStatus(resultSet.getString("ENTERPRISE_STATUS"));
         qo.setCreatedTime(resultSet.getString("CREATED_TIME"));
+        qo.setEnterpriseFlag(resultSet.getString("ENTERPRISE_FLAG"));
 
         return qo;
     }

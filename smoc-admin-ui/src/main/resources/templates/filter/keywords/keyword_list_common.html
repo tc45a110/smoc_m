@@ -28,11 +28,13 @@
                         <div class="col-sm-12">
                             <form id="query_form" method="post" >
                                 <div class="form-group col-sm-3 pull-right" style="text-align: right">
-                                    <a sec:authorize-url="/filter/keywords/CHANNEL/add/*"
-                                       th:href="@{/filter/keywords/CHANNEL/add/id}"
+                                    <a sec:authorize-url="/filter/keywords/add/*/*"
+                                       th:href="@{/filter/keywords/add/{keywordsType}/{businessId}(businessId=${businessId},keywordsType=${keywordsType})}"
                                        class="btn btn-success waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-plus-sign"></i> 批量新建</a>
-                                    <a  class="btn btn-primary waves-effect waves-light m-l-10 btn-md">
+                                    <a  sec:authorize-url="/filter/keywords/upFilesCommon/*/*"
+                                        th:href="@{/filter/keywords/upFilesCommon/{keywordsType}/{businessId}(businessId=${businessId},keywordsType=${keywordsType})}"
+                                        class="btn btn-primary waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-import"></i>
                                         导入
                                     </a>
@@ -66,226 +68,28 @@
                                 </tr>
                                 <thead>
                                 <tbody>
-                                <tr>
-                                    <td>
-                                        <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light">黑词</a>
-                                    </td>
-                                    <td>共产党</td>
-                                    <td></td>
-                                    <td>李先生</td>
-                                    <td>2021-11-3 12:45:47</td>
-                                    <td style="line-height: 26px;">
-                                        <a sec:authorize-url="/filter/keywords/CHANNEL/edit/*/*"
-                                           th:href="@{/filter/keywords/CHANNEL/edit/businessId/id}" class="on-default edit-row"
-                                           style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="left" title=""  data-original-title="编辑"><i
-                                                style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/ec/customer/contract/deleteById/id*" data-toggle="modal"
-                                           data-target="#confirm-modal" class="on-default remove-row"
-                                           style="padding-left: 5px;color: #f05050" title="删除"><i
-                                                style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <a class="btn btn-success btn-rounded btn-sm waves-effect waves-light">白词</a>
-                                    </td>
-                                    <td>不要打款</td>
-                                    <td></td>
-                                    <td>李先生</td>
-                                    <td>2021-11-3 12:45:47</td>
-                                    <td style="line-height: 26px;">
-                                        <a sec:authorize-url="/filter/keywords/CHANNEL/edit/*/*"
-                                           th:href="@{/filter/keywords/CHANNEL/edit/businessId/id}" class="on-default edit-row"
-                                           style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="left" title=""  data-original-title="编辑"><i
-                                                style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/ec/customer/contract/deleteById/id*" data-toggle="modal"
-                                           data-target="#confirm-modal" class="on-default remove-row"
-                                           style="padding-left: 5px;color: #f05050" title="删除"><i
-                                                style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light">黑词</a>
-                                    </td>
-                                    <td>共产党</td>
-                                    <td></td>
-                                    <td>李先生</td>
-                                    <td>2021-11-3 12:45:47</td>
-                                    <td style="line-height: 26px;">
-                                        <a sec:authorize-url="/filter/keywords/CHANNEL/edit/*/*"
-                                           th:href="@{/filter/keywords/CHANNEL/edit/businessId/id}" class="on-default edit-row"
-                                           style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="left" title=""  data-original-title="编辑"><i
-                                                style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/ec/customer/contract/deleteById/id*" data-toggle="modal"
-                                           data-target="#confirm-modal" class="on-default remove-row"
-                                           style="padding-left: 5px;color: #f05050" title="删除"><i
-                                                style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light">黑词</a>
-                                    </td>
-                                    <td>共产党</td>
-                                    <td></td>
-                                    <td>李先生</td>
-                                    <td>2021-11-3 12:45:47</td>
-                                    <td style="line-height: 26px;">
-                                        <a sec:authorize-url="/filter/keywords/CHANNEL/edit/*/*"
-                                           th:href="@{/filter/keywords/CHANNEL/edit/businessId/id}" class="on-default edit-row"
-                                           style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="left" title=""  data-original-title="编辑"><i
-                                                style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/ec/customer/contract/deleteById/id*" data-toggle="modal"
-                                           data-target="#confirm-modal" class="on-default remove-row"
-                                           style="padding-left: 5px;color: #f05050" title="删除"><i
-                                                style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light">黑词</a>
-                                    </td>
-                                    <td>共产党</td>
-                                    <td></td>
-                                    <td>李先生</td>
-                                    <td>2021-11-3 12:45:47</td>
-                                    <td style="line-height: 26px;">
-                                        <a sec:authorize-url="/filter/keywords/CHANNEL/edit/*/*"
-                                           th:href="@{/filter/keywords/CHANNEL/edit/businessId/id}" class="on-default edit-row"
-                                           style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="left" title=""  data-original-title="编辑"><i
-                                                style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/ec/customer/contract/deleteById/id*" data-toggle="modal"
-                                           data-target="#confirm-modal" class="on-default remove-row"
-                                           style="padding-left: 5px;color: #f05050" title="删除"><i
-                                                style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核词</a>
-                                    </td>
-                                    <td>打款</td>
-                                    <td></td>
-                                    <td>李先生</td>
-                                    <td>2021-11-3 12:45:47</td>
-                                    <td style="line-height: 26px;">
-                                        <a sec:authorize-url="/filter/keywords/CHANNEL/edit/*/*"
-                                           th:href="@{/filter/keywords/CHANNEL/edit/businessId/id}" class="on-default edit-row"
-                                           style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="left" title=""  data-original-title="编辑"><i
-                                                style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/ec/customer/contract/deleteById/id*" data-toggle="modal"
-                                           data-target="#confirm-modal" class="on-default remove-row"
-                                           style="padding-left: 5px;color: #f05050" title="删除"><i
-                                                style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light">黑词</a>
-                                    </td>
-                                    <td>共产党</td>
-                                    <td></td>
-                                    <td>李先生</td>
-                                    <td>2021-11-3 12:45:47</td>
-                                    <td style="line-height: 26px;">
-                                        <a sec:authorize-url="/filter/keywords/CHANNEL/edit/*/*"
-                                           th:href="@{/filter/keywords/CHANNEL/edit/businessId/id}" class="on-default edit-row"
-                                           style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="left" title=""  data-original-title="编辑"><i
-                                                style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/ec/customer/contract/deleteById/id*" data-toggle="modal"
-                                           data-target="#confirm-modal" class="on-default remove-row"
-                                           style="padding-left: 5px;color: #f05050" title="删除"><i
-                                                style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light">黑词</a>
-                                    </td>
-                                    <td>共产党</td>
-                                    <td></td>
-                                    <td>李先生</td>
-                                    <td>2021-11-3 12:45:47</td>
-                                    <td style="line-height: 26px;">
-                                        <a sec:authorize-url="/filter/keywords/CHANNEL/edit/*/*"
-                                           th:href="@{/filter/keywords/CHANNEL/edit/businessId/id}" class="on-default edit-row"
-                                           style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="left" title=""  data-original-title="编辑"><i
-                                                style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/ec/customer/contract/deleteById/id*" data-toggle="modal"
-                                           data-target="#confirm-modal" class="on-default remove-row"
-                                           style="padding-left: 5px;color: #f05050" title="删除"><i
-                                                style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light">黑词</a>
-                                    </td>
-                                    <td>共产党</td>
-                                    <td></td>
-                                    <td>李先生</td>
-                                    <td>2021-11-3 12:45:47</td>
-                                    <td style="line-height: 26px;">
-                                        <a sec:authorize-url="/filter/keywords/CHANNEL/edit/*/*"
-                                           th:href="@{/filter/keywords/CHANNEL/edit/businessId/id}" class="on-default edit-row"
-                                           style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="left" title=""  data-original-title="编辑"><i
-                                                style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/ec/customer/contract/deleteById/id*" data-toggle="modal"
-                                           data-target="#confirm-modal" class="on-default remove-row"
-                                           style="padding-left: 5px;color: #f05050" title="删除"><i
-                                                style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light">黑词</a>
-                                    </td>
-                                    <td>共产党</td>
-                                    <td></td>
-                                    <td>李先生</td>
-                                    <td>2021-11-3 12:45:47</td>
-                                    <td style="line-height: 26px;">
-                                        <a sec:authorize-url="/filter/keywords/CHANNEL/edit/*/*"
-                                           th:href="@{/filter/keywords/CHANNEL/edit/businessId/id}" class="on-default edit-row"
-                                           style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="left" title=""  data-original-title="编辑"><i
-                                                style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/ec/customer/contract/deleteById/id*" data-toggle="modal"
-                                           data-target="#confirm-modal" class="on-default remove-row"
-                                           style="padding-left: 5px;color: #f05050" title="删除"><i
-                                                style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light">黑词</a>
-                                    </td>
-                                    <td>共产党</td>
-                                    <td></td>
-                                    <td>李先生</td>
-                                    <td>2021-11-3 12:45:47</td>
-                                    <td style="line-height: 26px;">
-                                        <a sec:authorize-url="/filter/keywords/CHANNEL/edit/*/*"
-                                           th:href="@{/filter/keywords/CHANNEL/edit/businessId/id}" class="on-default edit-row"
-                                           style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="left" title=""  data-original-title="编辑"><i
-                                                style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/ec/customer/contract/deleteById/id*" data-toggle="modal"
-                                           data-target="#confirm-modal" class="on-default remove-row"
-                                           style="padding-left: 5px;color: #f05050" title="删除"><i
-                                                style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
-                                    </td>
-                                </tr>
+                            <tr th:each="info:${list}">
+                                <td>
+                                    <mpm:tag th:value="${info.keyWordsType}" identity="keyWordsType" show-type="button" key="code"
+                                             class="BLACK,btn btn-danger btn-rounded btn-sm waves-effect waves-light;WHITE,btn btn-success btn-rounded btn-sm waves-effect waves-light;CHECK,btn btn-info btn-rounded btn-sm waves-effect waves-light" />
+                                </td>
+                                <td>[[${info.keyWords}]]</td>
+                                <td>[[${info.keyDesc}]]</td>
+                                <td>[[${info.createdBy}]]</td>
+                                <td>[[${info.createdTimeStr}]]</td>
+                                <td style="line-height: 26px;">
+                                    <a sec:authorize-url="/filter/keywords/edit/*"
+                                       th:href="@{/filter/keywords/edit/{id}(id=${info.id})}" class="on-default edit-row"
+                                       style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
+                                       data-placement="left" title="" data-original-title="编辑"><i
+                                            style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
+                                    <a sec:authorize-url="/filter/keywords/deleteById/*" data-toggle="modal"
+                                       data-target="#confirm-modal" class="on-default remove-row"
+                                       th:onclick="confirmDelete([[${info.id}]],this)"
+                                       style="padding-left: 5px;color: #f05050" title="删除"><i
+                                            style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
+                                </td>
+                            </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -312,6 +116,17 @@
 <script th:src="@{/static/plugins/moment/moment.js}"></script>
 
 <script>
+
+    function confirmDelete(id) {
+        $("#deleteId").val(id);
+    }
+
+    function deleteById() {
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $('#preloader').css('display', 'block');
+        location.href = contextPath + "/filter/keywords/deleteById/" + $("#deleteId").val();
+    }
+
 
     var resizefunc = [];
     //隐藏进度项

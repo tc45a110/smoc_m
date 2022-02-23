@@ -48,4 +48,11 @@ public interface EnterpriseFeignClient {
      */
     @RequestMapping(value = "/enterprise/forbiddenEnterprise/{id}/{status}", method = RequestMethod.GET)
     ResponseData forbiddenEnterprise(@PathVariable String id, @PathVariable String status) throws Exception;
+
+    /**
+     * 生成企业标识
+     * @return
+     */
+    @RequestMapping(value = "/enterprise/createEnterpriseFlag", method = RequestMethod.GET)
+    ResponseData<String> createEnterpriseFlag() throws Exception;
 }

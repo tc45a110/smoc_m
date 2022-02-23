@@ -17,11 +17,14 @@ import com.smoc.cloud.customer.repository.AccountFinanceRepository;
 import com.smoc.cloud.customer.repository.BusinessAccountRepository;
 import com.smoc.cloud.finance.entity.FinanceAccount;
 import com.smoc.cloud.finance.repository.FinanceAccountRepository;
+import com.smoc.cloud.utils.RandomService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -51,6 +54,12 @@ public class BusinessAccountService {
 
     @Resource
     private AccountChannelRepository accountChannelRepository;
+
+    @Autowired
+    private RandomService randomService;
+
+    @Resource
+    private RedisTemplate<String, String> stringRedisTemplate;
 
 
     /**
@@ -171,6 +180,11 @@ public class BusinessAccountService {
         log.info("[EC业务账号管理][业务账号基本信息][{}]数据:{}", op, JSON.toJSONString(entity));
         businessAccountRepository.saveAndFlush(entity);
 
+        //把账号id放到redis里
+        String accountId = entity.getAccountId();
+        accountId = accountId.substring(accountId.length()-3);
+        stringRedisTemplate.opsForValue().set(RandomService.PREFIX +":"+accountId ,accountId);
+
         return ResponseDataUtil.buildSuccess();
     }
 
@@ -273,5 +287,17 @@ public class BusinessAccountService {
     public ResponseData<List<AccountBasicInfoValidator>> findBusinessAccountByEnterpriseId(String enterpriseId) {
         List<AccountBasicInfoValidator> list = businessAccountRepository.findBusinessAccountByEnterpriseId(enterpriseId);
         return ResponseDataUtil.buildSuccess(list);
+    }
+
+    /**
+     * 生成业务账号
+     * @param enterpriseFlag
+     * @return
+     */
+    public ResponseData<String> createAccountId(String enterpriseFlag) {
+
+        String accountId = randomService.getBusinessAccount(enterpriseFlag);
+
+        return ResponseDataUtil.buildSuccess(accountId);
     }
 }

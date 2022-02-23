@@ -114,7 +114,7 @@
                                            style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="编辑"><i
                                                 style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/filter/keywords/SYSTEM/deleteById/*" data-toggle="modal"
+                                        <a sec:authorize-url="/filter/keywords/deleteById/*" data-toggle="modal"
                                            data-target="#confirm-modal" class="on-default remove-row"
                                            th:onclick="confirmDelete([[${info.id}]],this)"
                                            style="padding-left: 5px;color: #f05050" title="删除"><i
@@ -157,7 +157,7 @@
     function deleteById() {
         var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
         $('#preloader').css('display', 'block');
-        location.href = contextPath + "/filter/keywords/SYSTEM/deleteById/" + $("#deleteId").val();
+        location.href = contextPath + "/filter/keywords/deleteById/" + $("#deleteId").val();
     }
 
     var resizefunc = [];

@@ -85,4 +85,18 @@ public class EnterpriseService {
             return ResponseDataUtil.buildError(e.getMessage());
         }
     }
+
+    /**
+     * 生成企业标识
+     * @return
+     */
+    public ResponseData<String> createEnterpriseFlag() {
+        try {
+            ResponseData<String> enterpriseFlag = this.enterpriseFeignClient.createEnterpriseFlag();
+            return enterpriseFlag;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
 }

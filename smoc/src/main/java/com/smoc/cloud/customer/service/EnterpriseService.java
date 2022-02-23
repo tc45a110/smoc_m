@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSON;
 import com.smoc.cloud.auth.service.AuthorityService;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
 import com.smoc.cloud.common.auth.validator.OrgValidator;
+import com.smoc.cloud.common.constant.RedisConstant;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
@@ -16,11 +17,13 @@ import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.customer.entity.EnterpriseBasicInfo;
 import com.smoc.cloud.customer.repository.EnterpriseRepository;
 import com.smoc.cloud.customer.repository.EnterpriseWebRepository;
+import com.smoc.cloud.utils.RandomService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -47,6 +50,9 @@ public class EnterpriseService {
 
     @Resource
     private AuthorityService authorityService;
+
+    @Resource
+    private RedisTemplate<String, String> stringRedisTemplate;
 
     /**
      * 查询列表
@@ -99,7 +105,7 @@ public class EnterpriseService {
     @Transactional
     public ResponseData<EnterpriseBasicInfo> save(EnterpriseBasicInfoValidator enterpriseBasicInfoValidator, String op) {
 
-        Iterable<EnterpriseBasicInfo> data = enterpriseRepository.findByEnterpriseName(enterpriseBasicInfoValidator.getEnterpriseName());
+        Iterable<EnterpriseBasicInfo> data = enterpriseRepository.findByEnterpriseNameAndEnterpriseFlag(enterpriseBasicInfoValidator.getEnterpriseName(),enterpriseBasicInfoValidator.getEnterpriseFlag());
 
         EnterpriseBasicInfo entity = new EnterpriseBasicInfo();
         BeanUtils.copyProperties(enterpriseBasicInfoValidator, entity);
@@ -140,6 +146,9 @@ public class EnterpriseService {
         if ("add".equals(op)) {
             saveOrg(entity);
         }
+
+        //把标识放到redis里
+        stringRedisTemplate.opsForValue().set(RandomService.PREFIX +":"+entity.getEnterpriseFlag(), entity.getEnterpriseFlag());
 
         return ResponseDataUtil.buildSuccess();
     }

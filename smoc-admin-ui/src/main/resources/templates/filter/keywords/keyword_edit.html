@@ -39,7 +39,7 @@
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all" style="margin-top:80px">
             <div class="col-md-12">
                 <div class="card-box">
-                    <form id="submit_form" th:action="@{/filter/keywords/SYSTEM/save/{op}(op=${op})}" th:object="${filterKeyWordsInfoValidator}"
+                    <form id="submit_form" th:action="@{/filter/keywords/save/SYSTEM/system/{op}(op=${op})}" th:object="${filterKeyWordsInfoValidator}"
                           method="post" data-parsley-validate="">
                         <div class="row">
                             <div class="col-md-12">
@@ -71,7 +71,7 @@
                                                 <input type="hidden" th:field="*{keyWordsBusinessType}">
                                                 <input type="hidden" th:field="*{businessId}">
                                                 <input type="hidden" th:field="*{createdBy}">
-                                                <button sec:authorize-url="/filter/keywords/SYSTEM/save/*" type="submit"
+                                                <button sec:authorize-url="/filter/keywords/save/*/*/*" type="submit"
                                                         class="btn btn-teal waves-effect waves-light">提交</button>
                                                 <a  sec:authorize-url="/filter/keywords/SYSTEM/list"
                                                      th:href="@{/filter/keywords/SYSTEM/list}" style="margin-left:20px"
