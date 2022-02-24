@@ -51,4 +51,6 @@ public class AccountBasicInfoValidator {
 
     private String enterpriseName;
     private String protocol;
+
+    private String errorAccount;
 }

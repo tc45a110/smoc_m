@@ -120,7 +120,11 @@
                                             <div class="col-md-6 form-group">
                                                 <label>企业标识(随机三位)<span class="text-danger">*</span>&nbsp;</label>
                                                 <input type="text" class="form-control" th:field="*{enterpriseFlag}"
+                                                       th:if="${op eq 'edit'}"
                                                        readonly autocomplete="off">
+                                                <input type="text" class="form-control" th:field="*{enterpriseFlag}"
+                                                       th:if="${op eq 'add'}"
+                                                       data-parsley-pattern="[A-Z]{3}" autocomplete="off">
                                             </div>
 
                                             <div class="col-md-12 text-center">
