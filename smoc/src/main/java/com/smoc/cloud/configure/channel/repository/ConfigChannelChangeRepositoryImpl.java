@@ -50,6 +50,12 @@ public class ConfigChannelChangeRepositoryImpl extends BasePageRepository {
             paramsList.add(qo.getChannelId().trim());
         }
 
+        //变更类型
+        if (!StringUtils.isEmpty(qo.getChangeType())) {
+            sqlBuffer.append(" and t.CHANGE_TYPE =?");
+            paramsList.add(qo.getChangeType().trim());
+        }
+
         //企业名称
         if (!StringUtils.isEmpty(qo.getChannelName())) {
             sqlBuffer.append(" and a.CHANNEL_NAME like ?");
@@ -57,7 +63,7 @@ public class ConfigChannelChangeRepositoryImpl extends BasePageRepository {
         }
 
         sqlBuffer.append(" order by t.CHANGE_STATUS desc,t.CREATED_TIME desc");
-        log.info("[SQL]:{}",sqlBuffer);
+        //log.info("[SQL]:{}",sqlBuffer);
         //根据参数个数，组织参数值
         Object[] params = new Object[paramsList.size()];
         paramsList.toArray(params);
@@ -81,7 +87,7 @@ public class ConfigChannelChangeRepositoryImpl extends BasePageRepository {
         //如果选中的业务账号为空
         if (StringUtils.isEmpty(accountIds)) {
             StringBuffer channelChangeSql = new StringBuffer("insert into config_channel_change(ID,CHANNEL_ID,ACCOUNT_NUM,CHANGE_TYPE,CHANGE_REASON,CHANGE_STATUS,CREATED_BY,CREATED_TIME) ");
-            channelChangeSql.append(" values('" + qo.getId() + "','" + qo.getChannelId() + "',0,'" + qo.getChannelName() + "','" + qo.getChangeReason() + "','" + qo.getChangeStatus() + "','" + qo.getCreatedBy() + "',now())");
+            channelChangeSql.append(" values('" + qo.getId() + "','" + qo.getChannelId() + "',0,'" + qo.getChangeType() + "','" + qo.getChangeReason() + "','" + qo.getChangeStatus() + "','" + qo.getCreatedBy() + "',now())");
             this.jdbcTemplate.update(channelChangeSql.toString());
             return;
         }
@@ -97,22 +103,24 @@ public class ConfigChannelChangeRepositoryImpl extends BasePageRepository {
         for (int j = 0; j < accountLength; j++) {
             //插入变更业务账号的变更记录
             StringBuffer itemSql = new StringBuffer("insert into config_channel_change_items(ID,CHANGE_ID,BUSINESS_ACCOUNT,CHANGE_TYPE,CHANGE_BEFORE_PRIORITY,CHANGE_AFTER_PRIORITY,ACCOUNT_CHANNEL_ID,STATUS,CREATED_BY,CREATED_TIME) ");
-            itemSql.append(" select '" + UUID.uuid32() + "',CHANNEL_ID,ACCOUNT_ID,'" + qo.getChangeType() + "',CHANNEL_PRIORITY,'" + qo.getChangeType() + "',ID,'1','" + qo.getCreatedBy() + "',now() from account_channel_info ");
+            itemSql.append(" select '" + UUID.uuid32() + "','"+qo.getId()+"',ACCOUNT_ID,'" + qo.getChangeType() + "',CHANNEL_PRIORITY,'" + qo.getChangeType() + "',ID,'1','" + qo.getCreatedBy() + "',now() from account_channel_info ");
             itemSql.append(" where ACCOUNT_ID ='" + accountArray[j] + "' and CHANNEL_ID='" + qo.getChannelId() + "' ");
+            //log.info("[sql{}]:{}",i, itemSql);
             sql[i] = itemSql.toString();
             i++;
             //修改业务账号 通道配置 优先级
             StringBuffer updateSql = new StringBuffer("update account_channel_info ");
             updateSql.append(" set CHANNEL_PRIORITY ='" + qo.getChangeType() + "',CHANGE_SOURCE='CHANNEL_CHANGE' ");
-            itemSql.append(" where ACCOUNT_ID ='" + accountArray[j] + "' and CHANNEL_ID='" + qo.getChannelId() + "' ");
+            updateSql.append(" where ACCOUNT_ID ='" + accountArray[j] + "' and CHANNEL_ID='" + qo.getChannelId() + "' ");
             sql[i] = updateSql.toString();
+            //log.info("[sql{}]:{}",i, sql);
             i++;
         }
 
         StringBuffer channelChangeSql = new StringBuffer("insert into config_channel_change(ID,CHANNEL_ID,ACCOUNT_NUM,CHANGE_TYPE,CHANGE_REASON,CHANGE_STATUS,CREATED_BY,CREATED_TIME) ");
-        channelChangeSql.append(" values('" + qo.getId() + "','" + qo.getChannelId() + "'," + accountLength + ",'" + qo.getChannelName() + "','" + qo.getChangeReason() + "','" + qo.getChangeStatus() + "','" + qo.getCreatedBy() + "',now())");
+        channelChangeSql.append(" values('" + qo.getId() + "','" + qo.getChannelId() + "'," + accountLength + ",'" + qo.getChangeType() + "','" + qo.getChangeReason() + "','" + qo.getChangeStatus() + "','" + qo.getCreatedBy() + "',now())");
         sql[i] = channelChangeSql.toString();
-        log.info("[sql]:{}", sql);
+        //log.info("[sql]:{}", sql);
         this.jdbcTemplate.batchUpdate(sql);
 
     }
@@ -150,14 +158,14 @@ public class ConfigChannelChangeRepositoryImpl extends BasePageRepository {
             for (int j = 0; j < accountLength; j++) {
                 //插入变更业务账号的变更记录
                 StringBuffer itemSql = new StringBuffer("insert into config_channel_change_items(ID,CHANGE_ID,BUSINESS_ACCOUNT,CHANGE_TYPE,CHANGE_BEFORE_PRIORITY,CHANGE_AFTER_PRIORITY,ACCOUNT_CHANNEL_ID,STATUS,CREATED_BY,CREATED_TIME) ");
-                itemSql.append(" select '" + UUID.uuid32() + "',CHANNEL_ID,ACCOUNT_ID,'" + qo.getChangeType() + "',CHANNEL_PRIORITY,'" + qo.getChangeType() + "',ID,'1','" + qo.getCreatedBy() + "',now() from account_channel_info ");
+                itemSql.append(" select '" + UUID.uuid32() + "','"+qo.getId()+"',ACCOUNT_ID,'" + qo.getChangeType() + "',CHANNEL_PRIORITY,'" + qo.getChangeType() + "',ID,'1','" + qo.getCreatedBy() + "',now() from account_channel_info ");
                 itemSql.append(" where ACCOUNT_ID ='" + accountArray[j] + "' and CHANNEL_ID='" + qo.getChannelId() + "' ");
                 sql[i] = itemSql.toString();
                 i++;
                 //修改业务账号 通道配置 优先级
                 StringBuffer updateSql = new StringBuffer("update account_channel_info ");
                 updateSql.append(" set CHANNEL_PRIORITY ='" + qo.getChangeType() + "',CHANGE_SOURCE='CHANNEL_CHANGE' ");
-                itemSql.append(" where ACCOUNT_ID ='" + accountArray[j] + "' and CHANNEL_ID='" + qo.getChannelId() + "' ");
+                updateSql.append(" where ACCOUNT_ID ='" + accountArray[j] + "' and CHANNEL_ID='" + qo.getChannelId() + "' ");
                 sql[i] = updateSql.toString();
                 i++;
             }
@@ -184,14 +192,14 @@ public class ConfigChannelChangeRepositoryImpl extends BasePageRepository {
             for (int j = 0; j < originalAccountLength; j++) {
                 //修改变更业务账号的变更记录
                 StringBuffer itemSql = new StringBuffer("update config_channel_change_items  ");
-                itemSql.append(" set STATUS = '0");
-                itemSql.append(" where ACCOUNT_ID ='" + originalAccountArray[j] + "' and CHANNEL_ID='" + qo.getChannelId() + "' ");
+                itemSql.append(" set STATUS = '0' ");
+                itemSql.append(" where BUSINESS_ACCOUNT ='" + originalAccountArray[j] + "' and CHANGE_ID ='"+ qo.getId() +"'");
                 sql[i] = itemSql.toString();
                 i++;
                 //修改业务账号 通道配置 优先级NORMAL
                 StringBuffer updateSql = new StringBuffer("update account_channel_info ");
                 updateSql.append(" set CHANNEL_PRIORITY ='NORMAL',CHANGE_SOURCE='CHANNEL_CHANGE' ");
-                itemSql.append(" where ACCOUNT_ID ='" + originalAccountArray[j] + "' and CHANNEL_ID='" + qo.getChannelId() + "' ");
+                updateSql.append(" where ACCOUNT_ID ='" + originalAccountArray[j] + "' and CHANNEL_ID='" + qo.getChannelId() + "' ");
                 sql[i] = updateSql.toString();
                 i++;
             }
@@ -249,14 +257,14 @@ public class ConfigChannelChangeRepositoryImpl extends BasePageRepository {
                 if (!originalMap.get(originalAccountArray[i])) {
                     //修改变更业务账号的变更记录
                     StringBuffer itemSql = new StringBuffer("update config_channel_change_items  ");
-                    itemSql.append(" set STATUS = '0");
-                    itemSql.append(" where ACCOUNT_ID ='" + originalAccountArray[i] + "' and CHANNEL_ID='" + qo.getChannelId() + "' ");
+                    itemSql.append(" set STATUS = '0' ");
+                    itemSql.append(" where BUSINESS_ACCOUNT ='" + originalAccountArray[i] + "' and CHANGE_ID ='"+ qo.getId() +"'");
                     sql[x] = itemSql.toString();
                     x++;
                     //修改业务账号 通道配置 优先级NORMAL
                     StringBuffer updateSql = new StringBuffer("update account_channel_info ");
                     updateSql.append(" set CHANNEL_PRIORITY ='NORMAL',CHANGE_SOURCE='CHANNEL_CHANGE' ");
-                    itemSql.append(" where ACCOUNT_ID ='" + originalAccountArray[i] + "' and CHANNEL_ID='" + qo.getChannelId() + "' ");
+                    updateSql.append(" where ACCOUNT_ID ='" + originalAccountArray[i] + "' and CHANNEL_ID='" + qo.getChannelId() + "' ");
                     sql[x] = updateSql.toString();
                     x++;
                 }
@@ -270,14 +278,14 @@ public class ConfigChannelChangeRepositoryImpl extends BasePageRepository {
                 if (value) {
                     //插入变更业务账号的变更记录
                     StringBuffer itemSql = new StringBuffer("insert into config_channel_change_items(ID,CHANGE_ID,BUSINESS_ACCOUNT,CHANGE_TYPE,CHANGE_BEFORE_PRIORITY,CHANGE_AFTER_PRIORITY,ACCOUNT_CHANNEL_ID,STATUS,CREATED_BY,CREATED_TIME) ");
-                    itemSql.append(" select '" + UUID.uuid32() + "',CHANNEL_ID,ACCOUNT_ID,'" + qo.getChangeType() + "',CHANNEL_PRIORITY,'" + qo.getChangeType() + "',ID,'1','" + qo.getCreatedBy() + "',now() from account_channel_info ");
+                    itemSql.append(" select '" + UUID.uuid32() + "','"+qo.getId()+"',ACCOUNT_ID,'" + qo.getChangeType() + "',CHANNEL_PRIORITY,'" + qo.getChangeType() + "',ID,'1','" + qo.getCreatedBy() + "',now() from account_channel_info ");
                     itemSql.append(" where ACCOUNT_ID ='" + entry.getKey() + "' and CHANNEL_ID='" + qo.getChannelId() + "' ");
                     sql[x] = itemSql.toString();
                     x++;
                     //修改业务账号 通道配置 优先级
                     StringBuffer updateSql = new StringBuffer("update account_channel_info ");
                     updateSql.append(" set CHANNEL_PRIORITY ='" + qo.getChangeType() + "',CHANGE_SOURCE='CHANNEL_CHANGE' ");
-                    itemSql.append(" where ACCOUNT_ID ='" + entry.getKey() + "' and CHANNEL_ID='" + qo.getChannelId() + "' ");
+                    updateSql.append(" where ACCOUNT_ID ='" + entry.getKey() + "' and CHANNEL_ID='" + qo.getChannelId() + "' ");
                     sql[x] = updateSql.toString();
                     x++;
                 }
@@ -320,19 +328,19 @@ public class ConfigChannelChangeRepositoryImpl extends BasePageRepository {
         for (int i = 0; i < originalAccountLength; i++) {
             //修改变更业务账号的变更记录
             StringBuffer itemSql = new StringBuffer("update config_channel_change_items  ");
-            itemSql.append(" set STATUS = '0");
-            itemSql.append(" where ACCOUNT_ID ='" + originalAccountArray[i] + "' and CHANNEL_ID='" + qo.getChannelId() + "' ");
+            itemSql.append(" set STATUS = '0'");
+            itemSql.append(" where BUSINESS_ACCOUNT ='" + originalAccountArray[i] + "' and CHANGE_ID ='"+ qo.getId() +"'");
             sql[j] = itemSql.toString();
             j++;
             //修改业务账号 通道配置 优先级NORMAL
             StringBuffer updateSql = new StringBuffer("update account_channel_info ");
             updateSql.append(" set CHANNEL_PRIORITY ='NORMAL',CHANGE_SOURCE='CHANNEL_CHANGE' ");
-            itemSql.append(" where ACCOUNT_ID ='" + originalAccountArray[i] + "' and CHANNEL_ID='" + qo.getChannelId() + "' ");
+            updateSql.append(" where ACCOUNT_ID ='" + originalAccountArray[i] + "' and CHANNEL_ID='" + qo.getChannelId() + "' ");
             sql[j] = updateSql.toString();
             j++;
 
         }
-
+        //log.info("[sql]:{}", sql);
         StringBuffer channelChangeUpdateSql = new StringBuffer("update config_channel_change ");
         channelChangeUpdateSql.append(" set CHANGE_STATUS = '0' ");
         channelChangeUpdateSql.append(" where ID ='" + qo.getId() + "' ");

@@ -185,4 +185,19 @@ public class AccountChannelService {
             return ResponseDataUtil.buildError(e.getMessage());
         }
     }
+
+    /**
+     * 通过channelId 查询 该通道的业务账号引用情况
+     * @param channelId
+     * @return
+     */
+    public ResponseData<List<AccountChannelInfoValidator>> channelDetail(String channelId) {
+        try {
+            ResponseData<List<AccountChannelInfoValidator>> list = this.accountChannelFeignClient.channelDetail(channelId);
+            return list;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
 }

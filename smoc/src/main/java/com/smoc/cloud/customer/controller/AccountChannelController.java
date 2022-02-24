@@ -177,4 +177,15 @@ public class AccountChannelController {
         return accountChannelService.channelDetail(accountChannelInfoValidator);
     }
 
+    /**
+     * 通过channelId 查询 该通道的业务账号引用情况
+     * @param channelId
+     * @return
+     */
+    @RequestMapping(value = "/channel/channelDetail/{channelId}", method = RequestMethod.POST)
+    public ResponseData<List<AccountChannelInfoValidator>> channelDetail(@PathVariable String channelId) {
+
+        return accountChannelService.channelDetail(channelId);
+    }
+
 }

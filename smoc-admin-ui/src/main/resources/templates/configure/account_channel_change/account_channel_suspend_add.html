@@ -244,14 +244,6 @@
                                                                 <tbody>
                                                                 <tr th:each="account:${accountList}">
                                                                     <td>
-                                                                        <div th:if="${selectedMap.get(account.accountId)}" class="btn-switch btn-switch-success">
-                                                                            <input th:id="${account.accountId}" th:value="${account.accountId}"
-                                                                                   name="accounts" type="checkbox" checked />
-                                                                            <label th:for="${account.accountId}"
-                                                                                   class="btn btn-rounded btn-success waves-effect waves-light">
-                                                                                <em class="glyphicon glyphicon-ok"></em>
-                                                                            </label>
-                                                                        </div>
                                                                         <div th:if="${(account.channelPriority == 'NORMAL' && account.channelStatus == '1')}"
                                                                              class="btn-switch btn-switch-custom">
                                                                             <input th:id="${account.accountId}"
@@ -262,7 +254,7 @@
                                                                                 <em class="glyphicon glyphicon-ok"></em>
                                                                             </label>
                                                                         </div>
-                                                                        <div th:if="${(account.channelPriority != 'NORMAL' && null == selectedMap.get(account.accountId)) || account.channelStatus != '1'}"
+                                                                        <div th:if="${(account.channelPriority != 'NORMAL' || account.channelStatus != '1')}"
                                                                              class="btn-switch btn-switch-danger">
                                                                             <input th:id="${account.accountId}"
                                                                                    disabled

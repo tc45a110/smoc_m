@@ -252,4 +252,16 @@ public class AccountChannelService {
 
         return ResponseDataUtil.buildSuccess(list);
     }
+
+    /**
+     * 通过channelId 查询 该通道的业务账号引用情况
+     * @param channelId
+     * @return
+     */
+    public ResponseData<List<AccountChannelInfoValidator>> channelDetail(String channelId){
+
+        List<AccountChannelInfoValidator> list = accountChannelRepository.channelDetail(channelId);
+        return ResponseDataUtil.buildSuccess(list);
+
+    }
 }

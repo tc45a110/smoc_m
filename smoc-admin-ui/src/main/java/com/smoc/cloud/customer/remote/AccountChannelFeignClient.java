@@ -108,5 +108,13 @@ public interface AccountChannelFeignClient {
      * @return
      */
     @RequestMapping(value = "/account/channel/channelDetail", method = RequestMethod.POST)
-    ResponseData<List<AccountChannelInfoValidator>> channelDetail(@RequestBody AccountChannelInfoValidator accountChannelInfoValidator);
+    ResponseData<List<AccountChannelInfoValidator>> channelDetail(@RequestBody AccountChannelInfoValidator accountChannelInfoValidator) throws Exception;
+
+    /**
+     * 通过channelId 查询 该通道的业务账号引用情况
+     * @param channelId
+     * @return
+     */
+    @RequestMapping(value = "/account/channel/channelDetail/{channelId}", method = RequestMethod.POST)
+    ResponseData<List<AccountChannelInfoValidator>> channelDetail(@PathVariable String channelId) throws Exception;
 }
