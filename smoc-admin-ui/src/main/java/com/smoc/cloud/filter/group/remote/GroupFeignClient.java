@@ -43,7 +43,7 @@ public interface GroupFeignClient {
      * @param id
      * @return
      */
-    @RequestMapping(value = "/group/deleteById/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/filter/group/deleteById/{id}", method = RequestMethod.GET)
     ResponseData deleteById(@PathVariable String id) throws Exception;
 
     /**

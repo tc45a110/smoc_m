@@ -7,6 +7,8 @@ server: #服务端口
         name: OAUTH2SESSION
       timeout: 240m
   connection-timeout: 15000
+  tomcat:
+    basedir:  /alidata/smoc/apps/temp
 
 spring:
   cloud:
