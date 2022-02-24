@@ -35,4 +35,7 @@ public class AccountChannelInfoValidator {
     private String channelName;
     private String channelGroupName;
     private String createdTimeStr;
+    private String enterpriseName;
+    private String businessType;
+    private String accountName;
 }

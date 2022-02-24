@@ -98,6 +98,13 @@ public interface AccountChannelRepository extends CrudRepository<AccountChannelI
     List<AccountChannelInfoValidator> channelDetail(AccountChannelInfoValidator accountChannelInfoValidator);
 
     /**
+     * 通过channelId 查询 该通道的业务账号引用情况
+     * @param channelId
+     * @return
+     */
+     List<AccountChannelInfoValidator> channelDetail(String channelId);
+
+    /**
      * 分组查询业务账号
      * @param channelGroupId
      * @param carrier

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org"
+>
+<head>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
+    <link th:href="@{/static/css/detail_statistics.css}" rel="stylesheet">
+</head>
+<body style="background-color:#fff">
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 10px;">
+    <div class="container">
+
+        <!-- start row  列表数据-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="panel panel-color panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">业务账号变更日志</h3>
+                    </div>
+                    <form id="query_form" method="post">
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table table-hover m-10" style="margin-top: -12px;">
+                                    <thead>
+                                    <tr>
+                                        <th>业务账号</th>
+                                        <th>变更类型</th>
+                                        <th>变更前先级</th>
+                                        <th>变更后优先级</th>
+                                        <th>是否有效</th>
+                                        <th>操作人</th>
+                                        <th>操作时间</th>
+                                    </tr>
+                                    <thead>
+                                    <tbody>
+                                    <tr th:each="info:${changeItems}">
+                                        <td style="vertical-align: middle;line-height: 26px">
+                                            [[${info.businessAccount}]]
+                                        </td>
+                                        <td style="vertical-align: middle;line-height: 26px">
+                                            <a th:if="${info.changeType =='NORMAL'}"
+                                               class="btn btn-info btn-rounded btn-sm waves-effect waves-light">正常</a>
+                                            <a th:if="${info.changeType =='PRIVILEGE'}"
+                                               class="btn btn-success btn-rounded btn-sm waves-effect waves-light">特权</a>
+                                            <a th:if="${info.changeType =='SUSPEND'}"
+                                               class="btn btn-danger btn-rounded btn-sm waves-effect waves-light">挂起</a>
+                                        </td>
+                                        <td style="vertical-align: middle;line-height: 26px">
+                                            <a th:if="${info.changeBeforePriority =='NORMAL'}"
+                                               class="btn btn-info btn-rounded btn-sm waves-effect waves-light">正常</a>
+                                            <a th:if="${info.changeBeforePriority =='PRIVILEGE'}"
+                                               class="btn btn-success btn-rounded btn-sm waves-effect waves-light">特权</a>
+                                            <a th:if="${info.changeBeforePriority =='SUSPEND'}"
+                                               class="btn btn-danger btn-rounded btn-sm waves-effect waves-light">挂起</a>
+                                        </td>
+                                        <td style="vertical-align: middle;line-height: 26px">
+                                            <a th:if="${info.changeAfterPriority =='NORMAL'}"
+                                               class="btn btn-info btn-rounded btn-sm waves-effect waves-light">正常</a>
+                                            <a th:if="${info.changeAfterPriority =='PRIVILEGE'}"
+                                               class="btn btn-success btn-rounded btn-sm waves-effect waves-light">特权</a>
+                                            <a th:if="${info.changeAfterPriority =='SUSPEND'}"
+                                               class="btn btn-danger btn-rounded btn-sm waves-effect waves-light">挂起</a>
+                                        </td>
+                                        <td style="vertical-align: middle;line-height: 26px">
+                                            <mpm:tag id="isOrNo" identity="isOrNo"
+                                                     class="1,btn btn-info btn-rounded btn-ms waves-effect waves-light;0,btn btn-danger btn-rounded btn-ms waves-effect waves-light;"
+                                                     name="isOrNo" show-type="button" key="code"
+                                                     th:value="${info.status}" title="状态"/>
+                                        </td>
+                                        <td style="vertical-align: middle;line-height: 26px">
+                                            [[${info.createdBy}]]
+                                        </td>
+                                        <td style="vertical-align: middle;line-height: 26px">
+                                            [[${info.createdTime}]]
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <hr>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+    </div>
+</div> <!-- content -->
+
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<script th:src="@{/static/plugins/moment/moment.js}"></script>
+<script th:src="@{/static/plugins/bootstrap-inputmask/bootstrap-inputmask.min.js}"></script>
+<script th:src="@{/static/plugins/autoNumeric/autoNumeric.js}"></script>
+<script>
+
+    $(document).ready(function() {
+		$('.autonumber').autoNumeric('init');
+	 });
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+
+
+</script>
+</body>
+</html>

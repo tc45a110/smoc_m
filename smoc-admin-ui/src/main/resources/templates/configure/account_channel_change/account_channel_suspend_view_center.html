@@ -18,16 +18,13 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">挂起通道详情</h4>
+                    <h4 class="page-title">通道挂起详情</h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
-                            业务账号管理
+                            通道切换
                         </li>
                         <li class="active">
-                            业务账号挂起通道
-                        </li>
-                        <li class="active">
-                            挂起通道详情
+                            通道挂起详情
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -43,11 +40,11 @@
                     <div class="row m-b-10">
                         <h4>
                             <div class="pull-right" style="margin-top: -12px;margin-right:10px">
-                                <a sec:authorize-url="/account/channel/suspend/list"
-                                   th:href="@{/account/channel/suspend/list}"
+                                <a sec:authorize-url="/configure/channel/suspend/list"
+                                   th:href="@{/configure/channel/suspend/list}"
                                    class="btn btn-default waves-effect waves-light btn-md">
                                     <i class="glyphicon  glyphicon-share-alt" style="margin-right:10px"></i>
-                                    返回挂起通道列表</a>
+                                    返回通道挂起列表</a>
                             </div>
                         </h4>
                     </div>
@@ -57,16 +54,23 @@
                                 <div class="col-md-12">
                                     <div class="card-box">
                                         <ul class="nav nav-tabs m-b-30">
-                                            <li class="active" id="tab1"><a onclick="active('1')"  sec:authorize-url="/account/channel/suspend/view/base/*"
-                                                                            th:href="@{/account/channel/suspend/view/base/id}"
+                                            <li class="active" id="tab1"><a onclick="active('1')"  sec:authorize-url="/configure/channel/suspend/view/base/*"
+                                                                            th:href="@{/configure/channel/suspend/view/base/{id}(id=${id})}"
                                                                             th:target="tab-content">挂起通道详情</a></li>
-                                            <li class="" id="tab5"><a onclick="active('5')"
-                                                                      th:target="tab-content">挂起通道操作日志</a></li>
+                                            <li class="" id="tab2"><a onclick="active('2')"
+                                                                      sec:authorize-url="/configure/channel/suspend/change/record/*"
+                                                                      th:href="@{/configure/channel/suspend/change/record/{id}(id=${id})}"
+                                                                      th:target="tab-content">业务账号记录</a></li>
+                                            <li class="" id="tab3"><a onclick="active('3')"
+                                                                      sec:authorize-url="/user/logs/list/*/*"
+                                                                      th:href="@{/user/logs/list/CHANNEL_CHANGE/{id}(id=${id})}"
+                                                                      th:target="tab-content">操作日志</a></li>
+
 
                                         </ul>
                                         <div class="tab-cotent" style="background-color:#fff">
                                             <iframe name="tab-content" id="tab-content" th:frameBorder="0" th:scrolling="auto"
-                                                    th:src="@{/account/channel/suspend/view/base/id}" style="padding: 0px; width: 100%; height: 1200px;background-color:#fff"> </iframe>
+                                                    th:src="@{/configure/channel/suspend/view/base/{id}(id=${id})}" style="padding: 0px; width: 100%; height: 1200px;background-color:#fff"> </iframe>
                                         </div>
                                     </div>
                                 </div> <!-- end col -->

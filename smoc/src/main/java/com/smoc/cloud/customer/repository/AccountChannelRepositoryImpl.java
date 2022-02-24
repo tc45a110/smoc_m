@@ -409,4 +409,49 @@ public class AccountChannelRepositoryImpl extends BasePageRepository {
 
         });
     }
+
+    /**
+     * 通过channelId 查询 该通道的业务账号引用情况
+     * @param channelId
+     * @return
+     */
+    public List<AccountChannelInfoValidator> channelDetail(String channelId) {
+
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append("  t.ID");
+        sqlBuffer.append(", t.ACCOUNT_ID");
+        sqlBuffer.append(", t.CONFIG_TYPE");
+        sqlBuffer.append(", t.CARRIER");
+        sqlBuffer.append(", t.CHANNEL_ID");
+        sqlBuffer.append(", t.CHANNEL_PRIORITY");
+        sqlBuffer.append(", t.CHANNEL_WEIGHT");
+        sqlBuffer.append(", t.CHANNEL_SOURCE");
+        sqlBuffer.append(", t.CHANGE_SOURCE");
+        sqlBuffer.append(", t.CHANNEL_STATUS");
+        sqlBuffer.append(", t.CREATED_BY");
+        sqlBuffer.append(", b.ACCOUNT_NAME");
+        sqlBuffer.append(", b.BUSINESS_TYPE");
+        sqlBuffer.append(", e.ENTERPRISE_NAME");
+        sqlBuffer.append(", DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME");
+        sqlBuffer.append("  from account_channel_info t,account_base_info b,enterprise_basic_info e where t.ACCOUNT_ID = b.ACCOUNT_ID and b.ENTERPRISE_ID = e.ENTERPRISE_ID ");
+
+        List<Object> paramsList = new ArrayList<Object>();
+
+        //通道ID
+        if (!StringUtils.isEmpty(channelId)) {
+            sqlBuffer.append(" and t.CHANNEL_ID = ?");
+            paramsList.add(channelId.trim());
+        }
+
+        sqlBuffer.append(" order by t.CARRIER ");
+
+        //根据参数个数，组织参数值
+        Object[] params = new Object[paramsList.size()];
+        paramsList.toArray(params);
+
+        List<AccountChannelInfoValidator> list = this.queryForObjectList(sqlBuffer.toString(), params,  new AccountChannelInfoDetailRowMapper());
+        return list;
+
+    }
 }

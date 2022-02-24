@@ -101,6 +101,7 @@ public class ConfigChannelChangeService {
                     }
                 }
             }
+            log.info("[update originalAccountIds]:{}",originalAccountIds);
             configChannelChangeRepository.editChannelChange(configChannelChangeValidator, originalAccountIds);
             return ResponseDataUtil.buildSuccess();
         }
@@ -133,6 +134,8 @@ public class ConfigChannelChangeService {
                 }
             }
         }
+
+        log.info("[cancel originalAccountIds]:{}",originalAccountIds);
 
         configChannelChangeRepository.cancelChannelChange(data.get(), originalAccountIds);
         return ResponseDataUtil.buildSuccess();
