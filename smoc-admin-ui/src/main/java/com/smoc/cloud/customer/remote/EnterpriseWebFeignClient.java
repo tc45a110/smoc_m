@@ -1,7 +1,6 @@
 package com.smoc.cloud.customer.remote;
 
 import com.smoc.cloud.common.response.ResponseData;
-import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseWebAccountInfoValidator;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;

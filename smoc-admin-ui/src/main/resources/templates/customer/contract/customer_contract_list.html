@@ -10,6 +10,8 @@
     <!-- Custom box css -->
     <link th:href="@{/static/plugins/custombox/css/custombox.min.css}" rel="stylesheet">
     <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
+    <!-- Tooltipster css -->
+    <link rel="stylesheet" th:href="@{/static/plugins/tooltipster/tooltipster.bundle.min.css}">
 </head>
 <body>
 <!-- Loader start 页面加载进度-->
@@ -45,26 +47,22 @@
                 <div class="card-box">
                     <div class="row m-b-60">
                         <div class="col-sm-12">
-                            <form id="query_form" th:action="@{/ec/customer/contract/page}" method="post" >
-                                <div class="form-group  col-sm-3">
-                                    <input id="reportrange" class="form-control" type="text"/>
+                            <form id="query_form" th:action="@{/ec/customer/contract/page}" th:object="${enterpriseContractInfoValidator}" method="post" >
+                                <div class="form-group col-sm-3">
+                                    <input id="dateQueryStr" class="form-control" type="text" th:field="*{startDate}"/>
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <input type="text" class="form-control" placeholder="企业名称" autocomplete="off">
+                                    <input type="text" class="form-control" th:field="*{enterpriseName}" placeholder="企业名称" autocomplete="off">
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <input type="text" class="form-control" placeholder="合同编号" autocomplete="off">
+                                    <input type="text" class="form-control" th:field="*{contractNo}" placeholder="合同编号" autocomplete="off">
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <input type="text" class="form-control" placeholder="关键字" autocomplete="off">
+                                    <input type="text" class="form-control" th:field="*{contractKey}" placeholder="关键字" autocomplete="off">
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <mpm:tag id="enterpriseType" identity="enterpriseType" show-type="select" key="code"
-                                             class="form-control" data-icon="mdi mdi-view-module" title="企业类型"/>
-                                </div>
-                                <div class="form-group  col-sm-3">
-                                    <mpm:tag id="corporation" identity="corporation" show-type="select" key="code"
-                                             class="form-control" data-icon="mdi mdi-view-module" title="对接主体公司"/>
+                                    <mpm:tag id="enterpriseType" identity="enterpriseType" name="enterpriseType" show-type="select" key="code"
+                                             th:value="${enterpriseContractInfoValidator.enterpriseType}" class="form-control" title="企业类型"/>
                                 </div>
                                 <div class="form-group col-sm-3 pull-right" style="text-align: right">
                                     <button sec:authorize-url="/ec/customer/contract/page"
@@ -75,6 +73,8 @@
                                        th:href="@{/ec/customer/search/contract}"
                                        class="btn btn-success waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-plus-sign"></i> 新建EC合同</a>
+                                    <input type="hidden" name="currentPage" id="currentPage" th:value="${pageParams.currentPage}">
+                                    <input type="hidden" name="pageSize" id="pageSize" th:value="${pageParams.pageSize}">
                                 </div>
                             </form>
                         </div>
@@ -100,339 +100,47 @@
                                     <th>企业类型</th>
                                     <th>合同编号</th>
                                     <th>合同附件</th>
-                                    <th>签订日期</th>
+                                    <th>签订日期/到期日期</th>
                                     <th>创建人/创建日期</th>
                                     <th>操作</th>
                                 </tr>
                                 <thead>
                                 <tbody>
-                                <tr>
+                                <tr th:each="info:${list}">
                                     <td>
-                                        <a th:href="@{/ec/customer/base_info/center/0000}" data-toggle="tooltip"
+                                        <a th:href="@{/enterprise/center/{id}(id=${info.enterpriseId})}" data-toggle="tooltip"
                                            data-placement="bottom" title="" data-original-title="跳转到企业信息中心">
-                                            <span style="color:#797979">北京星语互联科技有限公司</span></a>
+                                            <span style="color:#797979">[[${info.enterpriseName}]]</span></a>
                                     </td>
                                     <td>
-                                        <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">渠道商</a>
+                                        <mpm:tag identity="enterpriseType" show-type="button" key="code" th:value="${info.enterpriseType}"
+                                                 class="DIRECTCUSTOMER,btn btn-info btn-rounded btn-sm waves-effect waves-light;CHANNELCUSTOMER,btn btn-teal btn-rounded btn-sm waves-effect waves-light;IDENTIFICATION,btn btn-success btn-rounded btn-sm waves-effect waves-light;"/>
                                     </td>
-                                    <td style="line-height: 26px;">XY001-0876-2223</td>
-                                    <td style="line-height: 26px;"><a href="" title="点击下载"><i class="fa fa-file-word-o"
-                                                                                              style="margin-right:5px"></i>小舟科技短信合同</a>
+                                    <td style="line-height: 26px;">[[${info.contractNo}]]</td>
+                                    <td style="line-height: 26px;">
+                                        <i class="mdi mdi-file-document" style="font-size: 18px;color: #00acc1"
+                                           th:id="interaction+${info.id}"
+                                           th:onmouseover="interaction([[${info.id}]])"
+                                           data-toggle="tooltip">
+                                        </i>
                                     </td>
-                                    <td style="line-height: 26px;">2021-11-3</td>
-                                    <td>李先生<br>2021-11-3 12:45:47</td>
+                                    <td style="line-height: 26px;">[[${info.contractDate}]]<br>[[${info.contractExpireDate}]]</td>
+                                    <td>[[${info.createdBy}]]<br>[[${info.createdTime}]]</td>
                                     <td style="line-height: 26px;">
                                         <a sec:authorize-url="/ec/customer/contract/detail/*"
-                                           th:href="@{/ec/customer/contract/detail/id}" class="on-default edit-row"
+                                           th:href="@{/ec/customer/contract/detail/{id}(id=${info.id})}" class="on-default edit-row"
                                            style="padding-left: 5px;color: #4BD396;"
                                            data-toggle="tooltip"
                                            data-placement="left" title=""  data-original-title="查看详情"><i style="font-size: 18px"
                                                                                                          class="glyphicon glyphicon-search"></i></a>
                                         <a sec:authorize-url="/ec/customer/contract/edit/*"
-                                           th:href="@{/ec/customer/contract/edit/id}" class="on-default edit-row"
+                                           th:href="@{/ec/customer/contract/edit/{id}(id=${info.id})}" class="on-default edit-row"
                                            style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title=""  data-original-title="编辑"><i
                                                 style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/ec/customer/contract/deleteById/id*" data-toggle="modal"
+                                        <a sec:authorize-url="/ec/customer/contract/deleteById/*" data-toggle="modal"
                                            data-target="#confirm-modal" class="on-default remove-row"
-                                           style="padding-left: 5px;color: #f05050" title="删除"><i
-                                                style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <a th:href="@{/ec/customer/base_info/center/0000}" data-toggle="tooltip"
-                                           data-placement="bottom" title="" data-original-title="跳转到企业信息中心">
-                                            <span style="color:#797979">北京星语互联科技有限公司</span></a>
-                                    </td>
-                                    <td>
-                                        <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">渠道商</a>
-                                    </td>
-                                    <td style="line-height: 26px;">XY001-0876-2223</td>
-                                    <td style="line-height: 26px;"><a href="" title="点击下载"><i class="fa fa-file-word-o"
-                                                                                              style="margin-right:5px"></i>小舟科技短信合同</a>
-                                    </td>
-                                    <td style="line-height: 26px;">2021-11-3</td>
-                                    <td>李先生<br>2021-11-3 12:45:47</td>
-                                    <td style="line-height: 26px;">
-                                        <a sec:authorize-url="/ec/customer/contract/detail/*"
-                                           th:href="@{/ec/customer/contract/detail/id}" class="on-default edit-row"
-                                           style="padding-left: 5px;color: #4BD396;"
-                                           data-toggle="tooltip"
-                                           data-placement="left" title=""  data-original-title="查看详情"><i style="font-size: 18px"
-                                                                                                         class="glyphicon glyphicon-search"></i></a>
-                                        <a sec:authorize-url="/ec/customer/contract/edit/*"
-                                           th:href="@{/ec/customer/contract/edit/id}" class="on-default edit-row"
-                                           style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="left" title=""  data-original-title="编辑"><i
-                                                style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/ec/customer/contract/deleteById/id*" data-toggle="modal"
-                                           data-target="#confirm-modal" class="on-default remove-row"
-                                           style="padding-left: 5px;color: #f05050" title="删除"><i
-                                                style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <a th:href="@{/ec/customer/base_info/center/0000}" data-toggle="tooltip"
-                                           data-placement="bottom" title="" data-original-title="跳转到企业信息中心">
-                                            <span style="color:#797979">北京星语互联科技有限公司</span></a>
-                                    </td>
-                                    <td>
-                                        <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">渠道商</a>
-                                    </td>
-                                    <td style="line-height: 26px;">XY001-0876-2223</td>
-                                    <td style="line-height: 26px;"><a href="" title="点击下载"><i class="fa fa-file-word-o"
-                                                                                              style="margin-right:5px"></i>小舟科技短信合同</a>
-                                    </td>
-                                    <td style="line-height: 26px;">2021-11-3</td>
-                                    <td>李先生<br>2021-11-3 12:45:47</td>
-                                    <td style="line-height: 26px;">
-                                        <a sec:authorize-url="/ec/customer/contract/detail/*"
-                                           th:href="@{/ec/customer/contract/detail/id}" class="on-default edit-row"
-                                           style="padding-left: 5px;color: #4BD396;"
-                                           data-toggle="tooltip"
-                                           data-placement="left" title=""  data-original-title="查看详情"><i style="font-size: 18px"
-                                                                                                         class="glyphicon glyphicon-search"></i></a>
-                                        <a sec:authorize-url="/ec/customer/contract/edit/*"
-                                           th:href="@{/ec/customer/contract/edit/id}" class="on-default edit-row"
-                                           style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="left" title=""  data-original-title="编辑"><i
-                                                style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/ec/customer/contract/deleteById/id*" data-toggle="modal"
-                                           data-target="#confirm-modal" class="on-default remove-row"
-                                           style="padding-left: 5px;color: #f05050" title="删除"><i
-                                                style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <a th:href="@{/ec/customer/base_info/center/0000}" data-toggle="tooltip"
-                                           data-placement="bottom" title="" data-original-title="跳转到企业信息中心">
-                                            <span style="color:#797979">北京星语互联科技有限公司</span></a>
-                                    </td>
-                                    <td>
-                                        <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">渠道商</a>
-                                    </td>
-                                    <td style="line-height: 26px;">XY001-0876-2223</td>
-                                    <td style="line-height: 26px;"><a href="" title="点击下载"><i class="fa fa-file-word-o"
-                                                                                              style="margin-right:5px"></i>小舟科技短信合同</a>
-                                    </td>
-                                    <td style="line-height: 26px;">2021-11-3</td>
-                                    <td>李先生<br>2021-11-3 12:45:47</td>
-                                    <td style="line-height: 26px;">
-                                        <a sec:authorize-url="/ec/customer/contract/detail/*"
-                                           th:href="@{/ec/customer/contract/detail/id}" class="on-default edit-row"
-                                           style="padding-left: 5px;color: #4BD396;"
-                                           data-toggle="tooltip"
-                                           data-placement="left" title=""  data-original-title="查看详情"><i style="font-size: 18px"
-                                                                                                         class="glyphicon glyphicon-search"></i></a>
-                                        <a sec:authorize-url="/ec/customer/contract/edit/*"
-                                           th:href="@{/ec/customer/contract/edit/id}" class="on-default edit-row"
-                                           style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="left" title=""  data-original-title="编辑"><i
-                                                style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/ec/customer/contract/deleteById/id*" data-toggle="modal"
-                                           data-target="#confirm-modal" class="on-default remove-row"
-                                           style="padding-left: 5px;color: #f05050" title="删除"><i
-                                                style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <a th:href="@{/ec/customer/base_info/center/0000}" data-toggle="tooltip"
-                                           data-placement="bottom" title="" data-original-title="跳转到企业信息中心">
-                                            <span style="color:#797979">北京星语互联科技有限公司</span></a>
-                                    </td>
-                                    <td>
-                                        <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">渠道商</a>
-                                    </td>
-                                    <td style="line-height: 26px;">XY001-0876-2223</td>
-                                    <td style="line-height: 26px;"><a href="" title="点击下载"><i class="fa fa-file-word-o"
-                                                                                              style="margin-right:5px"></i>小舟科技短信合同</a>
-                                    </td>
-                                    <td style="line-height: 26px;">2021-11-3</td>
-                                    <td>李先生<br>2021-11-3 12:45:47</td>
-                                    <td style="line-height: 26px;">
-                                        <a sec:authorize-url="/ec/customer/contract/detail/*"
-                                           th:href="@{/ec/customer/contract/detail/id}" class="on-default edit-row"
-                                           style="padding-left: 5px;color: #4BD396;"
-                                           data-toggle="tooltip"
-                                           data-placement="left" title=""  data-original-title="查看详情"><i style="font-size: 18px"
-                                                                                                         class="glyphicon glyphicon-search"></i></a>
-                                        <a sec:authorize-url="/ec/customer/contract/edit/*"
-                                           th:href="@{/ec/customer/contract/edit/id}" class="on-default edit-row"
-                                           style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="left" title=""  data-original-title="编辑"><i
-                                                style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/ec/customer/contract/deleteById/id*" data-toggle="modal"
-                                           data-target="#confirm-modal" class="on-default remove-row"
-                                           style="padding-left: 5px;color: #f05050" title="删除"><i
-                                                style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <a th:href="@{/ec/customer/base_info/center/0000}" data-toggle="tooltip"
-                                           data-placement="bottom" title="" data-original-title="跳转到企业信息中心">
-                                            <span style="color:#797979">北京星语互联科技有限公司</span></a>
-                                    </td>
-                                    <td>
-                                        <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">渠道商</a>
-                                    </td>
-                                    <td style="line-height: 26px;">XY001-0876-2223</td>
-                                    <td style="line-height: 26px;"><a href="" title="点击下载"><i class="fa fa-file-word-o"
-                                                                                              style="margin-right:5px"></i>小舟科技短信合同</a>
-                                    </td>
-                                    <td style="line-height: 26px;">2021-11-3</td>
-                                    <td>李先生<br>2021-11-3 12:45:47</td>
-                                    <td style="line-height: 26px;">
-                                        <a sec:authorize-url="/ec/customer/contract/detail/*"
-                                           th:href="@{/ec/customer/contract/detail/id}" class="on-default edit-row"
-                                           style="padding-left: 5px;color: #4BD396;"
-                                           data-toggle="tooltip"
-                                           data-placement="left" title=""  data-original-title="查看详情"><i style="font-size: 18px"
-                                                                                                         class="glyphicon glyphicon-search"></i></a>
-                                        <a sec:authorize-url="/ec/customer/contract/edit/*"
-                                           th:href="@{/ec/customer/contract/edit/id}" class="on-default edit-row"
-                                           style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="left" title=""  data-original-title="编辑"><i
-                                                style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/ec/customer/contract/deleteById/id*" data-toggle="modal"
-                                           data-target="#confirm-modal" class="on-default remove-row"
-                                           style="padding-left: 5px;color: #f05050" title="删除"><i
-                                                style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <a th:href="@{/ec/customer/base_info/center/0000}" data-toggle="tooltip"
-                                           data-placement="bottom" title="" data-original-title="跳转到企业信息中心">
-                                            <span style="color:#797979">北京星语互联科技有限公司</span></a>
-                                    </td>
-                                    <td>
-                                        <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">渠道商</a>
-                                    </td>
-                                    <td style="line-height: 26px;">XY001-0876-2223</td>
-                                    <td style="line-height: 26px;"><a href="" title="点击下载"><i class="fa fa-file-word-o"
-                                                                                              style="margin-right:5px"></i>小舟科技短信合同</a>
-                                    </td>
-                                    <td style="line-height: 26px;">2021-11-3</td>
-                                    <td>李先生<br>2021-11-3 12:45:47</td>
-                                    <td style="line-height: 26px;">
-                                        <a sec:authorize-url="/ec/customer/contract/detail/*"
-                                           th:href="@{/ec/customer/contract/detail/id}" class="on-default edit-row"
-                                           style="padding-left: 5px;color: #4BD396;"
-                                           data-toggle="tooltip"
-                                           data-placement="left" title=""  data-original-title="查看详情"><i style="font-size: 18px"
-                                                                                                         class="glyphicon glyphicon-search"></i></a>
-                                        <a sec:authorize-url="/ec/customer/contract/edit/*"
-                                           th:href="@{/ec/customer/contract/edit/id}" class="on-default edit-row"
-                                           style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="left" title=""  data-original-title="编辑"><i
-                                                style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/ec/customer/contract/deleteById/id*" data-toggle="modal"
-                                           data-target="#confirm-modal" class="on-default remove-row"
-                                           style="padding-left: 5px;color: #f05050" title="删除"><i
-                                                style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <a th:href="@{/ec/customer/base_info/center/0000}" data-toggle="tooltip"
-                                           data-placement="bottom" title="" data-original-title="跳转到企业信息中心">
-                                            <span style="color:#797979">北京星语互联科技有限公司</span></a>
-                                    </td>
-                                    <td>
-                                        <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">渠道商</a>
-                                    </td>
-                                    <td style="line-height: 26px;">XY001-0876-2223</td>
-                                    <td style="line-height: 26px;"><a href="" title="点击下载"><i class="fa fa-file-word-o"
-                                                                                              style="margin-right:5px"></i>小舟科技短信合同</a>
-                                    </td>
-                                    <td style="line-height: 26px;">2021-11-3</td>
-                                    <td>李先生<br>2021-11-3 12:45:47</td>
-                                    <td style="line-height: 26px;">
-                                        <a sec:authorize-url="/ec/customer/contract/detail/*"
-                                           th:href="@{/ec/customer/contract/detail/id}" class="on-default edit-row"
-                                           style="padding-left: 5px;color: #4BD396;"
-                                           data-toggle="tooltip"
-                                           data-placement="left" title=""  data-original-title="查看详情"><i style="font-size: 18px"
-                                                                                                         class="glyphicon glyphicon-search"></i></a>
-                                        <a sec:authorize-url="/ec/customer/contract/edit/*"
-                                           th:href="@{/ec/customer/contract/edit/id}" class="on-default edit-row"
-                                           style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="left" title=""  data-original-title="编辑"><i
-                                                style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/ec/customer/contract/deleteById/id*" data-toggle="modal"
-                                           data-target="#confirm-modal" class="on-default remove-row"
-                                           style="padding-left: 5px;color: #f05050" title="删除"><i
-                                                style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <a th:href="@{/ec/customer/base_info/center/0000}" data-toggle="tooltip"
-                                           data-placement="bottom" title="" data-original-title="跳转到企业信息中心">
-                                            <span style="color:#797979">北京星语互联科技有限公司</span></a>
-                                    </td>
-                                    <td>
-                                        <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">渠道商</a>
-                                    </td>
-                                    <td style="line-height: 26px;">XY001-0876-2223</td>
-                                    <td style="line-height: 26px;"><a href="" title="点击下载"><i class="fa fa-file-word-o"
-                                                                                              style="margin-right:5px"></i>小舟科技短信合同</a>
-                                    </td>
-                                    <td style="line-height: 26px;">2021-11-3</td>
-                                    <td>李先生<br>2021-11-3 12:45:47</td>
-                                    <td style="line-height: 26px;">
-                                        <a sec:authorize-url="/ec/customer/contract/detail/*"
-                                           th:href="@{/ec/customer/contract/detail/id}" class="on-default edit-row"
-                                           style="padding-left: 5px;color: #4BD396;"
-                                           data-toggle="tooltip"
-                                           data-placement="left" title=""  data-original-title="查看详情"><i style="font-size: 18px"
-                                                                                                         class="glyphicon glyphicon-search"></i></a>
-                                        <a sec:authorize-url="/ec/customer/contract/edit/*"
-                                           th:href="@{/ec/customer/contract/edit/id}" class="on-default edit-row"
-                                           style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="left" title=""  data-original-title="编辑"><i
-                                                style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/ec/customer/contract/deleteById/id*" data-toggle="modal"
-                                           data-target="#confirm-modal" class="on-default remove-row"
-                                           style="padding-left: 5px;color: #f05050" title="删除"><i
-                                                style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <a th:href="@{/ec/customer/base_info/center/0000}" data-toggle="tooltip"
-                                           data-placement="bottom" title="" data-original-title="跳转到企业信息中心">
-                                            <span style="color:#797979">北京星语互联科技有限公司</span></a>
-                                    </td>
-                                    <td>
-                                        <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">渠道商</a>
-                                    </td>
-                                    <td style="line-height: 26px;">XY001-0876-2223</td>
-                                    <td style="line-height: 26px;"><a href="" title="点击下载"><i class="fa fa-file-word-o"
-                                                                                              style="margin-right:5px"></i>小舟科技短信合同</a>
-                                    </td>
-                                    <td style="line-height: 26px;">2021-11-3</td>
-                                    <td>李先生<br>2021-11-3 12:45:47</td>
-                                    <td style="line-height: 26px;">
-                                        <a sec:authorize-url="/ec/customer/contract/detail/*"
-                                           th:href="@{/ec/customer/contract/detail/id}" class="on-default edit-row"
-                                           style="padding-left: 5px;color: #4BD396;"
-                                           data-toggle="tooltip"
-                                           data-placement="left" title=""  data-original-title="查看详情"><i style="font-size: 18px"
-                                                                                                         class="glyphicon glyphicon-search"></i></a>
-                                        <a sec:authorize-url="/ec/customer/contract/edit/*"
-                                           th:href="@{/ec/customer/contract/edit/id}" class="on-default edit-row"
-                                           style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="left" title=""  data-original-title="编辑"><i
-                                                style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/ec/customer/contract/deleteById/id*" data-toggle="modal"
-                                           data-target="#confirm-modal" class="on-default remove-row"
-                                           style="padding-left: 5px;color: #f05050" title="删除"><i
+                                           th:onclick="confirmDelete([[${info.id}]],this)" style="padding-left: 5px;color: #f05050" title="删除"><i
                                                 style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
                                     </td>
                                 </tr>
@@ -463,16 +171,63 @@
 <th:block th:insert="fragments/common_fragments :: common_js"/>
 <th:block th:insert="fragments/common_fragments :: select_js"/>
 <script th:src="@{/static/plugins/moment/moment.js}"></script>
+<!-- Tooltipster js -->
+<script th:src="@{/static/plugins/tooltipster/tooltipster.bundle.min.js}"></script>
 <script th:src="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.js}"></script>
-<!-- Modal-Effect -->
 
-<script>
+<script th:remove="${#strings.isEmpty(error)}?none:all">
 
-    $('#reportrange').daterangepicker({
+    function interaction(id) {
+
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $.ajax({
+            url: contextPath + "/attachment/findByModelId/" + id,
+            async: false,
+            success: function (data) {
+                var files = data.split("@");
+                var onefile = ""
+                if (files.length > 1) {
+                    for (i = 0; i < files.length; i++) {
+                        var a = files[i].split(",");
+                        var url = contextPath+"/attachment/download/"+a[1];
+                        onefile += '<span style="font-size:12px"><a href="'+url+'" style="color: white">' + a[0] + '</a></span><br>';
+                    }
+                } else {
+                    var a = data.split(",");
+                    if(a.length>1){
+                        var url = contextPath+"/attachment/download/"+a[1];
+                        onefile =  '<span style="font-size:12px"><a href="'+url+'" style="color: white">' + a[0] + '</a></span>';
+                    }else{
+                        onefile =  '<span style="font-size:12px">无附件</a></span>';
+                    }
+                }
+
+                $('#interaction' + id).tooltipster({
+                    content: $('<p style="text-align:left;">' + onefile + '</p>'),
+                    maxWidth: 600,
+                    position: 'right',
+                    contentAsHTML: true,
+                    interactive: true
+                });
+            }
+        });
+    }
+
+    function confirmDelete(id) {
+        $("#deleteId").val(id);
+    }
+
+    function deleteById() {
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $('#preloader').css('display', 'block');
+        location.href = contextPath + "/ec/customer/contract/deleteById/" + $("#deleteId").val();
+    }
+
+    $('#dateQueryStr').daterangepicker({
         format: 'YYYY-MM-DD',
-        startDate: '2020-11-03',
-        endDate: '2021-11-03',
-        minDate: '2012-01-01',
+        startDate: '[[${enterpriseContractInfoValidator.startDate}]]',
+        endDate: '[[${enterpriseContractInfoValidator.endDate}]]',
+        minDate: '2019-01-01',
         maxDate: '2080-12-31',
         dateLimit: {
             days: 720
@@ -511,10 +266,12 @@
         //alert('A date range was chosen: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
     });
 
+</script>
+<script>
+
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
-
 </script>
 </body>
 </html>

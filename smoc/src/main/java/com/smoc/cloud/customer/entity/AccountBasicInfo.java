@@ -20,6 +20,7 @@ public class AccountBasicInfo {
     private String transferType;
     private String accountProcess;
     private String accountStatus;
+    private String accountPriority;
     private String createdBy;
     private Date createdTime;
     private String updatedBy;
@@ -204,6 +205,16 @@ public class AccountBasicInfo {
 
     public void setCountryCode(String countryCode) {
         this.countryCode = countryCode;
+    }
+
+    @Basic
+    @Column(name = "ACCOUNT_PRIORITY")
+    public String getAccountPriority() {
+        return accountPriority;
+    }
+
+    public void setAccountPriority(String accountPriority) {
+        this.accountPriority = accountPriority;
     }
 
     @Override

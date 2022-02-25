@@ -6,6 +6,8 @@
     <th:block th:insert="fragments/common_fragments :: common_css"/>
     <th:block th:insert="fragments/common_fragments :: select_css"/>
     <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
+    <link th:href="@{/static/plugins/jquery.filer/css/jquery.filer.css}" rel="stylesheet"/>
+    <link th:href="@{/static/plugins/jquery.filer/css/themes/jquery.filer-dragdropbox-theme.css}" rel="stylesheet"/>
 
 </head>
 <body>
@@ -45,17 +47,18 @@
                             EC资料管理
                         </h3>
                     </div>
-                    <div class="panel-body">
+                    <div class="panel-body" style="height: 600px">
                         <div class="row">
                             <div class="col-md-10">
                                 <div class="p-20">
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-sm-6 m-b-10">
-                                                <label>企业名称：</label>北京星语互联科技有限公司
+                                                <label>企业名称：</label>[[${enterpriseDocumentInfoValidator.enterpriseName}]]
                                             </div>
                                             <div class="col-sm-6 m-b-10">
-                                                <label>企业类型：</label>渠道商
+                                                <label>企业类型：</label><mpm:tag identity="enterpriseType" show-type="label" key="code"
+                                                                             th:value="${enterpriseDocumentInfoValidator.enterpriseType}"/>
                                             </div>
 
                                         </div>
@@ -63,41 +66,70 @@
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-sm-6 m-b-10">
-                                                <label>签名：</label>北京星语
+                                                <label>业务类型：</label>
+                                                <mpm:tag identity="businessType" show-type="label" key="code"
+                                                         th:value="${enterpriseDocumentInfoValidator.businessType}"/>
                                             </div>
                                             <div class="col-sm-6 m-b-10">
-                                                <label>业务类型：</label>国际短信
+                                                <label>信息类型：</label>
+                                                <mpm:tag identity="infoType" show-type="label" key="code"
+                                                         th:value="${enterpriseDocumentInfoValidator.infoType}"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+
+                                            <div class="col-sm-6 m-b-10">
+                                                <label>签名：</label>[[${enterpriseDocumentInfoValidator.signName}]]
+                                            </div>
+                                            <div class="col-sm-6 m-b-10">
+                                                <label>短链：</label>[[${enterpriseDocumentInfoValidator.shortLink}]]
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-sm-6 m-b-10">
-                                                <label>信息类型：</label>行业
+                                                <label>签订日期：</label>[[${enterpriseDocumentInfoValidator.signDate}]]
                                             </div>
                                             <div class="col-sm-6 m-b-10">
-                                                <label>短链：</label>http://mtw.so/6xOaa3
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-sm-6 m-b-10">
-                                                <label>签名合同链：</label>http://mtw.so/6xOaa3
-                                            </div>
-                                            <div class="col-sm-6 m-b-10">
-                                                <label>签订日期：</label>2021-11-03
+                                                <label>到期日期：</label>[[${enterpriseDocumentInfoValidator.signExpireDate}]]
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group m-b-20">
                                         <label>备注关键字：</label>
-                                        关键字、关键字、关键字
+                                        [[${enterpriseDocumentInfoValidator.docKey}]]
                                     </div>
+
                                     <div class="form-group m-b-20">
-                                        <p style="font-size:12px"><i style="font-size: 18px" class="mdi mdi-download"></i><a href="">&nbsp;签名合同文件</a></p>
-                                        <p style="font-size:12px"><i style="font-size: 18px" class="mdi mdi-download"></i><a href="">&nbsp;签名资质文件</a></p>
-                                        <p style="font-size:12px"><i style="font-size: 18px" class="mdi mdi-download"></i><a href="">&nbsp;客户金融信息安全承诺书</a></p>
+                                        <div class="jFiler-items jFiler-row">
+                                            <ul class="jFiler-items-list jFiler-items-grid">
+                                                <li class="jFiler-item jFiler-no-thumbnail" data-jfiler-index="0" style="" th:each="att:${filesList}">
+                                                    <div class="jFiler-item-container">
+                                                        <div class="jFiler-item-inner">
+                                                            <div class="jFiler-item-thumb">
+                                                                <div class="jFiler-item-info"><span class="jFiler-item-title"><b
+                                                                        th:title="${att.attachmentName}">[[${att.attachmentName}]]</b></span>
+                                                                </div>
+                                                                <div class="jFiler-item-thumb-image"><span class="jFiler-icon-file f-file f-file-ext-docx"
+                                                                                                           style="-webkit-box-shadow: #409024 42px -55px 0px 0px inset; -moz-box-shadow: #409024 42px -55px 0px 0px inset; box-shadow: #409024 42px -55px 0px 0px inset;">
+                                                            .[[${att.docType}]]</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="jFiler-item-assets jFiler-row">
+                                                                <ul class="list-inline pull-left">
+                                                                    <li><a style="color: #29b6f6;" sec:authorize-url="/attachment/download/*"
+                                                                           th:href="@{/attachment/download/{id}(id=${att.id})}"><i style="font-size: 18px" class="mdi mdi-download"></i></a></li>
+                                                                </ul>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
                                     <div class="text-right">
                                         <a sec:authorize-url="/ec/customer/material/list" th:href="@{/ec/customer/material/list}" class="btn btn-default waves-effect waves-light">返回</a>
@@ -115,35 +147,27 @@
                     <div class="panel-heading">
                         <h3 class="panel-title">
                             <i class="mdi mdi-content-save-all" style="margin-right:5px"></i>
-                            审核记录
+                            操作记录
                         </h3>
                     </div>
-                    <div class="panel-body" style="height: 470px">
+                    <div class="panel-body" style="height: 600px">
                         <div class="table-responsive">
                             <table class="table table table-hover m-10" style="margin-top: -12px;">
                                 <thead>
                                 <tr>
-                                    <th>提交人</th>
-                                    <th>提交时间</th>
-                                    <th>描述</th>
+                                    <th>操作人</th>
+                                    <th>操作类型</th>
+                                    <th>操作简要说明</th>
+                                    <th>操作日期</th>
                                 </tr>
                                 <thead>
                                 <tbody>
-                                    <tr>
-                                        <td>李先生</td>
-                                        <td>2021-11-3 12:45:47</td>
-                                        <td>修改</td>
-                                    </tr>
-                                    <tr>
-                                        <td>李先生</td>
-                                        <td>2021-11-3 12:45:47</td>
-                                        <td>修改</td>
-                                    </tr>
-                                    <tr>
-                                        <td>李先生</td>
-                                        <td>2021-11-3 12:45:47</td>
-                                        <td>添加</td>
-                                    </tr>
+                                <tr th:each="logs:${list}">
+                                    <td>[[${logs.userId}]]</td>
+                                    <td>[[${logs.operationType}]]</td>
+                                    <td>[[${logs.simpleIntroduce}]]</td>
+                                    <td th:text="${#dates.format(logs.createdTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+                                </tr>
                                 </tbody>
 
                             </table>

@@ -43,6 +43,8 @@ public class AccountBasicInfoValidator {
     private String accountProcess;
     @NotNull(message = "状态不能为空！")
     private String accountStatus;
+    @NotNull(message = "账号优先级不能为空！")
+    private String accountPriority;
     private String createdBy;
     private String createdTime;
     private String updatedBy;

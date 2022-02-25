@@ -56,9 +56,6 @@ public class AccountController {
     private SystemUserLogService systemUserLogService;
 
     @Autowired
-    private SequenceService sequenceService;
-
-    @Autowired
     private AccountFinanceService accountFinanceService;
 
     @Autowired
@@ -212,6 +209,7 @@ public class AccountController {
             accountBasicInfoValidator.setAccountStatus("2");
             accountBasicInfoValidator.setRandomExtendCodeLength(0);
             accountBasicInfoValidator.setAccountProcess("10000");
+            accountBasicInfoValidator.setAccountPriority("1");//优先级：默认正常
 
             //查询企业数据
             ResponseData<EnterpriseBasicInfoValidator> data = enterpriseService.findById(accountId);

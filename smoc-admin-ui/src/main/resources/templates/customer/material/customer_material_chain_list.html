@@ -33,7 +33,7 @@
                                 <h3 class="panel-title">
                                     签名合同链列表
                                     <div class="pull-right">
-                                        <a sec:authorize-url="/ec/customer/material/chain/add/*" th:href="@{/ec/customer/material/chain/add/id}"
+                                        <a sec:authorize-url="/ec/customer/material/chain/add/*" th:href="@{/ec/customer/material/chain/add/{id}(id=${enterpriseDocumentInfoValidator.id})}"
                                            style="margin-top: -8px"
                                            class="btn btn-purple waves-effect waves-light m-l-10 btn-sm" data-toggle="tooltip" data-placement="left" title="" >
                                             <i class="glyphicon glyphicon-plus-sign" style="margin-right:5px"></i>新建合同链</a>
@@ -54,21 +54,22 @@
                                         </tr>
                                         <thead>
                                         <tbody>
-                                        <tr>
+                                        <tr th:each="info:${list}">
 
-                                            <td style="vertical-align: middle;line-height: 26px">360数科-深圳风向-云启通
+                                            <td style="line-height: 26px">[[${info.signChain}]]
                                             </td>
-                                            <td style="vertical-align: middle;line-height: 26px">2021-11-3</td>
-                                            <td style="vertical-align: middle;line-height: 26px">2022-11-3</td>
-                                            <td style="vertical-align: middle;line-height: 26px">李先生</td>
-                                            <td style="vertical-align: middle;line-height: 26px">2021-11-3 12:45:47</td>
+                                            <td style="line-height: 26px">[[${info.signDate}]]</td>
+                                            <td style="line-height: 26px">[[${info.signExpireDate}]]</td>
+                                            <td style="line-height: 26px">[[${info.createdBy}]]</td>
+                                            <td style="line-height: 26px">[[${info.createdTime}]]</td>
                                             <td style="line-height: 26px;">
                                                 <a sec:authorize-url="/ec/customer/material/chain/edit/*"
-                                                   th:href="@{/ec/customer/material/chain/edit/id}" class="on-default edit-row"
+                                                   th:href="@{/ec/customer/material/chain/edit/{id}(id=${info.id})}" class="on-default edit-row"
                                                    style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
                                                    data-placement="left" title=""  data-original-title="编辑"><i
                                                         style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                                <a sec:authorize-url="/ec/customer/material/chain/deleteById/*" data-toggle="modal"
+                                                <a sec:authorize-url="/ec/customer/material/chain/deleteById/*"
+                                                   th:onclick="confirmDelete([[${info.id}]],this)" data-toggle="modal"
                                                    data-target="#confirm-modal" class="on-default remove-row"
                                                    style="padding-left: 5px;color: #f05050" title="删除"><i
                                                         style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
@@ -95,39 +96,29 @@
         <th:block th:insert="fragments/common_fragments :: common_error"/>
         <!-- end row -->
 
+        <!-- start row  删除确认-->
+        <th:block th:insert="fragments/common_fragments :: confirm-modal"/>
+        <!-- end row -->
+
     </div> <!-- container -->
 </div> <!-- content -->
 <th:block th:insert="fragments/common_fragments :: common_js"/>
 <th:block th:insert="fragments/common_fragments :: select_js"/>
 <script th:src="@{/static/plugins/moment/moment.js}"></script>
 <script th:src="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.js}"></script>
-<script th:src="@{/static/js/contractUploadFile.js}"></script>
-<script th:src="@{/static/plugins/jquery.filer/js/jquery.filer.min.js}"></script>
-<th:block th:insert="fragments/common_fragments :: common_submit_form"/>
 
 <script>
 
-    $(document).ready(function () {
-        init_select_date_picker($("#contractDate"));
-    });
-
-    function init_select_date_picker(id){
-        id.daterangepicker({
-            autoUpdateInput: false,
-            singleDatePicker: true,
-            showDropdowns: true,
-            locale : {
-                daysOfWeek : [ '日', '一', '二', '三', '四', '五', '六' ],
-                monthNames : [ '01月', '02月', '03月', '04月', '05月', '06月',
-                    '07月', '08月', '09月', '10月', '11月', '12月' ],
-                format : 'YYYY-MM-DD' ,
-                cancelLabel: 'Clear'
-            }
-        });
-        id.on('apply.daterangepicker', function(ev, picker) {
-            $(this).val(picker.startDate.format('YYYY-MM-DD') );
-        });
+    function confirmDelete(id) {
+        $("#deleteId").val(id);
     }
+
+    function deleteById() {
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $('#preloader').css('display', 'block');
+        location.href = contextPath + "/ec/customer/material/chain/deleteById/" + $("#deleteId").val();
+    }
+
 
     var resizefunc = [];
     //隐藏进度项

@@ -43,4 +43,10 @@ public interface WhiteRepository extends CrudRepository<FilterWhiteList, String>
      * @return
      */
     List<ExcelModel> excelModel(PageParams<FilterWhiteListValidator> pageParams);
+
+    /**
+     * 根据组id删除联系人
+     * @param id
+     */
+    void deleteByGroupId(String id);
 }

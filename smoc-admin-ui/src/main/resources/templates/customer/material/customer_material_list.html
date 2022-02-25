@@ -47,30 +47,35 @@
                 <div class="card-box">
                     <div class="row m-b-60">
                         <div class="col-sm-12">
-                            <form id="query_form" th:action="@{/ec/customer/material/page}" method="post">
-                                <div class="form-group  col-sm-3">
-                                    <input id="reportrange" class="form-control" type="text"/>
+                            <form id="query_form" th:action="@{/ec/customer/material/page}" th:object="${enterpriseDocumentInfoValidator}" method="post">
+                                <div class="form-group col-sm-3">
+                                    <input id="dateQueryStr" class="form-control" type="text" th:field="*{startDate}"/>
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <input type="text" class="form-control" placeholder="企业名称" autocomplete="off">
+                                    <input type="text" class="form-control" th:field="*{enterpriseName}" placeholder="企业名称" autocomplete="off">
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <input type="text" class="form-control" placeholder="签名" autocomplete="off">
+                                    <input type="text" class="form-control" th:field="*{signName}" placeholder="签名" autocomplete="off">
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <mpm:tag id="businessType" identity="businessType" show-type="select" key="code"
-                                             class="form-control" data-icon="mdi mdi-view-module" title="业务类型"/>
+                                    <mpm:tag id="businessType" identity="businessType" name="businessType" show-type="select" key="code"
+                                             th:value="${enterpriseDocumentInfoValidator.businessType}"
+                                             class="form-control" title="业务类型"/>
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <mpm:tag id="infoType" identity="infoType" show-type="select" key="code"
-                                             class="form-control" data-icon="mdi mdi-view-module" title="信息类型"/>
+                                    <mpm:tag id="infoType" identity="infoType" name="infoType" show-type="select" key="code"
+                                             th:value="${enterpriseDocumentInfoValidator.infoType}"
+                                             class="form-control" title="信息类型"/>
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <mpm:tag id="enterpriseType" identity="enterpriseType" show-type="select" key="code"
-                                             class="form-control" data-icon="mdi mdi-view-module" title="企业类型"/>
+                                    <mpm:tag id="enterpriseType" identity="enterpriseType" name="enterpriseType" show-type="select" key="code"
+                                             th:value="${enterpriseDocumentInfoValidator.enterpriseType}"
+                                             class="form-control" title="企业类型"/>
                                 </div>
 
                                 <div class="form-group  col-sm-3 pull-right" style="text-align: right">
+                                    <input type="hidden" name="currentPage" id="currentPage" th:value="${pageParams.currentPage}">
+                                    <input type="hidden" name="pageSize" id="pageSize" th:value="${pageParams.pageSize}">
                                     <button sec:authorize-url="/ec/customer/material/page"
                                             class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search"></i> 查询
@@ -107,514 +112,62 @@
                                     <th>业务类型</th>
                                     <th>信息类型</th>
                                     <th>短链/签名合同链</th>
-                                    <th>资料状态</th>
-                                    <th>签订日期</th>
+                                    <th>签订日期/到期日期</th>
                                     <th>创建人/创建日期</th>
                                     <th>操作</th>
                                 </tr>
                                 <thead>
                                 <tbody>
-                                  <tr>
-                                    <td style="vertical-align: middle;line-height: 26px"><span style="color:#26A69A">【星语互联科技】</span><br>
-                                        <a th:href="@{/ec/customer/base_info/center/0000}" data-toggle="tooltip"
+                                  <tr th:each="info:${list}">
+                                    <td style="line-height: 26px"><span style="color:#26A69A">【[[${info.signName}]]】</span><br>
+                                        <a th:href="@{/enterprise/center/{id}(id=${info.enterpriseId})}" data-toggle="tooltip"
                                            data-placement="bottom" title="" data-original-title="跳转到企业信息中心">
-                                            <span style="color:#797979">北京星语互联科技有限公司</span></a>
+                                            <span style="color:#797979">[[${info.enterpriseName}]]</span></a>
                                     </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <mpm:tag identity="enterpriseType" value="CHANNELCUSTOMER" show-type="label"
+                                    <td style="line-height: 26px">
+                                        <mpm:tag identity="enterpriseType" show-type="button" key="code" th:value="${info.enterpriseType}"
+                                                 class="DIRECTCUSTOMER,btn btn-info btn-rounded btn-sm waves-effect waves-light;CHANNELCUSTOMER,btn btn-teal btn-rounded btn-sm waves-effect waves-light;IDENTIFICATION,btn btn-success btn-rounded btn-sm waves-effect waves-light;"/>
+                                    </td>
+                                    <td style="line-height: 26px">
+                                        <mpm:tag identity="businessType" th:value="${info.businessType}" show-type="label"
                                                  key="code"/>
                                     </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <mpm:tag identity="businessType" value="INTERNATIONAL_SMS" show-type="label"
-                                                 key="code"/>
+                                    <td style="line-height: 26px">
+                                        <mpm:tag identity="infoType" th:value="${info.infoType}" show-type="label" key="code"/>
                                     </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <mpm:tag identity="infoType" value="001" show-type="label" key="code"/>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">http://mtw.so/6xOaa3<br>
+                                    <td style="line-height: 26px">[[${info.shortLink}]]<br>
                                         <i id="tooltip-html"  data-placement="right" title="" th:onmouseover="channelTip()"
                                            class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                        <i class="mdi mdi-file-document" style="font-size: 18px;color: #00acc1"
+                                           th:id="interaction+${info.id}"
+                                           th:onmouseover="interaction([[${info.id}]])"
+                                           data-toggle="tooltip">
+                                        </i>
                                     </td>
-                                    <td style="vertical-align: middle;line-height: 26px"><a
-                                            class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">2021-11-3</td>
-                                    <td style="vertical-align: middle;line-height: 26px">李先生<br>2021-11-3 12:45:47</td>
+
+                                    <td style="line-height: 26px">[[${info.signDate}]]<br>[[${info.signExpireDate}]]</td>
+                                      <td style="line-height: 26px">[[${info.createdBy}]]<br>[[${info.createdTime}]]</td>
 
                                     <td style="line-height: 26px;">
                                         <a sec:authorize-url="/ec/customer/material/detail/*"
-                                           th:href="@{/ec/customer/material/detail/id}" class="on-default edit-row"
+                                           th:href="@{/ec/customer/material/detail/{id}(id=${info.id})}" class="on-default edit-row"
                                            style="padding-left: 5px;color: #4BD396;"
                                            data-toggle="tooltip"
                                            data-placement="left" title=""  data-original-title="查看详情"><i style="font-size: 18px"
                                                            class="glyphicon glyphicon-search"></i></a>
-                                        <a data-toggle="modal"
-                                           data-target="#download-record"
-                                           class="on-default edit-row"
-                                           style="padding-left: 5px;color: #6B5FB5;" title="下载附件"><i
-                                                style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
-                                        <a sec:authorize-url="/ec/customer/material/edit/center/*"
-                                           th:href="@{/ec/customer/material/edit/center/id}" class="on-default edit-row"
+                                        <a sec:authorize-url="/ec/customer/material/edit/center/*/*"
+                                           th:href="@{/ec/customer/material/edit/center/enterprise/{id}(id=${info.id})}" class="on-default edit-row"
                                            style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title=""  data-original-title="编辑"><i
                                                 style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/ec/customer/material/deleteById/*" data-toggle="modal"
+                                        <a sec:authorize-url="/ec/customer/material/deleteById/*"
+                                           th:onclick="confirmDelete([[${info.id}]],this)"data-toggle="modal"
                                            data-target="#confirm-modal" class="on-default remove-row"
                                            style="padding-left: 5px;color: #f05050" title="删除"><i
                                                 style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
                                     </td>
                                 </tr>
-                                  <tr>
-                                      <td style="vertical-align: middle;line-height: 26px"><span style="color:#26A69A">【星语互联科技】</span><br>
-                                          <a th:href="@{/ec/customer/base_info/center/0000}" data-toggle="tooltip"
-                                             data-placement="bottom" title="" data-original-title="跳转到企业信息中心">
-                                              <span style="color:#797979">北京星语互联科技有限公司</span></a>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">
-                                          <mpm:tag identity="enterpriseType" value="CHANNELCUSTOMER" show-type="label"
-                                                   key="code"/>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">
-                                          <mpm:tag identity="businessType" value="INTERNATIONAL_SMS" show-type="label"
-                                                   key="code"/>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">
-                                          <mpm:tag identity="infoType" value="001" show-type="label" key="code"/>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">http://mtw.so/6xOaa3<br>
-                                          <i id="tooltip-html"  data-placement="right" title="" th:onmouseover="channelTip()"
-                                             class="mdi mdi-comment-text" style="margin-left:5px"></i>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px"><a
-                                              class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">2021-11-3</td>
-                                      <td style="vertical-align: middle;line-height: 26px">李先生<br>2021-11-3 12:45:47</td>
 
-                                      <td style="line-height: 26px;">
-                                          <a sec:authorize-url="/ec/customer/material/detail/*"
-                                             th:href="@{/ec/customer/material/detail/id}" class="on-default edit-row"
-                                             style="padding-left: 5px;color: #4BD396;"
-                                             data-toggle="tooltip"
-                                             data-placement="left" title=""  data-original-title="查看详情"><i style="font-size: 18px"
-                                                                                                           class="glyphicon glyphicon-search"></i></a>
-                                          <a data-toggle="modal"
-                                             data-target="#download-record"
-                                             class="on-default edit-row"
-                                             style="padding-left: 5px;color: #6B5FB5;" title="下载附件"><i
-                                                  style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
-                                          <a sec:authorize-url="/ec/customer/material/edit/center/*"
-                                           th:href="@{/ec/customer/material/edit/center/id}" class="on-default edit-row"
-                                             style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
-                                             data-placement="left" title=""  data-original-title="编辑"><i
-                                                  style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                          <a sec:authorize-url="/ec/customer/material/deleteById/*" data-toggle="modal"
-                                             data-target="#confirm-modal" class="on-default remove-row"
-                                             style="padding-left: 5px;color: #f05050" title="删除"><i
-                                                  style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
-                                      </td>
-                                  </tr>
-                                  <tr>
-                                      <td style="vertical-align: middle;line-height: 26px"><span style="color:#26A69A">【星语互联科技】</span><br>
-                                          <a th:href="@{/ec/customer/base_info/center/0000}" data-toggle="tooltip"
-                                             data-placement="bottom" title="" data-original-title="跳转到企业信息中心">
-                                              <span style="color:#797979">北京星语互联科技有限公司</span></a>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">
-                                          <mpm:tag identity="enterpriseType" value="CHANNELCUSTOMER" show-type="label"
-                                                   key="code"/>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">
-                                          <mpm:tag identity="businessType" value="INTERNATIONAL_SMS" show-type="label"
-                                                   key="code"/>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">
-                                          <mpm:tag identity="infoType" value="001" show-type="label" key="code"/>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">http://mtw.so/6xOaa3<br>
-                                          <i id="tooltip-html"  data-placement="right" title="" th:onmouseover="channelTip()"
-                                             class="mdi mdi-comment-text" style="margin-left:5px"></i>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px"><a
-                                              class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">2021-11-3</td>
-                                      <td style="vertical-align: middle;line-height: 26px">李先生<br>2021-11-3 12:45:47</td>
-
-                                      <td style="line-height: 26px;">
-                                          <a sec:authorize-url="/ec/customer/material/detail/*"
-                                             th:href="@{/ec/customer/material/detail/id}" class="on-default edit-row"
-                                             style="padding-left: 5px;color: #4BD396;"
-                                             data-toggle="tooltip"
-                                             data-placement="left" title=""  data-original-title="查看详情"><i style="font-size: 18px"
-                                                                                                           class="glyphicon glyphicon-search"></i></a>
-                                          <a data-toggle="modal"
-                                             data-target="#download-record"
-                                             class="on-default edit-row"
-                                             style="padding-left: 5px;color: #6B5FB5;" title="下载附件"><i
-                                                  style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
-                                          <a sec:authorize-url="/ec/customer/material/edit/center/*"
-                                           th:href="@{/ec/customer/material/edit/center/id}" class="on-default edit-row"
-                                             style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
-                                             data-placement="left" title=""  data-original-title="编辑"><i
-                                                  style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                          <a sec:authorize-url="/ec/customer/material/deleteById/*" data-toggle="modal"
-                                             data-target="#confirm-modal" class="on-default remove-row"
-                                             style="padding-left: 5px;color: #f05050" title="删除"><i
-                                                  style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
-                                      </td>
-                                  </tr>
-                                  <tr>
-                                      <td style="vertical-align: middle;line-height: 26px"><span style="color:#26A69A">【星语互联科技】</span><br>
-                                          <a th:href="@{/ec/customer/base_info/center/0000}" data-toggle="tooltip"
-                                             data-placement="bottom" title="" data-original-title="跳转到企业信息中心">
-                                              <span style="color:#797979">北京星语互联科技有限公司</span></a>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">
-                                          <mpm:tag identity="enterpriseType" value="CHANNELCUSTOMER" show-type="label"
-                                                   key="code"/>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">
-                                          <mpm:tag identity="businessType" value="INTERNATIONAL_SMS" show-type="label"
-                                                   key="code"/>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">
-                                          <mpm:tag identity="infoType" value="001" show-type="label" key="code"/>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">http://mtw.so/6xOaa3<br>
-                                          <i id="tooltip-html"  data-placement="right" title="" th:onmouseover="channelTip()"
-                                             class="mdi mdi-comment-text" style="margin-left:5px"></i>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px"><a
-                                              class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">2021-11-3</td>
-                                      <td style="vertical-align: middle;line-height: 26px">李先生<br>2021-11-3 12:45:47</td>
-
-                                      <td style="line-height: 26px;">
-                                          <a sec:authorize-url="/ec/customer/material/detail/*"
-                                             th:href="@{/ec/customer/material/detail/id}" class="on-default edit-row"
-                                             style="padding-left: 5px;color: #4BD396;"
-                                             data-toggle="tooltip"
-                                             data-placement="left" title=""  data-original-title="查看详情"><i style="font-size: 18px"
-                                                                                                           class="glyphicon glyphicon-search"></i></a>
-                                          <a data-toggle="modal"
-                                             data-target="#download-record"
-                                             class="on-default edit-row"
-                                             style="padding-left: 5px;color: #6B5FB5;" title="下载附件"><i
-                                                  style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
-                                          <a sec:authorize-url="/ec/customer/material/edit/center/*"
-                                           th:href="@{/ec/customer/material/edit/center/id}" class="on-default edit-row"
-                                             style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
-                                             data-placement="left" title=""  data-original-title="编辑"><i
-                                                  style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                          <a sec:authorize-url="/ec/customer/material/deleteById/*" data-toggle="modal"
-                                             data-target="#confirm-modal" class="on-default remove-row"
-                                             style="padding-left: 5px;color: #f05050" title="删除"><i
-                                                  style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
-                                      </td>
-                                  </tr>
-                                  <tr>
-                                      <td style="vertical-align: middle;line-height: 26px"><span style="color:#26A69A">【星语互联科技】</span><br>
-                                          <a th:href="@{/ec/customer/base_info/center/0000}" data-toggle="tooltip"
-                                             data-placement="bottom" title="" data-original-title="跳转到企业信息中心">
-                                              <span style="color:#797979">北京星语互联科技有限公司</span></a>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">
-                                          <mpm:tag identity="enterpriseType" value="CHANNELCUSTOMER" show-type="label"
-                                                   key="code"/>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">
-                                          <mpm:tag identity="businessType" value="INTERNATIONAL_SMS" show-type="label"
-                                                   key="code"/>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">
-                                          <mpm:tag identity="infoType" value="001" show-type="label" key="code"/>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">http://mtw.so/6xOaa3<br>
-                                          <i id="tooltip-html"  data-placement="right" title="" th:onmouseover="channelTip()"
-                                             class="mdi mdi-comment-text" style="margin-left:5px"></i>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px"><a
-                                              class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">2021-11-3</td>
-                                      <td style="vertical-align: middle;line-height: 26px">李先生<br>2021-11-3 12:45:47</td>
-
-                                      <td style="line-height: 26px;">
-                                          <a sec:authorize-url="/ec/customer/material/detail/*"
-                                             th:href="@{/ec/customer/material/detail/id}" class="on-default edit-row"
-                                             style="padding-left: 5px;color: #4BD396;"
-                                             data-toggle="tooltip"
-                                             data-placement="left" title=""  data-original-title="查看详情"><i style="font-size: 18px"
-                                                                                                           class="glyphicon glyphicon-search"></i></a>
-                                          <a data-toggle="modal"
-                                             data-target="#download-record"
-                                             class="on-default edit-row"
-                                             style="padding-left: 5px;color: #6B5FB5;" title="下载附件"><i
-                                                  style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
-                                          <a sec:authorize-url="/ec/customer/material/edit/center/*"
-                                           th:href="@{/ec/customer/material/edit/center/id}" class="on-default edit-row"
-                                             style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
-                                             data-placement="left" title=""  data-original-title="编辑"><i
-                                                  style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                          <a sec:authorize-url="/ec/customer/material/deleteById/*" data-toggle="modal"
-                                             data-target="#confirm-modal" class="on-default remove-row"
-                                             style="padding-left: 5px;color: #f05050" title="删除"><i
-                                                  style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
-                                      </td>
-                                  </tr>
-                                  <tr>
-                                      <td style="vertical-align: middle;line-height: 26px"><span style="color:#26A69A">【星语互联科技】</span><br>
-                                          <a th:href="@{/ec/customer/base_info/center/0000}" data-toggle="tooltip"
-                                             data-placement="bottom" title="" data-original-title="跳转到企业信息中心">
-                                              <span style="color:#797979">北京星语互联科技有限公司</span></a>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">
-                                          <mpm:tag identity="enterpriseType" value="CHANNELCUSTOMER" show-type="label"
-                                                   key="code"/>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">
-                                          <mpm:tag identity="businessType" value="INTERNATIONAL_SMS" show-type="label"
-                                                   key="code"/>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">
-                                          <mpm:tag identity="infoType" value="001" show-type="label" key="code"/>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">http://mtw.so/6xOaa3<br>
-                                          <i id="tooltip-html"  data-placement="right" title="" th:onmouseover="channelTip()"
-                                             class="mdi mdi-comment-text" style="margin-left:5px"></i>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px"><a
-                                              class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">2021-11-3</td>
-                                      <td style="vertical-align: middle;line-height: 26px">李先生<br>2021-11-3 12:45:47</td>
-
-                                      <td style="line-height: 26px;">
-                                          <a sec:authorize-url="/ec/customer/material/detail/*"
-                                             th:href="@{/ec/customer/material/detail/id}" class="on-default edit-row"
-                                             style="padding-left: 5px;color: #4BD396;"
-                                             data-toggle="tooltip"
-                                             data-placement="left" title=""  data-original-title="查看详情"><i style="font-size: 18px"
-                                                                                                           class="glyphicon glyphicon-search"></i></a>
-                                          <a data-toggle="modal"
-                                             data-target="#download-record"
-                                             class="on-default edit-row"
-                                             style="padding-left: 5px;color: #6B5FB5;" title="下载附件"><i
-                                                  style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
-                                          <a sec:authorize-url="/ec/customer/material/edit/center/*"
-                                           th:href="@{/ec/customer/material/edit/center/id}" class="on-default edit-row"
-                                             style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
-                                             data-placement="left" title=""  data-original-title="编辑"><i
-                                                  style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                          <a sec:authorize-url="/ec/customer/material/deleteById/*" data-toggle="modal"
-                                             data-target="#confirm-modal" class="on-default remove-row"
-                                             style="padding-left: 5px;color: #f05050" title="删除"><i
-                                                  style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
-                                      </td>
-                                  </tr>
-                                  <tr>
-                                      <td style="vertical-align: middle;line-height: 26px"><span style="color:#26A69A">【星语互联科技】</span><br>
-                                          <a th:href="@{/ec/customer/base_info/center/0000}" data-toggle="tooltip"
-                                             data-placement="bottom" title="" data-original-title="跳转到企业信息中心">
-                                              <span style="color:#797979">北京星语互联科技有限公司</span></a>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">
-                                          <mpm:tag identity="enterpriseType" value="CHANNELCUSTOMER" show-type="label"
-                                                   key="code"/>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">
-                                          <mpm:tag identity="businessType" value="INTERNATIONAL_SMS" show-type="label"
-                                                   key="code"/>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">
-                                          <mpm:tag identity="infoType" value="001" show-type="label" key="code"/>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">http://mtw.so/6xOaa3<br>
-                                          <i id="tooltip-html"  data-placement="right" title="" th:onmouseover="channelTip()"
-                                             class="mdi mdi-comment-text" style="margin-left:5px"></i>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px"><a
-                                              class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">2021-11-3</td>
-                                      <td style="vertical-align: middle;line-height: 26px">李先生<br>2021-11-3 12:45:47</td>
-
-                                      <td style="line-height: 26px;">
-                                          <a sec:authorize-url="/ec/customer/material/detail/*"
-                                             th:href="@{/ec/customer/material/detail/id}" class="on-default edit-row"
-                                             style="padding-left: 5px;color: #4BD396;"
-                                             data-toggle="tooltip"
-                                             data-placement="left" title=""  data-original-title="查看详情"><i style="font-size: 18px"
-                                                                                                           class="glyphicon glyphicon-search"></i></a>
-                                          <a data-toggle="modal"
-                                             data-target="#download-record"
-                                             class="on-default edit-row"
-                                             style="padding-left: 5px;color: #6B5FB5;" title="下载附件"><i
-                                                  style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
-                                          <a sec:authorize-url="/ec/customer/material/edit/center/*"
-                                           th:href="@{/ec/customer/material/edit/center/id}" class="on-default edit-row"
-                                             style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
-                                             data-placement="left" title=""  data-original-title="编辑"><i
-                                                  style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                          <a sec:authorize-url="/ec/customer/material/deleteById/*" data-toggle="modal"
-                                             data-target="#confirm-modal" class="on-default remove-row"
-                                             style="padding-left: 5px;color: #f05050" title="删除"><i
-                                                  style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
-                                      </td>
-                                  </tr>
-                                  <tr>
-                                      <td style="vertical-align: middle;line-height: 26px"><span style="color:#26A69A">【星语互联科技】</span><br>
-                                          <a th:href="@{/ec/customer/base_info/center/0000}" data-toggle="tooltip"
-                                             data-placement="bottom" title="" data-original-title="跳转到企业信息中心">
-                                              <span style="color:#797979">北京星语互联科技有限公司</span></a>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">
-                                          <mpm:tag identity="enterpriseType" value="CHANNELCUSTOMER" show-type="label"
-                                                   key="code"/>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">
-                                          <mpm:tag identity="businessType" value="INTERNATIONAL_SMS" show-type="label"
-                                                   key="code"/>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">
-                                          <mpm:tag identity="infoType" value="001" show-type="label" key="code"/>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">http://mtw.so/6xOaa3<br>
-                                          <i id="tooltip-html"  data-placement="right" title="" th:onmouseover="channelTip()"
-                                             class="mdi mdi-comment-text" style="margin-left:5px"></i>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px"><a
-                                              class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">2021-11-3</td>
-                                      <td style="vertical-align: middle;line-height: 26px">李先生<br>2021-11-3 12:45:47</td>
-
-                                      <td style="line-height: 26px;">
-                                          <a sec:authorize-url="/ec/customer/material/detail/*"
-                                             th:href="@{/ec/customer/material/detail/id}" class="on-default edit-row"
-                                             style="padding-left: 5px;color: #4BD396;"
-                                             data-toggle="tooltip"
-                                             data-placement="left" title=""  data-original-title="查看详情"><i style="font-size: 18px"
-                                                                                                           class="glyphicon glyphicon-search"></i></a>
-                                          <a data-toggle="modal"
-                                             data-target="#download-record"
-                                             class="on-default edit-row"
-                                             style="padding-left: 5px;color: #6B5FB5;" title="下载附件"><i
-                                                  style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
-                                          <a sec:authorize-url="/ec/customer/material/edit/center/*"
-                                           th:href="@{/ec/customer/material/edit/center/id}" class="on-default edit-row"
-                                             style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
-                                             data-placement="left" title=""  data-original-title="编辑"><i
-                                                  style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                          <a sec:authorize-url="/ec/customer/material/deleteById/*" data-toggle="modal"
-                                             data-target="#confirm-modal" class="on-default remove-row"
-                                             style="padding-left: 5px;color: #f05050" title="删除"><i
-                                                  style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
-                                      </td>
-                                  </tr>
-                                  <tr>
-                                      <td style="vertical-align: middle;line-height: 26px"><span style="color:#26A69A">【星语互联科技】</span><br>
-                                          <a th:href="@{/ec/customer/base_info/center/0000}" data-toggle="tooltip"
-                                             data-placement="bottom" title="" data-original-title="跳转到企业信息中心">
-                                              <span style="color:#797979">北京星语互联科技有限公司</span></a>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">
-                                          <mpm:tag identity="enterpriseType" value="CHANNELCUSTOMER" show-type="label"
-                                                   key="code"/>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">
-                                          <mpm:tag identity="businessType" value="INTERNATIONAL_SMS" show-type="label"
-                                                   key="code"/>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">
-                                          <mpm:tag identity="infoType" value="001" show-type="label" key="code"/>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">http://mtw.so/6xOaa3<br>
-                                          <i id="tooltip-html"  data-placement="right" title="" th:onmouseover="channelTip()"
-                                             class="mdi mdi-comment-text" style="margin-left:5px"></i>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px"><a
-                                              class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">2021-11-3</td>
-                                      <td style="vertical-align: middle;line-height: 26px">李先生<br>2021-11-3 12:45:47</td>
-
-                                      <td style="line-height: 26px;">
-                                          <a sec:authorize-url="/ec/customer/material/detail/*"
-                                             th:href="@{/ec/customer/material/detail/id}" class="on-default edit-row"
-                                             style="padding-left: 5px;color: #4BD396;"
-                                             data-toggle="tooltip"
-                                             data-placement="left" title=""  data-original-title="查看详情"><i style="font-size: 18px"
-                                                                                                           class="glyphicon glyphicon-search"></i></a>
-                                          <a data-toggle="modal"
-                                             data-target="#download-record"
-                                             class="on-default edit-row"
-                                             style="padding-left: 5px;color: #6B5FB5;" title="下载附件"><i
-                                                  style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
-                                          <a sec:authorize-url="/ec/customer/material/edit/center/*"
-                                           th:href="@{/ec/customer/material/edit/center/id}" class="on-default edit-row"
-                                             style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
-                                             data-placement="left" title=""  data-original-title="编辑"><i
-                                                  style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                          <a sec:authorize-url="/ec/customer/material/deleteById/*" data-toggle="modal"
-                                             data-target="#confirm-modal" class="on-default remove-row"
-                                             style="padding-left: 5px;color: #f05050" title="删除"><i
-                                                  style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
-                                      </td>
-                                  </tr>
-                                  <tr>
-                                      <td style="vertical-align: middle;line-height: 26px"><span style="color:#26A69A">【星语互联科技】</span><br>
-                                          <a th:href="@{/ec/customer/base_info/center/0000}" data-toggle="tooltip"
-                                             data-placement="bottom" title="" data-original-title="跳转到企业信息中心">
-                                              <span style="color:#797979">北京星语互联科技有限公司</span></a>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">
-                                          <mpm:tag identity="enterpriseType" value="CHANNELCUSTOMER" show-type="label"
-                                                   key="code"/>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">
-                                          <mpm:tag identity="businessType" value="INTERNATIONAL_SMS" show-type="label"
-                                                   key="code"/>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">
-                                          <mpm:tag identity="infoType" value="001" show-type="label" key="code"/>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">http://mtw.so/6xOaa3<br>
-                                          <i id="tooltip-html"  data-placement="right" title="" th:onmouseover="channelTip()"
-                                             class="mdi mdi-comment-text" style="margin-left:5px"></i>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px"><a
-                                              class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a>
-                                      </td>
-                                      <td style="vertical-align: middle;line-height: 26px">2021-11-3</td>
-                                      <td style="vertical-align: middle;line-height: 26px">李先生<br>2021-11-3 12:45:47</td>
-
-                                      <td style="line-height: 26px;">
-                                          <a sec:authorize-url="/ec/customer/material/detail/*"
-                                             th:href="@{/ec/customer/material/detail/id}" class="on-default edit-row"
-                                             style="padding-left: 5px;color: #4BD396;"
-                                             data-toggle="tooltip"
-                                             data-placement="left" title=""  data-original-title="查看详情"><i style="font-size: 18px"
-                                                                                                           class="glyphicon glyphicon-search"></i></a>
-                                          <a data-toggle="modal"
-                                             data-target="#download-record"
-                                             class="on-default edit-row"
-                                             style="padding-left: 5px;color: #6B5FB5;" title="下载附件"><i
-                                                  style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
-                                          <a sec:authorize-url="/ec/customer/material/edit/center/*"
-                                           th:href="@{/ec/customer/material/edit/center/id}" class="on-default edit-row"
-                                             style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
-                                             data-placement="left" title=""  data-original-title="编辑"><i
-                                                  style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                          <a sec:authorize-url="/ec/customer/material/deleteById/*" data-toggle="modal"
-                                             data-target="#confirm-modal" class="on-default remove-row"
-                                             style="padding-left: 5px;color: #f05050" title="删除"><i
-                                                  style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
-                                      </td>
-                                  </tr>
-                            
                                 </tbody>
 
                             </table>
@@ -635,30 +188,6 @@
         <th:block th:insert="fragments/common_fragments :: confirm-modal"/>
         <!-- end row -->
 
-        <!-- start row  资料下载-->
-        <div id="download-record" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="a-width-modalLabel"
-             aria-hidden="true" style="display: none;margin: 60px">
-            <div class="modal-dialog modal-md">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 class="modal-title">下载附件</h4>
-                    </div>
-                    <div class="row" style="padding-top: 15px">
-                        <div class="col-sm-12 m-b-10">
-                            <p style="font-size:12px"><i style="font-size: 18px" class="mdi mdi-download"></i><a href="">&nbsp;签名合同文件</a>
-                            </p>
-                            <p style="font-size:12px"><i style="font-size: 18px" class="mdi mdi-download"></i><a href="">&nbsp;签名资质文件</a>
-                            </p>
-                            <p style="font-size:12px"><i style="font-size: 18px" class="mdi mdi-download"></i><a href="">&nbsp;客户金融信息安全承诺书</a>
-                            </p>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- end row -->
 
     </div> <!-- container -->
 
@@ -671,7 +200,7 @@
 <script th:src="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.js}"></script>
 <!-- Modal-Effect -->
 <script th:src="@{/static/plugins/tooltipster/tooltipster.bundle.min.js}"></script>
-<script>
+<script th:remove="${#strings.isEmpty(error)}?none:all">
 
     function channelTip(){
         $('#tooltip-html').tooltipster({
@@ -680,11 +209,57 @@
         });
     }
 
-    $('#reportrange').daterangepicker({
+    function interaction(id) {
+
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $.ajax({
+            url: contextPath + "/attachment/findByModelId/" + id,
+            async: false,
+            success: function (data) {
+                var files = data.split("@");
+                var onefile = ""
+                if (files.length > 1) {
+                    for (i = 0; i < files.length; i++) {
+                        var a = files[i].split(",");
+                        var url = contextPath+"/attachment/download/"+a[1];
+                        onefile += '<span style="font-size:12px"><a href="'+url+'" style="color: white">' + a[0] + '</a></span><br>';
+                    }
+                } else {
+                    var a = data.split(",");
+                    if(a.length>1){
+                        var url = contextPath+"/attachment/download/"+a[1];
+                        onefile =  '<span style="font-size:12px"><a href="'+url+'" style="color: white">' + a[0] + '</a></span>';
+                    }else{
+                        onefile =  '<span style="font-size:12px">无附件</a></span>';
+                    }
+                }
+
+                $('#interaction' + id).tooltipster({
+                    content: $('<p style="text-align:left;">' + onefile + '</p>'),
+                    maxWidth: 600,
+                    position: 'right',
+                    contentAsHTML: true,
+                    interactive: true
+                });
+            }
+        });
+    }
+
+    function confirmDelete(id) {
+        $("#deleteId").val(id);
+    }
+
+    function deleteById() {
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $('#preloader').css('display', 'block');
+        location.href = contextPath + "/ec/customer/material/deleteById/" + $("#deleteId").val();
+    }
+
+    $('#dateQueryStr').daterangepicker({
         format: 'YYYY-MM-DD',
-        startDate: '2020-11-03',
-        endDate: '2021-11-03',
-        minDate: '2012-01-01',
+        startDate: '[[${enterpriseDocumentInfoValidator.startDate}]]',
+        endDate: '[[${enterpriseDocumentInfoValidator.endDate}]]',
+        minDate: '2019-01-01',
         maxDate: '2080-12-31',
         dateLimit: {
             days: 720

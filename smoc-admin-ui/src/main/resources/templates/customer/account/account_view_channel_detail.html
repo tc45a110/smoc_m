@@ -60,14 +60,16 @@
                                     </td>
                                     <td>[[${info.channelWeight}]]</td>
                                     <td>
-                                        <mpm:tag identity="accountChannelPriority" show-type="button" key="code" th:value="${info.channelPriority}"
-                                                 class="1,btn btn-info btn-rounded btn-sm waves-effect waves-light;2,btn btn-success btn-rounded btn-sm waves-effect waves-light;3,btn btn-danger btn-rounded btn-sm waves-effect waves-light;"/>
+                                        <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light" th:if="${info.channelPriority eq 'NORMAL'}">正常</a>
+                                        <a class="btn btn-success btn-rounded btn-sm waves-effect waves-light" th:if="${info.channelPriority eq 'PRIVILEGE'}">特权</a>
+                                        <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light" th:if="${info.channelPriority eq 'SUSPEND'}">挂起</a>
+
                                     </td>
                                     <td><mpm:tag identity="channelConfigSource" show-type="label" key="code" th:value="${info.channelSource}"/></td>
                                     <td><mpm:tag identity="accountChannelChangeType" show-type="label" key="code" th:value="${info.changeSource}"/></td>
                                     <td>
-                                        <mpm:tag identity="accountChannelStatus" show-type="button" key="code" th:value="${info.channelPriority}"
-                                                 class="1,btn btn-teal btn-rounded btn-sm waves-effect waves-light;2,btn btn-danger btn-rounded btn-sm waves-effect waves-light;"/>
+                                        <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light" th:if="${info.channelStatus eq '1'}">正常</a>
+                                        <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light" th:if="${info.channelStatus eq '0'}">已挂起</a>
                                     </td>
                                     <td>[[${info.createdTimeStr}]]</td>
                                     <td>[[${info.createdBy}]]</td>

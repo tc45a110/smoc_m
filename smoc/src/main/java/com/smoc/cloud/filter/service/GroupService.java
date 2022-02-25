@@ -7,7 +7,9 @@ import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.filter.FilterGroupListValidator;
 import com.smoc.cloud.filter.entity.FilterGroupList;
+import com.smoc.cloud.filter.repository.BlackRepository;
 import com.smoc.cloud.filter.repository.GroupRepository;
+import com.smoc.cloud.filter.repository.WhiteRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -28,6 +30,12 @@ public class GroupService {
 
     @Resource
     private GroupRepository groupRepository;
+
+    @Resource
+    private BlackRepository blackRepository;
+
+    @Resource
+    private WhiteRepository whiteRepository;
 
     /**
      * 根据id 查询
@@ -111,6 +119,12 @@ public class GroupService {
 
 
         //查询是否有联系人
+        if("smoc_black".equals(data.getEnterpriseId())){
+            blackRepository.deleteByGroupId(data.getId());
+        }
+        if("smoc_white".equals(data.getEnterpriseId())){
+            whiteRepository.deleteByGroupId(data.getId());
+        }
 
 
         return ResponseDataUtil.buildSuccess();

@@ -24,7 +24,8 @@
         <!-- start row 页面内容-->
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all" style="background-color:#fff">
             <div class="col-md-12">
-                <form id="submit_form"
+                <form id="submit_form" th:action="@{/ec/customer/material/save/{op}(op=${op})}"
+                      th:object="${enterpriseDocumentInfoValidator}" enctype="multipart/form-data"
                       method="post" data-parsley-validate="">
                     <div class="row">
                         <div class="col-md-12 panel panel-color panel-teal" style="padding-left:0px;padding-right:0px">
@@ -38,11 +39,12 @@
                                             <div class="row">
                                                 <div class="col-sm-6 m-b-10">
                                                     <label>企业名称</label><br>
-                                                    北京星语互联科技有限公司
+                                                    [[${enterpriseDocumentInfoValidator.enterpriseName}]]
                                                 </div>
                                                 <div class="col-sm-6 m-b-10">
                                                     <label>企业类型</label>
-                                                    <br>渠道商
+                                                    <br><mpm:tag identity="enterpriseType" show-type="label" key="code"
+                                                                 th:value="${enterpriseDocumentInfoValidator.enterpriseType}"/>
                                                 </div>
 
                                             </div>
@@ -50,72 +52,125 @@
                                         <div class="form-group">
                                             <div class="row">
                                                 <div class="col-sm-6 ">
-                                                    <label>签名<span class="text-danger">*</span>&nbsp;</label>
-                                                    <input type="text" class="form-control"
+                                                    <label>业务类型<span class="text-danger">*</span>
+                                                        <span class="text-danger" th:if="${#fields.hasErrors('businessType')}"
+                                                              th:errors="*{businessType}"></span></label>
+                                                    <mpm:tag required="true" identity="businessType" show-type="select"
+                                                             key="code" th:value="${enterpriseDocumentInfoValidator.businessType}"
+                                                             class="form-control" name="businessType" request=""
+                                                             title="业务类型"/>
+                                                </div>
+                                                <div class="col-sm-6 ">
+                                                    <label>信息类型<span class="text-danger">*</span>
+                                                        <span class="text-danger" th:if="${#fields.hasErrors('infoType')}"
+                                                              th:errors="*{infoType}"></span></label>
+                                                    <mpm:tag required="true" identity="infoType" show-type="select"
+                                                             key="code" th:value="${enterpriseDocumentInfoValidator.infoType}"
+                                                             class="form-control" name="infoType" title="信息类型"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-sm-6 ">
+                                                    <label>签名<span class="text-danger">*</span>&nbsp;
+                                                        <span class="text-danger" th:if="${#fields.hasErrors('signName')}"
+                                                              th:errors="*{signName}"></span></label>
+                                                    <input type="text" class="form-control" th:field="*{signName}"
                                                            required="" data-parsley-length="[2,48]" autocomplete="off"
                                                            placeholder="签名">
                                                 </div>
                                                 <div class="col-sm-6 ">
-                                                    <label>业务类型<span class="text-danger">*</span></label>
-                                                    <mpm:tag required="true" identity="businessType" show-type="select"
-                                                             key="code"
-                                                             class="form-control" name="businessType" value=""
-                                                             title="业务类型"/>
+                                                    <label>短链<span class="text-danger">*</span>&nbsp;
+                                                        <span class="text-danger" th:if="${#fields.hasErrors('shortLink')}"
+                                                              th:errors="*{shortLink}"></span></label>
+                                                    <input type="text" class="form-control" th:field="*{shortLink}"
+                                                           required="" data-parsley-length="[2,128]" autocomplete="off"
+                                                           placeholder="短链">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <div class="row">
                                                 <div class="col-sm-6 ">
-                                                    <label>信息类型<span class="text-danger">*</span></label>
-                                                    <mpm:tag required="true" identity="infoType" show-type="select"
-                                                             key="code"
-                                                             class="form-control" name="infoType" value="" title="信息类型"/>
+                                                    <label>签订日期<span class="text-danger">*</span>&nbsp;
+                                                        <span class="text-danger" th:if="${#fields.hasErrors('signDate')}"
+                                                              th:errors="*{signDate}"></span></label>
+                                                    <input id="signDate" class="form-control" type="text"
+                                                           th:field="*{signDate}" required="" autocomplete="off">
                                                 </div>
                                                 <div class="col-sm-6 ">
-                                                    <label>短链<span class="text-danger">*</span>&nbsp;</label>
-                                                    <input type="text" class="form-control"
-                                                           required="" data-parsley-length="[2,48]" autocomplete="off"
-                                                           placeholder="短链">
+                                                    <label>到期日期<span class="text-danger">*</span>&nbsp;
+                                                        <span class="text-danger" th:if="${#fields.hasErrors('signExpireDate')}"
+                                                              th:errors="*{signExpireDate}"></span></label>
+                                                    <input id="signExpireDate" class="form-control" type="text"
+                                                           th:field="*{signExpireDate}" required="" autocomplete="off">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group ">
-                                            <label>备注关键字(比如：合同里的关键字，方便根据关键字查询)</label>
-                                            <input type="text" class="form-control" data-parsley-length="[1,48]"
-                                                   autocomplete="off"
-                                                   placeholder="关键字">
+                                            <label>备注关键字(方便根据关键字查询)
+                                                <span class="text-danger" th:if="${#fields.hasErrors('docKey')}"
+                                                th:errors="*{docKey}"></span></label>
+                                            <input type="text" class="form-control" data-parsley-length="[1,128]"
+                                                   autocomplete="off" th:field="*{docKey}"placeholder="关键字">
                                         </div>
 
-                                        <div class="form-group ">
-                                            <label>上传附件</label>
-                                            <input type="file" name="file" id="input_file"
-                                                   multiple="multiple">
+
+
+                                        <div class="jFiler-items jFiler-row">
+                                            <ul class="jFiler-items-list jFiler-items-grid">
+                                                <li class="jFiler-item jFiler-no-thumbnail" data-jfiler-index="0" style="" th:each="att:${filesList}">
+                                                    <div class="jFiler-item-container">
+                                                        <div class="jFiler-item-inner">
+                                                            <div class="jFiler-item-thumb">
+                                                                <div class="jFiler-item-info"><span class="jFiler-item-title"><b
+                                                                        th:title="${att.attachmentName}">[[${att.attachmentName}]]</b></span>
+                                                                </div>
+                                                                <div class="jFiler-item-thumb-image"><span class="jFiler-icon-file f-file f-file-ext-docx"
+                                                                                                           style="-webkit-box-shadow: #409024 42px -55px 0px 0px inset; -moz-box-shadow: #409024 42px -55px 0px 0px inset; box-shadow: #409024 42px -55px 0px 0px inset;">
+                                                            .[[${att.docType}]]</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="jFiler-item-assets jFiler-row">
+                                                                <ul class="list-inline pull-left">
+                                                                    <li><a style="color: #29b6f6;" sec:authorize-url="/attachment/download/*"
+                                                                           th:href="@{/attachment/download/{id}(id=${att.id})}"><i style="font-size: 18px" class="mdi mdi-download"></i></a></li>
+                                                                </ul>
+                                                                <ul class="list-inline pull-right">
+                                                                    <li><a style="color:red;" sec:authorize-url="/attachment/deleteById/*"
+                                                                           data-toggle="modal" data-target="#confirm-modal"
+                                                                           th:onclick="confirmDelete([[${att.id}]],this)"><i style="font-size: 18px" class="mdi mdi-delete"></i></a></li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
                                         </div>
 
                                     </div> <!-- end col -->
 
                                     <div class="col-md-6">
-                                        <div class="form-group m-b-20">
-                                            <label>审核状态<span class="text-danger">*</span></label>
-                                            <select name="approveStatus" data-style="btn-default"
-                                                    class="selectpicker  form-control" tabindex="-98" 　required="true">
-                                                <option data-icon="mdi mdi-buffer">审核中</option>
-                                                <option data-icon="mdi mdi-buffer">通过审核</option>
-                                                <option data-icon="mdi mdi-buffer">拒绝</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group m-b-20">
-                                            <label>审核意见<span class="text-danger">*</span>&nbsp;
-                                                <span class="text-danger" style="font-weight: 200;font-size: 12px"></span>
-                                            </label>
-                                            <textarea class="form-control" rows="2" placeholder="输入审核意见"
-                                                      data-parsley-length="[1,200]" autocomplete="off"></textarea>
+                                        <div class="form-group ">
+                                            <label>上传附件<span class="text-danger">*</span>&nbsp;
+                                                <span class="text-danger" th:if="${#fields.hasErrors('contractFiles')}"
+                                                      th:errors="*{contractFiles}"></span></label>
+                                            <input type="file" name="file" id="input_file"
+                                                   multiple="multiple">
                                         </div>
                                     </div> <!-- end col -->
                                 </div> <!-- end row -->
                                 <div class="text-center" style="margin-bottom:20px">
-                                    <a type="button" class="btn btn-teal waves-effect waves-light">提交</a>
+                                    <input type="hidden" th:field="*{id}">
+                                    <input type="hidden" th:field="*{enterpriseId}">
+                                    <input type="hidden" th:field="*{docStatus}">
+                                    <input type="hidden" th:field="*{createdTime}">
+                                    <input type="hidden" th:field="*{createdBy}">
+                                    <button sec:authorize-url="/ec/customer/material/save/*" type="submit"
+                                            class="btn btn-teal waves-effect waves-light">提交
+                                    </button>
+
                                 </div>
                             </div>
                         </div> <!-- end col -->
@@ -130,20 +185,53 @@
         <th:block th:insert="fragments/common_fragments :: common_error"/>
         <!-- end row -->
 
+        <th:block th:insert="fragments/common_fragments :: confirm-modal"/>
+
     </div> <!-- container -->
 </div> <!-- content -->
 <th:block th:insert="fragments/common_fragments :: common_js"/>
 <th:block th:insert="fragments/common_fragments :: select_js"/>
 <script th:src="@{/static/plugins/moment/moment.js}"></script>
 <script th:src="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.js}"></script>
-<script th:src="@{/static/js/contractUploadFile.js}"></script>
+<script th:src="@{/static/js/uploadFile.js}"></script>
 <script th:src="@{/static/plugins/jquery.filer/js/jquery.filer.min.js}"></script>
 <th:block th:insert="fragments/common_fragments :: common_submit_form"/>
 
-<script>
+<script th:remove="${#strings.isEmpty(error)}?none:all">
 
     $(document).ready(function () {
-        init_select_date_picker($("#contractDate"));
+
+        if("refreshFlag" == '[[${refreshFlag}]]'){
+            var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+            parent.location.href = contextPath + '/ec/customer/material/edit/center/enterprise/'+'[[${enterpriseDocumentInfoValidator.id}]]';
+        }
+    });
+
+    function confirmDelete(id) {
+        $("#deleteId").val(id);
+    }
+
+    function deleteById() {
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $('#preloader').css('display', 'block');
+        $.ajax({
+            url: contextPath + "/attachment/deleteById/" + $("#deleteId").val(),
+            success: function (data) {
+                if("1"==data){
+                    location.reload();
+                }else{
+                    alert(data);
+                }
+
+            }, error: function (data) {
+                console.log("error");
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        init_select_date_picker($("#signDate"));
+        init_select_date_picker($("#signExpireDate"));
     });
 
     function init_select_date_picker(id){
@@ -151,6 +239,8 @@
             autoUpdateInput: false,
             singleDatePicker: true,
             showDropdowns: true,
+            minDate: '2015-01-01',
+            maxDate: '2080-12-31',
             locale : {
                 daysOfWeek : [ '日', '一', '二', '三', '四', '五', '六' ],
                 monthNames : [ '01月', '02月', '03月', '04月', '05月', '06月',

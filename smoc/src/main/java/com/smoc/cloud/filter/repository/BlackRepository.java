@@ -45,4 +45,10 @@ public interface BlackRepository extends CrudRepository<FilterBlackList, String>
      * @return
      */
     List<ExcelModel> excelModel(PageParams<FilterBlackListValidator> pageParams);
+
+    /**
+     * 根据组id删除联系人
+     * @param id
+     */
+    void deleteByGroupId(String id);
 }
