@@ -47,9 +47,9 @@
                             EC资料管理
                         </h3>
                     </div>
-                    <div class="panel-body" style="height: 600px">
+                    <div class="panel-body" style="height: 700px">
                         <div class="row">
-                            <div class="col-md-10">
+                            <div class="col-md-12">
                                 <div class="p-20">
                                     <div class="form-group">
                                         <div class="row">
@@ -79,25 +79,20 @@
                                     </div>
                                     <div class="form-group">
                                         <div class="row">
-
-                                            <div class="col-sm-6 m-b-10">
-                                                <label>签名：</label>[[${enterpriseDocumentInfoValidator.signName}]]
-                                            </div>
-                                            <div class="col-sm-6 m-b-10">
-                                                <label>短链：</label>[[${enterpriseDocumentInfoValidator.shortLink}]]
+                                            <div class="col-sm-12 m-b-10">
+                                                <label>签名：</label>
+                                                <textarea class="form-control" rows="3" style="border-bottom:0px" readonly>[[${enterpriseDocumentInfoValidator.signName}]]</textarea>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="row">
-                                            <div class="col-sm-6 m-b-10">
-                                                <label>签订日期：</label>[[${enterpriseDocumentInfoValidator.signDate}]]
-                                            </div>
-                                            <div class="col-sm-6 m-b-10">
-                                                <label>到期日期：</label>[[${enterpriseDocumentInfoValidator.signExpireDate}]]
+                                            <div class="col-sm-12 m-b-10">
+                                                <label>短链：</label>[[${enterpriseDocumentInfoValidator.shortLink}]]
                                             </div>
                                         </div>
                                     </div>
+
                                     <div class="form-group m-b-20">
                                         <label>备注关键字：</label>
                                         [[${enterpriseDocumentInfoValidator.docKey}]]
@@ -150,7 +145,7 @@
                             操作记录
                         </h3>
                     </div>
-                    <div class="panel-body" style="height: 600px">
+                    <div class="panel-body" style="height: 700px">
                         <div class="table-responsive">
                             <table class="table table table-hover m-10" style="margin-top: -12px;">
                                 <thead>

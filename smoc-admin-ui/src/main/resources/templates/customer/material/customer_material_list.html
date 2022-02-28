@@ -104,39 +104,39 @@
                     </div>
                     <div class="panel-body">
                         <div class="table-responsive">
-                            <table class="table table table-hover m-10" style="margin-top: -12px;">
+                            <table class="table table table-hover m-10" style="margin-top: -12px;table-layout:fixed;">
                                 <thead>
                                 <tr>
                                     <th>签名/企业名称</th>
-                                    <th>企业类型</th>
-                                    <th>业务类型</th>
-                                    <th>信息类型</th>
-                                    <th>短链/签名合同链</th>
-                                    <th>创建人/创建日期</th>
-                                    <th>操作</th>
+                                    <th style="width:180px">企业类型</th>
+                                    <th style="width:200px">业务类型</th>
+                                    <th style="width:180px">信息类型</th>
+                                    <th style="width:260px">短链/签名合同链</th>
+                                    <th style="width:180px">创建人/创建日期</th>
+                                    <th style="width:140px">操作</th>
                                 </tr>
                                 <thead>
                                 <tbody>
                                   <tr th:each="info:${list}">
-                                    <td style="line-height: 26px"><span style="color:#26A69A;width: 250px" class="text-overflow"
-                                                                        data-toggle="tooltip" data-placement="bottom"
-                                                                        th:data-original-title="${info.signName}">[[${info.signName}]]</span>
+                                    <td style="line-height: 26px"><span style="color:#26A69A;" class="text-overflow"
+                                                                     data-toggle="tooltip" data-placement="bottom"
+                                                                     th:data-original-title="${info.signName}">[[${info.signName}]]</span>
                                         <a th:href="@{/enterprise/center/{id}(id=${info.enterpriseId})}" data-toggle="tooltip"
                                            data-placement="bottom" title="" data-original-title="跳转到企业信息中心">
                                             <span style="color:#797979">[[${info.enterpriseName}]]</span></a>
                                     </td>
-                                    <td style="line-height: 26px">
+                                    <td style="vertical-align: middle;line-height: 26px">
                                         <mpm:tag identity="enterpriseType" show-type="button" key="code" th:value="${info.enterpriseType}"
                                                  class="DIRECTCUSTOMER,btn btn-info btn-rounded btn-sm waves-effect waves-light;CHANNELCUSTOMER,btn btn-teal btn-rounded btn-sm waves-effect waves-light;IDENTIFICATION,btn btn-success btn-rounded btn-sm waves-effect waves-light;"/>
                                     </td>
-                                    <td style="line-height: 26px">
+                                    <td style="vertical-align: middle;line-height: 26px">
                                         <mpm:tag identity="businessType" th:value="${info.businessType}" show-type="label"
                                                  key="code"/>
                                     </td>
-                                    <td style="line-height: 26px">
+                                    <td style="vertical-align: middle;line-height: 26px">
                                         <mpm:tag identity="infoType" th:value="${info.infoType}" show-type="label" key="code"/>
                                     </td>
-                                    <td style="line-height: 26px">[[${info.shortLink}]]<br>
+                                    <td style="vertical-align: middle;line-height: 26px">[[${info.shortLink}]]<br>
                                         <i class="mdi mdi-comment-text" style="margin-left:5px"
                                            th:id="chain+${info.id}"
                                            th:onmouseover="chainTip([[${info.id}]])"
@@ -147,9 +147,9 @@
                                            data-toggle="tooltip">
                                         </i>
                                     </td>
-                                      <td style="line-height: 26px">[[${info.createdBy}]]<br>[[${info.createdTime}]]</td>
+                                      <td style="vertical-align: middle;line-height: 26px">[[${info.createdBy}]]<br>[[${info.createdTime}]]</td>
 
-                                    <td style="line-height: 26px;">
+                                    <td style="vertical-align: middle;line-height: 26px;">
                                         <a sec:authorize-url="/ec/customer/material/detail/*"
                                            th:href="@{/ec/customer/material/detail/{id}(id=${info.id})}" class="on-default edit-row"
                                            style="padding-left: 5px;color: #4BD396;"
