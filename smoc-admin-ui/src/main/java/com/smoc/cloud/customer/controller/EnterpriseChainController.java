@@ -8,6 +8,7 @@ import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseChainInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseDocumentInfoValidator;
+import com.smoc.cloud.common.smoc.customer.validator.SystemAttachmentValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.common.validator.MpmIdValidator;
@@ -21,10 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -36,7 +34,7 @@ import java.util.List;
  * 签名合同链管理
  */
 @Slf4j
-@Controller
+@RestController
 @RequestMapping("/ec/customer")
 public class EnterpriseChainController {
 
@@ -294,5 +292,47 @@ public class EnterpriseChainController {
 
         view.setView(new RedirectView("/ec/customer/material/chain/list/"+infoDate.getData().getDocumentId(), true, false));
         return view;
+    }
+
+    /**
+     * 查询签名合同链
+     * @param id
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/material/chain/chainView/{id}", produces = "text/html;charset=utf-8", method = RequestMethod.GET)
+    public String findByModelId(@PathVariable String id, HttpServletRequest request) {
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            return MpmValidatorUtil.validateMessage(validator);
+        }
+
+        EnterpriseChainInfoValidator enterpriseChainInfoValidator = new EnterpriseChainInfoValidator();
+        enterpriseChainInfoValidator.setDocumentId(id);
+
+        //查询
+        ResponseData<List<EnterpriseChainInfoValidator>> data = enterpriseChainService.page(enterpriseChainInfoValidator);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            return "无签名合同链";
+        }
+
+        //查询附件
+        StringBuilder chain = new StringBuilder();
+        if (!StringUtils.isEmpty(data.getData()) && data.getData().size() > 0) {
+            List<EnterpriseChainInfoValidator> list = data.getData();
+            for (int a=0;a<list.size();a++) {
+                EnterpriseChainInfoValidator info = list.get(a);
+                chain.append(info.getSignChain()+","+info.getSignDate()+" - "+info.getSignExpireDate());
+                if (a != list.size()-1) {
+                    chain.append("@");
+                }
+            }
+            return chain.toString();
+        }
+
+        return "无签名合同链";
     }
 }

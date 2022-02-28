@@ -137,9 +137,11 @@
                                         <mpm:tag identity="infoType" th:value="${info.infoType}" show-type="label" key="code"/>
                                     </td>
                                     <td style="line-height: 26px">[[${info.shortLink}]]<br>
-                                        <i id="tooltip-html"  data-placement="right" title="" th:onmouseover="channelTip()"
-                                           class="mdi mdi-comment-text" style="margin-left:5px"></i>
-                                        <i class="mdi mdi-file-document" style="font-size: 18px;color: #00acc1"
+                                        <i class="mdi mdi-comment-text" style="margin-left:5px"
+                                           th:id="chain+${info.id}"
+                                           th:onmouseover="chainTip([[${info.id}]])"
+                                           data-toggle="tooltip"></i>
+                                        <i class="mdi mdi-file-document" style="color: #00acc1"
                                            th:id="interaction+${info.id}"
                                            th:onmouseover="interaction([[${info.id}]])"
                                            data-toggle="tooltip">
@@ -201,10 +203,28 @@
 <script th:src="@{/static/plugins/tooltipster/tooltipster.bundle.min.js}"></script>
 <script th:remove="${#strings.isEmpty(error)}?none:all">
 
-    function channelTip(){
-        $('#tooltip-html').tooltipster({
-            content: $('<p style="text-align:left;"><span style="font-size:12px">360数科-深圳风向 到期日期：2022-11-12</span><br><span style="font-size:12px">深圳风向-小舟科技 到期日期：2022-11-12</span></p>'),
-            position: 'right'
+    function chainTip(id){
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $.ajax({
+            url: contextPath + "/ec/customer/material/chain/chainView/" + id,
+            async: false,
+            success: function (data) {
+                var chains = data.split("@");
+                var chainName = ""
+                if (chains.length > 1) {
+                    for (i = 0; i < chains.length; i++) {
+                        chainName += '<span style="font-size:12px">' + chains[i] + '</span><br>';
+                    }
+                } else {
+                    chainName = '<span style="font-size:12px">' + chains + '</span>';
+                }
+
+                $('#chain' + id).tooltipster({
+                    content: $('<p style="text-align:left;">' + chainName + '</p>'),
+                    maxWidth: 600,
+                    position: 'right',
+                });
+            }
         });
     }
 

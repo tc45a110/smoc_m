@@ -43,7 +43,7 @@ public class EnterpriseChainRepositoryImpl extends BasePageRepository {
         }
 
 
-        sqlBuffer.append(" order by t.CREATED_TIME desc");
+        sqlBuffer.append(" order by t.SORT ");
 
         //根据参数个数，组织参数值
         Object[] params = new Object[paramsList.size()];
