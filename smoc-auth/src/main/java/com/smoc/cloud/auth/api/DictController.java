@@ -6,6 +6,7 @@ import com.smoc.cloud.common.auth.validator.DictValidator;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -76,6 +77,7 @@ public class DictController {
         //转BaseUser存放对象
         BaseCommDict baseCommDict = new BaseCommDict();
         BeanUtils.copyProperties(dictValidator, baseCommDict);
+        baseCommDict.setCreateDate(DateTimeUtils.getDateTimeFormat(dictValidator.getCreateDateTime()));
 
         return baseCommDictService.save(baseCommDict, op);
     }

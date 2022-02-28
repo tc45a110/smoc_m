@@ -96,6 +96,7 @@
                                     <th style="width:220px">业务账号/业务账号名称</th>
                                     <th style="width:180px">业务类型</th>
                                     <th>模版内容</th>
+                                    <th style="width:120px">状态</th>
                                     <th style="width:160px">创建人/创建时间</th>
                                     <th style="width:160px">操作</th>
                                 </tr>
@@ -120,6 +121,12 @@
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
                                         [[${info.templateContent}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
+                                        <mpm:tag id="templateStatus" identity="checkStatus"
+                                                 class="1,btn btn-success btn-rounded btn-sm waves-effect waves-light;2,btn btn-warning btn-rounded btn-sm waves-effect waves-light;0,btn btn-danger btn-rounded btn-sm waves-effect waves-light;"
+                                                 name="businessType" show-type="button" key="code"
+                                                 th:value="${info.templateStatus}" title="状态"/>
                                     </td>
                                     <td style="vertical-align: middle;;line-height: 26px;">
                                         [[${info.createdBy}]]

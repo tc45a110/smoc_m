@@ -43,4 +43,6 @@ public class DictValidator {
     private Integer active;
     private Date createDate;
     private Date editDate;
+
+    private String createDateTime;
 }

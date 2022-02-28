@@ -1,6 +1,7 @@
 package com.smoc.cloud.admin.security.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
 import com.smoc.cloud.admin.security.properties.SystemProperties;
 import com.smoc.cloud.admin.security.remote.service.DictService;
 import com.smoc.cloud.admin.security.remote.service.DictTypeService;
@@ -9,6 +10,7 @@ import com.smoc.cloud.common.auth.validator.DictTypeValidator;
 import com.smoc.cloud.common.auth.validator.DictValidator;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,7 +123,7 @@ public class DictController {
         DictValidator dictValidator = new DictValidator();
         dictValidator.setId(UUID.uuid32());
         dictValidator.setActive(1);
-        dictValidator.setCreateDate(new Date());
+        dictValidator.setCreateDateTime(DateTimeUtils.getDateTimeFormat(new Date()));
         dictValidator.setDictType(dictType);
         dictValidator.setTypeId(typeId);
         view.addObject("dictValidator", dictValidator);
@@ -180,8 +182,11 @@ public class DictController {
 
         ModelAndView view = new ModelAndView("sys_dict/sys_dict_edit");
 
+
+        log.info("[保存修改]：{}",new Gson().toJson(dictValidator));
         //完成参数规则验证
         if (result.hasErrors()) {
+            view.addObject("error", new Gson().toJson(result.getAllErrors()));
             view.addObject("dictValidator", dictValidator);
             view.addObject("op", op);
             return view;
@@ -189,7 +194,7 @@ public class DictController {
 
         //初始化其他变量
         if (!StringUtils.isEmpty(op) && "add".equals(op)) {
-            dictValidator.setCreateDate(new Date());
+            dictValidator.setCreateDateTime(DateTimeUtils.getDateTimeFormat(new Date()));
         } else if (!StringUtils.isEmpty(op) && "edit".equals(op)) {
             dictValidator.setEditDate(new Date());
         } else {
