@@ -24,6 +24,7 @@ public class EnterpriseChainInfoRowMapper implements RowMapper<EnterpriseChainIn
         qo.setSignChainStatus(resultSet.getString("SIGN_CHAIN_STATUS"));
         qo.setCreatedTime(resultSet.getString("CREATED_TIME"));
         qo.setCreatedBy(resultSet.getString("CREATED_BY"));
+        qo.setSort(resultSet.getInt("SORT"));
 
         return qo;
     }

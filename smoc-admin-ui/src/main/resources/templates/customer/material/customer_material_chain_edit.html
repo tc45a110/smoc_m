@@ -93,6 +93,18 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <label>顺序<span class="text-danger">*</span>&nbsp;
+                                                        <span class="text-danger" th:if="${#fields.hasErrors('sort')}"
+                                                              th:errors="*{sort}"></span></label>
+                                                    <input id="sort" class="form-control" type="text"
+                                                           th:field="*{sort}" required="" data-parsley-type="number" autocomplete="off">
+                                                </div>
+
+                                            </div>
+                                        </div>
                                     </div> <!-- end col -->
 
                                 </div> <!-- end row -->

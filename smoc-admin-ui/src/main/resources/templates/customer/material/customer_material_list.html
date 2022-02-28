@@ -112,14 +112,15 @@
                                     <th>业务类型</th>
                                     <th>信息类型</th>
                                     <th>短链/签名合同链</th>
-                                    <th>签订日期/到期日期</th>
                                     <th>创建人/创建日期</th>
                                     <th>操作</th>
                                 </tr>
                                 <thead>
                                 <tbody>
                                   <tr th:each="info:${list}">
-                                    <td style="line-height: 26px"><span style="color:#26A69A">【[[${info.signName}]]】</span><br>
+                                    <td style="line-height: 26px"><span style="color:#26A69A;width: 250px" class="text-overflow"
+                                                                        data-toggle="tooltip" data-placement="bottom"
+                                                                        th:data-original-title="${info.signName}">[[${info.signName}]]</span>
                                         <a th:href="@{/enterprise/center/{id}(id=${info.enterpriseId})}" data-toggle="tooltip"
                                            data-placement="bottom" title="" data-original-title="跳转到企业信息中心">
                                             <span style="color:#797979">[[${info.enterpriseName}]]</span></a>
@@ -144,8 +145,6 @@
                                            data-toggle="tooltip">
                                         </i>
                                     </td>
-
-                                    <td style="line-height: 26px">[[${info.signDate}]]<br>[[${info.signExpireDate}]]</td>
                                       <td style="line-height: 26px">[[${info.createdBy}]]<br>[[${info.createdTime}]]</td>
 
                                     <td style="line-height: 26px;">

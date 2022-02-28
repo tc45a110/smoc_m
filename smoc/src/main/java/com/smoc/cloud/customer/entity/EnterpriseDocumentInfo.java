@@ -15,8 +15,6 @@ public class EnterpriseDocumentInfo {
     private String infoType;
     private String shortLink;
     private String docKey;
-    private String signDate;
-    private String signExpireDate;
     private String docStatus;
     private String createdBy;
     private Date createdTime;
@@ -94,26 +92,6 @@ public class EnterpriseDocumentInfo {
     }
 
     @Basic
-    @Column(name = "SIGN_DATE")
-    public String getSignDate() {
-        return signDate;
-    }
-
-    public void setSignDate(String signDate) {
-        this.signDate = signDate;
-    }
-
-    @Basic
-    @Column(name = "SIGN_EXPIRE_DATE")
-    public String getSignExpireDate() {
-        return signExpireDate;
-    }
-
-    public void setSignExpireDate(String signExpireDate) {
-        this.signExpireDate = signExpireDate;
-    }
-
-    @Basic
     @Column(name = "DOC_STATUS")
     public String getDocStatus() {
         return docStatus;
@@ -175,7 +153,6 @@ public class EnterpriseDocumentInfo {
                 Objects.equals(infoType, that.infoType) &&
                 Objects.equals(shortLink, that.shortLink) &&
                 Objects.equals(docKey, that.docKey) &&
-                Objects.equals(signDate, that.signDate) &&
                 Objects.equals(docStatus, that.docStatus) &&
                 Objects.equals(createdBy, that.createdBy) &&
                 Objects.equals(createdTime, that.createdTime) &&
@@ -185,6 +162,6 @@ public class EnterpriseDocumentInfo {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, enterpriseId, signName, businessType, infoType, shortLink, docKey, signDate, docStatus, createdBy, createdTime, updatedBy, updatedTime);
+        return Objects.hash(id, enterpriseId, signName, businessType, infoType, shortLink, docKey, docStatus, createdBy, createdTime, updatedBy, updatedTime);
     }
 }

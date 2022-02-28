@@ -72,15 +72,19 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="row">
-                                                <div class="col-sm-6 ">
-                                                    <label>签名<span class="text-danger">*</span>&nbsp;
+                                                <div class="col-sm-12 ">
+                                                    <label>签名(不需要填写中括号，直接输入签名)<span class="text-danger">*</span>&nbsp;
                                                         <span class="text-danger" th:if="${#fields.hasErrors('signName')}"
                                                               th:errors="*{signName}"></span></label>
-                                                    <input type="text" class="form-control" th:field="*{signName}"
-                                                           required="" data-parsley-length="[2,48]" autocomplete="off"
-                                                           placeholder="签名">
+                                                    <textarea type="text" class="form-control" th:field="*{signName}"
+                                                           required="" data-parsley-length="[2,500]" autocomplete="off"
+                                                              rows="5"   placeholder="签名"></textarea>
                                                 </div>
-                                                <div class="col-sm-6 ">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-sm-12 ">
                                                     <label>短链<span class="text-danger">*</span>&nbsp;
                                                         <span class="text-danger" th:if="${#fields.hasErrors('shortLink')}"
                                                               th:errors="*{shortLink}"></span></label>
@@ -90,24 +94,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-sm-6 ">
-                                                    <label>签订日期<span class="text-danger">*</span>&nbsp;
-                                                        <span class="text-danger" th:if="${#fields.hasErrors('signDate')}"
-                                                              th:errors="*{signDate}"></span></label>
-                                                    <input id="signDate" class="form-control" type="text"
-                                                           th:field="*{signDate}" required="" autocomplete="off">
-                                                </div>
-                                                <div class="col-sm-6 ">
-                                                    <label>到期日期<span class="text-danger">*</span>&nbsp;
-                                                        <span class="text-danger" th:if="${#fields.hasErrors('signExpireDate')}"
-                                                              th:errors="*{signExpireDate}"></span></label>
-                                                    <input id="signExpireDate" class="form-control" type="text"
-                                                           th:field="*{signExpireDate}" required="" autocomplete="off">
-                                                </div>
-                                            </div>
-                                        </div>
+
                                         <div class="form-group ">
                                             <label>备注关键字(方便根据关键字查询)
                                                 <span class="text-danger" th:if="${#fields.hasErrors('docKey')}"
@@ -153,7 +140,7 @@
 
                                     <div class="col-md-6">
                                         <div class="form-group ">
-                                            <label>上传附件<span class="text-danger">*</span>&nbsp;
+                                            <label>上传附件(上传完整的签名合同连压缩包)<span class="text-danger">*</span>&nbsp;
                                                 <span class="text-danger" th:if="${#fields.hasErrors('contractFiles')}"
                                                       th:errors="*{contractFiles}"></span></label>
                                             <input type="file" name="file" id="input_file"

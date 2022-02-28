@@ -29,6 +29,7 @@ public class EnterpriseChainRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", t.SIGN_DATE");
         sqlBuffer.append(", t.SIGN_EXPIRE_DATE");
         sqlBuffer.append(", t.SIGN_CHAIN_STATUS");
+        sqlBuffer.append(", t.SORT");
         sqlBuffer.append(", t.CREATED_BY");
         sqlBuffer.append(", DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME");
         sqlBuffer.append("  from enterprise_chain_info t ");

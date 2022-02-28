@@ -25,8 +25,6 @@ public class EnterpriseDocumentInfoRowMapper implements RowMapper<EnterpriseDocu
         qo.setInfoType(resultSet.getString("INFO_TYPE"));
         qo.setShortLink(resultSet.getString("SHORT_LINK"));
         qo.setDocKey(resultSet.getString("DOC_KEY"));
-        qo.setSignDate(resultSet.getString("SIGN_DATE"));
-        qo.setSignExpireDate(resultSet.getString("SIGN_EXPIRE_DATE"));
         qo.setDocStatus(resultSet.getString("DOC_STATUS"));
         qo.setCreatedTime(resultSet.getString("CREATED_TIME"));
         qo.setCreatedBy(resultSet.getString("CREATED_BY"));

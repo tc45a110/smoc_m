@@ -15,6 +15,7 @@ public class EnterpriseChainInfo {
     private String signExpireDate;
     private String signChainStatus;
     private String createdBy;
+    private Integer sort;
     private Date createdTime;
     private String updatedBy;
     private Date updatedTime;
@@ -77,6 +78,16 @@ public class EnterpriseChainInfo {
 
     public void setSignChainStatus(String signChainStatus) {
         this.signChainStatus = signChainStatus;
+    }
+
+    @Basic
+    @Column(name = "SORT")
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
     }
 
     @Basic

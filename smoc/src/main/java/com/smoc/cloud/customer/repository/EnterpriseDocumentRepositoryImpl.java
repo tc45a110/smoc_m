@@ -33,8 +33,6 @@ public class EnterpriseDocumentRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", t.INFO_TYPE");
         sqlBuffer.append(", t.SHORT_LINK");
         sqlBuffer.append(", t.DOC_KEY");
-        sqlBuffer.append(", t.SIGN_DATE");
-        sqlBuffer.append(", t.SIGN_EXPIRE_DATE");
         sqlBuffer.append(", t.DOC_STATUS");
         sqlBuffer.append(", t.CREATED_BY");
         sqlBuffer.append(", DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME");
@@ -76,12 +74,12 @@ public class EnterpriseDocumentRepositoryImpl extends BasePageRepository {
         }
 
         if (!StringUtils.isEmpty(qo.getStartDate())) {
-            sqlBuffer.append(" and DATE_FORMAT(t.SIGN_DATE,'%Y-%m-%d') >= ? ");
+            sqlBuffer.append(" and DATE_FORMAT(t.CREATED_TIME,'%Y-%m-%d') >= ? ");
             paramsList.add(qo.getStartDate().trim());
         }
 
         if (!StringUtils.isEmpty(qo.getEndDate())) {
-            sqlBuffer.append(" and DATE_FORMAT(t.SIGN_DATE,'%Y-%m-%d') <= ? ");
+            sqlBuffer.append(" and DATE_FORMAT(t.CREATED_TIME,'%Y-%m-%d') <= ? ");
             paramsList.add(qo.getEndDate().trim());
         }
 

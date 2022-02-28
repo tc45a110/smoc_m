@@ -16,6 +16,7 @@ public class EnterpriseBasicInfoValidator {
     private String enterpriseId;
     private String enterpriseParentId;
 
+    @NotNull(message = "企业标识不能为空！")
     private String enterpriseFlag;
 
     @NotNull(message = "企业名称不能为空！")

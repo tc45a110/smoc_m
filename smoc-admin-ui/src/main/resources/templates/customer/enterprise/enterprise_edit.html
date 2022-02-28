@@ -123,7 +123,7 @@
                                                        th:if="${op eq 'edit'}"
                                                        readonly autocomplete="off">
                                                 <input type="text" class="form-control" th:field="*{enterpriseFlag}"
-                                                       th:if="${op eq 'add'}"
+                                                       th:if="${op eq 'add'}" required=""
                                                        data-parsley-pattern="[A-Z]{3}" autocomplete="off">
                                             </div>
 
