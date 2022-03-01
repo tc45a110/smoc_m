@@ -13,6 +13,7 @@
       <module fileurl="file://$PROJECT_DIR$/smoc-parent/smoc-parent.iml" filepath="$PROJECT_DIR$/smoc-parent/smoc-parent.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-parent-ui/smoc-parent-ui.iml" filepath="$PROJECT_DIR$/smoc-parent-ui/smoc-parent-ui.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-saler-ui/smoc-saler-ui.iml" filepath="$PROJECT_DIR$/smoc-saler-ui/smoc-saler-ui.iml" />
+      <module fileurl="file://$PROJECT_DIR$/smoc-scheduler/smoc-scheduler.iml" filepath="$PROJECT_DIR$/smoc-scheduler/smoc-scheduler.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-service-ui/smoc-service-ui.iml" filepath="$PROJECT_DIR$/smoc-service-ui/smoc-service-ui.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-statistic-ui/smoc-statistic-ui.iml" filepath="$PROJECT_DIR$/smoc-statistic-ui/smoc-statistic-ui.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-website/smoc-website.iml" filepath="$PROJECT_DIR$/smoc-website/smoc-website.iml" />
