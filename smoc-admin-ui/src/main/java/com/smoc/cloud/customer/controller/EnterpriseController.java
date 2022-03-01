@@ -174,7 +174,7 @@ public class EnterpriseController {
             }
             enterpriseBasicInfoValidator.setParentEnterpriseName(data.getData().getEnterpriseName());
             enterpriseBasicInfoValidator.setEnterpriseType(data.getData().getEnterpriseType());
-            enterpriseBasicInfoValidator.setEnterpriseProcess(data.getData().getEnterpriseProcess());
+            enterpriseBasicInfoValidator.setEnterpriseProcess("10000");
             enterpriseBasicInfoValidator.setSaler(data.getData().getSaler());
             enterpriseBasicInfoValidator.setAccessCorporation(data.getData().getAccessCorporation());
         }

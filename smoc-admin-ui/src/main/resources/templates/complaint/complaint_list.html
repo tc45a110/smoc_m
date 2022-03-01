@@ -8,8 +8,8 @@
     <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
     <th:block th:insert="fragments/common_fragments :: select_css"/>
     <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
-    <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
-    <link th:href="@{/static/css/detail_statistics.css}" rel="stylesheet">
+    <!-- Tooltipster css -->
+    <link rel="stylesheet" th:href="@{/static/plugins/tooltipster/tooltipster.bundle.min.css}">
 </head>
 <body>
 <!-- Loader start 页面加载进度-->
@@ -40,44 +40,35 @@
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
                 <div class="card-box">
-                    <form th:action="@{/complaint/page}" id="query_form" method="post">
+                    <form th:action="@{/complaint/page}" th:object="${messageComplaintInfoValidator}" id="query_form" method="post">
                         <div class="row m-b-60">
                             <div class="col-sm-12">
                                 <div class="form-group  col-sm-3">
-                                    <input id="reportrange" class="form-control" type="text"/>
+                                    <input id="reportrange" class="form-control" th:field="*{startDate}" type="text"/>
                                 </div>
                                 <div class="form-group  col-sm-3">
                                     <input type="text" class="form-control"
-                                           placeholder="企业名称" autocomplete="off">
+                                           placeholder="EC业务账号" th:field="*{businessAccount}" autocomplete="off">
                                 </div>
                                 <div class="form-group  col-sm-3">
                                     <input type="text" class="form-control"
-                                           placeholder="EC业务账号" autocomplete="off">
+                                           placeholder="码号" th:field="*{numberCode}" autocomplete="off">
                                 </div>
                                 <div class="form-group  col-sm-3">
                                     <input type="text" class="form-control"
-                                           placeholder="码号" autocomplete="off">
+                                           placeholder="举报手机号" th:field="*{reportNumber}" autocomplete="off">
                                 </div>
                                 <div class="form-group  col-sm-3">
                                     <input type="text" class="form-control"
-                                           placeholder="举报手机号" autocomplete="off">
+                                           placeholder="举报内容" th:field="*{reportContent}" autocomplete="off">
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <input type="text" class="form-control"
-                                           placeholder="举报内容" autocomplete="off">
-                                </div>
-                                <div class="form-group  col-sm-3">
-                                    <mpm:tag id="complaintSource" identity="complaintSource" show-type="select"
-                                             key="code"
-                                             class="form-control" name="complaintSource" value="" title="举报渠道"/>
-                                </div>
-                                <div class="form-group  col-sm-3">
-                                    <mpm:tag id="carrier" identity="carrier" show-type="select" key="code"
-                                             class="form-control" name="carrier" value="" title="运营商"/>
+                                    <mpm:tag id="carrier" identity="carrier" show-type="select" key="code" mask-value="INTERNATIONAL"
+                                             class="form-control" name="carrierSource" th:value="${messageComplaintInfoValidator.carrierSource}" title="运营商"/>
                                 </div>
                                 <div class="form-group  col-sm-3">
                                     <mpm:tag id="businessType" identity="businessType" show-type="select" key="code"
-                                             class="form-control" name="enterpriseType" value="" title="业务类型"/>
+                                             class="form-control" name="businessType" th:value="${messageComplaintInfoValidator.businessType}" title="业务类型"/>
                                 </div>
 
                                 <div class="form-group col-sm-3 pull-right" style="text-align: right">
@@ -85,12 +76,11 @@
                                             class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search" style="margin-right:5px"></i> 查询
                                     </button>
-                                    <!--                                    <a sec:authorize-url="/complaint/search" th:href="@{/complaint/search}"-->
-                                    <!--                                       class="btn btn-success waves-effect waves-light m-l-10 btn-md">-->
-                                    <!--                                        <i class="glyphicon glyphicon-plus-sign"></i> 新建投诉</a>-->
-                                    <a
-                                            class="btn btn-teal waves-effect waves-light m-l-10 btn-md">
+                                    <a  sec:authorize-url="/complaint/add" th:href="@{/complaint/add}"
+                                        class="btn btn-teal waves-effect waves-light m-l-10 btn-md">
                                         <i class="mdi mdi-file-import"></i> 批量导入</a>
+                                    <input type="hidden" name="currentPage" id="currentPage" th:value="${pageParams.currentPage}">
+                                    <input type="hidden" name="pageSize" id="pageSize" th:value="${pageParams.pageSize}">
                                 </div>
 
                             </div>
@@ -111,44 +101,40 @@
                     </div>
                     <div class="panel-body">
                         <div class="table-responsive">
-                            <table class="table table table-hover m-10" style="margin-top: -12px;">
+                            <table class="table table table-hover m-10" style="margin-top: -12px;table-layout:fixed;">
                                 <thead>
                                 <tr>
-                                    <th>EC业务账号/举报号码</th>
-                                    <th>12321来源/举报来源</th>
-                                    <th>码号/被举报号码</th>
-                                    <th>运营商/业务类型</th>
-                                    <th>举报内容/下发频次</th>
-                                    <th>举报日期/下发时间</th>
-                                    <th>通道ID/处理标记</th>
-                                    <th>创建日期</th>
-                                    <th>操作</th>
+                                    <th style="width:170px">运营商来源/通道ID</th>
+                                    <th style="width:180px">EC业务账号/举报号码</th>
+                                    <th style="width:170px">12321来源/举报来源</th>
+                                    <th style="width:170px">举报运营商/业务类型</th>
+                                    <th style="width:170px">下发时间/举报时间</th>
+                                    <th style="width:170px">码号/被举报号码</th>
+                                    <th>下发频次/举报内容</th>
+                                    <th style="width:170px">创建人/创建日期</th>
+                                    <th style="width:110px">操作</th>
                                 </tr>
                                 <thead>
                                 <tbody>
-                                <tr>
-                                    <td style="vertical-align: middle;line-height: 26px"> y41b78<br>13683071241</td>
-                                    <td style="vertical-align: middle;line-height: 26px">是<br>12321</td>
-                                    <td style="vertical-align: middle;line-height: 26px">10692939<br>106929395555</td>
-                                    <td style="vertical-align: middle;line-height: 26px">中国电信<br>
-                                        <a class="btn btn-brown waves-effect waves-light btn-xs">5G消息</a>
+                                <tr th:each="info:${list}">
+                                    <td><mpm:tag identity="carrier" show-type="label" key="code" th:value="${info.carrierSource}"/><br>[[${info.channelId}]]</td>
+                                    <td>[[${info.businessAccount}]]<br>[[${info.reportNumber}]]</td>
+                                    <td>[[${info.is12321 eq '0'?'否':'是'}]]<br>[[${info.reportSource}]]</td>
+                                    <td>[[${info.carrier}]]<br>
+                                        <mpm:tag identity="businessType" show-type="button"
+                                                 key="code" th:value="${info.businessType}"
+                                                 class="TEXT_SMS,btn btn-teal btn-xs waves-effect waves-light;MULTI_SMS,btn btn-brown btn-xs waves-effect waves-light;MMS,btn btn-info btn-xs waves-effect waves-light;5G_SMS,btn btn-primary btn-xs waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-xs waves-effect waves-light;BLACK_SERVICE,btn btn-inverse btn-xs waves-effect waves-light"/>
                                     </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <i style="font-size: 18px" class="mdi mdi-stackexchange" data-container="body"
-                                           title="" data-toggle="popover" data-placement="bottom"
-                                           data-content="【招商银行】您有20元消费金已到账，点击 cmbt.cn/N9p 查看。消费金只需微信支付交易满20元即可抵扣。已使用请忽略，退订回#C"></i>
-                                        <br> 30天4次
+                                    <td>[[${info.sendDate}]]<br>[[${info.reportDate}]]</td>
+                                    <td>[[${info.numberCode}]]<br>[[${info.reportedNumber}]]</td>
+                                    <td>[[${info.sendRate}]]<br>
+                                        <span class="text-overflow"
+                                              data-toggle="tooltip" data-placement="right"
+                                              th:data-original-title="${info.reportContent}">[[${info.reportContent}]]</span>
                                     </td>
-                                    <td style="vertical-align: middle;line-height: 26px"> 2021-11-17 14:45:23<br>2021-11-17
-                                        14:45:23
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        CHID10086
-                                        <br><a
-                                            class="btn btn-info waves-effect waves-light btn-xs">系统处理</a></td>
-                                    <td style="vertical-align: middle;line-height: 26px"> 2021-11-17 14:45:23</td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <a sec:authorize-url="/complaint/edit" th:href="@{/complaint/edit}"
+                                    <td>[[${info.createdBy}]]<br>[[${info.createdTime}]]</td>
+                                    <td style="line-height: 26px">
+                                        <a sec:authorize-url="/complaint/edit/*" th:href="@{/complaint/edit}"
                                            class="on-default edit-row"
                                            style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="bottom" title="" data-original-title="修改投诉信息"
@@ -156,212 +142,6 @@
                                             class="mdi mdi-table-edit"></i></a>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td style="vertical-align: middle;line-height: 26px"> y41b78<br>13683071241</td>
-                                    <td style="vertical-align: middle;line-height: 26px">否<br>短信平台</td>
-                                    <td style="vertical-align: middle;line-height: 26px">10692939<br>106929395555</td>
-                                    <td style="vertical-align: middle;line-height: 26px">中国电信<br>
-                                        <a class="btn btn-brown waves-effect waves-light btn-xs">普通短信</a>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <i style="font-size: 18px" class="mdi mdi-stackexchange" data-container="body"
-                                           title="" data-toggle="popover" data-placement="bottom"
-                                           data-content="【招商银行】您有20元消费金已到账，点击 cmbt.cn/N9p 查看。消费金只需微信支付交易满20元即可抵扣。已使用请忽略，退订回#C"></i>
-                                        <br>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px"> 2021-11-17 14:45:23<br>2021-11-17
-                                        14:45:23
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        CHID10086
-                                        <br>
-                                        <a
-                                                class="btn btn-primary waves-effect waves-light btn-xs">人工处理</a></td>
-                                    <td style="vertical-align: middle;line-height: 26px"> 2021-11-17 14:45:23</td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <a sec:authorize-url="/complaint/edit" th:href="@{/complaint/edit}"
-                                           class="on-default edit-row"
-                                           style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="bottom" title="" data-original-title="修改投诉信息"
-                                        ><i style="font-size: 18px"
-                                            class="mdi mdi-table-edit"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="vertical-align: middle;line-height: 26px"> y41b78<br>13683071241</td>
-                                    <td style="vertical-align: middle;line-height: 26px">否<br>10010</td>
-                                    <td style="vertical-align: middle;line-height: 26px">10692939<br>106929395555</td>
-                                    <td style="vertical-align: middle;line-height: 26px">中国电信<br>
-                                        <a class="btn btn-brown waves-effect waves-light btn-xs">普通短信</a>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <i style="font-size: 18px" class="mdi mdi-stackexchange" data-container="body"
-                                           title="" data-toggle="popover" data-placement="bottom"
-                                           data-content="【招商银行】您有20元消费金已到账，点击 cmbt.cn/N9p 查看。消费金只需微信支付交易满20元即可抵扣。已使用请忽略，退订回#C"></i>
-                                        <br> 30天4次
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px"> 2021-11-17 14:45:23<br>2021-11-17
-                                        14:45:23
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px"> CHID10086
-                                        <br><a
-                                                class="btn btn-primary waves-effect waves-light btn-xs">人工处理</a></td>
-                                    <td style="vertical-align: middle;line-height: 26px"> 2021-11-17 14:45:23</td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <a sec:authorize-url="/complaint/edit" th:href="@{/complaint/edit}"
-                                           class="on-default edit-row"
-                                           style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="bottom" title="" data-original-title="修改投诉信息"
-                                        ><i style="font-size: 18px"
-                                            class="mdi mdi-table-edit"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="vertical-align: middle;line-height: 26px"> y41b78<br>13683071241</td>
-                                    <td style="vertical-align: middle;line-height: 26px">是<br>12321</td>
-                                    <td style="vertical-align: middle;line-height: 26px">10692939<br>106929395555</td>
-                                    <td style="vertical-align: middle;line-height: 26px">中国电信<br>
-                                        <a class="btn btn-brown waves-effect waves-light btn-xs">5G消息</a>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <i style="font-size: 18px" class="mdi mdi-stackexchange" data-container="body"
-                                           title="" data-toggle="popover" data-placement="bottom"
-                                           data-content="【招商银行】您有20元消费金已到账，点击 cmbt.cn/N9p 查看。消费金只需微信支付交易满20元即可抵扣。已使用请忽略，退订回#C"></i>
-                                        <br>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px"> 2021-11-17 14:45:23<br>2021-11-17
-                                        14:45:23
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px"> CHID10086
-                                        <br><a
-                                                class="btn btn-info waves-effect waves-light btn-xs">系统处理</a></td>
-                                    <td style="vertical-align: middle;line-height: 26px"> 2021-11-17 14:45:23</td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <a sec:authorize-url="/complaint/edit" th:href="@{/complaint/edit}"
-                                           class="on-default edit-row"
-                                           style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="bottom" title="" data-original-title="修改投诉信息"
-                                        ><i style="font-size: 18px"
-                                            class="mdi mdi-table-edit"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="vertical-align: middle;line-height: 26px"> y41b78<br>13683071241</td>
-                                    <td style="vertical-align: middle;line-height: 26px">是<br>12321</td>
-                                    <td style="vertical-align: middle;line-height: 26px">10692939<br>106929395555</td>
-                                    <td style="vertical-align: middle;line-height: 26px">中国电信<br>
-                                        <a class="btn btn-brown waves-effect waves-light btn-xs">5G消息</a>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <i style="font-size: 18px" class="mdi mdi-stackexchange" data-container="body"
-                                           title="" data-toggle="popover" data-placement="bottom"
-                                           data-content="【招商银行】您有20元消费金已到账，点击 cmbt.cn/N9p 查看。消费金只需微信支付交易满20元即可抵扣。已使用请忽略，退订回#C"></i>
-                                        <br>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px"> 2021-11-17 14:45:23<br>2021-11-17
-                                        14:45:23
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px"> CHID10086
-                                        <br><a
-                                                class="btn btn-info waves-effect waves-light btn-xs">系统处理</a></td>
-                                    <td style="vertical-align: middle;line-height: 26px"> 2021-11-17 14:45:23</td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <a sec:authorize-url="/complaint/edit" th:href="@{/complaint/edit}"
-                                           class="on-default edit-row"
-                                           style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="bottom" title="" data-original-title="修改投诉信息"
-                                        ><i style="font-size: 18px"
-                                            class="mdi mdi-table-edit"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="vertical-align: middle;line-height: 26px"> y41b78<br>13683071241</td>
-                                    <td style="vertical-align: middle;line-height: 26px">是<br>12321</td>
-                                    <td style="vertical-align: middle;line-height: 26px">10692939<br>106929395555</td>
-                                    <td style="vertical-align: middle;line-height: 26px">中国电信<br>
-                                        <a class="btn btn-brown waves-effect waves-light btn-xs">5G消息</a>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <i style="font-size: 18px" class="mdi mdi-stackexchange" data-container="body"
-                                           title="" data-toggle="popover" data-placement="bottom"
-                                           data-content="【招商银行】您有20元消费金已到账，点击 cmbt.cn/N9p 查看。消费金只需微信支付交易满20元即可抵扣。已使用请忽略，退订回#C"></i>
-                                        <br>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px"> 2021-11-17 14:45:23<br>2021-11-17
-                                        14:45:23
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px"> CHID10086
-                                        <br><a
-                                                class="btn btn-info waves-effect waves-light btn-xs">系统处理</a></td>
-                                    <td style="vertical-align: middle;line-height: 26px"> 2021-11-17 14:45:23</td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <a sec:authorize-url="/complaint/edit" th:href="@{/complaint/edit}"
-                                           class="on-default edit-row"
-                                           style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="bottom" title="" data-original-title="修改投诉信息"
-                                        ><i style="font-size: 18px"
-                                            class="mdi mdi-table-edit"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="vertical-align: middle;line-height: 26px"> y41b78<br>13683071241</td>
-                                    <td style="vertical-align: middle;line-height: 26px">是<br>12321</td>
-                                    <td style="vertical-align: middle;line-height: 26px">10692939<br>106929395555</td>
-                                    <td style="vertical-align: middle;line-height: 26px">中国电信<br>
-                                        <a class="btn btn-brown waves-effect waves-light btn-xs">5G消息</a>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <i style="font-size: 18px" class="mdi mdi-stackexchange" data-container="body"
-                                           title="" data-toggle="popover" data-placement="bottom"
-                                           data-content="【招商银行】您有20元消费金已到账，点击 cmbt.cn/N9p 查看。消费金只需微信支付交易满20元即可抵扣。已使用请忽略，退订回#C"></i>
-                                        <br>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px"> 2021-11-17 14:45:23<br>2021-11-17
-                                        14:45:23
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px"> CHID10086
-                                        <br><a
-                                                class="btn btn-info waves-effect waves-light btn-xs">系统处理</a></td>
-                                    <td style="vertical-align: middle;line-height: 26px"> 2021-11-17 14:45:23</td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <a sec:authorize-url="/complaint/edit" th:href="@{/complaint/edit}"
-                                           class="on-default edit-row"
-                                           style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="bottom" title="" data-original-title="修改投诉信息"
-                                        ><i style="font-size: 18px"
-                                            class="mdi mdi-table-edit"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="vertical-align: middle;line-height: 26px"> y41b78<br>13683071241</td>
-                                    <td style="vertical-align: middle;line-height: 26px">是<br>12321</td>
-                                    <td style="vertical-align: middle;line-height: 26px">10692939<br>106929395555</td>
-                                    <td style="vertical-align: middle;line-height: 26px">中国电信<br>
-                                        <a class="btn btn-brown waves-effect waves-light btn-xs">5G消息</a>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <i style="font-size: 18px" class="mdi mdi-stackexchange" data-container="body"
-                                           title="" data-toggle="popover" data-placement="bottom"
-                                           data-content="【招商银行】您有20元消费金已到账，点击 cmbt.cn/N9p 查看。消费金只需微信支付交易满20元即可抵扣。已使用请忽略，退订回#C"></i>
-                                        <br>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px"> 2021-11-17 14:45:23<br>2021-11-17
-                                        14:45:23
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px"> CHID10086
-                                        <br><a
-                                                class="btn btn-info waves-effect waves-light btn-xs">系统处理</a></td>
-                                    <td style="vertical-align: middle;line-height: 26px"> 2021-11-17 14:45:23</td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <a sec:authorize-url="/complaint/edit" th:href="@{/complaint/edit}"
-                                           class="on-default edit-row"
-                                           style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
-                                           data-placement="bottom" title="" data-original-title="修改投诉信息"
-                                        ><i style="font-size: 18px"
-                                            class="mdi mdi-table-edit"></i></a>
-                                    </td>
-                                </tr>
-
 
                                 </tbody>
                             </table>
@@ -387,13 +167,13 @@
 <script th:src="@{/static/plugins/moment/moment.js}"></script>
 <script th:src="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.js}"></script>
 
-<script>
+<script  th:remove="${#strings.isEmpty(error)}?none:all">
 
     $('#reportrange').daterangepicker({
         format: 'YYYY-MM-DD',
-        startDate: '2020-11-03',
-        endDate: '2021-11-03',
-        minDate: '2012-01-01',
+        startDate: '[[${messageComplaintInfoValidator.startDate}]]',
+        endDate: '[[${messageComplaintInfoValidator.endDate}]]',
+        minDate: '2019-01-01',
         maxDate: '2080-12-31',
         dateLimit: {
             days: 720

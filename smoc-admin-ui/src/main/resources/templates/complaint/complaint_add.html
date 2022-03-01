@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
+    <link th:href="@{/static/plugins/jquery.filer/css/jquery.filer.css}" rel="stylesheet"/>
+    <link th:href="@{/static/plugins/jquery.filer/css/themes/jquery.filer-dragdropbox-theme.css}" rel="stylesheet"/>
+
+</head>
+<body>
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <!-- start row 页面导航-->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title"> 添加、修改投诉信息</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            投诉管理
+                        </li>
+                        <li>
+                            添加、修改投诉信息
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row 页面内容-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-md-12">
+                <div class="card-box">
+                    <form id="submit_form" th:action="@{/complaint/upComplaint}"
+                          th:object="${messageComplaintInfoValidator}"
+                          method="post" data-parsley-validate="" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="p-20">
+                                    <div class="form-group m-b-20">
+                                        <label>运营商<span class="text-danger">*</span>&nbsp;
+                                            <span class="text-danger" th:if="${#fields.hasErrors('carrier')}"
+                                                  th:errors="*{carrier}"></span></label>
+                                        <mpm:tag id="carrier" identity="carrier" name="carrier"  show-type="select" key="code" mask-value="INTERNATIONAL" class="form-control"
+                                                 th:value="${messageComplaintInfoValidator.carrier}" required="true" title="运营商"/>
+                                    </div>
+                                    <div class="form-group m-b-20">
+                                        <label>下载模版</label>
+                                        <label><a sec:authorize-url="/complaint/downFileTemp" th:onclick="downFile()">投诉模板.xlsx</a></label>
+                                    </div>
+
+                                    <div class="form-group m-b-20">
+                                        <label>上传附件<span class="text-danger">*</span>&nbsp;
+                                            <span class="text-danger" th:if="${#fields.hasErrors('complaintFiles')}"
+                                                  th:errors="*{complaintFiles}"></span></label>
+                                        <input type="file" name="file" id="input_file"
+                                               multiple="multiple">
+                                    </div>
+
+                                </div>
+                                <!-- end class p-20 -->
+
+                            </div> <!-- end col -->
+
+                        </div> <!-- end row -->
+
+                        <div class="text-center">
+
+                            <button sec:authorize-url="/complaint/upComplaint" type="submit"
+                                    class="btn btn-teal waves-effect waves-light">提交
+                            </button>
+                            <a sec:authorize-url="/complaint/list" th:href="@{/complaint/list}"
+                               class="btn btn-default waves-effect waves-light" style="margin-left:20px">返回</a>
+                        </div>
+                    </form>
+                    <!-- end form -->
+
+                </div> <!-- end card-box -->
+            </div> <!-- end col -->
+        </div>
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+        <th:block th:insert="fragments/common_fragments :: confirm-modal"/>
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<script th:src="@{/static/plugins/moment/moment.js}"></script>
+<script th:src="@{/static/js/contractUploadFile.js}"></script>
+<script th:src="@{/static/plugins/jquery.filer/js/jquery.filer.min.js}"></script>
+<th:block th:insert="fragments/common_fragments :: common_submit_form"/>
+
+<script>
+
+    function downFile(type) {
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        location.href = contextPath + "/complaint/downFileTemp" ;
+    }
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+
+</script>
+</body>
+</html>

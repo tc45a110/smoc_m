@@ -67,7 +67,7 @@ public class BlackRepositoryImpl extends BasePageRepository {
         Connection connection = null;
         PreparedStatement statement = null;
         List<ExcelModel> list= filterBlackListValidator.getExcelModelList();
-        final String sql = "insert into filter_black_list(ID,ENTERPRISE_ID,GROUP_ID,NAME,MOBILE,IS_SYNC,STATUS,CREATED_BY,CREATED_TIME) values(?,?,?,?,?,?,?,?,now()) on duplicate key update NAME = VALUES (NAME) ";
+        final String sql = "insert into filter_black_list(ID,ENTERPRISE_ID,GROUP_ID,NAME,MOBILE,IS_SYNC,STATUS,CREATED_BY,CREATED_TIME) values(?,?,?,?,?,?,?,?,now()) ";
         log.info(sql);
         log.info("[系统黑名单导入开始]数据：{}- 共{}条", System.currentTimeMillis(),list.size());
         try {

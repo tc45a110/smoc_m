@@ -222,7 +222,7 @@ public class EnterpriseContractController {
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
 
         MultipartHttpServletRequest mRequest = (MultipartHttpServletRequest) request;
-        List<MultipartFile> file = mRequest.getFiles("file[]");
+        List<MultipartFile> file = mRequest.getFiles("file");
         if("add".equals(op) && StringUtils.isEmpty(file.get(0).getOriginalFilename())){
             // 提交前台错误提示
             FieldError err = new FieldError("上传附件", "contractFiles", "附件不能为空");

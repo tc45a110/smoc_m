@@ -12,7 +12,7 @@ import com.smoc.cloud.common.smoc.filter.FilterKeyWordsInfoValidator;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.filter.keywords.service.KeywordsService;
-import com.smoc.cloud.filter.utils.FileUtils;
+import com.smoc.cloud.utils.FileUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -381,7 +381,7 @@ public class KeywordsController {
          * 获取文件信息
          */
         MultipartHttpServletRequest mRequest = (MultipartHttpServletRequest) request;
-        List<MultipartFile> file = mRequest.getFiles("file[]");
+        List<MultipartFile> file = mRequest.getFiles("file");
         if(!StringUtils.isEmpty(file) && file.size()>0){
 
             List<ExcelModel> list = FileUtils.readFile(file.get(0),"2");

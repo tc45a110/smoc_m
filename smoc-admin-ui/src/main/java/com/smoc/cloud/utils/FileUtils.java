@@ -1,4 +1,4 @@
-package com.smoc.cloud.filter.utils;
+package com.smoc.cloud.utils;
 
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelReader;
@@ -6,7 +6,11 @@ import com.alibaba.excel.read.metadata.ReadSheet;
 import com.alibaba.excel.write.builder.ExcelWriterBuilder;
 import com.alibaba.excel.write.builder.ExcelWriterSheetBuilder;
 import com.smoc.cloud.common.smoc.filter.ExcelModel;
+import com.smoc.cloud.common.smoc.message.model.ComplaintExcelModel;
 import com.smoc.cloud.common.utils.Utils;
+import com.smoc.cloud.complaint.model.ComplaintExcelModelListener;
+import com.smoc.cloud.filter.utils.ExcelModelListener;
+import com.smoc.cloud.filter.utils.KeywordsExcelModelListener;
 import com.sun.xml.internal.messaging.saaj.packaging.mime.internet.MimeUtility;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -19,7 +23,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 /**
  * 读取、导出excel、txt
@@ -27,22 +34,29 @@ import java.util.List;
 @Slf4j
 public class FileUtils {
 
-    public static List<ExcelModel> readFile(MultipartFile file,String type) {
+    public static List<ExcelModel> readFile(MultipartFile file, String type) {
+
+        List<ExcelModel> list = new ArrayList<>();
 
         try {
             InputStream in = file.getInputStream();
             String fileName = file.getOriginalFilename();
             String fileType = fileName.substring(fileName.lastIndexOf("."));
             if (".xls".equals(fileType) || ".xlsx".equals(fileType)) {
-                return readExcel(in,type);
+                list =  readExcel(in, type);
             } else if (".txt".equals(fileType)) {
-                return readerTxt(in);
+                list =  readerTxt(in);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return null;
+        //去重
+        if(list.size()>0){
+            list = list.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(o -> o.getColumn1().trim()))), ArrayList::new));
+        }
+
+        return list;
 
     }
 
@@ -86,19 +100,20 @@ public class FileUtils {
      * 异步EXCEL
      * 1:白黑名单 2：关键词
      */
-    public static List<ExcelModel> readExcel(InputStream inputStream,String type) {
+    public static List<ExcelModel> readExcel(InputStream inputStream, String type) {
         try {
             List<ExcelModel> list = new ArrayList<>();
-            if("1".equals(type)){
+            if ("1".equals(type)) {
                 ExcelModelListener excelModelListener = new ExcelModelListener();
                 ExcelReader excelReader = EasyExcel.read(inputStream, ExcelModel.class, excelModelListener).build();
                 ReadSheet readSheet = EasyExcel.readSheet(0).build();
                 excelReader.read(readSheet);
                 excelReader.finish();
                 list = excelModelListener.getExcelModelList();
+
             }
 
-            if("2".equals(type)){
+            if ("2".equals(type)) {
                 KeywordsExcelModelListener keywordsExcelModelListener = new KeywordsExcelModelListener();
                 ExcelReader excelReader = EasyExcel.read(inputStream, ExcelModel.class, keywordsExcelModelListener).build();
                 ReadSheet readSheet = EasyExcel.readSheet(0).build();
@@ -127,11 +142,11 @@ public class FileUtils {
      * @param excelname
      * @param expType
      */
-    public static void downFiles(String excelname, String expType,List<ExcelModel> list, HttpServletRequest request, HttpServletResponse response) {
+    public static void downFiles(String excelname, String expType, List<ExcelModel> list, HttpServletRequest request, HttpServletResponse response) {
         //txt
         if ("1".equals(expType)) {
             String fileName = encodeFilename(excelname + ".txt", request);
-            downTxt(fileName, list,request, response);
+            downTxt(fileName, list, request, response);
         }
         //excel
         if ("2".equals(expType)) {
@@ -147,7 +162,7 @@ public class FileUtils {
         }
     }
 
-    private static void downTxt(String fileName,List<ExcelModel> list, HttpServletRequest request, HttpServletResponse response) {
+    private static void downTxt(String fileName, List<ExcelModel> list, HttpServletRequest request, HttpServletResponse response) {
         StringBuilder data = new StringBuilder();
         for (int i = 0; i < list.size(); i++) {
             ExcelModel info = list.get(i);
@@ -172,7 +187,7 @@ public class FileUtils {
     }
 
     private static ServletOutputStream getOutputStream(String fileName,
-                                                       HttpServletResponse response)  throws Exception{
+                                                       HttpServletResponse response) throws Exception {
         try {
             fileName = URLEncoder.encode(fileName, "UTF-8");
             //设置响应的类型
@@ -224,5 +239,28 @@ public class FileUtils {
         } catch (Exception ex) {
             return filename;
         }
+    }
+
+    public static List<ComplaintExcelModel> readComplaintExcelFile(MultipartFile file) {
+        InputStream inputStream = null;
+        try {
+            inputStream = file.getInputStream();
+        } catch (IOException e) {
+            log.error("导出excel表格失败:", e);
+        }
+        String fileName = file.getOriginalFilename();
+        String fileType = fileName.substring(fileName.lastIndexOf("."));
+        if (".xls".equals(fileType) || ".xlsx".equals(fileType)) {
+            ComplaintExcelModelListener excelModelListener = new ComplaintExcelModelListener();
+            ExcelReader excelReader = EasyExcel.read(inputStream, ComplaintExcelModel.class, excelModelListener).build();
+            ReadSheet readSheet = EasyExcel.readSheet(0).build();
+            excelReader.read(readSheet);
+            excelReader.finish();
+            List<ComplaintExcelModel> list = excelModelListener.getExcelModelList();
+            list = list.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(o -> o.getCarrier().trim()+":"+o.getReportNumber().trim()+":"+o.getReportContent().trim()))), ArrayList::new));
+            return list;
+        }
+
+        return null;
     }
 }
