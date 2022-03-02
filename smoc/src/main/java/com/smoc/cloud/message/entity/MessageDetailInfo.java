@@ -46,6 +46,9 @@ public class MessageDetailInfo {
     @Column(name = "CHANNEL_ID", length = 32)
     private String channelId;
 
+    @Column(name = "NUMBER_CODE", length = 32)
+    private String numberCode;
+
     @Column(name = "REPORT_TIME", length = 32)
     private String reportTime;
 
@@ -162,6 +165,14 @@ public class MessageDetailInfo {
 
     public void setChannelId(String channelId) {
         this.channelId = channelId;
+    }
+
+    public String getNumberCode() {
+        return numberCode;
+    }
+
+    public void setNumberCode(String numberCode) {
+        this.numberCode = numberCode;
     }
 
     public String getSendTime() {

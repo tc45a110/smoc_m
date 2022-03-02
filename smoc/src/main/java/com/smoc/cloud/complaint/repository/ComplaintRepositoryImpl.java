@@ -4,8 +4,6 @@ package com.smoc.cloud.complaint.repository;
 import com.smoc.cloud.common.BasePageRepository;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
-import com.smoc.cloud.common.smoc.filter.ExcelModel;
-import com.smoc.cloud.common.smoc.filter.FilterBlackListValidator;
 import com.smoc.cloud.common.smoc.message.MessageComplaintInfoValidator;
 import com.smoc.cloud.common.smoc.message.model.ComplaintExcelModel;
 import com.smoc.cloud.common.utils.UUID;
@@ -35,6 +33,7 @@ public class ComplaintRepositoryImpl extends BasePageRepository {
         StringBuilder sqlBuffer = new StringBuilder("select ");
         sqlBuffer.append("  t.ID");
         sqlBuffer.append(", t.BUSINESS_ACCOUNT");
+        sqlBuffer.append(", a.ACCOUNT_NAME");
         sqlBuffer.append(", a.BUSINESS_TYPE");
         sqlBuffer.append(", t.REPORT_NUMBER");
         sqlBuffer.append(", t.NUMBER_CODE");
@@ -49,6 +48,13 @@ public class ComplaintRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", t.REPORT_SOURCE");
         sqlBuffer.append(", t.REPORT_DATE");
         sqlBuffer.append(", t.REPORTED_NUMBER");
+        sqlBuffer.append(", t.HANDLE_CARRIER_ID");
+        sqlBuffer.append(", t.SEND_TYPE");
+        sqlBuffer.append(", t.REPORTED_PROVINCE");
+        sqlBuffer.append(", t.REPORTED_CITY");
+        sqlBuffer.append(", t.REPORT_PROVINCE");
+        sqlBuffer.append(", t.REPORT_CITY");
+        sqlBuffer.append(", t.REPORT_CHANN");
         sqlBuffer.append(", t.CREATED_BY");
         sqlBuffer.append(", DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME");
         sqlBuffer.append("  from message_complaint_info t left join account_base_info a on t.BUSINESS_ACCOUNT = a.ACCOUNT_ID");
@@ -77,18 +83,43 @@ public class ComplaintRepositoryImpl extends BasePageRepository {
         }
 
         if (!StringUtils.isEmpty(qo.getReportContent())) {
-            sqlBuffer.append(" and t.REPORT_NUMBER like ? ");
+            sqlBuffer.append(" and t.REPORT_CONTENT like ? ");
             paramsList.add("%"+qo.getReportContent().trim()+"%");
         }
 
+        if (!StringUtils.isEmpty(qo.getReportedNumber())) {
+            sqlBuffer.append(" and t.REPORTED_NUMBER like ? ");
+            paramsList.add("%"+qo.getReportedNumber().trim()+"%");
+        }
+
+        if (!StringUtils.isEmpty(qo.getCarrier())) {
+            sqlBuffer.append(" and t.CARRIER like ? ");
+            paramsList.add("%"+qo.getCarrier().trim()+"%");
+        }
+
         if (!StringUtils.isEmpty(qo.getStartDate())) {
-            sqlBuffer.append(" and DATE_FORMAT(t.CREATED_TIME,'%Y-%m-%d') >= ? ");
+            sqlBuffer.append(" and DATE_FORMAT(t.REPORT_DATE,'%Y-%m-%d') >= ? ");
             paramsList.add(qo.getStartDate().trim());
         }
 
         if (!StringUtils.isEmpty(qo.getEndDate())) {
-            sqlBuffer.append(" and DATE_FORMAT(t.CREATED_TIME,'%Y-%m-%d') <= ? ");
+            sqlBuffer.append(" and DATE_FORMAT(t.REPORT_DATE,'%Y-%m-%d') <= ? ");
             paramsList.add(qo.getEndDate().trim());
+        }
+
+        if(!StringUtils.isEmpty(qo.getComplaintSource())){
+            sqlBuffer.append(" and t.COMPLAINT_SOURCE = ? ");
+            paramsList.add(qo.getComplaintSource().trim());
+        }
+
+        if (!StringUtils.isEmpty(qo.getReportedProvince())) {
+            sqlBuffer.append(" and t.REPORTED_PROVINCE like ? ");
+            paramsList.add("%"+qo.getReportedProvince().trim()+"%");
+        }
+
+        if (!StringUtils.isEmpty(qo.getReportedCity())) {
+            sqlBuffer.append(" and t.REPORTED_CITY like ? ");
+            paramsList.add("%"+qo.getReportedCity().trim()+"%");
         }
 
 
@@ -109,8 +140,8 @@ public class ComplaintRepositoryImpl extends BasePageRepository {
         PreparedStatement statement = null;
         List<ComplaintExcelModel> list= messageComplaintInfoValidator.getComplaintList();
         final String sql = "insert into message_complaint_info(ID,BUSINESS_ACCOUNT,REPORT_NUMBER,CHANNEL_ID,CARRIER_SOURCE,CARRIER,SEND_DATE,SEND_RATE,REPORT_CONTENT,CONTENT_TYPE,IS_12321,REPORT_SOURCE,REPORT_DATE" +
-                ",REPORTED_NUMBER,REPORTED_PROVINCE,REPORTED_CITY,REPORT_PROVINCE,REPORT_CITY,REPORT_UNIT,REPORT_CHANN,HANDLE_CARRIER_ID,SEND_TYPE,HANDLE_STATUS,HANDLE_RESULT,HANDLE_REMARK,CREATED_BY,CREATED_TIME) " +
-                " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,now()) ";
+                ",REPORTED_NUMBER,REPORTED_PROVINCE,REPORTED_CITY,REPORT_PROVINCE,REPORT_CITY,REPORT_UNIT,REPORT_CHANN,HANDLE_CARRIER_ID,SEND_TYPE,HANDLE_STATUS,HANDLE_RESULT,HANDLE_REMARK,CREATED_BY,CREATED_TIME,COMPLAINT_SOURCE,NUMBER_CODE) " +
+                " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,now(),?,?) ";
         log.info(sql);
         log.info("[投诉导入开始]数据：{}- 共{}条", System.currentTimeMillis(),list.size());
         try {
@@ -144,6 +175,8 @@ public class ComplaintRepositoryImpl extends BasePageRepository {
                 statement.setString(24, entry.getHandleResult());
                 statement.setString(25, entry.getHandleRemark());
                 statement.setString(26, messageComplaintInfoValidator.getCreatedBy());
+                statement.setString(27, messageComplaintInfoValidator.getComplaintSource());
+                statement.setString(28, entry.getNumberCode());
 
                 statement.addBatch();
             }

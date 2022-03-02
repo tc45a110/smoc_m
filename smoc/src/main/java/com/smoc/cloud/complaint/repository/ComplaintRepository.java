@@ -28,4 +28,15 @@ public interface ComplaintRepository extends CrudRepository<MessageComplaintInfo
      * @param messageComplaintInfoValidator
      */
     void batchSave(MessageComplaintInfoValidator messageComplaintInfoValidator);
+
+    /**
+     * 查询
+     * @param carrier
+     * @param reportNumber
+     * @param reportContent
+     * @param reportDate
+     * @return
+     */
+    MessageComplaintInfo findByCarrierSourceAndReportNumberAndReportContentAndReportDate(String carrier, String reportNumber, String reportContent, String reportDate);
+
 }

@@ -49,6 +49,9 @@ public class MessageComplaintInfoValidator {
     private String updatedBy;
     private Date updatedTime;
 
+    private String complaintSource;
+    private String accountName;
+
     private String startDate;
     private String endDate;
     private String complaintFiles;

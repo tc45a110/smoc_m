@@ -28,4 +28,11 @@ public interface MessageDetailInfoRepository extends JpaRepository<MessageDetail
      * @return
      */
     List<MessageDetailInfo> findByCarrierAndPhoneNumberAndMessageContent(String carrier, String reportNumber, String reportContent);
+
+    /**
+     * 查询下发频次
+     * @param validator
+     * @return
+     */
+    int statisticMessageNumber(MessageDetailInfoValidator validator);
 }

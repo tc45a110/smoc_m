@@ -43,16 +43,16 @@ public class FileUtils {
             String fileName = file.getOriginalFilename();
             String fileType = fileName.substring(fileName.lastIndexOf("."));
             if (".xls".equals(fileType) || ".xlsx".equals(fileType)) {
-                list =  readExcel(in, type);
+                list = readExcel(in, type);
             } else if (".txt".equals(fileType)) {
-                list =  readerTxt(in);
+                list = readerTxt(in);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         //去重
-        if(list.size()>0){
+        if (list.size() > 0) {
             list = list.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(o -> o.getColumn1().trim()))), ArrayList::new));
         }
 
@@ -246,7 +246,7 @@ public class FileUtils {
         try {
             inputStream = file.getInputStream();
         } catch (IOException e) {
-            log.error("导出excel表格失败:", e);
+            log.error("读取excel表格失败:", e);
         }
         String fileName = file.getOriginalFilename();
         String fileType = fileName.substring(fileName.lastIndexOf("."));
@@ -257,7 +257,7 @@ public class FileUtils {
             excelReader.read(readSheet);
             excelReader.finish();
             List<ComplaintExcelModel> list = excelModelListener.getExcelModelList();
-            list = list.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(o -> o.getCarrier().trim()+":"+o.getReportNumber().trim()+":"+o.getReportContent().trim()))), ArrayList::new));
+            list = list.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(o -> o.getCarrier().trim() + ":" + o.getReportNumber().trim() + ":" + o.getReportContent().trim() + ":" + o.getReportDate().trim()))), ArrayList::new));
             return list;
         }
 

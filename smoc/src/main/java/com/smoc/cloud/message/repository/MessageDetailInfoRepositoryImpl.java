@@ -94,4 +94,37 @@ public class MessageDetailInfoRepositoryImpl extends BasePageRepository {
         return pageList;
 
     }
+
+    public int statisticMessageNumber(MessageDetailInfoValidator qo){
+
+        //查询sql
+        StringBuffer sqlBuffer =  new StringBuffer("select count(t.id) from message_detail_info t where 1=1 ");
+
+        List<Object> paramsList = new ArrayList<Object>();
+
+        //手机号
+        if (!StringUtils.isEmpty(qo.getPhoneNumber())) {
+            sqlBuffer.append(" and t.PHONE_NUMBER =?");
+            paramsList.add(qo.getPhoneNumber().trim());
+        }
+
+        //时间起
+        if (!StringUtils.isEmpty(qo.getStartDate())) {
+            sqlBuffer.append(" and DATE_FORMAT(t.CREATED_TIME,'%Y-%m-%d') >=? ");
+            paramsList.add(qo.getStartDate().trim());
+        }
+        //时间止
+        if (!StringUtils.isEmpty(qo.getEndDate())) {
+            sqlBuffer.append(" and DATE_FORMAT(t.CREATED_TIME,'%Y-%m-%d') <=? ");
+            paramsList.add(qo.getEndDate().trim());
+        }
+
+        //根据参数个数，组织参数值
+        Object[] params = new Object[paramsList.size()];
+        paramsList.toArray(params);
+
+        int number = jdbcTemplate.queryForObject(sqlBuffer.toString(), params,Integer.class);
+
+        return number;
+    }
 }

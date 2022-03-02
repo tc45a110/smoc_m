@@ -1,10 +1,13 @@
 package com.smoc.cloud.common.smoc.message.model;
 
 
+import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+@Data
 @Setter
 @Getter
 public class ComplaintExcelModel {
@@ -63,9 +66,16 @@ public class ComplaintExcelModel {
     @ExcelProperty(value = "处理说明")
     private String handleRemark;
 
+    @ExcelIgnore
     private String is12321;
+    @ExcelIgnore
     private String businessAccount;
+    @ExcelIgnore
     private String channelId;
+    @ExcelIgnore
+    private String numberCode;
+    @ExcelIgnore
     private String sendDate;
+    @ExcelIgnore
     private String sendRate;
 }

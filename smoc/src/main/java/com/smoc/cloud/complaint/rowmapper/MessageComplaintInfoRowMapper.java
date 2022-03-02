@@ -34,6 +34,16 @@ public class MessageComplaintInfoRowMapper implements RowMapper<MessageComplaint
         qo.setCreatedBy(resultSet.getString("CREATED_BY"));
         qo.setCreatedTime(resultSet.getString("CREATED_TIME"));
         qo.setCarrierSource(resultSet.getString("CARRIER_SOURCE"));
+        qo.setHandleCarrierId(resultSet.getString("HANDLE_CARRIER_ID"));
+        qo.setSendType(resultSet.getString("SEND_TYPE"));
+        qo.setReportedProvince(resultSet.getString("REPORTED_PROVINCE"));
+        qo.setReportedCity(resultSet.getString("REPORTED_CITY"));
+        qo.setReportProvince(resultSet.getString("REPORT_PROVINCE"));
+        qo.setReportCity(resultSet.getString("REPORT_CITY"));
+        qo.setReportChann(resultSet.getString("REPORT_CHANN"));
+        qo.setAccountName(resultSet.getString("ACCOUNT_NAME"));
+
+
         return qo;
     }
 }

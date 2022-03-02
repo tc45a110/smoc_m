@@ -40,6 +40,7 @@ public class MessageComplaintInfo {
     private Date createdTime;
     private String updatedBy;
     private Date updatedTime;
+    private String complaintSource;
 
     @Id
     @Column(name = "ID")
@@ -319,6 +320,16 @@ public class MessageComplaintInfo {
 
     public void setHandleRemark(String handleRemark) {
         this.handleRemark = handleRemark;
+    }
+
+    @Basic
+    @Column(name = "COMPLAINT_SOURCE")
+    public String getComplaintSource() {
+        return complaintSource;
+    }
+
+    public void setComplaintSource(String complaintSource) {
+        this.complaintSource = complaintSource;
     }
 
     @Basic

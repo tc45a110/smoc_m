@@ -24,13 +24,13 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title"> 添加、修改投诉信息</h4>
+                    <h4 class="page-title"> 批量导入原始投诉</h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
                             投诉管理
                         </li>
                         <li>
-                            添加、修改投诉信息
+                            批量导入原始投诉
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -50,11 +50,11 @@
                             <div class="col-md-6">
                                 <div class="p-20">
                                     <div class="form-group m-b-20">
-                                        <label>运营商<span class="text-danger">*</span>&nbsp;
+                                        <label>运营商来源<span class="text-danger">*</span>&nbsp;
                                             <span class="text-danger" th:if="${#fields.hasErrors('carrier')}"
                                                   th:errors="*{carrier}"></span></label>
                                         <mpm:tag id="carrier" identity="carrier" name="carrier"  show-type="select" key="code" mask-value="INTERNATIONAL" class="form-control"
-                                                 th:value="${messageComplaintInfoValidator.carrier}" required="true" title="运营商"/>
+                                                 th:value="${messageComplaintInfoValidator.carrier}" required="true" title="投诉来源的运营商"/>
                                     </div>
                                     <div class="form-group m-b-20">
                                         <label>下载模版</label>
@@ -63,6 +63,8 @@
 
                                     <div class="form-group m-b-20">
                                         <label>上传附件<span class="text-danger">*</span>&nbsp;
+                                            <span th:if="${messageComplaintInfoValidator.complaintSource eq 'day'}">（备注：支持直接导入"每日端口投诉原始表格"）</span>
+                                            <span th:if="${messageComplaintInfoValidator.complaintSource eq '12321'}">（备注：支持直接导入"每日端口投诉原始表格"和"12321原始表格"）</span>
                                             <span class="text-danger" th:if="${#fields.hasErrors('complaintFiles')}"
                                                   th:errors="*{complaintFiles}"></span></label>
                                         <input type="file" name="file" id="input_file"
@@ -77,12 +79,14 @@
                         </div> <!-- end row -->
 
                         <div class="text-center">
-
+                            <input type="hidden" th:field="*{complaintSource}">
                             <button sec:authorize-url="/complaint/upComplaint" type="submit"
                                     class="btn btn-teal waves-effect waves-light">提交
                             </button>
                             <a sec:authorize-url="/complaint/list" th:href="@{/complaint/list}"
-                               class="btn btn-default waves-effect waves-light" style="margin-left:20px">返回</a>
+                               th:if="${messageComplaintInfoValidator.complaintSource eq 'day'}" class="btn btn-default waves-effect waves-light" style="margin-left:20px">返回</a>
+                            <a sec:authorize-url="/complaint/list" th:href="@{/complaint/complaintSource}"
+                               th:if="${messageComplaintInfoValidator.complaintSource eq '12321'}" class="btn btn-default waves-effect waves-light" style="margin-left:20px">返回</a>
                         </div>
                     </form>
                     <!-- end form -->

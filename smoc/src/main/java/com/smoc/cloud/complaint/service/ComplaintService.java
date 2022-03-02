@@ -7,7 +7,9 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.message.MessageComplaintInfoValidator;
+import com.smoc.cloud.common.smoc.message.MessageDetailInfoValidator;
 import com.smoc.cloud.common.smoc.message.model.ComplaintExcelModel;
+import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.complaint.entity.MessageComplaintInfo;
 import com.smoc.cloud.complaint.repository.ComplaintRepository;
 import com.smoc.cloud.customer.entity.EnterpriseChainInfo;
@@ -24,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -74,18 +77,23 @@ public class ComplaintService {
     public ResponseData<MessageComplaintInfo> save(MessageComplaintInfoValidator messageComplaintInfoValidator, String op) {
 
         Optional<MessageComplaintInfo> data = complaintRepository.findById(messageComplaintInfoValidator.getId());
+        if(data.isPresent()){
+            MessageComplaintInfo entity = data.get();
+            entity.setBusinessAccount(messageComplaintInfoValidator.getBusinessAccount());
+            entity.setIs12321(messageComplaintInfoValidator.getIs12321());
+            entity.setNumberCode(messageComplaintInfoValidator.getNumberCode());
+            entity.setSendDate(messageComplaintInfoValidator.getSendDate());
+            entity.setSendRate(messageComplaintInfoValidator.getSendRate());
 
-        MessageComplaintInfo entity = new MessageComplaintInfo();
-        BeanUtils.copyProperties(messageComplaintInfoValidator, entity);
+            //op 不为 edit 或 add
+            if (!("edit".equals(op) || "add".equals(op))) {
+                return ResponseDataUtil.buildError();
+            }
 
-        //op 不为 edit 或 add
-        if (!("edit".equals(op) || "add".equals(op))) {
-            return ResponseDataUtil.buildError();
+            //记录日志
+            log.info("[投诉管理][{}]数据:{}", op, JSON.toJSONString(entity));
+            complaintRepository.saveAndFlush(entity);
         }
-
-        //记录日志
-        log.info("[投诉管理][{}]数据:{}", op, JSON.toJSONString(entity));
-        complaintRepository.saveAndFlush(entity);
 
         return ResponseDataUtil.buildSuccess();
     }
@@ -118,15 +126,37 @@ public class ComplaintService {
 
         List<ComplaintExcelModel> list = messageComplaintInfoValidator.getComplaintList();
 
-        //根据投诉手机号、投诉内容、投诉运营商查询业务账号、码号、下发时间、下发频次
-        for(ComplaintExcelModel info:list){
-            List<MessageDetailInfo> messageList =  messageDetailInfoRepository.findByCarrierAndPhoneNumberAndMessageContent(messageComplaintInfoValidator.getCarrier(),info.getReportNumber(),info.getReportContent());
-            if(!StringUtils.isEmpty(messageList) && messageList.size()>0){
-                MessageDetailInfo message =  messageList.get(0);
-                info.setBusinessAccount(message.getBusinessAccount());
-                info.setSendDate(message.getSendTime());
-                info.setChannelId(message.getChannelId());
-                //info.setSendRate();
+        /**
+         * 每日投诉需要查业务账号
+         * 根据投诉手机号、投诉内容、投诉运营商查询业务账号、码号、下发时间、下发频次
+         */
+        if("day".equals(messageComplaintInfoValidator.getComplaintSource())){
+            for(ComplaintExcelModel info:list){
+                //查询日志表
+                List<MessageDetailInfo> messageList =  messageDetailInfoRepository.findByCarrierAndPhoneNumberAndMessageContent(messageComplaintInfoValidator.getCarrier(),info.getReportNumber(),info.getReportContent());
+                if(!StringUtils.isEmpty(messageList) && messageList.size()>0){
+                    MessageDetailInfo message =  messageList.get(0);
+                    info.setBusinessAccount(message.getBusinessAccount());
+                    info.setSendDate(message.getSendTime());
+                    info.setChannelId(message.getChannelId());
+                    info.setNumberCode(message.getNumberCode());
+
+                    //查询30天内下发频次
+                    MessageDetailInfoValidator validator = new MessageDetailInfoValidator();
+                    validator.setPhoneNumber(info.getReportNumber());
+                    Date startDate = DateTimeUtils.dateAddDays(new Date(),-30);
+                    validator.setStartDate(DateTimeUtils.getDateFormat(startDate));
+                    validator.setEndDate(DateTimeUtils.getDateFormat(new Date()));
+                    int number = messageDetailInfoRepository.statisticMessageNumber(validator);
+                    info.setSendRate(""+number);
+                }
+                //查询
+                MessageComplaintInfo messageComplaintInfo = complaintRepository.findByCarrierSourceAndReportNumberAndReportContentAndReportDate(messageComplaintInfoValidator.getCarrier(),info.getReportNumber(),info.getReportContent(),info.getReportDate());
+                if(!StringUtils.isEmpty(messageComplaintInfo)){
+                    //记录日志
+                    log.info("[投诉管理][delete]数据:{}",JSON.toJSONString(messageComplaintInfo));
+                    complaintRepository.deleteById(messageComplaintInfo.getId());
+                }
             }
         }
 

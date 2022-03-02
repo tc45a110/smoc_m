@@ -1,16 +1,20 @@
 package com.smoc.cloud.complaint.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.configuate.validator.CodeNumberInfoValidator;
+import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.common.smoc.message.MessageComplaintInfoValidator;
 import com.smoc.cloud.common.smoc.message.model.ComplaintExcelModel;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.complaint.service.ComplaintService;
+import com.smoc.cloud.customer.service.BusinessAccountService;
 import com.smoc.cloud.utils.FileUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +44,9 @@ public class ComplaintController {
     @Autowired
     private ComplaintService complaintService;
 
+    @Autowired
+    private BusinessAccountService businessAccountService;
+
     /**
      * 投诉列表查询
      * @return
@@ -53,6 +60,7 @@ public class ComplaintController {
         params.setPageSize(10);
         params.setCurrentPage(1);
         MessageComplaintInfoValidator messageComplaintInfoValidator = new MessageComplaintInfoValidator();
+        messageComplaintInfoValidator.setComplaintSource("day");
         Date startDate = DateTimeUtils.getFirstMonth(12);
         messageComplaintInfoValidator.setStartDate(DateTimeUtils.getDateFormat(startDate));
         messageComplaintInfoValidator.setEndDate(DateTimeUtils.getDateFormat(new Date()));
@@ -81,6 +89,7 @@ public class ComplaintController {
         ModelAndView view = new ModelAndView("complaint/complaint_list");
 
         //分页查询
+        messageComplaintInfoValidator.setComplaintSource("day");
         pageParams.setParams(messageComplaintInfoValidator);
         //日期格式
         if (!StringUtils.isEmpty(messageComplaintInfoValidator.getStartDate())) {
@@ -102,21 +111,21 @@ public class ComplaintController {
         return view;
     }
 
-    @RequestMapping(value = "/add", method = RequestMethod.GET)
-    public ModelAndView add() {
+    @RequestMapping(value = "/add/{complaintSource}", method = RequestMethod.GET)
+    public ModelAndView add(@PathVariable String complaintSource) {
 
         ModelAndView view = new ModelAndView("complaint/complaint_add");
 
         MessageComplaintInfoValidator messageComplaintInfoValidator = new MessageComplaintInfoValidator();
+        messageComplaintInfoValidator.setComplaintSource(complaintSource);
         view.addObject("messageComplaintInfoValidator", messageComplaintInfoValidator);
 
         return view;
 
     }
 
-
     /**
-     * 投诉溯源检索分页
+     * 详细
      * @return
      */
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
@@ -137,10 +146,154 @@ public class ComplaintController {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
         }
 
+        MessageComplaintInfoValidator messageComplaintInfoValidator = data.getData();
+
+        //查询账号
+        ResponseData<AccountBasicInfoValidator> info = businessAccountService.findById(data.getData().getBusinessAccount());
+        if (ResponseCode.SUCCESS.getCode().equals(info.getCode())) {
+            messageComplaintInfoValidator.setAccountName(info.getData().getAccountName());
+            messageComplaintInfoValidator.setBusinessType(info.getData().getBusinessType());
+        }
+
         //op操作标记，add表示添加，edit表示修改
         view.addObject("op", "edit");
         view.addObject("messageComplaintInfoValidator", data.getData());
 
+        return view;
+    }
+
+    /**
+     * 保存
+     *
+     * @return
+     */
+    @RequestMapping(value = "/save/{op}", method = RequestMethod.POST)
+    public ModelAndView save(@ModelAttribute @Validated MessageComplaintInfoValidator messageComplaintInfoValidator, BindingResult result, @PathVariable String op, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("complaint/complaint_edit");
+
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        if(StringUtils.isEmpty(messageComplaintInfoValidator.getBusinessAccount())){
+            // 提交前台错误提示
+            FieldError err = new FieldError("业务账号", "businessAccount", "业务账号不能为空");
+            result.addError(err);
+        }
+        //完成参数规则验证
+        if (result.hasErrors()) {
+            view.addObject("messageComplaintInfoValidator", messageComplaintInfoValidator);
+            view.addObject("op", op);
+            return view;
+        }
+
+        //初始化其他变量
+        if (!StringUtils.isEmpty(op) && "add".equals(op)) {
+            messageComplaintInfoValidator.setCreatedTime(DateTimeUtils.getDateTimeFormat(new Date()));
+            messageComplaintInfoValidator.setCreatedBy(user.getRealName());
+        } else if (!StringUtils.isEmpty(op) && "edit".equals(op)) {
+            messageComplaintInfoValidator.setUpdatedTime(new Date());
+            messageComplaintInfoValidator.setUpdatedBy(user.getRealName());
+        } else {
+            view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":" + ResponseCode.PARAM_LINK_ERROR.getMessage());
+            return view;
+        }
+
+        //保存数据
+        ResponseData data = complaintService.save(messageComplaintInfoValidator, op);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        //记录日志
+        log.info("[投诉管理][{}][{}]数据:{}", op, user.getUserName(), JSON.toJSONString(messageComplaintInfoValidator));
+
+        if("day".equals(messageComplaintInfoValidator.getComplaintSource())){
+            view.setView(new RedirectView("/complaint/list" , true, false));
+        }else if("12321".equals(messageComplaintInfoValidator.getComplaintSource())){
+            view.setView(new RedirectView("/complaint/complaintSource" , true, false));
+        }
+        return view;
+
+    }
+
+
+    /**
+     * 详细
+     * @return
+     */
+    @RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
+    public ModelAndView detail(@PathVariable String id) {
+        ModelAndView view = new ModelAndView("complaint/complaint_detail");
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
+
+        //查询数据
+        ResponseData<MessageComplaintInfoValidator> data = complaintService.findById(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+        }
+
+        MessageComplaintInfoValidator messageComplaintInfoValidator = data.getData();
+
+        //查询账号
+        ResponseData<AccountBasicInfoValidator> info = businessAccountService.findById(data.getData().getBusinessAccount());
+        if (ResponseCode.SUCCESS.getCode().equals(info.getCode())) {
+            messageComplaintInfoValidator.setAccountName(info.getData().getAccountName());
+            messageComplaintInfoValidator.setBusinessType(info.getData().getBusinessType());
+        }
+
+        view.addObject("messageComplaintInfoValidator", data.getData());
+
+        return view;
+    }
+
+    /**
+     * 删除
+     * @param id
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/deleteById/{id}", method = RequestMethod.GET)
+    public ModelAndView deleteById(@PathVariable String id, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("complaint_detail");
+
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
+
+        //查询信息
+        ResponseData<MessageComplaintInfoValidator> infoData = complaintService.findById(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(infoData.getCode())) {
+            view.addObject("error", infoData.getCode() + ":" + infoData.getMessage());
+        }
+
+        //删除操作
+        ResponseData data = complaintService.deleteById(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        //记录日志
+        log.info("[投诉管理][{}]数据:{}", "delete", user.getUserName(), JSON.toJSONString(infoData.getData()));
+
+        if("day".equals(infoData.getData().getComplaintSource())){
+            view.setView(new RedirectView("/complaint/list" , true, false));
+        }else if("12321".equals(infoData.getData().getComplaintSource())){
+            view.setView(new RedirectView("/complaint/complaintSource" , true, false));
+        }
         return view;
     }
 
@@ -186,12 +339,78 @@ public class ComplaintController {
             log.info("[投诉管理][导入][{}]数据::{}", user.getUserName(), list.size());
         }
 
-        view.setView(new RedirectView("/complaint/list" , true, false));
+        if("day".equals(messageComplaintInfoValidator.getComplaintSource())){
+            view.setView(new RedirectView("/complaint/list" , true, false));
+        }else if("12321".equals(messageComplaintInfoValidator.getComplaintSource())){
+            view.setView(new RedirectView("/complaint/complaintSource" , true, false));
+        }
 
         return view;
     }
 
+    /**
+     * 投诉列表查询
+     * @return
+     */
+    @RequestMapping(value = "/complaintSource", method = RequestMethod.GET)
+    public ModelAndView complaintSource() {
+        ModelAndView view = new ModelAndView("complaint/complaint_12321");
 
+        //初始化数据
+        PageParams<MessageComplaintInfoValidator> params = new PageParams<MessageComplaintInfoValidator>();
+        params.setPageSize(10);
+        params.setCurrentPage(1);
+        MessageComplaintInfoValidator messageComplaintInfoValidator = new MessageComplaintInfoValidator();
+        messageComplaintInfoValidator.setComplaintSource("12321");
+        Date startDate = DateTimeUtils.getFirstMonth(12);
+        messageComplaintInfoValidator.setStartDate(DateTimeUtils.getDateFormat(startDate));
+        messageComplaintInfoValidator.setEndDate(DateTimeUtils.getDateFormat(new Date()));
+        params.setParams(messageComplaintInfoValidator);
+
+        //查询
+        ResponseData<PageList<MessageComplaintInfoValidator>> data = complaintService.page(params);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("messageComplaintInfoValidator", messageComplaintInfoValidator);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
+
+        return view;
+    }
+
+    /**
+     * 投诉列表查询分页
+     * @return
+     */
+    @RequestMapping(value = "/complaintSourcePage", method = RequestMethod.POST)
+    public ModelAndView complaintSourcePage(@ModelAttribute MessageComplaintInfoValidator messageComplaintInfoValidator, PageParams pageParams) {
+        ModelAndView view = new ModelAndView("complaint/complaint_12321");
+
+        //分页查询
+        messageComplaintInfoValidator.setComplaintSource("12321");
+        pageParams.setParams(messageComplaintInfoValidator);
+        //日期格式
+        if (!StringUtils.isEmpty(messageComplaintInfoValidator.getStartDate())) {
+            String[] date = messageComplaintInfoValidator.getStartDate().split(" - ");
+            messageComplaintInfoValidator.setStartDate(StringUtils.trimWhitespace(date[0]));
+            messageComplaintInfoValidator.setEndDate(StringUtils.trimWhitespace(date[1]));
+        }
+
+        ResponseData<PageList<MessageComplaintInfoValidator>> data = complaintService.page(pageParams);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("messageComplaintInfoValidator", messageComplaintInfoValidator);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
+
+        return view;
+    }
 
     /**
      * 下载模板
