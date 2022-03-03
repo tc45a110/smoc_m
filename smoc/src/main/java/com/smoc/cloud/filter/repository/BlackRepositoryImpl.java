@@ -6,6 +6,8 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.smoc.filter.ExcelModel;
 import com.smoc.cloud.common.smoc.filter.FilterBlackListValidator;
 import com.smoc.cloud.common.smoc.filter.FilterWhiteListValidator;
+import com.smoc.cloud.common.smoc.message.MessageComplaintInfoValidator;
+import com.smoc.cloud.common.smoc.message.model.ComplaintExcelModel;
 import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.filter.rowmapper.BlackRowMapper;
 import com.smoc.cloud.filter.rowmapper.ExcelModelRowMapper;
@@ -133,5 +135,61 @@ public class BlackRepositoryImpl extends BasePageRepository {
 
         PageList<ExcelModel> pageList = this.queryByPageForMySQL(sqlBuffer.toString(), params, pageParams.getCurrentPage(), pageParams.getPageSize(), new ExcelModelRowMapper());
         return pageList.getList();
+    }
+
+    public void complaintBathSave(MessageComplaintInfoValidator messageComplaintInfoValidator, String groupComplaintId) {
+
+        //每batchSize 分批执行一次
+        int batchSize = 60000;
+        Connection connection = null;
+        PreparedStatement statement = null;
+
+        List<ComplaintExcelModel> list= messageComplaintInfoValidator.getComplaintList();
+
+        final String sql = "insert into filter_black_list(ID,ENTERPRISE_ID,GROUP_ID,NAME,MOBILE,IS_SYNC,STATUS,CREATED_BY,CREATED_TIME) values(?,?,?,?,?,?,?,?,now()) ";
+        log.info(sql);
+        log.info("[系统投诉黑名单导入开始]数据：{}- 共{}条", System.currentTimeMillis(),list.size());
+        try {
+            connection = jdbcTemplate.getDataSource().getConnection();
+            connection.setAutoCommit(false);
+            statement = connection.prepareStatement(sql);
+            int i=0;
+            for (ComplaintExcelModel entry : list) {
+                statement.setString(1, UUID.uuid32());
+                statement.setString(2, "SMOC");
+                statement.setString(3, groupComplaintId);
+                statement.setString(4, "");
+                statement.setString(5, entry.getReportNumber());
+                statement.setString(6, "0");
+                statement.setString(7, "1");
+                statement.setString(8, messageComplaintInfoValidator.getCreatedBy());
+                statement.addBatch();
+                i++;
+                if (i % batchSize == 0) {
+                    statement.executeBatch();
+                }
+            }
+            statement.executeBatch();
+            connection.commit();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            try {
+                if (null != statement) {
+                    statement.close();
+                }
+                if (null != connection) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        log.info("[系统投诉黑名单导入结束]数据：{}", System.currentTimeMillis());
+
     }
 }

@@ -2,6 +2,7 @@ package com.smoc.cloud.common.smoc.utils;
 
 import com.smoc.cloud.common.auth.qo.Dict;
 import com.smoc.cloud.common.auth.qo.DictType;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -57,4 +58,57 @@ public class ChannelUtils {
 
         return areaName.toString();
     }
+
+    /**
+     * 截取码号
+     * 码号的匹配规则：
+     * 1068、1069开头的被举报号码，则码号匹配前8位；
+     * 1065开头的被举报号码，则码号匹配11位；
+     * 对于特殊的106550240018/106550240786开头的，则匹配12位；
+     * @param numberCode
+     * @return
+     */
+    public static String getNumbeCode(String numberCode) {
+
+        if(StringUtils.isEmpty(numberCode)){
+            return "";
+        }
+
+        String number = numberCode.substring(0,4);
+
+        //第一种情况
+        if("1068".equals(number) || "1069".equals(number) ){
+            if(numberCode.length()>8){
+                return numberCode.substring(0,8);
+            }
+            return numberCode;
+        }
+
+        //第二种
+        if("1065".equals(number)){
+
+            if(numberCode.contains("106550240018") || numberCode.contains("106550240786")){
+
+                if(numberCode.length()>12){
+                    return numberCode.substring(0,12);
+                }
+                return numberCode;
+            }
+
+            if(numberCode.length()>11){
+                return numberCode.substring(0,11);
+            }
+            return numberCode;
+
+        }
+
+        return numberCode;
+    }
+
+
+    public static void  main(String[] args) {
+        //测试
+        System.out.println(ChannelUtils.getNumbeCode("106550240786822"));
+    }
+
 }

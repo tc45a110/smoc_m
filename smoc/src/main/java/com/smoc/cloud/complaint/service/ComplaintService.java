@@ -9,14 +9,17 @@ import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.message.MessageComplaintInfoValidator;
 import com.smoc.cloud.common.smoc.message.MessageDetailInfoValidator;
 import com.smoc.cloud.common.smoc.message.model.ComplaintExcelModel;
+import com.smoc.cloud.common.smoc.utils.ChannelUtils;
+import com.smoc.cloud.common.smoc.utils.SysFilterUtil;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.complaint.entity.MessageComplaintInfo;
 import com.smoc.cloud.complaint.repository.ComplaintRepository;
-import com.smoc.cloud.customer.entity.EnterpriseChainInfo;
+import com.smoc.cloud.filter.entity.FilterGroupList;
+import com.smoc.cloud.filter.repository.BlackRepository;
+import com.smoc.cloud.filter.repository.GroupRepository;
 import com.smoc.cloud.message.entity.MessageDetailInfo;
 import com.smoc.cloud.message.repository.MessageDetailInfoRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -43,6 +46,12 @@ public class ComplaintService {
 
     @Resource
     private MessageDetailInfoRepository messageDetailInfoRepository;
+
+    @Resource
+    private BlackRepository blackRepository;
+
+    @Resource
+    private GroupRepository groupRepository;
 
     /**
      * 查询列表
@@ -84,6 +93,7 @@ public class ComplaintService {
             entity.setNumberCode(messageComplaintInfoValidator.getNumberCode());
             entity.setSendDate(messageComplaintInfoValidator.getSendDate());
             entity.setSendRate(messageComplaintInfoValidator.getSendRate());
+            entity.setBusinessType(messageComplaintInfoValidator.getBusinessType());
 
             //op 不为 edit 或 add
             if (!("edit".equals(op) || "add".equals(op))) {
@@ -141,6 +151,7 @@ public class ComplaintService {
                     info.setChannelId(message.getChannelId());
                     info.setNumberCode(message.getNumberCode());
 
+
                     //查询30天内下发频次
                     MessageDetailInfoValidator validator = new MessageDetailInfoValidator();
                     validator.setPhoneNumber(info.getReportNumber());
@@ -162,7 +173,74 @@ public class ComplaintService {
 
         complaintRepository.batchSave(messageComplaintInfoValidator);
 
+        /**
+         * 加入黑名单
+         */
+        saveBlack(messageComplaintInfoValidator);
+
         return ResponseDataUtil.buildSuccess();
+
+    }
+
+    /**
+     * 导入黑名单
+     * @param messageComplaintInfoValidator
+     */
+    private void saveBlack(MessageComplaintInfoValidator messageComplaintInfoValidator) {
+
+        //每日投诉
+        if("day".equals(messageComplaintInfoValidator.getComplaintSource())){
+            //查询是否有每日投诉群组
+            Optional<FilterGroupList> optional = groupRepository.findById(SysFilterUtil.GROUP_COMPLAINT_ID);
+            if(!optional.isPresent()){
+                FilterGroupList filterGroupList = new FilterGroupList();
+                filterGroupList.setId(SysFilterUtil.GROUP_COMPLAINT_ID);
+                filterGroupList.setEnterpriseId("smoc_black");
+                filterGroupList.setGroupId(SysFilterUtil.GROUP_COMPLAINT_ID);
+                filterGroupList.setGroupName(SysFilterUtil.GROUP_COMPLAINT_NAME);
+                filterGroupList.setParentId("root");
+                filterGroupList.setIsLeaf("1");
+                filterGroupList.setStatus("1");
+                filterGroupList.setSort(0);
+                filterGroupList.setCreatedTime(new Date());
+                filterGroupList.setCreatedBy(messageComplaintInfoValidator.getCreatedBy());
+                groupRepository.saveAndFlush(filterGroupList);
+
+                //记录日志
+                log.info("[群组管理][每日投诉群组][{}]数据:{}","add",JSON.toJSONString(filterGroupList));
+            }
+
+            //导入黑名单
+            blackRepository.complaintBathSave(messageComplaintInfoValidator,SysFilterUtil.GROUP_COMPLAINT_ID);
+
+        }
+
+        //12321投诉
+        if("12321".equals(messageComplaintInfoValidator.getComplaintSource())){
+            //查询是否有12321投诉群组
+            Optional<FilterGroupList> optional = groupRepository.findById(SysFilterUtil.GROUP_12321_ID);
+            if(!optional.isPresent()){
+                FilterGroupList filterGroupList = new FilterGroupList();
+                filterGroupList.setId(SysFilterUtil.GROUP_12321_ID);
+                filterGroupList.setEnterpriseId("smoc_black");
+                filterGroupList.setGroupId(SysFilterUtil.GROUP_12321_ID);
+                filterGroupList.setGroupName(SysFilterUtil.GROUP_12321_NAME);
+                filterGroupList.setParentId("root");
+                filterGroupList.setIsLeaf("1");
+                filterGroupList.setStatus("1");
+                filterGroupList.setSort(0);
+                filterGroupList.setCreatedTime(new Date());
+                filterGroupList.setCreatedBy(messageComplaintInfoValidator.getCreatedBy());
+                groupRepository.saveAndFlush(filterGroupList);
+
+                //记录日志
+                log.info("[群组管理][12321投诉群组][{}]数据:{}","add",JSON.toJSONString(filterGroupList));
+            }
+
+            //导入黑名单
+            blackRepository.complaintBathSave(messageComplaintInfoValidator,SysFilterUtil.GROUP_12321_ID);
+
+        }
 
     }
 }

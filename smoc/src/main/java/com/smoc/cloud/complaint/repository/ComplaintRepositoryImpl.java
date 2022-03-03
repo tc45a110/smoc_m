@@ -6,6 +6,7 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.smoc.message.MessageComplaintInfoValidator;
 import com.smoc.cloud.common.smoc.message.model.ComplaintExcelModel;
+import com.smoc.cloud.common.smoc.utils.ChannelUtils;
 import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.complaint.rowmapper.MessageComplaintInfoRowMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +35,7 @@ public class ComplaintRepositoryImpl extends BasePageRepository {
         sqlBuffer.append("  t.ID");
         sqlBuffer.append(", t.BUSINESS_ACCOUNT");
         sqlBuffer.append(", a.ACCOUNT_NAME");
-        sqlBuffer.append(", a.BUSINESS_TYPE");
+        sqlBuffer.append(", IFNULL(t.BUSINESS_TYPE,a.BUSINESS_TYPE)BUSINESS_TYPE");
         sqlBuffer.append(", t.REPORT_NUMBER");
         sqlBuffer.append(", t.NUMBER_CODE");
         sqlBuffer.append(", t.CHANNEL_ID");
@@ -176,7 +177,12 @@ public class ComplaintRepositoryImpl extends BasePageRepository {
                 statement.setString(25, entry.getHandleRemark());
                 statement.setString(26, messageComplaintInfoValidator.getCreatedBy());
                 statement.setString(27, messageComplaintInfoValidator.getComplaintSource());
-                statement.setString(28, entry.getNumberCode());
+                if(StringUtils.isEmpty(entry.getNumberCode())){
+                    statement.setString(28, ChannelUtils.getNumbeCode(entry.getReportedNumber()));
+                }else{
+                    statement.setString(28, entry.getNumberCode());
+                }
+
 
                 statement.addBatch();
             }

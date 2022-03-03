@@ -117,22 +117,22 @@
                                 <thead>
                                 <tbody>
                                 <tr th:each="info:${list}">
-                                    <td><mpm:tag identity="carrier" show-type="label" key="code" th:value="${info.carrierSource}"/><br>
-                                        <span class="btn btn-teal btn-xs waves-effect waves-light;" th:if="${#strings.containsIgnoreCase(info.carrier,'移动')}">[[${info.carrier}]]</span>
-                                        <span class="btn btn-info btn-xs waves-effect waves-light;" th:if="${#strings.containsIgnoreCase(info.carrier,'联通')}">[[${info.carrier}]]</span>
-                                        <span class="btn btn-primary btn-xs waves-effect waves-light;" th:if="${#strings.containsIgnoreCase(info.carrier,'电信')}">[[${info.carrier}]]</span>
+                                    <td style="line-height: 26px"><mpm:tag identity="carrier" show-type="label" key="code" th:value="${info.carrierSource}"/><br>
+                                        <span class="btn btn-teal btn-rounded btn-sm waves-effect waves-light;" th:if="${#strings.containsIgnoreCase(info.carrier,'移动')}">[[${info.carrier}]]</span>
+                                        <span class="btn btn-info btn-rounded btn-sm waves-effect waves-light;" th:if="${#strings.containsIgnoreCase(info.carrier,'联通')}">[[${info.carrier}]]</span>
+                                        <span class="btn btn-primary btn-rounded btn-sm waves-effect waves-light;" th:if="${#strings.containsIgnoreCase(info.carrier,'电信')}">[[${info.carrier}]]</span>
                                     </td>
-                                    <td>[[${info.is12321 eq '0'?'否':'是'}]]<br>[[${info.reportSource}]]</td>
-                                    <td>[[${info.handleCarrierId}]]<br>[[${info.sendType}]]</td>
-                                    <td>[[${info.reportedNumber}]]<br>[[${info.reportDate}]]</td>
-                                    <td>[[${info.reportedProvince}]]<br>[[${info.reportedCity}]]</td>
-                                    <td>[[${info.contentType}]]<br>
+                                    <td style="line-height: 26px">[[${info.is12321 eq '0'?'否':'是'}]]<br>[[${info.reportSource}]]</td>
+                                    <td style="line-height: 26px">[[${info.handleCarrierId}]]<br>[[${info.sendType}]]</td>
+                                    <td style="line-height: 26px">[[${info.reportedNumber}]]<br>[[${info.reportDate}]]</td>
+                                    <td style="line-height: 26px">[[${info.reportedProvince}]]<br>[[${info.reportedCity}]]</td>
+                                    <td style="line-height: 26px">[[${info.contentType}]]<br>
                                         <span class="text-overflow"
                                               data-toggle="tooltip" data-placement="right"
                                               th:data-original-title="${info.reportContent}">[[${info.reportContent}]]</span>
                                     </td>
-                                    <td>[[${info.reportNumber}]]<br>[[${info.reportProvince}]][[${info.reportCity}]]</td>
-                                    <td>[[${info.createdBy}]]<br>[[${info.createdTime}]]</td>
+                                    <td style="line-height: 26px">[[${info.reportNumber}]]<br>[[${info.reportProvince}]][[${info.reportCity}]]</td>
+                                    <td style="line-height: 26px">[[${info.createdBy}]]<br>[[${info.createdTime}]]</td>
 
                                 </tr>
 

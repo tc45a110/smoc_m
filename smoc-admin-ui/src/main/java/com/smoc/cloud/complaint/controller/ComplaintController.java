@@ -149,10 +149,14 @@ public class ComplaintController {
         MessageComplaintInfoValidator messageComplaintInfoValidator = data.getData();
 
         //查询账号
-        ResponseData<AccountBasicInfoValidator> info = businessAccountService.findById(data.getData().getBusinessAccount());
-        if (ResponseCode.SUCCESS.getCode().equals(info.getCode())) {
-            messageComplaintInfoValidator.setAccountName(info.getData().getAccountName());
-            messageComplaintInfoValidator.setBusinessType(info.getData().getBusinessType());
+        if(!StringUtils.isEmpty(data.getData().getBusinessAccount())){
+            ResponseData<AccountBasicInfoValidator> info = businessAccountService.findById(data.getData().getBusinessAccount());
+            if (ResponseCode.SUCCESS.getCode().equals(info.getCode())) {
+                messageComplaintInfoValidator.setAccountName(info.getData().getAccountName());
+                if(StringUtils.isEmpty(messageComplaintInfoValidator.getBusinessType())){
+                    messageComplaintInfoValidator.setBusinessType(info.getData().getBusinessType());
+                }
+            }
         }
 
         //op操作标记，add表示添加，edit表示修改
@@ -242,10 +246,14 @@ public class ComplaintController {
         MessageComplaintInfoValidator messageComplaintInfoValidator = data.getData();
 
         //查询账号
-        ResponseData<AccountBasicInfoValidator> info = businessAccountService.findById(data.getData().getBusinessAccount());
-        if (ResponseCode.SUCCESS.getCode().equals(info.getCode())) {
-            messageComplaintInfoValidator.setAccountName(info.getData().getAccountName());
-            messageComplaintInfoValidator.setBusinessType(info.getData().getBusinessType());
+        if(!StringUtils.isEmpty(data.getData().getBusinessAccount())){
+            ResponseData<AccountBasicInfoValidator> info = businessAccountService.findById(data.getData().getBusinessAccount());
+            if (ResponseCode.SUCCESS.getCode().equals(info.getCode())) {
+                messageComplaintInfoValidator.setAccountName(info.getData().getAccountName());
+                if(StringUtils.isEmpty(messageComplaintInfoValidator.getBusinessType())){
+                    messageComplaintInfoValidator.setBusinessType(info.getData().getBusinessType());
+                }
+            }
         }
 
         view.addObject("messageComplaintInfoValidator", data.getData());

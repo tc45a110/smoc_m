@@ -7,6 +7,7 @@ import com.smoc.cloud.common.auth.qo.Nodes;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.filter.FilterGroupListValidator;
+import com.smoc.cloud.common.smoc.utils.SysFilterUtil;
 import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
@@ -214,6 +215,15 @@ public class GroupController {
             filterGroupListValidator.setCreatedBy(user.getRealName());
         } else if (!StringUtils.isEmpty(op) && "edit".equals(op)) {
             ResponseData<FilterGroupListValidator> data = groupService.findById(filterGroupListValidator.getId());
+            if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+                view.addObject("error", data.getCode() + ":" + data.getMessage());
+                return view;
+            }
+            if((SysFilterUtil.GROUP_COMPLAINT_ID.equals(data.getData().getId()) && SysFilterUtil.GROUP_COMPLAINT_NAME.equals(data.getData().getGroupName()))
+                    || (SysFilterUtil.GROUP_12321_ID.equals(data.getData().getId()) && SysFilterUtil.GROUP_12321_NAME.equals(data.getData().getGroupName()))){
+                view.addObject("error", "系统自建组不能修改");
+                return view;
+            }
             filterGroupListValidator.setCreatedTime(data.getData().getCreatedTime());
         } else {
             view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":" + ResponseCode.PARAM_LINK_ERROR.getMessage());
@@ -252,6 +262,11 @@ public class GroupController {
 
         //查询删除数据信息
         ResponseData<FilterGroupListValidator> filterGroupListValidator = groupService.findById(id);
+
+        if((SysFilterUtil.GROUP_COMPLAINT_ID.equals(filterGroupListValidator.getData().getId()) && !SysFilterUtil.GROUP_COMPLAINT_NAME.equals(filterGroupListValidator.getData().getGroupName()))
+                || (SysFilterUtil.GROUP_12321_ID.equals(filterGroupListValidator.getData().getId()) && !SysFilterUtil.GROUP_12321_NAME.equals(filterGroupListValidator.getData().getGroupName()))){
+            return "1";
+        }
 
         //记录日志
         SecurityUser user = (SecurityUser)request.getSession().getAttribute("user");

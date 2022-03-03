@@ -47,7 +47,7 @@
                             原始投诉信息
                         </h3>
                     </div>
-                    <div class="panel-body" style="height: 650px">
+                    <div class="panel-body" style="height: 660px">
                         <div class="row">
                             <div class="col-md-10">
                                 <div class="p-20">
@@ -89,7 +89,7 @@
                             投诉匹配信息
                         </h3>
                     </div>
-                    <div class="panel-body" style="height: 650px">
+                    <div class="panel-body" style="height: 660px">
                         <form id="submit_form" th:action="@{/complaint/save/{op}(op=${op})}" th:object="${messageComplaintInfoValidator}"
                               method="post" data-parsley-validate="">
                             <div class="p-20">
@@ -100,7 +100,7 @@
 
                                 </div>
                                 <div class="form-group m-b-20">
-                                    <label for="e32Name">业务类型<span class="text-danger">*</span>&nbsp;</label>
+                                    <label for="e32Name">业务类型&nbsp;</label>
                                     <mpm:tag id="businessType" required="true" identity="businessType"
                                              show-type="select" key="code" class="form-control"
                                              name="businessType"  mask-value="INTERNATIONAL_SMS"
@@ -120,7 +120,7 @@
                                            required="" data-parsley-pattern="[A-Z]{3}(\d){3}" placeholder="EC业务账号">
                                 </div>
                                 <div class="form-group m-b-20">
-                                    <label for="accountName">业务账号名称<span class="text-danger">*</span>&nbsp;</label>
+                                    <label for="accountName">业务账号名称&nbsp;</label>
                                     <input id="accountName" type="text" class="form-control" th:field="*{accountName}"
                                            readonly placeholder="业务账号名称">
                                 </div>

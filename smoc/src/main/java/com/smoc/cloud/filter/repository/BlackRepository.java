@@ -6,6 +6,8 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.smoc.filter.ExcelModel;
 import com.smoc.cloud.common.smoc.filter.FilterBlackListValidator;
 import com.smoc.cloud.common.smoc.filter.FilterWhiteListValidator;
+import com.smoc.cloud.common.smoc.message.MessageComplaintInfoValidator;
+import com.smoc.cloud.common.smoc.message.model.ComplaintExcelModel;
 import com.smoc.cloud.filter.entity.FilterBlackList;
 import com.smoc.cloud.filter.entity.FilterWhiteList;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -51,4 +53,11 @@ public interface BlackRepository extends CrudRepository<FilterBlackList, String>
      * @param id
      */
     void deleteByGroupId(String id);
+
+    /**
+     * 导入投诉号码到黑名单
+     * @param complaintList
+     * @param groupComplaintId
+     */
+    void complaintBathSave(MessageComplaintInfoValidator messageComplaintInfoValidator, String groupComplaintId);
 }

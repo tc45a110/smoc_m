@@ -122,33 +122,33 @@
                                 <thead>
                                 <tbody>
                                 <tr th:each="info:${list}">
-                                    <td>
+                                    <td  style="line-height: 26px">
                                         <mpm:tag identity="carrier" show-type="label" key="code" th:value="${info.carrierSource}"/><br>
-                                        <span class="btn btn-teal btn-xs waves-effect waves-light;" th:if="${#strings.containsIgnoreCase(info.carrier,'移动')}">[[${info.carrier}]]</span>
-                                        <span class="btn btn-info btn-xs waves-effect waves-light;" th:if="${#strings.containsIgnoreCase(info.carrier,'联通')}">[[${info.carrier}]]</span>
-                                        <span class="btn btn-primary btn-xs waves-effect waves-light;" th:if="${#strings.containsIgnoreCase(info.carrier,'电信')}">[[${info.carrier}]]</span>
+                                        <span class="btn btn-teal btn-rounded btn-sm waves-effect waves-light;" th:if="${#strings.containsIgnoreCase(info.carrier,'移动')}">[[${info.carrier}]]</span>
+                                        <span class="btn btn-info btn-rounded btn-sm waves-effect waves-light;" th:if="${#strings.containsIgnoreCase(info.carrier,'联通')}">[[${info.carrier}]]</span>
+                                        <span class="btn btn-primary btn-rounded btn-sm waves-effect waves-light;" th:if="${#strings.containsIgnoreCase(info.carrier,'电信')}">[[${info.carrier}]]</span>
                                     </td>
-                                    <td>[[${info.is12321 eq '0'?'否':'是'}]]<br>[[${info.reportSource}]]</td>
-                                    <td>[[${info.reportDate}]]<br>
+                                    <td  style="line-height: 26px">[[${info.is12321 eq '0'?'否':'是'}]]<br>[[${info.reportSource}]]</td>
+                                    <td  style="line-height: 26px">[[${info.reportDate}]]<br>
                                         <mpm:tag identity="businessType" show-type="button"
                                                  key="code" th:value="${info.businessType}"
-                                                 class="TEXT_SMS,btn btn-teal btn-xs waves-effect waves-light;MULTI_SMS,btn btn-brown btn-xs waves-effect waves-light;MMS,btn btn-info btn-xs waves-effect waves-light;5G_SMS,btn btn-primary btn-xs waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-xs waves-effect waves-light;BLACK_SERVICE,btn btn-inverse btn-xs waves-effect waves-light"/>
+                                                 class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;MULTI_SMS,btn btn-brown btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;5G_SMS,btn btn-primary btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-inverse btn-rounded btn-sm waves-effect waves-light"/>
                                     </td>
-                                    <td>[[${info.numberCode}]]<br>[[${info.reportedNumber}]]</td>
-                                    <td >
+                                    <td  style="line-height: 26px">[[${info.numberCode}]]<br>[[${info.reportedNumber}]]</td>
+                                    <td  style="line-height: 26px">
                                         <span th:if="${not #strings.isEmpty(info.businessAccount)}">[[${info.businessAccount}]]<br>[[${info.accountName}]]</span>
                                         <span th:if="${#strings.isEmpty(info.businessAccount)}" style="color: red">未匹配到业务账号</span>
                                     </td>
-                                    <td>
+                                    <td  style="line-height: 26px">
                                         <span th:if="${not #strings.isEmpty(info.sendRate)}">30天[[${info.sendRate}]]次</span><br>[[${info.sendDate}]]
                                     </td>
-                                    <td>[[${info.reportNumber}]]<br>
+                                    <td  style="line-height: 26px">[[${info.reportNumber}]]<br>
                                         <span class="text-overflow"
                                               data-toggle="tooltip" data-placement="right"
                                               th:data-original-title="${info.reportContent}">[[${info.reportContent}]]</span>
                                     </td>
 
-                                    <td>[[${info.createdBy}]]<br>[[${info.createdTime}]]</td>
+                                    <td  style="line-height: 26px">[[${info.createdBy}]]<br>[[${info.createdTime}]]</td>
                                     <td style="line-height: 26px">
                                         <a sec:authorize-url="/complaint/detail/*"
                                            th:href="@{/complaint/detail/{id}(id=${info.id})}" class="on-default edit-row"
