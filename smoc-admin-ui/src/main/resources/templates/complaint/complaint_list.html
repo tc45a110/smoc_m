@@ -111,10 +111,10 @@
                                 <tr>
                                     <th style="width:165px">运营商来源/举报运营商</th>
                                     <th style="width:165px">是否12321/举报来源</th>
-                                    <th style="width:170px">举报时间/业务类型</th>
+                                    <th style="width:170px">业务类型/举报时间</th>
                                     <th style="width:165px">码号/被举报号码</th>
                                     <th style="width:190px">业务账号/业务账号名称</th>
-                                    <th style="width:170px">下发时间/下发频次</th>
+                                    <th style="width:170px">下发频次/下发时间</th>
                                     <th>举报号码/举报内容</th>
                                     <th style="width:170px">创建人/创建日期</th>
                                     <th style="width:110px">操作</th>
@@ -122,7 +122,8 @@
                                 <thead>
                                 <tbody>
                                 <tr th:each="info:${list}">
-                                    <td><mpm:tag identity="carrier" show-type="label" key="code" th:value="${info.carrierSource}"/><br>
+                                    <td>
+                                        <mpm:tag identity="carrier" show-type="label" key="code" th:value="${info.carrierSource}"/><br>
                                         <span class="btn btn-teal btn-xs waves-effect waves-light;" th:if="${#strings.containsIgnoreCase(info.carrier,'移动')}">[[${info.carrier}]]</span>
                                         <span class="btn btn-info btn-xs waves-effect waves-light;" th:if="${#strings.containsIgnoreCase(info.carrier,'联通')}">[[${info.carrier}]]</span>
                                         <span class="btn btn-primary btn-xs waves-effect waves-light;" th:if="${#strings.containsIgnoreCase(info.carrier,'电信')}">[[${info.carrier}]]</span>
@@ -138,8 +139,8 @@
                                         <span th:if="${not #strings.isEmpty(info.businessAccount)}">[[${info.businessAccount}]]<br>[[${info.accountName}]]</span>
                                         <span th:if="${#strings.isEmpty(info.businessAccount)}" style="color: red">未匹配到业务账号</span>
                                     </td>
-                                    <td>[[${info.sendDate}]]<br>
-                                        <span th:if="${not #strings.isEmpty(info.sendRate)}">30天[[${info.sendRate}]]次</span>
+                                    <td>
+                                        <span th:if="${not #strings.isEmpty(info.sendRate)}">30天[[${info.sendRate}]]次</span><br>[[${info.sendDate}]]
                                     </td>
                                     <td>[[${info.reportNumber}]]<br>
                                         <span class="text-overflow"

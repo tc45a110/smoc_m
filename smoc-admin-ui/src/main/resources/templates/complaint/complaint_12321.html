@@ -108,10 +108,10 @@
                                     <th style="width:165px">运营商来源/举报运营商</th>
                                     <th style="width:165px">12321来源/举报来源</th>
                                     <th style="width:150px">ID/发送类型</th>
-                                    <th style="width:170px">举报时间/被举报号码</th>
+                                    <th style="width:170px">被举报号码/举报时间</th>
                                     <th style="width:170px">被举报省份/地市</th>
                                     <th>内容分类/举报内容</th>
-                                    <th style="width:175px">举报号码/举报省份地市</th>
+                                    <th style="width:175px">举报省份地市/举报号码</th>
                                     <th style="width:165px">创建人/创建日期</th>
                                 </tr>
                                 <thead>
@@ -124,7 +124,7 @@
                                     </td>
                                     <td>[[${info.is12321 eq '0'?'否':'是'}]]<br>[[${info.reportSource}]]</td>
                                     <td>[[${info.handleCarrierId}]]<br>[[${info.sendType}]]</td>
-                                    <td>[[${info.reportDate}]]<br>[[${info.reportedNumber}]]</td>
+                                    <td>[[${info.reportedNumber}]]<br>[[${info.reportDate}]]</td>
                                     <td>[[${info.reportedProvince}]]<br>[[${info.reportedCity}]]</td>
                                     <td>[[${info.contentType}]]<br>
                                         <span class="text-overflow"

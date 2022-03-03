@@ -73,7 +73,7 @@
                                         <div class="form-group">
                                             <div class="row">
                                                 <div class="col-sm-12 ">
-                                                    <label>签名(不需要填写中括号，直接输入签名)<span class="text-danger">*</span>&nbsp;
+                                                    <label>签名(不需要填写中括号，直接输入签名，多个签名请用 " | " 隔开)<span class="text-danger">*</span>&nbsp;
                                                         <span class="text-danger" th:if="${#fields.hasErrors('signName')}"
                                                               th:errors="*{signName}"></span></label>
                                                     <textarea type="text" class="form-control" th:field="*{signName}"

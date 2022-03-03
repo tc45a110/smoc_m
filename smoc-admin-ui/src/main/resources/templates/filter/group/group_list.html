@@ -18,14 +18,17 @@
                 <div class="card-box">
                     <div class="row m-b-60">
                         <div class="col-sm-12">
-                            <div class="col-sm-12">
-                                <div class="form-group pull-right" style="text-align: right">
-                                    <a sec:authorize-url="/filter/group/add/*" th:href="@{/filter/group/add/{parentId}(parentId=${svcType})}" class="btn btn-success waves-effect waves-light m-l-10 btn-md">
-                                        <i class="glyphicon glyphicon-plus-sign"></i> 新建分类</a>
-                                </div>
+                            <div class="col-md-8 alert alert-icon" style="background-color: #00acc1">
+                                <i class="mdi mdi-block-helper"></i>
+                                <strong>提醒!</strong>
+                                每日投诉、12321投诉黑名单是系统自建黑名单，不能进行修改、删除操作
+                            </div>
+
+                            <div class="form-group col-sm-4 pull-right" style="text-align: right">
+                                <a sec:authorize-url="/filter/group/add/*" th:href="@{/filter/group/add/{parentId}(parentId=${svcType})}" class="btn btn-success waves-effect waves-light m-l-10 btn-md">
+                                    <i class="glyphicon glyphicon-plus-sign"></i> 新建分类</a>
                             </div>
                         </div>
-
                     </div>
 
                 </div>

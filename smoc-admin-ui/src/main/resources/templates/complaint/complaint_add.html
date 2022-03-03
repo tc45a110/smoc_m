@@ -49,6 +49,14 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="p-20">
+
+                                    <div class="col-md-12 alert alert-icon" style="background-color: #00acc1">
+                                        <i class="mdi mdi-block-helper"></i>
+                                        <strong>提醒!</strong>
+                                        <span th:if="${messageComplaintInfoValidator.complaintSource eq 'day'}">支持直接导入"每日端口投诉原始表格"，导入表格的举报号码默认已加黑。</span>
+                                        <span th:if="${messageComplaintInfoValidator.complaintSource eq '12321'}">支持直接导入"每日端口投诉原始表格"和"12321原始表格"，导入表格的举报号码默认已加黑。</span>
+                                    </div>
+
                                     <div class="form-group m-b-20">
                                         <label>运营商来源<span class="text-danger">*</span>&nbsp;
                                             <span class="text-danger" th:if="${#fields.hasErrors('carrier')}"
@@ -57,19 +65,18 @@
                                                  th:value="${messageComplaintInfoValidator.carrier}" required="true" title="投诉来源的运营商"/>
                                     </div>
                                     <div class="form-group m-b-20">
-                                        <label>下载模版</label>
+                                        <label>下载模版</label>&nbsp;
                                         <label><a sec:authorize-url="/complaint/downFileTemp" th:onclick="downFile()">投诉模板.xlsx</a></label>
                                     </div>
 
                                     <div class="form-group m-b-20">
                                         <label>上传附件<span class="text-danger">*</span>&nbsp;
-                                            <span th:if="${messageComplaintInfoValidator.complaintSource eq 'day'}">（备注：支持直接导入"每日端口投诉原始表格"）</span>
-                                            <span th:if="${messageComplaintInfoValidator.complaintSource eq '12321'}">（备注：支持直接导入"每日端口投诉原始表格"和"12321原始表格"）</span>
                                             <span class="text-danger" th:if="${#fields.hasErrors('complaintFiles')}"
                                                   th:errors="*{complaintFiles}"></span></label>
                                         <input type="file" name="file" id="input_file"
                                                multiple="multiple">
                                     </div>
+
 
                                 </div>
                                 <!-- end class p-20 -->
