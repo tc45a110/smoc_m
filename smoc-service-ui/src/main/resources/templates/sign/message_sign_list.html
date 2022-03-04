@@ -63,7 +63,8 @@
                                             class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search"></i> 查询
                                     </button>
-                                    <a
+                                    <a sec:authorize-url="/sign/add/TEXT_SMS"
+                                       th:href="@{/sign/add/TEXT_SMS}"
                                        class="btn btn-success waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-plus-sign"
                                            style="margin-right:5px"></i>新建签名</a>
@@ -88,52 +89,52 @@
                             <table class="table table table-hover m-10" style="margin-top: -12px;">
                                 <thead>
                                 <tr>
-                                    <th>账号</th>
                                     <th>签名名称</th>
-                                    <th>行业</th>
-                                    <th>应用场景</th>
+                                    <th>业务类型</th>
+                                    <th>信息分类</th>
                                     <th>审核状态</th>
                                     <th>提交时间</th>
-                                    <th>审核时间</th>
                                     <th>操作</th>
                                 </tr>
                                 <thead>
                                 <tbody>
-                                <tr>
+                                <tr th:each="info:${list}">
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        XYBA100015
+                                        <span style="color:#26A69A;" class="text-overflow"
+                                              data-toggle="tooltip" data-placement="bottom"
+                                              th:data-original-title="${info.signName}">[[${info.signName}]]</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        【北京星语】
+                                        <mpm:tag identity="businessType" th:value="${info.businessType}" show-type="label"
+                                                 key="code"/>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        互联网游戏
+                                        <mpm:tag identity="infoType" th:value="${info.infoType}" show-type="label" key="code"/>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        签名为他人产品名/网站名
+                                        <a class="btn btn-success btn-rounded btn-sm waves-effect waves-light" th:if="${info.docStatus eq '1'}">通过审核</a>
+                                        <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light" th:if="${info.docStatus eq '2'}">待审核</a>
+                                        <a class="btn btn-warning btn-rounded btn-sm waves-effect waves-light" th:if="${info.docStatus eq '3'}">拒绝</a>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a class="btn btn-success btn-rounded btn-sm waves-effect waves-light">通过审核</a>
+                                        [[${info.createdTime}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        2021-11-17 14:45:23
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        2021-11-17 14:50:23
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-
-                                        <a
-                                           data-toggle="tooltip" data-placement="bottom"
+                                        <a data-toggle="tooltip" data-placement="bottom"
                                            data-original-title="明细"
                                            class="on-default edit-row"
                                            style="padding-left: 5px;color:#4BD396;"><i style="font-size: 18px"
-                                                                                       class="glyphicon glyphicon-search"></i></a>
-                                        <a
-                                            data-toggle="modal" th:onclick="confirmLogout('',this)"
-                                            data-target="#confirm-modal" class="on-default remove-row"
-                                            style="padding-left: 5px;color: #f05050"
-                                            title="删除"><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
+                                           class="glyphicon glyphicon-search"></i></a>
+                                        <a sec:authorize-url="/sign/edit/*"
+                                           th:href="@{/sign/edit/{id}(id=${info.id})}" class="on-default edit-row"
+                                           style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip" th:if="${info.docStatus ne '1'}"
+                                           data-placement="left" title=""  data-original-title="编辑"><i
+                                                style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
+                                        <a sec:authorize-url="/sign/deleteById/*" th:if="${info.docStatus ne '1'}"
+                                           th:onclick="confirmDelete([[${info.id}]],this)"data-toggle="modal"
+                                           data-target="#confirm-modal" class="on-default remove-row"
+                                           style="padding-left: 5px;color: #f05050" title="删除"><i
+                                                style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -150,6 +151,11 @@
         <!-- start row  错误提示-->
         <th:block th:insert="fragments/common_fragments :: common_error"/>
         <!-- end row -->
+
+        <!-- start row  删除确认-->
+        <th:block th:insert="fragments/common_fragments :: confirm-modal"/>
+        <!-- end row -->
+
     </div>
 </div> <!-- content -->
 
@@ -159,6 +165,17 @@
 <script th:src="@{/static/plugins/bootstrap-inputmask/bootstrap-inputmask.min.js}"></script>
 
 <script>
+
+    function confirmDelete(id) {
+        $("#deleteId").val(id);
+    }
+
+    function deleteById() {
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $('#preloader').css('display', 'block');
+        location.href = contextPath + "/sign/deleteById/" + $("#deleteId").val();
+    }
+
 
     var resizefunc = [];
     //隐藏进度项

@@ -732,7 +732,7 @@
 
         <!-- start confirm user-forbiden modal  -->
         <div id="enterprise-forbiden" class="modal fade" tabindex="-1" role="dialog"
-             aria-labelledby="custom-width-modalLabel" aria-hidden="true" style="display: none;margin-top: 80px">
+             aria-labelledby="custom-width-modalLabel" aria-hidden="true" style="display: none;margin-top: 80px" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="modal-dialog" style="width:33%;">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -754,11 +754,11 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
         <!-- end confirm user-forbiden modal  -->
 
         <!-- start confirm add-user modal  -->
-        <div id="confirm-add-user-modal" class="modal fade" tabindex="-1" role="dialog"
+        <div id="confirm-add-user-modal" class="modal fade" tabindex="-1" role="dialog" th:remove="${#strings.isEmpty(error)}?none:all"
              aria-labelledby="custom-width-modalLabel"
              aria-hidden="true" style="display: none;margin: 60px;margin-top:68px">
             <div class="modal-dialog" style="width:33%;">
@@ -807,7 +807,7 @@
         <!-- end confirm add-user modal  -->
 
         <!-- start confirm user-forbiden modal  -->
-        <div id="user-forbiden" class="modal fade" tabindex="-1" role="dialog"
+        <div id="user-forbiden" class="modal fade" tabindex="-1" role="dialog" th:remove="${#strings.isEmpty(error)}?none:all"
              aria-labelledby="custom-width-modalLabel" aria-hidden="true" style="display: none;margin-top: 80px">
             <div class="modal-dialog" style="width:33%;">
                 <div class="modal-content">
@@ -833,7 +833,7 @@
         <!-- end confirm user-forbiden modal  -->
 
         <!-- start confirm add-mail modal  -->
-        <div id="confirm-add-mail-modal" class="modal fade" tabindex="-1" role="dialog"
+        <div id="confirm-add-mail-modal" class="modal fade" tabindex="-1" role="dialog" th:remove="${#strings.isEmpty(error)}?none:all"
              aria-labelledby="custom-width-modalLabel"
              aria-hidden="true" style="display: none;margin: 60px;margin-top:68px">
             <div class="modal-dialog" style="width:33%;">
@@ -888,7 +888,7 @@
         <!-- end confirm add-mail modal  -->
 
         <!-- start confirm set-invoice modal  -->
-        <div id="confirm-set-invoice-modal" class="modal fade" tabindex="-1" role="dialog"
+        <div id="confirm-set-invoice-modal" class="modal fade" tabindex="-1" role="dialog" th:remove="${#strings.isEmpty(error)}?none:all"
              aria-labelledby="custom-width-modalLabel"
              aria-hidden="true" style="display: none;margin: 60px;margin-top:68px">
             <div class="modal-dialog" style="width:33%;">
@@ -939,7 +939,7 @@
         <!-- end confirm add-invoice modal  -->
 
         <!-- start confirm set-special-invoice modal  -->
-        <div id="confirm-set-invoice-special-modal" class="modal fade" tabindex="-1" role="dialog"
+        <div id="confirm-set-invoice-special-modal" class="modal fade" tabindex="-1" role="dialog" th:remove="${#strings.isEmpty(error)}?none:all"
              aria-labelledby="custom-width-modalLabel"
              aria-hidden="true" style="display: none;margin: 60px;margin-top:68px">
             <div class="modal-dialog" style="width:50%;">

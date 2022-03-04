@@ -39,7 +39,7 @@ public class EnterpriseDocumentRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", e.ENTERPRISE_NAME");
         sqlBuffer.append(", e.ENTERPRISE_TYPE");
         sqlBuffer.append("  from enterprise_document_info t left join enterprise_basic_info e on t.ENTERPRISE_ID = e.ENTERPRISE_ID ");
-        sqlBuffer.append("  where t.DOC_STATUS=1  ");
+        sqlBuffer.append("  where t.DOC_STATUS!=0  ");
 
         List<Object> paramsList = new ArrayList<Object>();
 

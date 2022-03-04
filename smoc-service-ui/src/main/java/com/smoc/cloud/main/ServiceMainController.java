@@ -59,6 +59,8 @@ public class ServiceMainController {
             return view;
         }
 
+        view.addObject("indexUrl", businessTypes.getData()[0].getHref());
+
         //log.info("[businessTypes]:{}",new Gson().toJson(businessTypes));
         view.addObject("businessTypes", businessTypes.getData());
 

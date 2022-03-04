@@ -17,39 +17,51 @@ import javax.servlet.http.HttpServletRequest;
 public class OverViewController {
 
     /**
-     * 行业短信概览
+     * 普通短信概览
      *
      * @return
      */
-    @RequestMapping(value = "/industry/overview", method = RequestMethod.GET)
-    public ModelAndView industry(HttpServletRequest request) {
+    @RequestMapping(value = "/textsms/overview", method = RequestMethod.GET)
+    public ModelAndView textsms(HttpServletRequest request) {
         ModelAndView view = new ModelAndView("index");
 
-        view.addObject("businessTypeName", "行业短信");
+        view.addObject("businessTypeName", "普通短信");
         return view;
     }
 
     /**
-     * 会销短信概览
+     * 多媒体短信概览
      *
      * @return
      */
-    @RequestMapping(value = "/marketing/overview", method = RequestMethod.GET)
-    public ModelAndView marketing( HttpServletRequest request) {
+    @RequestMapping(value = "/multisms/overview", method = RequestMethod.GET)
+    public ModelAndView multisms( HttpServletRequest request) {
         ModelAndView view = new ModelAndView("index");
-        view.addObject("businessTypeName", "会销短信");
+        view.addObject("businessTypeName", "多媒体短信");
         return view;
     }
 
     /**
-     * 拉新短信概览
+     * 彩信短信概览
      *
      * @return
      */
-    @RequestMapping(value = "/innovations/overview", method = RequestMethod.GET)
-    public ModelAndView innovations(HttpServletRequest request) {
+    @RequestMapping(value = "/mms/overview", method = RequestMethod.GET)
+    public ModelAndView mms(HttpServletRequest request) {
         ModelAndView view = new ModelAndView("index");
-        view.addObject("businessTypeName", "拉新短信");
+        view.addObject("businessTypeName", "彩信");
+        return view;
+    }
+
+    /**
+     * 5G短信概览
+     *
+     * @return
+     */
+    @RequestMapping(value = "/sms5g/overview", method = RequestMethod.GET)
+    public ModelAndView sms5g(HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("index");
+        view.addObject("businessTypeName", "5G短信");
         return view;
     }
 
@@ -62,6 +74,18 @@ public class OverViewController {
     public ModelAndView international(HttpServletRequest request) {
         ModelAndView view = new ModelAndView("index");
         view.addObject("businessTypeName", "国际短信");
+        return view;
+    }
+
+    /**
+     * 过黑服务概览
+     *
+     * @return
+     */
+    @RequestMapping(value = "/blackservice/overview", method = RequestMethod.GET)
+    public ModelAndView blackservice(HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("index");
+        view.addObject("businessTypeName", "过黑服务");
         return view;
     }
 }

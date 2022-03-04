@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
+    <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
+    <link th:href="@{/static/plugins/jquery.filer/css/jquery.filer.css}" rel="stylesheet"/>
+    <link th:href="@{/static/plugins/jquery.filer/css/themes/jquery.filer-dragdropbox-theme.css}" rel="stylesheet"/>
+
+</head>
+<body>
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <!-- start row 页面导航-->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">新建、修改签名</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            签名管理
+                        </li>
+                        <li class="active">
+                            新建、修改签名
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row 页面内容-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-md-12">
+                <div class="card-box">
+                    <form id="submit_form" th:action="@{/sign/save/{op}(op=${op})}"
+                          th:object="${enterpriseDocumentInfoValidator}"
+                          method="post" data-parsley-validate="" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="p-20">
+
+                                    <div class="form-group m-b-20">
+                                        <label>信息类型<span class="text-danger">*</span>
+                                            <span class="text-danger" th:if="${#fields.hasErrors('infoType')}"
+                                                  th:errors="*{infoType}"></span></label>
+                                        <mpm:tag required="true" identity="infoType" show-type="select"
+                                                 key="code" th:value="${enterpriseDocumentInfoValidator.infoType}"
+                                                 class="form-control" name="infoType" title="信息类型"/>
+                                    </div>
+                                    <div class="form-group m-b-20">
+                                        <label>签名<span class="text-danger">*</span>&nbsp;(不需要填写中括号，直接输入签名，多个签名请用 " | " 隔开)
+                                            <span class="text-danger" th:if="${#fields.hasErrors('signName')}"
+                                                  th:errors="*{signName}"></span></label>
+                                        <textarea type="text" class="form-control" th:field="*{signName}"
+                                                  required="" data-parsley-length="[2,500]" autocomplete="off"
+                                                  rows="5"   placeholder="签名"></textarea>
+                                    </div>
+
+                                    <div class="form-group m-b-20">
+                                        <label>备注
+                                            <span class="text-danger" th:if="${#fields.hasErrors('docKey')}"
+                                                  th:errors="*{docKey}"></span></label>
+                                        <input type="text" class="form-control" data-parsley-length="[1,128]"
+                                               autocomplete="off" th:field="*{docKey}"placeholder="关键字">
+                                    </div>
+                                </div>
+                                <!-- end class p-20 -->
+
+                                <div class="jFiler-items jFiler-row">
+                                    <ul class="jFiler-items-list jFiler-items-grid">
+                                        <li class="jFiler-item jFiler-no-thumbnail" data-jfiler-index="0" style="" th:each="att:${filesList}">
+                                            <div class="jFiler-item-container">
+                                                <div class="jFiler-item-inner">
+                                                    <div class="jFiler-item-thumb">
+                                                        <div class="jFiler-item-info"><span class="jFiler-item-title"><b
+                                                                th:title="${att.attachmentName}">[[${att.attachmentName}]]</b></span>
+                                                        </div>
+                                                        <div class="jFiler-item-thumb-image"><span class="jFiler-icon-file f-file f-file-ext-docx"
+                                                                style="-webkit-box-shadow: #409024 42px -55px 0px 0px inset; -moz-box-shadow: #409024 42px -55px 0px 0px inset; box-shadow: #409024 42px -55px 0px 0px inset;">
+                                                            .[[${att.docType}]]</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="jFiler-item-assets jFiler-row">
+                                                        <ul class="list-inline pull-left">
+                                                            <li><a style="color: #29b6f6;" sec:authorize-url="/attachment/download/*"
+                                                                   th:href="@{/attachment/download/{id}(id=${att.id})}"><i style="font-size: 18px" class="mdi mdi-download"></i></a></li>
+                                                        </ul>
+                                                        <ul class="list-inline pull-right">
+                                                            <li><a style="color:red;" sec:authorize-url="/attachment/deleteById/*"
+                                                                   data-toggle="modal" data-target="#confirm-modal"
+                                                                   th:onclick="confirmDelete([[${att.id}]],this)"><i style="font-size: 18px" class="mdi mdi-delete"></i></a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                            </div> <!-- end col -->
+
+                            <div class="col-md-6">
+                                <div class="form-group m-b-20">
+                                    <label>上传附件<span class="text-danger">*</span>&nbsp;(上传完整的签名合同链压缩包)
+                                        <span class="text-danger" th:if="${#fields.hasErrors('contractFiles')}"
+                                              th:errors="*{contractFiles}"></span></label><br>
+                                    <input type="file" name="file" id="input_file"
+                                           multiple="multiple">
+
+                                </div>
+
+                            </div> <!-- end col -->
+                        </div> <!-- end row -->
+
+                        <div class="text-center">
+                            <input type="hidden" th:field="*{id}">
+                            <input type="hidden" th:field="*{enterpriseId}">
+                            <input type="hidden" th:field="*{businessType}">
+                            <input type="hidden" th:field="*{docStatus}">
+                            <input type="hidden" th:field="*{createdTime}">
+                            <input type="hidden" th:field="*{createdBy}">
+                            <button sec:authorize-url="/sign/save/*" type="submit"
+                                    class="btn btn-teal waves-effect waves-light">提交
+                            </button>
+                            <a th:sec:authorize-url="|/sign/page/${signType}|"
+                               th:href="@{/sign/list/{signType}(signType=${signType})}"
+                               class="btn btn-default waves-effect waves-light" style="margin-left:20px">返回</a>
+                        </div>
+                    </form>
+                    <!-- end form -->
+
+                </div> <!-- end card-box -->
+            </div> <!-- end col -->
+        </div>
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+        <th:block th:insert="fragments/common_fragments :: confirm-modal"/>
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<script th:src="@{/static/plugins/moment/moment.js}"></script>
+<script th:src="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.js}"></script>
+<script th:src="@{/static/js/uploadFile.js}"></script>
+<script th:src="@{/static/plugins/jquery.filer/js/jquery.filer.min.js}"></script>
+<th:block th:insert="fragments/common_fragments :: common_submit_form"/>
+
+<script>
+
+    function confirmDelete(id) {
+        $("#deleteId").val(id);
+    }
+
+    function deleteById() {
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $('#preloader').css('display', 'block');
+        $.ajax({
+            url: contextPath + "/attachment/deleteById/" + $("#deleteId").val(),
+            success: function (data) {
+                if("1"==data){
+                    location.reload();
+                }else{
+                    alert(data);
+                }
+
+            }, error: function (data) {
+                console.log("error");
+            }
+        });
+    }
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+
+</script>
+</body>
+</html>

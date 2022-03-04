@@ -7,6 +7,8 @@ server: #服务端口
         name: OAUTH2SESSION
       timeout: 240m
   connection-timeout: 15000
+  tomcat:
+    basedir:  /alidata/smoc/apps/temp
 
 spring:
   cloud:
@@ -25,6 +27,10 @@ spring:
         max-idle: 8
         max-wait: -1
         min-idle: 5
+  servlet:
+    multipart:
+      max-file-size: 50MB  #单个数据大小
+      max-request-size: 100MB #总数据大小
 
 #**********************************************************
 # manpuman oauth2 token参数设置
@@ -45,6 +51,9 @@ com:
         enable-verify-code: false #是否启用验证码
         help-mobile: 联系电话 #帮助电话
         main-url: /service_main
+
+      smoc:
+        enterprise-file-path: /alidata/smoc/enterprise/
 
     #**********************************************************
     # 内置tomcat 配置

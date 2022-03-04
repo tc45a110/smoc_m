@@ -5,12 +5,14 @@ import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseWebAccountInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
+import com.smoc.cloud.customer.service.BusinessAccountService;
 import com.smoc.cloud.customer.service.EnterpriseService;
 import com.smoc.cloud.customer.service.EnterpriseWebService;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +32,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.List;
 
 
 @Slf4j
@@ -42,6 +45,9 @@ public class EnterpriseWebController {
 
     @Autowired
     private EnterpriseWebService enterpriseWebService;
+
+    @Autowired
+    private BusinessAccountService businessAccountService;
 
     @Autowired
     private SystemUserLogService systemUserLogService;
@@ -66,6 +72,17 @@ public class EnterpriseWebController {
         //企业状态无效
         if(!"1".equals(enterpriseData.getData().getEnterpriseStatus())){
             view.addObject("error", "企业状态无效，无法进行操作！");
+            return view;
+        }
+
+        //查询是否开通业务账号
+        ResponseData<List<AccountBasicInfoValidator>> info = businessAccountService.findBusinessAccountByEnterpriseId(enterpriseWebAccountInfoValidator.getEnterpriseId());
+        if (!ResponseCode.SUCCESS.getCode().equals(info.getCode())) {
+            view.addObject("error", info.getCode() + ":" + info.getMessage());
+            return view;
+        }
+        if(StringUtils.isEmpty(info.getData()) || info.getData().size()<=0){
+            view.addObject("error", "请先开通业务账号！");
             return view;
         }
 

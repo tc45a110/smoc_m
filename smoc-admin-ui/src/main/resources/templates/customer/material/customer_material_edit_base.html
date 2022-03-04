@@ -85,11 +85,11 @@
                                         <div class="form-group">
                                             <div class="row">
                                                 <div class="col-sm-12 ">
-                                                    <label>短链<span class="text-danger">*</span>&nbsp;
+                                                    <label>短链&nbsp;
                                                         <span class="text-danger" th:if="${#fields.hasErrors('shortLink')}"
                                                               th:errors="*{shortLink}"></span></label>
                                                     <input type="text" class="form-control" th:field="*{shortLink}"
-                                                           required="" data-parsley-length="[2,128]" autocomplete="off"
+                                                           data-parsley-length="[2,128]" autocomplete="off"
                                                            placeholder="短链">
                                                 </div>
                                             </div>
@@ -140,7 +140,7 @@
 
                                     <div class="col-md-6">
                                         <div class="form-group ">
-                                            <label>上传附件(上传完整的签名合同连压缩包)<span class="text-danger">*</span>&nbsp;
+                                            <label>上传附件(上传完整的签名合同链压缩包)<span class="text-danger">*</span>&nbsp;
                                                 <span class="text-danger" th:if="${#fields.hasErrors('contractFiles')}"
                                                       th:errors="*{contractFiles}"></span></label>
                                             <input type="file" name="file" id="input_file"
