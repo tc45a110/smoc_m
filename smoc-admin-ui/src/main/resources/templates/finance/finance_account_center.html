@@ -54,13 +54,15 @@
                                                    class="btn btn-default waves-effect waves-light btn-md">
                                                     <i class="glyphicon  glyphicon-share-alt" style="margin-right:5px"></i>
                                                     返回财务账户列表</a>
-                                                <a th:href="@{/enterprise/center/0000}"
+                                                <a sec:authorize-url="/enterprise/center/*"
+                                                   th:href="@{/enterprise/center/{id}(id=${enterpriseBasicInfoValidator.enterpriseId})}"
                                                    style="margin-left:10px;"
                                                    class="btn btn-facebook waves-effect waves-light btn-md">
                                                     <i class="mdi mdi-vector-circle" style="margin-right:5px"></i>
                                                     企业基本信息
                                                 </a>
-                                                <a th:href="@{/account/center/account}"
+                                                <a  sec:authorize-url="/account/center/*"
+                                                    th:href="@{/account/center/{enterpriseId}(enterpriseId=${enterpriseBasicInfoValidator.enterpriseId})}"
                                                    style="margin-left:10px;"
                                                    class="btn btn-instagram waves-effect waves-light btn-md">
                                                     <i class="mdi mdi-vector-circle" style="margin-right:5px"></i>

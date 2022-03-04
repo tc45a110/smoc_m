@@ -39,7 +39,7 @@ public class ComplaintExcelModel {
     @ExcelProperty(value = "被举报号码")
     private String reportedNumber;
 
-    @ExcelProperty(value = "被举报号码省份")
+    @ExcelProperty(value = "被举报号码省分")
     private String reportedProvince;
 
     @ExcelProperty(value = "被举报号码地市")
@@ -48,7 +48,7 @@ public class ComplaintExcelModel {
     @ExcelProperty(value = "内容分类")
     private String contentType;
 
-    @ExcelProperty(value = "举报号码省份")
+    @ExcelProperty(value = "举报号码省分")
     private String reportProvince;
 
     @ExcelProperty(value = "举报号码地市")

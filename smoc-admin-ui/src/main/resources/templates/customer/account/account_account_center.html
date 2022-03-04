@@ -137,7 +137,8 @@
                                                 <i class="mdi mdi-vector-circle" style="margin-right:5px"></i>
                                                 企业信息中心
                                             </a>
-                                            <a  th:href="@{/finance/account/center}"
+                                            <a  sec:authorize-url="/finance/account/center/*"
+                                                th:href="@{/finance/account/center/{enterpriseId}(enterpriseId=${enterpriseBasicInfoValidator.enterpriseId})}"
                                                 style="margin-left:10px;"
                                                 class="btn btn-tumblr waves-effect waves-light btn-md">
                                                 <i class="mdi mdi-vector-circle" style="margin-right:5px"></i>

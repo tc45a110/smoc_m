@@ -133,6 +133,7 @@ public class FinanceAccountController {
         view.addObject("enterprise", enterpriseData.getData());
         view.addObject("financeAccounts", data.getData());
         view.addObject("count", countData.getData());
+        view.addObject("enterpriseBasicInfoValidator", enterpriseData.getData());
 
         return view;
     }

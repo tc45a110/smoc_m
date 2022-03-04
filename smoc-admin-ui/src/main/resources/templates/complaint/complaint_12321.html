@@ -106,12 +106,12 @@
                                 <thead>
                                 <tr>
                                     <th style="width:165px">运营商来源/举报运营商</th>
-                                    <th style="width:165px">12321来源/举报来源</th>
+                                    <th style="width:165px">是否12321/举报来源</th>
                                     <th style="width:150px">ID/发送类型</th>
-                                    <th style="width:170px">被举报号码/举报时间</th>
-                                    <th style="width:170px">被举报省份/地市</th>
+                                    <th style="width:180px">被举报号码/举报时间</th>
+                                    <th style="width:170px">被举报省分/地市</th>
                                     <th>内容分类/举报内容</th>
-                                    <th style="width:175px">举报省份地市/举报号码</th>
+                                    <th style="width:170px">省分地市/举报号码</th>
                                     <th style="width:165px">创建人/创建日期</th>
                                 </tr>
                                 <thead>
@@ -131,7 +131,7 @@
                                               data-toggle="tooltip" data-placement="right"
                                               th:data-original-title="${info.reportContent}">[[${info.reportContent}]]</span>
                                     </td>
-                                    <td style="line-height: 26px">[[${info.reportNumber}]]<br>[[${info.reportProvince}]][[${info.reportCity}]]</td>
+                                    <td style="line-height: 26px">[[${info.reportProvince}]][[${info.reportCity}]]<br>[[${info.reportNumber}]]</td>
                                     <td style="line-height: 26px">[[${info.createdBy}]]<br>[[${info.createdTime}]]</td>
 
                                 </tr>
