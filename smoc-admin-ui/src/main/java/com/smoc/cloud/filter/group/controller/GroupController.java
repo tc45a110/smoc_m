@@ -263,8 +263,8 @@ public class GroupController {
         //查询删除数据信息
         ResponseData<FilterGroupListValidator> filterGroupListValidator = groupService.findById(id);
 
-        if((SysFilterUtil.GROUP_COMPLAINT_ID.equals(filterGroupListValidator.getData().getId()) && !SysFilterUtil.GROUP_COMPLAINT_NAME.equals(filterGroupListValidator.getData().getGroupName()))
-                || (SysFilterUtil.GROUP_12321_ID.equals(filterGroupListValidator.getData().getId()) && !SysFilterUtil.GROUP_12321_NAME.equals(filterGroupListValidator.getData().getGroupName()))){
+        if(SysFilterUtil.GROUP_COMPLAINT_ID.equals(filterGroupListValidator.getData().getId())
+                || SysFilterUtil.GROUP_12321_ID.equals(filterGroupListValidator.getData().getId())){
             return "1";
         }
 

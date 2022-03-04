@@ -21,7 +21,7 @@
                             <div class="col-md-8 alert alert-icon" style="background-color: #00acc1">
                                 <i class="mdi mdi-block-helper"></i>
                                 <strong>提醒!</strong>
-                                每日投诉、12321投诉黑名单是系统自建黑名单，不能进行修改、删除操作
+                                每日投诉、12321投诉黑名单是在导入投诉时系统自建黑名单，不能进行修改、删除操作
                             </div>
 
                             <div class="form-group col-sm-4 pull-right" style="text-align: right">
@@ -62,13 +62,13 @@
                                     <td>
                                         <a sec:authorize-url="/filter/group/edit/*" th:href="@{/filter/group/edit/{id}(id=${group.id})}"
                                            class="on-default edit-row"
-                                           style="padding-left: 5px;color: #29b6f6;"
+                                           style="padding-left: 5px;color: #29b6f6;" th:remove="${group.id eq '100000000' or group.id eq '200000000'}?all:none"
                                            title="编辑"><i style="font-size: 18px" class="mdi mdi-table-edit"></i>
                                         </a>
                                         <a sec:authorize-url="/filter/group/deleteById/*"
                                            th:onclick="confirmDelete([[${group.id}]],this)" data-toggle="modal"
                                            data-target="#confirm-modal" class="on-default remove-row"
-                                           style="padding-left: 5px;color: #f05050"
+                                           style="padding-left: 5px;color: #f05050" th:remove="${group.id eq '100000000' or group.id eq '200000000'}?all:none"
                                            title="删除"><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i>
                                         </a>
                                     </td>
