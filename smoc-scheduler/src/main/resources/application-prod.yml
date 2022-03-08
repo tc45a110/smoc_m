@@ -1,0 +1,82 @@
+# ========================================================================================
+# spring  JPA
+# ========================================================================================
+spring:
+  data:
+    jpa:
+      repositories:
+        enabled: true
+    redis:
+      repositories:
+        enabled: false
+  jpa:
+    database: MYSQL
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: none
+    generate-ddl: false
+    show-sql: true
+    open-in-view: true
+
+  # ========================================================================================
+  #  datasource hikari pool
+  # ========================================================================================
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      pool-name: MpmSpringHikariCP
+      jdbc-url: jdbc:mysql://rm-2zergmfbo0d88p44a.mysql.rds.aliyuncs.com:3306/smoc_oauth?characterEncoding=UTF-8&useSSL=true&serverTimezone=GMT%2B8&rewriteBatchedStatements=true&autoReconnect=true
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      username: yunsen-smoc
+      password: YUN%smoc9#40
+      auto-commit: true
+      connection-timeout: 30000
+      idle-timeout: 60000
+      max-lifetime: 180000
+      connection-test-query: select 1 from dual
+      minimum-idle: 10
+      maximum-pool-size: 100
+      data-source-properties:
+        prepStmtCacheSize: 256
+        prepStmtCacheSqlLimit: 2048
+        cachePrepStmts: true
+        useServerPrepStmts: true
+  #**********************************************************
+  # Redis
+  #**********************************************************
+  redis: #redis配置
+    host: r-2zegyswwjdbicif2hd.redis.rds.aliyuncs.com
+    port: 6379
+    password: Tsmoc40#RedistEst
+    database: 0
+    timeout: 10000
+    lettuce:
+      pool:
+        max-active: 50
+        max-idle: 10
+        max-wait: -1
+        min-idle: 5
+
+  #**********************************************************
+  # 内置tomcat 配置
+  #**********************************************************
+com:
+  manpuman:
+    tomcat:
+      connection-timeout: 15000
+      acceptor-thread-count: 4
+      min-spare-threads: 100
+      max-spare-threads: 300
+      accept-count: 200
+      max-connections: 1000
+      max-threads: 500
+      protocol: org.apache.coyote.http11.Http11NioProtocol #org.apache.coyote.http11.Http11AprProtocol
+
+logging:
+  config: classpath:logback-spring.xml
+  path: /cmsdata/smoc/smoc-log/smoc-auth-logs
+  level:
+    root: info
+

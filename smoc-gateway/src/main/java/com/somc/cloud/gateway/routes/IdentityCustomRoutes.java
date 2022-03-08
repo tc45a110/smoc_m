@@ -28,47 +28,47 @@ public class IdentityCustomRoutes {
 
         return builder.routes()
                 //拦截所有GET请求
-                .route(r -> r.method(HttpMethod.GET)
-                        .filters(f ->
-                                f.stripPrefix(1))
-                        .uri("lb://smoc-identity")
-                )
-                //拦截所有HEAD请求
-                .route(r -> r.method(HttpMethod.HEAD)
-                        .filters(f ->
-                                f.stripPrefix(1))
-                        .uri("lb://smoc-identity")
-                )
-                //拦截所有PUT请求
-                .route(r -> r.method(HttpMethod.PUT)
-                        .filters(f ->
-                                f.stripPrefix(1))
-                        .uri("lb://smoc-identity")
-                )
-                //拦截所有PATCH请求
-                .route(r -> r.method(HttpMethod.PATCH)
-                        .filters(f ->
-                                f.stripPrefix(1))
-                        .uri("lb://smoc-identity")
-                )
-                //拦截所有DELETE请求
-                .route(r -> r.method(HttpMethod.DELETE)
-                        .filters(f ->
-                                f.stripPrefix(1))
-                        .uri("lb://smoc-identity")
-                )
-                //拦截所有OPTIONS请求
-                .route(r -> r.method(HttpMethod.OPTIONS)
-                        .filters(f ->
-                                f.stripPrefix(1))
-                        .uri("lb://smoc-identity")
-                )
-                //拦截所有TRACE请求
-                .route(r -> r.method(HttpMethod.TRACE)
-                        .filters(f ->
-                                f.stripPrefix(1))
-                        .uri("lb://smoc-identity")
-                )
+//                .route(r -> r.method(HttpMethod.GET)
+//                        .filters(f ->
+//                                f.stripPrefix(1))
+//                        .uri("lb://smoc-identity")
+//                )
+//                //拦截所有HEAD请求
+//                .route(r -> r.method(HttpMethod.HEAD)
+//                        .filters(f ->
+//                                f.stripPrefix(1))
+//                        .uri("lb://smoc-identity")
+//                )
+//                //拦截所有PUT请求
+//                .route(r -> r.method(HttpMethod.PUT)
+//                        .filters(f ->
+//                                f.stripPrefix(1))
+//                        .uri("lb://smoc-identity")
+//                )
+//                //拦截所有PATCH请求
+//                .route(r -> r.method(HttpMethod.PATCH)
+//                        .filters(f ->
+//                                f.stripPrefix(1))
+//                        .uri("lb://smoc-identity")
+//                )
+//                //拦截所有DELETE请求
+//                .route(r -> r.method(HttpMethod.DELETE)
+//                        .filters(f ->
+//                                f.stripPrefix(1))
+//                        .uri("lb://smoc-identity")
+//                )
+//                //拦截所有OPTIONS请求
+//                .route(r -> r.method(HttpMethod.OPTIONS)
+//                        .filters(f ->
+//                                f.stripPrefix(1))
+//                        .uri("lb://smoc-identity")
+//                )
+//                //拦截所有TRACE请求
+//                .route(r -> r.method(HttpMethod.TRACE)
+//                        .filters(f ->
+//                                f.stripPrefix(1))
+//                        .uri("lb://smoc-identity")
+//                )
                 //拦截符合规则的 POST 请求
                 .route(r -> r.method(HttpMethod.POST)
                         .and().readBody(String.class, requestBody -> {

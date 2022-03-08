@@ -480,7 +480,7 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
             for (int i = 0; i < accountIds.length; i++) {
                 StringBuffer sqlBuffer = new StringBuffer(" insert into finance_account_share_detail(ID,SHARE_ACCOUNT_ID,ACCOUNT_ID,IS_USABLE_SUM_POOL,IS_FREEZE_SUM_POOL,USABLE_SUM_POOL,FREEZE_SUM_POOL,CREATED_BY,CREATED_TIME,SHARE_STATUS) ");
                 sqlBuffer.append(" select '" + UUID.uuid32() + "','" + qo.getAccountId() + "',ACCOUNT_ID,'" + qo.getIsUsableSumPool() + "','" + qo.getIsFreezeSumPool() + "',ACCOUNT_USABLE_SUM,ACCOUNT_FROZEN_SUM,'" + qo.getCreatedBy() + "' ,now(),'1' from finance_account where ACCOUNT_ID ='" + accountIds[i] + "' ");
-                log.info(sqlBuffer.toString());
+                //log.info(sqlBuffer.toString());
                 sql[i] = sqlBuffer.toString();
             }
 
@@ -497,7 +497,7 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
             for (int i = 0; i < accountIds.length; i++) {
                 StringBuffer sqlBuffer = new StringBuffer(" insert into finance_account_share_detail(ID,SHARE_ACCOUNT_ID,ACCOUNT_ID,IS_USABLE_SUM_POOL,IS_FREEZE_SUM_POOL,USABLE_SUM_POOL,FREEZE_SUM_POOL,CREATED_BY,CREATED_TIME,SHARE_STATUS) ");
                 sqlBuffer.append(" select '" + UUID.uuid32() + "','" + qo.getAccountId() + "',ACCOUNT_ID,'" + qo.getIsUsableSumPool() + "','" + qo.getIsFreezeSumPool() + "',ACCOUNT_USABLE_SUM,0.00,'" + qo.getCreatedBy() + "' ,now(),'1' from finance_account where ACCOUNT_ID ='" + accountIds[i] + "' ");
-                log.info(sqlBuffer.toString());
+                //log.info(sqlBuffer.toString());
                 sql[i] = sqlBuffer.toString();
             }
             //修改原账户状态、金额
@@ -513,7 +513,7 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
             for (int i = 0; i < accountIds.length; i++) {
                 StringBuffer sqlBuffer = new StringBuffer(" insert into finance_account_share_detail(ID,SHARE_ACCOUNT_ID,ACCOUNT_ID,IS_USABLE_SUM_POOL,IS_FREEZE_SUM_POOL,USABLE_SUM_POOL,FREEZE_SUM_POOL,CREATED_BY,CREATED_TIME,SHARE_STATUS) ");
                 sqlBuffer.append(" select '" + UUID.uuid32() + "','" + qo.getAccountId() + "',ACCOUNT_ID,'" + qo.getIsUsableSumPool() + "','" + qo.getIsFreezeSumPool() + "',0.00,ACCOUNT_FROZEN_SUM,'" + qo.getCreatedBy() + "' ,now(),'1' from finance_account where ACCOUNT_ID ='" + accountIds[i] + "' ");
-                log.info(sqlBuffer.toString());
+                //log.info(sqlBuffer.toString());
                 sql[i] = sqlBuffer.toString();
             }
 
@@ -530,7 +530,7 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
             for (int i = 0; i < accountIds.length; i++) {
                 StringBuffer sqlBuffer = new StringBuffer(" insert into finance_account_share_detail(ID,SHARE_ACCOUNT_ID,ACCOUNT_ID,IS_USABLE_SUM_POOL,IS_FREEZE_SUM_POOL,USABLE_SUM_POOL,FREEZE_SUM_POOL,CREATED_BY,CREATED_TIME,SHARE_STATUS) ");
                 sqlBuffer.append(" select '" + UUID.uuid32() + "','" + qo.getAccountId() + "',ACCOUNT_ID,'" + qo.getIsUsableSumPool() + "','" + qo.getIsFreezeSumPool() + "',0.00,0.00,'" + qo.getCreatedBy() + "' ,now(),'1' from finance_account where ACCOUNT_ID ='" + accountIds[i] + "' ");
-                log.info(sqlBuffer.toString());
+                //log.info(sqlBuffer.toString());
                 sql[i] = sqlBuffer.toString();
             }
 
