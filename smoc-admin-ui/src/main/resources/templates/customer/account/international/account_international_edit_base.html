@@ -109,7 +109,7 @@
                                                              required="true" title="账号状态"/>
 
                                                 </div>
-                                                <div class="col-sm-8 m-b-10">
+                                                <div class="col-sm-4 m-b-10">
                                                     <label>信息分类<span class="text-danger">*</span>&nbsp;
                                                         <span class="text-danger" th:if="${#fields.hasErrors('infoType')}"
                                                               th:errors="*{infoType}">*</span></label><br>
@@ -117,6 +117,17 @@
                                                              show-type="checkbox" key="code" class="form-control"
                                                              name="infoType"
                                                              th:value="${accountBasicInfoValidator.infoType}" title="信息分类"/>
+                                                </div>
+                                                <div class="col-sm-4 m-b-10">
+                                                    <label class="m-b-10">账号优先级<span class="text-danger">*</span>&nbsp;
+                                                        <span class="text-danger" th:if="${#fields.hasErrors('accountPriority')}"
+                                                              th:errors="*{accountPriority}"></span></label><br>
+                                                    <select data-style="btn-default" name="accountPriority" class="selectpicker form-control" required="" tabindex="-98">
+                                                        <option data-icon="mdi mdi-apps">--请选择账号优先级--</option>
+                                                        <option data-icon="mdi mdi-apps" value="1" th:selected="${accountBasicInfoValidator.accountPriority eq '1'}">正常</option>
+                                                        <option data-icon="mdi mdi-apps" value="2" th:selected="${accountBasicInfoValidator.accountPriority eq '2'}">中</option>
+                                                        <option data-icon="mdi mdi-apps" value="3" th:selected="${accountBasicInfoValidator.accountPriority eq '3'}">高</option>
+                                                    </select>
                                                 </div>
 
                                             </div>

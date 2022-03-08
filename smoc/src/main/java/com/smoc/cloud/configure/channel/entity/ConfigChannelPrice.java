@@ -14,7 +14,8 @@ public class ConfigChannelPrice {
     private String priceStyle;
     private String areaCode;
     private BigDecimal channelPrice;
-    private Date lasttimeHistory;
+    private String createdBy;
+    private Date createdTime;
     private String updatedBy;
     private Date updatedTime;
 
@@ -69,13 +70,23 @@ public class ConfigChannelPrice {
     }
 
     @Basic
-    @Column(name = "LASTTIME_HISTORY")
-    public Date getLasttimeHistory() {
-        return lasttimeHistory;
+    @Column(name = "CREATED_TIME")
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setLasttimeHistory(Date lasttimeHistory) {
-        this.lasttimeHistory = lasttimeHistory;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    @Basic
+    @Column(name = "CREATED_BY")
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
     }
 
     @Basic
@@ -108,13 +119,13 @@ public class ConfigChannelPrice {
                 Objects.equals(priceStyle, that.priceStyle) &&
                 Objects.equals(areaCode, that.areaCode) &&
                 Objects.equals(channelPrice, that.channelPrice) &&
-                Objects.equals(lasttimeHistory, that.lasttimeHistory) &&
+                Objects.equals(createdTime, that.createdTime) &&
                 Objects.equals(updatedBy, that.updatedBy) &&
                 Objects.equals(updatedTime, that.updatedTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, channelId, priceStyle, areaCode, channelPrice, lasttimeHistory, updatedBy, updatedTime);
+        return Objects.hash(id, channelId, priceStyle, areaCode, channelPrice, createdTime, updatedBy, updatedTime);
     }
 }

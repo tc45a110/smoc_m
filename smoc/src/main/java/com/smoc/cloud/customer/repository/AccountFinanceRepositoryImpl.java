@@ -27,7 +27,8 @@ public class AccountFinanceRepositoryImpl extends BasePageRepository {
 
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");
-        sqlBuffer.append("  t.ACCOUNT_ID");
+        sqlBuffer.append("  t.ID");
+        sqlBuffer.append(", t.ACCOUNT_ID");
         sqlBuffer.append(", t.PAY_TYPE");
         sqlBuffer.append(", t.CHARGE_TYPE");
         sqlBuffer.append(", t.FROZEN_RETURN_DATE");
@@ -69,7 +70,29 @@ public class AccountFinanceRepositoryImpl extends BasePageRepository {
 
         List<AccountFinanceInfoValidator> list = accountFinanceInfoValidator.getPrices();
 
-        final String sql = "insert into account_finance_info(ID,ACCOUNT_ID,PAY_TYPE,CHARGE_TYPE,FROZEN_RETURN_DATE,ACCOUNT_CREDIT_SUM,CARRIER_TYPE,CARRIER,CARRIER_PRICE,CREATED_BY,CREATED_TIME,UPDATED_BY,UPDATED_TIME) " +
+        String[] sql = new String[list.size()+ 1];
+
+        for(int i = 0; i < list.size(); i++){
+
+            AccountFinanceInfoValidator info = list.get(i);
+
+            if("1".equals(info.getFlag())){
+                StringBuffer sqlBuffer = new StringBuffer("insert into account_finance_info(ID,ACCOUNT_ID,PAY_TYPE,CHARGE_TYPE,FROZEN_RETURN_DATE,ACCOUNT_CREDIT_SUM,CARRIER_TYPE,CARRIER,CARRIER_PRICE,CREATED_BY,CREATED_TIME) ");
+                sqlBuffer.append(" values('"+UUID.uuid32()+"','"+accountFinanceInfoValidator.getAccountId()+"','"+accountFinanceInfoValidator.getPayType()+"','"+accountFinanceInfoValidator.getChargeType()+"','"+accountFinanceInfoValidator.getFrozenReturnDate()+"'" +
+                        ",'"+accountFinanceInfoValidator.getAccountCreditSum()+"','"+accountFinanceInfoValidator.getCarrierType()+"','"+info.getCarrier()+"','"+info.getCarrierPrice()+"','"+accountFinanceInfoValidator.getCreatedBy()+"',now()) ");
+                sql[i] = sqlBuffer.toString();
+            }
+
+            if("2".equals(info.getFlag())){
+                StringBuffer sqlBuffer = new StringBuffer("update account_finance_info set CARRIER_PRICE = '"+info.getCarrierPrice()+"',UPDATED_BY='"+accountFinanceInfoValidator.getCreatedBy()+"',UPDATED_TIME=now() where ID = '"+info.getId()+"' ");
+                sql[i] = sqlBuffer.toString();
+            }
+
+        }
+
+        this.jdbcTemplate.batchUpdate(sql);
+
+        /*final String sql = "insert into account_finance_info(ID,ACCOUNT_ID,PAY_TYPE,CHARGE_TYPE,FROZEN_RETURN_DATE,ACCOUNT_CREDIT_SUM,CARRIER_TYPE,CARRIER,CARRIER_PRICE,CREATED_BY,CREATED_TIME,UPDATED_BY,UPDATED_TIME) " +
                 "values(?,?,?,?,?,?,?,?,?,?,now(),?,now()) ";
 
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
@@ -92,7 +115,7 @@ public class AccountFinanceRepositoryImpl extends BasePageRepository {
                 ps.setString(11, accountFinanceInfoValidator.getCreatedBy());
             }
 
-        });
+        });*/
     }
 
 }

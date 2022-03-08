@@ -108,10 +108,9 @@
                                         [[${info.accountName}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <mpm:tag id="templateType" identity="businessType"
-                                                 class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-danger btn-rounded btn-sm waves-effect waves-light;"
-                                                 name="businessType" show-type="button" key="code"
-                                                 th:value="${info.templateType}" title="业务类型"/>
+                                        <mpm:tag identity="businessType" show-type="button"
+                                                 key="code" th:value="${info.templateType}"
+                                                 class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;MULTI_SMS,btn btn-brown btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;5G_SMS,btn btn-primary btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-inverse btn-rounded btn-sm waves-effect waves-light"/>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
                                         [[${info.templateContent}]]

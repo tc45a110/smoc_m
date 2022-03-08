@@ -37,5 +37,8 @@ public class AccountFinanceInfoValidator {
     private String updatedBy;
     private Date updatedTime;
 
+    //数据库批量执行标识1:添加 2：更新
+    private String flag;
+
     private List<AccountFinanceInfoValidator> prices = new ArrayList<>();
 }

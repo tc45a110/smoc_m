@@ -25,11 +25,12 @@ public class ChannelPriceRepositoryImpl extends BasePageRepository {
 
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");
-        sqlBuffer.append("  t.CHANNEL_ID");
+        sqlBuffer.append("  t.ID");
+        sqlBuffer.append(", t.CHANNEL_ID");
         sqlBuffer.append(", t.PRICE_STYLE");
         sqlBuffer.append(", t.AREA_CODE");
         sqlBuffer.append(", t.CHANNEL_PRICE");
-        sqlBuffer.append(", DATE_FORMAT(t.LASTTIME_HISTORY, '%Y-%m-%d %H:%i:%S')LASTTIME_HISTORY");
+        sqlBuffer.append(", DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME");
         sqlBuffer.append("  from config_channel_price t where 1=1 ");
 
         List<Object> paramsList = new ArrayList<Object>();
@@ -67,7 +68,28 @@ public class ChannelPriceRepositoryImpl extends BasePageRepository {
 
         List<ChannelPriceValidator> list = channelPriceValidator.getPrices();
 
-        final String sql = "insert into config_channel_price(ID,CHANNEL_ID,PRICE_STYLE,AREA_CODE,CHANNEL_PRICE,LASTTIME_HISTORY,UPDATED_TIME,UPDATED_BY) values(?,?,?,?,?,now(),now(),?) ";
+        String[] sql = new String[list.size()+ 1];
+
+        for(int i = 0; i < list.size(); i++){
+
+            ChannelPriceValidator info = list.get(i);
+
+            if("1".equals(info.getFlag())){
+                StringBuffer sqlBuffer = new StringBuffer("insert into config_channel_price(ID,CHANNEL_ID,PRICE_STYLE,AREA_CODE,CHANNEL_PRICE,CREATED_BY,CREATED_TIME) ");
+                sqlBuffer.append(" values('"+UUID.uuid32()+"','"+channelPriceValidator.getChannelId()+"','"+channelPriceValidator.getPriceStyle()+"','"+info.getAreaCode()+"','"+info.getChannelPrice()+"','"+info.getCreatedBy()+"',now()) ");
+                sql[i] = sqlBuffer.toString();
+            }
+
+            if("2".equals(info.getFlag())){
+                StringBuffer sqlBuffer = new StringBuffer("update config_channel_price set CHANNEL_PRICE = '"+info.getChannelPrice()+"',UPDATED_BY='"+info.getCreatedBy()+"',UPDATED_TIME=now() where ID = '"+info.getId()+"' ");
+                sql[i] = sqlBuffer.toString();
+            }
+
+        }
+
+        this.jdbcTemplate.batchUpdate(sql);
+
+        /*final String sql = "insert into config_channel_price(ID,CHANNEL_ID,PRICE_STYLE,AREA_CODE,CHANNEL_PRICE,LASTTIME_HISTORY,UPDATED_TIME,UPDATED_BY) values(?,?,?,?,?,now(),now(),?) ";
 
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             public int getBatchSize() {
@@ -84,6 +106,6 @@ public class ChannelPriceRepositoryImpl extends BasePageRepository {
                 ps.setString(6, channelPrice.getCreatedBy());
             }
 
-        });
+        })*/;
     }
 }

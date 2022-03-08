@@ -4,6 +4,7 @@ package com.smoc.cloud.customer.service;
 import com.alibaba.fastjson.JSON;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.smoc.configuate.validator.ChannelPriceValidator;
 import com.smoc.cloud.common.smoc.customer.validator.AccountFinanceInfoValidator;
 import com.smoc.cloud.customer.entity.AccountBasicInfo;
 import com.smoc.cloud.customer.repository.AccountFinanceRepository;
@@ -21,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  *  账号财务接口管理
@@ -80,8 +83,43 @@ public class AccountFinanceService {
             return ResponseDataUtil.buildError();
         }
 
+        //根据账号id查询已有的价格
+        AccountFinanceInfoValidator info = new AccountFinanceInfoValidator();
+        info.setAccountId(accountFinanceInfoValidator.getAccountId());
+        List<AccountFinanceInfoValidator> list = accountFinanceRepository.findByAccountId(accountFinanceInfoValidator);
+        //转map
+        Map<String, AccountFinanceInfoValidator> map = new HashMap<>();
+        if (!StringUtils.isEmpty(list) && list.size() > 0) {
+            map = list.stream().collect(Collectors.toMap(AccountFinanceInfoValidator::getCarrier, Function.identity()));
+        }
+
+        //前台提交的运营商和价格
+        List<AccountFinanceInfoValidator> priceList = accountFinanceInfoValidator.getPrices();
+        Iterator<AccountFinanceInfoValidator> it = priceList.iterator();
+        while (it.hasNext()){
+            AccountFinanceInfoValidator submitPrice = (AccountFinanceInfoValidator)it.next();
+            AccountFinanceInfoValidator priceMap = map.get(submitPrice.getCarrier());
+
+            //priceMap为空，代表是新添加的
+            if(StringUtils.isEmpty(priceMap) ){
+                submitPrice.setFlag("1");
+            }
+
+            //priceMap不为空：代表数据库存在
+            if(!StringUtils.isEmpty(priceMap) ){
+                //价格相等：代表没有改动，数据库不用执行
+                if(submitPrice.getCarrierPrice().compareTo(priceMap.getCarrierPrice())==0){
+                    it.remove();
+                }else{
+                    //价格有变动，需要修改更新日期
+                    submitPrice.setFlag("2");
+                    submitPrice.setId(priceMap.getId());
+                }
+            }
+        }
+
         //先删除数据
-        accountFinanceRepository.deleteByAccountId(accountFinanceInfoValidator.getAccountId());
+        //accountFinanceRepository.deleteByAccountId(accountFinanceInfoValidator.getAccountId());
 
         //批量保存
         accountFinanceRepository.batchSave(accountFinanceInfoValidator);

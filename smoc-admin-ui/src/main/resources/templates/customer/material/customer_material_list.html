@@ -128,11 +128,12 @@
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         <mpm:tag identity="enterpriseType" show-type="button" key="code" th:value="${info.enterpriseType}"
-                                                 class="DIRECTCUSTOMER,btn btn-info btn-rounded btn-sm waves-effect waves-light;CHANNELCUSTOMER,btn btn-teal btn-rounded btn-sm waves-effect waves-light;IDENTIFICATION,btn btn-success btn-rounded btn-sm waves-effect waves-light;"/>
+                                                 class="DIRECTCUSTOMER,btn btn-info btn-rounded btn-sm waves-effect waves-light;CHANNELCUSTOMER,btn btn-success btn-rounded btn-sm waves-effect waves-light;IDENTIFICATION,btn btn-success btn-rounded btn-sm waves-effect waves-light;"/>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <mpm:tag identity="businessType" th:value="${info.businessType}" show-type="label"
-                                                 key="code"/>
+                                        <mpm:tag identity="businessType" show-type="button"
+                                                 key="code" th:value="${info.businessType}"
+                                                 class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;MULTI_SMS,btn btn-brown btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;5G_SMS,btn btn-primary btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-inverse btn-rounded btn-sm waves-effect waves-light"/>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         <mpm:tag identity="infoType" th:value="${info.infoType}" show-type="label" key="code"/>

@@ -17,10 +17,14 @@ public class ChannelPriceValidator {
     private String priceStyle;
     private String areaCode;
     private BigDecimal channelPrice;
-    private String lasttimeHistory;
+    private String createdTime;
     private String createdBy;
     private String updatedBy;
     private Date updatedTime;
+    private String lasttimeHistory;
+
+    //数据库批量执行标识1:添加 2：更新
+    private String flag;
 
     private List<ChannelPriceValidator> prices = new ArrayList<>();
 }

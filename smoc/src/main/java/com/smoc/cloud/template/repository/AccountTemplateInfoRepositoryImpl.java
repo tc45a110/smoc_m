@@ -60,8 +60,8 @@ public class AccountTemplateInfoRepositoryImpl extends BasePageRepository {
 
         //业务账号
         if (!StringUtils.isEmpty(qo.getBusinessAccount())) {
-            sqlBuffer.append(" and t.BUSINESS_ACCOUNT =?");
-            paramsList.add(qo.getBusinessAccount().trim());
+            sqlBuffer.append(" and t.BUSINESS_ACCOUNT like ?");
+            paramsList.add("%" + qo.getBusinessAccount().trim() + "%");
         }
 
         //业务类型

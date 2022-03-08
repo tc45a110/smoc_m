@@ -17,6 +17,7 @@ public class AccountFinanceInfoRowMapper implements RowMapper<AccountFinanceInfo
     public AccountFinanceInfoValidator mapRow(ResultSet resultSet, int i) throws SQLException {
 
         AccountFinanceInfoValidator qo = new AccountFinanceInfoValidator();
+        qo.setId(resultSet.getString("ID"));
         qo.setAccountId(resultSet.getString("ACCOUNT_ID"));
         qo.setPayType(resultSet.getString("PAY_TYPE"));
         qo.setChargeType(resultSet.getString("CHARGE_TYPE"));

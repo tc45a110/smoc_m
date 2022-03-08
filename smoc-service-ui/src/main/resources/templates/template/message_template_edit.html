@@ -50,11 +50,10 @@
                                 <div class="p-20">
 
                                     <div class="form-group m-b-20">
-                                        <label>业务类型</label>
-                                        <mpm:tag id="templateType" identity="businessType"
-                                                 class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-danger btn-rounded btn-sm waves-effect waves-light;"
-                                                 name="businessType" show-type="button" key="code"
-                                                 th:value="${accountTemplateInfoValidator.templateType}" title="业务类型"/></span>
+                                        <label>业务类型</label>&nbsp;
+                                        <mpm:tag identity="businessType" show-type="button"
+                                                 key="code" th:value="${accountTemplateInfoValidator.templateType}"
+                                                 class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;MULTI_SMS,btn btn-brown btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;5G_SMS,btn btn-primary btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-inverse btn-rounded btn-sm waves-effect waves-light"/>
                                     </div>
 
                                     <div class="form-group m-b-20">
@@ -129,7 +128,7 @@
 <script th:src="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.js}"></script>
 <th:block th:insert="fragments/common_fragments :: common_submit_form"/>
 
-<script>
+<script th:remove="${#strings.isEmpty(error)}?none:all">
 
     $('#templateContent').bind('input propertychange', function () {
         var fizeNum = $(this).val().length;
@@ -161,6 +160,12 @@
     $('#preloader').css('display', 'none');
 
 
+</script>
+<script>
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
 </script>
 </body>
 </html>

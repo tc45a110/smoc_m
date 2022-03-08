@@ -101,7 +101,7 @@ public class MessageTemplateController {
      * @return
      */
     @RequestMapping(value = "page/{type}", method = RequestMethod.POST)
-    public ModelAndView page(@PathVariable String signType,@ModelAttribute AccountTemplateInfoValidator accountTemplateInfoValidator, @PathVariable String type,PageParams pageParams,HttpServletRequest request) {
+    public ModelAndView page(@ModelAttribute AccountTemplateInfoValidator accountTemplateInfoValidator, @PathVariable String type,PageParams pageParams,HttpServletRequest request) {
         ModelAndView view = new ModelAndView("template/message_template_list");
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
 

@@ -144,6 +144,7 @@ public class ChannelPriceController {
             ChannelPriceValidator channelPrice = new ChannelPriceValidator();
             channelPrice.setAreaCode(areaCodes[i]);
             channelPrice.setChannelPrice(new BigDecimal(request.getParameter(areaCodes[i])));
+            channelPrice.setCreatedBy(user.getRealName());
             list.add(channelPrice);
         }
 

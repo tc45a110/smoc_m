@@ -17,10 +17,11 @@ public class ChannelPriceRowMapper implements RowMapper<ChannelPriceValidator> {
     public ChannelPriceValidator mapRow(ResultSet resultSet, int i) throws SQLException {
 
         ChannelPriceValidator qo = new ChannelPriceValidator();
+        qo.setId(resultSet.getString("ID"));
         qo.setChannelId(resultSet.getString("CHANNEL_ID"));
         qo.setPriceStyle(resultSet.getString("PRICE_STYLE"));
         qo.setAreaCode(resultSet.getString("AREA_CODE"));
-        qo.setLasttimeHistory(resultSet.getString("LASTTIME_HISTORY"));
+        qo.setCreatedTime(resultSet.getString("CREATED_TIME"));
         BigDecimal channelPrice = resultSet.getBigDecimal("CHANNEL_PRICE");
         if(!StringUtils.isEmpty(channelPrice)){
             qo.setChannelPrice(new BigDecimal(channelPrice.stripTrailingZeros().toPlainString()));

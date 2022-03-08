@@ -203,7 +203,8 @@ public class ChannelService {
             configChannelPrice.setPriceStyle(channelBasicInfoValidator.getPriceStyle());
             configChannelPrice.setChannelPrice(channelBasicInfoValidator.getChannelPrice());
             configChannelPrice.setAreaCode("ALL");
-            configChannelPrice.setLasttimeHistory(new Date());
+            configChannelPrice.setCreatedTime(new Date());
+            configChannelPrice.setCreatedBy(channelBasicInfoValidator.getCreatedBy());
 
             //记录日志
             log.info("[通道管理][通道价格][{}]数据:{}",op,JSON.toJSONString(configChannelPrice));

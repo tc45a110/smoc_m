@@ -47,7 +47,7 @@
                             签名明细
                         </h3>
                     </div>
-                    <div class="panel-body" style="height: 540px">
+                    <div class="panel-body" style="height: 560px">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="p-20">
@@ -55,11 +55,12 @@
                                         <div class="row">
                                             <div class="col-sm-6 m-b-10">
                                                 <label>业务类型：</label>
-                                                <mpm:tag identity="businessType" show-type="label" key="code"
-                                                         th:value="${enterpriseDocumentInfoValidator.businessType}"/>
+                                                <mpm:tag identity="businessType" show-type="button"
+                                                         key="code" th:value="${enterpriseDocumentInfoValidator.businessType}"
+                                                         class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;MULTI_SMS,btn btn-brown btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;5G_SMS,btn btn-primary btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-inverse btn-rounded btn-sm waves-effect waves-light"/>
                                             </div>
                                             <div class="col-sm-6 m-b-10">
-                                                <label>信息类型：</label>
+                                                <label>信息分类：</label>
                                                 <mpm:tag identity="infoType" show-type="label" key="code"
                                                          th:value="${enterpriseDocumentInfoValidator.infoType}"/>
                                             </div>
@@ -126,7 +127,7 @@
                             审核记录
                         </h3>
                     </div>
-                    <div class="panel-body" style="height: 540px">
+                    <div class="panel-body" style="height: 560px">
                         <div class="table-responsive">
                             <table class="table table table-hover m-10" style="margin-top: -12px;">
                                 <thead>
