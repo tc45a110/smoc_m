@@ -15,7 +15,7 @@ import javax.annotation.Resource;
  * 通道价格历史 批处理
  */
 @Component
-public class ChannelPriceSchedulingJob {
+public class ChannelPriceSchedulingSchedule {
 
     @Autowired
     JobLauncher jobLauncher;
@@ -27,7 +27,7 @@ public class ChannelPriceSchedulingJob {
     private Job channelPriceHistoryJob;
 
     @Scheduled(cron = "0 0/5 * * * ?")
-    public void channelPriceHistoryJob() throws Exception {
+    public void channelPriceHistorySchedule() throws Exception {
         JobParameters jobParameter = new JobParametersBuilder().addLong("times",System.currentTimeMillis()).toJobParameters();
         JobExecution run = jobLauncher.run(channelPriceHistoryJob, jobParameter);
         run.getId();

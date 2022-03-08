@@ -11,16 +11,17 @@ import java.util.List;
 
 /**
  * 业务账号价格历史 批处理
+ * 对新数据进行特殊处理
  */
 @Slf4j
 @Component
-public class AccountPriceHistoryWriter implements ItemWriter<AccountPriceModel> {
+public class NewDataAccountPriceHistoryWriter implements ItemWriter<AccountPriceModel> {
 
     @Autowired
     private AccountFinanceService accountFinanceService;
 
     @Override
     public void write(List<? extends AccountPriceModel> list) throws Exception {
-        accountFinanceService.saveHistory(list);
+        accountFinanceService.updateOrSaveAccountPrice(list);
     }
 }

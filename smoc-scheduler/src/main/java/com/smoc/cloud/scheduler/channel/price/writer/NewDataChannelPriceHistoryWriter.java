@@ -11,16 +11,17 @@ import java.util.List;
 
 /**
  * 通道价格历史 批处理
+ * 对新数据进行特殊处理
  */
 @Slf4j
 @Component
-public class ChannelPriceHistoryWriter implements ItemWriter<ChannelPriceModel> {
+public class NewDataChannelPriceHistoryWriter implements ItemWriter<ChannelPriceModel> {
 
     @Autowired
     private ChannelPriceHistoryService channelPriceHistoryService;
 
     @Override
     public void write(List<? extends ChannelPriceModel> list) throws Exception {
-        channelPriceHistoryService.saveHistory(list);
+        channelPriceHistoryService.updateOrSaveChannelPrice(list);
     }
 }
