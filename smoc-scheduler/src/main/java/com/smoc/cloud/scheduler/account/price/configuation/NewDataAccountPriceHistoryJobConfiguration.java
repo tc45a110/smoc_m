@@ -80,8 +80,8 @@ public class NewDataAccountPriceHistoryJobConfiguration {
     }
 
     /**
-     * 查询非今天创建、批处理日期小于今天的数据
-     *
+     * 查询当天创建的数据
+     * 业务逻辑分为两种，一种是当天创建数据，一种是删除后在添加进去的数据
      * @return
      */
     @Bean
