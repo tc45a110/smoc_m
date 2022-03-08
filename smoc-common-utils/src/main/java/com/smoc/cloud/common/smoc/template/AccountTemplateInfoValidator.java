@@ -41,4 +41,5 @@ public class AccountTemplateInfoValidator {
     private String accountName;
     private String startDate;
     private String endDate;
+    private String enterpriseId;
 }

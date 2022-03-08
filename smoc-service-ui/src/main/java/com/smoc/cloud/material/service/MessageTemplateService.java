@@ -6,35 +6,29 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
-import com.smoc.cloud.common.smoc.customer.validator.EnterpriseDocumentInfoValidator;
-import com.smoc.cloud.common.smoc.customer.validator.SystemAttachmentValidator;
+import com.smoc.cloud.common.smoc.template.AccountTemplateInfoValidator;
 import com.smoc.cloud.common.utils.UUID;
-import com.smoc.cloud.material.remote.MessageSignFeignClient;
+import com.smoc.cloud.material.remote.MessageTemplateFeignClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
-import java.util.List;
 
 
 /**
- * 资质管理服务
+ * 模板管理服务
  **/
 @Slf4j
 @Service
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class MessageSignService {
+public class MessageTemplateService {
 
     @Autowired
-    private MessageSignFeignClient messageSignFeignClient;
-
-    @Autowired
-    private SystemAttachmentService systemAttachmentService;
+    private MessageTemplateFeignClient messageTemplateFeignClient;
 
     @Autowired
     private FlowApproveService flowApproveService;
@@ -45,10 +39,10 @@ public class MessageSignService {
      * @param pageParams
      * @return
      */
-    public ResponseData<PageList<EnterpriseDocumentInfoValidator>> page(PageParams<EnterpriseDocumentInfoValidator> pageParams) {
+    public ResponseData<PageList<AccountTemplateInfoValidator>> page(PageParams<AccountTemplateInfoValidator> pageParams) {
         try {
-            PageList<EnterpriseDocumentInfoValidator> pageList = this.messageSignFeignClient.page(pageParams);
-            return ResponseDataUtil.buildSuccess(pageList);
+            ResponseData<PageList<AccountTemplateInfoValidator>> pageList = this.messageTemplateFeignClient.page(pageParams);
+            return pageList;
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseDataUtil.buildError(e.getMessage());
@@ -61,9 +55,9 @@ public class MessageSignService {
      * @param id
      * @return
      */
-    public ResponseData<EnterpriseDocumentInfoValidator> findById(String id) {
+    public ResponseData<AccountTemplateInfoValidator> findById(String id) {
         try {
-            ResponseData<EnterpriseDocumentInfoValidator> data = this.messageSignFeignClient.findById(id);
+            ResponseData<AccountTemplateInfoValidator> data = this.messageTemplateFeignClient.findById(id);
             return data;
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -75,23 +69,20 @@ public class MessageSignService {
      * 保存、修改数据
      * op 是类型 表示了保存或修改
      */
-    public ResponseData save(EnterpriseDocumentInfoValidator enterpriseDocumentInfoValidator, List<MultipartFile> files,String enterpriseName, String op,String userId) {
+    public ResponseData save(AccountTemplateInfoValidator accountTemplateInfoValidator, String op,String userId) {
 
         try {
 
-            //获取上传的文件
-            List<SystemAttachmentValidator> list = systemAttachmentService.saveFile(files,"EC_DOCUMENT",enterpriseDocumentInfoValidator.getId(),enterpriseName,enterpriseDocumentInfoValidator.getCreatedBy());
-            enterpriseDocumentInfoValidator.setFilesList(list);
-            ResponseData data = this.messageSignFeignClient.save(enterpriseDocumentInfoValidator, op);
+            ResponseData data = this.messageTemplateFeignClient.save(accountTemplateInfoValidator, op);
 
             //组织审核信息
             if("add".equals(op)) {
                 FlowApproveValidator flowApproveValidator = new FlowApproveValidator();
                 flowApproveValidator.setId(UUID.uuid32());
-                flowApproveValidator.setApproveId(enterpriseDocumentInfoValidator.getId());
-                flowApproveValidator.setApproveType("SIGN_INFO");
+                flowApproveValidator.setApproveId(accountTemplateInfoValidator.getTemplateId());
+                flowApproveValidator.setApproveType("TEMPLATE_INFO");
                 flowApproveValidator.setSubmitTime(new Date());
-                flowApproveValidator.setBusiUrl(enterpriseDocumentInfoValidator.getCreatedBy());
+                flowApproveValidator.setBusiUrl(accountTemplateInfoValidator.getCreatedBy());
                 flowApproveValidator.setUserId(userId);
                 flowApproveValidator.setApproveAdvice("新建");
                 flowApproveValidator.setApproveStatus(4);
@@ -111,7 +102,7 @@ public class MessageSignService {
      */
     public ResponseData deleteById(String id) {
         try {
-            ResponseData data = this.messageSignFeignClient.deleteById(id);
+            ResponseData data = this.messageTemplateFeignClient.deleteById(id);
             return data;
         } catch (Exception e) {
             log.error(e.getMessage());

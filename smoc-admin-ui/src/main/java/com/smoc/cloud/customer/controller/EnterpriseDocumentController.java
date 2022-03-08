@@ -1,15 +1,16 @@
 package com.smoc.cloud.customer.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.smoc.cloud.admin.security.remote.service.FlowApproveService;
 import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
+import com.smoc.cloud.common.auth.validator.FlowApproveValidator;
 import com.smoc.cloud.common.auth.validator.SystemUserLogValidator;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
-import com.smoc.cloud.common.smoc.customer.validator.EnterpriseContractInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseDocumentInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.SystemAttachmentValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
@@ -58,6 +59,9 @@ public class EnterpriseDocumentController {
 
     @Autowired
     private SystemUserLogService systemUserLogService;
+
+    @Autowired
+    private FlowApproveService flowApproveService;
 
     /**
      * 查询EC资料
@@ -345,10 +349,40 @@ public class EnterpriseDocumentController {
      * 显示详情
      * @return
      */
+    @RequestMapping(value = "/material/view/{id}", method = RequestMethod.GET)
+    public ModelAndView view(@PathVariable String id, HttpServletRequest request) {
+
+        ModelAndView view = new ModelAndView("customer/material/customer_material_view_center");
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
+
+        //查询信息
+        ResponseData<EnterpriseDocumentInfoValidator> infoDate = enterpriseDocumentService.findById(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(infoDate.getCode())) {
+            view.addObject("error", infoDate.getCode() + ":" + infoDate.getMessage());
+            return view;
+        }
+
+        view.addObject("id", infoDate.getData().getId());
+
+        return view;
+
+    }
+
+    /**
+     * 显示详情
+     * @return
+     */
     @RequestMapping(value = "/material/detail/{id}", method = RequestMethod.GET)
     public ModelAndView detail(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("customer/material/customer_material_detail");
+        ModelAndView view = new ModelAndView("customer/material/customer_material_view_detail");
 
         //完成参数规则验证
         MpmIdValidator validator = new MpmIdValidator();
@@ -378,9 +412,6 @@ public class EnterpriseDocumentController {
         //查询附件
         ResponseData<List<SystemAttachmentValidator>> filesList = systemAttachmentService.findByMoudleId(enterpriseDocumentInfoValidator.getId());
 
-        //查询操作日志
-        querySysUserLog(view,infoDate.getData().getId(),"EC_DOCUMENT");
-
         view.addObject("enterpriseDocumentInfoValidator", enterpriseDocumentInfoValidator);
         view.addObject("filesList", filesList.getData());
 
@@ -388,25 +419,108 @@ public class EnterpriseDocumentController {
 
     }
 
-    private void querySysUserLog(ModelAndView view,String moduleId,String module) {
-        SystemUserLogValidator systemUserLogValidator = new SystemUserLogValidator();
-        systemUserLogValidator.setModuleId(moduleId);
-        systemUserLogValidator.setModule(module);
+    @RequestMapping(value = "/material/check/list/{id}", method = RequestMethod.GET)
+    public ModelAndView checkList(@PathVariable String id, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("customer/material/customer_material_view_check");
 
-        //查询数据
-        PageParams<SystemUserLogValidator> params = new PageParams<>();
-        params.setPageSize(20);
-        params.setCurrentPage(1);
-        params.setParams(systemUserLogValidator);
-
-        //分页查询
-        ResponseData<PageList<SystemUserLogValidator>> responseData = systemUserLogService.page(params);
-        if (ResponseCode.SUCCESS.getCode().equals(responseData.getCode())) {
-            view.addObject("list", responseData.getData().getList());
+        ResponseData<List<FlowApproveValidator>> checkRecordData = flowApproveService.checkRecord(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(checkRecordData.getCode())) {
+            view.addObject("error", checkRecordData.getCode() + ":" + checkRecordData.getMessage());
+            return view;
         }
+        view.addObject("checkRecord", checkRecordData.getData());
+        return view;
+    }
+
+    /**
+     * 显示审核
+     * @return
+     */
+    @RequestMapping(value = "/material/sign/check/{id}", method = RequestMethod.GET)
+    public ModelAndView check(@PathVariable String id, HttpServletRequest request) {
+
+        ModelAndView view = new ModelAndView("customer/material/cuxtomer_material_sign_check");
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
+
+        //查询信息
+        ResponseData<EnterpriseDocumentInfoValidator> infoDate = enterpriseDocumentService.findById(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(infoDate.getCode())) {
+            view.addObject("error", infoDate.getCode() + ":" + infoDate.getMessage());
+            return view;
+        }
+
+        //查询企业数据
+        ResponseData<EnterpriseBasicInfoValidator> enterpriseData = enterpriseService.findById(infoDate.getData().getEnterpriseId());
+        if (!ResponseCode.SUCCESS.getCode().equals(enterpriseData.getCode())) {
+            view.addObject("error", enterpriseData.getCode() + ":" + enterpriseData.getMessage());
+        }
+
+        EnterpriseDocumentInfoValidator enterpriseDocumentInfoValidator = infoDate.getData();
+        enterpriseDocumentInfoValidator.setEnterpriseName(enterpriseData.getData().getEnterpriseName());
+        enterpriseDocumentInfoValidator.setEnterpriseType(enterpriseData.getData().getEnterpriseType());
+
+        //查询附件
+        ResponseData<List<SystemAttachmentValidator>> filesList = systemAttachmentService.findByMoudleId(enterpriseDocumentInfoValidator.getId());
+
+        ResponseData<List<FlowApproveValidator>> checkRecordData = flowApproveService.checkRecord(infoDate.getData().getId());
+        if (!ResponseCode.SUCCESS.getCode().equals(checkRecordData.getCode())) {
+            view.addObject("error", checkRecordData.getCode() + ":" + checkRecordData.getMessage());
+            return view;
+        }
+
+        view.addObject("enterpriseDocumentInfoValidator", enterpriseDocumentInfoValidator);
+        view.addObject("filesList", filesList.getData());
+        view.addObject("checkRecord", checkRecordData.getData());
+
+        return view;
 
     }
 
+    /**
+     * 操作审核
+     * @param enterpriseDocumentInfoValidator
+     * @param result
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/material/sign/save", method = RequestMethod.POST)
+    public ModelAndView checkSave(@ModelAttribute @Validated EnterpriseDocumentInfoValidator enterpriseDocumentInfoValidator, BindingResult result, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("customer/material/cuxtomer_material_sign_check");
+
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        //完成参数规则验证
+        if (result.hasErrors()) {
+            view.addObject("enterpriseDocumentInfoValidator", enterpriseDocumentInfoValidator);
+            return view;
+        }
+
+        //保存数据
+        ResponseData data = enterpriseDocumentService.check(enterpriseDocumentInfoValidator,user);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        //保存操作记录
+        if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            systemUserLogService.logsAsync("EC_DOCUMENT", enterpriseDocumentInfoValidator.getId(), user.getRealName(), "check","审核签名资质" , JSON.toJSONString(enterpriseDocumentInfoValidator));
+        }
+
+        //记录日志
+        log.info("[签名资质审核][{}][{}]数据:{}", "check", user.getUserName(), JSON.toJSONString(enterpriseDocumentInfoValidator));
+
+        view.setView(new RedirectView("/ec/customer/material/list", true, false));
+        return view;
+
+    }
 
     /**
      * EC中心查询EC资料

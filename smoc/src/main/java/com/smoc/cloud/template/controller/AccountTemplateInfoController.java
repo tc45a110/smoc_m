@@ -99,4 +99,23 @@ public class AccountTemplateInfoController {
         ResponseData data = accountTemplateInfoService.cancelTemplate(id,templateStatus);
         return data;
     }
+
+    /**
+     * 根据ID 删除
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/deleteById/{id}", method = RequestMethod.GET)
+    public ResponseData deleteById(@PathVariable String id) {
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(validator));
+        }
+
+        return accountTemplateInfoService.deleteById(id);
+    }
 }

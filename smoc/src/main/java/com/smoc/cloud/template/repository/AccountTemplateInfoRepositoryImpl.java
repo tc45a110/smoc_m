@@ -52,6 +52,12 @@ public class AccountTemplateInfoRepositoryImpl extends BasePageRepository {
             paramsList.add("%" + qo.getEnterpriseName().trim() + "%");
         }
 
+        //企业ID
+        if (!StringUtils.isEmpty(qo.getEnterpriseId())) {
+            sqlBuffer.append(" and e.ENTERPRISE_ID = ? ");
+            paramsList.add(qo.getEnterpriseId().trim());
+        }
+
         //业务账号
         if (!StringUtils.isEmpty(qo.getBusinessAccount())) {
             sqlBuffer.append(" and t.BUSINESS_ACCOUNT =?");

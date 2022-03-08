@@ -129,4 +129,17 @@ public class BusinessAccountController {
         return businessAccountService.createAccountId(enterpriseFlag);
 
     }
+
+    /**
+     *  查询企业所有的业务账号
+     * @param accountBasicInfoValidator
+     * @return
+     */
+    @RequestMapping(value = "/findBusinessAccount", method = RequestMethod.POST)
+    public ResponseData<List<AccountBasicInfoValidator>> findBusinessAccount(@RequestBody AccountBasicInfoValidator accountBasicInfoValidator)  {
+
+
+        ResponseData<List<AccountBasicInfoValidator>> data = businessAccountService.findBusinessAccount(accountBasicInfoValidator);
+        return data;
+    }
 }

@@ -7,6 +7,8 @@
     <th:block th:insert="fragments/common_fragments :: common_css"/>
     <th:block th:insert="fragments/common_fragments :: select_css"/>
     <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
+    <link th:href="@{/static/plugins/jquery.filer/css/jquery.filer.css}" rel="stylesheet"/>
+    <link th:href="@{/static/plugins/jquery.filer/css/themes/jquery.filer-dragdropbox-theme.css}" rel="stylesheet"/>
 
 </head>
 <body>
@@ -22,13 +24,13 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                        <h4 class="page-title">WEB模板审核</h4>
+                        <h4 class="page-title">签名审核</h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
-                            模板管理
+                            签名资质管理
                         </li>
                         <li class="active">
-                            WEB模板审核
+                            签名审核
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -41,8 +43,8 @@
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-md-12">
                 <div class="card-box">
-                    <form id="submit_form" th:action="@{/template/web/save}"
-                          th:object="${accountTemplateInfoValidator}"
+                    <form id="submit_form" th:action="@{/ec/customer/material/sign/save}"
+                          th:object="${enterpriseDocumentInfoValidator}"
                           method="post" data-parsley-validate="">
                         <div class="row">
                             <div class="col-md-6">
@@ -50,32 +52,65 @@
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-6 form-group">
-                                                <label>企业名称： <span style="color:#00acc1">[[${enterpriseBasicInfoValidator.enterpriseName}]]</span>
+                                                <label>企业名称： <span style="color:#00acc1">[[${enterpriseDocumentInfoValidator.enterpriseName}]]</span>
                                                 </label>
                                             </div>
                                             <div class="col-md-6 form-group">
-                                                <label>业务账号： <span style="color:#00acc1">[[${accountBasicInfoValidator.accountId}]]</span>
-                                                </label>
-                                            </div>
-                                            <div class="col-md-6 form-group">
-                                                <label>业务账号名称：<span style="color:#00acc1">[[${accountBasicInfoValidator.accountName}]]</span>
-                                                </label>
+                                                <label>企业类型：</label>
+                                                    <span style="color:#00acc1">
+                                                        <mpm:tag identity="enterpriseType" show-type="label" key="code" th:value="${enterpriseDocumentInfoValidator.enterpriseType}"/>
+                                                    </span>
                                             </div>
                                             <div class="col-md-6 form-group">
                                                 <label>业务类型：<span style="color:#00acc1">
                                                     <mpm:tag id="templateType" identity="businessType"
                                                              class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-danger btn-rounded btn-sm waves-effect waves-light;"
                                                              name="businessType" show-type="button" key="code"
-                                                             th:value="${accountBasicInfoValidator.businessType}" title="业务类型"/></span>
+                                                             th:value="${enterpriseDocumentInfoValidator.businessType}" title="业务类型"/></span>
                                                 </label>
                                             </div>
-                                            <div class="col-md-12 form-group">
-                                                <label>模板内容</label>
+                                            <div class="col-md-6 form-group">
+                                                <label>信息类型：</label>
+                                                <span style="color:#00acc1">
+                                                 <mpm:tag identity="infoType" show-type="label" key="code"
+                                                          th:value="${enterpriseDocumentInfoValidator.infoType}"/>
+                                                </span>
                                             </div>
                                             <div class="col-md-12 form-group">
-                                                <textarea class="form-control" readonly
-                                                          rows="15">[[${accountTemplateInfoValidator.templateContent}]]</textarea>
+                                                <label>签名：</label>
+                                                <textarea class="form-control" rows="3" style="border-bottom:0px" readonly>[[${enterpriseDocumentInfoValidator.signName}]]</textarea>
                                             </div>
+
+                                            <div class="col-md-12 form-group">
+                                                <div class="jFiler-items jFiler-row">
+                                                    <ul class="jFiler-items-list jFiler-items-grid">
+                                                        <li class="jFiler-item jFiler-no-thumbnail" data-jfiler-index="0" style="" th:each="att:${filesList}">
+                                                            <div class="jFiler-item-container">
+                                                                <div class="jFiler-item-inner">
+                                                                    <div class="jFiler-item-thumb">
+                                                                        <div class="jFiler-item-info"><span class="jFiler-item-title"><b
+                                                                                th:title="${att.attachmentName}">[[${att.attachmentName}]]</b></span>
+                                                                        </div>
+                                                                        <div class="jFiler-item-thumb-image"><span class="jFiler-icon-file f-file f-file-ext-docx"
+                                                                                                                   style="-webkit-box-shadow: #409024 42px -55px 0px 0px inset; -moz-box-shadow: #409024 42px -55px 0px 0px inset; box-shadow: #409024 42px -55px 0px 0px inset;">
+                                                            .[[${att.docType}]]</span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="jFiler-item-assets jFiler-row">
+                                                                        <ul class="list-inline pull-left">
+                                                                            <li><a style="color: #29b6f6;" sec:authorize-url="/attachment/download/*"
+                                                                                   th:href="@{/attachment/download/{id}(id=${att.id})}"><i style="font-size: 18px" class="mdi mdi-download"></i></a></li>
+                                                                        </ul>
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+
+
                                         </div>
                                     </div>
                                 </div>
@@ -139,11 +174,14 @@
                                                           rows="3"></textarea>
                                             </div>
                                             <div class="col-md-12 text-center" style="margin-top:20px">
-                                                <input type="hidden" th:field="*{templateId}">
-                                                <button sec:authorize-url="/template/web/save" type="submit"
+                                                <input type="hidden" th:field="*{id}">
+                                                <input type="hidden" th:field="*{enterpriseId}">
+                                                <input type="hidden" th:field="*{businessType}">
+                                                <input type="hidden" th:field="*{infoType}">
+                                                <button sec:authorize-url="/ec/customer/material/sign/save" type="submit"
                                                         class="btn btn-teal waves-effect waves-light">提交
                                                 </button>
-                                                <a th:href="@{/template/web/list/HTTP}"
+                                                <a sec:authorize-url="/ec/customer/material/list" th:href="@{/ec/customer/material/list}"
                                                    style="margin-left:20px"
                                                    class="btn btn-default waves-effect waves-light">返回</a>
                                             </div>

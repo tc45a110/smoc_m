@@ -96,4 +96,21 @@ public class EnterpriseDocumentController {
         return enterpriseDocumentService.deleteById(id);
     }
 
+    /**
+     * 审核
+     * @return
+     */
+    @RequestMapping(value = "/sign/check", method = RequestMethod.POST)
+    public ResponseData check(@RequestBody EnterpriseDocumentInfoValidator enterpriseDocumentInfoValidator) {
+
+        //完成参数规则验证
+        if (!MpmValidatorUtil.validate(enterpriseDocumentInfoValidator)) {
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(enterpriseDocumentInfoValidator));
+        }
+
+        //保存操作
+        ResponseData data = enterpriseDocumentService.check(enterpriseDocumentInfoValidator);
+
+        return data;
+    }
 }

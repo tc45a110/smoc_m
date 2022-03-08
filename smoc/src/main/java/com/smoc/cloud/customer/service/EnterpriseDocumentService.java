@@ -143,7 +143,7 @@ public class EnterpriseDocumentService {
         EnterpriseDocumentInfo data = enterpriseDocumentRepository.findById(id).get();
         //记录日志
         log.info("[签名资质管理][delete]数据:{}",JSON.toJSONString(data));
-        enterpriseDocumentRepository.updateStatusById(id);
+        enterpriseDocumentRepository.updateStatusById(id,"0");
 
         //查询有没有附件，有：置为无效
         List<SystemAttachmentInfo> list = systemAttachmentRepository.findByMoudleIdAndAttachmentStatus(data.getId(),"1");
@@ -151,6 +151,27 @@ public class EnterpriseDocumentService {
             systemAttachmentRepository.updateAttachmentStatusByMoudleId(data.getId());
         }
 
+
+        return ResponseDataUtil.buildSuccess();
+    }
+
+    /**
+     * 审核
+     * @param enterpriseDocumentInfoValidator
+     * @return
+     */
+    @Transactional
+    public ResponseData check(EnterpriseDocumentInfoValidator enterpriseDocumentInfoValidator) {
+
+        //记录日志
+        log.info("[签名资质审核][check]数据:{}",JSON.toJSONString(enterpriseDocumentInfoValidator));
+
+        if("0".equals(enterpriseDocumentInfoValidator.getCheckStatus())){
+            enterpriseDocumentInfoValidator.setDocStatus("3");
+        }else{
+            enterpriseDocumentInfoValidator.setDocStatus(enterpriseDocumentInfoValidator.getCheckStatus());
+        }
+        enterpriseDocumentRepository.updateStatusById(enterpriseDocumentInfoValidator.getId(),enterpriseDocumentInfoValidator.getDocStatus());
 
         return ResponseDataUtil.buildSuccess();
     }

@@ -19,7 +19,6 @@ public class EnterpriseDocumentInfoValidator {
     @NotNull(message = "企业不能为空！")
     private String enterpriseId;
 
-    @NotNull(message = "签名不能为空！")
     @Length(max = 500, message = "签名长度不符合规则！")
     private String signName;
 
@@ -40,6 +39,8 @@ public class EnterpriseDocumentInfoValidator {
     private String createdTime;
     private String updatedBy;
     private Date updatedTime;
+    private String checkOpinions;
+    private String checkStatus;
 
     private String enterpriseType;
     private String enterpriseName;

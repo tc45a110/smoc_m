@@ -69,8 +69,8 @@ public class AccountFinanceRepositoryImpl extends BasePageRepository {
 
         List<AccountFinanceInfoValidator> list = accountFinanceInfoValidator.getPrices();
 
-        final String sql = "insert into account_finance_info(ID,ACCOUNT_ID,PAY_TYPE,CHARGE_TYPE,FROZEN_RETURN_DATE,ACCOUNT_CREDIT_SUM,CARRIER_TYPE,CARRIER,CARRIER_PRICE,CREATED_BY,CREATED_TIME) " +
-                "values(?,?,?,?,?,?,?,?,?,?,now()) ";
+        final String sql = "insert into account_finance_info(ID,ACCOUNT_ID,PAY_TYPE,CHARGE_TYPE,FROZEN_RETURN_DATE,ACCOUNT_CREDIT_SUM,CARRIER_TYPE,CARRIER,CARRIER_PRICE,CREATED_BY,CREATED_TIME,UPDATED_BY,UPDATED_TIME) " +
+                "values(?,?,?,?,?,?,?,?,?,?,now(),?,now()) ";
 
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             public int getBatchSize() {
@@ -89,6 +89,7 @@ public class AccountFinanceRepositoryImpl extends BasePageRepository {
                 ps.setString(8, info.getCarrier());
                 ps.setBigDecimal(9, info.getCarrierPrice());
                 ps.setString(10, accountFinanceInfoValidator.getCreatedBy());
+                ps.setString(11, accountFinanceInfoValidator.getCreatedBy());
             }
 
         });

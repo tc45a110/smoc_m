@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -36,6 +37,6 @@ public interface EnterpriseDocumentRepository extends CrudRepository<EnterpriseD
     List<EnterpriseDocumentInfo> findByEnterpriseIdAndSignNameAndDocStatus(String enterpriseId, String signName, String s);
 
     @Modifying
-    @Query(value = "update enterprise_document_info set DOC_STATUS = 0 where ID = :id ",nativeQuery = true)
-    void updateStatusById(String id);
+    @Query(value = "update enterprise_document_info set DOC_STATUS = :docStatus where ID = :id ",nativeQuery = true)
+    void updateStatusById(@Param("id") String id, @Param("docStatus") String docStatus);
 }

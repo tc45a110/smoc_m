@@ -1,64 +1,380 @@
 package com.smoc.cloud.material.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.smoc.cloud.admin.security.remote.service.FlowApproveService;
+import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
+import com.smoc.cloud.common.auth.entity.SecurityUser;
+import com.smoc.cloud.common.auth.validator.FlowApproveValidator;
+import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
+import com.smoc.cloud.common.response.ResponseCode;
+import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
+import com.smoc.cloud.common.smoc.template.AccountTemplateInfoValidator;
+import com.smoc.cloud.common.utils.DateTimeUtils;
+import com.smoc.cloud.common.validator.MpmIdValidator;
+import com.smoc.cloud.common.validator.MpmValidatorUtil;
+import com.smoc.cloud.material.service.BusinessAccountService;
+import com.smoc.cloud.material.service.MessageTemplateService;
+import com.smoc.cloud.material.service.SequenceService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 短信模板
  */
+@Slf4j
 @Controller
 @RequestMapping("/template")
 public class MessageTemplateController {
 
+    @Autowired
+    private SequenceService sequenceService;
+
+    @Autowired
+    private MessageTemplateService messageTemplateService;
+
+    @Autowired
+    private BusinessAccountService businessAccountService;
+
+    @Autowired
+    private SystemUserLogService systemUserLogService;
+
+    @Autowired
+    private FlowApproveService flowApproveService;
+
     /**
      * 短信模板列表
-     * @param signType
+     * @param type
      * @param request
      * @return
      */
-    @RequestMapping(value = "list/{signType}", method = RequestMethod.GET)
-    public ModelAndView list(@PathVariable String signType, HttpServletRequest request) {
-        ModelAndView view = new ModelAndView("template/message_template_list");
-        //查询数据
-        PageParams params = new PageParams<>();
-        params.setPages(3);
-        params.setPageSize(10);
-        params.setStartRow(1);
-        params.setEndRow(10);
-        params.setCurrentPage(1);
-        params.setTotalRows(22);
+    @RequestMapping(value = "list/{type}", method = RequestMethod.GET)
+    public ModelAndView list(@PathVariable String type, HttpServletRequest request) {
 
-        view.addObject("pageParams",params);
-        view.addObject("signType", signType);
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        ModelAndView view = new ModelAndView("template/message_template_list");
+        //初始化数据
+        PageParams<AccountTemplateInfoValidator> params = new PageParams<AccountTemplateInfoValidator>();
+        params.setPageSize(10);
+        params.setCurrentPage(1);
+        AccountTemplateInfoValidator accountTemplateInfoValidator = new AccountTemplateInfoValidator();
+        accountTemplateInfoValidator.setEnterpriseId(user.getOrganization());
+        accountTemplateInfoValidator.setTemplateAgreementType("HTTP");
+        accountTemplateInfoValidator.setTemplateType(type);
+        params.setParams(accountTemplateInfoValidator);
+
+        //查询
+        ResponseData<PageList<AccountTemplateInfoValidator>> data = messageTemplateService.page(params);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("accountTemplateInfoValidator", accountTemplateInfoValidator);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
+        view.addObject("type", type);
         return view;
     }
 
     /**
      *  短信模板分页
-     * @param signType
+     * @param type
      * @param request
      * @return
      */
-    @RequestMapping(value = "page/{signType}", method = RequestMethod.POST)
-    public ModelAndView page(@PathVariable String signType,HttpServletRequest request) {
+    @RequestMapping(value = "page/{type}", method = RequestMethod.POST)
+    public ModelAndView page(@PathVariable String signType,@ModelAttribute AccountTemplateInfoValidator accountTemplateInfoValidator, @PathVariable String type,PageParams pageParams,HttpServletRequest request) {
         ModelAndView view = new ModelAndView("template/message_template_list");
-        //查询数据
-        PageParams params = new PageParams<>();
-        params.setPages(3);
-        params.setPageSize(10);
-        params.setStartRow(1);
-        params.setEndRow(10);
-        params.setCurrentPage(1);
-        params.setTotalRows(22);
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
 
-        view.addObject("pageParams",params);
-        view.addObject("signType", signType);
+        //分页查询
+        accountTemplateInfoValidator.setEnterpriseId(user.getOrganization());
+        accountTemplateInfoValidator.setTemplateType(type);
+        accountTemplateInfoValidator.setTemplateAgreementType("HTTP");
+        pageParams.setParams(accountTemplateInfoValidator);
+
+
+        ResponseData<PageList<AccountTemplateInfoValidator>> data = messageTemplateService.page(pageParams);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("accountTemplateInfoValidator", accountTemplateInfoValidator);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
+        view.addObject("type", type);
         return view;
+    }
+
+    /**
+     * 添加
+     * @return
+     */
+    @RequestMapping(value = "/add/{type}", method = RequestMethod.GET)
+    public ModelAndView add(@PathVariable String type, HttpServletRequest request) {
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+        ModelAndView view = new ModelAndView("template/message_template_edit");
+
+        //初始化参数
+        AccountTemplateInfoValidator accountTemplateInfoValidator = new AccountTemplateInfoValidator();
+        accountTemplateInfoValidator.setTemplateId("TEMP" + sequenceService.findSequence("BUSINESS_ACCOUNT"));
+        accountTemplateInfoValidator.setTemplateType(type);
+        accountTemplateInfoValidator.setTemplateStatus("2");
+        accountTemplateInfoValidator.setTemplateAgreementType("HTTP");
+
+        //查询企业下得所有业务账号
+        AccountBasicInfoValidator accountBasicInfoValidator = new AccountBasicInfoValidator();
+        accountBasicInfoValidator.setBusinessType(type);
+        accountBasicInfoValidator.setEnterpriseId(user.getOrganization());
+        accountBasicInfoValidator.setAccountStatus("1");//正常
+        ResponseData<List<AccountBasicInfoValidator>> info = businessAccountService.findBusinessAccount(accountBasicInfoValidator);
+        if (!ResponseCode.SUCCESS.getCode().equals(info.getCode())) {
+            view.addObject("error", info.getCode() + ":" + info.getMessage());
+            return view;
+        }
+
+        //op操作标记，add表示添加，edit表示修改
+        view.addObject("op", "add");
+        view.addObject("accountTemplateInfoValidator", accountTemplateInfoValidator);
+        view.addObject("list", info.getData());
+        view.addObject("type", type);
+
+        return view;
+
+    }
+
+    /**
+     * 编辑
+     * @return
+     */
+    @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
+    public ModelAndView edit(@PathVariable String id, HttpServletRequest request) {
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+        ModelAndView view = new ModelAndView("template/message_template_edit");
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
+
+        //修改
+        ResponseData<AccountTemplateInfoValidator> data = messageTemplateService.findById(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+        }
+
+        //查询企业下得所有业务账号
+        AccountBasicInfoValidator accountBasicInfoValidator = new AccountBasicInfoValidator();
+        accountBasicInfoValidator.setBusinessType(data.getData().getTemplateType());
+        accountBasicInfoValidator.setEnterpriseId(user.getOrganization());
+        accountBasicInfoValidator.setAccountStatus("1");//正常
+        ResponseData<List<AccountBasicInfoValidator>> info = businessAccountService.findBusinessAccount(accountBasicInfoValidator);
+        if (!ResponseCode.SUCCESS.getCode().equals(info.getCode())) {
+            view.addObject("error", info.getCode() + ":" + info.getMessage());
+            return view;
+        }
+
+        //op操作标记，add表示添加，edit表示修改
+        view.addObject("op", "edit");
+        view.addObject("accountTemplateInfoValidator", data.getData());
+        view.addObject("type", data.getData().getTemplateType());
+        view.addObject("list", info.getData());
+
+        return view;
+
+    }
+
+    /**
+     * 保存
+     * @param accountTemplateInfoValidator
+     * @param result
+     * @param op
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/save/{op}", method = RequestMethod.POST)
+    public ModelAndView save(@ModelAttribute @Validated AccountTemplateInfoValidator accountTemplateInfoValidator, BindingResult result, @PathVariable String op, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("template/message_template_edit");
+
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        if(StringUtils.isEmpty(accountTemplateInfoValidator.getBusinessAccount())){
+            // 提交前台错误提示
+            FieldError err = new FieldError("业务账号", "businessAccount", "业务账号不能为空");
+            result.addError(err);
+        }
+
+        //完成参数规则验证
+        if (result.hasErrors()) {
+            //查询企业下得所有业务账号
+            AccountBasicInfoValidator accountBasicInfoValidator = new AccountBasicInfoValidator();
+            accountBasicInfoValidator.setBusinessType(accountTemplateInfoValidator.getTemplateType());
+            accountBasicInfoValidator.setEnterpriseId(user.getOrganization());
+            accountBasicInfoValidator.setAccountStatus("1");//正常
+            ResponseData<List<AccountBasicInfoValidator>> info = businessAccountService.findBusinessAccount(accountBasicInfoValidator);
+            if (!ResponseCode.SUCCESS.getCode().equals(info.getCode())) {
+                view.addObject("error", info.getCode() + ":" + info.getMessage());
+                return view;
+            }
+            view.addObject("accountTemplateInfoValidator", accountTemplateInfoValidator);
+            view.addObject("list", info.getData());
+            view.addObject("op", op);
+            return view;
+        }
+
+        //查询信息
+        ResponseData<AccountTemplateInfoValidator> infoDate = messageTemplateService.findById(accountTemplateInfoValidator.getTemplateId());
+        if (ResponseCode.SUCCESS.getCode().equals(infoDate.getCode()) && !StringUtils.isEmpty(infoDate.getData())) {
+            if("1".equals(infoDate.getData().getTemplateStatus())){
+                view.addObject("error", "已审核通过，不能进行修改！");
+                return view;
+            }
+        }
+
+        accountTemplateInfoValidator.setTemplateStatus("2");
+
+        //初始化其他变量
+        if (!StringUtils.isEmpty(op) && "add".equals(op)) {
+            accountTemplateInfoValidator.setCreatedTime(DateTimeUtils.getDateTimeFormat(new Date()));
+            accountTemplateInfoValidator.setCreatedBy(user.getRealName());
+        } else if (!StringUtils.isEmpty(op) && "edit".equals(op)) {
+            accountTemplateInfoValidator.setUpdatedTime(new Date());
+            accountTemplateInfoValidator.setUpdatedBy(user.getRealName());
+        } else {
+            view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":" + ResponseCode.PARAM_LINK_ERROR.getMessage());
+            return view;
+        }
+
+        //保存数据
+        ResponseData data = messageTemplateService.save(accountTemplateInfoValidator,op,user.getId());
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        //保存操作记录
+        if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            systemUserLogService.logsAsync("TEMPLATE_INFO", accountTemplateInfoValidator.getTemplateId(), "add".equals(op) ? accountTemplateInfoValidator.getCreatedBy() : accountTemplateInfoValidator.getUpdatedBy(), op, "add".equals(op) ? "添加模板" : "修改模板", JSON.toJSONString(accountTemplateInfoValidator));
+        }
+
+        //记录日志
+        log.info("[模板管理][{}][{}]数据:{}", op, user.getUserName(), JSON.toJSONString(accountTemplateInfoValidator));
+
+        view.setView(new RedirectView("/template/list/"+accountTemplateInfoValidator.getTemplateType(), true, false));
+        return view;
+
+    }
+
+    /**
+     * 删除信息
+     *
+     * @return
+     */
+    @RequestMapping(value = "/deleteById/{id}", method = RequestMethod.GET)
+    public ModelAndView deleteById(@PathVariable String id, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("template/message_template_edit");
+
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
+
+        //查询信息
+        ResponseData<AccountTemplateInfoValidator> infoDate = messageTemplateService.findById(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(infoDate.getCode())) {
+            view.addObject("error", infoDate.getCode() + ":" + infoDate.getMessage());
+            return view;
+        }
+
+        //查询信息
+        if (ResponseCode.SUCCESS.getCode().equals(infoDate.getCode()) && !StringUtils.isEmpty(infoDate.getData())) {
+            if("1".equals(infoDate.getData().getTemplateStatus())){
+                view.addObject("error", "已审核通过，不能进行删除！");
+                return view;
+            }
+        }
+
+        //删除操作
+        ResponseData data = messageTemplateService.deleteById(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        //保存操作记录
+        if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            systemUserLogService.logsAsync("TEMPLATE_INFO", infoDate.getData().getTemplateId(), user.getRealName(), "delete", "删除模板" , JSON.toJSONString(infoDate.getData()));
+        }
+
+        //记录日志
+        log.info("[模板管理][{}][{}]数据:{}", "delete", user.getUserName(), JSON.toJSONString(infoDate.getData()));
+
+        view.setView(new RedirectView("/template/list/"+infoDate.getData().getTemplateType(), true, false));
+        return view;
+    }
+
+    /**
+     * 显示详情
+     * @return
+     */
+    @RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
+    public ModelAndView detail(@PathVariable String id, HttpServletRequest request) {
+
+        ModelAndView view = new ModelAndView("template/message_template_detail");
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
+
+        //查询信息
+        ResponseData<AccountTemplateInfoValidator> infoDate = messageTemplateService.findById(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(infoDate.getCode())) {
+            view.addObject("error", infoDate.getCode() + ":" + infoDate.getMessage());
+            return view;
+        }
+
+        //查询审核记录
+        ResponseData<List<FlowApproveValidator>> checkRecordData = flowApproveService.checkRecord(infoDate.getData().getTemplateId());
+        if (!ResponseCode.SUCCESS.getCode().equals(checkRecordData.getCode())) {
+            view.addObject("error", checkRecordData.getCode() + ":" + checkRecordData.getMessage());
+            return view;
+        }
+
+        view.addObject("accountTemplateInfoValidator", infoDate.getData());
+        view.addObject("checkRecord", checkRecordData.getData());
+
+        return view;
+
     }
 }

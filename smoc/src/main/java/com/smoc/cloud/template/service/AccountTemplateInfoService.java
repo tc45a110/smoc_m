@@ -13,7 +13,6 @@ import com.smoc.cloud.template.entity.AccountTemplateInfo;
 import com.smoc.cloud.template.repository.AccountTemplateInfoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -105,6 +104,17 @@ public class AccountTemplateInfoService {
     @Transactional
     public ResponseData cancelTemplate(String templateId,String templateStatus){
         accountTemplateInfoRepository.cancelTemplate(templateId,templateStatus);
+        return ResponseDataUtil.buildSuccess();
+    }
+
+    @Transactional
+    public ResponseData deleteById(String id) {
+
+        AccountTemplateInfo data = accountTemplateInfoRepository.findById(id).get();
+        //记录日志
+        log.info("[模板管理][delete]数据:{}",JSON.toJSONString(data));
+        accountTemplateInfoRepository.deleteById(data.getTemplateId());
+
         return ResponseDataUtil.buildSuccess();
     }
 }

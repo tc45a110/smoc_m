@@ -73,6 +73,11 @@ public class EnterpriseDocumentRepositoryImpl extends BasePageRepository {
             paramsList.add("%"+qo.getDocKey().trim()+"%");
         }
 
+        if (!StringUtils.isEmpty(qo.getDocStatus())) {
+            sqlBuffer.append(" and t.DOC_STATUS = ? ");
+            paramsList.add(qo.getDocStatus().trim());
+        }
+
         if (!StringUtils.isEmpty(qo.getStartDate())) {
             sqlBuffer.append(" and DATE_FORMAT(t.CREATED_TIME,'%Y-%m-%d') >= ? ");
             paramsList.add(qo.getStartDate().trim());

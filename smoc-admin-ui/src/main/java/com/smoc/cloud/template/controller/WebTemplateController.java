@@ -244,7 +244,13 @@ public class WebTemplateController {
             return view;
         }
 
-        ResponseData deleteResponseData = accountTemplateInfoService.cancelTemplate(accountTemplateInfoValidator.getTemplateId(),"1");
+        if("0".equals(accountTemplateInfoValidator.getCheckStatus())){
+            accountTemplateInfoValidator.setTemplateStatus("3");
+        }else{
+            accountTemplateInfoValidator.setTemplateStatus(accountTemplateInfoValidator.getCheckStatus());
+        }
+
+        ResponseData deleteResponseData = accountTemplateInfoService.cancelTemplate(accountTemplateInfoValidator.getTemplateId(),accountTemplateInfoValidator.getTemplateStatus());
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(deleteResponseData.getCode())) {
             systemUserLogService.logsAsync("TEMPLATE_INFO", accountTemplateInfoValidator.getTemplateId(), user.getRealName(),"check","审核模板", JSON.toJSONString(flowApproveValidator));

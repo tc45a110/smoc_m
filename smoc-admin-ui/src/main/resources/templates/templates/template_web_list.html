@@ -117,10 +117,9 @@
                                         [[${info.templateContent}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
-                                        <mpm:tag id="templateStatus" identity="checkStatus"
-                                                 class="1,btn btn-success btn-rounded btn-sm waves-effect waves-light;2,btn btn-warning btn-rounded btn-sm waves-effect waves-light;0,btn btn-danger btn-rounded btn-sm waves-effect waves-light;"
-                                                 name="businessType" show-type="button" key="code"
-                                                 th:value="${info.templateStatus}" title="审核状态"/>
+                                        <a class="btn btn-success btn-rounded btn-sm waves-effect waves-light" th:if="${info.templateStatus eq '1'}">通过审核</a>
+                                        <a class="btn btn-warning btn-rounded btn-sm waves-effect waves-light" th:if="${info.templateStatus eq '2'}">待审核</a>
+                                        <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light" th:if="${info.templateStatus eq '3'}">拒绝</a>
                                     </td>
                                     <td style="vertical-align: middle;;line-height: 26px;">
                                         [[${info.createdBy}]]

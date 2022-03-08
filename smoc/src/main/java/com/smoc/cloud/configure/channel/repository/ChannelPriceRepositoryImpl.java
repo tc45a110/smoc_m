@@ -67,7 +67,7 @@ public class ChannelPriceRepositoryImpl extends BasePageRepository {
 
         List<ChannelPriceValidator> list = channelPriceValidator.getPrices();
 
-        final String sql = "insert into config_channel_price(ID,CHANNEL_ID,PRICE_STYLE,AREA_CODE,CHANNEL_PRICE,LASTTIME_HISTORY) values(?,?,?,?,?,now()) ";
+        final String sql = "insert into config_channel_price(ID,CHANNEL_ID,PRICE_STYLE,AREA_CODE,CHANNEL_PRICE,LASTTIME_HISTORY,UPDATED_TIME,UPDATED_BY) values(?,?,?,?,?,now(),now(),?) ";
 
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             public int getBatchSize() {
@@ -81,6 +81,7 @@ public class ChannelPriceRepositoryImpl extends BasePageRepository {
                 ps.setString(3, channelPriceValidator.getPriceStyle());
                 ps.setString(4, channelPrice.getAreaCode());
                 ps.setBigDecimal(5, channelPrice.getChannelPrice());
+                ps.setString(6, channelPrice.getCreatedBy());
             }
 
         });

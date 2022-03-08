@@ -109,4 +109,47 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
         List<AccountBasicInfoValidator> list = this.queryForObjectList(sqlBuffer.toString(), params, new AccountCenterInfoRowMapper());
         return list;
     }
+
+    public  List<AccountBasicInfoValidator> findBusinessAccount(AccountBasicInfoValidator qo) {
+
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append("  t.ACCOUNT_ID");
+        sqlBuffer.append(", t.ACCOUNT_NAME");
+        sqlBuffer.append(", t.BUSINESS_TYPE");
+        sqlBuffer.append(", t.CARRIER");
+        sqlBuffer.append(", t.INFO_TYPE");
+        sqlBuffer.append(", t.EXTEND_CODE");
+        sqlBuffer.append(", t.ACCOUNT_STATUS");
+        sqlBuffer.append(", ''PROTOCOL");
+        sqlBuffer.append("  from account_base_info t ");
+        sqlBuffer.append("  where 1 = 1");
+
+        List<Object> paramsList = new ArrayList<Object>();
+
+        if (!StringUtils.isEmpty(qo.getEnterpriseId())) {
+            sqlBuffer.append(" and t.ENTERPRISE_ID = ?");
+            paramsList.add(qo.getEnterpriseId().trim());
+        }
+
+
+        if (!StringUtils.isEmpty(qo.getBusinessType())) {
+            sqlBuffer.append(" and t.BUSINESS_TYPE = ?");
+            paramsList.add(qo.getBusinessType().trim());
+        }
+
+        if (!StringUtils.isEmpty(qo.getAccountStatus())) {
+            sqlBuffer.append(" and t.ACCOUNT_STATUS = ?");
+            paramsList.add(qo.getAccountStatus().trim());
+        }
+
+        sqlBuffer.append("  order by t.CREATED_TIME desc");
+
+        //根据参数个数，组织参数值
+        Object[] params = new Object[paramsList.size()];
+        paramsList.toArray(params);
+
+        List<AccountBasicInfoValidator> list = this.queryForObjectList(sqlBuffer.toString(), params, new AccountCenterInfoRowMapper());
+        return list;
+    }
 }

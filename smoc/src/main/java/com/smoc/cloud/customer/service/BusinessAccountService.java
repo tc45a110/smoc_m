@@ -300,4 +300,14 @@ public class BusinessAccountService {
 
         return ResponseDataUtil.buildSuccess(accountId);
     }
+
+    /**
+     * 查询企业所有的业务账号
+     * @param accountBasicInfoValidator
+     * @return
+     */
+    public ResponseData<List<AccountBasicInfoValidator>> findBusinessAccount(AccountBasicInfoValidator accountBasicInfoValidator) {
+        List<AccountBasicInfoValidator> list = businessAccountRepository.findBusinessAccount(accountBasicInfoValidator);
+        return ResponseDataUtil.buildSuccess(list);
+    }
 }

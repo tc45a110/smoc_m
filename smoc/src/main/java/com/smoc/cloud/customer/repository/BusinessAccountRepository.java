@@ -43,4 +43,11 @@ public interface BusinessAccountRepository extends CrudRepository<AccountBasicIn
      * @return
      */
     List<AccountBasicInfoValidator> findBusinessAccountByEnterpriseId(String enterpriseId);
+
+    /**
+     * 查询企业所有的业务账号
+     * @param accountBasicInfoValidator
+     * @return
+     */
+    List<AccountBasicInfoValidator> findBusinessAccount(AccountBasicInfoValidator accountBasicInfoValidator);
 }

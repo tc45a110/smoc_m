@@ -1,8 +1,10 @@
 package com.smoc.cloud.material.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.smoc.cloud.admin.security.remote.service.FlowApproveService;
 import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
+import com.smoc.cloud.common.auth.validator.FlowApproveValidator;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
@@ -53,6 +55,9 @@ public class MessageSignController {
 
     @Autowired
     private SystemAttachmentService systemAttachmentService;
+
+    @Autowired
+    private FlowApproveService flowApproveService;
 
     /**
      * 短信签名列表
@@ -210,7 +215,17 @@ public class MessageSignController {
             return view;
         }
 
+        //查询信息
+        ResponseData<EnterpriseDocumentInfoValidator> infoDate = messageSignService.findById(enterpriseDocumentInfoValidator.getId());
+        if (ResponseCode.SUCCESS.getCode().equals(infoDate.getCode()) && !StringUtils.isEmpty(infoDate.getData())) {
+            if("1".equals(infoDate.getData().getDocStatus())){
+                view.addObject("error", "已审核通过，不能进行修改！");
+                return view;
+            }
+        }
+
         enterpriseDocumentInfoValidator.setEnterpriseId(user.getOrganization());
+        enterpriseDocumentInfoValidator.setDocStatus("2");
 
         //初始化其他变量
         if (!StringUtils.isEmpty(op) && "add".equals(op)) {
@@ -225,7 +240,7 @@ public class MessageSignController {
         }
 
         //保存数据
-        ResponseData data = messageSignService.save(enterpriseDocumentInfoValidator, file, user.getCorporation(),op);
+        ResponseData data = messageSignService.save(enterpriseDocumentInfoValidator, file, user.getCorporation(),op,user.getId());
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;
@@ -270,6 +285,14 @@ public class MessageSignController {
             return view;
         }
 
+        //查询信息
+        if (ResponseCode.SUCCESS.getCode().equals(infoDate.getCode()) && !StringUtils.isEmpty(infoDate.getData())) {
+            if("1".equals(infoDate.getData().getDocStatus())){
+                view.addObject("error", "已审核通过，不能进行删除！");
+                return view;
+            }
+        }
+
         //删除操作
         ResponseData data = messageSignService.deleteById(id);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
@@ -296,7 +319,7 @@ public class MessageSignController {
     @RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
     public ModelAndView detail(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("sign/message_sign__detail");
+        ModelAndView view = new ModelAndView("sign/message_sign_detail");
 
         //完成参数规则验证
         MpmIdValidator validator = new MpmIdValidator();
@@ -313,11 +336,18 @@ public class MessageSignController {
             return view;
         }
 
+        //查询审核记录
+        ResponseData<List<FlowApproveValidator>> checkRecordData = flowApproveService.checkRecord(infoDate.getData().getId());
+        if (!ResponseCode.SUCCESS.getCode().equals(checkRecordData.getCode())) {
+            view.addObject("error", checkRecordData.getCode() + ":" + checkRecordData.getMessage());
+            return view;
+        }
+
         //查询附件
         ResponseData<List<SystemAttachmentValidator>> filesList = systemAttachmentService.findByMoudleId(infoDate.getData().getId());
 
-
         view.addObject("enterpriseDocumentInfoValidator", infoDate.getData());
+        view.addObject("checkRecord", checkRecordData.getData());
         view.addObject("filesList", filesList.getData());
 
         return view;

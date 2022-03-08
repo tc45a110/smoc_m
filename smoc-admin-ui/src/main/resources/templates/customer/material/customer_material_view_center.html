@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+</head>
+<body>
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <!-- start row 页面导航-->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">签名资质明细</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            签名资质管理
+                        </li>
+                        <li class="active">
+                            签名资质明细
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  页面内容-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <div class="row m-b-10">
+                        <h4 style="padding-left:12px">签名资质明细
+                            <div class="pull-right" style="margin-top: -12px;margin-right:10px">
+                                <a sec:authorize-url="/ec/customer/material/list" th:href="@{/ec/customer/material/list}"
+                                   class="btn btn-default waves-effect waves-light btn-md">
+                                    <i class="glyphicon  glyphicon-share-alt" style="margin-right:10px"></i>
+                                    返回签名资质列表</a>
+                            </div>
+                        </h4>
+                    </div>
+                    <div class="row m-b-10">
+                        <div class="col-md-12 col-sm-12">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card-box">
+                                        <ul class="nav nav-tabs m-b-30">
+                                            <li class="active" id="tab1"><a onclick="active('1')"
+                                                                            sec:authorize-url="/ec/customer/material/detail/*"
+                                                                            th:href="@{/ec/customer/material/detail/{id}(id=${id})}"
+                                                                            th:target="tab-content">签名资质明细</a></li>
+                                            <li class="" id="tab2"><a onclick="active('2')"
+                                                                      sec:authorize-url="/ec/customer/material/check/list/*"
+                                                                      th:href="@{/ec/customer/material/check/list/{id}(id=${id})}"
+                                                                      th:target="tab-content">审核记录</a></li>
+                                            <li class="" id="tab3"><a onclick="active('3')"
+                                                                      sec:authorize-url="/user/logs/list/*/*"
+                                                                      th:href="@{/user/logs/list/EC_DOCUMENT/{id}(id=${id})}"
+                                                                      th:target="tab-content">操作日志</a></li>
+
+                                        </ul>
+                                        <div class="tab-cotent" style="background-color:#fff">
+                                            <iframe name="tab-content" id="tab-content" th:frameBorder="0"
+                                                    th:scrolling="auto"
+                                                    th:src="@{/ec/customer/material/detail/{id}(id=${id})}"
+                                                    style="padding: 0px; width: 100%; height: 1200px;background-color:#fff"></iframe>
+                                        </div>
+                                    </div>
+                                </div> <!-- end col -->
+                            </div>
+                            <!-- end row -->
+                        </div> <!-- end col -->
+
+                    </div> <!-- end row -->
+
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<!-- Modal-Effect -->
+<script>
+
+    function active(tab) {
+        for(var num = 1;num<4;num++){
+            $('#tab'+num).removeClass("active");
+        }
+        $('#tab'+tab).attr("class","active");
+    }
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+</script>
+</body>
+</html>

@@ -45,4 +45,12 @@ public interface EnterpriseDocumentFeignClient {
      */
     @RequestMapping(value = "/ec/customer/document/deleteById/{id}", method = RequestMethod.GET)
     ResponseData deleteById(@PathVariable String id) throws Exception;
+
+    /**
+     * 审核
+     * @param enterpriseDocumentInfoValidator
+     * @return
+     */
+    @RequestMapping(value = "/ec/customer/document/sign/check", method = RequestMethod.POST)
+    ResponseData check(@RequestBody EnterpriseDocumentInfoValidator enterpriseDocumentInfoValidator);
 }

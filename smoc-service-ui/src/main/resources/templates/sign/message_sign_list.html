@@ -41,21 +41,20 @@
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
                 <div class="card-box">
-                    <form id="query_form" th:action="@{/sign/page/{signType}(signType=${signType})}" method="post">
+                    <form id="query_form" th:action="@{/sign/page/{signType}(signType=${signType})}" th:object="${enterpriseDocumentInfoValidator}" method="post">
                         <div class="row m-b-60">
                             <div class="col-sm-12">
-
                                 <div class="form-group  col-sm-3">
-                                    <input type="text" class="form-control"
+                                    <input type="text" class="form-control" th:field="*{signName}"
                                            placeholder="签名名称" autocomplete="off">
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <input type="text" class="form-control"
-                                           placeholder="账号" autocomplete="off">
-                                </div>
-                                <div class="form-group  col-sm-3">
-                                    <mpm:tag id="signStatus" identity="signStatus" show-type="select" key="code"
-                                             class="form-control" name="signStatus" value="" title="签名状态"/>
+                                    <select data-style="btn-default" name="docStatus" data-live-search="true" id="signStatus" class="selectpicker form-control" tabindex="-98">
+                                        <option value="" data-icon="mdi mdi-bell-ring-outline">--请选择签名状态--</option>
+                                        <option data-icon="mdi mdi-bell-ring-outline" value="1" th:selected="${enterpriseDocumentInfoValidator.docStatus eq '1'}">通过审核</option>
+                                        <option data-icon="mdi mdi-bell-ring-outline" value="2" th:selected="${enterpriseDocumentInfoValidator.docStatus eq '2'}">待审核</option>
+                                        <option data-icon="mdi mdi-bell-ring-outline" value="3" th:selected="${enterpriseDocumentInfoValidator.docStatus eq '3'}">拒绝</option>
+                                    </select>
                                 </div>
 
                                 <div class="form-group col-sm-3 pull-right" style="text-align: right">
@@ -63,11 +62,13 @@
                                             class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search"></i> 查询
                                     </button>
-                                    <a sec:authorize-url="/sign/add/TEXT_SMS"
-                                       th:href="@{/sign/add/TEXT_SMS}"
+                                    <a th:sec:authorize-url="|/sign/add/${signType}|"
+                                       th:href="@{/sign/add/{type}(type=${signType})}"
                                        class="btn btn-success waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-plus-sign"
                                            style="margin-right:5px"></i>新建签名</a>
+                                    <input type="hidden" name="currentPage" id="currentPage" th:value="${pageParams.currentPage}">
+                                    <input type="hidden" name="pageSize" id="pageSize" th:value="${pageParams.pageSize}">
                                 </div>
                             </div>
                         </div>
@@ -113,14 +114,16 @@
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         <a class="btn btn-success btn-rounded btn-sm waves-effect waves-light" th:if="${info.docStatus eq '1'}">通过审核</a>
-                                        <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light" th:if="${info.docStatus eq '2'}">待审核</a>
-                                        <a class="btn btn-warning btn-rounded btn-sm waves-effect waves-light" th:if="${info.docStatus eq '3'}">拒绝</a>
+                                        <a class="btn btn-warning btn-rounded btn-sm waves-effect waves-light" th:if="${info.docStatus eq '2'}">待审核</a>
+                                        <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light" th:if="${info.docStatus eq '3'}">拒绝</a>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         [[${info.createdTime}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a data-toggle="tooltip" data-placement="bottom"
+                                        <a sec:authorize-url="/sign/detail/*"
+                                           th:href="@{/sign/detail/{id}(id=${info.id})}"
+                                           data-toggle="tooltip" data-placement="bottom"
                                            data-original-title="明细"
                                            class="on-default edit-row"
                                            style="padding-left: 5px;color:#4BD396;"><i style="font-size: 18px"
