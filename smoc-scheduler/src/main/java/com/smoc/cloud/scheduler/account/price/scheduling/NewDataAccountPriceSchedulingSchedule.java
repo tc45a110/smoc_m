@@ -14,9 +14,10 @@ import javax.annotation.Resource;
 
 /**
  * 业务账号价格历史 批处理
+ * 对新数据进行特殊处理
  */
 @Component
-public class AccountPriceSchedulingJob {
+public class NewDataAccountPriceSchedulingSchedule {
 
     @Autowired
     JobLauncher jobLauncher;
@@ -24,13 +25,13 @@ public class AccountPriceSchedulingJob {
     @Autowired
     JobOperator jobOperator;
 
-    @Resource(name="accountPriceHistoryJob")
-    private Job accountPriceHistoryJob;
+    @Resource(name="newDataAccountPriceHistoryJob")
+    private Job newDataAccountPriceHistoryJob;
 
     @Scheduled(cron = "0 0/5 * * * ?")
-    public void channelPriceHistoryJob() throws Exception {
+    public void newDataAccountPriceHistorySchedule() throws Exception {
         JobParameters jobParameter = new JobParametersBuilder().addLong("times",System.currentTimeMillis()).toJobParameters();
-        JobExecution run = jobLauncher.run(accountPriceHistoryJob, jobParameter);
+        JobExecution run = jobLauncher.run(newDataAccountPriceHistoryJob, jobParameter);
         run.getId();
     }
 }
