@@ -111,7 +111,7 @@ public class AccountFinanceService {
                 if(submitPrice.getCarrierPrice().compareTo(priceMap.getCarrierPrice())==0){
                     it.remove();
                 }else{
-                    //价格有变动，需要修改更新日期
+                    //价格有变动，需要修改:更新日期
                     submitPrice.setFlag("2");
                     submitPrice.setId(priceMap.getId());
                 }
