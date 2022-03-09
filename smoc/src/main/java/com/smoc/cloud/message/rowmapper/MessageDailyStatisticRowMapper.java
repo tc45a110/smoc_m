@@ -25,6 +25,7 @@ public class MessageDailyStatisticRowMapper implements RowMapper<MessageDailySta
         qo.setMessageSuccessNum(resultSet.getInt("MESSAGE_SUCCESS_NUM"));
         qo.setMessageFailureNum(resultSet.getInt("MESSAGE_FAILURE_NUM"));
         qo.setMessageNoReportNum(resultSet.getInt("MESSAGE_NO_REPORT_NUM"));
+        qo.setMessageSign(resultSet.getString("MESSAGE_SIGN"));
         qo.setMessageDate(resultSet.getString("MESSAGE_DATE"));
         qo.setCreatedTime(resultSet.getString("CREATED_TIME"));
         return qo;

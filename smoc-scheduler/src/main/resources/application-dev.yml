@@ -49,6 +49,6 @@ spring:
 
 logging:
   config: classpath:logback-spring.xml
-  path: d:/meip-log/meip_scheduler-logs
+  path: d:/smoc-log/smoc_scheduler-logs
   level:
     root: info

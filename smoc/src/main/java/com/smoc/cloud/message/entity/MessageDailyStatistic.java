@@ -49,6 +49,9 @@ public class MessageDailyStatistic {
     @Column(name = "MESSAGE_NO_REPORT_NUM", nullable = false)
     private Integer messageNoReportNum;
 
+    @Column(name = "MESSAGE_SIGN", nullable = false)
+    private String messageSign;
+
     @Column(name = "MESSAGE_DATE", nullable = false)
     private Date messageDate;
 
@@ -206,5 +209,13 @@ public class MessageDailyStatistic {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getMessageSign() {
+        return messageSign;
+    }
+
+    public void setMessageSign(String messageSign) {
+        this.messageSign = messageSign;
     }
 }

@@ -97,9 +97,9 @@ public class NewDataAccountPriceHistoryJobConfiguration {
         //获取当前日期
         String today = DateTimeUtils.getDateFormat(new Date());
         MySqlPagingQueryProvider queryProvider = new MySqlPagingQueryProvider();
-        queryProvider.setSelectClause(" ID,ACCOUNT_ID,CARRIER,CARRIER_PRICE,BATCH_DATE,CREATED_TIME,'" + today + "' PRICE_DATE,TIMESTAMPDIFF(DAY,DATE_FORMAT(BATCH_DATE, '%Y-%m-%d'),'" + today + "') DAYS "); // 设置查询的列
+        queryProvider.setSelectClause(" ID,ACCOUNT_ID,CARRIER,CARRIER_PRICE,BATCH_DATE,CREATED_TIME,'" + today + "' PRICE_DATE,TIMESTAMPDIFF(DAY,DATE_FORMAT(CREATED_TIME, '%Y-%m-%d'),'" + today + "') DAYS "); // 设置查询的列
         queryProvider.setFromClause(" from smoc.account_finance_info "); // 设置要查询的表
-        queryProvider.setWhereClause(" where DATE_FORMAT(CREATED_TIME,'%Y-%m-%d') = :today ");
+        queryProvider.setWhereClause(" where BATCH_DATE is null or DATE_FORMAT(CREATED_TIME,'%Y-%m-%d') = :today ");
         queryProvider.setSortKeys(new HashMap<String, Order>() {{
             put("CREATED_TIME", Order.ASCENDING);
         }});

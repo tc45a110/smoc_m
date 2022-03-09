@@ -48,6 +48,7 @@ public class MessageDailyStatisticRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(" t.MESSAGE_SUCCESS_NUM,");
         sqlBuffer.append(" t.MESSAGE_FAILURE_NUM,");
         sqlBuffer.append(" t.MESSAGE_NO_REPORT_NUM,");
+        sqlBuffer.append(" t.MESSAGE_SIGN,");
         sqlBuffer.append(" DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m-%d')MESSAGE_DATE,");
         sqlBuffer.append(" t.CREATED_BY,");
         sqlBuffer.append(" DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME ");

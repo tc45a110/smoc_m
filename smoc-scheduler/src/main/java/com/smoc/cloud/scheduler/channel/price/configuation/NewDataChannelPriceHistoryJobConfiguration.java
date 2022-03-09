@@ -96,9 +96,9 @@ public class NewDataChannelPriceHistoryJobConfiguration {
         String today = DateTimeUtils.getDateFormat(new Date());
         //log.info("[today]:{}",today);
         MySqlPagingQueryProvider queryProvider = new MySqlPagingQueryProvider();
-        queryProvider.setSelectClause(" ID,CHANNEL_ID,AREA_CODE,BATCH_DATE,CHANNEL_PRICE,CREATED_TIME,'" + today + "' PRICE_DATE,0 DAYS "); // 设置查询的列
+        queryProvider.setSelectClause(" ID,CHANNEL_ID,AREA_CODE,BATCH_DATE,CHANNEL_PRICE,CREATED_TIME,'" + today + "' PRICE_DATE,TIMESTAMPDIFF(DAY,DATE_FORMAT(CREATED_TIME, '%Y-%m-%d'),'" + today + "') DAYS "); // 设置查询的列
         queryProvider.setFromClause(" from smoc.config_channel_price "); // 设置要查询的表
-        queryProvider.setWhereClause(" where DATE_FORMAT(CREATED_TIME,'%Y-%m-%d') = :today ");
+        queryProvider.setWhereClause(" where BATCH_DATE is null or  DATE_FORMAT(CREATED_TIME,'%Y-%m-%d') = :today ");
         queryProvider.setSortKeys(new HashMap<String, Order>() {{
             put("CREATED_TIME", Order.DESCENDING);
         }});

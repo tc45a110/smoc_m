@@ -18,6 +18,11 @@ public class ChannelPriceHistoryService {
     @Autowired
     private BatchRepository batchRepository;
 
+    /**
+     * 为已经跑过批处理得 价格生成历史数据
+     *
+     * @param list
+     */
     public void saveHistory(List<? extends ChannelPriceModel> list) {
 
         try {
@@ -37,7 +42,7 @@ public class ChannelPriceHistoryService {
 
                         //进行插入，并判断是否存在
                         StringBuffer insertSqlBuffer = new StringBuffer("insert into smoc.config_channel_price_history(ID,SOURCE_ID,CHANNEL_ID,PRICE_STYLE,AREA_CODE,CHANNEL_PRICE,PRICE_DATE,CREATE_TIME) ");
-                        insertSqlBuffer.append(" select '" + UUID.uuid32() + "',ID,CHANNEL_ID,PRICE_STYLE,AREA_CODE,CHANNEL_PRICE,'" + model.getPriceData() + "' PRICE_DATE ,now() CREATE_TIME from smoc.config_channel_price where ID ='" + model.getId() + "' ");
+                        insertSqlBuffer.append(" select '" + UUID.uuid32() + "',ID,CHANNEL_ID,PRICE_STYLE,AREA_CODE,CHANNEL_PRICE,'" + dataDate + "' PRICE_DATE ,now() CREATE_TIME from smoc.config_channel_price where ID ='" + model.getId() + "' ");
                         insertSqlBuffer.append(" and NOT EXISTS(select * from smoc.config_channel_price_history t where t.CHANNEL_ID='" + model.getChannelId() + "' and t.AREA_CODE='" + model.getAreaCode() + "' and t.PRICE_DATE='" + dataDate + "' )");
 
                         //修改原来数据的批处理日期
@@ -57,6 +62,12 @@ public class ChannelPriceHistoryService {
 
     }
 
+
+    /**
+     * 处理当天创建数据 或 创建后 没有跑过批处理数据  为这些数据生成价格历史数据
+     *
+     * @param list
+     */
     public void updateOrSaveChannelPrice(List<? extends ChannelPriceModel> list) {
 
         if (null == list || list.size() < 1) {
@@ -66,21 +77,48 @@ public class ChannelPriceHistoryService {
         try {
             List<String> sql = new ArrayList<>();
             for (ChannelPriceModel model : list) {
+                log.info("[days]:{}", model.getDays());
+                //如果是当天数据
+                if (0 == model.getDays()) {
+                    //如果存在则进行修改操作
+                    StringBuffer updateSqlBuffer = new StringBuffer("update smoc.config_channel_price_history set CHANNEL_PRICE =" + model.getChannelPrice() + ",SOURCE_ID='" + model.getId() + "' where CHANNEL_ID='" + model.getChannelId() + "' and AREA_CODE='" + model.getAreaCode() + "' and PRICE_DATE='" + model.getPriceData() + "' ");
 
-                //如果存在则进行修改操作
-                StringBuffer updateSqlBuffer = new StringBuffer("update smoc.config_channel_price_history set CHANNEL_PRICE =" + model.getChannelPrice() + ",SOURCE_ID='" + model.getId() + "' where CHANNEL_ID='" + model.getChannelId() + "' and AREA_CODE='" + model.getAreaCode() + "' and PRICE_DATE='" + model.getPriceData() + "' ");
+                    //如果不存在则进行 insert
+                    StringBuffer insertSqlBuffer = new StringBuffer("insert into smoc.config_channel_price_history(ID,SOURCE_ID,CHANNEL_ID,PRICE_STYLE,AREA_CODE,CHANNEL_PRICE,PRICE_DATE,CREATE_TIME) ");
+                    insertSqlBuffer.append(" select '" + UUID.uuid32() + "',ID,CHANNEL_ID,PRICE_STYLE,AREA_CODE,CHANNEL_PRICE,'" + model.getPriceData() + "' PRICE_DATE ,now() CREATE_TIME from smoc.config_channel_price where ID ='" + model.getId() + "' ");
+                    insertSqlBuffer.append(" and NOT EXISTS(select * from smoc.config_channel_price_history t where t.CHANNEL_ID='" + model.getChannelId() + "' and t.AREA_CODE='" + model.getAreaCode() + "' and t.PRICE_DATE='" + model.getPriceData() + "' )");
 
-                //如果不存在则进行 insert
-                StringBuffer insertSqlBuffer = new StringBuffer("insert into smoc.config_channel_price_history(ID,SOURCE_ID,CHANNEL_ID,PRICE_STYLE,AREA_CODE,CHANNEL_PRICE,PRICE_DATE,CREATE_TIME) ");
-                insertSqlBuffer.append(" select '" + UUID.uuid32() + "',ID,CHANNEL_ID,PRICE_STYLE,AREA_CODE,CHANNEL_PRICE,'" + model.getPriceData() + "' PRICE_DATE ,now() CREATE_TIME from smoc.config_channel_price where ID ='" + model.getId() + "' ");
-                insertSqlBuffer.append(" and NOT EXISTS(select * from smoc.config_channel_price_history t where t.CHANNEL_ID='" + model.getChannelId() + "' and t.AREA_CODE='" + model.getAreaCode() + "' and t.PRICE_DATE='" + model.getPriceData() + "' )");
+                    //修改原来数据的批处理日期
+                    String updateSql = "update smoc.config_channel_price set BATCH_DATE = now() where ID ='" + model.getId() + "'";
 
-                //修改原来数据的批处理日期
-                String updateSql = "update smoc.config_channel_price set BATCH_DATE = now() where ID ='" + model.getId() + "'";
+                    sql.add(updateSqlBuffer.toString());
+                    sql.add(insertSqlBuffer.toString());
+                    sql.add(updateSql);
+                } else {//创建后，没有进行批处理，虽然不是当天创建得，也要把数据补齐
 
-                sql.add(updateSqlBuffer.toString());
-                sql.add(insertSqlBuffer.toString());
-                sql.add(updateSql);
+                    //要补齐得天数+加当天
+                    int days = model.getDays() + 1;
+                    for (int i = 0; i < days; i++) {
+
+                        //价格日期
+                        String dataDate = DateTimeUtils.checkOption(model.getCreateTime(), i);
+
+                        StringBuffer updateSqlBuffer = new StringBuffer("update smoc.config_channel_price_history set CHANNEL_PRICE =" + model.getChannelPrice() + ",SOURCE_ID='" + model.getId() + "' where CHANNEL_ID='" + model.getChannelId() + "' and AREA_CODE='" + model.getAreaCode() + "' and PRICE_DATE='" + dataDate + "' ");
+
+                        //如果不存在则进行 insert
+                        StringBuffer insertSqlBuffer = new StringBuffer("insert into smoc.config_channel_price_history(ID,SOURCE_ID,CHANNEL_ID,PRICE_STYLE,AREA_CODE,CHANNEL_PRICE,PRICE_DATE,CREATE_TIME) ");
+                        insertSqlBuffer.append(" select '" + UUID.uuid32() + "',ID,CHANNEL_ID,PRICE_STYLE,AREA_CODE,CHANNEL_PRICE,'" + dataDate + "' PRICE_DATE ,now() CREATE_TIME from smoc.config_channel_price where ID ='" + model.getId() + "' ");
+                        insertSqlBuffer.append(" and NOT EXISTS(select * from smoc.config_channel_price_history t where t.CHANNEL_ID='" + model.getChannelId() + "' and t.AREA_CODE='" + model.getAreaCode() + "' and t.PRICE_DATE='" + dataDate + "' )");
+
+                        //修改原来数据的批处理日期
+                        String updateSql = "update smoc.config_channel_price set BATCH_DATE = now() where ID ='" + model.getId() + "'";
+
+                        sql.add(updateSqlBuffer.toString());
+                        sql.add(insertSqlBuffer.toString());
+                        sql.add(updateSql);
+                    }
+
+                }
             }
 
             //log.info("[通道价格批处理 新数据]:{}", sql.size());
