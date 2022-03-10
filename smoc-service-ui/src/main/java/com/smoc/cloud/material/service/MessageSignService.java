@@ -118,4 +118,19 @@ public class MessageSignService {
             return ResponseDataUtil.buildError(e.getMessage());
         }
     }
+
+    /**
+     * 查询签名
+     * @param enterpriseDocumentInfoValidator
+     * @return
+     */
+    public ResponseData<List<EnterpriseDocumentInfoValidator>> findMessageSign(EnterpriseDocumentInfoValidator enterpriseDocumentInfoValidator) {
+        try {
+            ResponseData<List<EnterpriseDocumentInfoValidator>> data = this.messageSignFeignClient.findMessageSign(enterpriseDocumentInfoValidator);
+            return data;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
 }

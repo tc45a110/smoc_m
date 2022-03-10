@@ -10,11 +10,13 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
+import com.smoc.cloud.common.smoc.customer.validator.EnterpriseDocumentInfoValidator;
 import com.smoc.cloud.common.smoc.template.AccountTemplateInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.material.service.BusinessAccountService;
+import com.smoc.cloud.material.service.MessageSignService;
 import com.smoc.cloud.material.service.MessageTemplateService;
 import com.smoc.cloud.material.service.SequenceService;
 import lombok.extern.slf4j.Slf4j;
@@ -57,6 +59,9 @@ public class MessageTemplateController {
 
     @Autowired
     private FlowApproveService flowApproveService;
+
+    @Autowired
+    private MessageSignService messageSignService;
 
     /**
      * 短信模板列表
@@ -152,10 +157,22 @@ public class MessageTemplateController {
             return view;
         }
 
+        //查询签名
+        EnterpriseDocumentInfoValidator enterpriseDocumentInfoValidator = new EnterpriseDocumentInfoValidator();
+        enterpriseDocumentInfoValidator.setEnterpriseId(user.getOrganization());
+        enterpriseDocumentInfoValidator.setBusinessType(type);
+        enterpriseDocumentInfoValidator.setDocStatus("1");
+        ResponseData<List<EnterpriseDocumentInfoValidator>> signList = messageSignService.findMessageSign(enterpriseDocumentInfoValidator);
+        if (!ResponseCode.SUCCESS.getCode().equals(signList.getCode())) {
+            view.addObject("error", signList.getCode() + ":" + signList.getMessage());
+            return view;
+        }
+
         //op操作标记，add表示添加，edit表示修改
         view.addObject("op", "add");
         view.addObject("accountTemplateInfoValidator", accountTemplateInfoValidator);
         view.addObject("list", info.getData());
+        view.addObject("signList", signList.getData());
         view.addObject("type", type);
 
         return view;
@@ -196,10 +213,22 @@ public class MessageTemplateController {
             return view;
         }
 
+        //查询签名
+        EnterpriseDocumentInfoValidator enterpriseDocumentInfoValidator = new EnterpriseDocumentInfoValidator();
+        enterpriseDocumentInfoValidator.setEnterpriseId(user.getOrganization());
+        enterpriseDocumentInfoValidator.setBusinessType(data.getData().getTemplateType());
+        enterpriseDocumentInfoValidator.setDocStatus("1");
+        ResponseData<List<EnterpriseDocumentInfoValidator>> signList = messageSignService.findMessageSign(enterpriseDocumentInfoValidator);
+        if (!ResponseCode.SUCCESS.getCode().equals(signList.getCode())) {
+            view.addObject("error", signList.getCode() + ":" + signList.getMessage());
+            return view;
+        }
+
         //op操作标记，add表示添加，edit表示修改
         view.addObject("op", "edit");
         view.addObject("accountTemplateInfoValidator", data.getData());
         view.addObject("type", data.getData().getTemplateType());
+        view.addObject("signList", signList.getData());
         view.addObject("list", info.getData());
 
         return view;
@@ -225,6 +254,11 @@ public class MessageTemplateController {
             FieldError err = new FieldError("业务账号", "businessAccount", "业务账号不能为空");
             result.addError(err);
         }
+        if(StringUtils.isEmpty(accountTemplateInfoValidator.getSignName())){
+            // 提交前台错误提示
+            FieldError err = new FieldError("签名", "signName", "签名不能为空");
+            result.addError(err);
+        }
 
         //完成参数规则验证
         if (result.hasErrors()) {
@@ -238,8 +272,15 @@ public class MessageTemplateController {
                 view.addObject("error", info.getCode() + ":" + info.getMessage());
                 return view;
             }
+            //查询签名
+            EnterpriseDocumentInfoValidator enterpriseDocumentInfoValidator = new EnterpriseDocumentInfoValidator();
+            enterpriseDocumentInfoValidator.setEnterpriseId(user.getOrganization());
+            enterpriseDocumentInfoValidator.setBusinessType(accountTemplateInfoValidator.getTemplateType());
+            enterpriseDocumentInfoValidator.setDocStatus("1");
+            ResponseData<List<EnterpriseDocumentInfoValidator>> signList = messageSignService.findMessageSign(enterpriseDocumentInfoValidator);
             view.addObject("accountTemplateInfoValidator", accountTemplateInfoValidator);
             view.addObject("list", info.getData());
+            view.addObject("signList", signList.getData());
             view.addObject("op", op);
             return view;
         }

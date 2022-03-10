@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.List;
+
 
 /**
  * 资质管理远程服务接口
@@ -45,4 +47,12 @@ public interface MessageSignFeignClient {
      */
     @RequestMapping(value = "/ec/customer/document/deleteById/{id}", method = RequestMethod.GET)
     ResponseData deleteById(@PathVariable String id) throws Exception;
+
+    /**
+     * 查询签名
+     * @param enterpriseDocumentInfoValidator
+     * @return
+     */
+    @RequestMapping(value = "/ec/customer/document/findMessageSign", method = RequestMethod.POST)
+    ResponseData<List<EnterpriseDocumentInfoValidator>> findMessageSign(@RequestBody EnterpriseDocumentInfoValidator enterpriseDocumentInfoValidator)throws Exception;
 }

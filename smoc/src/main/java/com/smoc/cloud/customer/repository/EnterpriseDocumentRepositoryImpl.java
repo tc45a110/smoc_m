@@ -100,5 +100,80 @@ public class EnterpriseDocumentRepositoryImpl extends BasePageRepository {
         return pageList;
     }
 
+    public List<EnterpriseDocumentInfoValidator> findMessageSign(EnterpriseDocumentInfoValidator qo) {
 
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append("  t.ID");
+        sqlBuffer.append(", t.ENTERPRISE_ID");
+        sqlBuffer.append(", t.SIGN_NAME");
+        sqlBuffer.append(", t.BUSINESS_TYPE");
+        sqlBuffer.append(", t.INFO_TYPE");
+        sqlBuffer.append(", t.SHORT_LINK");
+        sqlBuffer.append(", t.DOC_KEY");
+        sqlBuffer.append(", t.DOC_STATUS");
+        sqlBuffer.append(", t.CREATED_BY");
+        sqlBuffer.append(", DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME");
+        sqlBuffer.append(", e.ENTERPRISE_NAME");
+        sqlBuffer.append(", e.ENTERPRISE_TYPE");
+        sqlBuffer.append("  from enterprise_document_info t left join enterprise_basic_info e on t.ENTERPRISE_ID = e.ENTERPRISE_ID ");
+        sqlBuffer.append("  where t.DOC_STATUS!=0  ");
+
+        List<Object> paramsList = new ArrayList<Object>();
+
+        if (!StringUtils.isEmpty(qo.getEnterpriseType())) {
+            sqlBuffer.append(" and e.ENTERPRISE_TYPE = ? ");
+            paramsList.add(qo.getEnterpriseType().trim());
+        }
+
+        if (!StringUtils.isEmpty(qo.getEnterpriseName())) {
+            sqlBuffer.append(" and e.ENTERPRISE_NAME like ? ");
+            paramsList.add("%"+qo.getEnterpriseName().trim()+"%");
+        }
+
+        if (!StringUtils.isEmpty(qo.getBusinessType())) {
+            sqlBuffer.append(" and t.BUSINESS_TYPE = ? ");
+            paramsList.add(qo.getBusinessType().trim());
+        }
+
+        if (!StringUtils.isEmpty(qo.getInfoType())) {
+            sqlBuffer.append(" and t.INFO_TYPE = ? ");
+            paramsList.add(qo.getInfoType().trim());
+        }
+
+        if (!StringUtils.isEmpty(qo.getSignName())) {
+            sqlBuffer.append(" and t.SIGN_NAME like ? ");
+            paramsList.add("%"+qo.getSignName().trim()+"%");
+        }
+
+        if (!StringUtils.isEmpty(qo.getDocKey())) {
+            sqlBuffer.append(" and t.DOC_KEY like ? ");
+            paramsList.add("%"+qo.getDocKey().trim()+"%");
+        }
+
+        if (!StringUtils.isEmpty(qo.getDocStatus())) {
+            sqlBuffer.append(" and t.DOC_STATUS = ? ");
+            paramsList.add(qo.getDocStatus().trim());
+        }
+
+        if (!StringUtils.isEmpty(qo.getStartDate())) {
+            sqlBuffer.append(" and DATE_FORMAT(t.CREATED_TIME,'%Y-%m-%d') >= ? ");
+            paramsList.add(qo.getStartDate().trim());
+        }
+
+        if (!StringUtils.isEmpty(qo.getEndDate())) {
+            sqlBuffer.append(" and DATE_FORMAT(t.CREATED_TIME,'%Y-%m-%d') <= ? ");
+            paramsList.add(qo.getEndDate().trim());
+        }
+
+
+        sqlBuffer.append(" order by t.CREATED_TIME desc");
+
+        //根据参数个数，组织参数值
+        Object[] params = new Object[paramsList.size()];
+        paramsList.toArray(params);
+
+        List<EnterpriseDocumentInfoValidator> pageList = this.queryForObjectList(sqlBuffer.toString(), params, new EnterpriseDocumentInfoRowMapper());
+        return pageList;
+    }
 }

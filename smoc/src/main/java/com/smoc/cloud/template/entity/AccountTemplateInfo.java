@@ -16,6 +16,9 @@ public class AccountTemplateInfo {
     @Column(name = "BUSINESS_ACCOUNT", nullable = false, length = 32)
     private String businessAccount;
 
+    @Column(name = "SIGN_NAME", nullable = false, length = 64)
+    private String signName;
+
     @Lob
     @Column(name = "TEMPLATE_CONTENT", nullable = false)
     private String templateContent;
@@ -136,6 +139,14 @@ public class AccountTemplateInfo {
 
     public void setTemplateContent(String templateContent) {
         this.templateContent = templateContent;
+    }
+
+    public String getSignName() {
+        return signName;
+    }
+
+    public void setSignName(String signName) {
+        this.signName = signName;
     }
 
     public String getBusinessAccount() {

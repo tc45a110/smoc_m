@@ -15,6 +15,8 @@ public class AccountTemplateInfoValidator {
 
     private String businessAccount;
 
+    private String signName;
+
     private String templateContent;
 
     private String checkDate;

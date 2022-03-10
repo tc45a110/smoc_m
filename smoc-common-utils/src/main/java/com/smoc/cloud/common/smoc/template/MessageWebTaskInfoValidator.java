@@ -19,6 +19,8 @@ public class MessageWebTaskInfoValidator {
 
     private String businessType;
 
+    private String infoType;
+
     private String sendType;
 
     private String timingTime;
@@ -41,6 +43,7 @@ public class MessageWebTaskInfoValidator {
 
     private String sendStatus;
 
+    //表单输入手机号
     private String inputNumber;
 
     private String numberFiles;
@@ -58,4 +61,13 @@ public class MessageWebTaskInfoValidator {
     private String enterpriseName;
     private String startDate;
     private String endDate;
+
+    //原手机号上传路径
+    private String originalAttachment;
+    //发送手机号路径
+    private String sendNumberAttachment;
+    //异常手机号路径
+    private String exceptionNumberAttachment;
+    //发送内容条数
+    private Integer sendMessageNumber;
 }

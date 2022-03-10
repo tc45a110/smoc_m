@@ -50,6 +50,10 @@
                                            placeholder="模板内容" autocomplete="off">
                                 </div>
                                 <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control" th:field="*{signName}"
+                                           placeholder="签名" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-3">
                                     <input type="text" class="form-control" th:field="*{businessAccount}"
                                            placeholder="账号" autocomplete="off">
                                 </div>
@@ -96,6 +100,7 @@
                                 <tr>
                                     <th style="width:180px">账号</th>
                                     <th style="width:240px">模板ID</th>
+                                    <th style="width:240px">签名</th>
                                     <th>模板内容</th>
                                     <th style="width:140px">审核状态</th>
                                     <th style="width:170px">提交时间</th>
@@ -109,6 +114,9 @@
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;">
                                         [[${info.templateId}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px;">
+                                        [[${info.signName}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
                                         [[${info.templateContent}]]

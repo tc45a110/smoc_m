@@ -25,6 +25,9 @@ public class MessageWebTaskInfo {
     @Column(name = "BUSINESS_TYPE", nullable = false, length = 32)
     private String businessType;
 
+    @Column(name = "INFO_TYPE", nullable = false, length = 32)
+    private String infoType;
+
     @Column(name = "SEND_TYPE", nullable = false, length = 32)
     private String sendType;
 
@@ -221,6 +224,14 @@ public class MessageWebTaskInfo {
 
     public void setSendType(String sendType) {
         this.sendType = sendType;
+    }
+
+    public String getInfoType() {
+        return infoType;
+    }
+
+    public void setInfoType(String infoType) {
+        this.infoType = infoType;
     }
 
     public String getBusinessType() {

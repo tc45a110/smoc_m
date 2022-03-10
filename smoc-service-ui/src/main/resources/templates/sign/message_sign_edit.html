@@ -55,12 +55,12 @@
                                         <label>信息类型<span class="text-danger">*</span>
                                             <span class="text-danger" th:if="${#fields.hasErrors('infoType')}"
                                                   th:errors="*{infoType}"></span></label>
-                                        <mpm:tag required="true" identity="infoType" show-type="select"
-                                                 key="code" th:value="${enterpriseDocumentInfoValidator.infoType}"
-                                                 class="form-control" name="infoType" title="信息类型"/>
+                                        <mpm:tag id="infoType" required="true" identity="infoType"
+                                                 show-type="checkbox" key="code" class="form-control"
+                                                 name="infoType" th:value="${enterpriseDocumentInfoValidator.infoType}" title="信息分类"/>
                                     </div>
                                     <div class="form-group m-b-20">
-                                        <label>签名<span class="text-danger">*</span>&nbsp;(不需要填写中括号，直接输入签名，多个签名请用 " | " 隔开)
+                                        <label>签名<span class="text-danger">*</span>&nbsp;(无须在签名内容前后添加【】、()、[]，以避免签名符号重复)
                                             <span class="text-danger" th:if="${#fields.hasErrors('signName')}"
                                                   th:errors="*{signName}"></span></label>
                                         <textarea type="text" class="form-control" th:field="*{signName}"
@@ -135,7 +135,7 @@
                             <button sec:authorize-url="/sign/save/*" type="submit"
                                     class="btn btn-teal waves-effect waves-light">提交
                             </button>
-                            <a th:sec:authorize-url="|/sign/page/${signType}|"
+                            <a th:sec:authorize-url="|/sign/list/${signType}|"
                                th:href="@{/sign/list/{signType}(signType=${signType})}"
                                class="btn btn-default waves-effect waves-light" style="margin-left:20px">返回</a>
                         </div>

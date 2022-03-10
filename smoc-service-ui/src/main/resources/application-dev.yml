@@ -53,7 +53,8 @@ com:
         main-url: /service_main
 
       smoc:
-        enterprise-file-path: F:/data/enterprise/
+        enterprise-file-path: F:/data/enterprise/ #签名资质文件根目录
+        mobile-file-root-path: F:/data/message/mobile  #短信手机号文件根目录
 
     #**********************************************************
     # 内置tomcat 配置

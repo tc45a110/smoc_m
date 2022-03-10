@@ -15,6 +15,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.List;
+
 
 /**
  * 签名资质管理信息接口
@@ -113,4 +115,16 @@ public class EnterpriseDocumentController {
 
         return data;
     }
+
+    /**
+     * 查询签名列表
+     * @param enterpriseDocumentInfoValidator
+     * @return
+     */
+    @RequestMapping(value = "/findMessageSign", method = RequestMethod.POST)
+    public ResponseData<List<EnterpriseDocumentInfoValidator>> findMessageSign(@RequestBody EnterpriseDocumentInfoValidator enterpriseDocumentInfoValidator) {
+
+        return enterpriseDocumentService.findMessageSign(enterpriseDocumentInfoValidator);
+    }
+
 }

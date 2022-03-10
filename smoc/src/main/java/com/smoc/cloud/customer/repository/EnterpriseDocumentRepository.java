@@ -39,4 +39,11 @@ public interface EnterpriseDocumentRepository extends CrudRepository<EnterpriseD
     @Modifying
     @Query(value = "update enterprise_document_info set DOC_STATUS = :docStatus where ID = :id ",nativeQuery = true)
     void updateStatusById(@Param("id") String id, @Param("docStatus") String docStatus);
+
+    /**
+     * 查询签名
+     * @param enterpriseDocumentInfoValidator
+     * @return
+     */
+    List<EnterpriseDocumentInfoValidator> findMessageSign(EnterpriseDocumentInfoValidator enterpriseDocumentInfoValidator);
 }

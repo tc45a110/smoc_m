@@ -175,4 +175,14 @@ public class EnterpriseDocumentService {
 
         return ResponseDataUtil.buildSuccess();
     }
+
+    /**
+     * 查询签名
+     * @param enterpriseDocumentInfoValidator
+     * @return
+     */
+    public ResponseData<List<EnterpriseDocumentInfoValidator>> findMessageSign(EnterpriseDocumentInfoValidator enterpriseDocumentInfoValidator) {
+        List<EnterpriseDocumentInfoValidator> list = enterpriseDocumentRepository.findMessageSign(enterpriseDocumentInfoValidator);
+        return ResponseDataUtil.buildSuccess(list);
+    }
 }
