@@ -22,6 +22,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -69,7 +70,9 @@ public class ChannelService {
         //如果是统一计价，查询价格
         if ("UNIFIED_PRICE".equals(entity.getPriceStyle())) {
             ConfigChannelPrice configChannelPrice = channelPriceRepository.findByChannelId(entity.getChannelId());
-            channelBasicInfoValidator.setChannelPrice(configChannelPrice.getChannelPrice());
+            if(!StringUtils.isEmpty(configChannelPrice)){
+                channelBasicInfoValidator.setChannelPrice(configChannelPrice.getChannelPrice());
+            }
         }
 
         return ResponseDataUtil.buildSuccess(channelBasicInfoValidator);
@@ -99,7 +102,9 @@ public class ChannelService {
         //如果是统一计价，查询价格
         if ("UNIFIED_PRICE".equals(entity.getPriceStyle())) {
             ConfigChannelPrice configChannelPrice = channelPriceRepository.findByChannelId(entity.getChannelId());
-            channelBasicInfoValidator.setChannelPrice(configChannelPrice.getChannelPrice());
+            if(!StringUtils.isEmpty(configChannelPrice)){
+                channelBasicInfoValidator.setChannelPrice(configChannelPrice.getChannelPrice());
+            }
         }
 
         //转换日期
