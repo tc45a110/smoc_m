@@ -3,6 +3,8 @@ package com.smoc.cloud.common.smoc.message;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
+
 
 @Setter
 @Getter
@@ -33,6 +35,8 @@ public class MessageDailyStatisticValidator {
     private Integer messageFailureNum;
 
     private Integer messageNoReportNum;
+
+    private String messageSign;
 
     private String messageDate;
 
