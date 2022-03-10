@@ -1,5 +1,6 @@
 package com.smoc.cloud.scheduler.account.price.scheduling;
 
+import com.smoc.cloud.scheduler.account.price.service.AccountFinanceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
@@ -20,8 +21,11 @@ import javax.annotation.Resource;
 @Component
 public class UpdateMessageDailyStatisticsAccountSchedule {
 
+    @Autowired
+    private AccountFinanceService accountFinanceService;
+
     @Scheduled(cron = "0 0/1 * * * ?")
     public void  updateMessageDailyStatisticsAccountSchedule() throws Exception {
-
+        accountFinanceService.updateMessageDailyStatisticsAccountPrice();
     }
 }

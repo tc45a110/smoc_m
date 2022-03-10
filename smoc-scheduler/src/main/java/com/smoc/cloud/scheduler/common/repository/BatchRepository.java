@@ -17,6 +17,7 @@ public class BatchRepository {
 
     /**
      * 批量sql 执行
+     *
      * @param list
      * @throws Exception
      */
@@ -30,6 +31,17 @@ public class BatchRepository {
         String[] sql = new String[list.size()];
         list.toArray(sql);
         jdbcTemplate.batchUpdate(sql);
+    }
+
+    /**
+     * update sql 执行
+     *
+     * @throws Exception
+     */
+    @Transactional
+    public void update(String sql) throws Exception {
+
+        jdbcTemplate.update(sql);
     }
 
 

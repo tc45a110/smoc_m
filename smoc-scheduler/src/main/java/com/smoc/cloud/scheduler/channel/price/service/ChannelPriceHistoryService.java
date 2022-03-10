@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -81,7 +82,7 @@ public class ChannelPriceHistoryService {
                 //如果是当天数据
                 if (0 == model.getDays()) {
                     //如果存在则进行修改操作
-                    StringBuffer updateSqlBuffer = new StringBuffer("update smoc.config_channel_price_history set CHANNEL_PRICE =" + model.getChannelPrice() + ",SOURCE_ID='" + model.getId() + "' where CHANNEL_ID='" + model.getChannelId() + "' and AREA_CODE='" + model.getAreaCode() + "' and PRICE_DATE='" + model.getPriceData() + "' ");
+                    StringBuffer updateSqlBuffer = new StringBuffer("update smoc.config_channel_price_history set CHANNEL_PRICE =" + model.getChannelPrice() + ",SOURCE_ID='" + model.getId() + "',UPDATED_TIME = now() where CHANNEL_ID='" + model.getChannelId() + "' and AREA_CODE='" + model.getAreaCode() + "' and PRICE_DATE='" + model.getPriceData() + "' ");
 
                     //如果不存在则进行 insert
                     StringBuffer insertSqlBuffer = new StringBuffer("insert into smoc.config_channel_price_history(ID,SOURCE_ID,CHANNEL_ID,PRICE_STYLE,AREA_CODE,CHANNEL_PRICE,PRICE_DATE,CREATE_TIME) ");
@@ -103,7 +104,7 @@ public class ChannelPriceHistoryService {
                         //价格日期
                         String dataDate = DateTimeUtils.checkOption(model.getCreateTime(), i);
 
-                        StringBuffer updateSqlBuffer = new StringBuffer("update smoc.config_channel_price_history set CHANNEL_PRICE =" + model.getChannelPrice() + ",SOURCE_ID='" + model.getId() + "' where CHANNEL_ID='" + model.getChannelId() + "' and AREA_CODE='" + model.getAreaCode() + "' and PRICE_DATE='" + dataDate + "' ");
+                        StringBuffer updateSqlBuffer = new StringBuffer("update smoc.config_channel_price_history set CHANNEL_PRICE =" + model.getChannelPrice() + ",SOURCE_ID='" + model.getId() + "',UPDATED_TIME = now() where CHANNEL_ID='" + model.getChannelId() + "' and AREA_CODE='" + model.getAreaCode() + "' and PRICE_DATE='" + dataDate + "' ");
 
                         //如果不存在则进行 insert
                         StringBuffer insertSqlBuffer = new StringBuffer("insert into smoc.config_channel_price_history(ID,SOURCE_ID,CHANNEL_ID,PRICE_STYLE,AREA_CODE,CHANNEL_PRICE,PRICE_DATE,CREATE_TIME) ");
@@ -127,6 +128,21 @@ public class ChannelPriceHistoryService {
             log.error("[通道价格批处理]:{}", e.getMessage());
         }
 
+    }
+
+    /**
+     * 修改消息日统计 的通道价格
+     */
+    public void updateMessageDailyStatisticsChannelPrice() {
+        try {
+
+            //获取当前日期 为结束日期
+            String updateSql = "update smoc.message_daily_statistics m INNER JOIN(select c.CHANNEL_PRICE,c.CHANNEL_ID,c.PRICE_DATE,c.AREA_CODE from smoc.config_channel_price_history  c ) b on m.CHANNEL_ID = b.CHANNEL_ID and m.PRICE_AREA_CODE = b.AREA_CODE and m.MESSAGE_DATE=b.PRICE_DATE set m.CHANNEL_PRICE = b.CHANNEL_PRICE,CHANNEL_BATCH_DATE = now() where m.CHANNEL_BATCH_DATE ='0' ";
+            batchRepository.update(updateSql);
+            log.info("[消息日汇总 通道价格更新]");
+        } catch (Exception e) {
+            log.error("[消息日汇总 通道价格更新]:{}", e.getMessage());
+        }
     }
 
 

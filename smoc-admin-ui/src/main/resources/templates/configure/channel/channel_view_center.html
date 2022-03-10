@@ -41,17 +41,17 @@
                         <h4 >
                             <div class="pull-right" style="margin-top: -12px;margin-right:10px">
                                 <a sec:authorize-url="/configure/channel/list"
-                                   th:href="@{/configure/channel/list}" th:if="${flag ne 'INTL'}"
+                                   th:href="@{/configure/channel/list}" th:if="${flag ne 'INTERNATIONAL'}"
                                    class="btn btn-default waves-effect waves-light btn-md">
                                     <i class="glyphicon  glyphicon-share-alt" style="margin-right:10px"></i>
                                     返回通道列表</a>
                                 <a sec:authorize-url="/configure/channel/international/list"
-                                   th:href="@{/configure/channel/international/list}" th:if="${flag eq 'INTL'}"
+                                   th:href="@{/configure/channel/international/list}" th:if="${flag eq 'INTERNATIONAL'}"
                                    class="btn btn-default waves-effect waves-light btn-md">
                                     <i class="glyphicon  glyphicon-share-alt" style="margin-right:10px"></i>
                                     返回国际通道列表</a>
                                 <a sec:authorize-url="/configure/channel/edit/center/*"
-                                   th:href="@{/configure/channel/edit/center/{id}(id=${id})}" th:if="${flag ne 'INTL'}"
+                                   th:href="@{/configure/channel/edit/center/{id}(id=${id})}" th:if="${flag ne 'INTERNATIONAL'}"
                                    class="btn btn-purple waves-effect waves-light btn-md" style="margin-right:10px">
                                     <i class="glyphicon glyphicon-cog" style="margin-right:5px"></i>
                                     通道配置</a>
@@ -84,7 +84,8 @@
                                                 </a>
                                             </li>
                                             <li class="" id="tab4"><a onclick="active('4')"
-
+                                                                      sec:authorize-url="/configure/channel/price/history/list/*"
+                                                                      th:href="@{/configure/channel/price/history/list/{businessId}(businessId=${id})}"
                                                                             th:target="tab-content">通道价格记录</a></li>
                                             <li class="" id="tab5"><a onclick="active('5')"
 

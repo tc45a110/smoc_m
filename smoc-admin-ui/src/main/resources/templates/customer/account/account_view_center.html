@@ -87,7 +87,8 @@
                                                 </a>
                                             </li>
                                             <li class="" id="tab4"><a onclick="active('4')"
-
+                                                                      sec:authorize-url="/account/price/history/list/*"
+                                                                      th:href="@{/account/price/history/list/{accountId}(accountId=${accountId})}"
                                                                       th:target="tab-content">业务账号价格记录</a></li>
                                             <li class="" id="tab5"><a onclick="active('5')"
 

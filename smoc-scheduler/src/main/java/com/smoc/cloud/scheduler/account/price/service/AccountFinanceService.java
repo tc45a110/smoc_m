@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,6 +24,7 @@ public class AccountFinanceService {
 
     /**
      * 为已经跑过批处理得 价格生成历史数据
+     *
      * @param list
      */
     public void saveHistory(List<? extends AccountPriceModel> list) {
@@ -38,7 +40,7 @@ public class AccountFinanceService {
                         String dataDate = DateTimeUtils.checkOption(model.getBatchDate(), i + 1);
 
                         //如果存在则进行修改操作
-                        StringBuffer updateSqlBuffer = new StringBuffer("update smoc.account_price_history set CARRIER_PRICE =" + model.getCarrierPrice() + ",SOURCE_ID='" + model.getId() + "' where ACCOUNT_ID='" + model.getAccountId() + "' and CARRIER='" + model.getCarrier() + "' and PRICE_DATE='" + dataDate + "' ");
+                        StringBuffer updateSqlBuffer = new StringBuffer("update smoc.account_price_history set CARRIER_PRICE =" + model.getCarrierPrice() + ",SOURCE_ID='" + model.getId() + "',UPDATED_TIME = now() where ACCOUNT_ID='" + model.getAccountId() + "' and CARRIER='" + model.getCarrier() + "' and PRICE_DATE='" + dataDate + "' ");
 
                         //进行插入，并判断是否存在
                         StringBuffer sqlBuffer = new StringBuffer(" insert into smoc.account_price_history(ID,SOURCE_ID,ACCOUNT_ID,CARRIER_TYPE,CARRIER,CARRIER_PRICE,PRICE_DATE,CREATED_TIME) ");
@@ -64,6 +66,7 @@ public class AccountFinanceService {
 
     /**
      * 处理当天创建数据 或 创建后 没有跑过批处理数据  为这些数据生成价格历史数据
+     *
      * @param list
      */
     public void updateOrSaveAccountPrice(List<? extends AccountPriceModel> list) {
@@ -81,7 +84,7 @@ public class AccountFinanceService {
                 //如果是当天数据
                 if (0 == model.getDays()) {
                     //如果存在则进行修改操作
-                    StringBuffer updateSqlBuffer = new StringBuffer("update smoc.account_price_history set CARRIER_PRICE =" + model.getCarrierPrice() + ",SOURCE_ID='" + model.getId() + "' where ACCOUNT_ID='" + model.getAccountId() + "' and CARRIER='" + model.getCarrier() + "' and PRICE_DATE='" + model.getPriceData() + "' ");
+                    StringBuffer updateSqlBuffer = new StringBuffer("update smoc.account_price_history set CARRIER_PRICE =" + model.getCarrierPrice() + ",SOURCE_ID='" + model.getId() + "',UPDATED_TIME = now() where ACCOUNT_ID='" + model.getAccountId() + "' and CARRIER='" + model.getCarrier() + "' and PRICE_DATE='" + model.getPriceData() + "' ");
 
                     //进行插入，并判断是否存在
                     StringBuffer sqlBuffer = new StringBuffer(" insert into smoc.account_price_history(ID,SOURCE_ID,ACCOUNT_ID,CARRIER_TYPE,CARRIER,CARRIER_PRICE,PRICE_DATE,CREATED_TIME) ");
@@ -127,5 +130,18 @@ public class AccountFinanceService {
             log.error("[业务账号价格批处理 新数据]:{}", e.getMessage());
         }
 
+    }
+
+    /**
+     * 修改消息日统计 的业务账号价格
+     */
+    public void updateMessageDailyStatisticsAccountPrice() {
+        try {
+            String updateSql = "update smoc.message_daily_statistics m INNER JOIN(select c.CARRIER_PRICE,c.ACCOUNT_ID,c.PRICE_DATE,c.CARRIER from smoc.account_price_history  c ) b on m.BUSINESS_ACCOUNT = b.ACCOUNT_ID and m.CARRIER = b.CARRIER and m.MESSAGE_DATE=b.PRICE_DATE set m.ACCOUNT_PRICE = b.CARRIER_PRICE,ACCOUNT_BATCH_DATE = now() where m.ACCOUNT_BATCH_DATE ='0' ";
+            batchRepository.update(updateSql);
+            log.info("[消息日汇总 账号价格更新]");
+        } catch (Exception e) {
+            log.error("[消息日汇总 账号价格更新]:{}", e.getMessage());
+        }
     }
 }

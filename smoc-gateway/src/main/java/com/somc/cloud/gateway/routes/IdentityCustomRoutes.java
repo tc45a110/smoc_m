@@ -25,7 +25,6 @@ public class IdentityCustomRoutes {
     @Bean
     public RouteLocator identityRouteLocator(RouteLocatorBuilder builder) {
 
-
         return builder.routes()
                 //拦截所有GET请求
 //                .route(r -> r.method(HttpMethod.GET)
