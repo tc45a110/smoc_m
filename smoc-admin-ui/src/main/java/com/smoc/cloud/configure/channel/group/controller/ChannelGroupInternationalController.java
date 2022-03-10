@@ -42,7 +42,7 @@ public class ChannelGroupInternationalController {
         params.setPageSize(8);
         params.setCurrentPage(1);
         ChannelGroupInfoValidator channelGroupInfoValidator = new ChannelGroupInfoValidator();
-        channelGroupInfoValidator.setCarrier("INTERNATIONAL");
+        channelGroupInfoValidator.setCarrier("INTL");
         params.setParams(channelGroupInfoValidator);
 
         //查询
@@ -69,7 +69,7 @@ public class ChannelGroupInternationalController {
         ModelAndView view = new ModelAndView("configure/channel/international/channel_group_international_list");
 
         //分页查询
-        channelGroupInfoValidator.setCarrier("INTERNATIONAL");
+        channelGroupInfoValidator.setCarrier("INTL");
         pageParams.setParams(channelGroupInfoValidator);
 
         ResponseData<PageList<ChannelGroupInfoValidator>> data = channelGroupService.page(pageParams);
@@ -133,7 +133,7 @@ public class ChannelGroupInternationalController {
          */
         if ("base".equals(id)) {
             ChannelGroupInfoValidator channelGroupInfoValidator = new ChannelGroupInfoValidator();
-            channelGroupInfoValidator.setCarrier("INTERNATIONAL");
+            channelGroupInfoValidator.setCarrier("INTL");
             channelGroupInfoValidator.setBusinessType("INTERNATIONAL_SMS");
             channelGroupInfoValidator.setChannelGroupStatus("1");//状态
             channelGroupInfoValidator.setChannelGroupProcess("10");//配置进度

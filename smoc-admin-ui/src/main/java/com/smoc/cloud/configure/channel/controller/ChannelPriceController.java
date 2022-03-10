@@ -209,7 +209,7 @@ public class ChannelPriceController {
             dictList = dictType.getDict();
         }
         //国际
-        if("INTERNATIONAL".equals(data.getData().getBusinessAreaType())){
+        if("INTL".equals(data.getData().getBusinessAreaType())){
             DictType dictType  = dictMap.get("internationalArea");
             dictList = dictType.getDict();
         }

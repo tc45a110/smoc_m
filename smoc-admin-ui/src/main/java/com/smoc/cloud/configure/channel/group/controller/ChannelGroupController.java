@@ -194,7 +194,7 @@ public class ChannelGroupController {
 
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
 
-        if("INTERNATIONAL".equals(channelGroupInfoValidator.getCarrier())){
+        if("INTL".equals(channelGroupInfoValidator.getCarrier())){
             view.setViewName("configure/channel/international/channel_group_international_edit_base");
         }
 

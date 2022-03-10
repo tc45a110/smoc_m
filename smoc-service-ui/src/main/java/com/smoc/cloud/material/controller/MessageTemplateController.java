@@ -1,6 +1,7 @@
 package com.smoc.cloud.material.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.smoc.cloud.admin.security.remote.service.FlowApproveService;
 import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
@@ -26,14 +27,12 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -41,7 +40,7 @@ import java.util.List;
  * 短信模板
  */
 @Slf4j
-@Controller
+@RestController
 @RequestMapping("/template")
 public class MessageTemplateController {
 
@@ -417,5 +416,66 @@ public class MessageTemplateController {
 
         return view;
 
+    }
+
+    /**
+     * 模版分页查询，用于群发时模版选择
+     */
+    @RequestMapping(value = "/templateAjax", method = RequestMethod.POST)
+    public JSONObject templateAjax(@RequestBody JSONObject queryCondition, HttpServletRequest request) {
+        JSONObject result = new JSONObject();
+        List<AccountTemplateInfoValidator> list = new ArrayList<AccountTemplateInfoValidator>();
+
+        String currentPage = "1";
+        Integer pageSize = 6;
+        String templateId = null;
+        String keyword = null;
+        String bussinessType = null;
+        if(queryCondition!=null){
+            templateId = queryCondition.getString("templateId");
+            keyword = queryCondition.getString("keyword");
+            currentPage = queryCondition.getString("currentPage");
+            bussinessType = queryCondition.getString("businessType");
+        }
+
+        SecurityUser user = (SecurityUser)request.getSession().getAttribute("user");
+
+        if(!StringUtils.isEmpty(templateId)){
+            ResponseData<AccountTemplateInfoValidator> data = messageTemplateService.findById(templateId);
+            if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+                list.add(data.getData());
+            }
+
+            result.put("list", list);
+            result.put("pages", 1);
+            result.put("currentPage", 1);
+            return result;
+        }
+
+        PageParams<AccountTemplateInfoValidator> pageParams = new PageParams<AccountTemplateInfoValidator>();
+        pageParams.setPageSize(pageSize);
+        pageParams.setCurrentPage(new Integer(currentPage));
+
+        AccountTemplateInfoValidator messageTemplateValidator = new AccountTemplateInfoValidator();
+        messageTemplateValidator.setEnterpriseId(user.getOrganization());
+        messageTemplateValidator.setTemplateType(bussinessType);
+        messageTemplateValidator.setTemplateStatus("1");
+        messageTemplateValidator.setTemplateContent(keyword);
+        pageParams.setParams(messageTemplateValidator);
+        ResponseData<PageList<AccountTemplateInfoValidator>> data = messageTemplateService.page(pageParams);
+        list = data.getData().getList();
+
+        //以空格代替换行，避免字数不一致
+        /*for(AccountTemplateInfoValidator tmp:list){
+            String content_tmp = tmp.getTemplateContent();
+            if(content_tmp.indexOf("\r\n")!=-1){
+                tmp.setTemplateContent(content_tmp.replaceAll("\r\n", " "));
+            }
+        }*/
+
+        result.put("list", list);
+        result.put("pages", data.getData().getPageParams().getPages());
+        result.put("currentPage", data.getData().getPageParams().getCurrentPage());
+        return result;
     }
 }

@@ -52,7 +52,7 @@
                                 </div>
                                 <div class="form-group  col-sm-3">
                                     <mpm:tag id="carrier" identity="carrier" name="carrier" show-type="select"
-                                             key="code" class="form-control" mask-value="INTERNATIONAL"
+                                             key="code" class="form-control" mask-value="INTL"
                                              th:value="${channelGroupInfoValidator.carrier}" title="运营商"/>
                                 </div>
                                 <div class="form-group  col-sm-3">
@@ -117,7 +117,7 @@
                                                         <p style="font-size:12px">运营商：
                                                             <mpm:tag identity="carrier" show-type="button" key="code"
                                                                      th:value="${info.carrier}"
-                                                                     class="CMCC,btn btn-teal waves-effect waves-light btn-xs;UNICOM,btn btn-info waves-effect waves-light btn-xs;TELC,btn btn-primary waves-effect waves-light btn-xs;INTERNATIONAL,btn btn-brown waves-effect waves-light btn-xs;"/>
+                                                                     class="CMCC,btn btn-teal waves-effect waves-light btn-xs;UNIC,btn btn-info waves-effect waves-light btn-xs;TELC,btn btn-primary waves-effect waves-light btn-xs;INTL,btn btn-brown waves-effect waves-light btn-xs;"/>
                                                         </p>
                                                         <p style="font-size:12px">
                                                             配置通道数：[[${info.channelNum}]] 个

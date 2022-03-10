@@ -152,7 +152,7 @@ public class BusinessAccountService {
 
         if ("edit".equals(op)) {
             //根据运营商先删除库里多余的运营商的价格(比如：添加的时候选择了3个运营商，修改的时候选择了2个运营商，那么就得把多余的1个运营商删除)
-            if("INTERNATIONAL".equals(accountBasicInfoValidator.getCarrier())){
+            if("INTL".equals(accountBasicInfoValidator.getCarrier())){
                 accountFinanceRepository.deleteByAccountIdAndCarrier(accountBasicInfoValidator.getAccountId(), accountBasicInfoValidator.getCountryCode());
             }else{
                 accountFinanceRepository.deleteByAccountIdAndCarrier(accountBasicInfoValidator.getAccountId(), accountBasicInfoValidator.getCarrier());
@@ -165,7 +165,7 @@ public class BusinessAccountService {
             }
 
             //如果修改了运营商，并且配置了通道，需要删除通道
-            if("INTERNATIONAL".equals(accountBasicInfoValidator.getCarrier())){
+            if("INTL".equals(accountBasicInfoValidator.getCarrier())){
                 if(!accountBasicInfoValidator.getCountryCode().equals(countryCode)){
                     deleteConfigChannelByCarrier(entity);
                 }
@@ -218,7 +218,7 @@ public class BusinessAccountService {
     //修改运营商，并且配置了通道，需要删除通道
     private void deleteConfigChannelByCarrier(AccountBasicInfo entity) {
         String carrier = entity.getCarrier();
-        if("INTERNATIONAL".equals(entity.getCarrier())){
+        if("INTL".equals(entity.getCarrier())){
             carrier = entity.getCountryCode();
         }
         List<AccountChannelInfoQo> list = accountChannelRepository.accountChannelByAccountIdAndCarrier(entity.getAccountId(),carrier,entity.getAccountChannelType());

@@ -223,7 +223,7 @@ public class AccountController {
 
             //国际账号
             if("international".equals(flag)){
-                accountBasicInfoValidator.setCarrier("INTERNATIONAL");
+                accountBasicInfoValidator.setCarrier("INTL");
                 accountBasicInfoValidator.setBusinessType("INTERNATIONAL_SMS");
                 accountBasicInfoValidator.setTransferType("0");
                 view.setViewName("customer/account/international/account_international_edit_base");
@@ -255,7 +255,7 @@ public class AccountController {
         view.addObject("accountBasicInfoValidator", info.getData());
         view.addObject("enterpriseBasicInfoValidator", data.getData());
 
-        if("INTERNATIONAL".equals(info.getData().getCarrier())){
+        if("INTL".equals(info.getData().getCarrier())){
             view.setViewName("customer/account/international/account_international_edit_base");
         }
 
@@ -275,7 +275,7 @@ public class AccountController {
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
 
         //国际
-        if("INTERNATIONAL".equals(accountBasicInfoValidator.getCarrier())){
+        if("INTL".equals(accountBasicInfoValidator.getCarrier())){
             view.setViewName("customer/account/international/account_international_edit_base");
         }
 
@@ -537,7 +537,7 @@ public class AccountController {
         AccountFinanceInfoValidator accountFinanceInfoValidator = new AccountFinanceInfoValidator();
         accountFinanceInfoValidator.setAccountId(data.getData().getAccountId());
         accountFinanceInfoValidator.setCarrier(data.getData().getCarrier());
-        if("INTERNATIONAL".equals(data.getData().getCarrier())){
+        if("INTL".equals(data.getData().getCarrier())){
             accountFinanceInfoValidator.setCarrier(data.getData().getCountryCode());
         }
         ResponseData<Map<String, BigDecimal>> map = accountFinanceService.editCarrierPrice(accountFinanceInfoValidator);

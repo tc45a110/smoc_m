@@ -90,7 +90,7 @@ public class AccountFinanceController {
         accountFinanceInfoValidator.setFrozenReturnDate("1");//返还时间
 
         //国际取国家代码
-        if("INTERNATIONAL".equals(data.getData().getCarrier())){
+        if("INTL".equals(data.getData().getCarrier())){
             accountFinanceInfoValidator.setCarrier(data.getData().getCountryCode());
             accountFinanceInfoValidator.setPayType("2");//付费方式
             accountFinanceInfoValidator.setChargeType("2");//计费方式
@@ -154,7 +154,7 @@ public class AccountFinanceController {
 
         //国际得区分字段查
         String carrier = "";
-        if("INTERNATIONAL".equals(data.getData().getCarrier())){
+        if("INTL".equals(data.getData().getCarrier())){
             carrier = data.getData().getCountryCode();
         }else{
             carrier = data.getData().getCarrier();
@@ -229,7 +229,7 @@ public class AccountFinanceController {
         ServletContext context = request.getServletContext();
         Map<String, DictType> dictMap = (Map<String, DictType>) context.getAttribute("dict");
         DictType dictType  = dictMap.get("carrier");
-        if("INTERNATIONAL".equals(data.getData().getCarrier())){
+        if("INTL".equals(data.getData().getCarrier())){
             dictType  = dictMap.get("internationalArea");
         }
 

@@ -1,38 +1,42 @@
 package com.smoc.cloud.message.controller;
 
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
-import com.smoc.cloud.common.smoc.template.AccountTemplateInfoValidator;
 import com.smoc.cloud.common.smoc.template.MessageWebTaskInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.material.service.BusinessAccountService;
-import com.smoc.cloud.material.service.MessageService;
+import com.smoc.cloud.message.service.MessageService;
+import com.smoc.cloud.message.utils.SendMessage;
 import com.smoc.cloud.properties.SmocProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.net.URLEncoder;
 import java.util.Date;
 import java.util.List;
 
@@ -60,8 +64,8 @@ public class MessageController {
      * @param request
      * @return
      */
-    @RequestMapping(value = "list/{bussinessType}/{signType}", method = RequestMethod.GET)
-    public ModelAndView list(@PathVariable String bussinessType, @PathVariable String signType, HttpServletRequest request) {
+    @RequestMapping(value = "list/{businessType}/{signType}", method = RequestMethod.GET)
+    public ModelAndView list(@PathVariable String businessType, @PathVariable String signType, HttpServletRequest request) {
         ModelAndView view = new ModelAndView("message/message_list");
         //查询数据
         PageParams params = new PageParams<>();
@@ -74,7 +78,7 @@ public class MessageController {
 
         view.addObject("pageParams",params);
         view.addObject("signType", signType);
-        view.addObject("bussinessType", bussinessType);
+        view.addObject("businessType", businessType);
         return view;
     }
 
@@ -84,8 +88,8 @@ public class MessageController {
      * @param request
      * @return
      */
-    @RequestMapping(value = "page/{bussinessType}/{signType}", method = RequestMethod.POST)
-    public ModelAndView page(@PathVariable String bussinessType,@PathVariable String signType,HttpServletRequest request) {
+    @RequestMapping(value = "page/{businessType}/{signType}", method = RequestMethod.POST)
+    public ModelAndView page(@PathVariable String businessType,@PathVariable String signType,HttpServletRequest request) {
         ModelAndView view = new ModelAndView("message/message_list");
         //查询数据
         PageParams params = new PageParams<>();
@@ -98,7 +102,7 @@ public class MessageController {
 
         view.addObject("pageParams",params);
         view.addObject("signType", signType);
-        view.addObject("bussinessType", bussinessType);
+        view.addObject("businessType", businessType);
         return view;
     }
 
@@ -106,20 +110,20 @@ public class MessageController {
      * 添加
      * @return
      */
-    @RequestMapping(value = "/add/{bussinessType}/{signType}", method = RequestMethod.GET)
-    public ModelAndView add(@PathVariable String bussinessType,@PathVariable String signType, HttpServletRequest request) {
+    @RequestMapping(value = "/add/{businessType}/{signType}", method = RequestMethod.GET)
+    public ModelAndView add(@PathVariable String businessType,@PathVariable String signType, HttpServletRequest request) {
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
         ModelAndView view = new ModelAndView("message/message_edit");
 
         //初始化参数
         MessageWebTaskInfoValidator messageWebTaskInfoValidator = new MessageWebTaskInfoValidator();
-        messageWebTaskInfoValidator.setBusinessType(bussinessType);
+        messageWebTaskInfoValidator.setBusinessType(businessType);
         messageWebTaskInfoValidator.setInfoType(signType);
         messageWebTaskInfoValidator.setSendType("1");
 
         //查询企业下得所有业务账号
         AccountBasicInfoValidator accountBasicInfoValidator = new AccountBasicInfoValidator();
-        accountBasicInfoValidator.setBusinessType(bussinessType);
+        accountBasicInfoValidator.setBusinessType(businessType);
         accountBasicInfoValidator.setInfoType(signType);
         accountBasicInfoValidator.setEnterpriseId(user.getOrganization());
         accountBasicInfoValidator.setAccountStatus("1");//正常
@@ -134,8 +138,83 @@ public class MessageController {
         view.addObject("messageWebTaskInfoValidator", messageWebTaskInfoValidator);
         view.addObject("list", info.getData());
         view.addObject("signType", signType);
-        view.addObject("bussinessType", bussinessType);
+        view.addObject("businessType", businessType);
 
+        return view;
+
+    }
+
+    /**
+     * 短信发送
+     * @param messageWebTaskInfoValidator
+     * @param result
+     * @param op
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/save/{op}", method = RequestMethod.POST)
+    public ModelAndView save(@ModelAttribute @Validated MessageWebTaskInfoValidator messageWebTaskInfoValidator, BindingResult result, @PathVariable String op, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("template/message_template_edit");
+
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        if("2".equals(messageWebTaskInfoValidator.getSendType()) && StringUtils.isEmpty(messageWebTaskInfoValidator.getTimingTime())){
+            // 提交前台错误提示
+            FieldError err = new FieldError("发送方式", "sendType", "定时时间不能为空");
+            result.addError(err);
+        }
+        if(StringUtils.isEmpty(messageWebTaskInfoValidator.getInputNumber()) && StringUtils.isEmpty(messageWebTaskInfoValidator.getNumberFiles())){
+            // 提交前台错误提示
+            FieldError err = new FieldError("手机号", "inputNumber", "群发号码，号码文件不能都为空");
+            result.addError(err);
+        }
+
+        //完成参数规则验证
+        if (result.hasErrors()) {
+            //查询企业下得所有业务账号
+            AccountBasicInfoValidator accountBasicInfoValidator = new AccountBasicInfoValidator();
+            accountBasicInfoValidator.setBusinessType(messageWebTaskInfoValidator.getBusinessType());
+            accountBasicInfoValidator.setInfoType(messageWebTaskInfoValidator.getInfoType());
+            accountBasicInfoValidator.setEnterpriseId(user.getOrganization());
+            accountBasicInfoValidator.setAccountStatus("1");//正常
+            ResponseData<List<AccountBasicInfoValidator>> info = businessAccountService.findBusinessAccount(accountBasicInfoValidator);
+            if (!ResponseCode.SUCCESS.getCode().equals(info.getCode())) {
+                view.addObject("error", info.getCode() + ":" + info.getMessage());
+                return view;
+            }
+
+            view.addObject("messageWebTaskInfoValidator", messageWebTaskInfoValidator);
+            view.addObject("list", info.getData());
+            view.addObject("signType", messageWebTaskInfoValidator.getInfoType());
+            view.addObject("businessType", messageWebTaskInfoValidator.getBusinessType());
+            view.addObject("op", op);
+            return view;
+        }
+
+        //初始化其他变量
+        if (!StringUtils.isEmpty(op) && "add".equals(op)) {
+            messageWebTaskInfoValidator.setCreatedTime(DateTimeUtils.getDateTimeFormat(new Date()));
+            messageWebTaskInfoValidator.setCreatedBy(user.getRealName());
+        } else if (!StringUtils.isEmpty(op) && "edit".equals(op)) {
+            messageWebTaskInfoValidator.setUpdatedTime(new Date());
+            messageWebTaskInfoValidator.setUpdatedBy(user.getRealName());
+        } else {
+            view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":" + ResponseCode.PARAM_LINK_ERROR.getMessage());
+            return view;
+        }
+
+        //保存数据
+        messageWebTaskInfoValidator = SendMessage.handleFileSMS(messageWebTaskInfoValidator,smocProperties,user.getOrganization());
+        ResponseData data = messageService.save(messageWebTaskInfoValidator,op);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        //记录日志
+        log.info("[短信群发][{}][{}]数据:{}", op, user.getUserName(), JSON.toJSONString(messageWebTaskInfoValidator));
+
+        view.setView(new RedirectView("/message/list/"+messageWebTaskInfoValidator.getBusinessType()+"/"+messageWebTaskInfoValidator.getInfoType(), true, false));
         return view;
 
     }
@@ -162,6 +241,13 @@ public class MessageController {
         if(file!=null&&file.getSize()>0){
             try {
 
+                //文件格式非txt，直接返回-1，前端获取后提示用户
+                if(!file.getOriginalFilename().endsWith(".txt")){
+                    code = "-1";
+                    result.put("code", code);
+                    return result;
+                }
+
                 String nowDay = DateTimeUtils.currentDate(new Date());
                 String uuid = UUID.uuid32();
                 filePath = "/" + nowDay + "/"+ user.getOrganization() +"/" + uuid + "_source.txt";
@@ -174,8 +260,8 @@ public class MessageController {
 
                 //处理手机号，形成文件
                 MessageWebTaskInfoValidator messageValidator = new MessageWebTaskInfoValidator();
-                messageValidator.setOriginalAttachment(filePath);
-                messageValidator = messageService.handleFileSMS(messageValidator);
+                messageValidator.setNumberFiles(filePath);
+                messageValidator = SendMessage.handleFileSMS(messageValidator,smocProperties,user.getOrganization());
 
                 errorFilePath = messageValidator.getExceptionNumberAttachment();
                 sendFilePath = messageValidator.getSendNumberAttachment();
@@ -244,5 +330,62 @@ public class MessageController {
         }
 
         return entity;
+    }
+
+    /**
+     * 下载txt模板
+     */
+    @RequestMapping(value = "/downFileTemp/{type}", method = RequestMethod.GET)
+    public void downFileTemp(@PathVariable String type,HttpServletRequest request, HttpServletResponse response) {
+
+        String fileName = "example.txt";
+
+        if("1".equals(type)){
+            fileName = "example.txt";
+        }
+
+
+        //设置文件路径
+        ClassPathResource classPathResource = new ClassPathResource("static/files/" + fileName);
+        try {
+            response.setHeader("content-type", "application/octet-stream");
+            response.setContentType("application/octet-stream");
+            // 下载文件能正常显示中文
+            response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        // 实现文件下载
+        byte[] buffer = new byte[1024];
+        InputStream fis = null;
+        BufferedInputStream bis = null;
+        try {
+            fis = classPathResource.getInputStream();;
+            bis = new BufferedInputStream(fis);
+            OutputStream os = response.getOutputStream();
+            int i = bis.read(buffer);
+            while (i != -1) {
+                os.write(buffer, 0, i);
+                i = bis.read(buffer);
+            }
+            return ;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (bis != null) {
+                try {
+                    bis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (fis != null) {
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

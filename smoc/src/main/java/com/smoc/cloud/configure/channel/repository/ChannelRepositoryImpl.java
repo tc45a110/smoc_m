@@ -98,7 +98,7 @@ public class ChannelRepositoryImpl extends BasePageRepository {
             sqlBuffer.append(" and t.CARRIER like ?");
             paramsList.add( "%"+qo.getCarrier().trim()+"%");
         }else{
-            sqlBuffer.append(" and t.CARRIER !='INTERNATIONAL' ");
+            sqlBuffer.append(" and t.CARRIER !='INTL' ");
         }
 
         if (!StringUtils.isEmpty(qo.getBusinessType())) {

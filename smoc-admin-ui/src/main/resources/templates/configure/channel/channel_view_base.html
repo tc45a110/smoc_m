@@ -34,7 +34,7 @@
                                                 th:if="${not #strings.isEmpty(channelBasicInfoValidator.maxComplaintRate)}">[[${channelBasicInfoValidator.maxComplaintRate}]]/百万</span>
                                         </p>
                                         <p style="font-size:12px">签名方式：
-                                            <span th:if="${channelBasicInfoValidator.businessAreaType ne 'INTERNATIONAL'} ">
+                                            <span th:if="${channelBasicInfoValidator.businessAreaType ne 'INTL'} ">
                                                 <mpm:tag identity="signType" show-type="label" key="code"
                                                     th:value="${channelBasicInfoValidator.signType}"/>
                                             </span>

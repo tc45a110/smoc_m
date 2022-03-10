@@ -104,10 +104,10 @@
                                                         <h5 style="padding-left:10px"></h5>
                                                     </div>
                                                     <div class="col-md-3 form-group" th:each="info:${list}">
-                                                        <p class="text-muted" th:if="${'INTERNATIONAL' ne accountBasicInfoValidator.carrier}">
+                                                        <p class="text-muted" th:if="${'INTL' ne accountBasicInfoValidator.carrier}">
                                                             <mpm:tag identity="carrier"  show-type="label" key="code" th:value="${info.key}"/>单价：[[${info.value}]]
                                                         </p>
-                                                        <p class="text-muted" th:if="${'INTERNATIONAL' eq accountBasicInfoValidator.carrier}">
+                                                        <p class="text-muted" th:if="${'INTL' eq accountBasicInfoValidator.carrier}">
                                                             <mpm:tag identity="internationalArea"  show-type="label" key="code" th:value="${info.key}"/>单价：[[${info.value}]]
                                                         </p>
                                                     </div>

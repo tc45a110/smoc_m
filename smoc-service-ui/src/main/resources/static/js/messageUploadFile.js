@@ -3,7 +3,7 @@ $(document).ready(function(){
 	$("#filer_name").filer({
 		limit: 1,
 		maxSize: 10,
-		extensions:["xlsx","xls","txt"],
+		extensions:["txt"],
 		changeInput: '<div class="jFiler-input-dragDrop"><div class="jFiler-input-inner"><div class="jFiler-input-icon"><i class="icon-jfi-cloud-up-o"></i></div><div class="jFiler-input-text"></div><a class="jFiler-input-choose-btn btn btn-custom waves-effect waves-light">上传附件</a></div></div>',
 		showThumbs: true,
 		theme: "dragdropbox",
@@ -84,6 +84,12 @@ $(document).ready(function(){
 					var errorFilePath = data.errorFilePath;
 					$("#sendNumberId").val(data.sendNumber);
 
+					if(code=="-1"){
+						$("#tip-div").find("#tip-content").html("号码文件必须为txt格式");
+						$("#tip-div").modal();
+						return;
+					}
+
 					if(errorFilePath&&errorFilePath!=null&&errorFilePath.length>0) {
 						//alert("有异常号码");
 						$("#tip-div").find("#tip-content").html("有异常号码");
@@ -126,10 +132,10 @@ $(document).ready(function(){
 					$("#originalAttachment").val(filePath);
 					$("#sendFilePath").val(sendFilePath);
 
-					/*var parent = el.find(".jFiler-jProgressBar").parent();
+					var parent = el.find(".jFiler-jProgressBar").parent();
 					el.find(".jFiler-jProgressBar").fadeOut("slow", function(){
-						$("<div class=\"jFiler-item-others text-success\"><a href='#' onclick='showPreview()'>点击预览发送文件前3行</a></div>").hide().appendTo(parent).fadeIn("slow");
-					});*/
+						$("<div class=\"jFiler-item-others text-success\"></div>").hide().appendTo(parent).fadeIn("slow");
+					});
 				}else{
 					var parent = el.find(".jFiler-jProgressBar").parent();
 					el.find(".jFiler-jProgressBar").fadeOut("slow", function(){
@@ -168,7 +174,7 @@ $(document).ready(function(){
 			errors: {
 				//filesLimit: "只能上传 {{fi-limit}} 个号码文件",
 				filesLimit: "请先删除旧号码文件再上传",
-				filesType: "号码文件必须为txt、xlsx、xls格式",
+				filesType: "号码文件必须为txt格式",
 				filesSize: "号码文件大小不能超过 {{fi-maxSize}} MB.",
 				filesSizeAll: "Files you've choosed are too large! Please upload files up to {{fi-maxSize}} MB."
 			}

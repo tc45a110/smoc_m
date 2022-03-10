@@ -82,6 +82,51 @@ public class MessageWebTaskInfo {
     @Column(name = "UPDATED_TIME")
     private Date updatedTime;
 
+    //发送手机号路径
+    @Column(name = "SEND_NUMBER_ATTACHMENT", length = 255)
+    private String sendNumberAttachment;
+    //异常手机号路径
+    @Column(name = "EXCEPTION_NUMBER_ATTACHMENT", length = 255)
+    private String exceptionNumberAttachment;
+    //状态报告路径
+    @Column(name = "REPORT_ATTACHMENT", length = 255)
+    private String reportAttachment;
+    //发送内容条数
+    @Column(name = "SEND_MESSAGE_NUMBER")
+    private Integer sendMessageNumber;
+
+    public String getSendNumberAttachment() {
+        return sendNumberAttachment;
+    }
+
+    public void setSendNumberAttachment(String sendNumberAttachment) {
+        this.sendNumberAttachment = sendNumberAttachment;
+    }
+
+    public String getExceptionNumberAttachment() {
+        return exceptionNumberAttachment;
+    }
+
+    public void setExceptionNumberAttachment(String exceptionNumberAttachment) {
+        this.exceptionNumberAttachment = exceptionNumberAttachment;
+    }
+
+    public String getReportAttachment() {
+        return reportAttachment;
+    }
+
+    public void setReportAttachment(String reportAttachment) {
+        this.reportAttachment = reportAttachment;
+    }
+
+    public Integer getSendMessageNumber() {
+        return sendMessageNumber;
+    }
+
+    public void setSendMessageNumber(Integer sendMessageNumber) {
+        this.sendMessageNumber = sendMessageNumber;
+    }
+
     public Date getUpdatedTime() {
         return updatedTime;
     }

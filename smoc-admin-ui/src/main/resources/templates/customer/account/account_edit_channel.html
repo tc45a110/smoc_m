@@ -48,10 +48,10 @@
                                                                  th:value="${accountBasicInfoValidator.businessType}"/>
                                                     </b></p>
                                                     <p class="m-0"><b>
-                                                        <span th:if="${'INTERNATIONAL' ne accountBasicInfoValidator.carrier}">
+                                                        <span th:if="${'INTL' ne accountBasicInfoValidator.carrier}">
                                                             运营商：<mpm:tag identity="carrier" show-type="label" key="code" th:value="${info.key}"/>
                                                         </span>
-                                                        <span th:if="${'INTERNATIONAL' eq accountBasicInfoValidator.carrier}">
+                                                        <span th:if="${'INTL' eq accountBasicInfoValidator.carrier}">
                                                             国家：<mpm:tag identity="internationalArea" show-type="label" key="code" th:value="${info.key}"/>
                                                         </span>
                                                     </b></p>
@@ -117,16 +117,16 @@
                                                                              key="code"
                                                                              th:value="${channelBasicInfoQo.businessType}"/>
                                                                 </div>
-                                                                <div class="form-group  col-sm-6" th:if="${'INTERNATIONAL' ne accountBasicInfoValidator.carrier}">
+                                                                <div class="form-group  col-sm-6" th:if="${'INTL' ne accountBasicInfoValidator.carrier}">
                                                                     <label>运营商：</label>
                                                                     <mpm:tag identity="carrier" show-type="label"
                                                                              key="code"
                                                                              th:value="${channelBasicInfoQo.carrier}"/>
                                                                 </div>
-                                                                <div class="form-group  col-sm-6" th:if="${'INTERNATIONAL' eq accountBasicInfoValidator.carrier}">
+                                                                <div class="form-group  col-sm-6" th:if="${'INTL' eq accountBasicInfoValidator.carrier}">
                                                                     <label>运营商：</label>
                                                                     <mpm:tag identity="carrier" show-type="label"
-                                                                             key="code" th:value="INTERNATIONAL"/>
+                                                                             key="code" th:value="INTL"/>
                                                                 </div>
                                                                 <div class="form-group  col-sm-6">
                                                                     <label>信息分类：</label>
@@ -134,7 +134,7 @@
                                                                              key="code"
                                                                              th:value="${channelBasicInfoQo.infoType}"/>
                                                                 </div>
-                                                                <div class="form-group  col-sm-6" th:if="${'INTERNATIONAL' eq accountBasicInfoValidator.carrier}">
+                                                                <div class="form-group  col-sm-6" th:if="${'INTL' eq accountBasicInfoValidator.carrier}">
                                                                     <label>国家：</label>
                                                                     <mpm:tag identity="internationalArea" show-type="label"
                                                                              key="code"

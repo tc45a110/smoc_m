@@ -61,7 +61,7 @@
                                         <label>运营商来源<span class="text-danger">*</span>&nbsp;
                                             <span class="text-danger" th:if="${#fields.hasErrors('carrier')}"
                                                   th:errors="*{carrier}"></span></label>
-                                        <mpm:tag id="carrier" identity="carrier" name="carrier"  show-type="select" key="code" mask-value="INTERNATIONAL" class="form-control"
+                                        <mpm:tag id="carrier" identity="carrier" name="carrier"  show-type="select" key="code" mask-value="INTL" class="form-control"
                                                  th:value="${messageComplaintInfoValidator.carrier}" required="true" title="投诉来源的运营商"/>
                                     </div>
                                     <div class="form-group m-b-20">

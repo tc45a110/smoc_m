@@ -53,7 +53,7 @@ public class ChannelInternationalController {
         params.setPageSize(8);
         params.setCurrentPage(1);
         ChannelBasicInfoQo channelBasicInfoQo = new ChannelBasicInfoQo();
-        channelBasicInfoQo.setCarrier("INTERNATIONAL");
+        channelBasicInfoQo.setCarrier("INTL");
         params.setParams(channelBasicInfoQo);
 
         //查询
@@ -88,7 +88,7 @@ public class ChannelInternationalController {
         ModelAndView view = new ModelAndView("configure/channel/international/channel_international_list");
 
         //分页查询
-        channelBasicInfoQo.setCarrier("INTERNATIONAL");
+        channelBasicInfoQo.setCarrier("INTL");
         pageParams.setParams(channelBasicInfoQo);
 
         ResponseData<PageList<ChannelBasicInfoQo>> data = channelService.page(pageParams);
@@ -161,17 +161,17 @@ public class ChannelInternationalController {
         if ("base".equals(id)) {
             //初始化数据
             ChannelBasicInfoValidator channelBasicInfoValidator = new ChannelBasicInfoValidator();
-            channelBasicInfoValidator.setCarrier("INTERNATIONAL");
+            channelBasicInfoValidator.setCarrier("INTL");
             channelBasicInfoValidator.setBusinessType("INTERNATIONAL_SMS");
             channelBasicInfoValidator.setChannelStatus("002");//默认编辑中
             channelBasicInfoValidator.setReportEnable("1");//有无报告：有
             channelBasicInfoValidator.setChannelProcess("1000");//配置进度
             channelBasicInfoValidator.setChannelRunStatus("1");//正常
-            channelBasicInfoValidator.setBusinessAreaType("INTERNATIONAL");//国际
+            channelBasicInfoValidator.setBusinessAreaType("INTL");//国际
             channelBasicInfoValidator.setPriceStyle("AREA_PRICE");//区域计价
             channelBasicInfoValidator.setSignType("0");//签名方式:国际没有，默认给个值
             channelBasicInfoValidator.setTransferEnable("0");//携号转网:国际默认值
-            channelBasicInfoValidator.setSpecificProvder("INTERNATIONAL");//具体供应商
+            channelBasicInfoValidator.setSpecificProvder("INTL");//具体供应商
 
             //op操作标记，add表示添加，edit表示修改
             view.addObject("op", "add");

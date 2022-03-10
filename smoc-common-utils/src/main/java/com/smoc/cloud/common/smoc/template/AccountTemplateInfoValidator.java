@@ -2,7 +2,10 @@ package com.smoc.cloud.common.smoc.template;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Setter
@@ -17,6 +20,8 @@ public class AccountTemplateInfoValidator {
 
     private String signName;
 
+    @NotNull(message = "模板不能为空！")
+    @Size(min = 1, max = 500, message = "模板长度不符合规则！")
     private String templateContent;
 
     private String checkDate;

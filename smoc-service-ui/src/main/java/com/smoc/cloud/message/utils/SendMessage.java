@@ -1,8 +1,7 @@
-package com.smoc.cloud.material.service;
+package com.smoc.cloud.message.utils;
 
 
 import com.smoc.cloud.common.smoc.template.MessageWebTaskInfoValidator;
-import com.smoc.cloud.common.smoc.utils.MessageUtil;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.common.utils.Utils;
@@ -29,20 +28,14 @@ import java.util.List;
 @Slf4j
 @Service
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class MessageService {
+public class SendMessage {
 
-    @Autowired
-    private SmocProperties smocProperties;
 
-    public MessageWebTaskInfoValidator handleFileSMS(MessageWebTaskInfoValidator messageValidator) {
+    public static MessageWebTaskInfoValidator handleFileSMS(MessageWebTaskInfoValidator messageValidator,SmocProperties smocProperties,String org) {
 
         BufferedReader reader = null;
 
         try {
-            //当前日期，uuid,用于生成文件夹路径
-            String nowDay = DateTimeUtils.currentDate(new Date());
-            String uuid = UUID.uuid32();
-
             //发送内容文件路径
             String fileSendPath = null;
             //异常发送内容文件路径
@@ -61,7 +54,7 @@ public class MessageService {
             HashSet<String> repeatNumbers = new HashSet<String>();
 
             //解析表单上传的手机号码文件
-            String fileSource = messageValidator.getOriginalAttachment();
+            String fileSource = messageValidator.getNumberFiles();
             if (!StringUtils.isEmpty(fileSource)) {
                 File originalFile = new File(smocProperties.getMobileFileRootPath() + fileSource);
                 reader = new BufferedReader(new FileReader(originalFile));
@@ -101,9 +94,20 @@ public class MessageService {
                 }
             }
 
+            String nowDay = DateTimeUtils.currentDate(new Date());
+            String uuid = UUID.uuid32();
+
             //生成待发送号码文件
             if(!validNumbers.isEmpty()){
-                fileSendPath = fileSource.replace("_source", "_send");
+                if(!StringUtils.isEmpty(fileSource)){
+                    fileSendPath = fileSource.replace("_source", "_send");
+                }else{
+                    File targetFolder = new File(smocProperties.getMobileFileRootPath()+"/" + nowDay + "/" + org);
+                    if(!targetFolder.exists()){
+                        targetFolder.mkdirs();
+                    }
+                    fileSendPath = "/" + nowDay + "/" + org + "/" + uuid + "_send.txt";
+                }
 
                 sendMessageNumber = validNumbers.size();
                 sendMessageNumberSplit = countSendNumber(messageValidator.getMessageContent())*sendMessageNumber;
@@ -112,7 +116,15 @@ public class MessageService {
 
             //生成异常号码文件
             if(!errorFormatNumbers.isEmpty()||!repeatNumbers.isEmpty()){
-                fileError = fileSource.replace("_source", "_error");
+                if(!StringUtils.isEmpty(fileSource)){
+                    fileError = fileSource.replace("_source", "_send");
+                }else{
+                    File targetFolder = new File(smocProperties.getMobileFileRootPath()+"/" + nowDay + "/" + org);
+                    if(!targetFolder.exists()){
+                        targetFolder.mkdirs();
+                    }
+                    fileError = "/" + nowDay + "/" + org + "/" + uuid + "_error.txt";
+                }
 
                 List<String> errorContents = new ArrayList<String>();
                 for(String tmp:errorFormatNumbers){
@@ -129,6 +141,7 @@ public class MessageService {
             messageValidator.setSendNumberAttachment(fileSendPath);
             messageValidator.setExceptionNumberAttachment(fileError);
             messageValidator.setSubmitNumber(sendMessageNumber);
+            messageValidator.setSuccessNumber(sendMessageNumber);
             messageValidator.setSendMessageNumber(sendMessageNumberSplit);
         } catch (Exception e) {
             e.printStackTrace();
@@ -146,10 +159,11 @@ public class MessageService {
 
     }
 
+
     /**
      * 计算拆分条数
      */
-    private int countSendNumber(String content){
+    private static int countSendNumber(String content){
         if(StringUtils.isEmpty(content)){
             return 0;
         }else{

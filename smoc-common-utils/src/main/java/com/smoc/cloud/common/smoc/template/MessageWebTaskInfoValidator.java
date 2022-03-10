@@ -2,7 +2,10 @@ package com.smoc.cloud.common.smoc.template;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Setter
@@ -13,6 +16,7 @@ public class MessageWebTaskInfoValidator {
 
     private String subject;
 
+    @NotNull(message = "模板不能为空！")
     private String templateId;
 
     private String businessAccount;
@@ -46,8 +50,8 @@ public class MessageWebTaskInfoValidator {
     //表单输入手机号
     private String inputNumber;
 
-    private String numberFiles;
-
+    @NotNull(message = "内容不能为空！")
+    @Size(min = 1, max = 500, message = "短信内容长度不符合规则！")
     private String messageContent;
 
     private String createdBy;
@@ -62,12 +66,16 @@ public class MessageWebTaskInfoValidator {
     private String startDate;
     private String endDate;
 
+
     //原手机号上传路径
-    private String originalAttachment;
+    private String numberFiles;
     //发送手机号路径
     private String sendNumberAttachment;
     //异常手机号路径
     private String exceptionNumberAttachment;
+    //状态报告路径
+    private String reportAttachment;
     //发送内容条数
     private Integer sendMessageNumber;
+
 }

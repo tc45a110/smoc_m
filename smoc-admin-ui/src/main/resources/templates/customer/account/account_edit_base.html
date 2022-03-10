@@ -98,7 +98,7 @@
                                                     <label>发送运营商<span class="text-danger">*</span>&nbsp;
                                                         <span class="text-danger" th:if="${#fields.hasErrors('carrier')}"
                                                               th:errors="*{carrier}"></span></label><br>
-                                                    <mpm:tag id="carrier" required="true" identity="carrier" mask-value="INTERNATIONAL"
+                                                    <mpm:tag id="carrier" required="true" identity="carrier" mask-value="INTL"
                                                              show-type="checkbox" key="code" name="carrier" onchange="isTransferSwith()"
                                                              th:value="${accountBasicInfoValidator.carrier}" title="运营商"/>
                                                 </div>

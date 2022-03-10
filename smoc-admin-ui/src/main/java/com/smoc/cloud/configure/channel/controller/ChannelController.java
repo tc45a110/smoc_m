@@ -234,7 +234,7 @@ public class ChannelController {
         ModelAndView view = new ModelAndView("configure/channel/channel_edit_base");
 
         //国际
-        if("INTERNATIONAL".equals(channelBasicInfoValidator.getCarrier())){
+        if("INTL".equals(channelBasicInfoValidator.getCarrier())){
             view.setViewName("configure/channel/international/channel_international_edit_base");
         }
 
@@ -312,7 +312,7 @@ public class ChannelController {
             result.addError(err);
         }
         //参数验证:如果通道区域范围是国际，那业务区域不能为空
-        if ("INTERNATIONAL".equals(channelBasicInfoValidator.getBusinessAreaType()) && StringUtils.isEmpty(channelBasicInfoValidator.getSupportAreaCodes())) {
+        if ("INTL".equals(channelBasicInfoValidator.getBusinessAreaType()) && StringUtils.isEmpty(channelBasicInfoValidator.getSupportAreaCodes())) {
             FieldError err = new FieldError("支持国家", "supportAreaCodes", "支持国家不能为空");
             result.addError(err);
         }
@@ -366,7 +366,7 @@ public class ChannelController {
 
         //国际
         String dictType = "";
-        if ("INTERNATIONAL".equals(data.getData().getBusinessAreaType())) {
+        if ("INTL".equals(data.getData().getBusinessAreaType())) {
             dictType = "internationalArea";
         } else {
             dictType = "provices";
@@ -375,7 +375,7 @@ public class ChannelController {
         String areaType = "业务区域";
         String supportAreaCodes = data.getData().getSupportAreaCodes();
         //如果默认值为ALL并且屏蔽省份为空
-        if ("ALL".equals(data.getData().getSupportAreaCodes()) || "INTERNATIONAL".equals(data.getData().getCarrier())) {
+        if ("ALL".equals(data.getData().getSupportAreaCodes()) || "INTL".equals(data.getData().getCarrier())) {
             if (StringUtils.isEmpty(data.getData().getMaskProvince())) {
                 return "无屏蔽省份";
             } else {
