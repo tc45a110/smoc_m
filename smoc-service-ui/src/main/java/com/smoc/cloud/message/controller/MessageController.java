@@ -4,10 +4,12 @@ package com.smoc.cloud.message.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
+import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
+import com.smoc.cloud.common.smoc.template.AccountTemplateInfoValidator;
 import com.smoc.cloud.common.smoc.template.MessageWebTaskInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.UUID;
@@ -67,16 +69,32 @@ public class MessageController {
     @RequestMapping(value = "list/{businessType}/{signType}", method = RequestMethod.GET)
     public ModelAndView list(@PathVariable String businessType, @PathVariable String signType, HttpServletRequest request) {
         ModelAndView view = new ModelAndView("message/message_list");
-        //查询数据
-        PageParams params = new PageParams<>();
-        params.setPages(3);
-        params.setPageSize(10);
-        params.setStartRow(1);
-        params.setEndRow(10);
-        params.setCurrentPage(1);
-        params.setTotalRows(22);
 
-        view.addObject("pageParams",params);
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        //初始化数据
+        PageParams<MessageWebTaskInfoValidator> params = new PageParams<MessageWebTaskInfoValidator>();
+        params.setPageSize(10);
+        params.setCurrentPage(1);
+        MessageWebTaskInfoValidator messageWebTaskInfoValidator = new MessageWebTaskInfoValidator();
+        messageWebTaskInfoValidator.setEnterpriseId(user.getOrganization());
+        messageWebTaskInfoValidator.setBusinessType(businessType);
+        messageWebTaskInfoValidator.setInfoType(signType);
+        Date startDate = DateTimeUtils.getFirstMonth(6);
+        messageWebTaskInfoValidator.setStartDate(DateTimeUtils.getDateFormat(startDate));
+        messageWebTaskInfoValidator.setEndDate(DateTimeUtils.getDateFormat(new Date()));
+        params.setParams(messageWebTaskInfoValidator);
+
+        //查询
+        ResponseData<PageList<MessageWebTaskInfoValidator>> data = messageService.page(params);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("messageWebTaskInfoValidator", messageWebTaskInfoValidator);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
         view.addObject("signType", signType);
         view.addObject("businessType", businessType);
         return view;
@@ -84,25 +102,36 @@ public class MessageController {
 
     /**
      * 短信发送分页
-     * @param signType
      * @param request
      * @return
      */
-    @RequestMapping(value = "page/{businessType}/{signType}", method = RequestMethod.POST)
-    public ModelAndView page(@PathVariable String businessType,@PathVariable String signType,HttpServletRequest request) {
+    @RequestMapping(value = "page", method = RequestMethod.POST)
+    public ModelAndView page(@ModelAttribute MessageWebTaskInfoValidator messageWebTaskInfoValidator,PageParams pageParams,HttpServletRequest request) {
         ModelAndView view = new ModelAndView("message/message_list");
-        //查询数据
-        PageParams params = new PageParams<>();
-        params.setPages(3);
-        params.setPageSize(10);
-        params.setStartRow(1);
-        params.setEndRow(10);
-        params.setCurrentPage(1);
-        params.setTotalRows(22);
 
-        view.addObject("pageParams",params);
-        view.addObject("signType", signType);
-        view.addObject("businessType", businessType);
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        //分页查询
+        messageWebTaskInfoValidator.setEnterpriseId(user.getOrganization());
+        if (!StringUtils.isEmpty(messageWebTaskInfoValidator.getStartDate())) {
+            String[] date = messageWebTaskInfoValidator.getStartDate().split(" - ");
+            messageWebTaskInfoValidator.setStartDate(StringUtils.trimWhitespace(date[0]));
+            messageWebTaskInfoValidator.setEndDate(StringUtils.trimWhitespace(date[1]));
+        }
+        pageParams.setParams(messageWebTaskInfoValidator);
+
+
+        ResponseData<PageList<AccountTemplateInfoValidator>> data = messageService.page(pageParams);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("messageWebTaskInfoValidator", messageWebTaskInfoValidator);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
+        view.addObject("signType", messageWebTaskInfoValidator.getInfoType());
+        view.addObject("businessType", messageWebTaskInfoValidator.getBusinessType());
         return view;
     }
 
@@ -117,9 +146,12 @@ public class MessageController {
 
         //初始化参数
         MessageWebTaskInfoValidator messageWebTaskInfoValidator = new MessageWebTaskInfoValidator();
+        messageWebTaskInfoValidator.setId(UUID.uuid32());
+        messageWebTaskInfoValidator.setEnterpriseId(user.getOrganization());
         messageWebTaskInfoValidator.setBusinessType(businessType);
         messageWebTaskInfoValidator.setInfoType(signType);
         messageWebTaskInfoValidator.setSendType("1");
+        messageWebTaskInfoValidator.setSendStatus("1");
 
         //查询企业下得所有业务账号
         AccountBasicInfoValidator accountBasicInfoValidator = new AccountBasicInfoValidator();
@@ -154,7 +186,7 @@ public class MessageController {
      */
     @RequestMapping(value = "/save/{op}", method = RequestMethod.POST)
     public ModelAndView save(@ModelAttribute @Validated MessageWebTaskInfoValidator messageWebTaskInfoValidator, BindingResult result, @PathVariable String op, HttpServletRequest request) {
-        ModelAndView view = new ModelAndView("template/message_template_edit");
+        ModelAndView view = new ModelAndView("message/message_edit");
 
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
 

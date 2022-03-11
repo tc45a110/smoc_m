@@ -65,6 +65,12 @@ public class MessageWebTaskInfoRepositoryImpl extends BasePageRepository {
         }
 
         //企业名称
+        if (!StringUtils.isEmpty(qo.getEnterpriseId())) {
+            sqlBuffer.append(" and t.ENTERPRISE_ID = ? ");
+            paramsList.add(qo.getEnterpriseId().trim() );
+        }
+
+        //企业名称
         if (!StringUtils.isEmpty(qo.getEnterpriseName())) {
             sqlBuffer.append(" and e.ENTERPRISE_NAME like ? ");
             paramsList.add("%" + qo.getEnterpriseName().trim() + "%");
@@ -72,8 +78,8 @@ public class MessageWebTaskInfoRepositoryImpl extends BasePageRepository {
 
         //业务账号
         if (!StringUtils.isEmpty(qo.getBusinessAccount())) {
-            sqlBuffer.append(" and t.BUSINESS_ACCOUNT =?");
-            paramsList.add(qo.getBusinessAccount().trim());
+            sqlBuffer.append(" and t.BUSINESS_ACCOUNT like ?");
+            paramsList.add("%" + qo.getBusinessAccount().trim() + "%");
         }
 
         //模板ID
@@ -86,6 +92,18 @@ public class MessageWebTaskInfoRepositoryImpl extends BasePageRepository {
         if (!StringUtils.isEmpty(qo.getBusinessType())) {
             sqlBuffer.append(" and t.BUSINESS_TYPE =?");
             paramsList.add(qo.getBusinessType().trim());
+        }
+
+        //信息分类
+        if (!StringUtils.isEmpty(qo.getInfoType())) {
+            sqlBuffer.append(" and t.INFO_TYPE =?");
+            paramsList.add(qo.getInfoType().trim());
+        }
+
+        //企业名称
+        if (!StringUtils.isEmpty(qo.getMessageContent())) {
+            sqlBuffer.append(" and t.MESSAGE_CONTENT like ? ");
+            paramsList.add("%" + qo.getMessageContent().trim() + "%");
         }
 
         //发送状态

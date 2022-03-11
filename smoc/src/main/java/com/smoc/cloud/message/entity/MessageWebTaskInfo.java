@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
@@ -94,6 +95,16 @@ public class MessageWebTaskInfo {
     //发送内容条数
     @Column(name = "SEND_MESSAGE_NUMBER")
     private Integer sendMessageNumber;
+    @Column(name = "ENTERPRISE_ID")
+    private String enterpriseId;
+
+    public String getEnterpriseId() {
+        return enterpriseId;
+    }
+
+    public void setEnterpriseId(String enterpriseId) {
+        this.enterpriseId = enterpriseId;
+    }
 
     public String getSendNumberAttachment() {
         return sendNumberAttachment;

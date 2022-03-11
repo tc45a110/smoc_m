@@ -117,7 +117,7 @@ public class SendMessage {
             //生成异常号码文件
             if(!errorFormatNumbers.isEmpty()||!repeatNumbers.isEmpty()){
                 if(!StringUtils.isEmpty(fileSource)){
-                    fileError = fileSource.replace("_source", "_send");
+                    fileError = fileSource.replace("_source", "_error");
                 }else{
                     File targetFolder = new File(smocProperties.getMobileFileRootPath()+"/" + nowDay + "/" + org);
                     if(!targetFolder.exists()){

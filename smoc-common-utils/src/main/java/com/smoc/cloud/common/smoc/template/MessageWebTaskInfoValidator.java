@@ -19,6 +19,9 @@ public class MessageWebTaskInfoValidator {
     @NotNull(message = "模板不能为空！")
     private String templateId;
 
+    @NotNull(message = "企业不能为空！")
+    private String enterpriseId;
+
     private String businessAccount;
 
     private String businessType;
