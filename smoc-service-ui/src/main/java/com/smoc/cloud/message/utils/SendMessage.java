@@ -30,7 +30,13 @@ import java.util.List;
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class SendMessage {
 
-
+    /**
+     * 异步上传手机号
+     * @param messageValidator
+     * @param smocProperties
+     * @param org
+     * @return
+     */
     public static MessageWebTaskInfoValidator handleFileSMS(MessageWebTaskInfoValidator messageValidator,SmocProperties smocProperties,String org) {
 
         BufferedReader reader = null;
@@ -74,6 +80,84 @@ public class SendMessage {
                 }
             }
 
+            //生成待发送号码文件
+            if(!validNumbers.isEmpty()){
+                if(!StringUtils.isEmpty(fileSource)){
+                    fileSendPath = fileSource.replace("_source", "_send");
+                }
+
+                sendMessageNumber = validNumbers.size();
+                sendMessageNumberSplit = countSendNumber(messageValidator.getMessageContent())*sendMessageNumber;
+                FileUtils.writeLines(new File(smocProperties.getMobileFileRootPath() + fileSendPath), validNumbers);
+            }
+
+            //生成异常号码文件
+            if(!errorFormatNumbers.isEmpty()||!repeatNumbers.isEmpty()){
+                if(!StringUtils.isEmpty(fileSource)){
+                    fileError = fileSource.replace("_source", "_error");
+                }
+
+                List<String> errorContents = new ArrayList<String>();
+                for(String tmp:errorFormatNumbers){
+                    errorContents.add(tmp+"(手机号码不符合规范)");
+                }
+
+                for(String tmp:repeatNumbers){
+                    errorContents.add(tmp+"(重复号码)");
+                }
+
+                FileUtils.writeLines(new File(smocProperties.getMobileFileRootPath() + fileError), errorContents);
+            }
+
+            messageValidator.setSendNumberAttachment(fileSendPath);
+            messageValidator.setExceptionNumberAttachment(fileError);
+            messageValidator.setSubmitNumber(sendMessageNumber);
+            messageValidator.setSuccessNumber(sendMessageNumber);
+            messageValidator.setSendMessageNumber(sendMessageNumberSplit);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return messageValidator;
+
+    }
+
+    /**
+     * 表单输入框手机号
+     * @param messageValidator
+     * @param smocProperties
+     * @param org
+     * @return
+     */
+    public static MessageWebTaskInfoValidator FileSMSInput(MessageWebTaskInfoValidator messageValidator, SmocProperties smocProperties, String org) {
+        BufferedReader reader = null;
+
+        try {
+            //发送内容文件路径
+            String fileSendPath = null;
+            //异常发送内容文件路径
+            String fileError = null;
+            //未拆分的总条数
+            Integer sendMessageNumber = 0;
+            //拆分后的总条数
+            Integer sendMessageNumberSplit = 0;
+
+            //经过去重，校验手机号格式，变量参数，黑名单后得到的待发送号码集合
+            HashSet<String> validNumbers = new HashSet<String>();
+            //不符合手机号格式的异常号码集合
+            HashSet<String> errorFormatNumbers = new HashSet<String>();
+
+            //重复号码集合
+            HashSet<String> repeatNumbers = new HashSet<String>();
+
             //解析表单提交的文本手机号码数据
             String inputMobile = messageValidator.getInputNumber();
             if (!StringUtils.isEmpty(inputMobile)) {
@@ -99,15 +183,11 @@ public class SendMessage {
 
             //生成待发送号码文件
             if(!validNumbers.isEmpty()){
-                if(!StringUtils.isEmpty(fileSource)){
-                    fileSendPath = fileSource.replace("_source", "_send");
-                }else{
-                    File targetFolder = new File(smocProperties.getMobileFileRootPath()+"/" + nowDay + "/" + org);
-                    if(!targetFolder.exists()){
-                        targetFolder.mkdirs();
-                    }
-                    fileSendPath = "/" + nowDay + "/" + org + "/" + uuid + "_send.txt";
+                File targetFolder = new File(smocProperties.getMobileFileRootPath()+"/" + nowDay + "/" + org);
+                if(!targetFolder.exists()){
+                    targetFolder.mkdirs();
                 }
+                fileSendPath = "/" + nowDay + "/" + org + "/" + uuid + "_send.txt";
 
                 sendMessageNumber = validNumbers.size();
                 sendMessageNumberSplit = countSendNumber(messageValidator.getMessageContent())*sendMessageNumber;
@@ -116,15 +196,11 @@ public class SendMessage {
 
             //生成异常号码文件
             if(!errorFormatNumbers.isEmpty()||!repeatNumbers.isEmpty()){
-                if(!StringUtils.isEmpty(fileSource)){
-                    fileError = fileSource.replace("_source", "_error");
-                }else{
-                    File targetFolder = new File(smocProperties.getMobileFileRootPath()+"/" + nowDay + "/" + org);
-                    if(!targetFolder.exists()){
-                        targetFolder.mkdirs();
-                    }
-                    fileError = "/" + nowDay + "/" + org + "/" + uuid + "_error.txt";
+                File targetFolder = new File(smocProperties.getMobileFileRootPath()+"/" + nowDay + "/" + org);
+                if(!targetFolder.exists()){
+                    targetFolder.mkdirs();
                 }
+                fileError = "/" + nowDay + "/" + org + "/" + uuid + "_error.txt";
 
                 List<String> errorContents = new ArrayList<String>();
                 for(String tmp:errorFormatNumbers){
@@ -175,4 +251,6 @@ public class SendMessage {
             }
         }
     }
+
+
 }

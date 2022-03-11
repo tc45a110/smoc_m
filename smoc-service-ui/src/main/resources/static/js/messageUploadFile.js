@@ -1,9 +1,19 @@
 $(document).ready(function(){
 	var contextPath =$("#path").val();
+	var initFileSize =$("#originalAttachment").val();
+	var initFiles =[];
+	if(initFileSize !="" && initFileSize!=null ){
+		initFiles = [{
+			name: "号码文件.txt",
+			type: "txt",
+			file: ""
+		}];
+	}
 	$("#filer_name").filer({
 		limit: 1,
 		maxSize: 10,
 		extensions:["txt"],
+		files: initFiles,
 		changeInput: '<div class="jFiler-input-dragDrop"><div class="jFiler-input-inner"><div class="jFiler-input-icon"><i class="icon-jfi-cloud-up-o"></i></div><div class="jFiler-input-text"></div><a class="jFiler-input-choose-btn btn btn-custom waves-effect waves-light">上传附件</a></div></div>',
 		showThumbs: true,
 		theme: "dragdropbox",

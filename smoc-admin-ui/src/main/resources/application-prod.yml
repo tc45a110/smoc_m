@@ -7,6 +7,30 @@ server: #服务端口
         name: OAUTH2SESSION
       timeout: 240m
   connection-timeout: 15000
+  tomcat:
+    basedir:  /home/smoc/apps/temp
+
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 172.17.65.102:8848
+  redis: #redis配置
+    host: r-2zedjdi7xd84ex153o.redis.rds.aliyuncs.com
+    port: 6379
+    password: xz%smoc40#pm
+    database: 1
+    timeout: 10000
+    jedis:
+      pool:
+        max-active: 8
+        max-idle: 8
+        max-wait: -1
+        min-idle: 5
+  servlet:
+    multipart:
+      max-file-size: 50MB  #单个数据大小
+      max-request-size: 100MB #总数据大小
 #**********************************************************
 # manpuman oauth2 token参数设置
 #**********************************************************
@@ -19,34 +43,15 @@ com:
         user-name: authSystemUser    #authSystemUser #用户
         password: 049CB2A5480C582E54EBB82683F67410 #密码
       security: #系统信息配置
-        system-marking: meip-admin #系统标识  本系统和授权管理中心配置的系统标识对应
+        system-marking: smoc-admin #系统标识  本系统和授权管理中心配置的系统标识对应
         login-post-path: /security_login #spring security 拦截登录Post path   用户字段userName  密码字段 password  验证码字段 verificationCode
-        auth-uri: 172.30.236.149:18081 # 备用 授权中心地址，系统启动时 负载找不到host,系统启动后，会自动使用负载的host  注意不加http:// 及后缀
-        system-name: 企信通管理中心 #系统名称
-        company-name: 中国移动通信集团北京有限公司  #公司名称
-        enable-verify-code: true #是否启用验证码
+        system-name: smoc运营中心 #系统名称
+        company-name: 北京星语互联科技有限公司  #公司名称
+        enable-verify-code: false #是否启用验证码
         help-mobile: 联系电话 #帮助电话
-      meip:
-        #**********************************************************
-        # 系统全局参数
-        #**********************************************************
-        params:
-          account-type: 01 #账户类型 01 资金账户  暂时支持资金账户
-          message-price: 100  #短信价格(厘)
-          mm-price: 100 #彩信价格(厘)
-          inter-message-price: 100 #国际短信价格(厘)
-        message:
-          mobile-file-root-path: /share/meip/message/mobile  #短信手机号文件根目录
-          mobile-zip-root-path:  /share/meip/message/mmzip  #彩信包根目录
-        message-mm-resource:
-          resource-file-root-path:  /share/meip/message/resource  #彩信资源文件根目录
-          resource-allow-format[0]: jpg,jpeg,png,gif  #彩信资源图片格式
-          resource-allow-format[1]: mp3  #彩信资源音频格式
-          resource-allow-format[2]: mp4  #彩信资源视频频格式
-          resource-allow-format[3]:
-          resource-allow-format[4]:
-          resource-file-size-limit: 1000  #彩信资源文件大小限制，以K为单位
-          stay-times: 2 #彩信帧默认停留时间（秒）
+
+      smoc:
+        enterprise-file-path: /alidata/smoc/enterprise/
     #**********************************************************
     # 内置tomcat 配置
     #**********************************************************
@@ -60,75 +65,9 @@ com:
       max-threads: 500
       protocol: org.apache.coyote.http11.Http11NioProtocol #org.apache.coyote.http11.Http11AprProtocol
 
-meip-auth: #链接授权管理中心，负载配置（其实可以是网关地址）
-   ribbon:
-     #NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule #配置规则 随机
-     NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RoundRobinRule #配置规则 轮询
-     #NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RetryRule #配置规则 重试
-     #NFLoadBalancerRuleClassName: com.netflix.loadbalancer.WeightedResponseTimeRule #配置规则 响应时间权重
-     #NFLoadBalancerRuleClassName: com.netflix.loadbalancer.BestAvailableRule #配置规则 最空闲连接策略
-     ConnectTimeout: 2000 #请求连接超时时间
-     ReadTimeout: 6000 #请求处理的超时时间
-     OkToRetryOnAllOperations: true #对所有请求都进行重试
-     MaxAutoRetriesNextServer: 2 #切换实例的重试次数
-     MaxAutoRetries: 1 #对当前实例的重试次数 ,192.168.1.149:18081
-     listOfServers: 172.30.236.149:18081,172.30.236.153:18081,172.30.236.154:18081
-
-meip: #企信通管理，负载配置（其实可以是网关地址）
-  ribbon:
-    #NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule #配置规则 随机
-    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RoundRobinRule #配置规则 轮询
-    #NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RetryRule #配置规则 重试
-    #NFLoadBalancerRuleClassName: com.netflix.loadbalancer.WeightedResponseTimeRule #配置规则 响应时间权重
-    #NFLoadBalancerRuleClassName: com.netflix.loadbalancer.BestAvailableRule #配置规则 最空闲连接策略
-    ConnectTimeout: 2000 #请求连接超时时间
-    ReadTimeout: 6000 #请求处理的超时时间
-    OkToRetryOnAllOperations: true #对所有请求都进行重试
-    MaxAutoRetriesNextServer: 2 #切换实例的重试次数
-    MaxAutoRetries: 1 #对当前实例的重试次数 ,192.168.1.149:18081
-    listOfServers: 172.30.236.149:18082,172.30.236.150:18082,172.30.236.153:18082,172.30.236.154:18082
-
-meip-list: #企信通动态表管理，负载配置（其实可以是网关地址）
-  ribbon:
-    #NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule #配置规则 随机
-    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RoundRobinRule #配置规则 轮询
-    #NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RetryRule #配置规则 重试
-    #NFLoadBalancerRuleClassName: com.netflix.loadbalancer.WeightedResponseTimeRule #配置规则 响应时间权重
-    #NFLoadBalancerRuleClassName: com.netflix.loadbalancer.BestAvailableRule #配置规则 最空闲连接策略
-    ConnectTimeout: 2000 #请求连接超时时间
-    ReadTimeout: 6000 #请求处理的超时时间
-    OkToRetryOnAllOperations: true #对所有请求都进行重试
-    MaxAutoRetriesNextServer: 2 #切换实例的重试次数
-    MaxAutoRetries: 1 #对当前实例的重试次数 ,192.168.1.149:18081
-    listOfServers: 172.30.236.149:18083,172.30.236.150:18083,172.30.236.153:18083,172.30.236.154:18083
-
 logging:
   config: classpath:logback-spring.xml
-  path: /cmsdata/meip/meip-log/meip-admin-ui-logs
+  path: /home/smoc/smoc-log/smoc-admin-ui-logs
   level:
     root: info
 
-spring:
-  #**********************************************************
-  # Redis
-  #**********************************************************
-  redis: #redis配置
-    host: 172.30.236.133
-    port: 6379
-    password: MEIPnvGcOm987ERTd5
-    database: 0
-    timeout: 10000
-    jedis:
-      pool:
-        max-active: 8
-        max-idle: 8
-        max-wait: -1
-        min-idle: 5
-
-  # 短信通道
-  #**********************************************************
-  message:
-    username: 600264
-    password: d9rdm7o2
-    templateid: 100000237
-    url: http://172.30.236.165:5880/meip-sms/template/send

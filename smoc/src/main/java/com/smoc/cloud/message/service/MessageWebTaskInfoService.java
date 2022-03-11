@@ -114,7 +114,7 @@ public class MessageWebTaskInfoService {
      * @return
      */
     @Transactional
-    public ResponseData<EnterpriseDocumentInfo> deleteById(String id) {
+    public ResponseData<MessageWebTaskInfo> deleteById(String id) {
 
         MessageWebTaskInfo data = messageWebTaskInfoRepository.findById(id).get();
         //记录日志
