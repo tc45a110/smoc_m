@@ -59,12 +59,12 @@ public class ConfigChannelPriceHistoryRepositoryImpl extends BasePageRepository 
 
         sqlBuffer.append(" order by t.PRICE_DATE desc");
 
-        log.info("[sql]:{}",sqlBuffer.toString());
+        //log.info("[sql]:{}",sqlBuffer.toString());
 
         //根据参数个数，组织参数值
         Object[] params = new Object[paramsList.size()];
         paramsList.toArray(params);
-        log.info("[params]:{}",new Gson().toJson(paramsList));
+        //log.info("[params]:{}",new Gson().toJson(paramsList));
 
         PageList<ConfigChannelPriceHistoryValidator> pageList = this.queryByPageForMySQL(sqlBuffer.toString(), params, pageParams.getCurrentPage(), pageParams.getPageSize(), new ConfigChannelPriceHistoryRowMapper());
         pageList.getPageParams().setParams(qo);
