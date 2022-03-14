@@ -1,1 +1,41 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 172.17.65.102:8848
+    gateway:
+      #Global http timeouts.must be specified in milliseconds. must be specified as a java.time.Duration
+      httpclient:
+        connect-timeout: 15000
+        response-timeout: 5s
 
+  #**********************************************************
+  # Redis
+  #**********************************************************
+  redis: #redis配置
+    host: r-2zedjdi7xd84ex153o.redis.rds.aliyuncs.com
+    port: 6379
+    password: xz%smoc40#pm
+    database: 1
+    timeout: 10000
+    lettuce:
+      pool:
+        max-active: 50
+        max-idle: 10
+        max-wait: -1
+        min-idle: 5
+
+  #**********************************************************
+  # 内置tomcat 配置
+  #**********************************************************
+
+com:
+  smoc:
+    cloud:
+      gateway:
+        configuration:
+          signStyle: md5_HMAC
+          aesIv: BINM6krYfGEvGADKq4iTMvBQ6V/3IWFVaqdwhlUBw5Q=
+          aesKey: qUhpGjKp3caWMHgDmHoQzbOQP2lGxlzEjJNAwBwO4Q7Pv8XUpoDJUxEyPleyqy67
+          md5HmacKey: ad73qUQDMH2HZrYXTfeSqDl3ZjecgW0bDf2h2zs3KaY=
+          shaHmacKey: cgN4u8LsehkotaJKunFAsCign3oaCXJoF6wISxAK+ZRRyfAfrZk/d1EcUnaDi/8C
