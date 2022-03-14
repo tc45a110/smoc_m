@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <!-- Custom box css -->
+    <link th:href="@{/static/plugins/custombox/css/custombox.min.css}" rel="stylesheet">
+    <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
+</head>
+<body>
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <!-- start row 页面导航-->
+        <div class="row fixed-navigation">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title"> [[${systemHistoryPriceChangeRecordValidator.changeType=='CHANNEL'?'通道':'业务账号'}]]历史价格调整</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            高级配置
+                        </li>
+                        <li class="active">
+                            [[${systemHistoryPriceChangeRecordValidator.changeType=='CHANNEL'?'通道':'业务账号'}]]历史价格调整
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  查询条件-->
+        <div class="row" style="position: relative;margin-top: 80px" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <div class="row m-b-60">
+                        <div class="col-sm-12">
+                            <form id="query_form" th:action="@{/configure/price/history/page}"
+                                  th:object="${systemHistoryPriceChangeRecordValidator}" method="post">
+                                <div class="form-group col-sm-3 pull-right" style="text-align: right">
+                                    <button sec:authorize-url="//configure/price/history/page"
+                                            class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-search"></i> 查询
+                                    </button>
+                                    <a th:sec:authorize-url="@{/configure/{changeType}/price/search/list(changeType=${systemHistoryPriceChangeRecordValidator.changeType})}"
+                                       th:href="@{/configure/{changeType}/price/search/list(changeType=${systemHistoryPriceChangeRecordValidator.changeType})}"
+                                       class="btn btn-success waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-plus-sign"></i> 历史价格变更</a>
+                                    <input type="hidden" th:field="*{changeType}">
+                                    <input type="hidden" name="currentPage" id="currentPage"
+                                           th:value="${pageParams.currentPage}">
+                                    <input type="hidden" name="pageSize" id="pageSize"
+                                           th:value="${pageParams.pageSize}">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  列表数据-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="panel panel-color panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">历史价格变更记录</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table table-hover m-10" style="margin-top: -12px;">
+                                <thead>
+                                <tr>
+                                    <th>变更类型</th>
+                                    <th>[[${systemHistoryPriceChangeRecordValidator.changeType=='CHANNEL'?'通道':'业务账号'}]]ID</th>
+                                    <th>价格区域</th>
+                                    <th>变更后价格</th>
+                                    <th>变更价格开始日期</th>
+                                    <th>创建日期</th>
+                                    <th>操作</th>
+                                </tr>
+                                <thead>
+                                <tbody>
+                                <tr th:each="info:${list}">
+                                    <td>
+                                        [[${info.changeType}]]
+                                    </td>
+                                    <td>[[${info.businessId}]]</td>
+                                    <td>[[${info.priceArea}]]</td>
+                                    <td>[[${info.changePrice}]]</td>
+                                    <td>[[${info.startDate}]]</td>
+                                    <td>[[${info.createdTime}]]</td>
+                                    <td style="line-height: 26px;">
+                                    </td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <th:block th:insert="fragments/page_fragments :: page"/>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+        <!-- start row  删除确认-->
+        <th:block th:insert="fragments/common_fragments :: confirm-modal"/>
+        <!-- end row -->
+
+    </div> <!-- container -->
+</div> <!-- content -->
+
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<script th:src="@{/static/plugins/moment/moment.js}"></script>
+
+<script>
+
+    function confirmDelete(id) {
+        $("#deleteId").val(id);
+    }
+
+    function deleteById() {
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $('#preloader').css('display', 'block');
+        location.href = contextPath + "/filter/keywords/deleteById/" + $("#deleteId").val();
+    }
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+
+
+
+</script>
+</body>
+</html>

@@ -27,11 +27,11 @@ public class IdentityCustomRoutes {
 
         return builder.routes()
                 //拦截所有GET请求
-//                .route(r -> r.method(HttpMethod.GET)
-//                        .filters(f ->
-//                                f.stripPrefix(1))
-//                        .uri("lb://smoc-identity")
-//                )
+                .route(r -> r.method(HttpMethod.GET)
+                        .filters(f ->
+                                f.stripPrefix(1))
+                        .uri("lb://smoc-identity")
+                )
 //                //拦截所有HEAD请求
 //                .route(r -> r.method(HttpMethod.HEAD)
 //                        .filters(f ->
@@ -70,6 +70,8 @@ public class IdentityCustomRoutes {
 //                )
                 //拦截符合规则的 POST 请求
                 .route(r -> r.method(HttpMethod.POST)
+                        .and().path("/smoc-gateway/smoc-identity/**")
+                        .and().header("signature-nonce", "\\d+")
                         .and().readBody(String.class, requestBody -> {
                             //相当于缓存了body信息，在filter 中可以这么获取 exchange.getAttribute("cachedRequestBodyObject");
                             return true;
