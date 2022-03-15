@@ -28,6 +28,8 @@ public class MessageWebTaskInfoValidator {
 
     private String infoType;
 
+    private String messageType;
+
     private String sendType;
 
     private String timingTime;

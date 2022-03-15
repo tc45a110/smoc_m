@@ -53,6 +53,17 @@ public class AccountTemplateInfo {
     @Column(name = "UPDATED_TIME")
     private Date updatedTime;
 
+    @Column(name = "TEMPLATE_FLAG")
+    private String templateFlag;
+
+    public String getTemplateFlag() {
+        return templateFlag;
+    }
+
+    public void setTemplateFlag(String templateFlag) {
+        this.templateFlag = templateFlag;
+    }
+
     public Date getUpdatedTime() {
         return updatedTime;
     }

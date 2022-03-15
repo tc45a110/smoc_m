@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
 
@@ -50,7 +51,7 @@ public class MessageWebTaskInfoService {
      * @param qo
      * @return
      */
-    public ResponseData<Map<String, Object>> countSum(MessageWebTaskInfoValidator qo){
+    public ResponseData<Map<String, Object>> countSum(MessageWebTaskInfoValidator qo) {
 
         Map<String, Object> map = messageWebTaskInfoRepository.countSum(qo);
         return ResponseDataUtil.buildSuccess(map);
@@ -83,7 +84,7 @@ public class MessageWebTaskInfoService {
      * 保存或修改
      *
      * @param messageWebTaskInfoValidator
-     * @param op  操作类型 为add、edit
+     * @param op                          操作类型 为add、edit
      * @return
      */
     @Transactional
@@ -110,6 +111,7 @@ public class MessageWebTaskInfoService {
 
     /**
      * 删除
+     *
      * @param id
      * @return
      */
@@ -118,10 +120,26 @@ public class MessageWebTaskInfoService {
 
         MessageWebTaskInfo data = messageWebTaskInfoRepository.findById(id).get();
         //记录日志
-        log.info("[短信群发][delete]数据:{}",JSON.toJSONString(data));
+        log.info("[短信群发][delete]数据:{}", JSON.toJSONString(data));
         messageWebTaskInfoRepository.deleteById(id);
 
         return ResponseDataUtil.buildSuccess();
     }
 
+    /**
+     * 发送短信
+     *
+     * @param id
+     * @return
+     */
+    @Transactional
+    public ResponseData sendMessageById(String id) {
+        MessageWebTaskInfo data = messageWebTaskInfoRepository.findById(id).get();
+        //记录日志
+        log.info("[短信群发][send]数据:{}", JSON.toJSONString(data));
+
+        messageWebTaskInfoRepository.sendMessageById(id, "01", DateTimeUtils.getDateTimeFormat(new Date()));
+
+        return ResponseDataUtil.buildSuccess();
+    }
 }

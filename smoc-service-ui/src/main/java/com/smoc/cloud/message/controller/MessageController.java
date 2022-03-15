@@ -3,6 +3,7 @@ package com.smoc.cloud.message.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
@@ -17,6 +18,7 @@ import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.material.service.BusinessAccountService;
 import com.smoc.cloud.material.service.MessageTemplateService;
+import com.smoc.cloud.material.service.SequenceService;
 import com.smoc.cloud.message.service.MessageService;
 import com.smoc.cloud.message.utils.SendMessage;
 import com.smoc.cloud.properties.SmocProperties;
@@ -61,7 +63,10 @@ public class MessageController {
     private MessageService messageService;
 
     @Autowired
-    private MessageTemplateService messageTemplateService;
+    private SequenceService sequenceService;
+
+    @Autowired
+    private SystemUserLogService systemUserLogService;
 
     @Autowired
     private SmocProperties smocProperties;
@@ -85,6 +90,7 @@ public class MessageController {
         MessageWebTaskInfoValidator messageWebTaskInfoValidator = new MessageWebTaskInfoValidator();
         messageWebTaskInfoValidator.setEnterpriseId(user.getOrganization());
         messageWebTaskInfoValidator.setBusinessType(businessType);
+        messageWebTaskInfoValidator.setMessageType("1");
         messageWebTaskInfoValidator.setInfoType(signType);
         Date startDate = DateTimeUtils.getFirstMonth(6);
         messageWebTaskInfoValidator.setStartDate(DateTimeUtils.getDateFormat(startDate));
@@ -118,6 +124,7 @@ public class MessageController {
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
 
         //分页查询
+        messageWebTaskInfoValidator.setMessageType("1");
         messageWebTaskInfoValidator.setEnterpriseId(user.getOrganization());
         if (!StringUtils.isEmpty(messageWebTaskInfoValidator.getStartDate())) {
             String[] date = messageWebTaskInfoValidator.getStartDate().split(" - ");
@@ -152,12 +159,13 @@ public class MessageController {
 
         //初始化参数
         MessageWebTaskInfoValidator messageWebTaskInfoValidator = new MessageWebTaskInfoValidator();
-        messageWebTaskInfoValidator.setId(UUID.uuid32());
+        messageWebTaskInfoValidator.setId("TASK"+ sequenceService.findSequence("BUSINESS_ACCOUNT"));
         messageWebTaskInfoValidator.setEnterpriseId(user.getOrganization());
         messageWebTaskInfoValidator.setBusinessType(businessType);
         messageWebTaskInfoValidator.setInfoType(signType);
         messageWebTaskInfoValidator.setSendType("1");
-        messageWebTaskInfoValidator.setSendStatus("01");
+        messageWebTaskInfoValidator.setMessageType("1");
+        messageWebTaskInfoValidator.setSendStatus("05");
 
         //查询企业下得所有业务账号
         AccountBasicInfoValidator accountBasicInfoValidator = new AccountBasicInfoValidator();
@@ -249,7 +257,7 @@ public class MessageController {
             FieldError err = new FieldError("发送方式", "sendType", "定时时间不能为空");
             result.addError(err);
         }
-        if(StringUtils.isEmpty(messageWebTaskInfoValidator.getInputNumber()) && messageWebTaskInfoValidator.getSubmitNumber()==0){
+        if("1".equals(messageWebTaskInfoValidator.getMessageType()) && StringUtils.isEmpty(messageWebTaskInfoValidator.getInputNumber()) && messageWebTaskInfoValidator.getSubmitNumber()==0){
             // 提交前台错误提示
             FieldError err = new FieldError("手机号", "inputNumber", "群发号码，号码文件不能都为空");
             result.addError(err);
@@ -299,16 +307,37 @@ public class MessageController {
         if(!StringUtils.isEmpty(messageWebTaskInfoValidator.getInputNumber())){
             messageWebTaskInfoValidator = SendMessage.FileSMSInput(messageWebTaskInfoValidator,smocProperties,user.getOrganization());
         }
+
+        //变量短信，需要重新读取手机号匹配模板
+        if("2".equals(messageWebTaskInfoValidator.getMessageType())){
+            messageWebTaskInfoValidator = SendMessage.handleFileVariableSMS(messageWebTaskInfoValidator,smocProperties,user.getOrganization());
+        }
+
+        if(messageWebTaskInfoValidator.getSendMessageNumber()==0){
+            view.addObject("error", "有效号码数不能为0");
+            return view;
+        }
+
         ResponseData data = messageService.save(messageWebTaskInfoValidator,op);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;
         }
 
+        //保存操作记录
+        if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            systemUserLogService.logsAsync("MESSAGE_SEND", messageWebTaskInfoValidator.getId(),"add".equals(op) ? messageWebTaskInfoValidator.getCreatedBy() : messageWebTaskInfoValidator.getUpdatedBy(), op, "add".equals(op) ? "添加群发短信" : "修改群发短信",JSON.toJSONString(messageWebTaskInfoValidator));
+        }
+
         //记录日志
         log.info("[短信群发][{}][{}]数据:{}", op, user.getUserName(), JSON.toJSONString(messageWebTaskInfoValidator));
 
-        view.setView(new RedirectView("/message/list/"+messageWebTaskInfoValidator.getBusinessType()+"/"+messageWebTaskInfoValidator.getInfoType(), true, false));
+        if("1".equals(messageWebTaskInfoValidator.getMessageType())){
+            view.setView(new RedirectView("/message/list/"+messageWebTaskInfoValidator.getBusinessType()+"/"+messageWebTaskInfoValidator.getInfoType(), true, false));
+        }else{
+            view.setView(new RedirectView("/message/variable/list/"+messageWebTaskInfoValidator.getBusinessType()+"/"+messageWebTaskInfoValidator.getInfoType(), true, false));
+        }
+
         return view;
 
     }
@@ -333,17 +362,16 @@ public class MessageController {
         }
 
         //查询信息
-        ResponseData<MessageWebTaskInfoValidator> infoDate = messageService.findById(id);
-        if (!ResponseCode.SUCCESS.getCode().equals(infoDate.getCode())) {
-            view.addObject("error", infoDate.getCode() + ":" + infoDate.getMessage());
+        ResponseData<MessageWebTaskInfoValidator> infoData = messageService.findById(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(infoData.getCode())) {
+            view.addObject("error", infoData.getCode() + ":" + infoData.getMessage());
             return view;
         }
 
-        if(!"01".equals(infoDate.getData().getSendStatus())){
+        if(!"05".equals(infoData.getData().getSendStatus())){
             view.addObject("error", "不能进行删除操作！");
             return view;
         }
-
 
         //删除操作
         ResponseData data = messageService.deleteById(id);
@@ -352,12 +380,70 @@ public class MessageController {
             return view;
         }
 
+        //保存操作记录
+        if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            systemUserLogService.logsAsync("MESSAGE_SEND", infoData.getData().getId(),user.getRealName(), "delete", "删除群发短信",JSON.toJSONString(infoData.getData()));
+        }
 
         //记录日志
-        log.info("[短信群发][{}][{}]数据:{}", "delete", user.getUserName(), JSON.toJSONString(infoDate.getData()));
+        log.info("[短信群发][{}][{}]数据:{}", "delete", user.getUserName(), JSON.toJSONString(infoData.getData()));
 
-        view.setView(new RedirectView("/message/list/"+infoDate.getData().getBusinessType()+"/"+infoDate.getData().getInfoType(), true, false));
+        if("1".equals(infoData.getData().getMessageType())){
+            view.setView(new RedirectView("/message/list/"+infoData.getData().getBusinessType()+"/"+infoData.getData().getInfoType(), true, false));
+        }else{
+            view.setView(new RedirectView("/message/variable/list/"+infoData.getData().getBusinessType()+"/"+infoData.getData().getInfoType(), true, false));
+        }
+
         return view;
+    }
+
+    /**
+     * 发送
+     * @param id
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/sendMessage/{id}", method = RequestMethod.GET)
+    public ModelAndView sendMessage(@PathVariable String id, HttpServletRequest request) {
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+        ModelAndView view = new ModelAndView("message/message_edit");
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
+
+        //查询信息
+        ResponseData<MessageWebTaskInfoValidator> infoData = messageService.findById(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(infoData.getCode())) {
+            view.addObject("error", infoData.getCode() + ":" + infoData.getMessage());
+        }
+
+        //发送操作
+        ResponseData data = messageService.sendMessageById(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        //保存操作记录
+        if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            systemUserLogService.logsAsync("MESSAGE_SEND", infoData.getData().getId(),user.getRealName(), "send", "发送群发短信",JSON.toJSONString(infoData.getData()));
+        }
+
+        //记录日志
+        log.info("[短信群发][{}][{}]数据:{}", "send", user.getUserName(), JSON.toJSONString(infoData.getData()));
+
+        if("1".equals(infoData.getData().getMessageType())){
+            view.setView(new RedirectView("/message/list/"+infoData.getData().getBusinessType()+"/"+infoData.getData().getInfoType(), true, false));
+        }else{
+            view.setView(new RedirectView("/message/variable/list/"+infoData.getData().getBusinessType()+"/"+infoData.getData().getInfoType(), true, false));
+        }
+        return view;
+
     }
 
     /**
@@ -365,8 +451,8 @@ public class MessageController {
      * @param request
      * @return
      */
-    @RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
-    public JSONObject uploadFile(HttpServletRequest request) {
+    @RequestMapping(value = "/uploadFile/{messageType}", method = RequestMethod.POST)
+    public JSONObject uploadFile(@PathVariable String messageType, HttpServletRequest request) {
 
         JSONObject result = new JSONObject();
         String code = "1";
@@ -402,7 +488,17 @@ public class MessageController {
                 //处理手机号，形成文件
                 MessageWebTaskInfoValidator messageValidator = new MessageWebTaskInfoValidator();
                 messageValidator.setNumberFiles(filePath);
-                messageValidator = SendMessage.handleFileSMS(messageValidator,smocProperties,user.getOrganization());
+
+                //普通短信
+                if("1".equals(messageType)){
+                    messageValidator = SendMessage.handleFileSMS(messageValidator,smocProperties,user.getOrganization());
+                }
+
+                //变量短信
+                if("2".equals(messageType)){
+                    messageValidator = SendMessage.handleFileVariableSMS(messageValidator,smocProperties,user.getOrganization());
+                }
+
 
                 errorFilePath = messageValidator.getExceptionNumberAttachment();
                 sendFilePath = messageValidator.getSendNumberAttachment();
@@ -483,6 +579,10 @@ public class MessageController {
 
         if("1".equals(type)){
             fileName = "example.txt";
+        }
+
+        if("2".equals(type)){
+            fileName = "example_variable.txt";
         }
 
 

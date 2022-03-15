@@ -164,51 +164,26 @@
     <!-- end confirm delete modal  -->
 </th:block>
 
-<th:block th:fragment="confirm-message-stop">
+
+<th:block th:fragment="confirm-message-send">
     <!-- start confirm delete modal  -->
-    <div id="confirm-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="custom-width-modalLabel"
+    <div id="confirm-send" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="custom-width-modalLabel"
          aria-hidden="true" style="display: none;margin: 60px">
         <div class="modal-dialog" style="width:33%;">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title" id="custom-width-modalLabel">温馨提示</h4>
+                    <h4 class="modal-title">温馨提示</h4>
                 </div>
                 <div class="modal-body">
 
-                    <p>确认终止短信群发任务？</p>
+                    <p>确认发送群发任务？</p>
 
                 </div>
                 <div class="modal-footer">
-                    <input type="hidden" id="deleteId">
+                    <input type="hidden" id="sendId">
                     <a class="btn btn-default waves-effect" data-dismiss="modal">取消</a>
-                    <button onclick="deleteById()" class="btn btn-primary waves-effect waves-light">确认终止</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- end confirm delete modal  -->
-</th:block>
-
-<th:block th:fragment="confirm-busi-stop">
-    <!-- start confirm delete modal  -->
-    <div id="confirm-busi-stop" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="custom-width-modalLabel"
-         aria-hidden="true" style="display: none;margin: 60px">
-        <div class="modal-dialog" style="width:33%;">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title" id="custom-width-modalLabel">温馨提示</h4>
-                </div>
-                <div class="modal-body">
-
-                    <p>确认停止该业务？</p>
-
-                </div>
-                <div class="modal-footer">
-                    <input type="hidden" id="deleteId">
-                    <a class="btn btn-default waves-effect" data-dismiss="modal">取消</a>
-                    <button onclick="deleteById()" class="btn btn-primary waves-effect waves-light">确认终止</button>
+                    <button onclick="sendById()" class="btn btn-primary waves-effect waves-light">确认发送</button>
                 </div>
             </div>
         </div>

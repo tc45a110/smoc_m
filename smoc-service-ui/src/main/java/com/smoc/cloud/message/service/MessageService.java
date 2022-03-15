@@ -82,4 +82,19 @@ public class MessageService {
             return ResponseDataUtil.buildError(e.getMessage());
         }
     }
+
+    /**
+     * 短信发送
+     * @param id
+     * @return
+     */
+    public ResponseData sendMessageById(String id) {
+        try {
+            ResponseData data = this.messageFeignClient.sendMessageById(id);
+            return data;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
 }

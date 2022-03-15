@@ -1,5 +1,6 @@
 $(document).ready(function(){
 	var contextPath =$("#path").val();
+	var messageTypeInit = $("#messageType").val();
 	var initFileSize =$("#originalAttachment").val();
 	var initFiles =[];
 	if(initFileSize !="" && initFileSize!=null ){
@@ -79,7 +80,7 @@ $(document).ready(function(){
 			drop: null,
 		},
 		uploadFile: {
-			url: contextPath+"/message/uploadFile" ,
+			url: contextPath+"/message/uploadFile/"+messageTypeInit ,
 			type: 'POST',
 			contentType: false, //不设置内容类型
 			processData: false, //不处理数据

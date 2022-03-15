@@ -45,4 +45,12 @@ public interface MessageFeignClient {
      */
     @RequestMapping(value = "/message/web/task/deleteById/{id}", method = RequestMethod.GET)
     ResponseData deleteById(@PathVariable String id) throws Exception;
+
+    /**
+     * 短信发送
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/message/web/task/sendMessageById/{id}", method = RequestMethod.GET)
+    ResponseData sendMessageById(@PathVariable String id) throws Exception;
 }

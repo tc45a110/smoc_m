@@ -100,6 +100,12 @@ public class MessageWebTaskInfoRepositoryImpl extends BasePageRepository {
             paramsList.add(qo.getInfoType().trim());
         }
 
+        //短信类型
+        if (!StringUtils.isEmpty(qo.getMessageType())) {
+            sqlBuffer.append(" and t.MESSAGE_TYPE =?");
+            paramsList.add(qo.getMessageType().trim());
+        }
+
         //企业名称
         if (!StringUtils.isEmpty(qo.getMessageContent())) {
             sqlBuffer.append(" and t.MESSAGE_CONTENT like ? ");

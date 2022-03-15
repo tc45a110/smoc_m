@@ -98,6 +98,17 @@ public class MessageWebTaskInfo {
     @Column(name = "ENTERPRISE_ID")
     private String enterpriseId;
 
+    private String messageType;
+
+    @Column(name = "MESSAGE_TYPE")
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
+    }
+
     public String getEnterpriseId() {
         return enterpriseId;
     }

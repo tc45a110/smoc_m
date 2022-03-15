@@ -24,6 +24,8 @@ public class AccountTemplateInfoValidator {
     @Size(min = 1, max = 500, message = "模板长度不符合规则！")
     private String templateContent;
 
+    private String templateFlag;
+
     private String checkDate;
 
     private String checkBy;

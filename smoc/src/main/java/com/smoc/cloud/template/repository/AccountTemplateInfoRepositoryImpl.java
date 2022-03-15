@@ -32,6 +32,7 @@ public class AccountTemplateInfoRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(" a.BUSINESS_TYPE,");
         sqlBuffer.append(" t.BUSINESS_ACCOUNT,");
         sqlBuffer.append(" t.TEMPLATE_TYPE,");
+        sqlBuffer.append(" t.TEMPLATE_FLAG,");
         sqlBuffer.append(" t.SIGN_NAME,");
         sqlBuffer.append(" t.TEMPLATE_CONTENT,");
         sqlBuffer.append(" DATE_FORMAT(t.CHECK_DATE, '%Y-%m-%d %H:%i:%S')CHECK_DATE, ");
@@ -87,6 +88,12 @@ public class AccountTemplateInfoRepositoryImpl extends BasePageRepository {
         if (!StringUtils.isEmpty(qo.getTemplateAgreementType())) {
             sqlBuffer.append(" and t.TEMPLATE_AGREEMENT_TYPE =?");
             paramsList.add(qo.getTemplateAgreementType().trim());
+        }
+
+        //模板标识
+        if (!StringUtils.isEmpty(qo.getTemplateFlag())) {
+            sqlBuffer.append(" and t.TEMPLATE_FLAG = ? ");
+            paramsList.add( qo.getTemplateFlag().trim() );
         }
 
         //模板内容

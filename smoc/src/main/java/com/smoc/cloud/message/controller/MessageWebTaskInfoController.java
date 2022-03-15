@@ -107,4 +107,23 @@ public class MessageWebTaskInfoController {
 
         return messageWebTaskInfoService.deleteById(id);
     }
+
+    /**
+     * 发送短信
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/sendMessageById/{id}", method = RequestMethod.GET)
+    public ResponseData sendMessageById(@PathVariable String id) {
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(validator));
+        }
+
+        return messageWebTaskInfoService.sendMessageById(id);
+    }
 }

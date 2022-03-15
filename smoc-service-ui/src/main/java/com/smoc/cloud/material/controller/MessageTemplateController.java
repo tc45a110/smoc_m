@@ -143,6 +143,7 @@ public class MessageTemplateController {
         accountTemplateInfoValidator.setTemplateId("TEMP" + sequenceService.findSequence("BUSINESS_ACCOUNT"));
         accountTemplateInfoValidator.setTemplateType(type);
         accountTemplateInfoValidator.setTemplateStatus("2");
+        accountTemplateInfoValidator.setTemplateFlag("1");
         accountTemplateInfoValidator.setTemplateAgreementType("HTTP");
 
         //查询企业下得所有业务账号
@@ -429,10 +430,12 @@ public class MessageTemplateController {
         String currentPage = "1";
         Integer pageSize = 6;
         String templateId = null;
+        String templateFlag = null;
         String keyword = null;
         String bussinessType = null;
         if(queryCondition!=null){
             templateId = queryCondition.getString("templateId");
+            templateFlag = queryCondition.getString("templateFlag");
             keyword = queryCondition.getString("keyword");
             currentPage = queryCondition.getString("currentPage");
             bussinessType = queryCondition.getString("businessType");
@@ -459,6 +462,7 @@ public class MessageTemplateController {
         AccountTemplateInfoValidator messageTemplateValidator = new AccountTemplateInfoValidator();
         messageTemplateValidator.setEnterpriseId(user.getOrganization());
         messageTemplateValidator.setTemplateType(bussinessType);
+        messageTemplateValidator.setTemplateFlag(templateFlag);
         messageTemplateValidator.setTemplateStatus("1");
         messageTemplateValidator.setTemplateContent(keyword);
         pageParams.setParams(messageTemplateValidator);
