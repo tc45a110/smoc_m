@@ -64,11 +64,6 @@ public class MessageVariableController {
     @Autowired
     private SequenceService sequenceService;
 
-    @Autowired
-    private SystemUserLogService systemUserLogService;
-
-    @Autowired
-    private SmocProperties smocProperties;
 
     /**
      * 短信发送列表

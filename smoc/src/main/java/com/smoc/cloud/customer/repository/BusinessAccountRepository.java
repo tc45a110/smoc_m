@@ -4,6 +4,7 @@ package com.smoc.cloud.customer.repository;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
+import com.smoc.cloud.common.smoc.message.MessageAccountValidator;
 import com.smoc.cloud.customer.entity.AccountBasicInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -50,4 +51,11 @@ public interface BusinessAccountRepository extends CrudRepository<AccountBasicIn
      * @return
      */
     List<AccountBasicInfoValidator> findBusinessAccount(AccountBasicInfoValidator accountBasicInfoValidator);
+
+    /**
+     * 查询企业下的账户和余额
+     * @param messageAccountValidator
+     * @return
+     */
+    List<MessageAccountValidator> messageAccountList(MessageAccountValidator messageAccountValidator);
 }

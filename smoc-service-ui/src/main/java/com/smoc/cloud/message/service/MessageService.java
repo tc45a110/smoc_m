@@ -5,6 +5,8 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.smoc.message.MessageAccountValidator;
+import com.smoc.cloud.common.smoc.message.model.StatisticMessageSend;
 import com.smoc.cloud.common.smoc.template.MessageWebTaskInfoValidator;
 import com.smoc.cloud.message.remote.MessageFeignClient;
 import lombok.extern.slf4j.Slf4j;
@@ -91,6 +93,21 @@ public class MessageService {
     public ResponseData sendMessageById(String id) {
         try {
             ResponseData data = this.messageFeignClient.sendMessageById(id);
+            return data;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 查询企业发送量
+     * @param messageAccountValidator
+     * @return
+     */
+    public ResponseData<StatisticMessageSend> statisticMessageSendCount(MessageAccountValidator messageAccountValidator) {
+        try {
+            ResponseData<StatisticMessageSend> data = this.messageFeignClient.statisticMessageSendCount(messageAccountValidator);
             return data;
         } catch (Exception e) {
             log.error(e.getMessage());

@@ -6,6 +6,8 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.smoc.message.MessageAccountValidator;
+import com.smoc.cloud.common.smoc.message.model.StatisticMessageSend;
 import com.smoc.cloud.common.smoc.template.MessageWebTaskInfoValidator;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
@@ -125,5 +127,16 @@ public class MessageWebTaskInfoController {
         }
 
         return messageWebTaskInfoService.sendMessageById(id);
+    }
+
+    /**
+     * 查询企业发送量
+     * @param messageAccountValidator
+     * @return
+     */
+    @RequestMapping(value = "/statisticMessageSendCount", method = RequestMethod.POST)
+    public ResponseData<StatisticMessageSend> statisticMessageSendCount(@RequestBody MessageAccountValidator messageAccountValidator) {
+
+        return messageWebTaskInfoService.statisticMessageSendCount(messageAccountValidator);
     }
 }

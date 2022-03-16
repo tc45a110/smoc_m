@@ -6,6 +6,7 @@ import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
+import com.smoc.cloud.common.smoc.message.MessageAccountValidator;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.customer.service.BusinessAccountService;
@@ -138,8 +139,19 @@ public class BusinessAccountController {
     @RequestMapping(value = "/findBusinessAccount", method = RequestMethod.POST)
     public ResponseData<List<AccountBasicInfoValidator>> findBusinessAccount(@RequestBody AccountBasicInfoValidator accountBasicInfoValidator)  {
 
-
         ResponseData<List<AccountBasicInfoValidator>> data = businessAccountService.findBusinessAccount(accountBasicInfoValidator);
+        return data;
+    }
+
+    /**
+     *  查询企业下的账户和余额
+     * @param messageAccountValidator
+     * @return
+     */
+    @RequestMapping(value = "/messageAccountList", method = RequestMethod.POST)
+    public ResponseData<List<MessageAccountValidator>> messageAccountList(@RequestBody MessageAccountValidator messageAccountValidator)  {
+
+        ResponseData<List<MessageAccountValidator>> data = businessAccountService.messageAccountList(messageAccountValidator);
         return data;
     }
 }

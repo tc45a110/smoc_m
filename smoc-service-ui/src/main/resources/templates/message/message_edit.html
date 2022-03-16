@@ -25,7 +25,7 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title"><mpm:tag identity="infoType"
+                    <h4 class="page-title"><mpm:tag identity="helpSelfType"
                                                     th:value="${signType}" show-type="label"
                                                     key="code"/>发送</h4>
                     <ol class="breadcrumb p-0 m-0">
@@ -33,7 +33,7 @@
                             短信群发
                         </li>
                         <li class="active">
-                            <mpm:tag identity="infoType"
+                            <mpm:tag identity="helpSelfType"
                                      th:value="${signType}" show-type="label"
                                      key="code"/>发送
                         </li>
@@ -59,11 +59,12 @@
                                         <label>业务账号<span class="text-danger">*</span>
                                             <span class="text-danger" th:if="${#fields.hasErrors('businessAccount')}"
                                                   th:errors="*{businessAccount}"></span></label>
-                                        <select name="businessAccount" data-style="btn-default"
+                                        <select name="businessAccount" data-style="btn-default" th:if="${not #lists.isEmpty(list)}"
                                                 class="selectpicker  form-control" tabindex="-98" 　required="true">
                                             <option data-icon="mdi mdi-account" th:each="info:${list}"
                                                     th:selected="${messageWebTaskInfoValidator.businessAccount eq info.accountId}" th:value="${info.accountId}">[[${info.accountId}]]([[${info.AccountName}]])</option>
                                         </select>
+                                        <span th:if="${#lists.isEmpty(list)}" class="form-control" style="color: red">未开通业务账号</span>
                                     </div>
 
                                     <div class="form-group m-b-20">
@@ -309,7 +310,7 @@
         $("#messageContent").val('【'+tm.signName+'】'+tm.templateContent);
 
         //普通短信可根据模板字数计算拆分条数，变量短信要根据具体变量值替换后再计算
-        var charAmount = (tm.signName+tm.templateContent).length;
+        var charAmount = ('【'+tm.signName+'】'+tm.templateContent).length;
         var splitNumber = 1;
         if(charAmount<=70){
             splitNumber = 1;

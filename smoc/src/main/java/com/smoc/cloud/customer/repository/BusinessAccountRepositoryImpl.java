@@ -5,8 +5,10 @@ import com.smoc.cloud.common.BasePageRepository;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
+import com.smoc.cloud.common.smoc.message.MessageAccountValidator;
 import com.smoc.cloud.customer.rowmapper.AccountBasicInfoRowMapper;
 import com.smoc.cloud.customer.rowmapper.AccountCenterInfoRowMapper;
+import com.smoc.cloud.customer.rowmapper.MessageAccountRowMapper;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -132,10 +134,14 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
             paramsList.add(qo.getEnterpriseId().trim());
         }
 
-
         if (!StringUtils.isEmpty(qo.getBusinessType())) {
             sqlBuffer.append(" and t.BUSINESS_TYPE = ?");
             paramsList.add(qo.getBusinessType().trim());
+        }
+
+        if (!StringUtils.isEmpty(qo.getInfoType())) {
+            sqlBuffer.append(" and t.INFO_TYPE like ?");
+            paramsList.add( "%"+qo.getInfoType().trim()+"%");
         }
 
         if (!StringUtils.isEmpty(qo.getAccountStatus())) {
@@ -150,6 +156,39 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
         paramsList.toArray(params);
 
         List<AccountBasicInfoValidator> list = this.queryForObjectList(sqlBuffer.toString(), params, new AccountCenterInfoRowMapper());
+        return list;
+    }
+
+    public  List<MessageAccountValidator> messageAccountList(MessageAccountValidator qo) {
+
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append("  t.ACCOUNT_ID");
+        sqlBuffer.append(", t.ENTERPRISE_ID");
+        sqlBuffer.append(", t.BUSINESS_TYPE");
+        sqlBuffer.append(", a.ACCOUNT_USABLE_SUM");
+        sqlBuffer.append("  from account_base_info t left join finance_account a on t.ACCOUNT_ID=a.ACCOUNT_ID ");
+        sqlBuffer.append("  where 1 = 1 ");
+
+        List<Object> paramsList = new ArrayList<Object>();
+
+        if (!StringUtils.isEmpty(qo.getEnterpriseId())) {
+            sqlBuffer.append(" and t.ENTERPRISE_ID = ?");
+            paramsList.add(qo.getEnterpriseId().trim());
+        }
+
+        if (!StringUtils.isEmpty(qo.getBusinessType())) {
+            sqlBuffer.append(" and t.BUSINESS_TYPE = ?");
+            paramsList.add(qo.getBusinessType().trim());
+        }
+
+        sqlBuffer.append("  order by t.CREATED_TIME ");
+
+        //根据参数个数，组织参数值
+        Object[] params = new Object[paramsList.size()];
+        paramsList.toArray(params);
+
+        List<MessageAccountValidator> list = this.queryForObjectList(sqlBuffer.toString(), params, new MessageAccountRowMapper());
         return list;
     }
 }

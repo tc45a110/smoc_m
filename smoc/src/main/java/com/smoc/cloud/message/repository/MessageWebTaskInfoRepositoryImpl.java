@@ -1,11 +1,13 @@
 package com.smoc.cloud.message.repository;
 
-import com.google.gson.Gson;
 import com.smoc.cloud.common.BasePageRepository;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
+import com.smoc.cloud.common.smoc.message.MessageAccountValidator;
+import com.smoc.cloud.common.smoc.message.model.StatisticMessageSend;
 import com.smoc.cloud.common.smoc.template.MessageWebTaskInfoValidator;
 import com.smoc.cloud.message.rowmapper.MessageWebTaskInfoRowMapper;
+import com.smoc.cloud.message.rowmapper.StatisticMessageSendRowMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
@@ -219,6 +221,62 @@ public class MessageWebTaskInfoRepositoryImpl extends BasePageRepository {
             map.put("FAILURE_NUMBER",0);
         }
         return map;
+
+    }
+
+    /**
+     * 查询企业发送量
+     *
+     * @param qo
+     * @return
+     */
+    public StatisticMessageSend statisticMessageSendCount(MessageAccountValidator qo) {
+
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append(" sum(t.SUBMIT_NUMBER) SUBMIT_NUMBER,");
+        sqlBuffer.append(" sum(t.SUCCESS_NUMBER) SUCCESS_NUMBER,");
+        sqlBuffer.append(" sum(t.SUCCESS_SEND_NUMBER) SUCCESS_SEND_NUMBER,");
+        sqlBuffer.append(" sum(t.FAILURE_NUMBER) FAILURE_NUMBER,");
+        sqlBuffer.append(" sum(t.NO_REPORT_NUMBER) NO_REPORT_NUMBER");
+        sqlBuffer.append(" from message_web_task_info t");
+        sqlBuffer.append(" where 1=1 ");
+
+        List<Object> paramsList = new ArrayList<Object>();
+
+        //业务类型
+        if (!StringUtils.isEmpty(qo.getBusinessType())) {
+            sqlBuffer.append(" and t.BUSINESS_TYPE =?");
+            paramsList.add(qo.getBusinessType().trim());
+        }
+
+        if (!StringUtils.isEmpty(qo.getEnterpriseId())) {
+            sqlBuffer.append(" and t.ENTERPRISE_ID =?");
+            paramsList.add(qo.getEnterpriseId().trim());
+        }
+
+        //时间起
+        if (!StringUtils.isEmpty(qo.getStartDate())) {
+            sqlBuffer.append(" and DATE_FORMAT(t.CREATED_TIME,'%Y-%m-%d') >=? ");
+            paramsList.add(qo.getStartDate().trim());
+        }
+        //时间止
+        if (!StringUtils.isEmpty(qo.getEndDate())) {
+            sqlBuffer.append(" and DATE_FORMAT(t.CREATED_TIME,'%Y-%m-%d') <=? ");
+            paramsList.add(qo.getEndDate().trim());
+        }
+
+        //根据参数个数，组织参数值
+        Object[] params = new Object[paramsList.size()];
+        paramsList.toArray(params);
+
+        List<StatisticMessageSend> list = this.queryForObjectList(sqlBuffer.toString(), params, new StatisticMessageSendRowMapper());
+        StatisticMessageSend statisticMessageSend = new StatisticMessageSend();
+        if(!StringUtils.isEmpty(list) && list.size()>0){
+            statisticMessageSend = list.get(0);
+        }
+
+        return statisticMessageSend;
 
     }
 }

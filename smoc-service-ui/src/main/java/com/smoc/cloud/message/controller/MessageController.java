@@ -66,6 +66,9 @@ public class MessageController {
     private SequenceService sequenceService;
 
     @Autowired
+    private MessageTemplateService messageTemplateService;
+
+    @Autowired
     private SystemUserLogService systemUserLogService;
 
     @Autowired
@@ -257,7 +260,7 @@ public class MessageController {
             FieldError err = new FieldError("发送方式", "sendType", "定时时间不能为空");
             result.addError(err);
         }
-        if("1".equals(messageWebTaskInfoValidator.getMessageType()) && StringUtils.isEmpty(messageWebTaskInfoValidator.getInputNumber()) && messageWebTaskInfoValidator.getSubmitNumber()==0){
+        if("1".equals(messageWebTaskInfoValidator.getMessageType()) && StringUtils.isEmpty(messageWebTaskInfoValidator.getInputNumber()) && StringUtils.isEmpty(messageWebTaskInfoValidator.getNumberFiles())){
             // 提交前台错误提示
             FieldError err = new FieldError("手机号", "inputNumber", "群发号码，号码文件不能都为空");
             result.addError(err);
@@ -268,6 +271,11 @@ public class MessageController {
             FieldError err = new FieldError("手机号", "inputNumber", "群发号码，号码文件只能选择一种方式");
             result.addError(err);
         }
+
+       if(!user.getOrganization().equals(messageWebTaskInfoValidator.getEnterpriseId())){
+           view.addObject("error", "无法进行操作");
+           return view;
+       }
 
         //完成参数规则验证
         if (result.hasErrors()) {
@@ -303,6 +311,15 @@ public class MessageController {
             return view;
         }
 
+        //查询信息
+        ResponseData<AccountTemplateInfoValidator> infoDate = messageTemplateService.findById(messageWebTaskInfoValidator.getTemplateId());
+        if (!ResponseCode.SUCCESS.getCode().equals(infoDate.getCode())) {
+            view.addObject("error", infoDate.getCode() + ":" + infoDate.getMessage());
+            return view;
+        }
+
+        messageWebTaskInfoValidator.setMessageContent("【"+infoDate.getData().getSignName()+"】"+infoDate.getData().getTemplateContent());
+
         //保存数据
         if(!StringUtils.isEmpty(messageWebTaskInfoValidator.getInputNumber())){
             messageWebTaskInfoValidator = SendMessage.FileSMSInput(messageWebTaskInfoValidator,smocProperties,user.getOrganization());
@@ -317,11 +334,12 @@ public class MessageController {
             messageWebTaskInfoValidator = SendMessage.handleFileVariableSMS(messageWebTaskInfoValidator,smocProperties,user.getOrganization());
         }
 
-        if(messageWebTaskInfoValidator.getSendMessageNumber()==0){
+        if(messageWebTaskInfoValidator.getSuccessNumber()==0){
             view.addObject("error", "有效号码数不能为0");
             return view;
         }
 
+        //保存操作
         ResponseData data = messageService.save(messageWebTaskInfoValidator,op);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
@@ -369,6 +387,12 @@ public class MessageController {
         ResponseData<MessageWebTaskInfoValidator> infoData = messageService.findById(id);
         if (!ResponseCode.SUCCESS.getCode().equals(infoData.getCode())) {
             view.addObject("error", infoData.getCode() + ":" + infoData.getMessage());
+            return view;
+        }
+
+        //查看是否是自己企业
+        if(!user.getOrganization().equals(infoData.getData().getEnterpriseId())){
+            view.addObject("error", "不能进行删除操作！");
             return view;
         }
 
@@ -424,6 +448,12 @@ public class MessageController {
         ResponseData<MessageWebTaskInfoValidator> infoData = messageService.findById(id);
         if (!ResponseCode.SUCCESS.getCode().equals(infoData.getCode())) {
             view.addObject("error", infoData.getCode() + ":" + infoData.getMessage());
+        }
+
+        //查看是否是自己企业
+        if(!user.getOrganization().equals(infoData.getData().getEnterpriseId())){
+            view.addObject("error", "不能进行操作！");
+            return view;
         }
 
         //发送操作
@@ -497,7 +527,6 @@ public class MessageController {
         String sendFilePath = "";
         String errorFilePath = "";
         int sendNumber = 0;
-        int sendMessageNumber = 0;
 
         SecurityUser user = (SecurityUser)request.getSession().getAttribute("user");
 
@@ -540,7 +569,6 @@ public class MessageController {
                 errorFilePath = messageValidator.getExceptionNumberAttachment();
                 sendFilePath = messageValidator.getSendNumberAttachment();
                 sendNumber = messageValidator.getSubmitNumber();
-                sendMessageNumber = messageValidator.getSendMessageNumber();
                 if(!StringUtils.isEmpty(errorFilePath)){
                     request.getSession().setAttribute("errorFilePath", errorFilePath);
                 }
@@ -559,7 +587,6 @@ public class MessageController {
         result.put("sendFilePath", sendFilePath);
         result.put("errorFilePath", errorFilePath);
         result.put("sendNumber", sendNumber);
-        result.put("sendMessageNumber", sendMessageNumber);
         return result;
     }
 

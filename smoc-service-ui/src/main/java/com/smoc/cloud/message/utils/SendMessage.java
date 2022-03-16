@@ -110,7 +110,7 @@ public class SendMessage {
             messageValidator.setExceptionNumberAttachment(fileError);
             messageValidator.setSubmitNumber(sendMessageNumber);
             messageValidator.setSuccessNumber(sendMessageNumber);
-            messageValidator.setSendMessageNumber(sendMessageNumberSplit);
+            messageValidator.setSuccessNumber(sendMessageNumberSplit);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -215,7 +215,7 @@ public class SendMessage {
             messageValidator.setExceptionNumberAttachment(fileError);
             messageValidator.setSubmitNumber(sendMessageNumber);
             messageValidator.setSuccessNumber(sendMessageNumber);
-            messageValidator.setSendMessageNumber(sendMessageNumberSplit);
+            messageValidator.setSuccessNumber(sendMessageNumberSplit);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -334,7 +334,7 @@ public class SendMessage {
             messageValidator.setExceptionNumberAttachment(fileError);
             messageValidator.setSubmitNumber(sendMessageNumber);
             messageValidator.setSuccessNumber(sendMessageNumber);
-            messageValidator.setSendMessageNumber(sendMessageNumberSplit);
+            messageValidator.setSuccessNumber(sendMessageNumberSplit);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

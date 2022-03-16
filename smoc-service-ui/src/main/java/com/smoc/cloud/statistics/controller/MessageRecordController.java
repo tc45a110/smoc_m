@@ -18,12 +18,11 @@ public class MessageRecordController {
 
     /**
      * 短信记录列表
-     * @param signType
      * @param request
      * @return
      */
-    @RequestMapping(value = "list/{signType}", method = RequestMethod.GET)
-    public ModelAndView list(@PathVariable String signType, HttpServletRequest request) {
+    @RequestMapping(value = "list/{businessType}", method = RequestMethod.GET)
+    public ModelAndView list(@PathVariable String businessType, HttpServletRequest request) {
         ModelAndView view = new ModelAndView("statistics/message_record_list");
         //查询数据
         PageParams params = new PageParams<>();
@@ -35,7 +34,7 @@ public class MessageRecordController {
         params.setTotalRows(22);
 
         view.addObject("pageParams",params);
-        view.addObject("signType", signType);
+        view.addObject("businessType", businessType);
         return view;
     }
 

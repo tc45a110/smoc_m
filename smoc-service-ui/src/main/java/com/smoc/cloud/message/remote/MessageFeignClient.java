@@ -3,6 +3,8 @@ package com.smoc.cloud.message.remote;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.message.MessageAccountValidator;
+import com.smoc.cloud.common.smoc.message.model.StatisticMessageSend;
 import com.smoc.cloud.common.smoc.template.MessageWebTaskInfoValidator;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -53,4 +55,12 @@ public interface MessageFeignClient {
      */
     @RequestMapping(value = "/message/web/task/sendMessageById/{id}", method = RequestMethod.GET)
     ResponseData sendMessageById(@PathVariable String id) throws Exception;
+
+    /**
+     * 查询企业发送量
+     * @param messageAccountValidator
+     * @return
+     */
+    @RequestMapping(value = "/message/web/task/statisticMessageSendCount", method = RequestMethod.POST)
+    ResponseData<StatisticMessageSend> statisticMessageSendCount(@RequestBody MessageAccountValidator messageAccountValidator) throws Exception;
 }

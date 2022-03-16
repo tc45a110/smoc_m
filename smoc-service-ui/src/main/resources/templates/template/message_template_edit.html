@@ -119,7 +119,7 @@
                                             <span class="text-danger" th:if="${#fields.hasErrors('templateContent')}"
                                                   th:errors="*{templateContent}"></span></label>
                                         <textarea id="templateContent" class="form-control" rows="8" placeholder="输入模版内容，最多500汉字"
-                                                  autocomplete="off" th:field="*{templateContent}" data-parsley-length="[1,500]" required></textarea>
+                                                  autocomplete="off" th:field="*{templateContent}" data-parsley-length="[1,1500]" required></textarea>
                                     </div>
                                     <div class="form-group m-b-30">
                                         <span>当前已输入<font id="charAmount_id" color="red">0</font>字符</span><span id="amount_show_id">，下发条数<font id="amount_id" color="red">0</font>条</span>

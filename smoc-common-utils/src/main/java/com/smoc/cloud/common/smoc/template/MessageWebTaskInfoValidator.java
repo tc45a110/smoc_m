@@ -22,6 +22,7 @@ public class MessageWebTaskInfoValidator {
     @NotNull(message = "企业不能为空！")
     private String enterpriseId;
 
+    @NotNull(message = "账号不能为空！")
     private String businessAccount;
 
     private String businessType;
@@ -56,7 +57,7 @@ public class MessageWebTaskInfoValidator {
     private String inputNumber;
 
     @NotNull(message = "内容不能为空！")
-    @Size(min = 1, max = 500, message = "短信内容长度不符合规则！")
+    @Size(min = 1, max = 1500, message = "短信内容长度不符合规则！")
     private String messageContent;
 
     private String createdBy;
@@ -80,7 +81,5 @@ public class MessageWebTaskInfoValidator {
     private String exceptionNumberAttachment;
     //状态报告路径
     private String reportAttachment;
-    //发送内容条数
-    private Integer sendMessageNumber;
 
 }

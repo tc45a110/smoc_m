@@ -2,6 +2,8 @@ package com.smoc.cloud.message.repository;
 
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
+import com.smoc.cloud.common.smoc.message.MessageAccountValidator;
+import com.smoc.cloud.common.smoc.message.model.StatisticMessageSend;
 import com.smoc.cloud.common.smoc.template.MessageWebTaskInfoValidator;
 import com.smoc.cloud.message.entity.MessageWebTaskInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -39,4 +41,11 @@ public interface MessageWebTaskInfoRepository extends JpaRepository<MessageWebTa
     @Modifying
     @Query(value = "update message_web_task_info set SEND_STATUS = :sendStatus,APPLE_SEND_TIME = :dateTimeFormat  where ID = :id ",nativeQuery = true)
     void sendMessageById(@Param("id") String id, @Param("sendStatus") String sendStatus, @Param("dateTimeFormat") String dateTimeFormat);
+
+    /**
+     * 查询企业发送量
+     * @param messageAccountValidator
+     * @return
+     */
+    StatisticMessageSend statisticMessageSendCount(MessageAccountValidator messageAccountValidator);
 }

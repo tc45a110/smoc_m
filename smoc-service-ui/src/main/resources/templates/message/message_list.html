@@ -23,7 +23,7 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title"><mpm:tag identity="infoType"
+                    <h4 class="page-title"><mpm:tag identity="helpSelfType"
                                                     th:value="${signType}" show-type="label"
                                                     key="code"/>发送</h4>
                     <ol class="breadcrumb p-0 m-0">
@@ -31,7 +31,7 @@
                             短信群发
                         </li>
                         <li>
-                            <mpm:tag identity="infoType"
+                            <mpm:tag identity="helpSelfType"
                                      th:value="${signType}" show-type="label"
                                      key="code"/>发送
                         </li>
@@ -78,7 +78,7 @@
                                        th:href="@{/message/add/{businessType}/{signType}(businessType=${businessType},signType=${signType})}"
                                             class="btn btn-success waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-plus-sign"
-                                           style="margin-right:5px"></i><mpm:tag identity="infoType"
+                                           style="margin-right:5px"></i><mpm:tag identity="helpSelfType"
                                                                                  th:value="${signType}" show-type="label"
                                                                                  key="code"/>群发</a>
                                     <input type="hidden" name="currentPage" id="currentPage" th:value="${pageParams.currentPage}">
@@ -98,7 +98,7 @@
                 <div class="panel panel-color panel-info">
                     <div class="panel-heading">
                         <h3 class="panel-title">
-                            <mpm:tag identity="infoType"
+                            <mpm:tag identity="helpSelfType"
                                      th:value="${signType}" show-type="label"
                                      key="code"/> 发送列表</h3>
                     </div>
@@ -107,13 +107,13 @@
                             <table class="table table table-hover m-10" style="margin-top: -12px;">
                                 <thead>
                                 <tr>
-                                    <th style="width:130px">账号</th>
-                                    <th style="width:170px">任务ID/模板ID</th>
+                                    <th style="width:100px">账号</th>
+                                    <th style="width:150px">任务ID/模板ID</th>
                                     <th>发送内容</th>
-                                    <th style="width:170px">发送号码数/接受号码数</th>
-                                    <th style="width:155px">发送状态</th>
-                                    <th style="width:200px">申请发送时间/实际发送时间</th>
-                                    <th style="width:160px">操作 <a
+                                    <th style="width:155px">发送条数/接收条数</th>
+                                    <th style="width:140px">发送状态</th>
+                                    <th style="width:170px">创建时间/实际发送时间</th>
+                                    <th style="width:150px">操作 <a
                                             data-toggle="tooltip" data-placement="left"
                                             data-original-title="明细数据仅可查半年内，超过则无法查阅，请悉知。"
                                             class="on-default edit-row"
@@ -128,10 +128,10 @@
                                         [[${info.messageContent}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;width:100px">
-                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
+                                        <span data-d-group="3" data-a-sign=" " data-v-min="0" data-v-max="999999999"
                                               style="width:90px;text-align:left"
-                                              class="autonumber">[[${info.submitNumber}]]</span>/
-                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
+                                              class="autonumber">[[${info.successNumber}]]</span>/
+                                        <span data-d-group="3" data-a-sign=" " data-v-min="0" data-v-max="999999999"
                                               style="width:90px;text-align:left"
                                               class="autonumber">[[${info.successSendNumber}]]</span>
                                     </td>
@@ -139,9 +139,9 @@
                                     <td style="vertical-align: middle;line-height: 26px">
                                         <mpm:tag identity="messageStatus" show-type="button" key="code"
                                                  th:value="${info.sendStatus}"
-                                                 class="01,btn btn-warning  waves-effect waves-light btn-xs;02,btn btn-success  waves-effect waves-light btn-xs;03,btn btn-brown   waves-effect waves-light btn-xs;04,btn btn-danger waves-effect waves-light btn-xs;05,btn btn-info waves-effect waves-light btn-xs;06,btn btn-purple waves-effect waves-light btn-xs"/>
+                                                 class="01,btn btn-warning btn-rounded waves-effect waves-light btn-sm;02,btn btn-success btn-rounded waves-effect waves-light btn-sm;03,btn btn-brown btn-rounded waves-effect waves-light btn-sm;04,btn btn-danger btn-rounded waves-effect waves-light btn-sm;05,btn btn-info btn-rounded waves-effect waves-light btn-sm;06,btn btn-purple btn-rounded waves-effect waves-light btn-sm"/>
                                     </td>
-                                    <td style="vertical-align: middle;line-height: 26px;width:160px"> [[${info.appleSendTime}]]<br>[[${info.sendTime}]]
+                                    <td style="vertical-align: middle;line-height: 26px;width:160px"> [[${info.createdTime}]]<br>[[${info.sendTime}]]
                                     </td>
                                     <td style="vertical-align: middle;width:100px">
                                         <a sec:authorize-url="/message/detail/*"

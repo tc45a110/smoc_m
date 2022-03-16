@@ -9,6 +9,7 @@ import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.customer.qo.AccountChannelInfoQo;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
+import com.smoc.cloud.common.smoc.message.MessageAccountValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.customer.entity.AccountBasicInfo;
 import com.smoc.cloud.customer.entity.AccountChannelInfo;
@@ -308,6 +309,16 @@ public class BusinessAccountService {
      */
     public ResponseData<List<AccountBasicInfoValidator>> findBusinessAccount(AccountBasicInfoValidator accountBasicInfoValidator) {
         List<AccountBasicInfoValidator> list = businessAccountRepository.findBusinessAccount(accountBasicInfoValidator);
+        return ResponseDataUtil.buildSuccess(list);
+    }
+
+    /**
+     * 查询企业下的账户和余额
+     * @param messageAccountValidator
+     * @return
+     */
+    public ResponseData<List<MessageAccountValidator>> messageAccountList(MessageAccountValidator messageAccountValidator) {
+        List<MessageAccountValidator> list = businessAccountRepository.messageAccountList(messageAccountValidator);
         return ResponseDataUtil.buildSuccess(list);
     }
 }

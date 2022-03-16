@@ -92,9 +92,7 @@ public class MessageWebTaskInfo {
     //状态报告路径
     @Column(name = "REPORT_ATTACHMENT", length = 255)
     private String reportAttachment;
-    //发送内容条数
-    @Column(name = "SEND_MESSAGE_NUMBER")
-    private Integer sendMessageNumber;
+
     @Column(name = "ENTERPRISE_ID")
     private String enterpriseId;
 
@@ -139,14 +137,6 @@ public class MessageWebTaskInfo {
 
     public void setReportAttachment(String reportAttachment) {
         this.reportAttachment = reportAttachment;
-    }
-
-    public Integer getSendMessageNumber() {
-        return sendMessageNumber;
-    }
-
-    public void setSendMessageNumber(Integer sendMessageNumber) {
-        this.sendMessageNumber = sendMessageNumber;
     }
 
     public Date getUpdatedTime() {

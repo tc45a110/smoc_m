@@ -68,18 +68,18 @@
                                         <div class="form-group">
                                             <div class="row">
                                                 <div class="col-sm-3 m-b-10">
-                                                    <label>码号&nbsp;<span class="text-danger" th:if="${#fields.hasErrors('srcId')}"
+                                                    <label>服务代码(接入码号)&nbsp;<span class="text-danger" th:if="${#fields.hasErrors('srcId')}"
                                                             th:errors="*{srcId}" style="font-weight: 200;font-size: 12px"></span>
                                                     </label>
-                                                    <input type="text" placeholder="码号" class="form-control"
+                                                    <input type="text" placeholder="服务代码(接入码号)" class="form-control"
                                                            th:field="*{srcId}" data-parsley-length="[1,32]" data-parsley-type="number" autocomplete="off">
                                                 </div>
                                                 <div class="col-sm-3 m-b-10">
-                                                    <label>业务代码&nbsp;<span class="text-danger">*</span>&nbsp;<span
+                                                    <label>业务代码&nbsp;<span
                                                             class="text-danger" th:if="${#fields.hasErrors('serviceCode')}"
                                                             th:errors="*{serviceCode}" style="font-weight: 200;font-size: 12px"></span>
                                                     </label>
-                                                    <input type="text" required="" placeholder="业务代码" class="form-control"
+                                                    <input type="text" placeholder="业务代码" class="form-control"
                                                            th:field="*{serviceCode}" data-parsley-length="[1,128]" autocomplete="off">
                                                 </div>
                                                 <div class="col-sm-3 m-b-10">
@@ -103,11 +103,11 @@
                                         <div class="form-group">
                                             <div class="row">
                                                 <div class="col-sm-3 m-b-10">
-                                                    <label>心跳间隔单位&nbsp;<span class="text-danger">*</span>&nbsp;<span
+                                                    <label>心跳间隔单位&nbsp;&nbsp;<span
                                                             class="text-danger" th:if="${#fields.hasErrors('heartbeatInterval')}"
                                                             th:errors="*{heartbeatInterval}" style="font-weight: 200;font-size: 12px"></span>
                                                     </label>
-                                                    <input type="text" required="" placeholder="心跳间隔单位" class="form-control"
+                                                    <input type="text" placeholder="心跳间隔单位" class="form-control"
                                                            th:field="*{heartbeatInterval}" data-parsley-length="[1,10]" data-parsley-type="number" autocomplete="off">
                                                 </div>
                                                 <div class="col-sm-3 m-b-10">

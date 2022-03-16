@@ -3,6 +3,8 @@ package com.smoc.cloud.material.service;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
+import com.smoc.cloud.common.smoc.message.MessageAccountValidator;
+import com.smoc.cloud.common.smoc.message.model.StatisticMessageSend;
 import com.smoc.cloud.material.remote.BusinessAccountFeignClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,4 +41,20 @@ public class BusinessAccountService {
             return ResponseDataUtil.buildError(e.getMessage());
         }
     }
+
+    /**
+     * 查询企业下的账户和余额
+     * @param messageAccountValidator
+     * @return
+     */
+    public ResponseData<List<MessageAccountValidator>> messageAccountList(MessageAccountValidator messageAccountValidator) {
+        try {
+            ResponseData<List<MessageAccountValidator>> data = this.businessAccountFeignClient.messageAccountList(messageAccountValidator);
+            return data;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
 }
