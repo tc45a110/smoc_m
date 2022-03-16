@@ -307,6 +307,10 @@ public class MessageController {
         if(!StringUtils.isEmpty(messageWebTaskInfoValidator.getInputNumber())){
             messageWebTaskInfoValidator = SendMessage.FileSMSInput(messageWebTaskInfoValidator,smocProperties,user.getOrganization());
         }
+        //普通短信
+        if("1".equals(messageWebTaskInfoValidator.getMessageType()) && !StringUtils.isEmpty(messageWebTaskInfoValidator.getNumberFiles())){
+            messageWebTaskInfoValidator = SendMessage.handleFileSMS(messageWebTaskInfoValidator,smocProperties,user.getOrganization());
+        }
 
         //变量短信，需要重新读取手机号匹配模板
         if("2".equals(messageWebTaskInfoValidator.getMessageType())){
@@ -447,6 +451,39 @@ public class MessageController {
     }
 
     /**
+     * 查看明细
+     *
+     * @return
+     */
+    @RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
+    public ModelAndView detail(@PathVariable String id, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("message/message_detail");
+
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
+
+        //查询信息
+        ResponseData<MessageWebTaskInfoValidator> infoData = messageService.findById(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(infoData.getCode())) {
+            view.addObject("error", infoData.getCode() + ":" + infoData.getMessage());
+            return view;
+        }
+
+        view.addObject("messageWebTaskInfoValidator", infoData.getData());
+        view.addObject("signType", infoData.getData().getInfoType());
+        view.addObject("businessType", infoData.getData().getBusinessType());
+
+        return view;
+    }
+
+    /**
      * 异步上传号码
      * @param request
      * @return
@@ -460,6 +497,7 @@ public class MessageController {
         String sendFilePath = "";
         String errorFilePath = "";
         int sendNumber = 0;
+        int sendMessageNumber = 0;
 
         SecurityUser user = (SecurityUser)request.getSession().getAttribute("user");
 
@@ -499,10 +537,10 @@ public class MessageController {
                     messageValidator = SendMessage.handleFileVariableSMS(messageValidator,smocProperties,user.getOrganization());
                 }
 
-
                 errorFilePath = messageValidator.getExceptionNumberAttachment();
                 sendFilePath = messageValidator.getSendNumberAttachment();
                 sendNumber = messageValidator.getSubmitNumber();
+                sendMessageNumber = messageValidator.getSendMessageNumber();
                 if(!StringUtils.isEmpty(errorFilePath)){
                     request.getSession().setAttribute("errorFilePath", errorFilePath);
                 }
@@ -521,7 +559,74 @@ public class MessageController {
         result.put("sendFilePath", sendFilePath);
         result.put("errorFilePath", errorFilePath);
         result.put("sendNumber", sendNumber);
+        result.put("sendMessageNumber", sendMessageNumber);
         return result;
+    }
+
+    /**
+     * 根据文件类型下载各类号码文件
+     */
+    @RequestMapping(value = "/download/{fileType}/{id}", method = RequestMethod.GET)
+    public ResponseEntity<byte[]> downloadFile(@PathVariable String fileType, @PathVariable String id, HttpServletRequest request) {
+        ResponseEntity<byte[]> entity = null;
+
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        ResponseData<MessageWebTaskInfoValidator> data = messageService.findById(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            return entity;
+        }
+
+        //查看任务是否属于改企业
+        if(!user.getOrganization().equals(data.getData().getEnterpriseId())){
+            return entity;
+        }
+
+        MessageWebTaskInfoValidator messageValidator = data.getData();
+
+        File downloadFile = null;
+        if("numberFiles".equals(fileType)){
+            downloadFile = new File(smocProperties.getMobileFileRootPath() + messageValidator.getNumberFiles());
+        }else if("sendNumber".equals(fileType)){
+            downloadFile = new File(smocProperties.getMobileFileRootPath() + messageValidator.getSendNumberAttachment());
+        }else if("exceptionFile".equals(fileType)){
+            downloadFile = new File(smocProperties.getMobileFileRootPath() + messageValidator.getExceptionNumberAttachment());
+        }else if("reportFile".equals(fileType)){
+            downloadFile = new File(smocProperties.getMobileFileRootPath() + messageValidator.getReportAttachment());
+        }else{
+            return entity;
+        }
+
+        //文件不存在
+        if(!downloadFile.exists()){
+            log.info("[短信群发][download][{}]数据::{}", user.getUserName(), "文件不存在:"+downloadFile.getAbsolutePath());
+            return entity;
+        }
+
+        //读取文件内容输入流中
+        InputStream in = null;
+        try {
+            in = new FileInputStream(downloadFile);
+            byte[] body = new byte[in.available()];
+            in.read(body);
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Content-Disposition", "attchement;filename=" + downloadFile.getName());
+            HttpStatus statusCode = HttpStatus.OK;
+            entity = new ResponseEntity<byte[]>(body, headers, statusCode);
+        } catch (Exception e) {
+            log.error("[短信群发][download][{}]数据::{}", user.getUserName(), e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if(in!=null){
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return entity;
     }
 
     /**

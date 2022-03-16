@@ -105,7 +105,8 @@
                             <table class="table table table-hover m-10" style="margin-top: -12px;">
                                 <thead>
                                 <tr>
-                                    <th style="width:170px">账号/模板ID</th>
+                                    <th style="width:130px">账号</th>
+                                    <th style="width:170px">任务ID/模板ID</th>
                                     <th>发送内容</th>
                                     <th style="width:170px">发送号码数/接受号码数</th>
                                     <th style="width:155px">发送状态</th>
@@ -119,14 +120,15 @@
                                 <thead>
                                 <tbody>
                                     <tr th:each="info:${list}">
-                                        <td style="vertical-align: middle;line-height: 26px">[[${info.businessAccount}]]<br>[[${info.templateId}]]</td>
+                                        <td style="vertical-align: middle;line-height: 26px">[[${info.businessAccount}]]</td>
+                                        <td style="vertical-align: middle;line-height: 26px">[[${info.id}]]<br>[[${info.templateId}]]</td>
                                         <td style="vertical-align: middle;line-height: 26px">
                                             [[${info.messageContent}]]
                                         </td>
                                         <td style="vertical-align: middle;line-height: 26px;width:100px">
                                                 <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
                                                       style="width:90px;text-align:left"
-                                                      class="autonumber">[[${info.submitNumber}]]</span><br>
+                                                      class="autonumber">[[${info.submitNumber}]]</span>/
                                             <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
                                                   style="width:90px;text-align:left"
                                                   class="autonumber">[[${info.successSendNumber}]]</span>
@@ -140,7 +142,8 @@
                                         <td style="vertical-align: middle;line-height: 26px;width:160px"> [[${info.appleSendTime}]]<br>[[${info.sendTime}]]
                                         </td>
                                         <td style="vertical-align: middle;width:100px">
-                                            <a
+                                            <a sec:authorize-url="/message/detail/*"
+                                               th:href="@{/message/detail/{id}(id=${info.id})}"
                                                     data-toggle="tooltip" data-placement="bottom"
                                                     data-original-title="明细"
                                                     class="on-default edit-row"
