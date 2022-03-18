@@ -154,4 +154,14 @@ public class MessageWebTaskInfoService {
         StatisticMessageSend data = messageWebTaskInfoRepository.statisticMessageSendCount(messageAccountValidator);
         return ResponseDataUtil.buildSuccess(data);
     }
+
+    /**
+     * 统计短信提交发送量
+     * @param messageWebTaskInfoValidator
+     * @return
+     */
+    public ResponseData<StatisticMessageSend> statisticSubmitMessageSendCount(MessageWebTaskInfoValidator messageWebTaskInfoValidator) {
+        StatisticMessageSend data = messageWebTaskInfoRepository.statisticSubmitMessageSendCount(messageWebTaskInfoValidator);
+        return ResponseDataUtil.buildSuccess(data);
+    }
 }

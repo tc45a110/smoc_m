@@ -37,4 +37,16 @@ public class MessageDetailInfoController {
 
         return messageDetailInfoService.page(pageParams);
     }
+
+    /**
+     * 统计自服务平台短信明细列表
+     *
+     * @param pageParams
+     * @return
+     */
+    @RequestMapping(value = "/servicerPage", method = RequestMethod.POST)
+    public ResponseData<PageList<MessageDetailInfoValidator>> servicerPage(@RequestBody PageParams<MessageDetailInfoValidator> pageParams) {
+
+        return messageDetailInfoService.servicerPage(pageParams);
+    }
 }

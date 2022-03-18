@@ -114,4 +114,19 @@ public class MessageService {
             return ResponseDataUtil.buildError(e.getMessage());
         }
     }
+
+    /**
+     * 统计短信提交发送量
+     * @param messageWebTaskInfoValidator
+     * @return
+     */
+    public ResponseData<StatisticMessageSend> statisticSubmitMessageSendCount(MessageWebTaskInfoValidator messageWebTaskInfoValidator) {
+        try {
+            ResponseData<StatisticMessageSend> data = this.messageFeignClient.statisticSubmitMessageSendCount(messageWebTaskInfoValidator);
+            return data;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
 }

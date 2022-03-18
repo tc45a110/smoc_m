@@ -7,13 +7,12 @@ import org.springframework.stereotype.Component;
 
 /**
  * 配置属性文件
- * 2020/5/16 9:23
  **/
 @Setter
 @Getter
 @Component
-@ConfigurationProperties(prefix = "com.manpuman.cloud.smoc")
-public class SmocProperties {
+@ConfigurationProperties(prefix = "com.manpuman.cloud.smoc.message")
+public class MessageProperties {
 
     //合同、资质文件路径
     private String enterpriseFilePath;

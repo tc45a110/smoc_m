@@ -5,10 +5,9 @@ import com.smoc.cloud.common.smoc.template.MessageWebTaskInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.common.utils.Utils;
-import com.smoc.cloud.properties.SmocProperties;
+import com.smoc.cloud.properties.MessageProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -34,7 +33,7 @@ public class SendMessage {
      * @param org
      * @return
      */
-    public static MessageWebTaskInfoValidator handleFileSMS(MessageWebTaskInfoValidator messageValidator,SmocProperties smocProperties,String org) {
+    public static MessageWebTaskInfoValidator handleFileSMS(MessageWebTaskInfoValidator messageValidator, MessageProperties smocProperties, String org) {
 
         BufferedReader reader = null;
 
@@ -47,6 +46,8 @@ public class SendMessage {
             Integer sendMessageNumber = 0;
             //拆分后的总条数
             Integer sendMessageNumberSplit = 0;
+            //上传文件字节数，解析后更新保存数据库
+            Long originalAttachmentSize = 0l;
 
             //经过去重，校验手机号格式，变量参数，黑名单后得到的待发送号码集合
             HashSet<String> validNumbers = new HashSet<String>();
@@ -60,6 +61,7 @@ public class SendMessage {
             String fileSource = messageValidator.getNumberFiles();
             if (!StringUtils.isEmpty(fileSource)) {
                 File originalFile = new File(smocProperties.getMobileFileRootPath() + fileSource);
+                originalAttachmentSize = originalFile.length();
                 reader = new BufferedReader(new FileReader(originalFile));
                 String tmp = null;
                 while ((tmp = reader.readLine()) != null) {
@@ -109,6 +111,7 @@ public class SendMessage {
             messageValidator.setSendNumberAttachment(fileSendPath);
             messageValidator.setExceptionNumberAttachment(fileError);
             messageValidator.setSubmitNumber(sendMessageNumber);
+            messageValidator.setNumberAttachmentSize(originalAttachmentSize);
             messageValidator.setSuccessNumber(sendMessageNumber);
             messageValidator.setSuccessNumber(sendMessageNumberSplit);
         } catch (Exception e) {
@@ -134,7 +137,7 @@ public class SendMessage {
      * @param org
      * @return
      */
-    public static MessageWebTaskInfoValidator FileSMSInput(MessageWebTaskInfoValidator messageValidator, SmocProperties smocProperties, String org) {
+    public static MessageWebTaskInfoValidator FileSMSInput(MessageWebTaskInfoValidator messageValidator, MessageProperties smocProperties, String org) {
         BufferedReader reader = null;
 
         try {
@@ -146,6 +149,8 @@ public class SendMessage {
             Integer sendMessageNumber = 0;
             //拆分后的总条数
             Integer sendMessageNumberSplit = 0;
+            //上传文件字节数，解析后更新保存数据库
+            Long originalAttachmentSize = 0l;
 
             //经过去重，校验手机号格式，变量参数，黑名单后得到的待发送号码集合
             HashSet<String> validNumbers = new HashSet<String>();
@@ -214,6 +219,7 @@ public class SendMessage {
             messageValidator.setSendNumberAttachment(fileSendPath);
             messageValidator.setExceptionNumberAttachment(fileError);
             messageValidator.setSubmitNumber(sendMessageNumber);
+            messageValidator.setNumberAttachmentSize(originalAttachmentSize);
             messageValidator.setSuccessNumber(sendMessageNumber);
             messageValidator.setSuccessNumber(sendMessageNumberSplit);
         } catch (Exception e) {
@@ -232,7 +238,7 @@ public class SendMessage {
 
     }
 
-    public static MessageWebTaskInfoValidator handleFileVariableSMS(MessageWebTaskInfoValidator messageValidator, SmocProperties smocProperties, String organization) {
+    public static MessageWebTaskInfoValidator handleFileVariableSMS(MessageWebTaskInfoValidator messageValidator, MessageProperties smocProperties, String organization) {
 
         BufferedReader reader = null;
 
@@ -245,6 +251,8 @@ public class SendMessage {
             Integer sendMessageNumber = 0;
             //拆分后的总条数
             Integer sendMessageNumberSplit = 0;
+            //上传文件字节数，解析后更新保存数据库
+            Long originalAttachmentSize = 0l;
 
             //经过去重，校验手机号格式，变量参数，黑名单后得到的待发送号码集合
             HashSet<String> validNumbers = new HashSet<String>();
@@ -259,6 +267,7 @@ public class SendMessage {
             String fileSource = messageValidator.getNumberFiles();
             if (!StringUtils.isEmpty(fileSource)) {
                 File originalFile = new File(smocProperties.getMobileFileRootPath() + fileSource);
+                originalAttachmentSize = originalFile.length();
                 reader = new BufferedReader(new FileReader(originalFile));
                 String tmp = null;
                 while ((tmp = reader.readLine()) != null) {
@@ -333,6 +342,7 @@ public class SendMessage {
             messageValidator.setSendNumberAttachment(fileSendPath);
             messageValidator.setExceptionNumberAttachment(fileError);
             messageValidator.setSubmitNumber(sendMessageNumber);
+            messageValidator.setNumberAttachmentSize(originalAttachmentSize);
             messageValidator.setSuccessNumber(sendMessageNumber);
             messageValidator.setSuccessNumber(sendMessageNumberSplit);
         } catch (Exception e) {

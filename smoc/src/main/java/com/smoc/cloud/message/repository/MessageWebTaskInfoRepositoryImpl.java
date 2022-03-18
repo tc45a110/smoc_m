@@ -250,9 +250,91 @@ public class MessageWebTaskInfoRepositoryImpl extends BasePageRepository {
             paramsList.add(qo.getBusinessType().trim());
         }
 
+        //企业
         if (!StringUtils.isEmpty(qo.getEnterpriseId())) {
             sqlBuffer.append(" and t.ENTERPRISE_ID =?");
             paramsList.add(qo.getEnterpriseId().trim());
+        }
+
+        //账号
+        if (!StringUtils.isEmpty(qo.getAccountId())) {
+            sqlBuffer.append(" and t.BUSINESS_ACCOUNT like ?");
+            paramsList.add("%"+qo.getAccountId().trim()+"%");
+        }
+
+        //时间起
+        if (!StringUtils.isEmpty(qo.getStartDate())) {
+            sqlBuffer.append(" and DATE_FORMAT(t.CREATED_TIME,'%Y-%m-%d') >=? ");
+            paramsList.add(qo.getStartDate().trim());
+        }
+        //时间止
+        if (!StringUtils.isEmpty(qo.getEndDate())) {
+            sqlBuffer.append(" and DATE_FORMAT(t.CREATED_TIME,'%Y-%m-%d') <=? ");
+            paramsList.add(qo.getEndDate().trim());
+        }
+
+        //根据参数个数，组织参数值
+        Object[] params = new Object[paramsList.size()];
+        paramsList.toArray(params);
+
+        List<StatisticMessageSend> list = this.queryForObjectList(sqlBuffer.toString(), params, new StatisticMessageSendRowMapper());
+        StatisticMessageSend statisticMessageSend = new StatisticMessageSend();
+        if(!StringUtils.isEmpty(list) && list.size()>0){
+            statisticMessageSend = list.get(0);
+        }
+
+        return statisticMessageSend;
+
+    }
+
+    /**
+     * 统计短信提交发送量
+     *
+     * @param qo
+     * @return
+     */
+    public StatisticMessageSend statisticSubmitMessageSendCount(MessageWebTaskInfoValidator qo) {
+
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append(" sum(t.SUBMIT_NUMBER) SUBMIT_NUMBER,");
+        sqlBuffer.append(" sum(t.SUCCESS_NUMBER) SUCCESS_NUMBER,");
+        sqlBuffer.append(" sum(t.SUCCESS_SEND_NUMBER) SUCCESS_SEND_NUMBER,");
+        sqlBuffer.append(" sum(t.FAILURE_NUMBER) FAILURE_NUMBER,");
+        sqlBuffer.append(" sum(t.NO_REPORT_NUMBER) NO_REPORT_NUMBER");
+        sqlBuffer.append(" from message_web_task_info t");
+        sqlBuffer.append(" where 1=1 ");
+
+        List<Object> paramsList = new ArrayList<Object>();
+
+        //业务类型
+        if (!StringUtils.isEmpty(qo.getBusinessType())) {
+            sqlBuffer.append(" and t.BUSINESS_TYPE =?");
+            paramsList.add(qo.getBusinessType().trim());
+        }
+
+        //企业
+        if (!StringUtils.isEmpty(qo.getEnterpriseId())) {
+            sqlBuffer.append(" and t.ENTERPRISE_ID =?");
+            paramsList.add(qo.getEnterpriseId().trim());
+        }
+
+        //账号
+        if (!StringUtils.isEmpty(qo.getBusinessAccount())) {
+            sqlBuffer.append(" and t.BUSINESS_ACCOUNT like ?");
+            paramsList.add("%"+qo.getBusinessAccount().trim()+"%");
+        }
+
+        //任务id
+        if (!StringUtils.isEmpty(qo.getId())) {
+            sqlBuffer.append(" and t.ID =?");
+            paramsList.add(qo.getId().trim());
+        }
+
+        //内容
+        if (!StringUtils.isEmpty(qo.getMessageContent())) {
+            sqlBuffer.append(" and t.MESSAGE_CONTENT like ?");
+            paramsList.add("%"+qo.getMessageContent().trim()+"%");
         }
 
         //时间起

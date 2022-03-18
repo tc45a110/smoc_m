@@ -75,6 +75,8 @@ public class MessageWebTaskInfoValidator {
 
     //原手机号上传路径
     private String numberFiles;
+    //文件大小
+    private Long numberAttachmentSize;
     //发送手机号路径
     private String sendNumberAttachment;
     //异常手机号路径

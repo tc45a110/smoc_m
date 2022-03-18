@@ -53,4 +53,8 @@ public class MessageDetailInfoValidator {
 
     private String startDate;
     private String endDate;
+
+    private String enterpriseId;
+
+    private String businessType;
 }

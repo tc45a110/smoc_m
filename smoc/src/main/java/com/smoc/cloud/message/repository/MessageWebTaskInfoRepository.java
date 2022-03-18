@@ -48,4 +48,11 @@ public interface MessageWebTaskInfoRepository extends JpaRepository<MessageWebTa
      * @return
      */
     StatisticMessageSend statisticMessageSendCount(MessageAccountValidator messageAccountValidator);
+
+    /**
+     * 统计短信提交发送量
+     * @param messageWebTaskInfoValidator
+     * @return
+     */
+    StatisticMessageSend statisticSubmitMessageSendCount(MessageWebTaskInfoValidator messageWebTaskInfoValidator);
 }

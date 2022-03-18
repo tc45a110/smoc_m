@@ -9,7 +9,7 @@ import com.smoc.cloud.common.smoc.customer.validator.SystemAttachmentValidator;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.material.service.SystemAttachmentService;
-import com.smoc.cloud.properties.SmocProperties;
+import com.smoc.cloud.properties.MessageProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -36,7 +36,7 @@ public class SystemAttachmentController {
     private SystemAttachmentService systemAttachmentService;
 
     @Autowired
-    private SmocProperties smocProperties;
+    private MessageProperties smocProperties;
 
     @Autowired
     private SystemUserLogService systemUserLogService;
@@ -122,7 +122,6 @@ public class SystemAttachmentController {
      */
     @RequestMapping(value = "/download/{id}", method = RequestMethod.GET)
     public void download(@PathVariable String id, HttpServletRequest request, HttpServletResponse response) {
-
         //完成参数规则验证
         MpmIdValidator validator = new MpmIdValidator();
         validator.setId(id);

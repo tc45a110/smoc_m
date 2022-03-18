@@ -139,4 +139,15 @@ public class MessageWebTaskInfoController {
 
         return messageWebTaskInfoService.statisticMessageSendCount(messageAccountValidator);
     }
+
+    /**
+     * 统计短信提交发送量
+     * @param messageWebTaskInfoValidator
+     * @return
+     */
+    @RequestMapping(value = "/statisticSubmitMessageSendCount", method = RequestMethod.POST)
+    public ResponseData<StatisticMessageSend> statisticSubmitMessageSendCount(@RequestBody MessageWebTaskInfoValidator messageWebTaskInfoValidator) {
+
+        return messageWebTaskInfoService.statisticSubmitMessageSendCount(messageWebTaskInfoValidator);
+    }
 }

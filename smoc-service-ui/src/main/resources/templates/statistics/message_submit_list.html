@@ -166,8 +166,8 @@
                                     <td style="vertical-align: middle;line-height: 26px;width:160px">[[${info.createdTime}]]
                                     </td>
                                     <td style="vertical-align: middle;width:100px">
-                                        <a sec:authorize-url="/message/detail/*"
-                                           th:href="@{/message/detail/{id}(id=${info.id})}"
+                                        <a sec:authorize-url="/statistics/submit/message/detail/*"
+                                           th:href="@{/statistics/submit/message/detail/{id}(id=${info.id})}"
                                                 data-toggle="tooltip" data-placement="bottom"
                                                 data-original-title="明细"
                                                 class="on-default edit-row"

@@ -96,9 +96,20 @@ public class MessageWebTaskInfo {
     @Column(name = "ENTERPRISE_ID")
     private String enterpriseId;
 
+    @Column(name = "MESSAGE_TYPE")
     private String messageType;
 
-    @Column(name = "MESSAGE_TYPE")
+    @Column(name = "NUMBER_ATTACHMENT_SIZE")
+    private Long numberAttachmentSize;
+
+    public Long getNumberAttachmentSize() {
+        return numberAttachmentSize;
+    }
+
+    public void setNumberAttachmentSize(Long numberAttachmentSize) {
+        this.numberAttachmentSize = numberAttachmentSize;
+    }
+
     public String getMessageType() {
         return messageType;
     }

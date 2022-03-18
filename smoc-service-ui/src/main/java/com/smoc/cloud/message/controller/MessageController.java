@@ -21,7 +21,7 @@ import com.smoc.cloud.material.service.MessageTemplateService;
 import com.smoc.cloud.material.service.SequenceService;
 import com.smoc.cloud.message.service.MessageService;
 import com.smoc.cloud.message.utils.SendMessage;
-import com.smoc.cloud.properties.SmocProperties;
+import com.smoc.cloud.properties.MessageProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -72,7 +72,7 @@ public class MessageController {
     private SystemUserLogService systemUserLogService;
 
     @Autowired
-    private SmocProperties smocProperties;
+    private MessageProperties smocProperties;
 
     /**
      * 短信发送列表
@@ -503,6 +503,12 @@ public class MessageController {
         ResponseData<MessageWebTaskInfoValidator> infoData = messageService.findById(id);
         if (!ResponseCode.SUCCESS.getCode().equals(infoData.getCode())) {
             view.addObject("error", infoData.getCode() + ":" + infoData.getMessage());
+            return view;
+        }
+
+        //查看是否是自己企业
+        if(!user.getOrganization().equals(infoData.getData().getEnterpriseId())){
+            view.addObject("error", "无法查看！");
             return view;
         }
 

@@ -33,4 +33,15 @@ public class MessageDetailInfoService {
         return ResponseDataUtil.buildSuccess(page);
 
     }
+
+    /**
+     * 统计自服务平台短信明细列表
+     * @param pageParams
+     * @return
+     */
+    public ResponseData<PageList<MessageDetailInfoValidator>> servicerPage(PageParams<MessageDetailInfoValidator> pageParams) {
+        PageList<MessageDetailInfoValidator> page = messageDetailInfoRepository.servicerPage(pageParams);
+
+        return ResponseDataUtil.buildSuccess(page);
+    }
 }

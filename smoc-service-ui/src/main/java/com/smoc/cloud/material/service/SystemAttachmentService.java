@@ -6,7 +6,7 @@ import com.smoc.cloud.common.smoc.customer.validator.SystemAttachmentValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.material.remote.SystemAttachmentFeignClient;
-import com.smoc.cloud.properties.SmocProperties;
+import com.smoc.cloud.properties.MessageProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -34,7 +34,7 @@ public class SystemAttachmentService {
 
 
     @Autowired
-    private SmocProperties smocProperties;
+    private MessageProperties smocProperties;
 
     @Autowired
     private SystemAttachmentFeignClient systemAttachmentFeignClient;

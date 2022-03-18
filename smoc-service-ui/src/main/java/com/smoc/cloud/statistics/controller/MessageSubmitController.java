@@ -6,11 +6,12 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
-import com.smoc.cloud.common.smoc.message.MessageAccountValidator;
 import com.smoc.cloud.common.smoc.message.model.StatisticMessageSend;
 import com.smoc.cloud.common.smoc.template.AccountTemplateInfoValidator;
 import com.smoc.cloud.common.smoc.template.MessageWebTaskInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
+import com.smoc.cloud.common.validator.MpmIdValidator;
+import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.message.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -66,12 +67,7 @@ public class MessageSubmitController {
         }
 
         //统计发送量
-        MessageAccountValidator messageAccountValidator = new MessageAccountValidator();
-        messageAccountValidator.setEnterpriseId(user.getOrganization());
-        messageAccountValidator.setBusinessType(businessType);
-        messageAccountValidator.setStartDate(messageWebTaskInfoValidator.getStartDate());
-        messageAccountValidator.setEndDate(messageWebTaskInfoValidator.getEndDate());
-        ResponseData<StatisticMessageSend> statisticDate = messageService.statisticMessageSendCount(messageAccountValidator);
+        ResponseData<StatisticMessageSend> statisticDate = messageService.statisticSubmitMessageSendCount(messageWebTaskInfoValidator);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;
@@ -113,12 +109,7 @@ public class MessageSubmitController {
         }
 
         //统计发送量
-        MessageAccountValidator messageAccountValidator = new MessageAccountValidator();
-        messageAccountValidator.setEnterpriseId(user.getOrganization());
-        messageAccountValidator.setBusinessType(messageWebTaskInfoValidator.getBusinessType());
-        messageAccountValidator.setStartDate(messageWebTaskInfoValidator.getStartDate());
-        messageAccountValidator.setEndDate(messageWebTaskInfoValidator.getEndDate());
-        ResponseData<StatisticMessageSend> statisticDate = messageService.statisticMessageSendCount(messageAccountValidator);
+        ResponseData<StatisticMessageSend> statisticDate = messageService.statisticSubmitMessageSendCount(messageWebTaskInfoValidator);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;
@@ -127,7 +118,47 @@ public class MessageSubmitController {
         view.addObject("messageWebTaskInfoValidator", messageWebTaskInfoValidator);
         view.addObject("list", data.getData().getList());
         view.addObject("pageParams", data.getData().getPageParams());
+        view.addObject("statisticDate", statisticDate.getData());
         view.addObject("businessType", messageWebTaskInfoValidator.getBusinessType());
+        return view;
+    }
+
+    /**
+     * 查看明细
+     *
+     * @return
+     */
+    @RequestMapping(value = "/message/detail/{id}", method = RequestMethod.GET)
+    public ModelAndView detail(@PathVariable String id, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("statistics/message_submit_detail");
+
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
+
+        //查询信息
+        ResponseData<MessageWebTaskInfoValidator> infoData = messageService.findById(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(infoData.getCode())) {
+            view.addObject("error", infoData.getCode() + ":" + infoData.getMessage());
+            return view;
+        }
+
+        //查看是否是自己企业
+        if(!user.getOrganization().equals(infoData.getData().getEnterpriseId())){
+            view.addObject("error", "无法查看！");
+            return view;
+        }
+
+        view.addObject("messageWebTaskInfoValidator", infoData.getData());
+        view.addObject("signType", infoData.getData().getInfoType());
+        view.addObject("businessType", infoData.getData().getBusinessType());
+
         return view;
     }
 }

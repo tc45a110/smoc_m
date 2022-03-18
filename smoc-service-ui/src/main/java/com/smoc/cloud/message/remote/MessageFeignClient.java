@@ -63,4 +63,12 @@ public interface MessageFeignClient {
      */
     @RequestMapping(value = "/message/web/task/statisticMessageSendCount", method = RequestMethod.POST)
     ResponseData<StatisticMessageSend> statisticMessageSendCount(@RequestBody MessageAccountValidator messageAccountValidator) throws Exception;
+
+    /**
+     * 统计短信提交发送量
+     * @param messageWebTaskInfoValidator
+     * @return
+     */
+    @RequestMapping(value = "/message/web/task/statisticSubmitMessageSendCount", method = RequestMethod.POST)
+    ResponseData<StatisticMessageSend> statisticSubmitMessageSendCount(@RequestBody MessageWebTaskInfoValidator messageWebTaskInfoValidator);
 }

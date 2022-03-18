@@ -1,12 +1,15 @@
 $(document).ready(function(){
 	var contextPath =$("#path").val();
 	var messageTypeInit = $("#messageType").val();
-	var initFileSize =$("#originalAttachment").val();
+	var initFilePath =$("#originalAttachment").val();
+	var fileSize = $("#originalAttachmentSize").val();
 	var initFiles =[];
-	if(initFileSize !="" && initFileSize!=null ){
+
+	if(initFilePath !="" && initFilePath!=null ){
 		initFiles = [{
 			name: "号码文件.txt",
 			type: "txt",
+			size:fileSize,
 			file: ""
 		}];
 	}
@@ -15,7 +18,7 @@ $(document).ready(function(){
 		maxSize: 10,
 		extensions:["txt"],
 		files: initFiles,
-		changeInput: '<div class="jFiler-input-dragDrop"><div class="jFiler-input-inner"><div class="jFiler-input-icon"><i class="icon-jfi-cloud-up-o"></i></div><div class="jFiler-input-text"></div><a class="jFiler-input-choose-btn btn btn-custom waves-effect waves-light">上传附件</a></div></div>',
+		changeInput: '<div class="jFiler-input-dragDrop"><div class="jFiler-input-inner"><div class="jFiler-input-icon"><i class="icon-jfi-cloud-up-o"></i></div><div class="jFiler-input-text"><h3>Drag & Drop files here</h3> <span style="display:inline-block; margin: 15px 0">or</span></div><a class="jFiler-input-choose-btn btn btn-custom waves-effect waves-light">上传附件</a></div></div>',
 		showThumbs: true,
 		theme: "dragdropbox",
 		templates: {

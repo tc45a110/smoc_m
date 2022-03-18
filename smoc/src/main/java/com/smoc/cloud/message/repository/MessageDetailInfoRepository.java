@@ -35,4 +35,11 @@ public interface MessageDetailInfoRepository extends JpaRepository<MessageDetail
      * @return
      */
     int statisticMessageNumber(MessageDetailInfoValidator validator);
+
+    /**
+     * 统计自服务平台短信明细列表
+     * @param pageParams
+     * @return
+     */
+    PageList<MessageDetailInfoValidator> servicerPage(PageParams<MessageDetailInfoValidator> pageParams);
 }
