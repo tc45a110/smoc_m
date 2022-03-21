@@ -4,6 +4,7 @@ import com.smoc.cloud.common.BasePageRepository;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.smoc.configuate.validator.SystemHistoryPriceChangeRecordValidator;
+import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.configure.advance.rowmapper.SystemHistoryPriceChangeRecordRowMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
@@ -16,10 +17,11 @@ public class SystemHistoryPriceChangeRecordRepositoryImpl extends BasePageReposi
 
     /**
      * 查询列表
+     *
      * @param pageParams
      * @return
      */
-    public PageList<SystemHistoryPriceChangeRecordValidator> page(PageParams<SystemHistoryPriceChangeRecordValidator> pageParams){
+    public PageList<SystemHistoryPriceChangeRecordValidator> page(PageParams<SystemHistoryPriceChangeRecordValidator> pageParams) {
 
         SystemHistoryPriceChangeRecordValidator qo = pageParams.getParams();
 
@@ -66,5 +68,63 @@ public class SystemHistoryPriceChangeRecordRepositoryImpl extends BasePageReposi
         return pageList;
 
 
+    }
+
+    /**
+     * 批量更新 历史价格
+     *
+     * @param list
+     * @param changeType
+     */
+    public void batchUpdateHistoryPrice(List<SystemHistoryPriceChangeRecordValidator> list, String changeType) {
+
+        if ("CHANNEL".equals(changeType)) {
+            batchUpdateChannel(list);
+        }
+
+        if ("ACCOUNT".equals(changeType)) {
+            batchUpdateAccount(list);
+        }
+
+
+    }
+
+    public void batchUpdateChannel(List<SystemHistoryPriceChangeRecordValidator> list) {
+
+        List<String> sqlList = new ArrayList();
+
+
+        for (SystemHistoryPriceChangeRecordValidator validator : list) {
+
+            StringBuffer insertSql = new StringBuffer("insert into system_history_price_change_record(ID,CHANGE_TYPE,BUSINESS_ID,PRICE_AREA,START_DATE,CHANGE_PRICE,CREATED_BY,CREATED_TIME) ");
+            insertSql.append(" values('"+ UUID.uuid32() +"','CHANNEL','"+validator.getBusinessId()+"','"+validator.getPriceArea()+"','"+validator.getStartDate()+"',"+validator.getChangePrice()+",'"+validator.getCreatedBy()+"',now())");
+            sqlList.add(insertSql.toString());
+
+            //更新当前价格
+            String updateChannelPrice = "update config_channel_price set CHANNEL_PRICE=" + validator.getChangePrice() + ",UPDATED_TIME = now(),UPDATED_BY='" + validator.getCreatedBy() + "' where id = '" + validator.getId() + "'";
+            sqlList.add(updateChannelPrice);
+
+            //更新通道历史价格中的，价格
+            String updateChannelHistoryPrice = "update config_channel_price_history set CHANNEL_PRICE=" + validator.getChangePrice() + ",UPDATED_TIME = now(),UPDATED_BY='" + validator.getCreatedBy() + "' where CHANNEL_ID='" + validator.getBusinessId() + "' and AREA_CODE ='"+validator.getPriceArea()+"' and PRICE_DATE>='"+validator.getStartDate()+"' ";
+            sqlList.add(updateChannelHistoryPrice);
+
+            String updateMessageDailyStatisticsChannelPrice = "update message_daily_statistics set CHANNEL_PRICE=" + validator.getChangePrice() + ",UPDATED_TIME = now(),UPDATED_BY='" + validator.getCreatedBy() + "' where CHANNEL_ID='" + validator.getBusinessId() + "' and PRICE_AREA_CODE ='"+validator.getPriceArea()+"' and MESSAGE_DATE>='"+validator.getStartDate()+"' ";
+            sqlList.add(updateMessageDailyStatisticsChannelPrice);
+
+        }
+
+        log.info("[通道历史价格修改]：{}",sqlList.toString());
+        //根据参数个数，组织参数值
+        String[] params = new String[sqlList.size()];
+        sqlList.toArray(params);
+        jdbcTemplate.batchUpdate(params);
+
+    }
+
+    public void batchUpdateAccount(List<SystemHistoryPriceChangeRecordValidator> list) {
+        //更新当前价格
+        for (SystemHistoryPriceChangeRecordValidator validator : list) {
+
+        }
     }
 }

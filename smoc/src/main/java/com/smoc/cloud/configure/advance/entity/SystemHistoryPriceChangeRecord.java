@@ -13,7 +13,7 @@ public class SystemHistoryPriceChangeRecord {
     private String changeType;
     private String businessId;
     private String priceArea;
-    private Date startDate;
+    private String startDate;
     private BigDecimal changePrice;
     private String createdBy;
     private Date createdTime;
@@ -62,11 +62,11 @@ public class SystemHistoryPriceChangeRecord {
 
     @Basic
     @Column(name = "START_DATE")
-    public Date getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 

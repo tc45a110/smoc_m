@@ -82,26 +82,32 @@
                             <table class="table table table-hover m-10" style="margin-top: -12px;">
                                 <thead>
                                 <tr>
-                                    <th>变更类型</th>
+<!--                                    <th>变更类型</th>-->
                                     <th>[[${systemHistoryPriceChangeRecordValidator.changeType=='CHANNEL'?'通道':'业务账号'}]]ID</th>
                                     <th>价格区域</th>
                                     <th>变更后价格</th>
-                                    <th>变更价格开始日期</th>
-                                    <th>创建日期</th>
-                                    <th>操作</th>
+                                    <th>历史价格调整起（包括当日）</th>
+                                    <th>操作日期</th>
+                                    <th>操作人</th>
                                 </tr>
                                 <thead>
                                 <tbody>
                                 <tr th:each="info:${list}">
-                                    <td>
-                                        [[${info.changeType}]]
-                                    </td>
+<!--                                    <td>-->
+<!--                                        [[${info.changeType}]]-->
+<!--                                    </td>-->
                                     <td>[[${info.businessId}]]</td>
-                                    <td>[[${info.priceArea}]]</td>
+                                    <td>
+                                        <mpm:tag id="province" identity="provices" name="province"
+                                                 show-type="button" key="code" mask-value="ALL"
+                                                 class="form-control"
+                                                 th:value="${info.priceArea}" title="业务区域"/>
+                                    </td>
                                     <td>[[${info.changePrice}]]</td>
                                     <td>[[${info.startDate}]]</td>
                                     <td>[[${info.createdTime}]]</td>
                                     <td style="line-height: 26px;">
+                                        [[${info.createdBy}]]
                                     </td>
                                 </tr>
 

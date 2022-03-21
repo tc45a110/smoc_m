@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Slf4j
 @Service
 public class SystemHistoryPriceChangeRecordService {
@@ -27,6 +29,22 @@ public class SystemHistoryPriceChangeRecordService {
         try {
             ResponseData<PageList<SystemHistoryPriceChangeRecordValidator>> pageList = this.systemHistoryPriceChangeRecordFeignClient.page(pageParams);
             return pageList;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 历史价格调整
+     * @param validators
+     * @param changeType
+     * @return
+     */
+    public ResponseData save(List<SystemHistoryPriceChangeRecordValidator> validators,String changeType) {
+        try {
+            ResponseData data = this.systemHistoryPriceChangeRecordFeignClient.save(validators,changeType);
+            return data;
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseDataUtil.buildError(e.getMessage());
