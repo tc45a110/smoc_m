@@ -98,10 +98,14 @@
 <!--                                    </td>-->
                                     <td>[[${info.businessId}]]</td>
                                     <td>
-                                        <mpm:tag id="province" identity="provices" name="province"
+                                        <mpm:tag th:if="${null == info.areaType || ''==info.areaType}" id="province" identity="provices" name="province"
                                                  show-type="button" key="code" mask-value="ALL"
                                                  class="form-control"
                                                  th:value="${info.priceArea}" title="业务区域"/>
+                                        <mpm:tag  th:if="${info.areaType=='1'}"  identity="carrier"
+                                                  show-type="button" key="code" th:value="${info.priceArea}" class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;"/>
+                                        <mpm:tag th:if="${info.areaType=='2'}"  identity="internationalArea"
+                                                 show-type="button" key="code" th:value="${info.priceArea}"  class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;"/>
                                     </td>
                                     <td>[[${info.changePrice}]]</td>
                                     <td>[[${info.startDate}]]</td>

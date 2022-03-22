@@ -13,6 +13,7 @@ public class SystemHistoryPriceChangeRecord {
     private String changeType;
     private String businessId;
     private String priceArea;
+    private String areaType;
     private String startDate;
     private BigDecimal changePrice;
     private String createdBy;
@@ -58,6 +59,16 @@ public class SystemHistoryPriceChangeRecord {
 
     public void setPriceArea(String priceArea) {
         this.priceArea = priceArea;
+    }
+
+    @Basic
+    @Column(name = "AREA_TYPE")
+    public String getAreaType() {
+        return areaType;
+    }
+
+    public void setAreaType(String areaType) {
+        this.areaType = areaType;
     }
 
     @Basic

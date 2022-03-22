@@ -15,6 +15,7 @@ public class SystemHistoryPriceChangeRecordRowMapper implements RowMapper<System
         qo.setChangeType(resultSet.getString("CHANGE_TYPE"));
         qo.setBusinessId(resultSet.getString("BUSINESS_ID"));
         qo.setPriceArea(resultSet.getString("PRICE_AREA"));
+        qo.setAreaType(resultSet.getString("AREA_TYPE"));
         qo.setStartDate(resultSet.getString("START_DATE"));
         qo.setChangePrice(resultSet.getBigDecimal("CHANGE_PRICE"));
         qo.setCreatedBy(resultSet.getString("CREATED_BY"));

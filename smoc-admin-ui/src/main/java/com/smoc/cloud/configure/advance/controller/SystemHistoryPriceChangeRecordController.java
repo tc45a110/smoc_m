@@ -8,10 +8,12 @@ import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelPriceValidator;
 import com.smoc.cloud.common.smoc.configuate.validator.SystemHistoryPriceChangeRecordValidator;
+import com.smoc.cloud.common.smoc.customer.validator.AccountFinanceInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.configure.advance.service.SystemHistoryPriceChangeRecordService;
 import com.smoc.cloud.configure.channel.service.ChannelPriceService;
+import com.smoc.cloud.customer.service.AccountFinanceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,6 +37,9 @@ public class SystemHistoryPriceChangeRecordController {
 
     @Autowired
     private ChannelPriceService channelPriceService;
+
+    @Autowired
+    private AccountFinanceService accountFinanceService;
 
     @Autowired
     private SystemHistoryPriceChangeRecordService systemHistoryPriceChangeRecordService;
@@ -99,11 +104,25 @@ public class SystemHistoryPriceChangeRecordController {
      *
      * @return
      */
-    @RequestMapping(value = "/center/{changeType}/{businessId}", method = RequestMethod.GET)
-    public ModelAndView center(@PathVariable String changeType, @PathVariable String businessId) {
-        ModelAndView view = new ModelAndView("configure/advance/history_price_change_center");
+    @RequestMapping(value = "/center/CHANNEL/{businessId}", method = RequestMethod.GET)
+    public ModelAndView channel(@PathVariable String businessId) {
+        ModelAndView view = new ModelAndView("configure/advance/channel_history_price_change_center");
 
-        view.addObject("changeType", changeType);
+        view.addObject("changeType", "CHANNEL");
+        view.addObject("businessId", businessId);
+        return view;
+    }
+
+    /**
+     * 创建 新历史价格变更记录
+     *
+     * @return
+     */
+    @RequestMapping(value = "/center/ACCOUNT/{businessId}", method = RequestMethod.GET)
+    public ModelAndView account(@PathVariable String businessId) {
+        ModelAndView view = new ModelAndView("configure/advance/account_history_price_change_center");
+
+        view.addObject("changeType", "ACCOUNT");
         view.addObject("businessId", businessId);
         return view;
     }
@@ -153,6 +172,7 @@ public class SystemHistoryPriceChangeRecordController {
             validator.setPriceArea(request.getParameter(ids[i] + "_areaCode"));
             validator.setStartDate(request.getParameter(ids[i] + "_date"));
             validator.setCreatedBy(user.getRealName());
+            validator.setAreaType(request.getParameter(ids[i] + "_carrierType"));
             if(null != accountMap.get(ids[i]) && accountMap.get(ids[i])) {
                 recordList.add(validator);
             }
@@ -173,9 +193,9 @@ public class SystemHistoryPriceChangeRecordController {
      *
      * @return
      */
-    @RequestMapping(value = "/add/{changeType}/{businessId}", method = RequestMethod.GET)
-    public ModelAndView add(@PathVariable String changeType, @PathVariable String businessId) {
-        ModelAndView view = new ModelAndView("configure/advance/history_price_change_edit");
+    @RequestMapping(value = "/add/CHANNEL/{businessId}", method = RequestMethod.GET)
+    public ModelAndView channel_add(@PathVariable String businessId) {
+        ModelAndView view = new ModelAndView("configure/advance/channel_history_price_change_edit");
 
 
         //根据通道id查询区域价格
@@ -208,7 +228,52 @@ public class SystemHistoryPriceChangeRecordController {
         view.addObject("endDate", endDate);
         view.addObject("channelPriceList", listData.getData());
 
-        view.addObject("changeType", changeType);
+        view.addObject("changeType", "CHANNEL");
+        view.addObject("businessId", businessId);
+        return view;
+    }
+
+    /**
+     * 创建 新历史价格变更记录
+     *
+     * @return
+     */
+    @RequestMapping(value = "/add/ACCOUNT/{businessId}", method = RequestMethod.GET)
+    public ModelAndView account_add(@PathVariable String businessId) {
+        ModelAndView view = new ModelAndView("configure/advance/account_history_price_change_edit");
+
+
+        //查询账号配置的运营商价格
+        AccountFinanceInfoValidator accountFinanceInfoValidator = new AccountFinanceInfoValidator();
+        accountFinanceInfoValidator.setAccountId(businessId);
+        ResponseData<List<AccountFinanceInfoValidator>> listData = accountFinanceService.findByAccountId(accountFinanceInfoValidator);
+        if (!ResponseCode.SUCCESS.getCode().equals(listData.getCode())) {
+            view.addObject("error", listData.getCode() + ":" + listData.getMessage());
+            return view;
+        }
+
+        //log.info("[数据]：{}",new Gson().toJson(listData.getData()));
+        String priceIds = "";
+        if (null != listData.getData() && listData.getData().size() > 0) {
+            for (AccountFinanceInfoValidator obj : listData.getData()) {
+                if ("".equals(priceIds)) {
+                    priceIds = obj.getId();
+                } else {
+                    priceIds += "," + obj.getId();
+                }
+            }
+        }
+
+        String endDate = DateTimeUtils.getDateFormat(new Date());
+        String startDate = DateTimeUtils.checkOption(endDate, -31);
+
+
+        view.addObject("priceIds", priceIds);
+        view.addObject("startDate", startDate);
+        view.addObject("endDate", endDate);
+        view.addObject("accountPriceList", listData.getData());
+
+        view.addObject("changeType", "ACCOUNT");
         view.addObject("businessId", businessId);
         return view;
     }

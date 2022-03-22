@@ -14,6 +14,7 @@ public class SystemHistoryPriceChangeRecordValidator {
     private String changeType;
     private String businessId;
     private String priceArea;
+    private String areaType;
     private String startDate;
     private BigDecimal changePrice;
     private String createdBy;

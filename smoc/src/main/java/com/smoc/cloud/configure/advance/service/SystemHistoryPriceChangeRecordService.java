@@ -41,7 +41,7 @@ public class SystemHistoryPriceChangeRecordService {
      */
     @Transactional
     public ResponseData save(List<SystemHistoryPriceChangeRecordValidator> list, String changeType) {
-        log.info("[历史价格调整]：{}", new Gson().toJson(list));
+        //log.info("[历史价格调整]：{}", new Gson().toJson(list));
 
         systemHistoryPriceChangeRecordRepository.batchUpdateHistoryPrice(list,changeType);
         return ResponseDataUtil.buildSuccess();
