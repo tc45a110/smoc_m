@@ -23,5 +23,5 @@ public interface SystemHistoryPriceChangeRecordRepository extends CrudRepository
      * @param list
      * @param changeType
      */
-    void batchUpdateHistoryPrice(List<SystemHistoryPriceChangeRecordValidator> list, String changeType);
+    void batchUpdateHistoryPrice(List<SystemHistoryPriceChangeRecordValidator> list, String changeType,String taskType);
 }

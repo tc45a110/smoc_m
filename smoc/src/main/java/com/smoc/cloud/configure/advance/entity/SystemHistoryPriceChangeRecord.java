@@ -16,6 +16,8 @@ public class SystemHistoryPriceChangeRecord {
     private String areaType;
     private String startDate;
     private BigDecimal changePrice;
+    private String taskType;
+    private String taskStatus;
     private String createdBy;
     private Date createdTime;
     private String updatedBy;
@@ -89,6 +91,26 @@ public class SystemHistoryPriceChangeRecord {
 
     public void setChangePrice(BigDecimal changePrice) {
         this.changePrice = changePrice;
+    }
+
+    @Basic
+    @Column(name = "TASK_TYPE")
+    public String getTaskType() {
+        return taskType;
+    }
+
+    public void setTaskType(String taskType) {
+        this.taskType = taskType;
+    }
+
+    @Basic
+    @Column(name = "TASK_STATUS")
+    public String getTaskStatus() {
+        return taskStatus;
+    }
+
+    public void setTaskStatus(String taskStatus) {
+        this.taskStatus = taskStatus;
     }
 
     @Basic

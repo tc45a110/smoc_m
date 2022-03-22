@@ -29,6 +29,6 @@ public interface SystemHistoryPriceChangeRecordFeignClient {
      * @param changeType
      * @return
      */
-    @RequestMapping(value = "/configure/price/history/save/{changeType}", method = RequestMethod.POST)
-    ResponseData save(@RequestBody List<SystemHistoryPriceChangeRecordValidator> validators, @PathVariable String changeType) throws Exception;
+    @RequestMapping(value = "/configure/price/history/save/{changeType}/{taskType}", method = RequestMethod.POST)
+    ResponseData save(@RequestBody List<SystemHistoryPriceChangeRecordValidator> validators, @PathVariable String changeType,@PathVariable String taskType) throws Exception;
 }

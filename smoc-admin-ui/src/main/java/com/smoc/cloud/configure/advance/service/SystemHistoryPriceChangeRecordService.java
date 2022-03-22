@@ -41,9 +41,9 @@ public class SystemHistoryPriceChangeRecordService {
      * @param changeType
      * @return
      */
-    public ResponseData save(List<SystemHistoryPriceChangeRecordValidator> validators,String changeType) {
+    public ResponseData save(List<SystemHistoryPriceChangeRecordValidator> validators,String changeType,String taskType) {
         try {
-            ResponseData data = this.systemHistoryPriceChangeRecordFeignClient.save(validators,changeType);
+            ResponseData data = this.systemHistoryPriceChangeRecordFeignClient.save(validators,changeType,taskType);
             return data;
         } catch (Exception e) {
             log.error(e.getMessage());

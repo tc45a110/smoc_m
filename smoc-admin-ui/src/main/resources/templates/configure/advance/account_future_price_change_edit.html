@@ -26,12 +26,12 @@
                         <div class="col-md-12 panel panel-color panel-info"
                              style="padding-left:0px;padding-right:0px;margin-top:20px">
                             <div class="panel-heading">
-                                <h3 class="panel-title">修改业务账号历史价格</h3>
+                                <h3 class="panel-title">修改业务账号未来价格</h3>
                             </div>
                             <div style="margin-top:20px;" id="help"
                                  class="alert alert-icon alert-danger alert-dismissible fade in" role="alert">
                                 <i class="mdi mdi-help-circle-outline"></i>
-                                <strong>操作提示：</strong> 价格调整提交成功后，历史价格会自动调整，不能进行修改操作。注意：只能调整30天内价格
+                                <strong>操作提示：</strong> 价格调整提交成功后，到了设定的日期后，价格会自动调整
                             </div>
                             <div class="panel-body">
                                 <div class="table-responsive">
@@ -42,7 +42,7 @@
                                             <th>价格区域</th>
                                             <th>现价格（元）</th>
                                             <th>调整后价格（元）</th>
-                                            <th>历史价格调整起（包括当日）</th>
+                                            <th>价格调整起（包括当日）</th>
                                         </tr>
                                         <thead>
                                         <tbody>
@@ -94,7 +94,7 @@
                                     <input type="hidden" id="accountIds"
                                            name="accountIds">
                                     <input type="hidden" id="taskType"
-                                           name="taskType" value="history">
+                                           name="taskType" value="future">
                                     <hr>
                                     <div class="text-center" style="margin-bottom:20px">
                                         <button sec:authorize-url="/configure/price/history/edit/ACCOUNT/save"

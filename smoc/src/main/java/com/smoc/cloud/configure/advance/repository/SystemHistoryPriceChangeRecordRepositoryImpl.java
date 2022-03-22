@@ -35,6 +35,8 @@ public class SystemHistoryPriceChangeRecordRepositoryImpl extends BasePageReposi
         sqlBuffer.append(" t.AREA_TYPE,");
         sqlBuffer.append(" DATE_FORMAT(t.START_DATE, '%Y-%m-%d')START_DATE, ");
         sqlBuffer.append(" t.CHANGE_PRICE,");
+        sqlBuffer.append(" t.TASK_TYPE,");
+        sqlBuffer.append(" t.TASK_STATUS,");
         sqlBuffer.append(" t.CREATED_BY,");
         sqlBuffer.append(" DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME ");
         sqlBuffer.append(" from system_history_price_change_record t ");
@@ -78,78 +80,119 @@ public class SystemHistoryPriceChangeRecordRepositoryImpl extends BasePageReposi
      * @param list
      * @param changeType
      */
-    public void batchUpdateHistoryPrice(List<SystemHistoryPriceChangeRecordValidator> list, String changeType) {
+    public void batchUpdateHistoryPrice(List<SystemHistoryPriceChangeRecordValidator> list, String changeType, String taskType) {
 
         if ("CHANNEL".equals(changeType)) {
-            batchUpdateChannel(list);
+            batchUpdateChannel(list, taskType);
         }
 
         if ("ACCOUNT".equals(changeType)) {
-            batchUpdateAccount(list);
+            batchUpdateAccount(list, taskType);
         }
 
 
     }
 
-    public void batchUpdateChannel(List<SystemHistoryPriceChangeRecordValidator> list) {
+    public void batchUpdateChannel(List<SystemHistoryPriceChangeRecordValidator> list, String taskType) {
 
-        List<String> sqlList = new ArrayList();
+        if ("future".equals(taskType)) {
 
+            List<String> sqlList = new ArrayList();
+            for (SystemHistoryPriceChangeRecordValidator validator : list) {
 
-        for (SystemHistoryPriceChangeRecordValidator validator : list) {
+                StringBuffer insertSql = new StringBuffer("insert into system_history_price_change_record(ID,CHANGE_TYPE,BUSINESS_ID,PRICE_AREA,START_DATE,CHANGE_PRICE,CREATED_BY,CREATED_TIME,TASK_STATUS,TASK_TYPE) ");
+                insertSql.append(" values('" + UUID.uuid32() + "','CHANNEL','" + validator.getBusinessId() + "','" + validator.getPriceArea() + "','" + validator.getStartDate() + "'," + validator.getChangePrice() + ",'" + validator.getCreatedBy() + "',now(),'0','2')");
+                sqlList.add(insertSql.toString());
+            }
 
-            StringBuffer insertSql = new StringBuffer("insert into system_history_price_change_record(ID,CHANGE_TYPE,BUSINESS_ID,PRICE_AREA,START_DATE,CHANGE_PRICE,CREATED_BY,CREATED_TIME) ");
-            insertSql.append(" values('" + UUID.uuid32() + "','CHANNEL','" + validator.getBusinessId() + "','" + validator.getPriceArea() + "','" + validator.getStartDate() + "'," + validator.getChangePrice() + ",'" + validator.getCreatedBy() + "',now())");
-            sqlList.add(insertSql.toString());
-
-            //更新当前价格
-            String updateChannelPrice = "update config_channel_price set CHANNEL_PRICE=" + validator.getChangePrice() + ",UPDATED_TIME = now(),UPDATED_BY='" + validator.getCreatedBy() + "' where id = '" + validator.getId() + "'";
-            sqlList.add(updateChannelPrice);
-
-            //更新通道历史价格中的，价格
-            String updateChannelHistoryPrice = "update config_channel_price_history set CHANNEL_PRICE=" + validator.getChangePrice() + ",UPDATED_TIME = now(),UPDATED_BY='" + validator.getCreatedBy() + "' where CHANNEL_ID='" + validator.getBusinessId() + "' and AREA_CODE ='" + validator.getPriceArea() + "' and PRICE_DATE>='" + validator.getStartDate() + "' ";
-            sqlList.add(updateChannelHistoryPrice);
-
-            String updateMessageDailyStatisticsChannelPrice = "update message_daily_statistics set CHANNEL_PRICE=" + validator.getChangePrice() + ",UPDATED_TIME = now(),UPDATED_BY='" + validator.getCreatedBy() + "' where CHANNEL_ID='" + validator.getBusinessId() + "' and PRICE_AREA_CODE ='" + validator.getPriceArea() + "' and MESSAGE_DATE>='" + validator.getStartDate() + "' ";
-            sqlList.add(updateMessageDailyStatisticsChannelPrice);
+            //log.info("[业务账号历史价格修改]：{}", sqlList.toString());
+            //根据参数个数，组织参数值
+            String[] params = new String[sqlList.size()];
+            sqlList.toArray(params);
+            jdbcTemplate.batchUpdate(params);
 
         }
 
-        //log.info("[通道历史价格修改]：{}", sqlList.toString());
-        //根据参数个数，组织参数值
-        String[] params = new String[sqlList.size()];
-        sqlList.toArray(params);
-        jdbcTemplate.batchUpdate(params);
+        if ("history".equals(taskType)) {
+            List<String> sqlList = new ArrayList();
+
+
+            for (SystemHistoryPriceChangeRecordValidator validator : list) {
+
+                StringBuffer insertSql = new StringBuffer("insert into system_history_price_change_record(ID,CHANGE_TYPE,BUSINESS_ID,PRICE_AREA,START_DATE,CHANGE_PRICE,CREATED_BY,CREATED_TIME,TASK_STATUS,TASK_TYPE) ");
+                insertSql.append(" values('" + UUID.uuid32() + "','CHANNEL','" + validator.getBusinessId() + "','" + validator.getPriceArea() + "','" + validator.getStartDate() + "'," + validator.getChangePrice() + ",'" + validator.getCreatedBy() + "',now(),'1','1')");
+                sqlList.add(insertSql.toString());
+
+                //更新当前价格
+                String updateChannelPrice = "update config_channel_price set CHANNEL_PRICE=" + validator.getChangePrice() + ",UPDATED_TIME = now(),UPDATED_BY='" + validator.getCreatedBy() + "' where id = '" + validator.getId() + "'";
+                sqlList.add(updateChannelPrice);
+
+                //更新通道历史价格中的，价格
+                String updateChannelHistoryPrice = "update config_channel_price_history set CHANNEL_PRICE=" + validator.getChangePrice() + ",UPDATED_TIME = now(),UPDATED_BY='" + validator.getCreatedBy() + "' where CHANNEL_ID='" + validator.getBusinessId() + "' and AREA_CODE ='" + validator.getPriceArea() + "' and PRICE_DATE>='" + validator.getStartDate() + "' ";
+                sqlList.add(updateChannelHistoryPrice);
+
+                String updateMessageDailyStatisticsChannelPrice = "update message_daily_statistics set CHANNEL_PRICE=" + validator.getChangePrice() + ",UPDATED_TIME = now(),UPDATED_BY='" + validator.getCreatedBy() + "' where CHANNEL_ID='" + validator.getBusinessId() + "' and PRICE_AREA_CODE ='" + validator.getPriceArea() + "' and MESSAGE_DATE>='" + validator.getStartDate() + "' ";
+                sqlList.add(updateMessageDailyStatisticsChannelPrice);
+
+            }
+
+            //log.info("[通道历史价格修改]：{}", sqlList.toString());
+            //根据参数个数，组织参数值
+            String[] params = new String[sqlList.size()];
+            sqlList.toArray(params);
+            jdbcTemplate.batchUpdate(params);
+        }
 
     }
 
-    public void batchUpdateAccount(List<SystemHistoryPriceChangeRecordValidator> list) {
+    public void batchUpdateAccount(List<SystemHistoryPriceChangeRecordValidator> list, String taskType) {
 
-        List<String> sqlList = new ArrayList();
+        if ("future".equals(taskType)) {
 
-        for (SystemHistoryPriceChangeRecordValidator validator : list) {
+            List<String> sqlList = new ArrayList();
+            for (SystemHistoryPriceChangeRecordValidator validator : list) {
 
-            //更新当前价格
-            StringBuffer insertSql = new StringBuffer("insert into system_history_price_change_record(ID,CHANGE_TYPE,BUSINESS_ID,PRICE_AREA,START_DATE,CHANGE_PRICE,CREATED_BY,CREATED_TIME,AREA_TYPE) ");
-            insertSql.append(" values('" + UUID.uuid32() + "','ACCOUNT','" + validator.getBusinessId() + "','" + validator.getPriceArea() + "','" + validator.getStartDate() + "'," + validator.getChangePrice() + ",'" + validator.getCreatedBy() + "',now(),'" + validator.getAreaType() + "')");
-            sqlList.add(insertSql.toString());
+                //更新当前价格
+                StringBuffer insertSql = new StringBuffer("insert into system_history_price_change_record(ID,CHANGE_TYPE,BUSINESS_ID,PRICE_AREA,START_DATE,CHANGE_PRICE,CREATED_BY,CREATED_TIME,AREA_TYPE,TASK_STATUS,TASK_TYPE) ");
+                insertSql.append(" values('" + UUID.uuid32() + "','ACCOUNT','" + validator.getBusinessId() + "','" + validator.getPriceArea() + "','" + validator.getStartDate() + "'," + validator.getChangePrice() + ",'" + validator.getCreatedBy() + "',now(),'" + validator.getAreaType() + "','0','2')");
+                sqlList.add(insertSql.toString());
+            }
 
-            //更新当前价格
-            String updatePrice = "update account_finance_info set CARRIER_PRICE=" + validator.getChangePrice() + ",UPDATED_TIME = now(),UPDATED_BY='" + validator.getCreatedBy() + "' where id = '" + validator.getId() + "'";
-            sqlList.add(updatePrice);
+            //log.info("[业务账号历史价格修改]：{}", sqlList.toString());
+            //根据参数个数，组织参数值
+            String[] params = new String[sqlList.size()];
+            sqlList.toArray(params);
+            jdbcTemplate.batchUpdate(params);
 
-            //更新通道历史价格中的，价格
-            String updateChannelHistoryPrice = "update account_price_history set CARRIER_PRICE=" + validator.getChangePrice() + ",UPDATED_TIME = now(),UPDATED_BY='" + validator.getCreatedBy() + "' where ACCOUNT_ID='" + validator.getBusinessId() + "' and CARRIER ='" + validator.getPriceArea() + "' and PRICE_DATE>='" + validator.getStartDate() + "' ";
-            sqlList.add(updateChannelHistoryPrice);
-
-            String updateMessageDailyStatisticsChannelPrice = "update message_daily_statistics set ACCOUNT_PRICE=" + validator.getChangePrice() + ",UPDATED_TIME = now(),UPDATED_BY='" + validator.getCreatedBy() + "' where BUSINESS_ACCOUNT='" + validator.getBusinessId() + "' and PRICE_AREA_CODE ='" + validator.getPriceArea() + "' and MESSAGE_DATE>='" + validator.getStartDate() + "' ";
-            sqlList.add(updateMessageDailyStatisticsChannelPrice);
         }
 
-        //log.info("[业务账号历史价格修改]：{}", sqlList.toString());
-        //根据参数个数，组织参数值
-        String[] params = new String[sqlList.size()];
-        sqlList.toArray(params);
-        jdbcTemplate.batchUpdate(params);
+        if ("history".equals(taskType)) {
+            List<String> sqlList = new ArrayList();
+
+            for (SystemHistoryPriceChangeRecordValidator validator : list) {
+
+                //更新当前价格
+                StringBuffer insertSql = new StringBuffer("insert into system_history_price_change_record(ID,CHANGE_TYPE,BUSINESS_ID,PRICE_AREA,START_DATE,CHANGE_PRICE,CREATED_BY,CREATED_TIME,AREA_TYPE,TASK_STATUS,TASK_TYPE) ");
+                insertSql.append(" values('" + UUID.uuid32() + "','ACCOUNT','" + validator.getBusinessId() + "','" + validator.getPriceArea() + "','" + validator.getStartDate() + "'," + validator.getChangePrice() + ",'" + validator.getCreatedBy() + "',now(),'" + validator.getAreaType() + "','1','1')");
+                sqlList.add(insertSql.toString());
+
+                //更新当前价格
+                String updatePrice = "update account_finance_info set CARRIER_PRICE=" + validator.getChangePrice() + ",UPDATED_TIME = now(),UPDATED_BY='" + validator.getCreatedBy() + "' where id = '" + validator.getId() + "'";
+                sqlList.add(updatePrice);
+
+                //更新通道历史价格中的，价格
+                String updateChannelHistoryPrice = "update account_price_history set CARRIER_PRICE=" + validator.getChangePrice() + ",UPDATED_TIME = now(),UPDATED_BY='" + validator.getCreatedBy() + "' where ACCOUNT_ID='" + validator.getBusinessId() + "' and CARRIER ='" + validator.getPriceArea() + "' and PRICE_DATE>='" + validator.getStartDate() + "' ";
+                sqlList.add(updateChannelHistoryPrice);
+
+                String updateMessageDailyStatisticsChannelPrice = "update message_daily_statistics set ACCOUNT_PRICE=" + validator.getChangePrice() + ",UPDATED_TIME = now(),UPDATED_BY='" + validator.getCreatedBy() + "' where BUSINESS_ACCOUNT='" + validator.getBusinessId() + "' and PRICE_AREA_CODE ='" + validator.getPriceArea() + "' and MESSAGE_DATE>='" + validator.getStartDate() + "' ";
+                sqlList.add(updateMessageDailyStatisticsChannelPrice);
+            }
+
+            //log.info("[业务账号历史价格修改]：{}", sqlList.toString());
+            //根据参数个数，组织参数值
+            String[] params = new String[sqlList.size()];
+            sqlList.toArray(params);
+            jdbcTemplate.batchUpdate(params);
+        }
     }
 }

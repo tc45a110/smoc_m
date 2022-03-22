@@ -32,7 +32,7 @@ import java.util.*;
 
 @Slf4j
 @Controller
-@RequestMapping("/configure/price/history")
+@RequestMapping("/configure/price")
 public class SystemHistoryPriceChangeRecordController {
 
     @Autowired
@@ -49,7 +49,7 @@ public class SystemHistoryPriceChangeRecordController {
      *
      * @return
      */
-    @RequestMapping(value = "/list/{changeType}", method = RequestMethod.GET)
+    @RequestMapping(value = "/history/list/{changeType}", method = RequestMethod.GET)
     public ModelAndView list(@PathVariable String changeType) {
         ModelAndView view = new ModelAndView("configure/advance/history_price_change_list");
 
@@ -79,7 +79,7 @@ public class SystemHistoryPriceChangeRecordController {
      *
      * @return
      */
-    @RequestMapping(value = "/page", method = RequestMethod.POST)
+    @RequestMapping(value = "/history/page", method = RequestMethod.POST)
     public ModelAndView page(@ModelAttribute SystemHistoryPriceChangeRecordValidator systemHistoryPriceChangeRecordValidator, PageParams pageParams) {
         ModelAndView view = new ModelAndView("configure/advance/history_price_change_list");
 
@@ -104,7 +104,7 @@ public class SystemHistoryPriceChangeRecordController {
      *
      * @return
      */
-    @RequestMapping(value = "/center/CHANNEL/{businessId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/history/center/CHANNEL/{businessId}", method = RequestMethod.GET)
     public ModelAndView channel(@PathVariable String businessId) {
         ModelAndView view = new ModelAndView("configure/advance/channel_history_price_change_center");
 
@@ -118,7 +118,7 @@ public class SystemHistoryPriceChangeRecordController {
      *
      * @return
      */
-    @RequestMapping(value = "/center/ACCOUNT/{businessId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/history/center/ACCOUNT/{businessId}", method = RequestMethod.GET)
     public ModelAndView account(@PathVariable String businessId) {
         ModelAndView view = new ModelAndView("configure/advance/account_history_price_change_center");
 
@@ -132,7 +132,7 @@ public class SystemHistoryPriceChangeRecordController {
      *
      * @return
      */
-    @RequestMapping(value = "/edit/{changeType}/save", method = RequestMethod.POST)
+    @RequestMapping(value = "/history/edit/{changeType}/save", method = RequestMethod.POST)
     public ModelAndView save(@PathVariable String changeType, HttpServletRequest request) {
         ModelAndView view = new ModelAndView("configure/advance/history_price_change_edit");
 
@@ -148,18 +148,19 @@ public class SystemHistoryPriceChangeRecordController {
         }
 
         String accountIds = request.getParameter("accountIds");
-        log.info("[accountIds]:{}",accountIds);
+        log.info("[accountIds]:{}", accountIds);
         if (StringUtils.isEmpty(accountIds)) {
             view.setView(new RedirectView("/configure/price/history/add/" + changeType + "/" + businessId + "", true, false));
             return view;
         }
 
-        Map<String,Boolean> accountMap = new HashMap<>();
+        Map<String, Boolean> accountMap = new HashMap<>();
         String[] accounts = accountIds.split(",");
-        for(int i=0;i<accounts.length;i++){
-            accountMap.put(accounts[i],true);
+        for (int i = 0; i < accounts.length; i++) {
+            accountMap.put(accounts[i], true);
         }
 
+        String taskType = request.getParameter("taskType");
 
         String[] ids = priceIds.split(",");
         List<SystemHistoryPriceChangeRecordValidator> recordList = new ArrayList<>();
@@ -173,18 +174,21 @@ public class SystemHistoryPriceChangeRecordController {
             validator.setStartDate(request.getParameter(ids[i] + "_date"));
             validator.setCreatedBy(user.getRealName());
             validator.setAreaType(request.getParameter(ids[i] + "_carrierType"));
-            if(null != accountMap.get(ids[i]) && accountMap.get(ids[i])) {
+            if (null != accountMap.get(ids[i]) && accountMap.get(ids[i])) {
                 recordList.add(validator);
             }
         }
 
-        ResponseData data = systemHistoryPriceChangeRecordService.save(recordList, changeType);
+        ResponseData data = systemHistoryPriceChangeRecordService.save(recordList, changeType, taskType);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;
         }
-        //log.info("[recordList]:{}", new Gson().toJson(recordList));
-        view.setView(new RedirectView("/configure/price/history/add/" + changeType + "/" + businessId + "", true, false));
+        if ("future".equals(taskType)) {
+            view.setView(new RedirectView("/configure/price/future/add/" + changeType + "/" + businessId + "", true, false));
+        } else {
+            view.setView(new RedirectView("/configure/price/history/add/" + changeType + "/" + businessId + "", true, false));
+        }
         return view;
     }
 
@@ -193,7 +197,7 @@ public class SystemHistoryPriceChangeRecordController {
      *
      * @return
      */
-    @RequestMapping(value = "/add/CHANNEL/{businessId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/history/add/CHANNEL/{businessId}", method = RequestMethod.GET)
     public ModelAndView channel_add(@PathVariable String businessId) {
         ModelAndView view = new ModelAndView("configure/advance/channel_history_price_change_edit");
 
@@ -238,7 +242,52 @@ public class SystemHistoryPriceChangeRecordController {
      *
      * @return
      */
-    @RequestMapping(value = "/add/ACCOUNT/{businessId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/future/add/CHANNEL/{businessId}", method = RequestMethod.GET)
+    public ModelAndView channel_future(@PathVariable String businessId) {
+        ModelAndView view = new ModelAndView("configure/advance/channel_future_price_change_edit");
+
+
+        //根据通道id查询区域价格
+        ChannelPriceValidator channelPriceValidator = new ChannelPriceValidator();
+        channelPriceValidator.setChannelId(businessId);
+        ResponseData<List<ChannelPriceValidator>> listData = channelPriceService.findChannelPrice(channelPriceValidator);
+        if (!ResponseCode.SUCCESS.getCode().equals(listData.getCode())) {
+            view.addObject("error", listData.getCode() + ":" + listData.getMessage());
+            return view;
+        }
+
+        //log.info("[数据]：{}",new Gson().toJson(listData.getData()));
+        String priceIds = "";
+        if (null != listData.getData() && listData.getData().size() > 0) {
+            for (ChannelPriceValidator obj : listData.getData()) {
+                if ("".equals(priceIds)) {
+                    priceIds = obj.getId();
+                } else {
+                    priceIds += "," + obj.getId();
+                }
+            }
+        }
+
+        String startDate = DateTimeUtils.getDateFormat(new Date());
+        String endDate = DateTimeUtils.checkOption(startDate, 31);
+
+
+        view.addObject("priceIds", priceIds);
+        view.addObject("startDate", startDate);
+        view.addObject("endDate", endDate);
+        view.addObject("channelPriceList", listData.getData());
+
+        view.addObject("changeType", "CHANNEL_FUTURE");
+        view.addObject("businessId", businessId);
+        return view;
+    }
+
+    /**
+     * 创建 新历史价格变更记录
+     *
+     * @return
+     */
+    @RequestMapping(value = "/history/add/ACCOUNT/{businessId}", method = RequestMethod.GET)
     public ModelAndView account_add(@PathVariable String businessId) {
         ModelAndView view = new ModelAndView("configure/advance/account_history_price_change_edit");
 
@@ -266,6 +315,51 @@ public class SystemHistoryPriceChangeRecordController {
 
         String endDate = DateTimeUtils.getDateFormat(new Date());
         String startDate = DateTimeUtils.checkOption(endDate, -31);
+
+
+        view.addObject("priceIds", priceIds);
+        view.addObject("startDate", startDate);
+        view.addObject("endDate", endDate);
+        view.addObject("accountPriceList", listData.getData());
+
+        view.addObject("changeType", "ACCOUNT");
+        view.addObject("businessId", businessId);
+        return view;
+    }
+
+    /**
+     * 创建 新历史价格变更记录
+     *
+     * @return
+     */
+    @RequestMapping(value = "/future/add/ACCOUNT/{businessId}", method = RequestMethod.GET)
+    public ModelAndView account_future(@PathVariable String businessId) {
+        ModelAndView view = new ModelAndView("configure/advance/account_future_price_change_edit");
+
+
+        //查询账号配置的运营商价格
+        AccountFinanceInfoValidator accountFinanceInfoValidator = new AccountFinanceInfoValidator();
+        accountFinanceInfoValidator.setAccountId(businessId);
+        ResponseData<List<AccountFinanceInfoValidator>> listData = accountFinanceService.findByAccountId(accountFinanceInfoValidator);
+        if (!ResponseCode.SUCCESS.getCode().equals(listData.getCode())) {
+            view.addObject("error", listData.getCode() + ":" + listData.getMessage());
+            return view;
+        }
+
+        //log.info("[数据]：{}",new Gson().toJson(listData.getData()));
+        String priceIds = "";
+        if (null != listData.getData() && listData.getData().size() > 0) {
+            for (AccountFinanceInfoValidator obj : listData.getData()) {
+                if ("".equals(priceIds)) {
+                    priceIds = obj.getId();
+                } else {
+                    priceIds += "," + obj.getId();
+                }
+            }
+        }
+
+        String startDate = DateTimeUtils.getDateFormat(new Date());
+        String endDate = DateTimeUtils.checkOption(startDate, 31);
 
 
         view.addObject("priceIds", priceIds);

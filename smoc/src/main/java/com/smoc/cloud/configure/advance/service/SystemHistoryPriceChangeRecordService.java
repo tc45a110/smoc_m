@@ -40,10 +40,10 @@ public class SystemHistoryPriceChangeRecordService {
      * @return
      */
     @Transactional
-    public ResponseData save(List<SystemHistoryPriceChangeRecordValidator> list, String changeType) {
+    public ResponseData save(List<SystemHistoryPriceChangeRecordValidator> list, String changeType,String taskType) {
         //log.info("[历史价格调整]：{}", new Gson().toJson(list));
 
-        systemHistoryPriceChangeRecordRepository.batchUpdateHistoryPrice(list,changeType);
+        systemHistoryPriceChangeRecordRepository.batchUpdateHistoryPrice(list,changeType,taskType);
         return ResponseDataUtil.buildSuccess();
     }
 }

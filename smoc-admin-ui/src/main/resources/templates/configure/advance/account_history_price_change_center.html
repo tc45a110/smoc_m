@@ -19,13 +19,13 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title"> 变更业务账号历史价格</h4>
+                    <h4 class="page-title"> 调整业务账号价格</h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
-                            历史价格调整
+                            价格调整
                         </li>
                         <li class="active">
-                            变更业务账号历史价格
+                            调整业务账号价格
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -70,6 +70,13 @@
                                                            sec:authorize-url="/configure/price/history/add/ACCOUNT/*"
                                                            th:href="@{/configure/price/history/add/ACCOUNT/{businessId}(businessId=${businessId})}"
                                                            th:target="tab-content">历史价格变更
+                                                        </a>
+                                                    </li>
+                                                    <li class="" id="change1">
+                                                        <a onclick="activeTab('change1')"
+                                                           sec:authorize-url="/configure/price/future/add/ACCOUNT/*"
+                                                           th:href="@{/configure/price/future/add/ACCOUNT/{businessId}(businessId=${businessId})}"
+                                                           th:target="tab-content">调整未来价格
                                                         </a>
                                                     </li>
                                                     <li class="" id="logs">
@@ -119,6 +126,7 @@
     //页签切换
     function activeTab(id){
        $("#change").removeClass("active");
+       $("#change1").removeClass("active");
        $("#logs").removeClass("active");
        $("#"+id).addClass("active");
     }

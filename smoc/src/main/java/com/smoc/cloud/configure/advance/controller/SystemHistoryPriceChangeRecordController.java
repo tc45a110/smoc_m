@@ -44,11 +44,11 @@ public class SystemHistoryPriceChangeRecordController {
      * @param changeType
      * @return
      */
-    @RequestMapping(value = "/save/{changeType}", method = RequestMethod.POST)
-    public ResponseData save(@RequestBody List<SystemHistoryPriceChangeRecordValidator> validators,@PathVariable String changeType) {
+    @RequestMapping(value = "/save/{changeType}/{taskType}", method = RequestMethod.POST)
+    public ResponseData save(@RequestBody List<SystemHistoryPriceChangeRecordValidator> validators,@PathVariable String changeType,@PathVariable String taskType) {
 
         //保存操作
-        ResponseData data = systemHistoryPriceChangeRecordService.save(validators, changeType);
+        ResponseData data = systemHistoryPriceChangeRecordService.save(validators, changeType,taskType);
 
         return data;
     }
