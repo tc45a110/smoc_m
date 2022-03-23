@@ -21,7 +21,6 @@ $(document).ready(function(){
 		resourceAttchmentType = "image/"+resourceAttchmentType;
 	}
 	var fileUrl = contextPath+"/resource/download/"+$("#id").val();
-
 	if(resourceAttchmentSize>0){
 		initFiles = [{
 			name: resourceTitle,
@@ -38,8 +37,8 @@ $(document).ready(function(){
 	$("#filer_name1").filer({
 		limit: 1,
 		maxSize: fileSizeLimit_m,
-		files: initFiles,
 		extensions: fileTypes,
+		files: initFiles,
 		changeInput: '<div class="jFiler-input-dragDrop"><div class="jFiler-input-inner"><div class="jFiler-input-icon"><i class="icon-jfi-cloud-up-o"></i></div><div class="jFiler-input-text"><h3>Drag & Drop files here</h3> <span style="display:inline-block; margin: 15px 0">or</span></div><a class="jFiler-input-choose-btn btn btn-custom waves-effect waves-light">上传附件</a></div></div>',
 		showThumbs: true,
 		theme: "dragdropbox",

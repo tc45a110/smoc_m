@@ -83,5 +83,7 @@ public class MessageWebTaskInfoValidator {
     private String exceptionNumberAttachment;
     //状态报告路径
     private String reportAttachment;
+    //资源数据
+    private String multimediaAttachmentData;
 
 }

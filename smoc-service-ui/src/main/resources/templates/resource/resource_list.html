@@ -84,13 +84,13 @@
                                                 </div>
 
                                                 <div th:if="${#strings.contains(@resourceProperties.resourceAllowFormat[0], info.resourceAttchmentType)}" class="jFiler-item-thumb-image">
-                                                    <img th:src="@{/resource/show/{id}(id=${info.id})}" onerror="javascript:this.src='./static/assets/images/file-broken.png';this.onerror = null" draggable="false">
+                                                    <img th:src="@{/resource/show/{id}(id=${info.id})}" draggable="false">
                                                 </div>
                                                 <div th:if="${#strings.contains(@resourceProperties.resourceAllowFormat[1], info.resourceAttchmentType)}" class="jFiler-item-thumb-image">
                                                     <span class="jFiler-icon-file f-audio"><i class="icon-jfi-file-audio"></i></span>
                                                 </div>
                                                 <div th:if="${#strings.contains(@resourceProperties.resourceAllowFormat[2], info.resourceAttchmentType)}" class="jFiler-item-thumb-image">
-                                                    <span class="jFiler-icon-file f-video" style="-webkit-box-shadow: #f1bc6f 42px -55px 0px 0px inset; -moz-box-shadow: #f1bc6f 42px -55px 0px 0px inset; box-shadow: #f1bc6f 42px -55px 0px 0px inset;">.[[${info.resourceAttchmentType}]]</span>
+                                                    <span class="jFiler-icon-file f-video"><i class="icon-jfi-file-video"></i></span>
                                                 </div>
                                             </div>
                                             <div class="jFiler-item-assets jFiler-row">

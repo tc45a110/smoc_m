@@ -144,7 +144,7 @@
                             <button sec:authorize-url="/template/save/*" type="submit"
                                     class="btn btn-teal waves-effect waves-light">提交
                             </button>
-                            <a th:sec:authorize-url="|/template/page/${type}|"
+                            <a th:sec:authorize-url="|/template/list/${type}|"
                                th:href="@{/template/list/{type}(type=${type})}"
                                class="btn btn-default waves-effect waves-light" style="margin-left:20px">返回</a>
                         </div>

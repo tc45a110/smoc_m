@@ -613,4 +613,54 @@ public class MessageResourceController {
 
         return null;
     }
+
+    /*
+     *资源列表显示，创建模板时选择使用
+     */
+    @RequestMapping(value = "/templResource", method = RequestMethod.POST)
+    public JSONObject templResource(@RequestBody JSONObject queryCondition, HttpServletRequest request) {
+        JSONObject result = new JSONObject();
+
+        SecurityUser user = (SecurityUser)request.getSession().getAttribute("user");
+
+        String fileType = null;
+        String resourceType = null;
+        String currentPage = "1";
+        String screenWidth = null;
+        if(queryCondition!=null){
+            fileType = queryCondition.getString("fileType");
+            resourceType = queryCondition.getString("resourceType");
+            currentPage = queryCondition.getString("currentPage");
+            screenWidth = queryCondition.getString("screenWidth");
+        }
+
+        //根据屏幕尺寸调整显示资源的条数，避免前端撑开div
+        Integer pageSize = 11;
+        if(new Integer(screenWidth)<=1366){
+            pageSize = 7;
+        }
+        PageParams<AccountResourceInfoValidator> params = new PageParams<AccountResourceInfoValidator>();
+        params.setPageSize(pageSize);
+        params.setCurrentPage(new Integer(currentPage));
+        AccountResourceInfoValidator accountResourceInfoValidator = new AccountResourceInfoValidator();
+        accountResourceInfoValidator.setEnterpriseId(user.getOrganization());
+        accountResourceInfoValidator.setResourceType(resourceType);
+        accountResourceInfoValidator.setFileType(fileType);
+        if("1".equals(accountResourceInfoValidator.getFileType())){
+            accountResourceInfoValidator.setResourceAttchmentType(resourceProperties.getResourceAllowFormat()[0]);
+        }else if("2".equals(accountResourceInfoValidator.getFileType())){
+            accountResourceInfoValidator.setResourceAttchmentType(resourceProperties.getResourceAllowFormat()[1]);
+        }else if("3".equals(accountResourceInfoValidator.getFileType())){
+            accountResourceInfoValidator.setResourceAttchmentType(resourceProperties.getResourceAllowFormat()[2]);
+        }
+
+        params.setParams(accountResourceInfoValidator);
+        ResponseData<PageList<AccountResourceInfoValidator>> data = messageResourceService.page(params);
+
+        result.put("list", data.getData().getList());
+        result.put("pages", data.getData().getPageParams().getPages());
+        result.put("currentPage", data.getData().getPageParams().getCurrentPage());
+
+        return result;
+    }
 }

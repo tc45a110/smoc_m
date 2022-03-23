@@ -26,6 +26,8 @@ public class AccountTemplateInfoValidator {
 
     private String templateFlag;
 
+    private String mmAttchment;
+
     private String checkDate;
 
     private String checkBy;
@@ -51,4 +53,5 @@ public class AccountTemplateInfoValidator {
     private String startDate;
     private String endDate;
     private String enterpriseId;
+    private String multimediaAttachmentData;
 }

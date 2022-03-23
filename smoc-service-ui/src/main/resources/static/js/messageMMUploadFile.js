@@ -83,7 +83,7 @@ $(document).ready(function(){
 			drop: null,
 		},
 		uploadFile: {
-			url: contextPath+"/message/uploadFile/"+messageTypeInit ,
+			url: contextPath+"/message/mm/uploadFile/"+messageTypeInit ,
 			type: 'POST',
 			contentType: false, //不设置内容类型
 			processData: false, //不处理数据

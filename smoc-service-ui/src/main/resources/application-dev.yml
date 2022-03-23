@@ -56,6 +56,7 @@ com:
         message:
           enterprise-file-path: F:/data/enterprise/ #签名资质文件根目录
           mobile-file-root-path: F:/data/message/mobile  #短信手机号文件根目录
+          mobile-zip-root-path: F:/data/message/mmzip  #彩信包根目录
         message-resource:
           resource-file-root-path: F:/data/message/resource  #资源文件根目录
           resource-allow-format[0]: jpg,jpeg,gif,png  #资源图片格式

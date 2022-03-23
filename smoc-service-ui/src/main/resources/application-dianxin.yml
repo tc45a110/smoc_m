@@ -56,6 +56,7 @@ com:
         message:
           enterprise-file-path: /alidata/smoc/enterprise/ #签名资质文件根目录
           mobile-file-root-path: /alidata/smoc/message/mobile  #短信手机号文件根目录
+          mobile-zip-root-path: /alidata/smoc/message/mmzip  #彩信包根目录
         message-mm-resource:
           resource-file-root-path: /alidata/smoc/message/resource  #彩信资源文件根目录
           resource-allow-format[0]: jpg,jpeg,gif,png  #彩信资源图片格式

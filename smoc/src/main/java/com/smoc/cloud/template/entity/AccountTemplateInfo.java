@@ -56,6 +56,17 @@ public class AccountTemplateInfo {
     @Column(name = "TEMPLATE_FLAG")
     private String templateFlag;
 
+    @Column(name = "MM_ATTCHMENT")
+    private String mmAttchment;
+
+    public String getMmAttchment() {
+        return mmAttchment;
+    }
+
+    public void setMmAttchment(String mmAttchment) {
+        this.mmAttchment = mmAttchment;
+    }
+
     public String getTemplateFlag() {
         return templateFlag;
     }

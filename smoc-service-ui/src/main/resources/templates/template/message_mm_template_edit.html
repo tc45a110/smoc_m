@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <!-- common css start-->
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
+    <!-- Tooltipster css -->
+    <link rel="stylesheet" th:href="@{/static/plugins/tooltipster/tooltipster.bundle.min.css}">
+    <!-- common css end-->
+    <link th:href="@{/static/plugins/jquery.filer/css/jquery.filer.css}" rel="stylesheet"/>
+    <link th:href="@{/static/plugins/jquery.filer/css/themes/jquery.filer-dragdropbox-theme.css}" rel="stylesheet"/>
+    <link th:href="@{/static/css/mmTemplate.css}" rel="stylesheet"/>
+
+
+</head>
+
+<body>
+<div class="content" style="margin-top: 60px">
+    <div class="item_container container">
+        <!-- start row -->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">新建、修改模板</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li class="active">
+                            模板管理
+                        </li>
+                        <li class="active">
+                            新建、修改模板
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- start row -->
+        <div class="row" style="margin-top: -40px" th:remove="${#strings.isEmpty(error)}?none:all">
+<!--            <div class="item_content" style="float: left;background-color:#ffffff;height: 1014px;width: 48%">-->
+            <div style="float: left;background-color:#ffffff;height: auto;min-height: 1500px; width: 48%">
+                <div class="panel panel-color panel-info">
+                    <div class="panel-heading" style="height:60px;">
+                        <h3 class="panel-title" id="all-size-title" style="line-height: 36px">
+                            彩信文件限制大小：[[${@resourceProperties.resourceFileSizeLimit}]]KB；文件大小总计：[[${allSize}]]KB</h3>
+                    </div>
+                </div>
+                <form th:action="@{/template/mm/save/{op}(op=${op})}" id="submit_form" th:object="${accountTemplateInfoValidator}" method="post">
+                    <input type="hidden" th:field="*{templateId}" id="id">
+                    <input type="hidden" th:field="*{templateType}">
+                    <input type="hidden" th:field="*{templateStatus}">
+                    <input type="hidden" th:field="*{createdTime}">
+                    <input type="hidden" th:field="*{createdBy}">
+                    <input type="hidden" th:field="*{templateAgreementType}">
+                    <input id="parameters" type="hidden" name="parameters">
+
+                    <div style="height: 40px;margin-top: 20px;">
+                        <div style="position: relative;width: 100%;height: 20px;;padding-left: 30px">
+
+                            <div class="form-group m-b-20">
+                                <label>业务类型</label>&nbsp;
+                                <mpm:tag identity="businessType" show-type="button"
+                                         key="code" th:value="${accountTemplateInfoValidator.templateType}"
+                                         class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;MULTI_SMS,btn btn-brown btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;5G_SMS,btn btn-primary btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-inverse btn-rounded btn-sm waves-effect waves-light"/>
+                            </div>
+
+                            <div class="form-group m-b-20" style="width: 70%">
+                                <label>账号<span class="text-danger">*</span>
+                                    <span class="text-danger" th:if="${#fields.hasErrors('businessAccount')}"
+                                          th:errors="*{businessAccount}"></span></label>
+                                <select id="businessAccount" name="businessAccount" class="selectpicker form-control"　required="true">
+                                    <option data-icon="mdi mdi-account" value="">--请选择业务账号--</option>
+                                    <option data-icon="mdi mdi-account" th:each="info:${list}"
+                                            th:selected="${accountTemplateInfoValidator.businessAccount eq info.accountId}" th:value="${info.accountId}">[[${info.accountId}]]([[${info.AccountName}]])</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group m-b-20" style="width: 70%">
+                                <label>签名<span class="text-danger">*</span>
+                                    <span class="text-danger" th:if="${#fields.hasErrors('signName')}"
+                                          th:errors="*{signName}"></span></label>
+                                <select id="signName" name="signName" class="selectpicker form-control"  required="true">
+                                    <option data-icon="mdi mdi-account" value="">--请选择签名--</option>
+                                    <option data-icon="mdi mdi-account" th:each="info:${signList}"
+                                            th:selected="${accountTemplateInfoValidator.signName eq info.signName}" th:value="${info.signName}">[[${info.signName}]]</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group m-b-20">
+                                <label>模版类型<span class="text-danger">*</span></label>
+                                <br/>
+                                <div class="radio radio-info radio-inline">
+                                    <input type="radio" id="inlineRadio1" name="templateFlag" value="1" th:field="*{templateFlag}" th:checked="${accountTemplateInfoValidator.templateFlag== '1'}">
+                                    <label for="inlineRadio1"> 短信模版 </label>
+                                </div>
+                                <div class="radio radio-info radio-inline">
+                                    <i data-toggle="tooltip" data-placement="right"
+                                       data-original-title="变量模板仅文本可添加变量，最多包含5个变量用${1}、${2}、……表示变量，上传数据的第一列为待发送手机号。例如'13901234567|5月18日|东直门大街1号'代表给13901234567发送的短信，变量1和变量2分别是'5月18日'、'东直门大街1号'。">
+                                        <input type="radio" id="inlineRadio2" name="templateFlag" value="2" th:field="*{templateFlag}" th:checked="${accountTemplateInfoValidator.templateFlag== '2'}">
+                                        <label for="inlineRadio2"> 变量短信模版 </label>
+                                    </i>
+                                </div>
+                            </div>
+                            <div class="form-group m-b-30">
+                                <label for="templateContent">
+                                    模版标题<span class="text-danger">*</span>&nbsp;
+                                    <span id="templateContent_error_id" class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                </label>
+                                <input id="templateContent" th:field="*{templateContent}" type="text" name="templateContent" class="form-control" autocomplete="off"  required="" data-parsley-length="[1,64]" style="width: 80%" placeholder="请输入模版标题">
+                            </div>
+
+                            <div class="form-group m-b-20">
+                                <label>
+                                    帧列表(可拖拽调动帧顺序)<span class="text-danger">*</span>&nbsp;
+                                    <span id="frame_error_id" class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                </label>
+                                <br/>
+                            </div>
+                        </div>
+
+                        <div class="item_content" >
+                            <ul id="selectedFiles" style="float: left;margin-top: 380px;padding-left: 10px">
+                                <li th:each="para:${params}">
+                                    <div class="item filer-item col-sm-4" th:id="${'selectedId-'+para.resId}">
+                                        <div style="display: none">
+                                            <input type="hidden" name="resId" th:value="${para.resId}">
+                                            <input type="hidden" name="resTitle" th:value="${para.resTitle}">
+                                            <input type="hidden" name="resSize" th:value="${para.resSize}">
+                                            <input type="hidden" name="resPostfix" th:value="${para.resPostfix}">
+                                            <input type="hidden" name="resType" th:value="${para.resType}">
+                                            <input type="hidden" name="resUrl" th:value="${para.resUrl}">
+                                            <input type="hidden" name="stayTimes" th:value="${para.stayTimes}">
+                                            <input type="hidden" name="showUrl" th:value="${para.showUrl}">
+                                            <input type="hidden" name="frameTxt" th:value="${para.frameTxt}">
+                                        </div>
+                                        <div>
+                                            <div th:if="${para.resType =='0'}" class="item-span-img">
+                                                <div class="jFiler-item-thumb-image">
+                                                    <span class="jFiler-icon-file f-audio"> <i class="ion-clipboard" style="font-size:30px"></i></span>
+                                                </div>
+                                            </div>
+                                            <div th:if="${para.resType=='1'}" class="itemImg">
+                                                <img th:src="${para.showUrl}" draggable="false" onerror="javascript:this.src='./static/imgs/file-broken.png';this.onerror = null">
+                                            </div>
+                                            <div th:if="${para.resType =='2'}" class="item-span-img">
+                                                <div class="jFiler-item-thumb-image">
+                                                    <span class="jFiler-icon-file f-audio"><i class="icon-jfi-file-audio"></i></span>
+                                                </div>
+                                            </div>
+                                            <div th:if="${para.resType =='3'}" class="item-span-img">
+                                                <div class="jFiler-item-thumb-image">
+                                                    <span class="jFiler-icon-file f-video"><i class="icon-jfi-file-video"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="info">
+                                                <div style="float:left;width: 133px">
+    <!--                                                <span th:id="${'span-title-'+para.resId}">[[${para.getResTitle()}]]</span>-->
+                                                    第<b id="frame-index" style="color: red"></b><span th:id="${'span-staytime-'+para.resId}">帧停留：[[${para.stayTimes}]]秒</span>
+                                                    <br>
+                                                    <span th:id="${'span-size-'+para.resId}">文件大小：[[${para.getResSize()}]]KB</span>
+                                                    <br>
+                                                    <a th:id="${'span_txt_id-'+para.resId}" data-toggle="tooltip" data-placement="bottom"
+                                                      th:data-original-title="'文本内容：'+${para.getFrameTxt()}"  >文本字数：[[${para.getFrameTxt().length()}]]
+                                                   </a>
+                                                </div>
+                                                <div style="float:left;">
+                                                    <br>
+                                                    <a class="on-default edit-row" th:onclick="editFiles([[${para.resId}]]);"
+                                                            data-toggle="modal"
+                                                            data-target="#set-resource-properties"
+                                                            style="width:25px ;padding-right: 5px;color: #29b6f6;"
+                                                            title="编辑">
+                                                        <i style="font-size: 18px" class="mdi mdi-table-edit"></i>
+                                                    </a>
+                                                    <br>
+                                                    <a class="icon-jfi-trash" data-toggle="modal" data-target="#confirm-modal" th:onclick="confirmDelete([[${para.resId}]]);"
+                                                       style="width:25px ;padding-right: 5px;color: #ac2925;font-size: 18px"></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="col-sm-12" style="position: relative;width: 100%;height: 20px;padding-left: 30px;">
+                            <div class="row" style="position: relative;height: 60px;text-align: center;line-height: 60px; background-color:#ffffff; border-right: 1px solid #e1e1e1;">
+                                <div>
+                                    <a onclick="framePreview()" class="btn btn-success waves-effect waves-light">预览</a>&nbsp;&nbsp;
+                                    <a onclick="sumbitMM()" class="btn btn-teal waves-effect waves-light">提交</a>&nbsp;&nbsp;
+                                    <a th:sec:authorize-url="|/template/mm/list/${type}|" th:href="@{/template/mm/list/{type}(type=${type})}"
+                                       class="btn btn-default waves-effect waves-light" style="margin-left:20px">返回</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div style="background-color:#ffffff;height: 1500px;float: left;width: 52%">
+                <div class="panel panel-color panel-info" style="border-left:1px dashed whitesmoke; height:1500px">
+                    <div class="panel-heading" style="height:60px;">
+                        <h3 class="panel-title" style="line-height: 36px">
+                            提示：用鼠标双击来选择资源</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="col-sm-12">
+                            <div class="form-group  col-sm-5">
+                                <select id="resourceType" name="resourceType" data-style="btn-default" class="selectpicker form-control" onchange="doSearch()">
+                                    <option value="">--选择资源类型--</option>
+                                    <option th:each="rType:${resourceTypeList}" data-icon="mdi mdi-collage" th:value="${rType.fieldCode}">[[${rType.fieldName}]]</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group  col-sm-5">
+                                <select id="fileType" name="fileType" data-style="btn-default" class="selectpicker form-control" onchange="doSearch()">
+                                    <option value="">--选择文件类型--</option>
+                                    <option data-icon="mdi mdi-collage" value="1">图片文件</option>
+                                    <option data-icon="mdi mdi-collage" value="2">音频文件</option>
+                                    <option data-icon="mdi mdi-collage" value="3">视频文件</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="jFiler-items jFiler-row">
+                            <ul id="files" class="jFiler-items-list jFiler-items-grid">
+                            </ul>
+
+                            <li class="jFiler-item" check="false" data-jfiler-index="1" style="display: none" id="resourceTxt_id" ondblclick="request('txt', '0', '', '', '文本', '', 0, '')">
+                                <div class="jFiler-item-container" style="height: 160px">
+                                    <div class="jFiler-item-inner">
+                                        <div class="jFiler-item-thumb">
+                                            <div class="jFiler-item-status"></div>
+                                            <div class="jFiler-item-info">
+                                                <span class="jFiler-item-title">
+                                                    <b title="">文本</b>
+                                                </span>
+                                                <span class="jFiler-item-others"></span>
+                                            </div>
+
+                                            <div class="jFiler-item-thumb-image">
+                                                <div class="jFiler-item-thumb-image"><span
+                                                        class="jFiler-icon-file f-audio"><i
+                                                        class="ion-clipboard" style="font-size:30px"></i></span>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="jFiler-item-assets jFiler-row">
+                                            <ul class="list-inline pull-left">
+                                                <li>
+                                                    <div class="jFiler-jProgressBar" style="display: none;">
+                                                        <div class="bar" style="width: 100%;">
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="jFiler-item-others text-success">
+                                                        纯文本帧<!--(可多次使用)-->
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                            <ul class="list-inline pull-right">
+                                                <li></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="jFiler-item" data-jfiler-index="1" style="display: none" id="resourceDemo_id" ondblclick="">
+                                <div class="jFiler-item-container" style="height: 160px">
+                                    <div class="jFiler-item-inner">
+                                        <div class="jFiler-item-thumb">
+                                            <div class="jFiler-item-status"></div>
+                                            <div class="jFiler-item-info">
+                                                <span class="jFiler-item-title"><b title=""></b></span>
+                                                <span class="jFiler-item-others" id="size_id"></span>
+                                            </div>
+                                            <div class="jFiler-item-thumb-image" id="showType_id">
+                                            </div>
+                                        </div>
+                                        <div class="jFiler-item-assets jFiler-row">
+                                            <ul class="list-inline pull-left">
+                                                <li>
+                                                    <div class="jFiler-jProgressBar" style="display: none;">
+                                                        <div class="bar" style="width: 100%;">
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="jFiler-item-others text-success" id="title_id">
+                                                        title
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                            <ul class="list-inline pull-right">
+                                                <li id="select_id"></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="dataTables_paginate paging_simple_numbers" id="datatable-fixed-header_paginate">
+                                    <ul class="pagination pull-right">
+                                        <li id="prePage_id" class="paginate_button next" aria-controls="datatable-fixed-header" tabindex="0"><a href="#" onclick="prePage()">上一页</a></li>
+                                        <li class="paginate_button next" aria-controls="datatable-fixed-header" tabindex="0"><a href="#"><font id="cruPage_id">1</font>/<font id="pages_id">3</font></a></li>
+                                        <li id="nextPage_id" class="paginate_button next" aria-controls="datatable-fixed-header" tabindex="0"><a href="#" onclick="nextPage()">下一页</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+    </div>
+</div>
+
+<div style="display: none">
+    <form th:action="@{/template/mm/addResource}" id="params_form" method="post">
+        <input id="parames" type="hidden" name="parames">
+        <input id="allSize" type="hidden" name="allSize">
+        <input id="templateContent_tmp" type="hidden" name="templateContent_tmp">
+        <input id="templateFlag_tmp" type="hidden" name="templateFlag_tmp">
+        <input id="id_tmp" type="hidden" name="id_tmp">
+        <input id="op_tmp" type="hidden" name="op_tmp" th:value="${op}">
+        <input id="resource_page" type="hidden" name="resource_page" th:value="${resource_page}">
+        <input id="resource_type" type="hidden" name="resource_type" th:value="${resource_type}">
+        <input id="resource_file_type" type="hidden" name="resource_file_type" th:value="${resource_file_type}">
+        <input id="type" type="hidden" name="type" th:value="${type}">
+        <input id="signName_tmp" type="hidden" name="signName_tmp" th:value="${accountTemplateInfoValidator.signName}">
+        <input id="businessAccount_tmp" type="hidden" name="businessAccount_tmp" th:value="${accountTemplateInfoValidator.businessAccount}">
+    </form>
+</div>
+
+<th:block th:insert="fragments/common_fragments :: confirm-modal"/>
+<div id="alert-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="custom-width-modalLabel" aria-hidden="true" style="display: none;margin: 60px">
+    <div class="modal-dialog" style="width:33%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="custom-width-modalLabel">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p id="alert-message"></p>
+            </div>
+            <div class="modal-footer">
+                <input type="hidden" id="deleteId">
+                <a class="btn btn-default waves-effect" data-dismiss="modal">关闭</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="frameinfo-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="custom-width-modalLabel" aria-hidden="true" style="display: none;margin: 200px">
+    <div class="modal-dialog" style="width:66%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">帧文本内容</h4>
+            </div>
+            <div class="modal-body" id="frame_txt_id" style="white-space:normal; word-break:break-all;overflow:hidden;">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="set-resource-properties" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;margin-top:120px">
+    <div class="modal-dialog" style="width:66%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">设置帧属性</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group m-b-20">
+                            <label for="stayTime">
+                                停留时间<span class="text-danger">*</span>&nbsp;
+                                <span class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                            </label>
+                            <select id="stayTime" name="stayTime" data-style="btn-default" class="selectpicker form-control">
+                                <option data-icon="mdi mdi-collage" value="1">--1秒--</option>
+                                <option data-icon="mdi mdi-collage" value="2">--2秒--</option>
+                                <option data-icon="mdi mdi-collage" value="3">--3秒--</option>
+                                <option data-icon="mdi mdi-collage" value="4">--4秒--</option>
+                                <option data-icon="mdi mdi-collage" value="5">--5秒--</option>
+                                <option data-icon="mdi mdi-collage" value="6">--6秒--</option>
+                                <option data-icon="mdi mdi-collage" value="7">--7秒--</option>
+                                <option data-icon="mdi mdi-collage" value="8">--8秒--</option>
+                                <option data-icon="mdi mdi-collage" value="9">--9秒--</option>
+                            </select>
+                            <input type="hidden" id="resourceId">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="frameTxt">
+                                文本内容<span class="text-danger">*</span>&nbsp;
+                                <span class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                            </label>
+                            <textarea id="frameTxt" class="form-control" rows="3"  placeholder="输入文本内容，建议不超过1000汉字" required="" data-parsley-length="[1,500]" autocomplete="off"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="setFrame_id" onclick="setResourceProperties()" type="button" class="btn btn-info waves-effect waves-light" data-dismiss="modal">
+                    确认
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="preview-div" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;margin-top: 40px">
+    <div class="modal-dialog">
+        <div class="modal-content">
+                <div class="row" style="margin-top: -30px">
+                <div class="col-md-12">
+
+                            <div class="form-group">
+
+                                <div class="row">
+
+                                    <div class="col-sm-12 m-b-10" style="text-align: center;margin-top: 30px" id="preview_ope_id">
+                                        <button id="play_id" onclick="doPlay()" type="button" class="btn btn-success waves-effect waves-light">
+                                            <i class='mdi mdi-play' style='font-size: 17px;'></i>播放
+                                        </button>
+                                        <button id="stop_id" onclick="doStop()" type="button" class="btn btn-warning waves-effect waves-light" style="display: none">
+                                            <i class='mdi mdi-pause' style='font-size: 17px;'></i>暂停
+                                        </button>
+                                        <button id="pre_frame_id" type="button" class="btn">
+                                            上一帧
+                                        </button>
+                                        <button id="current_frame_id" type="button" class="btn btn-default waves-effect waves-light">
+                                            <font id="current_frame_index"></font>/<font id="total_frame_index"></font>帧
+                                        </button>
+                                        <button id="next_frame_id" type="button" class="btn btn-info waves-effect waves-light">
+                                            下一帧
+                                        </button>
+                                    </div>
+
+                                    <div class="m-b-10" style="text-align: center;padding-top: 30px;padding-left:66px">
+                                        <div class="iphone">
+                                            <div class="iphone-top">
+                                                <span class="camera"></span>
+                                                <!--<span class="sensor"></span>
+                                                <span class="speaker"></span>-->
+                                            </div>
+                                            <div class="top-bar"></div>
+                                            <div class="iphone-screen" style="overflow-y:scroll;overflow-x:hidden">
+                                                <div style="width: 100%;text-align: center;margin-top: 10px" id="media_div">
+                                                    <img id="frame_preview_img_id" src="" style="height: auto;display: none">
+                                                    <span class="jFiler-icon-file f-audio" style="display: none"><i class="icon-jfi-file-audio"></i></span>
+                                                    <span class="jFiler-icon-file f-video" style="display: none"><i class="icon-jfi-file-video"></i></span>
+                                                </div>
+                                                <div id="frame_preview_txt_id" style="margin-left: 10px; text-align: left;margin-top: 40px;font-size: 20px;word-break: break-all;white-space: normal;">
+
+                                                </div>
+                                            </div>
+                                            <div class="buttons">
+                                                <span class="on-off"></span>
+                                                <span class="sleep"></span>
+                                                <span class="up"></span>
+                                                <span class="down"></span>
+                                            </div>
+                                            <div class="bottom-bar"></div>
+                                            <div class="iphone-bottom">
+                                                <span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- common script start-->
+<script th:src="@{/static/assets/js/jquery.min.js}"></script>
+<script th:src="@{/static/assets/js/bootstrap.min.js}"></script>
+<script th:src="@{/static/assets/js/detect.js}"></script>
+<script th:src="@{/static/assets/js/fastclick.js}"></script>
+<script th:src="@{/static/assets/js/jquery.blockUI.js}"></script>
+<script th:src="@{/static/assets/js/waves.js}"></script>
+<script th:src="@{/static/assets/js/jquery.slimscroll.js}"></script>
+<script th:src="@{/static/assets/js/jquery.scrollTo.min.js}"></script>
+<script th:src="@{/static/plugins/switchery/switchery.min.js}"></script>
+
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<script th:src="@{/static/plugins/jquery.filer/js/jquery.filer.min.js}"></script>
+<script th:src="@{/static/assets/pages/jquery.property-add.init.js}"></script>
+
+<script th:src="@{/static/plugins/tooltipster/tooltipster.bundle.min.js}"></script>
+
+<script th:src="@{/static/assets/js/jquery.core.js}"></script>
+
+<script>
+    var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+    var cruPage = 1;
+    var resource_page = $("#resource_page").val();
+    if(resource_page!=null&&resource_page.length>0){
+        cruPage = resource_page;
+    }
+    var pages = 0;
+    var resource_type = $("#resource_type").val();
+    var resource_file_type = $("#resource_file_type").val();
+    if(resource_type!=null&&resource_type.length>0){
+        $("#resourceType option[value='"+resource_type+"']").prop("selected", true);
+    }
+    if(resource_file_type!=null&&resource_file_type.length>0){
+        $("#fileType option[value='"+resource_file_type+"']").prop("selected", true);
+    }
+
+    // var resourceIds = '[[${resourceIds}]]';
+    var imgTypes = '[[${@resourceProperties.resourceAllowFormat[0]}]]';
+    var audioTypes = '[[${@resourceProperties.resourceAllowFormat[1]}]]';
+    var videoTypes = '[[${@resourceProperties.resourceAllowFormat[2]}]]';
+
+    function prePage(){
+        if(cruPage<=1){
+            alert("已经是第一页");
+            return;
+        }
+        cruPage = cruPage - 1;
+        doSearch();
+    }
+
+    function nextPage(){
+        if(cruPage>=pages){
+            alert("已经是最后一页");
+            return;
+        }
+        cruPage = cruPage + 1;
+        doSearch();
+    }
+
+    function doSearch(){
+        $("#files").html("");
+        var defultTxt = $("#resourceTxt_id").clone();
+        defultTxt.show();
+        $("#files").append(defultTxt);
+
+        var resourceType = $("#resourceType").val();
+        var fileType = $("#fileType").val();
+        var screenWidth = window.screen.width;
+        $.ajax({
+            type: "POST",   //提交的方法
+            dataType: "json",
+            contentType : 'application/json',
+            url: contextPath + "/resource/templResource",
+            data:"{\"resourceType\":\""+resourceType+"\", \"fileType\":\""+fileType+"\", \"currentPage\":\""+cruPage+"\", \"screenWidth\":\""+screenWidth+"\"}",
+            success: function (data) {
+                var rList = data.list;
+                cruPage = data.currentPage;
+                pages = data.pages;
+                if(cruPage<=1){
+                    $("#prePage_id").hide();
+                }else{
+                    $("#prePage_id").show();
+                }
+                if(cruPage>=pages){
+                    $("#nextPage_id").hide();
+                }else{
+                    $("#nextPage_id").show();
+                }
+
+                $("#cruPage_id").html(cruPage);
+                $("#pages_id").html(pages);
+                for(i=0;i<rList.length;i++){
+                    var tmp = rList[i];
+
+                    if(imgTypes.indexOf(tmp.resourceAttchmentType)!=-1){
+                        tmp.fileType="1";
+                    }else if(audioTypes.indexOf(tmp.resourceAttchmentType)!=-1){
+                        tmp.fileType="2";
+                    }else if(videoTypes.indexOf(tmp.resourceAttchmentType)!=-1){
+                        tmp.fileType="3";
+                    }
+
+                    var resourceDemo = $("#resourceDemo_id").clone();
+                    resourceDemo.attr("id", tmp.id);
+
+                    //resourceDemo.find("#select_id").html('<i style="display:block;padding-right: 5px;font-size: 20px" class=" mdi mdi-checkbox-blank-outline"></i>');
+                    var showUrl = contextPath+"/resource/show/"+tmp.id;
+                    resourceDemo.attr("ondblclick", "request('"+tmp.id+"', '"+tmp.fileType+"', '"+tmp.resourceAttchment+"', '"+showUrl+"', '"+tmp.resourceTitle+"', '', '"+parseInt(tmp.resourceAttchmentSize/1024)+"', '"+tmp.resourceAttchmentType+"')");
+
+                    resourceDemo.show();
+
+                    resourceDemo.find("#title_id").html(tmp.resourceTitle);
+
+                    var resourceHeight = tmp.resourceHeight;
+                    var resourceWidth = tmp.resourceWidth;
+                    var picSize = "";
+                    if(resourceHeight>0&&resourceWidth>0){
+                        picSize = "("+resourceWidth+"*"+resourceHeight+")";
+                    }
+                    resourceDemo.find("#size_id").html(parseInt(tmp.resourceAttchmentSize/1024)+"KB"+picSize);
+
+                    var showType = "";
+                    if(tmp.fileType==="1"){
+                        var showUrl = contextPath+"/resource/show/"+tmp.id;
+                        resourceDemo.find("#showType_id").html('<img src="'+showUrl+'" draggable="false"  >');
+                    }else if(tmp.fileType==="2"){
+                        resourceDemo.find("#showType_id").html('<span class="jFiler-icon-file f-audio"><i class="icon-jfi-file-audio"></i></span>');
+                    }else if(tmp.fileType==="3"){
+                        resourceDemo.find("#showType_id").html('<span class="jFiler-icon-file f-video"><i class="icon-jfi-file-video"></i></span>');
+                    }
+
+                    $("#files").append(resourceDemo);
+                }
+            }, error: function (data) {
+                console.log("error");
+            }
+        });
+    }
+
+    doSearch();
+</script>
+<script>
+    $(function () {
+        function Pointer(x, y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        function Position(left, top) {
+            this.left = left;
+            this.top = top;
+        }
+
+        $(".item_content .item").each(function (i) {
+            this.init = function () { // 初始化
+                this.box = $(this).parent();
+                $(this).attr("index", i).css({
+                    position: "absolute",
+                    left: this.box.offset().left,
+                    top: this.box.offset().top
+                }).appendTo(".item_content");
+                this.drag();
+                $(this).find("#frame-index").html(i+1);
+            },
+            this.move = function (callback) {  // 移动
+                $(this).stop(true).animate({
+                    left: this.box.offset().left,
+                    top: this.box.offset().top
+                }, 500, function () {
+                    if (callback) {
+                        callback.call(this);
+                    }
+                });
+            },
+            this.collisionCheck = function () {
+                var currentItem = this;
+                var direction = null;
+                $(this).siblings(".item").each(function () {
+                    if (
+                        currentItem.pointer.x > this.box.offset().left &&
+                        currentItem.pointer.y > this.box.offset().top &&
+                        (currentItem.pointer.x < this.box.offset().left + this.box.width()) &&
+                        (currentItem.pointer.y < this.box.offset().top + this.box.height())
+                    ) {
+                        // 返回对象和方向
+                        if (currentItem.box.offset().top < this.box.offset().top) {
+                            direction = "down";
+                        } else if (currentItem.box.offset().top > this.box.offset().top) {
+                            direction = "up";
+                        } else {
+                            direction = "normal";
+                        }
+                        this.swap(currentItem, direction);
+                    }
+                });
+            },
+            this.swap = function (currentItem, direction) { // 交换位置
+                if (this.moveing) return false;
+                var directions = {
+                    normal: function () {
+                        var saveBox = this.box;
+                        this.box = currentItem.box;
+                        currentItem.box = saveBox;
+                        this.move();
+                        $(this).attr("index", this.box.index());
+                        $(this).find("#frame-index").html(this.box.index()+1);
+                        $(currentItem).attr("index", currentItem.box.index());
+                        $(currentItem).find("#frame-index").html(currentItem.box.index()+1);
+                    },
+                    down: function () {
+                        // 移到上方
+                        var box = this.box;
+                        var node = this;
+                        var startIndex = currentItem.box.index();
+                        var endIndex = node.box.index();
+                        for (var i = endIndex; i > startIndex; i--) {
+                            var prevNode = $(".item_content .item[index=" + (i - 1) + "]")[0];
+                            node.box = prevNode.box;
+                            $(node).attr("index", node.box.index());
+                            $(node).find("#frame-index").html(node.box.index()+1);
+                            node.move();
+                            node = prevNode;
+                        }
+                        currentItem.box = box;
+                        $(currentItem).attr("index", box.index());
+                        $(currentItem).find("#frame-index").html(box.index()+1);
+                    },
+                    up: function () {
+                        // 移到上方
+                        var box = this.box;
+                        var node = this;
+                        var startIndex = node.box.index();
+                        var endIndex = currentItem.box.index();
+                        for (var i = startIndex; i < endIndex; i++) {
+                            var nextNode = $(".item_content .item[index=" + (i + 1) + "]")[0];
+                            node.box = nextNode.box;
+                            $(node).attr("index", node.box.index());
+                            $(node).find("#frame-index").html(node.box.index()+1);
+                            node.move();
+                            node = nextNode;
+
+                            console.log("up");
+                        }
+                        currentItem.box = box;
+                        $(currentItem).attr("index", box.index());
+                        console.log("4:"+$(currentItem).find("#frame-index").html());
+                        $(currentItem).find("#frame-index").html(box.index()+1);
+                    }
+                }
+                directions[direction].call(this);
+            },
+            this.drag = function () { // 拖拽
+                var oldPosition = new Position();
+                var oldPointer = new Pointer();
+                var isDrag = false;
+                var currentItem = null;
+                $(this).mousedown(function (e) {
+                    e.preventDefault();
+                    oldPosition.left = $(this).position().left;
+                    oldPosition.top = $(this).position().top;
+                    oldPointer.x = e.clientX;
+                    oldPointer.y = e.clientY;
+                    isDrag = true;
+
+                    currentItem = this;
+
+                });
+                $(document).mousemove(function (e) {
+                    var currentPointer = new Pointer(e.clientX, e.clientY);
+                    if (!isDrag) return false;
+                    $(currentItem).css({
+                        "opacity": "0.8",
+                        "z-index": 999
+                    });
+                    var left = currentPointer.x - oldPointer.x + oldPosition.left;
+                    var top = currentPointer.y - oldPointer.y + oldPosition.top;
+                    $(currentItem).css({
+                        left: left,
+                        top: top
+                    });
+                    currentItem.pointer = currentPointer;
+                    // 开始交换位置
+                    currentItem.collisionCheck();
+
+                });
+                $(document).mouseup(function () {
+                    if (!isDrag) return false;
+                    isDrag = false;
+                    currentItem.move(function () {
+                        $(this).css({
+                            "opacity": "1",
+                            "z-index": 0
+                        });
+                    });
+                });
+            }
+            this.init();
+        });
+    });
+
+    function request(resIdNew, resTypeNew, resUrlNew, showUrlNew, resTitleNew,  frameTxtNew, resSizeNew, resPostfixNew) {
+        //var timestamp = new Date().getTime();
+        //resIdNew = resIdNew+"_"+timestamp;
+
+        var i = 0;
+        var json = "";
+        var allSize = 0;
+        var length = $("#selectedFiles li").length;
+        if(length>=20){
+            $("#alert-modal").find("#alert-message").html("不能超过20帧");
+            $("#alert-modal").modal();
+            return false;
+        }
+        if (length > 0) {
+            $(".item").each(function () {
+                var index = $(this).attr("index");
+                var resId = $(this).find("div input[name='resId']").val();
+                var resTitle = $(this).find("div input[name='resTitle']").val();
+                var frameTxt = $(this).find("div input[name='frameTxt']").val();
+                var resSize = $(this).find("div input[name='resSize']").val();
+                var resPostfix = $(this).find("div input[name='resPostfix']").val();
+                var resType = $(this).find("div input[name='resType']").val();
+                var resUrl = $(this).find("div input[name='resUrl']").val();
+                var showUrl = $(this).find("div input[name='showUrl']").val();
+                var stayTimes = $(this).find("div input[name='stayTimes']").val();
+                if ("" == json) {
+                    json = "{index:\"" + index + "\",resId:\"" + resId + "\",resTitle:\"" + resTitle + "\",frameTxt:\"" + frameTxt + "\",resSize:\"" + resSize + "\",resPostfix:\"" + resPostfix + "\",resType:\"" + resType + "\",resUrl:\"" + resUrl + "\",showUrl:\"" + showUrl + "\",stayTimes:\"" + stayTimes + "\"}";
+                } else {
+                    json += ",{index:\"" + index + "\",resId:\"" + resId + "\",resTitle:\"" + resTitle + "\",frameTxt:\"" + frameTxt + "\",resSize:\"" + resSize + "\",resPostfix:\"" + resPostfix + "\",resType:\"" + resType + "\",resUrl:\"" + resUrl + "\",showUrl:\"" + showUrl + "\",stayTimes:\"" + stayTimes + "\"}";
+                }
+                allSize += parseInt(resSize);
+                i++;
+            });
+        }
+        index = i;
+        allSize += parseInt(resSizeNew);
+        //默认帧停留时间
+        var stayTimesss = [[${@resourceProperties.stayTimes}]];
+        if ("" == json) {
+            json = "{index:\"" + index + "\",resId:\"" + resIdNew + "\",resTitle:\"" + resTitleNew + "\",frameTxt:\"" + frameTxtNew + "\",resSize:\"" + resSizeNew + "\",resPostfix:\"" + resPostfixNew + "\",resType:\"" + resTypeNew + "\",resUrl:\"" + resUrlNew + "\",showUrl:\"" + showUrlNew + "\",stayTimes:\"" + stayTimesss + "\"}";
+        } else {
+            json += ",{index:\"" + index + "\",resId:\"" + resIdNew + "\",resTitle:\"" + resTitleNew + "\",frameTxt:\"" + frameTxtNew + "\",resSize:\"" + resSizeNew + "\",resPostfix:\"" + resPostfixNew + "\",resType:\"" + resTypeNew + "\",resUrl:\"" + resUrlNew + "\",showUrl:\"" + showUrlNew + "\",stayTimes:\"" + stayTimesss + "\"}";
+        }
+        json = "[" + json + "]";
+
+        $("#id_tmp").val($("#id").val());
+        $("#templateContent_tmp").val($("#templateContent").val());
+        $("#templateFlag_tmp").val($('input:radio[name=templateFlag]:checked').val());
+        $("#resource_page").val(cruPage);
+        $("#resource_type").val($("#resourceType").val());
+        $("#resource_file_type").val($("#fileType").val());
+
+        $("#parames").val(json);
+        $("#allSize").val(allSize);
+        $("#params_form").submit();
+    }
+
+    function confirmDelete(id) {
+        $("#resourceId").val(id);
+    }
+
+    function deleteById() {
+        $('#preloader').css('display', 'block');
+        deleteFiles($("#resourceId").val());
+    }
+
+    function deleteFiles_confirm(id){
+        $("#resourceId").val(id);
+        $('#confirm-modal').modal();
+    }
+
+
+    function deleteFiles(id) {
+        $("#selectedId-" + id).remove();
+        var json = "";
+        var allSize = 0;
+        var length = $("#selectedFiles li").length;
+        if (length > 0) {
+            $(".item").each(function () {
+                var index = $(this).attr("index");
+                var resId = $(this).find("div input[name='resId']").val();
+                var resTitle = $(this).find("div input[name='resTitle']").val();
+                var frameTxt = $(this).find("div input[name='frameTxt']").val();
+                var resSize = $(this).find("div input[name='resSize']").val();
+                var resPostfix = $(this).find("div input[name='resPostfix']").val();
+                var resType = $(this).find("div input[name='resType']").val();
+                var resUrl = $(this).find("div input[name='resUrl']").val();
+                var showUrl = $(this).find("div input[name='showUrl']").val();
+                var stayTimes = $(this).find("div input[name='stayTimes']").val();
+                if ("" == json) {
+                    json = "{index:\"" + index + "\",resId:\"" + resId + "\",resTitle:\"" + resTitle + "\",frameTxt:\"" + frameTxt + "\",resSize:\"" + resSize + "\",resPostfix:\"" + resPostfix + "\",resType:\"" + resType + "\",resUrl:\"" + resUrl + "\",showUrl:\"" + showUrl + "\",stayTimes:\"" + stayTimes + "\"}";
+                } else {
+                    json += ",{index:\"" + index + "\",resId:\"" + resId + "\",resTitle:\"" + resTitle + "\",frameTxt:\"" + frameTxt + "\",resSize:\"" + resSize + "\",resPostfix:\"" + resPostfix + "\",resType:\"" + resType + "\",resUrl:\"" + resUrl + "\",showUrl:\"" + showUrl + "\",stayTimes:\"" + stayTimes + "\"}";
+                }
+
+                allSize += parseInt(resSize);
+            });
+        }
+
+        if ("" != json) {
+            json = "[" + json + "]";
+        }
+
+        $("#id_tmp").val($("#id").val());
+        $("#templateContent_tmp").val($("#templateContent").val());
+        $("#templateFlag_tmp").val($('input:radio[name=templateFlag]:checked').val());
+        $("#resource_page").val(cruPage);
+        $("#resource_type").val($("#resourceType").val());
+        $("#resource_file_page").val($("#fileType").val());
+
+        $("#parames").val(json);
+        $("#allSize").val(allSize);
+        $("#params_form").submit();
+    }
+
+
+    function editFiles(id) {
+        $("#resourceId").val(id);
+        var frameTxt = $("#selectedId-" + id + " div input[name='frameTxt']").val();
+        var stayTimes = $("#selectedId-" + id + " div input[name='stayTimes']").val();
+        $("#frameTxt").val(frameTxt);
+        $("#stayTime").val(stayTimes);
+    }
+
+    function setResourceProperties() {
+        var resId = $("#resourceId").val();
+        var frameTxt = $("#frameTxt").val();
+        var stayTime = $("#stayTime").val();
+
+        $("#selectedId-" + resId + " div input[name='frameTxt']").val(frameTxt);
+        $("#selectedId-" + resId + " div input[name='stayTimes']").val(stayTime);
+        $("#span-staytime-" + resId).html("帧停留：" + stayTime + "秒");
+
+        $("#resourceId").val("");
+        $("#frameTxt").val("");
+        $("#stayTime").val([[${@resourceProperties.stayTimes}]]);
+        $("#setFrame_id").attr("data-dismiss", "modal");
+
+        var newTxtInfo = $("#selectedId-" + resId).find(".txt-info-tip").eq(0).clone();
+        $("#selectedId-" + resId).find(".txt-info-tip").eq(0).hide();
+
+        $("#span_txt_id-" + resId).html(frameTxt.length);
+        $("#span_txt_id-" + resId).attr("title", frameTxt);
+
+        newTxtInfo.tooltipster();
+        $("#selectedId-" + resId).find("#span_txt_id").append(newTxtInfo);
+
+        /* var newTxtInfo = $("#selectedId-" + resId).find(".txt-info-tip").eq(0).clone();
+        $("#selectedId-" + resId).find(".txt-info-tip").eq(0).hide();*/
+
+        $("#span_txt_id-" + resId).html("文本字数："+frameTxt.length);
+         //$("#span_txt_id-" + resId).attr("title", frameTxt);
+         $('#span_txt_id-' + resId).attr({
+             // 设置提示内容
+             'data-original-title': frameTxt,
+         })
+    }
+
+    function sumbitMM() {
+        doTipSubmit();
+    }
+    function doTipSubmit() {
+        $('#tip-save').modal("hide");
+        var templateContent = $("#templateContent").val();
+        // 判断是否含有emoji表情
+        let iconRule = /[\uD83C|\uD83D|\uD83E][\uDC00-\uDFFF][\u200D|\uFE0F]|[\uD83C|\uD83D|\uD83E][\uDC00-\uDFFF]|[0-9|*|#]\uFE0F\u20E3|[0-9|#]\u20E3|[\u203C-\u3299]\uFE0F\u200D|[\u203C-\u3299]\uFE0F|[\u2122-\u2B55]|\u303D|[\A9|\AE]\u3030|\uA9|\uAE|\u3030/ig
+        if(templateContent.length==0||templateContent.length>32){
+            // $("#templateContent_error_id").html("模版标题不能为空且不能超过64字");
+            // $("#templateContent").focus();
+            $("#alert-modal").find("#alert-message").html("模版标题不能为空且不能超过32字");
+            $("#alert-modal").modal();
+            return false;
+        }else if(iconRule.test(templateContent)){
+            $("#alert-modal").find("#alert-message").html("模版标题不能含有表情字符");
+            $("#alert-modal").modal();
+            return false;
+        }else{
+            $("#templateContent_error_id").html("");
+        }
+
+        submitFormBefore();
+        var json = $("#parameters").val();
+        if(json.length==0){
+            // $("#frame_error_id").html("彩信模版至少要有一帧");
+            $("#alert-modal").find("#alert-message").html("模版至少要有一帧");
+            $("#alert-modal").modal();
+            return false;
+        }
+
+        var signName = $("#signName").val();
+        var businessAccount = $("#businessAccount").val();
+        if(""== signName ||  null == signName){
+            $("#alert-modal").find("#alert-message").html("签名不能为空");
+            $("#alert-modal").modal();
+            return false;
+        }
+        if(""== businessAccount ||  null == businessAccount){
+            $("#alert-modal").find("#alert-message").html("业务账号不能为空");
+            $("#alert-modal").modal();
+            return false;
+        }
+
+
+        //去除换行符，否则json转换不了
+        var json_tmp = json.replace(/\n/g,"").replace(/\r/g,"");
+        var frameDatas = eval('(' + json_tmp + ')');
+        for(i=0;i<frameDatas.length;i++){
+            var tmp = frameDatas[i];
+            if(tmp.resType=='0'&&tmp.frameTxt.length==0){
+                // $("#frame_error_id").html("纯文本帧的文本内容不能为空");
+                $("#alert-modal").find("#alert-message").html("纯文本帧的文本内容不能为空");
+                $("#alert-modal").modal();
+                return false;
+            }
+        }
+
+        var sizeLimit = '[[${@resourceProperties.resourceFileSizeLimit}]]';
+        var totalSize = '[[${allSize}]]';
+        console.log("totalSize:"+totalSize);
+        if(parseInt(totalSize)>parseInt(sizeLimit)){
+            // alert("彩信文件限制大小"+sizeLimit+"K");
+            // $("#frame_error_id").html("资源文件总大小不能超过"+sizeLimit+"K");
+            $("#alert-modal").find("#alert-message").html("资源文件总大小不能超过"+sizeLimit+"K");
+            $("#alert-modal").modal();
+            return false;
+        }
+
+        $("#submit_form").submit();
+    }
+
+    /**
+     * 提交form 之前执行
+     * @returns {boolean}
+     */
+    function submitFormBefore() {
+        var json = "";
+        var allSize = 0;
+        var length = $("#selectedFiles li").length;
+        if (length > 0) {
+            $(".item").each(function () {
+                var index = $(this).attr("index");
+                var resId = $(this).find("div input[name='resId']").val();
+                var resTitle = $(this).find("div input[name='resTitle']").val();
+                var frameTxt = $(this).find("div input[name='frameTxt']").val();
+                var resSize = $(this).find("div input[name='resSize']").val();
+                var resPostfix = $(this).find("div input[name='resPostfix']").val();
+                var resType = $(this).find("div input[name='resType']").val();
+                var resUrl = $(this).find("div input[name='resUrl']").val();
+                var showUrl = $(this).find("div input[name='showUrl']").val();
+                var stayTimes = $(this).find("div input[name='stayTimes']").val();
+                if ("" == json) {
+                    json = "{index:\"" + index + "\",resId:\"" + resId + "\",resTitle:\"" + resTitle + "\",frameTxt:\"" + frameTxt + "\",resSize:\"" + resSize + "\",resPostfix:\"" + resPostfix + "\",resType:\"" + resType + "\",resUrl:\"" + resUrl + "\",showUrl:\"" + showUrl + "\",stayTimes:\"" + stayTimes + "\"}";
+                } else {
+                    json += ",{index:\"" + index + "\",resId:\"" + resId + "\",resTitle:\"" + resTitle + "\",frameTxt:\"" + frameTxt + "\",resSize:\"" + resSize + "\",resPostfix:\"" + resPostfix + "\",resType:\"" + resType + "\",resUrl:\"" + resUrl + "\",showUrl:\"" + showUrl + "\",stayTimes:\"" + stayTimes + "\"}";
+                }
+                allSize += parseInt(resSize);
+
+            });
+        }
+        if(""== json ||  null == json){
+            return false;
+        }
+        json = "[" + json + "]";
+        $("#allMMSize").val(allSize);
+        $("#parameters").val(json);
+    }
+
+    var previewArray = [];
+    var previewIndex = 0;
+    var isStop = false;
+    var currentTask = null;
+    function framePreview(){
+        previewArray = [];
+        submitFormBefore();
+
+        var frameVaule = $("#parameters").val();
+        if(frameVaule==null||frameVaule.length==0){
+            $("#alert-modal").find("#alert-message").html("请先设置帧信息");
+            $("#alert-modal").modal();
+        }
+        frameVaule = frameVaule.replace(/[\n\r]/g,'<br/>');
+        var frameDatas = eval('(' + frameVaule + ')');
+
+        var index_init = 0;
+        //按index排序
+        while(index_init<frameDatas.length){
+            for(i=0;i<frameDatas.length;i++){
+                if(frameDatas[i].index == index_init){
+                    previewArray.push(frameDatas[i]);
+                }
+            }
+
+            index_init++;
+        }
+
+        previewIndex = 0;
+        $("#current_frame_index").html(1);
+        $("#total_frame_index").html(frameDatas.length);
+        isStop = false;
+        $("#play_id").show();
+        $("#play_id").html("<i class='mdi mdi-play' style='font-size: 17px;'></i>播放");
+        $("#stop_id").hide();
+        $("#pre_frame_id").attr("class", "btn");
+        $("#pre_frame_id").attr("onclick", "");
+        $("#next_frame_id").attr("class", "btn btn-info waves-effect waves-light");
+        $("#next_frame_id").attr("onclick", "playNext()");
+        $("#frame_preview_txt_id").html("");
+        $("#frame_preview_img_id").hide();
+        if(currentTask!=null){
+            clearTimeout(currentTask);
+        }
+        var frameInfo_tmp = previewArray[previewIndex];
+        var resType =  frameInfo_tmp.resType;
+        var showUrl =  frameInfo_tmp.showUrl;
+        var frameTxt =  frameInfo_tmp.frameTxt;
+        if(resType=='0'){
+            $("#frame_preview_img_id").hide();
+            $("#media_div").find(".f-video").eq(0).hide();
+            $("#media_div").find(".f-audio").eq(0).hide();
+        }else if(resType=='1'){
+            $("#frame_preview_img_id").show();
+            $("#frame_preview_img_id").attr("src", showUrl);
+            $("#media_div").find(".f-video").eq(0).hide();
+            $("#media_div").find(".f-audio").eq(0).hide();
+        }else if(resType=='2'){
+            $("#frame_preview_img_id").hide();
+            $("#media_div").find(".f-video").eq(0).hide();
+            $("#media_div").find(".f-audio").eq(0).show();
+        }else if(resType=='3'){
+            $("#frame_preview_img_id").hide();
+            $("#media_div").find(".f-video").eq(0).show();
+            $("#media_div").find(".f-audio").eq(0).hide();
+        }
+        $("#frame_preview_txt_id").html(frameTxt);
+
+        $("#preview-div").modal();
+    }
+    function doPlay(){
+        $("#play_id").hide();
+        $("#stop_id").show();
+        isStop = false;
+
+        if(previewIndex>=previewArray.length){
+            previewIndex = 0;
+        }
+        previewByTime();
+    }
+    function playNext() {
+        // console.log("......playNext...previewIndex:"+previewIndex);
+        $("#play_id").show();
+        $("#play_id").html("<i class='mdi mdi-play' style='font-size: 17px;'></i>播放");
+        $("#stop_id").hide();
+        isStop = true;
+        if(currentTask!=null){
+            clearTimeout(currentTask);
+        }
+
+        if(previewIndex<=0){
+            previewIndex = 1;
+        }
+        var frameInfo_tmp = previewArray[previewIndex];
+        var resType =  frameInfo_tmp.resType;
+        var showUrl =  frameInfo_tmp.showUrl;
+        var frameTxt =  frameInfo_tmp.frameTxt;
+        if(resType=='0'){
+            $("#frame_preview_img_id").hide();
+            $("#media_div").find(".f-video").eq(0).hide();
+            $("#media_div").find(".f-audio").eq(0).hide();
+        }else if(resType=='1'){
+            $("#frame_preview_img_id").show();
+            $("#frame_preview_img_id").attr("src", showUrl);
+            $("#media_div").find(".f-video").eq(0).hide();
+            $("#media_div").find(".f-audio").eq(0).hide();
+        }else if(resType=='2'){
+            $("#frame_preview_img_id").hide();
+            $("#media_div").find(".f-video").eq(0).hide();
+            $("#media_div").find(".f-audio").eq(0).show();
+        }else if(resType=='3'){
+            $("#frame_preview_img_id").hide();
+            $("#media_div").find(".f-video").eq(0).show();
+            $("#media_div").find(".f-audio").eq(0).hide();
+        }
+
+        $("#frame_preview_txt_id").html(frameTxt);
+
+        if(previewIndex>=previewArray.length-1){
+            $("#next_frame_id").removeClass("btn-info waves-effect waves-light");
+            $("#next_frame_id").attr("onclick", "");
+        }else{
+            $("#next_frame_id").addClass("btn-info waves-effect waves-light");
+            $("#next_frame_id").attr("onclick", "playNext()");
+        }
+        if(previewIndex>0){
+            $("#pre_frame_id").addClass("btn-info waves-effect waves-light");
+            $("#pre_frame_id").attr("onclick", "playPre()");
+        }else{
+            $("#pre_frame_id").removeClass("btn-info waves-effect waves-light");
+            $("#pre_frame_id").attr("onclick", "");
+        }
+        previewIndex++;
+        $("#current_frame_index").html(previewIndex);
+    }
+    function playPre() {
+        previewIndex = previewIndex-1;
+        if(previewIndex>=previewArray.length-1){
+            previewIndex = previewArray.length-2;
+        }
+        if(previewIndex<0){
+            previewIndex = 0;
+        }
+        // console.log("......playPre...previewIndex:"+previewIndex);
+        $("#play_id").show();
+        $("#play_id").html("<i class='mdi mdi-play' style='font-size: 17px;'></i>播放");
+        $("#stop_id").hide();
+        isStop = true;
+        if(currentTask!=null){
+            clearTimeout(currentTask);
+        }
+
+        var frameInfo_tmp = previewArray[previewIndex];
+        var resType =  frameInfo_tmp.resType;
+        var showUrl =  frameInfo_tmp.showUrl;
+        var frameTxt =  frameInfo_tmp.frameTxt;
+        if(resType=='0'){
+            $("#frame_preview_img_id").hide();
+            $("#media_div").find(".f-video").eq(0).hide();
+            $("#media_div").find(".f-audio").eq(0).hide();
+        }else if(resType=='1'){
+            $("#frame_preview_img_id").show();
+            $("#frame_preview_img_id").attr("src", showUrl);
+            $("#media_div").find(".f-video").eq(0).hide();
+            $("#media_div").find(".f-audio").eq(0).hide();
+        }else if(resType=='2'){
+            $("#frame_preview_img_id").hide();
+            $("#media_div").find(".f-video").eq(0).hide();
+            $("#media_div").find(".f-audio").eq(0).show();
+        }else if(resType=='3'){
+            $("#frame_preview_img_id").hide();
+            $("#media_div").find(".f-video").eq(0).show();
+            $("#media_div").find(".f-audio").eq(0).hide();
+        }
+        $("#frame_preview_txt_id").html(frameTxt);
+
+        if(previewIndex>=previewArray.length-1){
+            $("#next_frame_id").removeClass("btn-info waves-effect waves-light");
+            $("#next_frame_id").attr("onclick", "");
+        }else{
+            $("#next_frame_id").addClass("btn-info waves-effect waves-light");
+            $("#next_frame_id").attr("onclick", "playNext()");
+        }
+        if(previewIndex>0){
+            $("#pre_frame_id").addClass("btn-info waves-effect waves-light");
+            $("#pre_frame_id").attr("onclick", "playPre()");
+        }else{
+            $("#pre_frame_id").removeClass("btn-info waves-effect waves-light");
+            $("#pre_frame_id").attr("onclick", "");
+        }
+        $("#current_frame_index").html(previewIndex+1);
+    }
+    function doStop(){
+        $("#play_id").show();
+        $("#play_id").html("<i class='mdi mdi-play' style='font-size: 17px;'></i>播放");
+        $("#stop_id").hide();
+        isStop = true;
+        if(currentTask!=null){
+            clearTimeout(currentTask);
+        }
+    }
+    var previewByTime = function () {
+        // console.log("......previewByTime...previewIndex:"+previewIndex);
+        if(previewIndex>=previewArray.length-1){
+            $("#next_frame_id").removeClass("btn-info waves-effect waves-light");
+            $("#next_frame_id").attr("onclick", "");
+        }else{
+            $("#next_frame_id").addClass("btn-info waves-effect waves-light");
+            $("#next_frame_id").attr("onclick", "playNext()");
+        }
+        if(previewIndex>0){
+            $("#pre_frame_id").addClass("btn-info waves-effect waves-light");
+            $("#pre_frame_id").attr("onclick", "playPre()");
+        }else{
+            $("#pre_frame_id").removeClass("btn-info waves-effect waves-light");
+            $("#pre_frame_id").attr("onclick", "");
+        }
+
+        if(isStop){
+            return false;
+        }
+        if(previewIndex>=previewArray.length){
+            $("#play_id").show();
+            $("#play_id").html("<i class='mdi mdi-replay' style='font-size: 17px;'></i>重播");
+            $("#stop_id").hide();
+            isStop = true;
+            return false;
+        }
+
+        var frameInfo_tmp = previewArray[previewIndex];
+
+        var resType =  frameInfo_tmp.resType;
+        var showUrl =  frameInfo_tmp.showUrl;
+        var frameTxt =  frameInfo_tmp.frameTxt;
+        var stayTimes_int =  frameInfo_tmp.stayTimes*1000;
+        // console.log("previewByTime:"+resType+"-"+showUrl+"-"+frameTxt+"-"+stayTimes_int);
+        if(resType=='0'){
+            $("#frame_preview_img_id").hide();
+            $("#media_div").find(".f-video").eq(0).hide();
+            $("#media_div").find(".f-audio").eq(0).hide();
+        }else if(resType=='1'){
+            $("#frame_preview_img_id").show();
+            $("#frame_preview_img_id").attr("src", showUrl);
+            $("#media_div").find(".f-video").eq(0).hide();
+            $("#media_div").find(".f-audio").eq(0).hide();
+        }else if(resType=='2'){
+            $("#frame_preview_img_id").hide();
+            $("#media_div").find(".f-video").eq(0).hide();
+            $("#media_div").find(".f-audio").eq(0).show();
+        }else if(resType=='3'){
+            $("#frame_preview_img_id").hide();
+            $("#media_div").find(".f-video").eq(0).show();
+            $("#media_div").find(".f-audio").eq(0).hide();
+        }
+        $("#frame_preview_txt_id").html(frameTxt);
+        $("#current_frame_index").html(previewIndex+1);
+
+        currentTask = setTimeout(function () {
+            previewIndex++;
+            previewByTime();
+        }, stayTimes_int);
+    }
+
+    if(window.screen.width<1440){
+        var htmlStr = "<button id=\"play_id\" onclick=\"doPlay()\" type=\"button\" class=\"btn btn-success waves-effect waves-light\">\n" +
+            "                                    <i class='mdi mdi-play' style='font-size: 17px;'></i>播放\n" +
+            "                                </button>\n" +
+            "                                <button id=\"stop_id\" onclick=\"doStop()\" type=\"button\" class=\"btn btn-warning waves-effect waves-light\" style=\"display: none\">\n" +
+            "                                    <i class='mdi mdi-pause' style='font-size: 17px;'></i>暂停\n" +
+            "                                </button>\n" +
+            "                                <br><br><button id=\"pre_frame_id\" type=\"button\" class=\"btn\">\n" +
+            "                                    上一帧\n" +
+            "                                </button>\n" +
+            "                                <button id=\"current_frame_id\" type=\"button\" class=\"btn btn-default waves-effect waves-light\">\n" +
+            "                                    <font id=\"current_frame_index\"></font>/<font id=\"total_frame_index\"></font>帧\n" +
+            "                                </button>\n" +
+            "                                <button id=\"next_frame_id\" type=\"button\" class=\"btn btn-info waves-effect waves-light\">\n" +
+            "                                    下一帧\n" +
+            "                                </button>";
+        $("#preview_ope_id").html(htmlStr);
+    }
+
+    $(".txt-info-tip").each(function (i){
+        $(".txt-info-tip").eq(i).tooltipster();
+    });
+</script>
+</body>
+</html>

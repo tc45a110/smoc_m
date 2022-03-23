@@ -3,6 +3,10 @@ package com.smoc.cloud.message.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
 import com.smoc.cloud.common.page.PageList;
@@ -11,6 +15,7 @@ import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.common.smoc.template.AccountTemplateInfoValidator;
+import com.smoc.cloud.common.smoc.template.MessageFrameParamers;
 import com.smoc.cloud.common.smoc.template.MessageWebTaskInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.UUID;
@@ -22,6 +27,7 @@ import com.smoc.cloud.material.service.SequenceService;
 import com.smoc.cloud.message.service.MessageService;
 import com.smoc.cloud.message.utils.SendMessage;
 import com.smoc.cloud.properties.MessageProperties;
+import com.smoc.cloud.properties.ResourceProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -44,6 +50,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -52,9 +59,9 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping("/message")
+@RequestMapping("/message/mm")
 @Scope(value= WebApplicationContext.SCOPE_REQUEST)
-public class MessageController {
+public class MessageMMController {
 
     @Autowired
     private BusinessAccountService businessAccountService;
@@ -74,6 +81,9 @@ public class MessageController {
     @Autowired
     private MessageProperties smocProperties;
 
+    @Autowired
+    private ResourceProperties resourceProperties;
+
     /**
      * 短信发送列表
      * @param signType
@@ -82,7 +92,7 @@ public class MessageController {
      */
     @RequestMapping(value = "list/{businessType}/{signType}", method = RequestMethod.GET)
     public ModelAndView list(@PathVariable String businessType, @PathVariable String signType, HttpServletRequest request) {
-        ModelAndView view = new ModelAndView("message/message_list");
+        ModelAndView view = new ModelAndView("message/message_mm_list");
 
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
 
@@ -122,7 +132,7 @@ public class MessageController {
      */
     @RequestMapping(value = "page", method = RequestMethod.POST)
     public ModelAndView page(@ModelAttribute MessageWebTaskInfoValidator messageWebTaskInfoValidator,PageParams pageParams,HttpServletRequest request) {
-        ModelAndView view = new ModelAndView("message/message_list");
+        ModelAndView view = new ModelAndView("message/message_mm_list");
 
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
 
@@ -158,7 +168,7 @@ public class MessageController {
     @RequestMapping(value = "/add/{businessType}/{signType}", method = RequestMethod.GET)
     public ModelAndView add(@PathVariable String businessType,@PathVariable String signType, HttpServletRequest request) {
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
-        ModelAndView view = new ModelAndView("message/message_edit");
+        ModelAndView view = new ModelAndView("message/message_mm_edit");
 
         //初始化参数
         MessageWebTaskInfoValidator messageWebTaskInfoValidator = new MessageWebTaskInfoValidator();
@@ -202,7 +212,7 @@ public class MessageController {
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public ModelAndView edit(@PathVariable String id, HttpServletRequest request) {
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
-        ModelAndView view = new ModelAndView("message/message_edit");
+        ModelAndView view = new ModelAndView("message/message_mm_edit");
 
         //完成参数规则验证
         MpmIdValidator validator = new MpmIdValidator();
@@ -230,9 +240,18 @@ public class MessageController {
             return view;
         }
 
+        //修改
+        ResponseData<AccountTemplateInfoValidator> templateData = messageTemplateService.findById(data.getData().getTemplateId());
+        if (!ResponseCode.SUCCESS.getCode().equals(templateData.getCode())) {
+            view.addObject("error", templateData.getCode() + ":" + templateData.getMessage());
+        }
+
+        MessageWebTaskInfoValidator messageWebTaskInfoValidator = data.getData();
+        messageWebTaskInfoValidator.setMultimediaAttachmentData(templateData.getData().getMmAttchment());
+
         //op操作标记，add表示添加，edit表示修改
         view.addObject("op", "edit");
-        view.addObject("messageWebTaskInfoValidator", data.getData());
+        view.addObject("messageWebTaskInfoValidator", messageWebTaskInfoValidator);
         view.addObject("list", info.getData());
         view.addObject("signType", data.getData().getInfoType());
         view.addObject("businessType", data.getData().getBusinessType());
@@ -251,7 +270,7 @@ public class MessageController {
      */
     @RequestMapping(value = "/save/{op}", method = RequestMethod.POST)
     public ModelAndView save(@ModelAttribute @Validated MessageWebTaskInfoValidator messageWebTaskInfoValidator, BindingResult result, @PathVariable String op, HttpServletRequest request) {
-        ModelAndView view = new ModelAndView("message/message_edit");
+        ModelAndView view = new ModelAndView("message/message_mm_edit");
 
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
 
@@ -276,6 +295,10 @@ public class MessageController {
            view.addObject("error", "无法进行操作");
            return view;
        }
+
+       //查询模板资源
+        ResponseData<AccountTemplateInfoValidator> templateData = messageTemplateService.findById(messageWebTaskInfoValidator.getTemplateId());
+        messageWebTaskInfoValidator.setMultimediaAttachmentData(templateData.getData().getMmAttchment());
 
         //完成参数规则验证
         if (result.hasErrors()) {
@@ -311,30 +334,23 @@ public class MessageController {
             return view;
         }
 
-        //查询信息
-        ResponseData<AccountTemplateInfoValidator> infoDate = messageTemplateService.findById(messageWebTaskInfoValidator.getTemplateId());
-        if (!ResponseCode.SUCCESS.getCode().equals(infoDate.getCode())) {
-            view.addObject("error", infoDate.getCode() + ":" + infoDate.getMessage());
-            return view;
-        }
-        /*
-        messageWebTaskInfoValidator.setMessageContent("【"+infoDate.getData().getSignName()+"】"+infoDate.getData().getTemplateContent());
+        /*messageWebTaskInfoValidator.setMessageContent("【"+templateData.getData().getSignName()+"】"+templateData.getData().getTemplateContent());
 
         //保存数据
         if(!StringUtils.isEmpty(messageWebTaskInfoValidator.getInputNumber())){
-            messageWebTaskInfoValidator = SendMessage.FileSMSInput(messageWebTaskInfoValidator,smocProperties,user.getOrganization());
+            messageWebTaskInfoValidator = SendMessage.mmFileSMSInput(messageWebTaskInfoValidator,smocProperties,resourceProperties,user.getOrganization());
         }
         //普通短信
         if("1".equals(messageWebTaskInfoValidator.getMessageType()) && !StringUtils.isEmpty(messageWebTaskInfoValidator.getNumberFiles())){
-            messageWebTaskInfoValidator = SendMessage.handleFileSMS(messageWebTaskInfoValidator,smocProperties,user.getOrganization());
+            messageWebTaskInfoValidator = SendMessage.mmHandleFileSMS(messageWebTaskInfoValidator,smocProperties,resourceProperties,user.getOrganization());
         }
 
         //变量短信，需要重新读取手机号匹配模板
         if("2".equals(messageWebTaskInfoValidator.getMessageType())){
-            messageWebTaskInfoValidator = SendMessage.handleFileVariableSMS(messageWebTaskInfoValidator,smocProperties,user.getOrganization());
+            messageWebTaskInfoValidator = SendMessage.mmHandleFileVariableSMS(messageWebTaskInfoValidator,smocProperties,resourceProperties,user.getOrganization());
         }
 
-        if(messageWebTaskInfoValidator.getSuccessNumber()==0){
+        if(StringUtils.isEmpty(messageWebTaskInfoValidator) || messageWebTaskInfoValidator.getSuccessNumber()==0){
             view.addObject("error", "有效号码数不能为0");
             return view;
         }*/
@@ -355,9 +371,9 @@ public class MessageController {
         log.info("[短信群发][{}][{}]数据:{}", op, user.getUserName(), JSON.toJSONString(messageWebTaskInfoValidator));
 
         if("1".equals(messageWebTaskInfoValidator.getMessageType())){
-            view.setView(new RedirectView("/message/list/"+messageWebTaskInfoValidator.getBusinessType()+"/"+messageWebTaskInfoValidator.getInfoType(), true, false));
+            view.setView(new RedirectView("/message/mm/list/"+messageWebTaskInfoValidator.getBusinessType()+"/"+messageWebTaskInfoValidator.getInfoType(), true, false));
         }else{
-            view.setView(new RedirectView("/message/variable/list/"+messageWebTaskInfoValidator.getBusinessType()+"/"+messageWebTaskInfoValidator.getInfoType(), true, false));
+            view.setView(new RedirectView("/message/mm/variable/list/"+messageWebTaskInfoValidator.getBusinessType()+"/"+messageWebTaskInfoValidator.getInfoType(), true, false));
         }
 
         return view;
@@ -371,7 +387,7 @@ public class MessageController {
      */
     @RequestMapping(value = "/deleteById/{id}", method = RequestMethod.GET)
     public ModelAndView deleteById(@PathVariable String id, HttpServletRequest request) {
-        ModelAndView view = new ModelAndView("message/message_edit");
+        ModelAndView view = new ModelAndView("message/message_mm_edit");
 
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
 
@@ -417,9 +433,9 @@ public class MessageController {
         log.info("[短信群发][{}][{}]数据:{}", "delete", user.getUserName(), JSON.toJSONString(infoData.getData()));
 
         if("1".equals(infoData.getData().getMessageType())){
-            view.setView(new RedirectView("/message/list/"+infoData.getData().getBusinessType()+"/"+infoData.getData().getInfoType(), true, false));
+            view.setView(new RedirectView("/message/mm/list/"+infoData.getData().getBusinessType()+"/"+infoData.getData().getInfoType(), true, false));
         }else{
-            view.setView(new RedirectView("/message/variable/list/"+infoData.getData().getBusinessType()+"/"+infoData.getData().getInfoType(), true, false));
+            view.setView(new RedirectView("/message/mm/variable/list/"+infoData.getData().getBusinessType()+"/"+infoData.getData().getInfoType(), true, false));
         }
 
         return view;
@@ -434,7 +450,7 @@ public class MessageController {
     @RequestMapping(value = "/sendMessage/{id}", method = RequestMethod.GET)
     public ModelAndView sendMessage(@PathVariable String id, HttpServletRequest request) {
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
-        ModelAndView view = new ModelAndView("message/message_edit");
+        ModelAndView view = new ModelAndView("message/message_mm_edit");
 
         //完成参数规则验证
         MpmIdValidator validator = new MpmIdValidator();
@@ -472,9 +488,9 @@ public class MessageController {
         log.info("[短信群发][{}][{}]数据:{}", "send", user.getUserName(), JSON.toJSONString(infoData.getData()));
 
         if("1".equals(infoData.getData().getMessageType())){
-            view.setView(new RedirectView("/message/list/"+infoData.getData().getBusinessType()+"/"+infoData.getData().getInfoType(), true, false));
+            view.setView(new RedirectView("/message/mm/list/"+infoData.getData().getBusinessType()+"/"+infoData.getData().getInfoType(), true, false));
         }else{
-            view.setView(new RedirectView("/message/variable/list/"+infoData.getData().getBusinessType()+"/"+infoData.getData().getInfoType(), true, false));
+            view.setView(new RedirectView("/message/mm/variable/list/"+infoData.getData().getBusinessType()+"/"+infoData.getData().getInfoType(), true, false));
         }
         return view;
 
@@ -487,7 +503,7 @@ public class MessageController {
      */
     @RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
     public ModelAndView detail(@PathVariable String id, HttpServletRequest request) {
-        ModelAndView view = new ModelAndView("message/message_detail");
+        ModelAndView view = new ModelAndView("message/message_mm_detail");
 
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
 
@@ -511,6 +527,30 @@ public class MessageController {
             view.addObject("error", "无法查看！");
             return view;
         }
+
+        //查询模板
+        ResponseData<AccountTemplateInfoValidator> data = messageTemplateService.findById(infoData.getData().getTemplateId());
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+        }
+
+        //还原帧数据
+        List<MessageFrameParamers> paramsSort = new ArrayList<MessageFrameParamers>();
+        if (!StringUtils.isEmpty(data.getData().getMmAttchment())) {
+            Gson gson = new Gson();
+            JsonParser parser = new JsonParser();
+            JsonArray Jarray = parser.parse(data.getData().getMmAttchment()).getAsJsonArray();
+            for(JsonElement obj : Jarray){
+                MessageFrameParamers p = gson.fromJson(obj , MessageFrameParamers.class);
+                paramsSort.add(p);
+            }
+        }
+        int allSize = 0;
+        for(MessageFrameParamers p:paramsSort){
+            allSize += new Integer(p.getResSize());
+        }
+        view.addObject("params", paramsSort);
+        view.addObject("allSize", allSize);
 
         view.addObject("messageWebTaskInfoValidator", infoData.getData());
         view.addObject("signType", infoData.getData().getInfoType());
@@ -560,8 +600,8 @@ public class MessageController {
                 File originalFile = new File(smocProperties.getMobileFileRootPath() + filePath);
                 originalAttachmentSize = file.getSize();
                 file.transferTo(originalFile);
-/*
-                //处理手机号，形成文件
+
+               /* //处理手机号，形成文件
                 MessageWebTaskInfoValidator messageValidator = new MessageWebTaskInfoValidator();
                 messageValidator.setNumberFiles(filePath);
 
