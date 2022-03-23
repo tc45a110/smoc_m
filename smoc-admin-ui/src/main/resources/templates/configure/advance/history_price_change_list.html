@@ -102,7 +102,7 @@
                                     <td>[[${info.businessId}]]</td>
                                     <td>
                                         <span th:if="${info.taskType=='1'}" class="btn btn-teal btn-rounded btn-sm waves-effect waves-light">历史价格调整</span>
-                                        <span th:if="${info.taskType=='2'}" class="btn btn-success btn-rounded btn-sm waves-effect waves-light">未来价格调整</span>
+                                        <span th:if="${info.taskType=='2'}" class="btn btn-success btn-rounded btn-sm waves-effect waves-light">未来价格设定</span>
                                     </td>
                                     <td>
                                         <mpm:tag th:if="${null == info.areaType || ''==info.areaType}" id="province" identity="provices" name="province"

@@ -625,9 +625,9 @@ public class MpmDictTagProcessor extends AbstractAttributeTagProcessor {
         String classValue = attributeMap.get(CLASS);
         if (StringUtils.isEmpty(classValue)) {
             //start a
-            model.add(modelFactory.createOpenElementTag("<a class=\"btn btn-custom waves-effect waves-light btn-xs\">"));
+            model.add(modelFactory.createOpenElementTag("<a class=\"btn btn-teal btn-rounded btn-sm waves-effect waves-light\">"));
         } else {
-            String classShow = "btn btn-custom  waves-effect waves-light btn-xs";
+            String classShow = "btn btn-teal btn-rounded btn-sm waves-effect waves-light";
             if (!StringUtils.isEmpty(value)) {
                 //获取class  并根据value 获取对应的 button 样式
                 String[] classValueArray = classValue.split(";");

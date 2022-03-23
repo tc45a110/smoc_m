@@ -100,8 +100,8 @@ public class SystemHistoryPriceChangeRecordRepositoryImpl extends BasePageReposi
             List<String> sqlList = new ArrayList();
             for (SystemHistoryPriceChangeRecordValidator validator : list) {
 
-                StringBuffer insertSql = new StringBuffer("insert into system_history_price_change_record(ID,CHANGE_TYPE,BUSINESS_ID,PRICE_AREA,START_DATE,CHANGE_PRICE,CREATED_BY,CREATED_TIME,TASK_STATUS,TASK_TYPE) ");
-                insertSql.append(" values('" + UUID.uuid32() + "','CHANNEL','" + validator.getBusinessId() + "','" + validator.getPriceArea() + "','" + validator.getStartDate() + "'," + validator.getChangePrice() + ",'" + validator.getCreatedBy() + "',now(),'0','2')");
+                StringBuffer insertSql = new StringBuffer("insert into system_history_price_change_record(ID,CHANGE_TYPE,BUSINESS_ID,PRICE_AREA,START_DATE,CHANGE_PRICE,CREATED_BY,CREATED_TIME,TASK_STATUS,TASK_TYPE,DATA_ID) ");
+                insertSql.append(" values('" + UUID.uuid32() + "','CHANNEL','" + validator.getBusinessId() + "','" + validator.getPriceArea() + "','" + validator.getStartDate() + "'," + validator.getChangePrice() + ",'" + validator.getCreatedBy() + "',now(),'0','2','"+validator.getId()+"')");
                 sqlList.add(insertSql.toString());
             }
 
@@ -119,8 +119,8 @@ public class SystemHistoryPriceChangeRecordRepositoryImpl extends BasePageReposi
 
             for (SystemHistoryPriceChangeRecordValidator validator : list) {
 
-                StringBuffer insertSql = new StringBuffer("insert into system_history_price_change_record(ID,CHANGE_TYPE,BUSINESS_ID,PRICE_AREA,START_DATE,CHANGE_PRICE,CREATED_BY,CREATED_TIME,TASK_STATUS,TASK_TYPE) ");
-                insertSql.append(" values('" + UUID.uuid32() + "','CHANNEL','" + validator.getBusinessId() + "','" + validator.getPriceArea() + "','" + validator.getStartDate() + "'," + validator.getChangePrice() + ",'" + validator.getCreatedBy() + "',now(),'1','1')");
+                StringBuffer insertSql = new StringBuffer("insert into system_history_price_change_record(ID,CHANGE_TYPE,BUSINESS_ID,PRICE_AREA,START_DATE,CHANGE_PRICE,CREATED_BY,CREATED_TIME,TASK_STATUS,TASK_TYPE,DATA_ID) ");
+                insertSql.append(" values('" + UUID.uuid32() + "','CHANNEL','" + validator.getBusinessId() + "','" + validator.getPriceArea() + "','" + validator.getStartDate() + "'," + validator.getChangePrice() + ",'" + validator.getCreatedBy() + "',now(),'1','1','"+validator.getId()+"')");
                 sqlList.add(insertSql.toString());
 
                 //更新当前价格
@@ -153,8 +153,8 @@ public class SystemHistoryPriceChangeRecordRepositoryImpl extends BasePageReposi
             for (SystemHistoryPriceChangeRecordValidator validator : list) {
 
                 //更新当前价格
-                StringBuffer insertSql = new StringBuffer("insert into system_history_price_change_record(ID,CHANGE_TYPE,BUSINESS_ID,PRICE_AREA,START_DATE,CHANGE_PRICE,CREATED_BY,CREATED_TIME,AREA_TYPE,TASK_STATUS,TASK_TYPE) ");
-                insertSql.append(" values('" + UUID.uuid32() + "','ACCOUNT','" + validator.getBusinessId() + "','" + validator.getPriceArea() + "','" + validator.getStartDate() + "'," + validator.getChangePrice() + ",'" + validator.getCreatedBy() + "',now(),'" + validator.getAreaType() + "','0','2')");
+                StringBuffer insertSql = new StringBuffer("insert into system_history_price_change_record(ID,CHANGE_TYPE,BUSINESS_ID,PRICE_AREA,START_DATE,CHANGE_PRICE,CREATED_BY,CREATED_TIME,AREA_TYPE,TASK_STATUS,TASK_TYPE,DATA_ID) ");
+                insertSql.append(" values('" + UUID.uuid32() + "','ACCOUNT','" + validator.getBusinessId() + "','" + validator.getPriceArea() + "','" + validator.getStartDate() + "'," + validator.getChangePrice() + ",'" + validator.getCreatedBy() + "',now(),'" + validator.getAreaType() + "','0','2','"+validator.getId()+"')");
                 sqlList.add(insertSql.toString());
             }
 
@@ -172,8 +172,8 @@ public class SystemHistoryPriceChangeRecordRepositoryImpl extends BasePageReposi
             for (SystemHistoryPriceChangeRecordValidator validator : list) {
 
                 //更新当前价格
-                StringBuffer insertSql = new StringBuffer("insert into system_history_price_change_record(ID,CHANGE_TYPE,BUSINESS_ID,PRICE_AREA,START_DATE,CHANGE_PRICE,CREATED_BY,CREATED_TIME,AREA_TYPE,TASK_STATUS,TASK_TYPE) ");
-                insertSql.append(" values('" + UUID.uuid32() + "','ACCOUNT','" + validator.getBusinessId() + "','" + validator.getPriceArea() + "','" + validator.getStartDate() + "'," + validator.getChangePrice() + ",'" + validator.getCreatedBy() + "',now(),'" + validator.getAreaType() + "','1','1')");
+                StringBuffer insertSql = new StringBuffer("insert into system_history_price_change_record(ID,CHANGE_TYPE,BUSINESS_ID,PRICE_AREA,START_DATE,CHANGE_PRICE,CREATED_BY,CREATED_TIME,AREA_TYPE,TASK_STATUS,TASK_TYPE,DATA_ID) ");
+                insertSql.append(" values('" + UUID.uuid32() + "','ACCOUNT','" + validator.getBusinessId() + "','" + validator.getPriceArea() + "','" + validator.getStartDate() + "'," + validator.getChangePrice() + ",'" + validator.getCreatedBy() + "',now(),'" + validator.getAreaType() + "','1','1','"+validator.getId()+"')");
                 sqlList.add(insertSql.toString());
 
                 //更新当前价格
