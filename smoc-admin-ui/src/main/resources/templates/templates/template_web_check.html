@@ -7,6 +7,9 @@
     <th:block th:insert="fragments/common_fragments :: common_css"/>
     <th:block th:insert="fragments/common_fragments :: select_css"/>
     <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
+    <link th:href="@{/static/plugins/jquery.filer/css/jquery.filer.css}" rel="stylesheet"/>
+    <link th:href="@{/static/plugins/jquery.filer/css/themes/jquery.filer-dragdropbox-theme.css}" rel="stylesheet"/>
+    <link th:href="@{/static/css/mmTemplate.css}" rel="stylesheet"/>
 
 </head>
 <body>
@@ -78,8 +81,68 @@
                                             </div>
                                             <div class="col-md-12 form-group">
                                                 <textarea class="form-control" readonly
-                                                          rows="15">[[${accountTemplateInfoValidator.templateContent}]]</textarea>
+                                                          rows="8">[[${accountTemplateInfoValidator.templateContent}]]</textarea>
                                             </div>
+
+
+                                            <div class="col-md-12 form-group" th:if="${accountTemplateInfoValidator.templateType eq 'MULTI_SMS' or accountTemplateInfoValidator.templateType eq 'MMS'}">
+                                                <label>
+                                                    帧列表:&nbsp;文件大小总计：[[${allSize}]]KB
+                                                </label>
+                                                <div class="item_content" >
+                                                    <ul style="float: left;padding-left: 10px">
+                                                        <li th:each="para:${params}">
+                                                            <div class="item filer-item">
+                                                                <div>
+                                                                    <div th:if="${para.resType =='0'}" class="item-span-img">
+                                                                        <div class="jFiler-item-thumb-image">
+                                                                            <span class="jFiler-icon-file f-audio"> <i class="ion-clipboard" style="font-size:30px"></i></span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div th:if="${para.resType=='1'}" class="itemImg" >
+                                                                        <img th:src="@{/template/web/resource/show/{url}(url=${para.showUrl})}" draggable="false" onerror="javascript:this.src='./static/imgs/file-broken.png';this.onerror = null">
+                                                                    </div>
+                                                                    <div th:if="${para.resType =='2'}" class="item-span-img">
+                                                                        <div class="jFiler-item-thumb-image">
+                                                                            <span class="jFiler-icon-file f-audio"><i class="icon-jfi-file-audio"></i></span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div th:if="${para.resType =='3'}" class="item-span-img">
+                                                                        <div class="jFiler-item-thumb-image">
+                                                                            <span class="jFiler-icon-file f-video"><i class="icon-jfi-file-video"></i></span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="info">
+                                                                        <div style="float:left;width: 133px">
+                                                                            <!--                                                <span th:id="${'span-title-'+para.resId}">[[${para.getResTitle()}]]</span>-->
+                                                                            第<b id="frame-index" style="color: red"></b><span th:id="${'span-staytime-'+para.resId}">帧停留：[[${para.stayTimes}]]秒</span>
+                                                                            <br>
+                                                                            <span th:id="${'span-size-'+para.resId}">文件大小：[[${para.getResSize()}]]KB</span>
+                                                                            <br>
+                                                                            <a th:id="${'span_txt_id-'+para.resId}" data-toggle="tooltip" data-placement="bottom"
+                                                                               th:data-original-title="'文本内容：'+${para.getFrameTxt()}"  >文本字数：[[${para.getFrameTxt().length()}]]
+                                                                            </a>
+                                                                        </div>
+                                                                        <div style="float:left;">
+                                                                            <br><br>
+                                                                            <a class="on-default edit-row" th:href="@{/template/web/resource/download/{id}(id=${para.resId})}"
+                                                                               th:if="${para.resType ne '0'}"
+                                                                               style="width:25px ;padding-right: 5px;color: #29b6f6;"
+                                                                               title="下载">
+                                                                                <i style="font-size: 18px" class="mdi mdi-download"></i>
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+
+                                            </div>
+
+
+
                                         </div>
                                     </div>
                                 </div>
@@ -172,7 +235,22 @@
 <th:block th:insert="fragments/common_fragments :: common_js"/>
 <th:block th:insert="fragments/common_fragments :: select_js"/>
 <th:block th:insert="fragments/common_fragments :: common_submit_form"/>
+<script th:remove="${#strings.isEmpty(error)}?none:all">
+
+    $(function () {
+        $(".item_content .item").each(function (i) {
+            this.init = function () { // 初始化
+                this.box = $(this).parent();
+                $(this).find("#frame-index").html(i+1);
+            },
+
+                this.init();
+        });
+    });
+
+</script>
 <script>
+
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');

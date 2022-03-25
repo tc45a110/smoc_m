@@ -142,8 +142,8 @@
                                                     <span class="jFiler-icon-file f-audio"> <i class="ion-clipboard" style="font-size:30px"></i></span>
                                                 </div>
                                             </div>
-                                            <div th:if="${para.resType=='1'}" class="itemImg">
-                                                <img th:src="${para.showUrl}" draggable="false" onerror="javascript:this.src='./static/imgs/file-broken.png';this.onerror = null">
+                                            <div th:if="${para.resType=='1'}" class="itemImg" style="width: auto">
+                                                <img th:src="@{/resource/show/{url}(url=${para.showUrl})}" draggable="false" onerror="javascript:this.src='./static/imgs/file-broken.png';this.onerror = null">
                                             </div>
                                             <div th:if="${para.resType =='2'}" class="item-span-img">
                                                 <div class="jFiler-item-thumb-image">
@@ -601,7 +601,8 @@
 
                     //resourceDemo.find("#select_id").html('<i style="display:block;padding-right: 5px;font-size: 20px" class=" mdi mdi-checkbox-blank-outline"></i>');
                     var showUrl = contextPath+"/resource/show/"+tmp.id;
-                    resourceDemo.attr("ondblclick", "request('"+tmp.id+"', '"+tmp.fileType+"', '"+tmp.resourceAttchment+"', '"+showUrl+"', '"+tmp.resourceTitle+"', '', '"+parseInt(tmp.resourceAttchmentSize/1024)+"', '"+tmp.resourceAttchmentType+"')");
+                    var urlId = tmp.id;
+                    resourceDemo.attr("ondblclick", "request('"+tmp.id+"', '"+tmp.fileType+"', '"+tmp.resourceAttchment+"', '"+urlId+"', '"+tmp.resourceTitle+"', '', '"+parseInt(tmp.resourceAttchmentSize/1024)+"', '"+tmp.resourceAttchmentType+"')");
 
                     resourceDemo.show();
 
@@ -636,6 +637,8 @@
     doSearch();
 </script>
 <script>
+    var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+
     $(function () {
         function Pointer(x, y) {
             this.x = x;
@@ -1108,6 +1111,7 @@
         var frameInfo_tmp = previewArray[previewIndex];
         var resType =  frameInfo_tmp.resType;
         var showUrl =  frameInfo_tmp.showUrl;
+        showUrl =contextPath+'/resource/show/'+showUrl;
         var frameTxt =  frameInfo_tmp.frameTxt;
         if(resType=='0'){
             $("#frame_preview_img_id").hide();
@@ -1157,6 +1161,7 @@
         var frameInfo_tmp = previewArray[previewIndex];
         var resType =  frameInfo_tmp.resType;
         var showUrl =  frameInfo_tmp.showUrl;
+        showUrl =contextPath+'/resource/show/'+showUrl;
         var frameTxt =  frameInfo_tmp.frameTxt;
         if(resType=='0'){
             $("#frame_preview_img_id").hide();
@@ -1216,6 +1221,7 @@
         var frameInfo_tmp = previewArray[previewIndex];
         var resType =  frameInfo_tmp.resType;
         var showUrl =  frameInfo_tmp.showUrl;
+        showUrl =contextPath+'/resource/show/'+showUrl;
         var frameTxt =  frameInfo_tmp.frameTxt;
         if(resType=='0'){
             $("#frame_preview_img_id").hide();
@@ -1294,6 +1300,7 @@
 
         var resType =  frameInfo_tmp.resType;
         var showUrl =  frameInfo_tmp.showUrl;
+        showUrl =contextPath+'/resource/show/'+showUrl;
         var frameTxt =  frameInfo_tmp.frameTxt;
         var stayTimes_int =  frameInfo_tmp.stayTimes*1000;
         // console.log("previewByTime:"+resType+"-"+showUrl+"-"+frameTxt+"-"+stayTimes_int);

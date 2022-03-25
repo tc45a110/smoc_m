@@ -50,7 +50,7 @@
                                         </div>
                                         <div class="form-group m-b-20">
                                             <label>接口类型<span class="text-danger">*</span>&nbsp;</label>
-                                            <mpm:tag id="inter" required="true" identity="accountInterfaceType"
+                                            <mpm:tag id="protocol" required="true" identity="accountInterfaceType"
                                                      show-type="select" key="code" onchange="changeType(this.value)"
                                                      class="form-control" name="protocol" mask-value="HTTP_INTERNATIONAL,SMPP,MM7"
                                                      th:value="${accountInterfaceInfoValidator.protocol}" title="接口类型"/>
@@ -91,7 +91,7 @@
                                                     <span class="text-danger" th:if="${#fields.hasErrors('serviceCode')}"
                                                           th:errors="*{serviceCode}"
                                                           style="font-weight: 200;font-size: 12px"></span></label>
-                                                <input type="text" class="form-control" required=""
+                                                <input type="text" class="form-control" required="" id="serviceCode"
                                                        th:field="*{serviceCode}" data-parsley-length="[1,20]"
                                                        autocomplete="off" data-parsley-type="number"
                                                        placeholder="服务代码">
@@ -103,7 +103,7 @@
                                                           style="font-weight: 200;font-size: 12px"></span></label>
                                                 <input type="text" class="form-control" required=""
                                                        th:field="*{maxConnect}" data-parsley-length="[1,10]"
-                                                       data-parsley-type="number"
+                                                       data-parsley-type="number"  id="maxConnect"
                                                        autocomplete="off" placeholder="最大链接数">
                                             </div>
                                         </div>
@@ -168,53 +168,6 @@
                                                      title="是否"/>
                                         </div>
                                     </div>
-                                    <!--<div class="col-md-6" id="MM7" style="display: none">
-                                        <div class="form-group m-b-20">
-                                            <label>服务代码(接入码号)<span class="text-danger">*</span>
-                                                <span class="text-danger" th:if="${#fields.hasErrors('serviceCode')}"
-                                                      th:errors="*{serviceCode}"
-                                                      style="font-weight: 200;font-size: 12px"></span></label>
-                                            <input type="text" class="form-control" required=""
-                                                   th:field="*{serviceCode}" data-parsley-length="[1,20]"
-                                                   autocomplete="off" data-parsley-type="number"
-                                                   placeholder="服务代码">
-                                        </div>
-                                        <div class="form-group m-b-20">
-                                            <label>客户提交速率(次/秒)<span
-                                                    class="text-danger">*</span>&nbsp;
-                                                <span class="text-danger"
-                                                      th:if="${#fields.hasErrors('maxSubmitSecond')}"
-                                                      th:errors="*{maxSubmitSecond}"
-                                                      style="font-weight: 200;font-size: 12px"></span></label>
-                                            <input type="text" class="form-control" required="" autocomplete="off"
-                                                   th:field="*{maxSubmitSecond}" data-parsley-length="[1,10]"
-                                                   data-parsley-type="number"
-                                                   placeholder="客户提交速率">
-                                        </div>
-
-                                        <div class="form-group m-b-20">
-                                            <label>运营商状态报告推送地址url&nbsp;
-                                                <span class="text-danger"
-                                                      th:if="${#fields.hasErrors('statusReportUrl')}"
-                                                      th:errors="*{statusReportUrl}"
-                                                      style="font-weight: 200;font-size: 12px"></span></label>
-                                            <input type="text" class="form-control"
-                                                   th:field="*{statusReportUrl}" data-parsley-length="[2,128]"
-                                                   data-parsley-type="url" autocomplete="off"
-                                                   placeholder="运营商状态报告推送地址url">
-                                        </div>
-                                        <div class="form-group m-b-20">
-                                            <label class="m-b-10">模板是否审核<span
-                                                    class="text-danger">*</span>&nbsp;</label><br>
-                                            <mpm:tag identity="isOrNo" id="executeCheck" name="executeCheck"
-                                                     th:value="${accountInterfaceInfoValidator.executeCheck}"
-                                                     show-type="radio" style="margin-top:0px" key="code" required="true"
-                                                     title="是否"/>
-                                        </div>
-
-                                    </div>-->
-
-
 
                                 </div>
                                 <div class="text-center" style="margin-bottom:20px">
@@ -242,6 +195,23 @@
 
     </div> <!-- container -->
 </div> <!-- content -->
+<div id="alert-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="custom-width-modalLabel" aria-hidden="true" style="display: none;margin: 60px">
+    <div class="modal-dialog" style="width:33%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="custom-width-modalLabel">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p id="alert-message"></p>
+            </div>
+            <div class="modal-footer">
+                <input type="hidden" id="deleteId">
+                <a class="btn btn-default waves-effect" data-dismiss="modal">关闭</a>
+            </div>
+        </div>
+    </div>
+</div>
 <th:block th:insert="fragments/common_fragments :: common_js"/>
 <th:block th:insert="fragments/common_fragments :: select_js"/>
 <th:block th:insert="fragments/common_fragments :: common_submit_form"/>
@@ -278,17 +248,15 @@
             document.getElementById("HTTP_SMS").style.display = "none";
             document.getElementById("HTTP_BLACK_SERVICE").style.display = "none";
 
-            $("#CMPP :input").each(function(){
-                $(this).attr("required","true")
-                $(this).attr("disabled", false)
-            });
+            $('#serviceCode').prop("required","true");
+            $('#maxConnect').prop("required","true");
+            $('#executeCheck').prop("required","true");
+
             $("#HTTP_SMS :input").each(function(){
                 $(this).removeAttr("required")
-                $(this).attr("disabled", "true")
             });
             $("#HTTP_BLACK_SERVICE :input").each(function(){
                 $(this).removeAttr("required")
-                $(this).attr("disabled", "true")
             });
 
         }
@@ -299,17 +267,14 @@
             document.getElementById("CMPP").style.display = "none";
             document.getElementById("HTTP_BLACK_SERVICE").style.display = "none";
 
-            $("#maxSubmitSecond")[0].setAttribute("required","true");
-            $("#maxSubmitSecond_black")[0].attr("disabled", "true")
-            $("#CHECK_TEMPL")[0].setAttribute("required","true");
+            $('#maxSubmitSecond').prop("required","true");
+            $('#executeCheck').prop("required","true");
 
             $("#CMPP :input").each(function(){
                 $(this).removeAttr("required")
-                $(this).attr("disabled", "true")
             });
             $("#HTTP_BLACK_SERVICE :input").each(function(){
                 $(this).removeAttr("required")
-                $(this).attr("disabled", "true")
             });
 
         }
@@ -320,17 +285,13 @@
             document.getElementById("HTTP_SMS").style.display = "none";
             document.getElementById("CHECK_TEMPL").style.display = "none";
 
-            $("#maxSubmitSecond_black")[0].setAttribute("required","true");
-            $("#maxSubmitSecond_black")[0].attr("disabled", "true")
-            $("#CHECK_TEMPL")[0].removeAttr("required");
+            $('#maxSubmitSecond_black').prop("required","true");
 
             $("#CMPP :input").each(function(){
                 $(this).removeAttr("required")
-                $(this).attr("disabled", "true")
             });
             $("#HTTP_SMS :input").each(function(){
                 $(this).removeAttr("required")
-                $(this).attr("disabled", "true")
             });
 
         }

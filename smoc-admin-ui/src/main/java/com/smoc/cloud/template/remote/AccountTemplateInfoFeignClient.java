@@ -4,6 +4,7 @@ package com.smoc.cloud.template.remote;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.template.AccountResourceInfoValidator;
 import com.smoc.cloud.common.smoc.template.AccountTemplateInfoValidator;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -52,4 +53,12 @@ public interface AccountTemplateInfoFeignClient {
      */
     @RequestMapping(value = "/account/template/cancelTemplate/{id}/{templateStatus}", method = RequestMethod.GET)
     ResponseData cancelTemplate(@PathVariable String id,@PathVariable String templateStatus) throws Exception;
+
+    /**
+     * 查询资源
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/account/resource/findById/{id}", method = RequestMethod.GET)
+    ResponseData<AccountResourceInfoValidator> findResourceById(@PathVariable String id);
 }

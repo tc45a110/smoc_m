@@ -11,6 +11,8 @@
     <link th:href="@{/static/plugins/custombox/css/custombox.min.css}" rel="stylesheet">
     <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
     <link th:href="@{/static/css/detail_statistics.css}" rel="stylesheet">
+    <!-- Tooltipster css -->
+    <link rel="stylesheet" th:href="@{/static/plugins/tooltipster/tooltipster.bundle.min.css}">
 </head>
 <body>
 <!-- Loader start 页面加载进度-->
@@ -73,7 +75,7 @@
                                              th:value="${messageWebTaskInfoValidator.businessType}"/>
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <mpm:tag id="sendStatus" identity="taskStatus" show-type="select" key="code"
+                                    <mpm:tag id="sendStatus" identity="messageStatus" show-type="select" key="code"
                                              name="sendStatus"
                                              th:value="${messageWebTaskInfoValidator.sendStatus}"
                                              class="form-control" data-icon="mdi mdi-view-module" title="发送状态"/>
@@ -149,17 +151,18 @@
                                     <th>任务ID/模板ID</th>
                                     <th>提交号码数/成功提交数</th>
                                     <th>成功发送条数/失败条数</th>
-                                    <th>未知数/业务类型</th>
+                                    <th>业务类型</th>
                                     <th>发送类型/定时时间</th>
                                     <th>创建时间/发送时间</th>
                                     <th>发送状态</th>
                                     <th>内容/号码文件</th>
                                     <th>提交人</th>
+                                    <th>操作</th>
                                 </tr>
                                 <thead>
                                 <tbody>
                                 <tr th:each="info:${list}">
-                                    <td style="vertical-align: middle;line-height: 26px">[[${info.businessType}]]<br>
+                                    <td style="vertical-align: middle;line-height: 26px">[[${info.businessAccount}]]<br>
                                         [[${info.enterpriseName}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px"> [[${info.id}]]<br>
@@ -188,23 +191,22 @@
                                               class="autonumber">[[${info.failureNumber}]]</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <mpm:tag id="businessType" identity="businessType"
-                                                 class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-danger btn-rounded btn-sm waves-effect waves-light;"
-                                                 name="businessType" show-type="button" key="code"
-                                                 th:value="${info.businessType}" title="业务类型"/>
+                                        <mpm:tag identity="businessType" show-type="button"
+                                                 key="code" th:value="${info.businessType}"
+                                                 class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;MULTI_SMS,btn btn-brown btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;5G_SMS,btn btn-primary btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-inverse btn-rounded btn-sm waves-effect waves-light"/>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                         <span style="width:100px;text-align:left"
-                                               data-d-group="4" data-a-sign=" " data-v-min="0"
-                                               data-v-max="999999999"
-                                               class="autonumber">[[${info.noReportNumber}]]</span>
+                                        <span th:if="${info.sendType eq '1'}">及时发送</span>
+                                        <span th:if="${info.sendType eq '2'}">定时发送</span>
                                         <br>
-                                        [[${info.sendType}]]
+                                        [[${info.timingTime}]]
                                     </td>
-                                    <td style="vertical-align: middle;line-height: 26px">[[${info.appleSendTime}]]<br/>[[${info.sendTime}]]
+                                    <td style="vertical-align: middle;line-height: 26px">[[${info.createdTime}]]<br/>[[${info.sendTime}]]
                                     </td>
-                                    <td style="vertical-align: middle;line-height: 26px"><a
-                                            class="btn btn-info btn-rounded btn-xs waves-effect waves-light">发送完成</a>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <mpm:tag identity="messageStatus" show-type="button" key="code"
+                                          th:value="${info.sendStatus}"
+                                          class="01,btn btn-warning btn-rounded waves-effect waves-light btn-sm;02,btn btn-success btn-rounded waves-effect waves-light btn-sm;03,btn btn-brown btn-rounded waves-effect waves-light btn-sm;04,btn btn-danger btn-rounded waves-effect waves-light btn-sm;05,btn btn-info btn-rounded waves-effect waves-light btn-sm;06,btn btn-purple btn-rounded waves-effect waves-light btn-sm"/>
                                     </td>
                                     <td style="vertical-align: middle">
                                         <a class="on-default edit-row">
@@ -213,12 +215,22 @@
                                                data-placement="bottom"
                                                th:data-content="${info.messageContent}"></i>
                                         </a>
-                                        <a data-toggle="modal" data-target="#download-record"
+                                        <a data-toggle="tooltip"
                                            class="on-default edit-row"
-                                           style="padding-left: 5px;color: #6B5FB5;" title="下载号码文件"><i
+                                           th:id="interaction+${info.id}"
+                                           th:onmouseover="downloadFiles([[${info.id}]])"
+                                           style="padding-left: 5px;color: #6B5FB5;" ><i
                                                 style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px"> [[${info.createdBy}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <a sec:authorize-url="/message/order/web/detail/*"
+                                           th:href="@{/message/order/web/detail/{id}(id=${info.id})}"
+                                           data-toggle="tooltip" data-placement="bottom"
+                                           data-original-title="明细"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color:#4BD396;"><i style="font-size: 18px" class="glyphicon glyphicon-search"></i></a>
                                     </td>
                                 </tr>
 
@@ -235,30 +247,6 @@
         </div>
         <!-- end row -->
 
-        <!-- start row  号码文件下载-->
-        <div id="download-record" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="a-width-modalLabel"
-             aria-hidden="true" style="display: none;margin: 60px">
-            <div class="modal-dialog modal-md">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 class="modal-title">下载附件</h4>
-                    </div>
-                    <div class="row" style="padding-top: 15px">
-                        <div class="col-sm-12 m-b-10">
-                            <p style="font-size:12px"><i style="font-size: 18px" class="mdi mdi-download"></i><a
-                                    href="">&nbsp;提交号码文件</a>
-                            </p>
-                            <p style="font-size:12px"><i style="font-size: 18px" class="mdi mdi-download"></i><a
-                                    href="">&nbsp;号码报告文件</a>
-                            </p>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- end row -->
 
         <!-- start row  错误提示-->
         <th:block th:insert="fragments/common_fragments :: common_error"/>
@@ -270,10 +258,64 @@
 
 <th:block th:insert="fragments/common_fragments :: common_js"/>
 <th:block th:insert="fragments/common_fragments :: select_js"/>
-<th:block th:insert="fragments/cookie_fragments :: cookie_js"/>
 <script th:src="@{/static/plugins/moment/moment.js}"></script>
 <script th:src="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.js}"></script>
 <script th:src="@{/static/plugins/autoNumeric/autoNumeric.js}"></script>
+<script th:src="@{/static/plugins/tooltipster/tooltipster.bundle.min.js}"></script>
+<script>
+
+    function downloadFiles(id) {
+
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $.ajax({
+            url: contextPath + "/message/order/web/findFilesById/" + id,
+            async: false,
+            success: function (data) {
+                var chains = data.split("@");
+                var onefile = ""
+                if (chains.length > 1) {
+                    for (i = 0; i < chains.length; i++) {
+                        var paraUrl = url(chains[i],id);
+                        onefile += paraUrl;
+                    }
+                } else {
+                    var paraUrl = url(chains,id);
+                    onefile = paraUrl;
+                }
+
+                $('#interaction' + id).tooltipster({
+                    content: $('<p style="text-align:left;">' + onefile + '</p>'),
+                    maxWidth: 600,
+                    position: 'right',
+                    contentAsHTML: true,
+                    interactive: true
+                });
+            }
+        });
+    }
+
+    function url(flag,id){
+        var onefile = "";
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        if("1"==flag){
+            var url = contextPath+"/message/order/web/download/numberFiles/"+id;
+            onefile = '<span style="font-size:12px"><a href="'+url+'" style="color: white">源号码内容文件</a></span><br>';
+        }else if("2"==flag){
+            var url = contextPath+"/message/order/web/download/sendNumber/"+id;
+            onefile = '<span style="font-size:12px"><a href="'+url+'" style="color: white">发送号码内容文件</a></span><br>';
+        }else if("3"==flag){
+            var url = contextPath+"/message/order/web/download/exceptionFile/"+id;
+            onefile = '<span style="font-size:12px"><a href="'+url+'" style="color: white">异常号码内容文件</a></span><br>';
+        }else if("4"==flag){
+            var url = contextPath+"/message/order/web/download/reportFile/"+id;
+            onefile = '<span style="font-size:12px"><a href="'+url+'" style="color: white">发送报告内容文件</a></span><br>';
+        }else if("5"==flag){
+            onefile = '<span style="font-size:12px">无生成附件</span><br>';
+        }
+
+        return onefile;
+    }
+</script>
 <script>
 
     $(document).ready(function () {
@@ -345,15 +387,6 @@
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
-
-
-
-
-
-
-
-
-
 
 </script>
 </body>

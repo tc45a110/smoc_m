@@ -145,8 +145,11 @@
                             <button sec:authorize-url="/message/mm/save/*" type="submit"
                                     class="btn btn-teal waves-effect waves-light">提交
                             </button>
-                            <a th:sec:authorize-url="|/message/mm/list/${businessType}/${signType}|"
+                            <a th:sec:authorize-url="|/message/mm/list/${businessType}/${signType}|" th:if="${messageWebTaskInfoValidator.messageType eq '1'}"
                                th:href="@{/message/mm/list/{businessType}/{signType}(businessType=${businessType},signType=${signType})}"
+                               class="btn btn-default waves-effect waves-light" style="margin-left:20px">返回</a>
+                            <a th:sec:authorize-url="|/message/mm/variable/list/${businessType}/${signType}|" th:if="${messageWebTaskInfoValidator.messageType eq '2'}"
+                               th:href="@{/message/mm/variable/list/{businessType}/{signType}(businessType=${businessType},signType=${signType})}"
                                class="btn btn-default waves-effect waves-light" style="margin-left:20px">返回</a>
                         </div>
                     </form>

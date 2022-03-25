@@ -12,6 +12,7 @@ import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.common.smoc.template.AccountTemplateInfoValidator;
 import com.smoc.cloud.common.smoc.template.MessageWebTaskInfoValidator;
+import com.smoc.cloud.common.smoc.utils.MessageUtil;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.common.validator.MpmIdValidator;
@@ -452,6 +453,12 @@ public class MessageController {
 
         //查看是否是自己企业
         if(!user.getOrganization().equals(infoData.getData().getEnterpriseId())){
+            view.addObject("error", "不能进行操作！");
+            return view;
+        }
+
+        //如果已经发送完成了，不能重新发送
+        if(MessageUtil.MessageTaskStatus_finish.equals(infoData.getData().getSendStatus())){
             view.addObject("error", "不能进行操作！");
             return view;
         }

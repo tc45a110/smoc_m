@@ -3,6 +3,9 @@ package com.smoc.cloud.template.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.smoc.cloud.admin.security.remote.service.FlowApproveService;
 import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
@@ -14,16 +17,24 @@ import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
 import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountValidator;
+import com.smoc.cloud.common.smoc.template.AccountResourceInfoValidator;
 import com.smoc.cloud.common.smoc.template.AccountTemplateInfoValidator;
+import com.smoc.cloud.common.smoc.template.MessageFrameParamers;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.UUID;
+import com.smoc.cloud.common.validator.MpmIdValidator;
+import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.customer.service.BusinessAccountService;
 import com.smoc.cloud.customer.service.EnterpriseService;
 import com.smoc.cloud.finance.service.FinanceAccountService;
+import com.smoc.cloud.properties.ResourceProperties;
 import com.smoc.cloud.sequence.service.SequenceService;
 import com.smoc.cloud.template.service.AccountTemplateInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
@@ -35,7 +46,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -49,7 +68,7 @@ import java.util.Map;
 public class WebTemplateController {
 
     @Autowired
-    private SequenceService sequenceService;
+    private ResourceProperties resourceProperties;
 
     @Autowired
     private FlowApproveService flowApproveService;
@@ -159,6 +178,28 @@ public class WebTemplateController {
             view.addObject("error", checkRecordData.getCode() + ":" + checkRecordData.getMessage());
             return view;
         }
+
+        //如果是多媒体模板，需要查询出资源
+        if("MULTI_SMS".equals(data.getData().getTemplateType()) || "MMS".equals(data.getData().getTemplateType())){
+            //还原帧数据
+            List<MessageFrameParamers> paramsSort = new ArrayList<MessageFrameParamers>();
+            if (!StringUtils.isEmpty(data.getData().getMmAttchment())) {
+                Gson gson = new Gson();
+                JsonParser parser = new JsonParser();
+                JsonArray Jarray = parser.parse(data.getData().getMmAttchment()).getAsJsonArray();
+                for(JsonElement obj : Jarray){
+                    MessageFrameParamers p = gson.fromJson(obj , MessageFrameParamers.class);
+                    paramsSort.add(p);
+                }
+            }
+            int allSize = 0;
+            for(MessageFrameParamers p:paramsSort){
+                allSize += new Integer(p.getResSize());
+            }
+            view.addObject("params", paramsSort);
+            view.addObject("allSize", allSize);
+        }
+
         //log.info("[checkRecord]:{}",new Gson().toJson(checkRecordData.getData()));
         view.addObject("checkRecord", checkRecordData.getData());
         view.addObject("accountTemplateInfoValidator", data.getData());
@@ -208,6 +249,27 @@ public class WebTemplateController {
         if (!ResponseCode.SUCCESS.getCode().equals(enterpriseData.getCode())) {
             view.addObject("error", enterpriseData.getCode() + ":" + enterpriseData.getMessage());
             return view;
+        }
+
+        //如果是多媒体模板，需要查询出资源
+        if("MULTI_SMS".equals(data.getData().getTemplateType()) || "MMS".equals(data.getData().getTemplateType())){
+            //还原帧数据
+            List<MessageFrameParamers> paramsSort = new ArrayList<MessageFrameParamers>();
+            if (!StringUtils.isEmpty(data.getData().getMmAttchment())) {
+                Gson gson = new Gson();
+                JsonParser parser = new JsonParser();
+                JsonArray Jarray = parser.parse(data.getData().getMmAttchment()).getAsJsonArray();
+                for(JsonElement obj : Jarray){
+                    MessageFrameParamers p = gson.fromJson(obj , MessageFrameParamers.class);
+                    paramsSort.add(p);
+                }
+            }
+            int allSize = 0;
+            for(MessageFrameParamers p:paramsSort){
+                allSize += new Integer(p.getResSize());
+            }
+            view.addObject("params", paramsSort);
+            view.addObject("allSize", allSize);
         }
 
         view.addObject("accountBasicInfoValidator", accountBasicInfoValidatorResponseData.getData());
@@ -287,4 +349,142 @@ public class WebTemplateController {
         return view;
     }
 
+    /**
+     * 显示缩略图
+     * @param id
+     * @param request
+     * @param response
+     */
+    @RequestMapping(value = "/resource/show/{id}", method = RequestMethod.GET)
+    public void show(@PathVariable String id, HttpServletRequest request, HttpServletResponse response) {
+
+        SecurityUser user = (SecurityUser)request.getSession().getAttribute("user");
+
+        //去掉id中的时间戳
+        if(!StringUtils.isEmpty(id)){
+            id = id.split("_")[0];
+        }
+
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            return;
+        }
+
+        ResponseData<AccountResourceInfoValidator> data = accountTemplateInfoService.findResourceById(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            return;
+        }
+
+        AccountResourceInfoValidator resourceValidator = data.getData();
+        if(StringUtils.isEmpty(resourceValidator.getResourceAttchment())){
+            return;
+        }
+
+        File downloadFile = new File(resourceProperties.getResourceFileRootPath() + resourceValidator.getResourceAttchment());
+        //文件不存在
+        if(!downloadFile.exists()){
+            log.info("[资源管理][download][{}]数据::{}", user.getUserName(), "文件不存在:"+downloadFile.getAbsolutePath());
+            return;
+        }
+
+        //读取文件内容输入流中
+        InputStream in = null;
+        try {
+            //设置相应类型,告诉浏览器输出的内容为图片
+            response.setContentType("image/jpeg");
+            if("gif".equals(resourceValidator.getResourceAttchmentType())){
+                response.setContentType("image/gif");
+            }else if("png".equals(resourceValidator.getResourceAttchmentType())){
+                response.setContentType("image/png");
+            }
+
+            //设置响应头信息，告诉浏览器不要缓存此内容
+            response.setHeader("Pragma", "No-cache");
+            response.setHeader("Cache-Control", "no-cache");
+            response.setDateHeader("Expire", 0);
+
+            in = new FileInputStream(downloadFile);
+            BufferedImage bImage = ImageIO.read(in);
+            ImageIO.write(bImage, resourceValidator.getResourceAttchmentType(), response.getOutputStream());
+        } catch (Exception e) {
+            log.error("[资源管理][download][{}]数据::{}", user.getUserName(), e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if(in!=null){
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /**
+     * 下载资源文件
+     *
+     * @param id
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/resource/download/{id}", method = RequestMethod.GET)
+    public ResponseEntity<byte[]> downloadFile(@PathVariable String id, HttpServletRequest request) {
+        ResponseEntity<byte[]> entity = null;
+
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        //去掉id中的时间戳
+        if (!StringUtils.isEmpty(id)) {
+            id = id.split("_")[0];
+        }
+
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            return entity;
+        }
+
+        ResponseData<AccountResourceInfoValidator> data = accountTemplateInfoService.findResourceById(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            return entity;
+        }
+
+        AccountResourceInfoValidator resourceValidator = data.getData();
+        if (StringUtils.isEmpty(resourceValidator.getResourceAttchment())) {
+            return entity;
+        }
+
+        File downloadFile = new File(resourceProperties.getResourceFileRootPath() + resourceValidator.getResourceAttchment());
+        //文件不存在
+        if (!downloadFile.exists()) {
+            log.info("[资源管理][download][{}]数据::{}", user.getUserName(), "文件不存在:" + downloadFile.getAbsolutePath());
+            return entity;
+        }
+
+        //读取文件内容输入流中
+        InputStream in = null;
+        try {
+            in = new FileInputStream(downloadFile);
+            byte[] body = new byte[in.available()];
+            in.read(body);
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Content-Disposition", "attchement;filename=" + downloadFile.getName());
+            HttpStatus statusCode = HttpStatus.OK;
+            entity = new ResponseEntity<byte[]>(body, headers, statusCode);
+        } catch (Exception e) {
+            log.error("[资源管理][download][{}]数据::{}", user.getUserName(), e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return entity;
+    }
 }

@@ -8,6 +8,7 @@
     <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
     <link th:href="@{/static/plugins/jquery.filer/css/jquery.filer.css}" rel="stylesheet"/>
     <link th:href="@{/static/plugins/jquery.filer/css/themes/jquery.filer-dragdropbox-theme.css}" rel="stylesheet"/>
+    <link th:href="@{/static/css/mmTemplate.css}" rel="stylesheet"/>
 
 </head>
 <body>
@@ -22,17 +23,13 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title"> <mpm:tag identity="helpSelfType"
-                                                     th:value="${signType}" show-type="label"
-                                                     key="code"/>明细</h4>
+                    <h4 class="page-title"> WEB任务单明细</h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
-                            短信明细
+                            运营数据
                         </li>
                         <li class="active">
-                            <mpm:tag identity="helpSelfType"
-                                     th:value="${signType}" show-type="label"
-                                     key="code"/>明细
+                            WEB任务单明细
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -48,9 +45,7 @@
                     <div class="panel-heading">
                         <h3 class="panel-title">
                             <i class="mdi mdi-content-save-all" style="margin-right:5px"></i>
-                            <mpm:tag identity="helpSelfType"
-                                     th:value="${signType}" show-type="label"
-                                     key="code"/>明细
+                            WEB任务单明细
                         </h3>
                     </div>
                     <div class="panel-body" style="height: 680px">
@@ -161,12 +156,7 @@
 
 
                                     <div class="text-right">
-                                        <a th:sec:authorize-url="|/message/list/${businessType}/${signType}|" th:if="${messageWebTaskInfoValidator.messageType eq '1'}"
-                                           th:href="@{/message/list/{businessType}/{signType}(businessType=${businessType},signType=${signType})}"
-                                           class="btn btn-default waves-effect waves-light" style="margin-left:20px">返回</a>
-                                        <a th:sec:authorize-url="|/message/variable/list/${businessType}/${signType}|" th:if="${messageWebTaskInfoValidator.messageType eq '2'}"
-                                           th:href="@{/message/variable/list/{businessType}/{signType}(businessType=${businessType},signType=${signType})}"
-                                           class="btn btn-default waves-effect waves-light" style="margin-left:20px">返回</a>
+                                        <a sec:authorize-url="/message/order/web/list" th:href="@{/message/order/web/list}" class="btn btn-default waves-effect waves-light">返回</a>
                                     </div>
                                 </div>
                                 <!-- end class p-20 -->
@@ -334,6 +324,62 @@
                             </div>
                         </div>
 
+                        <div class="col-md-12 form-group" th:if="${accountTemplateInfoValidator.templateType eq 'MULTI_SMS' or accountTemplateInfoValidator.templateType eq 'MMS'}">
+                            <label>
+                                帧列表:&nbsp;文件大小总计：[[${allSize}]]KB
+                            </label>
+                            <div class="item_content" >
+                                <ul style="float: left;padding-left: 10px">
+                                    <li th:each="para:${params}">
+                                        <div class="item filer-item">
+                                            <div>
+                                                <div th:if="${para.resType =='0'}" class="item-span-img">
+                                                    <div class="jFiler-item-thumb-image">
+                                                        <span class="jFiler-icon-file f-audio"> <i class="ion-clipboard" style="font-size:30px"></i></span>
+                                                    </div>
+                                                </div>
+                                                <div th:if="${para.resType=='1'}" class="itemImg" >
+                                                    <img th:src="@{/template/web/resource/show/{url}(url=${para.showUrl})}" draggable="false" onerror="javascript:this.src='./static/imgs/file-broken.png';this.onerror = null">
+                                                </div>
+                                                <div th:if="${para.resType =='2'}" class="item-span-img">
+                                                    <div class="jFiler-item-thumb-image">
+                                                        <span class="jFiler-icon-file f-audio"><i class="icon-jfi-file-audio"></i></span>
+                                                    </div>
+                                                </div>
+                                                <div th:if="${para.resType =='3'}" class="item-span-img">
+                                                    <div class="jFiler-item-thumb-image">
+                                                        <span class="jFiler-icon-file f-video"><i class="icon-jfi-file-video"></i></span>
+                                                    </div>
+                                                </div>
+                                                <div class="info">
+                                                    <div style="float:left;width: 133px">
+                                                        <!--                                                <span th:id="${'span-title-'+para.resId}">[[${para.getResTitle()}]]</span>-->
+                                                        第<b id="frame-index" style="color: red"></b><span th:id="${'span-staytime-'+para.resId}">帧停留：[[${para.stayTimes}]]秒</span>
+                                                        <br>
+                                                        <span th:id="${'span-size-'+para.resId}">文件大小：[[${para.getResSize()}]]KB</span>
+                                                        <br>
+                                                        <a th:id="${'span_txt_id-'+para.resId}" data-toggle="tooltip" data-placement="bottom"
+                                                           th:data-original-title="'文本内容：'+${para.getFrameTxt()}"  >文本字数：[[${para.getFrameTxt().length()}]]
+                                                        </a>
+                                                    </div>
+                                                    <div style="float:left;">
+                                                        <br><br>
+                                                        <a class="on-default edit-row" th:href="@{/template/web/resource/download/{id}(id=${para.resId})}"
+                                                           th:if="${para.resType ne '0'}"
+                                                           style="width:25px ;padding-right: 5px;color: #29b6f6;"
+                                                           title="下载">
+                                                            <i style="font-size: 18px" class="mdi mdi-download"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </div>
+
                     </div>
 
 
@@ -351,7 +397,6 @@
 <th:block th:insert="fragments/common_fragments :: common_js"/>
 <th:block th:insert="fragments/common_fragments :: select_js"/>
 <script th:src="@{/static/plugins/moment/moment.js}"></script>
-<th:block th:insert="fragments/common_fragments :: common_submit_form"/>
 
 <script>
 

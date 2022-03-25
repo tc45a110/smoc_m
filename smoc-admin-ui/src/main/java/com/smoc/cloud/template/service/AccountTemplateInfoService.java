@@ -6,6 +6,7 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.smoc.template.AccountResourceInfoValidator;
 import com.smoc.cloud.common.smoc.template.AccountTemplateInfoValidator;
 import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.template.remote.AccountTemplateInfoFeignClient;
@@ -104,6 +105,21 @@ public class AccountTemplateInfoService {
                 flowApproveValidator.setUserApproveId("");
                 flowApproveService.saveFlowApprove(flowApproveValidator,"add");
             }
+            return data;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 查询资源
+     * @param id
+     * @return
+     */
+    public ResponseData<AccountResourceInfoValidator> findResourceById(String id) {
+        try {
+            ResponseData<AccountResourceInfoValidator> data = this.accountTemplateInfoFeignClient.findResourceById(id);
             return data;
         } catch (Exception e) {
             log.error(e.getMessage());

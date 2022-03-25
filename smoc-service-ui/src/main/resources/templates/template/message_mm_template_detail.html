@@ -107,7 +107,7 @@
                                                         </div>
                                                     </div>
                                                     <div th:if="${para.resType=='1'}" class="itemImg">
-                                                        <img th:src="${para.showUrl}" draggable="false" onerror="javascript:this.src='./static/imgs/file-broken.png';this.onerror = null">
+                                                        <img th:src="@{/resource/show/{url}(url=${para.showUrl})}" draggable="false" onerror="javascript:this.src='./static/imgs/file-broken.png';this.onerror = null">
                                                     </div>
                                                     <div th:if="${para.resType =='2'}" class="item-span-img">
                                                         <div class="jFiler-item-thumb-image">

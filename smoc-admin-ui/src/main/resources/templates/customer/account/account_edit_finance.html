@@ -41,7 +41,7 @@
                                                th:value="${accountBasicInfoValidator.accountId}" readonly>
                                     </div>
                                     <div class="col-md-4 form-group m-b-20">
-                                        <label for="accountCreditSum">授信额度<span class="text-danger">*</span>&nbsp;</label>
+                                        <label for="accountCreditSum">授信额度<span class="text-danger">*</span>&nbsp;<span id="aa"></span></label>
                                         <input id="accountCreditSum" type="text" class="form-control" th:field="*{accountCreditSum}"
                                                required="" min="0"   max="1000000" autocomplete="off"
                                                placeholder="授信额度，默认0">
@@ -106,6 +106,87 @@
 <th:block th:insert="fragments/common_fragments :: select_js"/>
 <th:block th:insert="fragments/common_fragments :: common_submit_form"/>
 <script>
+
+  /*  $('#accountCreditSum').bind('input propertychange', function () {
+        var numberValue = $(this).val();
+        var numberValue=new String(Math.round(numberValue*1000)); // 数字金额
+        var chineseValue=""; // 转换后的汉字金额
+        var String1 = "零壹贰叁肆伍陆柒捌玖"; // 汉字数字
+        var String1 = "0123456789"; // 汉字数字
+        var String2 = "万仟佰拾亿仟佰拾万仟佰拾元角分厘"; // 对应单位
+        var len=numberValue.length; // numberValue 的字符串长度
+        var Ch1; // 数字的汉语读法
+        var Ch2; // 数字位的汉字读法
+        var nZero=0; // 用来计算连续的零值的个数
+        var String3; // 指定位置的数值
+        if(len>15){
+            return "";
+        }
+        if (numberValue==0){
+            chineseValue = "零元整";
+            $("#aa").html(chineseValue);
+        }
+
+        String2 = String2.substr(String2.length-len, len); // 取出对应位数的STRING2的值
+        for(var i=0; i<len; i++){
+            String3 = parseInt(numberValue.substr(i, 1),10); // 取出需转换的某一位的值
+            if ( i != (len - 4) && i != (len - 8) && i != (len - 12) && i !=(len - 16) ){
+                if ( String3 == 0 ){
+                    Ch1 = "";
+                    Ch2 = "";
+                    nZero = nZero + 1;
+                }
+                else if ( String3 != 0 && nZero != 0 ){
+                    Ch1 = "零" + String1.substr(String3, 1);
+                    Ch2 = String2.substr(i, 1);
+                    nZero = 0;
+                }
+                else{
+                    Ch1 = String1.substr(String3, 1);
+                    Ch2 = String2.substr(i, 1);
+                    nZero = 0;
+                }
+            }
+            else{ // 该位是万亿，亿，万，元位等关键位
+                if( String3 != 0 && nZero != 0 ){
+                    Ch1 = "零" + String1.substr(String3, 1);
+                    Ch2 = String2.substr(i, 1);
+                    nZero = 0;
+                }
+                else if ( String3 != 0 && nZero == 0 ){
+                    Ch1 = String1.substr(String3, 1);
+                    Ch2 = String2.substr(i, 1);
+                    nZero = 0;
+                }
+                else if( String3 == 0 && nZero >= 3 ){
+                    Ch1 = "";
+                    Ch2 = "";
+                    nZero = nZero + 1;
+                }
+                else{
+                    Ch1 = "";
+                    Ch2 = String2.substr(i, 1);
+                    nZero = nZero + 1;
+                }
+                if( i == (len - 11) || i == (len - 3)){ // 如果该位是亿位或元位，则必须写上
+                    Ch2 = String2.substr(i, 1);
+                }
+            }
+            chineseValue = chineseValue + Ch1 + Ch2;
+        }
+
+        /!*if ( String3 == 0 ){ // 最后一位（分）为0时，加上“整”
+            chineseValue = chineseValue + "整";
+        }*!/
+        $("#aa").html(chineseValue);
+    });*/
+
+    function ChinaCost(numberValue){
+        alert(numberValue)
+
+    }
+
+
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');

@@ -55,4 +55,20 @@ public class MessageWebTaskInfoService {
             return ResponseDataUtil.buildError(e.getMessage());
         }
     }
+
+    /**
+     * 根据id获取信息
+     *
+     * @param id
+     * @return
+     */
+    public ResponseData<MessageWebTaskInfoValidator> findById(String id) {
+        try {
+            ResponseData<MessageWebTaskInfoValidator> data = this.messageWebTaskInfoFeignClient.findById(id);
+            return data;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
 }
