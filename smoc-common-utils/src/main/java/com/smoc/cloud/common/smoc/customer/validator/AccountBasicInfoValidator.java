@@ -45,6 +45,8 @@ public class AccountBasicInfoValidator {
     private String accountStatus;
     @NotNull(message = "账号优先级不能为空！")
     private String accountPriority;
+    @NotNull(message = "扣费不能为空！")
+    private String consumeType;
     private String createdBy;
     private String createdTime;
     private String updatedBy;

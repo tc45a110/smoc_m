@@ -210,6 +210,8 @@ public class AccountController {
             accountBasicInfoValidator.setRandomExtendCodeLength(0);
             accountBasicInfoValidator.setAccountProcess("10000");
             accountBasicInfoValidator.setAccountPriority("1");//优先级：默认正常
+            accountBasicInfoValidator.setConsumeType("1");//默认下发扣费、
+            accountBasicInfoValidator.setBusinessType("TEXT_SMS");
 
             //查询企业数据
             ResponseData<EnterpriseBasicInfoValidator> data = enterpriseService.findById(accountId);

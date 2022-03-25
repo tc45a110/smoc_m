@@ -21,6 +21,7 @@ public class AccountBasicInfo {
     private String accountProcess;
     private String accountStatus;
     private String accountPriority;
+    private String consumeType;
     private String createdBy;
     private Date createdTime;
     private String updatedBy;
@@ -215,6 +216,16 @@ public class AccountBasicInfo {
 
     public void setAccountPriority(String accountPriority) {
         this.accountPriority = accountPriority;
+    }
+
+    @Basic
+    @Column(name = "CONSUME_TYPE")
+    public String getConsumeType() {
+        return consumeType;
+    }
+
+    public void setConsumeType(String consumeType) {
+        this.consumeType = consumeType;
     }
 
     @Override
