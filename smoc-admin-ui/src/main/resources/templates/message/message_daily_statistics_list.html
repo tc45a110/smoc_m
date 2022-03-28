@@ -102,19 +102,19 @@
                             <div class="detailInner">
                                 <a>总成功提交数：<span style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
                                                 data-d-group="4" data-a-sign=" " data-v-min="0"
-                                                data-v-max="999999999"
+                                                data-v-max="99999999999"
                                                 class="autonumber">[[${countMap.get('SUCCESS_SUBMIT_NUM')}]]</span></a><i></i>
                                 <a>总成功发送数：<span style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
                                                 data-d-group="4" data-a-sign=" " data-v-min="0"
-                                                data-v-max="999999999"
+                                                data-v-max="99999999999"
                                                 class="autonumber">[[${countMap.get('MESSAGE_SUCCESS_NUM')}]]</span></a><i></i>
                                 <a>总发送失败数：<span style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
                                                 data-d-group="4" data-a-sign=" " data-v-min="0"
-                                                data-v-max="999999999"
+                                                data-v-max="99999999999"
                                                 class="autonumber">[[${countMap.get('MESSAGE_FAILURE_NUM')}]]</span></a><i></i>
                                 <a>总未知数：<span style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
                                               data-d-group="4" data-a-sign=" " data-v-min="0"
-                                              data-v-max="999999999"
+                                              data-v-max="99999999999"
                                               class="autonumber">[[${countMap.get('MESSAGE_NO_REPORT_NUM')}]]</span></a>
                             </div>
                         </li>
@@ -164,37 +164,50 @@
                                         [[${info.messageSign}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
+                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999999"
                                               class="autonumber">[[${info.customerSubmitNum}]]</span>
                                         <br>
-                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
+                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="99999999999"
                                               class="autonumber">[[${info.failureSubmitNum}]]</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
+                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="99999999999"
                                               class="autonumber">[[${info.messageSuccessNum}]]</span>
                                         <br>
-                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                              class="autonumber">[[${info.messageFailureNum}]]</span>
+                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="99999999999"
+                                              class="autonumber">[[${info.successSubmitNum}]]</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
+                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="99999999999"
                                               class="autonumber">[[${info.messageFailureNum}]]</span>
                                         <br>
-                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
+                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="99999999999"
                                               class="autonumber">[[${info.messageNoReportNum}]]</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a class="btn btn-purple btn-rounded  waves-effect waves-light btn-ms">国际短信</a>
+                                        <mpm:tag identity="businessType" show-type="button"
+                                                 key="code" th:value="${info.businessType}"
+                                                 class="TEXT_SMS,btn btn-teal btn-rounded waves-effect waves-light btn-ms;MULTI_SMS,btn btn-brown btn-rounded waves-effect waves-light btn-ms;MMS,btn btn-info waves-effect waves-light btn-ms;5G_SMS,btn btn-primary btn-rounded waves-effect waves-light btn-ms;INTERNATIONAL_SMS,btn btn-purple btn-rounded waves-effect waves-light btn-ms;BLACK_SERVICE,btn btn-inverse btn-rounded waves-effect waves-light btn-ms"/>
+
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        [[${info.carrier}]]
+                                        <mpm:tag  identity="carrier"
+                                                  show-type="button" key="code" th:value="${info.carrier}" class="CMCC,btn btn-teal btn-rounded btn-sm waves-effect waves-light;UNIC,btn btn-info btn-rounded btn-sm waves-effect waves-light;TELC,btn btn-success btn-rounded btn-sm waves-effect waves-light;INTL,btn btn-purple btn-rounded btn-sm waves-effect waves-light;"/>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        [[${info.areaCode}]]
+                                        <mpm:tag th:if="${info.carrier!='INTL'}"   identity="provices"
+                                                 show-type="button" key="code" th:value="${info.areaCode}"  class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;"/>
+
+                                        <mpm:tag th:if="${info.carrier=='INTL'}"  identity="internationalArea"
+                                                 show-type="button" key="code" th:value="${info.areaCode}"  class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;"/>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        [[${info.priceAreaCode}]]
+                                        <mpm:tag th:if="${info.carrier!='INTL'}"   identity="provices"
+                                                 show-type="button" key="code" th:value="${info.priceAreaCode}"  class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;"/>
+
+                                        <mpm:tag th:if="${info.carrier=='INTL'}"  identity="internationalArea"
+                                                 show-type="button" key="code" th:value="${info.priceAreaCode}"  class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;"/>
+
                                     </td>
                                 </tr>
                                 </tbody>

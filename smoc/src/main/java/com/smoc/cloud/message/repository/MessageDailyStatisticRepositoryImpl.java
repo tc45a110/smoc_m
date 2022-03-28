@@ -104,7 +104,8 @@ public class MessageDailyStatisticRepositoryImpl extends BasePageRepository {
             paramsList.add(qo.getEndDate().trim());
         }
 
-        sqlBuffer.append(" order by t.CREATED_TIME desc");
+        sqlBuffer.append(" order by t.MESSAGE_DATE desc,t.CREATED_TIME desc,t.MESSAGE_SUCCESS_NUM desc");
+
 
         //根据参数个数，组织参数值
         Object[] params = new Object[paramsList.size()];
@@ -182,7 +183,7 @@ public class MessageDailyStatisticRepositoryImpl extends BasePageRepository {
             paramsList.add(qo.getEndDate().trim());
         }
 
-        sqlBuffer.append(" order by t.CREATED_TIME desc");
+        sqlBuffer.append(" order by t.MESSAGE_DATE desc,t.CREATED_TIME desc");
 
         //根据参数个数，组织参数值
         Object[] params = new Object[paramsList.size()];

@@ -131,7 +131,7 @@ public class SystemHistoryPriceChangeRecordRepositoryImpl extends BasePageReposi
                 String updateChannelHistoryPrice = "update config_channel_price_history set CHANNEL_PRICE=" + validator.getChangePrice() + ",UPDATED_TIME = now(),UPDATED_BY='" + validator.getCreatedBy() + "' where CHANNEL_ID='" + validator.getBusinessId() + "' and AREA_CODE ='" + validator.getPriceArea() + "' and PRICE_DATE>='" + validator.getStartDate() + "' ";
                 sqlList.add(updateChannelHistoryPrice);
 
-                String updateMessageDailyStatisticsChannelPrice = "update message_daily_statistics set CHANNEL_PRICE=" + validator.getChangePrice() + ",UPDATED_TIME = now(),UPDATED_BY='" + validator.getCreatedBy() + "' where CHANNEL_ID='" + validator.getBusinessId() + "' and PRICE_AREA_CODE ='" + validator.getPriceArea() + "' and MESSAGE_DATE>='" + validator.getStartDate() + "' ";
+                String updateMessageDailyStatisticsChannelPrice = "update message_daily_statistics set CHANNEL_PRICE=" + validator.getChangePrice() + ",UPDATED_TIME = now(),UPDATED_BY='" + validator.getCreatedBy() + "' where CHANNEL_ID='" + validator.getBusinessId() + "' and PRICE_AREA_CODE ='" + validator.getPriceArea() + "' and '" + validator.getStartDate() + "'<=MESSAGE_DATE";
                 sqlList.add(updateMessageDailyStatisticsChannelPrice);
 
             }
@@ -184,7 +184,8 @@ public class SystemHistoryPriceChangeRecordRepositoryImpl extends BasePageReposi
                 String updateChannelHistoryPrice = "update account_price_history set CARRIER_PRICE=" + validator.getChangePrice() + ",UPDATED_TIME = now(),UPDATED_BY='" + validator.getCreatedBy() + "' where ACCOUNT_ID='" + validator.getBusinessId() + "' and CARRIER ='" + validator.getPriceArea() + "' and PRICE_DATE>='" + validator.getStartDate() + "' ";
                 sqlList.add(updateChannelHistoryPrice);
 
-                String updateMessageDailyStatisticsChannelPrice = "update message_daily_statistics set ACCOUNT_PRICE=" + validator.getChangePrice() + ",UPDATED_TIME = now(),UPDATED_BY='" + validator.getCreatedBy() + "' where BUSINESS_ACCOUNT='" + validator.getBusinessId() + "' and PRICE_AREA_CODE ='" + validator.getPriceArea() + "' and MESSAGE_DATE>='" + validator.getStartDate() + "' ";
+                String updateMessageDailyStatisticsChannelPrice = "update message_daily_statistics set ACCOUNT_PRICE=" + validator.getChangePrice() + ",UPDATED_TIME = now(),UPDATED_BY='" + validator.getCreatedBy() + "' where BUSINESS_ACCOUNT='" + validator.getBusinessId() + "' and CARRIER ='" + validator.getPriceArea() + "' and  '" + validator.getStartDate() + "'<=MESSAGE_DATE";
+                log.info("[updateMessageDailyStatisticsChannelPrice]：{}", updateMessageDailyStatisticsChannelPrice);
                 sqlList.add(updateMessageDailyStatisticsChannelPrice);
             }
 

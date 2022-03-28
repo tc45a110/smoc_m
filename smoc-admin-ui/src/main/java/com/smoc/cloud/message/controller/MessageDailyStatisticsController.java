@@ -1,5 +1,6 @@
 package com.smoc.cloud.message.controller;
 
+import com.google.gson.Gson;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
