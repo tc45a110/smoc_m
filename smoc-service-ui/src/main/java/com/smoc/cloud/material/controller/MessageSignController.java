@@ -202,11 +202,11 @@ public class MessageSignController {
 
         MultipartHttpServletRequest mRequest = (MultipartHttpServletRequest) request;
         List<MultipartFile> file = mRequest.getFiles("file[]");
-        if("add".equals(op) && file.size()==0){
+        /*if("add".equals(op) && file.size()==0){
             // 提交前台错误提示
             FieldError err = new FieldError("上传附件", "contractFiles", "附件不能为空");
             result.addError(err);
-        }
+        }*/
 
         //完成参数规则验证
         if (result.hasErrors()) {

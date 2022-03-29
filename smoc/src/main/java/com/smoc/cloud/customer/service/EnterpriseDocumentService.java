@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -143,7 +144,7 @@ public class EnterpriseDocumentService {
         EnterpriseDocumentInfo data = enterpriseDocumentRepository.findById(id).get();
         //记录日志
         log.info("[签名资质管理][delete]数据:{}",JSON.toJSONString(data));
-        enterpriseDocumentRepository.updateStatusById(id,"0");
+        enterpriseDocumentRepository.updateStatusById(id,"0","");
 
         //查询有没有附件，有：置为无效
         List<SystemAttachmentInfo> list = systemAttachmentRepository.findByMoudleIdAndAttachmentStatus(data.getId(),"1");
@@ -171,7 +172,8 @@ public class EnterpriseDocumentService {
         }else{
             enterpriseDocumentInfoValidator.setDocStatus(enterpriseDocumentInfoValidator.getCheckStatus());
         }
-        enterpriseDocumentRepository.updateStatusById(enterpriseDocumentInfoValidator.getId(),enterpriseDocumentInfoValidator.getDocStatus());
+        String checkDate = DateTimeUtils.getDateTimeFormat(new Date());
+        enterpriseDocumentRepository.updateStatusById(enterpriseDocumentInfoValidator.getId(),enterpriseDocumentInfoValidator.getDocStatus(),checkDate);
 
         return ResponseDataUtil.buildSuccess();
     }

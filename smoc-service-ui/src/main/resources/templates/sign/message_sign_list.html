@@ -90,27 +90,27 @@
                             <table class="table table table-hover m-10" style="margin-top: -12px;">
                                 <thead>
                                 <tr>
-                                    <th>签名名称</th>
-                                    <th>业务类型</th>
                                     <th>信息分类</th>
+                                    <th>签名名称</th>
+                                    <th>备注</th>
                                     <th>审核状态</th>
                                     <th>提交时间</th>
+                                    <th>审核时间</th>
                                     <th>操作</th>
                                 </tr>
                                 <thead>
                                 <tbody>
                                 <tr th:each="info:${list}">
                                     <td style="vertical-align: middle;line-height: 26px">
+                                        <mpm:tag identity="infoType" th:value="${info.infoType}" show-type="label" key="code"/>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
                                         <span style="color:#26A69A;" class="text-overflow"
                                               data-toggle="tooltip" data-placement="bottom"
                                               th:data-original-title="${info.signName}">[[${info.signName}]]</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <mpm:tag identity="businessType" th:value="${info.businessType}" show-type="label"
-                                                 key="code"/>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <mpm:tag identity="infoType" th:value="${info.infoType}" show-type="label" key="code"/>
+                                        [[${info.docKey}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         <a class="btn btn-success btn-rounded btn-sm waves-effect waves-light" th:if="${info.docStatus eq '1'}">通过审核</a>
@@ -121,10 +121,13 @@
                                         [[${info.createdTime}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
+                                        [[${info.checkDate}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
                                         <a sec:authorize-url="/sign/detail/*"
                                            th:href="@{/sign/detail/{id}(id=${info.id})}"
                                            data-toggle="tooltip" data-placement="bottom"
-                                           data-original-title="明细"
+                                           data-original-title="查看详情"
                                            class="on-default edit-row"
                                            style="padding-left: 5px;color:#4BD396;"><i style="font-size: 18px"
                                            class="glyphicon glyphicon-search"></i></a>

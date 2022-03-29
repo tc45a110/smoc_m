@@ -20,6 +20,7 @@ public class EnterpriseDocumentInfo {
     private Date createdTime;
     private String updatedBy;
     private Date updatedTime;
+    private String checkDate;
 
     @Id
     @Column(name = "ID")
@@ -139,6 +140,16 @@ public class EnterpriseDocumentInfo {
 
     public void setUpdatedTime(Date updatedTime) {
         this.updatedTime = updatedTime;
+    }
+
+    @Basic
+    @Column(name = "CHECK_DATE")
+    public String getCheckDate() {
+        return checkDate;
+    }
+
+    public void setCheckDate(String checkDate) {
+        this.checkDate = checkDate;
     }
 
     @Override

@@ -60,21 +60,31 @@
                                                  name="infoType" th:value="${enterpriseDocumentInfoValidator.infoType}" title="信息分类"/>
                                     </div>
                                     <div class="form-group m-b-20">
-                                        <label>签名<span class="text-danger">*</span>&nbsp;(无须在签名内容前后添加【】、()、[]，以避免签名符号重复)
+                                        <label>签名<span class="text-danger">*</span>&nbsp;
                                             <span class="text-danger" th:if="${#fields.hasErrors('signName')}"
                                                   th:errors="*{signName}"></span></label>
-                                        <textarea type="text" class="form-control" th:field="*{signName}"
-                                                  required="" data-parsley-length="[2,500]" autocomplete="off"
-                                                  rows="5"   placeholder="签名"></textarea>
+                                        <input type="text" class="form-control" th:field="*{signName}"
+                                                  required="" data-parsley-length="[1,10]" autocomplete="off"
+                                                  placeholder="签名">
                                     </div>
 
                                     <div class="form-group m-b-20">
                                         <label>备注
                                             <span class="text-danger" th:if="${#fields.hasErrors('docKey')}"
                                                   th:errors="*{docKey}"></span></label>
-                                        <input type="text" class="form-control" data-parsley-length="[1,128]"
-                                               autocomplete="off" th:field="*{docKey}"placeholder="关键字">
+                                        <input type="text" class="form-control" data-parsley-length="[1,10]"
+                                               autocomplete="off" th:field="*{docKey}"placeholder="备注">
                                     </div>
+
+                                    <div class="form-group m-b-20">
+                                        <label>上传附件&nbsp;
+                                            <span class="text-danger" th:if="${#fields.hasErrors('contractFiles')}"
+                                                  th:errors="*{contractFiles}"></span></label><br>
+                                        <input type="file" name="file" id="input_file"
+                                               multiple="multiple">
+
+                                    </div>
+
                                 </div>
                                 <!-- end class p-20 -->
 
@@ -111,15 +121,32 @@
 
                             </div> <!-- end col -->
 
-                            <div class="col-md-6">
-                                <div class="form-group m-b-20">
-                                    <label>上传附件<span class="text-danger">*</span>&nbsp;(上传完整的签名合同链压缩包)
-                                        <span class="text-danger" th:if="${#fields.hasErrors('contractFiles')}"
-                                              th:errors="*{contractFiles}"></span></label><br>
-                                    <input type="file" name="file" id="input_file"
-                                           multiple="multiple">
-
+                            <div class="col-md-6" >
+                                <div class="p-20">
+                                    <div class="form-group">
+                                        <label>签名规范：</label>
+                                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;无需在签名内容前后添加中括号，直接输入名称即可；每次仅能填入1个签名，若多个签名资质文件一致时，烦请联系客服批量处理</p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>上传附件规范：</label>
+                                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上传签名资质文件（支持文档、图片、压缩包等文件上传），且上传附件可为空</p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>签名资质文件一般审核规范：</label>
+                                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一、金融类签名</p>
+                                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1、【签名方】营业执照；</p>
+                                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2、完整的合同链(合同中公司名称、委托内容、有效期、盖章页应清晰可见)；</p>
+                                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3、短信完整文案；</p>
+                                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4、《金融安全承诺书》</p>
+                                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5、金融许可证或者政府的金融批复文件；</p>
+                                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6、若为催收签名，还需提供催收授权函</p>
+                                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;二、其他类签名</p>
+                                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1、【签名方】营业执照；</p>
+                                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2、完整的合同链(合同中公司名称、委托内容、有效期、盖章页应清晰可见)；</p>
+                                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3、短信完整文案；</p>
+                                    </div>
                                 </div>
+
 
                             </div> <!-- end col -->
 

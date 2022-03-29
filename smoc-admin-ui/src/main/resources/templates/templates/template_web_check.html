@@ -57,17 +57,14 @@
                                                 </label>
                                             </div>
                                             <div class="col-md-6 form-group">
-                                                <label>业务账号： <span style="color:#00acc1">[[${accountBasicInfoValidator.accountId}]]</span>
+                                                <label>信息分类： <span style="color:#00acc1"><mpm:tag identity="infoType" show-type="label" key="code"th:value="${accountTemplateInfoValidator.infoType}"/></span>
                                                 </label>
                                             </div>
-                                            <div class="col-md-6 form-group">
-                                                <label>业务账号名称：<span style="color:#00acc1">[[${accountBasicInfoValidator.accountName}]]</span>
-                                                </label>
-                                            </div>
+
                                             <div class="col-md-6 form-group">
                                                 <label>业务类型：<span style="color:#00acc1">
                                                     <mpm:tag identity="businessType" show-type="button"
-                                                             key="code" th:value="${accountBasicInfoValidator.businessType}"
+                                                             key="code" th:value="${accountTemplateInfoValidator.templateType}"
                                                              class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;MULTI_SMS,btn btn-brown btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;5G_SMS,btn btn-primary btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-inverse btn-rounded btn-sm waves-effect waves-light"/>
                                                     </span>
                                                 </label>

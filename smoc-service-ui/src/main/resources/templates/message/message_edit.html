@@ -76,16 +76,6 @@
                                                   rows="10" readonly></textarea>
                                     </div>
 
-                                    <div class="form-group m-b-20" th:if="${messageWebTaskInfoValidator.messageType eq '1'}">
-                                        <label>手机号&nbsp;
-                                            <span class="text-danger" th:if="${#fields.hasErrors('inputNumber')}"
-                                                  th:errors="*{inputNumber}"></span></label>
-                                        <textarea class="form-control" th:field="*{inputNumber}"
-                                                  data-parsley-length="[11,5000000]" autocomplete="off"
-                                                  rows="5"   placeholder="请输入手机号以英文逗号分隔，如：136xxxxxxxx,180xxxxxxxx"></textarea>
-
-                                    </div>
-
                                     <div class="form-group m-b-20">
                                         <label>发送方式<span class="text-danger">*</span>&nbsp;
                                             <span class="text-danger" th:if="${#fields.hasErrors('sendType')}"
@@ -107,19 +97,53 @@
                             </div> <!-- end row -->
 
                             <div class="col-md-6">
-                                <div class="alert alert-icon" style="background-color: #00acc1" th:if="${messageWebTaskInfoValidator.messageType eq '1'}">
-                                    <i class="mdi mdi-block-helper"></i>
-                                    <strong>提醒!</strong> 手动输入手机号和上传手机号文件，只能选择一种方式。
-                                </div>
-                                <div class="form-group m-b-20">
-                                    <label>上传手机号文件（<a sec:authorize-url="/message/downFileTemp/*" th:onclick="downFile('1')" th:if="${messageWebTaskInfoValidator.messageType eq '1'}">下载txt模板</a>
-                                        <a sec:authorize-url="/message/downFileTemp/*" th:onclick="downFile('2')" th:if="${messageWebTaskInfoValidator.messageType eq '2'}">下载txt模板</a>）
-                                        <span class="text-danger" th:if="${#fields.hasErrors('numberFiles')}"
-                                              th:errors="*{numberFiles}"></span></label><br>
-                                    <input type="file" name="file" id="filer_name"
-                                           multiple="multiple">
+                                <div class="p-20">
+                                    <div class="form-group m-b-20">
+                                        <label>上传方式<span class="text-danger">*</span>&nbsp;
+                                            <span class="text-danger" th:if="${#fields.hasErrors('upType')}"
+                                                  th:errors="*{upType}"></span></label>
+                                        <br/>
+                                        <div class="radio radio-info radio-inline"  th:if="${messageWebTaskInfoValidator.messageType eq '1'}">
+                                            <input type="radio" id="upRadio1" name="upType" value="1" th:checked="${messageWebTaskInfoValidator.upType eq '1'}" th:onclick="change('1')">
+                                            <label for="upRadio1"> 手动输入 </label>
+                                        </div>
+                                        <div class="radio radio-info radio-inline">
+                                            <input type="radio" id="upRadio2" name="upType" value="2" th:checked="${messageWebTaskInfoValidator.upType eq '2'}" th:onclick="change('2')">
+                                            <label for="upRadio2"> 批量导入 &nbsp;</label>
+                                        </div>
+                                        <div class="radio radio-info radio-inline"  th:if="${messageWebTaskInfoValidator.messageType eq '1'}">
+                                            <input type="radio" id="upRadio3" name="upType" value="3" th:checked="${messageWebTaskInfoValidator.upType eq '3'}" th:onclick="change('3')">
+                                            <label for="upRadio3"> 选择通讯录 &nbsp;</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group m-b-20" th:if="${messageWebTaskInfoValidator.messageType eq '1'}" id="inputNumber" style="display: none">
+                                        <label>手机号&nbsp;</label>
+                                        <textarea class="form-control" th:field="*{inputNumber}"
+                                                  data-parsley-length="[11,5000000]" autocomplete="off"
+                                                  rows="5"   placeholder="请输入手机号以英文逗号分隔，如：136xxxxxxxx,180xxxxxxxx"></textarea>
 
+                                    </div>
+                                    <div class="form-group m-b-20" th:if="${messageWebTaskInfoValidator.messageType eq '1'}" id="groupFile" style="display: none">
+                                        <label>选择通讯录&nbsp;</label>
+                                        <select name="groupId" data-style="btn-default" th:if="${not #lists.isEmpty(groupList)}"
+                                                class="selectpicker  form-control" tabindex="-98" >
+                                            <option data-icon="mdi mdi-account" value="">--请选择通讯录--</option>
+                                            <option data-icon="mdi mdi-account" th:each="info:${groupList}"
+                                                    th:selected="${messageWebTaskInfoValidator.groupId eq info.groupId}" th:value="${info.groupId}">[[${info.groupName}]]</option>
+                                        </select>
+                                        <span th:if="${#lists.isEmpty(groupList)}" class="form-control" style="color: red">无通讯录</span>
+
+                                    </div>
+                                    <div class="form-group m-b-20" style="display: none" id="upFile">
+                                        <label>上传手机号文件（<a sec:authorize-url="/message/downFileTemp/*" th:onclick="downFile('1')" th:if="${messageWebTaskInfoValidator.messageType eq '1'}">下载txt模板</a>
+                                            <a sec:authorize-url="/message/downFileTemp/*" th:onclick="downFile('2')" th:if="${messageWebTaskInfoValidator.messageType eq '2'}">下载txt模板</a>）
+                                            </label><br>
+                                        <input type="file" name="file" id="filer_name"
+                                               multiple="multiple">
+
+                                    </div>
                                 </div>
+
 
                             </div> <!-- end col -->
 
@@ -245,7 +269,35 @@
 <script th:src="@{/static/plugins/jquery.filer/js/jquery.filer.min.js}"></script>
 <th:block th:insert="fragments/common_fragments :: common_submit_form"/>
 
-<script>
+<script th:remove="${#strings.isEmpty(error)}?none:all">
+
+    $(function() {
+        var type = '[[${messageWebTaskInfoValidator.upType}]]';
+        change(type);
+    });
+
+    function change(type){
+
+        if("1" == type){
+            document.getElementById("inputNumber").style.display = "";
+            document.getElementById("upFile").style.display = "none";
+            document.getElementById("groupFile").style.display = "none";
+        }
+        if("2" == type){
+            var messageType = $("#messageType").val();
+            if("1" == messageType){
+                document.getElementById("inputNumber").style.display = "none";
+                document.getElementById("groupFile").style.display = "none";
+            }
+            document.getElementById("upFile").style.display = "";
+        }
+        if("3" == type){
+            document.getElementById("inputNumber").style.display = "none";
+            document.getElementById("upFile").style.display = "none";
+            document.getElementById("groupFile").style.display = "";
+        }
+
+    }
 
     var currentPage = 1;
     var pages = 1;
@@ -328,7 +380,7 @@
     }
 
 </script>
-<script>
+<script th:remove="${#strings.isEmpty(error)}?none:all">
 
     function downFile(type) {
         var contextPath = '[[${#httpServletRequest.getContextPath()}]]';

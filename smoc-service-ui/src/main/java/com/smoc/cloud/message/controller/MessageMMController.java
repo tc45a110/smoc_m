@@ -8,12 +8,14 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
+import com.smoc.cloud.book.service.GroupService;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
+import com.smoc.cloud.common.smoc.filter.FilterGroupListValidator;
 import com.smoc.cloud.common.smoc.template.AccountTemplateInfoValidator;
 import com.smoc.cloud.common.smoc.template.MessageFrameParamers;
 import com.smoc.cloud.common.smoc.template.MessageWebTaskInfoValidator;
@@ -82,7 +84,7 @@ public class MessageMMController {
     private MessageProperties smocProperties;
 
     @Autowired
-    private ResourceProperties resourceProperties;
+    private GroupService groupService;
 
     /**
      * 短信发送列表
@@ -179,6 +181,7 @@ public class MessageMMController {
         messageWebTaskInfoValidator.setSendType("1");
         messageWebTaskInfoValidator.setMessageType("1");
         messageWebTaskInfoValidator.setSendStatus("05");
+        messageWebTaskInfoValidator.setUpType("1");
 
         //查询企业下得所有业务账号
         AccountBasicInfoValidator accountBasicInfoValidator = new AccountBasicInfoValidator();
@@ -190,6 +193,12 @@ public class MessageMMController {
         if (!ResponseCode.SUCCESS.getCode().equals(info.getCode())) {
             view.addObject("error", info.getCode() + ":" + info.getMessage());
             return view;
+        }
+
+        //根据父id查询群组
+        ResponseData<List<FilterGroupListValidator>> data = groupService.findByParentId(user.getOrganization(),user.getOrganization());
+        if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("groupList", data.getData());
         }
 
         //op操作标记，add表示添加，edit表示修改
@@ -249,6 +258,12 @@ public class MessageMMController {
         MessageWebTaskInfoValidator messageWebTaskInfoValidator = data.getData();
         messageWebTaskInfoValidator.setMultimediaAttachmentData(templateData.getData().getMmAttchment());
 
+        //根据父id查询群组
+        ResponseData<List<FilterGroupListValidator>> groupData = groupService.findByParentId(user.getOrganization(),user.getOrganization());
+        if (ResponseCode.SUCCESS.getCode().equals(groupData.getCode())) {
+            view.addObject("groupList", groupData.getData());
+        }
+
         //op操作标记，add表示添加，edit表示修改
         view.addObject("op", "edit");
         view.addObject("messageWebTaskInfoValidator", messageWebTaskInfoValidator);
@@ -279,22 +294,31 @@ public class MessageMMController {
             FieldError err = new FieldError("发送方式", "sendType", "定时时间不能为空");
             result.addError(err);
         }
-        if("1".equals(messageWebTaskInfoValidator.getMessageType()) && StringUtils.isEmpty(messageWebTaskInfoValidator.getInputNumber()) && StringUtils.isEmpty(messageWebTaskInfoValidator.getNumberFiles())){
+        //变量类型
+        if("2".equals(messageWebTaskInfoValidator.getMessageType())){
+            messageWebTaskInfoValidator.setUpType("2");
+        }
+
+        if("1".equals(messageWebTaskInfoValidator.getUpType()) && StringUtils.isEmpty(messageWebTaskInfoValidator.getInputNumber())){
             // 提交前台错误提示
-            FieldError err = new FieldError("手机号", "inputNumber", "群发号码，号码文件不能都为空");
+            FieldError err = new FieldError("手机号", "upType", "群发号码不能为空");
+            result.addError(err);
+        }
+        if("2".equals(messageWebTaskInfoValidator.getUpType()) && StringUtils.isEmpty(messageWebTaskInfoValidator.getNumberFiles())){
+            // 提交前台错误提示
+            FieldError err = new FieldError("手机号", "upType", "群发号码不能为空");
+            result.addError(err);
+        }
+        if("3".equals(messageWebTaskInfoValidator.getUpType()) && StringUtils.isEmpty(messageWebTaskInfoValidator.getGroupId())){
+            // 提交前台错误提示
+            FieldError err = new FieldError("手机号", "upType", "群发号码不能为空");
             result.addError(err);
         }
 
-       if(!StringUtils.isEmpty(messageWebTaskInfoValidator.getInputNumber()) && !StringUtils.isEmpty(messageWebTaskInfoValidator.getNumberFiles())){
-            // 提交前台错误提示
-            FieldError err = new FieldError("手机号", "inputNumber", "群发号码，号码文件只能选择一种方式");
-            result.addError(err);
+        if(!user.getOrganization().equals(messageWebTaskInfoValidator.getEnterpriseId())){
+            view.addObject("error", "无法进行操作");
+            return view;
         }
-
-       if(!user.getOrganization().equals(messageWebTaskInfoValidator.getEnterpriseId())){
-           view.addObject("error", "无法进行操作");
-           return view;
-       }
 
        //查询模板资源
         ResponseData<AccountTemplateInfoValidator> templateData = messageTemplateService.findById(messageWebTaskInfoValidator.getTemplateId());
@@ -312,6 +336,12 @@ public class MessageMMController {
             if (!ResponseCode.SUCCESS.getCode().equals(info.getCode())) {
                 view.addObject("error", info.getCode() + ":" + info.getMessage());
                 return view;
+            }
+
+            //根据父id查询群组
+            ResponseData<List<FilterGroupListValidator>> data = groupService.findByParentId(user.getOrganization(),user.getOrganization());
+            if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+                view.addObject("groupList", data.getData());
             }
 
             view.addObject("messageWebTaskInfoValidator", messageWebTaskInfoValidator);
@@ -354,7 +384,18 @@ public class MessageMMController {
             view.addObject("error", "有效号码数不能为0");
             return view;
         }*/
-
+        if("1".equals(messageWebTaskInfoValidator.getUpType())){
+            messageWebTaskInfoValidator.setGroupId("");
+            messageWebTaskInfoValidator.setNumberFiles("");
+        }
+        if("2".equals(messageWebTaskInfoValidator.getUpType())){
+            messageWebTaskInfoValidator.setInputNumber("");
+            messageWebTaskInfoValidator.setGroupId("");
+        }
+        if("3".equals(messageWebTaskInfoValidator.getUpType())){
+            messageWebTaskInfoValidator.setInputNumber("");
+            messageWebTaskInfoValidator.setNumberFiles("");
+        }
         //保存操作
         ResponseData data = messageService.save(messageWebTaskInfoValidator,op);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {

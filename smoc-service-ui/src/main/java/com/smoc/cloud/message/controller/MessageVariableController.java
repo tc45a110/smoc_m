@@ -139,6 +139,7 @@ public class MessageVariableController {
         messageWebTaskInfoValidator.setSendType("1");
         messageWebTaskInfoValidator.setMessageType("2");
         messageWebTaskInfoValidator.setSendStatus("05");
+        messageWebTaskInfoValidator.setUpType("2");
 
         //查询企业下得所有业务账号
         AccountBasicInfoValidator accountBasicInfoValidator = new AccountBasicInfoValidator();

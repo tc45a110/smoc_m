@@ -68,14 +68,12 @@
                             </div>
 
                             <div class="form-group m-b-20" style="width: 70%">
-                                <label>账号<span class="text-danger">*</span>
-                                    <span class="text-danger" th:if="${#fields.hasErrors('businessAccount')}"
-                                          th:errors="*{businessAccount}"></span></label>
-                                <select id="businessAccount" name="businessAccount" class="selectpicker form-control"　required="true">
-                                    <option data-icon="mdi mdi-account" value="">--请选择业务账号--</option>
-                                    <option data-icon="mdi mdi-account" th:each="info:${list}"
-                                            th:selected="${accountTemplateInfoValidator.businessAccount eq info.accountId}" th:value="${info.accountId}">[[${info.accountId}]]([[${info.AccountName}]])</option>
-                                </select>
+                                <label>信息类型<span class="text-danger">*</span>
+                                    <span class="text-danger" th:if="${#fields.hasErrors('infoType')}"
+                                          th:errors="*{infoType}"></span></label>
+                                <mpm:tag id="infoType" required="true" identity="infoType"
+                                         show-type="select" key="code" class="form-control"
+                                         name="infoType" th:value="${accountTemplateInfoValidator.infoType}" title="信息分类"/>
                             </div>
 
                             <div class="form-group m-b-20" style="width: 70%">
@@ -336,7 +334,7 @@
         <input id="resource_file_type" type="hidden" name="resource_file_type" th:value="${resource_file_type}">
         <input id="type" type="hidden" name="type" th:value="${type}">
         <input id="signName_tmp" type="hidden" name="signName_tmp" th:value="${accountTemplateInfoValidator.signName}">
-        <input id="businessAccount_tmp" type="hidden" name="businessAccount_tmp" th:value="${accountTemplateInfoValidator.businessAccount}">
+        <input id="infoType_tmp" type="hidden" name="infoType_tmp" th:value="${accountTemplateInfoValidator.infoType}">
     </form>
 </div>
 
@@ -848,6 +846,8 @@
         $("#resource_page").val(cruPage);
         $("#resource_type").val($("#resourceType").val());
         $("#resource_file_type").val($("#fileType").val());
+        $("#signName_tmp").val($("#signName").val());
+        $("#infoType_tmp").val($("#infoType").val());
 
         $("#parames").val(json);
         $("#allSize").val(allSize);
@@ -906,6 +906,8 @@
         $("#resource_page").val(cruPage);
         $("#resource_type").val($("#resourceType").val());
         $("#resource_file_page").val($("#fileType").val());
+        $("#signName_tmp").val($("#signName").val());
+        $("#infoType_tmp").val($("#infoType").val());
 
         $("#parames").val(json);
         $("#allSize").val(allSize);
@@ -987,14 +989,14 @@
         }
 
         var signName = $("#signName").val();
-        var businessAccount = $("#businessAccount").val();
+        var infoType = $("#infoType").val();
         if(""== signName ||  null == signName){
             $("#alert-modal").find("#alert-message").html("签名不能为空");
             $("#alert-modal").modal();
             return false;
         }
-        if(""== businessAccount ||  null == businessAccount){
-            $("#alert-modal").find("#alert-message").html("业务账号不能为空");
+        if(""== infoType ||  null == infoType){
+            $("#alert-modal").find("#alert-message").html("信息分类不能为空");
             $("#alert-modal").modal();
             return false;
         }

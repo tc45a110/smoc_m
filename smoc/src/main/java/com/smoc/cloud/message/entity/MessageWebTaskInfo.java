@@ -102,6 +102,28 @@ public class MessageWebTaskInfo {
     @Column(name = "NUMBER_ATTACHMENT_SIZE")
     private Long numberAttachmentSize;
 
+    @Column(name = "GROUP_ID")
+    private String groupId;
+
+    @Column(name = "UP_TYPE")
+    private String upType;
+
+    public String getUpType() {
+        return upType;
+    }
+
+    public void setUpType(String upType) {
+        this.upType = upType;
+    }
+
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
     public Long getNumberAttachmentSize() {
         return numberAttachmentSize;
     }

@@ -87,7 +87,7 @@
                                 <thead>
                                 <tr>
                                     <th style="width:240px">模版ID/企业名称</th>
-                                    <th style="width:220px">业务账号/业务账号名称</th>
+                                    <th style="width:220px">信息分类</th>
                                     <th style="width:180px">业务类型</th>
                                     <th style="width:220px">签名</th>
                                     <th>模版内容</th>
@@ -104,9 +104,7 @@
                                         [[${info.enterpriseName}]]
                                     </td>
                                     <td style="vertical-align: middle;;line-height: 26px;">
-                                        [[${info.businessAccount}]]
-                                        <br>
-                                        [[${info.accountName}]]
+                                        <mpm:tag identity="infoType" show-type="label" key="code"th:value="${info.infoType}"/>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         <mpm:tag identity="businessType" show-type="button"

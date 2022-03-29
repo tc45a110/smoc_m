@@ -54,8 +54,8 @@
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-sm-6 m-b-10">
-                                                <label>业务账号：</label>
-                                                [[${accountTemplateInfoValidator.businessAccount}]]
+                                                <label>信息分类：</label>
+                                                <mpm:tag identity="infoType" show-type="label" key="code"th:value="${accountTemplateInfoValidator.infoType}"/>
                                             </div>
                                             <div class="col-sm-6 m-b-10">
                                                 <label>业务类型：</label>

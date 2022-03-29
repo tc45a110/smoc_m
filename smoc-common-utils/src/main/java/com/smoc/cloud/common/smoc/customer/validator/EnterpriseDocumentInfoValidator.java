@@ -41,6 +41,7 @@ public class EnterpriseDocumentInfoValidator {
     private Date updatedTime;
     private String checkOpinions;
     private String checkStatus;
+    private String checkDate;
 
     private String enterpriseType;
     private String enterpriseName;

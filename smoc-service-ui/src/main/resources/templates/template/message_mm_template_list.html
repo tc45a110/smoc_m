@@ -98,8 +98,8 @@
                             <table class="table table table-hover m-10" style="margin-top: -12px;">
                                 <thead>
                                 <tr>
-                                    <th style="width:180px">账号</th>
                                     <th style="width:240px">模板ID</th>
+                                    <th style="width:180px">信息分类</th>
                                     <th style="width:240px">签名</th>
                                     <th>模板标题</th>
                                     <th style="width:140px">审核状态</th>
@@ -109,11 +109,11 @@
                                 <thead>
                                 <tbody>
                                 <tr th:each="info:${list}">
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        [[${info.businessAccount}]]
-                                    </td>
                                     <td style="vertical-align: middle;line-height: 26px;">
                                         [[${info.templateId}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <mpm:tag identity="infoType" show-type="label" key="code"th:value="${info.infoType}"/>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;">
                                         [[${info.signName}]]

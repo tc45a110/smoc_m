@@ -71,6 +71,8 @@ public class MessageWebTaskInfoValidator {
     private String enterpriseName;
     private String startDate;
     private String endDate;
+    private String groupId;
+    private String groupName;
 
 
     //原手机号上传路径
@@ -85,5 +87,7 @@ public class MessageWebTaskInfoValidator {
     private String reportAttachment;
     //资源数据
     private String multimediaAttachmentData;
+
+    private String upType;
 
 }

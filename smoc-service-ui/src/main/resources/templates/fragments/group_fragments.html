@@ -11,7 +11,7 @@
 
         $(function () {
             $('#group_tree').treeview({
-                data: loadData('[[${parentId}]]'),//节点数据
+                data: loadData(),//节点数据
                 expanded: false,//初始是否展开
                 levels: 4,//初始显示层数
                 icon: "glyphicon glyphicon-stop",
@@ -21,25 +21,20 @@
                 iconBackground: "#4c4c4c",
                 lazyLoad: loadSubData,
                 onNodeSelected: function (event, data) {
-                    if("root"==data.id){
-                        window.frames[0].location.href = contextPath + "/filter/group/list" ;
+                    if("root" == data.system){
+                        window.frames[0].location.href = contextPath + "/book/group/list" ;
                     }else{
-                        if("white"==data.svcType){
-                            window.frames[0].location.href = contextPath + "/filter/white/list" ;
-                        }
-                        if("black"==data.svcType){
-                            window.frames[0].location.href = contextPath + "/filter/black/list" ;
-                        }
+                        window.frames[0].location.href = contextPath + "/book/list/"+data.id ;
                     }
                 }
             });
         });
 
-        function loadData(id) {
+        function loadData() {
 
             var treeData = {};
             $.ajax({
-                url: contextPath + "/filter/group/tree/" + id,
+                url: contextPath + "/book/group/tree" ,
                 type: "get",
                 contentType: "application/json",
                 timeout: 30000, //超时时间：30秒

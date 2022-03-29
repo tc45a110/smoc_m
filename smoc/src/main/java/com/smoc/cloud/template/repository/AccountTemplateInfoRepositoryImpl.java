@@ -29,7 +29,7 @@ public class AccountTemplateInfoRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(" t.TEMPLATE_ID,");
         sqlBuffer.append(" e.ENTERPRISE_NAME,");
         sqlBuffer.append(" a.ACCOUNT_NAME,");
-        sqlBuffer.append(" a.BUSINESS_TYPE,");
+        sqlBuffer.append(" t.TEMPLATE_TYPE as BUSINESS_TYPE,");
         sqlBuffer.append(" t.BUSINESS_ACCOUNT,");
         sqlBuffer.append(" t.TEMPLATE_TYPE,");
         sqlBuffer.append(" t.TEMPLATE_FLAG,");
@@ -42,9 +42,10 @@ public class AccountTemplateInfoRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(" t.TEMPLATE_STATUS,");
         sqlBuffer.append(" t.TEMPLATE_AGREEMENT_TYPE,");
         sqlBuffer.append(" t.CREATED_BY,");
+        sqlBuffer.append(" t.INFO_TYPE,");
         sqlBuffer.append(" DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME ");
-        sqlBuffer.append(" from account_template_info t,account_base_info a,enterprise_basic_info e ");
-        sqlBuffer.append(" where t.BUSINESS_ACCOUNT = a.ACCOUNT_ID and a.ENTERPRISE_ID = e.ENTERPRISE_ID ");
+        sqlBuffer.append(" from account_template_info t left join enterprise_basic_info e on t.ENTERPRISE_ID = e.ENTERPRISE_ID left join account_base_info a on t.BUSINESS_ACCOUNT = a.ACCOUNT_ID ");
+        sqlBuffer.append(" where 1=1 ");
 
         List<Object> paramsList = new ArrayList<Object>();
 
@@ -56,7 +57,7 @@ public class AccountTemplateInfoRepositoryImpl extends BasePageRepository {
 
         //企业ID
         if (!StringUtils.isEmpty(qo.getEnterpriseId())) {
-            sqlBuffer.append(" and e.ENTERPRISE_ID = ? ");
+            sqlBuffer.append(" and t.ENTERPRISE_ID = ? ");
             paramsList.add(qo.getEnterpriseId().trim());
         }
 
@@ -68,7 +69,7 @@ public class AccountTemplateInfoRepositoryImpl extends BasePageRepository {
 
         //业务类型
         if (!StringUtils.isEmpty(qo.getTemplateType())) {
-            sqlBuffer.append(" and a.BUSINESS_TYPE =?");
+            sqlBuffer.append(" and t.TEMPLATE_TYPE =?");
             paramsList.add(qo.getTemplateType().trim());
         }
 

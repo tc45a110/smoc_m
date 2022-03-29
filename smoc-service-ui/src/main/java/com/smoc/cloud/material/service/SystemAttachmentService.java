@@ -94,7 +94,7 @@ public class SystemAttachmentService {
 
         //上传文件
         List<SystemAttachmentValidator> list = new ArrayList<>();
-        if (!StringUtils.isEmpty(files.get(0).getOriginalFilename())) {
+        if (files.size()>0 && !StringUtils.isEmpty(files.get(0).getOriginalFilename())) {
             String day = DateTimeUtils.currentDateFomat(new Date());
             for (MultipartFile file : files) {
                 String fileName = file.getOriginalFilename();//文件名

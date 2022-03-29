@@ -14,9 +14,13 @@ public class AccountTemplateInfoValidator {
 
     private String templateId;
 
+    private String enterpriseId;
+
     private String templateType;
 
     private String businessAccount;
+
+    private String infoType;
 
     private String signName;
 
@@ -52,6 +56,5 @@ public class AccountTemplateInfoValidator {
     private String accountName;
     private String startDate;
     private String endDate;
-    private String enterpriseId;
     private String multimediaAttachmentData;
 }

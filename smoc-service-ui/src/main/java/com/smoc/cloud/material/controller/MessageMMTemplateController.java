@@ -157,17 +157,6 @@ public class MessageMMTemplateController {
         accountTemplateInfoValidator.setTemplateFlag("1");
         accountTemplateInfoValidator.setTemplateAgreementType("HTTP");
 
-        //查询企业下得所有业务账号
-        AccountBasicInfoValidator accountBasicInfoValidator = new AccountBasicInfoValidator();
-        accountBasicInfoValidator.setBusinessType(type);
-        accountBasicInfoValidator.setEnterpriseId(user.getOrganization());
-        accountBasicInfoValidator.setAccountStatus("1");//正常
-        ResponseData<List<AccountBasicInfoValidator>> info = businessAccountService.findBusinessAccount(accountBasicInfoValidator);
-        if (!ResponseCode.SUCCESS.getCode().equals(info.getCode())) {
-            view.addObject("error", info.getCode() + ":" + info.getMessage());
-            return view;
-        }
-
         //查询签名
         EnterpriseDocumentInfoValidator enterpriseDocumentInfoValidator = new EnterpriseDocumentInfoValidator();
         enterpriseDocumentInfoValidator.setEnterpriseId(user.getOrganization());
@@ -192,7 +181,6 @@ public class MessageMMTemplateController {
         //op操作标记，add表示添加，edit表示修改
         view.addObject("op", "add");
         view.addObject("accountTemplateInfoValidator", accountTemplateInfoValidator);
-        view.addObject("list", info.getData());
         view.addObject("signList", signList.getData());
         view.addObject("type", type);
         view.addObject("resourceTypeList", resourceTypeList);
@@ -222,17 +210,6 @@ public class MessageMMTemplateController {
         ResponseData<AccountTemplateInfoValidator> data = messageTemplateService.findById(id);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
-        }
-
-        //查询企业下得所有业务账号
-        AccountBasicInfoValidator accountBasicInfoValidator = new AccountBasicInfoValidator();
-        accountBasicInfoValidator.setBusinessType(data.getData().getTemplateType());
-        accountBasicInfoValidator.setEnterpriseId(user.getOrganization());
-        accountBasicInfoValidator.setAccountStatus("1");//正常
-        ResponseData<List<AccountBasicInfoValidator>> info = businessAccountService.findBusinessAccount(accountBasicInfoValidator);
-        if (!ResponseCode.SUCCESS.getCode().equals(info.getCode())) {
-            view.addObject("error", info.getCode() + ":" + info.getMessage());
-            return view;
         }
 
         //查询签名
@@ -270,7 +247,6 @@ public class MessageMMTemplateController {
         view.addObject("accountTemplateInfoValidator", data.getData());
         view.addObject("type", data.getData().getTemplateType());
         view.addObject("signList", signList.getData());
-        view.addObject("list", info.getData());
 
         return view;
 
@@ -290,9 +266,9 @@ public class MessageMMTemplateController {
 
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
 
-        if(StringUtils.isEmpty(accountTemplateInfoValidator.getBusinessAccount())){
+        if(StringUtils.isEmpty(accountTemplateInfoValidator.getInfoType())){
             // 提交前台错误提示
-            FieldError err = new FieldError("业务账号", "businessAccount", "业务账号不能为空");
+            FieldError err = new FieldError("信息分类", "infoType", "信息分类不能为空");
             result.addError(err);
         }
         if(StringUtils.isEmpty(accountTemplateInfoValidator.getSignName())){
@@ -358,6 +334,7 @@ public class MessageMMTemplateController {
         accountTemplateInfoValidator.setMmAttchment(new Gson().toJson(paramsSort));
 
         //保存数据
+        accountTemplateInfoValidator.setEnterpriseId(user.getOrganization());
         ResponseData data = messageTemplateService.save(accountTemplateInfoValidator,op,user.getId());
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
@@ -565,7 +542,7 @@ public class MessageMMTemplateController {
                                   @RequestParam(value = "resource_page") String resource_page,
                                   @RequestParam(value = "type") String type,
                                   @RequestParam(value = "signName_tmp") String signName_tmp,
-                                  @RequestParam(value = "businessAccount_tmp") String businessAccount_tmp,
+                                  @RequestParam(value = "infoType_tmp") String infoType_tmp,
                                   HttpServletRequest request) {
 
         ModelAndView view = new ModelAndView("template/message_mm_template_edit");
@@ -590,7 +567,7 @@ public class MessageMMTemplateController {
         accountTemplateInfoValidator.setTemplateStatus("2");
         accountTemplateInfoValidator.setTemplateAgreementType("HTTP");
         accountTemplateInfoValidator.setSignName(signName_tmp);
-        accountTemplateInfoValidator.setBusinessAccount(businessAccount_tmp);
+        accountTemplateInfoValidator.setInfoType(infoType_tmp);
 
         view.addObject("op", op_tmp);
         view.addObject("resource_page", resource_page);

@@ -10,6 +10,9 @@ public class AccountTemplateInfo {
     @Column(name = "TEMPLATE_ID", nullable = false, length = 32)
     private String templateId;
 
+    @Column(name = "ENTERPRISE_ID", nullable = false, length = 32)
+    private String enterpriseId;
+
     @Column(name = "TEMPLATE_TYPE", nullable = false, length = 32)
     private String templateType;
 
@@ -25,6 +28,9 @@ public class AccountTemplateInfo {
 
     @Column(name = "CHECK_DATE")
     private Date checkDate;
+
+    @Column(name = "INFO_TYPE")
+    private String infoType;
 
     @Column(name = "CHECK_BY", length = 32)
     private String checkBy;
@@ -58,6 +64,22 @@ public class AccountTemplateInfo {
 
     @Column(name = "MM_ATTCHMENT")
     private String mmAttchment;
+
+    public String getEnterpriseId() {
+        return enterpriseId;
+    }
+
+    public void setEnterpriseId(String enterpriseId) {
+        this.enterpriseId = enterpriseId;
+    }
+
+    public String getInfoType() {
+        return infoType;
+    }
+
+    public void setInfoType(String infoType) {
+        this.infoType = infoType;
+    }
 
     public String getMmAttchment() {
         return mmAttchment;

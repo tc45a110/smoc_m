@@ -159,15 +159,8 @@ public class WebTemplateController {
             return view;
         }
 
-        //查询业务账号信息
-        ResponseData<AccountBasicInfoValidator> accountBasicInfoValidatorResponseData = businessAccountService.findById(data.getData().getBusinessAccount());
-        if (!ResponseCode.SUCCESS.getCode().equals(accountBasicInfoValidatorResponseData.getCode())) {
-            view.addObject("error", accountBasicInfoValidatorResponseData.getCode() + ":" + accountBasicInfoValidatorResponseData.getMessage());
-            return view;
-        }
-
         //查询企业信息
-        ResponseData<EnterpriseBasicInfoValidator> enterpriseData = enterpriseService.findById(accountBasicInfoValidatorResponseData.getData().getEnterpriseId());
+        ResponseData<EnterpriseBasicInfoValidator> enterpriseData = enterpriseService.findById(data.getData().getEnterpriseId());
         if (!ResponseCode.SUCCESS.getCode().equals(enterpriseData.getCode())) {
             view.addObject("error", enterpriseData.getCode() + ":" + enterpriseData.getMessage());
             return view;
@@ -203,7 +196,6 @@ public class WebTemplateController {
         //log.info("[checkRecord]:{}",new Gson().toJson(checkRecordData.getData()));
         view.addObject("checkRecord", checkRecordData.getData());
         view.addObject("accountTemplateInfoValidator", data.getData());
-        view.addObject("accountBasicInfoValidator", accountBasicInfoValidatorResponseData.getData());
         view.addObject("enterpriseBasicInfoValidator", enterpriseData.getData());
         view.addObject("accountTemplateInfoValidator", data.getData());
 
@@ -237,15 +229,8 @@ public class WebTemplateController {
             return view;
         }
 
-        //查询业务账号信息
-        ResponseData<AccountBasicInfoValidator> accountBasicInfoValidatorResponseData = businessAccountService.findById(data.getData().getBusinessAccount());
-        if (!ResponseCode.SUCCESS.getCode().equals(accountBasicInfoValidatorResponseData.getCode())) {
-            view.addObject("error", accountBasicInfoValidatorResponseData.getCode() + ":" + accountBasicInfoValidatorResponseData.getMessage());
-            return view;
-        }
-
         //查询企业信息
-        ResponseData<EnterpriseBasicInfoValidator> enterpriseData = enterpriseService.findById(accountBasicInfoValidatorResponseData.getData().getEnterpriseId());
+        ResponseData<EnterpriseBasicInfoValidator> enterpriseData = enterpriseService.findById(data.getData().getEnterpriseId());
         if (!ResponseCode.SUCCESS.getCode().equals(enterpriseData.getCode())) {
             view.addObject("error", enterpriseData.getCode() + ":" + enterpriseData.getMessage());
             return view;
@@ -272,7 +257,6 @@ public class WebTemplateController {
             view.addObject("allSize", allSize);
         }
 
-        view.addObject("accountBasicInfoValidator", accountBasicInfoValidatorResponseData.getData());
         view.addObject("enterpriseBasicInfoValidator", enterpriseData.getData());
         view.addObject("accountTemplateInfoValidator", data.getData());
         return view;

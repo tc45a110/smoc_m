@@ -37,8 +37,8 @@ public interface EnterpriseDocumentRepository extends CrudRepository<EnterpriseD
     List<EnterpriseDocumentInfo> findByEnterpriseIdAndSignNameAndDocStatus(String enterpriseId, String signName, String s);
 
     @Modifying
-    @Query(value = "update enterprise_document_info set DOC_STATUS = :docStatus where ID = :id ",nativeQuery = true)
-    void updateStatusById(@Param("id") String id, @Param("docStatus") String docStatus);
+    @Query(value = "update enterprise_document_info set DOC_STATUS = :docStatus, CHECK_DATE= :checkDate where ID = :id ",nativeQuery = true)
+    void updateStatusById(@Param("id") String id, @Param("docStatus") String docStatus, @Param("checkDate") String checkDate);
 
     /**
      * 查询签名
