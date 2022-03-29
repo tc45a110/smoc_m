@@ -11,8 +11,8 @@ public class ReconciliationPeriod {
     private String id;
     private String accountPeriod;
     private String accountPeriodType;
-    private Timestamp accountPeriodStartDate;
-    private Timestamp accountPeriodEndDate;
+    private Date accountPeriodStartDate;
+    private Date accountPeriodEndDate;
     private String accountPeriodStatus;
     private String businessType;
     private String status;
@@ -53,21 +53,21 @@ public class ReconciliationPeriod {
 
     @Basic
     @Column(name = "ACCOUNT_PERIOD_START_DATE")
-    public Timestamp getAccountPeriodStartDate() {
+    public Date getAccountPeriodStartDate() {
         return accountPeriodStartDate;
     }
 
-    public void setAccountPeriodStartDate(Timestamp accountPeriodStartDate) {
+    public void setAccountPeriodStartDate(Date accountPeriodStartDate) {
         this.accountPeriodStartDate = accountPeriodStartDate;
     }
 
     @Basic
     @Column(name = "ACCOUNT_PERIOD_END_DATE")
-    public Timestamp getAccountPeriodEndDate() {
+    public Date getAccountPeriodEndDate() {
         return accountPeriodEndDate;
     }
 
-    public void setAccountPeriodEndDate(Timestamp accountPeriodEndDate) {
+    public void setAccountPeriodEndDate(Date accountPeriodEndDate) {
         this.accountPeriodEndDate = accountPeriodEndDate;
     }
 
