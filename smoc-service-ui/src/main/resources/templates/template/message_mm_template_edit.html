@@ -459,8 +459,8 @@
                                             <div class="iphone-screen" style="overflow-y:scroll;overflow-x:hidden">
                                                 <div style="width: 100%;text-align: center;margin-top: 10px" id="media_div">
                                                     <img id="frame_preview_img_id" src="" style="height: auto;display: none">
-                                                    <span class="jFiler-icon-file f-audio" style="display: none"><i class="icon-jfi-file-audio"></i></span>
-                                                    <span class="jFiler-icon-file f-video" style="display: none"><i class="icon-jfi-file-video"></i></span>
+                                                    <video id="video_id" controls autoplay style="display: none"></video>
+                                                    <audio id="audio_id" controls autoplay style="display: none"></audio>
                                                 </div>
                                                 <div id="frame_preview_txt_id" style="margin-left: 10px; text-align: left;margin-top: 40px;font-size: 20px;word-break: break-all;white-space: normal;">
 
@@ -1117,21 +1117,23 @@
         var frameTxt =  frameInfo_tmp.frameTxt;
         if(resType=='0'){
             $("#frame_preview_img_id").hide();
-            $("#media_div").find(".f-video").eq(0).hide();
-            $("#media_div").find(".f-audio").eq(0).hide();
+            $("#video_id").hide();
+            $("#audio_id").hide();
         }else if(resType=='1'){
             $("#frame_preview_img_id").show();
             $("#frame_preview_img_id").attr("src", showUrl);
-            $("#media_div").find(".f-video").eq(0).hide();
-            $("#media_div").find(".f-audio").eq(0).hide();
+            $("#video_id").hide();
+            $("#audio_id").hide();
         }else if(resType=='2'){
             $("#frame_preview_img_id").hide();
-            $("#media_div").find(".f-video").eq(0).hide();
-            $("#media_div").find(".f-audio").eq(0).show();
+            $("#audio_id").attr("src", showUrl);
+            $("#audio_id").show();
+            $("#video_id").hide();
         }else if(resType=='3'){
             $("#frame_preview_img_id").hide();
-            $("#media_div").find(".f-video").eq(0).show();
-            $("#media_div").find(".f-audio").eq(0).hide();
+            $("#audio_id").hide();
+            $("#video_id").attr("src", showUrl);
+            $("#video_id").show();
         }
         $("#frame_preview_txt_id").html(frameTxt);
 
@@ -1167,21 +1169,23 @@
         var frameTxt =  frameInfo_tmp.frameTxt;
         if(resType=='0'){
             $("#frame_preview_img_id").hide();
-            $("#media_div").find(".f-video").eq(0).hide();
-            $("#media_div").find(".f-audio").eq(0).hide();
+            $("#video_id").hide();
+            $("#audio_id").hide();
         }else if(resType=='1'){
             $("#frame_preview_img_id").show();
             $("#frame_preview_img_id").attr("src", showUrl);
-            $("#media_div").find(".f-video").eq(0).hide();
-            $("#media_div").find(".f-audio").eq(0).hide();
+            $("#video_id").hide();
+            $("#audio_id").hide();
         }else if(resType=='2'){
             $("#frame_preview_img_id").hide();
-            $("#media_div").find(".f-video").eq(0).hide();
-            $("#media_div").find(".f-audio").eq(0).show();
+            $("#audio_id").attr("src", showUrl);
+            $("#audio_id").show();
+            $("#video_id").hide();
         }else if(resType=='3'){
             $("#frame_preview_img_id").hide();
-            $("#media_div").find(".f-video").eq(0).show();
-            $("#media_div").find(".f-audio").eq(0).hide();
+            $("#audio_id").hide();
+            $("#video_id").attr("src", showUrl);
+            $("#video_id").show();
         }
 
         $("#frame_preview_txt_id").html(frameTxt);
@@ -1227,21 +1231,23 @@
         var frameTxt =  frameInfo_tmp.frameTxt;
         if(resType=='0'){
             $("#frame_preview_img_id").hide();
-            $("#media_div").find(".f-video").eq(0).hide();
-            $("#media_div").find(".f-audio").eq(0).hide();
+            $("#video_id").hide();
+            $("#audio_id").hide();
         }else if(resType=='1'){
             $("#frame_preview_img_id").show();
             $("#frame_preview_img_id").attr("src", showUrl);
-            $("#media_div").find(".f-video").eq(0).hide();
-            $("#media_div").find(".f-audio").eq(0).hide();
+            $("#video_id").hide();
+            $("#audio_id").hide();
         }else if(resType=='2'){
             $("#frame_preview_img_id").hide();
-            $("#media_div").find(".f-video").eq(0).hide();
-            $("#media_div").find(".f-audio").eq(0).show();
+            $("#audio_id").attr("src", showUrl);
+            $("#audio_id").show();
+            $("#video_id").hide();
         }else if(resType=='3'){
             $("#frame_preview_img_id").hide();
-            $("#media_div").find(".f-video").eq(0).show();
-            $("#media_div").find(".f-audio").eq(0).hide();
+            $("#audio_id").hide();
+            $("#video_id").attr("src", showUrl);
+            $("#video_id").show();
         }
         $("#frame_preview_txt_id").html(frameTxt);
 
@@ -1308,21 +1314,23 @@
         // console.log("previewByTime:"+resType+"-"+showUrl+"-"+frameTxt+"-"+stayTimes_int);
         if(resType=='0'){
             $("#frame_preview_img_id").hide();
-            $("#media_div").find(".f-video").eq(0).hide();
-            $("#media_div").find(".f-audio").eq(0).hide();
+            $("#video_id").hide();
+            $("#audio_id").hide();
         }else if(resType=='1'){
             $("#frame_preview_img_id").show();
             $("#frame_preview_img_id").attr("src", showUrl);
-            $("#media_div").find(".f-video").eq(0).hide();
-            $("#media_div").find(".f-audio").eq(0).hide();
+            $("#video_id").hide();
+            $("#audio_id").hide();
         }else if(resType=='2'){
             $("#frame_preview_img_id").hide();
-            $("#media_div").find(".f-video").eq(0).hide();
-            $("#media_div").find(".f-audio").eq(0).show();
+            $("#audio_id").attr("src", showUrl);
+            $("#audio_id").show();
+            $("#video_id").hide();
         }else if(resType=='3'){
             $("#frame_preview_img_id").hide();
-            $("#media_div").find(".f-video").eq(0).show();
-            $("#media_div").find(".f-audio").eq(0).hide();
+            $("#audio_id").hide();
+            $("#video_id").attr("src", showUrl);
+            $("#video_id").show();
         }
         $("#frame_preview_txt_id").html(frameTxt);
         $("#current_frame_index").html(previewIndex+1);

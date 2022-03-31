@@ -8,6 +8,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
+import com.smoc.cloud.book.service.BookService;
 import com.smoc.cloud.book.service.GroupService;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
 import com.smoc.cloud.common.page.PageList;
@@ -15,6 +16,7 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
+import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBookInfoValidator;
 import com.smoc.cloud.common.smoc.filter.FilterGroupListValidator;
 import com.smoc.cloud.common.smoc.template.AccountTemplateInfoValidator;
 import com.smoc.cloud.common.smoc.template.MessageFrameParamers;
@@ -85,6 +87,9 @@ public class MessageMMController {
 
     @Autowired
     private GroupService groupService;
+
+    @Autowired
+    private BookService bookService;
 
     /**
      * 短信发送列表
@@ -313,6 +318,22 @@ public class MessageMMController {
             // 提交前台错误提示
             FieldError err = new FieldError("手机号", "upType", "群发号码不能为空");
             result.addError(err);
+        }
+        //查询通讯录是否有联系人
+        if("3".equals(messageWebTaskInfoValidator.getUpType()) && !StringUtils.isEmpty(messageWebTaskInfoValidator.getGroupId())){
+            //初始化数据
+            PageParams<EnterpriseBookInfoValidator> params = new PageParams<EnterpriseBookInfoValidator>();
+            params.setPageSize(10);
+            params.setCurrentPage(1);
+            EnterpriseBookInfoValidator enterpriseBookInfoValidator = new EnterpriseBookInfoValidator();
+            enterpriseBookInfoValidator.setGroupId(messageWebTaskInfoValidator.getGroupId());
+            params.setParams(enterpriseBookInfoValidator);
+            ResponseData<PageList<EnterpriseBookInfoValidator>> data = bookService.page(params);
+            if (StringUtils.isEmpty(data.getData())|| data.getData().getList().size()<=0) {
+                // 提交前台错误提示
+                FieldError err = new FieldError("手机号", "upType", "通讯录暂无联系人");
+                result.addError(err);
+            }
         }
 
         if(!user.getOrganization().equals(messageWebTaskInfoValidator.getEnterpriseId())){

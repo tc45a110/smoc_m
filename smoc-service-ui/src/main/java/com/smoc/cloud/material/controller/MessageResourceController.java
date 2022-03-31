@@ -45,10 +45,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -561,6 +558,79 @@ public class MessageResourceController {
             return;
         }
 
+        //图片
+        if(resourceProperties.getResourceAllowFormat()[0].contains(data.getData().getResourceAttchmentType())){
+            image(resourceValidator,downloadFile,user,response);
+        }
+        //视频或音频
+        if(resourceProperties.getResourceAllowFormat()[2].contains(data.getData().getResourceAttchmentType()) || resourceProperties.getResourceAllowFormat()[1].contains(data.getData().getResourceAttchmentType())){
+            video(resourceValidator,downloadFile,user,request,response);
+        }
+
+    }
+
+    private void video(AccountResourceInfoValidator resourceValidator, File file, SecurityUser user, HttpServletRequest request,HttpServletResponse response) {
+        //获取从那个字节开始读取文件
+        String rangeString = request.getHeader("Range");
+
+        try {
+            //获取响应的输出流
+            OutputStream outputStream = response.getOutputStream();
+            if(file.exists()){
+                RandomAccessFile targetFile = new RandomAccessFile(file, "r");
+                long fileLength = targetFile.length();
+                //播放
+                if(rangeString != null){
+
+                    long range = Long.valueOf(rangeString.substring(rangeString.indexOf("=") + 1, rangeString.indexOf("-")));
+                    //设置内容类型
+                    if("mp4".equals(resourceValidator.getResourceAttchmentType())){
+                        response.setHeader("Content-Type", "video/mp4");
+                    }
+                    if("3gp".equals(resourceValidator.getResourceAttchmentType())){
+                        response.setHeader("Content-Type", "video/3gp");
+                    }
+                    if("mp3".equals(resourceValidator.getResourceAttchmentType())){
+                        response.setHeader("Content-Type", "audio/mp3");
+                    }
+                    if("amr".equals(resourceValidator.getResourceAttchmentType())){
+                        response.setHeader("Content-Type", "audio/amr");
+                    }
+                    if("aac".equals(resourceValidator.getResourceAttchmentType())){
+                        response.setHeader("Content-Type", "audio/aac");
+                    }
+                    if("midi".equals(resourceValidator.getResourceAttchmentType())){
+                        response.setHeader("Content-Type", "audio/midi");
+                    }
+                    if("wav".equals(resourceValidator.getResourceAttchmentType())){
+                        response.setHeader("Content-Type", "audio/wav");
+                    }
+                    //设置此次相应返回的数据长度
+                    response.setHeader("Content-Length", String.valueOf(fileLength - range));
+                    //设置此次相应返回的数据范围
+                    response.setHeader("Content-Range", "bytes "+range+"-"+(fileLength-1)+"/"+fileLength);
+                    //返回码需要为206，而不是200
+                    response.setStatus(HttpServletResponse.SC_PARTIAL_CONTENT);
+                    //设定文件读取开始位置（以字节为单位）
+                    targetFile.seek(range);
+                }
+
+                byte[] cache = new byte[1024 * 300];
+                int flag;
+                while ((flag = targetFile.read(cache))!=-1){
+                    outputStream.write(cache, 0, flag);
+                }
+            }
+
+            outputStream.flush();
+            outputStream.close();
+
+        } catch (IOException e) {
+            log.error("[资源管理][download][{}]数据::{}", user.getUserName(), e.getMessage());
+        }
+    }
+
+    private void image(AccountResourceInfoValidator resourceValidator,File downloadFile,SecurityUser user, HttpServletResponse response) {
         //读取文件内容输入流中
         InputStream in = null;
         try {

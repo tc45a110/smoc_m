@@ -29,11 +29,16 @@ public class MessageMoInfoRepositoryImpl extends BasePageRepository {
         StringBuilder sqlBuffer = new StringBuilder("select ");
 
         sqlBuffer.append(" t.ID,");
-        sqlBuffer.append(" a.ACCOUNT_NAME,");
+        sqlBuffer.append(" t.ACCOUNT_ID,");
+        sqlBuffer.append(" t.TASK_ID,");
+        sqlBuffer.append(" t.BUSINESS_TYPE,");
+        sqlBuffer.append(" t.INFO_TYPE,");
         sqlBuffer.append(" t.MOBILE,");
-        sqlBuffer.append(" t.MESSAGE_CONTENT,");
-        sqlBuffer.append(" DATE_FORMAT(t.MO_DATE, '%Y-%m-%d %H:%i:%S')MO_DATE ");
-        sqlBuffer.append(" from message_mo_info t left join account_base_info a on t.ACCOUNT_ID = a.ACCOUNT_ID");
+        sqlBuffer.append(" t.MO_MESSAGE_CONTENT,");
+        sqlBuffer.append(" t.MT_MESSAGE_CONTENT,");
+        sqlBuffer.append(" DATE_FORMAT(t.MO_DATE, '%Y-%m-%d %H:%i:%S')MO_DATE, ");
+        sqlBuffer.append(" DATE_FORMAT(t.MT_DATE, '%Y-%m-%d %H:%i:%S')MT_DATE ");
+        sqlBuffer.append(" from message_mo_info t ");
         sqlBuffer.append(" where 1=1 ");
 
         List<Object> paramsList = new ArrayList<Object>();
@@ -43,9 +48,24 @@ public class MessageMoInfoRepositoryImpl extends BasePageRepository {
             paramsList.add(qo.getEnterpriseId().trim() );
         }
 
-        if (!StringUtils.isEmpty(qo.getAccountName())) {
-            sqlBuffer.append(" and t.ACCOUNT_NAME like ? ");
-            paramsList.add("%" + qo.getAccountName().trim()+ "%" );
+        if (!StringUtils.isEmpty(qo.getBusinessType())) {
+            sqlBuffer.append(" and t.BUSINESS_TYPE = ? ");
+            paramsList.add(qo.getBusinessType().trim() );
+        }
+
+        if (!StringUtils.isEmpty(qo.getInfoType())) {
+            sqlBuffer.append(" and t.INFO_TYPE = ? ");
+            paramsList.add(qo.getInfoType().trim() );
+        }
+
+        if (!StringUtils.isEmpty(qo.getTaskId())) {
+            sqlBuffer.append(" and t.TASK_ID like ? ");
+            paramsList.add("%" + qo.getTaskId().trim()+ "%" );
+        }
+
+        if (!StringUtils.isEmpty(qo.getAccountId())) {
+            sqlBuffer.append(" and t.ACCOUNT_ID like ? ");
+            paramsList.add("%" + qo.getAccountId().trim()+ "%" );
         }
 
         if (!StringUtils.isEmpty(qo.getMobile())) {
@@ -53,9 +73,9 @@ public class MessageMoInfoRepositoryImpl extends BasePageRepository {
             paramsList.add("%" + qo.getMobile().trim()+ "%" );
         }
 
-        if (!StringUtils.isEmpty(qo.getMessageContent())) {
+        if (!StringUtils.isEmpty(qo.getMoMessageContent())) {
             sqlBuffer.append(" and t.MESSAGE_CONTENT like ? ");
-            paramsList.add("%" + qo.getMessageContent().trim() + "%");
+            paramsList.add("%" + qo.getMoMessageContent().trim() + "%");
         }
 
         //时间起

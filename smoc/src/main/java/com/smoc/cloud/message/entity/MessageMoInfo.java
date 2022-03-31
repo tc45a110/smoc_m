@@ -17,13 +17,18 @@ public class MessageMoInfo {
     private String mobile;
     private String taskId;
     private String webTemplateId;
-    private String messageContent;
+    private String moMessageContent;
     private Date moDate;
+    private String mtMessageContent;
+    private Date mtDate;
     private String status;
     private String createdBy;
     private Date createdTime;
     private String updatedBy;
     private Date updatedTime;
+
+    private String businessType;
+    private String infoType;
 
     @Id
     @Column(name = "ID")
@@ -116,13 +121,33 @@ public class MessageMoInfo {
     }
 
     @Basic
-    @Column(name = "MESSAGE_CONTENT")
-    public String getMessageContent() {
-        return messageContent;
+    @Column(name = "MT_MESSAGE_CONTENT")
+    public String getMtMessageContent() {
+        return mtMessageContent;
     }
 
-    public void setMessageContent(String messageContent) {
-        this.messageContent = messageContent;
+    public void setMtMessageContent(String mtMessageContent) {
+        this.mtMessageContent = mtMessageContent;
+    }
+
+    @Basic
+    @Column(name = "MT_DATE")
+    public Date getMtDate() {
+        return mtDate;
+    }
+
+    public void setMtDate(Date mtDate) {
+        this.mtDate = mtDate;
+    }
+
+    @Basic
+    @Column(name = "MO_MESSAGE_CONTENT")
+    public String getMoMessageContent() {
+        return moMessageContent;
+    }
+
+    public void setMoMessageContent(String moMessageContent) {
+        this.moMessageContent = moMessageContent;
     }
 
     @Basic
@@ -185,6 +210,26 @@ public class MessageMoInfo {
         this.updatedTime = updatedTime;
     }
 
+    @Basic
+    @Column(name = "BUSINESS_TYPE")
+    public String getBusinessType() {
+        return businessType;
+    }
+
+    public void setBusinessType(String businessType) {
+        this.businessType = businessType;
+    }
+
+    @Basic
+    @Column(name = "INFO_TYPE")
+    public String getInfoType() {
+        return infoType;
+    }
+
+    public void setInfoType(String infoType) {
+        this.infoType = infoType;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -199,7 +244,7 @@ public class MessageMoInfo {
                 Objects.equals(mobile, that.mobile) &&
                 Objects.equals(taskId, that.taskId) &&
                 Objects.equals(webTemplateId, that.webTemplateId) &&
-                Objects.equals(messageContent, that.messageContent) &&
+                Objects.equals(moMessageContent, that.moMessageContent) &&
                 Objects.equals(moDate, that.moDate) &&
                 Objects.equals(status, that.status) &&
                 Objects.equals(createdBy, that.createdBy) &&
@@ -210,6 +255,6 @@ public class MessageMoInfo {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, enterpriseId, accountId, channelId, channelSrc, srcId, mobile, taskId, webTemplateId, messageContent, moDate, status, createdBy, createdTime, updatedBy, updatedTime);
+        return Objects.hash(id, enterpriseId, accountId, channelId, channelSrc, srcId, mobile, taskId, webTemplateId, moMessageContent, moDate, status, createdBy, createdTime, updatedBy, updatedTime);
     }
 }

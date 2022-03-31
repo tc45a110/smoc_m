@@ -121,7 +121,7 @@
                                         <label>手机号&nbsp;</label>
                                         <textarea class="form-control" th:field="*{inputNumber}"
                                                   data-parsley-length="[11,5000000]" autocomplete="off"
-                                                  rows="5"   placeholder="请输入手机号以英文逗号分隔，如：136xxxxxxxx,180xxxxxxxx"></textarea>
+                                                  rows="8"   placeholder="请输入手机号以英文逗号分隔，如：136xxxxxxxx,180xxxxxxxx"></textarea>
 
                                     </div>
                                     <div class="form-group m-b-20" th:if="${messageWebTaskInfoValidator.messageType eq '1'}" id="groupFile" style="display: none">
@@ -161,7 +161,7 @@
                             <input type="hidden" th:field="*{submitNumber}" id="sendNumberId">
                             <input type="hidden" th:field="*{numberAttachmentSize}" id="originalAttachmentSize">
                             <input type="hidden" th:field="*{businessType}">
-                            <input type="hidden" th:field="*{infoType}">
+                            <input type="hidden" th:field="*{infoType}" id="infoType">
                             <input type="hidden" th:field="*{templateId}" id="templateId">
                             <input type="hidden" th:field="*{sendStatus}">
                             <input type="hidden" th:field="*{enterpriseId}">
@@ -318,13 +318,14 @@
         var templateFlag = $("#messageType").val();
         var keyword = $("#keyword_query").val();
         var businessType = $("#businessType").val();
+        var infoType = $("#infoType").val();
         var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
         $.ajax({
             type: "POST",
             dataType: "json",
             contentType : 'application/json',
             url: contextPath + "/template/templateAjax",
-            data:"{\"businessType\":\""+businessType+"\", \"templateId\":\""+templateId+"\",\"templateFlag\":\""+templateFlag+"\", \"keyword\":\""+keyword+"\", \"currentPage\":\""+currentPage+"\"}",
+            data:"{\"businessType\":\""+businessType+"\",\"infoType\":\""+infoType+"\", \"templateId\":\""+templateId+"\",\"templateFlag\":\""+templateFlag+"\", \"keyword\":\""+keyword+"\", \"currentPage\":\""+currentPage+"\"}",
             success: function (data) {
                 var tList = data.list;
                 currentPage = data.currentPage;

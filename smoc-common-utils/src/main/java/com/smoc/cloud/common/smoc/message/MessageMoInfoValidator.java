@@ -15,11 +15,15 @@ public class MessageMoInfoValidator {
     private String channelId;
     private String channelSrc;
     private String srcId;
+    private String businessType;
+    private String infoType;
     private String mobile;
     private String taskId;
     private String webTemplateId;
-    private String messageContent;
+    private String moMessageContent;
     private String moDate;
+    private String mtMessageContent;
+    private String mtDate;
     private String status;
     private String createdBy;
     private Date createdTime;

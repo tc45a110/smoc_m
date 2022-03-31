@@ -60,7 +60,7 @@ com:
         message-resource:
           resource-file-root-path: F:/data/message/resource  #资源文件根目录
           resource-allow-format[0]: jpg,jpeg,gif,png  #资源图片格式
-          resource-allow-format[1]: midi,mid,wav  #资源音频格式
+          resource-allow-format[1]: midi,wav,amr,mp3,aac  #资源音频格式
           resource-allow-format[2]: 3gp,mp4  #资源视频频格式
           resource-allow-format[3]:
           resource-allow-format[4]:

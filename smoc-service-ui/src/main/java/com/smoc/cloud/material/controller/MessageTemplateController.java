@@ -51,9 +51,6 @@ public class MessageTemplateController {
     private MessageTemplateService messageTemplateService;
 
     @Autowired
-    private BusinessAccountService businessAccountService;
-
-    @Autowired
     private SystemUserLogService systemUserLogService;
 
     @Autowired
@@ -400,12 +397,14 @@ public class MessageTemplateController {
         String templateFlag = null;
         String keyword = null;
         String bussinessType = null;
+        String infoType = null;
         if(queryCondition!=null){
             templateId = queryCondition.getString("templateId");
             templateFlag = queryCondition.getString("templateFlag");
             keyword = queryCondition.getString("keyword");
             currentPage = queryCondition.getString("currentPage");
             bussinessType = queryCondition.getString("businessType");
+            infoType = queryCondition.getString("infoType");
         }
 
         SecurityUser user = (SecurityUser)request.getSession().getAttribute("user");
@@ -429,6 +428,7 @@ public class MessageTemplateController {
         AccountTemplateInfoValidator messageTemplateValidator = new AccountTemplateInfoValidator();
         messageTemplateValidator.setEnterpriseId(user.getOrganization());
         messageTemplateValidator.setTemplateType(bussinessType);
+        messageTemplateValidator.setInfoType(infoType);
         messageTemplateValidator.setTemplateFlag(templateFlag);
         messageTemplateValidator.setTemplateStatus("1");
         messageTemplateValidator.setTemplateContent(keyword);
