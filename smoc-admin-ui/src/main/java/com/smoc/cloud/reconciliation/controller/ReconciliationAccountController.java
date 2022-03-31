@@ -8,6 +8,7 @@ import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.reconciliation.model.ReconciliationEnterpriseModel;
 import com.smoc.cloud.reconciliation.service.ReconciliationAccountService;
+import com.smoc.cloud.reconciliation.service.ReconciliationPeriodService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Map;
 
 /**
  * 业务账号对账
@@ -26,6 +29,9 @@ public class ReconciliationAccountController {
 
     @Autowired
     private ReconciliationAccountService reconciliationAccountService;
+
+    @Autowired
+    private ReconciliationPeriodService reconciliationPeriodService;
 
     /**
      * 列表
@@ -50,8 +56,13 @@ public class ReconciliationAccountController {
             return view;
         }
 
-        log.info("[page]:{}", new Gson().toJson(data.getData().getList()));
+        ResponseData<Map<String,String>> existPeriod = reconciliationPeriodService.findAccountPeriod();
+        if (!ResponseCode.SUCCESS.getCode().equals(existPeriod.getCode())) {
+            view.addObject("error", existPeriod.getCode() + ":" + existPeriod.getMessage());
+            return view;
+        }
 
+        view.addObject("existPeriod", existPeriod.getData());
         view.addObject("reconciliationEnterpriseModel", reconciliationEnterpriseModel);
         view.addObject("list", data.getData().getList());
         view.addObject("pageParams", data.getData().getPageParams());
@@ -77,6 +88,13 @@ public class ReconciliationAccountController {
             return view;
         }
 
+        ResponseData<Map<String,String>> existPeriod = reconciliationPeriodService.findAccountPeriod();
+        if (!ResponseCode.SUCCESS.getCode().equals(existPeriod.getCode())) {
+            view.addObject("error", existPeriod.getCode() + ":" + existPeriod.getMessage());
+            return view;
+        }
+
+        view.addObject("existPeriod", existPeriod.getData());
         view.addObject("reconciliationEnterpriseModel", reconciliationEnterpriseModel);
         view.addObject("list", data.getData().getList());
         view.addObject("pageParams", data.getData().getPageParams());
