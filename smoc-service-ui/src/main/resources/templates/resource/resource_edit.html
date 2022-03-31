@@ -19,17 +19,20 @@
                 <div class="card-box">
                     <form th:action="@{/resource/save/{op}(op=${op})}" id="submit_form" th:object="${accountResourceInfoValidator}" method="post" data-parsley-validate="">
                         <div class="row">
-                            <div class="col-md-8">
+                            <div class="col-md-12">
+                                <div class="alert alert-icon" style="background-color: #00acc1" >
+                                    <i class="mdi mdi-block-helper"></i>
+                                    <strong>提醒!</strong> 目前的资源类型支持图片(jpg,jpeg,gif,png)，视频(mp4、3gp) ，音频（midi,wav,amr,mp3,aac）
+                                </div>
                                 <div class="p-20">
-
-                                    <div class="form-group m-b-30">
+                                    <div class="form-group col-md-8 m-b-30">
                                         <label for="resourceTitle">
                                             资源备注<span class="text-danger">*</span>&nbsp;
                                             <span class="text-danger" style="font-weight: 200;font-size: 12px" th:if="${#fields.hasErrors('resourceTitle')}" th:errors="*{resourceTitle}"></span>
                                         </label>
                                         <input type="text" id="resourceTitle" class="form-control" placeholder="输入备注内容，最多10个汉字" autocomplete="off" th:field="*{resourceTitle}">
                                     </div>
-                                    <div class="form-group m-b-30">
+                                    <div class="form-group col-md-8 m-b-30">
                                         <label>
                                             上传资源文件<span class="text-danger" style="font-weight: 200;font-size: 12px"></span>
                                         </label>

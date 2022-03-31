@@ -61,8 +61,8 @@ com:
         message-resource:
           resource-file-root-path: /alidata/smoc/message/resource  #彩信资源文件根目录
           resource-allow-format[0]: jpg,jpeg,gif,png  #彩信资源图片格式
-          resource-allow-format[1]: midi,mid,wav  #彩信资源音频格式
-          resource-allow-format[2]: 3gp  #彩信资源视频频格式
+          resource-allow-format[1]: midi,wav,amr,mp3,aac  #彩信资源音频格式
+          resource-allow-format[2]: 3gp,mp4  #彩信资源视频频格式
           resource-allow-format[3]:
           resource-allow-format[4]:
           resource-file-size-limit: 2048  #彩信资源文件大小限制，以K为单位

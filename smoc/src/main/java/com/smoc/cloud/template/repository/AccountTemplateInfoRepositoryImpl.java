@@ -73,6 +73,12 @@ public class AccountTemplateInfoRepositoryImpl extends BasePageRepository {
             paramsList.add(qo.getTemplateType().trim());
         }
 
+        //信息分类
+        if (!StringUtils.isEmpty(qo.getInfoType())) {
+            sqlBuffer.append(" and t.INFO_TYPE =?");
+            paramsList.add(qo.getInfoType().trim());
+        }
+
         //业务账号名称
         if (!StringUtils.isEmpty(qo.getAccountName())) {
             sqlBuffer.append(" and a.ACCOUNT_NAME like ? ");
