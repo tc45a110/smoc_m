@@ -69,7 +69,7 @@ public class ReconciliationPeriodService {
         entity.setAccountPeriodEndDate(DateTimeUtils.getDateTimeFormat(validator.getAccountPeriodEndDate() + " 00:00:00"));
         entity.setCreatedTime(DateTimeUtils.getDateTimeFormat(validator.getCreatedTime()));
         reconciliationPeriodRepository.saveAndFlush(entity);
-        log.info("[ReconciliationPeriodValidator]:{}", new Gson().toJson(entity));
+        //log.info("[ReconciliationPeriodValidator]:{}", new Gson().toJson(entity));
         reconciliationPeriodRepository.buildAccountPeriod(validator, uuid);
         return ResponseDataUtil.buildSuccess();
     }

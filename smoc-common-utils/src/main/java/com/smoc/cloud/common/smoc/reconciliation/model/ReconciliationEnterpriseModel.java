@@ -1,4 +1,4 @@
-package com.smoc.cloud.reconciliation.model;
+package com.smoc.cloud.common.smoc.reconciliation.model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -20,6 +20,10 @@ public class ReconciliationEnterpriseModel {
     private String enterpriseName;
     //账单状态
     private String accountingStatus;
+
+    private String quantity;
+
+    private String sum;
     //业务账号
     private List<ReconciliationAccountModel> accounts;
 
