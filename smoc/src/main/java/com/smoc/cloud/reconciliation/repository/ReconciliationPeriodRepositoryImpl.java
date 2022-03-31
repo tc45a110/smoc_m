@@ -92,8 +92,8 @@ public class ReconciliationPeriodRepositoryImpl extends BasePageRepository {
      */
     public void buildAccountPeriod(ReconciliationPeriodValidator validator, String uuid) {
 
-        StringBuffer sql = new StringBuffer("insert into reconciliation_account_items(ID,ENTERPRISE_ID,ACCOUNT_PERIOD_ID,ACCOUNT_PERIOD,ACCOUNT_ID,CARRIER,TOTAL_SEND_QUANTITY,TOTAL_SUBMIT_QUANTITY,TOTAL_AMOUNT,TOTAL_NO_REPORT_QUANTITY,CHARGE_TYPE,PRICE,ACCOUNT_PERIOD_STATUS,STATUS,CREATED_BY,CREATED_TIME)");
-        sql.append(" select system_nextval('reconciliation'),ENTERPRISE_ID ,'" + uuid + "','" + validator.getAccountPeriod() + "',BUSINESS_ACCOUNT,CARRIER,MESSAGE_SUCCESS_NUM,0,0.00,0,CARRIER_TYPE,ACCOUNT_PRICE,'1','1','" + validator.getCreatedBy() + "',now() from view_reconciliation_account_original where DATA_DATE = '" + validator.getAccountPeriod() + "'");
+        StringBuffer sql = new StringBuffer("insert into reconciliation_account_items(ID,ENTERPRISE_ID,ACCOUNT_PERIOD_ID,ACCOUNT_PERIOD,ACCOUNT_ID,CARRIER,BUSINESS_TYPE,TOTAL_SEND_QUANTITY,TOTAL_SUBMIT_QUANTITY,TOTAL_AMOUNT,TOTAL_NO_REPORT_QUANTITY,CHARGE_TYPE,PRICE,ACCOUNT_PERIOD_STATUS,STATUS,CREATED_BY,CREATED_TIME)");
+        sql.append(" select system_nextval('reconciliation'),ENTERPRISE_ID ,'" + uuid + "','" + validator.getAccountPeriod() + "',BUSINESS_ACCOUNT,CARRIER,BUSINESS_TYPE,MESSAGE_SUCCESS_NUM,0,0.00,0,CARRIER_TYPE,ACCOUNT_PRICE,'1','1','" + validator.getCreatedBy() + "',now() from view_reconciliation_account_original where DATA_DATE = '" + validator.getAccountPeriod() + "'");
 
         jdbcTemplate.update(sql.toString());
     }

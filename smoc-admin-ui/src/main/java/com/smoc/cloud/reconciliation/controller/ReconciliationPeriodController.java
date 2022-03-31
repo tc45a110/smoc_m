@@ -6,7 +6,6 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
-import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountValidator;
 import com.smoc.cloud.common.smoc.reconciliation.ReconciliationPeriodValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.reconciliation.service.ReconciliationPeriodService;
@@ -45,7 +44,7 @@ public class ReconciliationPeriodController {
      */
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ModelAndView list() {
-        ModelAndView view = new ModelAndView("reconciliation/account/reconciliation_account_list");
+        ModelAndView view = new ModelAndView("reconciliation/account/reconciliation_account_config_list");
 
         //初始化数据
         PageParams<ReconciliationPeriodValidator> params = new PageParams<ReconciliationPeriodValidator>();
@@ -78,13 +77,13 @@ public class ReconciliationPeriodController {
      */
     @RequestMapping(value = "/page", method = RequestMethod.POST)
     public ModelAndView page(@ModelAttribute ReconciliationPeriodValidator reconciliationPeriodValidator, PageParams pageParams) {
-        ModelAndView view = new ModelAndView("reconciliation/account/reconciliation_account_list");
+        ModelAndView view = new ModelAndView("reconciliation/account/reconciliation_account_config_list");
 
         reconciliationPeriodValidator.setStatus("1");
         //分页查询
         pageParams.setParams(reconciliationPeriodValidator);
 
-        ResponseData<PageList<FinanceAccountValidator>> data = reconciliationPeriodService.page(pageParams);
+        ResponseData<PageList<ReconciliationPeriodValidator>> data = reconciliationPeriodService.page(pageParams);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;
@@ -105,7 +104,7 @@ public class ReconciliationPeriodController {
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public ModelAndView add() {
 
-        ModelAndView view = new ModelAndView("reconciliation/account/reconciliation_account_edit");
+        ModelAndView view = new ModelAndView("reconciliation/account/reconciliation_account_config_edit");
 
 
         ResponseData<Map<String,String>> existPeriod = reconciliationPeriodService.findAccountPeriod();
@@ -114,9 +113,9 @@ public class ReconciliationPeriodController {
             return view;
         }
 
-        log.info("[]:{}",new Gson().toJson(existPeriod.getData()));
+        //log.info("[]:{}",new Gson().toJson(existPeriod.getData()));
         List<String> dateList = new ArrayList<>();
-        for(int i=1;i<7;i++){
+        for(int i=0;i<7;i++){
             try {
                 String date = DateTimeUtils.dateFormat(DateTimeUtils.dateAddMonths(new Date(),-i), "yyyy-MM");
                 if(null == existPeriod.getData() || null == existPeriod.getData().get(date)) {
@@ -144,7 +143,7 @@ public class ReconciliationPeriodController {
      */
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public ModelAndView save(@ModelAttribute ReconciliationPeriodValidator reconciliationPeriodValidator, HttpServletRequest request) {
-        ModelAndView view = new ModelAndView("reconciliation/account/reconciliation_account_edit");
+        ModelAndView view = new ModelAndView("reconciliation/account/reconciliation_account_config_edit");
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
 
         reconciliationPeriodValidator.setCreatedTime(DateTimeUtils.getDateTimeFormat(new Date()));
@@ -174,7 +173,7 @@ public class ReconciliationPeriodController {
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
     public ModelAndView delete(@PathVariable String id) {
 
-        ModelAndView view = new ModelAndView("reconciliation/account/reconciliation_account_list");
+        ModelAndView view = new ModelAndView("reconciliation/account/reconciliation_account_config_list");
 
         ResponseData delete = reconciliationPeriodService.deleteAccountPeriod(id);
         if (!ResponseCode.SUCCESS.getCode().equals(delete.getCode())) {

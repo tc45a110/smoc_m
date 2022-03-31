@@ -1,4 +1,4 @@
-package com.smoc.cloud.reconciliation.model;
+package com.smoc.cloud.common.smoc.reconciliation.model;
 
 import lombok.Getter;
 import lombok.Setter;
