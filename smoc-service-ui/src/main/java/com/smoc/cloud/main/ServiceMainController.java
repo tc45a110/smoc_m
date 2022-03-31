@@ -74,22 +74,6 @@ public class ServiceMainController {
         }
         view.addObject("menus", data);
 
-        List<SystemValidator> list = new ArrayList();
-        String[] scopes = user.getAuthScope().split(",");
-        for (int i = 0; i < scopes.length; i++) {
-            if (!systemProperties.getSystemMarking().equals(scopes[i])) {
-                list.add(sysMap.get(scopes[i]));
-            }
-        }
-        view.addObject("sysList", list);
-
-        //引导页显示
-        String guideCount = ""+request.getSession().getAttribute("guideCount");
-        if(!StringUtils.isEmpty(guideCount) && !"null".equals(guideCount)){
-            view.addObject("guideCount","1");
-            request.getSession().setAttribute("guideCount", "");
-        }
-
         return view;
     }
 
@@ -150,22 +134,6 @@ public class ServiceMainController {
         }
         //log.info("[resource]:{}",new Gson().toJson(data));
         view.addObject("menus", data);
-
-        List<SystemValidator> list = new ArrayList();
-        String[] scopes = user.getAuthScope().split(",");
-        for (int i = 0; i < scopes.length; i++) {
-            if (!systemProperties.getSystemMarking().equals(scopes[i])) {
-                list.add(sysMap.get(scopes[i]));
-            }
-        }
-        view.addObject("sysList", list);
-
-        //引导页显示
-        String guideCount = ""+request.getSession().getAttribute("guideCount");
-        if(!StringUtils.isEmpty(guideCount) && !"null".equals(guideCount)){
-            view.addObject("guideCount","1");
-            request.getSession().setAttribute("guideCount", "");
-        }
 
         return view;
     }
