@@ -81,12 +81,6 @@ public class AccountInterfaceController {
 
         }
 
-        //查询企业数据
-        ResponseData<EnterpriseBasicInfoValidator> enterpriseData = enterpriseService.findById(data.getData().getEnterpriseId());
-        if (!ResponseCode.SUCCESS.getCode().equals(enterpriseData.getCode())) {
-            view.addObject("error", enterpriseData.getCode() + ":" + enterpriseData.getMessage());
-        }
-
         AccountInterfaceInfoValidator accountInterfaceInfoValidator = new AccountInterfaceInfoValidator();
         accountInterfaceInfoValidator.setAccountId(accountId);
 
@@ -100,7 +94,7 @@ public class AccountInterfaceController {
         }
 
         view.addObject("accountInterfaceInfoValidator", accountInterfaceInfoValidator);
-        view.addObject("enterpriseBasicInfoValidator", enterpriseData.getData());
+        view.addObject("accountBasicInfoValidator", data.getData());
 
         return view;
     }

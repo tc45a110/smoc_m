@@ -74,7 +74,7 @@ public class TemplateController {
         params.setCurrentPage(1);
         AccountTemplateInfoValidator accountTemplateInfoValidator = new AccountTemplateInfoValidator();
         accountTemplateInfoValidator.setTemplateAgreementType(protocol);
-        accountTemplateInfoValidator.setTemplateStatus("1");
+        //accountTemplateInfoValidator.setTemplateStatus("1");
         params.setParams(accountTemplateInfoValidator);
 
         //查询
@@ -102,7 +102,7 @@ public class TemplateController {
     public ModelAndView page(@ModelAttribute AccountTemplateInfoValidator accountTemplateInfoValidator, PageParams pageParams) {
         ModelAndView view = new ModelAndView("templates/template_list");
 
-        accountTemplateInfoValidator.setTemplateStatus("1");
+        //accountTemplateInfoValidator.setTemplateStatus("1");
         //分页查询
         pageParams.setParams(accountTemplateInfoValidator);
 
@@ -309,8 +309,8 @@ public class TemplateController {
      *
      * @return
      */
-    @RequestMapping(value = "/cancel/{templateId}", method = RequestMethod.GET)
-    public ModelAndView cancelTemplate(@PathVariable String templateId, HttpServletRequest request) {
+    @RequestMapping(value = "/cancel/{templateId}/{status}", method = RequestMethod.GET)
+    public ModelAndView cancelTemplate(@PathVariable String templateId,@PathVariable String status, HttpServletRequest request) {
         ModelAndView view = new ModelAndView("templates/template_list");
 
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
@@ -322,10 +322,15 @@ public class TemplateController {
             return view;
         }
 
-        ResponseData deleteResponseData = accountTemplateInfoService.cancelTemplate(templateId,"0");
+        if("0".equals(status)){
+            status = "1";
+        }else{
+            status = "0";
+        }
+        ResponseData deleteResponseData = accountTemplateInfoService.cancelTemplate(templateId,status);
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(deleteResponseData.getCode())) {
-            systemUserLogService.logsAsync("TEMPLATE_INFO", templateId, user.getRealName(),"delete","删除模板", JSON.toJSONString(data.getData()));
+            systemUserLogService.logsAsync("TEMPLATE_INFO", templateId, user.getRealName(),"delete","0".equals(status) ?"注销模板":"启用模板", JSON.toJSONString(data.getData()));
         }
         //记录日志
         log.info("[模板管理][注销模板][{}][{}]数据:{}", "delete", user.getUserName(), JSON.toJSONString(data.getCode()));

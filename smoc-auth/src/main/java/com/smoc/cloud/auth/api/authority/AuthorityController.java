@@ -74,7 +74,7 @@ public class AuthorityController {
     @RequestMapping(value = "user/save/{op}", method = RequestMethod.POST)
     public ResponseData saveUser(@RequestBody UserValidator userValidator, @PathVariable String op) {
 
-        log.info("[企业接入][创建用户]数据:{}={}",  JSON.toJSONString(userValidator));
+        log.info("[WEB服务][创建用户]数据:{}={}",  JSON.toJSONString(userValidator));
         /**
          * 完成参数规则验证
          */
