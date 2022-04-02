@@ -42,4 +42,15 @@ public class ReconciliationAccountService {
 
         return ResponseDataUtil.buildSuccess(pageList);
     }
+
+    /**
+     * 根据企业ID 和账期 查询企业账单明细
+     * @param enterpriseId
+     * @param accountPeriod
+     * @return
+     */
+    public ResponseData<Map<String,Object>> getEnterpriseBills(String enterpriseId, String accountPeriod){
+        Map<String,Object> result = reconciliationAccountRepository.getEnterpriseBills(enterpriseId,accountPeriod);
+        return ResponseDataUtil.buildSuccess(result);
+    }
 }

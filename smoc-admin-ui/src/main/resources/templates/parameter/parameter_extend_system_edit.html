@@ -72,6 +72,14 @@
                                                        th:value="${keyValueMap[parameter.paramKey]}"
                                                        th:data-parsley-pattern="${#strings.isEmpty(parameter.regularExp)?'':parameter.regularExp}"
                                                        class="form-control" autocomplete="off">
+                                                <textarea th:if="${(parameter.dataType == 'TEXT' && parameter.showType == 'text')}"
+                                                          th:id="${parameter.paramKey}" rows="4"
+                                                          type="text" th:name="${parameter.paramKey}"
+                                                          th:placeholder="${#strings.isEmpty(parameter.placeholder)?parameter.paramTitle:parameter.placeholder}"
+                                                          th:data-parsley-maxlength="${parameter.paramMaxLength}"
+                                                          th:attr="required=${parameter.isNull == '1'?'true':'false'}"
+                                                          th:data-parsley-pattern="${#strings.isEmpty(parameter.regularExp)?'':parameter.regularExp}"
+                                                          class="form-control" autocomplete="off">[[${keyValueMap[parameter.paramKey]}]]</textarea>
                                                 <input th:if="${(parameter.dataType == 'INT' && parameter.showType == 'text')}"
                                                        th:id="${parameter.paramKey}"
                                                        type="text" th:name="${parameter.paramKey}"
