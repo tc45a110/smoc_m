@@ -54,6 +54,12 @@ public class ReconciliationAccountRepository extends BasePageRepository {
             paramsList.add("%" + qo.getEnterpriseName().trim() + "%");
         }
 
+        //账期
+        if (!StringUtils.isEmpty(qo.getEnterpriseId())) {
+            sqlBuffer.append(" and rai.ENTERPRISE_ID =?");
+            paramsList.add(qo.getEnterpriseId().trim());
+        }
+
         //账单状态
         if (!StringUtils.isEmpty(qo.getAccountingStatus())) {
             sqlBuffer.append(" and rai.ACCOUNT_PERIOD_STATUS =?");

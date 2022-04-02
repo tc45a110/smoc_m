@@ -119,7 +119,8 @@
                                           [[${info.accountingPeriod}]]    [[${info.enterpriseName}]]
                                         </td>
                                         <td class="pull-right" style="padding-right:20px">
-                                            <a
+                                            <a sec:authorize-url="/reconciliation/account/ec/excel/*/*"
+                                               th:href="@{/reconciliation/account/ec/excel/{enterpriseId}/{accountPeriod}(enterpriseId=${info.enterpriseId},accountPeriod=${info.accountingPeriod})}"
                                                data-toggle="tooltip" data-placement="left"
                                                data-original-title="导出EXCEL账单"
                                                class="on-default edit-row"

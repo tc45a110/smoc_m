@@ -5,19 +5,24 @@ import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.google.gson.Gson;
+import com.smoc.cloud.common.auth.qo.Dict;
+import com.smoc.cloud.common.auth.qo.DictType;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
+import com.smoc.cloud.common.smoc.reconciliation.model.ReconciliationAccountModel;
 import com.smoc.cloud.common.smoc.reconciliation.model.ReconciliationEnterpriseModel;
 import com.smoc.cloud.customer.service.EnterpriseService;
 import com.smoc.cloud.reconciliation.service.ReconciliationAccountService;
 import com.smoc.cloud.reconciliation.service.ReconciliationPeriodService;
+import com.smoc.cloud.utils.TestFileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +34,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -72,7 +81,7 @@ public class ReconciliationAccountController {
             return view;
         }
 
-        ResponseData<Map<String,String>> existPeriod = reconciliationPeriodService.findAccountPeriod();
+        ResponseData<Map<String, String>> existPeriod = reconciliationPeriodService.findAccountPeriod();
         if (!ResponseCode.SUCCESS.getCode().equals(existPeriod.getCode())) {
             view.addObject("error", existPeriod.getCode() + ":" + existPeriod.getMessage());
             return view;
@@ -82,15 +91,6 @@ public class ReconciliationAccountController {
         view.addObject("reconciliationEnterpriseModel", reconciliationEnterpriseModel);
         view.addObject("list", data.getData().getList());
         view.addObject("pageParams", data.getData().getPageParams());
-        String servletPath = request.getServletPath();
-        String contextPath = request.getContextPath();
-        log.info("[servletPath]:{}",servletPath);
-        log.info("[contextPath]:{}",contextPath);
-
-        //设置文件路径
-//        ClassPathResource classPathResource = new ClassPathResource("static/files/模板.txt");
-//        log.info("[getFilename]:{}",classPathResource.getFilename());
-        //log.info("[getFilename]:{}",classPathResource.getURL().getPath());
 
         return view;
     }
@@ -113,7 +113,7 @@ public class ReconciliationAccountController {
             return view;
         }
 
-        ResponseData<Map<String,String>> existPeriod = reconciliationPeriodService.findAccountPeriod();
+        ResponseData<Map<String, String>> existPeriod = reconciliationPeriodService.findAccountPeriod();
         if (!ResponseCode.SUCCESS.getCode().equals(existPeriod.getCode())) {
             view.addObject("error", existPeriod.getCode() + ":" + existPeriod.getMessage());
             return view;
@@ -128,31 +128,63 @@ public class ReconciliationAccountController {
     }
 
     /**
-     * 列表
+     * 导出excel 结账单
      *
      * @return
      */
     @RequestMapping(value = "/ec/excel/{enterpriseId}/{accountPeriod}", method = RequestMethod.GET)
-    public void excel(@PathVariable String enterpriseId,@PathVariable String accountPeriod, HttpServletResponse response, HttpServletRequest request) {
+    public void excel(@PathVariable String enterpriseId, @PathVariable String accountPeriod, HttpServletResponse response, HttpServletRequest request) {
 
         ResponseData<EnterpriseBasicInfoValidator> enterpriseResponseDate = enterpriseService.findById(enterpriseId);
-        ResponseData<Map<String, Object>> responseData = reconciliationAccountService.getEnterpriseBills(enterpriseId,accountPeriod);
+
+        String templateFileName = TestFileUtil.getPath() + "static" + File.separator + "files" + File.separator + "templates" + File.separator + "reconciliation.xlsx";
+        log.info("[templateFileName]:{}",templateFileName);
+
+        //运营商
+        Map<String,String>  carrierMap = this.carrier(request);
+        //对接主体公司
+        Map<String,String> corporationMap = this.corporation(request);
+        //业务类型
+        Map<String,String> businessTypeMap = this.businessType(request);
+
+        //初始化数据
+        PageParams<ReconciliationEnterpriseModel> params = new PageParams<ReconciliationEnterpriseModel>();
+        params.setPageSize(1);
+        params.setCurrentPage(1);
+        ReconciliationEnterpriseModel reconciliationEnterpriseModel = new ReconciliationEnterpriseModel();
+        reconciliationEnterpriseModel.setEnterpriseId(enterpriseId);
+        reconciliationEnterpriseModel.setAccountingPeriod(accountPeriod);
+        params.setParams(reconciliationEnterpriseModel);
+
+        //查询
+        ResponseData<PageList<ReconciliationEnterpriseModel>> responseData = reconciliationAccountService.page(params);
+
+        BigDecimal total = new BigDecimal("0.00");
+        List<Map<String, Object>> list = new ArrayList<>();
+        if (null != responseData.getData() && responseData.getData().getList().size() > 0) {
+            ReconciliationEnterpriseModel enterpriseModel = responseData.getData().getList().get(0);
+            total = new BigDecimal(enterpriseModel.getSum());
+            if (null != enterpriseModel && null != enterpriseModel.getAccounts() && enterpriseModel.getAccounts().size() > 0)
+                for (ReconciliationAccountModel model : enterpriseModel.getAccounts()) {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("period", model.getAccountingPeriod());
+                    map.put("account", model.getAccount());
+                    map.put("carrier", carrierMap.get(model.getCarrier()));
+                    map.put("type",businessTypeMap.get(model.getBusinessType()));
+                    map.put("quantity", model.getSendSum());
+                    map.put("price", model.getPrice());
+                    map.put("amount", model.getTotalSum());
+                    list.add(map);
+                }
+        }
 
         OutputStream out = null;
         BufferedOutputStream bos = null;
         try {
 
-            String servletPath = request.getServletPath();
-
-            String templateFileName = "templates" + File.separator + "模板.xls";
-
-            //设置文件路径
-            ClassPathResource classPathResource = new ClassPathResource("static/files/模板.txt");
-
-
             response.setContentType("application/vnd.ms-excel");
             response.setCharacterEncoding("utf-8");
-            String fileName = URLEncoder.encode("下载后的名称.xls", "utf-8");
+            String fileName = URLEncoder.encode(enterpriseResponseDate.getData().getEnterpriseName() + "-" + accountPeriod + "-结算单.xls", "utf-8");
             response.setHeader("Content-disposition", "attachment; filename=" + new String(fileName.getBytes("UTF-8"), "ISO-8859-1"));
 
             out = response.getOutputStream();
@@ -162,18 +194,70 @@ public class ReconciliationAccountController {
             ExcelWriter excelWriter = EasyExcel.write(bos).withTemplate(templateFileName).build();
             WriteSheet writeSheet = EasyExcel.writerSheet().build();
 
-//            //list map 是查询并需导出的数据，并且里面的字段和excel需要导出的字段对应
-//            // 直接写入Excel数据
-//            List<Map> list = xxx;
-//            Map<String,Object> map = yyy;
-//            excelWriter.fill(list, writeSheet);
-//            excelWriter.fill(map, writeSheet);
-//            excelWriter.finish();
-//            bos.flush();
+            Map<String, Object> map = new HashMap<>();
+            map.put("partA", enterpriseResponseDate.getData().getEnterpriseName());
+            map.put("partB", corporationMap.get(enterpriseResponseDate.getData().getAccessCorporation()));
+            map.put("date", accountPeriod);
+            map.put("total", total);
+            excelWriter.fill(list, writeSheet);
+            excelWriter.fill(map, writeSheet);
+            excelWriter.finish();
+            bos.flush();
 
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
+    }
+
+    /**
+     * 运营商和 国际区域合并
+     */
+    private Map<String,String> carrier(HttpServletRequest request) {
+        Map<String, DictType> dictMap = (Map<String, DictType>) request.getServletContext().getAttribute("dict");
+        //运营商
+        DictType carrier = dictMap.get("carrier");
+        //国际区域
+        DictType internationalArea = dictMap.get("internationalArea");
+
+        Map<String,String> dictValueMap = new HashMap<>();
+        for (Dict dict : carrier.getDict()) {
+            dictValueMap.put(dict.getFieldCode(),dict.getFieldName());
+        }
+        for (Dict dict : internationalArea.getDict()) {
+            dictValueMap.put(dict.getFieldCode(),dict.getFieldName());
+        }
+        return dictValueMap;
+    } //业务类型
+
+
+    /**
+     * 对接主体公司
+     */
+    private Map<String,String> corporation(HttpServletRequest request) {
+        Map<String, DictType> dictMap = (Map<String, DictType>) request.getServletContext().getAttribute("dict");
+        //对接主体公司
+        DictType corporation = dictMap.get("corporation");
+
+        Map<String,String> dictValueMap = new HashMap<>();
+        for (Dict dict : corporation.getDict()) {
+            dictValueMap.put(dict.getFieldCode(),dict.getFieldName());
+        }
+        return dictValueMap;
+    }
+
+    /**
+     * 业务类型
+     */
+    private Map<String,String> businessType(HttpServletRequest request) {
+        Map<String, DictType> dictMap = (Map<String, DictType>) request.getServletContext().getAttribute("dict");
+        //对接主体公司
+        DictType businessType = dictMap.get("businessType");
+
+        Map<String,String> dictValueMap = new HashMap<>();
+        for (Dict dict : businessType.getDict()) {
+            dictValueMap.put(dict.getFieldCode(),dict.getFieldName());
+        }
+        return dictValueMap;
     }
 
 
