@@ -321,4 +321,14 @@ public class BusinessAccountService {
         List<MessageAccountValidator> list = businessAccountRepository.messageAccountList(messageAccountValidator);
         return ResponseDataUtil.buildSuccess(list);
     }
+
+    /**
+     * 查询自服务平台发送账号列表
+     * @param params
+     * @return
+     */
+    public ResponseData<PageList<MessageAccountValidator>> messageAccountInfoList(PageParams<MessageAccountValidator> params) {
+        PageList<MessageAccountValidator> list = businessAccountRepository.messageAccountInfoList(params);
+        return ResponseDataUtil.buildSuccess(list);
+    }
 }

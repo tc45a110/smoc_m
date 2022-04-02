@@ -22,6 +22,9 @@ public class AccountTemplateInfo {
     @Column(name = "SIGN_NAME", nullable = false, length = 64)
     private String signName;
 
+    @Column(name = "TEMPLATE_TITLE")
+    private String templateTitle;
+
     @Lob
     @Column(name = "TEMPLATE_CONTENT", nullable = false)
     private String templateContent;
@@ -215,5 +218,13 @@ public class AccountTemplateInfo {
 
     public void setTemplateId(String templateId) {
         this.templateId = templateId;
+    }
+
+    public String getTemplateTitle() {
+        return templateTitle;
+    }
+
+    public void setTemplateTitle(String templateTitle) {
+        this.templateTitle = templateTitle;
     }
 }

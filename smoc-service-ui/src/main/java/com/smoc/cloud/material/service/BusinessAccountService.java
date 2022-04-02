@@ -1,5 +1,7 @@
 package com.smoc.cloud.material.service;
 
+import com.smoc.cloud.common.page.PageList;
+import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
@@ -57,4 +59,33 @@ public class BusinessAccountService {
         }
     }
 
+    /**
+     * 查询账号
+     * @param businessAccount
+     * @return
+     */
+    public ResponseData<AccountBasicInfoValidator> findById(String businessAccount) {
+        try {
+            ResponseData<AccountBasicInfoValidator> data = this.businessAccountFeignClient.findById(businessAccount);
+            return data;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     *  查询发送账号列表
+     * @param params
+     * @return
+     */
+    public ResponseData<PageList<MessageAccountValidator>> messageAccountInfoList(PageParams<MessageAccountValidator> params) {
+        try {
+            ResponseData<PageList<MessageAccountValidator>> pageList = this.businessAccountFeignClient.messageAccountInfoList(params);
+            return pageList;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
 }

@@ -31,7 +31,7 @@ public class DictTypeValidator {
     private String dictTypeCode;
 
     @NotNull(message = "所属系统不能为空！")
-    @Size(min = 2, max = 32, message = "所属系统长度不符合规则！")
+    @Size(min = 2, max = 128, message = "所属系统长度不符合规则！")
     private String dictTypeSystem;
 
     @NotNull(message = "图标不能为空！")

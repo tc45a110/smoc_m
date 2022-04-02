@@ -34,6 +34,7 @@ public class AccountTemplateInfoRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(" t.TEMPLATE_TYPE,");
         sqlBuffer.append(" t.TEMPLATE_FLAG,");
         sqlBuffer.append(" t.SIGN_NAME,");
+        sqlBuffer.append(" t.TEMPLATE_TITLE,");
         sqlBuffer.append(" t.TEMPLATE_CONTENT,");
         sqlBuffer.append(" DATE_FORMAT(t.CHECK_DATE, '%Y-%m-%d %H:%i:%S')CHECK_DATE, ");
         sqlBuffer.append(" t.CHECK_BY,");

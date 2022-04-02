@@ -23,17 +23,13 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title"> <mpm:tag identity="helpSelfType"
-                                                     th:value="${signType}" show-type="label"
-                                                     key="code"/>明细</h4>
+                    <h4 class="page-title"> 短信明细</h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
-                            短信明细
+                            短信群发
                         </li>
                         <li class="active">
-                            <mpm:tag identity="helpSelfType"
-                                     th:value="${signType}" show-type="label"
-                                     key="code"/>明细
+                            短信明细
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -49,9 +45,7 @@
                     <div class="panel-heading">
                         <h3 class="panel-title">
                             <i class="mdi mdi-content-save-all" style="margin-right:5px"></i>
-                            <mpm:tag identity="helpSelfType"
-                                     th:value="${signType}" show-type="label"
-                                     key="code"/>明细
+                            短信明细
                         </h3>
                     </div>
                     <div class="panel-body" style="height: 700px">
@@ -160,11 +154,11 @@
                                     </div>
 
                                     <div class="text-right">
-                                        <a th:sec:authorize-url="|/message/mm/list/${businessType}/${signType}|" th:if="${messageWebTaskInfoValidator.messageType eq '1'}"
-                                           th:href="@{/message/mm/list/{businessType}/{signType}(businessType=${businessType},signType=${signType})}"
+                                        <a th:sec:authorize-url="|/message/mm/list/${businessType}|" th:if="${messageWebTaskInfoValidator.messageType eq '1'}"
+                                           th:href="@{/message/mm/list/{businessType}(businessType=${businessType})}"
                                            class="btn btn-default waves-effect waves-light" style="margin-left:20px">返回</a>
-                                        <a th:sec:authorize-url="|/message/mm/variable/list/${businessType}/${signType}|" th:if="${messageWebTaskInfoValidator.messageType eq '2'}"
-                                           th:href="@{/message/mm/variable/list/{businessType}/{signType}(businessType=${businessType},signType=${signType})}"
+                                        <a th:sec:authorize-url="|/message/mm/variable/list/${businessType}|" th:if="${messageWebTaskInfoValidator.messageType eq '2'}"
+                                           th:href="@{/message/mm/variable/list/{businessType}(businessType=${businessType})}"
                                            class="btn btn-default waves-effect waves-light" style="margin-left:20px">返回</a>
                                     </div>
                                 </div>

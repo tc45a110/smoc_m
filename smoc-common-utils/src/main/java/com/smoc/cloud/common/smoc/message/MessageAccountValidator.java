@@ -22,6 +22,22 @@ public class MessageAccountValidator {
 
     private String infoType;
 
+    private String carrier;
+
+    private String protocol;
+
+    private String payType;
+
+    private String maskArea;
+
+    private String dayLimit;
+
+    private String sendLimit;
+
+    private String accountStatus;
+
+    private String createdTime;
+
     private BigDecimal accountUsableSum;
 
     private String startDate;

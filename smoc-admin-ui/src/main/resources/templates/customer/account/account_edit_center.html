@@ -103,7 +103,7 @@
                                             </li>
                                             <li class="" id="tab4"><a onclick="active('4')" id="a4"
                                                                       sec:authorize-url="/parameter/filter/list/BUSINESS_ACCOUNT_FILTER/*/*"
-                                                                      th:href="@{/parameter/filter/list/BUSINESS_ACCOUNT_FILTER/accountId/6}"
+                                                                      th:href="@{/parameter/filter/list/BUSINESS_ACCOUNT_FILTER/{id}/6(id=${accountId})}"
                                                                       th:target="tab-content">业务账号过滤参数</a>
                                             <li class="" id="tab5">
                                                 <a onclick="active('5')" id="a5" th:if="${(flag eq 'base' or flag eq 'international') or accountChannelType eq 'ACCOUNT_CHANNEL_GROUP'}"

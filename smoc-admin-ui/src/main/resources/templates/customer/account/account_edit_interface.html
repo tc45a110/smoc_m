@@ -295,6 +295,24 @@
             });
 
         }
+
+        if ("WEB" == value) {
+            document.getElementById("HTTP_BLACK_SERVICE").style.display = "none";
+            document.getElementById("CMPP").style.display = "none";
+            document.getElementById("HTTP_SMS").style.display = "none";
+            document.getElementById("CHECK_TEMPL").style.display = "none";
+
+            $("#CMPP :input").each(function(){
+                $(this).removeAttr("required")
+            });
+            $("#HTTP_SMS :input").each(function(){
+                $(this).removeAttr("required")
+            });
+            $("#HTTP_BLACK_SERVICE :input").each(function(){
+                $(this).removeAttr("required")
+            });
+
+        }
     }
 
 </script>

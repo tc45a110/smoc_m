@@ -58,4 +58,11 @@ public interface BusinessAccountRepository extends CrudRepository<AccountBasicIn
      * @return
      */
     List<MessageAccountValidator> messageAccountList(MessageAccountValidator messageAccountValidator);
+
+    /**
+     * 查询自服务平台发送账号列表
+     * @param params
+     * @return
+     */
+    PageList<MessageAccountValidator> messageAccountInfoList(PageParams<MessageAccountValidator> params);
 }

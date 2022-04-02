@@ -168,6 +168,16 @@ public class MessageMMTemplateController {
             return view;
         }
 
+        //查询企业下得所有WEB业务账号
+        AccountBasicInfoValidator accountBasicInfoValidator = new AccountBasicInfoValidator();
+        accountBasicInfoValidator.setBusinessType(type);
+        accountBasicInfoValidator.setEnterpriseId(user.getOrganization());
+        accountBasicInfoValidator.setAccountStatus("1");//正常
+        ResponseData<List<AccountBasicInfoValidator>> info = businessAccountService.findBusinessAccount(accountBasicInfoValidator);
+        if (ResponseCode.SUCCESS.getCode().equals(info.getCode()) && !StringUtils.isEmpty(info.getData()) && info.getData().size()>0) {
+            view.addObject("infoTypeList", info.getData());
+        }
+
         //查询资源类型
         List<Dict> resourceTypeList = new ArrayList<Dict>();
         ServletContext context = request.getServletContext();
@@ -221,6 +231,16 @@ public class MessageMMTemplateController {
         if (!ResponseCode.SUCCESS.getCode().equals(signList.getCode())) {
             view.addObject("error", signList.getCode() + ":" + signList.getMessage());
             return view;
+        }
+
+        //查询企业下得所有WEB业务账号
+        AccountBasicInfoValidator accountBasicInfoValidator = new AccountBasicInfoValidator();
+        accountBasicInfoValidator.setBusinessType(data.getData().getTemplateType());
+        accountBasicInfoValidator.setEnterpriseId(user.getOrganization());
+        accountBasicInfoValidator.setAccountStatus("1");//正常
+        ResponseData<List<AccountBasicInfoValidator>> info = businessAccountService.findBusinessAccount(accountBasicInfoValidator);
+        if (ResponseCode.SUCCESS.getCode().equals(info.getCode()) && !StringUtils.isEmpty(info.getData()) && info.getData().size()>0) {
+            view.addObject("infoTypeList", info.getData());
         }
 
         //还原帧数据
@@ -279,16 +299,16 @@ public class MessageMMTemplateController {
 
         //完成参数规则验证
         if (result.hasErrors()) {
-            //查询企业下得所有业务账号
+            //查询企业下得所有WEB业务账号
             AccountBasicInfoValidator accountBasicInfoValidator = new AccountBasicInfoValidator();
             accountBasicInfoValidator.setBusinessType(accountTemplateInfoValidator.getTemplateType());
             accountBasicInfoValidator.setEnterpriseId(user.getOrganization());
             accountBasicInfoValidator.setAccountStatus("1");//正常
             ResponseData<List<AccountBasicInfoValidator>> info = businessAccountService.findBusinessAccount(accountBasicInfoValidator);
-            if (!ResponseCode.SUCCESS.getCode().equals(info.getCode())) {
-                view.addObject("error", info.getCode() + ":" + info.getMessage());
-                return view;
+            if (ResponseCode.SUCCESS.getCode().equals(info.getCode()) && !StringUtils.isEmpty(info.getData()) && info.getData().size()>0) {
+                view.addObject("infoTypeList", info.getData());
             }
+
             //查询签名
             EnterpriseDocumentInfoValidator enterpriseDocumentInfoValidator = new EnterpriseDocumentInfoValidator();
             enterpriseDocumentInfoValidator.setEnterpriseId(user.getOrganization());
@@ -296,7 +316,6 @@ public class MessageMMTemplateController {
             enterpriseDocumentInfoValidator.setDocStatus("1");
             ResponseData<List<EnterpriseDocumentInfoValidator>> signList = messageSignService.findMessageSign(enterpriseDocumentInfoValidator);
             view.addObject("accountTemplateInfoValidator", accountTemplateInfoValidator);
-            view.addObject("list", info.getData());
             view.addObject("signList", signList.getData());
             view.addObject("op", op);
             return view;
@@ -334,6 +353,7 @@ public class MessageMMTemplateController {
         accountTemplateInfoValidator.setMmAttchment(new Gson().toJson(paramsSort));
 
         //保存数据
+        accountTemplateInfoValidator.setTemplateTitle(accountTemplateInfoValidator.getTemplateContent());
         accountTemplateInfoValidator.setEnterpriseId(user.getOrganization());
         ResponseData data = messageTemplateService.save(accountTemplateInfoValidator,op,user.getId());
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
@@ -575,15 +595,14 @@ public class MessageMMTemplateController {
         view.addObject("resource_file_type", resource_file_type);
         view.addObject("accountTemplateInfoValidator", accountTemplateInfoValidator);
 
-        //查询企业下得所有业务账号
+        //查询企业下得所有WEB业务账号
         AccountBasicInfoValidator accountBasicInfoValidator = new AccountBasicInfoValidator();
-        accountBasicInfoValidator.setBusinessType(type);
+        accountBasicInfoValidator.setBusinessType(accountTemplateInfoValidator.getTemplateType());
         accountBasicInfoValidator.setEnterpriseId(user.getOrganization());
         accountBasicInfoValidator.setAccountStatus("1");//正常
         ResponseData<List<AccountBasicInfoValidator>> info = businessAccountService.findBusinessAccount(accountBasicInfoValidator);
-        if (!ResponseCode.SUCCESS.getCode().equals(info.getCode())) {
-            view.addObject("error", info.getCode() + ":" + info.getMessage());
-            return view;
+        if (ResponseCode.SUCCESS.getCode().equals(info.getCode()) && !StringUtils.isEmpty(info.getData()) && info.getData().size()>0) {
+            view.addObject("infoTypeList", info.getData());
         }
 
         //查询签名
@@ -609,7 +628,6 @@ public class MessageMMTemplateController {
 
         //op操作标记，add表示添加，edit表示修改
         view.addObject("op", "add");
-        view.addObject("list", info.getData());
         view.addObject("signList", signList.getData());
         view.addObject("type", type);
         view.addObject("resourceTypeList", resourceTypeList);

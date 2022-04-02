@@ -71,4 +71,5 @@ public interface MessageFeignClient {
      */
     @RequestMapping(value = "/message/web/task/statisticSubmitMessageSendCount", method = RequestMethod.POST)
     ResponseData<StatisticMessageSend> statisticSubmitMessageSendCount(@RequestBody MessageWebTaskInfoValidator messageWebTaskInfoValidator);
+
 }

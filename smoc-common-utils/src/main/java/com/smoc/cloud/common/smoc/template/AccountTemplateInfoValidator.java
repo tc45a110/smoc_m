@@ -24,8 +24,10 @@ public class AccountTemplateInfoValidator {
 
     private String signName;
 
+    private String templateTitle;
+
     @NotNull(message = "模板不能为空！")
-    @Size(min = 1, max = 500, message = "模板长度不符合规则！")
+    @Size(min = 1, max = 2000, message = "模板长度不符合规则！")
     private String templateContent;
 
     private String templateFlag;

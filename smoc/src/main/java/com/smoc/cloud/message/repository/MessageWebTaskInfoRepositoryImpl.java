@@ -38,6 +38,7 @@ public class MessageWebTaskInfoRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(" e.ENTERPRISE_NAME,");
         sqlBuffer.append(" t.TEMPLATE_ID,");
         sqlBuffer.append(" t.BUSINESS_ACCOUNT,");
+        sqlBuffer.append(" t.INFO_TYPE,");
         sqlBuffer.append(" t.BUSINESS_TYPE,");
         sqlBuffer.append(" t.SEND_TYPE,");
         sqlBuffer.append(" t.TIMING_TIME,");

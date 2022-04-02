@@ -66,14 +66,21 @@
                                         </select>
                                         <span th:if="${#lists.isEmpty(list)}" class="form-control" style="color: red">未开通业务账号</span>
                                     </div>
+                                    <div class="form-group m-b-20">
+                                        <label>短信标题</span>
+                                            <span class="text-danger" th:if="${#fields.hasErrors('subject')}"
+                                                  th:errors="*{subject}"></span></label>
+                                        <input id="subject" class="form-control" placeholder="输入短信标题，可以为空"
+                                               autocomplete="off" th:field="*{subject}" data-parsley-length="[1,32]" >
+                                    </div>
 
                                     <div class="form-group m-b-20">
-                                        <label>选择模板<span class="text-danger">*</span>&nbsp;<b id="charAmount-id"></b></span>
+                                        <label>短信内容<span class="text-danger">*</span>&nbsp;<b id="charAmount-id"></b></span>
                                             <span class="text-danger" th:if="${#fields.hasErrors('messageContent')}"
                                                   th:errors="*{messageContent}"></span></label><br>
                                         <textarea id="messageContent" class="form-control" th:field="*{messageContent}"
                                                   required="" data-parsley-length="[2,500]" autocomplete="off" onfocus="showTemplate()"
-                                                  rows="1" readonly></textarea>
+                                                  rows="1" readonly placeholder="请选择短信模板"></textarea>
                                     </div>
 
 
@@ -161,7 +168,6 @@
                             <input type="hidden" th:field="*{submitNumber}" id="sendNumberId">
                             <input type="hidden" th:field="*{numberAttachmentSize}" id="originalAttachmentSize">
                             <input type="hidden" th:field="*{businessType}">
-                            <input type="hidden" th:field="*{infoType}" id="infoType">
                             <input type="hidden" th:field="*{templateId}" id="templateId">
                             <input type="hidden" th:field="*{sendStatus}">
                             <input type="hidden" th:field="*{enterpriseId}">
@@ -171,11 +177,11 @@
                             <button sec:authorize-url="/message/mm/save/*" type="submit"
                                     class="btn btn-teal waves-effect waves-light">提交
                             </button>
-                            <a th:sec:authorize-url="|/message/mm/list/${businessType}/${signType}|" th:if="${messageWebTaskInfoValidator.messageType eq '1'}"
-                               th:href="@{/message/mm/list/{businessType}/{signType}(businessType=${businessType},signType=${signType})}"
+                            <a th:sec:authorize-url="|/message/mm/list/${businessType}|" th:if="${messageWebTaskInfoValidator.messageType eq '1'}"
+                               th:href="@{/message/mm/list/{businessType}(businessType=${businessType})}"
                                class="btn btn-default waves-effect waves-light" style="margin-left:20px">返回</a>
-                            <a th:sec:authorize-url="|/message/mm/variable/list/${businessType}/${signType}|" th:if="${messageWebTaskInfoValidator.messageType eq '2'}"
-                               th:href="@{/message/mm/variable/list/{businessType}/{signType}(businessType=${businessType},signType=${signType})}"
+                            <a th:sec:authorize-url="|/message/mm/variable/list/${businessType}|" th:if="${messageWebTaskInfoValidator.messageType eq '2'}"
+                               th:href="@{/message/mm/variable/list/{businessType}(businessType=${businessType})}"
                                class="btn btn-default waves-effect waves-light" style="margin-left:20px">返回</a>
                         </div>
                     </form>
@@ -318,14 +324,14 @@
         var templateFlag = $("#messageType").val();
         var keyword = $("#keyword_query").val();
         var businessType = $("#businessType").val();
-        var infoType = $("#infoType").val();
+        var businessAccount = $("#businessAccount").val();
         var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
         $.ajax({
             type: "POST",
             dataType: "json",
             contentType : 'application/json',
             url: contextPath + "/template/templateAjax",
-            data:"{\"businessType\":\""+businessType+"\",\"infoType\":\""+infoType+"\", \"templateId\":\""+templateId+"\",\"templateFlag\":\""+templateFlag+"\", \"keyword\":\""+keyword+"\", \"currentPage\":\""+currentPage+"\"}",
+            data:"{\"businessType\":\""+businessType+"\",\"businessAccount\":\""+businessAccount+"\", \"templateId\":\""+templateId+"\",\"templateFlag\":\""+templateFlag+"\", \"keyword\":\""+keyword+"\", \"currentPage\":\""+currentPage+"\"}",
             success: function (data) {
                 var tList = data.list;
                 currentPage = data.currentPage;
@@ -349,7 +355,7 @@
 
                     var trHtml = "<tr>" +
                         "<td style='vertical-align: middle;line-height: 26px'>" + tmp.templateId + "</td>" +
-                        "<td style='vertical-align: middle;line-height: 26px'><span class='text-overflow' title='"+tmp.templateContent+"'>" + tmp.templateContent + "</span></td>" +
+                        "<td style='vertical-align: middle;line-height: 26px'><span class='text-overflow' title='"+tmp.templateContent+"'>" + '【'+tmp.signName+'】'+ tmp.templateContent + "</span></td>" +
                         "<td style='vertical-align: middle;line-height: 26px; text-align: center'><a href='#' onclick='setTemplate("+valueStr+")' class='btn btn-success btn-rounded btn-sm waves-effect waves-light'>选择</a></td>" +
                         "</tr>";
                     $("#template_list_id").append(trHtml);

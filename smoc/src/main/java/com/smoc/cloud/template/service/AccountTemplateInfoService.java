@@ -51,7 +51,7 @@ public class AccountTemplateInfoService {
 
         Optional<AccountTemplateInfo> entityOptional = accountTemplateInfoRepository.findById(templateId);
         if (!entityOptional.isPresent()) {
-            ResponseDataUtil.buildError(ResponseCode.PARAM_QUERY_ERROR);
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_QUERY_ERROR);
         }
 
         AccountTemplateInfo entity = entityOptional.get();

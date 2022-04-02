@@ -23,17 +23,13 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title"><mpm:tag identity="helpSelfType"
-                                                    th:value="${signType}" show-type="label"
-                                                    key="code"/>发送</h4>
+                    <h4 class="page-title">短信发送</h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
                             短信群发
                         </li>
                         <li>
-                            <mpm:tag identity="helpSelfType"
-                                     th:value="${signType}" show-type="label"
-                                     key="code"/>发送
+                            短信发送
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -67,20 +63,23 @@
                                            placeholder="短信内容" autocomplete="off">
                                 </div>
 
+                                <div class="form-group  col-sm-3">
+                                    <mpm:tag id="infoType" identity="infoType"
+                                             show-type="select" key="code" class="form-control"
+                                             name="infoType" th:value="${messageWebTaskInfoValidator.infoType}" title="信息分类"/>
+                                </div>
+
                                 <div class="form-group col-sm-3 pull-right" style="text-align: right">
                                     <input type="hidden" th:field="*{businessType}">
-                                    <input type="hidden" th:field="*{infoType}">
                                     <button sec:authorize-url="/message/page" type="submit"
                                             class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search"></i> 查询
                                     </button>
-                                    <a th:sec:authorize-url="|/message/add/${businessType}/${signType}|"
-                                       th:href="@{/message/add/{businessType}/{signType}(businessType=${businessType},signType=${signType})}"
+                                    <a th:sec:authorize-url="|/message/add/${businessType}|"
+                                       th:href="@{/message/add/{businessType}(businessType=${businessType})}"
                                             class="btn btn-success waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-plus-sign"
-                                           style="margin-right:5px"></i><mpm:tag identity="helpSelfType"
-                                                                                 th:value="${signType}" show-type="label"
-                                                                                 key="code"/>群发</a>
+                                           style="margin-right:5px"></i>短信发送</a>
                                     <input type="hidden" name="currentPage" id="currentPage" th:value="${pageParams.currentPage}">
                                     <input type="hidden" name="pageSize" id="pageSize" th:value="${pageParams.pageSize}">
                                 </div>
@@ -98,17 +97,18 @@
                 <div class="panel panel-color panel-info">
                     <div class="panel-heading">
                         <h3 class="panel-title">
-                            <mpm:tag identity="helpSelfType"
-                                     th:value="${signType}" show-type="label"
-                                     key="code"/> 发送列表</h3>
+                            发送列表</h3>
                     </div>
                     <div class="panel-body">
                         <div class="table-responsive">
                             <table class="table table table-hover m-10" style="margin-top: -12px;">
                                 <thead>
                                 <tr>
+                                    <th style="width:150px">批次号</th>
+                                    <th style="width:100px">账号类型</th>
                                     <th style="width:100px">账号</th>
-                                    <th style="width:150px">任务ID/模板ID</th>
+                                    <th style="width:150px">模板ID</th>
+                                    <th style="width:150px">标题</th>
                                     <th>发送内容</th>
                                     <th style="width:155px">成功条数/失败条数</th>
                                     <th style="width:140px">发送状态</th>
@@ -122,8 +122,11 @@
                                 <thead>
                                 <tbody>
                                 <tr th:each="info:${list}">
+                                    <td style="vertical-align: middle;line-height: 26px">[[${info.id}]]</td>
+                                    <td style="vertical-align: middle;line-height: 26px"><mpm:tag identity="infoType" th:value="${info.infoType}" show-type="label" key="code"/></td>
                                     <td style="vertical-align: middle;line-height: 26px">[[${info.businessAccount}]]</td>
-                                    <td style="vertical-align: middle;line-height: 26px">[[${info.id}]]<br>[[${info.templateId}]]</td>
+                                    <td style="vertical-align: middle;line-height: 26px">[[${info.templateId}]]</td>
+                                    <td style="vertical-align: middle;line-height: 26px">[[${info.subject}]]</td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         [[${info.messageContent}]]
                                     </td>

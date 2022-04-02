@@ -93,12 +93,11 @@ public class MessageMMController {
 
     /**
      * 短信发送列表
-     * @param signType
      * @param request
      * @return
      */
-    @RequestMapping(value = "list/{businessType}/{signType}", method = RequestMethod.GET)
-    public ModelAndView list(@PathVariable String businessType, @PathVariable String signType, HttpServletRequest request) {
+    @RequestMapping(value = "list/{businessType}", method = RequestMethod.GET)
+    public ModelAndView list(@PathVariable String businessType, HttpServletRequest request) {
         ModelAndView view = new ModelAndView("message/message_mm_list");
 
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
@@ -111,7 +110,6 @@ public class MessageMMController {
         messageWebTaskInfoValidator.setEnterpriseId(user.getOrganization());
         messageWebTaskInfoValidator.setBusinessType(businessType);
         messageWebTaskInfoValidator.setMessageType("1");
-        messageWebTaskInfoValidator.setInfoType(signType);
         Date startDate = DateTimeUtils.getFirstMonth(6);
         messageWebTaskInfoValidator.setStartDate(DateTimeUtils.getDateFormat(startDate));
         messageWebTaskInfoValidator.setEndDate(DateTimeUtils.getDateFormat(new Date()));
@@ -127,7 +125,6 @@ public class MessageMMController {
         view.addObject("messageWebTaskInfoValidator", messageWebTaskInfoValidator);
         view.addObject("list", data.getData().getList());
         view.addObject("pageParams", data.getData().getPageParams());
-        view.addObject("signType", signType);
         view.addObject("businessType", businessType);
         return view;
     }
@@ -163,7 +160,6 @@ public class MessageMMController {
         view.addObject("messageWebTaskInfoValidator", messageWebTaskInfoValidator);
         view.addObject("list", data.getData().getList());
         view.addObject("pageParams", data.getData().getPageParams());
-        view.addObject("signType", messageWebTaskInfoValidator.getInfoType());
         view.addObject("businessType", messageWebTaskInfoValidator.getBusinessType());
         return view;
     }
@@ -172,8 +168,8 @@ public class MessageMMController {
      * 添加
      * @return
      */
-    @RequestMapping(value = "/add/{businessType}/{signType}", method = RequestMethod.GET)
-    public ModelAndView add(@PathVariable String businessType,@PathVariable String signType, HttpServletRequest request) {
+    @RequestMapping(value = "/add/{businessType}", method = RequestMethod.GET)
+    public ModelAndView add(@PathVariable String businessType, HttpServletRequest request) {
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
         ModelAndView view = new ModelAndView("message/message_mm_edit");
 
@@ -182,16 +178,14 @@ public class MessageMMController {
         messageWebTaskInfoValidator.setId("TASK"+ sequenceService.findSequence("BUSINESS_ACCOUNT"));
         messageWebTaskInfoValidator.setEnterpriseId(user.getOrganization());
         messageWebTaskInfoValidator.setBusinessType(businessType);
-        messageWebTaskInfoValidator.setInfoType(signType);
         messageWebTaskInfoValidator.setSendType("1");
         messageWebTaskInfoValidator.setMessageType("1");
         messageWebTaskInfoValidator.setSendStatus("05");
         messageWebTaskInfoValidator.setUpType("1");
 
-        //查询企业下得所有业务账号
+        //查询企业下得所有WEB业务账号
         AccountBasicInfoValidator accountBasicInfoValidator = new AccountBasicInfoValidator();
         accountBasicInfoValidator.setBusinessType(businessType);
-        accountBasicInfoValidator.setInfoType(signType);
         accountBasicInfoValidator.setEnterpriseId(user.getOrganization());
         accountBasicInfoValidator.setAccountStatus("1");//正常
         ResponseData<List<AccountBasicInfoValidator>> info = businessAccountService.findBusinessAccount(accountBasicInfoValidator);
@@ -210,7 +204,6 @@ public class MessageMMController {
         view.addObject("op", "add");
         view.addObject("messageWebTaskInfoValidator", messageWebTaskInfoValidator);
         view.addObject("list", info.getData());
-        view.addObject("signType", signType);
         view.addObject("businessType", businessType);
 
         return view;
@@ -242,10 +235,9 @@ public class MessageMMController {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
         }
 
-        //查询企业下得所有业务账号
+        //查询企业下得所有WEB业务账号
         AccountBasicInfoValidator accountBasicInfoValidator = new AccountBasicInfoValidator();
         accountBasicInfoValidator.setBusinessType(data.getData().getBusinessType());
-        accountBasicInfoValidator.setInfoType(data.getData().getInfoType());
         accountBasicInfoValidator.setEnterpriseId(user.getOrganization());
         accountBasicInfoValidator.setAccountStatus("1");//正常
         ResponseData<List<AccountBasicInfoValidator>> info = businessAccountService.findBusinessAccount(accountBasicInfoValidator);
@@ -273,7 +265,6 @@ public class MessageMMController {
         view.addObject("op", "edit");
         view.addObject("messageWebTaskInfoValidator", messageWebTaskInfoValidator);
         view.addObject("list", info.getData());
-        view.addObject("signType", data.getData().getInfoType());
         view.addObject("businessType", data.getData().getBusinessType());
 
         return view;
@@ -347,7 +338,7 @@ public class MessageMMController {
 
         //完成参数规则验证
         if (result.hasErrors()) {
-            //查询企业下得所有业务账号
+            //查询企业下得所有WEB业务账号
             AccountBasicInfoValidator accountBasicInfoValidator = new AccountBasicInfoValidator();
             accountBasicInfoValidator.setBusinessType(messageWebTaskInfoValidator.getBusinessType());
             accountBasicInfoValidator.setInfoType(messageWebTaskInfoValidator.getInfoType());
@@ -370,6 +361,19 @@ public class MessageMMController {
             view.addObject("signType", messageWebTaskInfoValidator.getInfoType());
             view.addObject("businessType", messageWebTaskInfoValidator.getBusinessType());
             view.addObject("op", op);
+            return view;
+        }
+
+        //查询账号
+        ResponseData<AccountBasicInfoValidator> account = businessAccountService.findById(messageWebTaskInfoValidator.getBusinessAccount());
+        if (!ResponseCode.SUCCESS.getCode().equals(account.getCode())) {
+            view.addObject("error", account.getCode() + ":" + account.getMessage());
+            return view;
+        }
+        messageWebTaskInfoValidator.setInfoType(account.getData().getInfoType());
+
+        if(!templateData.getData().getInfoType().equals(account.getData().getInfoType())){
+            view.addObject("error", "账号与模板类型不匹配");
             return view;
         }
 
@@ -433,9 +437,9 @@ public class MessageMMController {
         log.info("[短信群发][{}][{}]数据:{}", op, user.getUserName(), JSON.toJSONString(messageWebTaskInfoValidator));
 
         if("1".equals(messageWebTaskInfoValidator.getMessageType())){
-            view.setView(new RedirectView("/message/mm/list/"+messageWebTaskInfoValidator.getBusinessType()+"/"+messageWebTaskInfoValidator.getInfoType(), true, false));
+            view.setView(new RedirectView("/message/mm/list/"+messageWebTaskInfoValidator.getBusinessType(), true, false));
         }else{
-            view.setView(new RedirectView("/message/mm/variable/list/"+messageWebTaskInfoValidator.getBusinessType()+"/"+messageWebTaskInfoValidator.getInfoType(), true, false));
+            view.setView(new RedirectView("/message/mm/variable/list/"+messageWebTaskInfoValidator.getBusinessType(), true, false));
         }
 
         return view;
@@ -495,9 +499,9 @@ public class MessageMMController {
         log.info("[短信群发][{}][{}]数据:{}", "delete", user.getUserName(), JSON.toJSONString(infoData.getData()));
 
         if("1".equals(infoData.getData().getMessageType())){
-            view.setView(new RedirectView("/message/mm/list/"+infoData.getData().getBusinessType()+"/"+infoData.getData().getInfoType(), true, false));
+            view.setView(new RedirectView("/message/mm/list/"+infoData.getData().getBusinessType(), true, false));
         }else{
-            view.setView(new RedirectView("/message/mm/variable/list/"+infoData.getData().getBusinessType()+"/"+infoData.getData().getInfoType(), true, false));
+            view.setView(new RedirectView("/message/mm/variable/list/"+infoData.getData().getBusinessType(), true, false));
         }
 
         return view;
@@ -550,9 +554,9 @@ public class MessageMMController {
         log.info("[短信群发][{}][{}]数据:{}", "send", user.getUserName(), JSON.toJSONString(infoData.getData()));
 
         if("1".equals(infoData.getData().getMessageType())){
-            view.setView(new RedirectView("/message/mm/list/"+infoData.getData().getBusinessType()+"/"+infoData.getData().getInfoType(), true, false));
+            view.setView(new RedirectView("/message/mm/list/"+infoData.getData().getBusinessType(), true, false));
         }else{
-            view.setView(new RedirectView("/message/mm/variable/list/"+infoData.getData().getBusinessType()+"/"+infoData.getData().getInfoType(), true, false));
+            view.setView(new RedirectView("/message/mm/variable/list/"+infoData.getData().getBusinessType(), true, false));
         }
         return view;
 

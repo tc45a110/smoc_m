@@ -17,12 +17,18 @@
         <div class="row fixed-navigation">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title"><mpm:tag identity="businessType" show-type="label"
-                                                    key="code" th:value="${businessType}"/>概览 </h4>
+                    <h4 class="page-title">
+                        <span th:if="${businessType eq 'TEXT_SMS'}">文本短信</span>
+                        <span th:if="${businessType eq 'MULTI_SMS'}">视频短信</span>
+                        <span th:if="${businessType eq '5G_SMS'}">5G短信</span>
+                        <span th:if="${businessType eq 'INTERNATIONAL_SMS'}">国际短信</span>概览
+                    </h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
-                            <mpm:tag identity="businessType" show-type="label"
-                                     key="code" th:value="${businessType}"/>
+                            <span th:if="${businessType eq 'TEXT_SMS'}">文本短信</span>
+                            <span th:if="${businessType eq 'MULTI_SMS'}">视频短信</span>
+                            <span th:if="${businessType eq '5G_SMS'}">5G短信</span>
+                            <span th:if="${businessType eq 'INTERNATIONAL_SMS'}">国际短信</span>
                         </li>
                         <li>
                             概览

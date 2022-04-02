@@ -71,9 +71,13 @@
                                 <label>信息类型<span class="text-danger">*</span>
                                     <span class="text-danger" th:if="${#fields.hasErrors('infoType')}"
                                           th:errors="*{infoType}"></span></label>
-                                <mpm:tag id="infoType" required="true" identity="infoType"
-                                         show-type="select" key="code" class="form-control"
-                                         name="infoType" th:value="${accountTemplateInfoValidator.infoType}" title="信息分类"/>
+                                <select data-style="btn-default" name="infoType" data-live-search="true" id="infoType" class="selectpicker form-control" tabindex="-98" required="true">
+                                    <option value="" data-icon="glyphicon mdi mdi-arrange-bring-forward">--请选择信息分类--</option>
+                                    <option data-icon="glyphicon mdi mdi-arrange-bring-forward" th:each="info:${infoTypeList}"
+                                            th:selected="${accountTemplateInfoValidator.infoType eq info.infoType}" th:value="${info.infoType}">
+                                        <mpm:tag identity="infoType" th:value="${info.infoType}" show-type="label" key="code"/>
+                                    </option>
+                                </select>
                             </div>
 
                             <div class="form-group m-b-20" style="width: 70%">

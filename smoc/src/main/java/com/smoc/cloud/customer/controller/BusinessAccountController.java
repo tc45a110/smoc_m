@@ -154,4 +154,16 @@ public class BusinessAccountController {
         ResponseData<List<MessageAccountValidator>> data = businessAccountService.messageAccountList(messageAccountValidator);
         return data;
     }
+
+    /**
+     *  查询自服务平台发送账号列表
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/messageAccountInfoList", method = RequestMethod.POST)
+    public ResponseData<PageList<MessageAccountValidator>> messageAccountInfoList(@RequestBody PageParams<MessageAccountValidator> params) {
+
+        ResponseData<PageList<MessageAccountValidator>> data = businessAccountService.messageAccountInfoList(params);
+        return data;
+    }
 }
