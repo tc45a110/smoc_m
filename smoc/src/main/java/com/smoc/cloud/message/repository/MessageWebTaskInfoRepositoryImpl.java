@@ -54,6 +54,7 @@ public class MessageWebTaskInfoRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(" t.INPUT_NUMBER,");
         sqlBuffer.append(" t.NUMBER_FILES,");
         sqlBuffer.append(" t.MESSAGE_CONTENT,");
+        sqlBuffer.append(" t.SPLIT_NUMBER,");
         sqlBuffer.append(" t.CREATED_BY,");
         sqlBuffer.append(" DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME ");
         sqlBuffer.append(" from message_web_task_info t,account_base_info a,enterprise_basic_info e ");

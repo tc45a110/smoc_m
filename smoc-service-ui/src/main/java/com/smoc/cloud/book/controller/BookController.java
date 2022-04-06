@@ -49,6 +49,14 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
+    @RequestMapping(value = "/main", method = RequestMethod.GET)
+    public ModelAndView main(HttpServletRequest request) {
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+        ModelAndView view = new ModelAndView("book/book_main");
+        view.addObject("parentId", "root");
+        return view;
+    }
+
     /**
      * 通讯录列表
      *

@@ -37,6 +37,8 @@ public class MessageWebTaskInfoValidator {
 
     private String expandNumber;
 
+    private Integer splitNumber;
+
     private Integer submitNumber;
 
     private Integer successNumber;

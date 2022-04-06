@@ -88,11 +88,11 @@
                                         <div id="CMPP" style="display: none">
                                             <div class="form-group m-b-20">
                                                 <label>服务代码(接入码号)<span class="text-danger">*</span>
-                                                    <span class="text-danger" th:if="${#fields.hasErrors('serviceCode')}"
-                                                          th:errors="*{serviceCode}"
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('srcId')}"
+                                                          th:errors="*{srcId}"
                                                           style="font-weight: 200;font-size: 12px"></span></label>
-                                                <input type="text" class="form-control" required="" id="serviceCode"
-                                                       th:field="*{serviceCode}" data-parsley-length="[1,20]"
+                                                <input type="text" class="form-control" required="" id="srcId"
+                                                       th:field="*{srcId}" data-parsley-length="[1,20]"
                                                        autocomplete="off" data-parsley-type="number"
                                                        placeholder="服务代码">
                                             </div>
@@ -248,7 +248,7 @@
             document.getElementById("HTTP_SMS").style.display = "none";
             document.getElementById("HTTP_BLACK_SERVICE").style.display = "none";
 
-            $('#serviceCode').prop("required","true");
+            $('#srcId').prop("required","true");
             $('#maxConnect').prop("required","true");
             $('#executeCheck').prop("required","true");
 

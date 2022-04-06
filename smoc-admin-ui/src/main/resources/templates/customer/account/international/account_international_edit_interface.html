@@ -87,11 +87,11 @@
                                     <div class="col-md-6" id="SMPP" style="display: none">
                                         <div class="form-group m-b-20" >
                                             <label>服务代码(接入码号)<span class="text-danger">*</span>
-                                                <span class="text-danger" th:if="${#fields.hasErrors('serviceCode')}"
-                                                      th:errors="*{serviceCode}"
+                                                <span class="text-danger" th:if="${#fields.hasErrors('srcId')}"
+                                                      th:errors="*{srcId}"
                                                       style="font-weight: 200;font-size: 12px"></span></label>
                                             <input type="text" class="form-control" required=""
-                                                   th:field="*{serviceCode}" data-parsley-length="[1,20]"
+                                                   th:field="*{srcId}" data-parsley-length="[1,20]"
                                                    autocomplete="off" data-parsley-type="number"
                                                    placeholder="服务代码">
                                         </div>

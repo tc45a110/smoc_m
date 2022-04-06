@@ -30,8 +30,8 @@ public class AccountInterfaceInfoValidator {
     @Range(min = 1, max = 10000 , message = "发送速率长度要在{min}-{max}之间！")
     private Integer maxSendSecond;
 
-    @Length(max = 32, message = "服务代码最大长度为{max}！")
-    private String serviceCode;
+    @Length(max = 32, message = "接入码号最大长度为{max}！")
+    private String srcId;
 
     private String identifyIp;
 

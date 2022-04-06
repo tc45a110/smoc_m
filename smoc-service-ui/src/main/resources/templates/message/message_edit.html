@@ -62,7 +62,7 @@
                                         <select name="businessAccount" id="businessAccount" data-style="btn-default" th:if="${not #lists.isEmpty(list)}"
                                                 class="selectpicker  form-control" tabindex="-98" 　required="true">
                                             <option data-icon="mdi mdi-account" th:each="info:${list}"
-                                                    th:selected="${messageWebTaskInfoValidator.businessAccount eq info.accountId}" th:value="${info.accountId}">[[${info.accountId}]]([[${info.AccountName}]])</option>
+                                                    th:selected="${messageWebTaskInfoValidator.businessAccount eq info.accountId}" th:value="${info.accountId}">[[${info.accountId}]]</option>
                                         </select>
                                         <span th:if="${#lists.isEmpty(list)}" class="form-control" style="color: red">未开通业务账号</span>
                                     </div>
@@ -143,9 +143,18 @@
 
                                     </div>
                                     <div class="form-group m-b-20" style="display: none" id="upFile">
-                                        <label>上传手机号文件（<a sec:authorize-url="/message/downFileTemp/*" th:onclick="downFile('1')" th:if="${messageWebTaskInfoValidator.messageType eq '1'}">下载txt模板</a>
-                                            <a sec:authorize-url="/message/downFileTemp/*" th:onclick="downFile('2')" th:if="${messageWebTaskInfoValidator.messageType eq '2'}">下载txt模板</a>）
-                                            </label><br>
+                                        <label>上传手机号文件
+                                            <a sec:authorize-url="/message/downFileTemp/*" th:onclick="downFile('1')" th:if="${messageWebTaskInfoValidator.messageType eq '1'}"
+                                               class="btn btn-success waves-effect waves-light m-l-10 btn-md"><i class="glyphicon glyphicon-download"></i>下载txt模板</a>
+                                            <a sec:authorize-url="/message/downFileTemp/*" th:onclick="downFile('4')" th:if="${messageWebTaskInfoValidator.messageType eq '1'}"
+                                               class="btn btn-primary waves-effect waves-light m-l-10 btn-md"><i class="glyphicon glyphicon-download"></i>下载excel模板</a>
+                                            <a sec:authorize-url="/message/downFileTemp/*" th:onclick="downFile('2')" th:if="${messageWebTaskInfoValidator.messageType eq '2'}"
+                                               class="btn btn-success waves-effect waves-light m-l-10 btn-md"><i class="glyphicon glyphicon-download"></i>下载txt模板</a>
+                                            </a>
+                                            <a sec:authorize-url="/message/downFileTemp/*" th:onclick="downFile('3')" th:if="${messageWebTaskInfoValidator.messageType eq '2'}"
+                                               class="btn btn-primary waves-effect waves-light m-l-10 btn-md"><i class="glyphicon glyphicon-download"></i>下载excel模板</a>
+                                            </a>
+                                        </label><br><br>
                                         <input type="file" name="file" id="filer_name"
                                                multiple="multiple">
 
@@ -172,7 +181,11 @@
                             <input type="hidden" th:field="*{sendStatus}">
                             <input type="hidden" th:field="*{enterpriseId}">
                             <input type="hidden" th:field="*{messageType}">
+                            <input type="hidden" th:field="*{splitNumber}">
                             <input type="hidden" id="path" name="path" th:value="${#httpServletRequest.getContextPath()}">
+                            <a sec:authorize-url="/message/variable/preview" th:if="${messageWebTaskInfoValidator.messageType eq '2'}"
+                               href='#' onclick='showPreview()'
+                               class="btn btn-success waves-effect waves-light" style="margin-left:20px">预览</a>
                             <button sec:authorize-url="/message/save/*" type="submit"
                                     class="btn btn-teal waves-effect waves-light">提交
                             </button>
@@ -268,6 +281,19 @@
         </div>
     </div>
 </div>
+<div id="preview_id" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="a-width-modalLabel" aria-hidden="true" style="display: none;margin: 60px">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">发送预览(只显示前三条)</h4>
+            </div>
+            <div class="modal-body" id="preview_List_id">
+
+            </div>
+        </div>
+    </div>
+</div>
 <th:block th:insert="fragments/common_fragments :: common_js"/>
 <th:block th:insert="fragments/common_fragments :: select_js"/>
 <script th:src="@{/static/plugins/moment/moment.js}"></script>
@@ -304,6 +330,44 @@
             document.getElementById("groupFile").style.display = "";
         }
 
+    }
+
+    function showPreview(){
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        var templateId = $("#templateId").val();
+        if(templateId==null||templateId.length==0){
+            // alert("选择模板后才能预览");
+            $("#tip-div").find("#tip-content").html("选择模板后才能预览");
+            $("#tip-div").modal();
+            return;
+        }
+        var filePath = $("#originalAttachment").val();
+        if(filePath==null||filePath.length==0){
+            // alert("选择模板后才能预览");
+            $("#tip-div").find("#tip-content").html("上传文件后才能预览");
+            $("#tip-div").modal();
+            return;
+        }
+
+        $("#preview_List_id").html("");
+        $.ajax({
+            type: "POST",   //提交的方法
+            dataType: "json",
+            contentType : 'application/json',
+            url: contextPath + "/message/variable/preview",
+            data:"{\"templateId\":\""+templateId+"\", \"filePath\":\""+filePath+"\"}",
+            success: function (data) {
+                var previewList = data.previewList;
+                for(i=0;i<previewList.length;i++){
+                    var p = "<p style='text-align: left'>"+previewList[i]+"</p>"
+                    $("#preview_List_id").append(p);
+                }
+
+                $("#preview_id").modal();
+            }, error: function (data) {
+                console.log("error");
+            }
+        });
     }
 
     var currentPage = 1;
@@ -369,21 +433,24 @@
     }
 
     function setTemplate(tm){
-        $("#templateId").val(tm.templateId);
-        $("#signName").val(tm.signName);
-        $("#messageContent").val('【'+tm.signName+'】'+tm.templateContent);
+        var messageType = $("#messageType").val();
+        if("1" == messageType){
+            $("#templateId").val(tm.templateId);
+            $("#signName").val(tm.signName);
+            $("#messageContent").val('【'+tm.signName+'】'+tm.templateContent);
 
-        //普通短信可根据模板字数计算拆分条数，变量短信要根据具体变量值替换后再计算
-        var charAmount = ('【'+tm.signName+'】'+tm.templateContent).length;
-        var splitNumber = 1;
-        if(charAmount<=70){
-            splitNumber = 1;
-        }else{
-            var amount_init_f = parseFloat(charAmount)/67;
-            splitNumber = Math.ceil(amount_init_f);
+            //普通短信可根据模板字数计算拆分条数，变量短信要根据具体变量值替换后再计算
+            var charAmount = ('【'+tm.signName+'】'+tm.templateContent).length;
+            var splitNumber = 1;
+            if(charAmount<=70){
+                splitNumber = 1;
+            }else{
+                var amount_init_f = parseFloat(charAmount)/67;
+                splitNumber = Math.ceil(amount_init_f);
+            }
+            $("#charAmount-id").html("(短信内容共"+charAmount+"字，将按"+splitNumber+"条短信发送)");
+            $("#splitNumber").val(splitNumber);
         }
-        $("#charAmount-id").html("(短信内容共"+charAmount+"字，将按"+splitNumber+"条短信发送)");
-
         $("#template_list").modal("hide");
     }
 

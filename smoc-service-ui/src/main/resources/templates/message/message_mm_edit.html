@@ -62,7 +62,7 @@
                                         <select name="businessAccount" data-style="btn-default" th:if="${not #lists.isEmpty(list)}"
                                                 class="selectpicker  form-control" tabindex="-98" 　required="true">
                                             <option data-icon="mdi mdi-account" th:each="info:${list}"
-                                                    th:selected="${messageWebTaskInfoValidator.businessAccount eq info.accountId}" th:value="${info.accountId}">[[${info.accountId}]]([[${info.AccountName}]])</option>
+                                                    th:selected="${messageWebTaskInfoValidator.businessAccount eq info.accountId}" th:value="${info.accountId}">[[${info.accountId}]]</option>
                                         </select>
                                         <span th:if="${#lists.isEmpty(list)}" class="form-control" style="color: red">未开通业务账号</span>
                                     </div>
@@ -143,9 +143,18 @@
 
                                     </div>
                                     <div class="form-group m-b-20" style="display: none" id="upFile">
-                                        <label>上传手机号文件（<a sec:authorize-url="/message/downFileTemp/*" th:onclick="downFile('1')" th:if="${messageWebTaskInfoValidator.messageType eq '1'}">下载txt模板</a>
-                                            <a sec:authorize-url="/message/downFileTemp/*" th:onclick="downFile('2')" th:if="${messageWebTaskInfoValidator.messageType eq '2'}">下载txt模板</a>）
-                                        </label><br>
+                                        <label>上传手机号文件
+                                            <a sec:authorize-url="/message/downFileTemp/*" th:onclick="downFile('1')" th:if="${messageWebTaskInfoValidator.messageType eq '1'}"
+                                               class="btn btn-success waves-effect waves-light m-l-10 btn-md"><i class="glyphicon glyphicon-download"></i>下载txt模板</a>
+                                            <a sec:authorize-url="/message/downFileTemp/*" th:onclick="downFile('4')" th:if="${messageWebTaskInfoValidator.messageType eq '1'}"
+                                               class="btn btn-primary waves-effect waves-light m-l-10 btn-md"><i class="glyphicon glyphicon-download"></i>下载excel模板</a>
+                                            <a sec:authorize-url="/message/downFileTemp/*" th:onclick="downFile('2')" th:if="${messageWebTaskInfoValidator.messageType eq '2'}"
+                                               class="btn btn-success waves-effect waves-light m-l-10 btn-md"><i class="glyphicon glyphicon-download"></i>下载txt模板</a>
+                                            </a>
+                                            <a sec:authorize-url="/message/downFileTemp/*" th:onclick="downFile('3')" th:if="${messageWebTaskInfoValidator.messageType eq '2'}"
+                                               class="btn btn-primary waves-effect waves-light m-l-10 btn-md"><i class="glyphicon glyphicon-download"></i>下载excel模板</a>
+                                            </a>
+                                        </label><br><br>
                                         <input type="file" name="file" id="filer_name"
                                                multiple="multiple">
 

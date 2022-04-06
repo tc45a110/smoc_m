@@ -22,4 +22,6 @@ public interface GroupRepository extends CrudRepository<FilterGroupList, String>
     List<FilterGroupList> findByGroupNameAndEnterpriseIdAndStatus(String groupName, String enterpriseId, String status);
 
     List<FilterGroupList> findByEnterpriseIdAndParentIdOrderBySortAsc(String enterpriseId, String parentId);
+
+    FilterGroupList findByParentIdAndStatus(String parentId, String s);
 }

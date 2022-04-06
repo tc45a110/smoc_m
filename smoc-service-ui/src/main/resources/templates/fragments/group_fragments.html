@@ -3,7 +3,7 @@
 <head>
 </head>
 <body>
-<th:block th:fragment="group">
+<th:block th:fragment="group_person">
     <!-- start menus js -->
     <script th:src="@{/static/plugins/bootstrap-treeview/bootstrap-treeview.min.js}"></script>
     <script>
@@ -11,7 +11,7 @@
 
         $(function () {
             $('#group_tree').treeview({
-                data: loadData(),//节点数据
+                data: loadData('[[${parentId}]]'),//节点数据
                 expanded: false,//初始是否展开
                 levels: 4,//初始显示层数
                 icon: "glyphicon glyphicon-stop",
@@ -30,11 +30,71 @@
             });
         });
 
-        function loadData() {
+        function loadData(parentId) {
 
             var treeData = {};
             $.ajax({
-                url: contextPath + "/book/group/tree" ,
+                url: contextPath + "/book/group/tree/"+parentId ,
+                type: "get",
+                contentType: "application/json",
+                timeout: 30000, //超时时间：30秒
+                async: false,
+                dataType: "text",
+                success: function (data) {
+                    treeData = data;
+                }, error: function (data) {
+                    console.log("error");
+                }
+            });
+            return treeData;
+        }
+
+        function loadSubData(node, func) {//这个技巧真高，即能得到节点数据，又能把节点下级的数据通过函数发回去
+            var subData = loadData(node.id);
+            var array = JSON.parse(subData);
+            $('#group_tree').treeview('addNode', [array, node, 1, {silent: true}]);
+        }
+
+        function changeFrameHeight() {
+            var ifm = document.getElementById("groupFrame");
+            ifm.height = document.documentElement.clientHeight;
+        }
+
+        window.onresize = function () {
+            changeFrameHeight();
+        }
+    </script>
+    <!-- end menus js -->
+</th:block>
+
+<th:block th:fragment="group">
+    <!-- start menus js -->
+    <script th:src="@{/static/plugins/bootstrap-treeview/bootstrap-treeview.min.js}"></script>
+    <script>
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+
+        $(function () {
+            $('#group_tree').treeview({
+                data: loadData('[[${parentId}]]'),//节点数据
+                expanded: false,//初始是否展开
+                levels: 4,//初始显示层数
+                icon: "glyphicon glyphicon-stop",
+                color: "#4c4c4c",
+                backColor: "#3ac9d6",
+                selectedColor: "#3ac9d6",
+                iconBackground: "#4c4c4c",
+                lazyLoad: loadSubData,
+                onNodeSelected: function (event, data) {
+                    window.frames[0].location.href = contextPath + "/book/group/list/"+data.id ;
+                }
+            });
+        });
+
+        function loadData(parentId) {
+
+            var treeData = {};
+            $.ajax({
+                url: contextPath + "/book/group/tree/"+parentId ,
                 type: "get",
                 contentType: "application/json",
                 timeout: 30000, //超时时间：30秒

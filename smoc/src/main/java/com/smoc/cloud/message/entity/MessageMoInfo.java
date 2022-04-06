@@ -12,8 +12,10 @@ public class MessageMoInfo {
     private String enterpriseId;
     private String accountId;
     private String channelId;
-    private String channelSrc;
-    private String srcId;
+    private String channelSrcId;
+    private String accountSrcId;
+    private String moSrcId;
+    private String businessCode;
     private String mobile;
     private String taskId;
     private String webTemplateId;
@@ -71,23 +73,43 @@ public class MessageMoInfo {
     }
 
     @Basic
-    @Column(name = "CHANNEL_SRC")
-    public String getChannelSrc() {
-        return channelSrc;
+    @Column(name = "CHANNEL_SRC_ID")
+    public String getChannelSrcId() {
+        return channelSrcId;
     }
 
-    public void setChannelSrc(String channelSrc) {
-        this.channelSrc = channelSrc;
+    public void setChannelSrcId(String channelSrcId) {
+        this.channelSrcId = channelSrcId;
     }
 
     @Basic
-    @Column(name = "SRC_ID")
-    public String getSrcId() {
-        return srcId;
+    @Column(name = "ACCOUNT_SRC_ID")
+    public String getAccountSrcId() {
+        return accountSrcId;
     }
 
-    public void setSrcId(String srcId) {
-        this.srcId = srcId;
+    public void setAccountSrcId(String accountSrcId) {
+        this.accountSrcId = accountSrcId;
+    }
+
+    @Basic
+    @Column(name = "MO_SRC_ID")
+    public String getMoSrcId() {
+        return moSrcId;
+    }
+
+    public void setMoSrcId(String moSrcId) {
+        this.moSrcId = moSrcId;
+    }
+
+    @Basic
+    @Column(name = "BUSINESS_CODE")
+    public String getBusinessCode() {
+        return businessCode;
+    }
+
+    public void setBusinessCode(String businessCode) {
+        this.businessCode = businessCode;
     }
 
     @Basic
@@ -239,8 +261,7 @@ public class MessageMoInfo {
                 Objects.equals(enterpriseId, that.enterpriseId) &&
                 Objects.equals(accountId, that.accountId) &&
                 Objects.equals(channelId, that.channelId) &&
-                Objects.equals(channelSrc, that.channelSrc) &&
-                Objects.equals(srcId, that.srcId) &&
+
                 Objects.equals(mobile, that.mobile) &&
                 Objects.equals(taskId, that.taskId) &&
                 Objects.equals(webTemplateId, that.webTemplateId) &&
@@ -255,6 +276,6 @@ public class MessageMoInfo {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, enterpriseId, accountId, channelId, channelSrc, srcId, mobile, taskId, webTemplateId, moMessageContent, moDate, status, createdBy, createdTime, updatedBy, updatedTime);
+        return Objects.hash(id, enterpriseId, accountId, channelId,  mobile, taskId, webTemplateId, moMessageContent, moDate, status, createdBy, createdTime, updatedBy, updatedTime);
     }
 }

@@ -29,8 +29,9 @@ public class GroupNodesRowMapper implements RowMapper<Nodes> {
             node.setLazyLoad(false);
         } else {
             node.setLazyLoad(true);
+            node.setIcon("mdi mdi-book-open-page-variant");
         }
-        //node.setIcon("mdi mdi-book-open-page-variant");
+
         return node;
     }
 }

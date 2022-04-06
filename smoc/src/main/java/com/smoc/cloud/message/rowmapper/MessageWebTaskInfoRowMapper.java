@@ -36,6 +36,8 @@ public class MessageWebTaskInfoRowMapper implements RowMapper<MessageWebTaskInfo
         qo.setCreatedBy(resultSet.getString("CREATED_BY"));
         qo.setCreatedTime(resultSet.getString("CREATED_TIME"));
         qo.setInfoType(resultSet.getString("INFO_TYPE"));
+        qo.setSplitNumber(resultSet.getInt("SPLIT_NUMBER"));
+
         return qo;
     }
 }

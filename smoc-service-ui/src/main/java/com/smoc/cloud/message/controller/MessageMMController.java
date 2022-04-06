@@ -648,16 +648,21 @@ public class MessageMMController {
         if(file!=null&&file.getSize()>0){
             try {
 
+                String nowDay = DateTimeUtils.currentDate(new Date());
+                String uuid = UUID.uuid32();
+
                 //文件格式非txt，直接返回-1，前端获取后提示用户
-                if(!file.getOriginalFilename().endsWith(".txt")){
+                if(file.getOriginalFilename().endsWith(".txt")){
+                    code = "1";
+                    filePath = "/" + nowDay + "/"+ user.getOrganization() +"/" + uuid + "_source.txt";
+                }else if(file.getOriginalFilename().endsWith(".xls") || file.getOriginalFilename().endsWith(".xlsx")){
+                    code = "1";
+                    filePath = "/" + nowDay + "/"+ user.getOrganization() +"/" + uuid + "_source.xlsx";
+                }else{
                     code = "-1";
                     result.put("code", code);
                     return result;
                 }
-
-                String nowDay = DateTimeUtils.currentDate(new Date());
-                String uuid = UUID.uuid32();
-                filePath = "/" + nowDay + "/"+ user.getOrganization() +"/" + uuid + "_source.txt";
 
                 File desFile = new File(smocProperties.getMobileFileRootPath() + "/" + nowDay + "/"+ user.getOrganization());
                 if(!desFile.getParentFile().exists()){
@@ -817,64 +822,5 @@ public class MessageMMController {
         return entity;
     }
 
-    /**
-     * 下载txt模板
-     */
-    @RequestMapping(value = "/downFileTemp/{type}", method = RequestMethod.GET)
-    public void downFileTemp(@PathVariable String type,HttpServletRequest request, HttpServletResponse response) {
 
-        String fileName = "example.txt";
-
-        if("1".equals(type)){
-            fileName = "example.txt";
-        }
-
-        if("2".equals(type)){
-            fileName = "example_variable.txt";
-        }
-
-
-        //设置文件路径
-        ClassPathResource classPathResource = new ClassPathResource("static/files/" + fileName);
-        try {
-            response.setHeader("content-type", "application/octet-stream");
-            response.setContentType("application/octet-stream");
-            // 下载文件能正常显示中文
-            response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        // 实现文件下载
-        byte[] buffer = new byte[1024];
-        InputStream fis = null;
-        BufferedInputStream bis = null;
-        try {
-            fis = classPathResource.getInputStream();;
-            bis = new BufferedInputStream(fis);
-            OutputStream os = response.getOutputStream();
-            int i = bis.read(buffer);
-            while (i != -1) {
-                os.write(buffer, 0, i);
-                i = bis.read(buffer);
-            }
-            return ;
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (bis != null) {
-                try {
-                    bis.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (fis != null) {
-                try {
-                    fis.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
 }

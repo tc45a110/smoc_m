@@ -35,6 +35,9 @@ public class MessageWebTaskInfo {
     @Column(name = "TIMING_TIME", length = 32)
     private String timingTime;
 
+    @Column(name = "SPLIT_NUMBER")
+    private Integer splitNumber;
+
     @Column(name = "EXPAND_NUMBER", length = 32)
     private String expandNumber;
 
@@ -107,6 +110,14 @@ public class MessageWebTaskInfo {
 
     @Column(name = "UP_TYPE")
     private String upType;
+
+    public Integer getSplitNumber() {
+        return splitNumber;
+    }
+
+    public void setSplitNumber(Integer splitNumber) {
+        this.splitNumber = splitNumber;
+    }
 
     public String getUpType() {
         return upType;

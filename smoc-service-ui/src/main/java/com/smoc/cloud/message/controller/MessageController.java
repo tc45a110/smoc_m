@@ -624,16 +624,21 @@ public class MessageController {
         if(file!=null&&file.getSize()>0){
             try {
 
+                String nowDay = DateTimeUtils.currentDate(new Date());
+                String uuid = UUID.uuid32();
+
                 //文件格式非txt，直接返回-1，前端获取后提示用户
-                if(!file.getOriginalFilename().endsWith(".txt")){
+                if(file.getOriginalFilename().endsWith(".txt")){
+                    code = "1";
+                    filePath = "/" + nowDay + "/"+ user.getOrganization() +"/" + uuid + "_source.txt";
+                }else if(file.getOriginalFilename().endsWith(".xls") || file.getOriginalFilename().endsWith(".xlsx")){
+                    code = "1";
+                    filePath = "/" + nowDay + "/"+ user.getOrganization() +"/" + uuid + "_source.xlsx";
+                }else{
                     code = "-1";
                     result.put("code", code);
                     return result;
                 }
-
-                String nowDay = DateTimeUtils.currentDate(new Date());
-                String uuid = UUID.uuid32();
-                filePath = "/" + nowDay + "/"+ user.getOrganization() +"/" + uuid + "_source.txt";
 
                 File desFile = new File(smocProperties.getMobileFileRootPath() + "/" + nowDay + "/"+ user.getOrganization());
                 if(!desFile.getParentFile().exists()){
@@ -807,6 +812,14 @@ public class MessageController {
 
         if("2".equals(type)){
             fileName = "example_variable.txt";
+        }
+
+        if("3".equals(type)){
+            fileName = "example-variable.xlsx";
+        }
+
+        if("4".equals(type)){
+            fileName = "example.xlsx";
         }
 
 

@@ -42,7 +42,7 @@ public class ChannelInterfaceValidator {
     private String srcId;
 
     @Length(min = 1, max = 128, message = "业务代码长度不符合规则！")
-    private String serviceCode;
+    private String businessCode;
 
     @NotNull(message = "连接数不能为空！")
     @Range(min = 1, max = 10000 , message = "连接数长度要在{min}-{max}之间！")

@@ -15,7 +15,7 @@ public class ConfigChannelInterface {
     private String channelServiceUrl;
     private String spId;
     private String srcId;
-    private String serviceCode;
+    private String businessCode;
     private Integer connectNumber;
     private Integer maxSendSecond;
     private Integer heartbeatInterval;
@@ -97,13 +97,13 @@ public class ConfigChannelInterface {
     }
 
     @Basic
-    @Column(name = "SERVICE_CODE")
-    public String getServiceCode() {
-        return serviceCode;
+    @Column(name = "BUSINESS_CODE")
+    public String getBusinessCode() {
+        return businessCode;
     }
 
-    public void setServiceCode(String serviceCode) {
-        this.serviceCode = serviceCode;
+    public void setBusinessCode(String businessCode) {
+        this.businessCode = businessCode;
     }
 
     @Basic
@@ -208,7 +208,7 @@ public class ConfigChannelInterface {
                 Objects.equals(channelServiceUrl, that.channelServiceUrl) &&
                 Objects.equals(spId, that.spId) &&
                 Objects.equals(srcId, that.srcId) &&
-                Objects.equals(serviceCode, that.serviceCode) &&
+                Objects.equals(businessCode, that.businessCode) &&
                 Objects.equals(connectNumber, that.connectNumber) &&
                 Objects.equals(maxSendSecond, that.maxSendSecond) &&
                 Objects.equals(heartbeatInterval, that.heartbeatInterval) &&
@@ -222,6 +222,6 @@ public class ConfigChannelInterface {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, channelId, channelAccessAccount, channelAccessPassword, channelServiceUrl, spId, srcId, serviceCode, connectNumber, maxSendSecond, heartbeatInterval, protocol, version, createdBy, createdTime, updatedBy, updatedTime);
+        return Objects.hash(id, channelId, channelAccessAccount, channelAccessPassword, channelServiceUrl, spId, srcId, businessCode, connectNumber, maxSendSecond, heartbeatInterval, protocol, version, createdBy, createdTime, updatedBy, updatedTime);
     }
 }

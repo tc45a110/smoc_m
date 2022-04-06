@@ -12,7 +12,7 @@ public class AccountInterfaceInfo {
     private String accountPassword;
     private Integer maxSubmitSecond;
     private Integer maxSendSecond;
-    private String serviceCode;
+    private String srcId;
     private String identifyIp;
     private Integer maxConnect;
     private String executeCheck;
@@ -74,13 +74,13 @@ public class AccountInterfaceInfo {
     }
 
     @Basic
-    @Column(name = "SERVICE_CODE")
-    public String getServiceCode() {
-        return serviceCode;
+    @Column(name = "SRC_ID")
+    public String getSrcId() {
+        return srcId;
     }
 
-    public void setServiceCode(String serviceCode) {
-        this.serviceCode = serviceCode;
+    public void setSrcId(String srcId) {
+        this.srcId = srcId;
     }
 
     @Basic
@@ -183,7 +183,7 @@ public class AccountInterfaceInfo {
                 Objects.equals(protocol, that.protocol) &&
                 Objects.equals(accountPassword, that.accountPassword) &&
                 Objects.equals(maxSubmitSecond, that.maxSubmitSecond) &&
-                Objects.equals(serviceCode, that.serviceCode) &&
+                Objects.equals(srcId, that.srcId) &&
                 Objects.equals(identifyIp, that.identifyIp) &&
                 Objects.equals(maxConnect, that.maxConnect) &&
                 Objects.equals(executeCheck, that.executeCheck) &&
@@ -197,6 +197,6 @@ public class AccountInterfaceInfo {
 
     @Override
     public int hashCode() {
-        return Objects.hash(accountId, protocol, accountPassword, maxSubmitSecond, maxSendSecond, serviceCode, identifyIp, maxConnect, executeCheck, moUrl, statusReportUrl, createdBy, createdTime, updatedBy, updatedTime);
+        return Objects.hash(accountId, protocol, accountPassword, maxSubmitSecond, maxSendSecond, srcId, identifyIp, maxConnect, executeCheck, moUrl, statusReportUrl, createdBy, createdTime, updatedBy, updatedTime);
     }
 }

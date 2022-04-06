@@ -20,7 +20,7 @@
                         <div class="col-sm-12">
 
                             <div class="form-group col-sm-4 pull-right" style="text-align: right">
-                                <a sec:authorize-url="/book/group/add" th:href="@{/book/group/add}" class="btn btn-success waves-effect waves-light m-l-10 btn-md">
+                                <a sec:authorize-url="/book/group/add/*" th:href="@{/book/group/add/{parentId}(parentId=${parentId})}" class="btn btn-success waves-effect waves-light m-l-10 btn-md">
                                     <i class="glyphicon glyphicon-plus-sign"></i> 添加通讯录</a>
                             </div>
                         </div>
@@ -98,6 +98,9 @@
             url: contextPath + "/book/group/deleteById/" + $("#deleteId").val(),
             success: function (data) {
                 if("1"==data){
+                    var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+                    $('#preloader').css('display', 'block');
+                    //location.href = contextPath + "/book/group/list/" + '[[${parentId}]]';
                     parent.location.reload();
                 }else{
                     alert(data);

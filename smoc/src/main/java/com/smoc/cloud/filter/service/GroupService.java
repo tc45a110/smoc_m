@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.Iterator;
@@ -96,6 +97,14 @@ public class GroupService {
         log.info("[群组管理][{}]数据:{}",op,JSON.toJSONString(entity));
 
         groupRepository.saveAndFlush(entity);
+
+        //根据父ID查询
+        FilterGroupList info = groupRepository.findById(entity.getParentId()).get();
+        if(!StringUtils.isEmpty(info)){
+            info.setIsLeaf("0");
+            groupRepository.saveAndFlush(info);
+        }
+
         return ResponseDataUtil.buildSuccess();
     }
 
@@ -109,14 +118,11 @@ public class GroupService {
     public ResponseData deleteById(String id) {
 
         FilterGroupList data = groupRepository.findById(id).get();
+        String parentId = data.getParentId();
 
         //记录日志
         log.info("[群组管理][delete]数据:{}",JSON.toJSONString(data));
         groupRepository.deleteById(id);
-
-        //查询是否有下级，没有修改isLeaf为1
-        List<FilterGroupList> list = groupRepository.findByEnterpriseIdAndParentIdOrderBySortAsc(data.getEnterpriseId(),data.getParentId());
-
 
         //查询是否有联系人
         if("smoc_black".equals(data.getEnterpriseId())){
@@ -126,6 +132,13 @@ public class GroupService {
             whiteRepository.deleteByGroupId(data.getId());
         }
 
+        //查询是否有下级，没有修改isLeaf为1
+        List<FilterGroupList> list = groupRepository.findByEnterpriseIdAndParentIdOrderBySortAsc(data.getEnterpriseId(),data.getParentId());
+        if(StringUtils.isEmpty(list) || list.size()<=0){
+            FilterGroupList info = groupRepository.findById(parentId).get();
+            info.setIsLeaf("1");
+            groupRepository.saveAndFlush(info);
+        }
 
         return ResponseDataUtil.buildSuccess();
     }

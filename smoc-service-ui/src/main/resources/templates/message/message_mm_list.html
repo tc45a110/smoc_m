@@ -104,10 +104,8 @@
                             <table class="table table table-hover m-10" style="margin-top: -12px;">
                                 <thead>
                                 <tr>
-                                    <th style="width:150px">批次号</th>
-                                    <th style="width:100px">账号类型</th>
-                                    <th style="width:100px">账号</th>
-                                    <th style="width:150px">模板ID</th>
+                                    <th style="width:150px">账号类型/批次号</th>
+                                    <th style="width:150px">账号/模板ID</th>
                                     <th style="width:150px">标题</th>
                                     <th>发送内容</th>
                                     <th style="width:155px">成功条数/失败条数</th>
@@ -122,10 +120,8 @@
                                 <thead>
                                 <tbody>
                                 <tr th:each="info:${list}">
-                                    <td style="vertical-align: middle;line-height: 26px">[[${info.id}]]</td>
-                                    <td style="vertical-align: middle;line-height: 26px"><mpm:tag identity="infoType" th:value="${info.infoType}" show-type="label" key="code"/></td>
-                                    <td style="vertical-align: middle;line-height: 26px">[[${info.businessAccount}]]</td>
-                                    <td style="vertical-align: middle;line-height: 26px">[[${info.templateId}]]</td>
+                                    <td style="vertical-align: middle;line-height: 26px"><mpm:tag identity="infoType" th:value="${info.infoType}" show-type="label" key="code"/><br>[[${info.id}]]</td>
+                                    <td style="vertical-align: middle;line-height: 26px">[[${info.businessAccount}]]<br>[[${info.templateId}]]</td>
                                     <td style="vertical-align: middle;line-height: 26px">[[${info.subject}]]</td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         [[${info.messageContent}]]

@@ -1,18 +1,23 @@
 package com.smoc.cloud.message.controller;
 
 
+import com.alibaba.fastjson.JSONObject;
+import com.smoc.cloud.book.util.FileUtils;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
+import com.smoc.cloud.common.smoc.message.model.MessageTemplateExcelModel;
 import com.smoc.cloud.common.smoc.template.AccountTemplateInfoValidator;
 import com.smoc.cloud.common.smoc.template.MessageWebTaskInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.material.service.BusinessAccountService;
+import com.smoc.cloud.material.service.MessageTemplateService;
 import com.smoc.cloud.material.service.SequenceService;
 import com.smoc.cloud.message.service.MessageService;
+import com.smoc.cloud.properties.MessageProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -22,8 +27,12 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.List;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 变量短信发送
@@ -42,6 +51,12 @@ public class MessageVariableController {
 
     @Autowired
     private SequenceService sequenceService;
+
+    @Autowired
+    private MessageProperties smocProperties;
+    @Autowired
+    private MessageTemplateService messageTemplateService;
+
 
 
     /**
@@ -158,4 +173,57 @@ public class MessageVariableController {
 
     }
 
+    /**
+     * 预览拼装后的前3条发送数据
+     */
+    @RequestMapping(value = "/preview", method = RequestMethod.POST)
+    public @ResponseBody
+    JSONObject preview(@RequestBody JSONObject queryCondition, HttpServletRequest request) {
+        SecurityUser user = (SecurityUser)request.getSession().getAttribute("user");
+        JSONObject result = new JSONObject();
+        List<String> previewList = new ArrayList<String>();
+
+        String filePath = null;
+        String templateId = null;
+        if(queryCondition!=null){
+            filePath = queryCondition.getString("filePath");
+            templateId = queryCondition.getString("templateId");
+        }
+        if(StringUtils.isEmpty(filePath) || StringUtils.isEmpty(templateId)){
+            result.put("previewList", previewList);
+            return result;
+        }
+
+        //查询模板
+        ResponseData<AccountTemplateInfoValidator> data = messageTemplateService.findById(templateId);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            result.put("previewList", previewList);
+            return result;
+        }
+        AccountTemplateInfoValidator messageTemplateValidator = data.getData();
+
+        BufferedReader br = null;
+        File desFile = new File(smocProperties.getMobileFileRootPath() + filePath);
+
+        String fileType = filePath.substring(filePath.lastIndexOf("."));
+        if(".xls".equals(fileType) || ".xlsx".equals(fileType)){
+            previewList = FileUtils.readMessageTemplateExcel(desFile);
+        }else if (".txt".equals(fileType)){
+            previewList = FileUtils.readMessageTemplateTxt(desFile);
+        }
+
+        for(int i=0;i<previewList.size();i++){
+            String[] inputInfo = previewList.get(i).split("\\|");
+            String content = messageTemplateValidator.getTemplateContent();
+            for(int j=1;j<inputInfo.length;j++){
+                String replaceKey = "\\$\\{"+j+"\\}";
+                content = content.replaceAll(replaceKey, inputInfo[j]);
+            }
+            previewList.set(i, inputInfo[0]+","+content);
+        }
+
+        result.put("previewList", previewList);
+
+        return result;
+    }
 }

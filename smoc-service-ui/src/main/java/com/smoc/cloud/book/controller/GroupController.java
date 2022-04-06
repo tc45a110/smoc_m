@@ -41,23 +41,27 @@ public class GroupController {
     public ModelAndView main(HttpServletRequest request) {
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
         ModelAndView view = new ModelAndView("book/group_main");
-
+        view.addObject("parentId", "root");
         return view;
     }
 
-    @RequestMapping(value = "/group/list", method = RequestMethod.GET)
-    public ModelAndView listByParentId(HttpServletRequest request) {
+    @RequestMapping(value = "/group/list/{parentId}", method = RequestMethod.GET)
+    public ModelAndView listByParentId(@PathVariable String parentId, HttpServletRequest request) {
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
         ModelAndView view = new ModelAndView("book/group_list");
 
+        if("root".equals(parentId)){
+            parentId = user.getOrganization();
+        }
+
         //根据父id查询群组
-        ResponseData<List<FilterGroupListValidator>> data = groupService.findByParentId(user.getOrganization(),user.getOrganization());
+        ResponseData<List<FilterGroupListValidator>> data = groupService.findByParentId(user.getOrganization(),parentId);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;
         }
 
-        view.addObject("parentId", user.getOrganization());
+        view.addObject("parentId", parentId);
         view.addObject("list", data.getData());
         return view;
     }
@@ -67,27 +71,33 @@ public class GroupController {
      * @param request
      * @return
      */
-    @RequestMapping(value = "/group/tree", method = RequestMethod.GET)
-    public List<Nodes> treeByParentId(HttpServletRequest request) {
+    @RequestMapping(value = "/group/tree/{parentId}", method = RequestMethod.GET)
+    public List<Nodes> treeByParentId(@PathVariable String parentId, HttpServletRequest request) {
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
         List<Nodes> groupNodes = new ArrayList<Nodes>();
 
         //跟节点
         Nodes tmp = new Nodes();
         tmp.setId(user.getOrganization());
-        tmp.setHref("0");
-        tmp.setLazyLoad(false);
-        tmp.setSvcType(user.getOrganization());
-        tmp.setSystem("root");
-        tmp.setText(user.getCorporation());
-        Map<String, Object> stateMap = new HashMap<String, Object>();
-        stateMap.put("selected", true);
-        tmp.setState(stateMap);
-
-        ResponseData<List<Nodes>> nodes = groupService.getGroupByParentId(user.getOrganization(),tmp.getId());
-        tmp.setNodes(nodes.getData());
-
-        groupNodes.add(tmp);
+        if("root".equals(parentId)){
+            parentId = user.getOrganization();
+            tmp.setHref("0");
+            tmp.setLazyLoad(false);
+            tmp.setSvcType(parentId);
+            tmp.setSystem("root");
+            tmp.setText(user.getCorporation());
+            Map<String, Object> stateMap = new HashMap<String, Object>();
+            stateMap.put("selected", true);
+            tmp.setState(stateMap);
+            ResponseData<List<Nodes>> nodes = groupService.getGroupByParentId(tmp.getId(),parentId);
+            tmp.setNodes(nodes.getData());
+            groupNodes.add(tmp);
+        }else{
+            ResponseData<List<Nodes>> nodes = groupService.getGroupByParentId(tmp.getId(),parentId);
+            if(!StringUtils.isEmpty(nodes.getData()) && nodes.getData().size()>0){
+                groupNodes = nodes.getData();
+            }
+        }
 
         return groupNodes;
     }
@@ -98,16 +108,20 @@ public class GroupController {
      *
      * @return
      */
-    @RequestMapping(value = "/group/add", method = RequestMethod.GET)
-    public ModelAndView add(HttpServletRequest request) {
+    @RequestMapping(value = "/group/add/{parentId}", method = RequestMethod.GET)
+    public ModelAndView add(@PathVariable String parentId, HttpServletRequest request) {
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
         ModelAndView view = new ModelAndView("book/group_edit");
 
         FilterGroupListValidator filterGroupListValidator = new FilterGroupListValidator();
         filterGroupListValidator.setId(UUID.uuid32());
         filterGroupListValidator.setGroupId(filterGroupListValidator.getId());
+        if(parentId.equals(user.getOrganization())){
+            filterGroupListValidator.setParentId(user.getOrganization());//父id
+        }else{
+            filterGroupListValidator.setParentId(parentId);//父id
+        }
         filterGroupListValidator.setEnterpriseId(user.getOrganization());
-        filterGroupListValidator.setParentId(user.getOrganization());//父id
         filterGroupListValidator.setIsLeaf("1");//是子节点
         filterGroupListValidator.setStatus("1");//有效
 

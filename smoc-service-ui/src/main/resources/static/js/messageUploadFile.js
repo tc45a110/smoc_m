@@ -6,9 +6,11 @@ $(document).ready(function(){
 	var initFiles =[];
 
 	if(initFilePath !="" && initFilePath!=null ){
+		var type=initFilePath.substring(initFilePath.lastIndexOf(".")+1);
+		var name = "号码文件."+type;
 		initFiles = [{
-			name: "号码文件.txt",
-			type: "txt",
+			name: name,
+			type: type,
 			size:fileSize,
 			file: ""
 		}];
@@ -16,7 +18,7 @@ $(document).ready(function(){
 	$("#filer_name").filer({
 		limit: 1,
 		maxSize: 10,
-		extensions:["txt"],
+		extensions:["txt","xls","xlsx"],
 		files: initFiles,
 		changeInput: '<div class="jFiler-input-dragDrop"><div class="jFiler-input-inner"><div class="jFiler-input-icon"><i class="icon-jfi-cloud-up-o"></i></div><div class="jFiler-input-text"><h3>Drag & Drop files here</h3> <span style="display:inline-block; margin: 15px 0">or</span></div><a class="jFiler-input-choose-btn btn btn-custom waves-effect waves-light">上传附件</a></div></div>',
 		showThumbs: true,
@@ -100,7 +102,7 @@ $(document).ready(function(){
 					$("#originalAttachmentSize").val(data.originalAttachmentSize);
 
 					if(code=="-1"){
-						$("#tip-div").find("#tip-content").html("号码文件必须为txt格式");
+						$("#tip-div").find("#tip-content").html("号码文件必须为xlsx、xls、txt格式");
 						$("#tip-div").modal();
 						return;
 					}
@@ -190,7 +192,7 @@ $(document).ready(function(){
 			errors: {
 				//filesLimit: "只能上传 {{fi-limit}} 个号码文件",
 				filesLimit: "请先删除旧号码文件再上传",
-				filesType: "号码文件必须为txt格式",
+				filesType: "号码文件必须为xlsx、xls、txt格式",
 				filesSize: "号码文件大小不能超过 {{fi-maxSize}} MB.",
 				filesSizeAll: "Files you've choosed are too large! Please upload files up to {{fi-maxSize}} MB."
 			}
@@ -198,33 +200,3 @@ $(document).ready(function(){
 	});
 });
 
-function showPreview(){
-	var templateId = $("#templateId").val();
-	if(templateId==null||templateId.length==0){
-		// alert("选择模板后才能预览");
-		$("#tip-div").find("#tip-content").html("选择模板后才能预览");
-		$("#tip-div").modal();
-		return;
-	}
-	var filePath = $("#sendFileId").val();
-
-	$("#preview_List_id").html("");
-	$.ajax({
-		type: "POST",   //提交的方法
-		dataType: "json",
-		contentType : 'application/json',
-		url: contextPath + "/message/preview",
-		data:"{\"templateId\":\""+templateId+"\", \"filePath\":\""+filePath+"\"}",
-		success: function (data) {
-			var previewList = data.previewList;
-			for(i=0;i<previewList.length;i++){
-				var p = "<p style='text-align: left'>"+previewList[i]+"</p>"
-				$("#preview_List_id").append(p);
-			}
-
-			$("#preview_id").modal();
-		}, error: function (data) {
-			console.log("error");
-		}
-	});
-}
