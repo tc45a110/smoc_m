@@ -24,6 +24,8 @@ public class MessageMoInfoRowMapper implements RowMapper<MessageMoInfoValidator>
         qo.setMoDate(resultSet.getString("MO_DATE"));
         qo.setMtMessageContent(resultSet.getString("MT_MESSAGE_CONTENT"));
         qo.setMtDate(resultSet.getString("MT_DATE"));
+        qo.setCarrier(resultSet.getString("CARRIER"));
+        qo.setArea(resultSet.getString("AREA"));
 
         return qo;
     }

@@ -79,6 +79,12 @@ public class MessageDetailInfo {
     @Column(name = "UPDATED_TIME")
     private Date updatedTime;
 
+    @Column(name = "TASK_ID")
+    private String taskId;
+
+    @Column(name = "CHARGE_NUMBER")
+    private String chargeNumber;
+
     public Date getUpdatedTime() {
         return updatedTime;
     }

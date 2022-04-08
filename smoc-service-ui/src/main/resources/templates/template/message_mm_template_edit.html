@@ -40,7 +40,7 @@
         </div>
         <!-- start row -->
         <div class="row" style="margin-top: -40px" th:remove="${#strings.isEmpty(error)}?none:all">
-<!--            <div class="item_content" style="float: left;background-color:#ffffff;height: 1014px;width: 48%">-->
+            <!--            <div class="item_content" style="float: left;background-color:#ffffff;height: 1014px;width: 48%">-->
             <div style="float: left;background-color:#ffffff;height: auto;min-height: 1500px; width: 48%">
                 <div class="panel panel-color panel-info">
                     <div class="panel-heading" style="height:60px;">
@@ -159,22 +159,22 @@
                                             </div>
                                             <div class="info">
                                                 <div style="float:left;width: 133px">
-    <!--                                                <span th:id="${'span-title-'+para.resId}">[[${para.getResTitle()}]]</span>-->
+                                                    <!--                                                <span th:id="${'span-title-'+para.resId}">[[${para.getResTitle()}]]</span>-->
                                                     第<b id="frame-index" style="color: red"></b><span th:id="${'span-staytime-'+para.resId}">帧停留：[[${para.stayTimes}]]秒</span>
                                                     <br>
                                                     <span th:id="${'span-size-'+para.resId}">文件大小：[[${para.getResSize()}]]KB</span>
                                                     <br>
                                                     <a th:id="${'span_txt_id-'+para.resId}" data-toggle="tooltip" data-placement="bottom"
-                                                      th:data-original-title="'文本内容：'+${para.getFrameTxt()}"  >文本字数：[[${para.getFrameTxt().length()}]]
-                                                   </a>
+                                                       th:data-original-title="'文本内容：'+${para.getFrameTxt()}"  >文本字数：[[${para.getFrameTxt().length()}]]
+                                                    </a>
                                                 </div>
                                                 <div style="float:left;">
                                                     <br>
                                                     <a class="on-default edit-row" th:onclick="editFiles([[${para.resId}]]);"
-                                                            data-toggle="modal"
-                                                            data-target="#set-resource-properties"
-                                                            style="width:25px ;padding-right: 5px;color: #29b6f6;"
-                                                            title="编辑">
+                                                       data-toggle="modal"
+                                                       data-target="#set-resource-properties"
+                                                       style="width:25px ;padding-right: 5px;color: #29b6f6;"
+                                                       title="编辑">
                                                         <i style="font-size: 18px" class="mdi mdi-table-edit"></i>
                                                     </a>
                                                     <br>
@@ -427,65 +427,65 @@
 <div id="preview-div" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;margin-top: 40px">
     <div class="modal-dialog">
         <div class="modal-content">
-                <div class="row" style="margin-top: -30px">
+            <div class="row" style="margin-top: -30px">
                 <div class="col-md-12">
 
-                            <div class="form-group">
+                    <div class="form-group">
 
-                                <div class="row">
+                        <div class="row">
 
-                                    <div class="col-sm-12 m-b-10" style="text-align: center;margin-top: 30px" id="preview_ope_id">
-                                        <button id="play_id" onclick="doPlay()" type="button" class="btn btn-success waves-effect waves-light">
-                                            <i class='mdi mdi-play' style='font-size: 17px;'></i>播放
-                                        </button>
-                                        <button id="stop_id" onclick="doStop()" type="button" class="btn btn-warning waves-effect waves-light" style="display: none">
-                                            <i class='mdi mdi-pause' style='font-size: 17px;'></i>暂停
-                                        </button>
-                                        <button id="pre_frame_id" type="button" class="btn">
-                                            上一帧
-                                        </button>
-                                        <button id="current_frame_id" type="button" class="btn btn-default waves-effect waves-light">
-                                            <font id="current_frame_index"></font>/<font id="total_frame_index"></font>帧
-                                        </button>
-                                        <button id="next_frame_id" type="button" class="btn btn-info waves-effect waves-light">
-                                            下一帧
-                                        </button>
+                            <div class="col-sm-12 m-b-10" style="text-align: center;margin-top: 30px" id="preview_ope_id">
+                                <button id="play_id" onclick="doPlay()" type="button" class="btn btn-success waves-effect waves-light">
+                                    <i class='mdi mdi-play' style='font-size: 17px;'></i>播放
+                                </button>
+                                <button id="stop_id" onclick="doStop()" type="button" class="btn btn-warning waves-effect waves-light" style="display: none">
+                                    <i class='mdi mdi-pause' style='font-size: 17px;'></i>暂停
+                                </button>
+                                <button id="pre_frame_id" type="button" class="btn">
+                                    上一帧
+                                </button>
+                                <button id="current_frame_id" type="button" class="btn btn-default waves-effect waves-light">
+                                    <font id="current_frame_index"></font>/<font id="total_frame_index"></font>帧
+                                </button>
+                                <button id="next_frame_id" type="button" class="btn btn-info waves-effect waves-light">
+                                    下一帧
+                                </button>
+                            </div>
+
+                            <div class="m-b-10" style="text-align: center;padding-top: 30px;padding-left:66px">
+                                <div class="iphone">
+                                    <div class="iphone-top">
+                                        <span class="camera"></span>
+                                        <!--<span class="sensor"></span>
+                                        <span class="speaker"></span>-->
                                     </div>
+                                    <div class="top-bar"></div>
+                                    <div class="iphone-screen" style="overflow-y:scroll;overflow-x:hidden">
+                                        <div style="width: 100%;text-align: center;margin-top: 10px" id="media_div">
+                                            <img id="frame_preview_img_id" src="" style="height: auto;display: none">
+                                            <video id="video_id" controls autoplay style="display: none"></video>
+                                            <audio id="audio_id" controls autoplay style="display: none"></audio>
+                                        </div>
+                                        <div id="frame_preview_txt_id" style="margin-left: 10px; text-align: left;margin-top: 40px;font-size: 20px;word-break: break-all;white-space: normal;">
 
-                                    <div class="m-b-10" style="text-align: center;padding-top: 30px;padding-left:66px">
-                                        <div class="iphone">
-                                            <div class="iphone-top">
-                                                <span class="camera"></span>
-                                                <!--<span class="sensor"></span>
-                                                <span class="speaker"></span>-->
-                                            </div>
-                                            <div class="top-bar"></div>
-                                            <div class="iphone-screen" style="overflow-y:scroll;overflow-x:hidden">
-                                                <div style="width: 100%;text-align: center;margin-top: 10px" id="media_div">
-                                                    <img id="frame_preview_img_id" src="" style="height: auto;display: none">
-                                                    <video id="video_id" controls autoplay style="display: none"></video>
-                                                    <audio id="audio_id" controls autoplay style="display: none"></audio>
-                                                </div>
-                                                <div id="frame_preview_txt_id" style="margin-left: 10px; text-align: left;margin-top: 40px;font-size: 20px;word-break: break-all;white-space: normal;">
-
-                                                </div>
-                                            </div>
-                                            <div class="buttons">
-                                                <span class="on-off"></span>
-                                                <span class="sleep"></span>
-                                                <span class="up"></span>
-                                                <span class="down"></span>
-                                            </div>
-                                            <div class="bottom-bar"></div>
-                                            <div class="iphone-bottom">
-                                                <span></span>
-                                            </div>
                                         </div>
                                     </div>
-
+                                    <div class="buttons">
+                                        <span class="on-off"></span>
+                                        <span class="sleep"></span>
+                                        <span class="up"></span>
+                                        <span class="down"></span>
+                                    </div>
+                                    <div class="bottom-bar"></div>
+                                    <div class="iphone-bottom">
+                                        <span></span>
+                                    </div>
                                 </div>
-
                             </div>
+
+                        </div>
+
+                    </div>
 
 
 
@@ -663,138 +663,138 @@
                 this.drag();
                 $(this).find("#frame-index").html(i+1);
             },
-            this.move = function (callback) {  // 移动
-                $(this).stop(true).animate({
-                    left: this.box.offset().left,
-                    top: this.box.offset().top
-                }, 500, function () {
-                    if (callback) {
-                        callback.call(this);
-                    }
-                });
-            },
-            this.collisionCheck = function () {
-                var currentItem = this;
-                var direction = null;
-                $(this).siblings(".item").each(function () {
-                    if (
-                        currentItem.pointer.x > this.box.offset().left &&
-                        currentItem.pointer.y > this.box.offset().top &&
-                        (currentItem.pointer.x < this.box.offset().left + this.box.width()) &&
-                        (currentItem.pointer.y < this.box.offset().top + this.box.height())
-                    ) {
-                        // 返回对象和方向
-                        if (currentItem.box.offset().top < this.box.offset().top) {
-                            direction = "down";
-                        } else if (currentItem.box.offset().top > this.box.offset().top) {
-                            direction = "up";
-                        } else {
-                            direction = "normal";
+                this.move = function (callback) {  // 移动
+                    $(this).stop(true).animate({
+                        left: this.box.offset().left,
+                        top: this.box.offset().top
+                    }, 500, function () {
+                        if (callback) {
+                            callback.call(this);
                         }
-                        this.swap(currentItem, direction);
-                    }
-                });
-            },
-            this.swap = function (currentItem, direction) { // 交换位置
-                if (this.moveing) return false;
-                var directions = {
-                    normal: function () {
-                        var saveBox = this.box;
-                        this.box = currentItem.box;
-                        currentItem.box = saveBox;
-                        this.move();
-                        $(this).attr("index", this.box.index());
-                        $(this).find("#frame-index").html(this.box.index()+1);
-                        $(currentItem).attr("index", currentItem.box.index());
-                        $(currentItem).find("#frame-index").html(currentItem.box.index()+1);
-                    },
-                    down: function () {
-                        // 移到上方
-                        var box = this.box;
-                        var node = this;
-                        var startIndex = currentItem.box.index();
-                        var endIndex = node.box.index();
-                        for (var i = endIndex; i > startIndex; i--) {
-                            var prevNode = $(".item_content .item[index=" + (i - 1) + "]")[0];
-                            node.box = prevNode.box;
-                            $(node).attr("index", node.box.index());
-                            $(node).find("#frame-index").html(node.box.index()+1);
-                            node.move();
-                            node = prevNode;
-                        }
-                        currentItem.box = box;
-                        $(currentItem).attr("index", box.index());
-                        $(currentItem).find("#frame-index").html(box.index()+1);
-                    },
-                    up: function () {
-                        // 移到上方
-                        var box = this.box;
-                        var node = this;
-                        var startIndex = node.box.index();
-                        var endIndex = currentItem.box.index();
-                        for (var i = startIndex; i < endIndex; i++) {
-                            var nextNode = $(".item_content .item[index=" + (i + 1) + "]")[0];
-                            node.box = nextNode.box;
-                            $(node).attr("index", node.box.index());
-                            $(node).find("#frame-index").html(node.box.index()+1);
-                            node.move();
-                            node = nextNode;
-
-                            console.log("up");
-                        }
-                        currentItem.box = box;
-                        $(currentItem).attr("index", box.index());
-                        console.log("4:"+$(currentItem).find("#frame-index").html());
-                        $(currentItem).find("#frame-index").html(box.index()+1);
-                    }
-                }
-                directions[direction].call(this);
-            },
-            this.drag = function () { // 拖拽
-                var oldPosition = new Position();
-                var oldPointer = new Pointer();
-                var isDrag = false;
-                var currentItem = null;
-                $(this).mousedown(function (e) {
-                    e.preventDefault();
-                    oldPosition.left = $(this).position().left;
-                    oldPosition.top = $(this).position().top;
-                    oldPointer.x = e.clientX;
-                    oldPointer.y = e.clientY;
-                    isDrag = true;
-
-                    currentItem = this;
-
-                });
-                $(document).mousemove(function (e) {
-                    var currentPointer = new Pointer(e.clientX, e.clientY);
-                    if (!isDrag) return false;
-                    $(currentItem).css({
-                        "opacity": "0.8",
-                        "z-index": 999
                     });
-                    var left = currentPointer.x - oldPointer.x + oldPosition.left;
-                    var top = currentPointer.y - oldPointer.y + oldPosition.top;
-                    $(currentItem).css({
-                        left: left,
-                        top: top
+                },
+                this.collisionCheck = function () {
+                    var currentItem = this;
+                    var direction = null;
+                    $(this).siblings(".item").each(function () {
+                        if (
+                            currentItem.pointer.x > this.box.offset().left &&
+                            currentItem.pointer.y > this.box.offset().top &&
+                            (currentItem.pointer.x < this.box.offset().left + this.box.width()) &&
+                            (currentItem.pointer.y < this.box.offset().top + this.box.height())
+                        ) {
+                            // 返回对象和方向
+                            if (currentItem.box.offset().top < this.box.offset().top) {
+                                direction = "down";
+                            } else if (currentItem.box.offset().top > this.box.offset().top) {
+                                direction = "up";
+                            } else {
+                                direction = "normal";
+                            }
+                            this.swap(currentItem, direction);
+                        }
                     });
-                    currentItem.pointer = currentPointer;
-                    // 开始交换位置
-                    currentItem.collisionCheck();
+                },
+                this.swap = function (currentItem, direction) { // 交换位置
+                    if (this.moveing) return false;
+                    var directions = {
+                        normal: function () {
+                            var saveBox = this.box;
+                            this.box = currentItem.box;
+                            currentItem.box = saveBox;
+                            this.move();
+                            $(this).attr("index", this.box.index());
+                            $(this).find("#frame-index").html(this.box.index()+1);
+                            $(currentItem).attr("index", currentItem.box.index());
+                            $(currentItem).find("#frame-index").html(currentItem.box.index()+1);
+                        },
+                        down: function () {
+                            // 移到上方
+                            var box = this.box;
+                            var node = this;
+                            var startIndex = currentItem.box.index();
+                            var endIndex = node.box.index();
+                            for (var i = endIndex; i > startIndex; i--) {
+                                var prevNode = $(".item_content .item[index=" + (i - 1) + "]")[0];
+                                node.box = prevNode.box;
+                                $(node).attr("index", node.box.index());
+                                $(node).find("#frame-index").html(node.box.index()+1);
+                                node.move();
+                                node = prevNode;
+                            }
+                            currentItem.box = box;
+                            $(currentItem).attr("index", box.index());
+                            $(currentItem).find("#frame-index").html(box.index()+1);
+                        },
+                        up: function () {
+                            // 移到上方
+                            var box = this.box;
+                            var node = this;
+                            var startIndex = node.box.index();
+                            var endIndex = currentItem.box.index();
+                            for (var i = startIndex; i < endIndex; i++) {
+                                var nextNode = $(".item_content .item[index=" + (i + 1) + "]")[0];
+                                node.box = nextNode.box;
+                                $(node).attr("index", node.box.index());
+                                $(node).find("#frame-index").html(node.box.index()+1);
+                                node.move();
+                                node = nextNode;
 
-                });
-                $(document).mouseup(function () {
-                    if (!isDrag) return false;
-                    isDrag = false;
-                    currentItem.move(function () {
-                        $(this).css({
-                            "opacity": "1",
-                            "z-index": 0
+                                console.log("up");
+                            }
+                            currentItem.box = box;
+                            $(currentItem).attr("index", box.index());
+                            console.log("4:"+$(currentItem).find("#frame-index").html());
+                            $(currentItem).find("#frame-index").html(box.index()+1);
+                        }
+                    }
+                    directions[direction].call(this);
+                },
+                this.drag = function () { // 拖拽
+                    var oldPosition = new Position();
+                    var oldPointer = new Pointer();
+                    var isDrag = false;
+                    var currentItem = null;
+                    $(this).mousedown(function (e) {
+                        e.preventDefault();
+                        oldPosition.left = $(this).position().left;
+                        oldPosition.top = $(this).position().top;
+                        oldPointer.x = e.clientX;
+                        oldPointer.y = e.clientY;
+                        isDrag = true;
+
+                        currentItem = this;
+
+                    });
+                    $(document).mousemove(function (e) {
+                        var currentPointer = new Pointer(e.clientX, e.clientY);
+                        if (!isDrag) return false;
+                        $(currentItem).css({
+                            "opacity": "0.8",
+                            "z-index": 999
+                        });
+                        var left = currentPointer.x - oldPointer.x + oldPosition.left;
+                        var top = currentPointer.y - oldPointer.y + oldPosition.top;
+                        $(currentItem).css({
+                            left: left,
+                            top: top
+                        });
+                        currentItem.pointer = currentPointer;
+                        // 开始交换位置
+                        currentItem.collisionCheck();
+
+                    });
+                    $(document).mouseup(function () {
+                        if (!isDrag) return false;
+                        isDrag = false;
+                        currentItem.move(function () {
+                            $(this).css({
+                                "opacity": "1",
+                                "z-index": 0
+                            });
                         });
                     });
-                });
-            }
+                }
             this.init();
         });
     });
@@ -954,11 +954,11 @@
         $("#selectedId-" + resId).find(".txt-info-tip").eq(0).hide();*/
 
         $("#span_txt_id-" + resId).html("文本字数："+frameTxt.length);
-         //$("#span_txt_id-" + resId).attr("title", frameTxt);
-         $('#span_txt_id-' + resId).attr({
-             // 设置提示内容
-             'data-original-title': frameTxt,
-         })
+        //$("#span_txt_id-" + resId).attr("title", frameTxt);
+        $('#span_txt_id-' + resId).attr({
+            // 设置提示内容
+            'data-original-title': frameTxt,
+        })
     }
 
     function sumbitMM() {

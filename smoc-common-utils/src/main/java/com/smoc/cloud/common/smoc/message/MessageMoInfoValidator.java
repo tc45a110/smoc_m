@@ -29,6 +29,8 @@ public class MessageMoInfoValidator {
     private Date createdTime;
     private String updatedBy;
     private Date updatedTime;
+    private String carrier;
+    private String area;
 
     private String accountName;
     private String startDate;

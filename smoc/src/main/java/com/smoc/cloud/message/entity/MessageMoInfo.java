@@ -31,6 +31,8 @@ public class MessageMoInfo {
 
     private String businessType;
     private String infoType;
+    private String carrier;
+    private String area;
 
     @Id
     @Column(name = "ID")
@@ -250,6 +252,22 @@ public class MessageMoInfo {
 
     public void setInfoType(String infoType) {
         this.infoType = infoType;
+    }
+
+    public String getCarrier() {
+        return carrier;
+    }
+
+    public void setCarrier(String carrier) {
+        this.carrier = carrier;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
     }
 
     @Override

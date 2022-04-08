@@ -8,9 +8,8 @@ import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.message.MessageAccountValidator;
 import com.smoc.cloud.common.smoc.message.model.StatisticMessageSend;
-import com.smoc.cloud.common.smoc.template.MessageWebTaskInfoValidator;
+import com.smoc.cloud.common.smoc.message.MessageWebTaskInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
-import com.smoc.cloud.customer.entity.EnterpriseDocumentInfo;
 import com.smoc.cloud.message.entity.MessageWebTaskInfo;
 import com.smoc.cloud.message.repository.MessageWebTaskInfoRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
 
@@ -140,7 +138,7 @@ public class MessageWebTaskInfoService {
         //记录日志
         log.info("[短信群发][send]数据:{}", JSON.toJSONString(data));
 
-        messageWebTaskInfoRepository.sendMessageById(id, "01", DateTimeUtils.getDateTimeFormat(new Date()));
+        messageWebTaskInfoRepository.sendMessageById(id, "03");
 
         return ResponseDataUtil.buildSuccess();
     }
@@ -164,4 +162,5 @@ public class MessageWebTaskInfoService {
         StatisticMessageSend data = messageWebTaskInfoRepository.statisticSubmitMessageSendCount(messageWebTaskInfoValidator);
         return ResponseDataUtil.buildSuccess(data);
     }
+
 }

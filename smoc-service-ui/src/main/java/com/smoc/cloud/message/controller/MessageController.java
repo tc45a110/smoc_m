@@ -1,6 +1,9 @@
 package com.smoc.cloud.message.controller;
 
 
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.write.builder.ExcelWriterBuilder;
+import com.alibaba.excel.write.builder.ExcelWriterSheetBuilder;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
@@ -14,8 +17,9 @@ import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBookInfoValidator;
 import com.smoc.cloud.common.smoc.filter.FilterGroupListValidator;
+import com.smoc.cloud.common.smoc.message.model.MessageTaskDetail;
 import com.smoc.cloud.common.smoc.template.AccountTemplateInfoValidator;
-import com.smoc.cloud.common.smoc.template.MessageWebTaskInfoValidator;
+import com.smoc.cloud.common.smoc.message.MessageWebTaskInfoValidator;
 import com.smoc.cloud.common.smoc.utils.MessageUtil;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.UUID;
@@ -25,7 +29,6 @@ import com.smoc.cloud.material.service.BusinessAccountService;
 import com.smoc.cloud.material.service.MessageTemplateService;
 import com.smoc.cloud.material.service.SequenceService;
 import com.smoc.cloud.message.service.MessageService;
-import com.smoc.cloud.message.utils.SendMessage;
 import com.smoc.cloud.properties.MessageProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +36,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
@@ -45,6 +49,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
@@ -175,7 +180,7 @@ public class MessageController {
         messageWebTaskInfoValidator.setBusinessType(businessType);
         messageWebTaskInfoValidator.setSendType("1");
         messageWebTaskInfoValidator.setMessageType("1");
-        messageWebTaskInfoValidator.setSendStatus("05");
+        messageWebTaskInfoValidator.setSendStatus("01");
         messageWebTaskInfoValidator.setUpType("1");
 
         //查询企业下得所有WEB业务账号
@@ -532,7 +537,7 @@ public class MessageController {
             return view;
         }
 
-        //如果已经发送完成了，不能重新发送
+        //如果已经发送完成，不能点终止
         if(MessageUtil.MessageTaskStatus_finish.equals(infoData.getData().getSendStatus())){
             view.addObject("error", "不能进行操作！");
             return view;
@@ -569,7 +574,7 @@ public class MessageController {
      */
     @RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
     public ModelAndView detail(@PathVariable String id, HttpServletRequest request) {
-        ModelAndView view = new ModelAndView("message/message_detail");
+        ModelAndView view = new ModelAndView("message/message_detail_list");
 
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
 
@@ -594,12 +599,143 @@ public class MessageController {
             return view;
         }
 
+        //初始化数据
+        PageParams<MessageTaskDetail> params = new PageParams<MessageTaskDetail>();
+        params.setPageSize(20);
+        params.setCurrentPage(1);
+        MessageTaskDetail messageTaskDetail = new MessageTaskDetail();
+        messageTaskDetail.setTaskId(id);
+        params.setParams(messageTaskDetail);
+
+        //查询
+        ResponseData<PageList<MessageTaskDetail>> data = messageService.webTaskDetailList(params);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("messageTaskDetail", messageTaskDetail);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
         view.addObject("messageWebTaskInfoValidator", infoData.getData());
-        view.addObject("signType", infoData.getData().getInfoType());
-        view.addObject("businessType", infoData.getData().getBusinessType());
 
         return view;
     }
+
+    /**
+     * 查看明细分页
+     * @param messageTaskDetail
+     * @param params
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/detail/page", method = RequestMethod.POST)
+    public ModelAndView detailPage(@ModelAttribute MessageTaskDetail messageTaskDetail,PageParams params,HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("message/message_detail_list");
+
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        //查询信息
+        ResponseData<MessageWebTaskInfoValidator> infoData = messageService.findById(messageTaskDetail.getTaskId());
+        if (!ResponseCode.SUCCESS.getCode().equals(infoData.getCode())) {
+            view.addObject("error", infoData.getCode() + ":" + infoData.getMessage());
+            return view;
+        }
+
+        //查看是否是自己企业
+        if(!user.getOrganization().equals(infoData.getData().getEnterpriseId())){
+            view.addObject("error", "无法查看！");
+            return view;
+        }
+
+        //查询
+        params.setParams(messageTaskDetail);
+        ResponseData<PageList<MessageTaskDetail>> data = messageService.webTaskDetailList(params);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("messageTaskDetail", messageTaskDetail);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
+        view.addObject("messageWebTaskInfoValidator", infoData.getData());
+        return view;
+    }
+
+    /**
+     * 导出明细
+     *
+     * @return
+     */
+    @RequestMapping(value = "/expMessage", method = RequestMethod.POST)
+    public void expMessage(String taskId, HttpServletRequest request, HttpServletResponse response) {
+
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(taskId);
+        if (!MpmValidatorUtil.validate(validator)) {
+            return ;
+        }
+
+        //查询信息
+        ResponseData<MessageWebTaskInfoValidator> infoData = messageService.findById(taskId);
+        if (!ResponseCode.SUCCESS.getCode().equals(infoData.getCode())) {
+            return ;
+        }
+
+        //查看是否是自己企业
+        if(!user.getOrganization().equals(infoData.getData().getEnterpriseId())){
+            return ;
+        }
+
+        //初始化数据
+        PageParams<MessageTaskDetail> params = new PageParams<MessageTaskDetail>();
+        params.setPageSize(1000000);
+        params.setCurrentPage(1);
+        MessageTaskDetail messageTaskDetail = new MessageTaskDetail();
+        messageTaskDetail.setTaskId(taskId);
+        params.setParams(messageTaskDetail);
+
+        //查询
+        ResponseData<PageList<MessageTaskDetail>> data = messageService.webTaskDetailList(params);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            return ;
+        }
+
+        ServletOutputStream outputStream = null;
+        try {
+            outputStream = getOutputStream(infoData.getData().getId(), response);
+            ExcelWriterBuilder writeBook = EasyExcel.write(outputStream,MessageTaskDetail.class);
+            ExcelWriterSheetBuilder sheet = writeBook.sheet(infoData.getData().getId());
+            sheet.doWrite(data.getData().getList());
+        } catch (Exception e) {
+            log.error("导出excel表格失败:", e);
+        }
+
+    }
+
+    private ServletOutputStream getOutputStream(String fileName, HttpServletResponse response) throws Exception {
+        try {
+            fileName = URLEncoder.encode(fileName, "UTF-8");
+            //设置响应的类型
+            response.setContentType(MediaType.MULTIPART_FORM_DATA_VALUE);
+            //设置响应的编码格式
+            response.setCharacterEncoding("utf8");
+            //设置响应头
+            response.setHeader("Content-Disposition", "attachment;filename=" + fileName + ".xlsx");
+            response.setHeader("Pragma", "public");
+            response.setHeader("Cache-Control", "no-store");
+            response.addHeader("Cache-Control", "max-age=0");
+            return response.getOutputStream();
+        } catch (IOException e) {
+            log.error("导出excel表格失败:", e);
+            throw new Exception("导出excel表格失败!", e);
+        }
+    }
+
 
     /**
      * 异步上传号码

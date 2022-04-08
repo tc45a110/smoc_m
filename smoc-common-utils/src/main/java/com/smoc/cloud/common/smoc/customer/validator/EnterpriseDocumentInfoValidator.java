@@ -25,7 +25,6 @@ public class EnterpriseDocumentInfoValidator {
     @NotNull(message = "业务类型不能为空！")
     private String businessType;
 
-    @NotNull(message = "信息分类不能为空！")
     private String infoType;
 
     @Length(max = 128, message = "短链长度不符合规则！")

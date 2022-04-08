@@ -1,4 +1,4 @@
-package com.smoc.cloud.common.smoc.template;
+package com.smoc.cloud.common.smoc.message;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -75,7 +75,6 @@ public class MessageWebTaskInfoValidator {
     private String endDate;
     private String groupId;
     private String groupName;
-
 
     //原手机号上传路径
     private String numberFiles;

@@ -8,7 +8,7 @@ import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.message.model.StatisticMessageSend;
 import com.smoc.cloud.common.smoc.template.AccountTemplateInfoValidator;
-import com.smoc.cloud.common.smoc.template.MessageWebTaskInfoValidator;
+import com.smoc.cloud.common.smoc.message.MessageWebTaskInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
@@ -66,16 +66,8 @@ public class MessageSubmitController {
             return view;
         }
 
-        //统计发送量
-        ResponseData<StatisticMessageSend> statisticDate = messageService.statisticSubmitMessageSendCount(messageWebTaskInfoValidator);
-        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            view.addObject("error", data.getCode() + ":" + data.getMessage());
-            return view;
-        }
-
         view.addObject("messageWebTaskInfoValidator", messageWebTaskInfoValidator);
         view.addObject("list", data.getData().getList());
-        view.addObject("statisticDate", statisticDate.getData());
         view.addObject("pageParams", data.getData().getPageParams());
         view.addObject("businessType", businessType);
         return view;
@@ -108,17 +100,9 @@ public class MessageSubmitController {
             return view;
         }
 
-        //统计发送量
-        ResponseData<StatisticMessageSend> statisticDate = messageService.statisticSubmitMessageSendCount(messageWebTaskInfoValidator);
-        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            view.addObject("error", data.getCode() + ":" + data.getMessage());
-            return view;
-        }
-
         view.addObject("messageWebTaskInfoValidator", messageWebTaskInfoValidator);
         view.addObject("list", data.getData().getList());
         view.addObject("pageParams", data.getData().getPageParams());
-        view.addObject("statisticDate", statisticDate.getData());
         view.addObject("businessType", messageWebTaskInfoValidator.getBusinessType());
         return view;
     }

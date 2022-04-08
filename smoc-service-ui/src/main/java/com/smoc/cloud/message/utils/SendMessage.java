@@ -1,13 +1,12 @@
 package com.smoc.cloud.message.utils;
 
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.smoc.cloud.common.smoc.template.MessageFrameParamers;
-import com.smoc.cloud.common.smoc.template.MessageWebTaskInfoValidator;
+import com.smoc.cloud.common.smoc.message.MessageWebTaskInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.common.utils.Utils;

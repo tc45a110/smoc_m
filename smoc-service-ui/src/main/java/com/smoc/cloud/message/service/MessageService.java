@@ -6,8 +6,9 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.message.MessageAccountValidator;
+import com.smoc.cloud.common.smoc.message.model.MessageTaskDetail;
 import com.smoc.cloud.common.smoc.message.model.StatisticMessageSend;
-import com.smoc.cloud.common.smoc.template.MessageWebTaskInfoValidator;
+import com.smoc.cloud.common.smoc.message.MessageWebTaskInfoValidator;
 import com.smoc.cloud.message.remote.MessageFeignClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -124,6 +127,21 @@ public class MessageService {
         try {
             ResponseData<StatisticMessageSend> data = this.messageFeignClient.statisticSubmitMessageSendCount(messageWebTaskInfoValidator);
             return data;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 查询短信明细列表
+     * @param pageParams
+     * @return
+     */
+    public ResponseData<PageList<MessageTaskDetail>> webTaskDetailList(PageParams<MessageTaskDetail> pageParams) {
+        try {
+            ResponseData<PageList<MessageTaskDetail>> pageList = this.messageFeignClient.webTaskDetailList(pageParams);
+            return pageList;
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseDataUtil.buildError(e.getMessage());
