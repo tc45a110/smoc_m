@@ -49,7 +49,7 @@ public class SystemWhiteWordsFilter implements Filter {
             return;
         }
 
-        this.systemWhiteWordsPattern = loadDataService.getSystemWhiteWords();
+        this.systemWhiteWordsPattern = loadDataService.getSystemWhiteWords(account);
 
         //用系统白词，尝试洗白黑词
         if (null != systemWhiteWordsPattern) {

@@ -48,7 +48,7 @@ public class SystemBlackWordsFilter implements Filter {
             return;
         }
 
-        this.systemBlackWordsPattern = loadDataService.getSystemBlackWords();
+        this.systemBlackWordsPattern = loadDataService.getSystemBlackWords(account);
 
         //检查黑词
         if (null != systemBlackWordsPattern) {

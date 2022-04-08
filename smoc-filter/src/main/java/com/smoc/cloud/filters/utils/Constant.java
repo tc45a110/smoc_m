@@ -50,5 +50,11 @@ public class Constant {
     //信息分类白词过滤器
     public static final String INFO_TYPE_WHITE_WORDS_FILTER = "infoTypeWhiteWordsFilter";
 
+    //业务账号日限量过滤器
+    public static final String ACCOUNT_DAILY_LIMIT_FILTER = "accountDailyLimitFilter";
+
+    //业务账号发送时间限制过滤器
+    public static final String ACCOUNT_TIME_LIMIT_FILTER = "accountTimeLimitFilter";
+
 
 }

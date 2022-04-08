@@ -1,6 +1,8 @@
 package com.smoc.cloud.service;
 
 import com.smoc.cloud.filters.FilterChain;
+import com.smoc.cloud.filters.account.AccountDailyLimitFilter;
+import com.smoc.cloud.filters.account.AccountTimeLimitFilter;
 import com.smoc.cloud.filters.keywords.*;
 
 import java.util.HashMap;
@@ -21,7 +23,7 @@ public class FilterService {
     /**
      * 消息发送过滤验证
      * 描述：完成对消息内容进行系统关键字、账号关键字、通道关键字、运营商关键字、信息分类关键字进行黑词、审核词、白词进行校验；
-     * 对省份是否屏蔽、业务账号发送量限制、单个号码该通道发送量限制等进行过滤操作；
+     * 对省份是否屏蔽、业务账号发送量限制、单个号码该通道发送量限制等进行判定操作；
      *
      * @param channelId 通道id
      * @param account   业务账号
@@ -60,6 +62,14 @@ public class FilterService {
         filterChain.addFilter(new InfoTypeBalckWordsFilter(this.loadDataService, infoType));
         //信息分类白词过滤器
         filterChain.addFilter(new InfoTypeWhiteWordsFilter(this.loadDataService, infoType));
+
+        /**
+         * 业务账号相关过滤器
+         */
+        //业务账号日限量过滤器
+        filterChain.addFilter(new AccountDailyLimitFilter(this.loadDataService,account,carrier));
+        //业务账号发送时间限制
+        filterChain.addFilter(new AccountTimeLimitFilter(this.loadDataService,account));
 
 
         /**

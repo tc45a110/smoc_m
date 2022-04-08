@@ -50,7 +50,7 @@ public class SystemCheckWordsFilter implements Filter {
             return;
         }
 
-        this.systemCheckWordsPattern = loadDataService.getSystemCheckWords();
+        this.systemCheckWordsPattern = loadDataService.getSystemCheckWords(account);
 
         //检查审核词
         if (null != systemCheckWordsPattern) {
