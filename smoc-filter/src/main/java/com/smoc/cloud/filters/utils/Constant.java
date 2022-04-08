@@ -1,10 +1,5 @@
 package com.smoc.cloud.filters.utils;
 
-import com.smoc.cloud.filters.Filter;
-import com.smoc.cloud.filters.keywords.*;
-
-import java.util.Map;
-
 /**
  * 短消息过滤器常量
  */

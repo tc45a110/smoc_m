@@ -24,9 +24,9 @@ public class FilterService {
      *
      * @param channelId 通道id
      * @param account   业务账号
-     * @param carrier   运营商 CMCC、UNIC、TELC、INTL
+     * @param carrier   运营商  CMCC、UNIC、TELC、INTL
      * @param infoType  信息分类 INDUSTRY、MARKETING、NEW、COLLECTION
-     * @param province  省份
+     * @param province  省份编码
      * @param phone     手机号
      * @param message   消息内容
      * @return Map<String, String>  返回map.size<0表示通过验证，map.size>0时候，value为每个过滤器约定的含义来进行业务逻辑处理
@@ -59,6 +59,8 @@ public class FilterService {
         filterChain.addFilter(new InfoTypeBalckWordsFilter(this.loadDataService, infoType));
         //信息分类白词过滤器
         filterChain.addFilter(new InfoTypeWhiteWordsFilter(this.loadDataService, infoType));
+
+
 
 
         /**
