@@ -11,24 +11,21 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * 业务账号黑词、检查词、白词过滤
+ * 业务账号白词过滤
  * filterResult 操作说明  value 为 black表示，被系统黑词拦截；value为check表示被审核词拦截
  */
-public class AccountKeyWordsFilter implements Filter {
+public class AccountWhiteWordsFilter implements Filter {
 
-    public static Logger logger = Logger.getLogger(AccountKeyWordsFilter.class.toString());
+    public static Logger logger = Logger.getLogger(AccountWhiteWordsFilter.class.toString());
 
-    public AccountKeyWordsFilter(LoadDataService loadDataService,String account){
-        this.accountBlackWordsPattern = loadDataService.getAccountBlackWords(account);
-        this.accountCheckWordsPattern = loadDataService.getAccountCheckWords(account);
-        this.accountWhiteWordsPattern = loadDataService.getAccountWhiteWords(account);
+    private LoadDataService loadDataService;
+
+    private String account;
+
+    public AccountWhiteWordsFilter(LoadDataService loadDataService, String account) {
+        this.loadDataService = loadDataService;
+        this.account = account;
     }
-
-    //业务账号黑词  Pattern
-    private Pattern accountBlackWordsPattern;
-
-    //业务账号审核词 Pattern
-    private Pattern accountCheckWordsPattern;
 
     //业务账号白词 Pattern
     private Pattern accountWhiteWordsPattern;
@@ -44,12 +41,21 @@ public class AccountKeyWordsFilter implements Filter {
     @Override
     public void doFilter(String phone, String message, Map<String, String> filterResult, FilterChain chain) {
 
+
+        //判断是否有要洗的黑词
+        if(!("black".equals(filterResult.get(Constant.SYSTEM_BLACK_WORDS_FILTER)) || "black".equals(filterResult.get(Constant.ACCOUNT_BLACK_WORDS_FILTER)))){
+            chain.doFilter(phone, message, filterResult, chain);
+            return;
+        }
+
+        this.accountWhiteWordsPattern = loadDataService.getAccountWhiteWords(account);
+
         //如果有系统黑词，尝试黑词洗白
         if (null == filterResult || filterResult.size() > 0) {
-            if (null != accountWhiteWordsPattern && ("black".equals(filterResult.get(Constant.SYSTEM_KEY_WORDS_FILTER)))) {
+            if (null != accountWhiteWordsPattern && ("black".equals(filterResult.get(Constant.SYSTEM_BLACK_WORDS_FILTER)))) {
                 Matcher matcher = accountWhiteWordsPattern.matcher(message);
                 if (matcher.find()) {
-                    filterResult.remove(Constant.SYSTEM_KEY_WORDS_FILTER);
+                    filterResult.remove(Constant.SYSTEM_BLACK_WORDS_FILTER);
                 }
             }
         }
@@ -60,31 +66,15 @@ public class AccountKeyWordsFilter implements Filter {
             return;
         }
 
-        //检查黑词
-        if (null != accountBlackWordsPattern) {
-            Matcher matcher = accountBlackWordsPattern.matcher(message);
-            if (matcher.find()) {
-                filterResult.put(Constant.ACCOUNT_KEY_WORDS_FILTER, "black");
-            }
-        }
-
-        //检查审核词
-        if (null != accountCheckWordsPattern) {
-            Matcher matcher = accountCheckWordsPattern.matcher(message);
-            if (matcher.find()) {
-                filterResult.put(Constant.ACCOUNT_KEY_WORDS_FILTER, "check");
-            }
-        }
-
         //用业务账号白词，尝试洗白黑词
-        if (null != accountWhiteWordsPattern && "black".equals(filterResult.get(Constant.ACCOUNT_KEY_WORDS_FILTER))) {
+        if (null != accountWhiteWordsPattern && "black".equals(filterResult.get(Constant.ACCOUNT_BLACK_WORDS_FILTER))) {
             Matcher matcher = accountWhiteWordsPattern.matcher(message);
             if (matcher.find()) {
-                filterResult.remove(Constant.ACCOUNT_KEY_WORDS_FILTER);
+                filterResult.remove(Constant.ACCOUNT_BLACK_WORDS_FILTER);
             }
         }
 
-        logger.info("[Filters]:账号关键词过滤");
+        logger.info("[Filters]:业务账号白词过滤");
         chain.doFilter(phone, message, filterResult, chain);
     }
 

@@ -17,7 +17,7 @@ public class LoadDataServiceImpl implements LoadDataService {
     @Override
     public Pattern getSystemBlackWords() {
 
-        Pattern blackWordsPattern = Pattern.compile("aa|bb");
+        Pattern blackWordsPattern = Pattern.compile("国民党|bb");
         return blackWordsPattern;
     }
 
@@ -43,7 +43,9 @@ public class LoadDataServiceImpl implements LoadDataService {
      */
     @Override
     public Pattern getSystemWhiteWords() {
-        return null;
+
+        Pattern whiteWordsPattern = Pattern.compile("国民党|bb");
+        return whiteWordsPattern;
     }
 
     /**
@@ -83,7 +85,7 @@ public class LoadDataServiceImpl implements LoadDataService {
     @Override
     public Pattern getAccountWhiteWords(String account) {
 
-        Pattern whiteWordsPattern = Pattern.compile("aa|bb");
+        Pattern whiteWordsPattern = Pattern.compile("国民党|bb");
         return whiteWordsPattern;
 
     }
@@ -181,7 +183,7 @@ public class LoadDataServiceImpl implements LoadDataService {
     @Override
     public Pattern getInfoTypeBlackWords(String infoType) {
 
-        Pattern blackWordsPattern = Pattern.compile("aa|国民党");
+        Pattern blackWordsPattern = Pattern.compile("aa|bb");
         return blackWordsPattern;
 
     }
