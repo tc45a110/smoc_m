@@ -20,9 +20,10 @@ public class SystemWhiteWordsFilter implements Filter {
 
     private LoadDataService loadDataService;
 
+    //业务账号
     private String account;
 
-    public SystemWhiteWordsFilter(LoadDataService loadDataService,String account) {
+    public SystemWhiteWordsFilter(LoadDataService loadDataService, String account) {
         this.loadDataService = loadDataService;
         this.account = account;
     }
@@ -43,7 +44,7 @@ public class SystemWhiteWordsFilter implements Filter {
     public void doFilter(String phone, String message, Map<String, String> filterResult, FilterChain chain) {
 
         //判断是否有要洗的黑词
-        if(!"black".equals(filterResult.get(Constant.SYSTEM_BLACK_WORDS_FILTER))){
+        if (!"black".equals(filterResult.get(Constant.SYSTEM_BLACK_WORDS_FILTER))) {
             chain.doFilter(phone, message, filterResult, chain);
             return;
         }

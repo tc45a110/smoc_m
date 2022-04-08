@@ -20,6 +20,7 @@ public class ChannelWhiteWordsFilter implements Filter {
 
     private LoadDataService loadDataService;
 
+    //通道ID
     private String channelId;
 
     public ChannelWhiteWordsFilter(LoadDataService loadDataService, String channelId) {

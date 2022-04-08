@@ -20,6 +20,7 @@ public class InfoTypeCheckWordsFilter implements Filter {
 
     private LoadDataService loadDataService;
 
+    //信息分类
     private String infoType;
 
     public InfoTypeCheckWordsFilter(LoadDataService loadDataService, String infoType){

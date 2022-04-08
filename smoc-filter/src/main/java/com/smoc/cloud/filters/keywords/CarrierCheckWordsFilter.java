@@ -20,6 +20,7 @@ public class CarrierCheckWordsFilter implements Filter {
 
     private LoadDataService loadDataService;
 
+    //运营商
     private String carrier;
 
     public CarrierCheckWordsFilter(LoadDataService loadDataService, String carrier) {

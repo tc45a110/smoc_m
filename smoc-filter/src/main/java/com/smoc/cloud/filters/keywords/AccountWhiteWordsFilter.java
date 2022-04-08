@@ -20,6 +20,7 @@ public class AccountWhiteWordsFilter implements Filter {
 
     private LoadDataService loadDataService;
 
+    //业务账号
     private String account;
 
     public AccountWhiteWordsFilter(LoadDataService loadDataService, String account) {

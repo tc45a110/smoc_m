@@ -19,6 +19,7 @@ public class InfoTypeWhiteWordsFilter implements Filter {
     public static Logger logger = Logger.getLogger(InfoTypeWhiteWordsFilter.class.toString());
     private LoadDataService loadDataService;
 
+    //信息分类
     private String infoType;
 
     public InfoTypeWhiteWordsFilter(LoadDataService loadDataService, String infoType) {

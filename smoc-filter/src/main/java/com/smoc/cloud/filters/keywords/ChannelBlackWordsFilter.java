@@ -20,6 +20,7 @@ public class ChannelBlackWordsFilter implements Filter {
 
     private LoadDataService loadDataService;
 
+    //通道ID
     private String channelId;
 
     public ChannelBlackWordsFilter(LoadDataService loadDataService, String channelId){

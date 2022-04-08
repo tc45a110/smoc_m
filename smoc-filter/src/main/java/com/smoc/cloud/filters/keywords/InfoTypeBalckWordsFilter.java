@@ -20,6 +20,7 @@ public class InfoTypeBalckWordsFilter implements Filter {
 
     private LoadDataService loadDataService;
 
+    //信息分类
     private String infoType;
 
     public InfoTypeBalckWordsFilter(LoadDataService loadDataService, String infoType){

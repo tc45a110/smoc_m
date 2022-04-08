@@ -20,6 +20,7 @@ public class SystemBlackWordsFilter implements Filter {
 
     private LoadDataService loadDataService;
 
+    //业务账号
     private String account;
 
     public SystemBlackWordsFilter(LoadDataService loadDataService,String account) {

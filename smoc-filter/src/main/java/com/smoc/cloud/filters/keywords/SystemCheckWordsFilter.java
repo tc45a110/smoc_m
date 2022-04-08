@@ -20,6 +20,7 @@ public class SystemCheckWordsFilter implements Filter {
 
     private LoadDataService loadDataService;
 
+    //业务账号
     private String account;
 
     public SystemCheckWordsFilter(LoadDataService loadDataService,String account) {

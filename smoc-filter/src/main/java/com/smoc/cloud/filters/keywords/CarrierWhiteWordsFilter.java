@@ -20,6 +20,7 @@ public class CarrierWhiteWordsFilter implements Filter {
 
     private LoadDataService loadDataService;
 
+    //运营商
     private String carrier;
 
     public CarrierWhiteWordsFilter(LoadDataService loadDataService, String carrier) {

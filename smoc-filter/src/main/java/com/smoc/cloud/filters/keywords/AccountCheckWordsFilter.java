@@ -20,6 +20,7 @@ public class AccountCheckWordsFilter implements Filter {
 
     private LoadDataService loadDataService;
 
+    //业务账号
     private String account;
 
     public AccountCheckWordsFilter(LoadDataService loadDataService, String account){
