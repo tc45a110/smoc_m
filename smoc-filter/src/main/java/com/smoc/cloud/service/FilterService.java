@@ -20,7 +20,8 @@ public class FilterService {
 
     /**
      * 消息发送过滤验证
-     * 描述：完成对消息内容进行系统关键字、账号关键字、通道关键字、运营商关键字、信息分类关键字进行黑词、审核词、白词进行校验
+     * 描述：完成对消息内容进行系统关键字、账号关键字、通道关键字、运营商关键字、信息分类关键字进行黑词、审核词、白词进行校验；
+     * 对省份是否屏蔽、业务账号发送量限制、单个号码该通道发送量限制等进行过滤操作；
      *
      * @param channelId 通道id
      * @param account   业务账号
@@ -59,8 +60,6 @@ public class FilterService {
         filterChain.addFilter(new InfoTypeBalckWordsFilter(this.loadDataService, infoType));
         //信息分类白词过滤器
         filterChain.addFilter(new InfoTypeWhiteWordsFilter(this.loadDataService, infoType));
-
-
 
 
         /**
