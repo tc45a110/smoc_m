@@ -51,19 +51,11 @@ public class AccountWhiteWordsFilter implements Filter {
         this.accountWhiteWordsPattern = loadDataService.getAccountWhiteWords(account);
 
         //如果有系统黑词，尝试黑词洗白
-        if (null == filterResult || filterResult.size() > 0) {
-            if (null != accountWhiteWordsPattern && ("black".equals(filterResult.get(Constant.SYSTEM_BLACK_WORDS_FILTER)))) {
-                Matcher matcher = accountWhiteWordsPattern.matcher(message);
-                if (matcher.find()) {
-                    filterResult.remove(Constant.SYSTEM_BLACK_WORDS_FILTER);
-                }
+        if (null != accountWhiteWordsPattern && ("black".equals(filterResult.get(Constant.SYSTEM_BLACK_WORDS_FILTER)))) {
+            Matcher matcher = accountWhiteWordsPattern.matcher(message);
+            if (matcher.find()) {
+                filterResult.remove(Constant.SYSTEM_BLACK_WORDS_FILTER);
             }
-        }
-
-        //过滤过程中已出现失败情况，跳过该过滤器
-        if (null == filterResult || filterResult.size() > 0) {
-            chain.doFilter(phone, message, filterResult, chain);
-            return;
         }
 
         //用业务账号白词，尝试洗白黑词

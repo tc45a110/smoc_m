@@ -11,7 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * 运营商黑词、检查词、白词过滤
+ * 运营商黑词过滤
  * filterResult 操作说明  value 为 black表示，被系统黑词拦截；value为check表示被审核词拦截
  */
 public class CarrierBlackWordsFilter implements Filter {

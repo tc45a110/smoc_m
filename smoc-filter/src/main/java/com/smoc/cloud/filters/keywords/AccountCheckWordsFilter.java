@@ -27,14 +27,10 @@ public class AccountCheckWordsFilter implements Filter {
         this.account = account;
     }
 
-    //业务账号黑词  Pattern
-    private Pattern accountBlackWordsPattern;
 
     //业务账号审核词 Pattern
     private Pattern accountCheckWordsPattern;
 
-    //业务账号白词 Pattern
-    private Pattern accountWhiteWordsPattern;
 
     /**
      * 业务账号黑词、检查词、白词过滤
