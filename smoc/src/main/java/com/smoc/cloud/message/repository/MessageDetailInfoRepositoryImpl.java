@@ -4,7 +4,9 @@ import com.smoc.cloud.common.BasePageRepository;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.smoc.message.MessageDetailInfoValidator;
+import com.smoc.cloud.common.smoc.message.model.MessageTaskDetail;
 import com.smoc.cloud.message.rowmapper.MessageDetailInfoRowMapper;
+import com.smoc.cloud.message.rowmapper.MessageTaskDetailRowMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
@@ -219,4 +221,46 @@ public class MessageDetailInfoRepositoryImpl extends BasePageRepository {
         return pageList;
 
     }
+
+    public PageList<MessageTaskDetail> webTaskDetailList(PageParams<MessageTaskDetail> pageParams) {
+
+        //查询条件
+        MessageTaskDetail qo = pageParams.getParams();
+
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append(" t.MESSAGE_CONTENT,");
+        sqlBuffer.append(" t.SEND_NUMBER,");
+        sqlBuffer.append(" t.CARRIER,");
+        sqlBuffer.append(" t.AREA,");
+        sqlBuffer.append(" t.SEND_TIME,");
+        sqlBuffer.append(" t.CUSTOMER_STATUS,");
+        sqlBuffer.append(" t.CHARGE_NUMBER");
+        sqlBuffer.append(" from message_detail_info t ");
+        sqlBuffer.append(" where 1=1 ");
+
+        List<Object> paramsList = new ArrayList<Object>();
+
+        //任务Id
+        if (!StringUtils.isEmpty(qo.getTaskId())) {
+            sqlBuffer.append(" and t.TASK_ID =?");
+            paramsList.add(qo.getTaskId().trim());
+        }
+
+        //手机号
+        if (!StringUtils.isEmpty(qo.getMobile())) {
+            sqlBuffer.append(" and t.SEND_NUMBER like ? ");
+            paramsList.add("%" + qo.getMobile().trim() + "%");
+        }
+
+        sqlBuffer.append(" order by t.SEND_TIME desc");
+        //log.info("[SQL]:{}",sqlBuffer);
+        //根据参数个数，组织参数值
+        Object[] params = new Object[paramsList.size()];
+        paramsList.toArray(params);
+        PageList<MessageTaskDetail> pageList = this.queryByPageForMySQL(sqlBuffer.toString(), params, pageParams.getCurrentPage(), pageParams.getPageSize(), new MessageTaskDetailRowMapper());
+        pageList.getPageParams().setParams(qo);
+        return pageList;
+    }
+
 }

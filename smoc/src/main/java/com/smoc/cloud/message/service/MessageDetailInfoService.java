@@ -5,11 +5,13 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.message.MessageDetailInfoValidator;
+import com.smoc.cloud.common.smoc.message.model.MessageTaskDetail;
 import com.smoc.cloud.message.repository.MessageDetailInfoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 短信明细
@@ -44,4 +46,15 @@ public class MessageDetailInfoService {
 
         return ResponseDataUtil.buildSuccess(page);
     }
+
+    /**
+     * 查询短信明细列表
+     * @param pageParams
+     * @return
+     */
+    public ResponseData<PageList<MessageTaskDetail>> webTaskDetailList(PageParams<MessageTaskDetail> pageParams) {
+        PageList<MessageTaskDetail> page = messageDetailInfoRepository.webTaskDetailList(pageParams);
+        return ResponseDataUtil.buildSuccess(page);
+    }
+
 }

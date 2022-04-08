@@ -36,6 +36,8 @@ public class MessageMoInfoRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(" t.MOBILE,");
         sqlBuffer.append(" t.MO_MESSAGE_CONTENT,");
         sqlBuffer.append(" t.MT_MESSAGE_CONTENT,");
+        sqlBuffer.append(" t.CARRIER,");
+        sqlBuffer.append(" t.AREA,");
         sqlBuffer.append(" DATE_FORMAT(t.MO_DATE, '%Y-%m-%d %H:%i:%S')MO_DATE, ");
         sqlBuffer.append(" DATE_FORMAT(t.MT_DATE, '%Y-%m-%d %H:%i:%S')MT_DATE ");
         sqlBuffer.append(" from message_mo_info t ");

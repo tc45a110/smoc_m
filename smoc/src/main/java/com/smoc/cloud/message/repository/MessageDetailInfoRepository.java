@@ -3,6 +3,7 @@ package com.smoc.cloud.message.repository;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.smoc.message.MessageDetailInfoValidator;
+import com.smoc.cloud.common.smoc.message.model.MessageTaskDetail;
 import com.smoc.cloud.message.entity.MessageDetailInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -42,4 +43,12 @@ public interface MessageDetailInfoRepository extends JpaRepository<MessageDetail
      * @return
      */
     PageList<MessageDetailInfoValidator> servicerPage(PageParams<MessageDetailInfoValidator> pageParams);
+
+    /**
+     * 查询短信明细列表
+     * @param pageParams
+     * @return
+     */
+    PageList<MessageTaskDetail> webTaskDetailList(PageParams<MessageTaskDetail> pageParams);
+
 }

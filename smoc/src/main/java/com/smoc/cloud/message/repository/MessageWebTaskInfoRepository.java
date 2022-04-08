@@ -4,7 +4,7 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.smoc.message.MessageAccountValidator;
 import com.smoc.cloud.common.smoc.message.model.StatisticMessageSend;
-import com.smoc.cloud.common.smoc.template.MessageWebTaskInfoValidator;
+import com.smoc.cloud.common.smoc.message.MessageWebTaskInfoValidator;
 import com.smoc.cloud.message.entity.MessageWebTaskInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -34,13 +34,12 @@ public interface MessageWebTaskInfoRepository extends JpaRepository<MessageWebTa
     Map<String, Object> countSum(MessageWebTaskInfoValidator qo);
 
     /**
-     * 发送短信：更新状态和发送时间
+     * 发送短信：更新状态
      * @param id
-     * @param dateTimeFormat
      */
     @Modifying
-    @Query(value = "update message_web_task_info set SEND_STATUS = :sendStatus,APPLE_SEND_TIME = :dateTimeFormat  where ID = :id ",nativeQuery = true)
-    void sendMessageById(@Param("id") String id, @Param("sendStatus") String sendStatus, @Param("dateTimeFormat") String dateTimeFormat);
+    @Query(value = "update message_web_task_info set SEND_STATUS = :sendStatus where ID = :id ",nativeQuery = true)
+    void sendMessageById(@Param("id") String id, @Param("sendStatus") String sendStatus);
 
     /**
      * 查询企业发送量
@@ -55,4 +54,5 @@ public interface MessageWebTaskInfoRepository extends JpaRepository<MessageWebTa
      * @return
      */
     StatisticMessageSend statisticSubmitMessageSendCount(MessageWebTaskInfoValidator messageWebTaskInfoValidator);
+
 }

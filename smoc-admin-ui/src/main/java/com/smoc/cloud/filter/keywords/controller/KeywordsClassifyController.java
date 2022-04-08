@@ -471,7 +471,7 @@ public class KeywordsClassifyController {
 
 
         //行业分类
-        DictType industryType = dictMap.get("industryType");
+       /* DictType industryType = dictMap.get("industryType");
         Nodes industryTypeNode = new Nodes();
         industryTypeNode.setId("1");
         industryTypeNode.setHref("0");
@@ -490,7 +490,7 @@ public class KeywordsClassifyController {
             dictNode.setIcon(industryType.getIcon());
             industryTypeNodes.add(dictNode);
         }
-        industryTypeNode.setNodes(industryTypeNodes);
+        industryTypeNode.setNodes(industryTypeNodes);*/
 
         //信息分类
         DictType infoType = dictMap.get("infoType");
@@ -516,7 +516,7 @@ public class KeywordsClassifyController {
 
         List<Nodes> rootList = new ArrayList<>();
         rootList.add(carrierNode);
-        rootList.add(industryTypeNode);
+        //rootList.add(industryTypeNode);
         rootList.add(infoTypeNode);
         root.setNodes(rootList);
 

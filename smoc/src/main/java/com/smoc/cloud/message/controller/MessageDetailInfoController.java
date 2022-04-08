@@ -4,6 +4,7 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.message.MessageDetailInfoValidator;
+import com.smoc.cloud.common.smoc.message.model.MessageTaskDetail;
 import com.smoc.cloud.message.service.MessageDetailInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.WebApplicationContext;
+
+import java.util.List;
 
 /**
  * 短信明细
@@ -49,4 +52,16 @@ public class MessageDetailInfoController {
 
         return messageDetailInfoService.servicerPage(pageParams);
     }
+
+    /**
+     * 查询短信明细列表
+     * @param pageParams
+     * @return
+     */
+    @RequestMapping(value = "/task/webTaskDetailList", method = RequestMethod.POST)
+    public ResponseData<PageList<MessageTaskDetail>> webTaskDetailList(@RequestBody PageParams<MessageTaskDetail> pageParams) {
+
+        return messageDetailInfoService.webTaskDetailList(pageParams);
+    }
+
 }

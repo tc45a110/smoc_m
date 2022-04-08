@@ -90,7 +90,6 @@
                             <table class="table table table-hover m-10" style="margin-top: -12px;">
                                 <thead>
                                 <tr>
-                                    <th>信息分类</th>
                                     <th>签名名称</th>
                                     <th>备注</th>
                                     <th>审核状态</th>
@@ -102,12 +101,7 @@
                                 <tbody>
                                 <tr th:each="info:${list}">
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <mpm:tag identity="infoType" th:value="${info.infoType}" show-type="label" key="code"/>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <span style="color:#26A69A;" class="text-overflow"
-                                              data-toggle="tooltip" data-placement="bottom"
-                                              th:data-original-title="${info.signName}">[[${info.signName}]]</span>
+                                        [[${info.signName}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         [[${info.docKey}]]

@@ -5,7 +5,7 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.smoc.message.MessageAccountValidator;
 import com.smoc.cloud.common.smoc.message.model.StatisticMessageSend;
-import com.smoc.cloud.common.smoc.template.MessageWebTaskInfoValidator;
+import com.smoc.cloud.common.smoc.message.MessageWebTaskInfoValidator;
 import com.smoc.cloud.message.rowmapper.MessageWebTaskInfoRowMapper;
 import com.smoc.cloud.message.rowmapper.StatisticMessageSendRowMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -363,4 +363,5 @@ public class MessageWebTaskInfoRepositoryImpl extends BasePageRepository {
         return statisticMessageSend;
 
     }
+
 }

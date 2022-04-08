@@ -96,28 +96,44 @@
                             <table class="table table table-hover m-10" style="margin-top: -12px;">
                                 <thead>
                                 <tr>
-                                    <th style="width:110px">账号</th>
-                                    <th style="width:160px">任务ID</th>
+                                    <th>回复时间</th>
+                                    <th>手机号</th>
                                     <th>回复内容</th>
-                                    <th style="width:170px">手机号</th>
-                                    <th>短信内容</th>
-                                    <th style="width:170px">回复时间</th>
+                                    <th>运营商/属地</th>
+                                    <th>账号</th>
+                                    <th>对应短信内容</th>
+                                    <th>发送时间</th>
                                 </tr>
                                 <thead>
                                 <tbody>
                                 <tr th:each="info:${list}">
-                                    <td style="vertical-align: middle;line-height: 26px">[[${info.accountId}]]</td>
-                                    <td style="vertical-align: middle;line-height: 26px">[[${info.taskId}]]</td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        [[${info.moMessageContent}]]
-                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">[[${info.moDate}]]</td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         [[${info.mobile}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        [[${info.mtMessageContent}]]
+                                         <span data-toggle="tooltip" data-placement="bottom"
+                                               th:if="${#strings.length(info.moMessageContent)>25}"
+                                               th:data-original-title="${info.moMessageContent}">
+                                            [[${#strings.substring(info.moMessageContent,0,25)}]]......</span>
+                                        <span th:if="${#strings.length(info.moMessageContent)<=25}">
+                                            [[${info.moMessageContent}]]</span>
                                     </td>
-                                    <td style="vertical-align: middle;line-height: 26px;width:160px"> [[${info.moDate}]]
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <mpm:tag identity="carrier" show-type="label" key="code"
+                                                 th:value="${info.carrier}"/>[[${info.area}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">[[${info.accountId}]]</td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <span data-toggle="tooltip" data-placement="bottom"
+                                              th:if="${#strings.length(info.mtMessageContent)>25}"
+                                              th:data-original-title="${info.mtMessageContent}">
+                                            [[${#strings.substring(info.mtMessageContent,0,25)}]]......</span>
+                                        <span th:if="${#strings.length(info.mtMessageContent)<=25}">
+                                            [[${info.mtMessageContent}]]</span>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px;width:160px">
+                                        [[${info.mtDate}]]
                                     </td>
                                 </tr>
                                 </tbody>

@@ -1,6 +1,6 @@
 package com.smoc.cloud.message.rowmapper;
 
-import com.smoc.cloud.common.smoc.template.MessageWebTaskInfoValidator;
+import com.smoc.cloud.common.smoc.message.MessageWebTaskInfoValidator;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
