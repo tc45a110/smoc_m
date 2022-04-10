@@ -2,6 +2,7 @@ package com.smoc.cloud.filters.keywords;
 
 import com.smoc.cloud.filters.Filter;
 import com.smoc.cloud.filters.FilterChain;
+import com.smoc.cloud.filters.model.ParamModel;
 import com.smoc.cloud.filters.utils.Constant;
 import com.smoc.cloud.service.LoadDataService;
 
@@ -18,49 +19,42 @@ public class CarrierWhiteWordsFilter implements Filter {
 
     public static Logger logger = Logger.getLogger(CarrierWhiteWordsFilter.class.toString());
 
-    private LoadDataService loadDataService;
+    public static final String FILTER_KEY = Constant.CARRIER_WHITE_WORDS_FILTER;
 
-    //运营商
-    private String carrier;
-
-    public CarrierWhiteWordsFilter(LoadDataService loadDataService, String carrier) {
-        this.loadDataService = loadDataService;
-        this.carrier = carrier;
-
-    }
-
-    //业务账号白词 Pattern
-    private Pattern carrierWhiteWordsPattern;
 
     /**
      * 运营商黑词、检查词、白词过滤
      *
-     * @param phone        手机号
-     * @param message      短消息内容
+     * @param params       参数对象
      * @param filterResult map结构，key为失败过滤器的key，value 为每个过滤器约定的 错误类型或内容
      * @param chain        过滤链
      */
     @Override
-    public void doFilter(String phone, String message, Map<String, String> filterResult, FilterChain chain) {
+    public void doFilter(ParamModel params,LoadDataService loadDataService, Map<String, String> filterResult, FilterChain chain){
 
         //判断是否有要洗的黑词
         if (!"black".equals(filterResult.get(Constant.CARRIER_BLACK_WORDS_FILTER))) {
-            chain.doFilter(phone, message, filterResult, chain);
+            chain.doFilter(params,loadDataService, filterResult, chain);
             return;
         }
 
-        this.carrierWhiteWordsPattern = loadDataService.getCarrierWhiteWords(carrier);
+        Pattern carrierWhiteWordsPattern = loadDataService.getCarrierWhiteWords(params.getCarrier());
 
         //用运营商白词，尝试洗白黑词
         if (null != carrierWhiteWordsPattern) {
-            Matcher matcher = carrierWhiteWordsPattern.matcher(message);
+            Matcher matcher = carrierWhiteWordsPattern.matcher(params.getMessage());
             if (matcher.find()) {
                 filterResult.remove(Constant.CARRIER_BLACK_WORDS_FILTER);
             }
         }
 
-        logger.info("[Filters]:运营商白词过滤");
-        chain.doFilter(phone, message, filterResult, chain);
+        //logger.info("[Filters]:运营商白词过滤");
+        chain.doFilter(params,loadDataService, filterResult, chain);
+    }
+
+    @Override
+    public String getFilterKey() {
+        return FILTER_KEY;
     }
 
 }

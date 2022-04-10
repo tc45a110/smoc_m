@@ -56,5 +56,8 @@ public class Constant {
     //业务账号发送时间限制过滤器
     public static final String ACCOUNT_TIME_LIMIT_FILTER = "accountTimeLimitFilter";
 
+    //业务账号省份限制
+    public static final String ACCOUNT_PROVINCE_LIMIT_FILTER = "accountProvinceLimitFilter";
+
 
 }

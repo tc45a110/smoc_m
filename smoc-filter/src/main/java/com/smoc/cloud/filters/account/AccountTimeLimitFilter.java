@@ -2,43 +2,42 @@ package com.smoc.cloud.filters.account;
 
 import com.smoc.cloud.filters.Filter;
 import com.smoc.cloud.filters.FilterChain;
+import com.smoc.cloud.filters.model.ParamModel;
 import com.smoc.cloud.filters.utils.Constant;
 import com.smoc.cloud.service.LoadDataService;
 
 import java.util.Map;
 import java.util.logging.Logger;
 
+/**
+ * 业务账号发送时间限制过滤器
+ * filterResult 操作说明  value 为 black表示，被系统黑词拦截；value为check表示被审核词拦截
+ */
 public class AccountTimeLimitFilter implements Filter {
 
     public static Logger logger = Logger.getLogger(AccountTimeLimitFilter.class.toString());
 
-    private LoadDataService loadDataService;
-
-    //业务账号
-    private String account;
-
-    //日限量返回状态
-    private Boolean status;
-
-    public AccountTimeLimitFilter(LoadDataService loadDataService, String account) {
-        this.loadDataService = loadDataService;
-        this.account = account;
-    }
+    public static final String FILTER_KEY = Constant.ACCOUNT_TIME_LIMIT_FILTER;
 
     @Override
-    public void doFilter(String phone, String message, Map<String, String> filterResult, FilterChain chain) {
+    public void doFilter(ParamModel params,LoadDataService loadDataService, Map<String, String> filterResult, FilterChain chain){
         //过滤过程中已出现失败情况，跳过该过滤器
         if (null == filterResult || filterResult.size() > 0) {
-            chain.doFilter(phone, message, filterResult, chain);
+            chain.doFilter(params,loadDataService, filterResult, chain);
             return;
         }
 
-        this.status = this.loadDataService.validateAccountTimeLimit(account);
-        if (null != this.status && !this.status) {
+        Boolean status = loadDataService.validateAccountTimeLimit(params.getAccount());
+        if (null != status && !status) {
             filterResult.put(Constant.ACCOUNT_TIME_LIMIT_FILTER, "false");
         }
 
-        logger.info("[Filters]:业务账号日限量过滤");
-        chain.doFilter(phone, message, filterResult, chain);
+        //logger.info("[Filters]:业务账号日限量过滤");
+        chain.doFilter(params,loadDataService, filterResult, chain);
+    }
+
+    @Override
+    public String getFilterKey() {
+        return FILTER_KEY;
     }
 }

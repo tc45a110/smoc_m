@@ -2,6 +2,7 @@ package com.smoc.cloud.filters.keywords;
 
 import com.smoc.cloud.filters.Filter;
 import com.smoc.cloud.filters.FilterChain;
+import com.smoc.cloud.filters.model.ParamModel;
 import com.smoc.cloud.filters.utils.Constant;
 import com.smoc.cloud.service.LoadDataService;
 
@@ -18,48 +19,41 @@ public class CarrierCheckWordsFilter implements Filter {
 
     public static Logger logger = Logger.getLogger(CarrierCheckWordsFilter.class.toString());
 
-    private LoadDataService loadDataService;
-
-    //运营商
-    private String carrier;
-
-    public CarrierCheckWordsFilter(LoadDataService loadDataService, String carrier) {
-        this.loadDataService = loadDataService;
-        this.carrier = carrier;
-    }
-
-    //业务账号审核词 Pattern
-    private Pattern carrierCheckWordsPattern;
+    public static final String FILTER_KEY = Constant.CARRIER_CHECK_WORDS_FILTER;
 
     /**
      * 运营商检查词过滤
      *
-     * @param phone        手机号
-     * @param message      短消息内容
+     * @param params       参数对象
      * @param filterResult map结构，key为失败过滤器的key，value 为每个过滤器约定的 错误类型或内容
      * @param chain        过滤链
      */
     @Override
-    public void doFilter(String phone, String message, Map<String, String> filterResult, FilterChain chain) {
+    public void doFilter(ParamModel params,LoadDataService loadDataService, Map<String, String> filterResult, FilterChain chain){
 
         //过滤过程中已出现失败情况，跳过该过滤器
         if (null == filterResult || filterResult.size() > 0) {
-            chain.doFilter(phone, message, filterResult, chain);
+            chain.doFilter(params,loadDataService, filterResult, chain);
             return;
         }
 
-        this.carrierCheckWordsPattern = loadDataService.getCarrierCheckWords(carrier);
+        Pattern carrierCheckWordsPattern = loadDataService.getCarrierCheckWords(params.getCarrier());
 
         //检查审核词
         if (null != carrierCheckWordsPattern) {
-            Matcher matcher = carrierCheckWordsPattern.matcher(message);
+            Matcher matcher = carrierCheckWordsPattern.matcher(params.getMessage());
             if (matcher.find()) {
                 filterResult.put(Constant.CARRIER_CHECK_WORDS_FILTER, "check");
             }
         }
 
-        logger.info("[Filters]:运营商审核词过滤");
-        chain.doFilter(phone, message, filterResult, chain);
+        //logger.info("[Filters]:运营商审核词过滤");
+        chain.doFilter(params,loadDataService, filterResult, chain);
+    }
+
+    @Override
+    public String getFilterKey() {
+        return FILTER_KEY;
     }
 
 }
