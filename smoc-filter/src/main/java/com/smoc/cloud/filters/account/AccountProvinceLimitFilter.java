@@ -2,7 +2,7 @@ package com.smoc.cloud.filters.account;
 
 import com.smoc.cloud.filters.Filter;
 import com.smoc.cloud.filters.FilterChain;
-import com.smoc.cloud.filters.model.ParamModel;
+import com.smoc.cloud.model.ParamModel;
 import com.smoc.cloud.filters.utils.Constant;
 import com.smoc.cloud.service.LoadDataService;
 

@@ -1,4 +1,4 @@
-package com.smoc.cloud.filters.model;
+package com.smoc.cloud.model;
 
 
 public class ParamModel {

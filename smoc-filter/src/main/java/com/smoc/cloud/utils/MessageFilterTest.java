@@ -1,6 +1,6 @@
 package com.smoc.cloud.utils;
 
-import com.smoc.cloud.filters.model.ParamModel;
+import com.smoc.cloud.model.ParamModel;
 import com.smoc.cloud.service.FilterService;
 import com.smoc.cloud.service.LoadDataServiceImpl;
 

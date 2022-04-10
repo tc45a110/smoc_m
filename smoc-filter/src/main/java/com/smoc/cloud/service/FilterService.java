@@ -1,10 +1,7 @@
 package com.smoc.cloud.service;
 
 import com.smoc.cloud.filters.FilterChain;
-import com.smoc.cloud.filters.account.AccountDailyLimitFilter;
-import com.smoc.cloud.filters.account.AccountTimeLimitFilter;
-import com.smoc.cloud.filters.keywords.*;
-import com.smoc.cloud.filters.model.ParamModel;
+import com.smoc.cloud.model.ParamModel;
 import com.smoc.cloud.utils.FilterChainInitialize;
 
 import java.util.HashMap;

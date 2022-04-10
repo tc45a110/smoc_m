@@ -1,6 +1,6 @@
 package com.smoc.cloud.filters;
 
-import com.smoc.cloud.filters.model.ParamModel;
+import com.smoc.cloud.model.ParamModel;
 import com.smoc.cloud.service.LoadDataService;
 
 import java.util.Map;

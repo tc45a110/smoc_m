@@ -1,9 +1,17 @@
 package com.smoc.cloud.utils;
 
 import com.smoc.cloud.filters.FilterChain;
-import com.smoc.cloud.filters.account.AccountDailyLimitFilter;
-import com.smoc.cloud.filters.account.AccountTimeLimitFilter;
-import com.smoc.cloud.filters.keywords.*;
+import com.smoc.cloud.filters.account.*;
+import com.smoc.cloud.filters.carrier.CarrierBlackWordsFilter;
+import com.smoc.cloud.filters.carrier.CarrierCheckWordsFilter;
+import com.smoc.cloud.filters.carrier.CarrierWhiteWordsFilter;
+import com.smoc.cloud.filters.channel.ChannelBlackWordsFilter;
+import com.smoc.cloud.filters.channel.ChannelCheckWordsFilter;
+import com.smoc.cloud.filters.channel.ChannelWhiteWordsFilter;
+import com.smoc.cloud.filters.info.type.InfoTypeBalckWordsFilter;
+import com.smoc.cloud.filters.info.type.InfoTypeCheckWordsFilter;
+import com.smoc.cloud.filters.info.type.InfoTypeWhiteWordsFilter;
+import com.smoc.cloud.filters.system.*;
 
 /**
  * 静态初始化过滤链
