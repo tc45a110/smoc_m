@@ -171,7 +171,7 @@ public class MessageController {
     @RequestMapping(value = "/add/{businessType}", method = RequestMethod.GET)
     public ModelAndView add(@PathVariable String businessType,HttpServletRequest request) {
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
-        ModelAndView view = new ModelAndView("message/message_test");
+        ModelAndView view = new ModelAndView("message/message_edit");
 
         //初始化参数
         MessageWebTaskInfoValidator messageWebTaskInfoValidator = new MessageWebTaskInfoValidator();
