@@ -153,8 +153,21 @@ public interface LoadDataService {
 
     /**
      * 判定现在时间内是否可以发送；返回true表示可以发；返回false表示不可以发；返回null 表示不过滤
+     *
      * @param account 业务账号
      * @return
      */
     Boolean validateAccountTimeLimit(String account);
+
+    /**
+     * 判定是否进行了省份限制，返回true表示可以发；返回false表示不可以发；返回null 表示不过滤
+     *
+     * @param account  业务账号
+     * @param carrier  运营商
+     * @param province 省份
+     * @return
+     */
+    Boolean validateProvinceLimit(String account, String carrier, String province);
+
+
 }

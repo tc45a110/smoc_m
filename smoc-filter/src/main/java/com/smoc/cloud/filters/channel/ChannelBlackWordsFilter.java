@@ -33,7 +33,7 @@ public class ChannelBlackWordsFilter implements Filter {
     public void doFilter(ParamModel params,LoadDataService loadDataService, Map<String, String> filterResult, FilterChain chain){
 
         //过滤过程中已出现失败情况，跳过该过滤器
-        if (null == filterResult || filterResult.size() > 0) {
+        if (null == filterResult || filterResult.size() > 0 || params == null || null == params.getChannelId()) {
             chain.doFilter(params,loadDataService, filterResult, chain);
             return;
         }
@@ -44,7 +44,7 @@ public class ChannelBlackWordsFilter implements Filter {
         if (null != channelBlackWordsPattern) {
             Matcher matcher = channelBlackWordsPattern.matcher(params.getMessage());
             if (matcher.find()) {
-                filterResult.put(Constant.CHANNEL_BLACK_WORDS_FILTER, "black");
+                filterResult.put(FILTER_KEY, "black");
             }
         }
 

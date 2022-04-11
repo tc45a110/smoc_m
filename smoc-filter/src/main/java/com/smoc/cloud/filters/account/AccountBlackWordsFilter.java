@@ -5,6 +5,7 @@ import com.smoc.cloud.filters.FilterChain;
 import com.smoc.cloud.model.ParamModel;
 import com.smoc.cloud.filters.utils.Constant;
 import com.smoc.cloud.service.LoadDataService;
+import com.sun.deploy.util.StringUtils;
 
 import java.util.Map;
 import java.util.logging.Logger;
@@ -33,7 +34,7 @@ public class AccountBlackWordsFilter implements Filter {
     public void doFilter(ParamModel params,LoadDataService loadDataService, Map<String, String> filterResult, FilterChain chain){
 
         //过滤过程中已出现失败情况，跳过该过滤器
-        if (null == filterResult || filterResult.size() > 0) {
+        if (null == filterResult || filterResult.size() > 0 || params == null || null == params.getAccount()) {
             chain.doFilter(params,loadDataService, filterResult, chain);
             return;
         }
@@ -44,7 +45,7 @@ public class AccountBlackWordsFilter implements Filter {
         if (null != accountBlackWordsPattern) {
             Matcher matcher = accountBlackWordsPattern.matcher(params.getMessage());
             if (matcher.find()) {
-                filterResult.put(Constant.ACCOUNT_BLACK_WORDS_FILTER, "black");
+                filterResult.put(FILTER_KEY, "black");
             }
         }
 

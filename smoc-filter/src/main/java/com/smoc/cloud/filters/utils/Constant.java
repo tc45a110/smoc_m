@@ -59,5 +59,8 @@ public class Constant {
     //业务账号省份限制
     public static final String ACCOUNT_PROVINCE_LIMIT_FILTER = "accountProvinceLimitFilter";
 
+    //业务账号省份限制
+    public static final String ACCOUNT_PHONE_NUMBER_LIMIT_FILTER = "accountPhoneNumberLimitFilter";
+
 
 }

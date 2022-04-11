@@ -32,7 +32,7 @@ public class AccountCheckWordsFilter implements Filter {
     public void doFilter(ParamModel params,LoadDataService loadDataService, Map<String, String> filterResult, FilterChain chain){
 
         //过滤过程中已出现失败情况，跳过该过滤器
-        if (null == filterResult || filterResult.size() > 0) {
+        if (null == filterResult || filterResult.size() > 0 || params == null || null == params.getAccount()) {
             chain.doFilter(params,loadDataService, filterResult, chain);
             return;
         }
@@ -43,7 +43,7 @@ public class AccountCheckWordsFilter implements Filter {
         if (null != accountCheckWordsPattern) {
             Matcher matcher = accountCheckWordsPattern.matcher(params.getMessage());
             if (matcher.find()) {
-                filterResult.put(Constant.ACCOUNT_CHECK_WORDS_FILTER, "check");
+                filterResult.put(FILTER_KEY, "check");
             }
         }
 

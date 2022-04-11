@@ -32,7 +32,7 @@ public class ChannelCheckWordsFilter implements Filter {
     public void doFilter(ParamModel params,LoadDataService loadDataService, Map<String, String> filterResult, FilterChain chain){
 
         //过滤过程中已出现失败情况，跳过该过滤器
-        if (null == filterResult || filterResult.size() > 0) {
+        if (null == filterResult || filterResult.size() > 0 || params == null || null == params.getChannelId()) {
             chain.doFilter(params,loadDataService, filterResult, chain);
             return;
         }
@@ -43,7 +43,7 @@ public class ChannelCheckWordsFilter implements Filter {
         if (null != channelCheckWordsPattern) {
             Matcher matcher = channelCheckWordsPattern.matcher(params.getMessage());
             if (matcher.find()) {
-                filterResult.put(Constant.CHANNEL_CHECK_WORDS_FILTER, "check");
+                filterResult.put(FILTER_KEY, "check");
             }
         }
 
