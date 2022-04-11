@@ -67,6 +67,30 @@ public class BookController {
         SecurityUser user = (SecurityUser)request.getSession().getAttribute("user");
         ModelAndView view = new ModelAndView("book/book_list");
 
+        if("root".equals(parentId)){
+            //初始化数据
+            PageParams<EnterpriseBookInfoValidator> params = new PageParams<EnterpriseBookInfoValidator>();
+            params.setPageSize(10);
+            params.setCurrentPage(1);
+            EnterpriseBookInfoValidator enterpriseBookInfoValidator = new EnterpriseBookInfoValidator();
+            enterpriseBookInfoValidator.setGroupId(parentId);
+            params.setParams(enterpriseBookInfoValidator);
+
+            //查询
+            ResponseData<PageList<EnterpriseBookInfoValidator>> data = bookService.page(params);
+            if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+                view.addObject("error", data.getCode() + ":" + data.getMessage());
+                return view;
+            }
+
+            view.addObject("enterpriseBookInfoValidator", enterpriseBookInfoValidator);
+            view.addObject("list", data.getData().getList());
+            view.addObject("pageParams", data.getData().getPageParams());
+            view.addObject("filterGroupListValidator",new FilterGroupListValidator());
+            view.addObject("parentId",parentId);
+            return view;
+        }
+
         //查询组
         ResponseData<FilterGroupListValidator> groupData = groupService.findById(parentId);
         if (!ResponseCode.SUCCESS.getCode().equals(groupData.getCode())) {
@@ -115,6 +139,25 @@ public class BookController {
         SecurityUser user = (SecurityUser)request.getSession().getAttribute("user");
         ModelAndView view = new ModelAndView("book/book_list");
 
+        if("root".equals(enterpriseBookInfoValidator.getGroupId())){
+            //分页查询
+            pageParams.setParams(enterpriseBookInfoValidator);
+
+            ResponseData<PageList<FilterWhiteListValidator>> data = bookService.page(pageParams);
+            if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+                view.addObject("error", data.getCode() + ":" + data.getMessage());
+                return view;
+            }
+
+            view.addObject("enterpriseBookInfoValidator", enterpriseBookInfoValidator);
+            view.addObject("list", data.getData().getList());
+            view.addObject("pageParams", data.getData().getPageParams());
+            view.addObject("filterGroupListValidator",new FilterGroupListValidator());
+            view.addObject("parentId",enterpriseBookInfoValidator.getGroupId());
+
+            return view;
+        }
+
         //查询组
         ResponseData<FilterGroupListValidator> groupData = groupService.findById(enterpriseBookInfoValidator.getGroupId());
         if (!ResponseCode.SUCCESS.getCode().equals(groupData.getCode())) {
@@ -162,6 +205,11 @@ public class BookController {
         validator.setId(parentId);
         if (!MpmValidatorUtil.validate(validator)) {
             view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
+
+        if("root".equals(parentId)){
+            view.addObject("error", "请选择分组进行操作！");
             return view;
         }
 
@@ -355,6 +403,11 @@ public class BookController {
         validator.setId(parentId);
         if (!MpmValidatorUtil.validate(validator)) {
             view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
+
+        if("root".equals(parentId)){
+            view.addObject("error", "请选择分组进行操作！");
             return view;
         }
 

@@ -29,7 +29,7 @@ public class MessageService {
 
 
     /**
-     * 查询列表
+     * 查询WEB列表
      *
      * @param pageParams
      * @return
@@ -134,7 +134,7 @@ public class MessageService {
     }
 
     /**
-     * 查询短信明细列表
+     * 查询web短信明细列表
      * @param pageParams
      * @return
      */
@@ -148,4 +148,33 @@ public class MessageService {
         }
     }
 
+    /**
+     * 查询http列表
+     * @param pageParams
+     * @return
+     */
+    public ResponseData<PageList<MessageWebTaskInfoValidator>> httpPage(PageParams pageParams) {
+        try {
+            ResponseData<PageList<MessageWebTaskInfoValidator>> pageList = this.messageFeignClient.httpPage(pageParams);
+            return pageList;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 查询http短信明细列表
+     * @param params
+     * @return
+     */
+    public ResponseData<PageList<MessageTaskDetail>> httpTaskDetailList(PageParams<MessageTaskDetail> params) {
+        try {
+            ResponseData<PageList<MessageTaskDetail>> pageList = this.messageFeignClient.httpTaskDetailList(params);
+            return pageList;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
 }

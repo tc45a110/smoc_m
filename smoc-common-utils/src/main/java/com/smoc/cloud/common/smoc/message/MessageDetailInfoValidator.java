@@ -9,6 +9,10 @@ public class MessageDetailInfoValidator {
 
     private String id;
 
+    private String taskId;
+
+    private String protocol;
+
     private String phoneNumber;
 
     private String businessAccount;

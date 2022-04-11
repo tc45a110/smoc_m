@@ -171,11 +171,11 @@ public class MessageController {
     @RequestMapping(value = "/add/{businessType}", method = RequestMethod.GET)
     public ModelAndView add(@PathVariable String businessType,HttpServletRequest request) {
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
-        ModelAndView view = new ModelAndView("message/message_edit");
+        ModelAndView view = new ModelAndView("message/message_test");
 
         //初始化参数
         MessageWebTaskInfoValidator messageWebTaskInfoValidator = new MessageWebTaskInfoValidator();
-        messageWebTaskInfoValidator.setId("TASK"+ sequenceService.findSequence("BUSINESS_ACCOUNT"));
+        //messageWebTaskInfoValidator.setId("TASK"+ sequenceService.findSequence("BUSINESS_ACCOUNT"));
         messageWebTaskInfoValidator.setEnterpriseId(user.getOrganization());
         messageWebTaskInfoValidator.setBusinessType(businessType);
         messageWebTaskInfoValidator.setSendType("1");

@@ -5,6 +5,7 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.message.MessageDetailInfoValidator;
 import com.smoc.cloud.common.smoc.message.model.MessageTaskDetail;
+import com.smoc.cloud.common.smoc.message.model.StatisticMessageSendData;
 import com.smoc.cloud.message.service.MessageDetailInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,14 +55,36 @@ public class MessageDetailInfoController {
     }
 
     /**
-     * 查询短信明细列表
+     * 查询自服务web短信明细列表
      * @param pageParams
      * @return
      */
-    @RequestMapping(value = "/task/webTaskDetailList", method = RequestMethod.POST)
+    @RequestMapping(value = "/web/webTaskDetailList", method = RequestMethod.POST)
     public ResponseData<PageList<MessageTaskDetail>> webTaskDetailList(@RequestBody PageParams<MessageTaskDetail> pageParams) {
 
         return messageDetailInfoService.webTaskDetailList(pageParams);
+    }
+
+    /**
+     * 查询自服务http短信明细列表
+     * @param pageParams
+     * @return
+     */
+    @RequestMapping(value = "/http/httpTaskDetailList", method = RequestMethod.POST)
+    public ResponseData<PageList<MessageTaskDetail>> httpTaskDetailList(@RequestBody PageParams<MessageTaskDetail> pageParams) {
+
+        return messageDetailInfoService.httpTaskDetailList(pageParams);
+    }
+
+    /**
+     * 自服务平台单条短信发送记录
+     * @param pageParams
+     * @return
+     */
+    @RequestMapping(value = "/sendMessageList", method = RequestMethod.POST)
+    public ResponseData<PageList<MessageDetailInfoValidator>> sendMessageList(@RequestBody PageParams<MessageDetailInfoValidator> pageParams) {
+
+        return messageDetailInfoService.sendMessageList(pageParams);
     }
 
 }

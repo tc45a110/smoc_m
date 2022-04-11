@@ -5,6 +5,7 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.smoc.message.MessageAccountValidator;
 import com.smoc.cloud.common.smoc.message.model.StatisticMessageSend;
 import com.smoc.cloud.common.smoc.message.MessageWebTaskInfoValidator;
+import com.smoc.cloud.common.smoc.message.model.StatisticMessageSendData;
 import com.smoc.cloud.message.entity.MessageWebTaskInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -55,4 +56,17 @@ public interface MessageWebTaskInfoRepository extends JpaRepository<MessageWebTa
      */
     StatisticMessageSend statisticSubmitMessageSendCount(MessageWebTaskInfoValidator messageWebTaskInfoValidator);
 
+    /**
+     * 查询自服务http列表
+     * @param pageParams
+     * @return
+     */
+    PageList<MessageWebTaskInfoValidator> httpPage(PageParams<MessageWebTaskInfoValidator> pageParams);
+
+    /**
+     * 自服务平台不同维度统计发送量
+     * @param pageParams
+     * @return
+     */
+    PageList<StatisticMessageSendData> messageSendNumberList(PageParams<StatisticMessageSendData> pageParams);
 }

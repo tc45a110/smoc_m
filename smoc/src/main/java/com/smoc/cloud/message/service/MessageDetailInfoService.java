@@ -6,6 +6,7 @@ import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.message.MessageDetailInfoValidator;
 import com.smoc.cloud.common.smoc.message.model.MessageTaskDetail;
+import com.smoc.cloud.common.smoc.message.model.StatisticMessageSendData;
 import com.smoc.cloud.message.repository.MessageDetailInfoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -48,12 +49,32 @@ public class MessageDetailInfoService {
     }
 
     /**
-     * 查询短信明细列表
+     * 查询自服务web短信明细列表
      * @param pageParams
      * @return
      */
     public ResponseData<PageList<MessageTaskDetail>> webTaskDetailList(PageParams<MessageTaskDetail> pageParams) {
         PageList<MessageTaskDetail> page = messageDetailInfoRepository.webTaskDetailList(pageParams);
+        return ResponseDataUtil.buildSuccess(page);
+    }
+
+    /**
+     * 查询自服务http短信明细列表
+     * @param pageParams
+     * @return
+     */
+    public ResponseData<PageList<MessageTaskDetail>> httpTaskDetailList(PageParams<MessageTaskDetail> pageParams) {
+        PageList<MessageTaskDetail> page = messageDetailInfoRepository.httpTaskDetailList(pageParams);
+        return ResponseDataUtil.buildSuccess(page);
+    }
+
+    /**
+     * 单条短信发送记录
+     * @param pageParams
+     * @return
+     */
+    public ResponseData<PageList<MessageDetailInfoValidator>> sendMessageList(PageParams<MessageDetailInfoValidator> pageParams) {
+        PageList<MessageDetailInfoValidator> page = messageDetailInfoRepository.sendMessageList(pageParams);
         return ResponseDataUtil.buildSuccess(page);
     }
 

@@ -23,7 +23,7 @@ import java.util.List;
 public interface MessageFeignClient {
 
     /**
-     * 查询列表
+     * 查询web列表
      * @param pageParams
      * @return
      */
@@ -76,11 +76,26 @@ public interface MessageFeignClient {
     ResponseData<StatisticMessageSend> statisticSubmitMessageSendCount(@RequestBody MessageWebTaskInfoValidator messageWebTaskInfoValidator);
 
     /**
-     * 查询短信明细列表
+     * 查询web短信明细列表
      * @param pageParams
      * @return
      */
-    @RequestMapping(value = "/message/detail/task/webTaskDetailList", method = RequestMethod.POST)
+    @RequestMapping(value = "/message/detail/web/webTaskDetailList", method = RequestMethod.POST)
     ResponseData<PageList<MessageTaskDetail>> webTaskDetailList(@RequestBody PageParams<MessageTaskDetail> pageParams);
 
+    /**
+     * 查询http列表
+     * @param pageParams
+     * @return
+     */
+    @RequestMapping(value = "/message/web/task/httpPage", method = RequestMethod.POST)
+    ResponseData<PageList<MessageWebTaskInfoValidator>> httpPage(@RequestBody PageParams<MessageWebTaskInfoValidator> pageParams) throws Exception;
+
+    /**
+     * 查询http短信明细列表
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/message/detail/http/httpTaskDetailList", method = RequestMethod.POST)
+    ResponseData<PageList<MessageTaskDetail>> httpTaskDetailList(@RequestBody PageParams<MessageTaskDetail> params);
 }

@@ -45,10 +45,23 @@ public interface MessageDetailInfoRepository extends JpaRepository<MessageDetail
     PageList<MessageDetailInfoValidator> servicerPage(PageParams<MessageDetailInfoValidator> pageParams);
 
     /**
-     * 查询短信明细列表
+     * 查询自服务web短信明细列表
      * @param pageParams
      * @return
      */
     PageList<MessageTaskDetail> webTaskDetailList(PageParams<MessageTaskDetail> pageParams);
 
+    /**
+     * 查询自服务http短信明细列表
+     * @param pageParams
+     * @return
+     */
+    PageList<MessageTaskDetail> httpTaskDetailList(PageParams<MessageTaskDetail> pageParams);
+
+    /**
+     * 单条短信发送记录
+     * @param pageParams
+     * @return
+     */
+    PageList<MessageDetailInfoValidator> sendMessageList(PageParams<MessageDetailInfoValidator> pageParams);
 }
