@@ -45,7 +45,7 @@ public class AccountBlackWordsFilter implements Filter {
         if (null != accountBlackWordsPattern) {
             Matcher matcher = accountBlackWordsPattern.matcher(params.getMessage());
             if (matcher.find()) {
-                filterResult.put(Constant.ACCOUNT_BLACK_WORDS_FILTER, "black");
+                filterResult.put(FILTER_KEY, "black");
             }
         }
 

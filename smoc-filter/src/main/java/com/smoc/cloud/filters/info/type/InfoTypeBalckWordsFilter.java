@@ -42,7 +42,7 @@ public class InfoTypeBalckWordsFilter implements Filter {
         if (null != infoTypeBlackWordsPattern) {
             Matcher matcher = infoTypeBlackWordsPattern.matcher(params.getMessage());
             if (matcher.find()) {
-                filterResult.put(Constant.INFO_TYPE_BLACK_WORDS_FILTER, "black");
+                filterResult.put(FILTER_KEY, "black");
             }
         }
 

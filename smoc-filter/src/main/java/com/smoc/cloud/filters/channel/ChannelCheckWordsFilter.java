@@ -43,7 +43,7 @@ public class ChannelCheckWordsFilter implements Filter {
         if (null != channelCheckWordsPattern) {
             Matcher matcher = channelCheckWordsPattern.matcher(params.getMessage());
             if (matcher.find()) {
-                filterResult.put(Constant.CHANNEL_CHECK_WORDS_FILTER, "check");
+                filterResult.put(FILTER_KEY, "check");
             }
         }
 

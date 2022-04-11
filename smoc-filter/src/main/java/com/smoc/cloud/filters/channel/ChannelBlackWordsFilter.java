@@ -44,7 +44,7 @@ public class ChannelBlackWordsFilter implements Filter {
         if (null != channelBlackWordsPattern) {
             Matcher matcher = channelBlackWordsPattern.matcher(params.getMessage());
             if (matcher.find()) {
-                filterResult.put(Constant.CHANNEL_BLACK_WORDS_FILTER, "black");
+                filterResult.put(FILTER_KEY, "black");
             }
         }
 

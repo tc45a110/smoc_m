@@ -29,7 +29,7 @@ public class AccountTimeLimitFilter implements Filter {
 
         Boolean status = loadDataService.validateAccountTimeLimit(params.getAccount());
         if (null != status && !status) {
-            filterResult.put(Constant.ACCOUNT_TIME_LIMIT_FILTER, "false");
+            filterResult.put(FILTER_KEY, "false");
         }
 
         //logger.info("[Filters]:业务账号日限量过滤");

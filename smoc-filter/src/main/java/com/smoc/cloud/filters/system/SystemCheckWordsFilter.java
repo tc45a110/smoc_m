@@ -43,7 +43,7 @@ public class SystemCheckWordsFilter implements Filter {
         if (null != systemCheckWordsPattern) {
             Matcher matcher = systemCheckWordsPattern.matcher(params.getMessage());
             if (matcher.find()) {
-                filterResult.put(Constant.SYSTEM_CHECK_WORDS_FILTER, "check");
+                filterResult.put(FILTER_KEY, "check");
             }
         }
 

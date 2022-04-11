@@ -43,7 +43,7 @@ public class InfoTypeCheckWordsFilter implements Filter {
         if (null != infoTypeCheckWordsPattern) {
             Matcher matcher = infoTypeCheckWordsPattern.matcher(params.getMessage());
             if (matcher.find()) {
-                filterResult.put(Constant.INFO_TYPE_CHECK_WORDS_FILTER, "check");
+                filterResult.put(FILTER_KEY, "check");
             }
         }
 

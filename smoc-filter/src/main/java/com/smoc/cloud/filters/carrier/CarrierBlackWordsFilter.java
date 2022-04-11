@@ -43,7 +43,7 @@ public class CarrierBlackWordsFilter implements Filter {
         if (null != carrierBlackWordsPattern) {
             Matcher matcher = carrierBlackWordsPattern.matcher(params.getMessage());
             if (matcher.find()) {
-                filterResult.put(Constant.CARRIER_BLACK_WORDS_FILTER, "black");
+                filterResult.put(FILTER_KEY, "black");
             }
         }
 

@@ -43,7 +43,7 @@ public class AccountCheckWordsFilter implements Filter {
         if (null != accountCheckWordsPattern) {
             Matcher matcher = accountCheckWordsPattern.matcher(params.getMessage());
             if (matcher.find()) {
-                filterResult.put(Constant.ACCOUNT_CHECK_WORDS_FILTER, "check");
+                filterResult.put(FILTER_KEY, "check");
             }
         }
 

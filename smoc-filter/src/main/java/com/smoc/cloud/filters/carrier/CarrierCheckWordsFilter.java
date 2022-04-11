@@ -43,7 +43,7 @@ public class CarrierCheckWordsFilter implements Filter {
         if (null != carrierCheckWordsPattern) {
             Matcher matcher = carrierCheckWordsPattern.matcher(params.getMessage());
             if (matcher.find()) {
-                filterResult.put(Constant.CARRIER_CHECK_WORDS_FILTER, "check");
+                filterResult.put(FILTER_KEY, "check");
             }
         }
 
