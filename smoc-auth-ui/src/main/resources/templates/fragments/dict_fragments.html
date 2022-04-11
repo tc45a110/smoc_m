@@ -27,6 +27,18 @@
             });
         });
 
+        var search = function(e) {
+          var pattern = $('#input-search').val();
+          var options = {
+            ignoreCase: true,
+            exactMatch: false,
+            revealResults: false
+          };
+          var results = $('#dict_tree').treeview('search', [ pattern, options ]);
+        }
+
+        $('#btn-search').on('click', search);
+
         function loadData() {
 
             var treeData = {};
