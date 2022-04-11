@@ -32,7 +32,7 @@ public class CarrierCheckWordsFilter implements Filter {
     public void doFilter(ParamModel params,LoadDataService loadDataService, Map<String, String> filterResult, FilterChain chain){
 
         //过滤过程中已出现失败情况，跳过该过滤器
-        if (null == filterResult || filterResult.size() > 0) {
+        if (null == filterResult || filterResult.size() > 0 || params == null || null == params.getCarrier()) {
             chain.doFilter(params,loadDataService, filterResult, chain);
             return;
         }

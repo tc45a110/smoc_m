@@ -32,7 +32,7 @@ public class InfoTypeWhiteWordsFilter implements Filter {
     public void doFilter(ParamModel params,LoadDataService loadDataService, Map<String, String> filterResult, FilterChain chain){
 
         //判断是否有要洗的黑词
-        if(!"black".equals(filterResult.get(Constant.INFO_TYPE_BLACK_WORDS_FILTER))){
+        if(!"black".equals(filterResult.get(Constant.INFO_TYPE_BLACK_WORDS_FILTER)) || params == null || null == params.getInfoType()){
             chain.doFilter(params,loadDataService, filterResult, chain);
             return;
         }

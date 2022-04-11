@@ -29,12 +29,12 @@ public class AccountWhiteWordsFilter implements Filter {
      * @param chain        过滤链
      */
     @Override
-    public void doFilter(ParamModel params,LoadDataService loadDataService, Map<String, String> filterResult, FilterChain chain){
+    public void doFilter(ParamModel params, LoadDataService loadDataService, Map<String, String> filterResult, FilterChain chain) {
 
 
         //判断是否有要洗的黑词
-        if(!("black".equals(filterResult.get(Constant.SYSTEM_BLACK_WORDS_FILTER)) || "black".equals(filterResult.get(Constant.ACCOUNT_BLACK_WORDS_FILTER)))){
-            chain.doFilter(params,loadDataService, filterResult, chain);
+        if (!("black".equals(filterResult.get(Constant.SYSTEM_BLACK_WORDS_FILTER)) || "black".equals(filterResult.get(Constant.ACCOUNT_BLACK_WORDS_FILTER))) || params == null || null == params.getAccount()) {
+            chain.doFilter(params, loadDataService, filterResult, chain);
             return;
         }
 
@@ -57,7 +57,7 @@ public class AccountWhiteWordsFilter implements Filter {
         }
 
         //logger.info("[Filters]:业务账号白词过滤");
-        chain.doFilter(params,loadDataService, filterResult, chain);
+        chain.doFilter(params, loadDataService, filterResult, chain);
     }
 
     @Override

@@ -23,7 +23,7 @@ public class MessageFilterTest {
 
         Long start = System.currentTimeMillis();
         System.out.println("-----start-------" + start);
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 1000000; i++) {
 
             Map<String, String> resultMap = service.validateMessage(params);
 
