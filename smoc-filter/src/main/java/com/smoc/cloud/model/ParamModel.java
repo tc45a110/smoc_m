@@ -3,19 +3,19 @@ package com.smoc.cloud.model;
 
 public class ParamModel {
 
-    //phone     手机号
+    //phone     手机号  字段为空，则跳出所有涉及该字段的过滤
     private String phone;
     //message   消息内容
     private String message;
-    //account   业务账号
+    //account   业务账号 字段为空，则跳出所有涉及该字段的过滤
     private String account;
-    //carrier   运营商  CMCC、UNIC、TELC、INTL
+    //carrier   运营商  CMCC、UNIC、TELC、INTL 字段为空，则跳出所有涉及该字段的过滤
     private String carrier;
     //channelId 通道id
     private String channelId;
-    //infoType  信息分类 INDUSTRY、MARKETING、NEW、COLLECTION
+    //infoType  信息分类 INDUSTRY、MARKETING、NEW、COLLECTION 字段为空，则跳出所有涉及该字段的过滤
     private String infoType;
-    //province  省份编码
+    //province  省份编码 字段为空，则跳出所有涉及该字段的过滤
     private String province;
 
     public String getPhone() {
