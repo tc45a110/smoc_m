@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <!-- Custom box css -->
+    <link th:href="@{/static/plugins/custombox/css/custombox.min.css}" rel="stylesheet">
+</head>
+<body style="background-color:#fff">
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top:10px">
+    <div class="container">
+
+        <!-- start row  列表数据-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+
+            <form th:action="@{/complaint/ec/customer/center/page}" th:object="${messageComplaintInfoValidator}" id="query_form" method="post">
+                <input type="hidden" th:field="*{enterpriseId}">
+                <input type="hidden" name="currentPage" id="currentPage" th:value="${pageParams.currentPage}">
+                <input type="hidden" name="pageSize" id="pageSize" th:value="${pageParams.pageSize}">
+            </form>
+
+            <div class="col-sm-12">
+                <div class="panel panel-color panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">投诉列表</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table table-hover m-10" style="margin-top: -12px;table-layout:fixed;">
+                                <thead>
+                                <tr>
+                                    <th style="width:160px">运营商来源/举报运营商</th>
+                                    <th style="width:160px">是否12321/举报来源</th>
+                                    <th style="width:160px">举报时间/业务类型</th>
+                                    <th style="width:160px">码号/被举报号码</th>
+                                    <th style="width:160px">业务账号/业务账号名称</th>
+                                    <th style="width:160px">举报号码/举报内容</th>
+                                </tr>
+                                <thead>
+                                <tbody>
+                                <tr th:each="info:${list}">
+                                    <td  style="line-height: 26px">
+                                        <mpm:tag identity="carrier" show-type="label" key="code" th:value="${info.carrierSource}"/><br>
+                                        <span class="btn btn-teal btn-rounded btn-sm waves-effect waves-light;" th:if="${#strings.containsIgnoreCase(info.carrier,'移动')}">[[${info.carrier}]]</span>
+                                        <span class="btn btn-info btn-rounded btn-sm waves-effect waves-light;" th:if="${#strings.containsIgnoreCase(info.carrier,'联通')}">[[${info.carrier}]]</span>
+                                        <span class="btn btn-primary btn-rounded btn-sm waves-effect waves-light;" th:if="${#strings.containsIgnoreCase(info.carrier,'电信')}">[[${info.carrier}]]</span>
+                                    </td>
+                                    <td  style="line-height: 26px">[[${info.is12321 eq '0'?'否':'是'}]]<br>[[${info.reportSource}]]</td>
+                                    <td  style="line-height: 26px">[[${info.reportDate}]]<br>
+                                        <mpm:tag identity="businessType" show-type="button"
+                                                 key="code" th:value="${info.businessType}"
+                                                 class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;MULTI_SMS,btn btn-brown btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;5G_SMS,btn btn-primary btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-inverse btn-rounded btn-sm waves-effect waves-light"/>
+                                    </td>
+                                    <td  style="line-height: 26px">[[${info.numberCode}]]<br>[[${info.reportedNumber}]]</td>
+                                    <td  style="line-height: 26px">
+                                        <span th:if="${not #strings.isEmpty(info.businessAccount)}">[[${info.businessAccount}]]<br>[[${info.accountName}]]</span>
+                                        <span th:if="${#strings.isEmpty(info.businessAccount)}" style="color: red">未匹配到业务账号</span>
+                                    </td>
+                                    <td  style="line-height: 26px">[[${info.reportNumber}]]<br>
+                                        <span class="text-overflow"
+                                              data-toggle="tooltip" data-placement="left"
+                                              th:data-original-title="${info.reportContent}">[[${info.reportContent}]]</span>
+                                    </td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <th:block th:insert="fragments/page_fragments :: page"/>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+    </div> <!-- container -->
+</div> <!-- content -->
+
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<script th:src="@{/static/plugins/moment/moment.js}"></script>
+
+<script>
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+</script>
+</body>
+</html>

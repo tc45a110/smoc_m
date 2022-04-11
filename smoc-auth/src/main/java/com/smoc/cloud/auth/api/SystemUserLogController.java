@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -77,5 +78,24 @@ public class SystemUserLogController {
         return systemUserLogService.save(systemUserLog, "add");
     }
 
+    /**
+     * 保存
+     *
+     * @param systemUserLogValidator
+     * @return
+     */
+    @PreAuthorize("hasAuthority('SUPER-ROLE')")
+    @RequestMapping(value = "/postSystemUserLog", method = RequestMethod.POST)
+    public ResponseData postSystemUserLog(@RequestBody SystemUserLogValidator systemUserLogValidator) {
 
+        //完成参数规则验证
+        if (!MpmValidatorUtil.validate(systemUserLogValidator)) {
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(systemUserLogValidator));
+        }
+
+        //转SystemUserLog存放对象
+        SystemUserLog systemUserLog = new SystemUserLog();
+        BeanUtils.copyProperties(systemUserLogValidator, systemUserLog);
+        return systemUserLogService.save(systemUserLog, "add");
+    }
 }

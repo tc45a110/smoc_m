@@ -1,11 +1,16 @@
 package com.smoc.cloud.admin.security.handler;
 
+import com.alibaba.fastjson.JSON;
 import com.smoc.cloud.admin.oauth2.service.OauthTokenService;
 import com.smoc.cloud.admin.security.properties.SystemProperties;
+import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
 import com.smoc.cloud.admin.security.sms.MessageConfig;
 import com.smoc.cloud.admin.security.sms.SmsUtils;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
+import com.smoc.cloud.common.auth.validator.SystemUserLogValidator;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.utils.DateTimeUtils;
+import com.smoc.cloud.common.utils.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -51,13 +56,9 @@ public class MpmAuthenticationSuccessHandler extends SavedRequestAwareAuthentica
         SecurityUser u = user.getData();
         request.getSession().setAttribute("user", u);
 
+        //添加web登录记录
+        saveSysWebLogin(systemProperties,u);
 
-        //短信发送
-       /* if("meip".equals(systemProperties.getSystemMarking()) || "meip-admin".equals(systemProperties.getSystemMarking())){
-            if(!StringUtils.isEmpty(u.getPhone())){
-                SmsUtils.sendShortMessage(u,systemProperties.getSystemMarking(),messageConfig);
-            }
-        }*/
         if(StringUtils.isEmpty(systemProperties.getMainUrl())) {
             super.setDefaultTargetUrl("/main");
         }else{
@@ -65,6 +66,26 @@ public class MpmAuthenticationSuccessHandler extends SavedRequestAwareAuthentica
         }
         super.onAuthenticationSuccess(request, response, authentication);
 
+    }
+
+    /**
+     * 保存web登录记录
+     * @param systemProperties
+     * @param user
+     */
+    private void saveSysWebLogin(SystemProperties systemProperties,SecurityUser user) {
+        if("smoc-service".equals(systemProperties.getSystemMarking())){
+            SystemUserLogValidator systemUserLogValidator = new SystemUserLogValidator();
+            systemUserLogValidator.setId(UUID.uuid32());
+            systemUserLogValidator.setUserId(user.getUserName());
+            systemUserLogValidator.setModule("WEB-LOGIN");
+            systemUserLogValidator.setModuleId(user.getOrganization());
+            systemUserLogValidator.setOperationType(systemProperties.getSystemMarking());
+            systemUserLogValidator.setSimpleIntroduce("WEB登录：自服务系统");
+            systemUserLogValidator.setLogData(JSON.toJSONString(user));
+            systemUserLogValidator.setCreatedTime(DateTimeUtils.getNowDateTime());
+            oauthTokenService.postSystemUserLog(systemUserLogValidator);
+        }
     }
 
 }

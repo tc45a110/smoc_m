@@ -9,6 +9,8 @@
     <!-- Custom box css -->
     <link th:href="@{/static/plugins/custombox/css/custombox.min.css}" rel="stylesheet">
     <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
+    <!-- Tooltipster css -->
+    <link rel="stylesheet" th:href="@{/static/plugins/tooltipster/tooltipster.bundle.min.css}">
 </head>
 <body style="background-color:#fff">
 <!-- Loader start 页面加载进度-->
@@ -21,6 +23,13 @@
 
         <!-- start row  列表数据-->
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+
+            <form th:action="@{/ec/customer/center/material/page}" th:object="${enterpriseDocumentInfoValidator}" id="query_form" method="post">
+                <input type="hidden" th:field="*{enterpriseId}">
+                <input type="hidden" name="currentPage" id="currentPage" th:value="${pageParams.currentPage}">
+                <input type="hidden" name="pageSize" id="pageSize" th:value="${pageParams.pageSize}">
+            </form>
+
             <div class="col-sm-12">
                 <div class="panel panel-color panel-info">
                     <div class="panel-heading">
@@ -28,156 +37,48 @@
                     </div>
                     <div class="panel-body">
                         <div class="table-responsive">
-                            <table class="table table table-hover m-10" style="margin-top: -12px;">
+                            <table class="table table table-hover m-10" style="margin-top: -12px;table-layout:fixed;">
                                 <thead>
                                 <tr>
-                                    <th>签名</th>
-                                    <th>企业类型</th>
-                                    <th>业务类型</th>
-                                    <th>信息类型</th>
-                                    <th>短链</th>
-                                    <th>资料状态</th>
-                                    <th>签订日期</th>
-                                    <th>创建人/创建日期</th>
-                                    <th>操作</th>
+                                    <th style="width:280px">签名</th>
+                                    <th style="width:160px">业务类型</th>
+                                    <th style="width:200px">短链/签名合同链</th>
+                                    <th style="width:160px">审核状态</th>
+                                    <th style="width:200px">创建人/创建日期</th>
                                 </tr>
                                 <thead>
                                 <tbody>
+                                <tr th:each="info:${list}">
+                                    <td style="line-height: 26px"><span style="color:#26A69A;" class="text-overflow"
+                                                                        data-toggle="tooltip" data-placement="bottom"
+                                                                        th:data-original-title="${info.signName}">[[${info.signName}]]</span>
 
-                                    <tr>
-                                        <td><span style="color:#26A69A">【北京星语】</span></td>
-                                        <td style="line-height: 26px;"><mpm:tag identity="enterpriseType" value="DIRECTCUSTOMER" show-type="label"  key="code" /></td>
-                                        <td style="line-height: 26px;"><mpm:tag identity="businessType" value="MMS" show-type="label"  key="code" /></td>
-                                        <td style="line-height: 26px;">行业</td>
-                                        <td style="line-height: 26px;">http://mtw.so/6xOaa3</td>
-                                        <td><a class="btn btn-warning btn-rounded btn-sm waves-effect waves-light">审核中</a></td>
-                                        <td style="line-height: 26px;">2021-11-3</td>
-                                        <td>李先生<br>2021-11-3 12:45:47</td>
-                                        <td style="line-height: 26px;">
-                                            <a sec:authorize-url="/ec/resource/checkRecord/*"
-                                               data-toggle="modal" data-target="#check-record" class="on-default edit-row"
-                                               style="padding-left: 5px;color: #4BD396;"
-                                               title="审核记录"><i style="font-size: 18px" class="mdi mdi-book-open-page-variant"></i></a>
-                                            <a sec:authorize-url="/ec/resource/edit/*" data-toggle="modal" data-target="#download-record"
-                                               class="on-default edit-row"
-                                               style="padding-left: 5px;color: #6B5FB5;"title="下载附件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><span style="color:#26A69A">【星语互联科技】</span></td>
-                                        <td style="line-height: 26px;"><mpm:tag identity="enterpriseType" value="CHANNELCUSTOMER" show-type="label"  key="code" /></td>
-                                        <td style="line-height: 26px;"><mpm:tag identity="businessType" value="INTERNATIONAL_SMS" show-type="label"  key="code" /></td>
-                                        <td style="line-height: 26px;">行业</td>
-                                        <td style="line-height: 26px;">http://mtw.so/6xOaa3</td>
-                                        <td><a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a></td>
-                                        <td style="line-height: 26px;">2021-11-3</td>
-                                        <td>李先生<br>2021-11-3 12:45:47</td>
-                                        <td style="line-height: 26px;">
-                                            <a
-                                               data-toggle="modal" data-target="#check-record" class="on-default edit-row"
-                                               style="padding-left: 5px;color: #4BD396;"
-                                               title="审核记录"><i style="font-size: 18px" class="mdi mdi-book-open-page-variant"></i></a>
-                                            <a data-toggle="modal" data-target="#download-record"
-                                               class="on-default edit-row"
-                                               style="padding-left: 5px;color: #6B5FB5;"title="下载附件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
-                                        </td>
-                                    </tr>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <mpm:tag identity="businessType" show-type="button"
+                                                 key="code" th:value="${info.businessType}"
+                                                 class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;MULTI_SMS,btn btn-brown btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;5G_SMS,btn btn-primary btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-inverse btn-rounded btn-sm waves-effect waves-light"/>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">[[${info.shortLink}]]<br>
+                                        <i class="mdi mdi-comment-text" style="margin-left:5px"
+                                           th:id="chain+${info.id}"
+                                           th:onmouseover="chainTip([[${info.id}]])"
+                                           data-toggle="tooltip"></i>
+                                        <i class="mdi mdi-file-document" style="color: #00acc1"
+                                           th:id="interaction+${info.id}"
+                                           th:onmouseover="interaction([[${info.id}]])"
+                                           data-toggle="tooltip">
+                                        </i>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
+                                        <a class="btn btn-success btn-rounded btn-sm waves-effect waves-light" th:if="${info.docStatus eq '1'}">通过审核</a>
+                                        <a class="btn btn-warning btn-rounded btn-sm waves-effect waves-light" th:if="${info.docStatus eq '2'}">待审核</a>
+                                        <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light" th:if="${info.docStatus eq '3'}">拒绝</a>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">[[${info.createdBy}]]<br>[[${info.createdTime}]]</td>
 
-                                    <tr>
-                                        <td><span style="color:#26A69A">【星语互联科技】</span></td>
-                                        <td style="line-height: 26px;"><mpm:tag identity="enterpriseType" value="DIRECTCUSTOMER" show-type="label"  key="code" /></td>
-                                        <td style="line-height: 26px;"><mpm:tag identity="businessType" value="MULTI_SMS" show-type="label"  key="code" /></td>
-                                        <td style="line-height: 26px;">行业</td>
-                                        <td style="line-height: 26px;">http://mtw.so/6xOaa3</td>
-                                        <td><a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a></td>
-                                        <td style="line-height: 26px;">2021-11-3</td>
-                                        <td>李先生<br>2021-11-3 12:45:47</td>
-                                        <td style="line-height: 26px;">
-                                            <a
-                                                    data-toggle="modal" data-target="#check-record" class="on-default edit-row"
-                                                    style="padding-left: 5px;color: #4BD396;"
-                                                    title="审核记录"><i style="font-size: 18px" class="mdi mdi-book-open-page-variant"></i></a>
-                                            <a data-toggle="modal" data-target="#download-record"
-                                               class="on-default edit-row"
-                                               style="padding-left: 5px;color: #6B5FB5;"title="下载附件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><span style="color:#26A69A">【星语互联科技】</span></td>
-                                        <td style="line-height: 26px;"><mpm:tag identity="enterpriseType" value="CHANNELCUSTOMER" show-type="label"  key="code" /></td>
-                                        <td style="line-height: 26px;"><mpm:tag identity="businessType" value="BLACK_SERVICE" show-type="label"  key="code" /></td>
-                                        <td style="line-height: 26px;">行业</td>
-                                        <td style="line-height: 26px;">http://mtw.so/6xOaa3</td>
-                                        <td><a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a></td>
-                                        <td style="line-height: 26px;">2021-11-3</td>
-                                        <td>李先生<br>2021-11-3 12:45:47</td>
-                                        <td style="line-height: 26px;">
-                                            <a
-                                                    data-toggle="modal" data-target="#check-record" class="on-default edit-row"
-                                                    style="padding-left: 5px;color: #4BD396;"
-                                                    title="审核记录"><i style="font-size: 18px" class="mdi mdi-book-open-page-variant"></i></a>
-                                            <a data-toggle="modal" data-target="#download-record"
-                                               class="on-default edit-row"
-                                               style="padding-left: 5px;color: #6B5FB5;"title="下载附件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><span style="color:#26A69A">【星语互联科技】</span></td>
-                                        <td style="line-height: 26px;"><mpm:tag identity="enterpriseType" value="CHANNELCUSTOMER" show-type="label"  key="code" /></td>
-                                        <td style="line-height: 26px;"><mpm:tag identity="businessType" value="INTERNATIONAL_SMS" show-type="label"  key="code" /></td>
-                                        <td style="line-height: 26px;">行业</td>
-                                        <td style="line-height: 26px;">http://mtw.so/6xOaa3</td>
-                                        <td><a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a></td>
-                                        <td style="line-height: 26px;">2021-11-3</td>
-                                        <td>李先生<br>2021-11-3 12:45:47</td>
-                                        <td style="line-height: 26px;">
-                                            <a
-                                                    data-toggle="modal" data-target="#check-record" class="on-default edit-row"
-                                                    style="padding-left: 5px;color: #4BD396;"
-                                                    title="审核记录"><i style="font-size: 18px" class="mdi mdi-book-open-page-variant"></i></a>
-                                            <a data-toggle="modal" data-target="#download-record"
-                                               class="on-default edit-row"
-                                               style="padding-left: 5px;color: #6B5FB5;"title="下载附件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><span style="color:#26A69A">【星语互联科技】</span></td>
-                                        <td style="line-height: 26px;"><mpm:tag identity="enterpriseType" value="CHANNELCUSTOMER" show-type="label"  key="code" /></td>
-                                        <td style="line-height: 26px;"><mpm:tag identity="businessType" value="INTERNATIONAL_SMS" show-type="label"  key="code" /></td>
-                                        <td style="line-height: 26px;">行业</td>
-                                        <td style="line-height: 26px;">http://mtw.so/6xOaa3</td>
-                                        <td><a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a></td>
-                                        <td style="line-height: 26px;">2021-11-3</td>
-                                        <td>李先生<br>2021-11-3 12:45:47</td>
-                                        <td style="line-height: 26px;">
-                                            <a
-                                                    data-toggle="modal" data-target="#check-record" class="on-default edit-row"
-                                                    style="padding-left: 5px;color: #4BD396;"
-                                                    title="审核记录"><i style="font-size: 18px" class="mdi mdi-book-open-page-variant"></i></a>
-                                            <a data-toggle="modal" data-target="#download-record"
-                                               class="on-default edit-row"
-                                               style="padding-left: 5px;color: #6B5FB5;"title="下载附件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><span style="color:#26A69A">【星语互联科技】</span></td>
-                                        <td style="line-height: 26px;"><mpm:tag identity="enterpriseType" value="CHANNELCUSTOMER" show-type="label"  key="code" /></td>
-                                        <td style="line-height: 26px;"><mpm:tag identity="businessType" value="INTERNATIONAL_SMS" show-type="label"  key="code" /></td>
-                                        <td style="line-height: 26px;">行业</td>
-                                        <td style="line-height: 26px;">http://mtw.so/6xOaa3</td>
-                                        <td><a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a></td>
-                                        <td style="line-height: 26px;">2021-11-3</td>
-                                        <td>李先生<br>2021-11-3 12:45:47</td>
-                                        <td style="line-height: 26px;">
-                                            <a
-                                                    data-toggle="modal" data-target="#check-record" class="on-default edit-row"
-                                                    style="padding-left: 5px;color: #4BD396;"
-                                                    title="审核记录"><i style="font-size: 18px" class="mdi mdi-book-open-page-variant"></i></a>
-                                            <a data-toggle="modal" data-target="#download-record"
-                                               class="on-default edit-row"
-                                               style="padding-left: 5px;color: #6B5FB5;"title="下载附件"><i style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
-                                        </td>
-                                    </tr>
+
+                                </tr>
 
                                 </tbody>
 
@@ -195,56 +96,6 @@
         <th:block th:insert="fragments/common_fragments :: common_error"/>
         <!-- end row -->
 
-        <div id="check-record" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="a-width-modalLabel" aria-hidden="true" style="display: none;margin: 60px">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 class="modal-title">审核记录</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p id="tip_id" style="display: none;text-align: center">暂无审核记录</p>
-                        <table id="table_id" class="table table-striped m-0" style="margin-top: -12px;">
-                            <thead>
-                            <tr>
-                                <th width="10%">提交人</th>
-                                <th width="12%">状态</th>
-                                <th width="22%">提交时间</th>
-                                <th width="36%">描述</th>
-                                <th width="22%">审核人/审核时间</th>
-                            </tr>
-                            <thead>
-                            <tbody id="config">
-                            <td>李先生</td>
-                            <td>审核通过</td>
-                            <td>2021-11-3 12:45:47</td>
-                            <td>资料完整，给予通过</td>
-                            <td>张先生<br>2021-11-4 12:45:47</td>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="download-record" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="a-width-modalLabel" aria-hidden="true" style="display: none;margin: 60px">
-            <div class="modal-dialog modal-md">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 class="modal-title">下载附件</h4>
-                    </div>
-                    <div class="row" style="padding-top: 15px">
-                        <div class="col-sm-12 m-b-10">
-                            <p class="text-muted"><i style="font-size: 18px" class="mdi mdi-download"></i><a href="">&nbsp;签名合同文件</a></p>
-                            <p class="text-muted"><i style="font-size: 18px" class="mdi mdi-download"></i><a href="">&nbsp;签名资质文件</a></p>
-                            <p class="text-muted"><i style="font-size: 18px" class="mdi mdi-download"></i><a href="">&nbsp;客户金融信息安全承诺书</a></p>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </div> <!-- container -->
 </div> <!-- content -->
 <th:block th:insert="fragments/common_fragments :: common_js"/>
@@ -252,51 +103,70 @@
 <script th:src="@{/static/plugins/moment/moment.js}"></script>
 <script th:src="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.js}"></script>
 <!-- Modal-Effect -->
+<script th:src="@{/static/plugins/tooltipster/tooltipster.bundle.min.js}"></script>
 
 <script>
 
-    $('#reportrange').daterangepicker({
-        format: 'YYYY-MM-DD',
-        startDate: '2020-11-03',
-        endDate: '2021-11-03',
-        minDate: '2012-01-01',
-        maxDate: '2080-12-31',
-        dateLimit: {
-            days: 720
-        },
-        showDropdowns: true,
-        showWeekNumbers: true,
-        timePicker: false,
-        timePickerIncrement: 1,
-        timePicker12Hour: true,
-        ranges: {
-            '今天': [moment(), moment()],
-            '昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-            '最近7天': [moment().subtract(6, 'days'), moment()],
-            '最近30天': [moment().subtract(29, 'days'), moment()],
-            '本月': [moment().startOf('month'), moment().endOf('month')],
-            '上月': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-        },
-        opens: 'right',
-        buttonClasses: ['btn btn-default'],
-        applyClass: 'btn-small btn-primary',
-        cancelClass: 'btn-small',
-        format: 'YYYY-MM-DD',
-        separator: ' - ',
-        locale: {
-            applyLabel: '确认',
-            cancelLabel: '取消',
-            fromLabel: '从',
-            toLabel: '到',
-            customRangeLabel: '自定义',
-            format: "YYYY-MM-DD",
-            daysOfWeek: ['日', '一', '二', '三', '四', '五', '六'],
-            monthNames: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
-            firstDay: 1
-        }
-    }, function (start, end, label) {
-        //alert('A date range was chosen: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
-    });
+    function chainTip(id){
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $.ajax({
+            url: contextPath + "/ec/customer/material/chain/chainView/" + id,
+            async: false,
+            success: function (data) {
+                var chains = data.split("@");
+                var chainName = ""
+                if (chains.length > 1) {
+                    for (i = 0; i < chains.length; i++) {
+                        chainName += '<span style="font-size:12px">' + chains[i] + '</span><br>';
+                    }
+                } else {
+                    chainName = '<span style="font-size:12px">' + chains + '</span>';
+                }
+
+                $('#chain' + id).tooltipster({
+                    content: $('<p style="text-align:left;">' + chainName + '</p>'),
+                    maxWidth: 600,
+                    position: 'right',
+                });
+            }
+        });
+    }
+
+    function interaction(id) {
+
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $.ajax({
+            url: contextPath + "/attachment/findByModelId/" + id,
+            async: false,
+            success: function (data) {
+                var files = data.split("@");
+                var onefile = ""
+                if (files.length > 1) {
+                    for (i = 0; i < files.length; i++) {
+                        var a = files[i].split(",");
+                        var url = contextPath+"/attachment/download/"+a[1];
+                        onefile += '<span style="font-size:12px"><a href="'+url+'" style="color: white">' + a[0] + '</a></span><br>';
+                    }
+                } else {
+                    var a = data.split(",");
+                    if(a.length>1){
+                        var url = contextPath+"/attachment/download/"+a[1];
+                        onefile =  '<span style="font-size:12px"><a href="'+url+'" style="color: white">' + a[0] + '</a></span>';
+                    }else{
+                        onefile =  '<span style="font-size:12px">无附件</a></span>';
+                    }
+                }
+
+                $('#interaction' + id).tooltipster({
+                    content: $('<p style="text-align:left;">' + onefile + '</p>'),
+                    maxWidth: 600,
+                    position: 'right',
+                    contentAsHTML: true,
+                    interactive: true
+                });
+            }
+        });
+    }
 
     var resizefunc = [];
     //隐藏进度项

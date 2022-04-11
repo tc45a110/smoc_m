@@ -47,6 +47,10 @@ public class SystemUserLogController {
             return view;
         }
 
+        if("WEB-LOGIN".equals(module)){
+            view = new ModelAndView("sys_user_logs/user_logs_login_list");
+        }
+
         SystemUserLogValidator systemUserLogValidator = new SystemUserLogValidator();
         systemUserLogValidator.setModuleId(moduleId);
         systemUserLogValidator.setModule(module);
@@ -83,6 +87,10 @@ public class SystemUserLogController {
         if (StringUtils.isEmpty(systemUserLogValidator.getModuleId())) {
             view.addObject("error", "module参数不能为空");
             return view;
+        }
+
+        if("WEB-LOGIN".equals(systemUserLogValidator.getModule())){
+            view = new ModelAndView("sys_user_logs/user_logs_login_list");
         }
 
         //分页查询

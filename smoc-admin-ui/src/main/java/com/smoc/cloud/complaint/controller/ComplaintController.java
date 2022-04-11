@@ -472,4 +472,60 @@ public class ComplaintController {
         }
     }
 
+    /**
+     * 企业用户中心投诉列表
+     * @param enterpriseId
+     * @return
+     */
+    @RequestMapping(value = "/ec/customer/center/list/{enterpriseId}", method = RequestMethod.GET)
+    public ModelAndView customerComplaintList(@PathVariable String enterpriseId) {
+        ModelAndView view = new ModelAndView("complaint/customer_center_complaint_list");
+
+        //初始化数据
+        PageParams<MessageComplaintInfoValidator> params = new PageParams<MessageComplaintInfoValidator>();
+        params.setPageSize(10);
+        params.setCurrentPage(1);
+        MessageComplaintInfoValidator messageComplaintInfoValidator = new MessageComplaintInfoValidator();
+        messageComplaintInfoValidator.setComplaintSource("day");
+        messageComplaintInfoValidator.setEnterpriseId(enterpriseId);
+        params.setParams(messageComplaintInfoValidator);
+
+        //查询
+        ResponseData<PageList<MessageComplaintInfoValidator>> data = complaintService.page(params);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("messageComplaintInfoValidator", messageComplaintInfoValidator);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
+
+        return view;
+    }
+
+    /**
+     * 企业用户中心投诉分页
+     * @return
+     */
+    @RequestMapping(value = "/ec/customer/center/page", method = RequestMethod.POST)
+    public ModelAndView customerComplaintPage(@ModelAttribute MessageComplaintInfoValidator messageComplaintInfoValidator, PageParams pageParams) {
+        ModelAndView view = new ModelAndView("complaint/customer_center_complaint_list");
+
+        //分页查询
+        messageComplaintInfoValidator.setComplaintSource("day");
+        pageParams.setParams(messageComplaintInfoValidator);
+
+        ResponseData<PageList<MessageComplaintInfoValidator>> data = complaintService.page(pageParams);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("messageComplaintInfoValidator", messageComplaintInfoValidator);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
+
+        return view;
+    }
 }

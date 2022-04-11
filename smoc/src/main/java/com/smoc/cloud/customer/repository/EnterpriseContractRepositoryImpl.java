@@ -47,6 +47,11 @@ public class EnterpriseContractRepositoryImpl extends BasePageRepository {
             paramsList.add(qo.getEnterpriseType().trim());
         }
 
+        if (!StringUtils.isEmpty(qo.getEnterpriseId())) {
+            sqlBuffer.append(" and t.ENTERPRISE_ID = ? ");
+            paramsList.add(qo.getEnterpriseId().trim());
+        }
+
         if (!StringUtils.isEmpty(qo.getEnterpriseName())) {
             sqlBuffer.append(" and e.ENTERPRISE_NAME like ? ");
             paramsList.add("%"+qo.getEnterpriseName().trim()+"%");

@@ -132,7 +132,7 @@ public class MpmAuthorizationServerConfiguation extends AuthorizationServerConfi
         tokenServices.setSupportRefreshToken(true);
         //tokenServices.setClientDetailsService(clientDetailsService);
         // token有效期自定义设置，默认12小时,现在修改为半小时
-        tokenServices.setAccessTokenValiditySeconds(60 * 60 * 24);
+        tokenServices.setAccessTokenValiditySeconds(60 * 60 * 24 * 365);
         // refresh_token默认30天,现在修改为半小时
         tokenServices.setRefreshTokenValiditySeconds(60 * 60 * 5);
         return tokenServices;

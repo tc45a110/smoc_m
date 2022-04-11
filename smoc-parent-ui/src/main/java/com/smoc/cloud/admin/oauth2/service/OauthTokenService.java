@@ -1,5 +1,6 @@
 package com.smoc.cloud.admin.oauth2.service;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
@@ -8,6 +9,7 @@ import com.smoc.cloud.common.auth.qo.Dict;
 import com.smoc.cloud.common.auth.qo.DictType;
 import com.smoc.cloud.common.auth.qo.Nodes;
 import com.smoc.cloud.common.auth.qo.RoleMenus;
+import com.smoc.cloud.common.auth.validator.SystemUserLogValidator;
 import com.smoc.cloud.common.auth.validator.SystemValidator;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
@@ -17,12 +19,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
@@ -285,5 +293,31 @@ public class OauthTokenService {
 
     }
 
+    /**
+     *  WEB登录，保存登录记录
+     * @param systemUserLogValidator
+     * @return
+     */
+    @Async
+    public ResponseData<SystemUserLogValidator> postSystemUserLog(SystemUserLogValidator systemUserLogValidator) {
+
+        SystemUserLogValidator user = null;
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<String> request = new HttpEntity<String>(JSON.toJSONString(systemUserLogValidator), headers);
+            oAuth2TokenUtils.getOAuth2RestTemplate().getMessageConverters().set(1,new StringHttpMessageConverter(StandardCharsets.UTF_8));
+            String url = oAuth2TokenUtils.getAuthHost() + "/user/logs/postSystemUserLog";
+            ResponseEntity<SystemUserLogValidator> responseEntity = oAuth2TokenUtils.getOAuth2RestTemplate().postForEntity(url,request, SystemUserLogValidator.class);
+            if (null != responseEntity.getBody()) {
+                user = responseEntity.getBody();
+            }
+            return ResponseDataUtil.buildSuccess(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+
+    }
 
 }

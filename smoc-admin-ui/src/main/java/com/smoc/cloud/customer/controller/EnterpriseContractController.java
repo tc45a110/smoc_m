@@ -392,24 +392,36 @@ public class EnterpriseContractController {
      *
      * @return
      */
-    @RequestMapping(value = "/center/contract/list", method = RequestMethod.GET)
-    public ModelAndView customer_list() {
+    @RequestMapping(value = "/center/contract/list/{enterpriseId}", method = RequestMethod.GET)
+    public ModelAndView customer_list(@PathVariable String enterpriseId ) {
         ModelAndView view = new ModelAndView("customer/contract/customer_center_contract_list");
 
-        //查询数据
-        PageParams params = new PageParams<>();
-        params.setPages(10);
-        params.setPageSize(10);
-        params.setStartRow(1);
-        params.setEndRow(10);
-        params.setCurrentPage(1);
-        params.setTotalRows(100);
+        //查询企业数据
+        ResponseData<EnterpriseBasicInfoValidator> basic = enterpriseService.findById(enterpriseId);
+        if (!ResponseCode.SUCCESS.getCode().equals(basic.getCode())) {
+            view.addObject("error", basic.getCode() + ":" + basic.getMessage());
+        }
 
-        view.addObject("pageParams",params);
-        view.addObject("type","contract");
+        //初始化数据
+        PageParams<EnterpriseContractInfoValidator> params = new PageParams<EnterpriseContractInfoValidator>();
+        params.setPageSize(10);
+        params.setCurrentPage(1);
+        EnterpriseContractInfoValidator enterpriseContractInfoValidator = new EnterpriseContractInfoValidator();
+        enterpriseContractInfoValidator.setEnterpriseId(enterpriseId);
+        params.setParams(enterpriseContractInfoValidator);
+
+        //查询
+        ResponseData<PageList<EnterpriseContractInfoValidator>> data = enterpriseContractService.page(params);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("enterpriseContractInfoValidator", enterpriseContractInfoValidator);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
 
         return view;
-
     }
 
     /**
@@ -418,19 +430,27 @@ public class EnterpriseContractController {
      * @return
      */
     @RequestMapping(value = "/center/contract/page", method = RequestMethod.POST)
-    public ModelAndView customer_page() {
+    public ModelAndView customer_page(@ModelAttribute EnterpriseContractInfoValidator enterpriseContractInfoValidator, PageParams pageParams) {
         ModelAndView view = new ModelAndView("customer/contract/customer_center_contract_list");
-        //查询数据
-        PageParams params = new PageParams<>();
-        params.setPages(10);
-        params.setPageSize(10);
-        params.setStartRow(1);
-        params.setEndRow(10);
-        params.setCurrentPage(1);
-        params.setTotalRows(100);
 
-        view.addObject("pageParams",params);
-        view.addObject("type","contract");
+        //查询企业数据
+        ResponseData<EnterpriseBasicInfoValidator> basic = enterpriseService.findById(enterpriseContractInfoValidator.getEnterpriseId());
+        if (!ResponseCode.SUCCESS.getCode().equals(basic.getCode())) {
+            view.addObject("error", basic.getCode() + ":" + basic.getMessage());
+        }
+
+        //分页查询
+        pageParams.setParams(enterpriseContractInfoValidator);
+
+        ResponseData<PageList<EnterpriseContractInfoValidator>> data = enterpriseContractService.page(pageParams);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("enterpriseContractInfoValidator", enterpriseContractInfoValidator);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
         return view;
 
     }

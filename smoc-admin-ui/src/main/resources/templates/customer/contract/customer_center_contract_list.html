@@ -9,6 +9,8 @@
     <!-- Custom box css -->
     <link th:href="@{/static/plugins/custombox/css/custombox.min.css}" rel="stylesheet">
     <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
+    <!-- Tooltipster css -->
+    <link rel="stylesheet" th:href="@{/static/plugins/tooltipster/tooltipster.bundle.min.css}">
 </head>
 <body style="background-color:#fff">
 <!-- Loader start 页面加载进度-->
@@ -21,6 +23,13 @@
 
         <!-- start row  列表数据-->
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+
+            <form th:action="@{/ec/customer/center/contract/page}" th:object="${enterpriseContractInfoValidator}" id="query_form" method="post">
+                <input type="hidden" th:field="*{enterpriseId}">
+                <input type="hidden" name="currentPage" id="currentPage" th:value="${pageParams.currentPage}">
+                <input type="hidden" name="pageSize" id="pageSize" th:value="${pageParams.pageSize}">
+            </form>
+
             <div class="col-sm-12">
                 <div class="panel panel-color panel-info">
                     <div class="panel-heading">
@@ -33,144 +42,25 @@
                                 <tr>
                                     <th>合同编号</th>
                                     <th>合同附件</th>
-                                    <th>合同状态</th>
-                                    <th>签订日期</th>
+                                    <th>签订日期/到期日期</th>
                                     <th>创建人/创建日期</th>
-                                    <th>操作</th>
                                 </tr>
                                 <thead>
                                 <tbody>
-                                    <tr>
-                                        <td style="line-height: 26px;">XY001-0876-2223</td>
-                                        <td style="line-height: 26px;"><a href="" title="点击下载"><i class="fa fa-file-word-o" style="margin-right:5px"></i>小舟科技短信合同</a></td>
-                                        <td><a class="btn btn-warning btn-rounded btn-sm waves-effect waves-light">审核中</a></td>
-                                        <td style="line-height: 26px;">2021-11-3</td>
-                                        <td>李先生<br>2021-11-3 12:45:47</td>
-                                        <td style="line-height: 26px;">
-                                            <a sec:authorize-url=""
-                                               data-toggle="modal" data-target="#check-record" class="on-default edit-row"
-                                               style="padding-left: 5px;color: #4BD396;"
-                                               title="审核记录"><i style="font-size: 18px" class="mdi mdi-book-open-page-variant"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="line-height: 26px;">XY001-0876-2223</td>
-                                        <td style="line-height: 26px;"><a href="" title="点击下载"><i class="fa fa-file-word-o" style="margin-right:5px"></i>小舟科技短信合同</a></td>
-                                        <td><a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a></td>
-                                        <td style="line-height: 26px;">2021-11-3</td>
-                                        <td >李先生<br>
-                                            2021-11-3 12:45:47</td>
-                                        <td style="line-height: 26px;">
-                                            <a sec:authorize-url=""
-                                               data-toggle="modal" data-target="#check-record" class="on-default edit-row"
-                                               style="padding-left: 5px;color: #4BD396;"
-                                               title="审核记录"><i style="font-size: 18px" class="mdi mdi-book-open-page-variant"></i></a>
-                                        </td>
-                                    </tr>
+                                <tr th:each="info:${list}">
+                                    <td style="line-height: 26px;">[[${info.contractNo}]]</td>
+                                    <td style="line-height: 26px;">
+                                        <i class="mdi mdi-file-document" style="font-size: 18px;color: #00acc1"
+                                           th:id="interaction+${info.id}"
+                                           th:onmouseover="interaction([[${info.id}]])"
+                                           data-toggle="tooltip">
+                                        </i>
+                                    </td>
+                                    <td style="line-height: 26px;">[[${info.contractDate}]]<br>[[${info.contractExpireDate}]]</td>
+                                    <td>[[${info.createdBy}]]<br>[[${info.createdTime}]]</td>
 
-                                    <tr>
-                                        <td style="line-height: 26px;">XY001-0876-2223</td>
-                                        <td style="line-height: 26px;"><a href="" title="点击下载"><i class="fa fa-file-word-o" style="margin-right:5px"></i>小舟科技短信合同</a></td>
-                                        <td><a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a></td>
-                                        <td style="line-height: 26px;">2021-11-3</td>
-                                        <td >李先生<br>
-                                            2021-11-3 12:45:47</td>
-                                        <td style="line-height: 26px;">
-                                            <a sec:authorize-url=""
-                                               data-toggle="modal" data-target="#check-record" class="on-default edit-row"
-                                               style="padding-left: 5px;color: #4BD396;"
-                                               title="审核记录"><i style="font-size: 18px" class="mdi mdi-book-open-page-variant"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="line-height: 26px;">XY001-0876-2223</td>
-                                        <td style="line-height: 26px;"><a href="" title="点击下载"><i class="fa fa-file-word-o" style="margin-right:5px"></i>小舟科技短信合同</a></td>
-                                        <td><a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a></td>
-                                        <td style="line-height: 26px;">2021-11-3</td>
-                                        <td >李先生<br>
-                                            2021-11-3 12:45:47</td>
-                                        <td style="line-height: 26px;">
-                                            <a sec:authorize-url=""
-                                               data-toggle="modal" data-target="#check-record" class="on-default edit-row"
-                                               style="padding-left: 5px;color: #4BD396;"
-                                               title="审核记录"><i style="font-size: 18px" class="mdi mdi-book-open-page-variant"></i></a>
+                                </tr>
 
-                                    </tr>
-                                    <tr>
-                                        <td style="line-height: 26px;">XY001-0876-2223</td>
-                                        <td style="line-height: 26px;"><a href="" title="点击下载"><i class="fa fa-file-word-o" style="margin-right:5px"></i>小舟科技短信合同</a></td>
-                                        <td><a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a></td>
-                                        <td style="line-height: 26px;">2021-11-3</td>
-                                        <td >李先生<br>
-                                            2021-11-3 12:45:47</td>
-                                        <td style="line-height: 26px;">
-                                            <a sec:authorize-url=""
-                                               data-toggle="modal" data-target="#check-record" class="on-default edit-row"
-                                               style="padding-left: 5px;color: #4BD396;"
-                                               title="审核记录"><i style="font-size: 18px" class="mdi mdi-book-open-page-variant"></i></a>
-
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="line-height: 26px;">XY001-0876-2223</td>
-                                        <td style="line-height: 26px;"><a href="" title="点击下载"><i class="fa fa-file-word-o" style="margin-right:5px"></i>小舟科技短信合同</a></td>
-                                        <td><a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a></td>
-                                        <td style="line-height: 26px;">2021-11-3</td>
-                                        <td >李先生<br>
-                                            2021-11-3 12:45:47</td>
-                                        <td style="line-height: 26px;">
-                                            <a sec:authorize-url=""
-                                               data-toggle="modal" data-target="#check-record" class="on-default edit-row"
-                                               style="padding-left: 5px;color: #4BD396;"
-                                               title="审核记录"><i style="font-size: 18px" class="mdi mdi-book-open-page-variant"></i></a>
-
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="line-height: 26px;">XY001-0876-2223</td>
-                                        <td style="line-height: 26px;"><a href="" title="点击下载"><i class="fa fa-file-word-o" style="margin-right:5px"></i>小舟科技短信合同</a></td>
-                                        <td><a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a></td>
-                                        <td style="line-height: 26px;">2021-11-3</td>
-                                        <td >李先生<br>
-                                            2021-11-3 12:45:47</td>
-                                        <td style="line-height: 26px;">
-                                            <a sec:authorize-url=""
-                                               data-toggle="modal" data-target="#check-record" class="on-default edit-row"
-                                               style="padding-left: 5px;color: #4BD396;"
-                                               title="审核记录"><i style="font-size: 18px" class="mdi mdi-book-open-page-variant"></i></a>
-
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="line-height: 26px;">XY001-0876-2223</td>
-                                        <td style="line-height: 26px;"><a href="" title="点击下载"><i class="fa fa-file-word-o" style="margin-right:5px"></i>小舟科技短信合同</a></td>
-                                        <td><a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a></td>
-                                        <td style="line-height: 26px;">2021-11-3</td>
-                                        <td >李先生<br>
-                                            2021-11-3 12:45:47</td>
-                                        <td style="line-height: 26px;">
-                                            <a sec:authorize-url=""
-                                               data-toggle="modal" data-target="#check-record" class="on-default edit-row"
-                                               style="padding-left: 5px;color: #4BD396;"
-                                               title="审核记录"><i style="font-size: 18px" class="mdi mdi-book-open-page-variant"></i></a>
-
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="line-height: 26px;">XY001-0876-2223</td>
-                                        <td style="line-height: 26px;"><a href="" title="点击下载"><i class="fa fa-file-word-o" style="margin-right:5px"></i>小舟科技短信合同</a></td>
-                                        <td><a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核通过</a></td>
-                                        <td style="line-height: 26px;">2021-11-3</td>
-                                        <td >李先生<br>
-                                            2021-11-3 12:45:47</td>
-                                        <td style="line-height: 26px;">
-                                            <a sec:authorize-url=""
-                                               data-toggle="modal" data-target="#check-record" class="on-default edit-row"
-                                               style="padding-left: 5px;color: #4BD396;"
-                                               title="审核记录"><i style="font-size: 18px" class="mdi mdi-book-open-page-variant"></i></a>
-
-                                        </td>
-                                    </tr>
                                 </tbody>
 
                             </table>
@@ -187,40 +77,6 @@
         <th:block th:insert="fragments/common_fragments :: common_error"/>
         <!-- end row -->
 
-        <!-- start row  审核记录-->
-        <div id="check-record" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="a-width-modalLabel" aria-hidden="true" style="display: none;margin: 60px">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 class="modal-title">审核记录</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p id="tip_id" style="display: none;text-align: center">暂无审核记录</p>
-                        <table id="table_id" class="table table-striped m-0" style="margin-top: -12px;">
-                            <thead>
-                            <tr>
-                                <th width="10%">提交人</th>
-                                <th width="12%">状态</th>
-                                <th width="22%">提交时间</th>
-                                <th width="36%">描述</th>
-                                <th width="22%">审核人/审核时间</th>
-                            </tr>
-                            <thead>
-                            <tbody id="config">
-                            <td>李先生</td>
-                            <td>审核通过</td>
-                            <td>2021-11-3 12:45:47</td>
-                            <td>资料完整，给予通过</td>
-                            <td>张先生<br>2021-11-4 12:45:47</td>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- end row -->
-
     </div> <!-- container -->
 </div> <!-- content -->
 
@@ -228,52 +84,46 @@
 <th:block th:insert="fragments/common_fragments :: select_js"/>
 <script th:src="@{/static/plugins/moment/moment.js}"></script>
 <script th:src="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.js}"></script>
+<script th:src="@{/static/plugins/tooltipster/tooltipster.bundle.min.js}"></script>
 <!-- Modal-Effect -->
 
 <script>
 
-    $('#reportrange').daterangepicker({
-        format: 'YYYY-MM-DD',
-        startDate: '2020-11-03',
-        endDate: '2021-11-03',
-        minDate: '2012-01-01',
-        maxDate: '2080-12-31',
-        dateLimit: {
-            days: 720
-        },
-        showDropdowns: true,
-        showWeekNumbers: true,
-        timePicker: false,
-        timePickerIncrement: 1,
-        timePicker12Hour: true,
-        ranges: {
-            '今天': [moment(), moment()],
-            '昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-            '最近7天': [moment().subtract(6, 'days'), moment()],
-            '最近30天': [moment().subtract(29, 'days'), moment()],
-            '本月': [moment().startOf('month'), moment().endOf('month')],
-            '上月': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-        },
-        opens: 'right',
-        buttonClasses: ['btn btn-default'],
-        applyClass: 'btn-small btn-primary',
-        cancelClass: 'btn-small',
-        format: 'YYYY-MM-DD',
-        separator: ' - ',
-        locale: {
-            applyLabel: '确认',
-            cancelLabel: '取消',
-            fromLabel: '从',
-            toLabel: '到',
-            customRangeLabel: '自定义',
-            format: "YYYY-MM-DD",
-            daysOfWeek: ['日', '一', '二', '三', '四', '五', '六'],
-            monthNames: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
-            firstDay: 1
-        }
-    }, function (start, end, label) {
-        //alert('A date range was chosen: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
-    });
+    function interaction(id) {
+
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $.ajax({
+            url: contextPath + "/attachment/findByModelId/" + id,
+            async: false,
+            success: function (data) {
+                var files = data.split("@");
+                var onefile = ""
+                if (files.length > 1) {
+                    for (i = 0; i < files.length; i++) {
+                        var a = files[i].split(",");
+                        var url = contextPath+"/attachment/download/"+a[1];
+                        onefile += '<span style="font-size:12px"><a href="'+url+'" style="color: white">' + a[0] + '</a></span><br>';
+                    }
+                } else {
+                    var a = data.split(",");
+                    if(a.length>1){
+                        var url = contextPath+"/attachment/download/"+a[1];
+                        onefile =  '<span style="font-size:12px"><a href="'+url+'" style="color: white">' + a[0] + '</a></span>';
+                    }else{
+                        onefile =  '<span style="font-size:12px">无附件</a></span>';
+                    }
+                }
+
+                $('#interaction' + id).tooltipster({
+                    content: $('<p style="text-align:left;">' + onefile + '</p>'),
+                    maxWidth: 600,
+                    position: 'right',
+                    contentAsHTML: true,
+                    interactive: true
+                });
+            }
+        });
+    }
 
     var resizefunc = [];
     //隐藏进度项

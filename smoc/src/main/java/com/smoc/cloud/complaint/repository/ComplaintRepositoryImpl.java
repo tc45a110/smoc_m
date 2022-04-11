@@ -63,6 +63,11 @@ public class ComplaintRepositoryImpl extends BasePageRepository {
 
         List<Object> paramsList = new ArrayList<Object>();
 
+        if(!StringUtils.isEmpty(qo.getEnterpriseId())){
+            sqlBuffer.append(" and a.ENTERPRISE_ID = ? ");
+            paramsList.add(qo.getEnterpriseId().trim());
+        }
+
         if (!StringUtils.isEmpty(qo.getCarrierSource())) {
             sqlBuffer.append(" and t.CARRIER_SOURCE like ? ");
             paramsList.add("%"+qo.getCarrierSource().trim()+"%");

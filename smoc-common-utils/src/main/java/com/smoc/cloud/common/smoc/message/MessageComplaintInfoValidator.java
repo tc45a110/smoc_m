@@ -55,6 +55,7 @@ public class MessageComplaintInfoValidator {
     private String startDate;
     private String endDate;
     private String complaintFiles;
+    private String enterpriseId;
 
     List<ComplaintExcelModel> complaintList = new ArrayList();
 }

@@ -527,21 +527,34 @@ public class EnterpriseDocumentController {
      *
      * @return
      */
-    @RequestMapping(value = "/center/material/list", method = RequestMethod.GET)
-    public ModelAndView customer_data_list() {
+    @RequestMapping(value = "/center/material/list/{enterpriseId}", method = RequestMethod.GET)
+    public ModelAndView customer_data_list(@PathVariable String enterpriseId) {
         ModelAndView view = new ModelAndView("customer/material/customer_center_material_list");
 
-        //查询数据
-        PageParams params = new PageParams<>();
-        params.setPages(10);
-        params.setPageSize(10);
-        params.setStartRow(1);
-        params.setEndRow(10);
-        params.setCurrentPage(1);
-        params.setTotalRows(100);
+        //查询企业数据
+        ResponseData<EnterpriseBasicInfoValidator> basic = enterpriseService.findById(enterpriseId);
+        if (!ResponseCode.SUCCESS.getCode().equals(basic.getCode())) {
+            view.addObject("error", basic.getCode() + ":" + basic.getMessage());
+        }
 
-        view.addObject("pageParams",params);
-        view.addObject("type","contract");
+        //初始化数据
+        PageParams<EnterpriseDocumentInfoValidator> params = new PageParams<EnterpriseDocumentInfoValidator>();
+        params.setPageSize(10);
+        params.setCurrentPage(1);
+        EnterpriseDocumentInfoValidator enterpriseDocumentInfoValidator = new EnterpriseDocumentInfoValidator();
+        enterpriseDocumentInfoValidator.setEnterpriseId(enterpriseId);
+        params.setParams(enterpriseDocumentInfoValidator);
+
+        //查询
+        ResponseData<PageList<EnterpriseDocumentInfoValidator>> data = enterpriseDocumentService.page(params);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("enterpriseDocumentInfoValidator", enterpriseDocumentInfoValidator);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
 
         return view;
 
@@ -553,19 +566,28 @@ public class EnterpriseDocumentController {
      * @return
      */
     @RequestMapping(value = "/center/material/page", method = RequestMethod.POST)
-    public ModelAndView customer_data_page() {
+    public ModelAndView customer_data_page(@ModelAttribute EnterpriseDocumentInfoValidator enterpriseDocumentInfoValidator, PageParams pageParams) {
         ModelAndView view = new ModelAndView("customer/material/customer_center_material_list");
-        //查询数据
-        PageParams params = new PageParams<>();
-        params.setPages(10);
-        params.setPageSize(10);
-        params.setStartRow(1);
-        params.setEndRow(10);
-        params.setCurrentPage(1);
-        params.setTotalRows(100);
 
-        view.addObject("pageParams",params);
-        view.addObject("type","contract");
+        //查询企业数据
+        ResponseData<EnterpriseBasicInfoValidator> basic = enterpriseService.findById(enterpriseDocumentInfoValidator.getEnterpriseId());
+        if (!ResponseCode.SUCCESS.getCode().equals(basic.getCode())) {
+            view.addObject("error", basic.getCode() + ":" + basic.getMessage());
+        }
+
+        //分页查询
+        pageParams.setParams(enterpriseDocumentInfoValidator);
+
+        ResponseData<PageList<EnterpriseDocumentInfoValidator>> data = enterpriseDocumentService.page(pageParams);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("enterpriseDocumentInfoValidator", enterpriseDocumentInfoValidator);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
+
         return view;
 
     }
