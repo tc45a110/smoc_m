@@ -62,5 +62,14 @@ public class Constant {
     //业务账号省份限制
     public static final String ACCOUNT_PHONE_NUMBER_LIMIT_FILTER = "accountPhoneNumberLimitFilter";
 
+    //系统黑名单
+    public static final String SYSTEM_BLACK_LIST_FILTER = "systemBlackListFilter";
+
+    //系统白名单
+    public static final String SYSTEM_WHITE_LIST_FILTER = "systemWhiteListFilter";
+
+    //系统白名单
+    public static final String SYSTEM_SIGN_FILTER = "systemSignFilter";
+
 
 }

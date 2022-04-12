@@ -40,7 +40,7 @@ public class AccountCheckWordsFilter implements Filter {
         Pattern accountCheckWordsPattern = loadDataService.getAccountCheckWords(params.getAccount());
 
         //检查审核词
-        if (null != accountCheckWordsPattern) {
+        if (null != accountCheckWordsPattern && null != params.getMessage()) {
             Matcher matcher = accountCheckWordsPattern.matcher(params.getMessage());
             if (matcher.find()) {
                 filterResult.put(FILTER_KEY, "check");

@@ -169,5 +169,42 @@ public interface LoadDataService {
      */
     Boolean validateProvinceLimit(String account, String carrier, String province);
 
+    /**
+     * 判定账号，单个手机号发送频次，返回true表示可以发；返回false表示不可以发；返回null 表示不过滤
+     *
+     * @param account 业务账号
+     * @param phone   手机号
+     * @return
+     */
+    Boolean validateAccountSendFrequency(String account, String phone);
+
+    /**
+     * 判定手机号是否在黑名单，返回true表示表示存在黑名单中；返回false表示不存在黑名单中；返回null 表示不过滤
+     *
+     * @param phone 手机号
+     * @return
+     */
+    Boolean isExistSystemBlackList(String phone);
+
+    /**
+     * 前提是，这个手机好已经在黑名单了，现在判断下，这个手机号是否在白名单，在得化，则洗白这个号码
+     * 判定手机号是否在白名单，返回true表示存在；返回false表示不存在；在白名单，则会洗白这个在黑名单得手机号
+     *
+     * @param phone 手机号
+     * @return
+     */
+    Boolean isExistSystemWhiteList(String phone);
+
+    /**
+     * 验证签名发送频率限制
+     * 两个层次一个是 系统层次验证，一个是 业务账号层次验证
+     * 可以发则返回true，收到限制，则返回false；返回null 则不执行过滤
+     *
+     * @param account 业务账号
+     * @param sign    签名
+     * @return
+     */
+    Boolean validateSignLimit(String account, String sign);
+
 
 }

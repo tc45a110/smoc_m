@@ -1,4 +1,4 @@
-package com.smoc.cloud.filters.account;
+package com.smoc.cloud.filters.system;
 
 import com.smoc.cloud.filters.Filter;
 import com.smoc.cloud.filters.FilterChain;
@@ -10,30 +10,32 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 /**
- * 业务账号，单手机好发送次数限制
+ * 系统签名单手机号发送频次限制过滤器
  */
-public class AccountPhoneNumberLimitFilter implements Filter {
+public class SystemSignFilter implements Filter {
 
-    public static Logger logger = Logger.getLogger(AccountDailyLimitFilter.class.toString());
+    public static Logger logger = Logger.getLogger(SystemBlackWordsFilter.class.toString());
 
-    public static final String FILTER_KEY = Constant.ACCOUNT_PHONE_NUMBER_LIMIT_FILTER;
+    //系统黑词过滤器
+    public static final String FILTER_KEY = Constant.SYSTEM_SIGN_FILTER;
 
     @Override
     public void doFilter(ParamModel params, LoadDataService loadDataService, Map<String, String> filterResult, FilterChain chain) {
 
         //过滤过程中已出现失败情况，跳过该过滤器
-        if (null == filterResult || filterResult.size() > 0 || params == null || null == params.getAccount() || null == params.getPhone()) {
+        if (null == filterResult || filterResult.size() > 0 || params == null || null == params.getSign() || null != params.getAccount()) {
             chain.doFilter(params, loadDataService, filterResult, chain);
             return;
         }
 
-        Boolean status = loadDataService.validateAccountSendFrequency(params.getAccount().trim(), params.getPhone().trim());
+        Boolean status = loadDataService.validateSignLimit(params.getAccount(), params.getSign());
         if (null != status && !status) {
             filterResult.put(FILTER_KEY, "false");
         }
 
-        //logger.info("[Filters]:业务账号单手机号频次限制");
+        //logger.info("[Filters]:签名单手机号发送频次限制过滤器");
         chain.doFilter(params, loadDataService, filterResult, chain);
+
     }
 
     @Override

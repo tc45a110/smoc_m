@@ -39,7 +39,7 @@ public class AccountBlackWordsFilter implements Filter {
             return;
         }
 
-        Pattern accountBlackWordsPattern = loadDataService.getAccountBlackWords(params.getAccount());
+        Pattern accountBlackWordsPattern = loadDataService.getAccountBlackWords(params.getAccount().trim());
 
         //检查黑词
         if (null != accountBlackWordsPattern) {
