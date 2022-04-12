@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org"
+>
+<head>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
+    <link th:href="@{/static/css/detail_statistics.css}" rel="stylesheet">
+</head>
+<body>
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <!-- start row 页面导航-->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">单号签名频次限制</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                           高级设置
+                        </li>
+                        <li>
+                            单号签名频次限制
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  查询条件-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <form id="query_form" th:action="@{/filter/limit/page}" th:object="${filterSignFrequencyLimitValidator}"
+                          method="post">
+                        <div class="row m-b-60">
+                            <div class="col-sm-12">
+                                <div class="form-group  col-sm-4">
+                                    <select data-style="btn-default" name="limitType" data-live-search="true" id="limitType" class="selectpicker form-control">
+                                        <option value="" data-icon="mdi mdi-apps">--请选择签名限制级别--</option>
+                                        <option value="SYSTEM" data-icon="mdi mdi-apps"  th:attr="selected=${filterSignFrequencyLimitValidator.limitType == 'SYSTEM'?'true':'false'}">--系统级别--</option>
+                                        <option value="ACCOUNT" data-icon="mdi mdi-apps" th:attr="selected=${filterSignFrequencyLimitValidator.limitType == 'ACCOUNT'?'true':'false'}">--账号级别--</option>
+                                    </select>
+                                </div>
+                                <div class="form-group  col-sm-4">
+                                    <mpm:tag id="infoType" identity="infoType" name="infoType" show-type="select" key="code" class="form-control"
+                                             th:value="${filterSignFrequencyLimitValidator.infoType}" title="信息分类"/>
+                                </div>
+                                <div class="form-group  col-sm-4">
+                                    <input type="text" class="form-control" th:field="*{accounts}"
+                                           placeholder="限制账号" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-4">
+                                    <input type="text" class="form-control" th:field="*{signs}"
+                                           placeholder="限制签名" autocomplete="off">
+                                </div>
+                                <div class="form-group col-sm-4 pull-right" style="text-align: right">
+                                    <button sec:authorize-url="/filter/limit/page" type="submit"
+                                            class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-search"></i> 查询
+                                    </button>
+                                    <a sec:authorize-url="/filter/limit/add"
+                                       th:href="@{/filter/limit/add}"
+                                       class="btn btn-success waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-plus-sign"
+                                           style="margin-right:5px"></i>新建签名限制</a>
+                                    <input type="hidden" name="currentPage" id="currentPage"
+                                           th:value="${pageParams.currentPage}">
+                                    <input type="hidden" name="pageSize" id="pageSize"
+                                           th:value="${pageParams.pageSize}">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  列表数据-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="panel panel-color panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">单号签名频次限制列表</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table table-hover m-10" style="margin-top: -12px;">
+                                <thead>
+                                <tr>
+                                    <th style="min-width:120px">签名限制级别</th>
+                                    <th style="min-width:160px">限制信息分类</th>
+                                    <th style="min-width:160px">限制签名</th>
+                                    <th style="min-width:160px">限制账号</th>
+                                    <th style="min-width:100px">限制频次</th>
+                                    <th style="min-width:100px">创建人</th>
+                                    <th style="min-width:100px">操作</th>
+                                </tr>
+                                <thead>
+                                <tbody>
+                                <tr th:each="info:${list}">
+                                    <td style="vertical-align: middle;line-height: 26px" th:if="${info.limitType == 'SYSTEM'}">
+                                        系统级别
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px" th:if="${info.limitType == 'ACCOUNT'}">
+                                        账号级别
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <mpm:tag id="infoType" identity="infoType" name="infoType" show-type="label" key="code"
+                                                 th:value="${info.infoType}" required="true" title="信息分类"/>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        [[${info.signs}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        [[${info.accounts}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <mpm:tag id="frequency" identity="accountFrequency" name="frequency" show-type="label" key="code"
+                                                 th:value="${info.frequency}" required="true" title="频次限制"/>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        [[${info.createdBy}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <a sec:authorize-url="/filter/limit/edit/*"
+                                           th:href="@{/filter/limit/edit/{id}(id=${info.id})}"
+                                           class="on-default edit-row"
+                                           style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
+                                           data-placement="left" title="" data-original-title="修改签名限制"><i
+                                                style="font-size: 18px"
+                                                class="mdi mdi-table-edit"></i></a>
+                                        <a sec:authorize-url="/filter/limit/delete/*"
+                                            data-toggle="modal" th:onclick="confirmLogout([[${info.id}]],this)"
+                                            data-target="#confirm-modal" class="on-default remove-row"
+                                            style="padding-left: 5px;color: #f05050"
+                                            title="删除签名限制"><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <hr>
+                        </div>
+                        <th:block th:insert="fragments/page_fragments :: page"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start confirm delete modal  -->
+        <div id="confirm-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="custom-width-modalLabel"
+             aria-hidden="true" style="display: none;margin: 60px">
+            <div class="modal-dialog" style="width:33%;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title" id="custom-width-modalLabel">确认删除</h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <p>删除之后，该限制将无法使用！你还是确认删除？</p>
+
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" id="deleteId">
+                        <a class="btn btn-default waves-effect" data-dismiss="modal">取消</a>
+                        <button onclick="logoutById()" class="btn btn-primary waves-effect waves-light">确认注销</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end confirm delete modal  -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+    </div>
+</div> <!-- content -->
+
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<th:block th:insert="fragments/cookie_fragments :: cookie_js"/>
+<script th:src="@{/static/plugins/moment/moment.js}"></script>
+<script th:src="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.js}"></script>
+<script th:src="@{/static/plugins/bootstrap-inputmask/bootstrap-inputmask.min.js}"></script>
+<script th:src="@{/static/plugins/autoNumeric/autoNumeric.js}"></script>
+<script>
+
+    function confirmLogout(id) {
+        $("#deleteId").val(id);
+    }
+
+    //删除
+    function logoutById() {
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $('#preloader').css('display', 'block');
+        location.href = contextPath + '/filter/limit/delete/' + $("#deleteId").val();
+    }
+
+
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+
+</script>
+</body>
+</html>

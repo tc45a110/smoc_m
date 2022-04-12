@@ -15,6 +15,7 @@ public class FilterSignFrequencyLimit {
     private String accounts;
     private String frequency;
     private String createdBy;
+    private String status;
     private Date createdTime;
     private String updatedBy;
     private Date updatedTime;
@@ -77,6 +78,16 @@ public class FilterSignFrequencyLimit {
 
     public void setFrequency(String frequency) {
         this.frequency = frequency;
+    }
+
+    @Basic
+    @Column(name = "STATUS")
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Basic
