@@ -3,6 +3,7 @@ package com.smoc.cloud.customer.remote;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -67,4 +68,12 @@ public interface BusinessAccountFeignClient {
      */
     @RequestMapping(value = "/account/createAccountId/{enterpriseFlag}", method = RequestMethod.GET)
     ResponseData<String> createAccountId(@PathVariable String enterpriseFlag)throws Exception;
+
+    /**
+     * 账号按维度统计发送量
+     * @param statisticSendData
+     * @return
+     */
+    @RequestMapping(value = "/account/statisticAccountSendNumber", method = RequestMethod.POST)
+    ResponseData<List<AccountStatisticSendData>> statisticAccountSendNumber(@RequestBody AccountStatisticSendData statisticSendData);
 }

@@ -3,6 +3,7 @@ package com.smoc.cloud.customer.repository;
 
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
+import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.common.smoc.message.MessageAccountValidator;
 import com.smoc.cloud.customer.entity.AccountBasicInfo;
@@ -65,4 +66,11 @@ public interface BusinessAccountRepository extends CrudRepository<AccountBasicIn
      * @return
      */
     PageList<MessageAccountValidator> messageAccountInfoList(PageParams<MessageAccountValidator> params);
+
+    /**
+     * 账号按维度统计发送量
+     * @param statisticSendData
+     * @return
+     */
+    List<AccountStatisticSendData> statisticAccountSendNumber(AccountStatisticSendData statisticSendData);
 }

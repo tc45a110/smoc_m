@@ -118,7 +118,24 @@ public class ParameterExtendBusinessParamValueController {
         //获取页面传过来的值，并进行封装
         List<ParameterExtendBusinessParamValueValidator> list = new ArrayList<>();
         for (SystemExtendBusinessParamValidator obj : responseData.getData()) {
-            String value = request.getParameter(obj.getParamKey());
+
+            String showType = obj.getShowType();
+            String value = "";
+            if("checkbox".equals(showType)){
+                String[] values = request.getParameterValues(obj.getParamKey());
+                if(!StringUtils.isEmpty(values) && values.length>0){
+                    for(String v : values){
+                        if(StringUtils.isEmpty(value)){
+                            value = v;
+                        }else{
+                            value += "," +v;
+                        }
+                    }
+                }
+            }else{
+                value = request.getParameter(obj.getParamKey());
+            }
+
             if (!StringUtils.isEmpty(value)) {
                 //log.info("提交参数值：{}:{}", obj.getParamKey(), value);
                 ParameterExtendBusinessParamValueValidator parameter = new ParameterExtendBusinessParamValueValidator();

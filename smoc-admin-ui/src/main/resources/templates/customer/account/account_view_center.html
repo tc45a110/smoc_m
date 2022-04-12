@@ -71,35 +71,36 @@
                                             <li class="" id="tab2"><a onclick="active('2')"
                                                                       sec:authorize-url="/parameter/filter/view/BUSINESS_ACCOUNT_FILTER/*/*"
                                                                       th:href="@{/parameter/filter/view/BUSINESS_ACCOUNT_FILTER/accountId/4}"
-                                                                      th:target="tab-content">业务账号过滤参数</a>
+                                                                      th:target="tab-content">过滤参数</a>
                                             <li class="" id="tab8">
                                                 <a onclick="active('8')"
                                                    sec:authorize-url="/parameter/business/view/BUSINESS_ACCOUNT/*/*"
                                                    th:href="@{/parameter/business/view/BUSINESS_ACCOUNT/businessId/4}"
-                                                   th:target="tab-content">业务账号扩展参数
+                                                   th:target="tab-content">扩展参数
                                                 </a>
                                             </li>
                                             <li class="" id="tab3">
                                                 <a onclick="active('3')"
                                                    sec:authorize-url="/account/view/channel/detail/*"
                                                    th:href="@{/account/view/channel/detail/{accountId}(accountId=${accountId})}"
-                                                   th:target="tab-content">业务账号通道状态
+                                                   th:target="tab-content">通道状态
                                                 </a>
                                             </li>
                                             <li class="" id="tab4"><a onclick="active('4')"
                                                                       sec:authorize-url="/account/price/history/list/*"
                                                                       th:href="@{/account/price/history/list/{accountId}(accountId=${accountId})}"
-                                                                      th:target="tab-content">业务账号价格记录</a></li>
+                                                                      th:target="tab-content">价格记录</a></li>
                                             <li class="" id="tab5"><a onclick="active('5')"
-
-                                                                      th:target="tab-content">业务账号发送量统计</a></li>
+                                                                      sec:authorize-url="/account/view/statisticSend/*"
+                                                                      th:href="@{/account/view/statisticSend/{accountId}(accountId=${accountId})}"
+                                                                      th:target="tab-content">发送量统计</a></li>
                                             <li class="" id="tab6"><a onclick="active('6')"
 
-                                                                      th:target="tab-content">业务账号投诉统计</a></li>
+                                                                      th:target="tab-content">投诉统计</a></li>
                                             <li class="" id="tab7"><a onclick="active('7')"
                                                                       sec:authorize-url="/user/logs/list/*/*"
                                                                       th:href="@{/user/logs/list/BUSINESS_ACCOUNT/{accountId}(accountId=${accountId})}"
-                                                                      th:target="tab-content">业务账号操作日志</a></li>
+                                                                      th:target="tab-content">操作日志</a></li>
 
                                         </ul>
                                         <div class="tab-cotent" style="background-color:#fff">

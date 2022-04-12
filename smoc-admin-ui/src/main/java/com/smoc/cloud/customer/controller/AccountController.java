@@ -9,6 +9,7 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.customer.qo.AccountChannelInfoQo;
+import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.AccountFinanceInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.AccountInterfaceInfoValidator;
@@ -17,18 +18,13 @@ import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.customer.service.*;
-import com.smoc.cloud.sequence.service.SequenceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -42,7 +38,7 @@ import java.util.Map;
  * EC业务账号管理
  */
 @Slf4j
-@Controller
+@RestController
 @RequestMapping("/account")
 public class AccountController {
 
@@ -524,7 +520,7 @@ public class AccountController {
         }
 
         /**
-         * 查询账号配置的是通道组还是通道
+         * 查询账号信息
          */
         ResponseData<AccountBasicInfoValidator> data = businessAccountService.findById(accountId);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
@@ -580,6 +576,67 @@ public class AccountController {
 
     }
 
+    /**
+     * EC业务账号查看发送量统计
+     *
+     * @return
+     */
+    @RequestMapping(value = "/view/statisticSend/{accountId}", method = RequestMethod.GET)
+    public ModelAndView statisticSend(@PathVariable String accountId, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("customer/account/account_view_statistic_send");
 
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(accountId);
+        if (!MpmValidatorUtil.validate(validator)) {
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
+
+        /**
+         * 查询账号信息
+         */
+        ResponseData<AccountBasicInfoValidator> data = businessAccountService.findById(accountId);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("accountId", accountId);
+
+        return view;
+    }
+
+    /**
+     * EC业务账号查看发送量统计
+     *
+     * @return
+     */
+    @RequestMapping(value = "/view/statisticSendMonth/{accountId}/{type}", method = RequestMethod.GET)
+    public AccountStatisticSendData statisticSendMonth(@PathVariable String accountId, @PathVariable String type,HttpServletRequest request) {
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(accountId);
+        if (!MpmValidatorUtil.validate(validator)) {
+            return new AccountStatisticSendData();
+        }
+
+        /**
+         * 查询账号信息
+         */
+        ResponseData<AccountBasicInfoValidator> data = businessAccountService.findById(accountId);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            return new AccountStatisticSendData();
+        }
+
+        AccountStatisticSendData statisticSendData = new AccountStatisticSendData();
+        statisticSendData.setAccountId(accountId);
+        statisticSendData.setDimension(type);
+
+        statisticSendData = businessAccountService.statisticAccountSendNumber(statisticSendData);
+
+        return statisticSendData;
+    }
 
 }

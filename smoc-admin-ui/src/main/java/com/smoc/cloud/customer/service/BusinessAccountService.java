@@ -4,7 +4,9 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
+import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.customer.remote.BusinessAccountFeignClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +15,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 
 /**
@@ -117,4 +121,32 @@ public class BusinessAccountService {
             return ResponseDataUtil.buildError(e.getMessage());
         }
     }
+
+    /**
+     * 账号按维度统计发送量
+     * @param statisticSendData
+     * @return
+     */
+    public AccountStatisticSendData statisticAccountSendNumber(AccountStatisticSendData statisticSendData) {
+        ResponseData<List<AccountStatisticSendData>> responseData = this.businessAccountFeignClient.statisticAccountSendNumber(statisticSendData);
+        List<AccountStatisticSendData> list = responseData.getData();
+
+        Map<String, String> keyValueMap = new TreeMap<>();
+        if (null != list && list.size() > 0) {
+            keyValueMap = list.stream().collect(Collectors.toMap(AccountStatisticSendData::getData1, accountStatisticSendData -> accountStatisticSendData.getData2()));
+        }
+
+
+        //月份
+        String[] month = list.stream().map(AccountStatisticSendData::getData1).toArray(String[]::new);
+        //发送量
+        String[] sendNumber = list.stream().map(AccountStatisticSendData::getData2).toArray(String[]::new); ;
+
+        AccountStatisticSendData accountStatisticSendData = new AccountStatisticSendData();
+        accountStatisticSendData.setMonth(month);
+        accountStatisticSendData.setSendNumber(sendNumber);
+
+        return accountStatisticSendData;
+    }
+
 }

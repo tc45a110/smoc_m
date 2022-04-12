@@ -8,6 +8,7 @@ import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.customer.qo.AccountChannelInfoQo;
+import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.common.smoc.message.MessageAccountValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
@@ -329,6 +330,16 @@ public class BusinessAccountService {
      */
     public ResponseData<PageList<MessageAccountValidator>> messageAccountInfoList(PageParams<MessageAccountValidator> params) {
         PageList<MessageAccountValidator> list = businessAccountRepository.messageAccountInfoList(params);
+        return ResponseDataUtil.buildSuccess(list);
+    }
+
+    /**
+     * 账号按维度统计发送量
+     * @param statisticSendData
+     * @return
+     */
+    public ResponseData<List<AccountStatisticSendData>> statisticAccountSendNumber(AccountStatisticSendData statisticSendData) {
+        List<AccountStatisticSendData> list = businessAccountRepository.statisticAccountSendNumber(statisticSendData);
         return ResponseDataUtil.buildSuccess(list);
     }
 }

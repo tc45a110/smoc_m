@@ -5,6 +5,7 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.common.smoc.message.MessageAccountValidator;
 import com.smoc.cloud.common.validator.MpmIdValidator;
@@ -164,6 +165,18 @@ public class BusinessAccountController {
     public ResponseData<PageList<MessageAccountValidator>> messageAccountInfoList(@RequestBody PageParams<MessageAccountValidator> params) {
 
         ResponseData<PageList<MessageAccountValidator>> data = businessAccountService.messageAccountInfoList(params);
+        return data;
+    }
+
+    /**
+     * 账号按维度统计发送量
+     * @param statisticSendData
+     * @return
+     */
+    @RequestMapping(value = "/statisticAccountSendNumber", method = RequestMethod.POST)
+    public ResponseData<List<AccountStatisticSendData>> statisticAccountSendNumber(@RequestBody AccountStatisticSendData statisticSendData) {
+
+        ResponseData<List<AccountStatisticSendData>> data = businessAccountService.statisticAccountSendNumber(statisticSendData);
         return data;
     }
 }
