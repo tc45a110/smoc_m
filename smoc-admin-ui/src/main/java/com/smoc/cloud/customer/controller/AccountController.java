@@ -9,15 +9,19 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.customer.qo.AccountChannelInfoQo;
+import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticComplaintData;
 import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.AccountFinanceInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.AccountInterfaceInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
+import com.smoc.cloud.common.smoc.identification.validator.IdentificationAccountInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.customer.service.*;
+import com.smoc.cloud.identification.model.AccountExcelModel;
+import com.smoc.cloud.utils.ExcelUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -29,10 +33,12 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * EC业务账号管理
@@ -639,4 +645,93 @@ public class AccountController {
         return statisticSendData;
     }
 
+    /**
+     * EC业务账号投诉率统计
+     *
+     * @return
+     */
+    @RequestMapping(value = "/view/statisticComplaint/{accountId}", method = RequestMethod.GET)
+    public ModelAndView statisticComplaint(@PathVariable String accountId, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("customer/account/account_view_statistic_complaint");
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(accountId);
+        if (!MpmValidatorUtil.validate(validator)) {
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
+
+        /**
+         * 查询账号信息
+         */
+        ResponseData<AccountBasicInfoValidator> data = businessAccountService.findById(accountId);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("accountId", accountId);
+
+        return view;
+    }
+
+    /**
+     * EC业务账号投诉率统计
+     *
+     * @return
+     */
+    @RequestMapping(value = "/view/statisticComplaintMonth/{accountId}", method = RequestMethod.GET)
+    public AccountStatisticComplaintData statisticComplaintMonth(@PathVariable String accountId, HttpServletRequest request) {
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(accountId);
+        if (!MpmValidatorUtil.validate(validator)) {
+            return new AccountStatisticComplaintData();
+        }
+
+        /**
+         * 查询账号信息
+         */
+        ResponseData<AccountBasicInfoValidator> data = businessAccountService.findById(accountId);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            return new AccountStatisticComplaintData();
+        }
+
+        AccountStatisticComplaintData statisticComplaintData = new AccountStatisticComplaintData();
+        statisticComplaintData.setAccountId(accountId);
+
+        statisticComplaintData = businessAccountService.statisticComplaintMonth(statisticComplaintData);
+
+        return statisticComplaintData;
+    }
+
+    /**
+     * 生成excel：导出账号信息
+     *
+     * @return
+     */
+    @RequestMapping(value = "/excelAccountInfo/{accountId}", method = RequestMethod.GET)
+    public void excelAccountInfo(@PathVariable String accountId, HttpServletRequest request, HttpServletResponse response) {
+
+        /**
+         * 查询账号信息
+         */
+        ResponseData<AccountBasicInfoValidator> data = businessAccountService.findById(accountId);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            return ;
+        }
+
+        AccountBasicInfoValidator accountBasicInfoValidator = data.getData();
+
+        CopyOnWriteArrayList<AccountExcelModel> list = businessAccountService.excelAccountInfo(accountBasicInfoValidator,request);
+
+        String fileName = accountBasicInfoValidator.getAccountId()+"账号信息";
+        try {
+            ExcelUtils.writeExcel(fileName, AccountExcelModel.class ,response,list);
+        } catch (Exception e) {
+            log.error("导出excel表格失败:", e);
+        }
+    }
 }
