@@ -22,6 +22,10 @@ public class IdentityCustomRoutes {
     @Resource
     private GatewayFilter verifySignatureGatewayFilter;
 
+    //验签过滤器
+    @Resource
+    private GatewayFilter httpServerSignatureGatewayFilter;
+
     @Bean
     public RouteLocator identityRouteLocator(RouteLocatorBuilder builder) {
 
@@ -32,43 +36,10 @@ public class IdentityCustomRoutes {
                                 f.stripPrefix(1))
                         .uri("lb://smoc-identity")
                 )
-//                //拦截所有HEAD请求
-//                .route(r -> r.method(HttpMethod.HEAD)
-//                        .filters(f ->
-//                                f.stripPrefix(1))
-//                        .uri("lb://smoc-identity")
-//                )
-//                //拦截所有PUT请求
-//                .route(r -> r.method(HttpMethod.PUT)
-//                        .filters(f ->
-//                                f.stripPrefix(1))
-//                        .uri("lb://smoc-identity")
-//                )
-//                //拦截所有PATCH请求
-//                .route(r -> r.method(HttpMethod.PATCH)
-//                        .filters(f ->
-//                                f.stripPrefix(1))
-//                        .uri("lb://smoc-identity")
-//                )
-//                //拦截所有DELETE请求
-//                .route(r -> r.method(HttpMethod.DELETE)
-//                        .filters(f ->
-//                                f.stripPrefix(1))
-//                        .uri("lb://smoc-identity")
-//                )
-//                //拦截所有OPTIONS请求
-//                .route(r -> r.method(HttpMethod.OPTIONS)
-//                        .filters(f ->
-//                                f.stripPrefix(1))
-//                        .uri("lb://smoc-identity")
-//                )
-//                //拦截所有TRACE请求
-//                .route(r -> r.method(HttpMethod.TRACE)
-//                        .filters(f ->
-//                                f.stripPrefix(1))
-//                        .uri("lb://smoc-identity")
-//                )
-                //拦截符合规则的 POST 请求
+
+                /**
+                 * 身份认证服务
+                 */
                 .route(r -> r.method(HttpMethod.POST)
                         .and().path("/smoc-gateway/smoc-identity/**")
                         .and().header("signature-nonce", "\\d+")
@@ -79,6 +50,21 @@ public class IdentityCustomRoutes {
                         .filters(f ->
                                 f.filter(verifySignatureGatewayFilter).stripPrefix(1))
                         .uri("lb://smoc-identity")
+
+                )
+                /**
+                 * http协议发送短信服务
+                 */
+                .route(r -> r.method(HttpMethod.POST)
+                        .and().path("/smoc-gateway/http-server/**")
+                        .and().header("signature-nonce", "\\d+")
+                        .and().readBody(String.class, requestBody -> {
+                            //相当于缓存了body信息，在filter 中可以这么获取 exchange.getAttribute("cachedRequestBodyObject");
+                            return true;
+                        })
+                        .filters(f ->
+                                f.filter(httpServerSignatureGatewayFilter).stripPrefix(1))
+                        .uri("lb://smoc-http-server")
 
                 )
                 .build();

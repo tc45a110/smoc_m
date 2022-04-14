@@ -1,0 +1,44 @@
+server: #服务端口
+  port: 18091
+  servlet:
+    context-path: /http-server
+  connection-timeout: 15000
+
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+
+  #**********************************************************
+  # Redis
+  #**********************************************************
+  redis: #redis配置
+    host: r-2zegyswwjdbicif2hdpd.redis.rds.aliyuncs.com
+    port: 6379
+    password: Tsmoc40#RedistEst
+    database: 1
+    timeout: 10000
+    lettuce:
+      pool:
+        max-active: 50
+        max-idle: 10
+        max-wait: -1
+        min-idle: 5
+
+com:
+  smoc:
+    cloud:
+      identification:
+        configuration:
+          appKey: xwRfbS8LIh
+          appScrect: 804f7493a6622482b5f03560d3772d1f
+          serviceUri: http://api.faceos.com/openapi
+
+logging:
+  config: classpath:logback-spring.xml
+  path: E:/log/smoc-log/smoc-http-server-logs
+  level:
+    root: info
+
+

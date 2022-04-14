@@ -39,3 +39,9 @@ com:
           aesKey: qUhpGjKp3caWMHgDmHoQzbOQP2lGxlzEjJNAwBwO4Q7Pv8XUpoDJUxEyPleyqy67
           md5HmacKey: ad73qUQDMH2HZrYXTfeSqDl3ZjecgW0bDf2h2zs3KaY=
           shaHmacKey: cgN4u8LsehkotaJKunFAsCign3oaCXJoF6wISxAK+ZRRyfAfrZk/d1EcUnaDi/8C
+
+logging:
+  config: classpath:logback-spring.xml
+  path: E:/log/smoc-log/smoc-gateway-logs
+  level:
+    root: info

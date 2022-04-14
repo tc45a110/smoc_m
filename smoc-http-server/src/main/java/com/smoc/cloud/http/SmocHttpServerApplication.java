@@ -1,4 +1,4 @@
-package com.smoc.cloud;
+package com.smoc.cloud.http;
 
 
 import org.springframework.boot.SpringApplication;
@@ -7,15 +7,15 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
- * smoc身份认证服务
+ * smoc htt短信发送服务
  */
 @SpringBootApplication
 @EnableFeignClients
 @EnableAsync
-class SmocIdentifyApplication {
+class SmocHttpServerApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SmocIdentifyApplication.class, args);
+        SpringApplication.run(SmocHttpServerApplication.class, args);
     }
 
 }

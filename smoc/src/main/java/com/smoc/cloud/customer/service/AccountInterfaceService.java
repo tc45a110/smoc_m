@@ -4,6 +4,8 @@ package com.smoc.cloud.customer.service;
 import com.alibaba.fastjson.JSON;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
+import com.smoc.cloud.common.redis.smoc.identification.KeyEntity;
+import com.smoc.cloud.common.redis.smoc.identification.RedisConstant;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
@@ -24,6 +26,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,6 +48,9 @@ public class AccountInterfaceService {
 
     @Resource
     private BusinessAccountRepository businessAccountRepository;
+
+    @Resource
+    private RedisTemplate<String, KeyEntity> redisTemplate;
 
 
     /**
@@ -129,6 +135,21 @@ public class AccountInterfaceService {
         //记录日志
         log.info("[EC业务账号管理][业务账号接口信息][{}]数据:{}", op, JSON.toJSONString(entity));
         accountInterfaceRepository.saveAndFlush(entity);
+
+        //如果状态不为004 则放到redis中
+        if("HTTP_TEXT_SMS".equals(entity.getProtocol())) {
+            //放到redis中对象
+            KeyEntity key = new KeyEntity();
+            key.setMd5HmacKey(entity.getAccountPassword());
+            key.setAesKey(entity.getAccountPassword());
+            key.setAesIv(entity.getAccountPassword());
+
+            //把数据放到redis里
+            redisTemplate.opsForValue().set(RedisConstant.HTTP_SERVER_KEY + entity.getAccountId(), key);
+        }else{
+            //注销
+            redisTemplate.delete(RedisConstant.HTTP_SERVER_KEY + entity.getAccountId());
+        }
 
         return ResponseDataUtil.buildSuccess();
     }

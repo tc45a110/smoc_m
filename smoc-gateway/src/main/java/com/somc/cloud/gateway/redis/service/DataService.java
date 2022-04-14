@@ -47,8 +47,21 @@ public class DataService {
 
         //把数据放到redis里
         stringRedisTemplate.opsForValue().set(RedisConstant.NONCE + signatureNonce, signatureNonce);
-        stringRedisTemplate.expire(RedisConstant.NONCE + signatureNonce, 5 * 60, TimeUnit.SECONDS);
+        stringRedisTemplate.expire(RedisConstant.NONCE + signatureNonce, 10 * 60, TimeUnit.SECONDS);
         return false;
     }
+
+    /**
+     * 查询http 短信发送服务秘钥
+     *
+     * @param account
+     * @return
+     */
+    public KeyEntity getHttpServerKey(String account) {
+        //redis 查询
+        KeyEntity keyEntity = redisTemplate.opsForValue().get(RedisConstant.HTTP_SERVER_KEY + account);
+        return keyEntity;
+    }
+
 
 }

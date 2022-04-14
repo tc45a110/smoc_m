@@ -28,13 +28,9 @@ public class IndexController {
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
         ModelAndView view = new ModelAndView("index");
 
+
         return view;
 
     }
 
-    @RequestMapping(value = "/getPublicKey", method = RequestMethod.GET)
-    public String getKey(HttpServletRequest request){
-        String publicKey = RSAUtils.generateBase64PublicKey();
-        return publicKey;
-    }
 }

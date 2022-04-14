@@ -1,4 +1,4 @@
-package com.smoc.examples.identity.utils;
+package com.smoc.examples.utils;
 import sun.misc.BASE64Encoder;
 
 import java.io.FileInputStream;

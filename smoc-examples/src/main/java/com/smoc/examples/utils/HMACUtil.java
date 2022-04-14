@@ -1,4 +1,4 @@
-package com.smoc.examples.identity.utils;
+package com.smoc.examples.utils;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;

@@ -128,7 +128,6 @@ public class IdentificationAccountInfoService {
             key.setAesIv(identificationAccountInfoValidator.getAesIv());
             //把数据放到redis里
             redisTemplate.opsForValue().set(RedisConstant.KEY + identificationAccountInfoValidator.getIdentificationAccount(), key);
-            redisTemplate.expire(RedisConstant.KEY + identificationAccountInfoValidator.getIdentificationAccount(), 3 * 360, TimeUnit.DAYS);
         }else{
             //注销
             redisTemplate.delete(RedisConstant.KEY + identificationAccountInfoValidator.getIdentificationAccount());

@@ -29,12 +29,13 @@ public enum ResponseCode {
     SIGN_ERROR("2005","签名错误"),
     SIGN_LEGAL_ERROR("2006","签名不合法"),
 
-    REQUEST_LEGAL_ERROR("3001","非法请求"),
+
 
     USER_UNAUTH("3000", "用户无权限信息！"),
     USER_NOT_EXIST("3001","用户不存在或已注销"),
     USER_PASSWORD_NULL("3002","密码错误！"),
     USER_LOGIN_FAILURE("3003","登录失败"),
+    REQUEST_LEGAL_ERROR("3004","非法请求"),
 
 
     //OAuth2 异常

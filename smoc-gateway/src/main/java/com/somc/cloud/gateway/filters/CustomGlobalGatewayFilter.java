@@ -27,7 +27,9 @@ import java.nio.charset.StandardCharsets;
 
 
 /**
- * 自定义全局过滤器
+ * 全局过滤器
+ * 拦截非post请求，只允许post请求；
+ * 对于post请求进行请求HttpHeaders初步验证
  */
 @Slf4j
 @Component
@@ -44,9 +46,9 @@ public class CustomGlobalGatewayFilter implements GlobalFilter, Ordered {
         /**
          *  拦截所有非POST请求
          */
-        if(!request.getMethod().equals(HttpMethod.POST)){
+        if (!request.getMethod().equals(HttpMethod.POST)) {
             URI uri = request.getURI();
-            log.warn("[非法请求][数据]URI:{}",uri.toString());
+            log.warn("[非法请求][数据]URI:{}", uri.toString());
             return errorHandle(exchange, ResponseCode.REQUEST_LEGAL_ERROR.getCode(), ResponseCode.REQUEST_LEGAL_ERROR.getMessage());
         }
 
@@ -55,10 +57,10 @@ public class CustomGlobalGatewayFilter implements GlobalFilter, Ordered {
         RequestStardardHeaders requestStardardHeaders = new RequestStardardHeaders();
         requestStardardHeaders.setSignatureNonce(headers.getFirst("signature-nonce"));
         requestStardardHeaders.setSignature(headers.getFirst("signature"));
-        log.warn("[HttpHeader][数据]{}",new Gson().toJson(requestStardardHeaders));
+        //log.info("[HttpHeader][数据]{}",new Gson().toJson(requestStardardHeaders));
         //处理signatureNonce 重放攻击
         boolean replayAttacks = dataService.nonce(requestStardardHeaders.getSignatureNonce());
-        if(replayAttacks){
+        if (replayAttacks) {
             return errorHandle(exchange, ResponseCode.NONCE_ERROR.getCode(), ResponseCode.NONCE_ERROR.getMessage());
         }
 
@@ -66,7 +68,7 @@ public class CustomGlobalGatewayFilter implements GlobalFilter, Ordered {
         if (!ValidatorUtil.validate(requestStardardHeaders)) {
 
             URI uri = request.getURI();
-            log.warn("[非法POST请求][数据]URI:{}",uri.toString());
+            log.warn("[非法POST请求][数据]URI:{}", uri.toString());
             return errorHandle(exchange, ResponseCode.REQUEST_LEGAL_ERROR.getCode(), ResponseCode.REQUEST_LEGAL_ERROR.getMessage());
         }
 
@@ -76,7 +78,7 @@ public class CustomGlobalGatewayFilter implements GlobalFilter, Ordered {
     public Mono<Void> errorHandle(ServerWebExchange exchange, String errorCode, String errorMessage) {
         //响应信息
         ServerHttpResponse response = exchange.getResponse();
-        response.getHeaders().set("Content-Type","application/json;charset=utf-8");
+        response.getHeaders().set("Content-Type", "application/json;charset=utf-8");
         ResponseData responseData = ResponseDataUtil.buildError(errorCode, errorMessage);
         log.error("[响应数据]数据:{}", new Gson().toJson(responseData));
         byte[] bytes = new Gson().toJson(responseData).getBytes(StandardCharsets.UTF_8);
