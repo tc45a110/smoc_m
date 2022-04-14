@@ -8,7 +8,9 @@
       <module fileurl="file://$PROJECT_DIR$/smoc-auth-ui/smoc-auth-ui.iml" filepath="$PROJECT_DIR$/smoc-auth-ui/smoc-auth-ui.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-common-utils/smoc-common-utils.iml" filepath="$PROJECT_DIR$/smoc-common-utils/smoc-common-utils.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-examples/smoc-examples.iml" filepath="$PROJECT_DIR$/smoc-examples/smoc-examples.iml" />
+      <module fileurl="file://$PROJECT_DIR$/smoc-filter/smoc-filter.iml" filepath="$PROJECT_DIR$/smoc-filter/smoc-filter.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-gateway/smoc-gateway.iml" filepath="$PROJECT_DIR$/smoc-gateway/smoc-gateway.iml" />
+      <module fileurl="file://$PROJECT_DIR$/smoc-http-server/smoc-http-server.iml" filepath="$PROJECT_DIR$/smoc-http-server/smoc-http-server.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-identity/smoc-identity.iml" filepath="$PROJECT_DIR$/smoc-identity/smoc-identity.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-parent/smoc-parent.iml" filepath="$PROJECT_DIR$/smoc-parent/smoc-parent.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-parent-ui/smoc-parent-ui.iml" filepath="$PROJECT_DIR$/smoc-parent-ui/smoc-parent-ui.iml" />
