@@ -5,19 +5,17 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class AccountStatisticSendData {
+public class AccountStatisticComplaintData {
 
     private String accountId;
 
-    private int index;
-
     private String month;
 
-    private String sendNumber;
+    private String complaint;
 
     private String[] monthArray;
 
-    private String[] sendNumberArray;
+    private String[] complaintArray;
 
     //统计维度
     private String dimension;

@@ -16,9 +16,9 @@ public class AccountStatisticSendRowMapper implements RowMapper<AccountStatistic
     public AccountStatisticSendData mapRow(ResultSet resultSet, int i) throws SQLException {
 
         AccountStatisticSendData qo = new AccountStatisticSendData();
-        qo.setData1(resultSet.getString("MONTH_DAY"));
-        qo.setData2(resultSet.getString("SEND_NUMBER"));
-        qo.setIndex(resultSet.getInt("INDEX"));
+        qo.setMonth(resultSet.getString("MONTH_DAY"));
+        qo.setSendNumber(resultSet.getString("SEND_NUMBER"));
+
         return qo;
     }
 }

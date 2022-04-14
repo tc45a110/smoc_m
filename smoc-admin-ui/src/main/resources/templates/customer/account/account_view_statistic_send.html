@@ -68,12 +68,12 @@
         var type = 'month';
         var barType = 'bar';
         var title = '近12个月发送量统计';
-        var b = true;
+        var numberBoolean = true;
         if("2" == val){
             type = 'day';
             barType = 'line';
             title = "近180天发送量统计";
-            b = false;
+            numberBoolean = false;
         }
 
         $.ajax({
@@ -108,11 +108,12 @@
                     xAxis: [
                         {
                             type: 'category',
+                            axisTick: {show: false},
                             axisLabel: {
                                 interval: 'auto',
                                 rotate: 30
                             },
-                            data: articles.month
+                            data: articles.monthArray
                         }
                     ],
                     yAxis: [
@@ -134,12 +135,12 @@
                                     color: '#61A0A8',
                                     barBorderRadius: 0,
                                     label: {
-                                        show: b,
+                                        show: numberBoolean,
                                         position: 'insideTop'
                                     }
                                 }
                             },
-                            data: articles.sendNumber
+                            data: articles.sendNumberArray
                         }
                     ]
                 };

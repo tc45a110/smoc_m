@@ -30,6 +30,11 @@
                             <h3 class="panel-title">
                                 <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
                                 业务账号信息
+                                <a th:href="@{/account/excelAccountInfo/{accountId}(accountId=${accountBasicInfoValidator.accountId})}">
+                                    <i class="mdi mdi-file-document"
+                                    style="margin-right:5px;"
+                                    title="导出账号信息"></i>
+                                </a>
                             </h3>
                         </div>
                         <div class="panel-body" style="padding-bottom:0px">
@@ -192,7 +197,7 @@
                                                                 <p class="text-muted">最大链接数：[[${accountInterfaceInfoValidator.maxConnect}]]</p>
                                                             </div>
                                                             <div class="col-sm-3 form-group">
-                                                                <p class="text-muted">服务代码：[[${accountInterfaceInfoValidator.serviceCode}]]</p>
+                                                                <p class="text-muted">服务代码：[[${accountInterfaceInfoValidator.srcId}]]</p>
                                                             </div>
                                                         </div>
                                                         <div th:if="${accountInterfaceInfoValidator.protocol eq 'HTTP_TEXT_SMS' or accountInterfaceInfoValidator.protocol eq 'HTTP_MULTI_SMS'}">
@@ -211,26 +216,7 @@
                                                                 <p class="text-muted">客户提交速率(次/秒)：[[${accountInterfaceInfoValidator.maxSubmitSecond}]]</p>
                                                             </div>
                                                         </div>
-                                                        <div th:if="${accountInterfaceInfoValidator.protocol eq 'MM7'}">
-                                                            <div class="col-sm-3 form-group">
-                                                                <p class="text-muted">服务代码：[[${accountInterfaceInfoValidator.serviceCode}]]</p>
-                                                            </div>
-                                                            <div class="col-sm-3 form-group">
-                                                                <p class="text-muted">客户提交速率(次/秒)：[[${accountInterfaceInfoValidator.maxSubmitSecond}]]</p>
-                                                            </div>
-                                                            <div class="col-sm-3 form-group">
-                                                                <p class="text-muted">运营商状态报告推送地址url：[[${accountInterfaceInfoValidator.statusReportUrl}]]</p>
-                                                            </div>
-                                                        </div>
 
-                                                        <div th:if="${accountInterfaceInfoValidator.protocol eq 'SMPP'}">
-                                                            <div class="col-sm-3 form-group">
-                                                                <p class="text-muted">服务代码：[[${accountInterfaceInfoValidator.serviceCode}]]</p>
-                                                            </div>
-                                                            <div class="col-sm-3 form-group">
-                                                                <p class="text-muted">最大链接数：[[${accountInterfaceInfoValidator.maxConnect}]]</p>
-                                                            </div>
-                                                        </div>
                                                         <div th:if="${accountInterfaceInfoValidator.protocol eq 'HTTP_INTERNATIONAL'}">
                                                             <div class="col-sm-3 form-group">
                                                                 <p class="text-muted">客户提交速率(次/秒)：[[${accountInterfaceInfoValidator.maxSubmitSecond}]]</p>

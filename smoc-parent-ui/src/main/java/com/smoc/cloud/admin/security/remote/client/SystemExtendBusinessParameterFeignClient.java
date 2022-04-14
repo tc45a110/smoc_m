@@ -5,6 +5,7 @@ import com.smoc.cloud.common.auth.validator.SystemExtendBusinessParamValidator;
 import com.smoc.cloud.common.response.ResponseData;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -21,4 +22,10 @@ public interface SystemExtendBusinessParameterFeignClient {
      */
     @RequestMapping(value = "/param/list/{businessType}", method = RequestMethod.GET)
     ResponseData<List<SystemExtendBusinessParamValidator>> list(@PathVariable String businessType) throws Exception;
+
+    /**
+     * 查询列表
+     */
+    @RequestMapping(value = "/param/findParamByBusinessTypeAndParamKey", method = RequestMethod.GET)
+    ResponseData<SystemExtendBusinessParamValidator> findParamByBusinessTypeAndParamKey(@RequestBody SystemExtendBusinessParamValidator systemExtendBusinessParamValidator);
 }

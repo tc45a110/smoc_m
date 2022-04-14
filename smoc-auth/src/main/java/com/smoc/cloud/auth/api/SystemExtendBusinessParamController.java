@@ -97,4 +97,16 @@ public class SystemExtendBusinessParamController {
 
         return systemExtendBusinessParamService.deleteById(id);
     }
+
+    /**
+     * 根据业务类型和KEY查询
+     *
+     * @param systemExtendBusinessParamValidator
+     * @return
+     */
+    @RequestMapping(value = "/findParamByBusinessTypeAndParamKey", method = RequestMethod.POST)
+    public ResponseData findParamByBusinessTypeAndParamKey(@RequestBody SystemExtendBusinessParamValidator systemExtendBusinessParamValidator) {
+
+        return systemExtendBusinessParamService.findParamByBusinessTypeAndParamKey(systemExtendBusinessParamValidator);
+    }
 }

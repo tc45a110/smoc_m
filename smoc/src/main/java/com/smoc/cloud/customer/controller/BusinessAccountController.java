@@ -5,6 +5,7 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticComplaintData;
 import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.common.smoc.message.MessageAccountValidator;
@@ -177,6 +178,18 @@ public class BusinessAccountController {
     public ResponseData<List<AccountStatisticSendData>> statisticAccountSendNumber(@RequestBody AccountStatisticSendData statisticSendData) {
 
         ResponseData<List<AccountStatisticSendData>> data = businessAccountService.statisticAccountSendNumber(statisticSendData);
+        return data;
+    }
+
+    /**
+     *  EC业务账号投诉率统计
+     * @param statisticComplaintData
+     * @return
+     */
+    @RequestMapping(value = "/statisticComplaintMonth", method = RequestMethod.POST)
+    public ResponseData<List<AccountStatisticComplaintData>> statisticComplaintMonth(@RequestBody AccountStatisticComplaintData statisticComplaintData) {
+
+        ResponseData<List<AccountStatisticComplaintData>> data = businessAccountService.statisticComplaintMonth(statisticComplaintData);
         return data;
     }
 }

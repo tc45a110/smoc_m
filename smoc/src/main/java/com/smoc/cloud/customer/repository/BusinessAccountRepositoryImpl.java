@@ -4,6 +4,7 @@ package com.smoc.cloud.customer.repository;
 import com.smoc.cloud.common.BasePageRepository;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
+import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticComplaintData;
 import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.common.smoc.message.MessageAccountValidator;
@@ -266,7 +267,7 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
         StringBuilder sqlBuffer = new StringBuilder("select ");
 
         if("month".equals(statisticSendData.getDimension())){
-            sqlBuffer.append("  a.INDEX,a.MONTH_DAY");
+            sqlBuffer.append("  a.MONTH_DAY");
             sqlBuffer.append(", IFNULL(b.MESSAGE_SUCCESS_NUM,0)SEND_NUMBER from ");
             sqlBuffer.append(" (SELECT @s :=@s + 1 as `INDEX`, DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL @s MONTH),'%Y-%m') AS `MONTH_DAY` ");
             sqlBuffer.append("  from mysql.help_topic, (SELECT @s := -1) temp WHERE  @s < 11 ORDER BY MONTH_DAY desc");
@@ -278,7 +279,7 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
         }
 
         if("day".equals(statisticSendData.getDimension())){
-            sqlBuffer.append("  a.INDEX,a.MONTH_DAY");
+            sqlBuffer.append("  a.MONTH_DAY");
             sqlBuffer.append(", IFNULL(b.MESSAGE_SUCCESS_NUM,0)SEND_NUMBER from ");
             sqlBuffer.append(" (SELECT @s :=@s + 1 as `INDEX`, DATE(DATE_SUB(CURRENT_DATE, INTERVAL @s DAY)) AS `MONTH_DAY` ");
             sqlBuffer.append("  from mysql.help_topic, (SELECT @s := -1) temp WHERE  @s < 179 ORDER BY MONTH_DAY desc");
@@ -297,6 +298,32 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
         paramsList.toArray(params);
 
         List<AccountStatisticSendData> list = this.queryForObjectList(sqlBuffer.toString(), params, new AccountStatisticSendRowMapper());
+        return list;
+    }
+
+    public  List<AccountStatisticComplaintData> statisticComplaintMonth(AccountStatisticComplaintData statisticComplaintData) {
+
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append("  a.MONTH_DAY");
+        sqlBuffer.append(", IFNULL(b.COMPLAINT_NUM,0)COMPLAINT_NUM from ");
+        sqlBuffer.append(" (SELECT @s :=@s + 1 as `INDEX`, DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL @s MONTH),'%Y-%m') AS `MONTH_DAY` ");
+        sqlBuffer.append("  from mysql.help_topic, (SELECT @s := -1) temp WHERE  @s < 11 ORDER BY MONTH_DAY desc");
+        sqlBuffer.append(" )a  left join ");
+        sqlBuffer.append(" (SELECT DATE_FORMAT(t.REPORT_DATE, '%Y-%m')MONTH_DAY,count(*)COMPLAINT_NUM ");
+        sqlBuffer.append(" FROM message_complaint_info t WHERE t.BUSINESS_ACCOUNT = ? ");
+        sqlBuffer.append(" GROUP BY t.BUSINESS_ACCOUNT, DATE_FORMAT(t.REPORT_DATE, '%Y-%m')");
+        sqlBuffer.append(" )b on a.MONTH_DAY = b.MONTH_DAY  order by a.MONTH_DAY asc");
+
+
+        List<Object> paramsList = new ArrayList<Object>();
+        paramsList.add(statisticComplaintData.getAccountId());
+
+        //根据参数个数，组织参数值
+        Object[] params = new Object[paramsList.size()];
+        paramsList.toArray(params);
+
+        List<AccountStatisticComplaintData> list = this.queryForObjectList(sqlBuffer.toString(), params, new AccountStatisticComplaintRowMapper());
         return list;
     }
 }

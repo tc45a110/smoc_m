@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.Iterator;
@@ -146,5 +147,19 @@ public class SystemExtendBusinessParamService {
         return systemExtendBusinessParamRepository.existsById(id);
     }
 
+    /**
+     * 根据业务类型和KEY查询
+     * @param systemExtendBusinessParamValidator
+     * @return
+     */
+    public ResponseData findParamByBusinessTypeAndParamKey(SystemExtendBusinessParamValidator systemExtendBusinessParamValidator) {
 
+        List<SystemExtendBusinessParam> list = systemExtendBusinessParamRepository.findSystemExtendBusinessParamByBusinessTypeAndParamKeyAndParamStatus(systemExtendBusinessParamValidator.getBusinessType(),systemExtendBusinessParamValidator.getParamKey(),"1");
+        if(!StringUtils.isEmpty(list) && list.size()>0){
+            SystemExtendBusinessParam systemExtendBusinessParam = list.get(0);
+            return ResponseDataUtil.buildSuccess(systemExtendBusinessParam);
+        }
+
+        return ResponseDataUtil.buildSuccess();
+    }
 }

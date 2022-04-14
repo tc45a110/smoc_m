@@ -95,7 +95,8 @@
                                                                       th:href="@{/account/view/statisticSend/{accountId}(accountId=${accountId})}"
                                                                       th:target="tab-content">发送量统计</a></li>
                                             <li class="" id="tab6"><a onclick="active('6')"
-
+                                                                      sec:authorize-url="/account/view/statisticComplaint/*"
+                                                                      th:href="@{/account/view/statisticComplaint/{accountId}(accountId=${accountId})}"
                                                                       th:target="tab-content">投诉统计</a></li>
                                             <li class="" id="tab7"><a onclick="active('7')"
                                                                       sec:authorize-url="/user/logs/list/*/*"

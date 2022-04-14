@@ -3,6 +3,7 @@ package com.smoc.cloud.customer.remote;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticComplaintData;
 import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -76,4 +77,12 @@ public interface BusinessAccountFeignClient {
      */
     @RequestMapping(value = "/account/statisticAccountSendNumber", method = RequestMethod.POST)
     ResponseData<List<AccountStatisticSendData>> statisticAccountSendNumber(@RequestBody AccountStatisticSendData statisticSendData);
+
+    /**
+     * EC业务账号投诉率统计
+     * @param statisticComplaintData
+     * @return
+     */
+    @RequestMapping(value = "/account/statisticComplaintMonth", method = RequestMethod.POST)
+    ResponseData<List<AccountStatisticComplaintData>> statisticComplaintMonth(@RequestBody AccountStatisticComplaintData statisticComplaintData);
 }

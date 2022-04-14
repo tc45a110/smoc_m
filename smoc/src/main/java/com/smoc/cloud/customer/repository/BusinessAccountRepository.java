@@ -3,6 +3,7 @@ package com.smoc.cloud.customer.repository;
 
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
+import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticComplaintData;
 import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.common.smoc.message.MessageAccountValidator;
@@ -73,4 +74,11 @@ public interface BusinessAccountRepository extends CrudRepository<AccountBasicIn
      * @return
      */
     List<AccountStatisticSendData> statisticAccountSendNumber(AccountStatisticSendData statisticSendData);
+
+    /**
+     * 账号投诉率统计
+     * @param statisticComplaintData
+     * @return
+     */
+    List<AccountStatisticComplaintData> statisticComplaintMonth(AccountStatisticComplaintData statisticComplaintData);
 }

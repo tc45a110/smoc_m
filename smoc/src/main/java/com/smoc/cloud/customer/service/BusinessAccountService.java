@@ -8,6 +8,7 @@ import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.customer.qo.AccountChannelInfoQo;
+import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticComplaintData;
 import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.common.smoc.message.MessageAccountValidator;
@@ -340,6 +341,16 @@ public class BusinessAccountService {
      */
     public ResponseData<List<AccountStatisticSendData>> statisticAccountSendNumber(AccountStatisticSendData statisticSendData) {
         List<AccountStatisticSendData> list = businessAccountRepository.statisticAccountSendNumber(statisticSendData);
+        return ResponseDataUtil.buildSuccess(list);
+    }
+
+    /**
+     * 账号投诉率统计
+     * @param statisticComplaintData
+     * @return
+     */
+    public ResponseData<List<AccountStatisticComplaintData>> statisticComplaintMonth(AccountStatisticComplaintData statisticComplaintData) {
+        List<AccountStatisticComplaintData> list = businessAccountRepository.statisticComplaintMonth(statisticComplaintData);
         return ResponseDataUtil.buildSuccess(list);
     }
 }
