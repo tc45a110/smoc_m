@@ -116,4 +116,15 @@ public class EnterpriseWebController {
         ResponseData data = enterpriseWebService.forbiddenWeb(id,status);
         return data;
     }
+
+    /**
+     * 查询所有web账号
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/webAll", method = RequestMethod.POST)
+    public ResponseData<PageList<EnterpriseWebAccountInfoValidator>> webAll(@RequestBody PageParams<EnterpriseWebAccountInfoValidator> params) {
+
+        return enterpriseWebService.webAll(params);
+    }
 }

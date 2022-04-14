@@ -158,7 +158,7 @@
                                                     style="padding: 0px; width: 100%; height: 2600px;background-color:#fff"></iframe>
                                             <iframe name="tab-content" th:frameBorder="0"
                                                     th:scrolling="auto" th:if="${flag eq 'filter'}"
-                                                    th:src="@{/parameter/filter/list/BUSINESS_ACCOUNT_FILTER/accountId/6}"
+                                                    th:src="@{/parameter/filter/list/BUSINESS_ACCOUNT_FILTER/{id}/6(id=${accountId})}"
                                                     style="padding: 0px; width: 100%; height: 2600px;background-color:#fff"></iframe>
                                             <iframe name="tab-content" th:frameBorder="0"
                                                     th:scrolling="auto" th:if="${flag eq 'channel'}"

@@ -3,6 +3,7 @@ package com.smoc.cloud.customer.remote;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.customer.qo.AccountInfoQo;
 import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticComplaintData;
 import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
@@ -85,4 +86,12 @@ public interface BusinessAccountFeignClient {
      */
     @RequestMapping(value = "/account/statisticComplaintMonth", method = RequestMethod.POST)
     ResponseData<List<AccountStatisticComplaintData>> statisticComplaintMonth(@RequestBody AccountStatisticComplaintData statisticComplaintData);
+
+    /**
+     * 业务账号综合查询
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/account/accountAll", method = RequestMethod.POST)
+    ResponseData<PageList<AccountInfoQo>> accountAll(@RequestBody PageParams<AccountInfoQo> params);
 }

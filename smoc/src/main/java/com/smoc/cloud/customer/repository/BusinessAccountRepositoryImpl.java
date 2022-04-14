@@ -4,6 +4,7 @@ package com.smoc.cloud.customer.repository;
 import com.smoc.cloud.common.BasePageRepository;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
+import com.smoc.cloud.common.smoc.customer.qo.AccountInfoQo;
 import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticComplaintData;
 import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
@@ -112,6 +113,11 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
         return list;
     }
 
+    /**
+     * 查询企业所有的业务账号
+     * @param qo
+     * @return
+     */
     public  List<AccountBasicInfoValidator> findBusinessAccount(AccountBasicInfoValidator qo) {
 
         //查询sql
@@ -159,6 +165,11 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
         return list;
     }
 
+    /**
+     * 查询企业下的账户和余额
+     * @param qo
+     * @return
+     */
     public  List<MessageAccountValidator> messageAccountList(MessageAccountValidator qo) {
 
         //查询sql
@@ -192,6 +203,11 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
         return list;
     }
 
+    /**
+     * 查询自服务平台发送账号列表
+     * @param pageParams
+     * @return
+     */
     public PageList<MessageAccountValidator> messageAccountInfoList(PageParams<MessageAccountValidator> pageParams) {
 
         //查询条件
@@ -261,6 +277,11 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
         return pageList;
     }
 
+    /**
+     * 账号按维度统计发送量
+     * @param statisticSendData
+     * @return
+     */
     public  List<AccountStatisticSendData> statisticAccountSendNumber(AccountStatisticSendData statisticSendData) {
 
         //查询sql
@@ -301,6 +322,11 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
         return list;
     }
 
+    /**
+     * 账号投诉率统计
+     * @param statisticComplaintData
+     * @return
+     */
     public  List<AccountStatisticComplaintData> statisticComplaintMonth(AccountStatisticComplaintData statisticComplaintData) {
 
         //查询sql
@@ -325,5 +351,93 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
 
         List<AccountStatisticComplaintData> list = this.queryForObjectList(sqlBuffer.toString(), params, new AccountStatisticComplaintRowMapper());
         return list;
+    }
+
+    /**
+     * 业务账号综合查询
+     * @param pageParams
+     * @return
+     */
+    public PageList<AccountInfoQo> accountAll(PageParams<AccountInfoQo> pageParams) {
+
+        //查询条件
+        AccountInfoQo qo = pageParams.getParams();
+
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append("  t.ACCOUNT_ID");
+        sqlBuffer.append(", t.ENTERPRISE_ID");
+        sqlBuffer.append(", t.ACCOUNT_NAME");
+        sqlBuffer.append(", e.ENTERPRISE_NAME");
+        sqlBuffer.append(", t.BUSINESS_TYPE");
+        sqlBuffer.append(", t.CARRIER");
+        sqlBuffer.append(", t.INFO_TYPE");
+        sqlBuffer.append(", t.EXTEND_CODE");
+        sqlBuffer.append(", t.RANDOM_EXTEND_CODE_LENGTH");
+        sqlBuffer.append(", t.ACCOUNT_STATUS");
+        sqlBuffer.append(", f.PAY_TYPE");
+        sqlBuffer.append(", f.CHARGE_TYPE");
+        sqlBuffer.append(", p.PROTOCOL");
+        sqlBuffer.append("  from account_base_info t left join enterprise_basic_info e on t.ENTERPRISE_ID = e.ENTERPRISE_ID");
+        sqlBuffer.append("  left join (select ACCOUNT_ID,PAY_TYPE,CHARGE_TYPE from account_finance_info  group by ACCOUNT_ID)f on t.ACCOUNT_ID = f.ACCOUNT_ID");
+        sqlBuffer.append("  left join account_interface_info p on t.ACCOUNT_ID = p.ACCOUNT_ID");
+        sqlBuffer.append("  where 1=1 ");
+
+        List<Object> paramsList = new ArrayList<Object>();
+
+        if (!StringUtils.isEmpty(qo.getEnterpriseName())) {
+            sqlBuffer.append(" and e.ENTERPRISE_NAME like ?");
+            paramsList.add( "%"+qo.getEnterpriseName().trim()+"%");
+        }
+
+        if (!StringUtils.isEmpty(qo.getAccountName())) {
+            sqlBuffer.append(" and t.ACCOUNT_NAME like ?");
+            paramsList.add( "%"+qo.getAccountName().trim()+"%");
+        }
+
+        if (!StringUtils.isEmpty(qo.getAccountId())) {
+            sqlBuffer.append(" and t.ACCOUNT_ID like ?");
+            paramsList.add( "%"+qo.getAccountId().trim()+"%");
+        }
+
+        if (!StringUtils.isEmpty(qo.getCarrier())) {
+            sqlBuffer.append(" and t.CARRIER like ?");
+            paramsList.add( "%"+qo.getCarrier().trim()+"%");
+        }
+
+        if (!StringUtils.isEmpty(qo.getBusinessType())) {
+            sqlBuffer.append(" and t.BUSINESS_TYPE = ?");
+            paramsList.add(qo.getBusinessType().trim());
+        }
+
+        if (!StringUtils.isEmpty(qo.getInfoType())) {
+            sqlBuffer.append(" and t.INFO_TYPE like ?");
+            paramsList.add( "%"+qo.getInfoType().trim()+"%");
+        }
+
+        if (!StringUtils.isEmpty(qo.getPayType())) {
+            sqlBuffer.append(" and f.PAY_TYPE = ?");
+            paramsList.add(qo.getPayType().trim());
+        }
+
+        if (!StringUtils.isEmpty(qo.getChargeType())) {
+            sqlBuffer.append(" and f.CHARGE_TYPE = ?");
+            paramsList.add(qo.getChargeType().trim());
+        }
+
+        if (!StringUtils.isEmpty(qo.getProtocol())) {
+            sqlBuffer.append(" and p.PROTOCOL = ?");
+            paramsList.add(qo.getProtocol().trim());
+        }
+
+        sqlBuffer.append(" order by t.CREATED_TIME desc");
+
+        //根据参数个数，组织参数值
+        Object[] params = new Object[paramsList.size()];
+        paramsList.toArray(params);
+
+        PageList<AccountInfoQo> pageList = this.queryByPageForMySQL(sqlBuffer.toString(), params, pageParams.getCurrentPage(), pageParams.getPageSize(), new AccountInfoQoRowMapper());
+        pageList.getPageParams().setParams(qo);
+        return pageList;
     }
 }

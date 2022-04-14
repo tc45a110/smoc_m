@@ -9,6 +9,7 @@ import com.smoc.cloud.common.auth.validator.BaseUserValidator;
 import com.smoc.cloud.common.auth.validator.UserPasswordValidator;
 import com.smoc.cloud.common.auth.validator.UserValidator;
 import com.smoc.cloud.common.page.PageList;
+import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
@@ -256,5 +257,15 @@ public class EnterpriseWebService {
         log.info("[企业接入][{}]数据:{}", "1".equals(op) ? "注销WEB登录账号":"启用WEB登录账号" ,  JSON.toJSONString(entity));
 
         return ResponseDataUtil.buildSuccess();
+    }
+
+    /**
+     * 查询所有web账号
+     * @param params
+     * @return
+     */
+    public ResponseData<PageList<EnterpriseWebAccountInfoValidator>> webAll(PageParams<EnterpriseWebAccountInfoValidator> params) {
+        PageList<EnterpriseWebAccountInfoValidator> list = enterpriseWebRepository.webAll(params);
+        return ResponseDataUtil.buildSuccess(list);
     }
 }

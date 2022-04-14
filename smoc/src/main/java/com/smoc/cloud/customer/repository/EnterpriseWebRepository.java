@@ -1,6 +1,8 @@
 package com.smoc.cloud.customer.repository;
 
 
+import com.smoc.cloud.common.page.PageList;
+import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseWebAccountInfoValidator;
 import com.smoc.cloud.customer.entity.EnterpriseWebAccountInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -29,4 +31,11 @@ public interface EnterpriseWebRepository extends CrudRepository<EnterpriseWebAcc
     @Modifying
     @Query(value = "update enterprise_web_account_info set ACCOUNT_STATUS = :status where ENTERPRISE_ID = :enterpriseId",nativeQuery = true)
     void batchWebAccountStatusByentErpriseId(@Param("enterpriseId") String enterpriseId, @Param("status") String status);
+
+    /**
+     * 查询所有web账号
+     * @param params
+     * @return
+     */
+    PageList<EnterpriseWebAccountInfoValidator> webAll(PageParams<EnterpriseWebAccountInfoValidator> params);
 }

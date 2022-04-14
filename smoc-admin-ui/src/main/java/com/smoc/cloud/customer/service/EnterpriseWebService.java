@@ -1,5 +1,7 @@
 package com.smoc.cloud.customer.service;
 
+import com.smoc.cloud.common.page.PageList;
+import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
@@ -102,4 +104,20 @@ public class EnterpriseWebService {
             return ResponseDataUtil.buildError(e.getMessage());
         }
     }
+
+    /**
+     * 查询web账号
+     * @param params
+     * @return
+     */
+    public ResponseData<PageList<EnterpriseWebAccountInfoValidator>> webAll(PageParams<EnterpriseWebAccountInfoValidator> params) {
+        try {
+            ResponseData<PageList<EnterpriseWebAccountInfoValidator>> data = this.enterpriseWebFeignClient.webAll(params);
+            return data;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
 }

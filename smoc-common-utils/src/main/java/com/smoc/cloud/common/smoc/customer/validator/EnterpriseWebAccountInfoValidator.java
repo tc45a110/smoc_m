@@ -34,4 +34,5 @@ public class EnterpriseWebAccountInfoValidator {
     private String updatedBy;
     private Date updatedTime;
 
+    private String enterpriseName;
 }

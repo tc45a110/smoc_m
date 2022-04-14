@@ -8,6 +8,7 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.smoc.customer.qo.AccountInfoQo;
 import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticComplaintData;
 import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
@@ -243,18 +244,18 @@ public class BusinessAccountService {
             AccountInterfaceInfoValidator interfaceInfo = interfaceInfoValidator.getData();
 
             AccountExcelModel excelModel4 = new AccountExcelModel();
-            excelModel4.setKey(interfaceInfo.getProtocol() + "接口参数");
+            excelModel4.setKey(interfaceInfo.getProtocol() + "接口参数信息如下：");
             list.add(excelModel4);
-
-            AccountExcelModel excelModel5 = new AccountExcelModel();
-            excelModel5.setKey("IP端口");
-            excelModel5.setValue(StringUtils.isEmpty(interfaceInfo.getIdentifyIp()) ? "无限制" : interfaceInfo.getIdentifyIp());
-            list.add(excelModel5);
 
             AccountExcelModel excelModel6 = new AccountExcelModel();
             excelModel6.setKey("账号密码");
             excelModel6.setValue(DES.decrypt(interfaceInfo.getAccountPassword()));
             list.add(excelModel6);
+
+            AccountExcelModel excelModel5 = new AccountExcelModel();
+            excelModel5.setKey("IP端口");
+            excelModel5.setValue(StringUtils.isEmpty(interfaceInfo.getIdentifyIp()) ? "无限制" : interfaceInfo.getIdentifyIp());
+            list.add(excelModel5);
 
             AccountExcelModel excelModel7 = new AccountExcelModel();
             excelModel7.setKey("发送速率(条/秒)");
@@ -285,7 +286,7 @@ public class BusinessAccountService {
         ResponseData<List<ParameterExtendFiltersValueValidator>> data = this.parameterExtendFiltersValueService.findParameterValue(accountBasicInfoValidator.getAccountId());
         if (!StringUtils.isEmpty(data.getData()) && data.getData().size() > 0) {
             AccountExcelModel excelModel11 = new AccountExcelModel();
-            excelModel11.setKey("过滤属性");
+            excelModel11.setKey("过滤属性信息如下：");
             list.add(excelModel11);
 
             List<ParameterExtendFiltersValueValidator> filtersList = data.getData();
@@ -294,8 +295,12 @@ public class BusinessAccountService {
             Map<String, DictType> dictMap = (Map<String, DictType>) context.getAttribute("dict");
 
             for (ParameterExtendFiltersValueValidator filters : filtersList) {
-                String values = getParamValues(filters,dictMap);
+                //黑词过滤、审核词过滤、黑名单层级过滤  这三列不用导出
+                if("BLACK_WORD_FILTERING".equals(filters.getParamKey()) || "AUDIT_WORD_FILTERING".equals(filters.getParamKey()) || "BLACK_LIST_LEVEL_FILTERING".equals(filters.getParamKey())){
+                    continue;
+                }
 
+                String values = getParamValues(filters, dictMap);
                 AccountExcelModel excelModel12 = new AccountExcelModel();
                 excelModel12.setKey(filters.getParamName());
                 excelModel12.setValue(values);
@@ -310,35 +315,36 @@ public class BusinessAccountService {
 
         String values = "";
 
-        if(StringUtils.isEmpty(filters.getParamKey())){
+        if (StringUtils.isEmpty(filters.getParamKey())) {
             return "";
         }
 
+        //查询过滤信息，主要是取显示类型，用于查询字典FieldName
         SystemExtendBusinessParamValidator validator = new SystemExtendBusinessParamValidator();
         validator.setBusinessType("BUSINESS_ACCOUNT_FILTER");
         validator.setParamKey(filters.getParamKey());
         ResponseData<SystemExtendBusinessParamValidator> systemExtendBusinessParamValidator = systemExtendBusinessParameterFeignClient.findParamByBusinessTypeAndParamKey(validator);
 
-        if(StringUtils.isEmpty(systemExtendBusinessParamValidator.getData())){
+        if (StringUtils.isEmpty(systemExtendBusinessParamValidator.getData())) {
             return "";
         }
 
         //文本
-        if("text".equals(systemExtendBusinessParamValidator.getData().getShowType())){
+        if ("text".equals(systemExtendBusinessParamValidator.getData().getShowType())) {
             return filters.getParamValue();
         }
 
         //查询字典值
-        DictType dictType  = dictMap.get(systemExtendBusinessParamValidator.getData().getDictEnable());
+        DictType dictType = dictMap.get(systemExtendBusinessParamValidator.getData().getDictEnable());
         List<Dict> dictList = dictType.getDict();
-        if(StringUtils.isEmpty(dictList) && dictList.size()>0){
+        if (StringUtils.isEmpty(dictList) && dictList.size() > 0) {
             return "";
         }
 
         //下拉
-        if("select".equals(systemExtendBusinessParamValidator.getData().getShowType())){
-            for(Dict dict:dictList){
-                if(filters.getParamValue().equals(dict.getFieldCode())){
+        if ("select".equals(systemExtendBusinessParamValidator.getData().getShowType())) {
+            for (Dict dict : dictList) {
+                if (filters.getParamValue().equals(dict.getFieldCode())) {
                     values = dict.getFieldName();
                     return values;
                 }
@@ -346,26 +352,42 @@ public class BusinessAccountService {
         }
 
         //复选
-        if("checkbox".equals(systemExtendBusinessParamValidator.getData().getShowType())){
+        if ("checkbox".equals(systemExtendBusinessParamValidator.getData().getShowType())) {
             String[] params = filters.getParamValue().split(",");
-            if(StringUtils.isEmpty(params) || params.length<0){
+            if (StringUtils.isEmpty(params) || params.length < 0) {
                 return "";
             }
 
-            for(int a=0;a<params.length;a++){
-                for (int i =0;i<dictList.size();i++) {
+            for (int a = 0; a < params.length; a++) {
+                for (int i = 0; i < dictList.size(); i++) {
                     Dict dict = dictList.get(i);
                     if (params[a].equals(dict.getFieldCode())) {
-                        if(StringUtils.isEmpty(values)){
+                        if (StringUtils.isEmpty(values)) {
                             values = dict.getFieldName();
-                        }else{
-                            values += ","+dict.getFieldName();
+                        } else {
+                            values += "," + dict.getFieldName();
                         }
                         break;
                     }
                 }
             }
         }
+
         return values;
+    }
+
+    /**
+     * 业务账号综合查询
+     * @param params
+     * @return
+     */
+    public ResponseData<PageList<AccountInfoQo>> accountAll(PageParams<AccountInfoQo> params) {
+        try {
+            ResponseData<PageList<AccountInfoQo>> pageList = this.businessAccountFeignClient.accountAll(params);
+            return pageList;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
     }
 }

@@ -1,5 +1,7 @@
 package com.smoc.cloud.customer.remote;
 
+import com.smoc.cloud.common.page.PageList;
+import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseWebAccountInfoValidator;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -58,4 +60,12 @@ public interface EnterpriseWebFeignClient {
      */
     @RequestMapping(value = "/enterprise/web/forbiddenWeb/{id}/{status}", method = RequestMethod.GET)
     ResponseData forbiddenWeb(@PathVariable String id, @PathVariable String status) throws Exception;
+
+    /**
+     *  查询所有web账号
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/enterprise/web/webAll", method = RequestMethod.POST)
+    ResponseData<PageList<EnterpriseWebAccountInfoValidator>> webAll(@RequestBody PageParams<EnterpriseWebAccountInfoValidator> params);
 }

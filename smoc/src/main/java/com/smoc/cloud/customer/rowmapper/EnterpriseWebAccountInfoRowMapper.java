@@ -18,8 +18,11 @@ public class EnterpriseWebAccountInfoRowMapper implements RowMapper<EnterpriseWe
         EnterpriseWebAccountInfoValidator qo = new EnterpriseWebAccountInfoValidator();
         qo.setId(resultSet.getString("ID"));
         qo.setEnterpriseId(resultSet.getString("ENTERPRISE_ID"));
+        qo.setEnterpriseName(resultSet.getString("ENTERPRISE_NAME"));
         qo.setWebLoginName(resultSet.getString("WEB_LOGIN_NAME"));
         qo.setAccountStatus(resultSet.getString("ACCOUNT_STATUS"));
+        qo.setCreatedBy(resultSet.getString("CREATED_BY"));
+        qo.setCreatedTime(resultSet.getString("CREATED_TIME"));
 
         return qo;
     }

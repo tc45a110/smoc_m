@@ -5,6 +5,7 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.smoc.customer.qo.AccountInfoQo;
 import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticComplaintData;
 import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
@@ -191,5 +192,16 @@ public class BusinessAccountController {
 
         ResponseData<List<AccountStatisticComplaintData>> data = businessAccountService.statisticComplaintMonth(statisticComplaintData);
         return data;
+    }
+
+    /**
+     * 业务账号综合查询
+     * @param pageParams
+     * @return
+     */
+    @RequestMapping(value = "/accountAll", method = RequestMethod.POST)
+    public ResponseData<PageList<AccountInfoQo>> accountAll(@RequestBody PageParams<AccountInfoQo> pageParams){
+
+        return businessAccountService.accountAll(pageParams);
     }
 }
