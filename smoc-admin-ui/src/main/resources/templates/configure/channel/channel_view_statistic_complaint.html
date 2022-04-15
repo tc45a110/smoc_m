@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
+
+</head>
+<body style="background-color:#fff">
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="background-color:#fff">
+    <div class="container" style="background-color:#fff">
+
+        <!-- start row 页面内容-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+
+            <div class="col-md-12">
+                    <div id="main1" style="height: 450px;margin-top: 15px"></div>
+            </div> <!-- end col -->
+
+        </div>
+
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<script th:src="@{/static/echarts/echarts.min.js}"></script>
+
+<script th:remove="${#strings.isEmpty(error)}?none:all">
+
+    $.ajax({
+        url : '[[${#httpServletRequest.getContextPath()}]]/configure/channel/statistic/complaintMonth/[[${businessId}]]',
+        success : function(data) {
+            articles = eval(data);
+            option2 = {
+                title: {
+                    text: '近一年投诉率统计',
+                    x: 'left'
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                },
+                legend: {
+                    data: ['投诉率统计']
+                },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        mark: {show: false},
+                        dataView: {show: true, readOnly: false},
+                        magicType: {show: true, type: ['line', 'bar']},
+                        restore: {show: false},
+                        saveAsImage: {show: true}
+                    }
+                },
+                calculable: true,
+                xAxis: [
+                    {
+                        type: 'category',
+                        axisTick: {show: false},
+                        axisLabel: {
+                            interval: 'auto',
+                            rotate: 30
+                        },
+                        data: articles.monthArray
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        splitArea: {show: true}
+                    }
+                ],
+                grid: {
+                    x2: 40
+                },
+                series: [
+                    {
+                        name: '投诉率统计',
+                        type: 'bar',
+                        stack: '总量',
+                        itemStyle: {
+                            normal: {
+                                color: '#61A0A8',
+                                barBorderRadius: 0,
+                                label: {
+                                    show: true,
+                                    position: 'insideTop'
+                                }
+                            }
+                        },
+                        data: articles.complaintArray
+                    }
+                ]
+            };
+
+            myChart2 = echarts.init(document.getElementById('main1'));
+            myChart2.setOption(option2);
+        }
+    });
+
+</script>
+<script>
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+
+</script>
+</body>
+</html>

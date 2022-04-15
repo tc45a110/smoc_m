@@ -4,8 +4,10 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.configuate.qo.ChannelInterfaceInfoQo;
 import com.smoc.cloud.common.smoc.customer.qo.AccountInfoQo;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseWebAccountInfoValidator;
+import com.smoc.cloud.configure.channel.service.ChannelService;
 import com.smoc.cloud.customer.service.BusinessAccountService;
 import com.smoc.cloud.customer.service.EnterpriseWebService;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +28,9 @@ public class QueryInfoController {
 
     @Autowired
     private BusinessAccountService businessAccountService;
+
+    @Autowired
+    private ChannelService channelService;
 
     /**
      *  查询web账号
@@ -120,13 +125,65 @@ public class QueryInfoController {
         //分页查询
         pageParams.setParams(accountInfoQo);
 
-        ResponseData<PageList<AccountInfoQo>> data = enterpriseWebService.webAll(pageParams);
+        ResponseData<PageList<AccountInfoQo>> data = businessAccountService.accountAll(pageParams);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;
         }
 
         view.addObject("accountInfoQo", accountInfoQo);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
+        return view;
+    }
+
+    /**
+     *  通道接口参数查询
+     * @return
+     */
+    @RequestMapping(value = "/channel/interface/list", method = RequestMethod.GET)
+    public ModelAndView channelInterfaceList() {
+        ModelAndView view = new ModelAndView("query/channel_interface_list");
+
+        //初始化数据
+        PageParams<ChannelInterfaceInfoQo> params = new PageParams<ChannelInterfaceInfoQo>();
+        params.setPageSize(10);
+        params.setCurrentPage(1);
+        ChannelInterfaceInfoQo channelInterfaceInfoQo = new ChannelInterfaceInfoQo();
+        params.setParams(channelInterfaceInfoQo);
+
+        //查询
+        ResponseData<PageList<ChannelInterfaceInfoQo>> data = channelService.channelInterfacePage(params);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("channelInterfaceInfoQo", channelInterfaceInfoQo);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
+        return view;
+    }
+
+    /**
+     * 通道接口参数分页查询
+     *
+     * @return
+     */
+    @RequestMapping(value = "/channel/interface/page", method = RequestMethod.POST)
+    public ModelAndView channelInterfacePage(@ModelAttribute ChannelInterfaceInfoQo channelInterfaceInfoQo, PageParams pageParams) {
+        ModelAndView view = new ModelAndView("query/channel_interface_list");
+
+        //分页查询
+        pageParams.setParams(channelInterfaceInfoQo);
+
+        ResponseData<PageList<ChannelInterfaceInfoQo>> data = channelService.channelInterfacePage(pageParams);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("channelInterfaceInfoQo", channelInterfaceInfoQo);
         view.addObject("list", data.getData().getList());
         view.addObject("pageParams", data.getData().getPageParams());
         return view;

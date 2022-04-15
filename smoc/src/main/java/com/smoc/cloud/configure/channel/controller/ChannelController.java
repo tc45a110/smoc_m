@@ -5,8 +5,12 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.smoc.configuate.qo.ChannelAccountInfoQo;
 import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
+import com.smoc.cloud.common.smoc.configuate.qo.ChannelInterfaceInfoQo;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelBasicInfoValidator;
+import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticComplaintData;
+import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.configure.channel.service.ChannelInterfaceService;
@@ -17,6 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
+
+import java.util.List;
 
 
 /**
@@ -105,4 +111,49 @@ public class ChannelController {
         return data;
     }
 
+    /**
+     * 通道按维度统计发送量
+     * @param statisticSendData
+     * @return
+     */
+    @RequestMapping(value = "/statisticChannelSendNumber", method = RequestMethod.POST)
+    public ResponseData<List<AccountStatisticSendData>> statisticChannelSendNumber(@RequestBody AccountStatisticSendData statisticSendData) {
+
+        ResponseData<List<AccountStatisticSendData>> data = channelService.statisticChannelSendNumber(statisticSendData);
+        return data;
+    }
+
+    /**
+     *  通道投诉率统计
+     * @param statisticComplaintData
+     * @return
+     */
+    @RequestMapping(value = "/statisticComplaintMonth", method = RequestMethod.POST)
+    public ResponseData<List<AccountStatisticComplaintData>> statisticComplaintMonth(@RequestBody AccountStatisticComplaintData statisticComplaintData) {
+
+        ResponseData<List<AccountStatisticComplaintData>> data = channelService.statisticComplaintMonth(statisticComplaintData);
+        return data;
+    }
+
+    /**
+     * 通道账号使用明细
+     * @param pageParams
+     * @return
+     */
+    @RequestMapping(value = "/channelAccountList", method = RequestMethod.POST)
+    public ResponseData<PageList<ChannelAccountInfoQo>> channelAccountList(@RequestBody PageParams<ChannelAccountInfoQo> pageParams){
+
+        return channelService.channelAccountList(pageParams);
+    }
+
+    /**
+     * 通道接口参数查询
+     * @param pageParams
+     * @return
+     */
+    @RequestMapping(value = "/channelInterfacePage", method = RequestMethod.POST)
+    public ResponseData<PageList<ChannelInterfaceInfoQo>> channelInterfacePage(@RequestBody PageParams<ChannelInterfaceInfoQo> pageParams){
+
+        return channelService.channelInterfacePage(pageParams);
+    }
 }

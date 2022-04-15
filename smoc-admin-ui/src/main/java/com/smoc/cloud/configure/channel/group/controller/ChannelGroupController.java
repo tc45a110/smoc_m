@@ -10,6 +10,7 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.configuate.qo.ChannelAccountInfoQo;
 import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelGroupInfoValidator;
 import com.smoc.cloud.common.smoc.utils.ChannelUtils;
@@ -17,6 +18,7 @@ import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.configure.channel.group.service.ChannelGroupService;
+import com.smoc.cloud.configure.channel.service.ChannelService;
 import com.smoc.cloud.sequence.service.SequenceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +56,9 @@ public class ChannelGroupController {
 
     @Autowired
     private SequenceService sequenceService;
+
+    @Autowired
+    private ChannelService channelService;
 
     /**
      * 通道组管理列表
@@ -364,5 +369,63 @@ public class ChannelGroupController {
 
     }
 
+    /**
+     * 通道组使用明细列表
+     *
+     * @return
+     */
+    @RequestMapping(value = "/view/account/list/{channelId}", method = RequestMethod.GET)
+    public ModelAndView accountList(@PathVariable String channelId, HttpServletRequest request) {
+
+        ModelAndView view = new ModelAndView("configure/channel/group/channel_group_view_account_list");
+
+        ///初始化数据
+        PageParams<ChannelAccountInfoQo> params = new PageParams<ChannelAccountInfoQo>();
+        params.setPageSize(15);
+        params.setCurrentPage(1);
+        ChannelAccountInfoQo channelAccountInfoQo = new ChannelAccountInfoQo();
+        channelAccountInfoQo.setChannelId(channelId);
+        channelAccountInfoQo.setConfigType("ACCOUNT_CHANNEL_GROUP");
+        params.setParams(channelAccountInfoQo);
+
+        //查询
+        ResponseData<PageList<ChannelAccountInfoQo>> data = channelService.channelAccountList(params);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("channelAccountInfoQo", channelAccountInfoQo);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
+
+        return view;
+    }
+
+    /**
+     * 通道组使用明细分页查询
+     *
+     * @return
+     */
+    @RequestMapping(value = "/view/account/page", method = RequestMethod.POST)
+    public ModelAndView page(@ModelAttribute ChannelAccountInfoQo channelAccountInfoQo, PageParams pageParams) {
+        ModelAndView view = new ModelAndView("configure/channel/group/channel_group_view_account_list");
+
+        //分页查询
+        channelAccountInfoQo.setConfigType("ACCOUNT_CHANNEL_GROUP");
+        pageParams.setParams(channelAccountInfoQo);
+
+        ResponseData<PageList<ChannelAccountInfoQo>> data = channelService.channelAccountList(pageParams);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("channelAccountInfoQo", channelAccountInfoQo);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
+
+        return view;
+    }
 
 }

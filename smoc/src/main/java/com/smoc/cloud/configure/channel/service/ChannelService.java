@@ -7,8 +7,12 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.smoc.configuate.qo.ChannelAccountInfoQo;
 import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
+import com.smoc.cloud.common.smoc.configuate.qo.ChannelInterfaceInfoQo;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelBasicInfoValidator;
+import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticComplaintData;
+import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.configure.channel.entity.ConfigChannelBasicInfo;
@@ -25,8 +29,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -102,8 +108,9 @@ public class ChannelService {
         //如果是统一计价，查询价格
         if ("UNIFIED_PRICE".equals(entity.getPriceStyle())) {
             ConfigChannelPrice configChannelPrice = channelPriceRepository.findByChannelId(entity.getChannelId());
-            if(!StringUtils.isEmpty(configChannelPrice)){
-                channelBasicInfoValidator.setChannelPrice(configChannelPrice.getChannelPrice());
+            if(!StringUtils.isEmpty(configChannelPrice) && !StringUtils.isEmpty(configChannelPrice.getChannelPrice())){
+                String price = configChannelPrice.getChannelPrice().stripTrailingZeros().toPlainString();
+                channelBasicInfoValidator.setChannelPrice(new BigDecimal(price));
             }
         }
 
@@ -221,6 +228,44 @@ public class ChannelService {
         }
     }
 
+    /**
+     * 通道按维度统计发送量
+     * @param statisticSendData
+     * @return
+     */
+    public ResponseData<List<AccountStatisticSendData>> statisticChannelSendNumber(AccountStatisticSendData statisticSendData) {
+        List<AccountStatisticSendData> list = channelRepository.statisticChannelSendNumber(statisticSendData);
+        return ResponseDataUtil.buildSuccess(list);
 
+    }
 
+    /**
+     *  通道投诉率统计
+     * @param statisticComplaintData
+     * @return
+     */
+    public ResponseData<List<AccountStatisticComplaintData>> statisticComplaintMonth(AccountStatisticComplaintData statisticComplaintData) {
+        List<AccountStatisticComplaintData> list = channelRepository.statisticComplaintMonth(statisticComplaintData);
+        return ResponseDataUtil.buildSuccess(list);
+    }
+
+    /**
+     * 通道账号使用明细
+     * @param pageParams
+     * @return
+     */
+    public ResponseData<PageList<ChannelAccountInfoQo>> channelAccountList(PageParams<ChannelAccountInfoQo> pageParams) {
+        PageList<ChannelAccountInfoQo> list = channelRepository.channelAccountList(pageParams);
+        return ResponseDataUtil.buildSuccess(list);
+    }
+
+    /**
+     * 通道接口参数查询
+     * @param pageParams
+     * @return
+     */
+    public ResponseData<PageList<ChannelInterfaceInfoQo>> channelInterfacePage(PageParams<ChannelInterfaceInfoQo> pageParams) {
+        PageList<ChannelInterfaceInfoQo> list = channelRepository.channelInterfacePage(pageParams);
+        return ResponseDataUtil.buildSuccess(list);
+    }
 }

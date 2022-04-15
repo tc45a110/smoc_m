@@ -4,8 +4,12 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.smoc.configuate.qo.ChannelAccountInfoQo;
 import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
+import com.smoc.cloud.common.smoc.configuate.qo.ChannelInterfaceInfoQo;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelBasicInfoValidator;
+import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticComplaintData;
+import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
 import com.smoc.cloud.configure.channel.remote.ChannelFeignClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +18,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 
 
 /**
@@ -81,6 +86,80 @@ public class ChannelService {
         try {
             ResponseData<ChannelBasicInfoValidator> data = this.channelFeignClient.findById(channelId);
             return data;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 查看通道发送量统计
+     * @param statisticSendData
+     * @return
+     */
+    public AccountStatisticSendData statisticChannelSendNumber(AccountStatisticSendData statisticSendData) {
+        ResponseData<List<AccountStatisticSendData>> responseData = this.channelFeignClient.statisticChannelSendNumber(statisticSendData);
+        List<AccountStatisticSendData> list = responseData.getData();
+
+        //月份
+        String[] month = list.stream().map(AccountStatisticSendData::getMonth).toArray(String[]::new);
+        //发送量
+        String[] sendNumber = list.stream().map(AccountStatisticSendData::getSendNumber).toArray(String[]::new);
+        ;
+
+        AccountStatisticSendData accountStatisticSendData = new AccountStatisticSendData();
+        accountStatisticSendData.setMonthArray(month);
+        accountStatisticSendData.setSendNumberArray(sendNumber);
+
+        return accountStatisticSendData;
+    }
+
+    /**
+     * 通道投诉率统计
+     * @param statisticComplaintData
+     * @return
+     */
+    public AccountStatisticComplaintData statisticComplaintMonth(AccountStatisticComplaintData statisticComplaintData) {
+        ResponseData<List<AccountStatisticComplaintData>> responseData = this.channelFeignClient.statisticComplaintMonth(statisticComplaintData);
+        List<AccountStatisticComplaintData> list = responseData.getData();
+
+        //月份
+        String[] month = list.stream().map(AccountStatisticComplaintData::getMonth).toArray(String[]::new);
+        //投诉率
+        String[] complaint = list.stream().map(AccountStatisticComplaintData::getComplaint).toArray(String[]::new);
+        ;
+
+        AccountStatisticComplaintData accountStatisticComplaintData = new AccountStatisticComplaintData();
+        accountStatisticComplaintData.setMonthArray(month);
+        accountStatisticComplaintData.setComplaintArray(complaint);
+
+        return accountStatisticComplaintData;
+    }
+
+    /**
+     * 通道账号使用明细
+     * @param pageParams
+     * @return
+     */
+    public ResponseData<PageList<ChannelAccountInfoQo>> channelAccountList(PageParams<ChannelAccountInfoQo> pageParams) {
+        try {
+            ResponseData<PageList<ChannelAccountInfoQo>> pageList = this.channelFeignClient.channelAccountList(pageParams);
+            return pageList;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 通道接口参数查询
+     * @param params
+     * @return
+     */
+    public ResponseData<PageList<ChannelInterfaceInfoQo>> channelInterfacePage(PageParams<ChannelInterfaceInfoQo> params) {
+        try {
+            ResponseData<PageList<ChannelInterfaceInfoQo>> pageList = this.channelFeignClient.channelInterfacePage(params);
+            return pageList;
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseDataUtil.buildError(e.getMessage());

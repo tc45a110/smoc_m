@@ -75,31 +75,34 @@
                                             <li class="" id="tab2"><a onclick="active('2')"
                                                                       sec:authorize-url="/parameter/filter/view/CHANNEL_FILTER/*/*"
                                                                       th:href="@{/parameter/filter/view/CHANNEL_FILTER/{businessId}/3(businessId=${id})}"
-                                                                      th:target="tab-content">通道过滤参数</a>
+                                                                      th:target="tab-content">过滤参数</a>
                                             <li class="" id="tab3">
                                                 <a onclick="active('3')"
                                                    sec:authorize-url="/parameter/business/view/CHANNEL/*/*"
                                                    th:href="@{/parameter/business/view/CHANNEL/{businessId}/3(businessId=${id})}"
-                                                   th:target="tab-content">通道扩展参数
+                                                   th:target="tab-content">扩展参数
                                                 </a>
                                             </li>
                                             <li class="" id="tab4"><a onclick="active('4')"
                                                                       sec:authorize-url="/configure/channel/price/history/list/*"
                                                                       th:href="@{/configure/channel/price/history/list/{businessId}(businessId=${id})}"
-                                                                            th:target="tab-content">通道价格记录</a></li>
+                                                                            th:target="tab-content">价格记录</a></li>
                                             <li class="" id="tab5"><a onclick="active('5')"
-
-                                                                     th:target="tab-content">通道发送量统计</a></li>
+                                                                      sec:authorize-url="/configure/channel/statistic/sendNumber/*"
+                                                                      th:href="@{/configure/channel/statistic/sendNumber/{businessId}(businessId=${id})}"
+                                                                     th:target="tab-content">发送量统计</a></li>
                                             <li class="" id="tab6"><a onclick="active('6')"
-
-                                                                      th:target="tab-content">通道投诉统计</a></li>
+                                                                      sec:authorize-url="/configure/channel/statistic/complaint/*"
+                                                                      th:href="@{/configure/channel/statistic/complaint/{businessId}(businessId=${id})}"
+                                                                      th:target="tab-content">投诉统计</a></li>
                                             <li class="" id="tab7"><a onclick="active('7')"
-
-                                                                      th:target="tab-content">通道使用明细</a></li>
+                                                                      sec:authorize-url="/configure/channel/view/account/list/*"
+                                                                      th:href="@{/configure/channel/view/account/list/{businessId}(businessId=${id})}"
+                                                                      th:target="tab-content">使用明细</a></li>
                                             <li class="" id="tab8"><a onclick="active('8')"
                                                                       sec:authorize-url="/user/logs/list/*/*"
                                                                       th:href="@{/user/logs/list/CHANNEL_BASE/{id}(id=${id})}"
-                                                                      th:target="tab-content">通道操作日志</a></li>
+                                                                      th:target="tab-content">操作日志</a></li>
 
                                         </ul>
                                         <div class="tab-cotent" style="background-color:#fff">

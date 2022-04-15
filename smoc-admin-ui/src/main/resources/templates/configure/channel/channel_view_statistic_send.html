@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
+
+</head>
+<body style="background-color:#fff">
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="background-color:#fff">
+    <div class="container" style="background-color:#fff">
+
+        <!-- start row 页面内容-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+
+            <div class="col-md-12">
+                <div class="pull-right" style="margin-right:10px">
+                    <a sec:authorize-url="/configure/channel/statistic/sendNumberMonth/*/*"
+                       style="margin-left:10px;" onclick="active('1')"
+                       class="btn btn-info waves-effect waves-light btn-sm">
+                        <i class="mdi mdi-chart-bar" style="margin-right:5px"></i>
+                        按月统计
+                    </a>
+                    <a sec:authorize-url="/configure/channel/statistic/sendNumberMonth/*/*"
+                       style="margin-left:10px;" onclick="active('2')"
+                       class="btn btn-primary waves-effect waves-light btn-sm">
+                        <i class="mdi mdi-chart-bar" style="margin-right:5px"></i>
+                        按天统计
+                    </a>
+                </div>
+            </div> <!-- end col -->
+
+            <div class="col-md-12">
+                    <div id="main1" style="height: 450px;margin-top: 15px"></div>
+            </div> <!-- end col -->
+
+        </div>
+
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<script th:src="@{/static/echarts/echarts.min.js}"></script>
+
+<script th:remove="${#strings.isEmpty(error)}?none:all">
+
+    $(document).ready(function () {
+
+        active("1");
+
+    });
+
+    function active (val){
+        var type = 'month';
+        var barType = 'bar';
+        var title = '近12个月发送量统计';
+        var numberBoolean = true;
+        if("2" == val){
+            type = 'day';
+            barType = 'line';
+            title = "近180天发送量统计";
+            numberBoolean = false;
+        }
+
+        $.ajax({
+            url : '[[${#httpServletRequest.getContextPath()}]]/configure/channel/statistic/sendNumberMonth/[[${businessId}]]/'+type,
+            success : function(data) {
+                articles = eval(data);
+                option2 = {
+                    title: {
+                        text: title,
+                        x: 'left'
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'shadow'
+                        }
+                    },
+                    legend: {
+                        data: ['发送量统计']
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            mark: {show: false},
+                            dataView: {show: true, readOnly: false},
+                            magicType: {show: true, type: ['line', 'bar']},
+                            restore: {show: false},
+                            saveAsImage: {show: true}
+                        }
+                    },
+                    calculable: true,
+                    xAxis: [
+                        {
+                            type: 'category',
+                            axisTick: {show: false},
+                            axisLabel: {
+                                interval: 'auto',
+                                rotate: 30
+                            },
+                            data: articles.monthArray
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value',
+                            splitArea: {show: true}
+                        }
+                    ],
+                    grid: {
+                        x2: 40
+                    },
+                    series: [
+                        {
+                            name: '发送量统计',
+                            type: barType,
+                            stack: '总量',
+                            itemStyle: {
+                                normal: {
+                                    color: '#61A0A8',
+                                    barBorderRadius: 0,
+                                    label: {
+                                        show: numberBoolean,
+                                        position: 'insideTop'
+                                    }
+                                }
+                            },
+                            data: articles.sendNumberArray
+                        }
+                    ]
+                };
+
+                myChart2 = echarts.init(document.getElementById('main1'));
+                myChart2.setOption(option2);
+            }
+        });
+    }
+
+</script>
+<script>
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+</head>
+<body>
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <!-- start row 页面导航-->
+        <div class="row fixed-navigation">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">通道接口参数查询 </h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            信息查询
+                        </li>
+                        <li class="active">
+                            通道接口参数查询
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  查询条件-->
+        <div class="row" style="position: relative;margin-top: 80px" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <form th:action="@{/query/channel/interface/page}" th:object="${channelInterfaceInfoQo}" id="query_form" method="post">
+                        <div class="row m-b-60">
+                            <div class="col-sm-12">
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control" th:field="*{channelId}"
+                                           placeholder="通道ID" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control" th:field="*{channelName}"
+                                           placeholder="通道名称" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control" th:field="*{srcId}"
+                                           placeholder="码号" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control" th:field="*{channelAccessAccount}"
+                                           placeholder="通道协议账号" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <mpm:tag id="carrier" identity="carrier" show-type="select" key="code"
+                                             name="carrier" class="form-control"
+                                             th:value="${channelInterfaceInfoQo.carrier}" title="发送号码范围"/>
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <mpm:tag id="infoType" identity="infoType" show-type="select" key="code"
+                                             name="infoType" class="form-control"
+                                             th:value="${channelInterfaceInfoQo.infoType}" title="信息分类"/>
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <mpm:tag id="protocol" identity="channelProtocolType" show-type="select" key="code"
+                                             class="form-control" name="protocol" th:value="${channelInterfaceInfoQo.protocol}" title="通道协议类型"/>
+                                </div>
+
+                                <div class="form-group col-sm-3 pull-right" style="text-align: right">
+                                    <button sec:authorize-url="/query/channel/interface/page" type="submit"
+                                            class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-search" style="margin-right:5px"></i> 查询
+                                    </button>
+                                    <input type="hidden" name="currentPage" id="currentPage"
+                                           th:value="${pageParams.currentPage}">
+                                    <input type="hidden" name="pageSize" id="pageSize"
+                                           th:value="${pageParams.pageSize}">
+                                </div>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  列表数据-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="panel panel-color panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">通道接口参数列表</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table table-hover m-10" style="margin-top: -12px;table-layout:fixed;">
+                                <thead>
+                                <tr>
+                                    <th>通道ID/通道名称</th>
+                                    <th>业务类型</th>
+                                    <th>发送号码范围/信息分类</th>
+                                    <th>接口类型</th>
+                                    <th>对接账号/密码</th>
+                                    <th>企业代码/服务地址</th>
+                                    <th>接入码号/业务代码</th>
+                                    <th>连接数/速率(条/秒)</th>
+                                    <th>状态</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="info:${list}">
+                                    <td style="vertical-align: middle;line-height: 26px;">
+                                        [[${info.channelId}]]<br>[[${info.channelName}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px;">
+                                        <mpm:tag identity="businessType" show-type="button"
+                                                 key="code" th:value="${info.businessType}"
+                                                 class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;MULTI_SMS,btn btn-brown btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;5G_SMS,btn btn-primary btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-inverse btn-rounded btn-sm waves-effect waves-light"/>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px;">
+                                        <mpm:tag identity="carrier" show-type="label" key="code" th:value="${info.carrier}"/>
+                                        <br>
+                                        <mpm:tag identity="infoType" show-type="label" key="code" th:value="${info.infoType}"/>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px;">
+                                        <mpm:tag identity="channelProtocolType" show-type="label" key="code" th:value="${info.protocol}"/>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px;">
+                                        [[${info.channelAccessAccount}]]<br>[[${info.channelAccessPassword}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px;">
+                                        [[${info.spId}]]<br>[[${info.channelServiceUrl}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px;">
+                                        [[${info.srcId}]]<br>[[${info.businessCode}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px;">
+                                        [[${info.connectNumber}]]<br>[[${info.maxSendSecond}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px;">
+                                        <mpm:tag identity="channelStatus" show-type="button"
+                                                 key="code" th:value="${info.channelStatus}"
+                                                 class="001,btn btn-success btn-rounded btn-sm waves-effect waves-light;002,btn btn-orange btn-rounded btn-sm waves-effect waves-light;003,btn btn-brown btn-rounded btn-sm waves-effect waves-light;004,btn btn-pink btn-rounded btn-sm waves-effect waves-light;005,btn btn-inverse btn-rounded btn-sm waves-effect waves-light;006,btn btn-danger btn-rounded btn-sm waves-effect waves-light;"/>
+                                    </td>
+
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <th:block th:insert="fragments/page_fragments :: page"/>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+    </div> <!-- container -->
+
+</div> <!-- content -->
+
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<script th:src="@{/static/plugins/moment/moment.js}"></script>
+
+<script>
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+</script>
+</body>
+</html>

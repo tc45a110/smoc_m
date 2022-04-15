@@ -12,9 +12,12 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.configuate.qo.ChannelAccountInfoQo;
 import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelBasicInfoValidator;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelInterfaceValidator;
+import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticComplaintData;
+import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
 import com.smoc.cloud.common.smoc.utils.ChannelUtils;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.validator.MpmIdValidator;
@@ -517,4 +520,181 @@ public class ChannelController {
 
     }
 
+    /**
+     * 发送量统计
+     *
+     * @return
+     */
+    @RequestMapping(value = "/statistic/sendNumber/{businessId}", method = RequestMethod.GET)
+    public ModelAndView statisticSend(@PathVariable String businessId, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("configure/channel/channel_view_statistic_send");
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(businessId);
+        if (!MpmValidatorUtil.validate(validator)) {
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
+
+        //查询通道基本信息
+        ResponseData<ChannelBasicInfoValidator> data = channelService.findById(businessId);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+        view.addObject("businessId", businessId);
+
+        return view;
+    }
+
+    /**
+     * 查看通道发送量统计
+     *
+     * @return
+     */
+    @RequestMapping(value = "/statistic/sendNumberMonth/{businessId}/{type}", method = RequestMethod.GET)
+    public AccountStatisticSendData sendNumberMonth(@PathVariable String businessId, @PathVariable String type, HttpServletRequest request) {
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(businessId);
+        if (!MpmValidatorUtil.validate(validator)) {
+            return new AccountStatisticSendData();
+        }
+
+        //查询通道基本信息
+        ResponseData<ChannelBasicInfoValidator> data = channelService.findById(businessId);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            return new AccountStatisticSendData();
+        }
+
+        AccountStatisticSendData statisticSendData = new AccountStatisticSendData();
+        statisticSendData.setAccountId(businessId);
+        statisticSendData.setDimension(type);
+
+        statisticSendData = channelService.statisticChannelSendNumber(statisticSendData);
+
+        return statisticSendData;
+    }
+
+    /**
+     * 通道投诉率统计
+     *
+     * @return
+     */
+    @RequestMapping(value = "/statistic/complaint/{businessId}", method = RequestMethod.GET)
+    public ModelAndView statisticComplaint(@PathVariable String businessId, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("configure/channel/channel_view_statistic_complaint");
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(businessId);
+        if (!MpmValidatorUtil.validate(validator)) {
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
+
+        /**
+         * 查询账号信息
+         */
+        //查询通道基本信息
+        ResponseData<ChannelBasicInfoValidator> data = channelService.findById(businessId);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("businessId", businessId);
+
+        return view;
+    }
+
+    /**
+     * 通道投诉率统计
+     *
+     * @return
+     */
+    @RequestMapping(value = "/statistic/complaintMonth/{businessId}", method = RequestMethod.GET)
+    public AccountStatisticComplaintData statisticComplaintMonth(@PathVariable String businessId, HttpServletRequest request) {
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(businessId);
+        if (!MpmValidatorUtil.validate(validator)) {
+            return new AccountStatisticComplaintData();
+        }
+
+        //查询通道基本信息
+        ResponseData<ChannelBasicInfoValidator> data = channelService.findById(businessId);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            return new AccountStatisticComplaintData();
+        }
+
+        AccountStatisticComplaintData statisticComplaintData = new AccountStatisticComplaintData();
+        statisticComplaintData.setAccountId(businessId);
+
+        statisticComplaintData = channelService.statisticComplaintMonth(statisticComplaintData);
+
+        return statisticComplaintData;
+    }
+
+    /**
+     * 通道账号使用明细列表
+     *
+     * @return
+     */
+    @RequestMapping(value = "/view/account/list/{channelId}", method = RequestMethod.GET)
+    public ModelAndView accountList(@PathVariable String channelId, HttpServletRequest request) {
+
+        ModelAndView view = new ModelAndView("configure/channel/channel_view_account_list");
+
+        ///初始化数据
+        PageParams<ChannelAccountInfoQo> params = new PageParams<ChannelAccountInfoQo>();
+        params.setPageSize(15);
+        params.setCurrentPage(1);
+        ChannelAccountInfoQo channelAccountInfoQo = new ChannelAccountInfoQo();
+        channelAccountInfoQo.setChannelId(channelId);
+        channelAccountInfoQo.setConfigType("ACCOUNT_CHANNEL");
+        params.setParams(channelAccountInfoQo);
+
+        //查询
+        ResponseData<PageList<ChannelAccountInfoQo>> data = channelService.channelAccountList(params);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("channelAccountInfoQo", channelAccountInfoQo);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
+
+        return view;
+    }
+
+    /**
+     * 通道账号使用明细分页查询
+     *
+     * @return
+     */
+    @RequestMapping(value = "/view/account/page", method = RequestMethod.POST)
+    public ModelAndView page(@ModelAttribute ChannelAccountInfoQo channelAccountInfoQo, PageParams pageParams) {
+        ModelAndView view = new ModelAndView("configure/channel/channel_view_account_list");
+
+        //分页查询
+        channelAccountInfoQo.setConfigType("ACCOUNT_CHANNEL");
+        pageParams.setParams(channelAccountInfoQo);
+
+        ResponseData<PageList<ChannelAccountInfoQo>> data = channelService.channelAccountList(pageParams);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("channelAccountInfoQo", channelAccountInfoQo);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
+
+        return view;
+    }
 }
