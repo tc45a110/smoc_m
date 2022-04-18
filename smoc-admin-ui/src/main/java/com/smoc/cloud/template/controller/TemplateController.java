@@ -144,7 +144,7 @@ public class TemplateController {
 
         //初始化模板信息
         AccountTemplateInfoValidator accountTemplateInfoValidator = new AccountTemplateInfoValidator();
-        accountTemplateInfoValidator.setTemplateId("TEMP" + sequenceService.findSequence("BUSINESS_ACCOUNT"));
+        accountTemplateInfoValidator.setTemplateId("TEMP" + sequenceService.findSequence("TEMPLATE"));
         accountTemplateInfoValidator.setBusinessAccount(businessAccount);
         accountTemplateInfoValidator.setTemplateAgreementType(protocol);
         accountTemplateInfoValidator.setTemplateType(accountBasicInfoValidatorResponseData.getData().getBusinessType());

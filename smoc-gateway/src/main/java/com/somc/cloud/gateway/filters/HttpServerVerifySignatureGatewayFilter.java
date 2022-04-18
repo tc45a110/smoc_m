@@ -5,6 +5,7 @@ import com.smoc.cloud.common.gateway.request.HttpServerSignModel;
 import com.smoc.cloud.common.gateway.request.RequestStardardHeaders;
 import com.smoc.cloud.common.gateway.utils.HMACUtil;
 import com.smoc.cloud.common.gateway.utils.ValidatorUtil;
+import com.smoc.cloud.common.http.server.utils.Constant;
 import com.smoc.cloud.common.redis.smoc.identification.KeyEntity;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
@@ -19,6 +20,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -26,7 +28,11 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * http短信发送服务，验证签名
@@ -53,6 +59,8 @@ public class HttpServerVerifySignatureGatewayFilter {
             @Override
             public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
 
+                ServerHttpRequest request = exchange.getRequest();
+
                 //HttpHeaders 自定义的headers 组织签名信息;headers 数据已经经过了非空验证
                 HttpHeaders headers = exchange.getRequest().getHeaders();
 
@@ -66,7 +74,7 @@ public class HttpServerVerifySignatureGatewayFilter {
                 String requestBody = "";
                 if (HttpMethod.POST.equals(exchange.getRequest().getMethod())) {
                     requestBody = exchange.getAttribute("cachedRequestBodyObject");
-                    log.info("[接口请求]请求数据:{}", requestBody);
+                    //log.info("[接口请求]请求数据:{}", requestBody);
                 }
 
                 //requestBody 为空
@@ -96,7 +104,22 @@ public class HttpServerVerifySignatureGatewayFilter {
                 if (null == keyEntity || StringUtils.isEmpty(keyEntity.getMd5HmacKey())) {
                     return errorHandle(exchange, ResponseCode.USER_NOT_EXIST.getCode(), ResponseCode.USER_NOT_EXIST.getMessage());
                 }
-                log.info("[签名密钥]{}",new Gson().toJson(keyEntity));
+                //log.info("[签名密钥]{}",new Gson().toJson(keyEntity));
+
+                //账号、业务类型的映射关系
+                Map<String,String> businessAccountMap = Constant.BUSINESS_ACCOUNT_MAP;
+                URI uri = request.getURI();
+                for (Map.Entry<String, String> map : businessAccountMap.entrySet()) {
+                    Pattern UrlPattern = Pattern.compile(map.getKey());
+                    Matcher matcher = UrlPattern.matcher(uri.toString());
+                    if (matcher.find()) {
+                        //log.info("[账号、业务类型的映射关系]需要业务类型:{}", map.getValue());
+                        if(!map.getValue().equals(keyEntity.getAesKey())){
+                            return errorHandle(exchange, ResponseCode.ACCOUNT_BUSINESS_ERROR.getCode(), ResponseCode.ACCOUNT_BUSINESS_ERROR.getMessage());
+                        }
+                    }
+                }
+
 
                 String md5HmacKey = keyEntity.getMd5HmacKey();
 

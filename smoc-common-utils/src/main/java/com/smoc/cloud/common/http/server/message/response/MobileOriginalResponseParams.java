@@ -14,9 +14,7 @@ public class MobileOriginalResponseParams {
     //扩展号码
     private String extNumber;
 
-
     private String content;
-
 
     private String acceptTime;
 

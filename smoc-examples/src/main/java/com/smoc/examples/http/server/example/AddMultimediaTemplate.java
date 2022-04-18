@@ -1,23 +1,18 @@
 package com.smoc.examples.http.server.example;
 
 import com.google.gson.Gson;
-import com.smoc.examples.utils.DateTimeUtils;
-import com.smoc.examples.utils.HMACUtil;
-import com.smoc.examples.utils.Okhttp3Utils;
-import com.smoc.examples.utils.Utils;
+import com.smoc.examples.utils.*;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
- * 插叙账户余额
+ * 添加多媒体短信模板
  */
-public class GetAccountBalance {
+public class AddMultimediaTemplate {
 
     public static void main(String[] args) throws Exception {
 
-        String url = "http://localhost:18088/smoc-gateway/http-server/account/getAccountBalance";
+        String url = "http://localhost:18088/smoc-gateway/http-server/template/addMultimediaTemplate";
 
         //自定义header协议
         Map<String, String> header = new HashMap<>();
@@ -25,14 +20,38 @@ public class GetAccountBalance {
         header.put("signature-nonce", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(10));
 
         //请求的数据
-        Map<String, String> requestDataMap = new HashMap<>();
+        Map<String, Object> requestDataMap = new HashMap<>();
         //订单号，成功后的订单不能重复
         requestDataMap.put("orderNo", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(10));
         //业务账号；参见给的账号EXCEL文件
         requestDataMap.put("account", "YQT108");
-
+        //模板内容
+        requestDataMap.put("content", "【我是一只小小鸟】你的小小鸟验证码为${1}，请勿告知他人");
         //时间戳
         requestDataMap.put("timestamp", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS"));
+
+        requestDataMap.put("templateTitle", "多媒体变量模板");
+
+        List<Map<String,Object>> mediaItems = new ArrayList<>();
+        Map<String,Object> param = new HashMap<>();
+        param.put("subject","图片");
+        param.put("mediaType","AUDIO");
+        param.put("fileType",".mp3");
+        param.put("stayTimes",2);
+        param.put("frameTxt","多媒体文件API测试");
+        param.put("mediaFile", ImageUtils.getImgFileToBase64("E:/20220418153244.png"));
+        mediaItems.add(param);
+
+        Map<String,Object> param1 = new HashMap<>();
+        param1.put("subject","图片");
+        param1.put("mediaType","PIC");
+        param1.put("fileType",".png");
+        param1.put("stayTimes",2);
+        param1.put("frameTxt","多媒体文件API测试");
+        param1.put("mediaFile", ImageUtils.getImgFileToBase64("E:/20220418153244.png"));
+        mediaItems.add(param1);
+
+        requestDataMap.put("items", mediaItems);
         //转JSON请求数据
         String requestJsonData = new Gson().toJson(requestDataMap);
 

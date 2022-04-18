@@ -1,4 +1,4 @@
-package com.smoc.cloud.http.message.template.controller;
+package com.smoc.cloud.http.api.message;
 
 import com.google.gson.Gson;
 import com.smoc.cloud.common.gateway.utils.ValidatorUtil;
@@ -8,7 +8,7 @@ import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 
 import com.smoc.cloud.common.response.ResponseDataUtil;
-import com.smoc.cloud.http.message.template.service.MobileOriginalService;
+import com.smoc.cloud.http.service.MobileOriginalService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -21,7 +21,7 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.List;
 
 /**
- * 上行短信
+ * 获取上行短信
  */
 @Slf4j
 @RestController
@@ -32,6 +32,11 @@ public class MobileOriginalController {
     @Autowired
     private MobileOriginalService mobileOriginalService;
 
+    /**
+     * 获取上行短信
+     * @param params
+     * @return
+     */
     @RequestMapping(value = "/getMobileOriginal", method = RequestMethod.POST)
     public ResponseData<List<MobileOriginalResponseParams>> getMobileOriginal(@RequestBody MobileOriginalRequestParams params) {
 

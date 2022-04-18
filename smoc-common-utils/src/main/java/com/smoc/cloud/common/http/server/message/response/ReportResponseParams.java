@@ -8,11 +8,11 @@ import lombok.Setter;
 @Getter
 public class ReportResponseParams {
 
+    private String account;
+
     private String mobile;
 
     private String msgId;
-
-    private String sendTime;
 
     private String reportTime;
 

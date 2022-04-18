@@ -10,6 +10,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 根据订单号获取状态报告
+ */
 public class GetReportByOrderNo {
 
     public static void main(String[] args) throws Exception {
@@ -23,8 +26,8 @@ public class GetReportByOrderNo {
 
         //请求的数据
         Map<String, String> requestDataMap = new HashMap<>();
-        //订单号，成功后的订单不能重复
-        requestDataMap.put("orderNo", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(10));
+        //短信发送订单号
+        requestDataMap.put("orderNo", "202204141503389154538769762");
         //业务账号；参见给的账号EXCEL文件
         requestDataMap.put("account", "SWL102");
 

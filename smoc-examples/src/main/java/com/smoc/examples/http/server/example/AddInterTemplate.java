@@ -11,13 +11,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 插叙账户余额
+ * 添加国际短信模板
  */
-public class GetAccountBalance {
+public class AddInterTemplate {
 
     public static void main(String[] args) throws Exception {
 
-        String url = "http://localhost:18088/smoc-gateway/http-server/account/getAccountBalance";
+        String url = "http://localhost:18088/smoc-gateway/http-server/template/addInterTemplate";
 
         //自定义header协议
         Map<String, String> header = new HashMap<>();
@@ -30,7 +30,8 @@ public class GetAccountBalance {
         requestDataMap.put("orderNo", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(10));
         //业务账号；参见给的账号EXCEL文件
         requestDataMap.put("account", "YQT108");
-
+        //模板内容
+        requestDataMap.put("content", "【APPLE】I want a phone free,and you? Your code is ${1}");
         //时间戳
         requestDataMap.put("timestamp", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS"));
         //转JSON请求数据

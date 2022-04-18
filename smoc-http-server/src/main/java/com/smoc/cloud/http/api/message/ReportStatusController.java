@@ -1,4 +1,4 @@
-package com.smoc.cloud.http.message.template.controller;
+package com.smoc.cloud.http.api.message;
 
 import com.google.gson.Gson;
 import com.smoc.cloud.common.gateway.utils.ValidatorUtil;
@@ -9,7 +9,7 @@ import com.smoc.cloud.common.http.server.message.response.ReportResponseParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
-import com.smoc.cloud.http.message.template.service.ReportStatusService;
+import com.smoc.cloud.http.service.ReportStatusService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -20,8 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
-import java.util.Map;
 
+/**
+ * 获取状态报告
+ */
 @Slf4j
 @RestController
 @RequestMapping("report")
@@ -31,6 +33,11 @@ public class ReportStatusController {
     @Autowired
     private ReportStatusService reportStatusService;
 
+    /**
+     * 根据订单号获取状态报告
+     * @param params
+     * @return
+     */
     @RequestMapping(value = "/getReportByOrderNo", method = RequestMethod.POST)
     public ResponseData<List<ReportResponseParams>> getReportByOrderNo(@RequestBody ReportStatusRequestParams params) {
 
@@ -43,6 +50,11 @@ public class ReportStatusController {
         return reportStatusService.getReportByOrderNo(params);
     }
 
+    /**
+     * 批量获取状态报告
+     * @param params
+     * @return
+     */
     @RequestMapping(value = "/getReportBatch", method = RequestMethod.POST)
     public ResponseData<List<ReportResponseParams>> getReportBatch(@RequestBody ReportBatchParams params) {
 

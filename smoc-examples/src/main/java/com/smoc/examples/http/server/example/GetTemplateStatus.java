@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 普通消息，添加模板
+ * 获取模板状态
  */
 public class GetTemplateStatus {
 

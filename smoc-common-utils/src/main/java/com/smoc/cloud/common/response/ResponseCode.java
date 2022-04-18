@@ -28,6 +28,7 @@ public enum ResponseCode {
     SIGN_PARAM_FORMAT_ERROR("2004","签名格式问题"),
     SIGN_ERROR("2005","签名错误"),
     SIGN_LEGAL_ERROR("2006","签名不合法"),
+    ACCOUNT_BUSINESS_ERROR("2007","当前账号不支持该业务"),
 
 
 

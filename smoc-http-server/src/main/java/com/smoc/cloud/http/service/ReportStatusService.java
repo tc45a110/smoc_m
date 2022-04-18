@@ -1,4 +1,4 @@
-package com.smoc.cloud.http.message.template.service;
+package com.smoc.cloud.http.service;
 
 
 import com.smoc.cloud.common.http.server.message.request.ReportBatchParams;
@@ -21,25 +21,25 @@ public class ReportStatusService {
 
         List<ReportResponseParams> report = new ArrayList<>();
         ReportResponseParams model = new ReportResponseParams();
+        model.setAccount("SWL102");
         model.setMobile("18510369887");
         model.setMsgId("1c5979e910fe44598ab7bbe5f521439d");
-        model.setSendTime("2022-04-23 14:25:21");
         model.setReportTime("2022-04-23 14:25:26");
         model.setStatus("DELIVRD");
         report.add(model);
 
         ReportResponseParams model1 = new ReportResponseParams();
+        model1.setAccount("SWL102");
         model1.setMobile("18560369887");
         model1.setMsgId("1c5979e910fe44598ab7bbe5f521439d");
-        model1.setSendTime("2022-04-23 14:25:21");
         model1.setReportTime("2022-04-23 14:25:26");
         model1.setStatus("DELIVRD");
         report.add(model1);
 
         ReportResponseParams model2 = new ReportResponseParams();
+        model2.setAccount("SWL102");
         model2.setMobile("18580569887");
         model2.setMsgId("1c5979e910fe44598ab7bbe5f521439d");
-        model2.setSendTime("2022-04-23 14:25:21");
         model2.setReportTime("2022-04-23 14:25:26");
         model2.setStatus("DELIVRD");
         report.add(model2);
@@ -50,25 +50,25 @@ public class ReportStatusService {
 
         List<ReportResponseParams> report = new ArrayList<>();
         ReportResponseParams model = new ReportResponseParams();
+        model.setAccount("SWL102");
         model.setMobile("18510369887");
         model.setMsgId("1c5979e910fe44598ab7bbe5f521439d");
-        model.setSendTime("2022-04-23 14:25:21");
         model.setReportTime("2022-04-23 14:25:26");
         model.setStatus("DELIVRD");
         report.add(model);
 
         ReportResponseParams model1 = new ReportResponseParams();
+        model1.setAccount("SWL102");
         model1.setMobile("18560369887");
         model1.setMsgId("1c5979e910fe44598ab7bbe5f521439d");
-        model1.setSendTime("2022-04-23 14:25:21");
         model1.setReportTime("2022-04-23 14:25:26");
         model1.setStatus("DELIVRD");
         report.add(model1);
 
         ReportResponseParams model2 = new ReportResponseParams();
+        model2.setAccount("SWL102");
         model2.setMobile("18580569887");
         model2.setMsgId("1c5979e910fe44598ab7bbe5f521439d");
-        model2.setSendTime("2022-04-23 14:25:21");
         model2.setReportTime("2022-04-23 14:25:26");
         model2.setStatus("DELIVRD");
         report.add(model2);
