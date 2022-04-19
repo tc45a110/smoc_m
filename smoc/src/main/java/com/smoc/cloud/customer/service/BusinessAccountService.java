@@ -2,9 +2,9 @@ package com.smoc.cloud.customer.service;
 
 
 import com.alibaba.fastjson.JSON;
+import com.smoc.cloud.common.http.server.utils.RedisModel;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
-import com.smoc.cloud.common.redis.smoc.identification.KeyEntity;
 import com.smoc.cloud.common.redis.smoc.identification.RedisConstant;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
@@ -75,7 +75,7 @@ public class BusinessAccountService {
 
 
     @Resource
-    private RedisTemplate<String, KeyEntity> redisTemplate;
+    private RedisTemplate<String, RedisModel> redisTemplate;
 
 
     /**
@@ -282,22 +282,24 @@ public class BusinessAccountService {
         if ("0".equals(status)) {
             status = "1";
 
-            //账号放到redis里
+            /**
+             * 防止业务类型变更，更新redis中的 账号值
+             */
             Optional<AccountInterfaceInfo> data = accountInterfaceRepository.findById(id);
-            if ("HTTP_TEXT_SMS".equals(data.get().getProtocol())) {
-
-                Optional<AccountBasicInfo> optional = businessAccountRepository.findById(entity.getAccountId());
-                AccountBasicInfo accountBasicInfo = optional.get();
-
+            AccountInterfaceInfo accountInterfaceInfo = data.get();
+            //则放到redis中
+            if ("HTTPS".equals(accountInterfaceInfo.getProtocol())) {
                 //放到redis中对象
-                KeyEntity key = new KeyEntity();
-                key.setMd5HmacKey(DES.decrypt(data.get().getAccountPassword()));
-                key.setAesKey(entity.getBusinessType());
-                key.setAesIv(data.get().getAccountPassword());
-
+                RedisModel redisModel = new RedisModel();
+                redisModel.setMd5HmacKey(accountInterfaceInfo.getAccountPassword());
+                redisModel.setBusinessType(entity.getBusinessType());
+                redisModel.setSubmitRate(accountInterfaceInfo.getMaxSubmitSecond());
+                redisModel.setSendRate(accountInterfaceInfo.getMaxSendSecond());
+                redisModel.setIps(accountInterfaceInfo.getIdentifyIp());
                 //把数据放到redis里
-                redisTemplate.opsForValue().set(RedisConstant.HTTP_SERVER_KEY + entity.getAccountId(), key);
+                redisTemplate.opsForValue().set(RedisConstant.HTTP_SERVER_KEY + entity.getAccountId(), redisModel);
             }
+
 
             if (Integer.parseInt(entity.getAccountProcess()) <= 11100) {
                 status = "2";
@@ -397,6 +399,7 @@ public class BusinessAccountService {
 
     /**
      * 业务账号综合查询
+     *
      * @param pageParams
      * @return
      */

@@ -10,12 +10,10 @@ import com.smoc.cloud.common.http.server.multimedia.request.MultimediaTemplateMo
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
-import com.smoc.cloud.common.smoc.template.AccountTemplateInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.http.entity.AccountTemplateInfo;
 import com.smoc.cloud.http.repository.AccountTemplateInfoRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -34,35 +32,59 @@ public class TemplateService {
     @Autowired
     private SequenceService sequenceService;
 
+    @Autowired
+    private SystemHttpApiRequestService systemHttpApiRequestService;
+
     @Resource
     private AccountTemplateInfoRepository accountTemplateInfoRepository;
 
+    /**
+     * 添加普通短信模板
+     * @param params
+     * @return
+     */
     public ResponseData<Map<String, String>> addTemplate(TemplateAddRequestParams params) {
 
-        //可以处理前提逻辑
-        //获取模板ID
-        String templateId = "TEMP" + sequenceService.findSequence("TEMPLATE");
-
-        AccountTemplateInfo entity = new AccountTemplateInfo();
-        entity.setTemplateId(templateId);
-        entity.setBusinessAccount(params.getAccount());
-        entity.setTemplateType("TEXT_SMS");
-        entity.setTemplateAgreementType("HTTP");
-
-
-        entity.setTemplateStatus("2");
-        entity.setCheckBy("API");
-        entity.setCreatedTime(DateTimeUtils.getNowDateTime());
+//        //异步保存请求记录
+//        systemHttpApiRequestService.save(params.getOrderNo(), params.getAccount(), "addTemplate", new Gson().toJson(params));
+//
+//        //获取模板ID
+//        String templateId = "TEMP" + sequenceService.findSequence("TEMPLATE");
+//
+//        AccountTemplateInfo entity = new AccountTemplateInfo();
+//        entity.setTemplateId(templateId);
+//        entity.setBusinessAccount(params.getAccount());
+//        entity.setTemplateType("TEXT_SMS");
+//
+//        entity.setTemplateContent(params.getContent());
+//        //模板类型 1 表示普通模板 2 表示变量模板
+//        entity.setTemplateFlag(params.getTemplateType());
+//        entity.setTemplateAgreementType("HTTP");
+//
+//        //模板状态 2 表示待审核
+//        entity.setTemplateStatus("2");
+//        entity.setCreatedBy("API");
+//        entity.setCreatedTime(DateTimeUtils.getNowDateTime());
+//
+//        this.save(entity);
 
         //组织响应结果
         Map<String, String> result = new HashMap<>();
         result.put("orderNo", params.getOrderNo());
-        result.put("templateId", templateId);
+        result.put("templateId", "20004");
         return ResponseDataUtil.buildSuccess(result);
 
     }
 
+    /**
+     * 添加多媒体短信模板
+     * @param params
+     * @return
+     */
     public ResponseData<Map<String, String>> addMultimediaTemplate(MultimediaTemplateAddParams params) {
+
+        //异步保存请求记录
+        systemHttpApiRequestService.save(params.getOrderNo(), params.getAccount(), "addMultimediaTemplate", new Gson().toJson(params));
 
         //获取模板ID
         String templateId = "TEMP" + sequenceService.findSequence("TEMPLATE");
@@ -85,10 +107,36 @@ public class TemplateService {
         return ResponseDataUtil.buildSuccess(result);
     }
 
+    /**
+     * 添加国际短信模板
+     * @param params
+     * @return
+     */
     public ResponseData<Map<String, String>> addInterTemplate(TemplateAddRequestParams params) {
+
+        //异步保存请求记录
+        systemHttpApiRequestService.save(params.getOrderNo(), params.getAccount(), "addInterTemplate", new Gson().toJson(params));
 
         //获取模板ID
         String templateId = "TEMP" + sequenceService.findSequence("TEMPLATE");
+
+        AccountTemplateInfo entity = new AccountTemplateInfo();
+        entity.setTemplateId(templateId);
+        entity.setBusinessAccount(params.getAccount());
+        entity.setTemplateType("INTERNATIONAL_SMS");
+
+
+        entity.setTemplateContent(params.getContent());
+        //模板类型 1 表示普通模板 2 表示变量模板
+        entity.setTemplateFlag(params.getTemplateType());
+        entity.setTemplateAgreementType("HTTP");
+
+        //模板状态 2 表示待审核
+        entity.setTemplateStatus("2");
+        entity.setCreatedBy("API");
+        entity.setCreatedTime(DateTimeUtils.getNowDateTime());
+
+        this.save(entity);
 
         //组织响应结果
         Map<String, String> result = new HashMap<>();
@@ -98,6 +146,9 @@ public class TemplateService {
     }
 
     public ResponseData<Map<String, String>> getTemplateStatus(TemplateStatusRequestParams params) {
+
+        //异步保存请求记录
+        systemHttpApiRequestService.save(params.getOrderNo(), params.getAccount(), "getTemplateStatus", new Gson().toJson(params));
 
         //可以处理前提逻辑
         //获取模板ID
@@ -124,6 +175,6 @@ public class TemplateService {
     public void save(AccountTemplateInfo entity) {
         //记录日志
         log.info("[模板管理][API接口添加模板]数据:{}", JSON.toJSONString(entity));
-        accountTemplateInfoRepository.saveAndFlush(entity);
+        accountTemplateInfoRepository.saveHandle(entity);
     }
 }

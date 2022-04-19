@@ -33,6 +33,7 @@ public class MultimediaTemplateController {
 
     /**
      * 添加模板
+     *
      * @param params
      * @return
      */

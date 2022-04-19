@@ -2,25 +2,19 @@ package com.smoc.cloud.customer.service;
 
 
 import com.alibaba.fastjson.JSON;
-import com.smoc.cloud.common.page.PageList;
-import com.smoc.cloud.common.page.PageParams;
-import com.smoc.cloud.common.redis.smoc.identification.KeyEntity;
+import com.smoc.cloud.common.http.server.utils.RedisModel;
 import com.smoc.cloud.common.redis.smoc.identification.RedisConstant;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
-import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.AccountInterfaceInfoValidator;
 import com.smoc.cloud.common.utils.DES;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.PasswordUtils;
 import com.smoc.cloud.customer.entity.AccountBasicInfo;
 import com.smoc.cloud.customer.entity.AccountInterfaceInfo;
-import com.smoc.cloud.customer.repository.AccountFinanceRepository;
 import com.smoc.cloud.customer.repository.AccountInterfaceRepository;
 import com.smoc.cloud.customer.repository.BusinessAccountRepository;
-import com.smoc.cloud.finance.entity.FinanceAccount;
-import com.smoc.cloud.finance.repository.FinanceAccountRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -31,8 +25,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.math.BigDecimal;
-import java.util.Iterator;
 import java.util.Optional;
 
 /**
@@ -50,7 +42,7 @@ public class AccountInterfaceService {
     private BusinessAccountRepository businessAccountRepository;
 
     @Resource
-    private RedisTemplate<String, KeyEntity> redisTemplate;
+    private RedisTemplate<String, RedisModel> redisTemplate;
 
 
     /**
@@ -80,7 +72,7 @@ public class AccountInterfaceService {
      * 保存或修改
      *
      * @param accountInterfaceInfoValidator
-     * @param op  操作类型 为add、edit
+     * @param op                            操作类型 为add、edit
      * @return
      */
     @Transactional
@@ -91,7 +83,7 @@ public class AccountInterfaceService {
         AccountInterfaceInfo entity = new AccountInterfaceInfo();
         BeanUtils.copyProperties(accountInterfaceInfoValidator, entity);
 
-        if("add".equals(op)){
+        if ("add".equals(op)) {
             String passWord = PasswordUtils.getRandomPassword(9);
             entity.setAccountPassword(DES.encrypt(passWord));//加密
         }
@@ -121,9 +113,9 @@ public class AccountInterfaceService {
         }
 
         //设置账号完成进度
-        if("add".equals(op)){
+        if ("add".equals(op)) {
             Optional<AccountBasicInfo> optional = businessAccountRepository.findById(accountInterfaceInfoValidator.getAccountId());
-            if(optional.isPresent()){
+            if (optional.isPresent()) {
                 AccountBasicInfo accountBasicInfo = optional.get();
                 StringBuffer accountProcess = new StringBuffer(accountBasicInfo.getAccountProcess());
                 accountProcess = accountProcess.replace(2, 3, "1");
@@ -136,21 +128,22 @@ public class AccountInterfaceService {
         log.info("[EC业务账号管理][业务账号接口信息][{}]数据:{}", op, JSON.toJSONString(entity));
         accountInterfaceRepository.saveAndFlush(entity);
 
-        //如果状态不为004 则放到redis中
-        if("HTTP_TEXT_SMS".equals(entity.getProtocol())) {
+        //则放到redis中
+        if ("HTTPS".equals(entity.getProtocol())) {
 
             Optional<AccountBasicInfo> optional = businessAccountRepository.findById(entity.getAccountId());
             AccountBasicInfo accountBasicInfo = optional.get();
 
             //放到redis中对象
-            KeyEntity key = new KeyEntity();
-            key.setMd5HmacKey(DES.decrypt(entity.getAccountPassword()));
-            key.setAesKey(accountBasicInfo.getBusinessType());
-            key.setAesIv(entity.getAccountPassword());
-
+            RedisModel redisModel = new RedisModel();
+            redisModel.setMd5HmacKey(entity.getAccountPassword());
+            redisModel.setBusinessType(accountBasicInfo.getBusinessType());
+            redisModel.setSubmitRate(entity.getMaxSubmitSecond());
+            redisModel.setSendRate(entity.getMaxSendSecond());
+            redisModel.setIps(entity.getIdentifyIp());
             //把数据放到redis里
-            redisTemplate.opsForValue().set(RedisConstant.HTTP_SERVER_KEY + entity.getAccountId(), key);
-        }else{
+            redisTemplate.opsForValue().set(RedisConstant.HTTP_SERVER_KEY + entity.getAccountId(), redisModel);
+        } else {
             //注销
             redisTemplate.delete(RedisConstant.HTTP_SERVER_KEY + entity.getAccountId());
         }

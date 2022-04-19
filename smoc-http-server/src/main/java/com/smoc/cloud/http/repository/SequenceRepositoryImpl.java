@@ -14,6 +14,11 @@ public class SequenceRepositoryImpl {
     @Resource
     public JdbcTemplate jdbcTemplate;
 
+    /**
+     * 获得序列
+     * @param seqName
+     * @return
+     */
     public Integer findSequence(String seqName){
         String sql = "select system_nextval('"+seqName+"')";
         Integer seq = jdbcTemplate.queryForObject(sql,Integer.class);

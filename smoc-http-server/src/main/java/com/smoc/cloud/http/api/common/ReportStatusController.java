@@ -1,4 +1,4 @@
-package com.smoc.cloud.http.api.message;
+package com.smoc.cloud.http.api.common;
 
 import com.google.gson.Gson;
 import com.smoc.cloud.common.gateway.utils.ValidatorUtil;
@@ -35,6 +35,7 @@ public class ReportStatusController {
 
     /**
      * 根据订单号获取状态报告
+     *
      * @param params
      * @return
      */
@@ -52,6 +53,7 @@ public class ReportStatusController {
 
     /**
      * 批量获取状态报告
+     *
      * @param params
      * @return
      */

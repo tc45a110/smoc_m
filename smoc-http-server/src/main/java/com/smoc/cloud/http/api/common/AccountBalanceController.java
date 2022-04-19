@@ -1,12 +1,13 @@
-package com.smoc.cloud.http.api.international;
+package com.smoc.cloud.http.api.common;
+
 
 import com.google.gson.Gson;
 import com.smoc.cloud.common.gateway.utils.ValidatorUtil;
-import com.smoc.cloud.common.http.server.message.request.TemplateAddRequestParams;
+import com.smoc.cloud.common.http.server.message.request.AccountBalanceRequestParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
-import com.smoc.cloud.http.service.TemplateService;
+import com.smoc.cloud.http.service.AccountService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -19,32 +20,34 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.Map;
 
 /**
- * 国际短信，模板管理
+ * 查询账户余额
  */
 @Slf4j
 @RestController
-@RequestMapping("template")
+@RequestMapping("account")
 @Scope(value = WebApplicationContext.SCOPE_REQUEST)
-public class InterTemplateController {
+public class AccountBalanceController {
 
     @Autowired
-    private TemplateService templateService;
+    private AccountService accountService;
 
     /**
-     * 添加模板
+     * 查询账户余额
      *
      * @param params
      * @return
      */
-    @RequestMapping(value = "/addInterTemplate", method = RequestMethod.POST)
-    public ResponseData<Map<String, String>> addInterTemplate(@RequestBody TemplateAddRequestParams params) {
+    @RequestMapping(value = "/getAccountBalance", method = RequestMethod.POST)
+    public ResponseData<Map<String, String>> getAccountBalance(@RequestBody AccountBalanceRequestParams params) {
 
-        log.info("[创建国际短信模板]：{}", new Gson().toJson(params));
+        log.info("[获取账户余额]：{}", new Gson().toJson(params));
 
         if (!ValidatorUtil.validate(params)) {
             return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), ValidatorUtil.validateMessage(params));
         }
 
-        return templateService.addInterTemplate(params);
+        return accountService.getAccountBalance(params);
     }
+
+
 }

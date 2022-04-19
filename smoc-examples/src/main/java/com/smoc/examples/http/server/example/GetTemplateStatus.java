@@ -17,7 +17,7 @@ public class GetTemplateStatus {
 
     public static void main(String[] args) throws Exception {
 
-        String url = "http://localhost:18088/smoc-gateway/http-server/message/template/getTemplateStatus";
+        String url = "http://localhost:18088/smoc-gateway/http-server/template/getTemplateStatus";
 
         //自定义header协议
         Map<String, String> header = new HashMap<>();
@@ -29,7 +29,7 @@ public class GetTemplateStatus {
         //订单号，成功后的订单不能重复
         requestDataMap.put("orderNo", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(10));
         //业务账号；参见给的账号EXCEL文件
-        requestDataMap.put("account", "SWL102");
+        requestDataMap.put("account", "YQT108");
         //模板内容
         requestDataMap.put("templateId", "TEMP100000369");
         //时间戳
@@ -48,7 +48,7 @@ public class GetTemplateStatus {
         //加密后的身份证号
         signData.append(requestDataMap.get("timestamp"));
         //签名 MD5_HMAC 签名KEY,参见给的账号EXCEL文件
-        String sign = HMACUtil.md5_HMAC_sign(signData.toString(), "16B6DF81DF15FDFE75441AF3FBF9E12E");
+        String sign = HMACUtil.md5_HMAC_sign(signData.toString(), "BkqYXgMwD");
         System.out.println("[接口请求][签名数据]数据:" + signData);
         System.out.println("[接口请求][签名]数据:" + sign);
 

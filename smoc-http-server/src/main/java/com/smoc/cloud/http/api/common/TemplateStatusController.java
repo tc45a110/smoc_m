@@ -1,14 +1,12 @@
-package com.smoc.cloud.http.api.message;
+package com.smoc.cloud.http.api.common;
 
 import com.google.gson.Gson;
 import com.smoc.cloud.common.gateway.utils.ValidatorUtil;
-import com.smoc.cloud.common.http.server.message.request.MobileOriginalRequestParams;
-import com.smoc.cloud.common.http.server.message.response.MobileOriginalResponseParams;
+import com.smoc.cloud.common.http.server.message.request.TemplateStatusRequestParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
-
 import com.smoc.cloud.common.response.ResponseDataUtil;
-import com.smoc.cloud.http.service.MobileOriginalService;
+import com.smoc.cloud.http.service.TemplateService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -18,34 +16,36 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.List;
+import java.util.Map;
 
 /**
- * 获取上行短信
+ * 模板状态查询
  */
 @Slf4j
 @RestController
-@RequestMapping("mobile/original")
+@RequestMapping("template")
 @Scope(value = WebApplicationContext.SCOPE_REQUEST)
-public class MobileOriginalController {
+public class TemplateStatusController {
+
 
     @Autowired
-    private MobileOriginalService mobileOriginalService;
+    private TemplateService templateService;
 
     /**
-     * 获取上行短信
+     * 查询模板状态
+     *
      * @param params
      * @return
      */
-    @RequestMapping(value = "/getMobileOriginal", method = RequestMethod.POST)
-    public ResponseData<List<MobileOriginalResponseParams>> getMobileOriginal(@RequestBody MobileOriginalRequestParams params) {
+    @RequestMapping(value = "/getTemplateStatus", method = RequestMethod.POST)
+    public ResponseData<Map<String, String>> getTemplateStatus(@RequestBody TemplateStatusRequestParams params) {
 
-        log.info("[获取上行短信]：{}", new Gson().toJson(params));
+        log.info("[获取普通短信模板状态]：{}", new Gson().toJson(params));
 
         if (!ValidatorUtil.validate(params)) {
             return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), ValidatorUtil.validateMessage(params));
         }
 
-        return mobileOriginalService.getMobileOriginal(params);
+        return templateService.getTemplateStatus(params);
     }
 }

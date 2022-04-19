@@ -33,6 +33,7 @@ public class TemplateController {
 
     /**
      * 添加模板
+     *
      * @param params
      * @return
      */
@@ -48,20 +49,4 @@ public class TemplateController {
         return templateService.addTemplate(params);
     }
 
-    /**
-     * 查询模板状态
-     * @param params
-     * @return
-     */
-    @RequestMapping(value = "/getTemplateStatus", method = RequestMethod.POST)
-    public ResponseData<Map<String, String>> getTemplateStatus(@RequestBody TemplateStatusRequestParams params) {
-
-        log.info("[获取普通短信模板状态]：{}", new Gson().toJson(params));
-
-        if (!ValidatorUtil.validate(params)) {
-            return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), ValidatorUtil.validateMessage(params));
-        }
-
-        return templateService.getTemplateStatus(params);
-    }
 }

@@ -1,13 +1,14 @@
-package com.smoc.cloud.http.api.message;
-
+package com.smoc.cloud.http.api.common;
 
 import com.google.gson.Gson;
 import com.smoc.cloud.common.gateway.utils.ValidatorUtil;
-import com.smoc.cloud.common.http.server.message.request.AccountBalanceRequestParams;
+import com.smoc.cloud.common.http.server.message.request.MobileOriginalRequestParams;
+import com.smoc.cloud.common.http.server.message.response.MobileOriginalResponseParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
+
 import com.smoc.cloud.common.response.ResponseDataUtil;
-import com.smoc.cloud.http.service.AccountService;
+import com.smoc.cloud.http.service.MobileOriginalService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -17,37 +18,35 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.Map;
+import java.util.List;
 
 /**
- * 查询账户余额
+ * 获取上行短信
  */
 @Slf4j
 @RestController
-@RequestMapping("account")
+@RequestMapping("mobile/original")
 @Scope(value = WebApplicationContext.SCOPE_REQUEST)
-public class AccountBalanceController {
+public class MobileOriginalController {
 
     @Autowired
-    private AccountService accountService;
+    private MobileOriginalService mobileOriginalService;
 
     /**
-     * 查询账户余额
+     * 获取上行短信
      *
      * @param params
      * @return
      */
-    @RequestMapping(value = "/getAccountBalance", method = RequestMethod.POST)
-    public ResponseData<Map<String, String>> getAccountBalance(@RequestBody AccountBalanceRequestParams params) {
+    @RequestMapping(value = "/getMobileOriginal", method = RequestMethod.POST)
+    public ResponseData<List<MobileOriginalResponseParams>> getMobileOriginal(@RequestBody MobileOriginalRequestParams params) {
 
-        log.info("[获取账户余额]：{}", new Gson().toJson(params));
+        log.info("[获取上行短信]：{}", new Gson().toJson(params));
 
         if (!ValidatorUtil.validate(params)) {
             return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), ValidatorUtil.validateMessage(params));
         }
 
-        return accountService.getAccountBalance(params);
+        return mobileOriginalService.getMobileOriginal(params);
     }
-
-
 }

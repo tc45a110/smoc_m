@@ -1,5 +1,6 @@
 package com.somc.cloud.gateway.redis.service;
 
+import com.smoc.cloud.common.http.server.utils.RedisModel;
 import com.smoc.cloud.common.redis.smoc.identification.KeyEntity;
 import com.smoc.cloud.common.redis.smoc.identification.RedisConstant;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 public class DataService {
 
     @Resource
-    private RedisTemplate<String, KeyEntity> redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Resource
     private RedisTemplate<String, String> stringRedisTemplate;
@@ -27,9 +28,10 @@ public class DataService {
      */
     public KeyEntity getKey(String identificationAccount) {
         //redis 查询
-        KeyEntity keyEntity = redisTemplate.opsForValue().get(RedisConstant.KEY + identificationAccount);
+        KeyEntity keyEntity = (KeyEntity) redisTemplate.opsForValue().get(RedisConstant.KEY + identificationAccount);
         return keyEntity;
     }
+
 
     /**
      * 防止重放攻击
@@ -57,10 +59,10 @@ public class DataService {
      * @param account
      * @return
      */
-    public KeyEntity getHttpServerKey(String account) {
+    public RedisModel getHttpServerKey(String account) {
         //redis 查询
-        KeyEntity keyEntity = redisTemplate.opsForValue().get(RedisConstant.HTTP_SERVER_KEY + account);
-        return keyEntity;
+        RedisModel redisModel = (RedisModel) redisTemplate.opsForValue().get(RedisConstant.HTTP_SERVER_KEY + account);
+        return redisModel;
     }
 
 

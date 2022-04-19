@@ -6,12 +6,14 @@ import com.smoc.cloud.common.gateway.request.RequestStardardHeaders;
 import com.smoc.cloud.common.gateway.utils.HMACUtil;
 import com.smoc.cloud.common.gateway.utils.ValidatorUtil;
 import com.smoc.cloud.common.http.server.utils.Constant;
-import com.smoc.cloud.common.redis.smoc.identification.KeyEntity;
+import com.smoc.cloud.common.http.server.utils.RedisModel;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.utils.DES;
 import com.somc.cloud.gateway.configuration.GatewayConfigurationProperties;
 import com.somc.cloud.gateway.redis.service.DataService;
+import com.somc.cloud.gateway.util.IpUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
@@ -100,28 +102,42 @@ public class HttpServerVerifySignatureGatewayFilter {
                 log.info("[接口请求][账户:{}]header数据:{}", model.getAccount(), new Gson().toJson(requestHeaderData));
 
                 //取密钥数据
-                KeyEntity keyEntity = dataService.getHttpServerKey(model.getAccount());
-                if (null == keyEntity || StringUtils.isEmpty(keyEntity.getMd5HmacKey())) {
+                RedisModel redisModel = dataService.getHttpServerKey(model.getAccount());
+                if (null == redisModel || StringUtils.isEmpty(redisModel.getMd5HmacKey())) {
                     return errorHandle(exchange, ResponseCode.USER_NOT_EXIST.getCode(), ResponseCode.USER_NOT_EXIST.getMessage());
                 }
-                //log.info("[签名密钥]{}",new Gson().toJson(keyEntity));
 
-                //账号、业务类型的映射关系
-                Map<String,String> businessAccountMap = Constant.BUSINESS_ACCOUNT_MAP;
+                /**
+                 * IP鉴权
+                 */
+                if (!StringUtils.isEmpty(redisModel.getIps())) {
+                    String ip = IpUtil.getIpAddr(request);
+                    Pattern ipPattern = Pattern.compile(ip);
+                    Matcher matcher = ipPattern.matcher(redisModel.getIps());
+                    if (!matcher.find()) {
+                        log.info("[IP鉴权]被限制IP：{}", ip);
+                        return errorHandle(exchange, ResponseCode.USER_NOT_EXIST.getCode(), ResponseCode.USER_NOT_EXIST.getMessage());
+                    }
+                }
+
+                /**
+                 * 账号 业务对应关系
+                 */
+                Map<String, String> businessAccountMap = Constant.BUSINESS_ACCOUNT_MAP;
                 URI uri = request.getURI();
                 for (Map.Entry<String, String> map : businessAccountMap.entrySet()) {
                     Pattern UrlPattern = Pattern.compile(map.getKey());
                     Matcher matcher = UrlPattern.matcher(uri.toString());
                     if (matcher.find()) {
                         //log.info("[账号、业务类型的映射关系]需要业务类型:{}", map.getValue());
-                        if(!map.getValue().equals(keyEntity.getAesKey())){
-                            return errorHandle(exchange, ResponseCode.ACCOUNT_BUSINESS_ERROR.getCode(), ResponseCode.ACCOUNT_BUSINESS_ERROR.getMessage());
+                        if (!map.getValue().equals(redisModel.getBusinessType())) {
+                            return errorHandle(exchange, ResponseCode.REQUEST_IP_ERROR.getCode(), ResponseCode.REQUEST_IP_ERROR.getMessage());
                         }
                     }
                 }
 
 
-                String md5HmacKey = keyEntity.getMd5HmacKey();
+                String md5HmacKey = DES.decrypt(redisModel.getMd5HmacKey());
 
                 //签名数据
                 StringBuffer signData = new StringBuffer();

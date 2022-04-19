@@ -47,7 +47,7 @@ public class GetMobileOriginal {
         //加密后的身份证号
         signData.append(requestDataMap.get("timestamp"));
         //签名 MD5_HMAC 签名KEY,参见给的账号EXCEL文件
-        String sign = HMACUtil.md5_HMAC_sign(signData.toString(), "16B6DF81DF15FDFE75441AF3FBF9E12E");
+        String sign = HMACUtil.md5_HMAC_sign(signData.toString(), "BkqYXgMwD");
         System.out.println("[接口请求][签名数据]数据:" + signData);
         System.out.println("[接口请求][签名]数据:" + sign);
 

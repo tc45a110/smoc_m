@@ -37,6 +37,7 @@ public enum ResponseCode {
     USER_PASSWORD_NULL("3002","密码错误！"),
     USER_LOGIN_FAILURE("3003","登录失败"),
     REQUEST_LEGAL_ERROR("3004","非法请求"),
+    REQUEST_IP_ERROR("3005","IP访问受限"),
 
 
     //OAuth2 异常

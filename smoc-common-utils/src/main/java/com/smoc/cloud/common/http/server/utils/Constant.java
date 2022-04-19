@@ -12,8 +12,8 @@ public class Constant {
         BUSINESS_ACCOUNT_MAP = new HashMap<>();
         BUSINESS_ACCOUNT_MAP.put("addTemplate", "TEXT_SMS");
         BUSINESS_ACCOUNT_MAP.put("sendMessageByTemplate", "TEXT_SMS");
-        BUSINESS_ACCOUNT_MAP.put("addMultimediaTemplate", "MULTI_SMS,");
-        BUSINESS_ACCOUNT_MAP.put("sendMultimediaMessageByTemplate", "MULTI_SMS,");
+        BUSINESS_ACCOUNT_MAP.put("addMultimediaTemplate", "MULTI_SMS");
+        BUSINESS_ACCOUNT_MAP.put("sendMultimediaMessageByTemplate", "MULTI_SMS");
         BUSINESS_ACCOUNT_MAP.put("sendInterMessageByTemplate", "INTERNATIONAL_SMS");
         BUSINESS_ACCOUNT_MAP.put("addInterTemplate", "INTERNATIONAL_SMS");
     }
