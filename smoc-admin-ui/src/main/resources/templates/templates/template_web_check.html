@@ -204,10 +204,11 @@
                                             </div>
                                             <div class="col-md-12 text-center" style="margin-top:20px">
                                                 <input type="hidden" th:field="*{templateId}">
+                                                <input type="hidden" th:field="*{templateAgreementType}">
                                                 <button sec:authorize-url="/template/web/save" type="submit"
                                                         class="btn btn-teal waves-effect waves-light">提交
                                                 </button>
-                                                <a th:href="@{/template/web/list/HTTP}"
+                                                <a th:href="@{/template/web/list/{protocol}(protocol=${accountTemplateInfoValidator.templateAgreementType})}"
                                                    style="margin-left:20px"
                                                    class="btn btn-default waves-effect waves-light">返回</a>
                                             </div>

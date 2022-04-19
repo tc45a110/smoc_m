@@ -84,7 +84,7 @@ public class MessageTemplateController {
         params.setCurrentPage(1);
         AccountTemplateInfoValidator accountTemplateInfoValidator = new AccountTemplateInfoValidator();
         accountTemplateInfoValidator.setEnterpriseId(user.getOrganization());
-        accountTemplateInfoValidator.setTemplateAgreementType("HTTP");
+        accountTemplateInfoValidator.setTemplateAgreementType("SERVICE_WEB");
         accountTemplateInfoValidator.setTemplateType(type);
         params.setParams(accountTemplateInfoValidator);
 
@@ -116,7 +116,7 @@ public class MessageTemplateController {
         //分页查询
         accountTemplateInfoValidator.setEnterpriseId(user.getOrganization());
         accountTemplateInfoValidator.setTemplateType(type);
-        accountTemplateInfoValidator.setTemplateAgreementType("HTTP");
+        accountTemplateInfoValidator.setTemplateAgreementType("SERVICE_WEB");
         pageParams.setParams(accountTemplateInfoValidator);
 
 
@@ -148,7 +148,7 @@ public class MessageTemplateController {
         accountTemplateInfoValidator.setTemplateType(type);
         accountTemplateInfoValidator.setTemplateStatus("2");
         accountTemplateInfoValidator.setTemplateFlag("1");
-        accountTemplateInfoValidator.setTemplateAgreementType("HTTP");
+        accountTemplateInfoValidator.setTemplateAgreementType("WEB");
 
         //查询签名
         EnterpriseDocumentInfoValidator enterpriseDocumentInfoValidator = new EnterpriseDocumentInfoValidator();

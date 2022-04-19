@@ -92,10 +92,16 @@ public class AccountTemplateInfoRepositoryImpl extends BasePageRepository {
             paramsList.add(qo.getTemplateStatus().trim());
         }
 
-        //业务类型
+        //协议类型 SERVICE_WEB:标识是自服务平台
         if (!StringUtils.isEmpty(qo.getTemplateAgreementType())) {
-            sqlBuffer.append(" and t.TEMPLATE_AGREEMENT_TYPE =?");
-            paramsList.add(qo.getTemplateAgreementType().trim());
+            if("WEB".equals(qo.getTemplateAgreementType())){
+                sqlBuffer.append(" and ( t.TEMPLATE_AGREEMENT_TYPE ='WEB' or t.TEMPLATE_AGREEMENT_TYPE ='HTTP')");
+            }else if("SERVICE_WEB".equals(qo.getTemplateAgreementType())){
+                sqlBuffer.append(" and t.TEMPLATE_AGREEMENT_TYPE ='WEB' ");
+            }else{
+                sqlBuffer.append(" and t.TEMPLATE_AGREEMENT_TYPE =? ");
+                paramsList.add(qo.getTemplateAgreementType().trim());
+            }
         }
 
         //模板标识

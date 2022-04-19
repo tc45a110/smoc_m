@@ -511,7 +511,7 @@
                                                                                     <a data-toggle="modal"
                                                                                        data-target="#confirm-set-invoice-modal"
                                                                                        sec:authorize-url="/enterprise/invoice/save"
-                                                                                       th:onclick="openCommonInvoice([[${commonInvoice.id}]],[[${commonInvoice.invoiceTitle}]],[[${commonInvoice.taxPayerNumber}]],[[${commonInvoice.invoiceMark}]])"
+                                                                                       th:onclick="openCommonInvoice([[${commonInvoice.id}]],[[${commonInvoice.invoiceTitle}]],[[${commonInvoice.taxPayerNumber}]],[[${commonInvoice.openBank}]],[[${commonInvoice.openAccount}]],[[${commonInvoice.registerPhone}]],[[${commonInvoice.registerAddress}]],[[${commonInvoice.invoiceMark}]])"
                                                                                        class="btn btn-success"
                                                                                        style="font-size:12px;">设置</a>
                                                                                     <a data-toggle="modal"
@@ -890,7 +890,7 @@
         <div id="confirm-set-invoice-modal" class="modal fade" tabindex="-1" role="dialog" th:remove="${#strings.isEmpty(error)}?none:all"
              aria-labelledby="custom-width-modalLabel"
              aria-hidden="true" style="display: none;margin: 60px;margin-top:68px">
-            <div class="modal-dialog" style="width:33%;">
+            <div class="modal-dialog" style="width:50%;">
                 <div class="modal-content">
                     <form id="submit_formq2" method="post" th:action="@{/enterprise/invoice/save}"
                           th:object="${enterpriseInvoiceInfoValidator}" data-parsley-validate="">
@@ -900,22 +900,48 @@
                         </div>
                         <div class="row" style="margin-top:10px">
                             <div class="col-md-12">
-                                <div class="form-group m-b-20">
+                                <div class="col-md-6 form-group">
                                     <label>发票抬头<span class="text-danger">*</span>&nbsp;</label>
-                                    <input type="text" class="form-control" th:field="*{invoiceTitle}"
+                                    <input type="text" class="form-control" id="invoiceTitle"
+                                           th:field="*{invoiceTitle}"
                                            required="" data-parsley-length="[4,60]" autocomplete="off"
                                            placeholder="发票抬头">
                                 </div>
-                                <div class="form-group m-b-20">
+                                <div class="col-md-6 form-group">
                                     <label>纳税人税号<span class="text-danger">*</span>&nbsp;</label>
-                                    <input type="text" class="form-control" th:field="*{taxPayerNumber}"
+                                    <input type="text" class="form-control"
+                                           th:field="*{taxPayerNumber}" id="taxPayerNumber"
                                            required="" data-parsley-length="[15,25]" autocomplete="off"
                                            placeholder="纳税人税号">
                                 </div>
-
-                                <div class="form-group m-b-20">
-                                    <label>备注&nbsp;</label>
-                                    <input type="text" class="form-control" th:field="*{invoiceMark}"
+                                <div class="col-md-6 form-group">
+                                    <label>注册地址&nbsp;</label>
+                                    <input type="text" class="form-control" th:field="*{registerAddress}"
+                                           data-parsley-length="[2,64]" autocomplete="off" id="registerAddress"
+                                           placeholder="注册地址">
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label>注册电话&nbsp;</label>
+                                    <input type="text" class="form-control" th:field="*{registerPhone}"
+                                           data-parsley-length="[2,11]" autocomplete="off" id="registerPhone"
+                                           placeholder="注册电话">
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label>开户银行&nbsp;</label>
+                                    <input type="text" class="form-control" th:field="*{openBank}"
+                                           data-parsley-length="[2,64]" autocomplete="off" id="openBank"
+                                           placeholder="开户银行">
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label>开户账号&nbsp;</label>
+                                    <input type="text" class="form-control" th:field="*{openAccount}"
+                                           data-parsley-length="[2,64]" autocomplete="off"  id="openAccount"
+                                           placeholder="开户账号">
+                                </div>
+                                <div class="col-md-12 form-group">
+                                    <label>开票内容&nbsp;</label>
+                                    <input type="text" class="form-control"
+                                           th:field="*{invoiceMark}" id="invoiceMark"
                                            data-parsley-length="[1,128]" autocomplete="off"
                                            placeholder="备注">
                                 </div>
@@ -958,6 +984,7 @@
                                            required="" data-parsley-length="[4,60]" autocomplete="off"
                                            placeholder="发票抬头">
                                 </div>
+
                                 <div class="col-md-6 form-group">
                                     <label>纳税人税号<span class="text-danger">*</span>&nbsp;</label>
                                     <input id="specialTaxPayerNumber" type="text" class="form-control"
@@ -968,25 +995,25 @@
                                 <div class="col-md-6 form-group">
                                     <label>注册地址&nbsp;</label>
                                     <input type="text" class="form-control" th:field="*{registerAddress}"
-                                           data-parsley-length="[2,64]" autocomplete="off"
+                                           data-parsley-length="[2,64]" autocomplete="off" id="specialRegisterAddress"
                                            placeholder="注册地址">
                                 </div>
                                 <div class="col-md-6 form-group">
                                     <label>注册电话&nbsp;</label>
                                     <input type="text" class="form-control" th:field="*{registerPhone}"
-                                           data-parsley-length="[2,11]" autocomplete="off"
+                                           data-parsley-length="[2,11]" autocomplete="off" id="specialRegisterPhone"
                                            placeholder="注册电话">
                                 </div>
                                 <div class="col-md-6 form-group">
                                     <label>开户银行&nbsp;</label>
                                     <input type="text" class="form-control" th:field="*{openBank}"
-                                           data-parsley-length="[2,64]" autocomplete="off"
+                                           data-parsley-length="[2,64]" autocomplete="off" id="specialOpenBank"
                                            placeholder="开户银行">
                                 </div>
                                 <div class="col-md-6 form-group">
                                     <label>开户账号&nbsp;</label>
                                     <input type="text" class="form-control" th:field="*{openAccount}"
-                                           data-parsley-length="[2,64]" autocomplete="off"
+                                           data-parsley-length="[2,64]" autocomplete="off" id="specialOpenAccount"
                                            placeholder="开户账号">
                                 </div>
                                 <div class="col-md-12 form-group">
@@ -1047,7 +1074,6 @@
     </div> <!-- container -->
 </div> <!-- content -->
 <th:block th:insert="fragments/common_fragments :: common_js"/>
-<th:block th:insert="fragments/login_fragments :: login_js"/>
 <th:block th:insert="fragments/common_fragments :: common_submit_form"/>
 <script th:src="@{/static/js/clipboard.min.js}"></script>
 <!-- Tooltipster js -->
@@ -1090,10 +1116,14 @@
     }
 
     //打开普通发票信息
-    function openCommonInvoice(id, invoiceTitle, taxPayerNumber, invoiceMark) {
+    function openCommonInvoice(id, invoiceTitle, taxPayerNumber, openBank, openAccount, registerPhone, registerAddress, invoiceMark) {
         $("#commonId").val(id);
         $("#invoiceTitle").val(invoiceTitle);
         $("#taxPayerNumber").val(taxPayerNumber);
+        $("#openBank").val(openBank);
+        $("#openAccount").val(openAccount);
+        $("#registerPhone").val(registerPhone);
+        $("#registerAddress").val(registerAddress);
         $("#invoiceMark").val(invoiceMark);
     }
 
@@ -1102,10 +1132,10 @@
         $("#specialId").val(id);
         $("#specialInvoiceTitle").val(invoiceTitle);
         $("#specialTaxPayerNumber").val(taxPayerNumber);
-        $("#openBank").val(openBank);
-        $("#openAccount").val(openAccount);
-        $("#registerPhone").val(registerPhone);
-        $("#registerAddress").val(registerAddress);
+        $("#specialOpenBank").val(openBank);
+        $("#specialOpenAccount").val(openAccount);
+        $("#specialRegisterPhone").val(registerPhone);
+        $("#specialRegisterAddress").val(registerAddress);
         $("#specialInvoiceMark").val(invoiceMark);
     }
 

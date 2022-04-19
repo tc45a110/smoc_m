@@ -293,6 +293,11 @@ public class AccountController {
             result.addError(err);
         }
 
+        //多网：默认支持携号转网
+        if(carriers.length>1){
+            accountBasicInfoValidator.setTransferType("1");
+        }
+
         //查询企业数据
         ResponseData<EnterpriseBasicInfoValidator> enterdata = enterpriseService.findById(accountBasicInfoValidator.getEnterpriseId());
         if (!ResponseCode.SUCCESS.getCode().equals(enterdata.getCode())) {

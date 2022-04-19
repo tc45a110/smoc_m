@@ -50,7 +50,14 @@ public class SystemErrorCodeRepositoryImpl extends BasePageRepository {
                 paramsList.add( "%" + qo.getErrorCode().trim()+ "%");
             }
         }
-        sqlBuffer.append(" order by t.CREATED_TIME desc,t.ID ");
+
+        //service-ui:自服务平台
+        if("service-ui".equals(qo.getFlag())){
+            sqlBuffer.append(" order by t.CREATED_TIME ,t.ID ");
+        }else{
+            sqlBuffer.append(" order by t.CREATED_TIME desc,t.ID ");
+        }
+
 
         //根据参数个数，组织参数值
         Object[] params = new Object[paramsList.size()];

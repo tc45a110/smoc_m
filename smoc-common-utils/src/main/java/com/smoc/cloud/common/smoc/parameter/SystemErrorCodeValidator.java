@@ -23,16 +23,18 @@ public class SystemErrorCodeValidator {
     private String errorCode;
 
     @NotNull(message = "错误描述不能为空！")
-    @Length(max = 128, message = "错误描述最大长度为{max}个字符")
+    @Length(max = 254, message = "错误描述最大长度为{max}个字符")
     private String errorContent;
 
-    @Length(max = 128, message = "处理建议最大长度为{max}个字符")
+    @Length(max = 254, message = "处理建议最大长度为{max}个字符")
     private String handleRemark;
     private String status;
     private Date createdTime;
     private String createdBy;
     private String updatedBy;
     private Date updatedTime;
+
+    private String flag;
 
     private List<ErrorCodeExcelModel> excelModelList = new ArrayList<>();
 }

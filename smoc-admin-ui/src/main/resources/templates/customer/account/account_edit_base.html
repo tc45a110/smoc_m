@@ -112,13 +112,13 @@
                                                              th:value="${accountBasicInfoValidator.infoType}" title="信息分类"/>
                                                 </div>
                                                 <div class="col-sm-4 m-b-10">
-                                                    <label>扣费方式<span class="text-danger">*</span>&nbsp;</label><br>
-                                                    <mpm:tag id="consumeType" required="true"
-                                                             identity="consumeType"
+                                                    <label>设置通道方式<span class="text-danger">*</span>&nbsp;</label><br>
+                                                    <mpm:tag id="accountChannelType" required="true"
+                                                             identity="accountChannelType"
                                                              show-type="radio" key="code" style="margin-top:0px"
-                                                             name="consumeType"
-                                                             th:value="${accountBasicInfoValidator.consumeType}"
-                                                             title="扣费方式"/>
+                                                             name="accountChannelType"
+                                                             th:value="${accountBasicInfoValidator.accountChannelType}"
+                                                             title="通道方式"/>
                                                 </div>
 
                                             </div>
@@ -129,19 +129,14 @@
                                                     <label class="m-b-10">是否支持携号转网<span class="text-danger" id="transfer" style="display: none">*</span>&nbsp;
                                                         <span class="text-danger" th:if="${#fields.hasErrors('transferType')}"
                                                               th:errors="*{transferType}"></span></label><br>
-                                                    <mpm:tag id="transferType" identity="isOrNo" show-type="radio" style="margin-top:0px"
-                                                             key="code" name="transferType" th:value="${accountBasicInfoValidator.transferType}"/>
+                                                    <div style="margin-top:0px" class="radio radio-info checkbox-inline">
+                                                        <input name="transferType" id="transferType1" type="radio" value="1"  th:checked="${accountBasicInfoValidator.transferType eq '1'}"><label>是</label>
+                                                    </div>
+                                                    <div style="margin-top:0px" class="radio radio-info checkbox-inline">
+                                                        <input name="transferType" checked="true" id="transferType0" type="radio" value="0" th:checked="${accountBasicInfoValidator.transferType eq '0'}"><label>否</label>
+                                                    </div>
                                                 </div>
 
-                                                <div class="col-sm-4 m-b-10">
-                                                    <label>设置通道方式<span class="text-danger">*</span>&nbsp;</label><br>
-                                                    <mpm:tag id="accountChannelType" required="true"
-                                                             identity="accountChannelType"
-                                                             show-type="radio" key="code" style="margin-top:0px"
-                                                             name="accountChannelType"
-                                                             th:value="${accountBasicInfoValidator.accountChannelType}"
-                                                             title="通道方式"/>
-                                                </div>
                                                 <div class="col-sm-4 m-b-10">
                                                     <label class="m-b-10">账号状态<span class="text-danger">*</span>&nbsp;
                                                         <span class="text-danger" th:if="${#fields.hasErrors('accountStatus')}"
@@ -151,12 +146,6 @@
                                                              key="code" th:value="${accountBasicInfoValidator.accountStatus}"
                                                              required="true" title="账号状态"/>
                                                 </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <div class="row">
-
                                                 <div class="col-sm-4 m-b-10">
                                                     <label class="m-b-10">账号优先级<span class="text-danger">*</span>&nbsp;
                                                         <span class="text-danger" th:if="${#fields.hasErrors('accountPriority')}"
@@ -227,18 +216,12 @@
             parent.location.href = contextPath + '/account/edit/center/enterprise/'+'[[${accountBasicInfoValidator.accountId}]]';
         }
 
-    });
-
-    function changeType(value) {
-        if("INDUSTRY"==value){
-            document.getElementById('accountPriority').value="3";
-        }else if("MARKETING"==value){
-            document.getElementById('accountPriority').value="2";
-        }else if("NEW"==value){
-            document.getElementById('accountPriority').value="1";
+        var carrier = '[[${accountBasicInfoValidator.carrier}]]';
+        var carriers = carrier.split(",");
+        if(carriers.length>1){
+            $("[name='transferType']").attr("disabled",'true');
         }
-    }
-
+    });
 
     //判断是否支持携号转网
     function isTransferSwith(){
@@ -256,6 +239,7 @@
             $('#transfer').show();
         }else{
             $("[name='transferType']").removeAttr("checked");
+            $("#transferType1").prop("checked","checked");
             $("[name='transferType']").attr("disabled",'true');
             $('#transferType').removeAttr("required","");
             $('#transfer').hide();

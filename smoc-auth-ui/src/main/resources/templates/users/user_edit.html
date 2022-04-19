@@ -55,13 +55,13 @@
                                                placeholder="输入用户名">
                                     </div>
                                     <div class="form-group m-b-20">
-                                        <label for="phone">手机号<span class="text-danger">*</span>&nbsp;<span
+                                        <label for="phone">手机号&nbsp;<span
                                                 class="text-danger" style="font-weight: 200;font-size: 12px"
                                                 th:if="${#fields.hasErrors('baseUserValidator.phone')}"
                                                 th:errors="*{baseUserValidator.phone}"></span></label>
                                         <input id="phone" type="text" th:field="*{baseUserValidator.phone}"
                                                class="form-control" autocomplete="off"
-                                               required="" data-parsley-length="[11,11]" data-parsley-type="digits"
+                                               data-parsley-length="[2,11]" data-parsley-type="digits"
                                                placeholder="输入手机号">
                                     </div>
                                     <div class="form-group m-b-20">

@@ -48,20 +48,41 @@
                                             <input id="accountPassword" type="text" class="form-control"
                                                    readonly autocomplete="off" placeholder="根据规则自动生成">
                                         </div>
-                                        <div class="form-group m-b-20">
+                                        <div class="form-group m-b-20" th:if="${'TEXT_SMS' eq accountBasicInfoValidator.businessType}">
                                             <label>接口类型<span class="text-danger">*</span>&nbsp;</label>
                                             <mpm:tag id="protocol" required="true" identity="accountInterfaceType"
                                                      show-type="select" key="code" onchange="changeType(this.value)"
-                                                     class="form-control" name="protocol" mask-value="HTTP_INTERNATIONAL,SMPP,MM7"
+                                                     class="form-control" name="protocol" mask-value="SMPP"
                                                      th:value="${accountInterfaceInfoValidator.protocol}" title="接口类型"/>
                                         </div>
-                                        <div class="form-group m-b-20">
+                                        <div class="form-group m-b-20" th:if="${'MULTI_SMS' eq accountBasicInfoValidator.businessType}">
+                                            <label>接口类型<span class="text-danger">*</span>&nbsp;</label>
+                                            <mpm:tag id="protocol" required="true" identity="accountInterfaceType"
+                                                     show-type="select" key="code" onchange="changeType(this.value)"
+                                                     class="form-control" name="protocol" mask-value="SGIP,SMGP,SMPP"
+                                                     th:value="${accountInterfaceInfoValidator.protocol}" title="接口类型"/>
+                                        </div>
+                                        <div class="form-group m-b-20" th:if="${'INTERNATIONAL_SMS' eq accountBasicInfoValidator.businessType}">
+                                            <label>接口类型<span class="text-danger">*</span>&nbsp;</label>
+                                            <mpm:tag id="protocol" required="true" identity="accountInterfaceType"
+                                                     show-type="select" key="code" onchange="changeType(this.value)"
+                                                     class="form-control" name="protocol" mask-value="CMPP,SGIP,SMGP"
+                                                     th:value="${accountInterfaceInfoValidator.protocol}" title="接口类型"/>
+                                        </div>
+                                        <div class="form-group m-b-20" th:if="${'BLACK_SERVICE' eq accountBasicInfoValidator.businessType}">
+                                            <label>接口类型<span class="text-danger">*</span>&nbsp;</label>
+                                            <mpm:tag id="protocol" required="true" identity="accountInterfaceType"
+                                                     show-type="select" key="code" onchange="changeType(this.value)"
+                                                     class="form-control" name="protocol" mask-value="WEB,CMPP,SGIP,SMGP,SMPP"
+                                                     th:value="${accountInterfaceInfoValidator.protocol}" title="接口类型"/>
+                                        </div>
+                                        <div class="form-group m-b-20"  id="sendSecond" style="display: none">
                                             <label for="maxSendSecond">发送速率(条/秒)<span
                                                     class="text-danger">*</span>&nbsp;
                                                 <span class="text-danger" th:if="${#fields.hasErrors('maxSendSecond')}"
                                                       th:errors="*{maxSendSecond}"
                                                       style="font-weight: 200;font-size: 12px"></span></label>
-                                            <input id="maxSendSecond" type="text" class="form-control" required=""
+                                            <input id="maxSendSecond" type="text" class="form-control"
                                                    autocomplete="off"
                                                    th:field="*{maxSendSecond}" data-parsley-length="[1,10]"
                                                    data-parsley-type="number"
@@ -73,7 +94,7 @@
                                                       th:errors="*{identifyIp}"
                                                       style="font-weight: 200;font-size: 12px"></span></label>
                                             <input id="identifyIp" type="text" class="form-control"
-                                                   th:field="*{identifyIp}" data-parsley-length="[7,128]"
+                                                   th:field="*{identifyIp}" data-parsley-length="[7,1200]"
                                                    data-parsley-pattern="/^((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d))|\*)((\/([012]\d|3[012]|\d))?)(,((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d))|\*)((\/([012]\d|3[012]|\d))?))*$/"
                                                    autocomplete="off" placeholder="客户鉴权IP">
                                         </div>
@@ -110,7 +131,7 @@
 
                                         <div id="HTTP_SMS" style="display: none">
                                             <div class="form-group m-b-20">
-                                                <label>客户提交速率(次/秒)<span
+                                                <label>账号提交速率(次/秒)<span
                                                         class="text-danger">*</span>&nbsp;
                                                     <span class="text-danger"
                                                           th:if="${#fields.hasErrors('maxSubmitSecond')}"
@@ -146,7 +167,7 @@
 
                                         <div class="col-md-6" id="HTTP_BLACK_SERVICE" style="display: none">
                                             <div class="form-group m-b-20">
-                                                <label>客户提交速率(次/秒)<span
+                                                <label>账号提交速率(次/秒)<span
                                                         class="text-danger">*</span>&nbsp;
                                                     <span class="text-danger"
                                                           th:if="${#fields.hasErrors('maxSubmitSecond')}"
@@ -244,6 +265,7 @@
         if ("CMPP" == value || "SGIP" == value || "SMGP" == value || "SMPP" == value) {
             document.getElementById("CMPP").style.display = "";
             document.getElementById("CHECK_TEMPL").style.display = "";
+            document.getElementById("sendSecond").style.display = "";
 
             document.getElementById("HTTP_SMS").style.display = "none";
             document.getElementById("HTTP_BLACK_SERVICE").style.display = "none";
@@ -251,6 +273,7 @@
             $('#srcId').prop("required","true");
             $('#maxConnect').prop("required","true");
             $('#executeCheck').prop("required","true");
+            $('#maxSendSecond').prop("required","true");
 
             $("#HTTP_SMS :input").each(function(){
                 $(this).removeAttr("required")
@@ -261,14 +284,16 @@
 
         }
 
-        if ("HTTP_TEXT_SMS" == value || "HTTP_MULTI_SMS" == value) {
+        if ("HTTPS" == value) {
             document.getElementById("HTTP_SMS").style.display = "";
             document.getElementById("CHECK_TEMPL").style.display = "";
             document.getElementById("CMPP").style.display = "none";
             document.getElementById("HTTP_BLACK_SERVICE").style.display = "none";
+            document.getElementById("sendSecond").style.display = "none";
 
             $('#maxSubmitSecond').prop("required","true");
             $('#executeCheck').prop("required","true");
+            $('#maxSendSecond').removeAttr("required");
 
             $("#CMPP :input").each(function(){
                 $(this).removeAttr("required")
@@ -279,13 +304,15 @@
 
         }
 
-        if ("HTTP_BLACK_SERVICE" == value) {
+        if ("BLACK_SERVICE" == value) {
             document.getElementById("HTTP_BLACK_SERVICE").style.display = "";
+            document.getElementById("sendSecond").style.display = "";
             document.getElementById("CMPP").style.display = "none";
             document.getElementById("HTTP_SMS").style.display = "none";
             document.getElementById("CHECK_TEMPL").style.display = "none";
 
             $('#maxSubmitSecond_black').prop("required","true");
+            $('#maxSendSecond').prop("required","true");
 
             $("#CMPP :input").each(function(){
                 $(this).removeAttr("required")
@@ -301,6 +328,9 @@
             document.getElementById("CMPP").style.display = "none";
             document.getElementById("HTTP_SMS").style.display = "none";
             document.getElementById("CHECK_TEMPL").style.display = "none";
+            document.getElementById("sendSecond").style.display = "none";
+
+            $('#maxSendSecond').removeAttr("required");
 
             $("#CMPP :input").each(function(){
                 $(this).removeAttr("required")

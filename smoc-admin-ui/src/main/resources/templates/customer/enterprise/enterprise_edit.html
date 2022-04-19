@@ -70,7 +70,7 @@
                                                           th:errors="*{enterpriseContacts}"  style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
                                                 <input id="enterpriseContacts" type="text" class="form-control" th:field="*{enterpriseContacts}"
-                                                       required="" data-parsley-length="[2,12]" autocomplete="off"
+                                                       data-parsley-length="[2,12]" autocomplete="off"
                                                        th:placeholder="${level=='1'?'请输入企业联系人':'请输入二级企业联系人'}">
 
                                             </div>
@@ -90,7 +90,7 @@
                                                           th:errors="*{enterpriseContactsPhone}"  style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
                                                 <input id="enterpriseContactsPhone" type="text" class="form-control" th:field="*{enterpriseContactsPhone}"
-                                                       required="" data-parsley-length="[7,24]" autocomplete="off"
+                                                       data-parsley-length="[7,24]" autocomplete="off"
                                                        th:placeholder="${level=='1'?'请输入企业联系方式':'请输入二级企业联系方式'}">
                                             </div>
 

@@ -72,7 +72,7 @@ public class EnterpriseContractController {
         params.setPageSize(10);
         params.setCurrentPage(1);
         EnterpriseContractInfoValidator enterpriseContractInfoValidator = new EnterpriseContractInfoValidator();
-        Date startDate = DateTimeUtils.getFirstMonth(12);
+        Date startDate = DateTimeUtils.getFirstMonth(18);
         enterpriseContractInfoValidator.setStartDate(DateTimeUtils.getDateFormat(startDate));
         enterpriseContractInfoValidator.setEndDate(DateTimeUtils.getDateFormat(new Date()));
         params.setParams(enterpriseContractInfoValidator);

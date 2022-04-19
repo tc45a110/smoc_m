@@ -120,20 +120,6 @@
                                                 </div>
 
                                                 <div class="col-sm-4 m-b-10">
-                                                    <label>扣费方式<span class="text-danger">*</span>&nbsp;</label><br>
-                                                    <mpm:tag id="consumeType" required="true"
-                                                             identity="consumeType"
-                                                             show-type="radio" key="code" style="margin-top:0px"
-                                                             name="consumeType"
-                                                             th:value="${accountBasicInfoValidator.consumeType}"
-                                                             title="扣费方式"/>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-sm-4 m-b-10">
                                                     <label class="m-b-10">账号优先级<span class="text-danger">*</span>&nbsp;
                                                         <span class="text-danger" th:if="${#fields.hasErrors('accountPriority')}"
                                                               th:errors="*{accountPriority}"></span></label><br>

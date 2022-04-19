@@ -197,7 +197,6 @@ public class WebTemplateController {
         view.addObject("checkRecord", checkRecordData.getData());
         view.addObject("accountTemplateInfoValidator", data.getData());
         view.addObject("enterpriseBasicInfoValidator", enterpriseData.getData());
-        view.addObject("accountTemplateInfoValidator", data.getData());
 
         return view;
     }
@@ -310,7 +309,7 @@ public class WebTemplateController {
         //记录日志
         log.info("[模板管理][模板审核][{}][{}]数据:{}", "check", user.getUserName(), JSON.toJSONString(flowApproveValidator));
 
-        view.setView(new RedirectView("/template/web/list/HTTP", true, false));
+        view.setView(new RedirectView("/template/web/list/"+accountTemplateInfoValidator.getTemplateAgreementType(), true, false));
         return view;
 
     }

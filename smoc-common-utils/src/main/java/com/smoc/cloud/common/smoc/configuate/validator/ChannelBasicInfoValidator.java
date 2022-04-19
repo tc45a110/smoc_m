@@ -37,7 +37,7 @@ public class ChannelBasicInfoValidator {
     private String channelProvder;
 
     @NotNull(message = "信息分类不能为空！")
-    @Length(max = 32, message = "信息分类最大长度为{max}！")
+    @Length(max = 64, message = "信息分类最大长度为{max}！")
     private String infoType;
 
     @NotNull(message = "通道区域范围不能为空！")
