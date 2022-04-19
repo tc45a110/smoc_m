@@ -4,6 +4,8 @@ package com.smoc.cloud.customer.service;
 import com.alibaba.fastjson.JSON;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
+import com.smoc.cloud.common.redis.smoc.identification.KeyEntity;
+import com.smoc.cloud.common.redis.smoc.identification.RedisConstant;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
@@ -13,11 +15,14 @@ import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticComplaintData;
 import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.common.smoc.message.MessageAccountValidator;
+import com.smoc.cloud.common.utils.DES;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.customer.entity.AccountBasicInfo;
 import com.smoc.cloud.customer.entity.AccountChannelInfo;
+import com.smoc.cloud.customer.entity.AccountInterfaceInfo;
 import com.smoc.cloud.customer.repository.AccountChannelRepository;
 import com.smoc.cloud.customer.repository.AccountFinanceRepository;
+import com.smoc.cloud.customer.repository.AccountInterfaceRepository;
 import com.smoc.cloud.customer.repository.BusinessAccountRepository;
 import com.smoc.cloud.finance.entity.FinanceAccount;
 import com.smoc.cloud.finance.repository.FinanceAccountRepository;
@@ -59,11 +64,18 @@ public class BusinessAccountService {
     @Resource
     private AccountChannelRepository accountChannelRepository;
 
+    @Resource
+    private AccountInterfaceRepository accountInterfaceRepository;
+
     @Autowired
     private RandomService randomService;
 
     @Resource
     private RedisTemplate<String, String> stringRedisTemplate;
+
+
+    @Resource
+    private RedisTemplate<String, KeyEntity> redisTemplate;
 
 
     /**
@@ -103,7 +115,7 @@ public class BusinessAccountService {
      * 保存或修改
      *
      * @param accountBasicInfoValidator
-     * @param op  操作类型 为add、edit
+     * @param op                        操作类型 为add、edit
      * @return
      */
     @Transactional
@@ -156,25 +168,25 @@ public class BusinessAccountService {
 
         if ("edit".equals(op)) {
             //根据运营商先删除库里多余的运营商的价格(比如：添加的时候选择了3个运营商，修改的时候选择了2个运营商，那么就得把多余的1个运营商删除)
-            if("INTL".equals(accountBasicInfoValidator.getCarrier())){
+            if ("INTL".equals(accountBasicInfoValidator.getCarrier())) {
                 accountFinanceRepository.deleteByAccountIdAndCarrier(accountBasicInfoValidator.getAccountId(), accountBasicInfoValidator.getCountryCode());
-            }else{
+            } else {
                 accountFinanceRepository.deleteByAccountIdAndCarrier(accountBasicInfoValidator.getAccountId(), accountBasicInfoValidator.getCarrier());
             }
 
 
             //如果修改了通道方式，并且配置了通道，需要删除已经配置得通道
-            if(!accountBasicInfoValidator.getAccountChannelType().equals(accountChannelType)){
+            if (!accountBasicInfoValidator.getAccountChannelType().equals(accountChannelType)) {
                 deleteByAccountId(entity);
             }
 
             //如果修改了运营商，并且配置了通道，需要删除通道
-            if("INTL".equals(accountBasicInfoValidator.getCarrier())){
-                if(!accountBasicInfoValidator.getCountryCode().equals(countryCode)){
+            if ("INTL".equals(accountBasicInfoValidator.getCarrier())) {
+                if (!accountBasicInfoValidator.getCountryCode().equals(countryCode)) {
                     deleteConfigChannelByCarrier(entity);
                 }
-            }else{
-                if(!accountBasicInfoValidator.getCarrier().equals(carrier)){
+            } else {
+                if (!accountBasicInfoValidator.getCarrier().equals(carrier)) {
                     deleteConfigChannelByCarrier(entity);
                 }
             }
@@ -186,8 +198,8 @@ public class BusinessAccountService {
 
         //把账号id放到redis里
         String accountId = entity.getAccountId();
-        accountId = accountId.substring(accountId.length()-3);
-        stringRedisTemplate.opsForValue().set(RandomService.PREFIX +":"+accountId ,accountId);
+        accountId = accountId.substring(accountId.length() - 3);
+        stringRedisTemplate.opsForValue().set(RandomService.PREFIX + ":" + accountId, accountId);
 
         return ResponseDataUtil.buildSuccess();
     }
@@ -222,31 +234,31 @@ public class BusinessAccountService {
     //修改运营商，并且配置了通道，需要删除通道
     private void deleteConfigChannelByCarrier(AccountBasicInfo entity) {
         String carrier = entity.getCarrier();
-        if("INTL".equals(entity.getCarrier())){
+        if ("INTL".equals(entity.getCarrier())) {
             carrier = entity.getCountryCode();
         }
-        List<AccountChannelInfoQo> list = accountChannelRepository.accountChannelByAccountIdAndCarrier(entity.getAccountId(),carrier,entity.getAccountChannelType());
+        List<AccountChannelInfoQo> list = accountChannelRepository.accountChannelByAccountIdAndCarrier(entity.getAccountId(), carrier, entity.getAccountChannelType());
         String[] carrierLength = carrier.split(",");
-        if(StringUtils.isEmpty(list) || list.size()<carrierLength.length){
+        if (StringUtils.isEmpty(list) || list.size() < carrierLength.length) {
             //设置进度
-            accountProcess(entity,"0");
-        }else{
-            accountProcess(entity,"1");
+            accountProcess(entity, "0");
+        } else {
+            accountProcess(entity, "1");
         }
-        accountChannelRepository.deleteConfigChannelByCarrier(entity.getAccountId(),carrier);
+        accountChannelRepository.deleteConfigChannelByCarrier(entity.getAccountId(), carrier);
     }
 
     //修改了通道方式，删除已经配置得通道
     private void deleteByAccountId(AccountBasicInfo entity) {
         accountChannelRepository.deleteByAccountId(entity.getAccountId());
         //设置进度
-        accountProcess(entity,"0");
+        accountProcess(entity, "0");
     }
 
     //设置进度
-    private void accountProcess(AccountBasicInfo entity,String process) {
+    private void accountProcess(AccountBasicInfo entity, String process) {
         Optional<AccountBasicInfo> optional = businessAccountRepository.findById(entity.getAccountId());
-        if(optional.isPresent()){
+        if (optional.isPresent()) {
             AccountBasicInfo accountBasicInfo = optional.get();
             StringBuffer accountProcess = new StringBuffer(accountBasicInfo.getAccountProcess());
             accountProcess = accountProcess.replace(3, 4, process);
@@ -256,6 +268,7 @@ public class BusinessAccountService {
 
     /**
      * 注销、启用业务账号
+     *
      * @param id
      * @param status
      * @return
@@ -266,25 +279,46 @@ public class BusinessAccountService {
         AccountBasicInfo entity = businessAccountRepository.findById(id).get();
 
         //账号状态转换
-        if ("0".equals(status) ) {
+        if ("0".equals(status)) {
             status = "1";
-            if(Integer.parseInt(entity.getAccountProcess())<=11100){
+
+            //账号放到redis里
+            Optional<AccountInterfaceInfo> data = accountInterfaceRepository.findById(id);
+            if ("HTTP_TEXT_SMS".equals(data.get().getProtocol())) {
+
+                Optional<AccountBasicInfo> optional = businessAccountRepository.findById(entity.getAccountId());
+                AccountBasicInfo accountBasicInfo = optional.get();
+
+                //放到redis中对象
+                KeyEntity key = new KeyEntity();
+                key.setMd5HmacKey(DES.decrypt(data.get().getAccountPassword()));
+                key.setAesKey(entity.getBusinessType());
+                key.setAesIv(data.get().getAccountPassword());
+
+                //把数据放到redis里
+                redisTemplate.opsForValue().set(RedisConstant.HTTP_SERVER_KEY + entity.getAccountId(), key);
+            }
+
+            if (Integer.parseInt(entity.getAccountProcess()) <= 11100) {
                 status = "2";
             }
         } else {
             status = "0";
+            //注销
+            redisTemplate.delete(RedisConstant.HTTP_SERVER_KEY + entity.getAccountId());
         }
 
-        businessAccountRepository.updateAccountStatusById(id,status);
+        businessAccountRepository.updateAccountStatusById(id, status);
 
         //记录日志
-        log.info("[EC业务账号管理][{}]数据:{}", ("1".equals(op) || "2".equals(op))  ? "注销业务账号":"启用业务账号" ,  JSON.toJSONString(entity));
+        log.info("[EC业务账号管理][{}]数据:{}", ("1".equals(op) || "2".equals(op)) ? "注销业务账号" : "启用业务账号", JSON.toJSONString(entity));
 
         return ResponseDataUtil.buildSuccess();
     }
 
     /**
      * 查询企业所有的业务账号
+     *
      * @param enterpriseId
      * @return
      */
@@ -295,6 +329,7 @@ public class BusinessAccountService {
 
     /**
      * 生成业务账号
+     *
      * @param enterpriseFlag
      * @return
      */
@@ -307,6 +342,7 @@ public class BusinessAccountService {
 
     /**
      * 查询企业所有的业务账号
+     *
      * @param accountBasicInfoValidator
      * @return
      */
@@ -317,6 +353,7 @@ public class BusinessAccountService {
 
     /**
      * 查询企业下的账户和余额
+     *
      * @param messageAccountValidator
      * @return
      */
@@ -327,6 +364,7 @@ public class BusinessAccountService {
 
     /**
      * 查询自服务平台发送账号列表
+     *
      * @param params
      * @return
      */
@@ -337,6 +375,7 @@ public class BusinessAccountService {
 
     /**
      * 账号按维度统计发送量
+     *
      * @param statisticSendData
      * @return
      */
@@ -347,6 +386,7 @@ public class BusinessAccountService {
 
     /**
      * 账号投诉率统计
+     *
      * @param statisticComplaintData
      * @return
      */

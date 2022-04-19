@@ -12,10 +12,10 @@
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
         </filter>
-        <File>${LOG_PATH}/smoc-gateway-info.log</File>
+        <File>${LOG_PATH}/smoc-http-server-info.log</File>
         <rollingPolicy
                 class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH}/smoc-gateway-info-%d{yyyyMMdd}.log.%i
+            <fileNamePattern>${LOG_PATH}/smoc-http-server-info-%d{yyyyMMdd}.log.%i
             </fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy
                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
@@ -36,7 +36,7 @@
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
         </filter>
-        <File>${LOG_PATH}/smoc-gateway-error.log</File>
+        <File>${LOG_PATH}/smoc-http-server-error.log</File>
         <rollingPolicy
                 class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${LOG_PATH}/smoc-error-%d{yyyyMMdd}.log.%i
@@ -63,7 +63,7 @@
         <File>${LOG_PATH}/smoc-debug.log</File>
         <rollingPolicy
                 class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>${LOG_PATH}/smoc-gateway-debug.%d{yyyy-MM-dd}.log
+            <FileNamePattern>${LOG_PATH}/smoc-http-server-debug.%d{yyyy-MM-dd}.log
             </FileNamePattern>
         </rollingPolicy>
         <layout>
@@ -85,7 +85,7 @@
         </File>
         <rollingPolicy
                 class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>${LOG_PATH}/smoc-gateway-warn.%d{yyyy-MM-dd}.log
+            <FileNamePattern>${LOG_PATH}/smoc-http-server-warn.%d{yyyy-MM-dd}.log
             </FileNamePattern>
         </rollingPolicy>
         <layout>

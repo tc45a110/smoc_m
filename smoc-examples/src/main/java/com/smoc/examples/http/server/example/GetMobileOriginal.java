@@ -10,6 +10,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 获取上行短信
+ */
 public class GetMobileOriginal {
 
     public static void main(String[] args) throws Exception {
@@ -26,7 +29,7 @@ public class GetMobileOriginal {
         //订单号，成功后的订单不能重复
         requestDataMap.put("orderNo", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(10));
         //业务账号；参见给的账号EXCEL文件
-        requestDataMap.put("account", "SWL102");
+        requestDataMap.put("account", "YQT108");
 
         //时间戳
         requestDataMap.put("timestamp", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS"));

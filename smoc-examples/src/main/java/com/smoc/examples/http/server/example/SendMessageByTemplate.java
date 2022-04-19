@@ -8,6 +8,9 @@ import com.smoc.examples.utils.Utils;
 
 import java.util.*;
 
+/**
+ * 根据模板发送普通消息
+ */
 public class SendMessageByTemplate {
 
     public static void main(String[] args) throws Exception {
@@ -24,15 +27,15 @@ public class SendMessageByTemplate {
         //订单号，成功后的订单不能重复
         requestDataMap.put("orderNo", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(10));
         //业务账号；参见给的账号EXCEL文件
-        requestDataMap.put("account", "SWL102");
+        requestDataMap.put("account", "YQT108");
 
         //模板ID
         requestDataMap.put("templateId", "TEMP100000369");
 
         //模板短信内容
         List<String> list = new ArrayList<>();
-        for(int i=0;i<10;i++){
-            String item = "13"+Utils.getRandom(9)+"|"+Utils.getRandom(4);
+        for (int i = 0; i < 10; i++) {
+            String item = "13" + Utils.getRandom(9) + "|" + Utils.getRandom(4);
             list.add(item);
         }
         requestDataMap.put("content", list);
@@ -58,7 +61,7 @@ public class SendMessageByTemplate {
         //加密后的身份证号
         signData.append(requestDataMap.get("timestamp"));
         //签名 MD5_HMAC 签名KEY,参见给的账号EXCEL文件
-        String sign = HMACUtil.md5_HMAC_sign(signData.toString(), "16B6DF81DF15FDFE75441AF3FBF9E12E");
+        String sign = HMACUtil.md5_HMAC_sign(signData.toString(), "BkqYXgMwD");
         System.out.println("[接口请求][签名数据]数据:" + signData);
         System.out.println("[接口请求][签名]数据:" + sign);
 

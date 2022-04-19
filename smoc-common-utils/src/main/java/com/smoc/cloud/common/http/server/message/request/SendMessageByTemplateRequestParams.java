@@ -13,7 +13,7 @@ import javax.validation.constraints.Pattern;
 public class SendMessageByTemplateRequestParams extends HttpServerSignModel {
 
     @NotNull(message = "模板ID不能为空！")
-    @Pattern(regexp = "^[0-9A-Za-z]{6,16}", message = "模板ID不符合规则！")
+    @Pattern(regexp = "^TEMP[0-9]{1,9}", message = "模板ID不符合规则！")
     private String templateId;
 
     //13915863571|${不高}|${压弯}

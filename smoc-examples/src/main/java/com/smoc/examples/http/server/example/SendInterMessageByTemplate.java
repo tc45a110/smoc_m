@@ -6,18 +6,16 @@ import com.smoc.examples.utils.HMACUtil;
 import com.smoc.examples.utils.Okhttp3Utils;
 import com.smoc.examples.utils.Utils;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
- * 插叙账户余额
+ * 根据模板发送多媒体短信
  */
-public class GetAccountBalance {
+public class SendInterMessageByTemplate {
 
     public static void main(String[] args) throws Exception {
 
-        String url = "http://localhost:18088/smoc-gateway/http-server/account/getAccountBalance";
+        String url = "http://localhost:18088/smoc-gateway/http-server/message/sendInterMessageByTemplate";
 
         //自定义header协议
         Map<String, String> header = new HashMap<>();
@@ -25,11 +23,27 @@ public class GetAccountBalance {
         header.put("signature-nonce", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(10));
 
         //请求的数据
-        Map<String, String> requestDataMap = new HashMap<>();
+        Map<String, Object> requestDataMap = new HashMap<>();
         //订单号，成功后的订单不能重复
         requestDataMap.put("orderNo", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(10));
         //业务账号；参见给的账号EXCEL文件
         requestDataMap.put("account", "YQT108");
+
+        //模板ID
+        requestDataMap.put("templateId", "TEMP100000369");
+
+        //模板短信内容
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            String item = "13" + Utils.getRandom(9) + "|" + Utils.getRandom(4);
+            list.add(item);
+        }
+        requestDataMap.put("content", list);
+
+        //扩展号码
+        requestDataMap.put("extNumber", Utils.getRandom(4));
+        //客户可选业务类型
+        requestDataMap.put("business", "");
 
         //时间戳
         requestDataMap.put("timestamp", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS"));

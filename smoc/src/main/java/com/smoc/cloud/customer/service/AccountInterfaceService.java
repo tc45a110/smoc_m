@@ -138,10 +138,14 @@ public class AccountInterfaceService {
 
         //如果状态不为004 则放到redis中
         if("HTTP_TEXT_SMS".equals(entity.getProtocol())) {
+
+            Optional<AccountBasicInfo> optional = businessAccountRepository.findById(entity.getAccountId());
+            AccountBasicInfo accountBasicInfo = optional.get();
+
             //放到redis中对象
             KeyEntity key = new KeyEntity();
-            key.setMd5HmacKey(entity.getAccountPassword());
-            key.setAesKey(entity.getAccountPassword());
+            key.setMd5HmacKey(DES.decrypt(entity.getAccountPassword()));
+            key.setAesKey(accountBasicInfo.getBusinessType());
             key.setAesIv(entity.getAccountPassword());
 
             //把数据放到redis里

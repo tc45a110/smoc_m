@@ -1,4 +1,4 @@
-package com.smoc.cloud.http.message.template.service;
+package com.smoc.cloud.http.service;
 
 
 import com.smoc.cloud.common.http.server.message.request.MobileOriginalRequestParams;

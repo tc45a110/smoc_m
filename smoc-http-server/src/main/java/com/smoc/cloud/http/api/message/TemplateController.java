@@ -1,4 +1,4 @@
-package com.smoc.cloud.http.message.template.controller;
+package com.smoc.cloud.http.api.message;
 
 import com.google.gson.Gson;
 import com.smoc.cloud.common.gateway.utils.ValidatorUtil;
@@ -7,7 +7,7 @@ import com.smoc.cloud.common.http.server.message.request.TemplateStatusRequestPa
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
-import com.smoc.cloud.http.message.template.service.TemplateService;
+import com.smoc.cloud.http.service.TemplateService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -19,16 +19,23 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Map;
 
+/**
+ * 模板管理
+ */
 @Slf4j
 @RestController
-@RequestMapping("message/template")
+@RequestMapping("template")
 @Scope(value = WebApplicationContext.SCOPE_REQUEST)
 public class TemplateController {
 
     @Autowired
     private TemplateService templateService;
 
-
+    /**
+     * 添加模板
+     * @param params
+     * @return
+     */
     @RequestMapping(value = "/addTemplate", method = RequestMethod.POST)
     public ResponseData<Map<String, String>> addTemplate(@RequestBody TemplateAddRequestParams params) {
 
@@ -38,9 +45,14 @@ public class TemplateController {
             return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), ValidatorUtil.validateMessage(params));
         }
 
-        return templateService.saveTemplate(params);
+        return templateService.addTemplate(params);
     }
 
+    /**
+     * 查询模板状态
+     * @param params
+     * @return
+     */
     @RequestMapping(value = "/getTemplateStatus", method = RequestMethod.POST)
     public ResponseData<Map<String, String>> getTemplateStatus(@RequestBody TemplateStatusRequestParams params) {
 

@@ -10,6 +10,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 批量获取状态报告
+ */
 public class GetReportBatch {
 
     public static void main(String[] args) throws Exception {
