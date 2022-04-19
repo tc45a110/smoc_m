@@ -195,9 +195,9 @@
                                         </div>
                                     </td>
                                     <td style="text-align:center;line-height:44px">
-                                        <mpm:tag identity="accountStatus" show-type="button" key="code" th:value="${info.accountStatus}"
-                                                 class="1,btn btn-info btn-rounded btn-sm waves-effect waves-light;2,btn btn-warning btn-rounded btn-sm waves-effect waves-light;3,btn btn-inverse btn-rounded btn-sm waves-effect waves-light;0,btn btn-danger btn-rounded btn-sm waves-effect waves-light;"/>
-                                    </td>
+                                    <mpm:tag identity="accountStatus" show-type="button" key="code" th:value="${info.accountStatus}"
+                                             class="1,btn btn-info btn-rounded btn-sm waves-effect waves-light;2,btn btn-warning btn-rounded btn-sm waves-effect waves-light;3,btn btn-inverse btn-rounded btn-sm waves-effect waves-light;0,btn btn-danger btn-rounded btn-sm waves-effect waves-light;"/>
+                                </td>
                                     <td>
                                         <a sec:authorize-url="/account/edit/center/*/*"
                                            th:href="@{/account/edit/center/finance/{accountId}(accountId=${info.accountId})}"

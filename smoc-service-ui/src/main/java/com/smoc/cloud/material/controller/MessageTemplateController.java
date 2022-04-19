@@ -144,7 +144,7 @@ public class MessageTemplateController {
 
         //初始化参数
         AccountTemplateInfoValidator accountTemplateInfoValidator = new AccountTemplateInfoValidator();
-        accountTemplateInfoValidator.setTemplateId("TEMP" + sequenceService.findSequence("BUSINESS_ACCOUNT"));
+        accountTemplateInfoValidator.setTemplateId("TEMP" + sequenceService.findSequence("TEMPLATE"));
         accountTemplateInfoValidator.setTemplateType(type);
         accountTemplateInfoValidator.setTemplateStatus("2");
         accountTemplateInfoValidator.setTemplateFlag("1");

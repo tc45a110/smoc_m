@@ -7,10 +7,12 @@ import com.alibaba.excel.write.builder.ExcelWriterBuilder;
 import com.alibaba.excel.write.builder.ExcelWriterSheetBuilder;
 import com.smoc.cloud.common.smoc.filter.ExcelModel;
 import com.smoc.cloud.common.smoc.message.model.ComplaintExcelModel;
+import com.smoc.cloud.common.smoc.parameter.model.ErrorCodeExcelModel;
 import com.smoc.cloud.common.utils.Utils;
 import com.smoc.cloud.complaint.model.ComplaintExcelModelListener;
 import com.smoc.cloud.filter.utils.ExcelModelListener;
 import com.smoc.cloud.filter.utils.KeywordsExcelModelListener;
+import com.smoc.cloud.parameter.errorcode.model.ErrorCodeExcelModelListener;
 import com.sun.xml.internal.messaging.saaj.packaging.mime.internet.MimeUtility;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -258,6 +260,29 @@ public class FileUtils {
             excelReader.finish();
             List<ComplaintExcelModel> list = excelModelListener.getExcelModelList();
             list = list.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(o -> o.getCarrier().trim() + ":" + o.getReportNumber().trim() + ":" + o.getReportContent().trim() + ":" + o.getReportDate().trim()))), ArrayList::new));
+            return list;
+        }
+
+        return null;
+    }
+
+    public static List<ErrorCodeExcelModel> readErrorCodeFile(MultipartFile file) {
+        InputStream inputStream = null;
+        try {
+            inputStream = file.getInputStream();
+        } catch (IOException e) {
+            log.error("读取excel表格失败:", e);
+        }
+        String fileName = file.getOriginalFilename();
+        String fileType = fileName.substring(fileName.lastIndexOf("."));
+        if (".xls".equals(fileType) || ".xlsx".equals(fileType)) {
+            ErrorCodeExcelModelListener excelModelListener = new ErrorCodeExcelModelListener();
+            ExcelReader excelReader = EasyExcel.read(inputStream, ErrorCodeExcelModel.class, excelModelListener).build();
+            ReadSheet readSheet = EasyExcel.readSheet(0).build();
+            excelReader.read(readSheet);
+            excelReader.finish();
+            List<ErrorCodeExcelModel> list = excelModelListener.getExcelModelList();
+            list = list.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(o -> o.getErrorCode().trim()))), ArrayList::new));
             return list;
         }
 

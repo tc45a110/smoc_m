@@ -27,7 +27,7 @@ public class IndexStatisticsRepository {
         StringBuilder sqlBuffer = new StringBuilder("select ");
         sqlBuffer.append("  sum(m.MESSAGE_SUCCESS_NUM) messageTotal ");
         sqlBuffer.append("  from message_daily_statistics m ");
-        sqlBuffer.append("  where (1=1) m.MESSAGE_DATE>=? && m.MESSAGE_DATE<=?");
+        sqlBuffer.append("  where m.MESSAGE_DATE>=? and m.MESSAGE_DATE<=?");
 
         Object[] params = new Object[2];
         params[0] = startDate;
@@ -51,7 +51,7 @@ public class IndexStatisticsRepository {
         StringBuilder sqlBuffer = new StringBuilder("select ");
         sqlBuffer.append("  count(distinct BUSINESS_ACCOUNT) activeAccount ");
         sqlBuffer.append("  from message_daily_statistics m ");
-        sqlBuffer.append("  where (1=1) m.MESSAGE_DATE>=? && m.MESSAGE_DATE<=?");
+        sqlBuffer.append("  where m.MESSAGE_DATE>=? and m.MESSAGE_DATE<=?");
 
         Object[] params = new Object[2];
         params[0] = startDate;
@@ -75,7 +75,7 @@ public class IndexStatisticsRepository {
         StringBuilder sqlBuffer = new StringBuilder("select ");
         sqlBuffer.append("  count(distinct CHANNEL_ID) activeChannel ");
         sqlBuffer.append("  from message_daily_statistics m ");
-        sqlBuffer.append("  where (1=1) m.MESSAGE_DATE>=? && m.MESSAGE_DATE<=?");
+        sqlBuffer.append("  where m.MESSAGE_DATE>=? and m.MESSAGE_DATE<=?");
 
         Object[] params = new Object[2];
         params[0] = startDate;
@@ -86,5 +86,18 @@ public class IndexStatisticsRepository {
 
     }
 
+    /**
+     *  统计所有业务账号
+     * @return
+     */
+    public Long getAccountCount() {
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append("  count(*) totalAccount ");
+        sqlBuffer.append("  from account_base_info m ");
 
+        Long activeAccount = jdbcTemplate.queryForObject(sqlBuffer.toString(), Long.class);
+
+        return activeAccount;
+    }
 }

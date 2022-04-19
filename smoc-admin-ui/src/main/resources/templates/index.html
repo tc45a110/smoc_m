@@ -89,7 +89,7 @@
                 <div class="card-box widget-box-one">
                     <div class="wigdet-one-content">
                         <p class="m-0 text-uppercase font-600 font-secondary text-overflow">短信发送总量（2021）</p>
-                        <h2 class="text-teal"><i class="mdi mdi-weather-partlycloudy"  style="padding-right: 5px"></i><span data-plugin="counterup">34578</span></h2>
+                        <h2 class="text-teal"><i class="mdi mdi-weather-partlycloudy"  style="padding-right: 5px"></i><span data-plugin="counterup">[[${accountMap.get('MESSAGE_SEND_TOTAL')}]]</span></h2>
 
                     </div>
                 </div>
@@ -99,7 +99,7 @@
                 <div class="card-box widget-box-one">
                     <div class="wigdet-one-content">
                         <p class="m-0 text-uppercase font-600 font-secondary text-overflow">客户总数</p>
-                        <h2 class="text-custom"><i class="mdi mdi-weather-snowy"  style="padding-right: 5px"></i><span data-plugin="counterup">895</span> </h2>
+                        <h2 class="text-custom"><i class="mdi mdi-weather-snowy"  style="padding-right: 5px"></i><span data-plugin="counterup">[[${countMap.get('TOTAL_ACCOUNT')}]]</span> </h2>
 
                     </div>
                 </div>
@@ -108,7 +108,7 @@
                 <div class="card-box widget-box-one">
                     <div class="wigdet-one-content">
                         <p class="m-0 text-uppercase font-600 font-secondary text-overflow">活跃客户数</p>
-                        <h2 class="text-brown"><i class="mdi mdi-weather-rainy"  style="padding-right: 5px"></i><span data-plugin="counterup">652</span> </h2>
+                        <h2 class="text-brown"><i class="mdi mdi-weather-rainy"  style="padding-right: 5px"></i><span data-plugin="counterup">[[${countMap.get('ACTIVE_ACCOUNT')}]]</span> </h2>
 
                     </div>
                 </div>
@@ -117,7 +117,7 @@
                 <div class="card-box widget-box-one">
                     <div class="wigdet-one-content">
                         <p class="m-0 text-uppercase font-600 font-secondary text-overflow">可用通道数</p>
-                        <h2 class="text-warning"><i class="mdi mdi-weather-night"  style="padding-right: 5px"></i><span data-plugin="counterup">3245</span> </h2>
+                        <h2 class="text-warning"><i class="mdi mdi-weather-night"  style="padding-right: 5px"></i><span data-plugin="counterup">[[${countMap.get('ACTIVE_CHANNEL')}]]</span> </h2>
 
                     </div>
                 </div>
