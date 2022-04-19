@@ -52,7 +52,7 @@
                                             <label>接口类型<span class="text-danger">*</span>&nbsp;</label>
                                             <mpm:tag id="inter" required="true" identity="accountInterfaceType"
                                                      show-type="select" key="code" onchange="changeType(this.value)"
-                                                     class="form-control" name="protocol" mask-value="CMPP,HTTP_TEXT_SMS,HTTP_MULTI_SMS,HTTP_BLACK_SERVICE,MM7,SGIP,SMGP"
+                                                     class="form-control" name="protocol" mask-value="CMPP,SGIP,SMGP"
                                                      th:value="${accountInterfaceInfoValidator.protocol}" title="接口类型"/>
                                         </div>
                                         <div class="form-group m-b-20">
@@ -210,13 +210,18 @@
 
     function finalChange(value) {
 
-        if ("HTTP_INTERNATIONAL" == value) {
+        if ("HTTPS" == value) {
             document.getElementById("HTTP_INTERNATIONAL").style.display = "";
             document.getElementById("SMPP").style.display = "none";
         }
 
         if ("SMPP" == value) {
             document.getElementById("SMPP").style.display = "";
+            document.getElementById("HTTP_INTERNATIONAL").style.display = "none";
+        }
+
+        if ("WEB" == value) {
+            document.getElementById("SMPP").style.display = "none";
             document.getElementById("HTTP_INTERNATIONAL").style.display = "none";
         }
     }

@@ -113,6 +113,10 @@ public class AccountInterfaceController {
 
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
 
+        if("HTTPS".equals(accountInterfaceInfoValidator.getProtocol())){
+            accountInterfaceInfoValidator.setMaxSendSecond(0);
+        }
+
         //完成参数规则验证
         if (result.hasErrors()) {
             view.addObject("accountBasicInfoValidator", accountInterfaceInfoValidator);
