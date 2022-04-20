@@ -23,6 +23,8 @@ public class GetTemplateStatus {
         Map<String, String> header = new HashMap<>();
         //signature-nonce 为17位数字，并且每次请求signature-nonce不能重复
         header.put("signature-nonce", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(10));
+        header.put("account", "YQT108");
+
 
         //请求的数据
         Map<String, String> requestDataMap = new HashMap<>();
@@ -31,7 +33,7 @@ public class GetTemplateStatus {
         //业务账号；参见给的账号EXCEL文件
         requestDataMap.put("account", "YQT108");
         //模板内容
-        requestDataMap.put("templateId", "TEMP100000369");
+        requestDataMap.put("templateId", "TEMP100079");
         //时间戳
         requestDataMap.put("timestamp", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS"));
         //转JSON请求数据

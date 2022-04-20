@@ -19,6 +19,13 @@ public enum ResponseCode {
     PARAM_FORMAT_ERROR("1100", "参数规则输入错误!"),
     PARAM_ORDER_ERROR("1103", "订单号重复"),
     PARAM_ABLE_ERROR("1104", "余额不足"),
+    PARAM_MULTIMEDIA_ERROR("1105", "多媒体文件过大"),
+    PARAM_MULTIMEDIA_FILE_ERROR("1106", "多媒体文件生成异常"),
+    PARAM_TEMPLATE_ERROR("1107", "普通模版中包含变量字符$"),
+    PARAM_TEMPLATE_VARIABLE_ERROR("1108", "变量模版中不包含变量字符$"),
+    PARAM_MOBILE_ERROR("1109", "发送号码不能为空!"),
+    PARAM_TEMPLATE_NOT_EXIST_ERROR("1110", "模版不存在!"),
+    PARAM_TEMPLATE_STATUS_ERROR("1111", "模版未经审核!"),
 
     //鉴权失败
     TOKEN_UNAUTH("2000", "认证、鉴权失败！"),

@@ -57,7 +57,9 @@ public class CustomGlobalGatewayFilter implements GlobalFilter, Ordered {
         RequestStardardHeaders requestStardardHeaders = new RequestStardardHeaders();
         requestStardardHeaders.setSignatureNonce(headers.getFirst("signature-nonce"));
         requestStardardHeaders.setSignature(headers.getFirst("signature"));
+        requestStardardHeaders.setAccount(headers.getFirst("account"));
         //log.info("[HttpHeader][数据]{}",new Gson().toJson(requestStardardHeaders));
+
         //处理signatureNonce 重放攻击
         boolean replayAttacks = dataService.nonce(requestStardardHeaders.getSignatureNonce());
         if (replayAttacks) {
@@ -66,7 +68,6 @@ public class CustomGlobalGatewayFilter implements GlobalFilter, Ordered {
 
         //参数规则验证
         if (!ValidatorUtil.validate(requestStardardHeaders)) {
-
             URI uri = request.getURI();
             log.warn("[非法POST请求][数据]URI:{}", uri.toString());
             return errorHandle(exchange, ResponseCode.REQUEST_LEGAL_ERROR.getCode(), ResponseCode.REQUEST_LEGAL_ERROR.getMessage());

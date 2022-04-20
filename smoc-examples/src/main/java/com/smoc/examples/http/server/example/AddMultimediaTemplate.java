@@ -27,7 +27,7 @@ public class AddMultimediaTemplate {
         //业务账号；参见给的账号EXCEL文件
         requestDataMap.put("account", "YQT113");
         //模板类型 1 表示普通模板 2 表示变量模板
-        requestDataMap.put("templateType", "2");
+        requestDataMap.put("templateType", "1");
         //模板内容
         requestDataMap.put("content", "【我是一只小小鸟】你的小小鸟验证码为${1}，请勿告知他人");
         //时间戳
@@ -38,20 +38,20 @@ public class AddMultimediaTemplate {
         List<Map<String,Object>> mediaItems = new ArrayList<>();
         Map<String,Object> param = new HashMap<>();
         param.put("subject","图片");
-        param.put("mediaType","AUDIO");
-        param.put("fileType",".mp3");
+        param.put("mediaType","PIC");
+        param.put("fileType","jpeg");
         param.put("stayTimes",2);
         param.put("frameTxt","多媒体文件API测试");
-        param.put("mediaFile", ImageUtils.getImgFileToBase64("E:/20220418153244.png"));
+        param.put("mediaFile", FileBASE64Utils.getFileToBase64("/Users/wujihui/Desktop/smoc4.0/111.jpeg"));
         mediaItems.add(param);
 
         Map<String,Object> param1 = new HashMap<>();
         param1.put("subject","图片");
         param1.put("mediaType","PIC");
-        param1.put("fileType",".png");
+        param1.put("fileType","jpeg");
         param1.put("stayTimes",2);
         param1.put("frameTxt","多媒体文件API测试");
-        param1.put("mediaFile", ImageUtils.getImgFileToBase64("E:/20220418153244.png"));
+        param1.put("mediaFile", FileBASE64Utils.getFileToBase64("/Users/wujihui/Desktop/smoc4.0/WechatIMG3639.jpeg"));
         mediaItems.add(param1);
 
         requestDataMap.put("items", mediaItems);

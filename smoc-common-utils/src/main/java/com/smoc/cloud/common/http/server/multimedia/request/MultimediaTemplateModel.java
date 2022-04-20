@@ -24,7 +24,7 @@ public class MultimediaTemplateModel {
 
     //文件类型 .png  .mp3
     @NotNull(message = "文件类型不能为空！")
-    @Pattern(regexp = "^[\\.]{1}(jpg|jpeg|gif|png|midi|wav|amr|mp3|aac|3gp|mp4){1}", message = "文件类型不符合规则！只支持.jpg,.jpeg,.gif,.png,.midi,.wav,.amr,.mp3,.aac,.3gp,.mp4")
+    @Pattern(regexp = "^(jpg|jpeg|gif|png|midi|wav|amr|mp3|aac|3gp|mp4){1}", message = "文件类型不符合规则！只支持jpg,jpeg,gif,png,midi,wav,amr,mp3,aac,3gp,mp4")
     private String fileType;
 
     //停留时间

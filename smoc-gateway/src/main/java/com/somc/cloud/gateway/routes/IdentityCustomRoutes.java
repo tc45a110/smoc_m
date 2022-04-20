@@ -1,20 +1,17 @@
 package com.somc.cloud.gateway.routes;
 
-import com.somc.cloud.gateway.limiter.ApiKeyResolver;
 import com.somc.cloud.gateway.limiter.HostAddrKeyResolver;
 import com.somc.cloud.gateway.limiter.UserKeyResolver;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
-import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
 import org.springframework.cloud.gateway.filter.ratelimit.RedisRateLimiter;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Mono;
 
 
 import javax.annotation.Resource;

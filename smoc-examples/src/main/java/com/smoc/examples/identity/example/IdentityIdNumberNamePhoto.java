@@ -34,7 +34,7 @@ public class IdentityIdNumberNamePhoto {
        //AES加密后的 身份证号
        requestDataMap.put("cardNo",cardNo);
        //人的图像照片
-       requestDataMap.put("faceBase64", ImageUtils.getImgFileToBase64("/Users/wujihui/Desktop/smoc4.0/WechatIMG3635.jpeg"));
+       requestDataMap.put("faceBase64", FileBASE64Utils.getFileToBase64("/Users/wujihui/Desktop/smoc4.0/WechatIMG3635.jpeg"));
        //转JSON请求数据
        String requestJsonData = new Gson().toJson(requestDataMap);
 

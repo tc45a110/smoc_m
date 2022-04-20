@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 模板管理
@@ -44,6 +46,28 @@ public class TemplateController {
 
         if (!ValidatorUtil.validate(params)) {
             return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), ValidatorUtil.validateMessage(params));
+        }
+
+        //普通模版
+        if ("1".equals(params.getTemplateType())) {
+            Pattern ipPattern = Pattern.compile("['$']");
+            Matcher matcher = ipPattern.matcher(params.getContent());
+            boolean status = matcher.find();
+            //log.info("[matcher.find()]:{}",status);
+            if (status) {
+                return ResponseDataUtil.buildError(ResponseCode.PARAM_TEMPLATE_ERROR.getCode(), ResponseCode.PARAM_TEMPLATE_ERROR.getMessage());
+            }
+        }
+
+        //变量模版模版
+        if ("2".equals(params.getTemplateType())) {
+            Pattern ipPattern = Pattern.compile("['$']");
+            Matcher matcher = ipPattern.matcher(params.getContent());
+            boolean status = matcher.find();
+            //log.info("[matcher.find()]:{}",status);
+            if (!status) {
+                return ResponseDataUtil.buildError(ResponseCode.PARAM_TEMPLATE_VARIABLE_ERROR.getCode(), ResponseCode.PARAM_TEMPLATE_VARIABLE_ERROR.getMessage());
+            }
         }
 
         return templateService.addTemplate(params);

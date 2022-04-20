@@ -1,12 +1,17 @@
 package com.smoc.cloud.http.service;
 
 
+import com.google.gson.Gson;
 import com.smoc.cloud.common.http.server.message.request.MobileOriginalRequestParams;
 import com.smoc.cloud.common.http.server.message.response.MobileOriginalResponseParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.http.repository.MessageRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,34 +20,36 @@ import java.util.List;
 @Service
 public class MobileOriginalService {
 
+    @Autowired
+    private MessageRepository messageRepository;
 
-    public ResponseData<List<MobileOriginalResponseParams>> getMobileOriginal(MobileOriginalRequestParams params){
+    @Autowired
+    private SystemHttpApiRequestService systemHttpApiRequestService;
 
-        List<MobileOriginalResponseParams> result = new ArrayList<>();
-        MobileOriginalResponseParams model = new MobileOriginalResponseParams();
-        model.setAccount("SWL102");
-        model.setMobile("18513695412");
-        model.setContent("ok");
-        model.setExtNumber("2547");
-        model.setAcceptTime("2022-01-13 17:55:32");
-        result.add(model);
+    /**
+     * 根据业务账号查询上行短信 做多返回1000条
+     *
+     * @param params
+     * @return
+     */
+    public ResponseData<List<MobileOriginalResponseParams>> getMobileOriginalByAccount(MobileOriginalRequestParams params) {
 
-        MobileOriginalResponseParams model1 = new MobileOriginalResponseParams();
-        model1.setAccount("SWL102");
-        model1.setMobile("18513695412");
-        model1.setContent("ok,ok");
-        model1.setExtNumber("2547");
-        model1.setAcceptTime("2022-01-13 17:55:32");
-        result.add(model1);
+        //异步保存请求记录
+        systemHttpApiRequestService.save(params.getOrderNo(), params.getAccount(), "getMobileOriginalByAccount", new Gson().toJson(params));
 
-        MobileOriginalResponseParams model2 = new MobileOriginalResponseParams();
-        model2.setAccount("SWL102");
-        model2.setMobile("18513695412");
-        model2.setContent("ok,ok,ok");
-        model2.setExtNumber("2547");
-        model2.setAcceptTime("2022-01-13 17:55:32");
-        result.add(model2);
+        List<MobileOriginalResponseParams> mobileOriginalResponseParams = messageRepository.getMobileOriginalByAccount(params);
+        deleteMobileOriginal(mobileOriginalResponseParams);
+        return ResponseDataUtil.buildSuccess(mobileOriginalResponseParams);
+    }
 
-        return ResponseDataUtil.buildSuccess(result);
+    /**
+     * 异步，批量删除上行短信
+     *
+     * @param params
+     */
+    @Async
+    @Transactional
+    public void deleteMobileOriginal(List<MobileOriginalResponseParams> params) {
+        messageRepository.batchDelete(params);
     }
 }

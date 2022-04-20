@@ -13,6 +13,8 @@ import javax.validation.constraints.Pattern;
 @Getter
 public class RequestStardardHeaders {
 
+    @NotNull(message = "account不能为空！")
+    private String account;
     @NotNull(message = "signatureNonce不能为空！")
     @Pattern(regexp = "^[0-9]{27}", message = "signatureNonce不符合规则！")
     private String signatureNonce;

@@ -11,25 +11,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 根据订单号获取状态报告
+ * 根据业务账号查询状态报告  每次做多返回1000条
  */
-public class GetReportByOrderNo {
+public class GetReportByAccount {
 
     public static void main(String[] args) throws Exception {
 
-        String url = "http://localhost:18088/smoc-gateway/http-server/report/getReportByOrderNo";
+        String url = "http://localhost:18088/smoc-gateway/http-server/report/getReportByAccount";
 
         //自定义header协议
         Map<String, String> header = new HashMap<>();
         //signature-nonce 为17位数字，并且每次请求signature-nonce不能重复
         header.put("signature-nonce", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(10));
+        header.put("account", "YQT112");
 
         //请求的数据
         Map<String, String> requestDataMap = new HashMap<>();
         //短信发送订单号
-        requestDataMap.put("orderNo", "202204141503389154538769762");
+        requestDataMap.put("orderNo", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(10));
         //业务账号；参见给的账号EXCEL文件
-        requestDataMap.put("account", "YQT108");
+        requestDataMap.put("account", "YQT112");
 
         //时间戳
         requestDataMap.put("timestamp", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS"));
@@ -47,7 +48,7 @@ public class GetReportByOrderNo {
         //加密后的身份证号
         signData.append(requestDataMap.get("timestamp"));
         //签名 MD5_HMAC 签名KEY,参见给的账号EXCEL文件
-        String sign = HMACUtil.md5_HMAC_sign(signData.toString(), "BkqYXgMwD");
+        String sign = HMACUtil.md5_HMAC_sign(signData.toString(), "!TA5!*aFN");
         System.out.println("[接口请求][签名数据]数据:" + signData);
         System.out.println("[接口请求][签名]数据:" + sign);
 

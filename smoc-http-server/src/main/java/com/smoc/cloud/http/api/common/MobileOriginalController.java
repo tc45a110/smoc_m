@@ -33,13 +33,13 @@ public class MobileOriginalController {
     private MobileOriginalService mobileOriginalService;
 
     /**
-     * 获取上行短信
+     * 根据业务账号查询上行短信  每次做多返回1000条
      *
      * @param params
      * @return
      */
-    @RequestMapping(value = "/getMobileOriginal", method = RequestMethod.POST)
-    public ResponseData<List<MobileOriginalResponseParams>> getMobileOriginal(@RequestBody MobileOriginalRequestParams params) {
+    @RequestMapping(value = "/getMobileOriginalByAccount", method = RequestMethod.POST)
+    public ResponseData<List<MobileOriginalResponseParams>> getMobileOriginalByAccount(@RequestBody MobileOriginalRequestParams params) {
 
         log.info("[获取上行短信]：{}", new Gson().toJson(params));
 
@@ -47,6 +47,6 @@ public class MobileOriginalController {
             return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), ValidatorUtil.validateMessage(params));
         }
 
-        return mobileOriginalService.getMobileOriginal(params);
+        return mobileOriginalService.getMobileOriginalByAccount(params);
     }
 }

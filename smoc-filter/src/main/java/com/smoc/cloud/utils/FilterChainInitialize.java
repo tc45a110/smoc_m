@@ -53,7 +53,7 @@ public class FilterChainInitialize {
         filterChain.addFilter(new AccountDailyLimitFilter());
         //业务账号发送时间限制
         filterChain.addFilter(new AccountTimeLimitFilter());
-        //业务账号，单手机好发送次数限制
+        //业务账号，单手机号发送次数限制
         filterChain.addFilter(new AccountPhoneNumberLimitFilter());
 
 

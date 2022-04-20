@@ -23,6 +23,7 @@ public class GetAccountBalance {
         Map<String, String> header = new HashMap<>();
         //signature-nonce 为17位数字，并且每次请求signature-nonce不能重复
         header.put("signature-nonce", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(10));
+        header.put("account", "YQT108");
 
         //请求的数据
         Map<String, String> requestDataMap = new HashMap<>();

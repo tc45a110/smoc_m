@@ -11,18 +11,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 获取上行短信
+ * 根据业务账号查询上行短信  每次做多返回1000条
  */
-public class GetMobileOriginal {
+public class GetMobileOriginalByAccount {
 
     public static void main(String[] args) throws Exception {
 
-        String url = "http://localhost:18088/smoc-gateway/http-server/mobile/original/getMobileOriginal";
+        String url = "http://localhost:18088/smoc-gateway/http-server/mobile/original/getMobileOriginalByAccount";
 
         //自定义header协议
         Map<String, String> header = new HashMap<>();
         //signature-nonce 为17位数字，并且每次请求signature-nonce不能重复
         header.put("signature-nonce", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(10));
+        header.put("account", "YQT108");
 
         //请求的数据
         Map<String, String> requestDataMap = new HashMap<>();

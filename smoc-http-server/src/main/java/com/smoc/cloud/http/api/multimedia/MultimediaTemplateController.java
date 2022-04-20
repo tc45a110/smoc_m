@@ -40,7 +40,7 @@ public class MultimediaTemplateController {
     @RequestMapping(value = "/addMultimediaTemplate", method = RequestMethod.POST)
     public ResponseData<Map<String, String>> addMultimediaTemplate(@RequestBody MultimediaTemplateAddParams params) {
 
-        log.info("[创建多媒体短信模板]：{}", new Gson().toJson(params));
+        //log.info("[创建多媒体短信模板]：{}", new Gson().toJson(params));
 
         if (!ValidatorUtil.validate(params)) {
             return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), ValidatorUtil.validateMessage(params));

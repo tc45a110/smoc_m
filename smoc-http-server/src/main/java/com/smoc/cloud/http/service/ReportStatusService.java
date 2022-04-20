@@ -1,13 +1,18 @@
 package com.smoc.cloud.http.service;
 
 
+import com.google.gson.Gson;
 import com.smoc.cloud.common.http.server.message.request.ReportBatchParams;
 import com.smoc.cloud.common.http.server.message.response.ReportResponseParams;
 import com.smoc.cloud.common.http.server.message.request.ReportStatusRequestParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.http.repository.MessageRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,63 +21,61 @@ import java.util.List;
 @Service
 public class ReportStatusService {
 
+    @Autowired
+    private MessageRepository messageRepository;
 
-    public ResponseData<List<ReportResponseParams>> getReportByOrderNo(ReportStatusRequestParams params) {
+    @Autowired
+    private SystemHttpApiRequestService systemHttpApiRequestService;
 
-        List<ReportResponseParams> report = new ArrayList<>();
-        ReportResponseParams model = new ReportResponseParams();
-        model.setAccount("SWL102");
-        model.setMobile("18510369887");
-        model.setMsgId("1c5979e910fe44598ab7bbe5f521439d");
-        model.setReportTime("2022-04-23 14:25:26");
-        model.setStatus("DELIVRD");
-        report.add(model);
+    /**
+     * 根据账号获取状态报告 每次最多返回1000条
+     *
+     * @param params
+     * @return
+     */
+    public ResponseData<List<ReportResponseParams>> getReportByAccount(ReportStatusRequestParams params) {
 
-        ReportResponseParams model1 = new ReportResponseParams();
-        model1.setAccount("SWL102");
-        model1.setMobile("18560369887");
-        model1.setMsgId("1c5979e910fe44598ab7bbe5f521439d");
-        model1.setReportTime("2022-04-23 14:25:26");
-        model1.setStatus("DELIVRD");
-        report.add(model1);
+        //异步保存请求记录
+        systemHttpApiRequestService.save(params.getOrderNo(), params.getAccount(), "getReportByAccount", new Gson().toJson(params));
 
-        ReportResponseParams model2 = new ReportResponseParams();
-        model2.setAccount("SWL102");
-        model2.setMobile("18580569887");
-        model2.setMsgId("1c5979e910fe44598ab7bbe5f521439d");
-        model2.setReportTime("2022-04-23 14:25:26");
-        model2.setStatus("DELIVRD");
-        report.add(model2);
-        return ResponseDataUtil.buildSuccess(report);
+        List<ReportResponseParams> reports = messageRepository.getReportByAccount(params);
+
+        //把返回的条数删除
+        if(null != reports && reports.size()>0) {
+            deleteReportResponseParams(reports);
+        }
+        return ResponseDataUtil.buildSuccess(reports);
     }
 
+    /**
+     * 根据账号、起始日期 获取状态报告 每次最多返回1000条
+     *
+     * @param params
+     * @return
+     */
     public ResponseData<List<ReportResponseParams>> getReportBatch(ReportBatchParams params) {
 
-        List<ReportResponseParams> report = new ArrayList<>();
-        ReportResponseParams model = new ReportResponseParams();
-        model.setAccount("SWL102");
-        model.setMobile("18510369887");
-        model.setMsgId("1c5979e910fe44598ab7bbe5f521439d");
-        model.setReportTime("2022-04-23 14:25:26");
-        model.setStatus("DELIVRD");
-        report.add(model);
+        //异步保存请求记录
+        systemHttpApiRequestService.save(params.getOrderNo(), params.getAccount(), "getReportBatch", new Gson().toJson(params));
+        List<ReportResponseParams> reports = messageRepository.getReportBatch(params);
 
-        ReportResponseParams model1 = new ReportResponseParams();
-        model1.setAccount("SWL102");
-        model1.setMobile("18560369887");
-        model1.setMsgId("1c5979e910fe44598ab7bbe5f521439d");
-        model1.setReportTime("2022-04-23 14:25:26");
-        model1.setStatus("DELIVRD");
-        report.add(model1);
+        //把返回的条数删除
+        if(null != reports && reports.size()>0) {
+            deleteReportResponseParams(reports);
+        }
+        return ResponseDataUtil.buildSuccess(reports);
+    }
 
-        ReportResponseParams model2 = new ReportResponseParams();
-        model2.setAccount("SWL102");
-        model2.setMobile("18580569887");
-        model2.setMsgId("1c5979e910fe44598ab7bbe5f521439d");
-        model2.setReportTime("2022-04-23 14:25:26");
-        model2.setStatus("DELIVRD");
-        report.add(model2);
-        return ResponseDataUtil.buildSuccess(report);
+
+    /**
+     * 异步，批量删除状态报告
+     *
+     * @param reports
+     */
+    @Async
+    @Transactional
+    public void deleteReportResponseParams(List<ReportResponseParams> reports) {
+        messageRepository.batchDeleteReports(reports);
     }
 
 }
