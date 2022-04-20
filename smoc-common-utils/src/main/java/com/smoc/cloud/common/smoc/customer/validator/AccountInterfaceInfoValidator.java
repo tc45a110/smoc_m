@@ -36,7 +36,10 @@ public class AccountInterfaceInfoValidator {
     private String identifyIp;
 
     private Integer maxConnect;
+
     private String executeCheck;
+
+    private String matchingCheck;
 
     @Length(max = 128, message = "上行短信推送地址最大长度为{max}！")
     private String moUrl;

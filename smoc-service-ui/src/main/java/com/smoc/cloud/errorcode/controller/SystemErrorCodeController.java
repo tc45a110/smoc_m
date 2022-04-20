@@ -33,7 +33,7 @@ public class SystemErrorCodeController {
     @RequestMapping(value = "/list/{parentId}", method = RequestMethod.GET)
     public ModelAndView list(@PathVariable String parentId, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("/errorcode/error_code_list");
+        ModelAndView view = new ModelAndView("errorcode/error_code_list");
 
         //初始化数据
         PageParams<SystemErrorCodeValidator> params = new PageParams<SystemErrorCodeValidator>();
@@ -55,35 +55,6 @@ public class SystemErrorCodeController {
         view.addObject("list", data.getData().getList());
         view.addObject("pageParams", data.getData().getPageParams());
         view.addObject("parentId",parentId);
-
-        return view;
-
-    }
-
-    /**
-     * 错误码列表查询
-     *
-     * @return
-     */
-    @RequestMapping(value = "/page", method = RequestMethod.POST)
-    public ModelAndView page(@ModelAttribute SystemErrorCodeValidator systemErrorCodeValidator, PageParams pageParams) {
-
-        ModelAndView view = new ModelAndView("parameter/errorcode/error_code_list");
-
-        //分页查询
-        systemErrorCodeValidator.setFlag("service-ui");
-        pageParams.setParams(systemErrorCodeValidator);
-
-        ResponseData<PageList<SystemErrorCodeValidator>> data = systemErrorCodeService.page(pageParams);
-        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            view.addObject("error", data.getCode() + ":" + data.getMessage());
-            return view;
-        }
-
-        view.addObject("systemErrorCodeValidator", systemErrorCodeValidator);
-        view.addObject("list", data.getData().getList());
-        view.addObject("pageParams", data.getData().getPageParams());
-        view.addObject("parentId",systemErrorCodeValidator.getCodeType());
 
         return view;
 

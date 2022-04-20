@@ -70,6 +70,17 @@
                                                 </label>
                                             </div>
                                             <div class="col-md-12 form-group">
+                                                <label class="m-b-10">模板分类<span class="text-danger">*</span>&nbsp;
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('templateClassify')}"
+                                                          th:errors="*{templateClassify}"></span></label><br>
+                                                <div style="margin-top:0px" class="radio radio-info checkbox-inline">
+                                                    <input name="templateClassify" type="radio" value="1" required th:checked="${accountTemplateInfoValidator.templateClassify eq '1'}"><label>精准模板</label>
+                                                </div>
+                                                <div style="margin-top:0px" class="radio radio-info checkbox-inline">
+                                                    <input name="templateClassify" type="radio" value="0" required th:checked="${accountTemplateInfoValidator.templateClassify eq '0'}"><label>模糊模板</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 form-group">
                                                 <label>模板内容</label> <span style="margin-left:20px;color:#f5707a"> 如果内容包括多个模板内容，请用 " | " 隔开</span>
                                             </div>
                                             <div class="col-md-12 form-group">
@@ -78,6 +89,8 @@
                                             </div>
                                             <div class="col-md-12 text-center" style="margin-top:20px">
                                                 <input type="hidden" th:field="*{templateId}">
+                                                <input type="hidden" th:field="*{infoType}">
+                                                <input type="hidden" th:field="*{enterpriseId}">
                                                 <input type="hidden" th:field="*{businessAccount}">
                                                 <input type="hidden" th:field="*{templateAgreementType}">
                                                 <input type="hidden" th:field="*{templateType}">

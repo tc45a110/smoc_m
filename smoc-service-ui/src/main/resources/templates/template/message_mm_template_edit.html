@@ -825,9 +825,9 @@
                 var showUrl = $(this).find("div input[name='showUrl']").val();
                 var stayTimes = $(this).find("div input[name='stayTimes']").val();
                 if ("" == json) {
-                    json = "{index:\"" + index + "\",resId:\"" + resId + "\",resTitle:\"" + resTitle + "\",frameTxt:\"" + frameTxt + "\",resSize:\"" + resSize + "\",resPostfix:\"" + resPostfix + "\",resType:\"" + resType + "\",resUrl:\"" + resUrl + "\",showUrl:\"" + showUrl + "\",stayTimes:\"" + stayTimes + "\"}";
+                    json = "{index:\"" + index + "\",frameTxt:\"" + frameTxt + "\",resSize:\"" + resSize + "\",resPostfix:\"" + resPostfix + "\",resType:\"" + resType + "\",resUrl:\"" + resUrl + "\",stayTimes:\"" + stayTimes + "\"}";
                 } else {
-                    json += ",{index:\"" + index + "\",resId:\"" + resId + "\",resTitle:\"" + resTitle + "\",frameTxt:\"" + frameTxt + "\",resSize:\"" + resSize + "\",resPostfix:\"" + resPostfix + "\",resType:\"" + resType + "\",resUrl:\"" + resUrl + "\",showUrl:\"" + showUrl + "\",stayTimes:\"" + stayTimes + "\"}";
+                    json += ",{index:\"" + index + "\",frameTxt:\"" + frameTxt + "\",resSize:\"" + resSize + "\",resPostfix:\"" + resPostfix + "\",resType:\"" + resType + "\",resUrl:\"" + resUrl + "\",stayTimes:\"" + stayTimes + "\"}";
                 }
                 allSize += parseInt(resSize);
                 i++;
@@ -838,9 +838,9 @@
         //默认帧停留时间
         var stayTimesss = [[${@resourceProperties.stayTimes}]];
         if ("" == json) {
-            json = "{index:\"" + index + "\",resId:\"" + resIdNew + "\",resTitle:\"" + resTitleNew + "\",frameTxt:\"" + frameTxtNew + "\",resSize:\"" + resSizeNew + "\",resPostfix:\"" + resPostfixNew + "\",resType:\"" + resTypeNew + "\",resUrl:\"" + resUrlNew + "\",showUrl:\"" + showUrlNew + "\",stayTimes:\"" + stayTimesss + "\"}";
+            json = "{index:\"" + index + "\",frameTxt:\"" + frameTxtNew + "\",resSize:\"" + resSizeNew + "\",resPostfix:\"" + resPostfixNew + "\",resType:\"" + resTypeNew + "\",resUrl:\"" + resUrlNew + "\",stayTimes:\"" + stayTimesss + "\"}";
         } else {
-            json += ",{index:\"" + index + "\",resId:\"" + resIdNew + "\",resTitle:\"" + resTitleNew + "\",frameTxt:\"" + frameTxtNew + "\",resSize:\"" + resSizeNew + "\",resPostfix:\"" + resPostfixNew + "\",resType:\"" + resTypeNew + "\",resUrl:\"" + resUrlNew + "\",showUrl:\"" + showUrlNew + "\",stayTimes:\"" + stayTimesss + "\"}";
+            json += ",{index:\"" + index + "\",frameTxt:\"" + frameTxtNew + "\",resSize:\"" + resSizeNew + "\",resPostfix:\"" + resPostfixNew + "\",resType:\"" + resTypeNew + "\",resUrl:\"" + resUrlNew + "\",stayTimes:\"" + stayTimesss + "\"}";
         }
         json = "[" + json + "]";
 
@@ -891,9 +891,9 @@
                 var showUrl = $(this).find("div input[name='showUrl']").val();
                 var stayTimes = $(this).find("div input[name='stayTimes']").val();
                 if ("" == json) {
-                    json = "{index:\"" + index + "\",resId:\"" + resId + "\",resTitle:\"" + resTitle + "\",frameTxt:\"" + frameTxt + "\",resSize:\"" + resSize + "\",resPostfix:\"" + resPostfix + "\",resType:\"" + resType + "\",resUrl:\"" + resUrl + "\",showUrl:\"" + showUrl + "\",stayTimes:\"" + stayTimes + "\"}";
+                    json = "{index:\"" + index + "\",frameTxt:\"" + frameTxt + "\",resSize:\"" + resSize + "\",resPostfix:\"" + resPostfix + "\",resType:\"" + resType + "\",resUrl:\"" + resUrl + "\",stayTimes:\"" + stayTimes + "\"}";
                 } else {
-                    json += ",{index:\"" + index + "\",resId:\"" + resId + "\",resTitle:\"" + resTitle + "\",frameTxt:\"" + frameTxt + "\",resSize:\"" + resSize + "\",resPostfix:\"" + resPostfix + "\",resType:\"" + resType + "\",resUrl:\"" + resUrl + "\",showUrl:\"" + showUrl + "\",stayTimes:\"" + stayTimes + "\"}";
+                    json += ",{index:\"" + index + "\",frameTxt:\"" + frameTxt + "\",resSize:\"" + resSize + "\",resPostfix:\"" + resPostfix + "\",resType:\"" + resType + "\",resUrl:\"" + resUrl + "\",stayTimes:\"" + stayTimes + "\"}";
                 }
 
                 allSize += parseInt(resSize);
@@ -1054,9 +1054,9 @@
                 var showUrl = $(this).find("div input[name='showUrl']").val();
                 var stayTimes = $(this).find("div input[name='stayTimes']").val();
                 if ("" == json) {
-                    json = "{index:\"" + index + "\",resId:\"" + resId + "\",resTitle:\"" + resTitle + "\",frameTxt:\"" + frameTxt + "\",resSize:\"" + resSize + "\",resPostfix:\"" + resPostfix + "\",resType:\"" + resType + "\",resUrl:\"" + resUrl + "\",showUrl:\"" + showUrl + "\",stayTimes:\"" + stayTimes + "\"}";
+                    json = "{index:\"" + index + "\",frameTxt:\"" + frameTxt + "\",resSize:\"" + resSize + "\",resPostfix:\"" + resPostfix + "\",resType:\"" + resType + "\",resUrl:\"" + resUrl + "\",stayTimes:\"" + stayTimes + "\"}";
                 } else {
-                    json += ",{index:\"" + index + "\",resId:\"" + resId + "\",resTitle:\"" + resTitle + "\",frameTxt:\"" + frameTxt + "\",resSize:\"" + resSize + "\",resPostfix:\"" + resPostfix + "\",resType:\"" + resType + "\",resUrl:\"" + resUrl + "\",showUrl:\"" + showUrl + "\",stayTimes:\"" + stayTimes + "\"}";
+                    json += ",{index:\"" + index + "\",frameTxt:\"" + frameTxt + "\",resSize:\"" + resSize + "\",resPostfix:\"" + resPostfix + "\",resType:\"" + resType + "\",resUrl:\"" + resUrl + "\",stayTimes:\"" + stayTimes + "\"}";
                 }
                 allSize += parseInt(resSize);
 

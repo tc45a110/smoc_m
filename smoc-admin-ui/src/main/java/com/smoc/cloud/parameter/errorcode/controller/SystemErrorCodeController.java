@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -314,10 +315,10 @@ public class SystemErrorCodeController {
          * 获取文件信息
          */
         MultipartHttpServletRequest mRequest = (MultipartHttpServletRequest) request;
-        List<MultipartFile> file = mRequest.getFiles("file");
-        if(!StringUtils.isEmpty(file) && file.size()>0){
+        MultipartFile file = mRequest.getFile("file");
+        if (file != null && file.getSize() > 0) {
 
-            List<ErrorCodeExcelModel> list = FileUtils.readErrorCodeFile(file.get(0));
+            List<ErrorCodeExcelModel> list = FileUtils.readErrorCodeFile(file);
 
             //批量保存
             if(!StringUtils.isEmpty(list) && list.size()>0){

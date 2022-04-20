@@ -54,6 +54,8 @@ public class AccountTemplateInfoValidator {
 
     private Date updatedTime;
 
+    private String templateClassify;
+
     private String enterpriseName;
     private String accountName;
     private String startDate;

@@ -16,6 +16,7 @@ public class AccountInterfaceInfo {
     private String identifyIp;
     private Integer maxConnect;
     private String executeCheck;
+    private String matchingCheck;
     private String moUrl;
     private String statusReportUrl;
     private String createdBy;
@@ -171,6 +172,16 @@ public class AccountInterfaceInfo {
 
     public void setUpdatedTime(Date updatedTime) {
         this.updatedTime = updatedTime;
+    }
+
+    @Basic
+    @Column(name = "MATCHING_CHECK")
+    public String getMatchingCheck() {
+        return matchingCheck;
+    }
+
+    public void setMatchingCheck(String matchingCheck) {
+        this.matchingCheck = matchingCheck;
     }
 
     @Override

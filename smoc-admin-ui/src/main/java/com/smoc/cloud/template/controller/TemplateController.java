@@ -148,6 +148,8 @@ public class TemplateController {
         accountTemplateInfoValidator.setBusinessAccount(businessAccount);
         accountTemplateInfoValidator.setTemplateAgreementType(protocol);
         accountTemplateInfoValidator.setTemplateType(accountBasicInfoValidatorResponseData.getData().getBusinessType());
+        accountTemplateInfoValidator.setEnterpriseId(enterpriseData.getData().getEnterpriseId());
+        accountTemplateInfoValidator.setInfoType(accountBasicInfoValidatorResponseData.getData().getInfoType());
         accountTemplateInfoValidator.setTemplateStatus("1");
 
         view.addObject("op", "add");

@@ -43,8 +43,8 @@
         <div class="row" style="position: relative;margin-top: 80px">
 
             <div class="col-lg-3 col-md-6" th:each="info:${list}">
-                <div class="card-box widget-box-two widget-two-teal" th:if="${infoStat.count==1 || infoStat.count==5 || infoStat.count==9}">
-                    <i class="mdi mdi-chart-areaspline widget-two-icon" th:if="${infoStat.count==1 || infoStat.count==5 || infoStat.count==9}"></i>
+                <div class="card-box widget-box-two widget-two-teal" th:if="${infoStat.count==1 }">
+                    <i class="mdi mdi-chart-areaspline widget-two-icon" th:if="${infoStat.count==1 }"></i>
                     <div class="wigdet-two-content text-white">
                         <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Statistics">账号：[[${info.accountId}]]</p>
                         <h2 class="text-white">
@@ -60,8 +60,8 @@
                     </div>
                 </div>
 
-                <div class="card-box widget-box-two widget-two-primary" th:if="${infoStat.count==2 || infoStat.count==6 || infoStat.count==10}">
-                    <i class="mdi mdi-layers widget-two-icon" th:if="${infoStat.count==2 || infoStat.count==6 || infoStat.count==10}"></i>
+                <div class="card-box widget-box-two widget-two-primary" th:if="${infoStat.count==2}">
+                    <i class="mdi mdi-layers widget-two-icon" th:if="${infoStat.count==2 }"></i>
                     <div class="wigdet-two-content text-white">
                         <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Statistics">账号：[[${info.accountId}]]</p>
                         <h2 class="text-white">
@@ -77,8 +77,8 @@
                     </div>
                 </div>
 
-                <div class="card-box widget-box-two widget-two-success" th:if="${infoStat.count==3 || infoStat.count==7 || infoStat.count==11}">
-                    <i class="mdi mdi-account-convert widget-two-icon" th:if="${infoStat.count==3 || infoStat.count==7 || infoStat.count==11}"></i>
+                <div class="card-box widget-box-two widget-two-success" th:if="${infoStat.count==3}">
+                    <i class="mdi mdi-account-convert widget-two-icon" th:if="${infoStat.count==3}"></i>
                     <div class="wigdet-two-content text-white">
                         <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Statistics">账号：[[${info.accountId}]]</p>
                         <h2 class="text-white">
@@ -94,20 +94,14 @@
                     </div>
                 </div>
 
-                <div class="card-box widget-box-two widget-two-danger" th:if="${infoStat.count==4 || infoStat.count==8 || infoStat.count==12}">
-                    <i class="mdi mdi-access-point-network widget-two-icon" th:if="${infoStat.count==4 || infoStat.count==8 || infoStat.count==12}"></i>
-                    <div class="wigdet-two-content text-white">
-                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Statistics">账号：[[${info.accountId}]]</p>
+                <div class="card-box widget-box-two widget-two-default" th:if="${infoStat.count==4}" style="text-align: center;height:137px; ">
+                    <div class="wigdet-two-content text-white"  th:if="${infoStat.count==4}">
+                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Statistics">&nbsp;</p>
                         <h2 class="text-white">
-                            <span data-d-group="3" data-a-sign="¥ "
-                                  style="color:#fff;width:100px;text-align:left"
-                                  readonly class="autonumber">[[${info.accountUsableSum}]]</span><small style="font-size:14px;color:#fff">(余额)</small>
+                            <a class="btn btn-info waves-effect waves-light m-l-10 btn-md">
+                                <i class="glyphicon glyphicon-search" style="margin-right:5px"></i>更多账号余额</a>
                         </h2>
-                        <p class="m-0">短信余量（约）:[[${infoStat.count}]]
-                            <span data-d-group="3" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                  style="color:#fff;width:90px;text-align:left"
-                                  class="autonumber">4592289</span>
-                        </p>
+                        <p class="m-0">&nbsp;</p>
                     </div>
                 </div>
 

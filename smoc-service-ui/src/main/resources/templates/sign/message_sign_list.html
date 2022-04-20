@@ -7,7 +7,6 @@
     <th:block th:insert="fragments/common_fragments :: common_css"/>
     <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
     <th:block th:insert="fragments/common_fragments :: select_css"/>
-    <link th:href="@{/static/css/detail_statistics.css}" rel="stylesheet">
 </head>
 <body>
 <!-- Loader start 页面加载进度-->
@@ -87,24 +86,28 @@
                     </div>
                     <div class="panel-body">
                         <div class="table-responsive">
-                            <table class="table table table-hover m-10" style="margin-top: -12px;">
+                            <table class="table table table-hover m-10" style="margin-top: -12px;table-layout:fixed;">
                                 <thead>
                                 <tr>
-                                    <th>签名名称</th>
-                                    <th>备注</th>
-                                    <th>审核状态</th>
-                                    <th>提交时间</th>
-                                    <th>审核时间</th>
-                                    <th>操作</th>
+                                    <th style="min-width:200px">签名名称</th>
+                                    <th style="min-width:150px">备注</th>
+                                    <th style="min-width:80px">审核状态</th>
+                                    <th style="min-width:100px">提交时间</th>
+                                    <th style="min-width:100px">审核时间</th>
+                                    <th style="min-width:80px">操作</th>
                                 </tr>
                                 <thead>
                                 <tbody>
                                 <tr th:each="info:${list}">
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        [[${info.signName}]]
+                                        <span class="text-overflow"
+                                              data-toggle="tooltip" data-placement="bottom"
+                                              th:data-original-title="${info.signName}">[[${info.signName}]]</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        [[${info.docKey}]]
+                                        <span class="text-overflow"
+                                              data-toggle="tooltip" data-placement="bottom"
+                                              th:data-original-title="${info.docKey}">[[${info.docKey}]]</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         <a class="btn btn-success btn-rounded btn-sm waves-effect waves-light" th:if="${info.docStatus eq '1'}">通过审核</a>
@@ -161,7 +164,6 @@
 
 <th:block th:insert="fragments/common_fragments :: common_js"/>
 <th:block th:insert="fragments/common_fragments :: select_js"/>
-<th:block th:insert="fragments/cookie_fragments :: cookie_js"/>
 <script th:src="@{/static/plugins/bootstrap-inputmask/bootstrap-inputmask.min.js}"></script>
 
 <script>

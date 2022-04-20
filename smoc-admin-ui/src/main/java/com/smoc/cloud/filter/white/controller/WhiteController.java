@@ -365,10 +365,10 @@ public class WhiteController {
          * 获取文件信息
          */
         MultipartHttpServletRequest mRequest = (MultipartHttpServletRequest) request;
-        List<MultipartFile> file = mRequest.getFiles("file");
-        if(!StringUtils.isEmpty(file) && file.size()>0){
+        MultipartFile file = mRequest.getFile("file");
+        if (file != null && file.getSize() > 0) {
 
-            List<ExcelModel> list = FileUtils.readFile(file.get(0),"1");
+            List<ExcelModel> list = FileUtils.readFile(file,"1");
 
             //批量保存
             if(!StringUtils.isEmpty(list) && list.size()>0){

@@ -91,7 +91,10 @@ public class AccountInterfaceController {
             view.addObject("op", "edit");
         }else{
             view.addObject("op", "add");
+            accountInterfaceInfoValidator.setMaxSubmitSecond(4);//账号提交速率
         }
+
+
 
         view.addObject("accountInterfaceInfoValidator", accountInterfaceInfoValidator);
         view.addObject("accountBasicInfoValidator", data.getData());

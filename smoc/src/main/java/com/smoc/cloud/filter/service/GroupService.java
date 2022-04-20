@@ -99,8 +99,9 @@ public class GroupService {
         groupRepository.saveAndFlush(entity);
 
         //根据父ID查询
-        FilterGroupList info = groupRepository.findById(entity.getParentId()).get();
-        if(!StringUtils.isEmpty(info)){
+        Optional<FilterGroupList> optional = groupRepository.findById(entity.getParentId());
+        if(optional.isPresent()){
+            FilterGroupList info = optional.get();
             info.setIsLeaf("0");
             groupRepository.saveAndFlush(info);
         }
@@ -135,9 +136,12 @@ public class GroupService {
         //查询是否有下级，没有修改isLeaf为1
         List<FilterGroupList> list = groupRepository.findByEnterpriseIdAndParentIdOrderBySortAsc(data.getEnterpriseId(),data.getParentId());
         if(StringUtils.isEmpty(list) || list.size()<=0){
-            FilterGroupList info = groupRepository.findById(parentId).get();
-            info.setIsLeaf("1");
-            groupRepository.saveAndFlush(info);
+            Optional<FilterGroupList> optional = groupRepository.findById(parentId);
+            if(optional.isPresent()){
+                FilterGroupList info = optional.get();
+                info.setIsLeaf("1");
+                groupRepository.saveAndFlush(info);
+            }
         }
 
         return ResponseDataUtil.buildSuccess();

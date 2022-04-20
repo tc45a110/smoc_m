@@ -68,6 +68,9 @@ public class AccountTemplateInfo {
     @Column(name = "MM_ATTCHMENT")
     private String mmAttchment;
 
+    @Column(name = "TEMPLATE_CLASSIFY")
+    private String templateClassify;
+
     public String getEnterpriseId() {
         return enterpriseId;
     }
@@ -226,5 +229,13 @@ public class AccountTemplateInfo {
 
     public void setTemplateTitle(String templateTitle) {
         this.templateTitle = templateTitle;
+    }
+
+    public String getTemplateClassify() {
+        return templateClassify;
+    }
+
+    public void setTemplateClassify(String templateClassify) {
+        this.templateClassify = templateClassify;
     }
 }

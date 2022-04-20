@@ -311,14 +311,14 @@ public class ComplaintController {
      * @return
      */
     @RequestMapping(value = "/upComplaint", method = RequestMethod.POST)
-    public ModelAndView save(@ModelAttribute @Validated MessageComplaintInfoValidator messageComplaintInfoValidator, BindingResult result, HttpServletRequest request) {
+    public ModelAndView save(@ModelAttribute MessageComplaintInfoValidator messageComplaintInfoValidator, BindingResult result, HttpServletRequest request) {
         SecurityUser user = (SecurityUser)request.getSession().getAttribute("user");
 
         ModelAndView view = new ModelAndView("complaint/complaint_add");
 
         MultipartHttpServletRequest mRequest = (MultipartHttpServletRequest) request;
-        List<MultipartFile> file = mRequest.getFiles("file");
-        if(StringUtils.isEmpty(file) || file.size()<=0){
+        MultipartFile file = mRequest.getFile("file");
+        if (file != null && file.getSize() <= 0){
             // 提交前台错误提示
             FieldError err = new FieldError("上传附件", "complaintFiles", "附件不能为空");
             result.addError(err);
@@ -333,19 +333,15 @@ public class ComplaintController {
         /**
          * 获取文件信息
          */
-        if(!StringUtils.isEmpty(file) && file.size()>0){
-
-            List<ComplaintExcelModel> list = FileUtils.readComplaintExcelFile(file.get(0));
-
-            //批量保存
-            if(!StringUtils.isEmpty(list) && list.size()>0){
-                messageComplaintInfoValidator.setComplaintList(list);
-                messageComplaintInfoValidator.setCreatedBy(user.getRealName());
-                ResponseData data  = complaintService.batchSave(messageComplaintInfoValidator);
-            }
-
-            log.info("[投诉管理][导入][{}]数据::{}", user.getUserName(), list.size());
+        List<ComplaintExcelModel> list = FileUtils.readComplaintExcelFile(file);
+        //批量保存
+        if(!StringUtils.isEmpty(list) && list.size()>0){
+            messageComplaintInfoValidator.setComplaintList(list);
+            messageComplaintInfoValidator.setCreatedBy(user.getRealName());
+            ResponseData data  = complaintService.batchSave(messageComplaintInfoValidator);
         }
+
+        log.info("[投诉管理][导入][{}]数据::{}", user.getUserName(), list.size());
 
         if("day".equals(messageComplaintInfoValidator.getComplaintSource())){
             view.setView(new RedirectView("/complaint/list" , true, false));
