@@ -8,6 +8,7 @@ import com.smoc.cloud.customer.entity.EnterpriseBookInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.HashSet;
 import java.util.List;
 
 
@@ -27,4 +28,12 @@ public interface EnterpriseBookRepository extends CrudRepository<EnterpriseBookI
     List<EnterpriseBookInfo> findByGroupIdAndMobileAndStatus(String groupId, String mobile, String status);
 
     void bathSave(EnterpriseBookInfoValidator enterpriseBookInfoValidator);
+
+    /**
+     * 根据组id查询数据
+     * @param groupId
+     * @param status
+     * @return
+     */
+    List<String> findByGroupIdAndStatus(String groupId, String status);
 }

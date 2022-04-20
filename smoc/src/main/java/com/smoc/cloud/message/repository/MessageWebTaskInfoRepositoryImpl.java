@@ -4,13 +4,18 @@ import com.smoc.cloud.common.BasePageRepository;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.smoc.message.MessageAccountValidator;
+import com.smoc.cloud.common.smoc.message.model.MessageFormat;
 import com.smoc.cloud.common.smoc.message.model.StatisticMessageSend;
 import com.smoc.cloud.common.smoc.message.MessageWebTaskInfoValidator;
 import com.smoc.cloud.common.smoc.message.model.StatisticMessageSendData;
 import com.smoc.cloud.message.rowmapper.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.util.StringUtils;
 
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -364,4 +369,42 @@ public class MessageWebTaskInfoRepositoryImpl extends BasePageRepository {
 
     }
 
+    /**
+     * 批量保存 待发短信
+     *
+     * @param messages     短消息
+     * @param messageCount 发送短信数量
+     * @param phoneCount   发送手机号数量
+     */
+    public void saveMessageBatch(List<MessageFormat> messages, Integer messageCount, Integer phoneCount) {
+        final String sql = "insert into smoc_route.route_message_mt_info(ID,ACCOUNT_ID,PHONE_NUMBER,SUBMIT_TIME,MESSAGE_CONTENT,MESSAGE_FORMAT,MESSAGE_ID,TEMPLATE_ID,PROTOCOL,ACCOUNT_SRC_ID,ACCOUNT_BUSINESS_CODE,PHONE_NUMBER_NUMBER,MESSAGE_CONTENT_NUMBER,REPORT_FLAG,OPTION_PARAM,CREATED_TIME) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,now()) ";
+
+        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+            public int getBatchSize() {
+                return messages.size();
+            }
+
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                MessageFormat message = messages.get(i);
+                ps.setLong(1, message.getId());
+                ps.setString(2, message.getAccountId());
+                ps.setString(3, message.getPhoneNumber());
+                ps.setString(4, message.getSubmitTime());
+                ps.setString(5, message.getMessageContent());
+                ps.setString(6, message.getMessageFormat());
+                ps.setString(7, message.getMessageId());
+                ps.setString(8, message.getTemplateId());
+                ps.setString(9, message.getProtocol());
+                ps.setString(10, message.getAccountSrcId());
+                ps.setString(11, message.getAccountBusinessCode());
+                ps.setInt(12, phoneCount);
+                ps.setInt(13, messageCount);
+                ps.setInt(14, message.getReportFlag());
+                ps.setString(15, message.getOptionParam());
+
+            }
+
+        });
+
+    }
 }

@@ -75,25 +75,6 @@ public class MessageWebTaskInfoController {
     }
 
     /**
-     * 添加、修改
-     * @param op 操作标记，add表示添加，edit表示修改
-     * @return
-     */
-    @RequestMapping(value = "/save/{op}", method = RequestMethod.POST)
-    public ResponseData save(@RequestBody MessageWebTaskInfoValidator messageWebTaskInfoValidator, @PathVariable String op) {
-
-        //完成参数规则验证
-        if (!MpmValidatorUtil.validate(messageWebTaskInfoValidator)) {
-            return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(messageWebTaskInfoValidator));
-        }
-
-        //保存操作
-        ResponseData data = messageWebTaskInfoService.save(messageWebTaskInfoValidator, op);
-
-        return data;
-    }
-
-    /**
      * 根据ID 删除
      *
      * @param id

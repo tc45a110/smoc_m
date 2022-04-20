@@ -29,6 +29,7 @@ import com.smoc.cloud.material.service.BusinessAccountService;
 import com.smoc.cloud.material.service.MessageTemplateService;
 import com.smoc.cloud.material.service.SequenceService;
 import com.smoc.cloud.message.service.MessageService;
+import com.smoc.cloud.message.utils.SendMessage;
 import com.smoc.cloud.properties.MessageProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -322,6 +323,7 @@ public class MessageController {
             }
         }
 
+        //查询是否是自己企业任务
        if(!user.getOrganization().equals(messageWebTaskInfoValidator.getEnterpriseId())){
            view.addObject("error", "无法进行操作");
            return view;
@@ -366,60 +368,22 @@ public class MessageController {
             return view;
         }
 
-        //查询模板信息
-        ResponseData<AccountTemplateInfoValidator> infoDate = messageTemplateService.findById(messageWebTaskInfoValidator.getTemplateId());
-        if (!ResponseCode.SUCCESS.getCode().equals(infoDate.getCode())) {
-            view.addObject("error", infoDate.getCode() + ":" + infoDate.getMessage());
-            return view;
-        }
-
-        //查询账号
-        ResponseData<AccountBasicInfoValidator> account = businessAccountService.findById(messageWebTaskInfoValidator.getBusinessAccount());
-        if (!ResponseCode.SUCCESS.getCode().equals(account.getCode())) {
-            view.addObject("error", account.getCode() + ":" + account.getMessage());
-            return view;
-        }
-        messageWebTaskInfoValidator.setInfoType(account.getData().getInfoType());
-
-        if(!infoDate.getData().getInfoType().equals(account.getData().getInfoType())){
-            view.addObject("error", "账号与模板类型不匹配");
-            return view;
-        }
-
-        /*
-        messageWebTaskInfoValidator.setMessageContent("【"+infoDate.getData().getSignName()+"】"+infoDate.getData().getTemplateContent());
-
-        //保存数据
-        if(!StringUtils.isEmpty(messageWebTaskInfoValidator.getInputNumber())){
-            messageWebTaskInfoValidator = SendMessage.FileSMSInput(messageWebTaskInfoValidator,smocProperties,user.getOrganization());
-        }
-        //普通短信
-        if("1".equals(messageWebTaskInfoValidator.getMessageType()) && !StringUtils.isEmpty(messageWebTaskInfoValidator.getNumberFiles())){
-            messageWebTaskInfoValidator = SendMessage.handleFileSMS(messageWebTaskInfoValidator,smocProperties,user.getOrganization());
-        }
-
-        //变量短信，需要重新读取手机号匹配模板
-        if("2".equals(messageWebTaskInfoValidator.getMessageType())){
-            messageWebTaskInfoValidator = SendMessage.handleFileVariableSMS(messageWebTaskInfoValidator,smocProperties,user.getOrganization());
-        }
-
-        if(messageWebTaskInfoValidator.getSuccessNumber()==0){
-            view.addObject("error", "有效号码数不能为0");
-            return view;
-        }*/
-
+        //手动输入
         if("1".equals(messageWebTaskInfoValidator.getUpType())){
             messageWebTaskInfoValidator.setGroupId("");
             messageWebTaskInfoValidator.setNumberFiles("");
         }
+        //上传附件
         if("2".equals(messageWebTaskInfoValidator.getUpType())){
             messageWebTaskInfoValidator.setInputNumber("");
             messageWebTaskInfoValidator.setGroupId("");
         }
+        //通讯录
         if("3".equals(messageWebTaskInfoValidator.getUpType())){
             messageWebTaskInfoValidator.setInputNumber("");
             messageWebTaskInfoValidator.setNumberFiles("");
         }
+
         //保存操作
         ResponseData data = messageService.save(messageWebTaskInfoValidator,op);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {

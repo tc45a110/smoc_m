@@ -3,6 +3,7 @@ package com.smoc.cloud.message.repository;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.smoc.message.MessageAccountValidator;
+import com.smoc.cloud.common.smoc.message.model.MessageFormat;
 import com.smoc.cloud.common.smoc.message.model.StatisticMessageSend;
 import com.smoc.cloud.common.smoc.message.MessageWebTaskInfoValidator;
 import com.smoc.cloud.common.smoc.message.model.StatisticMessageSendData;
@@ -12,6 +13,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -56,4 +58,11 @@ public interface MessageWebTaskInfoRepository extends JpaRepository<MessageWebTa
      */
     StatisticMessageSend statisticSubmitMessageSendCount(MessageWebTaskInfoValidator messageWebTaskInfoValidator);
 
+    /**
+     * 异步 批量保存 待发短信
+     * @param messages
+     * @param messageCount
+     * @param phoneCount
+     */
+    void saveMessageBatch(List<MessageFormat> messages, Integer messageCount, Integer phoneCount);
 }

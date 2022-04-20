@@ -175,6 +175,7 @@ public class MessageWebOrderController {
         ResponseData<AccountTemplateInfoValidator> data = accountTemplateInfoService.findById(infoData.getData().getTemplateId());
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
         }
 
         //还原帧数据

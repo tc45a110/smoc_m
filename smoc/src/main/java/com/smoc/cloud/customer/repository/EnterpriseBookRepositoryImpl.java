@@ -9,13 +9,16 @@ import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.customer.rowmapper.EnterpriseBookInfoRowMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -114,5 +117,21 @@ public class EnterpriseBookRepositoryImpl extends BasePageRepository {
 
     }
 
+    public List<String> findByGroupIdAndStatus(String groupId, String status) {
+
+        //查询sql
+        StringBuffer sqlBuffer = new StringBuffer("select t.MOBILE " +
+                " from enterprise_book_info t where t.GROUP_ID='"+groupId+"' and t.status='"+status+"'" );
+
+        sqlBuffer.append(" order by t.CREATED_TIME desc,t.ID ");
+
+        List<String> list = this.queryForObjectList(sqlBuffer.toString(), null, new RowMapper<String>() {
+            @Override
+            public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return rs.getString(1);
+            }
+        });
+        return list;
+    }
 
 }
