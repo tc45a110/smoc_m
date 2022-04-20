@@ -271,11 +271,11 @@
             document.getElementById("CHECK_TEMPL").style.display = "";
             document.getElementById("IP").style.display = "";
             document.getElementById("CMPP").style.display = "none";
-            document.getElementById("sendSecond").style.display = "none";
+            document.getElementById("sendSecond").style.display = "";
 
             $('#maxSubmitSecond').prop("required","true");
             $('#executeCheck').prop("required","true");
-            $('#maxSendSecond').removeAttr("required");
+            $('#maxSendSecond').prop("required","true");
 
             $("#CMPP :input").each(function(){
                 $(this).removeAttr("required")

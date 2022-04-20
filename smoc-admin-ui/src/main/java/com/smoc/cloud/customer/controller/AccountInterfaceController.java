@@ -76,10 +76,10 @@ public class AccountInterfaceController {
         }
 
         //国际
-        if("INTERNATIONAL".equals(data.getData().getCarrier())){
+        /*if("INTERNATIONAL".equals(data.getData().getCarrier())){
             view.setViewName("customer/account/international/account_international_edit_interface");
 
-        }
+        }*/
 
         AccountInterfaceInfoValidator accountInterfaceInfoValidator = new AccountInterfaceInfoValidator();
         accountInterfaceInfoValidator.setAccountId(accountId);

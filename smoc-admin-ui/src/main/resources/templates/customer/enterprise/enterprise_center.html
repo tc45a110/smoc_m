@@ -774,21 +774,17 @@
                                     <label>用户名<span class="text-danger">*</span>&nbsp;</label>
                                     <input type="text" class="form-control" th:field="*{webLoginName}"
                                            required="" data-parsley-length="[4,30]" autocomplete="off"
-                                           placeholder="用户名">
+                                           data-parsley-pattern="^[0-9A-Za-z]{4,30}$"
+                                           placeholder="输入字母或数字">
                                 </div>
                                 <div class="form-group m-b-20">
-                                    <label>密码<span class="text-danger">*</span>&nbsp;</label>
+                                    <label>密码<span class="text-danger">*</span>（先复制密码在进行提交）&nbsp;</label>
                                     <input type="text" class="form-control" th:field="*{webLoginPassword}"
-                                           required="" data-parsley-length="[6,20]" autocomplete="off"
+                                           required="" data-parsley-length="[6,20]" id="webLoginPassword"
+                                           data-parsley-pattern="^[0-9A-Za-z]{4,30}$" autocomplete="off"
                                            placeholder="密码">
                                 </div>
-                                <div class="form-group m-b-20">
-                                    <label for="rePassword">确认密码<span class="text-danger">*</span>&nbsp;</label>
-                                    <input id="rePassword" data-parsley-equalto="#webLoginPassword" type="text"
-                                           class="form-control"
-                                           required="" data-parsley-length="[6,20]" autocomplete="off"
-                                           placeholder="确认密码">
-                                </div>
+
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -1087,14 +1083,12 @@
             $("#id").val('');
             $("#webLoginName").val('');
             $("#webLoginName").attr("readOnly", false);
-            $("#webLoginPassword").val('');
-            $("#rePassword").val('');
+            $("#webLoginPassword").val(getCode());
         } else {
             $("#id").val(id);
             $("#webLoginName").val(webLoginName);
             $("#webLoginName").attr("readOnly", true);
-            $("#webLoginPassword").val('');
-            $("#rePassword").val('');
+            $("#webLoginPassword").val(getCode());
         }
     }
 
@@ -1242,6 +1236,32 @@
     }
 
 </script>
+
+<script>
+     //封装一个随机生成数字的函数
+     function random(a, b) {
+             var n = Math.round(Math.random() * (a - b) + b);
+             return n;
+         }
+
+     function getCode(){
+         //定义一个字符串把所有可能都装进去，全部字母以及数字
+         var codeStr = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+         //声明一个空的字符串，用作装随机生成的四个数。
+         var str = "";
+
+         //写一个循环用来重复随机生成几个数，以及将东西一个一个放进上面声明的空字符串内
+         for (var i = 0; i < 8; i++) {
+                 var m = random(0,61);
+                 str += codeStr.charAt(m);
+             }
+         //在外面调用函数时，一定要在函数内写返回值
+         return str;
+     }
+
+
+ </script>
 
 <script>
 

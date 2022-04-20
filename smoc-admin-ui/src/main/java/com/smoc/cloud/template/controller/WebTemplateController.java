@@ -90,8 +90,8 @@ public class WebTemplateController {
      *
      * @return
      */
-    @RequestMapping(value = "/list/{protocol}", method = RequestMethod.GET)
-    public ModelAndView list(@PathVariable String protocol) {
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    public ModelAndView list() {
         ModelAndView view = new ModelAndView("templates/template_web_list");
 
         //初始化数据
@@ -99,7 +99,7 @@ public class WebTemplateController {
         params.setPageSize(10);
         params.setCurrentPage(1);
         AccountTemplateInfoValidator accountTemplateInfoValidator = new AccountTemplateInfoValidator();
-        accountTemplateInfoValidator.setTemplateAgreementType(protocol);
+        accountTemplateInfoValidator.setTemplateAgreementType("WEB");
         params.setParams(accountTemplateInfoValidator);
 
         //查询
@@ -309,7 +309,7 @@ public class WebTemplateController {
         //记录日志
         log.info("[模板管理][模板审核][{}][{}]数据:{}", "check", user.getUserName(), JSON.toJSONString(flowApproveValidator));
 
-        view.setView(new RedirectView("/template/web/list/"+accountTemplateInfoValidator.getTemplateAgreementType(), true, false));
+        view.setView(new RedirectView("/template/web/list", true, false));
         return view;
 
     }
