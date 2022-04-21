@@ -158,7 +158,7 @@ public class TemplateService {
                 String filePath = resourceProperties.getResourceFileRootPath() + "/" + folder;
                 String resId = UUID.uuid32();
                 String fileName = resId +"."+ model.getFileType();
-                format.setResUrl(filePath +"/" + fileName);
+                format.setResUrl("/"+folder +"/" + fileName);
 
                 multimediaFormats.add(format);
 
