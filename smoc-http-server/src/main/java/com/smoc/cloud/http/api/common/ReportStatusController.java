@@ -51,21 +51,21 @@ public class ReportStatusController {
         return reportStatusService.getReport(params);
     }
 
-    /**
-     * 批量获取状态报告
-     *
-     * @param params
-     * @return
-     */
-    @RequestMapping(value = "/getReportBatch", method = RequestMethod.POST)
-    public ResponseData<List<ReportResponseParams>> getReportBatch(@RequestBody ReportBatchParams params) {
-
-        log.info("[批量获取状态报告]：{}", new Gson().toJson(params));
-
-        if (!ValidatorUtil.validate(params)) {
-            return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), ValidatorUtil.validateMessage(params));
-        }
-
-        return reportStatusService.getReportBatch(params);
-    }
+//    /**
+//     * 批量获取状态报告
+//     *
+//     * @param params
+//     * @return
+//     */
+//    @RequestMapping(value = "/getReportBatch", method = RequestMethod.POST)
+//    public ResponseData<List<ReportResponseParams>> getReportBatch(@RequestBody ReportBatchParams params) {
+//
+//        log.info("[批量获取状态报告]：{}", new Gson().toJson(params));
+//
+//        if (!ValidatorUtil.validate(params)) {
+//            return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), ValidatorUtil.validateMessage(params));
+//        }
+//
+//        return reportStatusService.getReportBatch(params);
+//    }
 }
