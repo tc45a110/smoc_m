@@ -95,6 +95,7 @@
                                     <th style="width:240px">模版ID/企业名称</th>
                                     <th style="width:220px">业务账号/业务账号名称</th>
                                     <th style="width:180px">业务类型</th>
+                                    <th style="width:180px">模板分类</th>
                                     <th>模版内容</th>
                                     <th style="width:120px">状态</th>
                                     <th style="width:160px">创建人/创建时间</th>
@@ -119,12 +120,16 @@
                                                  class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;MULTI_SMS,btn btn-brown btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;5G_SMS,btn btn-primary btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-inverse btn-rounded btn-sm waves-effect waves-light"/>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
+                                        <span th:if="${info.templateClassify eq '1'}">精准模板</span>
+                                        <span th:if="${info.templateClassify eq '2'}">模糊模板</span>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
                                         [[${info.templateContent}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
-                                        <a class="btn btn-success btn-rounded btn-sm waves-effect waves-light" th:if="${info.templateStatus eq '1'}">通过审核</a>
-                                        <a class="btn btn-warning btn-rounded btn-sm waves-effect waves-light" th:if="${info.templateStatus eq '2'}">待审核</a>
-                                        <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light" th:if="${info.templateStatus eq '3'}">拒绝</a>
+                                        <a class="btn btn-success btn-rounded btn-sm waves-effect waves-light" th:if="${info.templateStatus eq '2'}">通过审核</a>
+                                        <a class="btn btn-warning btn-rounded btn-sm waves-effect waves-light" th:if="${info.templateStatus eq '3'}">待审核</a>
+                                        <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light" th:if="${info.templateStatus eq '1'}">拒绝</a>
                                         <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light" th:if="${info.templateStatus eq '0'}">无效</a>
                                     </td>
                                     <td style="vertical-align: middle;;line-height: 26px;">

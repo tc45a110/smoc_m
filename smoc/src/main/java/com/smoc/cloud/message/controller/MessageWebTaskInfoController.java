@@ -153,27 +153,4 @@ public class MessageWebTaskInfoController {
         return messageWebTaskInfoService.statisticSubmitMessageSendCount(messageWebTaskInfoValidator);
     }
 
-    /**
-     * 查询自服务http列表
-     *
-     * @param pageParams
-     * @return
-     */
-    @RequestMapping(value = "/httpPage", method = RequestMethod.POST)
-    public ResponseData<PageList<MessageWebTaskInfoValidator>> httpPage(@RequestBody PageParams<MessageWebTaskInfoValidator> pageParams) {
-
-        return messageWebTaskInfoService.httpPage(pageParams);
-    }
-
-
-    /**
-     * 自服务平台不同维度统计发送量
-     * @param pageParams
-     * @return
-     */
-    @RequestMapping(value = "/messageSendNumberList", method = RequestMethod.POST)
-    public ResponseData<PageList<StatisticMessageSendData>> messageSendNumberList(@RequestBody PageParams<StatisticMessageSendData> pageParams) {
-
-        return messageWebTaskInfoService.messageSendNumberList(pageParams);
-    }
 }

@@ -164,23 +164,4 @@ public class MessageWebTaskInfoService {
         return ResponseDataUtil.buildSuccess(data);
     }
 
-    /**
-     * 查询自服务http列表
-     * @param pageParams
-     * @return
-     */
-    public ResponseData<PageList<MessageWebTaskInfoValidator>> httpPage(PageParams<MessageWebTaskInfoValidator> pageParams) {
-        PageList<MessageWebTaskInfoValidator> page = messageWebTaskInfoRepository.httpPage(pageParams);
-        return ResponseDataUtil.buildSuccess(page);
-    }
-
-    /**
-     * 自服务平台不同维度统计发送量
-     * @param pageParams
-     * @return
-     */
-    public ResponseData<PageList<StatisticMessageSendData>> messageSendNumberList(PageParams<StatisticMessageSendData> pageParams) {
-        PageList<StatisticMessageSendData> page = messageWebTaskInfoRepository.messageSendNumberList(pageParams);
-        return ResponseDataUtil.buildSuccess(page);
-    }
 }

@@ -38,6 +38,6 @@ public interface StatisticsMessageFeignClient {
      * @param params
      * @return
      */
-    @RequestMapping(value = "/message/web/task/messageSendNumberList", method = RequestMethod.POST)
+    @RequestMapping(value = "/message/https/task/messageSendNumberList", method = RequestMethod.POST)
     ResponseData<PageList<StatisticMessageSendData>> messageSendNumberList(@RequestBody PageParams<StatisticMessageSendData> params);
 }

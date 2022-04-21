@@ -10,15 +10,9 @@ public class MessageFrameParamers {
 
     private Integer index;
 
-    private String resId;
-
-    private String resTitle;
-
     private String resSize;
 
     private String resUrl;
-
-    private String showUrl;
 
     private String resType;
 

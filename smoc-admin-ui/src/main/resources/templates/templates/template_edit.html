@@ -77,7 +77,7 @@
                                                     <input name="templateClassify" type="radio" value="1" required th:checked="${accountTemplateInfoValidator.templateClassify eq '1'}"><label>精准模板</label>
                                                 </div>
                                                 <div style="margin-top:0px" class="radio radio-info checkbox-inline">
-                                                    <input name="templateClassify" type="radio" value="0" required th:checked="${accountTemplateInfoValidator.templateClassify eq '0'}"><label>模糊模板</label>
+                                                    <input name="templateClassify" type="radio" value="2" required th:checked="${accountTemplateInfoValidator.templateClassify eq '2'}"><label>模糊模板</label>
                                                 </div>
                                             </div>
                                             <div class="col-md-12 form-group">
@@ -97,6 +97,7 @@
                                                 <input type="hidden" th:field="*{templateStatus}">
                                                 <input type="hidden" th:field="*{createdTime}">
                                                 <input type="hidden" th:field="*{createdBy}">
+                                                <input type="hidden" th:field="*{templateFlag}">
                                                 <button sec:authorize-url="/template/save/*" type="submit"
                                                         class="btn btn-teal waves-effect waves-light">提交
                                                 </button>

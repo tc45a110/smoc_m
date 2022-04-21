@@ -4,6 +4,7 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.message.MessageAccountValidator;
+import com.smoc.cloud.common.smoc.message.MessageHttpsTaskInfoValidator;
 import com.smoc.cloud.common.smoc.message.model.MessageTaskDetail;
 import com.smoc.cloud.common.smoc.message.model.StatisticMessageSend;
 import com.smoc.cloud.common.smoc.message.MessageWebTaskInfoValidator;
@@ -84,18 +85,26 @@ public interface MessageFeignClient {
     ResponseData<PageList<MessageTaskDetail>> webTaskDetailList(@RequestBody PageParams<MessageTaskDetail> pageParams);
 
     /**
-     * 查询http列表
-     * @param pageParams
-     * @return
-     */
-    @RequestMapping(value = "/message/web/task/httpPage", method = RequestMethod.POST)
-    ResponseData<PageList<MessageWebTaskInfoValidator>> httpPage(@RequestBody PageParams<MessageWebTaskInfoValidator> pageParams) throws Exception;
-
-    /**
      * 查询http短信明细列表
      * @param params
      * @return
      */
     @RequestMapping(value = "/message/detail/http/httpTaskDetailList", method = RequestMethod.POST)
     ResponseData<PageList<MessageTaskDetail>> httpTaskDetailList(@RequestBody PageParams<MessageTaskDetail> params);
+
+    /**
+     * 查询http列表
+     * @param pageParams
+     * @return
+     */
+    @RequestMapping(value = "/message/https/task/page", method = RequestMethod.POST)
+    ResponseData<PageList<MessageHttpsTaskInfoValidator>> httpPage(@RequestBody PageParams<MessageHttpsTaskInfoValidator> pageParams) throws Exception;
+
+    /**
+     * 查询http任务
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/message/https/task/findById/{id}", method = RequestMethod.GET)
+    ResponseData<MessageHttpsTaskInfoValidator> findHttpTaskById(@PathVariable String id);
 }

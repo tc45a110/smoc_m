@@ -262,7 +262,7 @@ public class WebTemplateController {
     }
 
     /**
-     * 保存企业开户
+     * 审核模板
      *
      * @return
      */
@@ -290,7 +290,7 @@ public class WebTemplateController {
         }
 
         if("0".equals(accountTemplateInfoValidator.getCheckStatus())){
-            accountTemplateInfoValidator.setTemplateStatus("3");
+            accountTemplateInfoValidator.setTemplateStatus("1");
         }else{
             accountTemplateInfoValidator.setTemplateStatus(accountTemplateInfoValidator.getCheckStatus());
         }

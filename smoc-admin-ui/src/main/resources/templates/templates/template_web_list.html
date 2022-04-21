@@ -116,9 +116,10 @@
                                         [[${info.templateContent}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
-                                        <a class="btn btn-success btn-rounded btn-sm waves-effect waves-light" th:if="${info.templateStatus eq '1'}">通过审核</a>
-                                        <a class="btn btn-warning btn-rounded btn-sm waves-effect waves-light" th:if="${info.templateStatus eq '2'}">待审核</a>
-                                        <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light" th:if="${info.templateStatus eq '3'}">拒绝</a>
+                                        <a class="btn btn-success btn-rounded btn-sm waves-effect waves-light" th:if="${info.templateStatus eq '2'}">通过审核</a>
+                                        <a class="btn btn-warning btn-rounded btn-sm waves-effect waves-light" th:if="${info.templateStatus eq '3'}">待审核</a>
+                                        <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light" th:if="${info.templateStatus eq '1'}">拒绝</a>
+                                        <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light" th:if="${info.templateStatus eq '0'}">无效</a>
                                     </td>
                                     <td style="vertical-align: middle;;line-height: 26px;">
                                         [[${info.createdBy}]]
@@ -133,7 +134,7 @@
                                            data-placement="left" title="" data-original-title="CMPP模板明细"><i
                                                 style="font-size: 18px"
                                                 class="glyphicon glyphicon-search"></i></a>
-                                        <a th:if="${'2'== info.templateStatus}" sec:authorize-url="/template/web/check/*"
+                                        <a th:if="${'3'== info.templateStatus}" sec:authorize-url="/template/web/check/*"
                                            th:href="@{/template/web/check/{templateId}(templateId=${info.templateId})}"
                                            class="on-default edit-row"
                                            style="padding-left: 5px;color: #29b6f6;"

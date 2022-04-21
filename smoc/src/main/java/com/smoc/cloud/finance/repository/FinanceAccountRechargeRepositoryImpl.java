@@ -49,6 +49,11 @@ public class FinanceAccountRechargeRepositoryImpl extends BasePageRepository {
             sqlBuffer.append(" and e.ENTERPRISE_NAME like ?");
             paramsList.add("%" + qo.getEnterpriseName().trim() + "%");
         }
+        //企业ID
+        if (!StringUtils.isEmpty(qo.getEnterpriseId())) {
+            sqlBuffer.append(" and e.ENTERPRISE_ID = ?");
+            paramsList.add(qo.getEnterpriseId().trim());
+        }
         //认证账号
         if (!StringUtils.isEmpty(qo.getAccountId())) {
             sqlBuffer.append(" and t.ACCOUNT_ID =?");
@@ -92,13 +97,18 @@ public class FinanceAccountRechargeRepositoryImpl extends BasePageRepository {
         sqlBuffer.append("  DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME ");
         sqlBuffer.append("  from finance_recharge_view t ");
         sqlBuffer.append("  where (1=1) ");
-        log.info("[sql]:{}",sqlBuffer.toString());
+        //log.info("[sql]:{}",sqlBuffer.toString());
         List<Object> paramsList = new ArrayList<Object>();
 
         //企业名称
         if (!StringUtils.isEmpty(qo.getEnterpriseName())) {
             sqlBuffer.append(" and t.ENTERPRISE_NAME like ? ");
             paramsList.add("%" + qo.getEnterpriseName().trim() + "%");
+        }
+        //企业ID
+        if (!StringUtils.isEmpty(qo.getEnterpriseId())) {
+            sqlBuffer.append(" and t.ENTERPRISE_ID = ?");
+            paramsList.add(qo.getEnterpriseId().trim());
         }
         //认证账号
         if (!StringUtils.isEmpty(qo.getAccountId())) {

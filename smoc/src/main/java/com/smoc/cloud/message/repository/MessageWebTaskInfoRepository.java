@@ -56,17 +56,4 @@ public interface MessageWebTaskInfoRepository extends JpaRepository<MessageWebTa
      */
     StatisticMessageSend statisticSubmitMessageSendCount(MessageWebTaskInfoValidator messageWebTaskInfoValidator);
 
-    /**
-     * 查询自服务http列表
-     * @param pageParams
-     * @return
-     */
-    PageList<MessageWebTaskInfoValidator> httpPage(PageParams<MessageWebTaskInfoValidator> pageParams);
-
-    /**
-     * 自服务平台不同维度统计发送量
-     * @param pageParams
-     * @return
-     */
-    PageList<StatisticMessageSendData> messageSendNumberList(PageParams<StatisticMessageSendData> pageParams);
 }

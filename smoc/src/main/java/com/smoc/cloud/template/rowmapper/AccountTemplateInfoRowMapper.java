@@ -29,6 +29,7 @@ public class AccountTemplateInfoRowMapper  implements RowMapper<AccountTemplateI
         qo.setTemplateFlag(resultSet.getString("TEMPLATE_FLAG"));
         qo.setInfoType(resultSet.getString("INFO_TYPE"));
         qo.setTemplateTitle(resultSet.getString("TEMPLATE_TITLE"));
+        qo.setTemplateClassify(resultSet.getString("TEMPLATE_CLASSIFY"));
 
         return qo;
     }

@@ -6,6 +6,7 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.message.MessageAccountValidator;
+import com.smoc.cloud.common.smoc.message.MessageHttpsTaskInfoValidator;
 import com.smoc.cloud.common.smoc.message.model.MessageTaskDetail;
 import com.smoc.cloud.common.smoc.message.model.StatisticMessageSend;
 import com.smoc.cloud.common.smoc.message.MessageWebTaskInfoValidator;
@@ -153,9 +154,9 @@ public class MessageService {
      * @param pageParams
      * @return
      */
-    public ResponseData<PageList<MessageWebTaskInfoValidator>> httpPage(PageParams pageParams) {
+    public ResponseData<PageList<MessageHttpsTaskInfoValidator>> httpPage(PageParams pageParams) {
         try {
-            ResponseData<PageList<MessageWebTaskInfoValidator>> pageList = this.messageFeignClient.httpPage(pageParams);
+            ResponseData<PageList<MessageHttpsTaskInfoValidator>> pageList = this.messageFeignClient.httpPage(pageParams);
             return pageList;
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -172,6 +173,21 @@ public class MessageService {
         try {
             ResponseData<PageList<MessageTaskDetail>> pageList = this.messageFeignClient.httpTaskDetailList(params);
             return pageList;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 查询http任务
+     * @param id
+     * @return
+     */
+    public ResponseData<MessageHttpsTaskInfoValidator> findHttpTaskById(String id) {
+        try {
+            ResponseData<MessageHttpsTaskInfoValidator> data = this.messageFeignClient.findHttpTaskById(id);
+            return data;
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseDataUtil.buildError(e.getMessage());

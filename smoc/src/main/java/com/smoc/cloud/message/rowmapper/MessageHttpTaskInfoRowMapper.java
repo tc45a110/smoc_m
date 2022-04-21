@@ -1,5 +1,6 @@
 package com.smoc.cloud.message.rowmapper;
 
+import com.smoc.cloud.common.smoc.message.MessageHttpsTaskInfoValidator;
 import com.smoc.cloud.common.smoc.message.MessageWebTaskInfoValidator;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -9,11 +10,11 @@ import java.sql.SQLException;
 /**
  * web任务单
  */
-public class MessageHttpTaskInfoRowMapper implements RowMapper<MessageWebTaskInfoValidator> {
+public class MessageHttpTaskInfoRowMapper implements RowMapper<MessageHttpsTaskInfoValidator> {
     @Override
-    public MessageWebTaskInfoValidator mapRow(ResultSet resultSet, int i) throws SQLException {
+    public MessageHttpsTaskInfoValidator mapRow(ResultSet resultSet, int i) throws SQLException {
 
-        MessageWebTaskInfoValidator qo = new MessageWebTaskInfoValidator();
+        MessageHttpsTaskInfoValidator qo = new MessageHttpsTaskInfoValidator();
         qo.setBusinessAccount(resultSet.getString("BUSINESS_ACCOUNT"));
         qo.setId(resultSet.getString("ID"));
         qo.setTemplateId(resultSet.getString("TEMPLATE_ID"));

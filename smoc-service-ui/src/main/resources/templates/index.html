@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:mpm="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <th:block th:insert="fragments/common_fragments :: common_header"/>
@@ -98,7 +98,8 @@
                     <div class="wigdet-two-content text-white"  th:if="${infoStat.count==4}">
                         <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Statistics">&nbsp;</p>
                         <h2 class="text-white">
-                            <a class="btn btn-info waves-effect waves-light m-l-10 btn-md">
+                            <a class="btn btn-info waves-effect waves-light m-l-10 btn-md"
+                               th:href="@{/web/finance/account/list/{businessType}(businessType=${businessType})}">
                                 <i class="glyphicon glyphicon-search" style="margin-right:5px"></i>更多账号余额</a>
                         </h2>
                         <p class="m-0">&nbsp;</p>
@@ -106,24 +107,6 @@
                 </div>
 
             </div><!-- end col -->
-
-
-
-            <!--<div class="col-lg-3 col-md-6">
-                <div class="card-box widget-box-two widget-two-default" style="text-align: center;height:137px; ">
-                    <div class="wigdet-two-content text-white">
-                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Statistics">&nbsp;</p>
-                        <h2 class="text-white">
-                            <a class="btn btn-info waves-effect waves-light m-l-10 btn-md">
-                                <i class="glyphicon glyphicon-search" style="margin-right:5px"></i>查看更多账号</a>
-                        </h2>
-                        <p class="m-0">&nbsp;</p>
-                    </div>
-                </div>
-            </div>-->
-
-        </div>
-        <!-- end row -->
 
         <!-- start row  汇总统计-->
         <div  class="row" th:remove="${#strings.isEmpty(error)}?none:all">

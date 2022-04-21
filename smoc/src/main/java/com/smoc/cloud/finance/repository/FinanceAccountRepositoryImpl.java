@@ -57,6 +57,11 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
             sqlBuffer.append(" and e.ENTERPRISE_NAME like ?");
             paramsList.add("%" + qo.getEnterpriseName().trim() + "%");
         }
+        //企业ID
+        if (!StringUtils.isEmpty(qo.getEnterpriseId())) {
+            sqlBuffer.append(" and e.ENTERPRISE_ID = ?");
+            paramsList.add("%" + qo.getEnterpriseId().trim() + "%");
+        }
         //账号
         if (!StringUtils.isEmpty(qo.getAccountId())) {
             sqlBuffer.append(" and t.ACCOUNT_ID =?");
@@ -122,6 +127,11 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
         if (!StringUtils.isEmpty(qo.getEnterpriseName())) {
             sqlBuffer.append(" and e.ENTERPRISE_NAME like ?");
             paramsList.add("%" + qo.getEnterpriseName().trim() + "%");
+        }
+        //企业ID
+        if (!StringUtils.isEmpty(qo.getEnterpriseId())) {
+            sqlBuffer.append(" and e.ENTERPRISE_ID = ?");
+            paramsList.add("%" + qo.getEnterpriseId().trim() + "%");
         }
         //认证账号
         if (!StringUtils.isEmpty(qo.getAccountName())) {
@@ -189,6 +199,11 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
         if (!StringUtils.isEmpty(qo.getEnterpriseName())) {
             sqlBuffer.append(" and e.ENTERPRISE_NAME like ? ");
             paramsList.add("%" + qo.getEnterpriseName().trim() + "%");
+        }
+        //企业ID
+        if (!StringUtils.isEmpty(qo.getEnterpriseId())) {
+            sqlBuffer.append(" and e.ENTERPRISE_ID = ?");
+            paramsList.add(qo.getEnterpriseId().trim() );
         }
         //账号
         if (!StringUtils.isEmpty(qo.getAccountId())) {

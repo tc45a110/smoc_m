@@ -150,7 +150,8 @@ public class TemplateController {
         accountTemplateInfoValidator.setTemplateType(accountBasicInfoValidatorResponseData.getData().getBusinessType());
         accountTemplateInfoValidator.setEnterpriseId(enterpriseData.getData().getEnterpriseId());
         accountTemplateInfoValidator.setInfoType(accountBasicInfoValidatorResponseData.getData().getInfoType());
-        accountTemplateInfoValidator.setTemplateStatus("1");
+        accountTemplateInfoValidator.setTemplateStatus("2");//通过审核
+        accountTemplateInfoValidator.setTemplateFlag("1");//默认普通模板
 
         view.addObject("op", "add");
         view.addObject("accountBasicInfoValidator", accountBasicInfoValidatorResponseData.getData());
@@ -258,7 +259,7 @@ public class TemplateController {
     }
 
     /**
-     * 保存企业开户
+     * 保存模板
      *
      * @return
      */
@@ -325,7 +326,7 @@ public class TemplateController {
         }
 
         if("0".equals(status)){
-            status = "1";
+            status = "2";
         }else{
             status = "0";
         }

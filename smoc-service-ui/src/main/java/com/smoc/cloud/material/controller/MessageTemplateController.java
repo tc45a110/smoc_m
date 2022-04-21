@@ -146,7 +146,7 @@ public class MessageTemplateController {
         AccountTemplateInfoValidator accountTemplateInfoValidator = new AccountTemplateInfoValidator();
         accountTemplateInfoValidator.setTemplateId("TEMP" + sequenceService.findSequence("TEMPLATE"));
         accountTemplateInfoValidator.setTemplateType(type);
-        accountTemplateInfoValidator.setTemplateStatus("2");
+        accountTemplateInfoValidator.setTemplateStatus("3");
         accountTemplateInfoValidator.setTemplateFlag("1");
         accountTemplateInfoValidator.setTemplateAgreementType("WEB");
 

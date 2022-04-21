@@ -9,9 +9,8 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.message.MessageHttpsTaskInfoValidator;
 import com.smoc.cloud.common.smoc.message.model.MessageTaskDetail;
-import com.smoc.cloud.common.smoc.message.model.StatisticMessageSend;
-import com.smoc.cloud.common.smoc.template.AccountTemplateInfoValidator;
 import com.smoc.cloud.common.smoc.message.MessageWebTaskInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.validator.MpmIdValidator;
@@ -36,7 +35,7 @@ import java.net.URLEncoder;
 import java.util.Date;
 
 /**
- * 短信提交记录
+ * 批次发送记录
  */
 @Slf4j
 @Controller
@@ -59,25 +58,25 @@ public class MessageSubmitController {
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
 
         //初始化数据
-        PageParams<MessageWebTaskInfoValidator> params = new PageParams<MessageWebTaskInfoValidator>();
+        PageParams<MessageHttpsTaskInfoValidator> params = new PageParams<MessageHttpsTaskInfoValidator>();
         params.setPageSize(10);
         params.setCurrentPage(1);
-        MessageWebTaskInfoValidator messageWebTaskInfoValidator = new MessageWebTaskInfoValidator();
-        messageWebTaskInfoValidator.setEnterpriseId(user.getOrganization());
-        messageWebTaskInfoValidator.setBusinessType(businessType);
-        Date startDate = DateTimeUtils.getFirstMonth(6);
-        messageWebTaskInfoValidator.setStartDate(DateTimeUtils.getDateFormat(startDate));
-        messageWebTaskInfoValidator.setEndDate(DateTimeUtils.getDateFormat(new Date()));
-        params.setParams(messageWebTaskInfoValidator);
+        MessageHttpsTaskInfoValidator messageHttpsTaskInfoValidator = new MessageHttpsTaskInfoValidator();
+        messageHttpsTaskInfoValidator.setEnterpriseId(user.getOrganization());
+        messageHttpsTaskInfoValidator.setBusinessType(businessType);
+        Date startDate = DateTimeUtils.getFirstMonth(1);
+        messageHttpsTaskInfoValidator.setStartDate(DateTimeUtils.getDateFormat(startDate));
+        messageHttpsTaskInfoValidator.setEndDate(DateTimeUtils.getDateFormat(new Date()));
+        params.setParams(messageHttpsTaskInfoValidator);
 
         //查询
-        ResponseData<PageList<MessageWebTaskInfoValidator>> data = messageService.httpPage(params);
+        ResponseData<PageList<MessageHttpsTaskInfoValidator>> data = messageService.httpPage(params);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;
         }
 
-        view.addObject("messageWebTaskInfoValidator", messageWebTaskInfoValidator);
+        view.addObject("messageHttpsTaskInfoValidator", messageHttpsTaskInfoValidator);
         view.addObject("list", data.getData().getList());
         view.addObject("pageParams", data.getData().getPageParams());
         view.addObject("businessType", businessType);
@@ -90,31 +89,31 @@ public class MessageSubmitController {
      * @return
      */
     @RequestMapping(value = "page", method = RequestMethod.POST)
-    public ModelAndView page(@ModelAttribute MessageWebTaskInfoValidator messageWebTaskInfoValidator, PageParams pageParams, HttpServletRequest request) {
+    public ModelAndView page(@ModelAttribute MessageHttpsTaskInfoValidator messageHttpsTaskInfoValidator, PageParams pageParams, HttpServletRequest request) {
         ModelAndView view = new ModelAndView("statistics/message_submit_list");
 
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
 
         //分页查询
-        messageWebTaskInfoValidator.setEnterpriseId(user.getOrganization());
-        if (!StringUtils.isEmpty(messageWebTaskInfoValidator.getStartDate())) {
-            String[] date = messageWebTaskInfoValidator.getStartDate().split(" - ");
-            messageWebTaskInfoValidator.setStartDate(StringUtils.trimWhitespace(date[0]));
-            messageWebTaskInfoValidator.setEndDate(StringUtils.trimWhitespace(date[1]));
+        messageHttpsTaskInfoValidator.setEnterpriseId(user.getOrganization());
+        if (!StringUtils.isEmpty(messageHttpsTaskInfoValidator.getStartDate())) {
+            String[] date = messageHttpsTaskInfoValidator.getStartDate().split(" - ");
+            messageHttpsTaskInfoValidator.setStartDate(StringUtils.trimWhitespace(date[0]));
+            messageHttpsTaskInfoValidator.setEndDate(StringUtils.trimWhitespace(date[1]));
         }
-        pageParams.setParams(messageWebTaskInfoValidator);
+        pageParams.setParams(messageHttpsTaskInfoValidator);
 
         //查询
-        ResponseData<PageList<MessageWebTaskInfoValidator>> data = messageService.httpPage(pageParams);
+        ResponseData<PageList<MessageHttpsTaskInfoValidator>> data = messageService.httpPage(pageParams);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;
         }
 
-        view.addObject("messageWebTaskInfoValidator", messageWebTaskInfoValidator);
+        view.addObject("messageHttpsTaskInfoValidator", messageHttpsTaskInfoValidator);
         view.addObject("list", data.getData().getList());
         view.addObject("pageParams", data.getData().getPageParams());
-        view.addObject("businessType", messageWebTaskInfoValidator.getBusinessType());
+        view.addObject("businessType", messageHttpsTaskInfoValidator.getBusinessType());
         return view;
     }
 
@@ -138,7 +137,7 @@ public class MessageSubmitController {
         }
 
         //查询信息
-        ResponseData<MessageWebTaskInfoValidator> infoData = messageService.findById(id);
+        ResponseData<MessageHttpsTaskInfoValidator> infoData = messageService.findHttpTaskById(id);
         if (!ResponseCode.SUCCESS.getCode().equals(infoData.getCode())) {
             view.addObject("error", infoData.getCode() + ":" + infoData.getMessage());
             return view;
