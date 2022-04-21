@@ -71,7 +71,7 @@ public class TemplateService {
         entity.setTemplateAgreementType("HTTP");
 
         //模板状态 2 表示待审核
-        entity.setTemplateStatus("2");
+        entity.setTemplateStatus("3");
         entity.setCreatedBy("API");
         entity.setCreatedTime(DateTimeUtils.getNowDateTime());
 
@@ -155,10 +155,10 @@ public class TemplateService {
 
                 //生成本地文件
                 String folder = DateTimeUtils.getDateFormat(new Date(), "yyyyMMdd");
-                String filePath = resourceProperties.getResourceFileRootPath() + File.separator + folder;
+                String filePath = resourceProperties.getResourceFileRootPath() + "/" + folder;
                 String resId = UUID.uuid32();
-                String fileName = resId + model.getFileType();
-                format.setResUrl(filePath + File.separator + fileName);
+                String fileName = resId +"."+ model.getFileType();
+                format.setResUrl(filePath +"/" + fileName);
 
                 multimediaFormats.add(format);
 
@@ -187,7 +187,7 @@ public class TemplateService {
         entity.setMmAttchment(new Gson().toJson(multimediaFormats));
 
         //模板状态 2 表示待审核
-        entity.setTemplateStatus("2");
+        entity.setTemplateStatus("3");
         entity.setCreatedBy("API");
         entity.setCreatedTime(DateTimeUtils.getNowDateTime());
         //异步保存
@@ -226,7 +226,7 @@ public class TemplateService {
         entity.setTemplateAgreementType("HTTP");
 
         //模板状态 2 表示待审核
-        entity.setTemplateStatus("2");
+        entity.setTemplateStatus("3");
         entity.setCreatedBy("API");
         entity.setCreatedTime(DateTimeUtils.getNowDateTime());
 
@@ -289,9 +289,9 @@ public class TemplateService {
     public static Map<String, String> getTemplateStatusDesc() {
         Map<String, String> map = new HashMap<>();
         map.put("0", "无效");
-        map.put("1", "通过审核");
-        map.put("2", "等待审核");
-        map.put("3", "被拒绝");
+        map.put("1", "被拒绝");
+        map.put("2", "通过审核");
+        map.put("3", "等待审核");
         return map;
     }
 }

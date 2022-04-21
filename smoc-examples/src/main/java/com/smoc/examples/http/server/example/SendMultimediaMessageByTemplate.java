@@ -21,16 +21,17 @@ public class SendMultimediaMessageByTemplate {
         Map<String, String> header = new HashMap<>();
         //signature-nonce 为17位数字，并且每次请求signature-nonce不能重复
         header.put("signature-nonce", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(10));
+        header.put("account", "YQT113");
 
         //请求的数据
         Map<String, Object> requestDataMap = new HashMap<>();
         //订单号，成功后的订单不能重复
         requestDataMap.put("orderNo", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(10));
         //业务账号；参见给的账号EXCEL文件
-        requestDataMap.put("account", "YQT108");
+        requestDataMap.put("account", "YQT113");
 
         //模板ID
-        requestDataMap.put("templateId", "TEMP100000369");
+        requestDataMap.put("templateId", "TEMP100148");
 
         //模板短信内容
         List<String> list = new ArrayList<>();
@@ -61,7 +62,7 @@ public class SendMultimediaMessageByTemplate {
         //加密后的身份证号
         signData.append(requestDataMap.get("timestamp"));
         //签名 MD5_HMAC 签名KEY,参见给的账号EXCEL文件
-        String sign = HMACUtil.md5_HMAC_sign(signData.toString(), "BkqYXgMwD");
+        String sign = HMACUtil.md5_HMAC_sign(signData.toString(), "LJ9u!X7di");
         System.out.println("[接口请求][签名数据]数据:" + signData);
         System.out.println("[接口请求][签名]数据:" + sign);
 

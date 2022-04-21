@@ -39,8 +39,8 @@ public class ReportStatusController {
      * @param params
      * @return
      */
-    @RequestMapping(value = "/getReportByAccount", method = RequestMethod.POST)
-    public ResponseData<List<ReportResponseParams>> getReportByAccount(@RequestBody ReportStatusRequestParams params) {
+    @RequestMapping(value = "/getReport", method = RequestMethod.POST)
+    public ResponseData<List<ReportResponseParams>> getReport(@RequestBody ReportStatusRequestParams params) {
 
         log.info("[根据账号获取状态报告]：{}", new Gson().toJson(params));
 
@@ -48,7 +48,7 @@ public class ReportStatusController {
             return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), ValidatorUtil.validateMessage(params));
         }
 
-        return reportStatusService.getReportByAccount(params);
+        return reportStatusService.getReport(params);
     }
 
     /**

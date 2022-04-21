@@ -13,11 +13,11 @@ import java.util.Map;
 /**
  * 根据业务账号查询状态报告  每次做多返回1000条
  */
-public class GetReportByAccount {
+public class GetReport {
 
     public static void main(String[] args) throws Exception {
 
-        String url = "http://localhost:18088/smoc-gateway/http-server/report/getReportByAccount";
+        String url = "http://localhost:18088/smoc-gateway/http-server/report/getReport";
 
         //自定义header协议
         Map<String, String> header = new HashMap<>();
@@ -31,6 +31,12 @@ public class GetReportByAccount {
         requestDataMap.put("orderNo", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(10));
         //业务账号；参见给的账号EXCEL文件
         requestDataMap.put("account", "YQT112");
+
+        //msgId ，发送短信时的订单号
+        //requestDataMap.put("msgId", "202204211307584599387668430");
+
+        //mobile 手机号
+        requestDataMap.put("mobile", "18510846775");
 
         //时间戳
         requestDataMap.put("timestamp", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS"));

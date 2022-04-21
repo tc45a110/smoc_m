@@ -77,7 +77,7 @@ com:
       http:
         server:
           message-resource:
-            resource-file-root-path: /Users/wujihui/Desktop/smoc4.0/data/message/resource  #资源文件根目录
+            resource-file-root-path: F:/data/message/resource  #资源文件根目录
             resource-file-size-limit: 4096  #资源文件大小限制，以K为单位
 
 logging:

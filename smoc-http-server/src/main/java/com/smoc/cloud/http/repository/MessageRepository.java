@@ -7,15 +7,20 @@ import com.smoc.cloud.common.http.server.message.request.ReportStatusRequestPara
 import com.smoc.cloud.common.http.server.message.response.MobileOriginalResponseParams;
 import com.smoc.cloud.common.http.server.message.response.ReportResponseParams;
 import com.smoc.cloud.common.page.PageList;
+import com.smoc.cloud.http.entity.MessageFormat;
+import com.smoc.cloud.http.entity.MessageHttpsTaskInfo;
 import com.smoc.cloud.http.rowmapper.MobileOriginalResponseParamsRowMapper;
 import com.smoc.cloud.http.rowmapper.ReportResponseParamsRowMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -83,7 +88,7 @@ public class MessageRepository extends BasePageRepository {
      * @param reportStatusRequestParams
      * @return
      */
-    public List<ReportResponseParams> getReportByAccount(ReportStatusRequestParams reportStatusRequestParams) {
+    public List<ReportResponseParams> getReport(ReportStatusRequestParams reportStatusRequestParams) {
 
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");
@@ -101,10 +106,33 @@ public class MessageRepository extends BasePageRepository {
         sqlBuffer.append("  t.MESSAGE_INDEX,");
         sqlBuffer.append("  t.OPTION_PARAM ");
         sqlBuffer.append("  from smoc_route.route_message_mr_info t ");
-        sqlBuffer.append("  where  t.ACCOUNT_ID=?  order by t.SUBMIT_TIME desc");
+        sqlBuffer.append("  where  (1=1) ");
 
-        Object[] params = new Object[1];
-        params[0] = reportStatusRequestParams.getAccount();
+        List<Object> paramsList = new ArrayList<Object>();
+
+        //业务账号
+        if (!StringUtils.isEmpty(reportStatusRequestParams.getAccount())) {
+            sqlBuffer.append(" and t.ACCOUNT_ID=? ");
+            paramsList.add(reportStatusRequestParams.getAccount().trim());
+        }
+
+        //订单号
+        if (!StringUtils.isEmpty(reportStatusRequestParams.getMsgId())) {
+            sqlBuffer.append(" and t.MESSAGE_ID=? ");
+            paramsList.add(reportStatusRequestParams.getMsgId().trim());
+        }
+
+        //手机号
+        if (!StringUtils.isEmpty(reportStatusRequestParams.getMobile())) {
+            sqlBuffer.append(" and t.PHONE_NUMBER=? ");
+            paramsList.add(reportStatusRequestParams.getMobile().trim());
+        }
+
+        sqlBuffer.append(" order by t.SUBMIT_TIME desc");
+
+        //根据参数个数，组织参数值
+        Object[] params = new Object[paramsList.size()];
+        paramsList.toArray(params);
 
         log.info("[获取状态报告sql]:{}", sqlBuffer);
 
@@ -170,6 +198,59 @@ public class MessageRepository extends BasePageRepository {
             }
 
         });
+    }
+
+    /**
+     * 批量保存 待发短信
+     *
+     * @param messages     短消息
+     * @param messageCount 发送短信数量
+     * @param phoneCount   发送手机号数量
+     */
+    public void saveMessageBatch(final List<MessageFormat> messages, Integer messageCount, Integer phoneCount) {
+        final String sql = "insert into smoc_route.route_message_mt_info(ID,ACCOUNT_ID,PHONE_NUMBER,SUBMIT_TIME,MESSAGE_CONTENT,MESSAGE_FORMAT,MESSAGE_ID,TEMPLATE_ID,PROTOCOL,ACCOUNT_SRC_ID,ACCOUNT_BUSINESS_CODE,PHONE_NUMBER_NUMBER,MESSAGE_CONTENT_NUMBER,REPORT_FLAG,OPTION_PARAM,CREATED_TIME) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
+
+        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+            public int getBatchSize() {
+                return messages.size();
+            }
+
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                MessageFormat message = messages.get(i);
+                ps.setLong(1, message.getId());
+                ps.setString(2, message.getAccountId());
+                ps.setString(3, message.getPhoneNumber());
+                ps.setString(4, message.getSubmitTime());
+                ps.setString(5, message.getMessageContent());
+                ps.setString(6, message.getMessageFormat());
+                ps.setString(7, message.getMessageId());
+                ps.setString(8, message.getTemplateId());
+                ps.setString(9, message.getProtocol());
+                ps.setString(10, message.getAccountSrcId());
+                ps.setString(11, message.getAccountBusinessCode());
+                ps.setInt(12, phoneCount);
+                ps.setInt(13, messageCount);
+                ps.setInt(14, message.getReportFlag());
+                ps.setString(15, message.getOptionParam());
+                ps.setDate(16, new Date(System.currentTimeMillis()));
+
+            }
+
+        });
+
+    }
+
+    /**
+     * 批量保存 待发短信
+     *
+     */
+    public void saveBatchTask(MessageHttpsTaskInfo task) {
+
+        StringBuffer sql = new StringBuffer("insert into message_https_task_info(ID,TEMPLATE_ID,BUSINESS_ACCOUNT,ENTERPRISE_ID,BUSINESS_TYPE,INFO_TYPE,MESSAGE_TYPE,SEND_TYPE,EXPAND_NUMBER,SPLIT_NUMBER,SUBMIT_NUMBER,MESSAGE_CONTENT,CREATED_BY,CREATED_TIME)");
+        sql.append(" select '"+task.getId()+"','"+task.getTemplateId()+"','"+task.getBusinessAccount()+"',a.ENTERPRISE_ID,a.BUSINESS_TYPE,a.INFO_TYPE,a.BUSINESS_TYPE,'1','"+task.getExpandNumber()+"',"+task.getSplitNumber()+","+task.getSubmitNumber()+",'"+task.getMessageContent()+"','"+task.getCreatedBy()+"',now() from  account_base_info a  where a.ACCOUNT_ID='"+task.getBusinessAccount()+"' ");
+        log.info("[insert select]:{}",sql);
+        jdbcTemplate.update(sql.toString());
+
     }
 
 

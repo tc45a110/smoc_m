@@ -33,12 +33,12 @@ public class ReportStatusService {
      * @param params
      * @return
      */
-    public ResponseData<List<ReportResponseParams>> getReportByAccount(ReportStatusRequestParams params) {
+    public ResponseData<List<ReportResponseParams>> getReport(ReportStatusRequestParams params) {
 
         //异步保存请求记录
-        systemHttpApiRequestService.save(params.getOrderNo(), params.getAccount(), "getReportByAccount", new Gson().toJson(params));
+       // systemHttpApiRequestService.save(params.getMsgId(), params.getAccount(), "getReport", new Gson().toJson(params));
 
-        List<ReportResponseParams> reports = messageRepository.getReportByAccount(params);
+        List<ReportResponseParams> reports = messageRepository.getReport(params);
 
         //把返回的条数删除
         if(null != reports && reports.size()>0) {

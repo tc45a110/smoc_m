@@ -27,7 +27,7 @@ public class FileBASE64Utils {
         try {
 //            byte[] bytes = Base64.getDecoder().decode(base64);
             byte[] bytes = Base64.getMimeDecoder().decode(base64);
-            file = new File(filePath + File.separator + fileName);
+            file = new File(filePath + "/" + fileName);
             fos = new java.io.FileOutputStream(file);
             bos = new BufferedOutputStream(fos);
             bos.write(bytes);

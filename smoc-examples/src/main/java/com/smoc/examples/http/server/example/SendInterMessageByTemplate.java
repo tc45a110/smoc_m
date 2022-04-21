@@ -21,6 +21,7 @@ public class SendInterMessageByTemplate {
         Map<String, String> header = new HashMap<>();
         //signature-nonce 为17位数字，并且每次请求signature-nonce不能重复
         header.put("signature-nonce", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(10));
+        header.put("account", "YQT108");
 
         //请求的数据
         Map<String, Object> requestDataMap = new HashMap<>();
@@ -30,7 +31,7 @@ public class SendInterMessageByTemplate {
         requestDataMap.put("account", "YQT108");
 
         //模板ID
-        requestDataMap.put("templateId", "TEMP100000369");
+        requestDataMap.put("templateId", "TEMP100149");
 
         //模板短信内容
         List<String> list = new ArrayList<>();

@@ -34,7 +34,7 @@ public class AddInterTemplate {
         //模板类型 1 表示普通模板 2 表示变量模板
         requestDataMap.put("templateType", "2");
         //模板内容
-        requestDataMap.put("content", "【APPLE】I want a phone free,and you? Your code is {1}");
+        requestDataMap.put("content", "【APPLE】May the new year bring many good things and rich blessings to you and all those you love! your code is ${1}");
         //时间戳
         requestDataMap.put("timestamp", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS"));
         //转JSON请求数据

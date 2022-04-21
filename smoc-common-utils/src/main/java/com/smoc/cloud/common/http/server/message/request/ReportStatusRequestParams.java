@@ -8,4 +8,8 @@ import lombok.Setter;
 @Setter
 @Getter
 public class ReportStatusRequestParams extends HttpServerSignModel {
+
+    private String msgId;
+
+    private String mobile;
 }

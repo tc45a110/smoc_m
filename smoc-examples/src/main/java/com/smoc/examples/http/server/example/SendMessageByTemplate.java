@@ -31,12 +31,12 @@ public class SendMessageByTemplate {
         requestDataMap.put("account", "YQT112");
 
         //模板ID
-        requestDataMap.put("templateId", "TEMP100138");
+        requestDataMap.put("templateId", "TEMP100145");
 
         //模板短信内容
         List<String> list = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            String item = "13" + Utils.getRandom(9) + "|" + Utils.getRandom(4)+ "|" + Utils.getRandom(4);
+            String item = "13" + Utils.getRandom(9) + "|" + Utils.getRandom(4);
             list.add(item);
         }
         requestDataMap.put("content", list);
