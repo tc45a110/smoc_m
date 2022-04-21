@@ -24,5 +24,4 @@ public class MobileOriginalResponseParams {
 
     private String moTime;
 
-
 }

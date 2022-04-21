@@ -1,17 +1,14 @@
 package com.smoc.cloud.http.service;
 
-import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.smoc.cloud.common.http.server.message.request.SendMessageByTemplateRequestParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.utils.DateTimeUtils;
-import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.http.entity.AccountTemplateInfo;
 import com.smoc.cloud.http.entity.MessageFormat;
 import com.smoc.cloud.http.entity.MessageHttpsTaskInfo;
-import com.smoc.cloud.http.entity.MultimediaFormat;
 import com.smoc.cloud.http.repository.AccountTemplateInfoRepository;
 import com.smoc.cloud.http.repository.MessageRepository;
 import com.smoc.cloud.http.utils.Int64UUID;
@@ -25,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.*;
 
 @Slf4j
@@ -70,6 +66,9 @@ public class SendMessageService {
         List<MessageFormat> messages = new ArrayList<>();
         //批次发送数量
         Integer length = params.getContent().length;
+        if (1000 < length) {
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_MOBILE_NUM_ERROR.getCode(), ResponseCode.PARAM_MOBILE_NUM_ERROR.getMessage());
+        }
 
         //模版内容
         String templateContent = optional.get().getTemplateContent();
@@ -167,6 +166,9 @@ public class SendMessageService {
         List<MessageFormat> messages = new ArrayList<>();
         //批次发送数量
         Integer length = params.getContent().length;
+        if (1000 < length) {
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_MOBILE_NUM_ERROR.getCode(), ResponseCode.PARAM_MOBILE_NUM_ERROR.getMessage());
+        }
 
         //多媒体模板内容
         //String multimediaMessage = optional.get().getMmAttchment();
@@ -189,14 +191,23 @@ public class SendMessageService {
             if ("1".equals(optional.get().getTemplateFlag())) {
                 String phoneNumber = params.getContent()[i].split("\\|")[0];
                 messageFormat.setPhoneNumber(phoneNumber);
-                //messageFormat.setMessageContent(multimediaMessage);
             }
 
             //变量模版短信
             if ("2".equals(optional.get().getTemplateFlag())) {
                 String[] content = params.getContent()[i].split("\\|");
                 messageFormat.setPhoneNumber(content[0]);
-                messageFormat.setMessageContent(params.getContent()[i]);
+                String multimedia = "";
+                if (content.length > 1) {
+                    for (int t = 1; t < content.length; t++) {
+                        if (StringUtils.isEmpty(multimedia)) {
+                            multimedia = content[t];
+                        } else {
+                            multimedia += "|" + content[t];
+                        }
+                    }
+                }
+                messageFormat.setMessageContent(multimedia);
             }
 
             phoneCount++;
@@ -255,6 +266,9 @@ public class SendMessageService {
         List<MessageFormat> messages = new ArrayList<>();
         //批次发送数量
         Integer length = params.getContent().length;
+        if (1000 < length) {
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_MOBILE_NUM_ERROR.getCode(), ResponseCode.PARAM_MOBILE_NUM_ERROR.getMessage());
+        }
 
         //模版内容
         String templateContent = optional.get().getTemplateContent();

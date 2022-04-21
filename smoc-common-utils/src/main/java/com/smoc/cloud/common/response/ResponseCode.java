@@ -26,6 +26,7 @@ public enum ResponseCode {
     PARAM_MOBILE_ERROR("1109", "发送号码不能为空!"),
     PARAM_TEMPLATE_NOT_EXIST_ERROR("1110", "模版不存在!"),
     PARAM_TEMPLATE_STATUS_ERROR("1111", "模版未经审核!"),
+    PARAM_MOBILE_NUM_ERROR("1112", "单批次发送量超过1000条!"),
 
     //鉴权失败
     TOKEN_UNAUTH("2000", "认证、鉴权失败！"),

@@ -37,7 +37,7 @@ public class MobileOriginalService {
         //异步保存请求记录
         systemHttpApiRequestService.save(params.getOrderNo(), params.getAccount(), "getMobileOriginalByAccount", new Gson().toJson(params));
 
-        List<MobileOriginalResponseParams> mobileOriginalResponseParams = messageRepository.getMobileOriginalByAccount(params);
+        List<MobileOriginalResponseParams> mobileOriginalResponseParams = messageRepository.getMobileOriginalByAccount(params.getAccount());
         deleteMobileOriginal(mobileOriginalResponseParams);
         return ResponseDataUtil.buildSuccess(mobileOriginalResponseParams);
     }

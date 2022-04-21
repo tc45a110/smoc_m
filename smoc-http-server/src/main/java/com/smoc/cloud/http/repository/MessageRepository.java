@@ -1,7 +1,6 @@
 package com.smoc.cloud.http.repository;
 
 import com.google.gson.Gson;
-import com.smoc.cloud.common.http.server.message.request.MobileOriginalRequestParams;
 import com.smoc.cloud.common.http.server.message.request.ReportBatchParams;
 import com.smoc.cloud.common.http.server.message.request.ReportStatusRequestParams;
 import com.smoc.cloud.common.http.server.message.response.MobileOriginalResponseParams;
@@ -31,10 +30,10 @@ public class MessageRepository extends BasePageRepository {
     /**
      * 根据业务账号查询上行短信  每次做多返回1000条
      *
-     * @param requestParams
+     * @param account
      * @return
      */
-    public List<MobileOriginalResponseParams> getMobileOriginalByAccount(MobileOriginalRequestParams requestParams) {
+    public List<MobileOriginalResponseParams> getMobileOriginalByAccount(String account) {
 
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");
@@ -52,9 +51,9 @@ public class MessageRepository extends BasePageRepository {
         sqlBuffer.append("  where  t.ACCOUNT_ID=? order by t.MO_TIME desc");
 
         Object[] params = new Object[1];
-        params[0] = requestParams.getAccount();
+        params[0] = account;
 
-        log.info("[获取上行短信sql]:{}", sqlBuffer);
+        //log.info("[获取上行短信sql]:{}", sqlBuffer);
 
         PageList<MobileOriginalResponseParams> pageList = this.queryByPageForMySQL(sqlBuffer.toString(), params, 0, 1000, new MobileOriginalResponseParamsRowMapper());
         return pageList.getList();
@@ -134,7 +133,7 @@ public class MessageRepository extends BasePageRepository {
         Object[] params = new Object[paramsList.size()];
         paramsList.toArray(params);
 
-        log.info("[获取状态报告sql]:{}", sqlBuffer);
+        //log.info("[获取状态报告sql]:{}", sqlBuffer);
 
         PageList<ReportResponseParams> pageList = this.queryByPageForMySQL(sqlBuffer.toString(), params, 0, 1000, new ReportResponseParamsRowMapper());
         return pageList.getList();
@@ -171,7 +170,7 @@ public class MessageRepository extends BasePageRepository {
         params[1] = reportBatchParams.getStartDate();
         params[2] = reportBatchParams.getEndDate();
 
-        log.info("[批量获取状态报告sql]:{}", sqlBuffer);
+        //log.info("[批量获取状态报告sql]:{}", sqlBuffer);
 
         PageList<ReportResponseParams> pageList = this.queryByPageForMySQL(sqlBuffer.toString(), params, 0, 1000, new ReportResponseParamsRowMapper());
         log.info("[批量获取状态报告sql]:{}", new Gson().toJson(pageList.getList()));
@@ -242,13 +241,12 @@ public class MessageRepository extends BasePageRepository {
 
     /**
      * 批量保存 待发短信
-     *
      */
     public void saveBatchTask(MessageHttpsTaskInfo task) {
 
         StringBuffer sql = new StringBuffer("insert into message_https_task_info(ID,TEMPLATE_ID,BUSINESS_ACCOUNT,ENTERPRISE_ID,BUSINESS_TYPE,INFO_TYPE,MESSAGE_TYPE,SEND_TYPE,EXPAND_NUMBER,SPLIT_NUMBER,SUBMIT_NUMBER,MESSAGE_CONTENT,CREATED_BY,CREATED_TIME)");
-        sql.append(" select '"+task.getId()+"','"+task.getTemplateId()+"','"+task.getBusinessAccount()+"',a.ENTERPRISE_ID,a.BUSINESS_TYPE,a.INFO_TYPE,a.BUSINESS_TYPE,'1','"+task.getExpandNumber()+"',"+task.getSplitNumber()+","+task.getSubmitNumber()+",'"+task.getMessageContent()+"','"+task.getCreatedBy()+"',now() from  account_base_info a  where a.ACCOUNT_ID='"+task.getBusinessAccount()+"' ");
-        log.info("[insert select]:{}",sql);
+        sql.append(" select '" + task.getId() + "','" + task.getTemplateId() + "','" + task.getBusinessAccount() + "',a.ENTERPRISE_ID,a.BUSINESS_TYPE,a.INFO_TYPE,a.BUSINESS_TYPE,'1','" + task.getExpandNumber() + "'," + task.getSplitNumber() + "," + task.getSubmitNumber() + ",'" + task.getMessageContent() + "','" + task.getCreatedBy() + "',now() from  account_base_info a  where a.ACCOUNT_ID='" + task.getBusinessAccount() + "' ");
+        //log.info("[insert select]:{}", sql);
         jdbcTemplate.update(sql.toString());
 
     }

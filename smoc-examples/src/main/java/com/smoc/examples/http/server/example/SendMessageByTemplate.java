@@ -35,7 +35,7 @@ public class SendMessageByTemplate {
 
         //模板短信内容
         List<String> list = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 1011; i++) {
             String item = "13" + Utils.getRandom(9) + "|" + Utils.getRandom(4);
             list.add(item);
         }
