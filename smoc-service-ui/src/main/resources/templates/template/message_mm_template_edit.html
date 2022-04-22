@@ -100,7 +100,7 @@
                                 </div>
                                 <div class="radio radio-info radio-inline">
                                     <i data-toggle="tooltip" data-placement="right"
-                                       data-original-title="变量模板仅文本可添加变量，最多包含5个变量用${1}、${2}、……表示变量，上传数据的第一列为待发送手机号。例如'136xxxxxxxx|2022年2月1日|商用讨论会'代表给136xxxxxxxx发送的短信，变量1和变量2分别是'2022年2月1日'、'商用讨论会'。">
+                                       data-original-title="模板中变量表示为${1},${2}">
                                         <input type="radio" id="inlineRadio2" name="templateFlag" value="2" th:field="*{templateFlag}" th:checked="${accountTemplateInfoValidator.templateFlag== '2'}">
                                         <label for="inlineRadio2"> 变量短信模版 </label>
                                     </i>
