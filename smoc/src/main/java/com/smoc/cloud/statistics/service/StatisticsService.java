@@ -2,6 +2,8 @@ package com.smoc.cloud.statistics.service;
 
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountRechargeValidator;
+import com.smoc.cloud.finance.repository.FinanceAccountRechargeRepository;
 import com.smoc.cloud.statistics.repository.IndexStatisticsRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,9 @@ public class StatisticsService {
 
     @Resource
     private IndexStatisticsRepository indexStatisticsRepository;
+
+    @Resource
+    private FinanceAccountRechargeRepository financeAccountRechargeRepository;
 
     /**
      * 统计(客户数、活跃数、通道数)
@@ -60,10 +65,19 @@ public class StatisticsService {
         map.put("MESSAGE_SEND_TOTAL",messageSendTotal);
 
         //营收总额
+        Map<String, Object> profit = indexStatisticsRepository.getProfitSum(startDate,endDate);
+        map.put("PROFIT_SUM",profit.get("PROFIT_SUM"));
 
         //充值总额
+        FinanceAccountRechargeValidator qo = new FinanceAccountRechargeValidator();
+        qo.setStartDate(startDate);
+        qo.setEndDate(endDate);
+        Map<String, Object> recharge = financeAccountRechargeRepository.countRechargeSum(qo);
+        map.put("RECHARGE_SUM",recharge.get("RECHARGE_SUM"));
 
         //账户总余额
+        Map<String, Object> usableAccount = indexStatisticsRepository.getCountUsableAccount();
+        map.put("ACCOUNT_USABLE_SUM",usableAccount.get("ACCOUNT_USABLE_SUM"));
 
         return ResponseDataUtil.buildSuccess(map);
     }

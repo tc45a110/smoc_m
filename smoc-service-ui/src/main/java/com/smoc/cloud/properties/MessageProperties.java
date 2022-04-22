@@ -20,6 +20,4 @@ public class MessageProperties {
     //手机号文件根目录
     private String mobileFileRootPath;
 
-    //多媒体文件根目录
-    private String mobileZipRootPath;
 }

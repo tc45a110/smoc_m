@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+</head>
+<body style="background-color:#fff">
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content">
+    <div class="container">
+        <!-- start row  页面内容-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all" style="margin-top:10px">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-color panel-info">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">财务账户列表</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table table-hover m-10"
+                                       style="margin-top: -10px;">
+                                    <thead>
+                                    <tr>
+                                        <th>业务账号</th>
+                                        <th>财务账户余额</th>
+                                        <th>财务账户冻结金额</th>
+                                        <th>是否已共享</th>
+                                        <th>共享账户</th>
+                                        <th>业务类型</th>
+                                        <th style="text-align:center">账户状态</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="info:${financeAccounts}">
+
+                                        <td>
+                                            [[${info.accountId}]]
+                                        </td>
+                                        <td>
+                                            ¥
+                                            [[${#numbers.formatDecimal(info.accountUsableSum,1,'COMMA',2,'POINT')}]]
+                                        </td>
+                                        <td>
+                                            ¥
+                                            [[${#numbers.formatDecimal(info.accountFrozenSum,1,'COMMA',2,'POINT')}]]
+                                        </td>
+                                        <td>
+                                            <mpm:tag id="isOrNo" identity="isOrNo" class="0,btn btn-info btn-rounded btn-ms waves-effect waves-light;1,btn btn-danger btn-rounded btn-ms waves-effect waves-light;"
+                                                     name="isOrNo" show-type="button"  key="code"
+                                                     th:value="${info.isShare}" title="共享状态"/>
+                                        </td>
+                                        <td>
+                                            [[${info.shareId}]]
+                                        </td>
+                                        <td>
+                                            <mpm:tag identity="businessType" show-type="button"
+                                                     key="code" th:value="${info.accountType}"
+                                                     class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;MULTI_SMS,btn btn-brown btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;5G_SMS,btn btn-primary btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-inverse btn-rounded btn-sm waves-effect waves-light"/>
+                                        </td>
+                                        <td style="text-align:center">
+                                            <mpm:tag id="accountStatus"
+                                                     identity="dataStatus"
+                                                     class="1,btn btn-info btn-rounded btn-ms waves-effect waves-light;0,btn btn-danger btn-rounded btn-ms waves-effect waves-light;"
+                                                     name="accountStatus" show-type="button"
+                                                     key="code"
+                                                     th:value="${info.accountStatus}"
+                                                     title="账号状态"/>
+                                        </td>
+
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<!-- Modal-Effect -->
+<script>
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+
+
+
+
+</script>
+</body>
+</html>

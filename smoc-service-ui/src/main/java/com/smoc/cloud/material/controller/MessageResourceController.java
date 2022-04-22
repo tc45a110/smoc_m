@@ -509,15 +509,15 @@ public class MessageResourceController {
 
     /**
      * 显示缩略图
-     * @param id
+     * @param resUrl
      * @param request
      * @param response
      */
-    @RequestMapping(value = "/show/{id}", method = RequestMethod.GET)
-    public void show(@PathVariable String id, HttpServletRequest request, HttpServletResponse response) {
+    @RequestMapping(value = "/show/{resUrl}", method = RequestMethod.GET)
+    public void show(@PathVariable String resUrl, HttpServletRequest request, HttpServletResponse response) {
 
         SecurityUser user = (SecurityUser)request.getSession().getAttribute("user");
-
+/*
         //去掉id中的时间戳
         if(!StringUtils.isEmpty(id)){
             id = id.split("_")[0];
@@ -542,27 +542,29 @@ public class MessageResourceController {
         //查看是否是自己企业
         if(!user.getOrganization().equals(data.getData().getEnterpriseId())){
             return;
-        }
+        }*/
 
-        File downloadFile = new File(resourceProperties.getResourceFileRootPath() + resourceValidator.getResourceAttchment());
+        File downloadFile = new File(resourceProperties.getResourceFileRootPath() + resUrl);
         //文件不存在
         if(!downloadFile.exists()){
             log.info("[资源管理][download][{}]数据::{}", user.getUserName(), "文件不存在:"+downloadFile.getAbsolutePath());
             return;
         }
 
+        String suffixType = resUrl.substring(resUrl.lastIndexOf(".") + 1);
+
         //图片
-        if(resourceProperties.getResourceAllowFormat()[0].contains(data.getData().getResourceAttchmentType())){
-            image(resourceValidator,downloadFile,user,response);
+        if(resourceProperties.getResourceAllowFormat()[0].contains(suffixType)){
+            image(suffixType,downloadFile,user,response);
         }
         //视频或音频
-        if(resourceProperties.getResourceAllowFormat()[2].contains(data.getData().getResourceAttchmentType()) || resourceProperties.getResourceAllowFormat()[1].contains(data.getData().getResourceAttchmentType())){
-            video(resourceValidator,downloadFile,user,request,response);
+        if(resourceProperties.getResourceAllowFormat()[2].contains(suffixType) || resourceProperties.getResourceAllowFormat()[1].contains(suffixType)){
+            video(suffixType,downloadFile,user,request,response);
         }
 
     }
 
-    private void video(AccountResourceInfoValidator resourceValidator, File file, SecurityUser user, HttpServletRequest request,HttpServletResponse response) {
+    private void video(String suffixType, File file, SecurityUser user, HttpServletRequest request,HttpServletResponse response) {
         //获取从那个字节开始读取文件
         String rangeString = request.getHeader("Range");
 
@@ -577,25 +579,25 @@ public class MessageResourceController {
 
                     long range = Long.valueOf(rangeString.substring(rangeString.indexOf("=") + 1, rangeString.indexOf("-")));
                     //设置内容类型
-                    if("mp4".equals(resourceValidator.getResourceAttchmentType())){
+                    if("mp4".equals(suffixType)){
                         response.setHeader("Content-Type", "video/mp4");
                     }
-                    if("3gp".equals(resourceValidator.getResourceAttchmentType())){
+                    if("3gp".equals(suffixType)){
                         response.setHeader("Content-Type", "video/3gp");
                     }
-                    if("mp3".equals(resourceValidator.getResourceAttchmentType())){
+                    if("mp3".equals(suffixType)){
                         response.setHeader("Content-Type", "audio/mp3");
                     }
-                    if("amr".equals(resourceValidator.getResourceAttchmentType())){
+                    if("amr".equals(suffixType)){
                         response.setHeader("Content-Type", "audio/amr");
                     }
-                    if("aac".equals(resourceValidator.getResourceAttchmentType())){
+                    if("aac".equals(suffixType)){
                         response.setHeader("Content-Type", "audio/aac");
                     }
-                    if("midi".equals(resourceValidator.getResourceAttchmentType())){
+                    if("midi".equals(suffixType)){
                         response.setHeader("Content-Type", "audio/midi");
                     }
-                    if("wav".equals(resourceValidator.getResourceAttchmentType())){
+                    if("wav".equals(suffixType)){
                         response.setHeader("Content-Type", "audio/wav");
                     }
                     //设置此次相应返回的数据长度
@@ -623,17 +625,12 @@ public class MessageResourceController {
         }
     }
 
-    private void image(AccountResourceInfoValidator resourceValidator,File downloadFile,SecurityUser user, HttpServletResponse response) {
+    private void image(String suffixType,File downloadFile,SecurityUser user, HttpServletResponse response) {
         //读取文件内容输入流中
         InputStream in = null;
         try {
             //设置相应类型,告诉浏览器输出的内容为图片
             response.setContentType("image/jpeg");
-            if("gif".equals(resourceValidator.getResourceAttchmentType())){
-                response.setContentType("image/gif");
-            }else if("png".equals(resourceValidator.getResourceAttchmentType())){
-                response.setContentType("image/png");
-            }
 
             //设置响应头信息，告诉浏览器不要缓存此内容
             response.setHeader("Pragma", "No-cache");
@@ -642,7 +639,7 @@ public class MessageResourceController {
 
             in = new FileInputStream(downloadFile);
             BufferedImage bImage = ImageIO.read(in);
-            ImageIO.write(bImage, resourceValidator.getResourceAttchmentType(), response.getOutputStream());
+            ImageIO.write(bImage, suffixType, response.getOutputStream());
         } catch (Exception e) {
             log.error("[资源管理][download][{}]数据::{}", user.getUserName(), e.getMessage());
             e.printStackTrace();

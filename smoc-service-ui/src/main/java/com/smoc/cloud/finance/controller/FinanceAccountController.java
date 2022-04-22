@@ -21,8 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 /**
  * 财务账户
@@ -159,6 +158,156 @@ public class FinanceAccountController {
             return view;
         }
 
+
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
+        view.addObject("financeAccountRechargeValidator", financeAccountRechargeValidator);
+        return view;
+    }
+
+    /**
+     * 财务共享账户查看中心
+     *
+     * @return
+     */
+    @RequestMapping(value = "/account/share/view/{accountId}/{businessType}", method = RequestMethod.GET)
+    public ModelAndView shareView(@PathVariable String accountId,@PathVariable String businessType,HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("finance/finance_account_share_view_center");
+
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        //账户信息
+        ResponseData<FinanceAccountValidator> shareFinanceAccount = financeAccountService.findById(accountId);
+        if (!ResponseCode.SUCCESS.getCode().equals(shareFinanceAccount.getCode())) {
+            view.addObject("error", shareFinanceAccount.getCode() + ":" + shareFinanceAccount.getMessage());
+            return view;
+        }
+
+        //是否属于自己企业
+        if(!user.getOrganization().equals(shareFinanceAccount.getData().getEnterpriseId())){
+            view.addObject("error", ResponseCode.OAUTH2_EXCEPTION_UNAUTH.getMessage());
+            return view;
+        }
+
+        view.addObject("financeAccountValidator", shareFinanceAccount.getData());
+        view.addObject("businessType", businessType);
+
+        return view;
+    }
+
+    /**
+     * 财务共享账户明细
+     *
+     * @return
+     */
+    @RequestMapping(value = "/account/shareDetail/{accountId}", method = RequestMethod.GET)
+    public ModelAndView center(@PathVariable String accountId,HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("finance/finance_account_share_view_detail");
+
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        //账户信息
+        ResponseData<FinanceAccountValidator> shareFinanceAccount = financeAccountService.findById(accountId);
+        if (!ResponseCode.SUCCESS.getCode().equals(shareFinanceAccount.getCode())) {
+            view.addObject("error", shareFinanceAccount.getCode() + ":" + shareFinanceAccount.getMessage());
+            return view;
+        }
+
+        //是否属于自己企业
+        if(!user.getOrganization().equals(shareFinanceAccount.getData().getEnterpriseId())){
+            view.addObject("error", ResponseCode.OAUTH2_EXCEPTION_UNAUTH.getMessage());
+            return view;
+        }
+
+        //查询共享账号的子账号信息
+        ResponseData<List<FinanceAccountValidator>> data = financeAccountService.findSubsidiaryFinanceAccountByAccountId(shareFinanceAccount.getData().getAccountId());
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("financeAccountValidator", shareFinanceAccount.getData());
+        view.addObject("financeAccounts", data.getData());
+
+        return view;
+    }
+
+    /**
+     * 财务充值列表
+     * @return
+     */
+    @RequestMapping(value = "/account/shareRecharge/{accountId}", method = RequestMethod.GET)
+    public ModelAndView shareRecharge(@PathVariable String accountId,HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("finance/finance_account_share_view_recharge");
+
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        //账户信息
+        ResponseData<FinanceAccountValidator> shareFinanceAccount = financeAccountService.findById(accountId);
+        if (!ResponseCode.SUCCESS.getCode().equals(shareFinanceAccount.getCode())) {
+            view.addObject("error", shareFinanceAccount.getCode() + ":" + shareFinanceAccount.getMessage());
+            return view;
+        }
+
+        //是否属于自己企业
+        if(!user.getOrganization().equals(shareFinanceAccount.getData().getEnterpriseId())){
+            view.addObject("error", ResponseCode.OAUTH2_EXCEPTION_UNAUTH.getMessage());
+            return view;
+        }
+
+        //初始化数据
+        PageParams<FinanceAccountRechargeValidator> params = new PageParams<FinanceAccountRechargeValidator>();
+        params.setPageSize(10);
+        params.setCurrentPage(1);
+        FinanceAccountRechargeValidator financeAccountRechargeValidator = new FinanceAccountRechargeValidator();
+
+        financeAccountRechargeValidator.setAccountId(accountId);
+        params.setParams(financeAccountRechargeValidator);
+
+        //查询
+        ResponseData<PageList<FinanceAccountRechargeValidator>> data = financeAccountService.rechargePage(params,"1");
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("financeAccountRechargeValidator", financeAccountRechargeValidator);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
+        return view;
+    }
+
+    /**
+     * 财务充值列表分页
+     * @return
+     */
+    @RequestMapping(value = "/account/shareRecharge/page", method = RequestMethod.POST)
+    public ModelAndView accountPage(@ModelAttribute FinanceAccountRechargeValidator financeAccountRechargeValidator, PageParams pageParams,HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("finance/finance_account_share_view_recharge");
+
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        //账户信息
+        ResponseData<FinanceAccountValidator> shareFinanceAccount = financeAccountService.findById(financeAccountRechargeValidator.getAccountId());
+        if (!ResponseCode.SUCCESS.getCode().equals(shareFinanceAccount.getCode())) {
+            view.addObject("error", shareFinanceAccount.getCode() + ":" + shareFinanceAccount.getMessage());
+            return view;
+        }
+
+        //是否属于自己企业
+        if(!user.getOrganization().equals(shareFinanceAccount.getData().getEnterpriseId())){
+            view.addObject("error", ResponseCode.OAUTH2_EXCEPTION_UNAUTH.getMessage());
+            return view;
+        }
+
+        //分页查询
+        pageParams.setParams(financeAccountRechargeValidator);
+
+        ResponseData<PageList<FinanceAccountRechargeValidator>> data = financeAccountService.rechargePage(pageParams,"1");
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
 
         view.addObject("list", data.getData().getList());
         view.addObject("pageParams", data.getData().getPageParams());

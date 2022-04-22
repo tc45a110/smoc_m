@@ -2,8 +2,12 @@ package com.smoc.cloud.statistics.repository;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 首页统计数据查询
@@ -99,5 +103,38 @@ public class IndexStatisticsRepository {
         Long activeAccount = jdbcTemplate.queryForObject(sqlBuffer.toString(), Long.class);
 
         return activeAccount;
+    }
+
+    /**
+     * 账户总余额
+     * @return
+     */
+    public Map<String, Object> getCountUsableAccount() {
+        StringBuffer sql = new StringBuffer("select");
+        sql.append("  sum(t.ACCOUNT_USABLE_SUM) ACCOUNT_USABLE_SUM ");
+        sql.append("  from finance_account t ");
+
+        Map<String, Object> map = jdbcTemplate.queryForMap(sql.toString());
+        return map;
+    }
+
+    /**
+     * 营收总额
+     * @param startDate
+     * @param endDate
+     * @return
+     */
+    public Map<String, Object> getProfitSum(String startDate, String endDate) {
+        StringBuffer sql = new StringBuffer("select");
+        sql.append("  IFNULL(ROUND(sum(t.ACCOUNT_PRICE)-sum(t.CHANNEL_PRICE)),0) PROFIT_SUM ");
+        sql.append("  from message_daily_statistics t ");
+        sql.append("  where t.MESSAGE_DATE>=? and t.MESSAGE_DATE<=?");
+
+        Object[] params = new Object[2];
+        params[0] = startDate;
+        params[1] = endDate;
+
+        Map<String, Object> map = jdbcTemplate.queryForMap(sql.toString(),params);
+        return map;
     }
 }

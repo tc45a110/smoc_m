@@ -14,6 +14,9 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "com.manpuman.cloud.smoc.message-resource")
 public class ResourceProperties {
 
+    //资源文件访问路径
+    private String resourceUrl;
+
     //彩信资源文件根目录
     private String resourceFileRootPath;
 

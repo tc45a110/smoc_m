@@ -301,6 +301,12 @@
             $("#HTTP_SMS :input").each(function(){
                 $(this).removeAttr("required")
             });
+            $("#MATCHING_CHECK :radio").each(function(){
+                $(this).prop("required","true");
+            });
+            $("#CHECK_TEMPL :radio").each(function(){
+                $(this).prop("required","true");
+            });
 
         }
 
@@ -312,8 +318,6 @@
             document.getElementById("sendSecond").style.display = "";
             document.getElementById("MATCHING_CHECK").style.display = "none";
 
-            $('#matchingCheck').removeAttr("required");
-
             $('#maxSubmitSecond').prop("required","true");
             $('#executeCheck').prop("required","true");
             $('#maxSendSecond').prop("required","true");
@@ -321,7 +325,12 @@
             $("#CMPP :input").each(function(){
                 $(this).removeAttr("required")
             });
-
+            $("#MATCHING_CHECK :radio").each(function(){
+                $(this).removeAttr("required")
+            });
+            $("#CHECK_TEMPL :radio").each(function(){
+                $(this).prop("required","true");
+            });
         }
 
         if ("WEB" == value) {
@@ -332,14 +341,18 @@
             document.getElementById("IP").style.display = "none";
             document.getElementById("MATCHING_CHECK").style.display = "none";
 
-            $('#matchingCheck').removeAttr("required");
-
             $('#maxSendSecond').removeAttr("required");
 
             $("#CMPP :input").each(function(){
                 $(this).removeAttr("required")
             });
             $("#HTTP_SMS :input").each(function(){
+                $(this).removeAttr("required")
+            });
+            $("#MATCHING_CHECK :radio").each(function(){
+                $(this).removeAttr("required")
+            });
+            $("#CHECK_TEMPL :radio").each(function(){
                 $(this).removeAttr("required")
             });
 

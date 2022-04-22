@@ -289,16 +289,12 @@ public class WebTemplateController {
             return view;
         }
 
-        if("0".equals(accountTemplateInfoValidator.getCheckStatus())){
-            accountTemplateInfoValidator.setTemplateStatus("1");
-        }else{
-            accountTemplateInfoValidator.setTemplateStatus(accountTemplateInfoValidator.getCheckStatus());
-        }
+        accountTemplateInfoValidator.setTemplateStatus(accountTemplateInfoValidator.getCheckStatus());
 
         ResponseData deleteResponseData = accountTemplateInfoService.cancelTemplate(accountTemplateInfoValidator.getTemplateId(),accountTemplateInfoValidator.getTemplateStatus());
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(deleteResponseData.getCode())) {
-            systemUserLogService.logsAsync("TEMPLATE_INFO", accountTemplateInfoValidator.getTemplateId(), user.getRealName(),"check","审核模板", JSON.toJSONString(flowApproveValidator));
+            systemUserLogService.logsAsync("TEMPLATE_INFO", accountTemplateInfoValidator.getTemplateId(), user.getRealName(),"check","审核模板", JSON.toJSONString(accountTemplateInfoValidator));
         }
 
         //保存操作记录
@@ -334,54 +330,29 @@ public class WebTemplateController {
 
     /**
      * 显示缩略图
-     * @param id
+     * @param resUrl
      * @param request
      * @param response
      */
-    @RequestMapping(value = "/resource/show/{id}", method = RequestMethod.GET)
-    public void show(@PathVariable String id, HttpServletRequest request, HttpServletResponse response) {
+    @RequestMapping(value = "/resource/show/{resUrl}", method = RequestMethod.GET)
+    public void show(@PathVariable String resUrl, HttpServletRequest request, HttpServletResponse response) {
 
         SecurityUser user = (SecurityUser)request.getSession().getAttribute("user");
 
-        //去掉id中的时间戳
-        if(!StringUtils.isEmpty(id)){
-            id = id.split("_")[0];
-        }
-
-        MpmIdValidator validator = new MpmIdValidator();
-        validator.setId(id);
-        if (!MpmValidatorUtil.validate(validator)) {
-            return;
-        }
-
-        ResponseData<AccountResourceInfoValidator> data = accountTemplateInfoService.findResourceById(id);
-        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            return;
-        }
-
-        AccountResourceInfoValidator resourceValidator = data.getData();
-        if(StringUtils.isEmpty(resourceValidator.getResourceAttchment())){
-            return;
-        }
-
-        File downloadFile = new File(resourceProperties.getResourceFileRootPath() + resourceValidator.getResourceAttchment());
+        File downloadFile = new File(resourceProperties.getResourceFileRootPath() + resUrl);
         //文件不存在
         if(!downloadFile.exists()){
             log.info("[资源管理][download][{}]数据::{}", user.getUserName(), "文件不存在:"+downloadFile.getAbsolutePath());
             return;
         }
 
+        String suffixType = resUrl.substring(resUrl.lastIndexOf(".") + 1);
+
         //读取文件内容输入流中
         InputStream in = null;
         try {
             //设置相应类型,告诉浏览器输出的内容为图片
             response.setContentType("image/jpeg");
-            if("gif".equals(resourceValidator.getResourceAttchmentType())){
-                response.setContentType("image/gif");
-            }else if("png".equals(resourceValidator.getResourceAttchmentType())){
-                response.setContentType("image/png");
-            }
-
             //设置响应头信息，告诉浏览器不要缓存此内容
             response.setHeader("Pragma", "No-cache");
             response.setHeader("Cache-Control", "no-cache");
@@ -389,7 +360,7 @@ public class WebTemplateController {
 
             in = new FileInputStream(downloadFile);
             BufferedImage bImage = ImageIO.read(in);
-            ImageIO.write(bImage, resourceValidator.getResourceAttchmentType(), response.getOutputStream());
+            ImageIO.write(bImage, suffixType, response.getOutputStream());
         } catch (Exception e) {
             log.error("[资源管理][download][{}]数据::{}", user.getUserName(), e.getMessage());
             e.printStackTrace();
@@ -407,38 +378,18 @@ public class WebTemplateController {
     /**
      * 下载资源文件
      *
-     * @param id
+     * @param resUrl
      * @param request
      * @return
      */
-    @RequestMapping(value = "/resource/download/{id}", method = RequestMethod.GET)
-    public ResponseEntity<byte[]> downloadFile(@PathVariable String id, HttpServletRequest request) {
+    @RequestMapping(value = "/resource/download/{resUrl}", method = RequestMethod.GET)
+    public ResponseEntity<byte[]> downloadFile(@PathVariable String resUrl, HttpServletRequest request) {
         ResponseEntity<byte[]> entity = null;
 
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
 
-        //去掉id中的时间戳
-        if (!StringUtils.isEmpty(id)) {
-            id = id.split("_")[0];
-        }
 
-        MpmIdValidator validator = new MpmIdValidator();
-        validator.setId(id);
-        if (!MpmValidatorUtil.validate(validator)) {
-            return entity;
-        }
-
-        ResponseData<AccountResourceInfoValidator> data = accountTemplateInfoService.findResourceById(id);
-        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            return entity;
-        }
-
-        AccountResourceInfoValidator resourceValidator = data.getData();
-        if (StringUtils.isEmpty(resourceValidator.getResourceAttchment())) {
-            return entity;
-        }
-
-        File downloadFile = new File(resourceProperties.getResourceFileRootPath() + resourceValidator.getResourceAttchment());
+        File downloadFile = new File(resourceProperties.getResourceFileRootPath() + resUrl);
         //文件不存在
         if (!downloadFile.exists()) {
             log.info("[资源管理][download][{}]数据::{}", user.getUserName(), "文件不存在:" + downloadFile.getAbsolutePath());

@@ -26,7 +26,6 @@ public class AccountInterfaceInfoValidator {
 
     private Integer maxSubmitSecond;
 
-    @NotNull(message = "发送速率不能为空！")
     @Range(min = 0, max = 100000 , message = "发送速率长度要在{min}-{max}之间！")
     private Integer maxSendSecond;
 

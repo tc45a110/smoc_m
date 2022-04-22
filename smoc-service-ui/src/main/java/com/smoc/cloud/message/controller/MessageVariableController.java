@@ -115,7 +115,7 @@ public class MessageVariableController {
         pageParams.setParams(messageWebTaskInfoValidator);
 
         //查询
-        ResponseData<PageList<AccountTemplateInfoValidator>> data = messageService.page(pageParams);
+        ResponseData<PageList<MessageWebTaskInfoValidator>> data = messageService.page(pageParams);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;
@@ -145,7 +145,7 @@ public class MessageVariableController {
         messageWebTaskInfoValidator.setBusinessType(businessType);
         messageWebTaskInfoValidator.setSendType("1");
         messageWebTaskInfoValidator.setMessageType("2");
-        messageWebTaskInfoValidator.setSendStatus("05");
+        messageWebTaskInfoValidator.setSendStatus("01");
         messageWebTaskInfoValidator.setUpType("2");
 
         //查询企业下得所有WEB业务账号

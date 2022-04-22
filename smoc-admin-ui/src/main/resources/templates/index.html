@@ -41,9 +41,9 @@
                 <div class="card-box widget-box-two widget-two-info">
                     <i class="mdi mdi-chart-areaspline widget-two-icon"></i>
                     <div class="wigdet-two-content text-white">
-                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Statistics">营收总额（2021年）</p>
-                        <h2 class="text-white"><i class="fa fa-rmb" STYLE="color:#fff;margin-right:10px"></i></small><span data-plugin="counterup">34578</span></h2>
-                        <p class="m-0">截止日期: 2021-11-11</p>
+                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Statistics">营收总额（[[${year}]]年）</p>
+                        <h2 class="text-white"><i class="fa fa-rmb" STYLE="color:#fff;margin-right:10px"></i></small><span data-plugin="counterup">[[${accountMap.get('PROFIT_SUM')}]]</span></h2>
+                        <p class="m-0">截止日期: [[${endDate}]]</p>
                     </div>
                 </div>
             </div><!-- end col -->
@@ -52,9 +52,9 @@
                 <div class="card-box widget-box-two widget-two-primary">
                     <i class="mdi mdi-layers widget-two-icon"></i>
                     <div class="wigdet-two-content text-white">
-                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="User This Month">充值总额（2021年）</p>
-                        <h2 class="text-white"><i class="fa fa-rmb" STYLE="color:#fff;margin-right:10px"></i></small><span data-plugin="counterup">52410 </span></h2>
-                        <p class="m-0">截止日期: 2021-11-11</p>
+                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="User This Month">充值总额（[[${year}]]年）</p>
+                        <h2 class="text-white"><i class="fa fa-rmb" STYLE="color:#fff;margin-right:10px"></i></small><span data-plugin="counterup">[[${accountMap.get('RECHARGE_SUM')}]] </span></h2>
+                        <p class="m-0">截止日期: [[${endDate}]]</p>
                     </div>
                 </div>
             </div><!-- end col -->
@@ -63,9 +63,9 @@
                 <div class="card-box widget-box-two widget-two-danger">
                     <i class="mdi mdi-access-point-network widget-two-icon"></i>
                     <div class="wigdet-two-content text-white">
-                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Statistics">待收总额（2021年）</p>
-                        <h2 class="text-white"><i class="fa fa-rmb" STYLE="color:#fff;margin-right:10px"></i></small><span data-plugin="counterup">6352</span></h2>
-                        <p class="m-0">截止日期: 2021-11-11</p>
+                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Statistics">待收总额（[[${year}]]年）</p>
+                        <h2 class="text-white"><i class="fa fa-rmb" STYLE="color:#fff;margin-right:10px"></i></small><span data-plugin="counterup"></span></h2>
+                        <p class="m-0">截止日期: [[${endDate}]]</p>
                     </div>
                 </div>
             </div><!-- end col -->
@@ -74,9 +74,9 @@
                 <div class="card-box widget-box-two widget-two-success">
                     <i class="mdi mdi-account-convert widget-two-icon"></i>
                     <div class="wigdet-two-content text-white">
-                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="User Today">账户总余额（2021年）</p>
-                        <h2 class="text-white"><small><i class="fa fa-rmb" STYLE="color:#fff;margin-right:10px"></i></small><span data-plugin="counterup">895 </span></h2>
-                        <p class="m-0">截止日期:2021-11-11</p>
+                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="User Today">账户总余额</p>
+                        <h2 class="text-white"><small><i class="fa fa-rmb" STYLE="color:#fff;margin-right:10px"></i></small><span data-plugin="counterup">[[${accountMap.get('ACCOUNT_USABLE_SUM')}]] </span></h2>
+                        <p class="m-0">&nbsp;</p>
                     </div>
                 </div>
             </div><!-- end col -->
@@ -116,7 +116,7 @@
             <div class="col-lg-3 col-md-6">
                 <div class="card-box widget-box-one">
                     <div class="wigdet-one-content">
-                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow">可用通道数（180天内）</p>
+                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow">活跃通道数（180天内）</p>
                         <h2 class="text-warning"><i class="mdi mdi-weather-night"  style="padding-right: 5px"></i><span data-plugin="counterup">[[${countMap.get('ACTIVE_CHANNEL')}]]</span> </h2>
 
                     </div>

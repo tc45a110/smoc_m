@@ -137,7 +137,7 @@ public class MessageSignController {
         EnterpriseDocumentInfoValidator enterpriseDocumentInfoValidator = new EnterpriseDocumentInfoValidator();
         enterpriseDocumentInfoValidator.setId(UUID.uuid32());
         enterpriseDocumentInfoValidator.setBusinessType(signType);
-        enterpriseDocumentInfoValidator.setDocStatus("2");
+        enterpriseDocumentInfoValidator.setDocStatus("3");
         enterpriseDocumentInfoValidator.setEnterpriseId(user.getOrganization());
 
         //op操作标记，add表示添加，edit表示修改
@@ -218,14 +218,14 @@ public class MessageSignController {
         //查询信息
         ResponseData<EnterpriseDocumentInfoValidator> infoDate = messageSignService.findById(enterpriseDocumentInfoValidator.getId());
         if (ResponseCode.SUCCESS.getCode().equals(infoDate.getCode()) && !StringUtils.isEmpty(infoDate.getData())) {
-            if("1".equals(infoDate.getData().getDocStatus())){
+            if("2".equals(infoDate.getData().getDocStatus())){
                 view.addObject("error", "已审核通过，不能进行修改！");
                 return view;
             }
         }
 
         enterpriseDocumentInfoValidator.setEnterpriseId(user.getOrganization());
-        enterpriseDocumentInfoValidator.setDocStatus("2");
+        enterpriseDocumentInfoValidator.setDocStatus("3");
 
         //初始化其他变量
         if (!StringUtils.isEmpty(op) && "add".equals(op)) {
@@ -287,7 +287,7 @@ public class MessageSignController {
 
         //查询信息
         if (ResponseCode.SUCCESS.getCode().equals(infoDate.getCode()) && !StringUtils.isEmpty(infoDate.getData())) {
-            if("1".equals(infoDate.getData().getDocStatus())){
+            if("2".equals(infoDate.getData().getDocStatus())){
                 view.addObject("error", "已审核通过，不能进行删除！");
                 return view;
             }

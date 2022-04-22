@@ -126,51 +126,50 @@
                         <div class="item_content" >
                             <ul id="selectedFiles" style="float: left;margin-top: 380px;padding-left: 10px">
                                 <li th:each="para:${params}">
-                                    <div class="item filer-item col-sm-4" th:id="${'selectedId-'+para.resId}">
+                                    <div class="item filer-item col-sm-4" th:id="${'selectedId-'+para.index}">
                                         <div style="display: none">
-                                            <input type="hidden" name="resId" th:value="${para.resId}">
+                                            <input type="hidden" name="resId" th:value="${para.index}">
                                             <input type="hidden" name="resTitle" th:value="${para.resTitle}">
                                             <input type="hidden" name="resSize" th:value="${para.resSize}">
                                             <input type="hidden" name="resPostfix" th:value="${para.resPostfix}">
                                             <input type="hidden" name="resType" th:value="${para.resType}">
                                             <input type="hidden" name="resUrl" th:value="${para.resUrl}">
                                             <input type="hidden" name="stayTimes" th:value="${para.stayTimes}">
-                                            <input type="hidden" name="showUrl" th:value="${para.showUrl}">
                                             <input type="hidden" name="frameTxt" th:value="${para.frameTxt}">
                                         </div>
                                         <div>
-                                            <div th:if="${para.resType =='0'}" class="item-span-img">
+                                            <div th:if="${para.resType eq 'TXT'}" class="item-span-img">
                                                 <div class="jFiler-item-thumb-image">
                                                     <span class="jFiler-icon-file f-audio"> <i class="ion-clipboard" style="font-size:30px"></i></span>
                                                 </div>
                                             </div>
-                                            <div th:if="${para.resType=='1'}" class="itemImg" style="width: auto">
-                                                <img th:src="@{/resource/show/{url}(url=${para.showUrl})}" draggable="false" onerror="javascript:this.src='./static/imgs/file-broken.png';this.onerror = null">
+                                            <div th:if="${para.resType eq 'PIC'}" class="itemImg" style="width: auto">
+                                                <img th:src="${@resourceProperties.resourceUrl+para.resUrl}" draggable="false" onerror="javascript:this.src='./static/imgs/file-broken.png';this.onerror = null">
                                             </div>
-                                            <div th:if="${para.resType =='2'}" class="item-span-img">
+                                            <div th:if="${para.resType eq 'AUDIO'}" class="item-span-img">
                                                 <div class="jFiler-item-thumb-image">
                                                     <span class="jFiler-icon-file f-audio"><i class="icon-jfi-file-audio"></i></span>
                                                 </div>
                                             </div>
-                                            <div th:if="${para.resType =='3'}" class="item-span-img">
+                                            <div th:if="${para.resType eq 'VIDEO'}" class="item-span-img">
                                                 <div class="jFiler-item-thumb-image">
                                                     <span class="jFiler-icon-file f-video"><i class="icon-jfi-file-video"></i></span>
                                                 </div>
                                             </div>
                                             <div class="info">
                                                 <div style="float:left;width: 133px">
-                                                    <!--                                                <span th:id="${'span-title-'+para.resId}">[[${para.getResTitle()}]]</span>-->
-                                                    第<b id="frame-index" style="color: red"></b><span th:id="${'span-staytime-'+para.resId}">帧停留：[[${para.stayTimes}]]秒</span>
+
+                                                    第<b id="frame-index" style="color: red"></b><span th:id="${'span-staytime-'+para.index}">帧停留：[[${para.stayTimes}]]秒</span>
                                                     <br>
-                                                    <span th:id="${'span-size-'+para.resId}">文件大小：[[${para.getResSize()}]]KB</span>
+                                                    <span th:id="${'span-size-'+para.index}">文件大小：[[${para.getResSize()}]]KB</span>
                                                     <br>
-                                                    <a th:id="${'span_txt_id-'+para.resId}" data-toggle="tooltip" data-placement="bottom"
+                                                    <a th:id="${'span_txt_id-'+para.index}" data-toggle="tooltip" data-placement="bottom"
                                                        th:data-original-title="'文本内容：'+${para.getFrameTxt()}"  >文本字数：[[${para.getFrameTxt().length()}]]
                                                     </a>
                                                 </div>
                                                 <div style="float:left;">
                                                     <br>
-                                                    <a class="on-default edit-row" th:onclick="editFiles([[${para.resId}]]);"
+                                                    <a class="on-default edit-row" th:onclick="editFiles([[${para.index}]]);"
                                                        data-toggle="modal"
                                                        data-target="#set-resource-properties"
                                                        style="width:25px ;padding-right: 5px;color: #29b6f6;"
@@ -178,7 +177,7 @@
                                                         <i style="font-size: 18px" class="mdi mdi-table-edit"></i>
                                                     </a>
                                                     <br>
-                                                    <a class="icon-jfi-trash" data-toggle="modal" data-target="#confirm-modal" th:onclick="confirmDelete([[${para.resId}]]);"
+                                                    <a class="icon-jfi-trash" data-toggle="modal" data-target="#confirm-modal" th:onclick="confirmDelete([[${para.index}]]);"
                                                        style="width:25px ;padding-right: 5px;color: #ac2925;font-size: 18px"></a>
                                                 </div>
                                             </div>
@@ -231,7 +230,7 @@
                             <ul id="files" class="jFiler-items-list jFiler-items-grid">
                             </ul>
 
-                            <li class="jFiler-item" check="false" data-jfiler-index="1" style="display: none" id="resourceTxt_id" ondblclick="request('txt', '0', '', '', '文本', '', 0, '')">
+                            <li class="jFiler-item" check="false" data-jfiler-index="1" style="display: none" id="resourceTxt_id" ondblclick="request('txt', 'TXT', '', '', '文本', '', 0, '')">
                                 <div class="jFiler-item-container" style="height: 160px">
                                     <div class="jFiler-item-inner">
                                         <div class="jFiler-item-thumb">
@@ -536,6 +535,7 @@
     var imgTypes = '[[${@resourceProperties.resourceAllowFormat[0]}]]';
     var audioTypes = '[[${@resourceProperties.resourceAllowFormat[1]}]]';
     var videoTypes = '[[${@resourceProperties.resourceAllowFormat[2]}]]';
+    var resourcePath = '[[${@resourceProperties.resourceUrl}]]';
 
     function prePage(){
         if(cruPage<=1){
@@ -591,18 +591,17 @@
                     var tmp = rList[i];
 
                     if(imgTypes.indexOf(tmp.resourceAttchmentType)!=-1){
-                        tmp.fileType="1";
+                        tmp.fileType="PIC";
                     }else if(audioTypes.indexOf(tmp.resourceAttchmentType)!=-1){
-                        tmp.fileType="2";
+                        tmp.fileType="AUDIO";
                     }else if(videoTypes.indexOf(tmp.resourceAttchmentType)!=-1){
-                        tmp.fileType="3";
+                        tmp.fileType="VIDEO";
                     }
 
                     var resourceDemo = $("#resourceDemo_id").clone();
                     resourceDemo.attr("id", tmp.id);
 
                     //resourceDemo.find("#select_id").html('<i style="display:block;padding-right: 5px;font-size: 20px" class=" mdi mdi-checkbox-blank-outline"></i>');
-                    var showUrl = contextPath+"/resource/show/"+tmp.id;
                     var urlId = tmp.id;
                     resourceDemo.attr("ondblclick", "request('"+tmp.id+"', '"+tmp.fileType+"', '"+tmp.resourceAttchment+"', '"+urlId+"', '"+tmp.resourceTitle+"', '', '"+parseInt(tmp.resourceAttchmentSize/1024)+"', '"+tmp.resourceAttchmentType+"')");
 
@@ -619,12 +618,12 @@
                     resourceDemo.find("#size_id").html(parseInt(tmp.resourceAttchmentSize/1024)+"KB"+picSize);
 
                     var showType = "";
-                    if(tmp.fileType==="1"){
-                        var showUrl = contextPath+"/resource/show/"+tmp.id;
-                        resourceDemo.find("#showType_id").html('<img src="'+showUrl+'" draggable="false"  >');
-                    }else if(tmp.fileType==="2"){
+                    if(tmp.fileType==="PIC"){
+                        var resUrl = resourcePath+tmp.resourceAttchment;
+                        resourceDemo.find("#showType_id").html('<img src="'+resUrl+'" draggable="false"  >');
+                    }else if(tmp.fileType==="AUDIO"){
                         resourceDemo.find("#showType_id").html('<span class="jFiler-icon-file f-audio"><i class="icon-jfi-file-audio"></i></span>');
-                    }else if(tmp.fileType==="3"){
+                    }else if(tmp.fileType==="VIDEO"){
                         resourceDemo.find("#showType_id").html('<span class="jFiler-icon-file f-video"><i class="icon-jfi-file-video"></i></span>');
                     }
 
@@ -815,7 +814,6 @@
         if (length > 0) {
             $(".item").each(function () {
                 var index = $(this).attr("index");
-                var resId = $(this).find("div input[name='resId']").val();
                 var resTitle = $(this).find("div input[name='resTitle']").val();
                 var frameTxt = $(this).find("div input[name='frameTxt']").val();
                 var resSize = $(this).find("div input[name='resSize']").val();
@@ -881,7 +879,6 @@
         if (length > 0) {
             $(".item").each(function () {
                 var index = $(this).attr("index");
-                var resId = $(this).find("div input[name='resId']").val();
                 var resTitle = $(this).find("div input[name='resTitle']").val();
                 var frameTxt = $(this).find("div input[name='frameTxt']").val();
                 var resSize = $(this).find("div input[name='resSize']").val();
@@ -1011,7 +1008,7 @@
         var frameDatas = eval('(' + json_tmp + ')');
         for(i=0;i<frameDatas.length;i++){
             var tmp = frameDatas[i];
-            if(tmp.resType=='0'&&tmp.frameTxt.length==0){
+            if(tmp.resType=='TXT'&&tmp.frameTxt.length==0){
                 // $("#frame_error_id").html("纯文本帧的文本内容不能为空");
                 $("#alert-modal").find("#alert-message").html("纯文本帧的文本内容不能为空");
                 $("#alert-modal").modal();
@@ -1044,7 +1041,6 @@
         if (length > 0) {
             $(".item").each(function () {
                 var index = $(this).attr("index");
-                var resId = $(this).find("div input[name='resId']").val();
                 var resTitle = $(this).find("div input[name='resTitle']").val();
                 var frameTxt = $(this).find("div input[name='frameTxt']").val();
                 var resSize = $(this).find("div input[name='resSize']").val();
@@ -1116,24 +1112,24 @@
         }
         var frameInfo_tmp = previewArray[previewIndex];
         var resType =  frameInfo_tmp.resType;
-        var showUrl =  frameInfo_tmp.showUrl;
-        showUrl =contextPath+'/resource/show/'+showUrl;
+        var showUrl =  frameInfo_tmp.resUrl;
+        showUrl =resourcePath+showUrl;
         var frameTxt =  frameInfo_tmp.frameTxt;
-        if(resType=='0'){
+        if(resType=='TXT'){
             $("#frame_preview_img_id").hide();
             $("#video_id").hide();
             $("#audio_id").hide();
-        }else if(resType=='1'){
+        }else if(resType=='PIC'){
             $("#frame_preview_img_id").show();
             $("#frame_preview_img_id").attr("src", showUrl);
             $("#video_id").hide();
             $("#audio_id").hide();
-        }else if(resType=='2'){
+        }else if(resType=='AUDIO'){
             $("#frame_preview_img_id").hide();
             $("#audio_id").attr("src", showUrl);
             $("#audio_id").show();
             $("#video_id").hide();
-        }else if(resType=='3'){
+        }else if(resType=='VIDEO'){
             $("#frame_preview_img_id").hide();
             $("#audio_id").hide();
             $("#video_id").attr("src", showUrl);
@@ -1168,24 +1164,24 @@
         }
         var frameInfo_tmp = previewArray[previewIndex];
         var resType =  frameInfo_tmp.resType;
-        var showUrl =  frameInfo_tmp.showUrl;
-        showUrl =contextPath+'/resource/show/'+showUrl;
+        var showUrl =  frameInfo_tmp.resUrl;
+        showUrl =resourcePath+showUrl;
         var frameTxt =  frameInfo_tmp.frameTxt;
-        if(resType=='0'){
+        if(resType=='TXT'){
             $("#frame_preview_img_id").hide();
             $("#video_id").hide();
             $("#audio_id").hide();
-        }else if(resType=='1'){
+        }else if(resType=='PIC'){
             $("#frame_preview_img_id").show();
             $("#frame_preview_img_id").attr("src", showUrl);
             $("#video_id").hide();
             $("#audio_id").hide();
-        }else if(resType=='2'){
+        }else if(resType=='AUDIO'){
             $("#frame_preview_img_id").hide();
             $("#audio_id").attr("src", showUrl);
             $("#audio_id").show();
             $("#video_id").hide();
-        }else if(resType=='3'){
+        }else if(resType=='VIDEO'){
             $("#frame_preview_img_id").hide();
             $("#audio_id").hide();
             $("#video_id").attr("src", showUrl);
@@ -1230,24 +1226,24 @@
 
         var frameInfo_tmp = previewArray[previewIndex];
         var resType =  frameInfo_tmp.resType;
-        var showUrl =  frameInfo_tmp.showUrl;
-        showUrl =contextPath+'/resource/show/'+showUrl;
+        var showUrl =  frameInfo_tmp.resUrl;
+        showUrl =resourcePath+showUrl;
         var frameTxt =  frameInfo_tmp.frameTxt;
-        if(resType=='0'){
+        if(resType=='TXT'){
             $("#frame_preview_img_id").hide();
             $("#video_id").hide();
             $("#audio_id").hide();
-        }else if(resType=='1'){
+        }else if(resType=='PIC'){
             $("#frame_preview_img_id").show();
             $("#frame_preview_img_id").attr("src", showUrl);
             $("#video_id").hide();
             $("#audio_id").hide();
-        }else if(resType=='2'){
+        }else if(resType=='AUDIO'){
             $("#frame_preview_img_id").hide();
             $("#audio_id").attr("src", showUrl);
             $("#audio_id").show();
             $("#video_id").hide();
-        }else if(resType=='3'){
+        }else if(resType=='VIDEO'){
             $("#frame_preview_img_id").hide();
             $("#audio_id").hide();
             $("#video_id").attr("src", showUrl);
@@ -1311,26 +1307,26 @@
         var frameInfo_tmp = previewArray[previewIndex];
 
         var resType =  frameInfo_tmp.resType;
-        var showUrl =  frameInfo_tmp.showUrl;
-        showUrl =contextPath+'/resource/show/'+showUrl;
+        var showUrl =  frameInfo_tmp.resUrl;
+        showUrl =resourcePath+showUrl;
         var frameTxt =  frameInfo_tmp.frameTxt;
         var stayTimes_int =  frameInfo_tmp.stayTimes*1000;
         // console.log("previewByTime:"+resType+"-"+showUrl+"-"+frameTxt+"-"+stayTimes_int);
-        if(resType=='0'){
+        if(resType=='TXT'){
             $("#frame_preview_img_id").hide();
             $("#video_id").hide();
             $("#audio_id").hide();
-        }else if(resType=='1'){
+        }else if(resType=='PIC'){
             $("#frame_preview_img_id").show();
             $("#frame_preview_img_id").attr("src", showUrl);
             $("#video_id").hide();
             $("#audio_id").hide();
-        }else if(resType=='2'){
+        }else if(resType=='AUDIO'){
             $("#frame_preview_img_id").hide();
             $("#audio_id").attr("src", showUrl);
             $("#audio_id").show();
             $("#video_id").hide();
-        }else if(resType=='3'){
+        }else if(resType=='VIDEO'){
             $("#frame_preview_img_id").hide();
             $("#audio_id").hide();
             $("#video_id").attr("src", showUrl);

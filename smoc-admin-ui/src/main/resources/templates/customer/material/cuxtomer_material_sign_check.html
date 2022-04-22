@@ -140,8 +140,8 @@
                                                               新建
                                                           </a>
                                                           <mpm:tag th:if="${4 != approve.approveStatus}" id="templateStatus" identity="checkStatus"
-                                                                   class="1,btn btn-success btn-rounded btn-sm waves-effect waves-light;2,btn btn-warning btn-rounded btn-sm waves-effect waves-light;0,btn btn-danger btn-rounded btn-sm waves-effect waves-light;"
-                                                                   name="businessType" show-type="button" key="code"
+                                                                   class="2,btn btn-success btn-rounded btn-sm waves-effect waves-light;3,btn btn-warning btn-rounded btn-sm waves-effect waves-light;1,btn btn-danger btn-rounded btn-sm waves-effect waves-light;"
+                                                                   show-type="button" key="code"
                                                                    th:value="${approve.approveStatus}" title="审核状态"/>
                                                       </td>
                                                       <td style="vertical-align: middle;line-height: 26px;">
@@ -163,9 +163,11 @@
                                         <div class="row">
                                             <div class="col-md-12 form-group">
                                                 <label>审核状态：<span class="text-danger">*</span>&nbsp;</label>
-                                                <mpm:tag id="checkStatus" identity="checkStatus" required="true"
-                                                         name="checkStatus" show-type="select" key="code"
-                                                         mask-value="2" title="审核状态"/>
+                                                <select data-style="btn-default" name="checkStatus" data-live-search="true" id="checkStatus" class="selectpicker" required="true" tabindex="-98">
+                                                    <option value="" data-icon="mdi mdi-buffer">--请选择审核状态--</option>
+                                                    <option data-icon="mdi mdi-buffer" value="1" th:selected="${enterpriseDocumentInfoValidator.checkStatus eq '1'}">拒绝</option>
+                                                    <option data-icon="mdi mdi-buffer" value="2" th:selected="${enterpriseDocumentInfoValidator.checkStatus eq '2'}">审核通过</option>
+                                                </select>
                                             </div>
                                             <div class="col-md-12 form-group">
                                                 <label>审核意见：<span class="text-danger">*</span>&nbsp

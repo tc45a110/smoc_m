@@ -91,20 +91,20 @@
                                                         <li th:each="para:${params}">
                                                             <div class="item filer-item">
                                                                 <div>
-                                                                    <div th:if="${para.resType =='0'}" class="item-span-img">
+                                                                    <div th:if="${para.resType eq 'TXT'}" class="item-span-img">
                                                                         <div class="jFiler-item-thumb-image">
                                                                             <span class="jFiler-icon-file f-audio"> <i class="ion-clipboard" style="font-size:30px"></i></span>
                                                                         </div>
                                                                     </div>
-                                                                    <div th:if="${para.resType=='1'}" class="itemImg" >
-                                                                        <img th:src="@{/template/web/resource/show/{url}(url=${para.showUrl})}" draggable="false" onerror="javascript:this.src='./static/imgs/file-broken.png';this.onerror = null">
+                                                                    <div th:if="${para.resType eq 'PIC'}" class="itemImg" >
+                                                                        <img th:src="${@resourceProperties.resourceUrl+para.resUrl}" draggable="false" onerror="javascript:this.src='./static/imgs/file-broken.png';this.onerror = null">
                                                                     </div>
-                                                                    <div th:if="${para.resType =='2'}" class="item-span-img">
+                                                                    <div th:if="${para.resType eq 'AUDIO'}" class="item-span-img">
                                                                         <div class="jFiler-item-thumb-image">
                                                                             <span class="jFiler-icon-file f-audio"><i class="icon-jfi-file-audio"></i></span>
                                                                         </div>
                                                                     </div>
-                                                                    <div th:if="${para.resType =='3'}" class="item-span-img">
+                                                                    <div th:if="${para.resType eq 'VIDEO'}" class="item-span-img">
                                                                         <div class="jFiler-item-thumb-image">
                                                                             <span class="jFiler-icon-file f-video"><i class="icon-jfi-file-video"></i></span>
                                                                         </div>
@@ -122,12 +122,17 @@
                                                                         </div>
                                                                         <div style="float:left;">
                                                                             <br><br>
-                                                                            <!--<a class="on-default edit-row" th:href="@{/template/web/resource/download/{id}(id=${para.index})}"
-                                                                               th:if="${para.resType ne '0'}"
+                                                                            <a class="on-default edit-row"
+                                                                               href="javascript:void(0)"
+                                                                               th:onclick="confirmSend([[${@resourceProperties.resourceUrl+para.resUrl}]], [[${para.resType}]])"
+                                                                               data-toggle="modal" data-target="#confirm-send"
+                                                                               th:if="${para.resType ne 'TXT'}"
                                                                                style="width:25px ;padding-right: 5px;color: #29b6f6;"
-                                                                               title="下载">
-                                                                                <i style="font-size: 18px" class="mdi mdi-download"></i>
-                                                                            </a>-->
+                                                                               title="预览">
+                                                                                <i style="font-size: 18px" class="mdi mdi-file-image" th:if="${para.resType eq 'PIC'}"></i>
+                                                                                <i style="font-size: 18px" class="mdi mdi-message-video" th:if="${para.resType eq 'VIDEO'}"></i>
+                                                                                <i style="font-size: 18px" class="mdi mdi-audiobook" th:if="${para.resType eq 'AUDIO'}"></i>
+                                                                            </a>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -169,8 +174,8 @@
                                                               新建
                                                           </a>
                                                           <mpm:tag th:if="${4 != approve.approveStatus}" id="templateStatus" identity="checkStatus"
-                                                                   class="1,btn btn-success btn-rounded btn-sm waves-effect waves-light;2,btn btn-warning btn-rounded btn-sm waves-effect waves-light;0,btn btn-danger btn-rounded btn-sm waves-effect waves-light;"
-                                                                   name="businessType" show-type="button" key="code"
+                                                                   class="2,btn btn-success btn-rounded btn-sm waves-effect waves-light;3,btn btn-warning btn-rounded btn-sm waves-effect waves-light;1,btn btn-danger btn-rounded btn-sm waves-effect waves-light;"
+                                                                   show-type="button" key="code"
                                                                    th:value="${approve.approveStatus}" title="审核状态"/>
                                                       </td>
                                                       <td style="vertical-align: middle;line-height: 26px;">
@@ -232,10 +237,50 @@
 
     </div> <!-- container -->
 </div> <!-- content -->
+<!-- start confirm delete modal  -->
+<div id="confirm-send" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="custom-width-modalLabel"
+     aria-hidden="true" style="display: none;margin: 60px">
+    <div class="modal-dialog" style="text-align: center">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <img id="img_id" src="" style="display: none">
+                <video id="video_id" controls style="display: none"></video>
+                <audio id="audio_id" controls style="display: none"></audio>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- end confirm delete modal  -->
 <th:block th:insert="fragments/common_fragments :: common_js"/>
 <th:block th:insert="fragments/common_fragments :: select_js"/>
 <th:block th:insert="fragments/common_fragments :: common_submit_form"/>
 <script th:remove="${#strings.isEmpty(error)}?none:all">
+
+    function confirmSend(url,type) {
+        if("VIDEO"==type){
+            $("#video_id").attr("src", url);
+            $("#video_id").show();
+            $("#audio_id").hide();
+            $("#img_id").hide();
+        }
+        if("AUDIO"==type){
+            $("#audio_id").attr("src", url);
+            $("#audio_id").show();
+            $("#video_id").hide();
+            $("#img_id").hide();
+        }
+        if("PIC"==type){
+            $("#img_id").attr("src", url);
+            $("#img_id").show();
+            $("#video_id").hide();
+            $("#audio_id").hide();
+        }
+
+    }
 
     $(function () {
         $(".item_content .item").each(function (i) {

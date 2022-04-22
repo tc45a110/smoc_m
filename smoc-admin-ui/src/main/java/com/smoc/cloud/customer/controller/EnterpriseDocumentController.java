@@ -189,7 +189,7 @@ public class EnterpriseDocumentController {
             EnterpriseDocumentInfoValidator enterpriseDocumentInfoValidator = new EnterpriseDocumentInfoValidator();
             enterpriseDocumentInfoValidator.setId(UUID.uuid32());
             enterpriseDocumentInfoValidator.setEnterpriseId(data.getData().getEnterpriseId());
-            enterpriseDocumentInfoValidator.setDocStatus("1");//正常状态
+            enterpriseDocumentInfoValidator.setDocStatus("2");//正常状态
             enterpriseDocumentInfoValidator.setEnterpriseName(data.getData().getEnterpriseName());
             enterpriseDocumentInfoValidator.setEnterpriseType(data.getData().getEnterpriseType());
 

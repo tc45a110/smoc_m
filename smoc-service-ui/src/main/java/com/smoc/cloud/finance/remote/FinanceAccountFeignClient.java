@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.List;
+
 /**
  * 财务账号
  */
@@ -35,4 +37,20 @@ public interface FinanceAccountFeignClient {
     @RequestMapping(value = "finance/recharge/page/{flag}", method = RequestMethod.POST)
     ResponseData<PageList<FinanceAccountRechargeValidator>> rechargePage(@RequestBody PageParams<FinanceAccountRechargeValidator> pageParams, @PathVariable String flag) throws Exception;
 
+    /**
+     * 根据id查询
+     *
+     * @param accountId
+     * @return
+     */
+    @RequestMapping(value = "/finance/account/findById/{accountId}", method = RequestMethod.GET)
+    ResponseData<FinanceAccountValidator> findById(@PathVariable String accountId);
+
+    /**
+     * 查询共享账号的子账号信息
+     * @param accountId
+     * @return
+     */
+    @RequestMapping(value = "/finance/account/findSubsidiaryFinanceAccountByAccountId/{accountId}", method = RequestMethod.GET)
+    ResponseData<List<FinanceAccountValidator>> findSubsidiaryFinanceAccountByAccountId(@PathVariable String accountId);
 }

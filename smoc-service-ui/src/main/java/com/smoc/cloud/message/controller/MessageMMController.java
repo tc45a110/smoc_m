@@ -170,7 +170,7 @@ public class MessageMMController {
 
         //初始化参数
         MessageWebTaskInfoValidator messageWebTaskInfoValidator = new MessageWebTaskInfoValidator();
-        messageWebTaskInfoValidator.setId("TASK"+ sequenceService.findSequence("BUSINESS_ACCOUNT"));
+        messageWebTaskInfoValidator.setId("TASK"+ sequenceService.findSequence("TASK"));
         messageWebTaskInfoValidator.setEnterpriseId(user.getOrganization());
         messageWebTaskInfoValidator.setBusinessType(businessType);
         messageWebTaskInfoValidator.setSendType("1");

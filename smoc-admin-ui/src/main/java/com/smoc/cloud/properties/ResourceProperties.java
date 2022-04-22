@@ -17,4 +17,6 @@ public class ResourceProperties {
     //资源文件根目录
     private String resourceFileRootPath;
 
+    //资源文件访问路径
+    private String resourceUrl;
 }

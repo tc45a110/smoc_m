@@ -53,8 +53,8 @@ com:
       smoc:
         enterprise-file-path: /alidata/smoc/enterprise/
         mobile-file-root-path: /alidata/smoc/message/mobile  #短信手机号文件根目录
-        mobile-zip-root-path: /alidata/smoc/message/mmzip  #彩信包根目录
         message-resource:
+          resource-url: http://39.107.110.237/smoc/message/resource #访问资源路径
           resource-file-root-path: /alidata/smoc/message/resource  #资源文件根目录
 
     #**********************************************************

@@ -116,7 +116,8 @@ public class AccountInterfaceController {
 
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
 
-        if("HTTPS".equals(accountInterfaceInfoValidator.getProtocol())){
+        if("WEB".equals(accountInterfaceInfoValidator.getProtocol())){
+            accountInterfaceInfoValidator.setExecuteCheck("0");
             accountInterfaceInfoValidator.setMaxSendSecond(0);
         }
 

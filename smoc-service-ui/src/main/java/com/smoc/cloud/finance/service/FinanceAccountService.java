@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Slf4j
 @Service
@@ -47,6 +49,35 @@ public class FinanceAccountService {
 
         try {
             return this.financeAccountFeignClient.rechargePage(pageParams, flag);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 根据id查询
+     *
+     * @param accountId
+     * @return
+     */
+    public ResponseData<FinanceAccountValidator> findById(String accountId) {
+        try {
+            return this.financeAccountFeignClient.findById(accountId);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 查询共享账号的子账号信息
+     * @param accountId
+     * @return
+     */
+    public ResponseData<List<FinanceAccountValidator>> findSubsidiaryFinanceAccountByAccountId(String accountId) {
+        try {
+            return this.financeAccountFeignClient.findSubsidiaryFinanceAccountByAccountId(accountId);
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseDataUtil.buildError(e.getMessage());

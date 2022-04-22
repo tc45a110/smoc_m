@@ -408,7 +408,7 @@ public class SendMessage {
      * @param org
      * @return
      */
-    public static MessageWebTaskInfoValidator mmFileSMSInput(MessageWebTaskInfoValidator messageValidator, MessageProperties smocProperties, ResourceProperties resourceProperties, String org) {
+    /*public static MessageWebTaskInfoValidator mmFileSMSInput(MessageWebTaskInfoValidator messageValidator, MessageProperties smocProperties, ResourceProperties resourceProperties, String org) {
         BufferedReader reader = null;
 
         String title = messageValidator.getMessageContent();
@@ -524,7 +524,7 @@ public class SendMessage {
         }
 
         return messageValidator;
-    }
+    }*/
 
     /**
      * 多媒体-上传的手机号
@@ -533,7 +533,7 @@ public class SendMessage {
      * @param org
      * @return
      */
-    public static MessageWebTaskInfoValidator mmHandleFileSMS(MessageWebTaskInfoValidator messageValidator, MessageProperties smocProperties, ResourceProperties resourceProperties, String org) {
+    /*public static MessageWebTaskInfoValidator mmHandleFileSMS(MessageWebTaskInfoValidator messageValidator, MessageProperties smocProperties, ResourceProperties resourceProperties, String org) {
         BufferedReader reader = null;
 
         String title = messageValidator.getMessageContent();
@@ -643,7 +643,7 @@ public class SendMessage {
         }
 
         return messageValidator;
-    }
+    }*/
 
     /**
      * 多媒体-变量短信
@@ -652,7 +652,7 @@ public class SendMessage {
      * @param org
      * @return
      */
-    public static MessageWebTaskInfoValidator mmHandleFileVariableSMS(MessageWebTaskInfoValidator messageValidator, MessageProperties smocProperties, ResourceProperties resourceProperties, String org) {
+   /* public static MessageWebTaskInfoValidator mmHandleFileVariableSMS(MessageWebTaskInfoValidator messageValidator, MessageProperties smocProperties, ResourceProperties resourceProperties, String org) {
         BufferedReader reader = null;
 
         String title = messageValidator.getMessageContent();
@@ -785,11 +785,11 @@ public class SendMessage {
 
         return messageValidator;
     }
-
+*/
     /**
      * 生成压缩包并返回压缩包路径
      */
-    private static String makeZip(String zipTargetFolder, String multimediaAttachmentData, String title, MessageProperties smocProperties,ResourceProperties resourceProperties) throws Exception {
+    /*private static String makeZip(String zipTargetFolder, String multimediaAttachmentData, String title, MessageProperties smocProperties,ResourceProperties resourceProperties) throws Exception {
         if(StringUtils.isEmpty(zipTargetFolder)||StringUtils.isEmpty(multimediaAttachmentData)){
             return "";
         }
@@ -861,9 +861,9 @@ public class SendMessage {
         return smocProperties.getMobileZipRootPath() + zipTargetFolder + ".zip";
     }
 
-    /**
+    *//**
      * 构建smil对象并转成XML字符串
-     */
+     *//*
     private static String formatSmil(List<SmilBodyPar> pars) throws Exception {
         SmilHeadLayoutRootLayoutHeadRegion r1 = new SmilHeadLayoutRootLayoutHeadRegion();
         r1.setId("Image");
@@ -894,7 +894,7 @@ public class SendMessage {
         Smil smilInfo = new Smil(smilHead, body);
         smilInfo.setXmlns("http://www.w3.org/2000/SMIL20/CR/Language");
         return XMLUtils.convertToXml(smilInfo);
-    }
+    }*/
 
 
 

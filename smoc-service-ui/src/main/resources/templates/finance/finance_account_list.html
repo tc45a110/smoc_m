@@ -87,6 +87,7 @@
                                     <th>授信额度</th>
                                     <th>业务类型</th>
                                     <th>是否共享</th>
+                                    <th>共享账号</th>
                                 </tr>
                                 <thead>
                                 <tbody>
@@ -119,7 +120,14 @@
                                                  name="isOrNo" show-type="button"  key="code"
                                                  th:value="${info.isShare}" title="共享状态"/>
                                     </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <a th:if="${not #strings.isEmpty(info.shareId)}"
+                                           sec:authorize-url="/web/finance/account/share/view/*/*"
+                                           th:href="@{/web/finance/account/share/view/{id}/{businessType}(id=${info.shareId},businessType=${businessType})}"
+                                           class="btn btn-success waves-effect waves-light btn-xs"
+                                           style="padding-left: 5px;">[[${info.shareId}]]</a>
 
+                                    </td>
 
                                 </tr>
                                 </tbody>

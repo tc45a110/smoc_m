@@ -441,6 +441,52 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
     }
 
     /**
+     * 查询共享账号的子账号信息
+     * @param accountId
+     * @return
+     */
+    public List<FinanceAccountValidator> findSubsidiaryFinanceAccountByAccountId(String accountId) {
+
+        String[] accountIds = accountId.split(",");
+
+        String account = "";
+        for(int i =0;i<accountIds.length;i++){
+            if(StringUtils.isEmpty(account)){
+                account+="'"+accountIds[i]+"'";
+            }else{
+                account+=",'"+accountIds[i]+"'";
+            }
+        }
+
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append("  t.ACCOUNT_ID,");
+        sqlBuffer.append("  ''ENTERPRISE_NAME,");
+        sqlBuffer.append("  ''ENTERPRISE_ID,");
+        sqlBuffer.append("  ''ACCOUNT_NAME,");
+        sqlBuffer.append("  ''ACCOUNT,");
+        sqlBuffer.append("  t.ACCOUNT_TYPE,");
+        sqlBuffer.append("  t.ACCOUNT_TOTAL_SUM,");
+        sqlBuffer.append("  t.ACCOUNT_USABLE_SUM,");
+        sqlBuffer.append("  t.ACCOUNT_FROZEN_SUM,");
+        sqlBuffer.append("  t.ACCOUNT_CONSUME_SUM,");
+        sqlBuffer.append("  t.ACCOUNT_RECHARGE_SUM,");
+        sqlBuffer.append("  t.ACCOUNT_CREDIT_SUM,");
+        sqlBuffer.append("  t.ACCOUNT_STATUS,");
+        sqlBuffer.append("  t.SHARE_ID,");
+        sqlBuffer.append("  t.IS_SHARE,");
+        sqlBuffer.append("  t.CREATED_BY,");
+        sqlBuffer.append("  DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME ");
+        sqlBuffer.append("  from finance_account t ");
+        sqlBuffer.append("  where t.ACCOUNT_TYPE !='IDENTIFICATION_ACCOUNT' ");
+        sqlBuffer.append("  and t.ACCOUNT_ID in(" + account + ") ");
+        sqlBuffer.append("  order by t.CREATED_TIME desc");
+
+        List<FinanceAccountValidator> list = this.queryForObjectList(sqlBuffer.toString(), null, new FinanceAccountRowMapper());
+        return list;
+    }
+
+    /**
      * 根据enterpriseId 汇总企业金额统计
      *
      * @param enterpriseId

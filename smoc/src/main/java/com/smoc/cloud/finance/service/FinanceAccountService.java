@@ -225,4 +225,19 @@ public class FinanceAccountService {
             return ResponseDataUtil.buildSuccess();
         }
     }
+
+    /**
+     * 查询共享账号的子账号信息
+     * @param accountId
+     * @return
+     */
+    public ResponseData<List<FinanceAccountValidator>> findSubsidiaryFinanceAccountByAccountId(String accountId) {
+        Optional<FinanceAccount> optional = financeAccountRepository.findById(accountId);
+        if(optional.isPresent()){
+            List<FinanceAccountValidator> data = financeAccountRepository.findSubsidiaryFinanceAccountByAccountId(optional.get().getShareId());
+            return ResponseDataUtil.buildSuccess(data);
+        }
+
+        return ResponseDataUtil.buildSuccess();
+    }
 }

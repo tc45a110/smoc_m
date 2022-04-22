@@ -56,14 +56,12 @@ com:
         message:
           enterprise-file-path: F:/data/enterprise/ #签名资质文件根目录
           mobile-file-root-path: F:/data/message/mobile  #短信手机号文件根目录
-          mobile-zip-root-path: F:/data/message/mmzip  #彩信包根目录
         message-resource:
+          resource-url: http://localhost:8090/smoc/message/resource #访问资源路径
           resource-file-root-path: F:/data/message/resource  #资源文件根目录
           resource-allow-format[0]: jpg,jpeg,gif,png  #资源图片格式
           resource-allow-format[1]: midi,wav,amr,mp3,aac  #资源音频格式
           resource-allow-format[2]: 3gp,mp4  #资源视频频格式
-          resource-allow-format[3]:
-          resource-allow-format[4]:
           resource-file-size-limit: 2048  #资源文件大小限制，以K为单位
           stay-times: 2 #帧默认停留时间（秒）
 

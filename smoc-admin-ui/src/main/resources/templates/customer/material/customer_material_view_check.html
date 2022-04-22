@@ -48,10 +48,9 @@
                                            class="btn btn-teal btn-rounded btn-sm waves-effect waves-light">
                                             新建
                                         </a>
-                                        <mpm:tag th:if="${4 != approve.approveStatus}" id="templateStatus"
-                                                 identity="checkStatus"
-                                                 class="1,btn btn-success btn-rounded btn-sm waves-effect waves-light;2,btn btn-warning btn-rounded btn-sm waves-effect waves-light;0,btn btn-danger btn-rounded btn-sm waves-effect waves-light;"
-                                                 name="businessType" show-type="button" key="code"
+                                        <mpm:tag th:if="${4 != approve.approveStatus}" id="templateStatus" identity="checkStatus"
+                                                 class="2,btn btn-success btn-rounded btn-sm waves-effect waves-light;3,btn btn-warning btn-rounded btn-sm waves-effect waves-light;1,btn btn-danger btn-rounded btn-sm waves-effect waves-light;"
+                                                 show-type="button" key="code"
                                                  th:value="${approve.approveStatus}" title="审核状态"/>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;">

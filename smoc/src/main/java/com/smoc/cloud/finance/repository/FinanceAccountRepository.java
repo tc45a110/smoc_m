@@ -132,4 +132,11 @@ public interface FinanceAccountRepository extends CrudRepository<FinanceAccount,
      * 包括了修改共享账户流水记录，修改原账户状态，并修改共享账户
      */
     void editShareFinanceAccount(FinanceAccountValidator qo, FinanceAccountValidator financeAccountValidator);
+
+    /**
+     * 查询共享账号的子账号信息
+     * @param accountId
+     * @return
+     */
+    List<FinanceAccountValidator> findSubsidiaryFinanceAccountByAccountId(String accountId);
 }

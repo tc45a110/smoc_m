@@ -154,7 +154,7 @@ public class MessageTemplateController {
         EnterpriseDocumentInfoValidator enterpriseDocumentInfoValidator = new EnterpriseDocumentInfoValidator();
         enterpriseDocumentInfoValidator.setEnterpriseId(user.getOrganization());
         enterpriseDocumentInfoValidator.setBusinessType(type);
-        enterpriseDocumentInfoValidator.setDocStatus("1");
+        enterpriseDocumentInfoValidator.setDocStatus("2");
         ResponseData<List<EnterpriseDocumentInfoValidator>> signList = messageSignService.findMessageSign(enterpriseDocumentInfoValidator);
         if (!ResponseCode.SUCCESS.getCode().equals(signList.getCode())) {
             view.addObject("error", signList.getCode() + ":" + signList.getMessage());
@@ -208,7 +208,7 @@ public class MessageTemplateController {
         EnterpriseDocumentInfoValidator enterpriseDocumentInfoValidator = new EnterpriseDocumentInfoValidator();
         enterpriseDocumentInfoValidator.setEnterpriseId(user.getOrganization());
         enterpriseDocumentInfoValidator.setBusinessType(data.getData().getTemplateType());
-        enterpriseDocumentInfoValidator.setDocStatus("1");
+        enterpriseDocumentInfoValidator.setDocStatus("2");
         ResponseData<List<EnterpriseDocumentInfoValidator>> signList = messageSignService.findMessageSign(enterpriseDocumentInfoValidator);
         if (!ResponseCode.SUCCESS.getCode().equals(signList.getCode())) {
             view.addObject("error", signList.getCode() + ":" + signList.getMessage());
@@ -276,7 +276,7 @@ public class MessageTemplateController {
             EnterpriseDocumentInfoValidator enterpriseDocumentInfoValidator = new EnterpriseDocumentInfoValidator();
             enterpriseDocumentInfoValidator.setEnterpriseId(user.getOrganization());
             enterpriseDocumentInfoValidator.setBusinessType(accountTemplateInfoValidator.getTemplateType());
-            enterpriseDocumentInfoValidator.setDocStatus("1");
+            enterpriseDocumentInfoValidator.setDocStatus("2");
             ResponseData<List<EnterpriseDocumentInfoValidator>> signList = messageSignService.findMessageSign(enterpriseDocumentInfoValidator);
             view.addObject("accountTemplateInfoValidator", accountTemplateInfoValidator);
             view.addObject("signList", signList.getData());
@@ -287,13 +287,13 @@ public class MessageTemplateController {
         //查询信息
         ResponseData<AccountTemplateInfoValidator> infoDate = messageTemplateService.findById(accountTemplateInfoValidator.getTemplateId());
         if (ResponseCode.SUCCESS.getCode().equals(infoDate.getCode()) && !StringUtils.isEmpty(infoDate.getData())) {
-            if("1".equals(infoDate.getData().getTemplateStatus())){
+            if("2".equals(infoDate.getData().getTemplateStatus())){
                 view.addObject("error", "已审核通过，不能进行修改！");
                 return view;
             }
         }
 
-        accountTemplateInfoValidator.setTemplateStatus("2");
+        accountTemplateInfoValidator.setTemplateStatus("3");
 
         //初始化其他变量
         if (!StringUtils.isEmpty(op) && "add".equals(op)) {
@@ -356,7 +356,7 @@ public class MessageTemplateController {
 
         //查询信息
         if (ResponseCode.SUCCESS.getCode().equals(infoDate.getCode()) && !StringUtils.isEmpty(infoDate.getData())) {
-            if("1".equals(infoDate.getData().getTemplateStatus())){
+            if("2".equals(infoDate.getData().getTemplateStatus())){
                 view.addObject("error", "已审核通过，不能进行删除！");
                 return view;
             }
@@ -472,8 +472,9 @@ public class MessageTemplateController {
         messageTemplateValidator.setEnterpriseId(user.getOrganization());
         messageTemplateValidator.setTemplateType(bussinessType);
         messageTemplateValidator.setTemplateFlag(templateFlag);
-        messageTemplateValidator.setTemplateStatus("1");
+        messageTemplateValidator.setTemplateStatus("2");
         messageTemplateValidator.setTemplateContent(keyword);
+        messageTemplateValidator.setTemplateAgreementType("SERVICE_WEB");
         pageParams.setParams(messageTemplateValidator);
         ResponseData<PageList<AccountTemplateInfoValidator>> data = messageTemplateService.page(pageParams);
         list = data.getData().getList();

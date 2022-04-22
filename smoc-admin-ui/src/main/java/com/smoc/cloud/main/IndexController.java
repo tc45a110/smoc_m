@@ -44,12 +44,15 @@ public class IndexController {
         ResponseData<Map<String, Object>> countMap = statisticsService.statisticsCountData(startDate,endDate);
 
         //短信发送总量、营收总额、充值总额、账户总余额
-        String start = DateTimeUtils.getNowYear()+"-01"+"-01";
+        int year = DateTimeUtils.getNowYear();
+        String start = year+"-01"+"-01";
         String end = DateTimeUtils.getDateFormat(new Date());
         ResponseData<Map<String, Object>> accountMap = statisticsService.statisticsAccountData(start,end);
 
         view.addObject("countMap", countMap.getData());
         view.addObject("accountMap", accountMap.getData());
+        view.addObject("endDate", endDate);
+        view.addObject("year", year);
 
         return view;
 

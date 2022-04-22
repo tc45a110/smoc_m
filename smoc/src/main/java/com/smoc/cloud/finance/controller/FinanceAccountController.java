@@ -125,5 +125,14 @@ public class FinanceAccountController {
         return financeAccountService.save(financeAccountValidator,op);
     }
 
+    /**
+     * 查询共享账号的子账号信息
+     * @param accountId
+     * @return
+     */
+    @RequestMapping(value = "/findSubsidiaryFinanceAccountByAccountId/{accountId}", method = RequestMethod.GET)
+    public ResponseData<List<FinanceAccountValidator>> findSubsidiaryFinanceAccountByAccountId(@PathVariable String accountId) {
 
+        return financeAccountService.findSubsidiaryFinanceAccountByAccountId(accountId);
+    }
 }

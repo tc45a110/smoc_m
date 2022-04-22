@@ -434,7 +434,7 @@
 
     function setTemplate(tm){
         var messageType = $("#messageType").val();
-        if("1" == messageType){
+
             $("#templateId").val(tm.templateId);
             $("#signName").val(tm.signName);
             $("#messageContent").val('【'+tm.signName+'】'+tm.templateContent);
@@ -448,6 +448,7 @@
                 var amount_init_f = parseFloat(charAmount)/67;
                 splitNumber = Math.ceil(amount_init_f);
             }
+        if("1" == messageType){
             $("#charAmount-id").html("(短信内容共"+charAmount+"字，将按"+splitNumber+"条短信发送)");
             $("#splitNumber").val(splitNumber);
         }

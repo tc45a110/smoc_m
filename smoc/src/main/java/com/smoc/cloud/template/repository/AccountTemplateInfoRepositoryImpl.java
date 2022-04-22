@@ -134,7 +134,12 @@ public class AccountTemplateInfoRepositoryImpl extends BasePageRepository {
             paramsList.add(qo.getEndDate().trim());
         }
 
-        sqlBuffer.append(" order by t.TEMPLATE_STATUS desc,t.CREATED_TIME desc");
+        if("SERVICE_WEB".equals(qo.getTemplateAgreementType())){
+            sqlBuffer.append(" order by t.CREATED_TIME desc,t.TEMPLATE_STATUS desc");
+        }else{
+            sqlBuffer.append(" order by t.TEMPLATE_STATUS desc,t.CREATED_TIME desc");
+        }
+
 
         //根据参数个数，组织参数值
         Object[] params = new Object[paramsList.size()];

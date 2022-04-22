@@ -37,7 +37,7 @@ public class ZipUtils {
      * @param title           彩信模版标题，为空则设为当前压缩包名
      * @throws Exception 压缩失败会抛出运行时异常
      */
-    public String jsonToZip(String mulContentJson, String title) throws Exception {
+    /*public String jsonToZip(String mulContentJson, String title) throws Exception {
         //当前日期，uuid,用于生成文件夹路径
         String nowDay = DateTimeUtils.currentDate(new Date());
         String uuid = com.smoc.cloud.common.utils.UUID.uuid32();
@@ -112,7 +112,7 @@ public class ZipUtils {
         }
 
         return zipTargetPath;
-    }
+    }*/
 
     /**
      * 构建smil对象并转成XML字符串
@@ -156,7 +156,7 @@ public class ZipUtils {
      * @param zipFilePath           彩信zip包文件路径
      * @throws Exception 操作失败会抛出运行时异常
      */
-    public String zipToJson(String zipFilePath) throws Exception {
+   /* public String zipToJson(String zipFilePath) throws Exception {
         String mulContentJson = null;
 
         if(!StringUtils.isEmpty(zipFilePath)){
@@ -229,7 +229,7 @@ public class ZipUtils {
 
         return mulContentJson;
     }
-
+*/
 
     /**
      * 压缩成ZIP 单文件压缩
