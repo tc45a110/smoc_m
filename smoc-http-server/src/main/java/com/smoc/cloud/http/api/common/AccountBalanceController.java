@@ -37,6 +37,7 @@ public class AccountBalanceController {
      * @param params
      * @return
      */
+
     @RequestMapping(value = "/getAccountBalance", method = RequestMethod.POST)
     public ResponseData<Map<String, String>> getAccountBalance(@RequestBody AccountBalanceRequestParams params) {
 

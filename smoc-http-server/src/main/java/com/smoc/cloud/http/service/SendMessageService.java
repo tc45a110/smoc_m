@@ -29,6 +29,9 @@ import java.util.*;
 public class SendMessageService {
 
     @Autowired
+    private AccountRateLimiter accountRateLimiter;
+
+    @Autowired
     private SequenceService sequenceService;
 
     @Autowired
@@ -126,6 +129,12 @@ public class SendMessageService {
             messageFormat.setCreateTime(new Date());
 
             messages.add(messageFormat);
+        }
+
+        //流控、限流
+        Boolean limiter = accountRateLimiter.limiter(params.getAccount(), messageCount);
+        if (!limiter) {
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_MOBILE_NUM_ERROR.getCode(), ResponseCode.PARAM_MOBILE_NUM_ERROR.getMessage());
         }
 
         //异步 批量保存短消息
@@ -230,6 +239,12 @@ public class SendMessageService {
             messages.add(messageFormat);
         }
 
+        //流控、限流
+        Boolean limiter = accountRateLimiter.limiter(params.getAccount(), messageCount);
+        if (!limiter) {
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_MOBILE_NUM_ERROR.getCode(), ResponseCode.PARAM_MOBILE_NUM_ERROR.getMessage());
+        }
+
         //异步 批量保存短消息
         this.saveMessageBatch(messages, messageCount, phoneCount, "", params.getTemplateId(), params.getAccount(), params.getExtNumber());
         Map<String, String> result = new HashMap<>();
@@ -326,6 +341,12 @@ public class SendMessageService {
             messageFormat.setCreateTime(new Date());
 
             messages.add(messageFormat);
+        }
+
+        //流控、限流
+        Boolean limiter = accountRateLimiter.limiter(params.getAccount(), messageCount);
+        if (!limiter) {
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_MOBILE_NUM_ERROR.getCode(), ResponseCode.PARAM_MOBILE_NUM_ERROR.getMessage());
         }
 
         //异步 批量保存短消息
