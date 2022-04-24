@@ -9,6 +9,7 @@ import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.somc.cloud.gateway.redis.service.DataService;
 import com.somc.cloud.gateway.util.IpUtil;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -71,8 +72,12 @@ public class CustomGlobalGatewayFilter implements GlobalFilter, Ordered {
             return errorHandle(exchange, ResponseCode.NONCE_ERROR.getCode(), ResponseCode.NONCE_ERROR.getMessage());
         }
 
-        //取密钥数据
+        //取账户参数
         RedisModel redisModel = dataService.getHttpServerKey(headers.getFirst("account"));
+        if (null == redisModel) {
+            return errorHandle(exchange, ResponseCode.USER_NOT_EXIST.getCode(), ResponseCode.USER_NOT_EXIST.getMessage());
+        }
+
         /**
          * IP鉴权
          */
@@ -87,7 +92,7 @@ public class CustomGlobalGatewayFilter implements GlobalFilter, Ordered {
         }
 
         //提交速率限流
-        boolean limiter = dataService.limiter(headers.getFirst("account"));
+        Boolean limiter = dataService.limiter(headers.getFirst("account"));
         if (!limiter) {
             return errorHandle(exchange, ResponseCode.PARAM_SUBMIT_LIMITER_ERROR.getCode(), ResponseCode.PARAM_SUBMIT_LIMITER_ERROR.getMessage());
         }

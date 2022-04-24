@@ -72,7 +72,7 @@ public class HttpServerVerifySignatureGatewayFilter {
                 requestHeaderData.setSignatureNonce(signatureNonce);
                 requestHeaderData.setSignature(signature);
                 requestHeaderData.setAccount(account);
-                log.info("[接口请求][账户:{}]header数据:{}", account, new Gson().toJson(requestHeaderData));
+                //log.info("[接口请求][账户:{}]header数据:{}", account, new Gson().toJson(requestHeaderData));
 
                 //获取body内容
                 String requestBody = "";
