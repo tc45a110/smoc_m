@@ -91,11 +91,11 @@
                                         <label>模版类型<span class="text-danger">*</span></label>
                                         <br/>
                                         <div class="radio radio-info radio-inline">
-                                            <input type="radio" id="inlineRadio1" name="templateType" value="1" th:field="*{templateFlag}" th:checked="${accountTemplateInfoValidator.templateFlag== '1'}" onclick="showTip('1')">
+                                            <input type="radio" id="inlineRadio1" name="templateFlag" value="1" th:field="*{templateFlag}" th:checked="${accountTemplateInfoValidator.templateFlag== '1'}" onclick="showTip('1')">
                                             <label for="inlineRadio1"> 短信模版 </label>
                                         </div>
                                         <div class="radio radio-info radio-inline">
-                                            <input type="radio" id="inlineRadio2" name="templateType" value="2" th:field="*{templateFlag}" th:checked="${accountTemplateInfoValidator.templateFlag == '2'}" onclick="showTip('2')">
+                                            <input type="radio" id="inlineRadio2" name="templateFlag" value="2" th:field="*{templateFlag}" th:checked="${accountTemplateInfoValidator.templateFlag == '2'}" onclick="showTip('2')">
                                             <label for="inlineRadio2"> 变量短信模版 </label>
                                         </div>
                                     </div>
@@ -150,7 +150,8 @@
                             <input type="hidden" th:field="*{createdTime}">
                             <input type="hidden" th:field="*{createdBy}">
                             <input type="hidden" th:field="*{templateAgreementType}">
-                            <button sec:authorize-url="/template/save/*" type="submit"
+                            <button sec:authorize-url="/template/save/*" type="button"
+                                    onclick="sumbitFrom()"
                                     class="btn btn-teal waves-effect waves-light">提交
                             </button>
                             <a th:sec:authorize-url="|/template/list/${type}|"
@@ -171,6 +172,22 @@
 
     </div> <!-- container -->
 </div> <!-- content -->
+<div id="tip-div" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="template-width-modalLabel" aria-hidden="true" style="display: none;margin: 60px">
+    <div class="modal-dialog" style="width:33%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p id="tip-content"></p>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-primary waves-effect waves-light" data-dismiss="modal">确认</a>
+            </div>
+        </div>
+    </div>
+</div>
 <th:block th:insert="fragments/common_fragments :: common_js"/>
 <th:block th:insert="fragments/common_fragments :: select_js"/>
 <script th:src="@{/static/plugins/moment/moment.js}"></script>
@@ -178,6 +195,22 @@
 <th:block th:insert="fragments/common_fragments :: common_submit_form"/>
 
 <script th:remove="${#strings.isEmpty(error)}?none:all">
+
+    function sumbitFrom() {
+
+        var templateFlag = $('input[name="templateFlag"]:checked').val();
+        if("2"==templateFlag){
+            var templateContent = $("#templateContent").val();
+            var reg = RegExp("\\${");
+            if(!templateContent.match(reg)) {
+                $("#tip-div").find("#tip-content").html("变量模板必须插入变量");
+                $("#tip-div").modal();
+                return;
+            }
+        }
+
+        $("#submit_form").submit();
+    }
 
     function showTip(tipType){
         templateType_init = tipType;
@@ -192,6 +225,37 @@
             $("#paramInsert").show();
         }
     }
+
+    function insertParam(paramIndex){
+        var charvalue = '${'+paramIndex+'}';
+        $('#templateContent').insertAtCursor(charvalue);
+    }
+
+    $('#templateContent').bind('input propertychange', function () {
+        var fizeNum = $(this).val().length;
+        $("#charAmount_id").html(fizeNum);
+        if(fizeNum==0){
+            $("#amount_id").html(0);
+        }else if(fizeNum<=70){
+            $("#amount_id").html(1);
+        }else{
+            var amount_f = parseFloat(fizeNum)/67;
+            var amount_i = Math.ceil(amount_f);
+            $("#amount_id").html(amount_i);
+        }
+    });
+    var fizeNum_init = $("#templateContent").val().length;
+    $("#charAmount_id").html(fizeNum_init);
+    if(fizeNum_init==0){
+        $("#amount_id").html(0);
+    }else if(fizeNum_init<=70){
+        $("#amount_id").html(1);
+    }else{
+        var amount_init_f = parseFloat(fizeNum_init)/67;
+        var amount_init_i = Math.ceil(amount_init_f);
+        $("#amount_id").html(amount_init_i);
+    }
+
 
     var templateType_init = '[[${accountTemplateInfoValidator.templateFlag}]]';
     showTip(templateType_init);
@@ -285,35 +349,6 @@
         }
     })(jQuery);
 
-    function insertParam(paramIndex){
-        var charvalue = '${'+paramIndex+'}';
-        $('#templateContent').insertAtCursor(charvalue);
-    }
-
-    $('#templateContent').bind('input propertychange', function () {
-        var fizeNum = $(this).val().length;
-        $("#charAmount_id").html(fizeNum);
-        if(fizeNum==0){
-            $("#amount_id").html(0);
-        }else if(fizeNum<=70){
-            $("#amount_id").html(1);
-        }else{
-            var amount_f = parseFloat(fizeNum)/67;
-            var amount_i = Math.ceil(amount_f);
-            $("#amount_id").html(amount_i);
-        }
-    });
-    var fizeNum_init = $("#templateContent").val().length;
-    $("#charAmount_id").html(fizeNum_init);
-    if(fizeNum_init==0){
-        $("#amount_id").html(0);
-    }else if(fizeNum_init<=70){
-        $("#amount_id").html(1);
-    }else{
-        var amount_init_f = parseFloat(fizeNum_init)/67;
-        var amount_init_i = Math.ceil(amount_init_f);
-        $("#amount_id").html(amount_init_i);
-    }
 
     var resizefunc = [];
     //隐藏进度项
