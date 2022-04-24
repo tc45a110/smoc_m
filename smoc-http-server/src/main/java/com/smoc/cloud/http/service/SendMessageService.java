@@ -137,7 +137,7 @@ public class SendMessageService {
         }
 
         //异步 批量保存短消息
-        //this.saveMessageBatch(messages, messageCount, phoneCount, templateContent, params.getTemplateId(), params.getAccount(), params.getExtNumber());
+        this.saveMessageBatch(messages, messageCount, phoneCount, templateContent, params.getTemplateId(), params.getAccount(), params.getExtNumber());
 
         //log.info("[普通短信]:{}", new Gson().toJson(messages));
         Map<String, String> result = new HashMap<>();

@@ -39,7 +39,7 @@ public class SendMultimediaMessageController {
     @RequestMapping(value = "/sendMultimediaMessageByTemplate", method = RequestMethod.POST)
     public ResponseData<Map<String, String>> sendMultimediaMessageByTemplate(@RequestBody SendMessageByTemplateRequestParams params) {
 
-        log.info("[发送多媒体模板短信]：{}", new Gson().toJson(params));
+        //log.info("[发送多媒体模板短信]：{}", new Gson().toJson(params));
 
         if (!ValidatorUtil.validate(params)) {
             return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), ValidatorUtil.validateMessage(params));
