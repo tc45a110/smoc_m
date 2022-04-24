@@ -112,19 +112,6 @@ public class HttpServerVerifySignatureGatewayFilter {
                 }
 
                 /**
-                 * IP鉴权
-                 */
-                if (!StringUtils.isEmpty(redisModel.getIps())) {
-                    String ip = IpUtil.getIpAddr(request);
-                    Pattern ipPattern = Pattern.compile(ip);
-                    Matcher matcher = ipPattern.matcher(redisModel.getIps());
-                    if (!matcher.find()) {
-                        log.info("[IP鉴权]被限制IP：{}", ip);
-                        return errorHandle(exchange, ResponseCode.REQUEST_IP_ERROR.getCode(), ResponseCode.REQUEST_IP_ERROR.getMessage());
-                    }
-                }
-
-                /**
                  * 账号 业务对应关系
                  */
                 Map<String, String> businessAccountMap = Constant.BUSINESS_ACCOUNT_MAP;

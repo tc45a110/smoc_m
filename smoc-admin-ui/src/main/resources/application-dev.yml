@@ -16,9 +16,9 @@ spring:
       discovery:
         server-addr: 127.0.0.1:8848
   redis: #redis配置
-    host: r-2zegyswwjdbicif2hdpd.redis.rds.aliyuncs.com
-    port: 6379
-    password: Tsmoc40#RedistEst
+    host: 123.57.216.87
+    port: 6555
+    password: Dj!bm%Mk8DyP
     database: 0
     timeout: 10000
     jedis:

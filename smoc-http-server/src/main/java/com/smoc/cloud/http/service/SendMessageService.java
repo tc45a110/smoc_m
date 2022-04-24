@@ -1,6 +1,5 @@
 package com.smoc.cloud.http.service;
 
-import com.google.gson.Gson;
 import com.smoc.cloud.common.http.server.message.request.SendMessageByTemplateRequestParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
@@ -134,13 +133,13 @@ public class SendMessageService {
         //流控、限流
         Boolean limiter = accountRateLimiter.limiter(params.getAccount(), messageCount);
         if (!limiter) {
-            return ResponseDataUtil.buildError(ResponseCode.PARAM_MOBILE_NUM_ERROR.getCode(), ResponseCode.PARAM_MOBILE_NUM_ERROR.getMessage());
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_MOBILE_LIMITER_ERROR.getCode(), ResponseCode.PARAM_MOBILE_LIMITER_ERROR.getMessage());
         }
 
         //异步 批量保存短消息
-        this.saveMessageBatch(messages, messageCount, phoneCount, templateContent, params.getTemplateId(), params.getAccount(), params.getExtNumber());
+        //this.saveMessageBatch(messages, messageCount, phoneCount, templateContent, params.getTemplateId(), params.getAccount(), params.getExtNumber());
 
-        log.info("[普通短信]:{}", new Gson().toJson(messages));
+        //log.info("[普通短信]:{}", new Gson().toJson(messages));
         Map<String, String> result = new HashMap<>();
         result.put("orderNo", params.getOrderNo());
         result.put("template", params.getTemplateId());
@@ -242,7 +241,7 @@ public class SendMessageService {
         //流控、限流
         Boolean limiter = accountRateLimiter.limiter(params.getAccount(), messageCount);
         if (!limiter) {
-            return ResponseDataUtil.buildError(ResponseCode.PARAM_MOBILE_NUM_ERROR.getCode(), ResponseCode.PARAM_MOBILE_NUM_ERROR.getMessage());
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_MOBILE_LIMITER_ERROR.getCode(), ResponseCode.PARAM_MOBILE_LIMITER_ERROR.getMessage());
         }
 
         //异步 批量保存短消息
@@ -346,7 +345,7 @@ public class SendMessageService {
         //流控、限流
         Boolean limiter = accountRateLimiter.limiter(params.getAccount(), messageCount);
         if (!limiter) {
-            return ResponseDataUtil.buildError(ResponseCode.PARAM_MOBILE_NUM_ERROR.getCode(), ResponseCode.PARAM_MOBILE_NUM_ERROR.getMessage());
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_MOBILE_LIMITER_ERROR.getCode(), ResponseCode.PARAM_MOBILE_LIMITER_ERROR.getMessage());
         }
 
         //异步 批量保存短消息

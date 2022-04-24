@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * 按账号限流
  * redis_cell 实现 漏桶算法、令牌算法的限流
  */
 @Slf4j
@@ -25,34 +26,44 @@ public class AccountRateLimiter {
     /**
      * 账号限流判断
      *
-     * @param account
-     * @param sendNumber
+     * @param account      业务账号
+     * @param sendMessages 分拆后的短信数
      * @return
      */
-    public Boolean limiter(String account, Integer sendNumber) {
+    public Boolean limiter(String account, Integer sendMessages) {
 
 
-        Boolean status = true;
+        Boolean status = false;
 
-//        RedisModel redisModel = getHttpServerKey(account);
-//        if (null == redisModel.getSendRate() || redisModel.getSendRate() == 0) {
-//            return true;
-//        }
-//        String key = RedisConstant.HTTP_SERVER_LIMITER + account;
-//        status = isActionAllowed(key, (redisModel.getSendRate() + 1000), redisModel.getSendRate(), 1, sendNumber);
-        
+        //没有设置限流
+        RedisModel redisModel = getHttpServerKey(account);
+        if (null == redisModel || redisModel.getSendRate() == 0) {
+            return true;
+        }
+
+        //限流的账号、最高流速maxBurst、限流
+        String key = RedisConstant.HTTP_SERVER_MESSAGE_LIMITER + account;
+        Integer maxBurst = redisModel.getSendRate() * 2;
+        status = isActionAllowed(key, maxBurst, redisModel.getSendRate(), 1, sendMessages);
+        if (!status) {
+            log.warn("[触发限流]账号：{}-触发消息发送限流", account);
+        }
         return status;
     }
 
     /**
-     * 查询http 短信发送服务秘钥
+     * 查询http 协议业务账号 限流值
      *
      * @param account
      * @return
      */
     public RedisModel getHttpServerKey(String account) {
         //redis 查询
+        String key = RedisConstant.HTTP_SERVER_KEY + account;
+        boolean hasKey = redisTemplate.hasKey(key.trim());
+        //log.info("[限流测试]account key：{},{}",hasKey,key);
         RedisModel redisModel = (RedisModel) redisTemplate.opsForValue().get(RedisConstant.HTTP_SERVER_KEY + account);
+        //log.info("[限流测试]redisModel：{}",new Gson().toJson(redisModel));
         return redisModel;
     }
 

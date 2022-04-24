@@ -97,7 +97,9 @@
                                                        required="" data-parsley-length="[1,12]" data-parsley-min="0" autocomplete="off" >
                                             </div>
                                             <div class="col-md-6 form-group">
-
+                                                <label for="submitLimiter">账号提交速率(次/秒)<span class="text-danger">*</span></label>
+                                                <input id="submitLimiter" type="text" class="form-control" value="0" th:field="*{submitLimiter}"
+                                                       required="" data-parsley-length="[1,2]" data-parsley-type="number" data-parsley-min="1" autocomplete="off" >
                                             </div>
                                             <div class="col-md-6 form-group">
                                                 <label class="m-b-10">账号类型</label>
@@ -107,6 +109,17 @@
                                                          th:value="${identificationAccountInfoValidator.accountType}" title="账号类型"/>
 
                                             </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="identifyIp">客户鉴权IP(多个IP用英文逗号隔开，不填写，代表所有IP)&nbsp;
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('identifyIp')}"
+                                                          th:errors="*{identifyIp}"
+                                                          style="font-weight: 200;font-size: 12px"></span></label>
+                                                <input id="identifyIp" type="text" class="form-control"
+                                                       th:field="*{identifyIp}" data-parsley-length="[7,255]"
+                                                       data-parsley-pattern="/^((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d))|\*)((\/([012]\d|3[012]|\d))?)(,((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d))|\*)((\/([012]\d|3[012]|\d))?))*$/"
+                                                       autocomplete="off" placeholder="客户鉴权IP">
+                                            </div>
+
                                             <div class="col-md-6 form-group">
                                                 <label class="m-b-10">是否有效</label>
                                                 <br/>
