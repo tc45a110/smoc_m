@@ -624,126 +624,144 @@ if (option1 && typeof option1 === "object") {
     myChart1.setOption(option1, true);
 }
 
-var dom3 = document.getElementById("main1");
-var myChart3 = echarts.init(dom3);
-var app = {};
-option3 = null;
-option3 = {
-    title: {
-        text: '近12个月短信发送量（W）'
-    },
-    tooltip: {
-        trigger: 'axis'
-    },
-    toolbox: {
-        show: true,
-        feature: {
-            dataView: {show: true, readOnly: false},
-            magicType: {show: true, type: ['line', 'bar']},
-            restore: {show: true},
-            saveAsImage: {show: true}
-        }
-    },
-    calculable: true,
-    xAxis: [
-        {
-            type: 'category',
-            axisLabel: {
-              interval: 'auto',
-              rotate: 30
-             },
-            data: ['2020-11', '2020-12', '2021-01', '2021-02', '2021-03', '2021-04', '2021-05', '2021-06', '2021-07', '2021-08', '2021-09','2021-10']
-        }
-    ],
-    yAxis: [
-        {
-            type: 'value'
-        }
-    ],
-    series: [
-        {
-            name: '短信发送量（W）',
-            type: 'bar',
-            data: [26, 59, 90, 264, 287, 707, 1756, 1822, 487, 188, 60, 23],
-            markPoint: {
-                data: [
-                    {name: '最高', value: 1822, xAxis: 7, yAxis: 1822},
-                    {name: '最低', value: 23, xAxis: 11, yAxis: 23}
-                ]
+$.ajax({
+    url : '[[${#httpServletRequest.getContextPath()}]]/index/statisticSendMonth',
+    success : function(data) {
+        articles = eval(data);
+        var dom3 = document.getElementById("main1");
+        var myChart3 = echarts.init(dom3);
+        var app = {};
+        option3 = null;
+        option3 = {
+            title: {
+                text: '近12个月短信发送量（W）'
             },
-            markLine: {
-                data: [
-                    {type: 'average', name: '平均值'}
-                ]
-            }
+            tooltip: {
+                trigger: 'axis'
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                    dataView: {show: true, readOnly: false},
+                    magicType: {show: true, type: ['line', 'bar']},
+                    restore: {show: true},
+                    saveAsImage: {show: true}
+                }
+            },
+            calculable: true,
+            xAxis: [
+                {
+                    type: 'category',
+                    axisLabel: {
+                        interval: 'auto',
+                        rotate: 30
+                    },
+                    data: articles.monthArray
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: '短信发送量（W）',
+                    type: 'bar',
+                    /*label: {
+                        show: true,
+                        position: 'top'
+                    },*/
+                    data: articles.sendNumberArray,
+                    markPoint: {
+                        data: [
+                            {name: '最高', value: articles.maxValue, xAxis: articles.maxMonth, yAxis: articles.maxValue},
+                            {name: '最低', value: articles.minValue, xAxis: articles.minMonth, yAxis: articles.minValue}
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            {type: 'average', name: '平均值'}
+                        ]
+                    }
+                }
+            ]
+        };
+        ;
+        if (option3 && typeof option3 === "object") {
+            myChart3.setOption(option3, true);
         }
-    ]
-};
-;
-if (option3 && typeof option3 === "object") {
-    myChart3.setOption(option3, true);
-}
+    }
+});
 
-var dom4 = document.getElementById("main2");
-var myChart4 = echarts.init(dom4);
-var app = {};
-option4 = null;
-option4 = {
-    title: {
-        text: '近12个月营业收入（W）'
-    },
-    tooltip: {
-        trigger: 'axis'
-    },
-    color: ['#66AAE7'],
-    toolbox: {
-        show: true,
-        feature: {
-            dataView: {show: true, readOnly: false},
-            magicType: {show: true, type: ['line', 'bar']},
-            restore: {show: true},
-            saveAsImage: {show: true}
-        }
-    },
-    calculable: true,
-    xAxis: [
-        {
-            type: 'category',
-            axisLabel: {
-              interval: 'auto',
-              rotate: 30
-             },
-            data: ['2020-11', '2020-12', '2021-01', '2021-02', '2021-03', '2021-04', '2021-05', '2021-06', '2021-07', '2021-08', '2021-09','2021-10']
-        }
-    ],
-    yAxis: [
-        {
-            type: 'value'
-        }
-    ],
-    series: [
-        {
-            name: '营业收入（W）',
-            type: 'bar',
-            data: [26, 59, 90, 264, 287, 707, 1756, 1822, 487, 188, 60, 23],
-            markPoint: {
-                data: [
-                    {name: '最高', value: 1822, xAxis: 7, yAxis: 1822},
-                    {name: '最低', value: 23, xAxis: 11, yAxis: 23}
-                ]
+$.ajax({
+    url : '[[${#httpServletRequest.getContextPath()}]]/index/statisticProfitMonth',
+    success : function(data) {
+        articles = eval(data);
+        var dom4 = document.getElementById("main2");
+        var myChart4 = echarts.init(dom4);
+        var app = {};
+        option4 = null;
+        option4 = {
+            title: {
+                text: '近12个月营业收入（W）'
             },
-            markLine: {
-                data: [
-                    {type: 'average', name: '平均值'}
-                ]
-            }
+            tooltip: {
+                trigger: 'axis'
+            },
+            color: ['#66AAE7'],
+            toolbox: {
+                show: true,
+                feature: {
+                    dataView: {show: true, readOnly: false},
+                    magicType: {show: true, type: ['line', 'bar']},
+                    restore: {show: true},
+                    saveAsImage: {show: true}
+                }
+            },
+            calculable: true,
+            xAxis: [
+                {
+                    type: 'category',
+                    axisLabel: {
+                        interval: 'auto',
+                        rotate: 30
+                    },
+                    data: articles.monthArray
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: '营业收入（W）',
+                    type: 'bar',
+                    data: articles.profitArray,
+                    markPoint: {
+                        data: [
+                            {name: '最高', value: articles.maxValue, xAxis: articles.maxMonth, yAxis: articles.maxValue},
+                            {name: '最低', value: articles.minValue, xAxis: articles.minMonth, yAxis: articles.minValue}
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            {type: 'average', name: '平均值'}
+                        ]
+                    }
+                }
+            ]
+        };
+        ;
+        if (option4 && typeof option4 === "object") {
+            myChart4.setOption(option4, true);
         }
-    ]
-};
-;
-if (option4 && typeof option4 === "object") {
-    myChart4.setOption(option4, true);
-}
+    }
+});
+
+
 
 
 

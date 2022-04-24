@@ -1,5 +1,10 @@
 package com.smoc.cloud.statistics.repository;
 
+import com.smoc.cloud.common.BasePageRepository;
+import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
+import com.smoc.cloud.common.smoc.customer.qo.StatisticProfitData;
+import com.smoc.cloud.customer.rowmapper.AccountStatisticSendRowMapper;
+import com.smoc.cloud.statistics.rowmapper.StatisticProfitRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -13,7 +18,7 @@ import java.util.Map;
  * 首页统计数据查询
  */
 @Service
-public class IndexStatisticsRepository {
+public class IndexStatisticsRepository  extends BasePageRepository {
 
     @Resource
     public JdbcTemplate jdbcTemplate;
@@ -136,5 +141,27 @@ public class IndexStatisticsRepository {
 
         Map<String, Object> map = jdbcTemplate.queryForMap(sql.toString(),params);
         return map;
+    }
+
+    /**
+     * 近12个月营业收入
+     * @param statisticProfitData
+     * @return
+     */
+    public List<StatisticProfitData> statisticProfitMonth(StatisticProfitData statisticProfitData) {
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append("  a.MONTH_DAY");
+        sqlBuffer.append(", IFNULL(b.PROFIT_NUM,0)PROFIT_NUM from ");
+        sqlBuffer.append(" (SELECT @s :=@s + 1 as `INDEX`, DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL @s MONTH),'%Y-%m') AS `MONTH_DAY` ");
+        sqlBuffer.append("  from mysql.help_topic, (SELECT @s := -1) temp WHERE  @s < 11 ORDER BY MONTH_DAY desc");
+        sqlBuffer.append(" )a  left join ");
+        sqlBuffer.append(" (SELECT DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m')MESSAGE_DATE, ROUND((sum(t.ACCOUNT_PRICE)-sum(t.CHANNEL_PRICE))/10000,2) PROFIT_NUM ");
+        sqlBuffer.append(" FROM message_daily_statistics t ");
+        sqlBuffer.append(" GROUP BY DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m')");
+        sqlBuffer.append(" )b on a.MONTH_DAY = b.MESSAGE_DATE  order by a.MONTH_DAY asc");
+
+        List<StatisticProfitData> list = this.queryForObjectList(sqlBuffer.toString(), null, new StatisticProfitRowMapper());
+        return list;
     }
 }

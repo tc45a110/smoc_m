@@ -29,6 +29,7 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -165,7 +166,7 @@ public class BusinessAccountService {
         //月份
         String[] month = list.stream().map(AccountStatisticSendData::getMonth).toArray(String[]::new);
         //发送量
-        String[] sendNumber = list.stream().map(AccountStatisticSendData::getSendNumber).toArray(String[]::new);
+        BigDecimal[] sendNumber = list.stream().map(AccountStatisticSendData::getSendNumber).toArray(BigDecimal[]::new);
         ;
 
         AccountStatisticSendData accountStatisticSendData = new AccountStatisticSendData();

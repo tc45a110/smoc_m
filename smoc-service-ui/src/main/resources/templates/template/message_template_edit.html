@@ -80,7 +80,7 @@
                                         <label>签名<span class="text-danger">*</span>
                                             <span class="text-danger" th:if="${#fields.hasErrors('signName')}"
                                                   th:errors="*{signName}"></span></label>
-                                        <select name="signName" data-style="btn-default"
+                                        <select name="signName" data-style="btn-default" id="signName" onchange="signNameSwith(this.value)"
                                                 class="selectpicker  form-control" tabindex="-98" 　required="true">
                                             <option data-icon="mdi mdi-account" value="">--请选择签名--</option>
                                             <option data-icon="mdi mdi-account" th:each="info:${signList}"
@@ -199,8 +199,8 @@
     function sumbitFrom() {
 
         var templateFlag = $('input[name="templateFlag"]:checked').val();
+        var templateContent = $("#templateContent").val();
         if("2"==templateFlag){
-            var templateContent = $("#templateContent").val();
             var reg = RegExp("\\${");
             if(!templateContent.match(reg)) {
                 $("#tip-div").find("#tip-content").html("变量模板必须插入变量");
@@ -209,8 +209,18 @@
             }
         }
 
+        var regex=/\【.*?\】/g;
+        if(!regex.test(templateContent)){
+            $("#tip-div").find("#tip-content").html("签名不符合规则");
+            $("#tip-div").modal();
+            return;
+        }
+
         $("#submit_form").submit();
     }
+
+    var templateType_init = '[[${accountTemplateInfoValidator.templateFlag}]]';
+    showTip(templateType_init);
 
     function showTip(tipType){
         templateType_init = tipType;
@@ -231,7 +241,44 @@
         $('#templateContent').insertAtCursor(charvalue);
     }
 
+    function signNameSwith(signName){
+        var templateContent = $("#templateContent").val();
+        if(""==templateContent || null==templateContent){
+            $("#templateContent").val("【"+signName+"】");
+            var fizeNum_init = $("#templateContent").val().length;
+            contentLength(fizeNum_init)
+        }else{
+            var nstr = templateContent.replace(/\【.*?\】/g,"【"+signName+"】");
+            $("#templateContent").val(nstr);
+            var fizeNum_init = $("#templateContent").val().length;
+            contentLength(fizeNum_init)
+        }
+
+    }
+
+    function contentLength(fizeNum_init){
+        $("#charAmount_id").html(fizeNum_init);
+        if(fizeNum_init==0){
+            $("#amount_id").html(0);
+        }else if(fizeNum_init<=70){
+            $("#amount_id").html(1);
+        }else{
+            var amount_init_f = parseFloat(fizeNum_init)/67;
+            var amount_init_i = Math.ceil(amount_init_f);
+            $("#amount_id").html(amount_init_i);
+        }
+
+    }
+
     $('#templateContent').bind('input propertychange', function () {
+        var signName = $("#signName").val();
+        if(""==signName || null==signName) {
+            $("#templateContent").val("");
+            $("#tip-div").find("#tip-content").html("请先选择签名");
+            $("#tip-div").modal();
+            return;
+        }
+
         var fizeNum = $(this).val().length;
         $("#charAmount_id").html(fizeNum);
         if(fizeNum==0){
@@ -256,9 +303,6 @@
         $("#amount_id").html(amount_init_i);
     }
 
-
-    var templateType_init = '[[${accountTemplateInfoValidator.templateFlag}]]';
-    showTip(templateType_init);
 
     (function(jQuery){
         jQuery.fn.getCursorPosition = function(){
@@ -348,11 +392,6 @@
             }
         }
     })(jQuery);
-
-
-    var resizefunc = [];
-    //隐藏进度项
-    $('#preloader').css('display', 'none');
 
 
 </script>

@@ -419,7 +419,7 @@
 
                     var trHtml = "<tr>" +
                         "<td style='vertical-align: middle;line-height: 26px'>" + tmp.templateId + "</td>" +
-                        "<td style='vertical-align: middle;line-height: 26px'><span class='text-overflow' title='"+tmp.templateContent+"'>" + '【'+tmp.signName+'】'+tmp.templateContent + "</span></td>" +
+                        "<td style='vertical-align: middle;line-height: 26px'><span class='text-overflow' title='"+tmp.templateContent+"'>" + tmp.templateContent + "</span></td>" +
                         "<td style='vertical-align: middle;line-height: 26px; text-align: center'><a href='#' onclick='setTemplate("+valueStr+")' class='btn btn-success btn-rounded btn-sm waves-effect waves-light'>选择</a></td>" +
                         "</tr>";
                     $("#template_list_id").append(trHtml);
@@ -437,10 +437,10 @@
 
             $("#templateId").val(tm.templateId);
             $("#signName").val(tm.signName);
-            $("#messageContent").val('【'+tm.signName+'】'+tm.templateContent);
+            $("#messageContent").val(tm.templateContent);
 
             //普通短信可根据模板字数计算拆分条数，变量短信要根据具体变量值替换后再计算
-            var charAmount = ('【'+tm.signName+'】'+tm.templateContent).length;
+            var charAmount = (tm.templateContent).length;
             var splitNumber = 1;
             if(charAmount<=70){
                 splitNumber = 1;
