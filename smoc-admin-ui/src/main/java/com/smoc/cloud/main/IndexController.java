@@ -1,11 +1,20 @@
 package com.smoc.cloud.main;
 
 import com.smoc.cloud.common.auth.entity.SecurityUser;
+import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
+import com.smoc.cloud.common.smoc.customer.qo.StatisticProfitData;
+import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
+import com.smoc.cloud.common.validator.MpmIdValidator;
+import com.smoc.cloud.common.validator.MpmValidatorUtil;
+import com.smoc.cloud.customer.service.BusinessAccountService;
 import com.smoc.cloud.statistics.service.StatisticsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -58,4 +67,35 @@ public class IndexController {
 
     }
 
+    /**
+     * 近12个月短信发送量
+     *
+     * @return
+     */
+    @RequestMapping(value = "/index/statisticSendMonth", method = RequestMethod.GET)
+    public AccountStatisticSendData indexStatisticSendMonth(HttpServletRequest request) {
+
+
+        AccountStatisticSendData statisticSendData = new AccountStatisticSendData();
+        statisticSendData.setDimension("index");
+
+        statisticSendData = statisticsService.statisticSendNumber(statisticSendData);
+
+        return statisticSendData;
+    }
+
+    /**
+     * 近12个月营业收入
+     *
+     * @return
+     */
+    @RequestMapping(value = "/index/statisticProfitMonth", method = RequestMethod.GET)
+    public StatisticProfitData statisticProfitMonth(HttpServletRequest request) {
+
+        StatisticProfitData statisticProfitData = new StatisticProfitData();
+
+        statisticProfitData = statisticsService.statisticProfitMonth(statisticProfitData);
+
+        return statisticProfitData;
+    }
 }

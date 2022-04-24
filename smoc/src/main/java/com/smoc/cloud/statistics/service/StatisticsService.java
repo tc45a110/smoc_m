@@ -2,6 +2,7 @@ package com.smoc.cloud.statistics.service;
 
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.smoc.customer.qo.StatisticProfitData;
 import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountRechargeValidator;
 import com.smoc.cloud.finance.repository.FinanceAccountRechargeRepository;
 import com.smoc.cloud.statistics.repository.IndexStatisticsRepository;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -80,5 +82,16 @@ public class StatisticsService {
         map.put("ACCOUNT_USABLE_SUM",usableAccount.get("ACCOUNT_USABLE_SUM"));
 
         return ResponseDataUtil.buildSuccess(map);
+    }
+
+    /**
+     * 近12个月营业收入
+     * @param statisticProfitData
+     * @return
+     */
+    public ResponseData<List<StatisticProfitData>> statisticProfitMonth(StatisticProfitData statisticProfitData) {
+
+        List<StatisticProfitData> list = indexStatisticsRepository.statisticProfitMonth(statisticProfitData);
+        return ResponseDataUtil.buildSuccess(list);
     }
 }

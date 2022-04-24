@@ -6,6 +6,7 @@ import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.customer.qo.AccountInfoQo;
 import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticComplaintData;
 import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
+import com.smoc.cloud.common.smoc.customer.qo.StatisticProfitData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -94,4 +95,5 @@ public interface BusinessAccountFeignClient {
      */
     @RequestMapping(value = "/account/accountAll", method = RequestMethod.POST)
     ResponseData<PageList<AccountInfoQo>> accountAll(@RequestBody PageParams<AccountInfoQo> params);
+
 }

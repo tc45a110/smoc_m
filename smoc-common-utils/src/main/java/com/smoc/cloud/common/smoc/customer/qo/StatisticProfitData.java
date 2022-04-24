@@ -7,28 +7,21 @@ import java.math.BigDecimal;
 
 @Setter
 @Getter
-public class AccountStatisticSendData {
-
-    private String accountId;
-
-    private int index;
+public class StatisticProfitData {
 
     private String month;
 
-    private BigDecimal sendNumber;
+    private BigDecimal profit;
 
     private String[] monthArray;
 
-    private BigDecimal[] sendNumberArray;
+    private BigDecimal[] profitArray;
 
-    //统计维度
-    private String dimension;
     private String startDate;
     private String endDate;
 
     private BigDecimal maxValue;
     private BigDecimal minxValue;
-
     private String maxMonth;
     private String minMonth;
 }

@@ -287,25 +287,43 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");
 
+        //首页：近12个月短信发送量
+        if("index".equals(statisticSendData.getDimension())){
+            sqlBuffer.append("  a.MONTH_DAY");
+            sqlBuffer.append(", IFNULL(b.MESSAGE_SUCCESS_NUM,0)SEND_NUMBER from ");
+            sqlBuffer.append(" (SELECT @s :=@s + 1 as `INDEX`, DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL @s MONTH),'%Y-%m') AS `MONTH_DAY` ");
+            sqlBuffer.append("  from mysql.help_topic, (SELECT @s := -1) temp WHERE  @s < 11 ORDER BY MONTH_DAY desc");
+            sqlBuffer.append(" )a  left join ");
+            sqlBuffer.append(" (SELECT DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m')MESSAGE_DATE, ROUND(sum(t.MESSAGE_SUCCESS_NUM)/10000,2) MESSAGE_SUCCESS_NUM ");
+            sqlBuffer.append(" FROM message_daily_statistics t ");
+            sqlBuffer.append(" GROUP BY DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m')");
+            sqlBuffer.append(" )b on a.MONTH_DAY = b.MESSAGE_DATE  order by a.MONTH_DAY asc");
+
+            List<AccountStatisticSendData> list = this.queryForObjectList(sqlBuffer.toString(), null, new AccountStatisticSendRowMapper());
+            return list;
+        }
+
+        //账户发送量：按月
         if("month".equals(statisticSendData.getDimension())){
             sqlBuffer.append("  a.MONTH_DAY");
             sqlBuffer.append(", IFNULL(b.MESSAGE_SUCCESS_NUM,0)SEND_NUMBER from ");
             sqlBuffer.append(" (SELECT @s :=@s + 1 as `INDEX`, DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL @s MONTH),'%Y-%m') AS `MONTH_DAY` ");
             sqlBuffer.append("  from mysql.help_topic, (SELECT @s := -1) temp WHERE  @s < 11 ORDER BY MONTH_DAY desc");
             sqlBuffer.append(" )a  left join ");
-            sqlBuffer.append(" (SELECT DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m')MESSAGE_DATE, sum(t.MESSAGE_SUCCESS_NUM) MESSAGE_SUCCESS_NUM ");
+            sqlBuffer.append(" (SELECT DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m')MESSAGE_DATE, ROUND(sum(t.MESSAGE_SUCCESS_NUM)/10000,2) MESSAGE_SUCCESS_NUM ");
             sqlBuffer.append(" FROM message_daily_statistics t WHERE t.BUSINESS_ACCOUNT = ? ");
             sqlBuffer.append(" GROUP BY t.BUSINESS_ACCOUNT, DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m')");
             sqlBuffer.append(" )b on a.MONTH_DAY = b.MESSAGE_DATE  order by a.MONTH_DAY asc");
         }
 
+        //账户发送量：按天
         if("day".equals(statisticSendData.getDimension())){
             sqlBuffer.append("  a.MONTH_DAY");
             sqlBuffer.append(", IFNULL(b.MESSAGE_SUCCESS_NUM,0)SEND_NUMBER from ");
             sqlBuffer.append(" (SELECT @s :=@s + 1 as `INDEX`, DATE(DATE_SUB(CURRENT_DATE, INTERVAL @s DAY)) AS `MONTH_DAY` ");
             sqlBuffer.append("  from mysql.help_topic, (SELECT @s := -1) temp WHERE  @s < 179 ORDER BY MONTH_DAY desc");
             sqlBuffer.append(" )a  left join ");
-            sqlBuffer.append(" (SELECT DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m-%d')MESSAGE_DATE, sum(t.MESSAGE_SUCCESS_NUM) MESSAGE_SUCCESS_NUM ");
+            sqlBuffer.append(" (SELECT DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m-%d')MESSAGE_DATE, ROUND(sum(t.MESSAGE_SUCCESS_NUM)/10000,2) MESSAGE_SUCCESS_NUM ");
             sqlBuffer.append(" FROM message_daily_statistics t WHERE t.BUSINESS_ACCOUNT = ? ");
             sqlBuffer.append(" GROUP BY t.BUSINESS_ACCOUNT, DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m-%d')");
             sqlBuffer.append(" )b on a.MONTH_DAY = b.MESSAGE_DATE  order by a.MONTH_DAY asc");

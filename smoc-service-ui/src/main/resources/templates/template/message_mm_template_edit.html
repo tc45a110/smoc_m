@@ -98,12 +98,10 @@
                                     <input type="radio" id="inlineRadio1" name="templateFlag" value="1" th:field="*{templateFlag}" th:checked="${accountTemplateInfoValidator.templateFlag== '1'}">
                                     <label for="inlineRadio1"> 短信模版 </label>
                                 </div>
-                                <div class="radio radio-info radio-inline">
-                                    <i data-toggle="tooltip" data-placement="right"
-                                       data-original-title="模板中变量表示为${1},${2}">
-                                        <input type="radio" id="inlineRadio2" name="templateFlag" value="2" th:field="*{templateFlag}" th:checked="${accountTemplateInfoValidator.templateFlag== '2'}">
-                                        <label for="inlineRadio2"> 变量短信模版 </label>
-                                    </i>
+                                <div class="radio radio-info radio-inline" data-toggle="tooltip" data-placement="right"
+                                     data-original-title="在文本内容中插入变量${1},${2}">
+                                    <input type="radio" id="inlineRadio2" name="templateFlag" value="2" th:field="*{templateFlag}" th:checked="${accountTemplateInfoValidator.templateFlag== '2'}">
+                                    <label for="inlineRadio2"> 变量短信模版 </label>
                                 </div>
                             </div>
                             <div class="form-group m-b-30">
@@ -144,7 +142,7 @@
                                                 </div>
                                             </div>
                                             <div th:if="${para.resType eq 'PIC'}" class="itemImg" style="width: auto">
-                                                <img th:src="${@resourceProperties.resourceUrl+para.resUrl}" draggable="false" onerror="javascript:this.src='./static/imgs/file-broken.png';this.onerror = null">
+                                                <img th:src="${@resourceProperties.resourceUrl+para.resUrl}" draggable="false" >
                                             </div>
                                             <div th:if="${para.resType eq 'AUDIO'}" class="item-span-img">
                                                 <div class="jFiler-item-thumb-image">
@@ -1006,6 +1004,7 @@
         //去除换行符，否则json转换不了
         var json_tmp = json.replace(/\n/g,"").replace(/\r/g,"");
         var frameDatas = eval('(' + json_tmp + ')');
+        var templateFlag = $('input[name="templateFlag"]:checked').val();
         for(i=0;i<frameDatas.length;i++){
             var tmp = frameDatas[i];
             if(tmp.resType=='TXT'&&tmp.frameTxt.length==0){
@@ -1013,6 +1012,17 @@
                 $("#alert-modal").find("#alert-message").html("纯文本帧的文本内容不能为空");
                 $("#alert-modal").modal();
                 return false;
+            }
+            if("2"==templateFlag){
+                if(tmp.resType=='TXT'&&tmp.frameTxt.length>0){
+                    var templateContent = tmp.frameTxt;
+                    var reg = RegExp("\\${");
+                    if(!templateContent.match(reg)) {
+                        $("#alert-modal").find("#alert-message").html("变量模板必须在纯文本帧的文本内容中插入变量");
+                        $("#alert-modal").modal();
+                        return false;
+                    }
+                }
             }
         }
 
