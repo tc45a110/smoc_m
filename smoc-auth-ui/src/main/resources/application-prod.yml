@@ -14,17 +14,18 @@ spring:
       discovery:
         server-addr: 172.17.65.102:8848
   redis: #redis配置
-    host: r-2zedjdi7xd84ex153o.redis.rds.aliyuncs.com
-    port: 6379
-    password: xz%smoc40#pm
-    database: 0
-    timeout: 10000
+    host: 123.57.216.87
+    port: 6555
+    password: Dj!bm%Mk8DyP
+    database: 1
+    timeout: 3000
     jedis:
       pool:
         max-active: 8
+        max-wait: 2000
         max-idle: 8
-        max-wait: -1
-        min-idle: 5
+        min-idle: 0
+        time-between-eviction-runs: 1000
 
 #**********************************************************
 # manpuman oauth2 token参数设置

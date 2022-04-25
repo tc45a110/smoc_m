@@ -72,7 +72,7 @@ public class HttpServerVerifySignatureGatewayFilter {
                 requestHeaderData.setSignatureNonce(signatureNonce);
                 requestHeaderData.setSignature(signature);
                 requestHeaderData.setAccount(account);
-                log.info("[接口请求][账户:{}]header数据:{}", account, new Gson().toJson(requestHeaderData));
+                //log.info("[接口请求][账户:{}]header数据:{}", account, new Gson().toJson(requestHeaderData));
 
                 //获取body内容
                 String requestBody = "";
@@ -109,19 +109,6 @@ public class HttpServerVerifySignatureGatewayFilter {
                 RedisModel redisModel = dataService.getHttpServerKey(model.getAccount());
                 if (null == redisModel || StringUtils.isEmpty(redisModel.getMd5HmacKey())) {
                     return errorHandle(exchange, ResponseCode.USER_NOT_EXIST.getCode(), ResponseCode.USER_NOT_EXIST.getMessage());
-                }
-
-                /**
-                 * IP鉴权
-                 */
-                if (!StringUtils.isEmpty(redisModel.getIps())) {
-                    String ip = IpUtil.getIpAddr(request);
-                    Pattern ipPattern = Pattern.compile(ip);
-                    Matcher matcher = ipPattern.matcher(redisModel.getIps());
-                    if (!matcher.find()) {
-                        log.info("[IP鉴权]被限制IP：{}", ip);
-                        return errorHandle(exchange, ResponseCode.REQUEST_IP_ERROR.getCode(), ResponseCode.REQUEST_IP_ERROR.getMessage());
-                    }
                 }
 
                 /**

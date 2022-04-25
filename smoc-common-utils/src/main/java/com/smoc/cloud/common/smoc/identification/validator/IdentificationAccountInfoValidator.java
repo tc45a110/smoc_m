@@ -16,6 +16,8 @@ public class IdentificationAccountInfoValidator {
     private String md5HmacKey;
     private String aesKey;
     private String aesIv;
+    private Integer submitLimiter;
+    private String identifyIp;
     private BigDecimal identificationPrice;
     private BigDecimal identificationFacePrice;
     private BigDecimal grantingCredit;

@@ -3,10 +3,13 @@ package com.somc.cloud.gateway.filters;
 import com.google.gson.Gson;
 import com.smoc.cloud.common.gateway.request.RequestStardardHeaders;
 import com.smoc.cloud.common.gateway.utils.ValidatorUtil;
+import com.smoc.cloud.common.http.server.utils.RedisModel;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.somc.cloud.gateway.redis.service.DataService;
+import com.somc.cloud.gateway.util.IpUtil;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -18,12 +21,15 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -64,6 +70,31 @@ public class CustomGlobalGatewayFilter implements GlobalFilter, Ordered {
         boolean replayAttacks = dataService.nonce(requestStardardHeaders.getSignatureNonce());
         if (replayAttacks) {
             return errorHandle(exchange, ResponseCode.NONCE_ERROR.getCode(), ResponseCode.NONCE_ERROR.getMessage());
+        }
+
+        //取账户参数
+        RedisModel redisModel = dataService.getHttpServerKey(headers.getFirst("account"));
+        if (null == redisModel) {
+            return errorHandle(exchange, ResponseCode.USER_NOT_EXIST.getCode(), ResponseCode.USER_NOT_EXIST.getMessage());
+        }
+
+        /**
+         * IP鉴权
+         */
+        if (!StringUtils.isEmpty(redisModel.getIps())) {
+            String ip = IpUtil.getIpAddr(request);
+            Pattern ipPattern = Pattern.compile(ip);
+            Matcher matcher = ipPattern.matcher(redisModel.getIps());
+            if (!matcher.find()) {
+                log.info("[IP鉴权]被限制IP：{}", ip);
+                return errorHandle(exchange, ResponseCode.REQUEST_IP_ERROR.getCode(), ResponseCode.REQUEST_IP_ERROR.getMessage());
+            }
+        }
+
+        //提交速率限流
+        Boolean limiter = dataService.limiter(headers.getFirst("account"));
+        if (!limiter) {
+            return errorHandle(exchange, ResponseCode.PARAM_SUBMIT_LIMITER_ERROR.getCode(), ResponseCode.PARAM_SUBMIT_LIMITER_ERROR.getMessage());
         }
 
         //参数规则验证

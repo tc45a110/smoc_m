@@ -52,8 +52,7 @@ public class IdentityCustomRoutes {
                  */.route(r -> r.method(HttpMethod.POST).and().path("/smoc-gateway/smoc-identity/**").and().header("signature-nonce", "\\d+").and().readBody(String.class, requestBody -> {
                             //相当于缓存了body信息，在filter 中可以这么获取 exchange.getAttribute("cachedRequestBodyObject");
                             return true;
-                        }).filters(f -> f.stripPrefix(1).requestRateLimiter().rateLimiter(RedisRateLimiter.class, c -> c.setBurstCapacity(10).setReplenishRate(4)) //burstCapacity令牌桶的上限  replenishRate 每秒平均速率
-                                .configure(c -> c.setKeyResolver(hostAddrKeyResolver)).filter(verifySignatureGatewayFilter)).uri("lb://smoc-identity")
+                        }).filters(f -> f.stripPrefix(1).filter(verifySignatureGatewayFilter)).uri("lb://smoc-identity")
 
                 )
                 /**
@@ -61,11 +60,13 @@ public class IdentityCustomRoutes {
                  */.route(r -> r.method(HttpMethod.POST).and().path("/smoc-gateway/http-server/**").and().header("signature-nonce", "\\d+").and().readBody(String.class, requestBody -> {
                             //相当于缓存了body信息，在filter 中可以这么获取 exchange.getAttribute("cachedRequestBodyObject");
                             return true;
-                        }).filters(f -> f.stripPrefix(1).requestRateLimiter().rateLimiter(RedisRateLimiter.class, c -> c.setBurstCapacity(10).setReplenishRate(4)) //burstCapacity令牌桶的上限  replenishRate 每秒平均速率
-                                .configure(c -> c.setKeyResolver(userKeyResolver)).filter(httpServerSignatureGatewayFilter)).uri("lb://smoc-http-server")
+                        }).filters(f -> f.stripPrefix(1).filter(httpServerSignatureGatewayFilter)).uri("lb://smoc-http-server")
 
                 ).build();
     }
 
+//配置限流代码 先注释掉。现在增加了根据业务动态限流
+//     .requestRateLimiter().rateLimiter(RedisRateLimiter.class, c -> c.setBurstCapacity(20).setReplenishRate(10)) //burstCapacity令牌桶的上限  replenishRate 每秒平均速率
+//            .configure(c -> c.setKeyResolver(hostAddrKeyResolver))
 
 }

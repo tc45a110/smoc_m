@@ -10,7 +10,9 @@ public class RedisConstant {
 
     public static final String HTTP_SERVER_KEY = "gateway:http:server:keys:";
 
-    public static final String HTTP_SERVER_LIMITER = "gateway:http:server:limiter:";
+    public static final String HTTP_SERVER_MESSAGE_LIMITER = "gateway:http:server:message:limiter:";
+
+    public static final String HTTP_SERVER_SUBMIT_LIMITER = "gateway:http:server:submit:limiter:";
 
     public static final String HTTP_SERVER_ORDERS = "gateway:http:server:orders:";
 }

@@ -39,7 +39,7 @@ public class SendMessageController {
     @RequestMapping(value = "/sendMessageByTemplate", method = RequestMethod.POST)
     public ResponseData<Map<String, String>> sendMessageByTemplate(@RequestBody SendMessageByTemplateRequestParams params) {
 
-        log.info("[发送普通模板短信]：{}", new Gson().toJson(params));
+        //log.info("[发送普通模板短信]：{}", new Gson().toJson(params));
 
         if (!ValidatorUtil.validate(params)) {
             return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), ValidatorUtil.validateMessage(params));

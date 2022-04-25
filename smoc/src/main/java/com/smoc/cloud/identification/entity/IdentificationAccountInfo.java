@@ -1,9 +1,6 @@
 package com.smoc.cloud.identification.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -28,6 +25,12 @@ public class IdentificationAccountInfo {
 
     @Column(name = "AES_IV", nullable = false, length = 32)
     private String aesIv;
+
+    @Column(name = "SUBMIT_LIMITER", nullable = false, length = 32)
+    private Integer submitLimiter;
+
+    @Column(name = "IDENTIFY_IP", nullable = false, length = 255)
+    private String identifyIp;
 
     @Column(name = "IDENTIFICATION_PRICE", nullable = false, precision = 24, scale = 4)
     private BigDecimal identificationPrice;
@@ -174,5 +177,21 @@ public class IdentificationAccountInfo {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Integer getSubmitLimiter() {
+        return submitLimiter;
+    }
+
+    public void setSubmitLimiter(Integer submitLimiter) {
+        this.submitLimiter = submitLimiter;
+    }
+
+    public String getIdentifyIp() {
+        return identifyIp;
+    }
+
+    public void setIdentifyIp(String identifyIp) {
+        this.identifyIp = identifyIp;
     }
 }

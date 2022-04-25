@@ -152,6 +152,8 @@ public class IdentificationAccountController {
         String aesKey = StringRandom.getStringRandom(32);
         identificationAccountInfoValidator.setAesKey(aesKey);
 
+        identificationAccountInfoValidator.setSubmitLimiter(5);
+
         //自动生成AESIV
         String aesIv = StringRandom.getStringRandom(16);
         identificationAccountInfoValidator.setAesIv(aesIv);
@@ -313,14 +315,24 @@ public class IdentificationAccountController {
         list.add(excelModel3);
 
         AccountExcelModel excelModel4 = new AccountExcelModel();
-        excelModel4.setKey("技术对接说明");
-        excelModel4.setValue("用MD5-HMAC签名；AES(256)对敏感数据身份证号进行加密；AES(256)加密模式:AES/CBC/PKCS7Padding；AES_NAME为AES");
+        excelModel4.setKey("提交速率（次/秒）");
+        excelModel4.setValue(identificationAccountInfoValidator.getSubmitLimiter()+"");
         list.add(excelModel4);
 
+        AccountExcelModel excelModel8 = new AccountExcelModel();
+        excelModel8.setKey("IP限制");
+        excelModel8.setValue(identificationAccountInfoValidator.getIdentifyIp());
+        list.add(excelModel8);
+
         AccountExcelModel excelModel5 = new AccountExcelModel();
-        excelModel5.setKey("友好提示");
-        excelModel5.setValue("请妥善报关该资料，请无泄露，如有泄露，自行负责");
+        excelModel5.setKey("技术对接说明");
+        excelModel5.setValue("用MD5-HMAC签名；AES(256)对敏感数据身份证号进行加密；AES(256)加密模式:AES/CBC/PKCS7Padding；AES_NAME为AES");
         list.add(excelModel5);
+
+        AccountExcelModel excelModel6 = new AccountExcelModel();
+        excelModel6.setKey("友好提示");
+        excelModel6.setValue("请妥善报关该资料，请无泄露，如有泄露，自行负责");
+        list.add(excelModel6);
 
         String fileName = identificationAccountInfoValidator.getIdentificationAccount();
         try {

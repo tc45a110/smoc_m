@@ -1,6 +1,7 @@
 package com.smoc.cloud.identification.service;
 
 import com.alibaba.fastjson.JSON;
+import com.smoc.cloud.common.http.server.utils.RedisModel;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.redis.smoc.identification.KeyEntity;
@@ -36,7 +37,7 @@ public class IdentificationAccountInfoService {
     private IdentificationAccountInfoRepository identificationAccountInfoRepository;
 
     @Resource
-    private RedisTemplate<String, KeyEntity> redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
 
     /**
@@ -128,6 +129,14 @@ public class IdentificationAccountInfoService {
             key.setAesIv(identificationAccountInfoValidator.getAesIv());
             //把数据放到redis里
             redisTemplate.opsForValue().set(RedisConstant.KEY + identificationAccountInfoValidator.getIdentificationAccount(), key);
+
+            //放到redis中对象
+            RedisModel redisModel = new RedisModel();
+            redisModel.setMd5HmacKey(identificationAccountInfoValidator.getMd5HmacKey());
+            redisModel.setSubmitRate(entity.getSubmitLimiter());
+            redisModel.setIps(identificationAccountInfoValidator.getIdentifyIp());
+            //把数据放到redis里
+            redisTemplate.opsForValue().set(RedisConstant.HTTP_SERVER_KEY + identificationAccountInfoValidator.getIdentificationAccount(), redisModel);
         }else{
             //注销
             redisTemplate.delete(RedisConstant.KEY + identificationAccountInfoValidator.getIdentificationAccount());

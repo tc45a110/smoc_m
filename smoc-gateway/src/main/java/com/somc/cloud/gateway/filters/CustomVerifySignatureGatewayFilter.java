@@ -57,6 +57,7 @@ public class CustomVerifySignatureGatewayFilter {
 
                 String signatureNonce = headers.getFirst("signature-nonce");
                 String signature = headers.getFirst("signature");
+                String account = headers.getFirst("account");
                 RequestStardardHeaders requestHeaderData = new RequestStardardHeaders();
                 requestHeaderData.setSignatureNonce(signatureNonce);
                 requestHeaderData.setSignature(signature);
@@ -78,6 +79,11 @@ public class CustomVerifySignatureGatewayFilter {
                     model = new Gson().fromJson(requestBody, RequestSignModel.class);
                 } catch (Exception e) {
                     return errorHandle(exchange, ResponseCode.PARAM_FORMAT_ERROR.getCode(), ResponseCode.PARAM_FORMAT_ERROR.getMessage());
+                }
+
+                //header account 与 model account 保持一致
+                if (!account.equals(model.getIdentifyAccount())) {
+                    return errorHandle(exchange, ResponseCode.PARAM_FORMAT_ERROR.getCode(), "account数据不一致");
                 }
 
                 //身份证规则验证  验证身证号 及姓名

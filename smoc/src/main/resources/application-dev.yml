@@ -55,17 +55,18 @@ spring:
   # Redis
   #**********************************************************
   redis: #redis配置
-    host: r-2zegyswwjdbicif2hdpd.redis.rds.aliyuncs.com
-    port: 6379
-    password: Tsmoc40#RedistEst
+    host: 123.57.216.87
+    port: 6555
+    password: Dj!bm%Mk8DyP
     database: 1
-    timeout: 10000
-    lettuce:
+    timeout: 3000
+    jedis:
       pool:
-        max-active: 50
-        max-idle: 10
-        max-wait: -1
-        min-idle: 5
+        max-active: 8
+        max-wait: 2000
+        max-idle: 8
+        min-idle: 0
+        time-between-eviction-runs: 1000
 
   #**********************************************************
   # 内置tomcat 配置
