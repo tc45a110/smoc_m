@@ -18,6 +18,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -104,7 +105,7 @@ public class ChannelService {
         //月份
         String[] month = list.stream().map(AccountStatisticSendData::getMonth).toArray(String[]::new);
         //发送量
-        String[] sendNumber = list.stream().map(AccountStatisticSendData::getSendNumber).toArray(String[]::new);
+        BigDecimal[] sendNumber = list.stream().map(AccountStatisticSendData::getSendNumber).toArray(BigDecimal[]::new);
         ;
 
         AccountStatisticSendData accountStatisticSendData = new AccountStatisticSendData();
