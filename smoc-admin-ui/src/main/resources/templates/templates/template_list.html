@@ -44,10 +44,10 @@
                                 <input type="text" class="form-control"
                                        placeholder="业务账号" autocomplete="off" th:field="*{businessAccount}">
                             </div>
-                            <div class="form-group  col-sm-4">
-                                <input type="text" class="form-control"
-                                       placeholder="业务账号名称" autocomplete="off" th:field="*{accountName}">
-                            </div>
+<!--                            <div class="form-group  col-sm-4">-->
+<!--                                <input type="text" class="form-control"-->
+<!--                                       placeholder="业务账号名称" autocomplete="off" th:field="*{accountName}">-->
+<!--                            </div>-->
                             <div class="form-group  col-sm-4">
                                 <mpm:tag id="templateType" identity="businessType" show-type="select" key="code"
                                          name="templateType"
@@ -93,12 +93,12 @@
                                 <thead>
                                 <tr>
                                     <th style="width:240px">模版ID/企业名称</th>
-                                    <th style="width:220px">业务账号/业务账号名称</th>
-                                    <th style="width:180px">业务类型</th>
-                                    <th style="width:180px">模板分类</th>
+                                    <th style="width:100px">业务账号</th>
+                                    <th style="width:100px">业务类型</th>
+                                    <th style="width:100px">模板分类</th>
                                     <th>模版内容</th>
-                                    <th style="width:120px">状态</th>
-                                    <th style="width:160px">创建人/创建时间</th>
+                                    <th style="width:180px">禁止内容</th>
+                                    <th style="width:100px">状态</th>
                                     <th style="width:160px">操作</th>
                                 </tr>
                                 <thead>
@@ -111,8 +111,8 @@
                                     </td>
                                     <td style="vertical-align: middle;;line-height: 26px;">
                                         [[${info.businessAccount}]]
-                                        <br>
-                                        [[${info.accountName}]]
+<!--                                        <br>-->
+<!--                                        [[${info.accountName}]]-->
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         <mpm:tag identity="businessType" show-type="button"
@@ -126,17 +126,16 @@
                                     <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
                                         [[${info.templateContent}]]
                                     </td>
+                                    <td style="vertical-align: middle;;line-height: 26px;">
+                                        [[${info.forbiddenContent}]]
+                                    </td>
                                     <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
                                         <a class="btn btn-success btn-rounded btn-sm waves-effect waves-light" th:if="${info.templateStatus eq '2'}">通过审核</a>
                                         <a class="btn btn-warning btn-rounded btn-sm waves-effect waves-light" th:if="${info.templateStatus eq '3'}">待审核</a>
                                         <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light" th:if="${info.templateStatus eq '1'}">拒绝</a>
                                         <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light" th:if="${info.templateStatus eq '0'}">无效</a>
                                     </td>
-                                    <td style="vertical-align: middle;;line-height: 26px;">
-                                        [[${info.createdBy}]]
-                                        <br>
-                                        [[${info.createdTime}]]
-                                    </td>
+
                                     <td style="vertical-align: middle;line-height: 26px;">
                                         <a sec:authorize-url="/template/view/center/*/*"
                                            th:href="@{/template/view/center/{templateId}/{protocol}(templateId=${info.templateId},protocol=${info.templateAgreementType})}"
@@ -163,8 +162,8 @@
                                         <a sec:authorize-url="/template/cancel/*/*"
                                            data-toggle="modal" th:onclick="confirmLogout([[${info.templateId}]],[[${info.templateStatus}]],this)"
                                            data-target="#confirm-modal" class="on-default remove-row"
-                                           th:style="${info.templateStatus eq '1'?'padding-left: 5px;color: #f05050':'padding-left: 5px;color: #29b6f6'}"
-                                           th:title="${info.templateStatus eq '1'?'注销模板':'启用模板'}">
+                                           th:style="${info.templateStatus eq '2'?'padding-left: 5px;color: #f05050':'padding-left: 5px;color: #29b6f6'}"
+                                           th:title="${info.templateStatus eq '2'?'注销模板':'启用模板'}">
                                             <i style="font-size: 18px" class="mdi mdi-delete-sweep"></i>
                                         </a>
                                     </td>

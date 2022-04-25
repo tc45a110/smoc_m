@@ -22,7 +22,7 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                        <h4 class="page-title">CMPP模板维护</h4>
+                    <h4 class="page-title">CMPP模板维护</h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
                             模板管理
@@ -66,26 +66,55 @@
                                                     <mpm:tag id="templateType" identity="businessType"
                                                              class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-danger btn-rounded btn-sm waves-effect waves-light;"
                                                              name="businessType" show-type="button" key="code"
-                                                             th:value="${accountBasicInfoValidator.businessType}" title="业务类型"/></span>
+                                                             th:value="${accountBasicInfoValidator.businessType}"
+                                                             title="业务类型"/></span>
                                                 </label>
                                             </div>
                                             <div class="col-md-12 form-group">
-                                                <label class="m-b-10">模板分类<span class="text-danger">*</span>&nbsp;
-                                                    <span class="text-danger" th:if="${#fields.hasErrors('templateClassify')}"
-                                                          th:errors="*{templateClassify}"></span></label><br>
+                                                <label class="m-b-10">模板分类
+                                                    <i data-toggle="tooltip" data-placement="bottom"
+                                                       data-original-title="精准模板:不进行黑白词过滤，直接发送；模糊模板：要进行一系列黑白词过滤；"
+                                                       class="mdi mdi-help-circle-outline"
+                                                       style="font-size:18px;margin-left:5px;"></i>
+                                                    <span class="text-danger">*</span>&nbsp;
+                                                    <span class="text-danger"
+                                                          th:if="${#fields.hasErrors('templateClassify')}"
+                                                          th:errors="*{templateClassify}"></span></label>
                                                 <div style="margin-top:0px" class="radio radio-info checkbox-inline">
-                                                    <input name="templateClassify" type="radio" value="1" required th:checked="${accountTemplateInfoValidator.templateClassify eq '1'}"><label>精准模板</label>
+                                                    <input name="templateClassify" type="radio" value="1" required
+                                                           th:checked="${accountTemplateInfoValidator.templateClassify eq '1'}"><label>精准模板</label>
                                                 </div>
                                                 <div style="margin-top:0px" class="radio radio-info checkbox-inline">
-                                                    <input name="templateClassify" type="radio" value="2" required th:checked="${accountTemplateInfoValidator.templateClassify eq '2'}"><label>模糊模板</label>
+                                                    <input name="templateClassify" type="radio" value="2" required
+                                                           th:checked="${accountTemplateInfoValidator.templateClassify eq '2'}"><label>模糊模板</label>
                                                 </div>
+
                                             </div>
                                             <div class="col-md-12 form-group">
-                                                <label>模板内容</label> <span style="margin-left:20px;color:#f5707a"> 如果内容包括多个模板内容，请用 " | " 隔开</span>
+                                                <label>模板内容</label> <span style="margin-left:20px;color:#4CD396">模版内容全为被允许的内容；如果包括多个模板内容，请用 " | " 隔开</span>
                                             </div>
                                             <div class="col-md-12 form-group">
                                                 <textarea class="form-control" required th:field="*{templateContent}"
-                                                          rows="15">[[${accountTemplateInfoValidator.templateContent}]]</textarea>
+                                                          rows="12">[[${accountTemplateInfoValidator.templateContent}]]</textarea>
+                                            </div>
+                                            <div id="forbidden-title" class="col-md-12 form-group" style="display:none">
+                                                <label>禁止内容</label> <span style="margin-left:20px;color:#F5707A">禁止内容全为被禁止的内容；如果包括多个被禁止内容，请用 " | " 隔开</span>
+                                            </div>
+                                            <div id="forbidden-content" class="col-md-12 form-group"
+                                                 style="display:none">
+                                                <textarea class="form-control" th:field="*{forbiddenContent}"
+                                                          rows="4">[[${accountTemplateInfoValidator.forbiddenContent}]]</textarea>
+                                            </div>
+                                            <div id="check-tooltip-warning" class="col-md-12 form-group"
+                                                 style="display:none">
+                                                <label>内容检测结果</label> <span id="warning-content"
+                                                                            style="margin-left:20px;color:#F5707A"></span>
+
+                                            </div>
+                                            <div id="check-tooltip-success" class="col-md-12 form-group"
+                                                 style="display:none">
+                                                <label>内容检测结果</label> <span id="success-content"
+                                                                            style="margin-left:20px;color:#4CD396">模版内容很纯洁，再接再厉！</span>
                                             </div>
                                             <div class="col-md-12 text-center" style="margin-top:20px">
                                                 <input type="hidden" th:field="*{templateId}">
@@ -101,6 +130,11 @@
                                                 <button sec:authorize-url="/template/save/*" type="submit"
                                                         class="btn btn-teal waves-effect waves-light">提交
                                                 </button>
+
+                                                <a sec:authorize-url="/template/check" style="margin-left:20px"
+                                                   id="check"
+                                                   class="btn btn-info waves-effect waves-light">内容检测
+                                                </a>
                                                 <a th:href="@{/template/list/{protocol}(protocol=${accountTemplateInfoValidator.templateAgreementType})}"
                                                    style="margin-left:20px"
                                                    class="btn btn-default waves-effect waves-light">返回</a>
@@ -128,6 +162,81 @@
 <th:block th:insert="fragments/common_fragments :: select_js"/>
 <th:block th:insert="fragments/common_fragments :: common_submit_form"/>
 <script>
+
+   var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+   $(document).ready(function() {
+       var templateClassify = '[[${accountTemplateInfoValidator.templateClassify}]]';
+       alert
+       if("1" == templateClassify){
+         $("#forbidden-title").css('display','none');
+         $("#forbidden-content").css('display','none');
+         $("#forbidden-content").val("")
+       }
+       if("2" == templateClassify){
+         $("#forbidden-title").css('display','block');
+         $("#forbidden-content").css('display','block');
+       }
+
+       $('input[type=radio][name=templateClassify]').change(function() {
+              if (this.value == '1') {
+                 $("#forbidden-title").css('display','none');
+                 $("#forbidden-content").css('display','none');
+                 $("#forbidden-content").val("")
+              }
+              else if (this.value == '2') {
+                 $("#forbidden-title").css('display','block');
+                 $("#forbidden-content").css('display','block');
+             }
+       });
+
+        $("#check").click(function () {
+             $('#preloader').css('display', 'block');
+             $.ajax({
+                type:"POST",
+                url: contextPath+"/template/check",
+                contentType: "application/json", //必须这样写
+                dataType:"json",
+                data: JSON.stringify(GetJsonData()),
+                success:function (data) {
+                  if(!("undefined" ==typeof(data.system))){
+                     $("#check-tooltip-warning").css('display','block');
+                     $("#check-tooltip-success").css('display','none');
+                     $("#warning-content").html("包含系统黑词："+data.system);
+                     $('#preloader').css('display', 'none');
+                     return;
+                  }
+
+                  if(!("undefined" ==typeof(data.account))){
+                     $("#check-tooltip-warning").css('display','block');
+                     $("#check-tooltip-success").css('display','none');
+                     $("#warning-content").html("包含账号黑词："+data.account);
+                     $('#preloader').css('display', 'none');
+                     return;
+                  }
+
+                  if(("undefined" ==typeof(data.system))){
+                    $("#check-tooltip-warning").css('display','none');
+                    $("#check-tooltip-success").css('display','block');
+                  }
+                  $('#preloader').css('display', 'none');
+                }
+
+             })
+　　     })
+
+        //json格式的数据源
+        function GetJsonData() {
+              // 使用 jquery 中的 ajax 发请求
+            var account = $("#businessAccount").val();
+            var templateContent = $("#templateContent").val();
+          var json = {
+              "account": account,
+              "templateContent": templateContent
+          };
+          return json;
+        }
+   });
+
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');

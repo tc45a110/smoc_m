@@ -11,36 +11,39 @@ import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
+import com.smoc.cloud.common.smoc.filter.FilterKeyWordsInfoValidator;
 import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountValidator;
 import com.smoc.cloud.common.smoc.template.AccountTemplateInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.customer.service.BusinessAccountService;
 import com.smoc.cloud.customer.service.EnterpriseService;
+import com.smoc.cloud.filter.keywords.service.KeywordsService;
 import com.smoc.cloud.finance.service.FinanceAccountService;
 import com.smoc.cloud.sequence.service.SequenceService;
 import com.smoc.cloud.template.service.AccountTemplateInfoService;
+import com.smoc.cloud.template.service.CheckModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 模板管理
  */
 @Slf4j
-@Controller
+@RestController
 @RequestMapping("/template")
 public class TemplateController {
 
@@ -58,6 +61,9 @@ public class TemplateController {
 
     @Autowired
     private AccountTemplateInfoService accountTemplateInfoService;
+
+    @Autowired
+    private KeywordsService keywordsService;
 
     /**
      * 模板管理列表
@@ -146,6 +152,7 @@ public class TemplateController {
         AccountTemplateInfoValidator accountTemplateInfoValidator = new AccountTemplateInfoValidator();
         accountTemplateInfoValidator.setTemplateId("TEMP" + sequenceService.findSequence("TEMPLATE"));
         accountTemplateInfoValidator.setBusinessAccount(businessAccount);
+        accountTemplateInfoValidator.setTemplateClassify("1");
         accountTemplateInfoValidator.setTemplateAgreementType(protocol);
         accountTemplateInfoValidator.setTemplateType(accountBasicInfoValidatorResponseData.getData().getBusinessType());
         accountTemplateInfoValidator.setEnterpriseId(enterpriseData.getData().getEnterpriseId());
@@ -288,7 +295,7 @@ public class TemplateController {
         }
 
         //保存数据
-        ResponseData data = accountTemplateInfoService.save(accountTemplateInfoValidator, op,user.getId());
+        ResponseData data = accountTemplateInfoService.save(accountTemplateInfoValidator, op, user.getId());
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;
@@ -313,7 +320,7 @@ public class TemplateController {
      * @return
      */
     @RequestMapping(value = "/cancel/{templateId}/{status}", method = RequestMethod.GET)
-    public ModelAndView cancelTemplate(@PathVariable String templateId,@PathVariable String status, HttpServletRequest request) {
+    public ModelAndView cancelTemplate(@PathVariable String templateId, @PathVariable String status, HttpServletRequest request) {
         ModelAndView view = new ModelAndView("templates/template_list");
 
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
@@ -325,20 +332,63 @@ public class TemplateController {
             return view;
         }
 
-        if("0".equals(status)){
+        if ("0".equals(status)) {
             status = "2";
-        }else{
+        } else {
             status = "0";
         }
-        ResponseData deleteResponseData = accountTemplateInfoService.cancelTemplate(templateId,status);
+        ResponseData deleteResponseData = accountTemplateInfoService.cancelTemplate(templateId, status);
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(deleteResponseData.getCode())) {
-            systemUserLogService.logsAsync("TEMPLATE_INFO", templateId, user.getRealName(),"delete","0".equals(status) ?"注销模板":"启用模板", JSON.toJSONString(data.getData()));
+            systemUserLogService.logsAsync("TEMPLATE_INFO", templateId, user.getRealName(), "delete", "0".equals(status) ? "注销模板" : "启用模板", JSON.toJSONString(data.getData()));
         }
         //记录日志
         log.info("[模板管理][注销模板][{}][{}]数据:{}", "delete", user.getUserName(), JSON.toJSONString(data.getCode()));
 
         view.setView(new RedirectView("/template/list/" + data.getData().getTemplateAgreementType(), true, false));
         return view;
+    }
+
+    @RequestMapping(value = "/check", method = RequestMethod.POST)
+    public Map<String,String> checkKeyWord(@RequestBody CheckModel model) {
+        Map<String,String> resultMap = new HashMap<>();
+        //初始化数据
+        PageParams<FilterKeyWordsInfoValidator> params = new PageParams<FilterKeyWordsInfoValidator>();
+        params.setPageSize(10000);
+        params.setCurrentPage(1);
+        FilterKeyWordsInfoValidator filterKeyWordsInfoValidator = new FilterKeyWordsInfoValidator();
+        filterKeyWordsInfoValidator.setKeyWordsType("BLACK");
+        filterKeyWordsInfoValidator.setKeyWordsBusinessType("BUSINESS_ACCOUNT");
+        filterKeyWordsInfoValidator.setBusinessId(model.getAccount());
+        params.setParams(filterKeyWordsInfoValidator);
+
+        ResponseData<PageList<FilterKeyWordsInfoValidator>> accountKeyWords = keywordsService.page(params);
+        if (null != accountKeyWords && null != accountKeyWords.getData() && null != accountKeyWords.getData().getList() && accountKeyWords.getData().getList().size() > 0) {
+            for(FilterKeyWordsInfoValidator validator:accountKeyWords.getData().getList()){
+                Pattern regPattern = Pattern.compile(validator.getKeyWords());
+                Matcher matcher = regPattern.matcher(model.getTemplateContent());
+                if (matcher.find()) {
+                    resultMap.put("account",validator.getKeyWords());
+                    break;
+                }
+            }
+        }
+
+        filterKeyWordsInfoValidator.setKeyWordsBusinessType("SYSTEM");
+        filterKeyWordsInfoValidator.setBusinessId("system");
+        params.setParams(filterKeyWordsInfoValidator);
+        ResponseData<PageList<FilterKeyWordsInfoValidator>> systemKeyWords = keywordsService.page(params);
+        if (null != systemKeyWords && null != systemKeyWords.getData() && null != systemKeyWords.getData().getList() && systemKeyWords.getData().getList().size() > 0) {
+            for(FilterKeyWordsInfoValidator validator:systemKeyWords.getData().getList()){
+                Pattern regPattern = Pattern.compile(validator.getKeyWords());
+                Matcher matcher = regPattern.matcher(model.getTemplateContent());
+                if (matcher.find()) {
+                    resultMap.put("system",validator.getKeyWords());
+                    break;
+                }
+            }
+        }
+
+        return resultMap;
     }
 }

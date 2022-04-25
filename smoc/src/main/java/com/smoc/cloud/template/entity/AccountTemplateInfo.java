@@ -29,6 +29,9 @@ public class AccountTemplateInfo {
     @Column(name = "TEMPLATE_CONTENT", nullable = false)
     private String templateContent;
 
+    @Column(name = "FORBIDDEN_CONTENT")
+    private String forbiddenContent;
+
     @Column(name = "CHECK_DATE")
     private Date checkDate;
 
@@ -237,5 +240,13 @@ public class AccountTemplateInfo {
 
     public void setTemplateClassify(String templateClassify) {
         this.templateClassify = templateClassify;
+    }
+
+    public String getForbiddenContent() {
+        return forbiddenContent;
+    }
+
+    public void setForbiddenContent(String forbiddenContent) {
+        this.forbiddenContent = forbiddenContent;
     }
 }

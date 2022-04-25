@@ -18,6 +18,7 @@ public class AccountTemplateInfoRowMapper  implements RowMapper<AccountTemplateI
         qo.setTemplateType(resultSet.getString("BUSINESS_TYPE"));
         qo.setSignName(resultSet.getString("SIGN_NAME"));
         qo.setTemplateContent(resultSet.getString("TEMPLATE_CONTENT"));
+        qo.setForbiddenContent(resultSet.getString("FORBIDDEN_CONTENT"));
         qo.setCheckDate(resultSet.getString("CHECK_DATE"));
         qo.setCheckBy(resultSet.getString("CHECK_BY"));
         qo.setCheckOpinions(resultSet.getString("CHECK_OPINIONS"));
