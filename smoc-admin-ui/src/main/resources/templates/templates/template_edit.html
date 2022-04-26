@@ -102,7 +102,7 @@
                                             </div>
                                             <div id="forbidden-content" class="col-md-12 form-group"
                                                  style="display:none">
-                                                <textarea class="form-control" th:field="*{forbiddenContent}"
+                                                <textarea   class="form-control" th:field="*{forbiddenContent}"
                                                           rows="4">[[${accountTemplateInfoValidator.forbiddenContent}]]</textarea>
                                             </div>
                                             <div id="check-tooltip-warning" class="col-md-12 form-group"
@@ -181,7 +181,8 @@
               if (this.value == '1') {
                  $("#forbidden-title").css('display','none');
                  $("#forbidden-content").css('display','none');
-                 $("#forbidden-content").val("")
+                 $("#forbiddenContent").val("");
+                 $("#forbiddenContent").text("");
               }
               else if (this.value == '2') {
                  $("#forbidden-title").css('display','block');
