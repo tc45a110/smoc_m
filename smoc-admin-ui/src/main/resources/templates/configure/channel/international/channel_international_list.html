@@ -172,13 +172,12 @@
                                                             通道区域范围：
                                                             <mpm:tag identity="businessAreaType" show-type="label"
                                                                      key="code" th:value="${info.businessAreaType}"/>
-                                                            <i th:if="${not #strings.isEmpty(info.maskProvince)}"
+                                                            <i th:if="${info.supportAreaCodes ne 'ALL'}"
                                                                data-toggle="tooltip" data-placement="right" title=""
-                                                               data-original-title="屏蔽区域，如果存在屏蔽区域的话"
+                                                               data-original-title="这个位置开发时有业务逻辑，可能多条 在这显示"
                                                                th:id="${info.channelId}"
                                                                th:onmouseover="areaCodes([[${info.channelId}]])"
-                                                               class="mdi mdi-comment-text-outline"
-                                                               style="margin-left:5px"></i>
+                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
                                                         </p>
                                                     </div>
                                                     <div class="col-sm-3">

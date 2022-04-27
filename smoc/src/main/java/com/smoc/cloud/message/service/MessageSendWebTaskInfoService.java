@@ -46,6 +46,9 @@ public class MessageSendWebTaskInfoService {
     @Resource
     private MessageProperties messageProperties;
 
+    @Resource
+    private MessageWebTaskInfoService messageWebTaskInfoService;
+
 
     /**
      * 发送短信
@@ -65,7 +68,7 @@ public class MessageSendWebTaskInfoService {
 
         //判断发送数量
         if (phoneCount > messageProperties.getMobileCountLimit()) {
-            return ResponseDataUtil.buildError(ResponseCode.PARAM_MOBILE_NUM_ERROR.getCode(), ResponseCode.PARAM_MOBILE_NUM_ERROR.getMessage());
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_MOBILE_NUM_ERROR.getCode(), "单批次发送量超过"+messageProperties.getMobileCountLimit()+"条!");
         }
 
         //查询模板
@@ -211,24 +214,9 @@ public class MessageSendWebTaskInfoService {
         messageWebTaskInfoRepository.saveAndFlush(entity);
 
         //异步 批量保存短消息
-        this.saveMessageBatch(messages, messageCount, phoneCount);
+        messageWebTaskInfoService.saveMessageBatch(messages, messageCount, phoneCount);
 
         return ResponseDataUtil.buildSuccess();
     }
-
-    /**
-     * 异步 批量保存 待发短信
-     *
-     * @param messages     短消息
-     * @param messageCount 发送短信数量
-     * @param phoneCount   发送手机号数量
-     */
-    @Async
-    public void saveMessageBatch(List<MessageFormat> messages, Integer messageCount, Integer phoneCount) {
-
-        messageWebTaskInfoRepository.saveMessageBatch(messages, messageCount, phoneCount);
-
-    }
-
 
 }

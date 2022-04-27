@@ -41,7 +41,7 @@ public class ChannelInterfaceValidator {
     @Length(max = 32, message = "码号最大长度为{max}")
     private String srcId;
 
-    @Length(min = 1, max = 128, message = "业务代码长度不符合规则！")
+    @Length(max = 128, message = "业务代码长度不符合规则！")
     private String businessCode;
 
     @NotNull(message = "连接数不能为空！")
@@ -51,7 +51,7 @@ public class ChannelInterfaceValidator {
     @Range(max = 10000, message = "最大速率为{max}！")
     private Integer maxSendSecond;
 
-    @Range(min = 1, max = 10000, message = "心跳间隔单位长度要在{min}-{max}之间！")
+    @Range(min = 0, max = 10000, message = "心跳间隔单位长度要在{min}-{max}之间！")
     private Integer heartbeatInterval;
 
     @NotNull(message = "通道协议类型不能为空！")

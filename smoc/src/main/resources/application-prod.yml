@@ -84,6 +84,12 @@ com:
       max-threads: 500
       protocol: org.apache.coyote.http11.Http11NioProtocol #org.apache.coyote.http11.Http11AprProtocol
 
+    cloud:
+      smoc:
+        message:
+          mobile-file-root-path: /alidata/smoc/message/mobile  #短信手机号文件根目录
+          mobile-count-limit: 1000 #该批次手机号总量
+
 logging:
   config: classpath:logback-spring.xml
   path: /home/smoc/smoc-log/smoc-logs

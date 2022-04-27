@@ -17,14 +17,15 @@ spring:
     host: r-2zegyswwjdbicif2hd.redis.rds.aliyuncs.com
     port: 6379
     password: Tsmoc40#RedistEst
-    database: 0
-    timeout: 10000
+    database: 1
+    timeout: 3000
     jedis:
       pool:
         max-active: 8
+        max-wait: 2000
         max-idle: 8
-        max-wait: -1
-        min-idle: 5
+        min-idle: 0
+        time-between-eviction-runs: 1000
 
 #**********************************************************
 # manpuman oauth2 token参数设置

@@ -31,6 +31,9 @@ public class RedisConstant {
     //菜单
     public static String AUTH_MENUS_PREFIX = ":m";
 
+    //自服务菜单
+    public static String SERICE_UI_MENUS = "service-ui:auth";
+
     /**
      * Redis key 数据KEY
      */

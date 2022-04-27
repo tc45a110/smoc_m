@@ -378,7 +378,7 @@ public class ChannelController {
         String areaType = "业务区域";
         String supportAreaCodes = data.getData().getSupportAreaCodes();
         //如果默认值为ALL并且屏蔽省份为空
-        if ("ALL".equals(data.getData().getSupportAreaCodes()) || "INTL".equals(data.getData().getCarrier())) {
+        if ("ALL".equals(data.getData().getSupportAreaCodes()) ) {
             if (StringUtils.isEmpty(data.getData().getMaskProvince())) {
                 return "无屏蔽省份";
             } else {

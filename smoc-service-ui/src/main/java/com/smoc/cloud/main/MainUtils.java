@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.smoc.cloud.admin.oauth2.service.OauthTokenService;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
 import com.smoc.cloud.common.auth.qo.Nodes;
+import com.smoc.cloud.common.constant.RedisConstant;
 import com.smoc.cloud.common.response.ResponseData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +29,10 @@ public class MainUtils {
     public void setReidsData(ResponseData<Nodes[]> businessTypes, ValueOperations<String,String> vo, SecurityUser user) {
         Gson gson = new Gson();
         for(int i=1;i<businessTypes.getData().length;i++){
-            String value = vo.get("serviceAuth:"+user.getId()+"-"+businessTypes.getData()[i].getText());
+            String value = vo.get(RedisConstant.SERICE_UI_MENUS+":"+user.getId()+":"+businessTypes.getData()[i].getText());
             if(StringUtils.isEmpty(value)){
                 ResponseData<Nodes[]> data = oauthTokenService.getAllSubMenusByParentId(businessTypes.getData()[i].getId());
-                vo.set("serviceAuth:"+user.getId()+"-"+businessTypes.getData()[i].getText(), gson.toJson(data.getData()));
+                vo.set(RedisConstant.SERICE_UI_MENUS+":"+user.getId()+":"+businessTypes.getData()[i].getText(), gson.toJson(data.getData()));
             }
         }
     }

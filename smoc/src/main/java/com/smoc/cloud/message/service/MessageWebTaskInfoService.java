@@ -7,6 +7,7 @@ import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.message.MessageAccountValidator;
+import com.smoc.cloud.common.smoc.message.model.MessageFormat;
 import com.smoc.cloud.common.smoc.message.model.StatisticMessageSend;
 import com.smoc.cloud.common.smoc.message.MessageWebTaskInfoValidator;
 import com.smoc.cloud.common.smoc.message.model.StatisticMessageSendData;
@@ -15,10 +16,12 @@ import com.smoc.cloud.message.entity.MessageWebTaskInfo;
 import com.smoc.cloud.message.repository.MessageWebTaskInfoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -146,6 +149,7 @@ public class MessageWebTaskInfoService {
 
     /**
      * 查询企业发送量
+     *
      * @param messageAccountValidator
      * @return
      */
@@ -156,6 +160,7 @@ public class MessageWebTaskInfoService {
 
     /**
      * 统计短信提交发送量
+     *
      * @param messageWebTaskInfoValidator
      * @return
      */
@@ -164,4 +169,15 @@ public class MessageWebTaskInfoService {
         return ResponseDataUtil.buildSuccess(data);
     }
 
+    /**
+     * 异步 批量保存 待发短信
+     *
+     * @param messages     短消息
+     * @param messageCount 发送短信数量
+     * @param phoneCount   发送手机号数量
+     */
+    @Async
+    public void saveMessageBatch(List<MessageFormat> messages, Integer messageCount, Integer phoneCount) {
+        messageWebTaskInfoRepository.saveMessageBatch(messages, messageCount, phoneCount);
+    }
 }

@@ -9,7 +9,6 @@ import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.message.MessageWebTaskInfoValidator;
 import com.smoc.cloud.common.smoc.message.model.MessageTemplateExcelModel;
-import com.smoc.cloud.common.smoc.template.AccountTemplateInfoValidator;
 import com.smoc.cloud.common.utils.Utils;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.customer.entity.EnterpriseBookInfo;
@@ -17,7 +16,6 @@ import com.smoc.cloud.customer.repository.EnterpriseBookRepository;
 import com.smoc.cloud.message.model.MessageTemplateExcelModelListener;
 import com.smoc.cloud.message.properties.MessageProperties;
 import com.smoc.cloud.message.service.MessageSendWebTaskInfoService;
-import com.smoc.cloud.template.service.AccountTemplateInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -146,9 +144,6 @@ public class MessageSendWebTaskInfoController {
             String tempString = null;
             int i = 0;
             while ((tempString = br.readLine()) != null) {
-                if(i>=3){
-                    break;
-                }
                 if (StringUtils.isEmpty(tempString)) {
                     continue;
                 }

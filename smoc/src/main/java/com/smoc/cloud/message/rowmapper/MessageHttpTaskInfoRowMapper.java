@@ -22,6 +22,8 @@ public class MessageHttpTaskInfoRowMapper implements RowMapper<MessageHttpsTaskI
         qo.setSuccessNumber(resultSet.getInt("SUCCESS_NUMBER"));
         qo.setSuccessSendNumber(resultSet.getInt("SUCCESS_SEND_NUMBER"));
         qo.setCreatedTime(resultSet.getString("CREATED_TIME"));
+        qo.setSplitNumber(resultSet.getInt("SPLIT_NUMBER"));
+        qo.setSubmitNumber(resultSet.getInt("SUBMIT_NUMBER"));
 
         return qo;
     }

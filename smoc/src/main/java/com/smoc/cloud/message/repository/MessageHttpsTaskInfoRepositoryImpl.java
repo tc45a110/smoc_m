@@ -34,6 +34,8 @@ public class MessageHttpsTaskInfoRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(" t.TEMPLATE_ID,");
         sqlBuffer.append(" t.BUSINESS_ACCOUNT,");
         sqlBuffer.append(" t.MESSAGE_CONTENT,");
+        sqlBuffer.append(" t.SPLIT_NUMBER,");
+        sqlBuffer.append(" t.SUBMIT_NUMBER,");
         sqlBuffer.append(" t.SUCCESS_NUMBER,");
         sqlBuffer.append(" t.SUCCESS_SEND_NUMBER,");
         sqlBuffer.append(" DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME ");

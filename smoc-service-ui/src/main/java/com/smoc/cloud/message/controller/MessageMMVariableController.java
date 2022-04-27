@@ -134,7 +134,7 @@ public class MessageMMVariableController {
         messageWebTaskInfoValidator.setBusinessType(businessType);
         messageWebTaskInfoValidator.setSendType("1");
         messageWebTaskInfoValidator.setMessageType("2");
-        messageWebTaskInfoValidator.setSendStatus("05");
+        messageWebTaskInfoValidator.setSendStatus("01");
         messageWebTaskInfoValidator.setUpType("2");
 
         //查询企业下得所有WEB业务账号

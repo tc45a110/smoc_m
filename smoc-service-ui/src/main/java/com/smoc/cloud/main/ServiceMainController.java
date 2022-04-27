@@ -6,6 +6,7 @@ import com.smoc.cloud.admin.security.properties.SystemProperties;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
 import com.smoc.cloud.common.auth.qo.Nodes;
 import com.smoc.cloud.common.auth.validator.SystemValidator;
+import com.smoc.cloud.common.constant.RedisConstant;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
@@ -180,7 +181,7 @@ public class ServiceMainController {
 
         //redis缓存
         ValueOperations<String,String> vo = redisTemplate.opsForValue();
-        String value = vo.get("serviceAuth:"+user.getId()+"-"+businessTypes.getData()[0].getText());
+        String value = vo.get(RedisConstant.SERICE_UI_MENUS+":"+user.getId()+":"+businessTypes.getData()[0].getText());
         Gson gson = new Gson();
         if(StringUtils.isEmpty(value)){
             //加载菜单数据
@@ -190,7 +191,7 @@ public class ServiceMainController {
                 return view;
             }
             view.addObject("menus", data);
-            vo.set("serviceAuth:"+user.getId()+"-"+businessTypes.getData()[0].getText(), gson.toJson(data.getData()));
+            vo.set(RedisConstant.SERICE_UI_MENUS+":"+user.getId()+":"+businessTypes.getData()[0].getText(), gson.toJson(data.getData()));
         }else{
             Nodes[] nodesData = gson.fromJson(value, Nodes[].class);
             view.addObject("menus", ResponseDataUtil.buildSuccess(nodesData));
@@ -251,11 +252,11 @@ public class ServiceMainController {
 
         //redis缓存中获取
         ValueOperations<String,String> vo = redisTemplate.opsForValue();
-        String value = vo.get("serviceAuth:"+user.getId()+"-"+businessTypeName);
+        String value = vo.get(RedisConstant.SERICE_UI_MENUS+":"+user.getId()+":"+businessTypeName);
         Gson gson = new Gson();
         if(StringUtils.isEmpty(value)){
             ResponseData<Nodes[]> data = oauthTokenService.getAllSubMenusByParentId(parentId);
-            vo.set("serviceAuth:"+user.getId()+"-"+businessTypeName, gson.toJson(data.getData()));
+            vo.set(RedisConstant.SERICE_UI_MENUS+":"+user.getId()+":"+businessTypeName, gson.toJson(data.getData()));
             view.addObject("menus", data);
         }else{
             Nodes[] nodesData = gson.fromJson(value, Nodes[].class);
