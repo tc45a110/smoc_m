@@ -97,11 +97,11 @@
                                                 <textarea class="form-control" required th:field="*{templateContent}"
                                                           rows="12">[[${accountTemplateInfoValidator.templateContent}]]</textarea>
                                             </div>
-                                            <div id="forbidden-title" class="col-md-12 form-group" style="display:none">
-                                                <label>禁止内容</label> <span style="margin-left:20px;color:#F5707A">禁止内容全为被禁止的内容；如果包括多个被禁止内容，请用 " | " 隔开；如：积分｜信贷｜捕鱼</span>
+                                            <div sec:authorize-url="/regular_expression" id="forbidden-title" class="col-md-12 form-group" style="display:block">
+                                                <label>正则表达式</label> <span style="margin-left:20px;color:#F5707A"></span>
                                             </div>
-                                            <div id="forbidden-content" class="col-md-12 form-group"
-                                                 style="display:none">
+                                            <div sec:authorize-url="/regular_expression" id="forbidden-content" class="col-md-12 form-group"
+                                                 style="display:block">
                                                 <textarea   class="form-control" th:field="*{forbiddenContent}"
                                                           rows="4">[[${accountTemplateInfoValidator.forbiddenContent}]]</textarea>
                                             </div>
@@ -165,30 +165,6 @@
 
    var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
    $(document).ready(function() {
-       var templateClassify = '[[${accountTemplateInfoValidator.templateClassify}]]';
-       alert
-       if("1" == templateClassify){
-         $("#forbidden-title").css('display','none');
-         $("#forbidden-content").css('display','none');
-         $("#forbidden-content").val("")
-       }
-       if("2" == templateClassify){
-         $("#forbidden-title").css('display','block');
-         $("#forbidden-content").css('display','block');
-       }
-
-       $('input[type=radio][name=templateClassify]').change(function() {
-              if (this.value == '1') {
-                 $("#forbidden-title").css('display','none');
-                 $("#forbidden-content").css('display','none');
-                 $("#forbiddenContent").val("");
-                 $("#forbiddenContent").text("");
-              }
-              else if (this.value == '2') {
-                 $("#forbidden-title").css('display','block');
-                 $("#forbidden-content").css('display','block');
-             }
-       });
 
         $("#check").click(function () {
              $('#preloader').css('display', 'block');

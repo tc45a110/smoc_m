@@ -44,10 +44,10 @@
                                 <input type="text" class="form-control"
                                        placeholder="业务账号" autocomplete="off" th:field="*{businessAccount}">
                             </div>
-<!--                            <div class="form-group  col-sm-4">-->
-<!--                                <input type="text" class="form-control"-->
-<!--                                       placeholder="业务账号名称" autocomplete="off" th:field="*{accountName}">-->
-<!--                            </div>-->
+                            <div class="form-group  col-sm-4">
+                                <input type="text" class="form-control"
+                                       placeholder="业务账号名称" autocomplete="off" th:field="*{accountName}">
+                            </div>
                             <div class="form-group  col-sm-4">
                                 <mpm:tag id="templateType" identity="businessType" show-type="select" key="code"
                                          name="templateType"
@@ -93,11 +93,10 @@
                                 <thead>
                                 <tr>
                                     <th style="width:240px">模版ID/企业名称</th>
-                                    <th style="width:100px">业务账号</th>
+                                    <th style="width:180px">业务账号/账号名称</th>
                                     <th style="width:100px">业务类型</th>
                                     <th style="width:100px">模板分类</th>
                                     <th>模版内容</th>
-                                    <th style="width:180px">禁止内容</th>
                                     <th style="width:100px">状态</th>
                                     <th style="width:160px">操作</th>
                                 </tr>
@@ -111,8 +110,8 @@
                                     </td>
                                     <td style="vertical-align: middle;;line-height: 26px;">
                                         [[${info.businessAccount}]]
-<!--                                        <br>-->
-<!--                                        [[${info.accountName}]]-->
+                                        <br>
+                                        [[${info.accountName}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         <mpm:tag identity="businessType" show-type="button"
@@ -125,9 +124,6 @@
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
                                         [[${info.templateContent}]]
-                                    </td>
-                                    <td style="vertical-align: middle;;line-height: 26px;">
-                                        [[${info.forbiddenContent}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
                                         <a class="btn btn-success btn-rounded btn-sm waves-effect waves-light" th:if="${info.templateStatus eq '2'}">通过审核</a>

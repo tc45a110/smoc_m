@@ -8,7 +8,7 @@ server: #服务端口
       timeout: 240m
   connection-timeout: 15000
   tomcat:
-    basedir:  F:/data/apps/temp
+    basedir: F:/data/apps/temp
 
 spring:
   cloud:
@@ -57,6 +57,12 @@ com:
         message-resource:
           resource-url: http://localhost:8090/smoc/message/resource #访问资源路径
           resource-file-root-path: F:/data/message/resource  #资源文件根目录
+
+        intelligence:
+          account: account
+          password: password
+          serverAddress: serverAddress
+
 
     #**********************************************************
     # 内置tomcat 配置
