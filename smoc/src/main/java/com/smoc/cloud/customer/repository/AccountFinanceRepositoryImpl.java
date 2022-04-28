@@ -84,7 +84,12 @@ public class AccountFinanceRepositoryImpl extends BasePageRepository {
             }
 
             if("2".equals(info.getFlag())){
-                StringBuffer sqlBuffer = new StringBuffer("update account_finance_info set CARRIER_PRICE = '"+info.getCarrierPrice()+"',UPDATED_BY='"+accountFinanceInfoValidator.getCreatedBy()+"',UPDATED_TIME=now() where ID = '"+info.getId()+"' ");
+                StringBuffer sqlBuffer = new StringBuffer("update account_finance_info set PAY_TYPE = '"+accountFinanceInfoValidator.getPayType()+"',CHARGE_TYPE='"+accountFinanceInfoValidator.getChargeType()+"',ACCOUNT_CREDIT_SUM='"+accountFinanceInfoValidator.getAccountCreditSum()+"', CARRIER_PRICE = '"+info.getCarrierPrice()+"',UPDATED_BY='"+accountFinanceInfoValidator.getCreatedBy()+"',UPDATED_TIME=now() where ID = '"+info.getId()+"' ");
+                sql[i] = sqlBuffer.toString();
+            }
+
+            if("3".equals(info.getFlag())){
+                StringBuffer sqlBuffer = new StringBuffer("update account_finance_info set PAY_TYPE = '"+accountFinanceInfoValidator.getPayType()+"',CHARGE_TYPE='"+accountFinanceInfoValidator.getChargeType()+"',ACCOUNT_CREDIT_SUM='"+accountFinanceInfoValidator.getAccountCreditSum()+"' where ID = '"+info.getId()+"' ");
                 sql[i] = sqlBuffer.toString();
             }
 

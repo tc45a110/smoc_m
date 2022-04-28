@@ -7,7 +7,7 @@ import lombok.Setter;
 import java.util.List;
 
 /**
- * 获取模版状态
+ * 获取模板状态
  */
 @Setter
 @Getter

@@ -34,6 +34,8 @@ public class AccountBasicInfoValidator {
     private String carrier;
     @NotNull(message = "信息分类不能为空！")
     private String infoType;
+    @NotNull(message = "行业分类不能为空！")
+    private String industryType;
     private String extendCode;
     private Integer randomExtendCodeLength;
     @NotNull(message = "设置通道方式不能为空！")

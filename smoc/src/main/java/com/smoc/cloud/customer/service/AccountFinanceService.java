@@ -109,7 +109,9 @@ public class AccountFinanceService {
             if(!StringUtils.isEmpty(priceMap) ){
                 //价格相等：代表没有改动，数据库不用执行
                 if(submitPrice.getCarrierPrice().compareTo(priceMap.getCarrierPrice())==0){
-                    it.remove();
+                    //价格没有变动，需要更新其他字段
+                    submitPrice.setFlag("3");
+                    submitPrice.setId(priceMap.getId());
                 }else{
                     //价格有变动，需要修改:更新日期
                     submitPrice.setFlag("2");

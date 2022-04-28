@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 启用、禁止模版
+ * 启用、禁止模板
  */
 @Setter
 @Getter

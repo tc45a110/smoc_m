@@ -288,13 +288,13 @@ public class GroupController {
     @RequestMapping(value = "/downFileTemp/{type}", method = RequestMethod.GET)
     public void downFileTemp(@PathVariable String type,HttpServletRequest request, HttpServletResponse response) {
 
-        String fileName = "模版.txt";
+        String fileName = "模板.txt";
 
         if("1".equals(type)){
-            fileName = "模版.txt";
+            fileName = "模板.txt";
         }
         if("2".equals(type)){
-            fileName = "模版.xlsx";
+            fileName = "模板.xlsx";
         }
         if("3".equals(type)){
             fileName = "关键词模板.xlsx";

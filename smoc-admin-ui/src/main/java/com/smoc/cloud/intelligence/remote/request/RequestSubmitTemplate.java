@@ -7,7 +7,7 @@ import lombok.Setter;
 import java.util.List;
 
 /**
- * 智能模版提交请求参数
+ * 智能模板提交请求参数
  */
 @Setter
 @Getter
@@ -29,7 +29,7 @@ public class RequestSubmitTemplate {
     //业务 Id
     private String bizId;
 
-    //短信示例 所要发送的短信原文的示例，用于模版审核 时使用，最大 70 个字符。
+    //短信示例 所要发送的短信原文的示例，用于模板审核 时使用，最大 70 个字符。
     private String smsExample;
 
     //模板协议 最大支持 10 页协议

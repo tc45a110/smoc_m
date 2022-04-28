@@ -211,8 +211,11 @@ public class AccountController {
             accountBasicInfoValidator.setAccountStatus("2");
             accountBasicInfoValidator.setRandomExtendCodeLength(0);
             accountBasicInfoValidator.setAccountProcess("10000");
-            accountBasicInfoValidator.setConsumeType("1");//默认下发扣费、
             accountBasicInfoValidator.setBusinessType("TEXT_SMS");
+            accountBasicInfoValidator.setIndustryType("001");//行业类型：默认金融
+            accountBasicInfoValidator.setTransferType("0");//是否支持携号转网：默认否
+            accountBasicInfoValidator.setAccountPriority("2");//账号优先级：默认中
+            accountBasicInfoValidator.setAccountChannelType("ACCOUNT_CHANNEL_GROUP");//设置通道方式:默认通道组
 
             //查询企业数据
             ResponseData<EnterpriseBasicInfoValidator> data = enterpriseService.findById(accountId);

@@ -13,6 +13,7 @@ public class AccountBasicInfo {
     private String businessType;
     private String carrier;
     private String infoType;
+    private String industryType;
     private String extendCode;
     private Integer randomExtendCodeLength;
     private String accountChannelType;
@@ -226,6 +227,16 @@ public class AccountBasicInfo {
 
     public void setConsumeType(String consumeType) {
         this.consumeType = consumeType;
+    }
+
+    @Basic
+    @Column(name = "INDUSTRY_TYPE")
+    public String getIndustryType() {
+        return industryType;
+    }
+
+    public void setIndustryType(String industryType) {
+        this.industryType = industryType;
     }
 
     @Override

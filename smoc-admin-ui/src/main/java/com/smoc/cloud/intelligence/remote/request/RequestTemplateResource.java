@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 模版资源上传请求参数
+ * 模板资源上传请求参数
  */
 @Setter
 @Getter

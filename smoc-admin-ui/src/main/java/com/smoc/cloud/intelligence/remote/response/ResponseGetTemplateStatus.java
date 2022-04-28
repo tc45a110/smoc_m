@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 获取模版状态
+ * 获取模板状态
  */
 @Setter
 @Getter

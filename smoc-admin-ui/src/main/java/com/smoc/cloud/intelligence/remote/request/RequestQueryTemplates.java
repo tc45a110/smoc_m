@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 模版查询请求参数
+ * 模板查询请求参数
  */
 @Setter
 @Getter

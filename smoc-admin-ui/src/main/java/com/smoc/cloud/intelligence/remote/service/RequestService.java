@@ -27,7 +27,7 @@ public class RequestService {
     private IntelligenceProperties intelligenceProperties;
 
     /**
-     * 模版资源上传
+     * 模板资源上传
      *
      * @param param
      * @return data 中数据 resourceId
@@ -44,7 +44,7 @@ public class RequestService {
     }
 
     /**
-     * 智能短信模版提交
+     * 智能短信模板提交
      *
      * @param param
      * @return data 中数据tplId
@@ -156,7 +156,7 @@ public class RequestService {
     }
 
     /**
-     * 查询公共模版
+     * 查询公共模板
      *
      * @param param
      * @return

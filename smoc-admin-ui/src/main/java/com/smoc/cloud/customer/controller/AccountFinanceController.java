@@ -84,16 +84,11 @@ public class AccountFinanceController {
 
         //根据运营商和账号ID查询运营商单价
         AccountFinanceInfoValidator accountFinanceInfoValidator = new AccountFinanceInfoValidator();
-        accountFinanceInfoValidator.setCarrierType("1");
-        accountFinanceInfoValidator.setAccountCreditSum(new BigDecimal("0"));
         accountFinanceInfoValidator.setAccountId(data.getData().getAccountId());
-        accountFinanceInfoValidator.setFrozenReturnDate("1");//返还时间
 
         //国际取国家代码
         if("INTL".equals(data.getData().getCarrier())){
             accountFinanceInfoValidator.setCarrier(data.getData().getCountryCode());
-            accountFinanceInfoValidator.setPayType("2");//付费方式
-            accountFinanceInfoValidator.setChargeType("2");//计费方式
             accountFinanceInfoValidator.setCarrierType("2");//国际运营商
 
         }else{
@@ -108,6 +103,11 @@ public class AccountFinanceController {
             view.addObject("op", "edit");
             accountFinanceInfoValidator = list.getData().get(0);
         } else {
+            accountFinanceInfoValidator.setCarrierType("1");
+            accountFinanceInfoValidator.setAccountCreditSum(new BigDecimal("0"));
+            accountFinanceInfoValidator.setFrozenReturnDate("1");//返还时间
+            accountFinanceInfoValidator.setPayType("1");//付费方式
+            accountFinanceInfoValidator.setChargeType("2");//计费方式
             view.addObject("op", "add");
         }
 

@@ -30,10 +30,10 @@ public class EnterpriseBasicInfoValidator {
     @NotNull(message = "对接主体公司不能为空！")
     private String accessCorporation;
 
-    @Length(min = 2, max = 12, message = "企业联系人长度不符合规则！")
+    @Length(max = 12, message = "企业联系人长度不符合规则！")
     private String enterpriseContacts;
 
-    @Length(min = 7, max = 24, message = "企业联系方式长度不符合规则！")
+    @Length(max = 24, message = "企业联系方式长度不符合规则！")
     private String enterpriseContactsPhone;
 
     private String saler;

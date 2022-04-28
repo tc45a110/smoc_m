@@ -52,12 +52,12 @@
                                                  key="code" th:value="${accountFinanceInfoValidator.chargeType}" required="true" title="计费方式"/>
                                     </div>
                                     <div class="col-md-4 form-group m-b-20">
-                                        <label>付费方式<span class="text-danger">*</span>&nbsp;</label><br><br>
+                                        <label>客户付费方式<span class="text-danger">*</span>&nbsp;</label><br><br>
                                         <mpm:tag id="payType" identity="payType" show-type="radio" key="code" style="margin-top:0px"
                                                  name="payType" th:value="${accountFinanceInfoValidator.payType}" required="true" title="付费方式"/>
                                     </div>
                                     <div class="col-md-4 form-group m-b-20">
-                                        <label>冻结金额返还时间<span class="text-danger">*</span>&nbsp;</label><br><br>
+                                        <label>账户余额扣费方式<span class="text-danger">*</span>&nbsp;</label><br><br>
                                         <mpm:tag id="frozenReturnDate" identity="frozenReturnDate" show-type="radio" key="code" style="margin-top:0px" mask-value="2"
                                                  name="frozenReturnDate" th:value="${accountFinanceInfoValidator.frozenReturnDate}" required="true" title="额返还时间"/>
                                     </div>
@@ -107,11 +107,11 @@
 <th:block th:insert="fragments/common_fragments :: common_submit_form"/>
 <script>
 
-  /*  $('#accountCreditSum').bind('input propertychange', function () {
+    /*$('#accountCreditSum').bind('input propertychange', function () {
         var numberValue = $(this).val();
         var numberValue=new String(Math.round(numberValue*1000)); // 数字金额
         var chineseValue=""; // 转换后的汉字金额
-        var String1 = "零壹贰叁肆伍陆柒捌玖"; // 汉字数字
+        //var String1 = "零壹贰叁肆伍陆柒捌玖"; // 汉字数字
         var String1 = "0123456789"; // 汉字数字
         var String2 = "万仟佰拾亿仟佰拾万仟佰拾元角分厘"; // 对应单位
         var len=numberValue.length; // numberValue 的字符串长度
@@ -123,8 +123,8 @@
             return "";
         }
         if (numberValue==0){
-            chineseValue = "零元整";
-            $("#aa").html(chineseValue);
+            chineseValue = "零元";
+            $("#aa").html('<span style="color: red">' + chineseValue + '</span>');
         }
 
         String2 = String2.substr(String2.length-len, len); // 取出对应位数的STRING2的值
@@ -175,16 +175,16 @@
             chineseValue = chineseValue + Ch1 + Ch2;
         }
 
-        /!*if ( String3 == 0 ){ // 最后一位（分）为0时，加上“整”
+        if ( String3 == 0 ){ // 最后一位（分）为0时，加上“整”
             chineseValue = chineseValue + "整";
-        }*!/
-        $("#aa").html(chineseValue);
-    });*/
+        }
+        $("#aa").html('<span style="color: red">' + chineseValue + '</span>');
+    });
 
     function ChinaCost(numberValue){
         alert(numberValue)
 
-    }
+    }*/
 
 
     var resizefunc = [];

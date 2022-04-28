@@ -149,8 +149,8 @@ public class ComplaintController {
         MessageComplaintInfoValidator messageComplaintInfoValidator = data.getData();
 
         //查询账号
-        if(!StringUtils.isEmpty(data.getData().getBusinessAccount())){
-            ResponseData<AccountBasicInfoValidator> info = businessAccountService.findById(data.getData().getBusinessAccount());
+        if(!StringUtils.isEmpty(messageComplaintInfoValidator.getBusinessAccount())){
+            ResponseData<AccountBasicInfoValidator> info = businessAccountService.findById(messageComplaintInfoValidator.getBusinessAccount());
             if (ResponseCode.SUCCESS.getCode().equals(info.getCode())) {
                 messageComplaintInfoValidator.setAccountName(info.getData().getAccountName());
                 if(StringUtils.isEmpty(messageComplaintInfoValidator.getBusinessType())){

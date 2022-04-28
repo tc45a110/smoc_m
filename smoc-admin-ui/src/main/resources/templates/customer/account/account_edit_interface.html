@@ -83,7 +83,7 @@
                                                       th:errors="*{maxSendSecond}"
                                                       style="font-weight: 200;font-size: 12px"></span></label>
                                             <input id="maxSendSecond" type="text" class="form-control"
-                                                   autocomplete="off"
+                                                   autocomplete="off"  required=""
                                                    th:field="*{maxSendSecond}" data-parsley-length="[1,10]"
                                                    data-parsley-type="number"
                                                    placeholder="发送速率(条/秒)">
@@ -93,10 +93,14 @@
                                                 <span class="text-danger" th:if="${#fields.hasErrors('identifyIp')}"
                                                       th:errors="*{identifyIp}"
                                                       style="font-weight: 200;font-size: 12px"></span></label>
-                                            <input id="identifyIp" type="text" class="form-control"
+                                            <!--<input id="identifyIp" type="text" class="form-control"
                                                    th:field="*{identifyIp}" data-parsley-length="[7,1200]"
                                                    data-parsley-pattern="/^((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d))|\*)((\/([012]\d|3[012]|\d))?)(,((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d))|\*)((\/([012]\d|3[012]|\d))?))*$/"
-                                                   autocomplete="off" placeholder="客户鉴权IP">
+                                                   autocomplete="off" placeholder="客户鉴权IP">-->
+                                            <textarea id="identifyIp" class="form-control" th:field="*{identifyIp}"
+                                                      data-parsley-length="[7,1200]" autocomplete="off"
+                                                      data-parsley-pattern="/^((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d))|\*)((\/([012]\d|3[012]|\d))?)(,((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d))|\*)((\/([012]\d|3[012]|\d))?))*$/"
+                                                      rows="2"   placeholder="客户鉴权IP"></textarea>
                                         </div>
                                     </div>
 
@@ -142,31 +146,33 @@
                                                        data-parsley-type="number"
                                                        placeholder="账号提交速率">
                                             </div>
-                                            <div class="form-group m-b-20">
-                                                <label>上行短信推送地址url&nbsp;
-                                                    <span class="text-danger" th:if="${#fields.hasErrors('moUrl')}"
-                                                          th:errors="*{moUrl}"
-                                                          style="font-weight: 200;font-size: 12px"></span></label>
-                                                <input type="text" class="form-control"
-                                                       th:field="*{moUrl}" data-parsley-length="[2,128]"
-                                                       data-parsley-type="url" autocomplete="off"
-                                                       placeholder="上行短信推送地址url">
-                                            </div>
-                                            <div class="form-group m-b-20">
-                                                <label>运营商状态报告推送地址url&nbsp;
-                                                    <span class="text-danger"
-                                                          th:if="${#fields.hasErrors('statusReportUrl')}"
-                                                          th:errors="*{statusReportUrl}"
-                                                          style="font-weight: 200;font-size: 12px"></span></label>
-                                                <input type="text" class="form-control"
-                                                       th:field="*{statusReportUrl}" data-parsley-length="[2,128]"
-                                                       data-parsley-type="url" autocomplete="off"
-                                                       placeholder="运营商状态报告推送地址url">
+                                            <div id="SMS_URL" style="display: none">
+                                                <div class="form-group m-b-20">
+                                                    <label>上行短信推送地址url&nbsp;
+                                                        <span class="text-danger" th:if="${#fields.hasErrors('moUrl')}"
+                                                              th:errors="*{moUrl}"
+                                                              style="font-weight: 200;font-size: 12px"></span></label>
+                                                    <input type="text" class="form-control"
+                                                           th:field="*{moUrl}" data-parsley-length="[2,128]"
+                                                           data-parsley-type="url" autocomplete="off"
+                                                           placeholder="上行短信推送地址url">
+                                                </div>
+                                                <div class="form-group m-b-20">
+                                                    <label>运营商状态报告推送地址url&nbsp;
+                                                        <span class="text-danger"
+                                                              th:if="${#fields.hasErrors('statusReportUrl')}"
+                                                              th:errors="*{statusReportUrl}"
+                                                              style="font-weight: 200;font-size: 12px"></span></label>
+                                                    <input type="text" class="form-control"
+                                                           th:field="*{statusReportUrl}" data-parsley-length="[2,128]"
+                                                           data-parsley-type="url" autocomplete="off"
+                                                           placeholder="运营商状态报告推送地址url">
+                                                </div>
                                             </div>
                                         </div>
 
                                         <div class="form-group m-b-20" id="CHECK_TEMPL" style="display: none">
-                                            <label class="m-b-10">模板是否审核<span
+                                            <label class="m-b-10">是否审核内容<span
                                                     class="text-danger">*</span>&nbsp;</label><br>
                                             <mpm:tag identity="isOrNo" id="executeCheck" name="executeCheck"
                                                      th:value="${accountInterfaceInfoValidator.executeCheck}"
@@ -241,7 +247,7 @@
 
         var value = $("#protocol").val();
 
-        if("HTTPS" == value){
+        if("HTTPS" == value || "WEB" == value){
             $("#CMPP :input").each(function(){
                 $(this).val("");
             });
@@ -250,15 +256,6 @@
             $("#HTTP_SMS :input").each(function(){
                 $(this).val("");
             });
-        }
-        if ("WEB" == value) {
-            $("#CMPP :input").each(function(){
-                $(this).val("");
-            });
-            $("#HTTP_SMS :input").each(function(){
-                $(this).val("");
-            });
-
         }
 
         $("#submit_form").submit();
@@ -289,13 +286,11 @@
             document.getElementById("sendSecond").style.display = "";
             document.getElementById("IP").style.display = "";
             document.getElementById("MATCHING_CHECK").style.display = "";
-
             document.getElementById("HTTP_SMS").style.display = "none";
 
             $('#srcId').prop("required","true");
             $('#maxConnect').prop("required","true");
             $('#executeCheck').prop("required","true");
-            $('#maxSendSecond').prop("required","true");
             $('#matchingCheck').prop("required","true");
 
             $("#HTTP_SMS :input").each(function(){
@@ -308,19 +303,26 @@
                 $(this).prop("required","true");
             });
 
+            $("#maxSendSecond").val("200");
+            $("#maxConnect").val("2");
         }
 
-        if ("HTTPS" == value ) {
+        if ("HTTPS" == value || "WEB" == value) {
+            document.getElementById("CMPP").style.display = "none";
             document.getElementById("HTTP_SMS").style.display = "";
             document.getElementById("CHECK_TEMPL").style.display = "";
-            document.getElementById("IP").style.display = "";
-            document.getElementById("CMPP").style.display = "none";
             document.getElementById("sendSecond").style.display = "";
+            document.getElementById("IP").style.display = "";
             document.getElementById("MATCHING_CHECK").style.display = "none";
+
+            if("WEB" == value){
+                document.getElementById("SMS_URL").style.display = "none";
+            }else{
+                document.getElementById("SMS_URL").style.display = "";
+            }
 
             $('#maxSubmitSecond').prop("required","true");
             $('#executeCheck').prop("required","true");
-            $('#maxSendSecond').prop("required","true");
 
             $("#CMPP :input").each(function(){
                 $(this).removeAttr("required")
@@ -331,32 +333,33 @@
             $("#CHECK_TEMPL :radio").each(function(){
                 $(this).prop("required","true");
             });
+
+            $("#maxSendSecond").val("100");
+            $("#maxSubmitSecond").val("20");
         }
 
-        if ("WEB" == value) {
+        /*if ("WEB" == value) {
             document.getElementById("CMPP").style.display = "none";
-            document.getElementById("HTTP_SMS").style.display = "none";
-            document.getElementById("CHECK_TEMPL").style.display = "none";
-            document.getElementById("sendSecond").style.display = "none";
-            document.getElementById("IP").style.display = "none";
+            document.getElementById("HTTP_SMS").style.display = "";
+            document.getElementById("CHECK_TEMPL").style.display = "";
+            document.getElementById("sendSecond").style.display = "";
             document.getElementById("MATCHING_CHECK").style.display = "none";
+            document.getElementById("SMS_URL").style.display = "none";
 
-            $('#maxSendSecond').removeAttr("required");
+            $('#maxSubmitSecond').prop("required","true");
+            $('#executeCheck').prop("required","true");
 
             $("#CMPP :input").each(function(){
-                $(this).removeAttr("required")
-            });
-            $("#HTTP_SMS :input").each(function(){
                 $(this).removeAttr("required")
             });
             $("#MATCHING_CHECK :radio").each(function(){
                 $(this).removeAttr("required")
             });
             $("#CHECK_TEMPL :radio").each(function(){
-                $(this).removeAttr("required")
+                $(this).prop("required","true");
             });
 
-        }
+        }*/
     }
 
 </script>
