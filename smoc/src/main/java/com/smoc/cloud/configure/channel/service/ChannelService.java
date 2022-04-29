@@ -169,7 +169,9 @@ public class ChannelService {
             //如果第一次选择的是全国并且屏蔽省份有值，修改的时候改成了分省，那得把屏蔽省份设为空
             entity.setMaskProvince("");
         }*/
-        entity.setSupportAreaCodes(channelBasicInfoValidator.getProvince());
+        if(!"INTL".equals(channelBasicInfoValidator.getBusinessAreaType())){
+            entity.setSupportAreaCodes(channelBasicInfoValidator.getProvince());
+        }
 
         //如果是统一计价，保存通道价格表
         saveChannelPrice(channelBasicInfoValidator, op);
