@@ -53,9 +53,9 @@
                                                 <div class="col-sm-4 m-b-10">
                                                     <label for="accountId">业务账号<span class="text-danger">*</span>
                                                         <span class="text-danger" th:if="${#fields.hasErrors('errorAccount')}"
-                                                              th:errors="*{errorAccount}"></span>&nbsp;</label>
+                                                              th:errors="*{errorAccount}"></span>&nbsp;</label><!--data-parsley-pattern="[A-Z]{3}(\d){3}"-->
                                                     <input id="accountId" type="text" class="form-control" required=""
-                                                           th:field="*{accountId}" data-parsley-pattern="[A-Z]{3}(\d){3}"
+                                                           th:field="*{accountId}" data-parsley-length="[6,6]"
                                                            th:if="${op eq 'add'}" autocomplete="off" placeholder="根据规则自动生成" >
                                                     <input type="text" class="form-control"
                                                            th:field="*{accountId}" th:if="${op eq 'edit'}"

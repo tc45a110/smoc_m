@@ -307,10 +307,13 @@ public class AccountController {
             view.addObject("error", enterdata.getCode() + ":" + enterdata.getMessage());
         }
         String accountId = accountBasicInfoValidator.getAccountId();
-        if(!enterdata.getData().getEnterpriseFlag().equals(accountId.substring(0,3))){
-            FieldError err = new FieldError("业务账号", "errorAccount", "企业标识：三位字母不能修改");
-            result.addError(err);
+        if(!org.apache.commons.lang3.StringUtils.isNumeric(accountId)){
+            if(!enterdata.getData().getEnterpriseFlag().equals(accountId.substring(0,3))){
+                FieldError err = new FieldError("业务账号", "errorAccount", "企业标识：三位字母不能修改");
+                result.addError(err);
+            }
         }
+
 
         //完成参数规则验证
         if (result.hasErrors()) {

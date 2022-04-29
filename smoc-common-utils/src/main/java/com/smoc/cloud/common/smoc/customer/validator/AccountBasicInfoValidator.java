@@ -15,7 +15,7 @@ import java.util.Objects;
 public class AccountBasicInfoValidator {
 
     @NotNull(message = "业务账号不能为空！")
-    @Size(min = 6, max = 6, message = "业务账号长度只能是6位！")
+    @Size(min = 6, max = 6, message = "业务账号长度只能是{max}位！")
     private String accountId;
 
     @NotNull(message = "ID不能为空！")

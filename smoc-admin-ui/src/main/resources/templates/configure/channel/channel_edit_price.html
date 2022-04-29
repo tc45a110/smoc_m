@@ -37,7 +37,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <div class="row">
-                                                <div class="col-sm-3 m-b-10" th:each="info:${list}" th:if="${supportAreaCodes eq 'PROVINCE'}">
+                                                <div class="col-sm-3 m-b-10" th:each="info:${list}" th:if="${supportAreaCodes ne 'INTL'}">
                                                     <label><mpm:tag identity="provices"  show-type="label" key="code"
                                                                     th:value="${info.key}"/>资费(元/条)<span class="text-danger">*</span>&nbsp;<span
                                                             class="text-danger"

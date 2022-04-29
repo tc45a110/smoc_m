@@ -76,9 +76,9 @@ public class ChannelPriceController {
 
         ChannelBasicInfoValidator channelBasicInfoValidator = data.getData();
 
-        //如果不是全国，才会去查区域价格数据
+        //如果是区域计价，才会去查区域价格数据
         ChannelPriceValidator channelPriceValidator = new ChannelPriceValidator();
-        if (!"COUNTRY".equals(channelBasicInfoValidator.getBusinessAreaType())) {
+        if ("AREA_PRICE".equals(channelBasicInfoValidator.getPriceStyle())) {
             channelPriceValidator.setChannelId(channelBasicInfoValidator.getChannelId());
             channelPriceValidator.setAreaCode(channelBasicInfoValidator.getSupportAreaCodes());
 
