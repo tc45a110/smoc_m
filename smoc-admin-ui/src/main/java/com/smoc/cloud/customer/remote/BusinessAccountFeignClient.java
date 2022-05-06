@@ -65,6 +65,16 @@ public interface BusinessAccountFeignClient {
     ResponseData<List<AccountBasicInfoValidator>> findBusinessAccountByEnterpriseId(@PathVariable String enterpriseId) throws Exception;
 
     /**
+     * 根据业务类型查询企业所有的业务账号
+     * @param enterpriseId
+     * @param businessType
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/account/findBusinessAccountByEnterpriseIdAndBusinessType/{enterpriseId}/{businessType}", method = RequestMethod.GET)
+    ResponseData<List<AccountBasicInfoValidator>> findBusinessAccountByEnterpriseIdAndBusinessType(@PathVariable String enterpriseId,@PathVariable String businessType) throws Exception;
+
+    /**
      * 生成业务账号
      * @param enterpriseFlag
      * @return

@@ -2,8 +2,10 @@ package com.smoc.cloud.customer.service;
 
 
 import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
 import com.smoc.cloud.auth.service.AuthorityService;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
+import com.smoc.cloud.common.auth.qo.Nodes;
 import com.smoc.cloud.common.auth.validator.OrgValidator;
 import com.smoc.cloud.common.constant.RedisConstant;
 import com.smoc.cloud.common.page.PageList;
@@ -82,7 +84,7 @@ public class EnterpriseService {
         BeanUtils.copyProperties(entity, enterpriseBasicInfoValidator);
 
         //查询上级企业的名称
-        if(!"0000".equals(entity.getEnterpriseParentId())){
+        if (!"0000".equals(entity.getEnterpriseParentId())) {
             Optional<EnterpriseBasicInfo> infoData = enterpriseRepository.findById(entity.getEnterpriseParentId());
             if (data.isPresent()) {
                 enterpriseBasicInfoValidator.setParentEnterpriseName(infoData.get().getEnterpriseName());
@@ -99,13 +101,13 @@ public class EnterpriseService {
      * 保存或修改
      *
      * @param enterpriseBasicInfoValidator
-     * @param op  操作类型 为add、edit
+     * @param op                           操作类型 为add、edit
      * @return
      */
     @Transactional
     public ResponseData<EnterpriseBasicInfo> save(EnterpriseBasicInfoValidator enterpriseBasicInfoValidator, String op) {
 
-        Iterable<EnterpriseBasicInfo> data = enterpriseRepository.findByEnterpriseNameAndEnterpriseFlag(enterpriseBasicInfoValidator.getEnterpriseName(),enterpriseBasicInfoValidator.getEnterpriseFlag());
+        Iterable<EnterpriseBasicInfo> data = enterpriseRepository.findByEnterpriseNameAndEnterpriseFlag(enterpriseBasicInfoValidator.getEnterpriseName(), enterpriseBasicInfoValidator.getEnterpriseFlag());
 
         EnterpriseBasicInfo entity = new EnterpriseBasicInfo();
         BeanUtils.copyProperties(enterpriseBasicInfoValidator, entity);
@@ -148,7 +150,7 @@ public class EnterpriseService {
         }
 
         //把标识放到redis里
-        stringRedisTemplate.opsForValue().set(RandomService.PREFIX +":"+entity.getEnterpriseFlag(), entity.getEnterpriseFlag());
+        stringRedisTemplate.opsForValue().set(RandomService.PREFIX + ":" + entity.getEnterpriseFlag(), entity.getEnterpriseFlag());
 
         return ResponseDataUtil.buildSuccess();
     }
@@ -183,6 +185,7 @@ public class EnterpriseService {
 
     /**
      * 注销、启用企业业务
+     *
      * @param id
      * @param status
      * @return
@@ -193,36 +196,47 @@ public class EnterpriseService {
         EnterpriseBasicInfo entity = enterpriseRepository.findById(id).get();
 
         //账号状态转换
-        if ("0".equals(status) ) {
+        if ("0".equals(status)) {
             status = "1";
         } else {
             status = "0";
         }
 
         //更新企业状态为已注销
-        enterpriseRepository.updateEnterpriseStatus(id,status);
+        enterpriseRepository.updateEnterpriseStatus(id, status);
 
         //查询企业下所有的WEB账号
         EnterpriseWebAccountInfoValidator enterpriseWebAccountInfoValidator = new EnterpriseWebAccountInfoValidator();
         enterpriseWebAccountInfoValidator.setEnterpriseId(entity.getEnterpriseId());
         List<EnterpriseWebAccountInfoValidator> list = enterpriseWebRepository.page(enterpriseWebAccountInfoValidator);
-        if(!StringUtils.isEmpty(list) && list.size()>0){
+        if (!StringUtils.isEmpty(list) && list.size() > 0) {
             //注销、启用WEB账号状态
-            enterpriseWebRepository.batchWebAccountStatusByentErpriseId(entity.getEnterpriseId(),status);
+            enterpriseWebRepository.batchWebAccountStatusByentErpriseId(entity.getEnterpriseId(), status);
             //注销、启用用户表状态
             List<SecurityUser> userList = new ArrayList<>();
-            for(EnterpriseWebAccountInfoValidator info:list){
+            for (EnterpriseWebAccountInfoValidator info : list) {
                 SecurityUser user = new SecurityUser();
                 user.setId(info.getId());
                 user.setUserName(info.getWebLoginName());
                 userList.add(user);
             }
-            authorityService.batchForbiddenUser(userList,status);
+            authorityService.batchForbiddenUser(userList, status);
         }
 
         //记录日志
-        log.info("[企业接入][{}]数据:{}", "1".equals(op) ? "注销企业业务及WEB账号":"启用企业业务及WEB账号" ,  JSON.toJSONString(entity));
+        log.info("[企业接入][{}]数据:{}", "1".equals(op) ? "注销企业业务及WEB账号" : "启用企业业务及WEB账号", JSON.toJSONString(entity));
 
         return ResponseDataUtil.buildSuccess();
+    }
+
+    /**
+     * 根据账号类型查询企业列表
+     *
+     * @return
+     */
+    public ResponseData<List<Nodes>> findByAccountBusinessType(String businessType) {
+        List<Nodes> list = enterpriseRepository.findByAccountBusinessType(businessType);
+        log.info("[enterprise]{}",new Gson().toJson(list));
+        return ResponseDataUtil.buildSuccess(list);
     }
 }

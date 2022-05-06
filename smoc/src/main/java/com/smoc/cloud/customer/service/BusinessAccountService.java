@@ -330,6 +330,17 @@ public class BusinessAccountService {
     }
 
     /**
+     * 根据业务类型查询企业所有的业务账号
+     *
+     * @param enterpriseId
+     * @return
+     */
+    public ResponseData<List<AccountBasicInfo>> findBusinessAccountByEnterpriseIdAndBusinessType(String enterpriseId,String businessType) {
+        List<AccountBasicInfo> list = businessAccountRepository.findBusinessAccountByEnterpriseIdAndBusinessType(enterpriseId,businessType);
+        return ResponseDataUtil.buildSuccess(list);
+    }
+
+    /**
      * 生成业务账号
      *
      * @param enterpriseFlag

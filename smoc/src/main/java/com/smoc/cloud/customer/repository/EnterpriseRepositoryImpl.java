@@ -3,10 +3,12 @@ package com.smoc.cloud.customer.repository;
 
 import com.google.gson.Gson;
 import com.smoc.cloud.common.BasePageRepository;
+import com.smoc.cloud.common.auth.qo.Nodes;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
 import com.smoc.cloud.customer.rowmapper.EnterpriseBasicInfoRowMapper;
+import com.smoc.cloud.customer.rowmapper.NodesRowMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
@@ -183,6 +185,26 @@ public class EnterpriseRepositoryImpl extends BasePageRepository {
         }
 
         return enterpriseIds;
+    }
+
+    /**
+     * 根据账号类型查询企业列表
+     *
+     * @return
+     */
+    public List<Nodes> findByAccountBusinessType(String businessType) {
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append("  t.ENTERPRISE_ID");
+        sqlBuffer.append(", t.ENTERPRISE_NAME");
+        sqlBuffer.append("  from enterprise_basic_info t,account_base_info a");
+        sqlBuffer.append("  where t.ENTERPRISE_ID = a.ENTERPRISE_ID and a.BUSINESS_TYPE=? and a.ACCOUNT_STATUS !='0' ");
+        sqlBuffer.append("  order by t.CREATED_TIME desc");
+
+        Object[] params = new Object[1];
+        params[0] = businessType;
+        List<Nodes> list = this.queryForObjectList(sqlBuffer.toString(), params, new NodesRowMapper());
+        return list;
     }
 
 }

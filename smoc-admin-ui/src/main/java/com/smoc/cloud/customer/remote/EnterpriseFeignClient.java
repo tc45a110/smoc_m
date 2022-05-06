@@ -1,5 +1,6 @@
 package com.smoc.cloud.customer.remote;
 
+import com.smoc.cloud.common.auth.qo.Nodes;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
@@ -9,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import java.util.List;
 
 
 /**
@@ -55,4 +58,12 @@ public interface EnterpriseFeignClient {
      */
     @RequestMapping(value = "/enterprise/createEnterpriseFlag", method = RequestMethod.GET)
     ResponseData<String> createEnterpriseFlag() throws Exception;
+
+    /**
+     * 根据账号类型查询企业列表
+     *
+     * @return
+     */
+    @RequestMapping(value = "/enterprise/findByAccountBusinessType/{businessType}", method = RequestMethod.GET)
+    ResponseData<List<Nodes>>  findByAccountBusinessType(@PathVariable String businessType) throws Exception;
 }

@@ -24,6 +24,7 @@ public interface BusinessAccountRepository extends CrudRepository<AccountBasicIn
 
     /**
      * 查询-分页
+     *
      * @param pageParams
      * @return
      */
@@ -34,22 +35,34 @@ public interface BusinessAccountRepository extends CrudRepository<AccountBasicIn
 
     /**
      * 注销、启用业务账号
+     *
      * @param id
      * @param status
      */
     @Modifying
-    @Query(value = "update account_base_info set ACCOUNT_STATUS = :status where ACCOUNT_ID = :id",nativeQuery = true)
+    @Query(value = "update account_base_info set ACCOUNT_STATUS = :status where ACCOUNT_ID = :id", nativeQuery = true)
     void updateAccountStatusById(@Param("id") String id, @Param("status") String status);
 
     /**
      * 查询企业所有的业务账号
+     *
      * @param enterpriseId
      * @return
      */
     List<AccountBasicInfoValidator> findBusinessAccountByEnterpriseId(String enterpriseId);
 
     /**
+     * 根据业务类型查询企业所有的业务账号
+     *
+     * @param enterpriseId
+     * @param businessType
+     * @return
+     */
+    List<AccountBasicInfo> findBusinessAccountByEnterpriseIdAndBusinessType(String enterpriseId, String businessType);
+
+    /**
      * 查询企业所有的业务账号
+     *
      * @param accountBasicInfoValidator
      * @return
      */
@@ -57,6 +70,7 @@ public interface BusinessAccountRepository extends CrudRepository<AccountBasicIn
 
     /**
      * 查询企业下的账户和余额
+     *
      * @param messageAccountValidator
      * @return
      */
@@ -64,6 +78,7 @@ public interface BusinessAccountRepository extends CrudRepository<AccountBasicIn
 
     /**
      * 查询自服务平台发送账号列表
+     *
      * @param params
      * @return
      */
@@ -71,6 +86,7 @@ public interface BusinessAccountRepository extends CrudRepository<AccountBasicIn
 
     /**
      * 账号按维度统计发送量
+     *
      * @param statisticSendData
      * @return
      */
@@ -78,6 +94,7 @@ public interface BusinessAccountRepository extends CrudRepository<AccountBasicIn
 
     /**
      * 账号投诉率统计
+     *
      * @param statisticComplaintData
      * @return
      */
@@ -85,6 +102,7 @@ public interface BusinessAccountRepository extends CrudRepository<AccountBasicIn
 
     /**
      * 业务账号综合查询
+     *
      * @param pageParams
      * @return
      */

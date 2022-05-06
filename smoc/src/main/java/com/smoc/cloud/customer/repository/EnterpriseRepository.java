@@ -1,6 +1,7 @@
 package com.smoc.cloud.customer.repository;
 
 
+import com.smoc.cloud.common.auth.qo.Nodes;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
@@ -34,4 +35,11 @@ public interface EnterpriseRepository extends CrudRepository<EnterpriseBasicInfo
      * @return
      */
     List<String> findEnterpriseAndSubsidiaryId(String enterpriseId);
+
+    /**
+     * 根据账号类型查询企业列表
+     *
+     * @return
+     */
+     List<Nodes> findByAccountBusinessType(String businessType);
 }

@@ -138,6 +138,22 @@ public class BusinessAccountService {
     }
 
     /**
+     * 根据业务类型查询企业所有的业务账号
+     *
+     * @param enterpriseId
+     * @return
+     */
+    public ResponseData<List<AccountBasicInfoValidator>> findBusinessAccountByEnterpriseIdAndBusinessType(String enterpriseId,String businessType) {
+        try {
+            ResponseData<List<AccountBasicInfoValidator>> data = this.businessAccountFeignClient.findBusinessAccountByEnterpriseIdAndBusinessType(enterpriseId,businessType);
+            return data;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
      * 生成业务账号
      *
      * @param enterpriseFlag

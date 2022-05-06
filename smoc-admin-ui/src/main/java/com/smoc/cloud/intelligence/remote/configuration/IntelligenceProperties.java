@@ -19,6 +19,8 @@ public class IntelligenceProperties {
 
     private String password;
 
+    private String domain;
+
     private String serverAddress;
-    
+
 }

@@ -1,5 +1,6 @@
 package com.smoc.cloud.customer.service;
 
+import com.smoc.cloud.common.auth.qo.Nodes;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 /**
@@ -27,6 +30,7 @@ public class EnterpriseService {
 
     /**
      * 查询列表
+     *
      * @param pageParams
      * @return
      */
@@ -42,6 +46,7 @@ public class EnterpriseService {
 
     /**
      * 根据id获取信息
+     *
      * @param id
      * @return
      */
@@ -72,6 +77,7 @@ public class EnterpriseService {
 
     /**
      * 注销、启用企业业务
+     *
      * @param id
      * @param status
      * @return
@@ -88,12 +94,28 @@ public class EnterpriseService {
 
     /**
      * 生成企业标识
+     *
      * @return
      */
     public ResponseData<String> createEnterpriseFlag() {
         try {
             ResponseData<String> enterpriseFlag = this.enterpriseFeignClient.createEnterpriseFlag();
             return enterpriseFlag;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 根据账号类型查询企业列表
+     *
+     * @return
+     */
+    public ResponseData<List<Nodes>> findByAccountBusinessType(String businessType) {
+        try {
+            ResponseData<List<Nodes>> data = this.enterpriseFeignClient.findByAccountBusinessType(businessType);
+            return data;
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseDataUtil.buildError(e.getMessage());

@@ -12,6 +12,7 @@ import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.common.smoc.message.MessageAccountValidator;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
+import com.smoc.cloud.customer.entity.AccountBasicInfo;
 import com.smoc.cloud.customer.service.BusinessAccountService;
 import com.smoc.cloud.utils.RandomService;
 import lombok.extern.slf4j.Slf4j;
@@ -119,6 +120,26 @@ public class BusinessAccountController {
         }
 
         ResponseData<List<AccountBasicInfoValidator>> data = businessAccountService.findBusinessAccountByEnterpriseId(enterpriseId);
+        return data;
+    }
+
+    /**
+     * 根据业务类型查询企业所有的业务账号
+     * @param enterpriseId
+     * @param businessType
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/findBusinessAccountByEnterpriseIdAndBusinessType/{enterpriseId}/{businessType}", method = RequestMethod.GET)
+    public ResponseData<List<AccountBasicInfo>> findBusinessAccountByEnterpriseIdAndBusinessType(@PathVariable String enterpriseId,@PathVariable String businessType){
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(enterpriseId);
+        if (!MpmValidatorUtil.validate(validator)) {
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(validator));
+        }
+
+        ResponseData<List<AccountBasicInfo>> data = businessAccountService.findBusinessAccountByEnterpriseIdAndBusinessType(enterpriseId,businessType);
         return data;
     }
 
