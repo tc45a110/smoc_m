@@ -35,13 +35,7 @@
                                                 <div class="wigdet-two-content text-white">
                                                     <p class="m-0 text-uppercase font-600 font-secondary text-overflow">
                                                         [[${info.value!=null?info.value.channelName:'未配置通道'}]]
-                                                        <a data-toggle="modal" data-target="#confirm-delete-modal"
-                                                           title="移除该已选中产品" th:if="${info.value !=null}"
-                                                           th:onclick="deleteChannel([[${info.value.id}]])"
-                                                           class="pull-right">
-                                                            <i class="glyphicon glyphicon-remove"
-                                                               style="font-size:16px;color:#fff;"></i>
-                                                        </a>
+
                                                     </p>
                                                     <p class="text-white"><b>业务类型：
                                                         <mpm:tag identity="businessType" show-type="label" key="code"
@@ -179,9 +173,12 @@
                                                                                    data-target="#confirm-add-modal"
                                                                                    href="javascript:void(0);"
                                                                                    sec:authorize-url="/account/channel/save"
-                                                                                   th:onclick="openChannel([[${channelBasicInfoQo.carrier}]],[[${info.channelId}]],[[${info.channelName}]])"
+                                                                                   th:onclick="openChannel([[${channelBasicInfoQo.carrier}]],[[${info.channelId}]],[[${info.channelName}]],[[${op}]])"
                                                                                    title="添加该通道到通道账户">
-                                                                                    <i class="glyphicon glyphicon-plus-sign"
+
+                                                                                    <i th:if="${'add' eq op}" class="glyphicon glyphicon-plus-sign"
+                                                                                       style="margin-right:5px;font-size:16px;color:#7e6258"></i>
+                                                                                    <i th:if="${'edit' eq op}" class="glyphicon glyphicon-check"
                                                                                        style="margin-right:5px;font-size:16px;color:#7e6258"></i></a>
                                                                             </div>
                                                                         </h5>
@@ -287,7 +284,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 class="modal-title">确认添加该通道到业务账号</h4>
+                        <h4 class="modal-title" id="h4-tip">确认添加该通道到业务账号</h4>
                     </div>
                     <form th:action="@{/account/channel/save}" id="submit_form"
                           th:object="${accountChannelInfoValidator}"
@@ -313,9 +310,10 @@
                                 <input type="hidden" id="carrier" name="carrier" th:value="${accountChannelInfoValidator.carrier}">
                                 <input type="hidden" id="accountId" name="accountId" th:value="${accountChannelInfoValidator.accountId}">
                                 <input type="hidden" id="channelId" name="channelId" th:value="${accountChannelInfoValidator.channelId}">
+                                <input type="hidden" id="op" name="op">
                                 <a class="btn btn-default waves-effect" data-dismiss="modal">取消</a>
                                 <button sec:authorize-url="/account/channel/save"
-                                        class="btn btn-primary waves-effect waves-light">确认添加
+                                        class="btn btn-primary waves-effect waves-light" id="forbbenButton">确认添加
                                 </button>
                                 </button>
                             </div>
@@ -335,12 +333,24 @@
 <script>
 
     //打开选择通道
-    function openChannel(carrier, channelId, channelName) {
+    function openChannel(carrier, channelId, channelName,op) {
         $("#carrier").val(carrier);
         $("#channelId").val(channelId);
         $("#channelName").val(channelName);
         $("#channelWeight").val('10');
         $("#name").html(channelName);
+        $("#op").val(op);
+
+        if("add" == op ){
+            document.getElementById("h4-tip").innerText = "确认添加该通道到业务账号";
+            document.getElementById("forbbenButton").setAttribute("class", "btn btn-primary waves-effect waves-light");
+            document.getElementById("forbbenButton").innerText = "确认添加";
+        }
+        if("edit" == op ){
+            document.getElementById("h4-tip").innerText = "确认替换该通道到业务账号";
+            document.getElementById("forbbenButton").setAttribute("class", "btn btn-danger waves-effect waves-light");
+            document.getElementById("forbbenButton").innerText = "确认替换";
+        }
     }
 
     //打开删除通道

@@ -89,4 +89,6 @@ public class ChannelBasicInfoValidator {
     private String specificProvder;
     @NotNull(message = "对账周期不能为空！")
     private String channelBill;
+
+    private String protocol;
 }

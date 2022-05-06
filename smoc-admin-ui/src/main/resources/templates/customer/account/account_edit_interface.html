@@ -172,7 +172,7 @@
                                         </div>
 
                                         <div class="form-group m-b-20" id="CHECK_TEMPL" style="display: none">
-                                            <label class="m-b-10">是否审核内容<span
+                                            <label class="m-b-10"><sapn id="checkTemplId">是否审核内容</sapn><span
                                                     class="text-danger">*</span>&nbsp;</label><br>
                                             <mpm:tag identity="isOrNo" id="executeCheck" name="executeCheck"
                                                      th:value="${accountInterfaceInfoValidator.executeCheck}"
@@ -288,6 +288,8 @@
             document.getElementById("MATCHING_CHECK").style.display = "";
             document.getElementById("HTTP_SMS").style.display = "none";
 
+            document.getElementById("checkTemplId").innerText = "是否审核内容";
+
             $('#srcId').prop("required","true");
             $('#maxConnect').prop("required","true");
             $('#executeCheck').prop("required","true");
@@ -315,8 +317,11 @@
             document.getElementById("IP").style.display = "";
             document.getElementById("MATCHING_CHECK").style.display = "none";
 
+            document.getElementById("checkTemplId").innerText = "是否审核模板";
+
             if("WEB" == value){
                 document.getElementById("SMS_URL").style.display = "none";
+                document.getElementById("IP").style.display = "none";
             }else{
                 document.getElementById("SMS_URL").style.display = "";
             }

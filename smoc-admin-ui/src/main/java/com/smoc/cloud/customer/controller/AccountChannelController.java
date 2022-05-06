@@ -119,13 +119,19 @@ public class AccountChannelController {
         accountChannelInfoQo.setCarrier(data.getData().getCarrier());
         accountChannelInfoQo.setAccountChannelType(data.getData().getAccountChannelType());
         //国际
-        if("INTERNATIONAL".equals(data.getData().getCarrier())){
+       /* if("INTERNATIONAL".equals(data.getData().getCarrier())){
             accountChannelInfoQo.setCarrier(data.getData().getCountryCode());
-        }
+        }*/
         ResponseData<Map<String, AccountChannelInfoQo>> channelData = accountChannelService.findAccountChannelConfig(accountChannelInfoQo);
         if (!ResponseCode.SUCCESS.getCode().equals(channelData.getCode())) {
             view.addObject("error", channelData.getCode() + ":" + channelData.getMessage());
             return view;
+        }
+
+        AccountChannelInfoQo qo = channelData.getData().get(carrier);
+        String op = "add";
+        if(!StringUtils.isEmpty(qo)){
+            op = "edit";
         }
 
         /**
@@ -138,10 +144,10 @@ public class AccountChannelController {
         channelBasicInfoQo.setInfoType(data.getData().getInfoType());
         channelBasicInfoQo.setChannelStatus("001");//正常
         //国际
-        if("INTERNATIONAL".equals(data.getData().getCarrier())){
+       /* if("INTERNATIONAL".equals(data.getData().getCarrier())){
             channelBasicInfoQo.setCarrier(data.getData().getCarrier());
             channelBasicInfoQo.setCountryCode(carrier);//国家代码
-        }
+        }*/
         ResponseData<List<ChannelBasicInfoQo>> listDate = accountChannelService.findChannelList(channelBasicInfoQo);
         if (!ResponseCode.SUCCESS.getCode().equals(listDate.getCode())) {
             view.addObject("error", listDate.getCode() + ":" + listDate.getMessage());
@@ -157,6 +163,7 @@ public class AccountChannelController {
         view.addObject("accountBasicInfoValidator", data.getData());
         view.addObject("channelBasicInfoQo", channelBasicInfoQo);
         view.addObject("accountChannelInfoValidator", accountChannelInfoValidator);
+        view.addObject("op", op);
 
         return view;
 
@@ -188,13 +195,19 @@ public class AccountChannelController {
         accountChannelInfoQo.setCarrier(data.getData().getCarrier());
         accountChannelInfoQo.setAccountChannelType(data.getData().getAccountChannelType());
         //国际
-        if("INTERNATIONAL".equals(data.getData().getCarrier())){
+       /* if("INTERNATIONAL".equals(data.getData().getCarrier())){
             accountChannelInfoQo.setCarrier(data.getData().getCountryCode());
-        }
+        }*/
         ResponseData<Map<String, AccountChannelInfoQo>> channelData = accountChannelService.findAccountChannelConfig(accountChannelInfoQo);
         if (!ResponseCode.SUCCESS.getCode().equals(channelData.getCode())) {
             view.addObject("error", channelData.getCode() + ":" + channelData.getMessage());
             return view;
+        }
+
+        AccountChannelInfoQo qo = channelData.getData().get(channelBasicInfoQo.getCarrier());
+        String op = "add";
+        if(!StringUtils.isEmpty(qo)){
+            op = "edit";
         }
 
         /**
@@ -202,9 +215,9 @@ public class AccountChannelController {
          */
         channelBasicInfoQo.setChannelStatus("001");//正常
         //国际
-        if("INTERNATIONAL".equals(data.getData().getCarrier())){
+        /*if("INTERNATIONAL".equals(data.getData().getCarrier())){
             channelBasicInfoQo.setCarrier(data.getData().getCarrier());
-        }
+        }*/
 
         ResponseData<List<ChannelBasicInfoQo>> listDate = accountChannelService.findChannelList(channelBasicInfoQo);
         if (!ResponseCode.SUCCESS.getCode().equals(listDate.getCode())) {
@@ -212,11 +225,12 @@ public class AccountChannelController {
         }
 
         AccountChannelInfoValidator accountChannelInfoValidator = new AccountChannelInfoValidator();
-        if("INTERNATIONAL".equals(data.getData().getCarrier())){
+       /* if("INTERNATIONAL".equals(data.getData().getCarrier())){
             accountChannelInfoValidator.setCarrier(channelBasicInfoQo.getCountryCode());
         }else{
             accountChannelInfoValidator.setCarrier(channelBasicInfoQo.getCarrier());
-        }
+        }*/
+        accountChannelInfoValidator.setCarrier(channelBasicInfoQo.getCarrier());
         accountChannelInfoValidator.setAccountId(data.getData().getAccountId());
 
         view.addObject("channelMap", channelData.getData());
@@ -224,6 +238,7 @@ public class AccountChannelController {
         view.addObject("accountBasicInfoValidator", data.getData());
         view.addObject("channelBasicInfoQo", channelBasicInfoQo);
         view.addObject("accountChannelInfoValidator", accountChannelInfoValidator);
+        view.addObject("op", op);
 
         return view;
 
@@ -248,11 +263,11 @@ public class AccountChannelController {
         }
 
         //查询账号下得运营商是否配置过通道
-        ResponseData<List<AccountChannelInfoValidator>> infoData = accountChannelService.findByAccountIdAndCarrier(accountChannelInfoValidator.getAccountId(),accountChannelInfoValidator.getCarrier());
+        /*ResponseData<List<AccountChannelInfoValidator>> infoData = accountChannelService.findByAccountIdAndCarrier(accountChannelInfoValidator.getAccountId(),accountChannelInfoValidator.getCarrier());
         if (ResponseCode.SUCCESS.getCode().equals(infoData.getCode()) && infoData.getData().size()>0) {
             view.addObject("error", "该业务账号下的运营商已配置过通道");
             return view;
-        }
+        }*/
 
         //查询业务账号
         ResponseData<AccountBasicInfoValidator> data = businessAccountService.findById(accountChannelInfoValidator.getAccountId());
@@ -262,7 +277,7 @@ public class AccountChannelController {
         }
 
         //保存账号通道
-        String op= "add";
+        String op= accountChannelInfoValidator.getOp();
         accountChannelInfoValidator.setId(UUID.uuid32());
         accountChannelInfoValidator.setConfigType("ACCOUNT_CHANNEL");
         accountChannelInfoValidator.setChannelPriority("NORMAL");//等级:NORMAL表示正常
@@ -278,7 +293,7 @@ public class AccountChannelController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            systemUserLogService.logsAsync("BUSINESS_ACCOUNT", accountChannelInfoValidator.getAccountId(), accountChannelInfoValidator.getCreatedBy() , op,  "添加业务账号通道配置", JSON.toJSONString(accountChannelInfoValidator));
+            systemUserLogService.logsAsync("BUSINESS_ACCOUNT", accountChannelInfoValidator.getAccountId(), accountChannelInfoValidator.getCreatedBy() , op,  "add".equals(op) ? "添加业务账号通道配置" : "替换业务账号通道配置", JSON.toJSONString(accountChannelInfoValidator));
         }
 
         //记录日志
@@ -359,9 +374,9 @@ public class AccountChannelController {
         accountChannelInfoQo.setAccountId(data.getData().getAccountId());
         accountChannelInfoQo.setCarrier(data.getData().getCarrier());
         accountChannelInfoQo.setAccountChannelType(data.getData().getAccountChannelType());
-        if("INTERNATIONAL".equals(data.getData().getCarrier())){
+        /*if("INTERNATIONAL".equals(data.getData().getCarrier())){
             accountChannelInfoQo.setCarrier(data.getData().getCountryCode());
-        }
+        }*/
         ResponseData<Map<String, AccountChannelInfoQo>> channelData = accountChannelService.findAccountChannelConfig(accountChannelInfoQo);
         if (!ResponseCode.SUCCESS.getCode().equals(channelData.getCode())) {
             view.addObject("error", channelData.getCode() + ":" + channelData.getMessage());
@@ -404,13 +419,19 @@ public class AccountChannelController {
         accountChannelInfoQo.setAccountId(data.getData().getAccountId());
         accountChannelInfoQo.setCarrier(data.getData().getCarrier());
         accountChannelInfoQo.setAccountChannelType(data.getData().getAccountChannelType());
-        if("INTERNATIONAL".equals(data.getData().getCarrier())){
+        /*if("INTERNATIONAL".equals(data.getData().getCarrier())){
             accountChannelInfoQo.setCarrier(data.getData().getCountryCode());
-        }
+        }*/
         ResponseData<Map<String, AccountChannelInfoQo>> channelData = accountChannelService.findAccountChannelConfig(accountChannelInfoQo);
         if (!ResponseCode.SUCCESS.getCode().equals(channelData.getCode())) {
             view.addObject("error", channelData.getCode() + ":" + channelData.getMessage());
             return view;
+        }
+
+        AccountChannelInfoQo qo = channelData.getData().get(carrier);
+        String op = "add";
+        if(!StringUtils.isEmpty(qo)){
+            op = "edit";
         }
 
         /**
@@ -423,10 +444,10 @@ public class AccountChannelController {
         channelGroupInfoValidator.setInfoType(data.getData().getInfoType());
         channelGroupInfoValidator.setChannelGroupStatus("1");//正常
         //国际
-        if("INTERNATIONAL".equals(data.getData().getCarrier())){
+       /* if("INTERNATIONAL".equals(data.getData().getCarrier())){
             channelGroupInfoValidator.setCarrier(data.getData().getCarrier());
             channelGroupInfoValidator.setCountryCode(carrier);//国家代码
-        }
+        }*/
         ResponseData<List<ChannelGroupInfoValidator>> listDate = accountChannelService.findChannelGroupList(channelGroupInfoValidator);
         if (!ResponseCode.SUCCESS.getCode().equals(listDate.getCode())) {
             view.addObject("error", listDate.getCode() + ":" + listDate.getMessage());
@@ -442,6 +463,7 @@ public class AccountChannelController {
         view.addObject("accountBasicInfoValidator", data.getData());
         view.addObject("channelGroupInfoValidator", channelGroupInfoValidator);
         view.addObject("accountChannelInfoValidator", accountChannelInfoValidator);
+        view.addObject("op", op);
 
         return view;
     }
@@ -470,13 +492,19 @@ public class AccountChannelController {
         accountChannelInfoQo.setAccountId(data.getData().getAccountId());
         accountChannelInfoQo.setCarrier(data.getData().getCarrier());
         accountChannelInfoQo.setAccountChannelType(data.getData().getAccountChannelType());
-        if("INTERNATIONAL".equals(data.getData().getCarrier())){
+        /*if("INTERNATIONAL".equals(data.getData().getCarrier())){
             accountChannelInfoQo.setCarrier(data.getData().getCountryCode());
-        }
+        }*/
         ResponseData<Map<String, AccountChannelInfoQo>> channelData = accountChannelService.findAccountChannelConfig(accountChannelInfoQo);
         if (!ResponseCode.SUCCESS.getCode().equals(channelData.getCode())) {
             view.addObject("error", channelData.getCode() + ":" + channelData.getMessage());
             return view;
+        }
+
+        AccountChannelInfoQo qo = channelData.getData().get(channelGroupInfoValidator.getCarrier());
+        String op = "add";
+        if(!StringUtils.isEmpty(qo)){
+            op = "edit";
         }
 
         /**
@@ -490,17 +518,19 @@ public class AccountChannelController {
 
         AccountChannelInfoValidator accountChannelInfoValidator = new AccountChannelInfoValidator();
         accountChannelInfoValidator.setAccountId(data.getData().getAccountId());
-        if("INTERNATIONAL".equals(data.getData().getCarrier())){
+        accountChannelInfoValidator.setCarrier(channelGroupInfoValidator.getCarrier());
+       /* if("INTERNATIONAL".equals(data.getData().getCarrier())){
             accountChannelInfoValidator.setCarrier(channelGroupInfoValidator.getCountryCode());
         }else{
             accountChannelInfoValidator.setCarrier(channelGroupInfoValidator.getCarrier());
-        }
+        }*/
 
         view.addObject("channelMap", channelData.getData());
         view.addObject("list", listDate.getData());
         view.addObject("accountBasicInfoValidator", data.getData());
         view.addObject("channelGroupInfoValidator", channelGroupInfoValidator);
         view.addObject("accountChannelInfoValidator", accountChannelInfoValidator);
+        view.addObject("op", op);
 
         return view;
 
@@ -525,11 +555,11 @@ public class AccountChannelController {
         }
 
         //查询账号下得运营商是否配置过通道
-        ResponseData<List<AccountChannelInfoValidator>> infoData = accountChannelService.findByAccountIdAndCarrier(accountChannelInfoValidator.getAccountId(),accountChannelInfoValidator.getCarrier());
+       /* ResponseData<List<AccountChannelInfoValidator>> infoData = accountChannelService.findByAccountIdAndCarrier(accountChannelInfoValidator.getAccountId(),accountChannelInfoValidator.getCarrier());
         if (ResponseCode.SUCCESS.getCode().equals(infoData.getCode()) && infoData.getData().size()>0) {
             view.addObject("error", "该业务账号下的运营商已配置过通道組");
             return view;
-        }
+        }*/
 
         //查询业务账号
         ResponseData<AccountBasicInfoValidator> data = businessAccountService.findById(accountChannelInfoValidator.getAccountId());
@@ -539,7 +569,7 @@ public class AccountChannelController {
         }
 
         //保存账号通道
-        String op= "add";
+        String op= accountChannelInfoValidator.getOp();
         accountChannelInfoValidator.setId(UUID.uuid32());
         accountChannelInfoValidator.setConfigType("ACCOUNT_CHANNEL_GROUP");
         accountChannelInfoValidator.setChannelPriority("NORMAL");//等级
@@ -547,6 +577,7 @@ public class AccountChannelController {
         accountChannelInfoValidator.setChannelStatus("1");
         accountChannelInfoValidator.setCreatedTime(new Date());
         accountChannelInfoValidator.setCreatedBy(user.getRealName());
+
         ResponseData resData = accountChannelService.save(accountChannelInfoValidator,op);
         if (!ResponseCode.SUCCESS.getCode().equals(resData.getCode())) {
             view.addObject("error", resData.getCode() + ":" + resData.getMessage());
@@ -555,7 +586,7 @@ public class AccountChannelController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            systemUserLogService.logsAsync("BUSINESS_ACCOUNT", accountChannelInfoValidator.getAccountId(), accountChannelInfoValidator.getCreatedBy() , op,  "添加业务账号通道組配置", JSON.toJSONString(accountChannelInfoValidator));
+            systemUserLogService.logsAsync("BUSINESS_ACCOUNT", accountChannelInfoValidator.getAccountId(), accountChannelInfoValidator.getCreatedBy() , op,  "add".equals(op) ? "添加业务账号通道組配置" : "替换业务账号通道組配置", JSON.toJSONString(accountChannelInfoValidator));
         }
 
         //记录日志

@@ -38,4 +38,6 @@ public class AccountChannelInfoValidator {
     private String enterpriseName;
     private String businessType;
     private String accountName;
+
+    private String op;
 }

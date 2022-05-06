@@ -136,4 +136,7 @@ public interface AccountChannelRepository extends CrudRepository<AccountChannelI
     @Query(value = "update account_channel_info set CHANNEL_WEIGHT = :channelWeight where CHANNEL_GROUP_ID = :channelGroupId and CHANNEL_ID = :channelId ",nativeQuery = true)
     void updateAccountChannelWeight(@Param("channelGroupId") String channelGroupId, @Param("channelId") String channelId, @Param("channelWeight") int channelWeight);
 
+    @Modifying
+    @Query(value = "delete from account_channel_info where ACCOUNT_ID = :accountId and CARRIER = :carrier ",nativeQuery = true)
+    void deleteByAccountIdAndCarrier(@Param("accountId")String accountId, @Param("carrier")String carrier);
 }

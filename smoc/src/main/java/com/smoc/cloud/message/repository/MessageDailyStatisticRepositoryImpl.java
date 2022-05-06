@@ -52,8 +52,9 @@ public class MessageDailyStatisticRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(" DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m-%d')MESSAGE_DATE,");
         sqlBuffer.append(" t.CREATED_BY,");
         sqlBuffer.append(" DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME ");
-        sqlBuffer.append(" from message_daily_statistics t,account_base_info a,enterprise_basic_info e ");
-        sqlBuffer.append(" where t.BUSINESS_ACCOUNT = a.ACCOUNT_ID and a.ENTERPRISE_ID = e.ENTERPRISE_ID ");
+        sqlBuffer.append(" from message_daily_statistics t left join account_base_info a on t.BUSINESS_ACCOUNT = a.ACCOUNT_ID " +
+                " left join enterprise_basic_info e on a.ENTERPRISE_ID = e.ENTERPRISE_ID ");
+        sqlBuffer.append(" where  1=1 ");
 
         List<Object> paramsList = new ArrayList<Object>();
 
@@ -131,8 +132,9 @@ public class MessageDailyStatisticRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(" sum(t.MESSAGE_SUCCESS_NUM) MESSAGE_SUCCESS_NUM,");
         sqlBuffer.append(" sum(t.MESSAGE_FAILURE_NUM) MESSAGE_FAILURE_NUM,");
         sqlBuffer.append(" sum(t.MESSAGE_NO_REPORT_NUM) MESSAGE_NO_REPORT_NUM");
-        sqlBuffer.append(" from message_daily_statistics t,account_base_info a,enterprise_basic_info e ");
-        sqlBuffer.append(" where t.BUSINESS_ACCOUNT = a.ACCOUNT_ID and a.ENTERPRISE_ID = e.ENTERPRISE_ID ");
+        sqlBuffer.append(" from message_daily_statistics t left join account_base_info a on t.BUSINESS_ACCOUNT = a.ACCOUNT_ID " +
+                " left join enterprise_basic_info e on a.ENTERPRISE_ID = e.ENTERPRISE_ID ");
+        sqlBuffer.append(" where  1=1 ");
 
         List<Object> paramsList = new ArrayList<Object>();
 

@@ -91,15 +91,15 @@ public class AccountChannelService {
     @Transactional
     public ResponseData save(AccountChannelInfoValidator accountChannelInfoValidator, String op) {
 
-        List<AccountChannelInfo> data = accountChannelRepository.findByAccountIdAndCarrier(accountChannelInfoValidator.getAccountId(),accountChannelInfoValidator.getCarrier());
+       // List<AccountChannelInfo> data = accountChannelRepository.findByAccountIdAndCarrier(accountChannelInfoValidator.getAccountId(),accountChannelInfoValidator.getCarrier());
 
         AccountChannelInfo entity = new AccountChannelInfo();
         BeanUtils.copyProperties(accountChannelInfoValidator, entity);
 
         //add查重
-        if (!StringUtils.isEmpty(data) && data.size()>0 &&"add".equals(op)) {
+        /*if (!StringUtils.isEmpty(data) && data.size()>0 &&"add".equals(op)) {
             return ResponseDataUtil.buildError(ResponseCode.PARAM_CREATE_ERROR);
-        }
+        }*/
 
         //op 不为 edit 或 add
         if (!("edit".equals(op) || "add".equals(op))) {
@@ -108,6 +108,9 @@ public class AccountChannelService {
 
         //记录日志
         log.info("[EC业务账号管理][业务账号通道配置][{}]数据:{}", op, JSON.toJSONString(entity));
+
+        //先删除在添加
+        accountChannelRepository.deleteByAccountIdAndCarrier(accountChannelInfoValidator.getAccountId(),accountChannelInfoValidator.getCarrier());
 
         //保存通道
         if(!StringUtils.isEmpty(entity.getChannelId())){
@@ -124,9 +127,9 @@ public class AccountChannelService {
         if("add".equals(op)){
             AccountBasicInfo accountBasicInfo = businessAccountRepository.findById(entity.getAccountId()).get();
             String carrier = accountBasicInfo.getCarrier();
-            if("INTERNATIONAL".equals(accountBasicInfo.getCarrier())){
+            /*if("INTERNATIONAL".equals(accountBasicInfo.getCarrier())){
                 carrier = accountBasicInfo.getCountryCode();
-            }
+            }*/
             List<AccountChannelInfoQo> list = accountChannelRepository.accountChannelByAccountIdAndCarrier(entity.getAccountId(),carrier,accountBasicInfo.getAccountChannelType());
             String[] carrierLength = carrier.split(",");
             if(!StringUtils.isEmpty(list) && list.size()==carrierLength.length){

@@ -16,6 +16,7 @@ import com.smoc.cloud.common.smoc.configuate.qo.ChannelAccountInfoQo;
 import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelBasicInfoValidator;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelInterfaceValidator;
+import com.smoc.cloud.common.smoc.configuate.validator.ConfigChannelSpareChannelValidator;
 import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticComplaintData;
 import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
 import com.smoc.cloud.common.smoc.utils.ChannelUtils;
@@ -24,6 +25,7 @@ import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.configure.channel.service.ChannelInterfaceService;
 import com.smoc.cloud.configure.channel.service.ChannelService;
+import com.smoc.cloud.configure.channel.service.ChannelSpareService;
 import com.smoc.cloud.sequence.service.SequenceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +64,9 @@ public class ChannelController {
 
     @Autowired
     private SysUserService sysUserService;
+
+    @Autowired
+    private ChannelSpareService channelSpareService;
 
     /**
      * 通道管理列表
@@ -429,20 +434,6 @@ public class ChannelController {
     }
 
     /**
-     * 补发通道设置
-     *
-     * @return
-     */
-    @RequestMapping(value = "/edit/spare/{id}", method = RequestMethod.GET)
-    public ModelAndView spare(@PathVariable String id, HttpServletRequest request) {
-
-        ModelAndView view = new ModelAndView("configure/channel/channel_edit_spare");
-
-        return view;
-
-    }
-
-    /**
      * 通道详情中心
      *
      * @return
@@ -512,12 +503,23 @@ public class ChannelController {
             channelInterfaceValidator = channelInterfaceData.getData();
         }
 
+        //查询备用通道信息
+        ConfigChannelSpareChannelValidator configChannelSpareChannelValidator = new ConfigChannelSpareChannelValidator();
+        ResponseData<ConfigChannelSpareChannelValidator> spareChannel = channelSpareService.findByChannelId(id);
+        if (ResponseCode.SUCCESS.getCode().equals(spareChannel.getCode()) && !StringUtils.isEmpty(spareChannel.getData())) {
+            configChannelSpareChannelValidator = spareChannel.getData();
+            ResponseData<ChannelBasicInfoValidator> info = channelService.findById(configChannelSpareChannelValidator.getSpareChannelId());
+            if (ResponseCode.SUCCESS.getCode().equals(info.getCode()) && !StringUtils.isEmpty(info.getData())) {
+                configChannelSpareChannelValidator.setSpareChannelName(info.getData().getChannelName());
+            }
+        }
+
         view.addObject("channelBasicInfoValidator", data.getData());
         view.addObject("channelInterfaceValidator", channelInterfaceValidator);
+        view.addObject("configChannelSpareChannelValidator", configChannelSpareChannelValidator);
         view.addObject("realName", realName);
 
         return view;
-
     }
 
     /**

@@ -36,14 +36,7 @@
                                                 <div class="wigdet-two-content text-white">
                                                     <p class="m-0 text-uppercase font-600 font-secondary text-overflow">
                                                         [[${info.value!=null?info.value.channelName:'未配置通道组'}]]
-                                                        <a sec:authorize-url="/account/channelGroup/deleteChannelGroup/*/*/*"
-                                                           data-toggle="modal" data-target="#confirm-delete-modal"
-                                                           title="移除该已选中产品" th:if="${info.value !=null}"
-                                                           th:onclick="deleteChannelGroup([[${info.value.accountId}]],[[${info.value.carrier}]],[[${info.value.channelGroupId}]])"
-                                                           class="pull-right">
-                                                            <i class="glyphicon glyphicon-remove"
-                                                               style="font-size:16px;color:#fff;"></i>
-                                                        </a>
+
                                                     </p>
                                                     <p class="m-0"><b>
                                                         <span th:if="${'INTL' ne accountBasicInfoValidator.carrier}">
@@ -169,11 +162,13 @@
                                                                             <div class="pull-right">
                                                                                 <a data-toggle="modal"
                                                                                    data-target="#confirm-add-modal"
-                                                                                   title="添加该通道组到通道账户"
+                                                                                   th:title="${'add' eq op ? '添加该通道组到通道账户' : '替换该通道组到通道账户'}"
                                                                                    sec:authorize-url="/account/channelGroup/save"
-                                                                                   th:onclick="openChannelGroup([[${accountChannelInfoValidator.carrier}]],[[${info.channelGroupId}]])">
-                                                                                    <i class="glyphicon glyphicon-plus-sign"
-                                                                                       style="margin-right:5px;font-size:16px;color:#0095a8"></i></a>
+                                                                                   th:onclick="openChannelGroup([[${accountChannelInfoValidator.carrier}]],[[${info.channelGroupId}]],[[${op}]])">
+                                                                                <i th:if="${'add' eq op}" class="glyphicon glyphicon-plus-sign"
+                                                                                   style="margin-right:5px;font-size:16px;color:#7e6258"></i>
+                                                                                <i th:if="${'edit' eq op}" class="glyphicon glyphicon-check"
+                                                                                   style="margin-right:5px;font-size:16px;color:#7e6258"></i></a>
                                                                             </div>
                                                                         </h5>
                                                                     </div>
@@ -290,19 +285,21 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                            <h4 class="modal-title">确认添加该通道组到业务账号</h4>
+                            <h4 class="modal-title" id="h4-tip">确认添加该通道组到业务账号</h4>
                         </div>
                         <div class="modal-body">
 
-                            <p>确认添加该通道组到该业务账号！确认添加？</p>
+                            <p id="custom-tip">确认添加该通道组到该业务账号！确认添加？</p>
 
                         </div>
                         <div class="modal-footer">
                             <input type="hidden" id="carrier" name="carrier" th:value="${accountChannelInfoValidator.carrier}">
                             <input type="hidden" id="accountId" name="accountId" th:value="${accountChannelInfoValidator.accountId}">
                             <input type="hidden" id="channelGroupId" name="channelGroupId" th:value="${accountChannelInfoValidator.channelGroupId}">
+                            <input type="hidden" id="op" name="op">
                             <a class="btn btn-default waves-effect" data-dismiss="modal">取消</a>
-                            <button sec:authorize-url="/account/channelGroup/save" class="btn btn-primary waves-effect waves-light">确认添加
+                            <button sec:authorize-url="/account/channelGroup/save" class="btn btn-primary waves-effect waves-light" id="forbbenButton">
+                                确认添加
                             </button>
                         </div>
                     </div>
@@ -321,9 +318,22 @@
 <script>
 
     //打开选择通道组
-    function openChannelGroup(carrier, channelGroupId) {
+    function openChannelGroup(carrier, channelGroupId,op) {
         $("#carrier").val(carrier);
         $("#channelGroupId").val(channelGroupId);
+        $("#op").val(op);
+        if("add" == op ){
+            document.getElementById("h4-tip").innerText = "确认添加该通道组到业务账号";
+            document.getElementById("custom-tip").innerText = "确认添加该通道组到该业务账号！确认添加？";
+            document.getElementById("forbbenButton").setAttribute("class", "btn btn-primary waves-effect waves-light");
+            document.getElementById("forbbenButton").innerText = "确认添加";
+        }
+        if("edit" == op ){
+            document.getElementById("h4-tip").innerText = "确认替换该通道组到业务账号";
+            document.getElementById("custom-tip").innerText = "确认替换该通道组到该业务账号！确认替换？";
+            document.getElementById("forbbenButton").setAttribute("class", "btn btn-danger waves-effect waves-light");
+            document.getElementById("forbbenButton").innerText = "确认替换";
+        }
     }
 
     //打开删除通道组

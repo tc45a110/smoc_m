@@ -98,7 +98,7 @@
                                             </li>
                                             <li class="" id="tab7"><a onclick="active('7')" id="a7"
                                                                       sec:authorize-url="/configure/channel/edit/spare/*"
-                                                                      th:href="@{/configure/channel/edit/spare/id}"
+                                                                      th:href="@{/configure/channel/edit/spare/{id}(id=${id})}"
                                                                       th:target="tab-content">失败补发通道配置</a></li>
                                         </ul>
                                         <div class="tab-cotent" style="background-color:#fff">
