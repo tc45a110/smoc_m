@@ -6,6 +6,7 @@ import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
 import com.smoc.cloud.common.smoc.customer.qo.StatisticProfitData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
+import com.smoc.cloud.common.smoc.message.MessageChannelComplaintValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
@@ -22,6 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -58,10 +60,18 @@ public class IndexController {
         String end = DateTimeUtils.getDateFormat(new Date());
         ResponseData<Map<String, Object>> accountMap = statisticsService.statisticsAccountData(start,end);
 
+        //查询通道排行
+        String month = DateTimeUtils.getDateFormat(new Date(),"yyyy-MM");
+        MessageChannelComplaintValidator messageChannelComplaintValidator = new MessageChannelComplaintValidator();
+        messageChannelComplaintValidator.setMonth(month);
+        ResponseData<List<MessageChannelComplaintValidator>> complaintList = statisticsService.channelComplaintRanking(messageChannelComplaintValidator);
+
         view.addObject("countMap", countMap.getData());
         view.addObject("accountMap", accountMap.getData());
         view.addObject("endDate", endDate);
         view.addObject("year", year);
+        view.addObject("month", month);
+        view.addObject("complaintList", complaintList.getData());
 
         return view;
 

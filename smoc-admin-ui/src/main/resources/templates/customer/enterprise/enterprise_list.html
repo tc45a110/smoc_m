@@ -142,7 +142,8 @@
                                                 <span style="color:#797979">[[${info.enterpriseName}]]</span></a>
                                         </td>
                                         <td>[[${info.enterpriseFlag}]]</td>
-                                        <td><p style="font-size:14px;">[[${info.enterpriseContacts}]]<span
+                                        <td><p style="font-size:14px;" th:if="${not #strings.isEmpty(info.enterpriseContacts)}">[[${info.enterpriseContacts}]]
+                                            <span th:if="${not #strings.isEmpty(info.enterpriseContactsPhone)}"
                                                 style="font-size:14px;color:#989898;margin-left:5px">([[${info.enterpriseContactsPhone}]])</span>
                                         </p></td>
                                         <td><span th:if="${salesMap[info.saler] !=null}">[[${salesMap[info.saler].realName}]]</span></td>
@@ -215,9 +216,12 @@
                                                    data-original-title="跳转到企业信息中心"> <span style="color:#797979">[[${enterprise.enterpriseName}]]</span></a></a>
                                             </td>
                                             <td>[[${enterprise.enterpriseFlag}]]</td>
-                                            <td><p style="font-size:14px;">[[${enterprise.enterpriseContacts}]]<span
-                                                    style="font-size:14px;color:#989898;margin-left:5px">([[${enterprise.enterpriseContactsPhone}]])</span>
-                                            </p></td>
+                                            <td>
+                                                <p style="font-size:14px;" th:if="${not #strings.isEmpty(enterprise.enterpriseContacts)}">[[${enterprise.enterpriseContacts}]]
+                                                    <span th:if="${not #strings.isEmpty(enterprise.enterpriseContactsPhone)}"
+                                                          style="font-size:14px;color:#989898;margin-left:5px">([[${enterprise.enterpriseContactsPhone}]])</span>
+                                                </p>
+                                            </td>
                                             <td><span th:if="${salesMap[info.saler] !=null}">[[${salesMap[info.saler].realName}]]</span></td>
                                         <td>
                                             <mpm:tag identity="enterpriseType" show-type="button" key="code" th:value="${enterprise.enterpriseType}"
@@ -261,8 +265,8 @@
                                                 <a sec:authorize-url="/enterprise/edit/*/*"
                                                    th:href="@{/enterprise/edit/2/{id}(id=${enterprise.enterpriseId})}"
                                                    class="on-default edit-row"
-                                                   style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
-                                                   data-placement="left" title="" data-original-title="修改企业信息"><i
+                                                   style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"data-placement="left" title="" data-original-title="修改企业信
+                                                   息"><i
                                                         style="font-size: 18px"
                                                         class="mdi mdi-table-edit"></i></a>
                                                 <a sec:authorize-url="/enterprise/center/*"

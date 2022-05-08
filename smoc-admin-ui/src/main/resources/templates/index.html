@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:mpm="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <th:block th:insert="fragments/common_fragments :: common_header"/>
     <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
     <link th:href="@{/static/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css}" rel="stylesheet">
     <script th:src="@{/static/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js}"></script>
     <style>
@@ -13,6 +15,7 @@
             background: -moz-linear-gradient(left, #fff, #f5707a);
             background: linear-gradient(to right, #fff, #f5707a); /* 标准的语法 */
         }
+
     </style>
 </head>
 <body>
@@ -107,7 +110,7 @@
             <div class="col-lg-3 col-md-6">
                 <div class="card-box widget-box-one">
                     <div class="wigdet-one-content">
-                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow">活跃客户数（180天内）</p>
+                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow">活跃账号数（180天内）</p>
                         <h2 class="text-brown"><i class="mdi mdi-weather-rainy"  style="padding-right: 5px"></i><span data-plugin="counterup">[[${countMap.get('ACTIVE_ACCOUNT')}]]</span> </h2>
 
                     </div>
@@ -131,112 +134,30 @@
             <div class="col-md-6">
                 <div class="panel panel-color panel-info">
                     <div class="panel-heading">
-                        <h3 class="panel-title">通道投诉TOP 1-10(2022-01)</h3>
+                        <h3 class="panel-title">通道投诉TOP 1-10([[${month}]])</h3>
                     </div>
                     <div class="panel-body card-box">
-                        <div class="table-responsive">
+                        <div class="table-responsive"  style="height: 460px;">
                             <table class="table table table-hover m-10" style="margin-top: -12px;">
                                 <tbody>
-                                <tr>
+                                <tr th:each="info:${complaintList}" th:if="${infoStat.count>0 and infoStat.count<=10}">
                                     <td style="text-align:left">
-                                        <div style="float:left;line-height:24px;"><span
-                                                style="float:left;">联通通道-CHID10086-A</span> <span class="bg"
-                                                                                                  style="float:left;width:160px;height:12px;margin-left:10px;margin-top:6px"></span>
-                                            <span style="float:left;color:#26a69a;font-size:14px;font-weight:600;margin-left:5px">235</span>
-                                            <span style="float:left;color:#4bd396;font-size:14px;font-weight:600;margin-left:20px">投诉率：3.2/百万 < 抗诉率 4/百万</span>
+                                        <div style="float:left;line-height:24px;" data-placement="bottom" data-toggle="tooltip" th:data-original-title="${info.channelName}+'--投诉量：'+${info.complaintNum}+'，发送量：'+${info.messageNum}"><span
+                                                style="float:left;"><mpm:tag identity="carrier" show-type="label" key="code" th:value="${info.carrier}"/>通道-[[${info.channelId}]]</span>
+                                            <!--<span style="float:left;color:#26a69a;font-size:14px;font-weight:600;margin-left:5px">235</span>-->
+                                            <span style="float:left;color:#4bd396;font-size:14px;font-weight:600;margin-left:20px">
+                                                <span th:if="${not #strings.isEmpty(info.maxComplaintRate) and info.complaintRate lt info.maxComplaintRate}">投诉率：[[${info.complaintRate}]]/百万 < 抗诉率 [[${info.maxComplaintRate}]]/百万</span>
+                                                <span th:if="${not #strings.isEmpty(info.maxComplaintRate) and info.complaintRate eq info.maxComplaintRate}">投诉率：[[${info.complaintRate}]]/百万 = 抗诉率 [[${info.maxComplaintRate}]]/百万</span>
+                                                <span th:if="${#strings.isEmpty(info.maxComplaintRate)}">投诉率：[[${info.complaintRate}]]/百万</span>
+                                            </span>
+                                            <span style="float:left;color:#f2404e;font-size:14px;font-weight:600;margin-left:20px">
+                                                <span th:if="${not #strings.isEmpty(info.maxComplaintRate) and info.complaintRate gt info.maxComplaintRate}">投诉率：[[${info.complaintRate}]]/百万 > 抗诉率 [[${info.maxComplaintRate}]]/百万</span>
+                                                <span th:if="${#strings.isEmpty(info.maxComplaintRate)}">投诉率：[[${info.complaintRate}]]/百万</span>
+                                            </span>
                                         </div>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td style="text-align:left">
-                                        <div style="float:left;line-height:24px;"><span
-                                                style="float:left;">联通通道-CHID10086-A</span> <span class="bg"
-                                                                                                  style="float:left;width:120px;height:12px;margin-left:10px;margin-top:6px"></span>
-                                            <span style="float:left;color:#26a69a;font-size:14px;font-weight:600;margin-left:5px">165</span>
-                                            <span style="float:left;color:#f2404e;font-size:14px;font-weight:600;margin-left:20px">投诉率：5.2/百万 > 抗诉率 4/百万</span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="text-align:left">
-                                        <div style="float:left;line-height:24px;"><span
-                                                style="float:left;">联通通道-CHID10086-A</span> <span class="bg"
-                                                                                                  style="float:left;width:110px;height:12px;margin-left:10px;margin-top:6px"></span>
-                                            <span style="float:left;color:#26a69a;font-size:14px;font-weight:600;margin-left:5px">155</span>
-                                            <span style="float:left;color:#4bd396;font-size:14px;font-weight:600;margin-left:20px">投诉率：3.2/百万 < 抗诉率 4/百万</span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="text-align:left">
-                                        <div style="float:left;line-height:24px;"><span
-                                                style="float:left;">联通通道-CHID10086-A</span> <span class="bg"
-                                                                                                  style="float:left;width:100px;height:12px;margin-left:10px;margin-top:6px"></span>
-                                            <span style="float:left;color:#26a69a;font-size:14px;font-weight:600;margin-left:5px">145</span>
-                                            <span style="float:left;color:#4bd396;font-size:14px;font-weight:600;margin-left:20px">投诉率：3.2/百万 < 抗诉率 4/百万</span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="text-align:left">
-                                        <div style="float:left;line-height:24px;"><span
-                                                style="float:left;">联通通道-CHID10086-A</span> <span class="bg"
-                                                                                                  style="float:left;width:96px;height:12px;margin-left:10px;margin-top:6px"></span>
-                                            <span style="float:left;color:#26a69a;font-size:14px;font-weight:600;margin-left:5px">140</span>
-                                            <span style="float:left;color:#4bd396;font-size:14px;font-weight:600;margin-left:20px">投诉率：3.2/百万 < 抗诉率 4/百万</span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="text-align:left">
-                                        <div style="float:left;line-height:24px;"><span
-                                                style="float:left;">联通通道-CHID10086-A</span> <span class="bg"
-                                                                                                  style="float:left;width:90px;height:12px;margin-left:10px;margin-top:6px"></span>
-                                            <span style="float:left;color:#26a69a;font-size:14px;font-weight:600;margin-left:5px">130</span>
-                                            <span style="float:left;color:#4bd396;font-size:14px;font-weight:600;margin-left:20px">投诉率：3.2/百万 < 抗诉率 4/百万</span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="text-align:left">
-                                        <div style="float:left;line-height:24px;"><span
-                                                style="float:left;">联通通道-CHID10086-A</span> <span class="bg"
-                                                                                                  style="float:left;width:80px;height:12px;margin-left:10px;margin-top:6px"></span>
-                                            <span style="float:left;color:#26a69a;font-size:14px;font-weight:600;margin-left:5px">110</span>
-                                            <span style="float:left;color:#4bd396;font-size:14px;font-weight:600;margin-left:20px">投诉率：3.2/百万 < 抗诉率 4/百万</span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="text-align:left">
-                                        <div style="float:left;line-height:24px;"><span
-                                                style="float:left;">联通通道-CHID10086-A</span> <span class="bg"
-                                                                                                  style="float:left;width:60px;height:12px;margin-left:10px;margin-top:6px"></span>
-                                            <span style="float:left;color:#26a69a;font-size:14px;font-weight:600;margin-left:5px">96</span>
-                                            <span style="float:left;color:#4bd396;font-size:14px;font-weight:600;margin-left:20px">投诉率：3.2/百万 < 抗诉率 4/百万</span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="text-align:left">
-                                        <div style="float:left;line-height:24px;"><span
-                                                style="float:left;">联通通道-CHID10086-A</span> <span class="bg"
-                                                                                                  style="float:left;width:50px;height:12px;margin-left:10px;margin-top:6px"></span>
-                                            <span style="float:left;color:#26a69a;font-size:14px;font-weight:600;margin-left:5px">90</span>
-                                            <span style="float:left;color:#4bd396;font-size:14px;font-weight:600;margin-left:20px">投诉率：3.2/百万 < 抗诉率 4/百万</span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="text-align:left">
-                                        <div style="float:left;line-height:24px;"><span
-                                                style="float:left;">联通通道-CHID10086-A</span> <span class="bg"
-                                                                                                  style="float:left;width:45px;height:12px;margin-left:10px;margin-top:6px"></span>
-                                            <span style="float:left;color:#26a69a;font-size:14px;font-weight:600;margin-left:5px">86</span>
-                                            <span style="float:left;color:#4bd396;font-size:14px;font-weight:600;margin-left:20px">投诉率：3.2/百万 < 抗诉率 4/百万</span>
-                                        </div>
-                                    </td>
-                                </tr>
+
                                 </tbody>
                             </table>
                         </div>
@@ -247,109 +168,27 @@
             <div class="col-md-6">
                 <div class="panel panel-color panel-info">
                     <div class="panel-heading">
-                        <h3 class="panel-title">通道投诉TOP 11-20(2022-01)</h3>
+                        <h3 class="panel-title">通道投诉TOP 11-20([[${month}]])</h3>
                     </div>
                     <div class="panel-body card-box">
-                        <div class="table-responsive">
+                        <div class="table-responsive"  style="height: 460px;">
                             <table class="table table table-hover m-10" style="margin-top: -12px;">
                                 <tbody>
-                                <tr>
+
+                                <tr th:each="info:${complaintList}" th:if="${infoStat.count>10 and infoStat.count<=20}">
                                     <td style="text-align:left">
-                                        <div style="float:left;line-height:24px;"><span
-                                                style="float:left;">联通通道-CHID10086-A</span> <span class="bg"
-                                                                                                  style="float:left;width:160px;height:12px;margin-left:10px;margin-top:6px"></span>
-                                            <span style="float:left;color:#26a69a;font-size:14px;font-weight:600;margin-left:5px">235</span>
-                                            <span style="float:left;color:#4bd396;font-size:14px;font-weight:600;margin-left:20px">投诉率：3.2/百万 < 抗诉率 4/百万</span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="text-align:left">
-                                        <div style="float:left;line-height:24px;"><span
-                                                style="float:left;">联通通道-CHID10086-A</span> <span class="bg"
-                                                                                                  style="float:left;width:120px;height:12px;margin-left:10px;margin-top:6px"></span>
-                                            <span style="float:left;color:#26a69a;font-size:14px;font-weight:600;margin-left:5px">165</span>
-                                            <span style="float:left;color:#f2404e;font-size:14px;font-weight:600;margin-left:20px">投诉率：5.2/百万 > 抗诉率 4/百万</span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="text-align:left">
-                                        <div style="float:left;line-height:24px;"><span
-                                                style="float:left;">联通通道-CHID10086-A</span> <span class="bg"
-                                                                                                  style="float:left;width:110px;height:12px;margin-left:10px;margin-top:6px"></span>
-                                            <span style="float:left;color:#26a69a;font-size:14px;font-weight:600;margin-left:5px">155</span>
-                                            <span style="float:left;color:#4bd396;font-size:14px;font-weight:600;margin-left:20px">投诉率：3.2/百万 < 抗诉率 4/百万</span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="text-align:left">
-                                        <div style="float:left;line-height:24px;"><span
-                                                style="float:left;">联通通道-CHID10086-A</span> <span class="bg"
-                                                                                                  style="float:left;width:100px;height:12px;margin-left:10px;margin-top:6px"></span>
-                                            <span style="float:left;color:#26a69a;font-size:14px;font-weight:600;margin-left:5px">145</span>
-                                            <span style="float:left;color:#4bd396;font-size:14px;font-weight:600;margin-left:20px">投诉率：3.2/百万 < 抗诉率 4/百万</span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="text-align:left">
-                                        <div style="float:left;line-height:24px;"><span
-                                                style="float:left;">联通通道-CHID10086-A</span> <span class="bg"
-                                                                                                  style="float:left;width:96px;height:12px;margin-left:10px;margin-top:6px"></span>
-                                            <span style="float:left;color:#26a69a;font-size:14px;font-weight:600;margin-left:5px">140</span>
-                                            <span style="float:left;color:#4bd396;font-size:14px;font-weight:600;margin-left:20px">投诉率：3.2/百万 < 抗诉率 4/百万</span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="text-align:left">
-                                        <div style="float:left;line-height:24px;"><span
-                                                style="float:left;">联通通道-CHID10086-A</span> <span class="bg"
-                                                                                                  style="float:left;width:90px;height:12px;margin-left:10px;margin-top:6px"></span>
-                                            <span style="float:left;color:#26a69a;font-size:14px;font-weight:600;margin-left:5px">130</span>
-                                            <span style="float:left;color:#4bd396;font-size:14px;font-weight:600;margin-left:20px">投诉率：3.2/百万 < 抗诉率 4/百万</span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="text-align:left">
-                                        <div style="float:left;line-height:24px;"><span
-                                                style="float:left;">联通通道-CHID10086-A</span> <span class="bg"
-                                                                                                  style="float:left;width:80px;height:12px;margin-left:10px;margin-top:6px"></span>
-                                            <span style="float:left;color:#26a69a;font-size:14px;font-weight:600;margin-left:5px">110</span>
-                                            <span style="float:left;color:#4bd396;font-size:14px;font-weight:600;margin-left:20px">投诉率：3.2/百万 < 抗诉率 4/百万</span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="text-align:left">
-                                        <div style="float:left;line-height:24px;"><span
-                                                style="float:left;">联通通道-CHID10086-A</span> <span class="bg"
-                                                                                                  style="float:left;width:60px;height:12px;margin-left:10px;margin-top:6px"></span>
-                                            <span style="float:left;color:#26a69a;font-size:14px;font-weight:600;margin-left:5px">96</span>
-                                            <span style="float:left;color:#4bd396;font-size:14px;font-weight:600;margin-left:20px">投诉率：3.2/百万 < 抗诉率 4/百万</span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="text-align:left">
-                                        <div style="float:left;line-height:24px;"><span
-                                                style="float:left;">联通通道-CHID10086-A</span> <span class="bg"
-                                                                                                  style="float:left;width:50px;height:12px;margin-left:10px;margin-top:6px"></span>
-                                            <span style="float:left;color:#26a69a;font-size:14px;font-weight:600;margin-left:5px">90</span>
-                                            <span style="float:left;color:#4bd396;font-size:14px;font-weight:600;margin-left:20px">投诉率：3.2/百万 < 抗诉率 4/百万</span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="text-align:left">
-                                        <div style="float:left;line-height:24px;"><span
-                                                style="float:left;">联通通道-CHID10086-A</span> <span class="bg"
-                                                                                                  style="float:left;width:45px;height:12px;margin-left:10px;margin-top:6px"></span>
-                                            <span style="float:left;color:#26a69a;font-size:14px;font-weight:600;margin-left:5px">86</span>
-                                            <span style="float:left;color:#4bd396;font-size:14px;font-weight:600;margin-left:20px">投诉率：3.2/百万 < 抗诉率 4/百万</span>
+                                        <div style="float:left;line-height:24px;" data-placement="bottom" data-toggle="tooltip" th:data-original-title="${info.channelName}+'--投诉量：'+${info.complaintNum}+'，发送量：'+${info.messageNum}"><span
+                                                style="float:left;"><mpm:tag identity="carrier" show-type="label" key="code" th:value="${info.carrier}"/>通道-[[${info.channelId}]]</span>
+                                            <!--<span style="float:left;color:#26a69a;font-size:14px;font-weight:600;margin-left:5px">235</span>-->
+                                            <span style="float:left;color:#4bd396;font-size:14px;font-weight:600;margin-left:20px">
+                                                <span th:if="${not #strings.isEmpty(info.maxComplaintRate) and info.complaintRate lt info.maxComplaintRate}">投诉率：[[${info.complaintRate}]]/百万 < 抗诉率 [[${info.maxComplaintRate}]]/百万</span>
+                                                <span th:if="${not #strings.isEmpty(info.maxComplaintRate) and info.complaintRate eq info.maxComplaintRate}">投诉率：[[${info.complaintRate}]]/百万 = 抗诉率 [[${info.maxComplaintRate}]]/百万</span>
+                                                <span th:if="${#strings.isEmpty(info.maxComplaintRate)}">投诉率：[[${info.complaintRate}]]/百万</span>
+                                            </span>
+                                            <span style="float:left;color:#f2404e;font-size:14px;font-weight:600;margin-left:20px">
+                                                <span th:if="${not #strings.isEmpty(info.maxComplaintRate) and info.complaintRate gt info.maxComplaintRate}">投诉率：[[${info.complaintRate}]]/百万 > 抗诉率 [[${info.maxComplaintRate}]]/百万</span>
+                                                <span th:if="${#strings.isEmpty(info.maxComplaintRate)}">投诉率：[[${info.complaintRate}]]/百万</span>
+                                            </span>
                                         </div>
                                     </td>
                                 </tr>
@@ -404,6 +243,8 @@
 
     </div> <!-- container -->
 </div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
 <script th:src="@{/static/assets/js/jquery.min.js}"></script>
 <script th:src="@{/static/echarts/echarts.min.js}"></script>
 <script type="text/javascript">

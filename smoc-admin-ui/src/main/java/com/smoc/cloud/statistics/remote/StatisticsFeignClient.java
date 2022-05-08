@@ -3,6 +3,7 @@ package com.smoc.cloud.statistics.remote;
 
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.customer.qo.StatisticProfitData;
+import com.smoc.cloud.common.smoc.message.MessageChannelComplaintValidator;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,4 +41,12 @@ public interface StatisticsFeignClient {
      */
     @RequestMapping(value = "/statistics/index/statisticProfitMonth", method = RequestMethod.POST)
     ResponseData<List<StatisticProfitData>> statisticProfitMonth(@RequestBody StatisticProfitData statisticProfitData);
+
+    /**
+     * 查询通道排行
+     * @param messageChannelComplaintValidator
+     * @return
+     */
+    @RequestMapping(value = "/complaint/channelComplaintRanking", method = RequestMethod.POST)
+    ResponseData<List<MessageChannelComplaintValidator>> channelComplaintRanking(@RequestBody MessageChannelComplaintValidator messageChannelComplaintValidator);
 }

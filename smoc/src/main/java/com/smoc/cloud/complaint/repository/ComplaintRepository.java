@@ -3,11 +3,13 @@ package com.smoc.cloud.complaint.repository;
 
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
+import com.smoc.cloud.common.smoc.message.MessageChannelComplaintValidator;
 import com.smoc.cloud.common.smoc.message.MessageComplaintInfoValidator;
 import com.smoc.cloud.complaint.entity.MessageComplaintInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.List;
 
 
 /**
@@ -39,4 +41,10 @@ public interface ComplaintRepository extends CrudRepository<MessageComplaintInfo
      */
     MessageComplaintInfo findByCarrierSourceAndReportNumberAndReportContentAndReportDate(String carrier, String reportNumber, String reportContent, String reportDate);
 
+    /**
+     * 查询通道投诉排行
+     * @param messageChannelComplaintValidator
+     * @return
+     */
+    List<MessageChannelComplaintValidator> channelComplaintRanking(MessageChannelComplaintValidator messageChannelComplaintValidator);
 }

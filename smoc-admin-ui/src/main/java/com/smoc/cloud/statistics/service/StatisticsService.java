@@ -5,6 +5,7 @@ import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
 import com.smoc.cloud.common.smoc.customer.qo.StatisticProfitData;
+import com.smoc.cloud.common.smoc.message.MessageChannelComplaintValidator;
 import com.smoc.cloud.customer.remote.BusinessAccountFeignClient;
 import com.smoc.cloud.customer.service.BusinessAccountService;
 import com.smoc.cloud.statistics.remote.StatisticsFeignClient;
@@ -150,5 +151,19 @@ public class StatisticsService {
         statisticData.setMinMonth(minMonth);
 
         return statisticData;
+    }
+
+    /**
+     * 查询通道排行
+     * @param messageChannelComplaintValidator
+     * @return
+     */
+    public ResponseData<List<MessageChannelComplaintValidator>> channelComplaintRanking(MessageChannelComplaintValidator messageChannelComplaintValidator) {
+        try {
+            ResponseData<List<MessageChannelComplaintValidator>> data = statisticsFeignClient.channelComplaintRanking(messageChannelComplaintValidator);
+            return data;
+        } catch (Exception e) {
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
     }
 }

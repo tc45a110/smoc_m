@@ -6,6 +6,7 @@ import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseContractInfoValidator;
+import com.smoc.cloud.common.smoc.message.MessageChannelComplaintValidator;
 import com.smoc.cloud.common.smoc.message.MessageComplaintInfoValidator;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
@@ -16,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
+
+import java.util.List;
 
 
 /**
@@ -116,4 +119,16 @@ public class ComplaintController {
 
         return data;
     }
+
+    /**
+     * 查询通道投诉排行
+     * @param messageChannelComplaintValidator
+     * @return
+     */
+    @RequestMapping(value = "/channelComplaintRanking", method = RequestMethod.POST)
+    public ResponseData<List<MessageChannelComplaintValidator>> channelComplaintRanking(@RequestBody MessageChannelComplaintValidator messageChannelComplaintValidator) {
+
+        return complaintService.channelComplaintRanking(messageChannelComplaintValidator);
+    }
+
 }

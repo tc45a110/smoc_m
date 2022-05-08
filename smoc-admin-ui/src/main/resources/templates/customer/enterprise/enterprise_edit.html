@@ -124,7 +124,7 @@
                                                        readonly autocomplete="off">
                                                 <input type="text" class="form-control" th:field="*{enterpriseFlag}"
                                                        th:if="${op eq 'add'}" required=""
-                                                       data-parsley-pattern="[A-Z]{3}" autocomplete="off">
+                                                       data-parsley-length="[3,6]" autocomplete="off">
                                             </div>
 
                                             <div class="col-md-12 text-center">

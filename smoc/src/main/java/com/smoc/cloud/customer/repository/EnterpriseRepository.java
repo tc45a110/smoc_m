@@ -42,4 +42,6 @@ public interface EnterpriseRepository extends CrudRepository<EnterpriseBasicInfo
      * @return
      */
      List<Nodes> findByAccountBusinessType(String businessType);
+
+    Iterable<EnterpriseBasicInfo> findByEnterpriseNameOrEnterpriseFlag(String enterpriseName, String enterpriseFlag);
 }

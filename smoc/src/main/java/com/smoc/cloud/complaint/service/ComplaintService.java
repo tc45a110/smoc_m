@@ -6,6 +6,7 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.smoc.message.MessageChannelComplaintValidator;
 import com.smoc.cloud.common.smoc.message.MessageComplaintInfoValidator;
 import com.smoc.cloud.common.smoc.message.MessageDetailInfoValidator;
 import com.smoc.cloud.common.smoc.message.model.ComplaintExcelModel;
@@ -14,6 +15,9 @@ import com.smoc.cloud.common.smoc.utils.SysFilterUtil;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.complaint.entity.MessageComplaintInfo;
 import com.smoc.cloud.complaint.repository.ComplaintRepository;
+import com.smoc.cloud.configure.channel.entity.ConfigChannelInterface;
+import com.smoc.cloud.configure.channel.repository.ChannelInterfaceRepository;
+import com.smoc.cloud.configure.channel.service.ChannelInterfaceService;
 import com.smoc.cloud.filter.entity.FilterGroupList;
 import com.smoc.cloud.filter.repository.BlackRepository;
 import com.smoc.cloud.filter.repository.GroupRepository;
@@ -52,6 +56,9 @@ public class ComplaintService {
 
     @Resource
     private GroupRepository groupRepository;
+
+    @Resource
+    private ChannelInterfaceRepository channelInterfaceRepository;
 
     /**
      * 查询列表
@@ -94,6 +101,12 @@ public class ComplaintService {
             entity.setSendDate(messageComplaintInfoValidator.getSendDate());
             entity.setSendRate(messageComplaintInfoValidator.getSendRate());
             entity.setBusinessType(messageComplaintInfoValidator.getBusinessType());
+
+            //根据码号查询通道
+            List<ConfigChannelInterface> list = channelInterfaceRepository.findBySrcId(messageComplaintInfoValidator.getNumberCode());
+            if(!StringUtils.isEmpty(list) && list.size()>0){
+                entity.setChannelId(list.get(0).getChannelId());
+            }
 
             //op 不为 edit 或 add
             if (!("edit".equals(op) || "add".equals(op))) {
@@ -242,5 +255,15 @@ public class ComplaintService {
 
         }
 
+    }
+
+    /**
+     * 查询通道投诉排行
+     * @param messageChannelComplaintValidator
+     * @return
+     */
+    public ResponseData<List<MessageChannelComplaintValidator>> channelComplaintRanking(MessageChannelComplaintValidator messageChannelComplaintValidator) {
+        List<MessageChannelComplaintValidator> list = complaintRepository.channelComplaintRanking(messageChannelComplaintValidator);
+        return ResponseDataUtil.buildSuccess(list);
     }
 }

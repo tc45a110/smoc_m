@@ -107,7 +107,7 @@ public class EnterpriseService {
     @Transactional
     public ResponseData<EnterpriseBasicInfo> save(EnterpriseBasicInfoValidator enterpriseBasicInfoValidator, String op) {
 
-        Iterable<EnterpriseBasicInfo> data = enterpriseRepository.findByEnterpriseNameAndEnterpriseFlag(enterpriseBasicInfoValidator.getEnterpriseName(), enterpriseBasicInfoValidator.getEnterpriseFlag());
+        Iterable<EnterpriseBasicInfo> data = enterpriseRepository.findByEnterpriseNameOrEnterpriseFlag(enterpriseBasicInfoValidator.getEnterpriseName(), enterpriseBasicInfoValidator.getEnterpriseFlag());
 
         EnterpriseBasicInfo entity = new EnterpriseBasicInfo();
         BeanUtils.copyProperties(enterpriseBasicInfoValidator, entity);
