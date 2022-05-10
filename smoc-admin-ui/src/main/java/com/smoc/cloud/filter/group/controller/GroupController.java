@@ -315,7 +315,7 @@ public class GroupController {
         InputStream fis = null;
         BufferedInputStream bis = null;
         try {
-            fis = classPathResource.getInputStream();;
+            fis = classPathResource.getInputStream();
             bis = new BufferedInputStream(fis);
             OutputStream os = response.getOutputStream();
             int i = bis.read(buffer);
