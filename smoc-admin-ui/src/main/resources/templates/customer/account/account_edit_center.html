@@ -59,6 +59,11 @@
                                             <i class="mdi mdi-vector-circle" style="margin-right:5px"></i>
                                             EC业务账号中心
                                         </a>
+                                        <a sec:authorize-url="/account/excelAccountInfo/*" th:if="${'base' ne flag}"
+                                           th:href="@{/account/excelAccountInfo/{accountId}(accountId=${accountId})}"
+                                           class="btn btn-purple waves-effect waves-light m-l-10 btn-md">
+                                            <i class="glyphicon glyphicon-export"></i> 导出账号信息
+                                        </a>
                                         <a id="help_display" style="margin-left:10px"><i
                                                 class="mdi mdi-help-circle-outline"></i></a>
                                     </div>

@@ -133,8 +133,9 @@
                                                     class="fa  fa-angle-double-down" style="margin-left:10px;"></i>
                                                 <span style="color:#797979">[[${info.enterpriseName}]]</span></a>
                                         </td>
-                                        <td><p style="font-size:14px;">[[${info.enterpriseContacts}]]<span
-                                                style="font-size:14px;color:#989898;margin-left:5px">([[${info.enterpriseContactsPhone}]])</span>
+                                        <td><p style="font-size:14px;" th:if="${not #strings.isEmpty(info.enterpriseContacts)}">[[${info.enterpriseContacts}]]
+                                            <span th:if="${not #strings.isEmpty(info.enterpriseContactsPhone)}"
+                                                  style="font-size:14px;color:#989898;margin-left:5px">([[${info.enterpriseContactsPhone}]])</span>
                                         </p></td>
                                         <td><span th:if="${salesMap[info.saler] !=null}">[[${salesMap[info.saler].realName}]]</span></td>
                                         <td>
@@ -170,9 +171,12 @@
                                                    data-toggle="tooltip" data-placement="bottom" title=""
                                                    data-original-title="跳转到企业信息中心"> <span style="color:#797979">[[${enterprise.enterpriseName}]]</span></a></a>
                                             </td>
-                                            <td><p style="font-size:14px;">[[${enterprise.enterpriseContacts}]]<span
-                                                    style="font-size:14px;color:#989898;margin-left:5px">([[${enterprise.enterpriseContactsPhone}]])</span>
-                                            </p></td>
+                                            <td>
+                                                <p style="font-size:14px;" th:if="${not #strings.isEmpty(enterprise.enterpriseContacts)}">[[${enterprise.enterpriseContacts}]]
+                                                    <span th:if="${not #strings.isEmpty(enterprise.enterpriseContactsPhone)}"
+                                                          style="font-size:14px;color:#989898;margin-left:5px">([[${enterprise.enterpriseContactsPhone}]])</span>
+                                                </p>
+                                            </td>
                                             <td><span th:if="${salesMap[info.saler] !=null}">[[${salesMap[info.saler].realName}]]</span></td>
                                             <td>
                                                 <mpm:tag identity="enterpriseType" show-type="button" key="code" th:value="${enterprise.enterpriseType}"

@@ -3,6 +3,7 @@ package com.smoc.cloud.customer.rowmapper;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseWebAccountInfoValidator;
 import org.springframework.jdbc.core.RowMapper;
 
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -23,6 +24,7 @@ public class EnterpriseWebAccountInfoRowMapper implements RowMapper<EnterpriseWe
         qo.setAccountStatus(resultSet.getString("ACCOUNT_STATUS"));
         qo.setCreatedBy(resultSet.getString("CREATED_BY"));
         qo.setCreatedTime(resultSet.getString("CREATED_TIME"));
+        qo.setAesPassword(resultSet.getString("AES_PASSWORD"));
 
         return qo;
     }

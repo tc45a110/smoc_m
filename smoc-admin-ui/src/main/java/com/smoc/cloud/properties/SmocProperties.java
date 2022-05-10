@@ -21,4 +21,7 @@ public class SmocProperties {
     //手机号文件根目录
     private String mobileFileRootPath;
 
+    //自服务平台网址
+    private String webUrl;
+
 }

@@ -32,7 +32,15 @@ public class RandomService {
         }
 
         String prefix = code.substring(0,1);
-        return ""+sequenceRepository.findSequence(prefix);
+
+        String sequence = ""+sequenceRepository.findSequence(prefix);
+
+        //如果为空，标识企业不是英文字符
+        if(StringUtils.isEmpty(sequence) || "null".equals(sequence)){
+            return sequenceRepository.findSequence("ACCOUNT_RANDOM")+"";
+        }
+
+        return sequence;
 
     }
 

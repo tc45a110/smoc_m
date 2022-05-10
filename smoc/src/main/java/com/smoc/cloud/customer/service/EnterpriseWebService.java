@@ -8,6 +8,7 @@ import com.smoc.cloud.common.auth.validator.BaseUserExtendsValidator;
 import com.smoc.cloud.common.auth.validator.BaseUserValidator;
 import com.smoc.cloud.common.auth.validator.UserPasswordValidator;
 import com.smoc.cloud.common.auth.validator.UserValidator;
+import com.smoc.cloud.common.gateway.utils.AESConstUtil;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
@@ -130,6 +131,8 @@ public class EnterpriseWebService {
 
         //密码加密
         entity.setWebLoginPassword(new BCryptPasswordEncoder().encode(entity.getWebLoginPassword()));
+        //AES加密
+        entity.setAesPassword(AESConstUtil.encrypt(enterpriseWebAccountInfoValidator.getWebLoginPassword()));
 
         //记录日志
         log.info("[企业接入][企业WEB登录账号][{}]数据:{}",op, JSON.toJSONString(entity));
@@ -214,7 +217,9 @@ public class EnterpriseWebService {
 
         EnterpriseWebAccountInfo entity = enterpriseWebRepository.findById(enterpriseWebAccountInfoValidator.getId()).get();
 
-        entity.setWebLoginPassword(new BCryptPasswordEncoder().encode(entity.getWebLoginPassword()));
+        entity.setWebLoginPassword(new BCryptPasswordEncoder().encode(enterpriseWebAccountInfoValidator.getWebLoginPassword()));
+        //AES加密
+        entity.setAesPassword(AESConstUtil.encrypt(enterpriseWebAccountInfoValidator.getWebLoginPassword()));
 
         //记录日志
         log.info("[企业接入][重置WEB账号密码][{}]数据:{}","edit", JSON.toJSONString(entity));

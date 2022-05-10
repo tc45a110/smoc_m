@@ -227,7 +227,7 @@ public class ComplaintRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", truncate(a.COMPLAINT_NUM/c.MESSAGE_SUCCESS_NUM*1000000,2)COMPLAINT_RATE");
         sqlBuffer.append(", b.MAX_COMPLAINT_RATE");
         sqlBuffer.append("  from (select t.CHANNEL_ID,count(t.id)COMPLAINT_NUM,t.CARRIER from message_complaint_info t where t.COMPLAINT_SOURCE='day' and DATE_FORMAT(t.REPORT_DATE,'%Y-%m')=? and ifnull(t.CHANNEL_ID,'') <> '' group by t.CHANNEL_ID,t.CARRIER,DATE_FORMAT(t.REPORT_DATE,'%Y-%m'))a");
-        sqlBuffer.append("  left join (select t.CHANNEL_ID,t.CHANNEL_NAME,t.MAX_COMPLAINT_RATE from config_channel_basic_info t where t.CHANNEL_STATUS='001')b on a.CHANNEL_ID = b.CHANNEL_ID ");
+        sqlBuffer.append("  left join (select t.CHANNEL_ID,t.CHANNEL_NAME,t.MAX_COMPLAINT_RATE from config_channel_basic_info t )b on a.CHANNEL_ID = b.CHANNEL_ID ");
         sqlBuffer.append(" left join (select t.CHANNEL_ID,sum(t.MESSAGE_SUCCESS_NUM)MESSAGE_SUCCESS_NUM from message_daily_statistics t group by t.CHANNEL_ID)c on b.CHANNEL_ID = c.CHANNEL_ID ");
         sqlBuffer.append("  where 1=1  ");
 

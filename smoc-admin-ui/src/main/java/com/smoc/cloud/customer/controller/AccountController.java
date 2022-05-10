@@ -1,6 +1,9 @@
 package com.smoc.cloud.customer.controller;
 
 
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.fastjson.JSON;
 import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
@@ -21,7 +24,9 @@ import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.customer.service.*;
 import com.smoc.cloud.identification.model.AccountExcelModel;
+import com.smoc.cloud.properties.SmocProperties;
 import com.smoc.cloud.utils.ExcelUtils;
+import com.smoc.cloud.utils.TestFileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -34,10 +39,12 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.OutputStream;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.net.URLEncoder;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -65,6 +72,9 @@ public class AccountController {
 
     @Autowired
     private AccountChannelService accountChannelService;
+
+    @Autowired
+    private SmocProperties smocProperties;
 
     /**
      * 业务账号列表
@@ -723,12 +733,12 @@ public class AccountController {
      *
      * @return
      */
-    @RequestMapping(value = "/excelAccountInfo/{accountId}", method = RequestMethod.GET)
-    public void excelAccountInfo(@PathVariable String accountId, HttpServletRequest request, HttpServletResponse response) {
+    /*@RequestMapping(value = "/excelAccountInfo1/{accountId}", method = RequestMethod.GET)
+    public void excelAccountInfo1(@PathVariable String accountId, HttpServletRequest request, HttpServletResponse response) {
 
-        /**
+        *//**
          * 查询账号信息
-         */
+         *//*
         ResponseData<AccountBasicInfoValidator> data = businessAccountService.findById(accountId);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             return ;
@@ -743,6 +753,67 @@ public class AccountController {
             ExcelUtils.writeExcel(fileName, AccountExcelModel.class ,response,list);
         } catch (Exception e) {
             log.error("导出excel表格失败:", e);
+        }
+    }*/
+
+    /**
+     * 生成excel：导出账号信息
+     *
+     * @return
+     */
+    @RequestMapping(value = "/excelAccountInfo/{accountId}", method = RequestMethod.GET)
+    public void excelAccountInfo(@PathVariable String accountId, HttpServletRequest request, HttpServletResponse response) {
+
+        /**
+         * 查询账号信息
+         */
+        ResponseData<AccountBasicInfoValidator> data = businessAccountService.findById(accountId);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            return ;
+        }
+
+        //模板路径
+        String templateFileName = TestFileUtil.getPath() + "static" + File.separator + "files" + File.separator + "templates" + File.separator + "account.xlsx";
+
+        //账号信息
+        AccountBasicInfoValidator accountBasicInfoValidator = data.getData();
+
+        //查询导出数据信息
+        Map<String, Object> buildMap = businessAccountService.buildExcelMap(accountBasicInfoValidator,request);
+
+        OutputStream out = null;
+        BufferedOutputStream bos = null;
+        try {
+
+            response.setContentType("application/vnd.ms-excel");
+            response.setCharacterEncoding("utf-8");
+            String fileName = URLEncoder.encode( accountId + "账号信息.xls", "utf-8");
+            response.setHeader("Content-disposition", "attachment; filename=" + new String(fileName.getBytes("UTF-8"), "ISO-8859-1"));
+
+            out = response.getOutputStream();
+            bos = new BufferedOutputStream(out);
+
+            //读取Excel
+            ExcelWriter excelWriter = EasyExcel.write(bos).withTemplate(templateFileName).build();
+            WriteSheet writeSheet = EasyExcel.writerSheet(0).build();
+            WriteSheet writeSheet1 = EasyExcel.writerSheet(1).build();
+
+            Map<String, Object> accountMap = new HashMap<>();
+            accountMap.put("account", accountBasicInfoValidator.getAccountId());
+            accountMap.put("webUrl", smocProperties.getWebUrl());
+            excelWriter.fill(buildMap.get("messageMap"), writeSheet1);
+            excelWriter.fill(buildMap.get("messageFiltersList"), writeSheet1);
+            excelWriter.fill(accountMap, writeSheet);
+            excelWriter.fill(buildMap.get("finance"), writeSheet);
+            excelWriter.fill(buildMap.get("interface"), writeSheet);
+            excelWriter.fill(buildMap.get("interfaceList"), writeSheet);
+            excelWriter.fill(buildMap.get("webList"), writeSheet);
+
+            excelWriter.finish();
+            bos.flush();
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

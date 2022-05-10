@@ -54,6 +54,7 @@ com:
       smoc:
         enterprise-file-path: /alidata/smoc/enterprise/
         mobile-file-root-path: /alidata/smoc/message/mobile  #短信手机号文件根目录
+        web-url: http://39.107.110.237:8085/service #导出账号信息：自服务平台网址
         message-resource:
           resource-url: http://39.107.110.237/smoc/message/resource #访问资源路径
           resource-file-root-path: /alidata/smoc/message/resource  #资源文件根目录

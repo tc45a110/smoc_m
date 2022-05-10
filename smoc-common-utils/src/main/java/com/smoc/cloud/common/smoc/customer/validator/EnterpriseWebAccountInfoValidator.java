@@ -28,6 +28,7 @@ public class EnterpriseWebAccountInfoValidator {
     @NotNull(message = "密码不能为空！")
     @Length(min = 6, max = 20, message = "密码长度不符合规则！")
     private String webLoginPassword;
+    private String aesPassword;
     private String accountStatus;
     private String createdBy;
     private String createdTime;

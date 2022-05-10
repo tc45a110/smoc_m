@@ -203,23 +203,23 @@
         </div>
         <!-- end row -->
 
-        <div class="row">
+        <!--<div class="row">
             <div class="col-lg-4">
                 <div class="card-box">
 
                     <div id="main3" style="height: 400px;"></div>
 
                 </div>
-            </div><!-- end col -->
+            </div>&lt;!&ndash; end col &ndash;&gt;
             <div class="col-lg-8">
                 <div class="card-box">
 
                     <div id="main4" style="height: 400px;"></div>
 
                 </div>
-            </div><!-- end col -->
+            </div>&lt;!&ndash; end col &ndash;&gt;
 
-        </div>
+        </div>-->
         <!-- end row -->
         <div class="row">
             <div class="col-lg-6">
@@ -248,7 +248,7 @@
 <script th:src="@{/static/assets/js/jquery.min.js}"></script>
 <script th:src="@{/static/echarts/echarts.min.js}"></script>
 <script type="text/javascript">
-
+/*
 var dom = document.getElementById("main4");
 var myChart = echarts.init(dom);
 var app = {};
@@ -463,7 +463,7 @@ option1 = {
 };;
 if (option1 && typeof option1 === "object") {
     myChart1.setOption(option1, true);
-}
+}*/
 
 $.ajax({
     url : '[[${#httpServletRequest.getContextPath()}]]/index/statisticSendMonth',

@@ -4,6 +4,7 @@ import com.smoc.cloud.admin.security.remote.client.SystemExtendBusinessParameter
 import com.smoc.cloud.common.auth.qo.Dict;
 import com.smoc.cloud.common.auth.qo.DictType;
 import com.smoc.cloud.common.auth.validator.SystemExtendBusinessParamValidator;
+import com.smoc.cloud.common.gateway.utils.AESConstUtil;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
@@ -14,10 +15,13 @@ import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.AccountFinanceInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.AccountInterfaceInfoValidator;
+import com.smoc.cloud.common.smoc.customer.validator.EnterpriseWebAccountInfoValidator;
 import com.smoc.cloud.common.smoc.parameter.ParameterExtendFiltersValueValidator;
+import com.smoc.cloud.common.smoc.parameter.ParameterExtendSystemParamValueValidator;
 import com.smoc.cloud.common.utils.DES;
 import com.smoc.cloud.customer.remote.BusinessAccountFeignClient;
 import com.smoc.cloud.identification.model.AccountExcelModel;
+import com.smoc.cloud.parameter.remote.ParameterExtendSystemParamValueFeignClient;
 import com.smoc.cloud.parameter.service.ParameterExtendFiltersValueService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +60,12 @@ public class BusinessAccountService {
 
     @Autowired
     private SystemExtendBusinessParameterFeignClient systemExtendBusinessParameterFeignClient;
+
+    @Autowired
+    private ParameterExtendSystemParamValueFeignClient parameterExtendSystemParamValueFeignClient;
+
+    @Autowired
+    private EnterpriseWebService enterpriseWebService;
 
     /**
      * 查询列表
@@ -221,7 +231,7 @@ public class BusinessAccountService {
      * @param accountBasicInfoValidator
      * @return
      */
-    public CopyOnWriteArrayList<AccountExcelModel> excelAccountInfo(AccountBasicInfoValidator accountBasicInfoValidator, HttpServletRequest request) {
+   /* public CopyOnWriteArrayList<AccountExcelModel> excelAccountInfo(AccountBasicInfoValidator accountBasicInfoValidator, HttpServletRequest request) {
 
         //查询财务信息
         AccountFinanceInfoValidator accountFinanceInfoValidator = new AccountFinanceInfoValidator();
@@ -326,6 +336,239 @@ public class BusinessAccountService {
         }
 
         return list;
+    }*/
+
+
+    /**
+     * 业务账号综合查询
+     * @param params
+     * @return
+     */
+    public ResponseData<PageList<AccountInfoQo>> accountAll(PageParams<AccountInfoQo> params) {
+        try {
+            ResponseData<PageList<AccountInfoQo>> pageList = this.businessAccountFeignClient.accountAll(params);
+            return pageList;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    public Map<String, Object> buildExcelMap(AccountBasicInfoValidator accountBasicInfoValidator, HttpServletRequest request) {
+
+        //业务类型
+        Map<String,String> businessTypeMap = this.businessType(request);
+        //运营商
+        Map<String,String>  carrierMap = this.carrier(request);
+
+        Map<String, Object> buildMap = new HashMap<>();
+
+        //查询财务信息
+        AccountFinanceInfoValidator accountFinanceInfoValidator = new AccountFinanceInfoValidator();
+        accountFinanceInfoValidator.setAccountId(accountBasicInfoValidator.getAccountId());
+        ResponseData<List<AccountFinanceInfoValidator>> financeList = accountFinanceService.findByAccountId(accountFinanceInfoValidator);
+
+        Map<String, Object> financeMap = new HashMap<>();
+        financeMap.put("bussinessType",businessTypeMap.get(accountBasicInfoValidator.getBusinessType()));
+        if (!StringUtils.isEmpty(financeList.getData()) && financeList.getData().size() > 0) {
+            AccountFinanceInfoValidator finance = financeList.getData().get(0);
+            financeMap.put("chargeType",finance.getChargeType().equals("1") ? "下发运营商计费" : "回执成功计费");
+            financeMap.put("payType",finance.getPayType().equals("1") ? "预付费" : "后付费");
+            String price = "";
+            for(AccountFinanceInfoValidator info: financeList.getData()){
+                if(StringUtils.isEmpty(price)){
+                    price = carrierMap.get(info.getCarrier())+":"+info.getCarrierPrice();
+                }else{
+                    price += ","+ carrierMap.get(info.getCarrier())+":"+info.getCarrierPrice();
+                }
+            }
+            financeMap.put("price",price);
+        }
+
+        //查询接口参数
+        ResponseData<AccountInterfaceInfoValidator> interfaceInfoValidator = accountInterfaceService.findById(accountBasicInfoValidator.getAccountId());
+        Map<String, Object> interfaceMap = new HashMap<>();
+        List<Map<String, Object>> interfaceList = new ArrayList<>();
+        if(!StringUtils.isEmpty(interfaceInfoValidator.getData())){
+            AccountInterfaceInfoValidator interfaceInfo = interfaceInfoValidator.getData();
+            interfaceMap.put("protocol",interfaceInfo.getProtocol());
+            interfaceMap.put("accountPassword",DES.decrypt(interfaceInfo.getAccountPassword()));
+            interfaceMap.put("maxSendSecond",interfaceInfo.getMaxSendSecond());
+            //查询系统参数:系统对外IP
+            ResponseData<ParameterExtendSystemParamValueValidator> systemParamValue = parameterExtendSystemParamValueFeignClient.findByBusinessTypeAndBusinessIdAndParamKey("SYSTEM_PARAM","SYSTEM","SYSTEM_PARAM_IP");
+            if(!StringUtils.isEmpty(systemParamValue.getData())){
+                interfaceMap.put("sysIp",systemParamValue.getData().getParamValue());
+            }
+
+            if("WEB".equals(interfaceInfo.getProtocol())){
+                Map<String, Object> map = new HashMap<>();
+                map.put("interKey","账号提交速率(次/秒)");
+                map.put("interValue",interfaceInfo.getMaxSubmitSecond());
+
+                Map<String, Object> map1 = new HashMap<>();
+                map1.put("interKey","是否审核模板");
+                map1.put("interValue",interfaceInfo.getExecuteCheck().equals("1") ? "是" : "否");
+
+                interfaceList.add(map);
+                interfaceList.add(map1);
+            }
+
+            if("CMPP".equals(interfaceInfo.getProtocol()) || "SGIP".equals(interfaceInfo.getProtocol()) || "SMGP".equals(interfaceInfo.getProtocol())){
+                Map<String, Object> map = new HashMap<>();
+                map.put("interKey","服务代码(接入码号)");
+                map.put("interValue",interfaceInfo.getSrcId());
+
+                Map<String, Object> map1 = new HashMap<>();
+                map1.put("interKey","最大链接数");
+                map1.put("interValue",interfaceInfo.getMaxConnect());
+
+                Map<String, Object> map2 = new HashMap<>();
+                map2.put("interKey","是否匹配模板");
+                map2.put("interValue",interfaceInfo.getExecuteCheck().equals("1") ? "是" : "否");
+
+                Map<String, Object> map3 = new HashMap<>();
+                map3.put("interKey","是否审核内容");
+                map3.put("interValue",interfaceInfo.getMatchingCheck().equals("1") ? "是" : "否");
+
+                Map<String, Object> map4 = new HashMap<>();
+                map4.put("interKey","客户鉴权IP");
+                map4.put("interValue",StringUtils.isEmpty(interfaceInfo.getIdentifyIp()) ? "无限制" : interfaceInfo.getIdentifyIp());
+
+                interfaceList.add(map);
+                interfaceList.add(map1);
+                interfaceList.add(map2);
+                interfaceList.add(map3);
+                interfaceList.add(map4);
+            }
+
+            if("HTTPS".equals(interfaceInfo.getProtocol())){
+                Map<String, Object> map = new HashMap<>();
+                map.put("interKey","账号提交速率(次/秒)");
+                map.put("interValue",interfaceInfo.getMaxSubmitSecond());
+
+                Map<String, Object> map1 = new HashMap<>();
+                map1.put("interKey","是否审核模板");
+                map1.put("interValue",interfaceInfo.getExecuteCheck().equals("1") ? "是" : "否");
+
+                Map<String, Object> map2 = new HashMap<>();
+                map2.put("interKey","客户鉴权IP");
+                map2.put("interValue",StringUtils.isEmpty(interfaceInfo.getIdentifyIp()) ? "无限制" : interfaceInfo.getIdentifyIp());
+
+                Map<String, Object> map3 = new HashMap<>();
+                map3.put("interKey","上行短信推送地址");
+                map3.put("interValue",interfaceInfo.getMoUrl());
+
+                Map<String, Object> map4 = new HashMap<>();
+                map4.put("interKey","状态报告推送地址");
+                map4.put("interValue",interfaceInfo.getStatusReportUrl());
+
+                interfaceList.add(map);
+                interfaceList.add(map1);
+                interfaceList.add(map2);
+                interfaceList.add(map3);
+                interfaceList.add(map4);
+            }
+        }
+
+        //web登录账号
+        List<Map<String, Object>> webList = new ArrayList<>();
+        EnterpriseWebAccountInfoValidator enterpriseWebAccountInfoValidator = new EnterpriseWebAccountInfoValidator();
+        enterpriseWebAccountInfoValidator.setEnterpriseId(accountBasicInfoValidator.getEnterpriseId());
+        ResponseData<List<EnterpriseWebAccountInfoValidator>> webData = this.enterpriseWebService.page(enterpriseWebAccountInfoValidator);
+        if(!StringUtils.isEmpty(webData.getData()) && webData.getData().size()>0){
+            for(EnterpriseWebAccountInfoValidator info:webData.getData()){
+                Map<String, Object> map = new HashMap<>();
+                map.put("webLoginName",info.getWebLoginName());
+                String webPassword = "";
+                if(!StringUtils.isEmpty(info.getAesPassword())){
+                    webPassword = AESConstUtil.decrypt(info.getAesPassword());
+                }
+                map.put("webPassword",webPassword);
+                webList.add(map);
+            }
+        }
+
+        //接口账号发送属性
+        Map<String, Object> messageMap = new HashMap<>();
+        messageMap.put("transferType",accountBasicInfoValidator.getTransferType().equals("1") ? "是" : "否");
+        String value = "";
+        if(accountBasicInfoValidator.getRandomExtendCodeLength()>0){
+            value = "；随机扩展码位数："+accountBasicInfoValidator.getRandomExtendCodeLength();
+        }
+        messageMap.put("extendCode",!StringUtils.isEmpty(accountBasicInfoValidator.getExtendCode())? "固定扩展码：" +accountBasicInfoValidator.getExtendCode() + value: "固定扩展码：无");
+        //查询系统参数
+        ResponseData<ParameterExtendSystemParamValueValidator> systemParamValue = parameterExtendSystemParamValueFeignClient.findByBusinessTypeAndBusinessIdAndParamKey("SYSTEM_PARAM","SYSTEM","MAX_SMS_TEXT_LENGTH");
+        if(!StringUtils.isEmpty(systemParamValue.getData())){
+            messageMap.put("messageLength",systemParamValue.getData().getParamValue());
+        }
+
+        //过滤参数信息
+        List<Map<String, Object>> messageFiltersList = new ArrayList<>();
+        ResponseData<List<ParameterExtendFiltersValueValidator>> data = this.parameterExtendFiltersValueService.findParameterValue(accountBasicInfoValidator.getAccountId());
+        if (!StringUtils.isEmpty(data.getData()) && data.getData().size() > 0) {
+
+            List<ParameterExtendFiltersValueValidator> filtersList = data.getData();
+            //取字典数据
+            ServletContext context = request.getServletContext();
+            Map<String, DictType> dictMap = (Map<String, DictType>) context.getAttribute("dict");
+
+            for (ParameterExtendFiltersValueValidator filters : filtersList) {
+                //黑词过滤、审核词过滤、黑名单层级过滤  这三列不用导出
+                if("BLACK_WORD_FILTERING".equals(filters.getParamKey()) || "AUDIT_WORD_FILTERING".equals(filters.getParamKey()) || "BLACK_LIST_LEVEL_FILTERING".equals(filters.getParamKey())){
+                    continue;
+                }
+                Map<String, Object> map = new HashMap<>();
+                String values = getParamValues(filters, dictMap);
+                map.put("filterKey",filters.getParamName());
+                map.put("filterValue",values);
+
+                messageFiltersList.add(map);
+            }
+        }
+
+        buildMap.put("finance",financeMap);
+        buildMap.put("interface",interfaceMap);
+        buildMap.put("interfaceList",interfaceList);
+        buildMap.put("webList",webList);
+        buildMap.put("messageMap",messageMap);
+        buildMap.put("messageFiltersList",messageFiltersList);
+
+        return buildMap;
+    }
+
+    /**
+     * 业务类型
+     */
+    private Map<String,String> businessType(HttpServletRequest request) {
+        Map<String, DictType> dictMap = (Map<String, DictType>) request.getServletContext().getAttribute("dict");
+        //对接主体公司
+        DictType businessType = dictMap.get("businessType");
+
+        Map<String,String> dictValueMap = new HashMap<>();
+        for (Dict dict : businessType.getDict()) {
+            dictValueMap.put(dict.getFieldCode(),dict.getFieldName());
+        }
+        return dictValueMap;
+    }
+
+    /**
+     * 运营商和 国际区域合并
+     */
+    private Map<String,String> carrier(HttpServletRequest request) {
+        Map<String, DictType> dictMap = (Map<String, DictType>) request.getServletContext().getAttribute("dict");
+        //运营商
+        DictType carrier = dictMap.get("carrier");
+        //国际区域
+        DictType internationalArea = dictMap.get("internationalArea");
+
+        Map<String,String> dictValueMap = new HashMap<>();
+        for (Dict dict : carrier.getDict()) {
+            dictValueMap.put(dict.getFieldCode(),dict.getFieldName());
+        }
+        for (Dict dict : internationalArea.getDict()) {
+            dictValueMap.put(dict.getFieldCode(),dict.getFieldName());
+        }
+        return dictValueMap;
     }
 
     private String getParamValues(ParameterExtendFiltersValueValidator filters, Map<String, DictType> dictMap) {
@@ -391,20 +634,5 @@ public class BusinessAccountService {
         }
 
         return values;
-    }
-
-    /**
-     * 业务账号综合查询
-     * @param params
-     * @return
-     */
-    public ResponseData<PageList<AccountInfoQo>> accountAll(PageParams<AccountInfoQo> params) {
-        try {
-            ResponseData<PageList<AccountInfoQo>> pageList = this.businessAccountFeignClient.accountAll(params);
-            return pageList;
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return ResponseDataUtil.buildError(e.getMessage());
-        }
     }
 }

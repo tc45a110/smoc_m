@@ -13,6 +13,7 @@ public class EnterpriseWebAccountInfo {
     private String accountType;
     private String webLoginName;
     private String webLoginPassword;
+    private String aesPassword;
     private String accountStatus;
     private String createdBy;
     private Date createdTime;
@@ -67,6 +68,16 @@ public class EnterpriseWebAccountInfo {
 
     public void setWebLoginPassword(String webLoginPassword) {
         this.webLoginPassword = webLoginPassword;
+    }
+
+    @Basic
+    @Column(name = "AES_PASSWORD")
+    public String getAesPassword() {
+        return aesPassword;
+    }
+
+    public void setAesPassword(String aesPassword) {
+        this.aesPassword = aesPassword;
     }
 
     @Basic

@@ -27,6 +27,7 @@ public class EnterpriseWebRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", t.ENTERPRISE_ID");
         sqlBuffer.append(", '' ENTERPRISE_NAME");
         sqlBuffer.append(", t.WEB_LOGIN_NAME");
+        sqlBuffer.append(", t.AES_PASSWORD");
         sqlBuffer.append(", t.ACCOUNT_STATUS");
         sqlBuffer.append(", t.CREATED_BY");
         sqlBuffer.append(", DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME");
@@ -58,7 +59,8 @@ public class EnterpriseWebRepositoryImpl extends BasePageRepository {
         sqlBuffer.append("  t.ID");
         sqlBuffer.append(", t.ENTERPRISE_ID");
         sqlBuffer.append(", a.ENTERPRISE_NAME");
-        sqlBuffer.append(", t.WEB_LOGIN_NAME");
+        sqlBuffer.append(", ''AES_PASSWORD");
+        sqlBuffer.append(", t.ACCOUNT_STATUS");
         sqlBuffer.append(", t.ACCOUNT_STATUS");
         sqlBuffer.append(", t.CREATED_BY");
         sqlBuffer.append(", DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME");
