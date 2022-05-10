@@ -29,6 +29,7 @@ import com.smoc.cloud.utils.ExcelUtils;
 import com.smoc.cloud.utils.TestFileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -41,6 +42,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
@@ -772,9 +774,6 @@ public class AccountController {
             return ;
         }
 
-        //模板路径
-        String templateFileName = TestFileUtil.getPath() + "static" + File.separator + "files" + File.separator + "templates" + File.separator + "account.xlsx";
-
         //账号信息
         AccountBasicInfoValidator accountBasicInfoValidator = data.getData();
 
@@ -784,7 +783,9 @@ public class AccountController {
         OutputStream out = null;
         BufferedOutputStream bos = null;
         try {
-
+            //模板路径
+            ClassPathResource classPathResource = new ClassPathResource("static/files/templates/" + "account.xlsx");
+            InputStream fis = classPathResource.getInputStream();
             response.setContentType("application/vnd.ms-excel");
             response.setCharacterEncoding("utf-8");
             String fileName = URLEncoder.encode( accountId + "账号信息.xls", "utf-8");
@@ -794,7 +795,7 @@ public class AccountController {
             bos = new BufferedOutputStream(out);
 
             //读取Excel
-            ExcelWriter excelWriter = EasyExcel.write(bos).withTemplate(templateFileName).build();
+            ExcelWriter excelWriter = EasyExcel.write(bos).withTemplate(fis).build();
             WriteSheet writeSheet = EasyExcel.writerSheet(0).build();
             WriteSheet writeSheet1 = EasyExcel.writerSheet(1).build();
 
