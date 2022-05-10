@@ -788,7 +788,7 @@ public class AccountController {
             InputStream fis = classPathResource.getInputStream();
             response.setContentType("application/vnd.ms-excel");
             response.setCharacterEncoding("utf-8");
-            String fileName = URLEncoder.encode( accountId + "账号信息.xls", "utf-8");
+            String fileName = URLEncoder.encode( accountId + "账号信息.xlsx", "utf-8");
             response.setHeader("Content-disposition", "attachment; filename=" + new String(fileName.getBytes("UTF-8"), "ISO-8859-1"));
 
             out = response.getOutputStream();
