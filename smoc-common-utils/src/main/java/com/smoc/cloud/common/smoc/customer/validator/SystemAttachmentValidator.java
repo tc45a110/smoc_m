@@ -22,4 +22,6 @@ public class SystemAttachmentValidator {
     private String createdBy;
     private Date createdTime;
 
+    private String base64;
+
 }

@@ -20,14 +20,14 @@
             <div class="col-xs-12">
                 <div class="page-title-box">
                     <h2 class="page-title" style="font-size:14px;padding-top:12px">
-                        <a th:href="@{/intel/resource/type/page/getEnterprise}">素材管理</a> \ <a th:href="@{/intel/resource/type/page/getAccount/{enterpriseId}(enterpriseId =${enterpriseId})}">[[${enterpriseName}]]</a> \ [[${accountId}]]
+                        <a th:href="@{/intel/resource/type/page/getEnterprise}">素材管理</a> \ <a th:href="@{/intel/resource/type/page/getAccount/{enterpriseId}(enterpriseId =${enterpriseId})}">[[${enterpriseName}]]</a> \ <a th:href="@{/intel/resource/type/page/getResourceType/{accountId}(accountId =${accountId})}">[[${accountId}]]</a> \ [[${materialTypeTitle}]]
                     </h2>
                     <ol class="breadcrumb p-0 m-0">
-                        <a sec:authorize-url="/intel/resource/type/add/*/*"
-                           th:href="@{/intel/resource/type/add/{enterpriseId}/{accountId}(enterpriseId=${enterpriseId},accountId=${accountId})}"
+                        <a sec:authorize-url="/intel/material/add/*/*"
+                           th:href="@{/intel/material/add/{accountId}/{materialTypeId}(materialTypeId=${materialTypeId},accountId=${accountId})}"
                            class="btn btn-success waves-effect waves-light m-l-10 btn-md">
                             <i class="glyphicon glyphicon-plus-sign"
-                               style="margin-right:5px"></i>新建素材分类</a>
+                               style="margin-right:5px"></i>新建素材</a>
                     </ol>
                     <div class="clearfix"></div>
                 </div>
@@ -40,16 +40,16 @@
             <div class="col-sm-12" style="padding-left:0px;padding-right:0px;margin-left:-10px;margin-right:-10px">
                 <div class="panel panel-color panel-info">
                     <div class="panel-heading">
-                        <h3 class="panel-title">素材分类(双击文件夹可进入)</h3>
+                        <h3 class="panel-title">[[${materialTypeTitle}]]</h3>
                     </div>
                     <div class="panel-body">
                         <div class="jFiler-items jFiler-row" style="border:0px solid #F6F6F6;">
                             <ul class="jFiler-items-list jFiler-items-grid">
                                 <li class="jFiler-item jFiler-no-thumbnail" data-jfiler-index="0"
-                                    th:each="materialType:${list}">
-                                    <div class="jFiler-item-container" th:id="${materialType.id}"
-                                         th:onclick="selected([[${materialType.id}]],[[${materialType.parentId}]],this)"
-                                         th:ondblclick="linked([[${materialType.id}]],[[${materialType.parentId}]],this)">
+                                    th:each="material:${list}">
+                                    <div class="jFiler-item-container" th:id="${material.id}"
+                                         th:onclick="selected([[${material.id}]],[[${material.parentId}]],this)"
+                                         th:ondblclick="linked([[${material.id}]],[[${material.parentId}]],this)">
                                         <div class="dropdown pull-right">
                                             <a href="#" class="dropdown-toggle card-drop" data-toggle="dropdown"
                                                aria-expanded="false">
@@ -57,13 +57,13 @@
                                                         class="mdi mdi-dots-horizontal"></i></h3>
                                             </a>
                                             <ul class="dropdown-menu" role="menu">
-                                                <li><a sec:authorize-url="/intel/resource/type/edit/*"
-                                                       th:href="@{/intel/resource/type/edit/{id}(id=${materialType.id})}"
+                                                <li><a sec:authorize-url="/intel/material/edit/*"
+                                                       th:href="@{/intel/material/edit/{id}(id=${material.id})}"
                                                        style="font-size: 12px;color: #989898"><i
                                                         style="font-size: 12px;padding-right: 4px;color: #29b6f6;"
                                                         class="mdi mdi-table-edit"></i>修改</a></li>
                                                 <li><a data-toggle="modal"
-                                                       th:onclick="confirmForbidden([[${materialType.id}]],this)"
+                                                       th:onclick="confirmForbidden([[${material.id}]],this)"
                                                        data-target="#user-forbiden"
                                                        style="font-size: 12px;color: #989898"><i
                                                         style="font-size: 12px;padding-right: 4px;color: #f5707a;"
@@ -73,16 +73,15 @@
                                         </div>
                                         <div class="jFiler-item-inner">
                                             <div class="jFiler-item-thumb" style="border:0px solid #F6F6F6;">
-                                                <div class="jFiler-item-info"><span class="jFiler-item-title"
-                                                                                    style="font-size:10px"><b>[[${materialType.typeDescribe}]]</b></span>
-                                                </div>
-                                                <div class="jFiler-item-thumb-image">
-                                                    <img th:src="@{/static/img/folder.jpeg}">
+
+                                                <div class="jFiler-item-thumb-image"><span class="jFiler-icon-file f-file f-file-ext-docx"
+                                                                                           style="-webkit-box-shadow: #409024 42px -55px 0px 0px inset; -moz-box-shadow: #409024 42px -55px 0px 0px inset; box-shadow: #409024 42px -55px 0px 0px inset;">
+                                                            .[[${material.fileType}]]</span>
                                                 </div>
                                             </div>
                                             <div class="jFiler-item-assets jFiler-row">
                                                 <ul class="list-inline" style="text-align:center">
-                                                    <li style="color:#4c4c4c">[[${materialType.title}]]</li>
+                                                    <li style="color:#4c4c4c">[[${material.materialName}]]</li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -150,7 +149,7 @@
     }
     function cancel() {
         $('#preloader').css('display', 'block');
-        location.href = contextPath + '/intel/resource/type/cancel/' + $("#forbiddenId").val();
+        location.href = contextPath + '/intel/material/cancel/' + $("#forbiddenId").val();
     }
 
     var resizefunc = [];

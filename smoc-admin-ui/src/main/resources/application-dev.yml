@@ -59,10 +59,12 @@ com:
           resource-file-root-path: F:/data/message/resource  #资源文件根目录
 
         intelligence:
-          account: account
-          password: password
+          account: AP0681
+          password: 679870213340024832lwoSvz
           domain: domain
-          serverAddress: serverAddress
+          server-address: https://tpl-aim.monyun.cn:57123
+          view-address: http://localhost:8080
+          resource-file-root-path: /Users/wujihui/desktop/work/data/intelect/resource/  #资源文件根目录
 
 
     #**********************************************************

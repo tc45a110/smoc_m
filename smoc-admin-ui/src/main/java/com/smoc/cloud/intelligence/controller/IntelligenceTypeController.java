@@ -85,6 +85,19 @@ public class IntelligenceTypeController {
      *
      * @return
      */
+    @RequestMapping(value = "/page/getEnterprise", method = RequestMethod.GET)
+    public ModelAndView getEnterprisePage() {
+        ModelAndView view = new ModelAndView("intelligence/resource/resource_enterprise_list");
+        ResponseData<List<Nodes>> nodes = enterpriseService.findByAccountBusinessType("INTELLECT_SMS");
+        view.addObject("list", nodes.getData());
+        return view;
+    }
+
+    /**
+     * 加载 开通智能短信账号的企业（JSON）
+     *
+     * @return
+     */
     @RequestMapping(value = "/getAccount/{enterpriseId}", method = RequestMethod.GET)
     public List<Nodes> getAccount(@PathVariable String enterpriseId) {
 
@@ -107,6 +120,31 @@ public class IntelligenceTypeController {
         }
         //log.info("[account]:{}", new Gson().toJson(result));
         return result;
+    }
+
+    /**
+     * 加载 开通智能短信账号的企业(页面)
+     *
+     * @return
+     */
+    @RequestMapping(value = "/page/getAccount/{enterpriseId}", method = RequestMethod.GET)
+    public ModelAndView getAccountPage(@PathVariable String enterpriseId) {
+
+        ModelAndView view = new ModelAndView("intelligence/resource/resource_account_list");
+
+        ResponseData<EnterpriseBasicInfoValidator> enterpriseData = enterpriseService.findById(enterpriseId);
+
+        ResponseData<List<AccountBasicInfoValidator>> accountData = businessAccountService.findBusinessAccountByEnterpriseIdAndBusinessType(enterpriseId, "INTELLECT_SMS");
+        if (!ResponseCode.SUCCESS.getCode().equals(accountData.getCode())) {
+            view.addObject("error", accountData.getCode() + ":" + accountData.getMessage());
+            return view;
+        }
+
+        view.addObject("enterpriseName", enterpriseData.getData().getEnterpriseName());
+        view.addObject("enterpriseId", enterpriseData.getData().getEnterpriseId());
+        view.addObject("list", accountData.getData());
+
+        return view;
     }
 
     /**
@@ -244,7 +282,7 @@ public class IntelligenceTypeController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            systemUserLogService.logsAsync("RESOURCE_TYPE", intellectMaterialTypeValidator.getId(), "add".equals(op) ? intellectMaterialTypeValidator.getCreatedBy() : intellectMaterialTypeValidator.getUpdatedBy(), op, "add".equals(op) ? "添加企业开户" : "修改企业开户", JSON.toJSONString(intellectMaterialTypeValidator));
+            systemUserLogService.logsAsync("RESOURCE_TYPE", intellectMaterialTypeValidator.getId(), "add".equals(op) ? intellectMaterialTypeValidator.getCreatedBy() : intellectMaterialTypeValidator.getUpdatedBy(), op, "add".equals(op) ? "添加" : "修改", JSON.toJSONString(intellectMaterialTypeValidator));
         }
 
         //记录日志

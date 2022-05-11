@@ -8,4 +8,6 @@ import java.util.List;
 public interface IntellectMaterialRepository extends JpaRepository<IntellectMaterial, String> {
 
     List<IntellectMaterial> findIntellectMaterialByMaterialTypeId(String materialTypeId);
+
+    List<IntellectMaterial> findIntellectMaterialByMaterialTypeIdAndMaterialName(String materialTypeId,String materialName);
 }

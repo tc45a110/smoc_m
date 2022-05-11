@@ -40,5 +40,7 @@ public class RequestQueryTemplates {
     //查询条数  页容量，不超过 100 条
     private Integer size;
 
+    private Long templateId;
+
 
 }

@@ -12,11 +12,15 @@ public class IntellectMaterialValidator {
 
     private String id;
 
+    private String parentId;
+
     private String materialTypeId;
 
     private String materialName;
 
     private String materialType;
+
+    private String fileName;
 
     private String fileType;
 

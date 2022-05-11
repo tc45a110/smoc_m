@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <link th:href="@{/static/plugins/bootstrap-treeview/bootstrap-treeview.min.css}" rel="stylesheet"
+          type="text/css"/>
+    <!--    <script>-->
+    <!--      window.parent.document.getElementById("wrapper").setAttribute("class","enlarged");-->
+    <!--    </script>-->
+</head>
+<body>
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title"><a id="spanLink" th:href="@{/intel/template/list}">模版管理</a></h4>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+        <div class="row">
+            <div class="table-detail mail-right col-md-12">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <iframe name="template" id="templateFrame"
+                                th:src="@{http://editor-aim.monyun.cn:9327/editor/?token={token}&type=aim&bizId={bizId}(token=${token},bizId=${enterpriseId})}"
+                                style="padding: 0px; width: 100%;margin-bottom: 10px"
+                                scrolling="yes" onload="changeFrameHeight()"
+                                frameborder="0"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+    </div> <!-- container -->
+
+</div> <!-- content -->
+
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<!-- start menus js -->
+<script th:src="@{/static/plugins/bootstrap-treeview/bootstrap-treeview.min.js}"></script>
+<script>
+
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+
+        var accountId = '[[${accountId}]]';
+        var enterpriseId = '[[${enterpriseId}]]';
+
+        function changeFrameHeight() {
+            var ifm = document.getElementById("templateFrame");
+            ifm.height = document.documentElement.clientHeight - 130;
+        }
+
+        //接受iframe的回调方法
+        window.addEventListener('message', (e) => {
+<!--             console.log("回调成功！");-->
+<!--             console.log(e.data)-->
+<!--             console.log(JSON.stringify(e.data))-->
+             $.ajax({
+                url: contextPath + "/intel/template/save/"+enterpriseId+"/"+accountId,
+                type: "post",
+                data:JSON.stringify(e.data),
+                timeout: 60000, //超时时间：60秒
+                async: false,
+                contentType:"application/json;charset=UTF-8",
+                success: function (data) {
+                   document.getElementById("spanLink").click();
+                }, error: function (data) {
+                    console.log("error");
+                }
+            });
+        })
+        var resizefunc = [];
+        //隐藏进度项
+        $('#preloader').css('display', 'none');
+
+
+</script>
+</body>
+</html>

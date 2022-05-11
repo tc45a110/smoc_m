@@ -7,24 +7,42 @@ import com.smoc.cloud.intelligence.remote.configuration.IntelligenceProperties;
 import com.smoc.cloud.intelligence.remote.request.*;
 import com.smoc.cloud.intelligence.remote.response.*;
 import com.smoc.cloud.intelligence.remote.utils.Okhttp3Utils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 梦网智能短信请求服务
  */
+@Slf4j
 @Service
 public class RequestService {
 
     @Autowired
     private IntelligenceProperties intelligenceProperties;
+
+
+    /**
+     * 向服务器发送获取企业鉴权 token 请求。
+     * @return
+     */
+    public ResponseDataUtil<String> getCompanyToken(){
+        String requestUrl = "http://editor-aim.monyun.cn:9327/EditorService/v1/AuthManage/getCompanyToken";
+
+        log.info("[requestUrl]:{}",requestUrl);
+        String response = Okhttp3Utils.postJson(requestUrl, new Gson().toJson(new ArrayList<>()), buildHeader());
+        log.info("[response]:{}",response);
+        Type type = new TypeToken<ResponseDataUtil<String>>() {
+        }.getType();
+
+        ResponseDataUtil<String> result = new Gson().fromJson(response, type);
+
+        return result;
+    }
 
     /**
      * 模板资源上传
@@ -34,7 +52,7 @@ public class RequestService {
      */
     public ResponseDataUtil<Map<String, String>> uploadTemplateResource(RequestTemplateResource param) {
 
-        String requestUrl = intelligenceProperties.getServerAddress() + "/ApiService/v1/TemplateManage/uploadAimTplRes";
+        String requestUrl = "https://tpl-aim.monyun.cn:57123/ApiService/v1/TemplateManage/uploadAimTplRes";
         String response = Okhttp3Utils.postJson(requestUrl, new Gson().toJson(param), buildHeader());
 
         Type type = new TypeToken<ResponseDataUtil<Map<String, String>>>() {
@@ -140,13 +158,64 @@ public class RequestService {
     }
 
     /**
-     * 查询模板
+     * 查询模板（iframe）
+     *
+     * @param param
+     * @return
+     */
+    public ResponseDataUtil<List<ResponseTemplateInfo>> queryIframeTemplates(RequestQueryTemplates param) {
+        String requestUrl = "http://editor-aim.monyun.cn:9327/EditorService/v1/TemplateManage/listTemplate";
+        String response = Okhttp3Utils.postJson(requestUrl, new Gson().toJson(param), buildHeader());
+
+        Type type = new TypeToken<ResponseDataUtil<List<ResponseTemplateInfo>>>() {
+        }.getType();
+        ResponseDataUtil<List<ResponseTemplateInfo>> result = new Gson().fromJson(response, type);
+        return result;
+    }
+
+    /**
+     * 查询模板（iframe）
+     *
+     * @param templateId
+     * @return
+     */
+    public String queryIframeTemplatesByTemplateId(Long templateId) {
+
+        RequestQueryTemplates queryTemplates = new RequestQueryTemplates();
+        queryTemplates.setPage(1);
+        queryTemplates.setSize(10);
+        queryTemplates.setTemplateId(templateId);
+        String requestUrl = "http://editor-aim.monyun.cn:9327/EditorService/v1/TemplateManage/listTemplate";
+        String response = Okhttp3Utils.postJson(requestUrl, new Gson().toJson(queryTemplates), buildHeader());
+
+        return response;
+    }
+
+    /**
+     * 查询模板（API）
+     *
+     * @param tplId
+     * @return
+     */
+    public String queryTemplates(String tplId) {
+        RequestQueryTemplates queryTemplates = new RequestQueryTemplates();
+        queryTemplates.setPage(1);
+        queryTemplates.setSize(10);
+        queryTemplates.setTplId(tplId);
+        String requestUrl = "https://tpl-aim.monyun.cn:57123/ApiService/v1/TemplateManage/listECTemplates";
+        String response = Okhttp3Utils.postJson(requestUrl, new Gson().toJson(queryTemplates), buildHeader());
+        return response;
+    }
+
+
+    /**
+     * 查询模板（API）
      *
      * @param param
      * @return
      */
     public ResponseDataUtil<List<ResponseTemplateInfo>> queryTemplates(RequestQueryTemplates param) {
-        String requestUrl = intelligenceProperties.getServerAddress() + "/ApiService/v1/TemplateManage/listECTemplates";
+        String requestUrl = "https://tpl-aim.monyun.cn:57123/ApiService/v1/TemplateManage/listECTemplates";
         String response = Okhttp3Utils.postJson(requestUrl, new Gson().toJson(param), buildHeader());
 
         Type type = new TypeToken<ResponseDataUtil<List<ResponseTemplateInfo>>>() {

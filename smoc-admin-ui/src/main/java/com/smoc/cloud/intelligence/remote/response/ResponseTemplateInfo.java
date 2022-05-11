@@ -18,6 +18,9 @@ public class ResponseTemplateInfo {
     //模板名称
     private String tplName;
 
+    //板式
+    private String cardId;
+
     //场景类型
     private String scene;
 
@@ -43,10 +46,10 @@ public class ResponseTemplateInfo {
     private Integer editorWidth;
 
     //短信示例
-    private Integer description;
+    private String description;
 
     //模板协议 最大支持 10 页协议
-    private List<Page> pages;
+    private String pages;
 
     //创建人
     private String creator;
@@ -69,7 +72,12 @@ public class ResponseTemplateInfo {
     //预览地址
     private String previewUrl;
 
+    //iframe中的 templateId
+    private String templateId;
 
+    private String tplDesc;
+
+    private Integer paramcnt;
 
 
 }

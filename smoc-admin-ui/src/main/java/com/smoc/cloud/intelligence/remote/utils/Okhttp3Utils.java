@@ -1,5 +1,6 @@
 package com.smoc.cloud.intelligence.remote.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 
 import java.util.Map;
@@ -8,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * http请求工具类
  */
+@Slf4j
 public class Okhttp3Utils {
 
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
@@ -21,6 +23,8 @@ public class Okhttp3Utils {
      */
     public static String postJson(String url, String requestJsonData, Map<String, String> header) {
 
+        log.info("[url]:{}",url);
+        log.info("[requestJsonData]:{}",requestJsonData);
         RequestBody body = RequestBody.create(JSON, requestJsonData);
 
         //循环添加header
@@ -42,7 +46,7 @@ public class Okhttp3Utils {
                     .build();
             response = client.newCall(request).execute();
             jsonString = response.body().string();
-            //System.out.println("[请求响应]原数据:" + jsonString);
+            System.out.println("[请求响应]原数据:" + jsonString);
             if (response.isSuccessful()) {
                 return jsonString;
             }else{

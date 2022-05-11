@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <link th:href="@{/static/plugins/jquery.filer/css/jquery.filer.css}" rel="stylesheet"/>
+    <link th:href="@{/static/plugins/jquery.filer/css/themes/jquery.filer-dragdropbox-theme.css}" rel="stylesheet"/>
+</head>
+<body>
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content">
+    <div class="container">
+        <!-- start row 页面导航-->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h2 class="page-title" style="font-size:14px;padding-top:12px">
+                        <a th:href="@{/intel/resource/type/page/getEnterprise}">素材管理</a> \ [[${enterpriseName}]]
+                    </h2>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row -->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12" style="padding-left:0px;padding-right:0px;margin-left:-10px;margin-right:-10px">
+                <div class="panel panel-color panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">智能短信账号(双击文件夹可进入)</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="jFiler-items jFiler-row" style="border:0px solid #F6F6F6;">
+                            <ul class="jFiler-items-list jFiler-items-grid">
+                                <li class="jFiler-item jFiler-no-thumbnail" data-jfiler-index="0"
+                                    th:each="account:${list}">
+                                    <div class="jFiler-item-container" th:id="${account.accountId}"
+                                         th:onclick="selected([[${account.accountId}]],[[${account.enterpriseId}]],this)"
+                                         th:ondblclick="linked([[${account.accountId}]],[[${account.enterpriseId}]],this)">
+                                        <div class="jFiler-item-inner">
+                                            <div class="jFiler-item-thumb" style="border:0px solid #F6F6F6;">
+                                                <div class="jFiler-item-info"><span class="jFiler-item-title"
+                                                                                    style="font-size:10px"><b>[[${account.accountName}]]</b></span>
+                                                </div>
+                                                <div class="jFiler-item-thumb-image">
+                                                    <img th:src="@{/static/img/folder.jpeg}">
+                                                </div>
+                                            </div>
+                                            <div class="jFiler-item-assets jFiler-row">
+                                                <ul class="list-inline" style="text-align:center">
+                                                    <li style="color:#4c4c4c">[[${account.accountId}]]</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- end row -->
+
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <th:block th:insert="fragments/common_fragments :: confirm-modal"/>
+
+    </div> <!-- container -->
+
+</div> <!-- content -->
+
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<script>
+    var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+    //单击选中
+    function selected(id){
+       $(".jFiler-item-container").each(function (i, val){
+          $("#"+val.id).css("border", "1px solid #e1e1e1");
+       });
+       $("#"+id).css("border", "1px solid #39C9D7");
+    }
+
+    //双击跳转
+    function linked(id,enterpriseId){
+      location.href = contextPath + "/intel/resource/type/page/getResourceType/"+id;
+    }
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+</script>
+</body>
+</html>

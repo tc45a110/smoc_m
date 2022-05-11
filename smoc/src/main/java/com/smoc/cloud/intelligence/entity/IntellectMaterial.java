@@ -13,6 +13,9 @@ public class IntellectMaterial {
     @Column(name = "ID", nullable = false, length = 64)
     private String id;
 
+    @Column(name = "PARENT_ID", nullable = false, length = 64)
+    private String parentId;
+
     @Column(name = "MATERIAL_TYPE_ID", nullable = false, length = 64)
     private String materialTypeId;
 
@@ -21,6 +24,9 @@ public class IntellectMaterial {
 
     @Column(name = "MATERIAL_TYPE", nullable = false, length = 32)
     private String materialType;
+
+    @Column(name = "FILE_NAME", nullable = false, length = 32)
+    private String fileName;
 
     @Column(name = "FILE_TYPE", nullable = false, length = 32)
     private String fileType;
@@ -173,5 +179,21 @@ public class IntellectMaterial {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 }

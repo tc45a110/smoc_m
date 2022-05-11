@@ -21,6 +21,10 @@ public class IntelligenceProperties {
 
     private String domain;
 
+    private String viewAddress;
+
     private String serverAddress;
+
+    private String resourceFileRootPath;
 
 }
