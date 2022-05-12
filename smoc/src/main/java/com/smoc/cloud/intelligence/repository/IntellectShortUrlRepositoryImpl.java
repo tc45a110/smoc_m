@@ -51,6 +51,11 @@ public class IntellectShortUrlRepositoryImpl extends BasePageRepository {
             paramsList.add(qo.getCustId().trim());
         }
 
+        if (!StringUtils.isEmpty(qo.getTplId())) {
+            sqlBuffer.append(" and i.TPL_ID = ? ");
+            paramsList.add(qo.getTplId().trim());
+        }
+
         if (!StringUtils.isEmpty(qo.getEnterpriseName())) {
             sqlBuffer.append(" and t.ENTERPRISE_NAME like ?");
             paramsList.add("%" + qo.getEnterpriseName().trim() + "%");

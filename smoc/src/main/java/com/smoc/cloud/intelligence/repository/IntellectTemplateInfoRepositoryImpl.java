@@ -52,6 +52,11 @@ public class IntellectTemplateInfoRepositoryImpl extends BasePageRepository {
             paramsList.add(qo.getAccountId().trim());
         }
 
+        if (!StringUtils.isEmpty(qo.getTplId())) {
+            sqlBuffer.append(" and i.TPL_ID = ? ");
+            paramsList.add(qo.getTplId().trim());
+        }
+
         if (!StringUtils.isEmpty(qo.getEnterpriseName())) {
             sqlBuffer.append(" and t.ENTERPRISE_NAME like ?");
             paramsList.add("%" + qo.getEnterpriseName().trim() + "%");
@@ -63,7 +68,7 @@ public class IntellectTemplateInfoRepositoryImpl extends BasePageRepository {
         }
 
         if (!StringUtils.isEmpty(qo.getTemplateId())) {
-            sqlBuffer.append(" and i.ACCOUNT_ID = ? ");
+            sqlBuffer.append(" and i.TEMPLATE_ID = ? ");
             paramsList.add(qo.getTemplateId().trim());
         }
 

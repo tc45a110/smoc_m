@@ -59,6 +59,10 @@
                                     <input type="text" class="form-control" th:field="*{tplName}"
                                            placeholder="模版名称" autocomplete="off">
                                 </div>
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control" th:field="*{tplId}"
+                                           placeholder="模版ID" autocomplete="off">
+                                </div>
                                 <div class="form-group col-sm-3 pull-right" style="text-align: right">
                                     <button sec:authorize-url="/intel/short/url/page" type="submit"
                                             class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
