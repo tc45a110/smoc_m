@@ -142,6 +142,13 @@
                                         <!--                                            class="on-default edit-row"-->
                                         <!--                                            style="padding-left: 5px;color:#4BD396;"><i style="font-size: 18px"-->
                                         <!--                                                                                        class="glyphicon glyphicon-search"></i></a>-->
+                                        <a th:if="${0!=info.templateCheckStatus}" target="_blank"
+                                            th:href="@{/intel/template/preview/{tplId}(tplId=${info.tplId})}"
+                                            data-toggle="tooltip" data-placement="bottom"
+                                            data-original-title="预览"
+                                            class="on-default edit-row"
+                                            style="padding-left: 5px;color:#4BD396;"><i style="font-size: 18px"
+                                                                                        class="glyphicon glyphicon-search"></i></a>
                                         <a th:if="${2==info.templateCheckStatus}" sec:authorize-url="/intel/short/url/add/*/*/*"
                                            th:href="@{/intel/short/url/add/{enterpriseId}/{businessAccount}/{tplId}(enterpriseId=${info.enterpriseId},businessAccount=${info.accountId},tplId=${info.tplId})}"
                                            data-toggle="tooltip" data-placement="bottom"

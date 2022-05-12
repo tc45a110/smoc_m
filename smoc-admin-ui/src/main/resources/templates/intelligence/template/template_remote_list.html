@@ -151,7 +151,8 @@
                                         [[${info.createTime}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a  th:href="@{${info.previewUrl+url}}" target="_blank"
+                                        <a  target="_blank"
+                                           th:href="@{/intel/template/preview/{tplId}(tplId=${info.tplId})}"
                                            data-toggle="tooltip" data-placement="bottom"
                                            data-original-title="预览"
                                            class="on-default edit-row"

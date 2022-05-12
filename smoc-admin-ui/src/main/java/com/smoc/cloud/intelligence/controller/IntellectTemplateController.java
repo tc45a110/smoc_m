@@ -130,10 +130,6 @@ public class IntellectTemplateController {
         params.setTotalRows(templates.getPageInfo().getTotal());
         //log.info("[templates]:{}", new Gson().toJson(templates));
 
-        Map<String, String> account = requestService.buildHeader();
-        String url = "&Ab=" + account.get("account") + "&Sm=" + account.get("pwd") + "&Tt=" + account.get("timestamp");
-
-        view.addObject("url", url);
         view.addObject("list", templates.getData());
         view.addObject("pageParams", params);
         return view;
@@ -160,10 +156,6 @@ public class IntellectTemplateController {
         pageParams.setTotalRows(templates.getPageInfo().getTotal());
         //log.info("[templates]:{}", new Gson().toJson(templates));
 
-        Map<String, String> account = requestService.buildHeader();
-        String url = "&Ab=" + account.get("account") + "&Sm=" + account.get("pwd") + "&Tt=" + account.get("timestamp");
-
-        view.addObject("url", url);
         view.addObject("list", templates.getData());
         view.addObject("pageParams", pageParams);
         return view;
@@ -305,6 +297,37 @@ public class IntellectTemplateController {
         ResponseGetTemplateStatus  status =  templateStatusResponseDataUtil.getData().get(0);
         intellectTemplateInfoService.updateCheckStatusByTplId(status.getTplId(),status.getAuditState());
         return status;
+    }
+
+    /**
+     * 模版预览
+     *
+     * @return
+     */
+    @RequestMapping(value = "/preview/{tplId}", method = RequestMethod.GET)
+    public ModelAndView preview(@PathVariable String tplId) {
+        ModelAndView view = new ModelAndView("intelligence/short_link/short_link_edit");
+
+        RequestQueryTemplates queryTemplates = new RequestQueryTemplates();
+        queryTemplates.setPage(1);
+        queryTemplates.setSize(10);
+        queryTemplates.setTplId(tplId);
+        ResponseDataUtil<List<ResponseTemplateInfo>> templates = requestService.queryTemplates(queryTemplates);
+        //log.info("[templates]:{}", new Gson().toJson(templates));
+        if (!(0 == templates.getSubCode())) {
+            view.addObject("error", templates.getMessage());
+            return view;
+        }
+        if (null == templates.getData() || templates.getData().size() < 1) {
+            view.addObject("error", "未查询到模版数据");
+            return view;
+        }
+        ResponseTemplateInfo templateInfo = templates.getData().get(0);
+        Map<String, String> account = requestService.buildHeader();
+        String url = "&Ab=" + account.get("account") + "&Sm=" + account.get("pwd") + "&Tt=" + account.get("timestamp");
+        view.setViewName("redirect:"+templateInfo.getPreviewUrl()+url);
+        return view;
+
     }
 
 
