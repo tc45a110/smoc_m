@@ -34,10 +34,10 @@ public class ResponseTemplateInfo {
     private List<Map<String, String>> factoryInfo;
 
     //模板动态参数个 数
-    private Integer paramCnt;
+//    private Integer paramCnt;
 
     //模板动态参数列 表
-    private List<Map<String, String>> paramArr;
+    private List<ResponseParamArr> paramArr;
 
     //单位（字节）
     private Integer degreeSize;
@@ -77,6 +77,7 @@ public class ResponseTemplateInfo {
 
     private String tplDesc;
 
+    //文档中写的字段是
     private Integer paramcnt;
 
 

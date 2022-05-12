@@ -127,8 +127,13 @@ public class IntellectTemplateController {
         //queryTemplates.setBizId("699687d778924514b3f3636b193b5b3b");
         //queryTemplates.setBizFlag("XYK112");
         ResponseDataUtil<List<ResponseTemplateInfo>> templates = requestService.queryTemplates(queryTemplates);
+        if (!(0 == templates.getSubCode())) {
+            view.addObject("error", templates.getMessage());
+            return view;
+        }
         params.setTotalRows(templates.getPageInfo().getTotal());
         //log.info("[templates]:{}", new Gson().toJson(templates));
+
 
         view.addObject("list", templates.getData());
         view.addObject("pageParams", params);
@@ -153,6 +158,10 @@ public class IntellectTemplateController {
         //queryTemplates.setBizId("699687d778924514b3f3636b193b5b3b");
         //queryTemplates.setBizFlag("XYK112");
         ResponseDataUtil<List<ResponseTemplateInfo>> templates = requestService.queryTemplates(queryTemplates);
+        if (!(0 == templates.getSubCode())) {
+            view.addObject("error", templates.getMessage());
+            return view;
+        }
         pageParams.setTotalRows(templates.getPageInfo().getTotal());
         //log.info("[templates]:{}", new Gson().toJson(templates));
 

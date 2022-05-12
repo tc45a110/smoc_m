@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
+    <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
+    <link th:href="@{/static/plugins/jquery.filer/css/jquery.filer.css}" rel="stylesheet"/>
+    <link th:href="@{/static/plugins/jquery.filer/css/themes/jquery.filer-dragdropbox-theme.css}" rel="stylesheet"/>
+
+</head>
+<body>
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <!-- start row 页面导航-->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">短链申请</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            智能短信
+                        </li>
+                        <li class="active">
+                            短链申请
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row 页面内容-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-md-12">
+                <div class="card-box">
+                    <form id="submit_form" th:action="@{/intel/short/url/generate}"
+                          th:object="${applyShortUrl}"
+                          method="post" data-parsley-validate="">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="p-20">
+                                    <div class="form-group m-b-20">
+                                        <label>模版名称：[[${templateInfo.tplName}]]</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>板式：
+                                            <a th:if="${'com.hbm.carouse'==templateInfo.cardId}"
+                                               class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">横滑类
+                                                1</a>
+                                            <a th:if="${'com.hbm.carouseltitle'==templateInfo.cardId}"
+                                               class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">横滑类
+                                                2</a>
+                                            <a th:if="${'com.hbm.notification'==templateInfo.cardId}"
+                                               class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">通知类</a>
+                                            <a th:if="${'com.hbm.video'==templateInfo.cardId}"
+                                               class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">视频类</a>
+                                            <a th:if="${'com.hbm.imageandtext'==templateInfo.cardId}"
+                                               class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">图文类</a>
+                                            <a th:if="${'com.hbm.trip'==templateInfo.cardId}"
+                                               class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">行程类</a>
+                                            <a th:if="${'com.hbm.standardimageandtext'==templateInfo.cardId}"
+                                               class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">多图文类</a>
+                                            <a th:if="${'com.hbm.redpacket'==templateInfo.cardId}"
+                                               class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">红包类</a>
+                                            <a th:if="${'com.hbm.news'==templateInfo.cardId}"
+                                               class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">新闻类</a>
+                                            <a th:if="${'com.hbm.ecImageAndText'==templateInfo.cardId}"
+                                               class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">电商类</a>
+                                            <a th:if="${'com.hbm.videoimageandtext'==templateInfo.cardId}"
+                                               class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">视频图文</a>
+                                            <a th:if="${'com.hbm.carouselImageSixteenToNine:'==templateInfo.cardId}"
+                                               class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">图片轮播类</a>
+                                            <a th:if="${'com.hbm.carouselQuareImage'==templateInfo.cardId}"
+                                               class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">图片轮播类
+                                                1：1</a>
+                                            <a th:if="${'com.hbm.carouselVerticalImage'==templateInfo.cardId}"
+                                               class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">图片轮播类
+                                                48：65</a>
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>支持厂商：
+                                        </label>
+                                        <div th:each="info:${templateInfo.factoryInfo}"
+                                             class="btn-switch btn-switch-info">
+                                            <input th:id="${info.get('factoryType')}"
+                                                   th:value="${info.get('factoryType')}"
+                                                   name="accounts" type="checkbox" checked disabled/>
+                                            <label th:for="${info.get('factoryType')}"
+                                                   class="btn btn-rounded btn-success waves-effect waves-light">
+                                                <em class="glyphicon glyphicon-ok"></em>[[${info.get('factoryType')}]]
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>生成短链类型：<span class="text-danger">*</span>&nbsp;
+                                            <div style="margin-top:0px" class="radio radio-info checkbox-inline">
+                                                <input name="aimCodeType" type="radio" value="1" required
+                                                       th:checked="${applyShortUrl.aimCodeType eq 1}"><label>群发</label>
+                                            </div>
+                                            <!--                                            <div style="margin-top:0px" class="radio radio-info checkbox-inline">-->
+                                            <!--                                                <input name="aimCodeType" type="radio" value="2" required-->
+                                            <!--                                                       th:checked="${applyShortUrl.aimCodeType eq 2}"><label>个性化</label>-->
+                                            <!--                                            </div>-->
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>最大解析次数：<span class="text-danger">*</span>&nbsp;</label>
+                                        <span class="text-danger">提示：系统会根据最大解析次数冻结金额；</span> <span class="text-teal">该数量用于限制短链可解析最大消息数,系统会根据输入数量进行扣费,发送短信时请注意不要超过该值,避免造成损失</span>
+                                        <input id="showTimes" type="text" class="form-control" th:field="*{showTimes}"
+                                               placeholder="最大解析次数"
+                                               required="" data-parsley-length="[1,10]" data-parsley-type="number"
+                                               autocomplete="off">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>短信签名：<span class="text-danger">*</span>&nbsp;</label>
+                                        <span class="text-teal">提示： 签名内容不包括前后中英文括号；多个签名用 ' ; '分开；</span>
+                                        <div class="col-md-12 form-group">
+                                                <textarea class="form-control" required th:field="*{smsSigns}"
+                                                          rows="2"
+                                                          placeholder="终端接收到短信的签名，与短链内的智 能短信编码对应；多个签名用 ' ; '分开；最多 10 个签名，每个 签名长度不超过 18 个字">[[${applyShortUrl.smsSigns}]]</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>短链有效期：<span class="text-danger">*</span>&nbsp;</label>
+                                        <span class="text-teal"></span>
+                                        <div class="btn-group bootstrap-select form-control">
+                                            <select data-style="btn-default" name="expireTimes" required=""
+                                                    data-live-search="true" id="expireTimes"
+                                                    class="selectpicker form-control" tabindex="-98">
+                                                <option value="" data-icon="mdi mdi-arrange-bring-forward">--请选择有效期--
+                                                </option>
+                                                <option data-icon="mdi mdi-arrange-bring-forward"
+                                                        value="1">1
+                                                </option>
+                                                <option data-icon="mdi mdi-arrange-bring-forward"
+                                                        value="3">3
+                                                </option>
+                                                <option data-icon="mdi mdi-arrange-bring-forward"
+                                                        value="5">5
+                                                </option>
+                                                <option data-icon="mdi mdi-arrange-bring-forward"
+                                                        value="7">7
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>自定义跳转地址：</label>
+                                        <span class="text-teal">提示： 终端用户点击访问短信原文中 的短链，跳转客户填写的链接落地页；不填写则跳转智能短信 H5 页；填写时必须为 http 或 https 做为前缀。</span>
+                                        <input id="customUrl" type="text" class="form-control" th:field="*{customUrl}"
+                                               placeholder="自定义跳转地址"
+                                               data-parsley-length="[0,128]"
+                                               autocomplete="off">
+                                    </div>
+                                </div>
+                                <!-- end class p-20 -->
+
+                            </div> <!-- end col -->
+
+                            <div class="col-md-6">
+                                <div style="height:20px"></div>
+                                <div th:each="params:${templateInfo.paramArr}" class="form-group">
+                                    <label>变量参数：[[${params.name}]]：<span class="text-danger">*</span></label>
+                                    <span class="text-teal">选填；数据类型：[[${params.type ==1?"数字":"文本"}]]；最大长度[[${params.maxLength}]]</span>
+                                    <input th:if="${1==params.type}" type="text" class="form-control"
+                                           th:name="${params.name}"
+                                           th:placeholder="${params.name}"
+                                           th:data-parsley-maxlength="${params.maxLength}"
+                                           required="" data-parsley-type="number"
+                                           autocomplete="off">
+                                    <input th:if="${4==params.type}" type="text" class="form-control"
+                                           th:name="${params.name}"
+                                           th:placeholder="${params.name}"
+                                           required=""
+                                           th:data-parsley-maxlength="${params.maxLength}"
+                                           autocomplete="off">
+                                </div>
+                            </div> <!-- end col -->
+                        </div> <!-- end row -->
+
+                        <div class="text-center">
+                            <input type="hidden" th:field="*{tplId}">
+                            <input type="hidden" name="enterpriseId" th:value="${enterpriseId}">
+                            <input type="hidden" name="accountId" th:value="${accountId}">
+                            <input type="hidden" th:field="*{params}">
+                            <button sec:authorize-url="/intel/short/url/generate" type="submit"
+                                    class="btn btn-teal waves-effect waves-light">生成短链
+                            </button>
+                            <a sec:authorize-url="/intel/template/list" th:href="@{/intel/template/list}"
+                               class="btn btn-default waves-effect waves-light" style="margin-left:20px">返回</a>
+                        </div>
+                    </form>
+                    <!-- end form -->
+
+                </div> <!-- end card-box -->
+            </div> <!-- end col -->
+        </div>
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+        <th:block th:insert="fragments/common_fragments :: confirm-modal"/>
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<script th:src="@{/static/plugins/moment/moment.js}"></script>
+<th:block th:insert="fragments/common_fragments :: common_submit_form"/>
+
+<script>
+
+    $(document).ready(function () {
+        init_select_date_picker($("#contractDate"));
+        init_select_date_picker($("#contractExpireDate"));
+    });
+
+    function init_select_date_picker(id) {
+        id.daterangepicker({
+            autoUpdateInput: false,
+            singleDatePicker: true,
+            showDropdowns: true,
+            minDate: '2015-01-01',
+            maxDate: '2080-12-31',
+            locale: {
+                daysOfWeek: ['日', '一', '二', '三', '四', '五', '六'],
+                monthNames: ['01月', '02月', '03月', '04月', '05月', '06月',
+                    '07月', '08月', '09月', '10月', '11月', '12月'],
+                format: 'YYYY-MM-DD',
+                cancelLabel: 'Clear'
+            }
+        });
+        id.on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('YYYY-MM-DD'));
+        });
+    }
+
+    function confirmDelete(id) {
+        $("#deleteId").val(id);
+    }
+
+    function deleteById() {
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $('#preloader').css('display', 'block');
+        $.ajax({
+            url: contextPath + "/attachment/deleteById/" + $("#deleteId").val(),
+            success: function (data) {
+                if("1"==data){
+                    location.reload();
+                }else{
+                    alert(data);
+                }
+
+            }, error: function (data) {
+                console.log("error");
+            }
+        });
+    }
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+
+
+
+
+</script>
+</body>
+</html>

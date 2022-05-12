@@ -148,7 +148,7 @@ public class RequestService {
      * @return
      */
     public ResponseDataUtil<ResponseShortUrl> applyShortUrl(RequestApplyShortUrl param) {
-        String requestUrl = intelligenceProperties.getServerAddress() + "/ApiService/v1/SCodeManage/applyAimUrl";
+        String requestUrl = "https://surl-aim.monyun.cn:57126/ApiService/v1/SCodeManage/applyAimUrl";
         String response = Okhttp3Utils.postJson(requestUrl, new Gson().toJson(param), buildHeader());
 
         Type type = new TypeToken<ResponseDataUtil<ResponseShortUrl>>() {
@@ -253,7 +253,7 @@ public class RequestService {
     public ResponseDataUtil<List<ResponseTemplateInfo>> queryTemplates(RequestQueryTemplates param) {
         String requestUrl = "https://tpl-aim.monyun.cn:57123/ApiService/v1/TemplateManage/listECTemplates";
         String response = Okhttp3Utils.postJson(requestUrl, new Gson().toJson(param), buildHeader());
-
+        //log.info("[queryTemplates]:{}",response);
         Type type = new TypeToken<ResponseDataUtil<List<ResponseTemplateInfo>>>() {
         }.getType();
         ResponseDataUtil<List<ResponseTemplateInfo>> result = new Gson().fromJson(response, type);
