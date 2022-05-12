@@ -18,7 +18,15 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title"><a id="spanLink" th:href="@{/intel/template/list}">模版管理</a></h4>
+                    <h4 class="page-title">模版管理</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            <a id="spanLink" th:href="@{/intel/template/list}"
+                               style="margin-left:20px"
+                               class="btn btn-default waves-effect waves-light">返回</a>
+                        </li>
+
+                    </ol>
                     <div class="clearfix"></div>
                 </div>
             </div>
@@ -29,7 +37,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <iframe name="template" id="templateFrame"
-                                th:src="@{http://editor-aim.monyun.cn:9327/editor/?token={token}&type=aim&bizId={bizId}(token=${token},bizId=${enterpriseId})}"
+                                th:src="@{http://editor-aim.monyun.cn:9327/editor/?token={token}&type=aim&bizId={bizId}&bizFlag={bizFlag}&action={action}&tplId={templateId}(token=${token},bizId=${enterpriseId},bizFlag=${accountId},action=${action},templateId=${templateId})}"
                                 style="padding: 0px; width: 100%;margin-bottom: 10px"
                                 scrolling="yes" onload="changeFrameHeight()"
                                 frameborder="0"></iframe>

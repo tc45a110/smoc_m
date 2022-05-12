@@ -17,6 +17,8 @@ public class IntellectTemplateInfoValidator {
 
     private String templateId;
 
+    private String tplId;
+
     private String cardId;
 
     private String tplName;

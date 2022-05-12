@@ -33,9 +33,9 @@ public class RequestService {
     public ResponseDataUtil<String> getCompanyToken(){
         String requestUrl = "http://editor-aim.monyun.cn:9327/EditorService/v1/AuthManage/getCompanyToken";
 
-        log.info("[requestUrl]:{}",requestUrl);
+        //log.info("[requestUrl]:{}",requestUrl);
         String response = Okhttp3Utils.postJson(requestUrl, new Gson().toJson(new ArrayList<>()), buildHeader());
-        log.info("[response]:{}",response);
+        //log.info("[response]:{}",response);
         Type type = new TypeToken<ResponseDataUtil<String>>() {
         }.getType();
 
@@ -115,13 +115,13 @@ public class RequestService {
      * @param param
      * @return
      */
-    public ResponseDataUtil<ResponseGetTemplateStatus> getTemplateStatus(RequestGetTemplateStatus param) {
+    public ResponseDataUtil<List<ResponseGetTemplateStatus>> getTemplateStatus(RequestGetTemplateStatus param) {
         String requestUrl = intelligenceProperties.getServerAddress() + "/ApiService/v1/TemplateManage/getTplAuditState";
         String response = Okhttp3Utils.postJson(requestUrl, new Gson().toJson(param), buildHeader());
 
-        Type type = new TypeToken<ResponseDataUtil<ResponseGetTemplateStatus>>() {
+        Type type = new TypeToken<ResponseDataUtil<List<ResponseGetTemplateStatus>>>() {
         }.getType();
-        ResponseDataUtil<ResponseGetTemplateStatus> result = new Gson().fromJson(response, type);
+        ResponseDataUtil<List<ResponseGetTemplateStatus>> result = new Gson().fromJson(response, type);
         return result;
     }
 
@@ -170,6 +170,42 @@ public class RequestService {
         Type type = new TypeToken<ResponseDataUtil<List<ResponseTemplateInfo>>>() {
         }.getType();
         ResponseDataUtil<List<ResponseTemplateInfo>> result = new Gson().fromJson(response, type);
+        return result;
+    }
+
+    /**
+     * 提交审核模版（iframe）
+     *
+     * @param templateId
+     * @return
+     */
+    public ResponseDataUtil<Map<String,Object>> submitTemplate(Long templateId) {
+        Map<String,Long> param = new HashMap<>();
+        param.put("templateId",templateId);
+        String requestUrl = "http://editor-aim.monyun.cn:9327/EditorService/v1/TemplateManage/submitTemplate";
+        String response = Okhttp3Utils.postJson(requestUrl, new Gson().toJson(param), buildHeader());
+
+        Type type = new TypeToken<ResponseDataUtil<Map<String,Object>>>() {
+        }.getType();
+        ResponseDataUtil<Map<String,Object>> result = new Gson().fromJson(response, type);
+        return result;
+    }
+
+    /**
+     * 提交审核模版（iframe）
+     *
+     * @param templateId
+     * @return
+     */
+    public ResponseDataUtil<Map<String,Object>> deleteTemplate(Long templateId) {
+        Map<String,Long> param = new HashMap<>();
+        param.put("templateId",templateId);
+        String requestUrl = "http://editor-aim.monyun.cn:9327/EditorService/v1/TemplateManage/deleteTemplate";
+        String response = Okhttp3Utils.postJson(requestUrl, new Gson().toJson(param), buildHeader());
+
+        Type type = new TypeToken<ResponseDataUtil<Map<String,Object>>>() {
+        }.getType();
+        ResponseDataUtil<Map<String,Object>> result = new Gson().fromJson(response, type);
         return result;
     }
 

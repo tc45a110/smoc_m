@@ -57,4 +57,64 @@ public class IntellectTemplateInfoController {
 
         return data;
     }
+
+    /**
+     * 根据templateId 修改 tplId
+     * @param templateId
+     * @param tplId
+     * @return
+     */
+    @RequestMapping(value = "/updateTplIdAndStatus/{templateId}/{tplId}/{status}", method = RequestMethod.GET)
+    public ResponseData updateTplId(@PathVariable String templateId,@PathVariable String tplId,@PathVariable Integer status) {
+
+        //保存操作
+        ResponseData data = intellectTemplateInfoService.updateTplIdAndStatus(templateId,tplId,status);
+
+        return data;
+    }
+
+    /**
+     * templateId 修改 check status
+     * @param status
+     * @param templateId
+     * @return
+     */
+    @RequestMapping(value = "/updateCheckStatus/{templateId}/{status}", method = RequestMethod.GET)
+    public ResponseData updateCheckStatus(@PathVariable String templateId,@PathVariable Integer status) {
+
+        //保存操作
+        ResponseData data = intellectTemplateInfoService.updateCheckStatus(templateId,status);
+
+        return data;
+    }
+
+    /**
+     * tplId 修改 check status
+     * @param status
+     * @param tplId
+     * @return
+     */
+    @RequestMapping(value = "/updateCheckStatusByTplId/{tplId}/{status}", method = RequestMethod.GET)
+    public ResponseData updateCheckStatusByTplId(@PathVariable String tplId,@PathVariable Integer status) {
+
+        //保存操作
+        ResponseData data = intellectTemplateInfoService.updateCheckStatusByTplId(tplId,status);
+
+        return data;
+    }
+
+    /**
+     * templateId 修改  status
+     * @param status
+     * @param templateId
+     * @return
+     */
+    @RequestMapping(value = "/updateStatusByTemplateId/{templateId}/{status}", method = RequestMethod.GET)
+    public ResponseData updateStatusByTemplateId(@PathVariable String templateId,@PathVariable Integer status) {
+
+        //保存操作
+        ResponseData data = intellectTemplateInfoService.updateStatusByTemplateId(templateId,status);
+
+        return data;
+    }
 }

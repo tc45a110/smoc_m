@@ -23,13 +23,13 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">智能短信模查询(梦网)</h4>
+                    <h4 class="page-title">智能短信模版管理</h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
                             智能短信
                         </li>
                         <li>
-                            智能短信模查询(梦网)
+                            智能短信模版管理
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -43,9 +43,18 @@
             <div class="col-sm-12">
                 <div class="card-box">
                     <form id="query_form" th:action="@{/intel/template/page}"
+                          th:object="${intellectTemplateInfoValidator}"
                           method="post">
                         <div class="row m-b-60">
                             <div class="col-sm-12">
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control" th:field="*{enterpriseName}"
+                                           placeholder="企业名称" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control" th:field="*{accountId}"
+                                           placeholder="业务账号" autocomplete="off">
+                                </div>
                                 <div class="form-group col-sm-3 pull-right" style="text-align: right">
                                     <button sec:authorize-url="/intel/template/page" type="submit"
                                             class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
@@ -56,6 +65,10 @@
                                        class="btn btn-success waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-plus-sign"
                                            style="margin-right:5px"></i>新建智能短信模版</a>
+                                    <input type="hidden" name="currentPage" id="currentPage"
+                                           th:value="${pageParams.currentPage}">
+                                    <input type="hidden" name="pageSize" id="pageSize"
+                                           th:value="${pageParams.pageSize}">
                                 </div>
                             </div>
                         </div>
@@ -77,10 +90,13 @@
                             <table class="table table table-hover m-10" style="margin-top: -12px;">
                                 <thead>
                                 <tr>
-                                    <th>模板主题</th>
+                                    <th>企业名称</th>
+                                    <th>业务账号</th>
+                                    <th>模版名称</th>
                                     <th>业务场景</th>
                                     <th>短信示例</th>
-                                    <th>参数个数</th>
+                                    <th>审核状态</th>
+                                    <th>创建人</th>
                                     <th>创建时间</th>
                                     <th>操作</th>
                                 </tr>
@@ -88,27 +104,70 @@
                                 <tbody>
                                 <tr th:each="info:${list}">
                                     <td style="vertical-align: middle;line-height: 26px">
+                                        [[${info.enterpriseName}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        [[${info.accountId}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
                                         [[${info.tplName}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         [[${info.scene}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        [[${info.tplDesc}]]
+                                        [[${info.smsExample}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        [[${info.paramCnt}]]
+                                        <a th:if="${0==info.templateCheckStatus}"
+                                           class="btn btn-warning btn-rounded  waves-effect waves-light btn-ms">未提交</a>
+                                        <a th:if="${1==info.templateCheckStatus}"
+                                           th:onclick="getTemplateStatus([[${info.tplId}]],this)"
+                                           class="btn btn-info btn-rounded  waves-effect waves-light btn-ms">待审核</a>
+                                        <a th:if="${2==info.templateCheckStatus}"
+                                           class="btn btn-success btn-rounded  waves-effect waves-light btn-ms">通过审核</a>
+                                        <a th:if="${3==info.templateCheckStatus}"
+                                           class="btn btn-danger btn-rounded  waves-effect waves-light btn-ms">审核失败</a>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        [[${info.createTime}]]
+                                        [[${info.createdBy}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a  th:href="@{/intel/template/view/json/{templateId}(templateId=${info.templateId})}"
-                                            data-toggle="tooltip" data-placement="bottom"
-                                            data-original-title="JSON"
-                                            class="on-default edit-row"
-                                            style="padding-left: 5px;color:#4BD396;"><i style="font-size: 18px"
-                                                                                        class="glyphicon glyphicon-search"></i></a>
+                                        [[${info.createdTime}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <!--                                        <a  th:href="@{http://editor-aim.monyun.cn:9327/previewH5/index.html#/index?token={token}&templateId={templateId}(token=${token},templateId=${info.templateId})}" target="_blank"-->
+                                        <!--                                            data-toggle="tooltip" data-placement="bottom"-->
+                                        <!--                                            data-original-title="模版预览"-->
+                                        <!--                                            class="on-default edit-row"-->
+                                        <!--                                            style="padding-left: 5px;color:#4BD396;"><i style="font-size: 18px"-->
+                                        <!--                                                                                        class="glyphicon glyphicon-search"></i></a>-->
+                                        <a th:if="${2==info.templateCheckStatus}" sec:authorize-url="/intel/short/url/add/*/*/*"
+                                           th:href="@{/intel/short/url/add/{enterpriseId}/{businessAccount}/{tplId}(enterpriseId=${info.enterpriseId},businessAccount=${info.accountId},tplId=${info.tplId})}"
+                                           data-toggle="tooltip" data-placement="bottom"
+                                           data-original-title="生成短链"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 18px"
+                                                                                        class="mdi mdi-camera-iris"></i></a>
+                                        <a th:if="${0==info.templateCheckStatus}" sec:authorize-url="/template/add/*/*"
+                                           th:href="@{/intel/template/template_main/{businessAccount}/{enterpriseId}/update/{templateId}(enterpriseId=${info.enterpriseId},businessAccount=${info.accountId},templateId=${info.templateId})}"
+                                           data-toggle="tooltip" data-placement="bottom"
+                                           data-original-title="编辑模版"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 18px"
+                                                                                        class="mdi mdi-table-edit"></i></a>
+                                        <a th:if="${0==info.templateCheckStatus}"
+                                           sec:authorize-url="/intel/template/submit/template/*"
+                                           data-toggle="modal" th:onclick="submitTemplate([[${info.templateId}]],this)"
+                                           data-target="#submit-modal" class="on-default remove-row"
+                                           style="padding-left: 5px;color: #29b6f6"
+                                           title="提交审核"><i style="font-size: 18px"
+                                                           class=" mdi mdi-arrow-up-bold-circle-outline"></i></a>
+                                        <a sec:authorize-url="/intel/template/delete/template/*"
+                                           data-toggle="modal" th:onclick="confirmLogout([[${info.templateId}]],this)"
+                                           data-target="#confirm-modal" class="on-default remove-row"
+                                           style="padding-left: 5px;color: #f05050"
+                                           title="删除模版"><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -129,15 +188,37 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 class="modal-title" id="custom-width-modalLabel">确认注销</h4>
+                        <h4 class="modal-title" id="custom-width-modalLabel">确认删除</h4>
                     </div>
                     <div class="modal-body">
-                        <p>注销之后，该账户将无法使用！你还是确认注销？</p>
+                        <p>删除之后，该模版将无法使用，无法回复！你还是确认删除？</p>
                     </div>
                     <div class="modal-footer">
                         <input type="hidden" id="deleteId">
                         <a class="btn btn-default waves-effect" data-dismiss="modal">取消</a>
-                        <button onclick="logoutById()" class="btn btn-primary waves-effect waves-light">确认注销</button>
+                        <button onclick="logoutById()" class="btn btn-primary waves-effect waves-light">确认删除</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end confirm delete modal  -->
+
+        <!-- start confirm delete modal  -->
+        <div id="submit-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="custom-width-modalLabel"
+             aria-hidden="true" style="display: none;margin: 60px">
+            <div class="modal-dialog" style="width:33%;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">确认提交审核</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>提交审核之后，该模版将无法修改！你还是确认提交审核么？</p>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" id="submitId">
+                        <a class="btn btn-default waves-effect" data-dismiss="modal">取消</a>
+                        <button onclick="submitById()" class="btn btn-primary waves-effect waves-light">确认提交审核</button>
                     </div>
                 </div>
             </div>
@@ -159,22 +240,55 @@
 <script th:src="@{/static/plugins/autoNumeric/autoNumeric.js}"></script>
 <script>
 
+    var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+
     function confirmLogout(id) {
         $("#deleteId").val(id);
     }
 
-    //注销
+    function submitTemplate(id) {
+        $("#submitId").val(id);
+    }
+
+    //删除模版
     function logoutById() {
         var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
         $('#preloader').css('display', 'block');
-        location.href = contextPath + '/identification/account/logout/' + $("#deleteId").val();
+        location.href = contextPath + '/intel/template/delete/template/' + $("#deleteId").val();
     }
 
+    //模版提交审核
+    function submitById() {
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $('#preloader').css('display', 'block');
+        location.href = contextPath + '/intel/template/submit/template/' + $("#submitId").val();
+    }
 
+    function getTemplateStatus(tplId){
+
+       if("" == tplId || null == tplId){
+         return;
+       }
+       $.ajax({
+        url: contextPath + "/intel/template/getTemplateStatus/"+tplId,
+        type: "get",
+        contentType: "application/json",
+        timeout: 60000, //超时时间：60秒
+        async: false,
+        dataType: "text",
+        success: function (data) {
+        }, error: function (data) {
+        }
+      });
+    }
 
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
+
+
+
+
 
 
 

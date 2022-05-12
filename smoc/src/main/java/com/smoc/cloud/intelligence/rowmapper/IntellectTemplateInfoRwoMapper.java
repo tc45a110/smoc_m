@@ -16,6 +16,7 @@ public class IntellectTemplateInfoRwoMapper implements RowMapper<IntellectTempla
         qo.setEnterpriseName(resultSet.getString("ENTERPRISE_NAME"));
         qo.setAccountId(resultSet.getString("ACCOUNT_ID"));
         qo.setTemplateId(resultSet.getString("TEMPLATE_ID"));
+        qo.setTplId(resultSet.getString("TPL_ID"));
         qo.setCardId(resultSet.getString("CARD_ID"));
         qo.setTplName(resultSet.getString("TPL_NAME"));
         qo.setScene(resultSet.getString("SCENE"));

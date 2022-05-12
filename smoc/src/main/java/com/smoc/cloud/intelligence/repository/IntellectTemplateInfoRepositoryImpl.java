@@ -29,6 +29,7 @@ public class IntellectTemplateInfoRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", t.ENTERPRISE_NAME");
         sqlBuffer.append(", i.ACCOUNT_ID");
         sqlBuffer.append(", i.TEMPLATE_ID");
+        sqlBuffer.append(", i.TPL_ID");
         sqlBuffer.append(", i.CARD_ID");
         sqlBuffer.append(", i.TPL_NAME");
         sqlBuffer.append(", i.SCENE");
@@ -42,7 +43,7 @@ public class IntellectTemplateInfoRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", i.CREATED_BY");
         sqlBuffer.append(", DATE_FORMAT(i.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME");
         sqlBuffer.append("  from intellect_template_info i,enterprise_basic_info t  ");
-        sqlBuffer.append("  where i.ENTERPRISE_ID = t.ENTERPRISE_ID ");
+        sqlBuffer.append("  where i.ENTERPRISE_ID = t.ENTERPRISE_ID and i.TEMPLATE_STATUS= 1 ");
 
         List<Object> paramsList = new ArrayList<Object>();
 

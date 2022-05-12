@@ -10,8 +10,10 @@ import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.intelligence.IntellectTemplateInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.UUID;
+import com.smoc.cloud.intelligence.remote.request.RequestGetTemplateStatus;
 import com.smoc.cloud.intelligence.remote.request.RequestQueryTemplates;
 import com.smoc.cloud.intelligence.remote.response.ResponseDataUtil;
+import com.smoc.cloud.intelligence.remote.response.ResponseGetTemplateStatus;
 import com.smoc.cloud.intelligence.remote.response.ResponseTemplateInfo;
 import com.smoc.cloud.intelligence.remote.service.RequestService;
 import com.smoc.cloud.intelligence.service.IntellectTemplateInfoService;
@@ -21,12 +23,10 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 智能短信模版
@@ -54,78 +54,24 @@ public class IntellectTemplateController {
 
         //初始化数据
         PageParams<IntellectTemplateInfoValidator> params = new PageParams<IntellectTemplateInfoValidator>();
-
-        //总页数
-        int pages = 0;
-        //查询总行数
-        int rows = 0;
-
-        //开始行
-        int startRow = 0;
-
-        //结束行
-        int endRow = 0;
-
-        int currentPage = 1;
-
-        int pageSize = 10;
-
-
+        params.setPageSize(10);
+        params.setCurrentPage(1);
         IntellectTemplateInfoValidator intellectTemplateInfoValidator = new IntellectTemplateInfoValidator();
         params.setParams(intellectTemplateInfoValidator);
 
-//        //查询
-//        ResponseData<PageList<IntellectTemplateInfoValidator>> data = intellectTemplateInfoService.page(params);
-//        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-//            view.addObject("error", data.getCode() + ":" + data.getMessage());
-//            return view;
-//        }
-
-        RequestQueryTemplates queryTemplates = new RequestQueryTemplates();
-        queryTemplates.setPage(currentPage);
-        queryTemplates.setSize(pageSize);
-        //queryTemplates.setTplId("600057337");
-        //queryTemplates.setBizId("699687d778924514b3f3636b193b5b3b");
-        //queryTemplates.setBizFlag("XYK112");
-        ResponseDataUtil<List<ResponseTemplateInfo>>  templates = requestService.queryIframeTemplates(queryTemplates);
-        log.info("[iframeTemplates]:{}", new Gson().toJson(templates));
-
-        rows = templates.getPageInfo().getTotal();
-
-        //判断页数,如果是页大小的整数倍就为rows/pageRow如果不是整数倍就为rows/pageRow+1
-        if (rows % pageSize == 0) {
-            pages = rows / pageSize;
-        } else {
-            pages = rows / pageSize + 1;
+        //查询
+        ResponseData<PageList<IntellectTemplateInfoValidator>> data = intellectTemplateInfoService.page(params);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
         }
 
-        if (currentPage > pages) {
-            currentPage = pages;
-        }
+        ResponseDataUtil<String> responseDataUtil = requestService.getCompanyToken();
+        //log.info("[token]:{}", new Gson().toJson(responseDataUtil));
 
-        //查询第page页的数据
-        if (currentPage <= 1) {
-            endRow = pageSize < rows ? pageSize : rows;
-        } else {
-            startRow = ((currentPage - 1) * pageSize);
-            endRow = (((currentPage - 1) * pageSize) + pageSize) < rows ? (((currentPage - 1) * pageSize) + pageSize) : rows;
-        }
-
-        //设置总页数
-        params.setPages(pages);
-        //设置当前页
-        params.setCurrentPage(currentPage);
-        //设置每页显示条数
-        params.setPageSize(pageSize);
-        //设置总记录数
-        params.setTotalRows(rows);
-        //设置开始行
-        params.setStartRow(startRow + 1);
-        //设置结束行
-        params.setEndRow(endRow);
-
+        view.addObject("token", responseDataUtil.getData());
         view.addObject("intellectTemplateInfoValidator", intellectTemplateInfoValidator);
-        view.addObject("list", templates.getData());
+        view.addObject("list", data.getData().getList());
         view.addObject("pageParams", params);
         return view;
 
@@ -139,32 +85,25 @@ public class IntellectTemplateController {
     @RequestMapping(value = "/page", method = RequestMethod.POST)
     public ModelAndView page(@ModelAttribute IntellectTemplateInfoValidator intellectTemplateInfoValidator, PageParams pageParams) {
         ModelAndView view = new ModelAndView("intelligence/template/template_list");
-//        pageParams.setParams(intellectTemplateInfoValidator);
-//
-//        //查询
-//        ResponseData<PageList<IntellectTemplateInfoValidator>> data = intellectTemplateInfoService.page(pageParams);
-//        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-//            view.addObject("error", data.getCode() + ":" + data.getMessage());
-//            return view;
-//        }
+        pageParams.setParams(intellectTemplateInfoValidator);
 
-        RequestQueryTemplates queryTemplates = new RequestQueryTemplates();
-        queryTemplates.setPage(pageParams.getCurrentPage());
-        queryTemplates.setSize(pageParams.getPageSize());
-        //queryTemplates.setTplId("600057337");
-        //queryTemplates.setBizId("699687d778924514b3f3636b193b5b3b");
-        //queryTemplates.setBizFlag("XYK112");
-        ResponseDataUtil<List<ResponseTemplateInfo>>  templates = requestService.queryIframeTemplates(queryTemplates);
-        pageParams.setTotalRows(templates.getPageInfo().getTotal());
+        //查询
+        ResponseData<PageList<IntellectTemplateInfoValidator>> data = intellectTemplateInfoService.page(pageParams);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
 
+        ResponseDataUtil<String> responseDataUtil = requestService.getCompanyToken();
+        //log.info("[token]:{}", new Gson().toJson(responseDataUtil));
 
+        view.addObject("token", responseDataUtil.getData());
         view.addObject("intellectTemplateInfoValidator", intellectTemplateInfoValidator);
-        view.addObject("list", templates.getData());
+        view.addObject("list", data.getData().getList());
         view.addObject("pageParams", pageParams);
         return view;
 
     }
-
 
 
     /**
@@ -187,12 +126,12 @@ public class IntellectTemplateController {
         //queryTemplates.setTplId("600057337");
         //queryTemplates.setBizId("699687d778924514b3f3636b193b5b3b");
         //queryTemplates.setBizFlag("XYK112");
-        ResponseDataUtil<List<ResponseTemplateInfo>>  templates = requestService.queryTemplates(queryTemplates);
+        ResponseDataUtil<List<ResponseTemplateInfo>> templates = requestService.queryTemplates(queryTemplates);
         params.setTotalRows(templates.getPageInfo().getTotal());
-        log.info("[templates]:{}", new Gson().toJson(templates));
+        //log.info("[templates]:{}", new Gson().toJson(templates));
 
-        Map<String,String> account = requestService.buildHeader();
-        String url ="&Ab="+account.get("account")+"&Sm="+account.get("pwd")+"&Tt="+account.get("timestamp");
+        Map<String, String> account = requestService.buildHeader();
+        String url = "&Ab=" + account.get("account") + "&Sm=" + account.get("pwd") + "&Tt=" + account.get("timestamp");
 
         view.addObject("url", url);
         view.addObject("list", templates.getData());
@@ -217,12 +156,12 @@ public class IntellectTemplateController {
         //queryTemplates.setTplId("600057337");
         //queryTemplates.setBizId("699687d778924514b3f3636b193b5b3b");
         //queryTemplates.setBizFlag("XYK112");
-        ResponseDataUtil<List<ResponseTemplateInfo>>  templates = requestService.queryTemplates(queryTemplates);
+        ResponseDataUtil<List<ResponseTemplateInfo>> templates = requestService.queryTemplates(queryTemplates);
         pageParams.setTotalRows(templates.getPageInfo().getTotal());
         //log.info("[templates]:{}", new Gson().toJson(templates));
 
-        Map<String,String> account = requestService.buildHeader();
-        String url ="&Ab="+account.get("account")+"&Sm="+account.get("pwd")+"&Tt="+account.get("timestamp");
+        Map<String, String> account = requestService.buildHeader();
+        String url = "&Ab=" + account.get("account") + "&Sm=" + account.get("pwd") + "&Tt=" + account.get("timestamp");
 
         view.addObject("url", url);
         view.addObject("list", templates.getData());
@@ -244,47 +183,86 @@ public class IntellectTemplateController {
         //queryTemplates.setBizFlag("XYK112");
         String templates = requestService.queryIframeTemplatesByTemplateId(new Long(templateId));
 
-        view.addObject("jsonData",templates.replace("\\","").replace("\"[","[").replace("]\"","]"));
+        view.addObject("jsonData", templates.replace("\\", "").replace("\"[", "[").replace("]\"", "]"));
         return view;
 
     }
 
     /**
-     * 远程模版查询列表
+     * 提交审核（iframe）
      *
      * @return
      */
-    @RequestMapping(value = "/view/remote/json/{templateId}", method = RequestMethod.GET)
-    public ModelAndView json(@PathVariable String templateId) {
-        ModelAndView view = new ModelAndView("intelligence/template/template_remote_json_view");
+    @RequestMapping(value = "/submit/template/{templateId}", method = RequestMethod.GET)
+    public ModelAndView submit(@PathVariable String templateId) {
+        ModelAndView view = new ModelAndView("intelligence/template/template_list");
 
+        ResponseDataUtil<Map<String, Object>> submitTemplate = requestService.submitTemplate(new Long(templateId));
+        if (!(0 == submitTemplate.getSubCode())) {
+            view.addObject("error", submitTemplate.getMessage());
+            return view;
+        }
+        log.info("[submitTemplate]:{}", new Gson().toJson(submitTemplate));
+        ResponseData updateTplIdData = intellectTemplateInfoService.updateTplIdAndStatus(templateId, submitTemplate.getData().get("tplId").toString(), 1);
+        if (!ResponseCode.SUCCESS.getCode().equals(updateTplIdData.getCode())) {
+            view.addObject("error", updateTplIdData.getCode() + ":" + updateTplIdData.getMessage());
+            return view;
+        }
 
-        //queryTemplates.setBizId("699687d778924514b3f3636b193b5b3b");
-        //queryTemplates.setBizFlag("XYK112");
-        String templates = requestService.queryIframeTemplatesByTemplateId(new Long(templateId));
-
-        view.addObject("jsonData",templates.replace("\\","").replace("\"[","[").replace("]\"","]"));
+        view.setView(new RedirectView("/intel/template/list", true, false));
         return view;
 
     }
 
     /**
-     * 添加模版
+     * 删除模版（iframe）
      *
      * @return
      */
-    @RequestMapping(value = "/template_main/{accountId}/{enterpriseId}", method = RequestMethod.GET)
-    public ModelAndView template_main(@PathVariable String accountId, @PathVariable String enterpriseId) {
+    @RequestMapping(value = "/delete/template/{templateId}", method = RequestMethod.GET)
+    public ModelAndView delete(@PathVariable String templateId) {
+        ModelAndView view = new ModelAndView("intelligence/template/template_list");
+        ResponseDataUtil<Map<String, Object>> deleteTemplate = requestService.deleteTemplate(new Long(templateId));
+        log.info("[deleteTemplate]:{}", new Gson().toJson(deleteTemplate));
+        if (!(0 == deleteTemplate.getSubCode())) {
+            view.addObject("error", deleteTemplate.getMessage());
+            return view;
+        }
+
+        ResponseData deleteResponseData = intellectTemplateInfoService.updateStatusByTemplateId(templateId, 0);
+        if (!ResponseCode.SUCCESS.getCode().equals(deleteResponseData.getCode())) {
+            view.addObject("error", deleteResponseData.getCode() + ":" + deleteResponseData.getMessage());
+            return view;
+        }
+        view.setView(new RedirectView("/intel/template/list", true, false));
+        return view;
+
+    }
+
+
+    /**
+     * 进入模版编辑器
+     *
+     * @param accountId
+     * @param enterpriseId
+     * @param action       add、update、copy
+     * @param templateId
+     * @return
+     */
+    @RequestMapping(value = "/template_main/{accountId}/{enterpriseId}/{action}/{templateId}", method = RequestMethod.GET)
+    public ModelAndView template_main(@PathVariable String accountId, @PathVariable String enterpriseId, @PathVariable String action, @PathVariable String templateId) {
 
         ModelAndView view = new ModelAndView("intelligence/template/template_main");
         ResponseDataUtil<String> responseDataUtil = requestService.getCompanyToken();
         log.info("[token]:{}", new Gson().toJson(responseDataUtil));
+
+        view.addObject("templateId", templateId);
+        view.addObject("action", action);
         view.addObject("accountId", accountId);
         view.addObject("enterpriseId", enterpriseId);
         view.addObject("token", responseDataUtil.getData());
         return view;
     }
-
 
 
     /**
@@ -299,7 +277,7 @@ public class IntellectTemplateController {
         intellectTemplateInfoValidator.setEnterpriseId(enterpriseId);
         intellectTemplateInfoValidator.setAccountId(accountId);
         intellectTemplateInfoValidator.setSmsExample(intellectTemplateInfoValidator.getDescription());
-        intellectTemplateInfoValidator.setTemplateCheckStatus(1);
+        intellectTemplateInfoValidator.setTemplateCheckStatus(0);
         intellectTemplateInfoValidator.setTemplateStatus(1);
         intellectTemplateInfoValidator.setCreatedTime(DateTimeUtils.getDateTimeFormat(new Date()));
         intellectTemplateInfoValidator.setCreatedBy(user.getRealName());
@@ -308,6 +286,25 @@ public class IntellectTemplateController {
         Map<String, String> result = new HashMap<>();
         result.put("result", "ok");
         return result;
+    }
+
+    /**
+     * 查询模版状态，并同步修改模版状态
+     */
+    @RequestMapping(value = "/getTemplateStatus/{tplId}", method = RequestMethod.GET)
+    public ResponseGetTemplateStatus getTemplateStatus(@PathVariable String tplId) {
+        RequestGetTemplateStatus templateStatus = new RequestGetTemplateStatus();
+        List<String> tplIds = new ArrayList<>();
+        tplIds.add(tplId);
+        templateStatus.setTplIds(tplIds);
+        ResponseDataUtil<List<ResponseGetTemplateStatus>> templateStatusResponseDataUtil = requestService.getTemplateStatus(templateStatus);
+        log.info("[templateStatus]:{}", new Gson().toJson(templateStatusResponseDataUtil));
+        if (!(0 == templateStatusResponseDataUtil.getSubCode())) {
+            return null;
+        }
+        ResponseGetTemplateStatus  status =  templateStatusResponseDataUtil.getData().get(0);
+        intellectTemplateInfoService.updateCheckStatusByTplId(status.getTplId(),status.getAuditState());
+        return status;
     }
 
 

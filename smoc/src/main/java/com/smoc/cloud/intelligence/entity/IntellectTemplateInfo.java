@@ -22,6 +22,9 @@ public class IntellectTemplateInfo {
     @Column(name = "TEMPLATE_ID", length = 32)
     private String templateId;
 
+    @Column(name = "TPL_ID", length = 32)
+    private String tplId;
+
     @Column(name = "CARD_ID", length = 64)
     private String cardId;
 
@@ -196,6 +199,14 @@ public class IntellectTemplateInfo {
         return enterpriseId;
     }
 
+    public String getTplId() {
+        return tplId;
+    }
+
+    public void setTplId(String tplId) {
+        this.tplId = tplId;
+    }
+
     public void setEnterpriseId(String enterpriseId) {
         this.enterpriseId = enterpriseId;
     }
@@ -207,4 +218,6 @@ public class IntellectTemplateInfo {
     public void setId(String id) {
         this.id = id;
     }
+
+
 }
