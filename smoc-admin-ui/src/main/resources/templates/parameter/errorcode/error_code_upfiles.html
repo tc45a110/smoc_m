@@ -59,7 +59,7 @@
                                 <button sec:authorize-url="/errorCode/upFiles" type="submit"
                                         class="btn btn-teal waves-effect waves-light">提交
                                 </button>
-                                <a sec:authorize-url="/errorCode/list/*" th:href="@{/complaint/list/{parentId}(parentId=${parentId})}"  class="btn btn-default waves-effect waves-light" style="margin-left:20px">返回</a>
+                                <a sec:authorize-url="/errorCode/list/*" th:href="@{/errorCode/list/{parentId}(parentId=${parentId})}"  class="btn btn-default waves-effect waves-light" style="margin-left:20px">返回</a>
                             </div>
                         </form>
                         <!-- end form -->

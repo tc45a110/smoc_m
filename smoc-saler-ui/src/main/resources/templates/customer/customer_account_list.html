@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+</head>
+<body>
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <!-- start row 页面导航-->
+        <div class="row fixed-navigation">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">我的客户 </h4>
+                    <ol class="breadcrumb p-0 m-0">
+
+                        <li class="active">
+                            我的客户
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  查询条件-->
+        <div class="row" style="position: relative;margin-top: 80px" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <form th:action="@{/customer/account/page}" th:object="${customerAccountInfoQo}" id="query_form" method="post">
+                        <div class="row m-b-60">
+                            <div class="col-sm-12">
+                                <div class="form-group  col-sm-4">
+                                    <input type="text" class="form-control" th:field="*{enterpriseName}"
+                                           placeholder="企业名称" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-4">
+                                    <input type="text" class="form-control" th:field="*{accountName}"
+                                           placeholder="业务账号名称" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-4">
+                                    <input type="text" class="form-control" th:field="*{accountId}"
+                                           placeholder="业务账号" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-4">
+                                    <mpm:tag id="businessType" identity="businessType" show-type="select" key="code"
+                                             class="form-control" name="businessType" th:value="${customerAccountInfoQo.businessType}" title="业务类型"/>
+                                </div>
+                                <div class="form-group  col-sm-4">
+                                    <mpm:tag id="carrier" identity="carrier" show-type="select" key="code"
+                                             class="form-control" name="carrier" th:value="${customerAccountInfoQo.carrier}" title="发送运营商"/>
+                                </div>
+                                <div class="form-group  col-sm-4">
+                                    <mpm:tag id="infoType" identity="infoType" show-type="select" key="code"
+                                             class="form-control" name="infoType" th:value="${customerAccountInfoQo.infoType}" title="信息分类"/>
+                                </div>
+
+
+                                <div class="form-group col-sm-6 pull-right" style="text-align: right">
+                                    <button sec:authorize-url="/customer/account/page" type="submit"
+                                            class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-search" style="margin-right:5px"></i> 查询
+                                    </button>
+
+                                    <input type="hidden" name="currentPage" id="currentPage"
+                                           th:value="${pageParams.currentPage}">
+                                    <input type="hidden" name="pageSize" id="pageSize"
+                                           th:value="${pageParams.pageSize}">
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  列表数据-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="panel panel-color panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">客户账号列表</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table table-hover m-10" style="margin-top: -12px;">
+                                <thead>
+                                <tr>
+                                    <th>企业名称</th>
+                                    <th>业务账号/业务账号名称</th>
+                                    <th>业务类型</th>
+                                    <th>信息分类/行业类型</th>
+                                    <th>发送运营商</th>
+                                    <th>付费方式</th>
+                                    <th>企业联系人</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="info:${list}">
+                                    <td style="line-height:44px">
+                                        [[${info.enterpriseName}]]
+                                    </td>
+                                    <td>
+                                        [[${info.accountId}]]<br>
+                                        [[${info.accountName}]]
+                                    </td>
+                                    <td style="line-height:44px">
+                                        <mpm:tag identity="businessType" show-type="button"
+                                                 key="code" th:value="${info.businessType}"
+                                                 class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;MULTI_SMS,btn btn-brown btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;5G_SMS,btn btn-primary btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-inverse btn-rounded btn-sm waves-effect waves-light"/>
+                                    </td>
+                                    <td>
+                                        <mpm:tag identity="infoType" show-type="label" key="code" th:value="${info.infoType}"/>
+                                        <br>
+                                        <mpm:tag identity="industryType" show-type="label" key="code" th:value="${info.industryType}"/>
+                                    </td>
+                                    <td style="line-height:44px">
+                                        <mpm:tag identity="carrier" show-type="label" key="code" th:value="${info.carrier}"/>
+                                    </td>
+                                    <td>
+                                        <mpm:tag identity="payType" show-type="label" key="code" th:value="${info.payType}"/>
+                                    </td>
+                                    <td>
+                                        <p style="font-size:14px;" th:if="${not #strings.isEmpty(info.enterpriseContacts)}">[[${info.enterpriseContacts}]]
+                                            <span th:if="${not #strings.isEmpty(info.enterpriseContactsPhone)}"
+                                                  style="font-size:14px;color:#989898;margin-left:5px">([[${info.enterpriseContactsPhone}]])</span>
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <a sec:authorize-url="/customer/account/statistic/*"
+                                           th:href="@{/customer/account/statistic/{accountId}(accountId=${info.accountId})}"
+                                           class="on-default edit-row"
+                                           style="padding-left: 10px;color: #29b6f6;" data-toggle="tooltip"
+                                           data-placement="left" title="" data-original-title="查看账号发送量"><i
+                                                style="font-size: 18px"
+                                                class=" mdi mdi-chart-bar"></i></a>
+                                    </td>
+
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <th:block th:insert="fragments/page_fragments :: page"/>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+    </div> <!-- container -->
+
+</div> <!-- content -->
+
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<script th:src="@{/static/plugins/moment/moment.js}"></script>
+<!-- Tooltipster js -->
+
+<script>
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+
+</script>
+</body>
+</html>

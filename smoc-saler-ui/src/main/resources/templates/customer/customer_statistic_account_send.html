@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <link th:href="@{/static/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css}" rel="stylesheet">
+    <script th:src="@{/static/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js}"></script>
+</head>
+<body>
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Start content -->
+
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+        <div class="row fixed-navigation">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">统计账号发送量 </h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            统计账号发送量
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <div class="row"  style="position: relative;margin-top: 80px">
+            <div class="col-lg-12">
+                <div class="card-box">
+                    <div id="main1" style="height: 450px;"></div>
+                </div>
+            </div><!-- end col -->
+
+        </div>
+        <!-- end row -->
+
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<script th:src="@{/static/assets/js/jquery.min.js}"></script>
+<script th:src="@{/static/echarts/echarts.min.js}"></script>
+<script th:src="@{/static/plugins/autoNumeric/autoNumeric.js}"></script>
+<script type="text/javascript">
+
+    var dom3 = document.getElementById("main1");
+    var myChart3 = echarts.init(dom3);
+    var app = {};
+    option3 = null;
+    option3 = {
+        title: {
+            text: '客户近12个月短信发送量（W）'
+        },
+        color: ['#EE6666', '#92CB76'],
+        legend: {
+          data: ['2021年近12个月', '2022年近12个月']
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                saveAsImage: {show: true}
+            }
+        },
+        calculable: true,
+        xAxis: [
+            {
+                type: 'category',
+                axisLabel: {
+                  interval: 'auto',
+                  rotate: 30
+                 },
+                data: ['2020-11', '2020-12', '2021-01', '2021-02', '2021-03', '2021-04', '2021-05', '2021-06', '2021-07', '2021-08', '2021-09','2021-10']
+            }
+        ],
+        yAxis: [
+            {
+                type: 'value'
+            }
+        ],
+         series: [
+            {
+              name: '2021年近12个月',
+              type: 'line',
+              stack: 'Total',
+              data: [26, 59, 90, 264, 287, 707, 1756, 1822, 487, 188, 60, 23],
+              markLine: {
+                    data: [
+                        {type: 'average', name: '平均值'}
+                    ]
+              }
+            },
+            {
+              name: '2022年近12个月',
+              type: 'line',
+              stack: 'Total',
+              data: [526, 459, 90, 264, 287, 207, 56, 822, 287, 88, 560, 823],
+              markLine: {
+                    data: [
+                        {type: 'average', name: '平均值'}
+                    ]
+              }
+            },
+        ]
+    };
+    ;
+    if (option3 && typeof option3 === "object") {
+        myChart3.setOption(option3, true);
+    }
+
+
+    $(document).ready(function() {
+		$('.autonumber').autoNumeric('init');
+	 });
+
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+</script>
+
+</body>
+</html>
