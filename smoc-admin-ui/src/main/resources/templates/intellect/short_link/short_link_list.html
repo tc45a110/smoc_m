@@ -98,6 +98,7 @@
                                     <th>短链/支持厂商</th>
                                     <th>有效期(天)/最大解析(次)</th>
                                     <th>生成状态</th>
+                                    <th>回执成功次数</th>
                                     <th>时效状态</th>
                                     <th>创建人</th>
                                     <th>创建时间</th>
@@ -130,6 +131,9 @@
                                            class="btn btn-success btn-rounded  waves-effect waves-light btn-ms">申请成功</a>
                                         <a th:if="${'0'!=info.resultCode}"
                                            class="btn btn-danger btn-rounded  waves-effect waves-light btn-ms">申请失败</a>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        [[${info.successAnalysis}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         <a th:if="${'1'==info.status}"

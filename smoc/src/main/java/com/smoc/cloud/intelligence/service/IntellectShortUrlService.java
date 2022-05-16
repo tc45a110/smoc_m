@@ -65,6 +65,7 @@ public class IntellectShortUrlService {
         //转换日期格式
         entity.setCreatedTime(DateTimeUtils.getDateTimeFormat(intellectShortUrlValidator.getCreatedTime()));
         entity.setIsGiveBack("0");
+        entity.setSuccessAnalysis(0);
 
         //成本价格
         ParameterExtendSystemParamValue costPriceParam = this.parameterExtendSystemParamValueRepository.findByBusinessTypeAndBusinessIdAndParamKey("INTELLECT_COST","INTELLECT_COST","INTELLECT_PRICE");

@@ -134,7 +134,7 @@ public class IntellectShortUrlController {
         }
 
         //预计可解析的最大条数
-        Integer totalNum = totalSum.divide(systemAccountInfoValidatorResponseData.getData().getPrice()).intValue();
+        Integer totalNum = totalSum.divide(systemAccountInfoValidatorResponseData.getData().getPrice(),6).intValue();
 
         RequestQueryTemplates queryTemplates = new RequestQueryTemplates();
         queryTemplates.setPage(1);
@@ -188,9 +188,10 @@ public class IntellectShortUrlController {
 
         applyShortUrl.setExpireTimes(7);
 
-
+        log.info("totalNum:{}",totalNum);
+        log.info("totalSum:{}",totalSum);
         view.addObject("totalNum", totalNum);
-        view.addObject("totalSum", new BigDecimal(totalSum.toPlainString()));
+        view.addObject("totalSum", totalSum);
         view.addObject("accountId", accountId);
         view.addObject("enterpriseId", enterpriseId);
         view.addObject("applyShortUrl", applyShortUrl);

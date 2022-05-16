@@ -31,6 +31,8 @@ public class IntellectShortUrlValidator {
     //显示次数 群发单个智能短信短链短信给 N 个号码 的场景，防止展示次数超过预期带来安 全风险，指定此智能短信短链最大成功 展示次数。
     private Integer showTimes;
 
+    private Integer successAnalysis;
+
     //失效时间 智能短信编码类型为群发：时间可任意 填，不填则默认 7 天； 智能短信编码类型为个性化：时间最小 1 天，最大 7
     private Integer expireTimes;
 

@@ -39,6 +39,8 @@ public class IntellectTemplateInfoValidator {
 
     private Integer templateStatus;
 
+    private String templateCheckMessage;
+
     private String createdBy;
 
     private String createdTime;

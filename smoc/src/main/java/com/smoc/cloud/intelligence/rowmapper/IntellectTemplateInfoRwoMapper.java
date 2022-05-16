@@ -26,6 +26,7 @@ public class IntellectTemplateInfoRwoMapper implements RowMapper<IntellectTempla
         qo.setBizFlag(resultSet.getString("BIZ_FLAG"));
         qo.setSmsExample(resultSet.getString("SMS_EXAMPLE"));
         qo.setTemplateCheckStatus(resultSet.getInt("TEMPLATE_CHECK_STATUS"));
+        qo.setTemplateCheckMessage(resultSet.getString("TEMPLATE_CHECK_MESSAGE"));
         qo.setTemplateStatus(resultSet.getInt("TEMPLATE_STATUS"));
         qo.setCreatedBy(resultSet.getString("CREATED_BY"));
         qo.setCreatedTime(resultSet.getString("CREATED_TIME"));

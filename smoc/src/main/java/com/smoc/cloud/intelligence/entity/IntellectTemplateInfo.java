@@ -55,6 +55,9 @@ public class IntellectTemplateInfo {
     @Column(name = "TEMPLATE_STATUS", nullable = false)
     private Integer templateStatus;
 
+    @Column(name = "TEMPLATE_CHECK_MESSAGE", length = 32)
+    private String templateCheckMessage;
+
     @Column(name = "CREATED_BY", nullable = false, length = 32)
     private String createdBy;
 
@@ -219,5 +222,11 @@ public class IntellectTemplateInfo {
         this.id = id;
     }
 
+    public String getTemplateCheckMessage() {
+        return templateCheckMessage;
+    }
 
+    public void setTemplateCheckMessage(String templateCheckMessage) {
+        this.templateCheckMessage = templateCheckMessage;
+    }
 }

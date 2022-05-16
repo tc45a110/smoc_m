@@ -40,6 +40,7 @@ public class IntellectTemplateInfoRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", i.SMS_EXAMPLE");
         sqlBuffer.append(", i.TEMPLATE_CHECK_STATUS");
         sqlBuffer.append(", i.TEMPLATE_STATUS");
+        sqlBuffer.append(", i.TEMPLATE_CHECK_MESSAGE");
         sqlBuffer.append(", i.CREATED_BY");
         sqlBuffer.append(", DATE_FORMAT(i.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME");
         sqlBuffer.append("  from intellect_template_info i,enterprise_basic_info t  ");

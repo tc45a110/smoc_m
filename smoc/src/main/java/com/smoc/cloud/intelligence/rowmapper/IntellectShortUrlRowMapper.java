@@ -23,6 +23,7 @@ public class IntellectShortUrlRowMapper implements RowMapper<IntellectShortUrlVa
         qo.setExpireTimes(resultSet.getInt("EXPIRE_TIMES"));
         qo.setFactories(resultSet.getString("FACTORIES"));
         qo.setShowTimes(resultSet.getInt("SHOW_TIMES"));
+        qo.setSuccessAnalysis(resultSet.getInt("SUCCESS_ANALYSIS"));
         qo.setTplName(resultSet.getString("TPL_NAME"));
         qo.setDyncParams(resultSet.getString("DYNC_PARAMS"));
         qo.setCustomUrl(resultSet.getString("CUSTOM_URL"));

@@ -39,8 +39,12 @@ public class IntellectShortUrl {
     @Column(name = "SHOW_TIMES", nullable = false)
     private Integer showTimes;
 
+    @Column(name = "SUCCESS_ANALYSIS", nullable = false)
+    private Integer successAnalysis;
+
     @Column(name = "EXPIRE_TIMES", nullable = false)
     private Integer expireTimes;
+
 
     @Column(name = "CURRENT_PRICE", nullable = false, precision = 24, scale = 4)
     private BigDecimal currentPrice;
@@ -238,5 +242,13 @@ public class IntellectShortUrl {
 
     public void setIsGiveBack(String isGiveBack) {
         this.isGiveBack = isGiveBack;
+    }
+
+    public Integer getSuccessAnalysis() {
+        return successAnalysis;
+    }
+
+    public void setSuccessAnalysis(Integer successAnalysis) {
+        this.successAnalysis = successAnalysis;
     }
 }
