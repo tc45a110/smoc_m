@@ -18,6 +18,13 @@ public interface FinanceAccountRechargeRepository extends JpaRepository<FinanceA
     PageList<FinanceAccountRechargeValidator> pageIdentification(PageParams<FinanceAccountRechargeValidator> pageParams);
 
     /**
+     * 分页查询 共用账号充值记录
+     * @param pageParams
+     * @return
+     */
+     PageList<FinanceAccountRechargeValidator> pageSystem(PageParams<FinanceAccountRechargeValidator> pageParams);
+
+    /**
      * 分页查询  业务账号充值记录
      * @param pageParams
      * @return

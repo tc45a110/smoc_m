@@ -39,7 +39,7 @@ public class IntellectShortUrlController {
     }
 
     /**
-     * 添加、修改
+     * 添加
      *
      * @return
      */

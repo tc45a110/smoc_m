@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.smoc.cloud.common.gateway.request.RequestSignModel;
 import com.smoc.cloud.common.gateway.request.RequestStardardHeaders;
 import com.smoc.cloud.common.gateway.utils.ValidatorUtil;
-import com.smoc.cloud.common.redis.smoc.identification.KeyEntity;
+import com.smoc.cloud.common.redis.RedisModel;
 import com.somc.cloud.gateway.configuration.GatewayConfigurationProperties;
 import com.smoc.cloud.common.gateway.utils.HMACUtil;
 import com.smoc.cloud.common.response.ResponseCode;
@@ -95,13 +95,13 @@ public class CustomVerifySignatureGatewayFilter {
                 //log.info("[接口请求][账户:{}]header数据:{}", model.getIdentifyAccount(), new Gson().toJson(requestHeaderData));
 
                 //取密钥数据
-                KeyEntity keyEntity = dataService.getKey(model.getIdentifyAccount());
-                if (null == keyEntity || StringUtils.isEmpty(keyEntity.getMd5HmacKey())) {
+                RedisModel redisModel = dataService.getHttpServerKey(model.getIdentifyAccount());
+                if (null == redisModel || StringUtils.isEmpty(redisModel.getMd5HmacKey())) {
                     return errorHandle(exchange, ResponseCode.USER_NOT_EXIST.getCode(), ResponseCode.USER_NOT_EXIST.getMessage());
                 }
                 //log.info("[签名密钥]{}",new Gson().toJson(keyEntity));
 
-                String md5HmacKey = keyEntity.getMd5HmacKey();
+                String md5HmacKey = redisModel.getMd5HmacKey();
 
                 //签名数据
                 StringBuffer signData = new StringBuffer();

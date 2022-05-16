@@ -1,6 +1,7 @@
 package com.smoc.cloud.intelligence.entity;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
@@ -41,11 +42,23 @@ public class IntellectShortUrl {
     @Column(name = "EXPIRE_TIMES", nullable = false)
     private Integer expireTimes;
 
+    @Column(name = "CURRENT_PRICE", nullable = false, precision = 24, scale = 4)
+    private BigDecimal currentPrice;
+
+    @Column(name = "COST_PRICE", nullable = false, precision = 24, scale = 4)
+    private BigDecimal costPrice;
+
+    @Column(name = "FACTORIES", length = 255)
+    private String factories;
+
     @Column(name = "RESULT_CODE", length = 32)
     private String resultCode;
 
     @Column(name = "ERROR_MESSAGE", length = 900)
     private String errorMessage;
+
+    @Column(name = "IS_GIVE_BACK", length = 32)
+    private String isGiveBack;
 
     @Column(name = "CREATED_BY", nullable = false, length = 32)
     private String createdBy;
@@ -193,5 +206,37 @@ public class IntellectShortUrl {
 
     public void setExpireTimes(Integer expireTimes) {
         this.expireTimes = expireTimes;
+    }
+
+    public String getFactories() {
+        return factories;
+    }
+
+    public void setFactories(String factories) {
+        this.factories = factories;
+    }
+
+    public BigDecimal getCurrentPrice() {
+        return currentPrice;
+    }
+
+    public void setCurrentPrice(BigDecimal currentPrice) {
+        this.currentPrice = currentPrice;
+    }
+
+    public BigDecimal getCostPrice() {
+        return costPrice;
+    }
+
+    public void setCostPrice(BigDecimal costPrice) {
+        this.costPrice = costPrice;
+    }
+
+    public String getIsGiveBack() {
+        return isGiveBack;
+    }
+
+    public void setIsGiveBack(String isGiveBack) {
+        this.isGiveBack = isGiveBack;
     }
 }

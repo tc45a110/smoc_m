@@ -3,6 +3,7 @@ package com.smoc.cloud.common.smoc.intelligence;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Getter
@@ -33,9 +34,17 @@ public class IntellectShortUrlValidator {
     //失效时间 智能短信编码类型为群发：时间可任意 填，不填则默认 7 天； 智能短信编码类型为个性化：时间最小 1 天，最大 7
     private Integer expireTimes;
 
+    private BigDecimal currentPrice;
+
+    private BigDecimal costPrice;
+
+    private String factories;
+
     private String resultCode;
 
     private String errorMessage;
+
+    private String isGiveBack;
 
     private String createdBy;
 
@@ -48,4 +57,7 @@ public class IntellectShortUrlValidator {
     private String enterpriseName;
 
     private String tplName;
+
+    //短链的有效状态
+    private String status;
 }

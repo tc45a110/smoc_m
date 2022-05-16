@@ -1,11 +1,10 @@
 package com.smoc.cloud.identification.service;
 
 import com.alibaba.fastjson.JSON;
-import com.smoc.cloud.common.http.server.utils.RedisModel;
+import com.smoc.cloud.common.redis.RedisConstant;
+import com.smoc.cloud.common.redis.RedisModel;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
-import com.smoc.cloud.common.redis.smoc.identification.KeyEntity;
-import com.smoc.cloud.common.redis.smoc.identification.RedisConstant;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
@@ -24,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
@@ -109,6 +107,7 @@ public class IdentificationAccountInfoService {
             financeAccount.setAccountConsumeSum(new BigDecimal("0.00000"));
             financeAccount.setAccountRechargeSum(new BigDecimal("0.00000"));
             financeAccount.setAccountCreditSum(entity.getGrantingCredit());
+            financeAccount.setEnterpriseId(entity.getEnterpriseId());
             financeAccount.setAccountStatus("1");
             financeAccount.setCreatedTime(DateTimeUtils.getNowDateTime());
             financeAccount.setCreatedBy(entity.getCreatedBy());
@@ -122,24 +121,19 @@ public class IdentificationAccountInfoService {
 
         //如果状态不为004 则放到redis中
         if(!"004".equals(entity.getAccountStatus())) {
-            //放到redis中对象
-            KeyEntity key = new KeyEntity();
-            key.setMd5HmacKey(identificationAccountInfoValidator.getMd5HmacKey());
-            key.setAesKey(identificationAccountInfoValidator.getAesKey());
-            key.setAesIv(identificationAccountInfoValidator.getAesIv());
-            //把数据放到redis里
-            redisTemplate.opsForValue().set(RedisConstant.KEY + identificationAccountInfoValidator.getIdentificationAccount(), key);
 
             //放到redis中对象
             RedisModel redisModel = new RedisModel();
             redisModel.setMd5HmacKey(identificationAccountInfoValidator.getMd5HmacKey());
+            redisModel.setAesKey(identificationAccountInfoValidator.getAesKey());
+            redisModel.setAesIv(identificationAccountInfoValidator.getAesIv());
             redisModel.setSubmitRate(entity.getSubmitLimiter());
             redisModel.setIps(identificationAccountInfoValidator.getIdentifyIp());
             //把数据放到redis里
             redisTemplate.opsForValue().set(RedisConstant.HTTP_SERVER_KEY + identificationAccountInfoValidator.getIdentificationAccount(), redisModel);
         }else{
             //注销
-            redisTemplate.delete(RedisConstant.KEY + identificationAccountInfoValidator.getIdentificationAccount());
+            redisTemplate.delete(RedisConstant.HTTP_SERVER_KEY + identificationAccountInfoValidator.getIdentificationAccount());
         }
         return ResponseDataUtil.buildSuccess();
     }
@@ -153,7 +147,7 @@ public class IdentificationAccountInfoService {
     @Transactional
     public ResponseData logoutAccount(String id) {
         //把数据放到redis里
-        redisTemplate.delete(RedisConstant.KEY + id);
+        redisTemplate.delete(RedisConstant.HTTP_SERVER_KEY + id);
         identificationAccountInfoRepository.logoutAccount(id, "004");
         return ResponseDataUtil.buildSuccess();
     }

@@ -1,7 +1,7 @@
 package com.smoc.cloud.http.service;
 
-import com.smoc.cloud.common.http.server.utils.RedisModel;
-import com.smoc.cloud.common.redis.smoc.identification.RedisConstant;
+import com.smoc.cloud.common.redis.RedisConstant;
+import com.smoc.cloud.common.redis.RedisModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;

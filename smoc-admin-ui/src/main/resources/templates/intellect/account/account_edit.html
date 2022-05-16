@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
+
+</head>
+<body>
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <!-- start row 页面导航-->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">新建、修改智能短信账号</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            智能短信服务
+                        </li>
+                        <li>
+                            智能短信账号管理
+                        </li>
+                        <li class="active">
+                            新建、修改智能短信账号
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row 页面内容-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-md-12">
+                <div class="card-box">
+                    <form id="submit_form" th:action="@{/intellect/account/save/{op}(op=${op})}"
+                          th:object="${systemAccountInfoValidator}"
+                          method="post" data-parsley-validate="">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="p-20">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-12 form-group m-b-20"
+                                                 th:remove="${level =='1'}?all:none">
+                                                <label>企业名称</label>：[[${systemAccountInfoValidator.enterpriseName}]]
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label for="identificationAccount">智能短信账号<span
+                                                        class="text-danger">*</span>&nbsp;
+                                                </label>
+                                                <input id="identificationAccount" type="text" class="form-control"
+                                                       th:field="*{account}"
+                                                       required="" data-parsley-length="[2,64]" readonly
+                                                       autocomplete="off">
+                                            </div>
+                                            <div class="col-md-6 form-group" style="display:none">
+                                                <label for="md5HmacKey">md5Hmac密钥(客户对接参数)<span
+                                                        class="text-danger">*</span>&nbsp;
+                                                </label>
+                                                <input id="md5HmacKey" type="text" class="form-control"
+                                                       th:field="*{md5HmacKey}"
+                                                       required="" data-parsley-length="[2,32]" autocomplete="off"
+                                                       readonly>
+
+                                            </div>
+                                            <div class="col-md-6 form-group"  style="display:none">
+                                                <label for="aesKey">AES(256)密钥(客户对接参数)<span class="text-danger">*</span>&nbsp;
+                                                </label>
+                                                <input id="aesKey" type="text" class="form-control" th:field="*{aesKey}"
+                                                       required="" data-parsley-length="[2,32]" autocomplete="off"
+                                                       readonly>
+                                            </div>
+                                            <div class="col-md-6 form-group"  style="display:none">
+                                                <label for="aesIv">AES(256)偏移量(客户对接参数)<span class="text-danger">*</span>&nbsp;
+                                                </label>
+                                                <input id="aesIv" type="text" class="form-control" th:field="*{aesIv}"
+                                                       required="" data-parsley-length="[2,16]" autocomplete="off"
+                                                       readonly>
+                                            </div>
+
+                                            <div class="col-md-6 form-group">
+                                                <label for="price">解析价格(元/条)<span
+                                                        class="text-danger">*</span>&nbsp;</label>
+                                                <input id="price" type="text" class="form-control" th:field="*{price}"
+                                                       required="" data-parsley-length="[1,12]" data-parsley-min="0.01"
+                                                       autocomplete="off">
+                                            </div>
+                                            <div class="col-md-6 form-group"  style="display:none">
+                                                <label for="secondPrice">xxx价格（每条）<span class="text-danger">*</span>&nbsp;</label>
+                                                <input id="secondPrice" type="text" class="form-control"
+                                                       th:field="*{secondPrice}"
+                                                       required="" data-parsley-length="[1,12]" data-parsley-min="0.00"
+                                                       autocomplete="off">
+                                            </div>
+                                            <div class="col-md-6 form-group"  style="display:none">
+                                                <label for="thirdPrice">xxx价格（每条）<span class="text-danger">*</span>&nbsp;</label>
+                                                <input id="thirdPrice" type="text" class="form-control"
+                                                       th:field="*{thirdPrice}"
+                                                       required="" data-parsley-length="[1,12]" data-parsley-min="0.00"
+                                                       autocomplete="off">
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label for="grantingCredit">账号授信金额（元）<span
+                                                        class="text-danger">*</span></label>
+                                                <input id="grantingCredit" type="text" class="form-control" value="0"
+                                                       th:field="*{grantingCredit}"
+                                                       required="" data-parsley-length="[1,12]" data-parsley-min="0"
+                                                       autocomplete="off">
+                                            </div>
+                                            <div class="col-md-6 form-group" style="display:none">
+                                                <label for="submitLimiter">账号提交速率(次/秒)<span class="text-danger">*</span></label>
+                                                <input id="submitLimiter" type="text" class="form-control" value="0"
+                                                       th:field="*{submitLimiter}"
+                                                       required="" data-parsley-length="[1,2]"
+                                                       data-parsley-type="number" data-parsley-min="1"
+                                                       autocomplete="off">
+                                            </div>
+
+                                            <div class="form-group col-md-12" style="display:none">
+                                                <label for="identifyIp">客户鉴权IP(多个IP用英文逗号隔开，不填写，代表所有IP)&nbsp;
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('identifyIp')}"
+                                                          th:errors="*{identifyIp}"
+                                                          style="font-weight: 200;font-size: 12px"></span></label>
+                                                <input id="identifyIp" type="text" class="form-control"
+                                                       th:field="*{identifyIp}" data-parsley-length="[7,255]"
+                                                       data-parsley-pattern="/^((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d))|\*)((\/([012]\d|3[012]|\d))?)(,((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d))|\*)((\/([012]\d|3[012]|\d))?))*$/"
+                                                       autocomplete="off" placeholder="客户鉴权IP">
+                                            </div>
+                                            <div class="col-md-6 form-group" style="display:none">
+                                                <label class="m-b-10">账号类型</label>
+                                                <br/>
+                                                <mpm:tag id="accountType" identity="idenAccountType"
+                                                         name="accountType" show-type="radio" key="code" required="true"
+                                                         style="margin-top:0px"
+                                                         th:value="${systemAccountInfoValidator.accountType}"
+                                                         title="账号类型"/>
+
+                                            </div>
+                                            <div class="col-md-6 form-group" style="display:none">
+                                                <label class="m-b-10">是否同步到网关</label>
+                                                <br/>
+                                                <div style="margin-top:0px" class="radio radio-info checkbox-inline">
+                                                    <input name="isGateway" type="radio" value="1" required
+                                                           th:checked="${systemAccountInfoValidator.isGateway eq '1'}"><label>同步</label>
+                                                </div>
+                                                <div style="margin-top:0px" class="radio radio-info checkbox-inline">
+                                                    <input name="isGateway" type="radio" value="0" required
+                                                           th:checked="${systemAccountInfoValidator.isGateway eq '0'}"><label>不同步</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 form-group">
+                                                <label class="m-b-10">是否有效</label>
+                                                <br/>
+                                                <div style="margin-top:0px" class="radio radio-info checkbox-inline">
+                                                    <input name="accountStatus" type="radio" value="1" required
+                                                           th:checked="${systemAccountInfoValidator.accountStatus eq '1'}"><label>有效</label>
+                                                </div>
+                                                <div style="margin-top:0px" class="radio radio-info checkbox-inline">
+                                                    <input name="accountStatus" type="radio" value="2" required
+                                                           th:checked="${systemAccountInfoValidator.accountStatus eq '0'}"><label>无效</label>
+                                                </div>
+
+                                            </div>
+
+
+                                            <div class="col-md-12 text-center m-t-20">
+                                                <input type="hidden" th:field="*{enterpriseId}">
+                                                <input type="hidden" th:field="*{createdTime}">
+                                                <input type="hidden" th:field="*{createdBy}">
+                                                <input type="hidden" th:field="*{id}">
+                                                <button sec:authorize-url="/intellect/account/save/*" type="submit"
+                                                        class="btn btn-teal waves-effect waves-light">提交
+                                                </button>
+                                                <a sec:authorize-url="/intellect/account/list"
+                                                   th:href="@{/intellect/account/list}" style="margin-left:20px"
+                                                   class="btn btn-default waves-effect waves-light">返回</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end class p-20 -->
+                            </div> <!-- end col -->
+                        </div> <!-- end row -->
+                    </form>
+                    <!-- end form -->
+                </div> <!-- end card-box -->
+            </div> <!-- end col -->
+        </div>
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<th:block th:insert="fragments/common_fragments :: common_submit_form"/>
+<script>
+
+    function onCheckBoxChange(id,value){
+      if("accountType" == id){
+          $('#accountType-001').attr("checked", '');
+          $('#accountType-004').attr("checked", '');
+      }
+    }
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+
+
+
+</script>
+</body>
+</html>

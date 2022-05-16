@@ -34,6 +34,7 @@ public class IntellectShortUrlRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", i.EXPIRE_TIMES");
         sqlBuffer.append(", i.SHOW_TIMES");
         sqlBuffer.append(", temp.TPL_NAME");
+        sqlBuffer.append(", i.FACTORIES");
         sqlBuffer.append(", i.DYNC_PARAMS");
         sqlBuffer.append(", i.CUSTOM_URL");
         sqlBuffer.append(", i.EXT_DATA");

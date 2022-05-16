@@ -24,7 +24,7 @@ public interface FinanceAccountFeignClient {
     /**
      * 分查询列表
      * @param pageParams
-     * @param flag 1表示业务账号 账户  2表示认证账号 账户 3表示财务共享账号
+     * @param flag  1表示业务账号 账户  2表示认证账号 账户 3表示财务共享账号 4表示共用的账号财务账户
      * @return
      */
     @RequestMapping(value = "/finance/account/page/{flag}", method = RequestMethod.POST)
@@ -32,7 +32,7 @@ public interface FinanceAccountFeignClient {
 
     /**
      * 统计账户金额
-     * @param flag 1 表示业务账号 账户  2表示认证账号 账户 3表示财务共享账户
+     * @param flag  1表示业务账号 账户  2表示认证账号 账户 3表示财务共享账号 4表示共用的账号财务账户
      * @return
      */
     @RequestMapping(value = "/finance/account/count/{flag}", method = RequestMethod.POST)

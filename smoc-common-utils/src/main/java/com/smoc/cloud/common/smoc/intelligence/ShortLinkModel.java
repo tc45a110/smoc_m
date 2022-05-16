@@ -43,4 +43,7 @@ public class ShortLinkModel {
     private String customUrl;
 
     private String params;
+
+    //支持厂商
+    private String factories;
 }

@@ -6,8 +6,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.smoc.cloud.common.gateway.utils.AESUtil;
 import com.smoc.cloud.common.gateway.utils.ValidatorUtil;
+import com.smoc.cloud.common.redis.RedisModel;
 import com.smoc.cloud.common.identification.RequestModel;
-import com.smoc.cloud.common.redis.smoc.identification.KeyEntity;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
@@ -59,7 +59,7 @@ public class IdentificationService {
 
         //log.info("[请求数据]{}", new Gson().toJson(requestModel));
 
-        KeyEntity keyEntity = dataService.getKey(requestModel.getIdentifyAccount());
+        RedisModel keyEntity = dataService.getHttpServerKey(requestModel.getIdentifyAccount());
         if (null == keyEntity) {
             return ResponseDataUtil.buildError(ResponseCode.USER_NOT_EXIST.getCode(), ResponseCode.USER_NOT_EXIST.getMessage());
         }
@@ -181,7 +181,7 @@ public class IdentificationService {
     public ResponseData identificationFace(RequestModel requestModel) {
 
 
-        KeyEntity keyEntity = dataService.getKey(requestModel.getIdentifyAccount());
+        RedisModel keyEntity = dataService.getHttpServerKey(requestModel.getIdentifyAccount());
         if (null == keyEntity) {
             return ResponseDataUtil.buildError(ResponseCode.USER_NOT_EXIST.getCode(), ResponseCode.USER_NOT_EXIST.getMessage());
         }

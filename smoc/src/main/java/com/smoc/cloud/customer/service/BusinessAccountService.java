@@ -2,10 +2,10 @@ package com.smoc.cloud.customer.service;
 
 
 import com.alibaba.fastjson.JSON;
-import com.smoc.cloud.common.http.server.utils.RedisModel;
+import com.smoc.cloud.common.redis.RedisConstant;
+import com.smoc.cloud.common.redis.RedisModel;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
-import com.smoc.cloud.common.redis.smoc.identification.RedisConstant;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
@@ -15,10 +15,8 @@ import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticComplaintData;
 import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.common.smoc.message.MessageAccountValidator;
-import com.smoc.cloud.common.utils.DES;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.customer.entity.AccountBasicInfo;
-import com.smoc.cloud.customer.entity.AccountChannelInfo;
 import com.smoc.cloud.customer.entity.AccountInterfaceInfo;
 import com.smoc.cloud.customer.repository.AccountChannelRepository;
 import com.smoc.cloud.customer.repository.AccountFinanceRepository;
@@ -288,7 +286,7 @@ public class BusinessAccountService {
             Optional<AccountInterfaceInfo> data = accountInterfaceRepository.findById(id);
             AccountInterfaceInfo accountInterfaceInfo = data.get();
             //则放到redis中
-            if ("HTTPS".equals(accountInterfaceInfo.getProtocol())) {
+            if ("HTTPS".equals(accountInterfaceInfo.getProtocol()) || "https".equals(accountInterfaceInfo.getProtocol())) {
                 //放到redis中对象
                 RedisModel redisModel = new RedisModel();
                 redisModel.setMd5HmacKey(accountInterfaceInfo.getAccountPassword());

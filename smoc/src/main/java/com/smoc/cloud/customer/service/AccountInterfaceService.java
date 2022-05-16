@@ -2,8 +2,8 @@ package com.smoc.cloud.customer.service;
 
 
 import com.alibaba.fastjson.JSON;
-import com.smoc.cloud.common.http.server.utils.RedisModel;
-import com.smoc.cloud.common.redis.smoc.identification.RedisConstant;
+import com.smoc.cloud.common.redis.RedisConstant;
+import com.smoc.cloud.common.redis.RedisModel;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
@@ -129,7 +129,7 @@ public class AccountInterfaceService {
         accountInterfaceRepository.saveAndFlush(entity);
 
         //则放到redis中
-        if ("HTTPS".equals(entity.getProtocol())) {
+        if ("HTTPS".equals(entity.getProtocol()) || "https".equals(entity.getProtocol())) {
 
             Optional<AccountBasicInfo> optional = businessAccountRepository.findById(entity.getAccountId());
             AccountBasicInfo accountBasicInfo = optional.get();
@@ -144,7 +144,6 @@ public class AccountInterfaceService {
             //把数据放到redis里
             redisTemplate.opsForValue().set(RedisConstant.HTTP_SERVER_KEY + entity.getAccountId(), redisModel);
         } else {
-            //注销
             redisTemplate.delete(RedisConstant.HTTP_SERVER_KEY + entity.getAccountId());
         }
 

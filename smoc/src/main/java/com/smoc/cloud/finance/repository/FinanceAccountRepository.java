@@ -56,7 +56,7 @@ public interface FinanceAccountRepository extends CrudRepository<FinanceAccount,
 
     /**
      * 汇总金额统计
-     * @param flag 1 表示业务账号 账户  2表示认证账号
+     * @param flag  1表示业务账号 账户  2表示认证账号 账户 3表示财务共享账号 4表示共用的账号财务账户
      * @return
      */
     Map<String,Object> countSum(String flag,FinanceAccountValidator qo);
@@ -139,4 +139,12 @@ public interface FinanceAccountRepository extends CrudRepository<FinanceAccount,
      * @return
      */
     List<FinanceAccountValidator> findSubsidiaryFinanceAccountByAccountId(String accountId);
+
+    /**
+     * 分页查询 系统共用账号财务账户 保障账号类型非空
+     *
+     * @param pageParams
+     * @return
+     */
+    PageList<FinanceAccountValidator> pageSystemAccount(PageParams<FinanceAccountValidator> pageParams);
 }

@@ -18,15 +18,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
-
-import static com.smoc.cloud.common.response.ResponseCode.PARAM_QUERY_ERROR;
 
 
 @Slf4j
@@ -50,7 +47,7 @@ public class FinanceAccountService {
      * 分页查询
      *
      * @param pageParams
-     * @param flag       1表示业务账号 账户  2表示认证账号 账户 3表示财务共享账号
+     * @param flag       1表示业务账号 账户  2表示认证账号 账户 3表示财务共享账号 4表示共用的账号财务账户
      * @return
      */
     public ResponseData<PageList<FinanceAccountValidator>> page(PageParams<FinanceAccountValidator> pageParams, String flag) {
@@ -68,13 +65,21 @@ public class FinanceAccountService {
             return ResponseDataUtil.buildSuccess(data);
         }
 
+        if ("4".equals(flag)) {
+            if (StringUtils.isEmpty(pageParams.getParams().getAccountType())) {
+                return ResponseDataUtil.buildError("业务类型参数不能为空！");
+            }
+            PageList<FinanceAccountValidator> data = financeAccountRepository.pageSystemAccount(pageParams);
+            return ResponseDataUtil.buildSuccess(data);
+        }
+
         return ResponseDataUtil.buildError();
     }
 
     /**
      * 统计账户金额
      *
-     * @param flag 1 表示业务账号 账户  2表示认证账号 账户 3表示财务共享账户
+     * @param flag  1表示业务账号 账户  2表示认证账号 账户 3表示财务共享账号 4表示共用的账号财务账户
      * @return
      */
     public ResponseData<Map<String, Object>> countSum(String flag, FinanceAccountValidator op) {
@@ -228,12 +233,13 @@ public class FinanceAccountService {
 
     /**
      * 查询共享账号的子账号信息
+     *
      * @param accountId
      * @return
      */
     public ResponseData<List<FinanceAccountValidator>> findSubsidiaryFinanceAccountByAccountId(String accountId) {
         Optional<FinanceAccount> optional = financeAccountRepository.findById(accountId);
-        if(optional.isPresent()){
+        if (optional.isPresent()) {
             List<FinanceAccountValidator> data = financeAccountRepository.findSubsidiaryFinanceAccountByAccountId(optional.get().getShareId());
             return ResponseDataUtil.buildSuccess(data);
         }

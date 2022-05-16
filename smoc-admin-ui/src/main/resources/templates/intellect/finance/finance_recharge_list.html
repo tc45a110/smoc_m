@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org"
+>
+<head>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
+    <link th:href="@{/static/css/detail_statistics.css}" rel="stylesheet">
+</head>
+<body style="background-color:#fff">
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 10px;">
+    <div class="container">
+
+        <!-- start row  列表数据-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="panel panel-color panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">智能短信账号充值记录</h3>
+                    </div>
+                    <form id="query_form" th:action="@{/intellect/finance/recharge/page}" th:object="${financeAccountRechargeValidator}" method="post">
+                        <input type="hidden" name="currentPage" id="currentPage"
+                               th:value="${pageParams.currentPage}">
+                        <input type="hidden" name="pageSize" id="pageSize"
+                               th:value="${pageParams.pageSize}">
+                        <input type="hidden" th:field="*{accountId}" >
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table table-hover m-10" style="margin-top: -12px;">
+                                <thead>
+                                <tr>
+                                    <th>充值流水号</th>
+                                    <th>充值金额(元)</th>
+                                    <th>操作人</th>
+                                    <th>操作时间</th>
+                                </tr>
+                                <thead>
+                                <tbody>
+                                <tr th:each="info:${list}">
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        [[${info.rechargeFlowNo}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        ¥ [[${#numbers.formatDecimal(info.rechargeSum,0,'COMMA',2,'POINT')}]]
+
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        [[${info.createdBy}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        [[${info.createdTime}]]
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <hr>
+                        </div>
+                        <th:block th:insert="fragments/page_fragments :: page"/>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+    </div>
+</div> <!-- content -->
+
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<script th:src="@{/static/plugins/moment/moment.js}"></script>
+<script th:src="@{/static/plugins/bootstrap-inputmask/bootstrap-inputmask.min.js}"></script>
+<script th:src="@{/static/plugins/autoNumeric/autoNumeric.js}"></script>
+<script>
+
+    $(document).ready(function() {
+
+		$('.autonumber').autoNumeric('init');
+	 });
+
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+
+
+</script>
+</body>
+</html>

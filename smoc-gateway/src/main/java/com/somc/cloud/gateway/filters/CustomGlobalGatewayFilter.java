@@ -3,13 +3,12 @@ package com.somc.cloud.gateway.filters;
 import com.google.gson.Gson;
 import com.smoc.cloud.common.gateway.request.RequestStardardHeaders;
 import com.smoc.cloud.common.gateway.utils.ValidatorUtil;
-import com.smoc.cloud.common.http.server.utils.RedisModel;
+import com.smoc.cloud.common.redis.RedisModel;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.somc.cloud.gateway.redis.service.DataService;
 import com.somc.cloud.gateway.util.IpUtil;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -36,6 +35,7 @@ import java.util.regex.Pattern;
  * 全局过滤器
  * 拦截非post请求，只允许post请求；
  * 对于post请求进行请求HttpHeaders初步验证
+ * 对提交速率进行限制
  */
 @Slf4j
 @Component

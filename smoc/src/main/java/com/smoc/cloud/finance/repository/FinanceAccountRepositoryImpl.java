@@ -160,6 +160,8 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
         return pageList;
     }
 
+
+
     /**
      * 分页查询 业务财务账户
      *
@@ -203,7 +205,7 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
         //企业ID
         if (!StringUtils.isEmpty(qo.getEnterpriseId())) {
             sqlBuffer.append(" and e.ENTERPRISE_ID = ?");
-            paramsList.add(qo.getEnterpriseId().trim() );
+            paramsList.add(qo.getEnterpriseId().trim());
         }
         //账号
         if (!StringUtils.isEmpty(qo.getAccountId())) {
@@ -241,7 +243,7 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
     /**
      * 汇总金额统计
      *
-     * @param flag 1表示业务账号 账户  2表示认证账号 账户 3表示财务共享账户
+     * @param flag 1表示业务账号 账户  2表示认证账号 账户 3表示财务共享账号 4表示共用的账号财务账户
      * @return
      */
     public Map<String, Object> countSum(String flag, FinanceAccountValidator qo) {
@@ -265,6 +267,11 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
         if ("3".equals(flag)) {
             sql.append("  from finance_account t,enterprise_basic_info e ");
             sql.append("  where  t.ENTERPRISE_ID = e.ENTERPRISE_ID and t.ACCOUNT_TYPE ='SHARE_ACCOUNT'");
+        }
+
+        if ("4".equals(flag)) {
+            sql.append("  from finance_account t,enterprise_basic_info e ");
+            sql.append("  where  t.ENTERPRISE_ID = e.ENTERPRISE_ID   ");
         }
 
         List<Object> paramsList = new ArrayList<Object>();
@@ -293,6 +300,17 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
             if (!StringUtils.isEmpty(qo.getAccountName())) {
                 sql.append(" and t.ACCOUNT_NAME like ?");
                 paramsList.add("%" + qo.getAccountName().trim() + "%");
+            }
+        }
+
+        //根据业务类型查询统计
+        if ("4".equals(flag)) {
+            //业务类型
+            if (!StringUtils.isEmpty(qo.getAccountType())) {
+                sql.append(" and t.ACCOUNT_TYPE = ? ");
+                paramsList.add(qo.getAccountType().trim());
+            } else {
+                return null;
             }
         }
         //账号状态
@@ -442,6 +460,7 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
 
     /**
      * 查询共享账号的子账号信息
+     *
      * @param accountId
      * @return
      */
@@ -450,11 +469,11 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
         String[] accountIds = accountId.split(",");
 
         String account = "";
-        for(int i =0;i<accountIds.length;i++){
-            if(StringUtils.isEmpty(account)){
-                account+="'"+accountIds[i]+"'";
-            }else{
-                account+=",'"+accountIds[i]+"'";
+        for (int i = 0; i < accountIds.length; i++) {
+            if (StringUtils.isEmpty(account)) {
+                account += "'" + accountIds[i] + "'";
+            } else {
+                account += ",'" + accountIds[i] + "'";
             }
         }
 
@@ -521,7 +540,7 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
         //log.info("[qo]:{}",new Gson().toJson(qo));
 
         //如果没有选择 共享分账号 则只创建 共享账号本身信息
-        if(StringUtils.isEmpty(qo.getAccountIds())){
+        if (StringUtils.isEmpty(qo.getAccountIds())) {
             //创建共享账户语句
             StringBuffer sb = new StringBuffer("insert into finance_account(ACCOUNT_ID,ACCOUNT_TYPE,ACCOUNT_NAME,ENTERPRISE_ID,ACCOUNT_TOTAL_SUM,ACCOUNT_USABLE_SUM,ACCOUNT_FROZEN_SUM,ACCOUNT_CONSUME_SUM,ACCOUNT_RECHARGE_SUM,ACCOUNT_CREDIT_SUM,ACCOUNT_STATUS,IS_SHARE,SHARE_ID,CREATED_BY,CREATED_TIME) ");
             sb.append(" values('" + qo.getAccountId() + "','SHARE_ACCOUNT','" + qo.getAccountName() + "','" + qo.getEnterpriseId() + "',0.00,0.00,0.00,0.00,0.00," + qo.getAccountCreditSum() + ",'1','0','" + qo.getAccountIds() + "','" + qo.getCreatedBy() + "',now()) ");
@@ -631,7 +650,7 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
 
 
         //新共享与 原来共享的账户 都为空，则只修改 共享账号本身信息
-        if(StringUtils.isEmpty(qo.getAccountIds()) && StringUtils.isEmpty(financeAccountValidator.getShareId())){
+        if (StringUtils.isEmpty(qo.getAccountIds()) && StringUtils.isEmpty(financeAccountValidator.getShareId())) {
             //更新共享账户语句
             StringBuffer updateShareFinanceAccount = new StringBuffer();
             updateShareFinanceAccount.append("update finance_account set ACCOUNT_NAME='" + qo.getAccountName() + "',ACCOUNT_CREDIT_SUM =" + qo.getAccountCreditSum() + " ,UPDATED_BY='" + qo.getCreatedBy() + "',UPDATED_TIME=now() where ACCOUNT_ID ='" + qo.getAccountId() + "'");
@@ -654,7 +673,7 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
         //现有共享分账户  所有的现有分财务账户，在map 中初始化为false
         String[] shareIds = null;
         //原来共享账户不为空
-        if(!StringUtils.isEmpty(financeAccountValidator.getShareId())) {
+        if (!StringUtils.isEmpty(financeAccountValidator.getShareId())) {
             shareIds = financeAccountValidator.getShareId().split(",");
             for (int i = 0; i < shareIds.length; i++) {
                 shareIdsMap.put(shareIds[i].trim(), false);
@@ -664,7 +683,7 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
 
         //新共享分账户
         String[] accountIds = null;
-        if(!StringUtils.isEmpty(qo.getAccountIds())){
+        if (!StringUtils.isEmpty(qo.getAccountIds())) {
             accountIds = qo.getAccountIds().split(",");
             for (int i = 0; i < accountIds.length; i++) {
                 //表示该共享分账户，存在现有数据中
@@ -680,9 +699,9 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
 
 
         //新数据没有选择共享账户，原数据有共享账户，则删除原共享账户共享的账户
-        if(null ==accountIds && shareIds !=null){
-            String[] sql = new String[shareIdsMap.size()*2+1];
-            int deleteIndex=0;
+        if (null == accountIds && shareIds != null) {
+            String[] sql = new String[shareIdsMap.size() * 2 + 1];
+            int deleteIndex = 0;
             //现有的分共享账户被删除,所以要恢复被删除的分财务账户
             for (String key : shareIdsMap.keySet()) {
                 //修改原来合并账户明细 的状态
@@ -827,15 +846,93 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
         selectCount.append(" from finance_account_share_detail where SHARE_ACCOUNT_ID ='" + qo.getAccountId() + "' ");
         Map<String, Object> map = jdbcTemplate.queryForMap(selectCount.toString());
         if (null == map || map.size() < 1) {
-           map = new HashMap<>();
-           map.put("USABLE_SUM_POOL",0.00);
-           map.put("FREEZE_SUM_POOL",0.00);
+            map = new HashMap<>();
+            map.put("USABLE_SUM_POOL", 0.00);
+            map.put("FREEZE_SUM_POOL", 0.00);
         }
 
         StringBuffer updateShareFinanceAccount = new StringBuffer();
         updateShareFinanceAccount.append("update finance_account set ACCOUNT_USABLE_SUM = ACCOUNT_USABLE_SUM+" + map.get("USABLE_SUM_POOL") + ",ACCOUNT_FROZEN_SUM = ACCOUNT_FROZEN_SUM+" + map.get("FREEZE_SUM_POOL") + ",SHARE_ID='" + qo.getAccountIds() + "' , ACCOUNT_NAME='" + qo.getAccountName() + "',ACCOUNT_CREDIT_SUM =" + qo.getAccountCreditSum() + " ,UPDATED_BY='" + qo.getCreatedBy() + "',UPDATED_TIME=now() where ACCOUNT_ID ='" + qo.getAccountId() + "'");
         //log.info("[sq++++++++++]:{}",updateShareFinanceAccount.toString());
         this.jdbcTemplate.update(updateShareFinanceAccount.toString());
+    }
+
+    /**
+     * 分页查询 系统共用账号财务账户 保障账号类型非空
+     *
+     * @param pageParams
+     * @return
+     */
+    public PageList<FinanceAccountValidator> pageSystemAccount(PageParams<FinanceAccountValidator> pageParams) {
+
+        //查询条件
+        FinanceAccountValidator qo = pageParams.getParams();
+
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append("  t.ACCOUNT_ID,");
+        sqlBuffer.append("  e.ENTERPRISE_NAME,");
+        sqlBuffer.append("  e.ENTERPRISE_ID,");
+        sqlBuffer.append("  i.ACCOUNT ACCOUNT_NAME,");
+        sqlBuffer.append("  i.ACCOUNT ACCOUNT,");
+        sqlBuffer.append("  t.ACCOUNT_TYPE,");
+        sqlBuffer.append("  t.ACCOUNT_TOTAL_SUM,");
+        sqlBuffer.append("  t.ACCOUNT_USABLE_SUM,");
+        sqlBuffer.append("  t.ACCOUNT_FROZEN_SUM,");
+        sqlBuffer.append("  t.ACCOUNT_CONSUME_SUM,");
+        sqlBuffer.append("  t.ACCOUNT_RECHARGE_SUM,");
+        sqlBuffer.append("  t.ACCOUNT_CREDIT_SUM,");
+        sqlBuffer.append("  t.ACCOUNT_STATUS,");
+        sqlBuffer.append("  t.SHARE_ID,");
+        sqlBuffer.append("  t.IS_SHARE,");
+        sqlBuffer.append("  t.CREATED_BY,");
+        sqlBuffer.append("  DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME ");
+        sqlBuffer.append("  from finance_account t,system_account_info i,enterprise_basic_info e ");
+        sqlBuffer.append("  where t.ACCOUNT_ID = i.ACCOUNT and i.ENTERPRISE_ID = e.ENTERPRISE_ID and i.ACCOUNT_STATUS='1' ");
+
+        List<Object> paramsList = new ArrayList<Object>();
+
+        //企业名称
+        if (!StringUtils.isEmpty(qo.getEnterpriseName())) {
+            sqlBuffer.append(" and e.ENTERPRISE_NAME like ?");
+            paramsList.add("%" + qo.getEnterpriseName().trim() + "%");
+        }
+        //企业ID
+        if (!StringUtils.isEmpty(qo.getEnterpriseId())) {
+            sqlBuffer.append(" and e.ENTERPRISE_ID = ?");
+            paramsList.add("%" + qo.getEnterpriseId().trim() + "%");
+        }
+        //认证账号
+        if (!StringUtils.isEmpty(qo.getAccountName())) {
+            sqlBuffer.append(" and i.ACCOUNT =?");
+            paramsList.add(qo.getAccountName().trim());
+        }
+        //账号状态
+        if (!StringUtils.isEmpty(qo.getAccountStatus())) {
+            sqlBuffer.append(" and t.ACCOUNT_STATUS =?");
+            paramsList.add(qo.getAccountStatus().trim());
+        }
+
+        //账号
+        if (!StringUtils.isEmpty(qo.getAccountId())) {
+            sqlBuffer.append(" and t.ACCOUNT_ID =?");
+            paramsList.add(qo.getAccountId().trim());
+        }
+        //账号类型
+        if (!StringUtils.isEmpty(qo.getAccountType())) {
+            sqlBuffer.append(" and t.ACCOUNT_TYPE =?");
+            paramsList.add(qo.getAccountType().trim());
+        }
+
+        sqlBuffer.append(" order by t.CREATED_TIME desc");
+
+        //根据参数个数，组织参数值
+        Object[] params = new Object[paramsList.size()];
+        paramsList.toArray(params);
+
+        PageList<FinanceAccountValidator> pageList = this.queryByPageForMySQL(sqlBuffer.toString(), params, pageParams.getCurrentPage(), pageParams.getPageSize(), new FinanceAccountRowMapper());
+        pageList.getPageParams().setParams(qo);
+        return pageList;
     }
 
 }
