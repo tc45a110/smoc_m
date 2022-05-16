@@ -48,6 +48,11 @@ public class IntellectShortUrlRepositoryImpl extends BasePageRepository {
 
         List<Object> paramsList = new ArrayList<Object>();
 
+        if (!StringUtils.isEmpty(qo.getCustFlag())) {
+            sqlBuffer.append(" and i.CUST_FLAG = ? ");
+            paramsList.add(qo.getCustFlag().trim());
+        }
+
         if (!StringUtils.isEmpty(qo.getCustId())) {
             sqlBuffer.append(" and i.CUST_ID = ? ");
             paramsList.add(qo.getCustId().trim());

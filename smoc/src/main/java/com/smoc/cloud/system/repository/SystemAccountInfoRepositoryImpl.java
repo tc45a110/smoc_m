@@ -46,6 +46,11 @@ public class SystemAccountInfoRepositoryImpl extends BasePageRepository {
             sqlBuffer.append(" and e.ENTERPRISE_NAME like ?");
             paramsList.add("%" + qo.getEnterpriseName().trim() + "%");
         }
+        //企业ID
+        if (!StringUtils.isEmpty(qo.getEnterpriseId())) {
+            sqlBuffer.append(" and t.ENTERPRISE_ID =?");
+            paramsList.add(qo.getEnterpriseId().trim());
+        }
         //账号
         if (!StringUtils.isEmpty(qo.getAccount())) {
             sqlBuffer.append(" and t.ACCOUNT =?");

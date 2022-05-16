@@ -67,6 +67,13 @@ com:
           resource-file-size-limit: 4096  #彩信资源文件大小限制，以K为单位
           stay-times: 2 #彩信帧默认停留时间（秒）
 
+        intelligence:
+          account: AP0681
+          password: 679870213340024832lwoSvz
+          domain: domain
+          server-address: https://tpl-aim.monyun.cn:57123
+          view-address: http://localhost:8080
+
     #**********************************************************
     # 内置tomcat 配置
     #**********************************************************

@@ -48,6 +48,11 @@ public class IntellectTemplateInfoRepositoryImpl extends BasePageRepository {
 
         List<Object> paramsList = new ArrayList<Object>();
 
+        if (!StringUtils.isEmpty(qo.getEnterpriseId())) {
+            sqlBuffer.append(" and i.ENTERPRISE_ID = ? ");
+            paramsList.add(qo.getEnterpriseId().trim());
+        }
+
         if (!StringUtils.isEmpty(qo.getAccountId())) {
             sqlBuffer.append(" and i.ACCOUNT_ID = ? ");
             paramsList.add(qo.getAccountId().trim());

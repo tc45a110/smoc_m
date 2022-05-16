@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org"
+>
+<head>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
+    <link th:href="@{/static/css/detail_statistics.css}" rel="stylesheet">
+</head>
+<body>
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <!-- start row 页面导航-->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">智能短信模查询(梦网)</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            智能短信
+                        </li>
+                        <li>
+                            智能短信模查询(梦网)
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  查询条件-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <form id="query_form" th:action="@{/intel/template/remote/page}"
+                          method="post">
+                        <div class="row m-b-60">
+                            <div class="col-sm-12">
+                                <div class="form-group col-sm-3 pull-right" style="text-align: right">
+                                    <button sec:authorize-url="/intel/template/remote/page" type="submit"
+                                            class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-search"></i> 查询
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  列表数据-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="panel panel-color panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">智能短信模版列表</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table table-hover m-10" style="margin-top: -12px;">
+                                <thead>
+                                <tr>
+                                    <th>模板主题</th>
+                                    <th>板式</th>
+                                    <th>业务场景</th>
+                                    <th>模板掩码</th>
+                                    <th>短信示例</th>
+                                    <th>参数个数</th>
+                                    <th>审核状态</th>
+                                    <th>模版状态</th>
+                                    <th>创建时间</th>
+                                    <th>操作</th>
+                                </tr>
+                                <thead>
+                                <tbody>
+                                <tr th:each="info:${list}">
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        [[${info.tplName}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <a th:if="${'com.hbm.carouse'==info.cardId}"
+                                           class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">横滑类 1</a>
+                                        <a th:if="${'com.hbm.carouseltitle'==info.cardId}"
+                                           class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">横滑类 2</a>
+                                        <a th:if="${'com.hbm.notification'==info.cardId}"
+                                           class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">通知类</a>
+                                        <a th:if="${'com.hbm.video'==info.cardId}"
+                                           class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">视频类</a>
+                                        <a th:if="${'com.hbm.imageandtext'==info.cardId}"
+                                           class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">图文类</a>
+                                        <a th:if="${'com.hbm.trip'==info.cardId}"
+                                           class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">行程类</a>
+                                        <a th:if="${'com.hbm.standardimageandtext'==info.cardId}"
+                                           class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">多图文类</a>
+                                        <a th:if="${'com.hbm.redpacket'==info.cardId}"
+                                           class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">红包类</a>
+                                        <a th:if="${'com.hbm.news'==info.cardId}"
+                                           class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">新闻类</a>
+                                        <a th:if="${'com.hbm.ecImageAndText'==info.cardId}"
+                                           class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">电商类</a>
+                                        <a th:if="${'com.hbm.videoimageandtext'==info.cardId}"
+                                           class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">视频图文</a>
+                                        <a th:if="${'com.hbm.carouselImageSixteenToNine:'==info.cardId}"
+                                           class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">图片轮播类</a>
+                                        <a th:if="${'com.hbm.carouselQuareImage'==info.cardId}"
+                                           class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">图片轮播类 1：1</a>
+                                        <a th:if="${'com.hbm.carouselVerticalImage'==info.cardId}"
+                                           class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">图片轮播类 48：65</a>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        [[${info.scene}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        [[${info.tplMask}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        [[${info.description}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        [[${info.paramcnt}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <a th:if="${0==info.auditState}"
+                                           class="btn btn-warning btn-rounded  waves-effect waves-light btn-ms">未提交</a>
+                                        <a th:if="${1==info.auditState}"
+                                           class="btn btn-info btn-rounded  waves-effect waves-light btn-ms">待审核</a>
+                                        <a th:if="${2==info.auditState}"
+                                           class="btn btn-success btn-rounded  waves-effect waves-light btn-ms">通过审核</a>
+                                        <a th:if="${3==info.auditState}"
+                                           class="btn btn-danger btn-rounded  waves-effect waves-light btn-ms">审核失败</a>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <a th:if="${1==info.tplState}"
+                                           class="btn btn-success btn-rounded  waves-effect waves-light btn-ms">启用</a>
+                                        <a th:if="${0==info.tplState}"
+                                           class="btn btn-danger btn-rounded  waves-effect waves-light btn-ms">禁用</a>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        [[${info.createTime}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <a  target="_blank"
+                                           th:href="@{/intel/template/preview/{tplId}(tplId=${info.tplId})}"
+                                           data-toggle="tooltip" data-placement="bottom"
+                                           data-original-title="预览"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color:#4BD396;"><i style="font-size: 18px"
+                                                                                       class="glyphicon glyphicon-search"></i></a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <hr>
+                        </div>
+                        <th:block th:insert="fragments/page_fragments :: page"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start confirm delete modal  -->
+        <div id="confirm-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="custom-width-modalLabel"
+             aria-hidden="true" style="display: none;margin: 60px">
+            <div class="modal-dialog" style="width:33%;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title" id="custom-width-modalLabel">确认注销</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>注销之后，该账户将无法使用！你还是确认注销？</p>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" id="deleteId">
+                        <a class="btn btn-default waves-effect" data-dismiss="modal">取消</a>
+                        <button onclick="logoutById()" class="btn btn-primary waves-effect waves-light">确认注销</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end confirm delete modal  -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+    </div>
+</div> <!-- content -->
+
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<th:block th:insert="fragments/cookie_fragments :: cookie_js"/>
+<script th:src="@{/static/plugins/moment/moment.js}"></script>
+<script th:src="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.js}"></script>
+<script th:src="@{/static/plugins/bootstrap-inputmask/bootstrap-inputmask.min.js}"></script>
+<script th:src="@{/static/plugins/autoNumeric/autoNumeric.js}"></script>
+<script>
+
+    function confirmLogout(id) {
+        $("#deleteId").val(id);
+    }
+
+    //注销
+    function logoutById() {
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $('#preloader').css('display', 'block');
+        location.href = contextPath + '/identification/account/logout/' + $("#deleteId").val();
+    }
+
+
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+
+
+
+</script>
+</body>
+</html>

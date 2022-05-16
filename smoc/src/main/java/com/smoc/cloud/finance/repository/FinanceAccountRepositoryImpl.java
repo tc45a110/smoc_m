@@ -900,7 +900,7 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
         //企业ID
         if (!StringUtils.isEmpty(qo.getEnterpriseId())) {
             sqlBuffer.append(" and e.ENTERPRISE_ID = ?");
-            paramsList.add("%" + qo.getEnterpriseId().trim() + "%");
+            paramsList.add(qo.getEnterpriseId().trim());
         }
         //认证账号
         if (!StringUtils.isEmpty(qo.getAccountName())) {
