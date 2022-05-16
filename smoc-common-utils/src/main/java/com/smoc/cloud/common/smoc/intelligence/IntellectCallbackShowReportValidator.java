@@ -32,4 +32,6 @@ public class IntellectCallbackShowReportValidator {
     private String createdBy;
 
     private String createdTime;
+
+    private String enterpriseName;
 }

@@ -26,6 +26,7 @@ public class IntellectCallbackShowReportRepositoryImpl extends BasePageRepositor
         sqlBuffer.append("  t.ID");
         sqlBuffer.append(", t.ORDER_NO");
         sqlBuffer.append(", t.CUST_FLAG");
+        sqlBuffer.append(", e.ENTERPRISE_NAME");
         sqlBuffer.append(", t.CUST_ID");
         sqlBuffer.append(", t.AIM_URL");
         sqlBuffer.append(", t.AIM_CODE");
@@ -35,8 +36,8 @@ public class IntellectCallbackShowReportRepositoryImpl extends BasePageRepositor
         sqlBuffer.append(", t.DESCRIBE");
         sqlBuffer.append(", t.CREATED_BY");
         sqlBuffer.append(", DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME");
-        sqlBuffer.append("  from intellect_callback_show_report t   ");
-        sqlBuffer.append("  where (1=1) ");
+        sqlBuffer.append("  from intellect_callback_show_report t,enterprise_basic_info e   ");
+        sqlBuffer.append("  where e.ENTERPRISE_ID = t.CUST_FLAG ");
 
         List<Object> paramsList = new ArrayList<Object>();
 
@@ -48,6 +49,11 @@ public class IntellectCallbackShowReportRepositoryImpl extends BasePageRepositor
         if (!StringUtils.isEmpty(qo.getTplId())) {
             sqlBuffer.append(" and t.TPL_ID = ? ");
             paramsList.add(qo.getTplId().trim());
+        }
+
+        if (!StringUtils.isEmpty(qo.getEnterpriseName())) {
+            sqlBuffer.append(" and e.ENTERPRISE_NAME like ?");
+            paramsList.add("%" + qo.getEnterpriseName().trim() + "%");
         }
 
         sqlBuffer.append(" order by t.CREATED_TIME desc");

@@ -26,6 +26,7 @@ public class IntellectCallbackTemplateStatusReportRepositoryImpl extends BasePag
         sqlBuffer.append(", t.ORDER_NO");
         sqlBuffer.append(", t.TPL_ID");
         sqlBuffer.append(", t.BIZ_ID");
+        sqlBuffer.append(", e.ENTERPRISE_NAME");
         sqlBuffer.append(", t.BIZ_FLAG");
         sqlBuffer.append(", t.TPL_STATE");
         sqlBuffer.append(", t.AUDIT_STATE");
@@ -35,14 +36,24 @@ public class IntellectCallbackTemplateStatusReportRepositoryImpl extends BasePag
         sqlBuffer.append(", t.STATE");
         sqlBuffer.append(", t.CREATED_BY");
         sqlBuffer.append(", DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME");
-        sqlBuffer.append("  from intellect_callback_template_status_report t ");
-        sqlBuffer.append("  where (1=1) ");
+        sqlBuffer.append("  from intellect_callback_template_status_report t,enterprise_basic_info e ");
+        sqlBuffer.append("  where t.BIZ_ID= e.ENTERPRISE_ID ");
 
         List<Object> paramsList = new ArrayList<Object>();
 
         if (!StringUtils.isEmpty(qo.getTplId())) {
             sqlBuffer.append(" and t.TPL_ID = ? ");
             paramsList.add(qo.getTplId().trim());
+        }
+
+        if (!StringUtils.isEmpty(qo.getBizFlag())) {
+            sqlBuffer.append(" and t.BIZ_FLAG = ? ");
+            paramsList.add(qo.getBizFlag().trim());
+        }
+
+        if (!StringUtils.isEmpty(qo.getEnterpriseName())) {
+            sqlBuffer.append(" and e.ENTERPRISE_NAME like ?");
+            paramsList.add("%" + qo.getEnterpriseName().trim() + "%");
         }
 
         sqlBuffer.append(" order by t.CREATED_TIME desc");

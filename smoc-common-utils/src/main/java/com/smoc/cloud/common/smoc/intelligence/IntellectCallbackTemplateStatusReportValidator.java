@@ -34,4 +34,6 @@ public class IntellectCallbackTemplateStatusReportValidator {
     private String createdBy;
 
     private String createdTime;
+
+    private String enterpriseName;
 }

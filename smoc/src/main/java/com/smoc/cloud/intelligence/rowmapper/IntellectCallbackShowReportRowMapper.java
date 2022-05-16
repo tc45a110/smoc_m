@@ -13,6 +13,7 @@ public class IntellectCallbackShowReportRowMapper implements RowMapper<Intellect
         qo.setId(resultSet.getString("ID"));
         qo.setOrderNo(resultSet.getString("ORDER_NO"));
         qo.setCustFlag(resultSet.getString("CUST_FLAG"));
+        qo.setEnterpriseName(resultSet.getString("ENTERPRISE_NAME"));
         qo.setCustId(resultSet.getString("CUST_ID"));
         qo.setTplId(resultSet.getString("TPL_ID"));
         qo.setAimUrl(resultSet.getString("AIM_URL"));
