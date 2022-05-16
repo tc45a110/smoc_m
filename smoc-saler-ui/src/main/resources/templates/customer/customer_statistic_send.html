@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <link th:href="@{/static/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css}" rel="stylesheet">
+    <script th:src="@{/static/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js}"></script>
+</head>
+<body>
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Start content -->
+
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+        <div class="row fixed-navigation">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">客户发送量统计 </h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            客户发送量统计
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  查询条件-->
+        <div class="row" style="position: relative;margin-top: 80px" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <form th:action="@{/customer/statistic/statisticSendQuery}" th:object="${accountStatisticSendData}" id="query_form" method="post">
+                        <div class="row m-b-60">
+                            <div class="col-sm-12">
+                                <div class="form-group  col-sm-4">
+                                    <input type="text" class="form-control" id="enterpriseName" th:field="*{enterpriseName}"
+                                           placeholder="企业名称" autocomplete="off">
+                                </div>
+
+                                <div class="form-group col-sm-6 pull-right" style="text-align: right">
+                                    <button sec:authorize-url="/customer/statistic/statisticSendQuery" type="submit"
+                                            class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-search" style="margin-right:5px"></i> 查询
+                                    </button>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+
+
+        <div class="row">
+
+            <div class="col-lg-12">
+                <div class="card-box">
+                    <div id="main1" style="height: 480px;"></div>
+                </div>
+            </div><!-- end col -->
+
+            <div class="col-lg-12">
+                <div class="card-box">
+                    <div id="main2" style="height: 480px;"></div>
+                </div>
+            </div><!-- end col -->
+
+        </div>
+        <!-- end row -->
+
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<script th:src="@{/static/assets/js/jquery.min.js}"></script>
+<script th:src="@{/static/echarts/echarts.min.js}"></script>
+<script th:src="@{/static/plugins/autoNumeric/autoNumeric.js}"></script>
+<script>
+
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        contentType:"application/json;charset=UTF-8",
+        url : '[[${#httpServletRequest.getContextPath()}]]/customer/statistic/statisticSendMonthByName',
+        data:"{\"enterpriseName\":\""+$("#enterpriseName").val()+"\"}",
+        success : function(data) {
+            articles = eval(data);
+            option2 = {
+                title: {
+                    text: '近24个月发送量统计（W）',
+                    x: 'left'
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                },
+                legend: {
+                    data: ['发送量统计']
+                },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        mark: {show: false},
+                        dataView: {show: true, readOnly: false},
+                        magicType: {show: true, type: ['line', 'bar']},
+                        restore: {show: false},
+                        saveAsImage: {show: true}
+                    }
+                },
+                calculable: true,
+                xAxis: [
+                    {
+                        type: 'category',
+                        axisTick: {show: false},
+                        axisLabel: {
+                            interval: 'auto',
+                            rotate: 30
+                        },
+                        data: articles.monthArray
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value'
+                    }
+                ],
+                grid: {
+                    x2: 40
+                },
+                series: [
+                    {
+                        name: '发送量统计',
+                        type: 'line',
+                        stack: '总量',
+                        itemStyle: {
+                            normal: {
+                                color: '#66AAE7',
+                                barBorderRadius: 0,
+                                label: {
+                                    show: true,
+                                    position: 'insideTop'
+                                }
+                            }
+                        },
+                        data: articles.sendNumberArray,
+
+                    }
+                ]
+            };
+
+            myChart2 = echarts.init(document.getElementById('main1'));
+            myChart2.setOption(option2);
+        }
+    });
+
+
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        contentType:"application/json;charset=UTF-8",
+        url : '[[${#httpServletRequest.getContextPath()}]]/customer/statistic/statisticSendDayByName',
+        data:"{\"enterpriseName\":\""+$("#enterpriseName").val()+"\"}",
+        success : function(data) {
+            articles = eval(data);
+            option2 = {
+                title: {
+                    text: '近180天发送量统计（W）',
+                    x: 'left'
+                },
+                color: ['#71D5DE'],
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                },
+                legend: {
+                    data: ['发送量统计']
+                },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        mark: {show: false},
+                        dataView: {show: true, readOnly: false},
+                        magicType: {show: true, type: ['line', 'bar']},
+                        restore: {show: false},
+                        saveAsImage: {show: true}
+                    }
+                },
+                calculable: true,
+                xAxis: [
+                    {
+                        type: 'category',
+                        axisTick: {show: false},
+                        axisLabel: {
+                            interval: 'auto',
+                            rotate: 30
+                        },
+                        data: articles.monthArray
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value'
+                    }
+                ],
+                grid: {
+                    x2: 40
+                },
+                series: [
+                    {
+                        name: '发送量统计',
+                        type: 'line',
+                        stack: '总量',
+                        /*itemStyle: {
+                            normal: {
+                                color: '#71D5DE',
+                                barBorderRadius: 0,
+                                label: {
+                                    show: true,
+                                    position: 'insideTop'
+                                }
+                            }
+                        },*/
+                        data: articles.sendNumberArray,
+
+                    }
+                ]
+            };
+
+            myChart2 = echarts.init(document.getElementById('main2'));
+            myChart2.setOption(option2);
+        }
+    });
+</script>
+
+<script type="text/javascript">
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+</script>
+
+</body>
+</html>

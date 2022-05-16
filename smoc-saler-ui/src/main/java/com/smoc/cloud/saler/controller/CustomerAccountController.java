@@ -1,15 +1,19 @@
 package com.smoc.cloud.saler.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
+import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
 import com.smoc.cloud.common.smoc.saler.qo.CustomerAccountInfoQo;
 import com.smoc.cloud.saler.service.CustomerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -86,7 +90,7 @@ public class CustomerAccountController {
     }
 
     /**
-     * 账号发送量统计
+     * 单个账号发送量统计
      *
      * @return
      */
@@ -103,8 +107,14 @@ public class CustomerAccountController {
             return view;
         }
 
+        //查询企业基本数据
+        ResponseData<EnterpriseBasicInfoValidator> data = customerService.findEnterpriseBasicInfoById(info.getData().getEnterpriseId());
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+        }
+
         //判断是否是本人客户
-        if(!user.getOrganization().equals(info.getData().getEnterpriseId())){
+        if(!user.getId().equals(data.getData().getSaler())){
             view.addObject("error", "无权限查看");
             return view;
         }
@@ -112,6 +122,107 @@ public class CustomerAccountController {
         view.addObject("accountId", accountId);
 
         return view;
+    }
 
+    /**
+     * 单个账号发送量统计按月Ajax
+     * @param accountId
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/account/statistic/statisticAccountSendMonth/{accountId}/{type}", method = RequestMethod.GET)
+    public AccountStatisticSendData statisticAccountSendMonth(@PathVariable String accountId, @PathVariable String type,HttpServletRequest request) {
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        //查询账号信息
+        ResponseData<AccountBasicInfoValidator> info = customerService.findAccountById(accountId);
+        if (!ResponseCode.SUCCESS.getCode().equals(info.getCode())) {
+            return new AccountStatisticSendData();
+        }
+
+        //查询企业基本数据
+        ResponseData<EnterpriseBasicInfoValidator> data = customerService.findEnterpriseBasicInfoById(info.getData().getEnterpriseId());
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            return new AccountStatisticSendData();
+        }
+
+        //判断是否是本人客户
+        if(!user.getId().equals(data.getData().getSaler())){
+            return new AccountStatisticSendData();
+        }
+
+        AccountStatisticSendData statisticSendData = new AccountStatisticSendData();
+        statisticSendData.setAccountId(accountId);
+        statisticSendData.setDimension(type);
+
+        statisticSendData = customerService.statisticSendNumberMonthByAccount(statisticSendData);
+
+        return statisticSendData;
+    }
+
+    /**
+     * 客户发送量统计显示页面：根据企业查询
+     *
+     * @return
+     */
+    @RequestMapping(value = "/statistic/statisticSendMonth", method = RequestMethod.GET)
+    public ModelAndView statisticSendMonth(HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("customer/customer_statistic_send");
+
+        AccountStatisticSendData accountStatisticSendData = new AccountStatisticSendData();
+
+        view.addObject("accountStatisticSendData", accountStatisticSendData);
+
+        return view;
+    }
+
+    /**
+     * 查询客户发送量统计显示页面：根据企业查询
+     *
+     * @return
+     */
+    @RequestMapping(value = "/statistic/statisticSendQuery", method = RequestMethod.POST)
+    public ModelAndView statisticSendQuery(@ModelAttribute AccountStatisticSendData accountStatisticSendData,HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("customer/customer_statistic_send");
+
+        view.addObject("accountStatisticSendData", accountStatisticSendData);
+
+        return view;
+    }
+
+    /**
+     * 企业发送量统计按月：根据企业查询
+     * @param statisticSendData
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/statistic/statisticSendMonthByName", method = RequestMethod.POST)
+    public AccountStatisticSendData statisticSendByName(@RequestBody AccountStatisticSendData statisticSendData, HttpServletRequest request) {
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        statisticSendData.setSaler(user.getId());
+        statisticSendData.setDimension("month");
+
+        statisticSendData = customerService.statisticSendNumberByEnterpriseName(statisticSendData);
+
+        return statisticSendData;
+    }
+
+    /**
+     * 企业发送量统计按天：根据企业查询
+     * @param statisticSendData
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/statistic/statisticSendDayByName", method = RequestMethod.POST)
+    public AccountStatisticSendData statisticSendDayByName(@RequestBody AccountStatisticSendData statisticSendData, HttpServletRequest request) {
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        statisticSendData.setSaler(user.getId());
+        statisticSendData.setDimension("day");
+
+        statisticSendData = customerService.statisticSendNumberByEnterpriseName(statisticSendData);
+
+        return statisticSendData;
     }
 }

@@ -58,6 +58,14 @@ com:
           resource-url: http://39.107.110.237/smoc/message/resource #访问资源路径
           resource-file-root-path: /alidata/smoc/message/resource  #资源文件根目录
 
+        intelligence:
+          account: AP0681
+          password: 679870213340024832lwoSvz
+          domain: domain
+          server-address: https://tpl-aim.monyun.cn:57123
+          view-address: http://localhost:8080
+          resource-file-root-path: /alidata/smoc/intelect/resource/  #资源文件根目录
+
     #**********************************************************
     # 内置tomcat 配置
     #**********************************************************

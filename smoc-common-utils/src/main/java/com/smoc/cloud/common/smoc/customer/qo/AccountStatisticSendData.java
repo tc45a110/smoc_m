@@ -31,4 +31,7 @@ public class AccountStatisticSendData {
 
     private String maxMonth;
     private String minMonth;
+
+    private String saler;
+    private String enterpriseName;
 }

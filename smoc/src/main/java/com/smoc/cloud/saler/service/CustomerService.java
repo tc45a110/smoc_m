@@ -5,6 +5,7 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
 import com.smoc.cloud.common.smoc.saler.qo.CustomerAccountInfoQo;
 import com.smoc.cloud.saler.repository.CustomerRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 客户管理
@@ -38,4 +40,23 @@ public class CustomerService {
         return ResponseDataUtil.buildSuccess(list);
     }
 
+    /**
+     * 单个账号发送量统计按月
+     * @param statisticSendData
+     * @return
+     */
+    public ResponseData<List<AccountStatisticSendData>> statisticSendNumberMonthByAccount(AccountStatisticSendData statisticSendData) {
+        List<AccountStatisticSendData> list = customerRepository.statisticSendNumberMonthByAccount(statisticSendData);
+        return ResponseDataUtil.buildSuccess(list);
+    }
+
+    /**
+     * 根据企业查询账号发送量统计按月
+     * @param statisticSendData
+     * @return
+     */
+    public ResponseData<List<AccountStatisticSendData>> statisticSendNumberByEnterpriseName(AccountStatisticSendData statisticSendData) {
+        List<AccountStatisticSendData> list = customerRepository.statisticSendNumberByEnterpriseName(statisticSendData);
+        return ResponseDataUtil.buildSuccess(list);
+    }
 }
