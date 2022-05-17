@@ -281,6 +281,11 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
             sql.append(" and e.ENTERPRISE_NAME like ? ");
             paramsList.add("%" + qo.getEnterpriseName().trim() + "%");
         }
+        //企业ID
+        if (!StringUtils.isEmpty(qo.getEnterpriseId())) {
+            sql.append(" and e.ENTERPRISE_ID = ? ");
+            paramsList.add( qo.getEnterpriseId().trim());
+        }
         //账号
         if (!StringUtils.isEmpty(qo.getAccountId())) {
             sql.append(" and t.ACCOUNT_ID = ? ");
@@ -292,6 +297,11 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
             if (!StringUtils.isEmpty(qo.getAccountName())) {
                 sql.append(" and i.ACCOUNT_NAME like ? ");
                 paramsList.add("%" + qo.getAccountName().trim() + "%");
+            }
+            //账号类型
+            if (!StringUtils.isEmpty(qo.getAccountType())) {
+                sql.append(" and t.ACCOUNT_TYPE =? ");
+                paramsList.add(qo.getAccountType().trim());
             }
         }
 

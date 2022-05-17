@@ -51,6 +51,12 @@ public class UserCacheService {
         if (hasMenuKey) {
             redisTemplate.delete(RedisConstant.AUTH_USER_MENUS + ":" + projectName + ":" + userId);
         }
+
+        //清除自服务平台缓存
+        if("smoc-service".equals(projectName)){
+            deleteServiceKey(userId);
+        }
+
         log.info("[清除用户缓存][clearUsersCache]数据：{}-{}-{}",projectName,userName,userId);
         return ResponseDataUtil.buildSuccess();
     }
@@ -82,5 +88,16 @@ public class UserCacheService {
         Token token = new Token();
         token.setToken(tokenData);
         return ResponseDataUtil.buildSuccess(token);
+    }
+
+    /**
+     * 清除自服务平台缓存
+     */
+    private void deleteServiceKey(String userId) {
+        redisTemplate.delete(RedisConstant.SERICE_UI_MENUS + ":" + userId + ":" + "文本短信");
+        redisTemplate.delete(RedisConstant.SERICE_UI_MENUS + ":" + userId + ":" + "视频短信");
+        redisTemplate.delete(RedisConstant.SERICE_UI_MENUS + ":" + userId + ":" + "国际短信");
+        redisTemplate.delete(RedisConstant.SERICE_UI_MENUS + ":" + userId + ":" + "智能短信");
+        redisTemplate.delete(RedisConstant.SERICE_UI_MENUS + ":" + userId + ":" + "错误码");
     }
 }

@@ -21,7 +21,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 财务账户
@@ -61,9 +63,12 @@ public class FinanceAccountController {
             return view;
         }
 
+        ResponseData<Map<String, Object>> count = financeAccountService.count(financeAccountValidator,"1");
+
         view.addObject("financeAccountValidator", financeAccountValidator);
         view.addObject("list", data.getData().getList());
         view.addObject("pageParams", data.getData().getPageParams());
+        view.addObject("counter", count.getData());
         return view;
     }
 
@@ -88,9 +93,12 @@ public class FinanceAccountController {
             return view;
         }
 
+        ResponseData<Map<String, Object>> count = financeAccountService.count(financeAccountValidator,"1");
+
         view.addObject("financeAccountValidator", financeAccountValidator);
         view.addObject("list", data.getData().getList());
         view.addObject("pageParams", data.getData().getPageParams());
+        view.addObject("counter", count.getData());
 
         return view;
     }
@@ -125,6 +133,13 @@ public class FinanceAccountController {
             return view;
         }
 
+        ResponseData<Map<String, Object>> countData = financeAccountService.countRechargeSum(financeAccountRechargeValidator);
+        if (!ResponseCode.SUCCESS.getCode().equals(countData.getCode())) {
+            view.addObject("error", countData.getCode() + ":" + countData.getMessage());
+            return view;
+        }
+
+        view.addObject("count", countData.getData() == null?new HashMap<>():countData.getData());
         view.addObject("financeAccountRechargeValidator", financeAccountRechargeValidator);
         view.addObject("list", data.getData().getList());
         view.addObject("pageParams", data.getData().getPageParams());
@@ -158,7 +173,13 @@ public class FinanceAccountController {
             return view;
         }
 
+        ResponseData<Map<String, Object>> countData = financeAccountService.countRechargeSum(financeAccountRechargeValidator);
+        if (!ResponseCode.SUCCESS.getCode().equals(countData.getCode())) {
+            view.addObject("error", countData.getCode() + ":" + countData.getMessage());
+            return view;
+        }
 
+        view.addObject("count", countData.getData() == null?new HashMap<>():countData.getData());
         view.addObject("list", data.getData().getList());
         view.addObject("pageParams", data.getData().getPageParams());
         view.addObject("financeAccountRechargeValidator", financeAccountRechargeValidator);

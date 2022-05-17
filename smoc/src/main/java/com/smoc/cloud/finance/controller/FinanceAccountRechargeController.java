@@ -50,4 +50,16 @@ public class FinanceAccountRechargeController {
 
         return financeAccountRechargeService.countRechargeSum(financeAccountRechargeValidator);
     }
+
+    /**
+     * 统计充值金额
+     *
+     * @param financeAccountRechargeValidator
+     * @return
+     */
+    @RequestMapping(value = "/statisticRechargeSum/{flag}", method = RequestMethod.POST)
+    public ResponseData<Map<String, Object>> statisticRechargeSum(@RequestBody FinanceAccountRechargeValidator financeAccountRechargeValidator, @PathVariable String flag) {
+
+        return financeAccountRechargeService.statisticRechargeSum(financeAccountRechargeValidator,flag);
+    }
 }

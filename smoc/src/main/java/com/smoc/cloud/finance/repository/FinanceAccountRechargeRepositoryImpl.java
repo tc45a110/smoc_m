@@ -121,6 +121,15 @@ public class FinanceAccountRechargeRepositoryImpl extends BasePageRepository {
             paramsList.add(qo.getRechargeSource().trim());
         }
 
+        if (!StringUtils.isEmpty(qo.getStartDate())) {
+            sqlBuffer.append(" and DATE_FORMAT(t.CREATED_TIME,'%Y-%m-%d') >=? ");
+            paramsList.add(qo.getStartDate().trim());
+        }
+        if (!StringUtils.isEmpty(qo.getEndDate())) {
+            sqlBuffer.append(" and DATE_FORMAT(t.CREATED_TIME,'%Y-%m-%d') <=? ");
+            paramsList.add(qo.getEndDate().trim());
+        }
+
         sqlBuffer.append(" order by t.CREATED_TIME desc");
 
         //根据参数个数，组织参数值
@@ -219,6 +228,11 @@ public class FinanceAccountRechargeRepositoryImpl extends BasePageRepository {
             sql.append(" and t.ENTERPRISE_NAME like ? ");
             paramsList.add("%" + qo.getEnterpriseName().trim() + "%");
         }
+        //企业ID
+        if (!StringUtils.isEmpty(qo.getEnterpriseId())) {
+            sql.append(" and t.ENTERPRISE_ID = ?");
+            paramsList.add(qo.getEnterpriseId().trim());
+        }
         //认证账号
         if (!StringUtils.isEmpty(qo.getAccountId())) {
             sql.append(" and t.ACCOUNT_ID =? ");
@@ -243,6 +257,53 @@ public class FinanceAccountRechargeRepositoryImpl extends BasePageRepository {
         Object[] params = new Object[paramsList.size()];
         paramsList.toArray(params);
         Map<String, Object> map = jdbcTemplate.queryForMap(sql.toString(), params);
+        //log.info(new Gson().toJson(map));
+        return map;
+    }
+
+    /**
+     * 统计充值金额
+     *
+     * @param qo
+     * @return
+     */
+    public Map<String, Object> intellectRechargeSum(FinanceAccountRechargeValidator qo) {
+        StringBuffer sqlBuffer = new StringBuffer("select");
+        sqlBuffer.append("  sum(t.RECHARGE_SUM) RECHARGE_SUM ");
+        sqlBuffer.append("  from finance_account_recharge t,system_account_info i");
+        sqlBuffer.append("  where t.ACCOUNT_ID = i.ACCOUNT ");
+
+        List<Object> paramsList = new ArrayList<Object>();
+
+        //企业ID
+        if (!StringUtils.isEmpty(qo.getEnterpriseId())) {
+            sqlBuffer.append(" and i.ENTERPRISE_ID = ?");
+            paramsList.add(qo.getEnterpriseId().trim());
+        }
+        //账号
+        if (!StringUtils.isEmpty(qo.getAccountId())) {
+            sqlBuffer.append(" and t.ACCOUNT_ID =?");
+            paramsList.add(qo.getAccountId().trim());
+        }
+        //充值来源
+        if (!StringUtils.isEmpty(qo.getRechargeSource())) {
+            sqlBuffer.append(" and t.RECHARGE_SOURCE = ?");
+            paramsList.add(qo.getRechargeSource().trim());
+        }
+
+        if (!StringUtils.isEmpty(qo.getStartDate())) {
+            sqlBuffer.append(" and DATE_FORMAT(t.CREATED_TIME,'%Y-%m-%d') >=? ");
+            paramsList.add(qo.getStartDate().trim());
+        }
+        if (!StringUtils.isEmpty(qo.getEndDate())) {
+            sqlBuffer.append(" and DATE_FORMAT(t.CREATED_TIME,'%Y-%m-%d') <=? ");
+            paramsList.add(qo.getEndDate().trim());
+        }
+
+        //根据参数个数，组织参数值
+        Object[] params = new Object[paramsList.size()];
+        paramsList.toArray(params);
+        Map<String, Object> map = jdbcTemplate.queryForMap(sqlBuffer.toString(), params);
         //log.info(new Gson().toJson(map));
         return map;
     }

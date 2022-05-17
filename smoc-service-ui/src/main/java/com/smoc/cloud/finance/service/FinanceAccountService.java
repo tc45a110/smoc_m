@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 
 @Slf4j
@@ -78,6 +79,53 @@ public class FinanceAccountService {
     public ResponseData<List<FinanceAccountValidator>> findSubsidiaryFinanceAccountByAccountId(String accountId) {
         try {
             return this.financeAccountFeignClient.findSubsidiaryFinanceAccountByAccountId(accountId);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 统计账户金额
+     *
+     * @param flag  1表示业务账号 账户  2表示认证账号 账户 3表示财务共享账号 4表示共用的账号财务账户
+     * @return
+     */
+    public ResponseData<Map<String, Object>> count(FinanceAccountValidator financeAccountValidator, String flag) {
+        try {
+            return this.financeAccountFeignClient.count(financeAccountValidator,flag);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 统计充值金额
+     *
+     * @param financeAccountRechargeValidator
+     * @return
+     */
+    public ResponseData<Map<String, Object>> countRechargeSum(FinanceAccountRechargeValidator financeAccountRechargeValidator) {
+
+        try {
+            return this.financeAccountFeignClient.countRechargeSum(financeAccountRechargeValidator);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 统计充值金额
+     * @param financeAccountRechargeValidator
+     * @param flag
+     * @return
+     */
+    public ResponseData<Map<String, Object>> statisticRechargeSum(FinanceAccountRechargeValidator financeAccountRechargeValidator,String flag) {
+
+        try {
+            return this.financeAccountFeignClient.statisticRechargeSum(financeAccountRechargeValidator,flag);
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseDataUtil.buildError(e.getMessage());

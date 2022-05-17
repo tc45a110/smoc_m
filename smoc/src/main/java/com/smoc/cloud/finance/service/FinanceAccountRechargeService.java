@@ -61,4 +61,21 @@ public class FinanceAccountRechargeService {
         Map<String, Object> data = financeAccountRechargeRepository.countRechargeSum(qo);
         return ResponseDataUtil.buildSuccess(data);
     }
+
+    /**
+     * 统计充值金额
+     * @param financeAccountRechargeValidator
+     * @param flag 1表示业务账号 账户  2表示认证账号 账户  4表示智能账号
+     * @return
+     */
+    public ResponseData<Map<String, Object>> statisticRechargeSum(FinanceAccountRechargeValidator financeAccountRechargeValidator, String flag) {
+
+        //智能短信
+        if ("4".equals(flag)) {
+            Map<String, Object> data = financeAccountRechargeRepository.intellectRechargeSum(financeAccountRechargeValidator);
+            return ResponseDataUtil.buildSuccess(data);
+        }
+
+        return ResponseDataUtil.buildError();
+    }
 }

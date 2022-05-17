@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -24,7 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 @Controller
 @RequestMapping("/intellect/account")
-public class IntellectAccountSearchController {
+public class IntellectAccountController {
 
     @Autowired
     private SystemAccountInfoService systemAccountInfoService;
@@ -37,9 +38,13 @@ public class IntellectAccountSearchController {
      *
      * @return
      */
-    @RequestMapping(value = "/search/list", method = RequestMethod.GET)
-    public ModelAndView list(HttpServletRequest request) {
+    @RequestMapping(value = "/list/{base}", method = RequestMethod.GET)
+    public ModelAndView list(@PathVariable String base, HttpServletRequest request) {
         ModelAndView view = new ModelAndView("intellect/search/account_list");
+
+        if("base".equals(base)){
+            view = new ModelAndView("intellect/finance/account_list");
+        }
 
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
 
@@ -62,6 +67,7 @@ public class IntellectAccountSearchController {
         view.addObject("systemAccountInfoValidator", systemAccountInfoValidator);
         view.addObject("list", data.getData().getList());
         view.addObject("pageParams", data.getData().getPageParams());
+        view.addObject("base", base);
 
         return view;
 
@@ -72,11 +78,15 @@ public class IntellectAccountSearchController {
      *
      * @return
      */
-    @RequestMapping(value = "/search/page", method = RequestMethod.POST)
-    public ModelAndView page(@ModelAttribute SystemAccountInfoValidator systemAccountInfoValidator, PageParams pageParams, HttpServletRequest request) {
+    @RequestMapping(value = "/page/{base}", method = RequestMethod.POST)
+    public ModelAndView page(@ModelAttribute SystemAccountInfoValidator systemAccountInfoValidator,@PathVariable String base, PageParams pageParams, HttpServletRequest request) {
 
         ModelAndView view = new ModelAndView("intellect/search/account_list");
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        if("base".equals(base)){
+            view = new ModelAndView("intellect/finance/account_list");
+        }
 
         //分页查询
         systemAccountInfoValidator.setBusinessType(this.businessType);
@@ -92,6 +102,7 @@ public class IntellectAccountSearchController {
         view.addObject("systemAccountInfoValidator", systemAccountInfoValidator);
         view.addObject("list", data.getData().getList());
         view.addObject("pageParams", data.getData().getPageParams());
+        view.addObject("base", base);
 
         return view;
     }

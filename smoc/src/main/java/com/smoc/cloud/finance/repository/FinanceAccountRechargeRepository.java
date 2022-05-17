@@ -32,10 +32,17 @@ public interface FinanceAccountRechargeRepository extends JpaRepository<FinanceA
     PageList<FinanceAccountRechargeValidator> pageBusiness(PageParams<FinanceAccountRechargeValidator> pageParams);
 
     /**
-     * 统计充值金额
+     * 统计充值金额：查询视图
      *
      * @param qo
      * @return
      */
      Map<String, Object> countRechargeSum(FinanceAccountRechargeValidator qo);
+
+    /**
+     * 统计充值金额：根据表查询
+     * @param financeAccountRechargeValidator
+     * @return
+     */
+    Map<String, Object> intellectRechargeSum(FinanceAccountRechargeValidator financeAccountRechargeValidator);
 }

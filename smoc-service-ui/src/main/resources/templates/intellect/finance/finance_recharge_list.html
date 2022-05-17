@@ -71,6 +71,26 @@
         </div>
         <!-- end row -->
 
+        <!-- start row  汇总统计-->
+        <div id="help" class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="detail">
+                    <ul>
+                        <li>
+                            <h2 style="color: #fff">充值明细统计</h2>
+                            <span></span>
+                            <div class="detailInner">
+                                <a>充值总金额（元）：<span data-d-group="4" data-a-sign="¥ "
+                                                  style="color:#fff;width:80px;background-color:#0095a8;text-align:left"
+                                                  class="autonumber">[[${count.get('RECHARGE_SUM')}]]</span></a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
         <!-- start row  列表数据-->
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">

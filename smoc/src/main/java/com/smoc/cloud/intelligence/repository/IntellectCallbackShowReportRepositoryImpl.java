@@ -46,6 +46,11 @@ public class IntellectCallbackShowReportRepositoryImpl extends BasePageRepositor
             paramsList.add(qo.getCustId().trim());
         }
 
+        if (!StringUtils.isEmpty(qo.getCustFlag())) {
+            sqlBuffer.append(" and t.CUST_FLAG = ? ");
+            paramsList.add(qo.getCustFlag().trim());
+        }
+
         if (!StringUtils.isEmpty(qo.getTplId())) {
             sqlBuffer.append(" and t.TPL_ID = ? ");
             paramsList.add(qo.getTplId().trim());
