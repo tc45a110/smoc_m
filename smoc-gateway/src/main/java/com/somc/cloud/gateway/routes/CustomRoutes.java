@@ -1,12 +1,7 @@
 package com.somc.cloud.gateway.routes;
 
-import com.somc.cloud.gateway.limiter.HostAddrKeyResolver;
-import com.somc.cloud.gateway.limiter.UserKeyResolver;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
-import org.springframework.cloud.gateway.filter.ratelimit.RedisRateLimiter;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
@@ -23,13 +18,17 @@ import javax.annotation.Resource;
 @Component
 public class CustomRoutes {
 
-    //验签过滤器
+    //身份认证验签过滤器
     @Resource
-    private GatewayFilter verifySignatureGatewayFilter;
+    private GatewayFilter identitySignatureGatewayFilter;
 
-    //验签过滤器
+    //http短信服务验签过滤器
     @Resource
-    private GatewayFilter httpServerSignatureGatewayFilter;
+    private GatewayFilter shortMessageSignatureGatewayFilter;
+
+    //梦网回执
+    @Resource
+    private GatewayFilter intellectSignatureGatewayFilter;
 
     @Bean
     public RouteLocator identityRouteLocator(RouteLocatorBuilder builder) {
@@ -44,16 +43,16 @@ public class CustomRoutes {
                 .route(r -> r.method(HttpMethod.POST).and().path("/smoc-gateway/identity/smoc-identity/**").and().header("signature-nonce", "\\d+").and().readBody(String.class, requestBody -> {
                             //相当于缓存了body信息，在filter 中可以这么获取 exchange.getAttribute("cachedRequestBodyObject");
                             return true;
-                        }).filters(f -> f.stripPrefix(2).filter(verifySignatureGatewayFilter)).uri("lb://smoc-identity")
+                        }).filters(f -> f.stripPrefix(2).filter(identitySignatureGatewayFilter)).uri("lb://smoc-identity")
 
                 )
                 /**
-                 * 智能短信回执 暂时没有鉴权，在全局过滤器中，抛开
+                 * 智能短信回执
                  */
                 .route(r -> r.method(HttpMethod.POST).and().path("/smoc-gateway/intellect/smoc-identity/AimService/**").and().readBody(String.class, requestBody -> {
                             //相当于缓存了body信息，在filter 中可以这么获取 exchange.getAttribute("cachedRequestBodyObject");
                             return true;
-                        }).filters(f -> f.stripPrefix(2)).uri("lb://smoc-identity")
+                        }).filters(f -> f.stripPrefix(2).filter(intellectSignatureGatewayFilter)).uri("lb://smoc-identity")
 
                 )
                 /**
@@ -62,7 +61,7 @@ public class CustomRoutes {
                 .route(r -> r.method(HttpMethod.POST).and().path("/smoc-gateway/http-server/**").and().header("signature-nonce", "\\d+").and().readBody(String.class, requestBody -> {
                             //相当于缓存了body信息，在filter 中可以这么获取 exchange.getAttribute("cachedRequestBodyObject");
                             return true;
-                        }).filters(f -> f.stripPrefix(1).filter(httpServerSignatureGatewayFilter)).uri("lb://smoc-http-server")
+                        }).filters(f -> f.stripPrefix(1).filter(shortMessageSignatureGatewayFilter)).uri("lb://smoc-http-server")
 
                 ).build();
     }

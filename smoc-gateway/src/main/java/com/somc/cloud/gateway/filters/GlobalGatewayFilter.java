@@ -61,7 +61,6 @@ public class GlobalGatewayFilter implements GlobalFilter, Ordered {
         Pattern aim = Pattern.compile("AimService");
         Matcher aimMatcher = aim.matcher(uri.toString());
         if (aimMatcher.find()) {
-            log.info("[梦网回执][数据]URI:{}", uri.toString());
             return chain.filter(exchange);
         }
 

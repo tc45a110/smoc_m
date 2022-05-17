@@ -1,17 +1,15 @@
 package com.somc.cloud.gateway.filters;
 
 import com.google.gson.Gson;
-import com.smoc.cloud.common.gateway.request.HttpServerSignModel;
+import com.smoc.cloud.common.gateway.request.RequestSignModel;
 import com.smoc.cloud.common.gateway.request.RequestStardardHeaders;
-import com.smoc.cloud.common.gateway.utils.HMACUtil;
 import com.smoc.cloud.common.gateway.utils.ValidatorUtil;
-import com.smoc.cloud.common.http.server.utils.Constant;
 import com.smoc.cloud.common.redis.RedisModel;
+import com.somc.cloud.gateway.configuration.GatewayConfigurationProperties;
+import com.smoc.cloud.common.gateway.utils.HMACUtil;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
-import com.smoc.cloud.common.utils.DES;
-import com.somc.cloud.gateway.configuration.GatewayConfigurationProperties;
 import com.somc.cloud.gateway.redis.service.DataService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,17 +29,13 @@ import reactor.core.publisher.Mono;
 
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
- * http短信发送服务，验证签名
+ * 身份认证服务，验证签名
  */
 @Slf4j
 @Component
-public class HttpServerVerifySignatureGatewayFilter {
-
+public class IdentityGatewayFilter {
 
     @Autowired
     private DataService dataService;
@@ -55,29 +49,29 @@ public class HttpServerVerifySignatureGatewayFilter {
      * @return
      */
     @Bean
-    public GatewayFilter httpServerSignatureGatewayFilter() {
+    public GatewayFilter identitySignatureGatewayFilter() {
         return new GatewayFilter() {
             @Override
             public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
 
                 ServerHttpRequest request = exchange.getRequest();
+                URI uri = request.getURI();
+                log.info("[身份认证请求]URI:{}", uri.toString());
 
                 //HttpHeaders 自定义的headers 组织签名信息;headers 数据已经经过了非空验证
                 HttpHeaders headers = exchange.getRequest().getHeaders();
+
                 String signatureNonce = headers.getFirst("signature-nonce");
                 String signature = headers.getFirst("signature");
                 String account = headers.getFirst("account");
                 RequestStardardHeaders requestHeaderData = new RequestStardardHeaders();
                 requestHeaderData.setSignatureNonce(signatureNonce);
                 requestHeaderData.setSignature(signature);
-                requestHeaderData.setAccount(account);
-                //log.info("[接口请求][账户:{}]header数据:{}", account, new Gson().toJson(requestHeaderData));
 
                 //获取body内容
                 String requestBody = "";
                 if (HttpMethod.POST.equals(exchange.getRequest().getMethod())) {
                     requestBody = exchange.getAttribute("cachedRequestBodyObject");
-                    //log.info("[接口请求]请求数据:{}", requestBody);
                 }
 
                 //requestBody 为空
@@ -86,15 +80,15 @@ public class HttpServerVerifySignatureGatewayFilter {
                 }
 
                 //校验数据请求的数据结构
-                HttpServerSignModel model;
+                RequestSignModel model;
                 try {
-                    model = new Gson().fromJson(requestBody, HttpServerSignModel.class);
+                    model = new Gson().fromJson(requestBody, RequestSignModel.class);
                 } catch (Exception e) {
                     return errorHandle(exchange, ResponseCode.PARAM_FORMAT_ERROR.getCode(), ResponseCode.PARAM_FORMAT_ERROR.getMessage());
                 }
 
                 //header account 与 model account 保持一致
-                if (!account.equals(model.getAccount())) {
+                if (!account.equals(model.getIdentifyAccount())) {
                     return errorHandle(exchange, ResponseCode.PARAM_FORMAT_ERROR.getCode(), "account数据不一致");
                 }
 
@@ -104,38 +98,27 @@ public class HttpServerVerifySignatureGatewayFilter {
                     return errorHandle(exchange, ResponseCode.PARAM_FORMAT_ERROR.getCode(), errorMessage);
                 }
 
+                //log.info("[接口请求][账户:{}]header数据:{}", model.getIdentifyAccount(), new Gson().toJson(requestHeaderData));
+
                 //取密钥数据
-                RedisModel redisModel = dataService.getHttpServerKey(model.getAccount());
+                RedisModel redisModel = dataService.getHttpServerKey(model.getIdentifyAccount());
                 if (null == redisModel || StringUtils.isEmpty(redisModel.getMd5HmacKey())) {
                     return errorHandle(exchange, ResponseCode.USER_NOT_EXIST.getCode(), ResponseCode.USER_NOT_EXIST.getMessage());
                 }
+                //log.info("[签名密钥]{}",new Gson().toJson(keyEntity));
 
-                /**
-                 * 账号 业务对应关系
-                 */
-                Map<String, String> businessAccountMap = Constant.BUSINESS_ACCOUNT_MAP;
-                URI uri = request.getURI();
-                for (Map.Entry<String, String> map : businessAccountMap.entrySet()) {
-                    Pattern UrlPattern = Pattern.compile(map.getKey());
-                    Matcher matcher = UrlPattern.matcher(uri.toString());
-                    if (matcher.find()) {
-                        //log.info("[账号、业务类型的映射关系]需要业务类型:{}", map.getValue());
-                        if (!map.getValue().equals(redisModel.getBusinessType())) {
-                            return errorHandle(exchange, ResponseCode.ACCOUNT_BUSINESS_ERROR.getCode(), ResponseCode.ACCOUNT_BUSINESS_ERROR.getMessage());
-                        }
-                    }
-                }
+                String md5HmacKey = redisModel.getMd5HmacKey();
 
-                //组织签名数据
-                String md5HmacKey = DES.decrypt(redisModel.getMd5HmacKey());
+                //签名数据
                 StringBuffer signData = new StringBuffer();
                 signData.append(requestHeaderData.getSignatureNonce().trim());
                 signData.append(model.getOrderNo().trim());
-                signData.append(model.getAccount());
-                signData.append(model.getTimestamp().trim());
+                signData.append(model.getIdentifyAccount());
+                signData.append(model.getCardNo().trim());
 
-                //校验签名
+                //校验签名数据
                 boolean verifySign = HMACUtil.verifySign(signData.toString(), requestHeaderData.getSignature(), md5HmacKey, gatewayConfigurationProperties.getSignStyle());
+                //签名错误
                 if (!verifySign) {
                     return errorHandle(exchange, ResponseCode.SIGN_ERROR.getCode(), ResponseCode.SIGN_ERROR.getMessage());
                 }
@@ -158,4 +141,7 @@ public class HttpServerVerifySignatureGatewayFilter {
         DataBuffer bodyDataBuffer = response.bufferFactory().wrap(bytes);
         return exchange.getResponse().writeWith(Flux.just(bodyDataBuffer));
     }
+
+
 }
+

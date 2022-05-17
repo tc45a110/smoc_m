@@ -24,7 +24,6 @@ public class IntellectShowReport {
        String timestamp = DateTimeUtils.getDateFormat(new Date(), "MMddHHmmss");
        header.put("timestamp", timestamp);
        header.put("pwd", DigestUtils.md5Hex("AP0681".toUpperCase() + "00000000" + "679870213340024832lwoSvz" + timestamp));
-
        //
        Map<String,Object> data = new HashMap<>();
        data.put("tplId","600060181");

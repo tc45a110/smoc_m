@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-@ConfigurationProperties(prefix = "com.smoc.cloud.gateway.configuration")
+@ConfigurationProperties(prefix = "com.smoc.cloud.gateway.configuration.signature")
 public class GatewayConfigurationProperties {
 
     // 签名、验签算法，支持md5_HMAC、sha256_HMAC、sha384_HMAC、sha512_HMAC
