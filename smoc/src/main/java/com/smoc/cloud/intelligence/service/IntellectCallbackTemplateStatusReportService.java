@@ -51,7 +51,7 @@ public class IntellectCallbackTemplateStatusReportService {
         log.info("[智能短信][模版管理][模版状态回调][{}]数据:{}", JSON.toJSONString(entity));
 
         //变更模版状态
-        intellectCallbackTemplateStatusReportRepository.updateTemplateStatus(intellectCallbackTemplateStatusReportValidator.getTplId(), intellectCallbackTemplateStatusReportValidator.getState(), intellectCallbackTemplateStatusReportValidator.getAuditState(), intellectCallbackTemplateStatusReportValidator.getAuditDesc());
+        intellectCallbackTemplateStatusReportRepository.updateTemplateStatus(intellectCallbackTemplateStatusReportValidator.getTplId(), 1, intellectCallbackTemplateStatusReportValidator.getAuditState(), intellectCallbackTemplateStatusReportValidator.getAuditDesc());
 
         //保存模版状态回执
         intellectCallbackTemplateStatusReportRepository.saveAndFlush(entity);

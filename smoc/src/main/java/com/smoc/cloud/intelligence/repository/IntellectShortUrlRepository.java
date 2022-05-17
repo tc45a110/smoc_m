@@ -22,7 +22,7 @@ public interface IntellectShortUrlRepository extends JpaRepository<IntellectShor
      */
     PageList<IntellectShortUrlValidator> page(PageParams<IntellectShortUrlValidator> pageParams);
 
-    List<IntellectShortUrl> findIntellectShortUrlByCustIdAndAimCodeAndAimUrl(String custId,String aimCode,String aimUrl);
+    List<IntellectShortUrl> findIntellectShortUrlByTplIdAndCustIdAndAimCodeAndAimUrl(String tplId,String custId,String aimCode,String aimUrl);
 
     @Modifying
     @Query(value = "update intellect_short_url set SUCCESS_ANALYSIS = SUCCESS_ANALYSIS+:successAnalysis where ID = :id ", nativeQuery = true)

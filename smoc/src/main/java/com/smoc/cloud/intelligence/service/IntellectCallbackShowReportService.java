@@ -62,7 +62,7 @@ public class IntellectCallbackShowReportService {
         //根据状态，进行扣费操作
         if (0 == intellectCallbackShowReportValidator.getStatus()) { //表示成功解析
             //查询原锻炼数据，里面有价格
-            List<IntellectShortUrl> shortUrls = intellectShortUrlRepository.findIntellectShortUrlByCustIdAndAimCodeAndAimUrl(intellectCallbackShowReportValidator.getCustId(), intellectCallbackShowReportValidator.getAimCode(), intellectCallbackShowReportValidator.getAimUrl());
+            List<IntellectShortUrl> shortUrls = intellectShortUrlRepository.findIntellectShortUrlByTplIdAndCustIdAndAimCodeAndAimUrl(intellectCallbackShowReportValidator.getTplId().trim(), intellectCallbackShowReportValidator.getCustId(), intellectCallbackShowReportValidator.getAimCode().trim(), intellectCallbackShowReportValidator.getAimUrl().trim());
             //从冻结中扣除金额
             if (null != shortUrls && shortUrls.size() > 0) {
                 IntellectShortUrl shortUrl = shortUrls.get(0);
