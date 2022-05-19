@@ -44,4 +44,6 @@ public interface KeywordsRepository extends CrudRepository<FilterKeyWordsInfo, S
      * @param filterKeyWordsInfoValidator
      */
     void expBatchSave(FilterKeyWordsInfoValidator filterKeyWordsInfoValidator);
+
+    List<FilterKeyWordsInfo> findByKeyWordsBusinessTypeAndBusinessIdAndKeyWordsTypeAndKeyWordsAndWaskKeyWords(String keyWordsBusinessType, String businessId, String keyWordsType, String keyWords, String waskKeyWordsType);
 }

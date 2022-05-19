@@ -25,14 +25,14 @@
             <div class="col-xs-12">
                 <div class="page-title-box">
                     <h4 class="page-title">
-                        系统<span th:if="${filterKeyWordsInfoValidator.businessId eq 'CHECK'}">审核词</span><span th:if="${filterKeyWordsInfoValidator.businessId eq 'BLACK'}">黑词</span>
+                        系统白词</span>
                         </h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
                             过滤配置
                         </li>
                         <li class="active">
-                            系统<span th:if="${filterKeyWordsInfoValidator.businessId eq 'CHECK'}">审核词</span><span th:if="${filterKeyWordsInfoValidator.businessId eq 'BLACK'}">黑词</span>
+                            系统白词</span>
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -47,23 +47,33 @@
                 <div class="card-box">
                     <div class="row m-b-60">
                         <div class="col-sm-12">
-                            <form id="query_form" th:action="@{/filter/keywords/SYSTEM/page}" th:object="${filterKeyWordsInfoValidator}" method="post">
+                            <form id="query_form" th:action="@{/filter/keywords/white/SYSTEM/page}" th:object="${filterKeyWordsInfoValidator}" method="post">
                                 <div class="form-group  col-sm-3">
                                     <input type="text" class="form-control" th:field="*{keyWords}" autocomplete="off"
-                                           th:placeholder="${filterKeyWordsInfoValidator.businessId eq 'CHECK' ? '审核词' : (filterKeyWordsInfoValidator.businessId eq 'BLACK' ? '黑词' : '关键词')}">
+                                           placeholder="白词">
                                 </div>
+                                <div class="form-group  col-sm-3">
+                                    <select data-style="btn-default" name="keyWordsType" data-live-search="true" id="keyWordsType" class="selectpicker form-control" tabindex="-98">
+                                        <option value="" data-icon="mdi mdi-appnet">--请选择白词类别--</option>
+                                        <option data-icon="mdi mdi-appnet" value="WHITE_AVOID_CHECK" th:selected="${filterKeyWordsInfoValidator.keyWordsType eq 'WHITE_AVOID_CHECK'}">免审白词</option>
+                                        <option data-icon="mdi mdi-appnet" value="WHITE_AVOID_BLACK" th:selected="${filterKeyWordsInfoValidator.keyWordsType eq 'WHITE_AVOID_BLACK'}">洗黑白词</option>
+                                        <option data-icon="mdi mdi-appnet" value="SUPER_WHITE" th:selected="${filterKeyWordsInfoValidator.keyWordsType eq 'SUPER_WHITE'}">超级白词</option>
+                                        <option data-icon="mdi mdi-appnet" value="WHITE_AVOID_REGULAR" th:selected="${filterKeyWordsInfoValidator.keyWordsType eq 'WHITE_AVOID_REGULAR'}">正则白词</option>
+                                    </select>
+                                </div>
+
                                 <input type="hidden" class="form-control" th:field="*{businessId}">
                                 <div class="form-group col-sm-3 pull-right" style="text-align: right">
                                     <button sec:authorize-url="/filter/keywords/SYSTEM/page"
                                             class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search"></i> 查询
                                     </button>
-                                    <a sec:authorize-url="/filter/keywords/*/*/add"
-                                       th:href="@{/filter/keywords/{keywordsType}/{businessId}/add(keywordsType=${filterKeyWordsInfoValidator.keyWordsBusinessType},businessId=${filterKeyWordsInfoValidator.businessId})}"
+                                    <a sec:authorize-url="/filter/keywords/white/*/add"
+                                       th:href="@{/filter/keywords/white/{keywordsType}/add(keywordsType=${filterKeyWordsInfoValidator.keyWordsBusinessType})}"
                                        class="btn btn-success waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-plus-sign"></i> 新建</a>
-                                    <a sec:authorize-url="/filter/keywords/*/*/upFilesView"
-                                       th:href="@{/filter/keywords/{keywordsType}/{businessId}/upFilesView(keywordsType=${filterKeyWordsInfoValidator.keyWordsBusinessType},businessId=${filterKeyWordsInfoValidator.businessId})}"
+                                    <a sec:authorize-url="/filter/keywords/white/upFilesView/*"
+                                       th:href="@{/filter/keywords/white/upFilesView/{keywordsType}(keywordsType=${filterKeyWordsInfoValidator.keyWordsBusinessType})}"
                                        class="btn btn-primary waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-import"></i> 导入
                                     </a>
@@ -83,15 +93,17 @@
             <div class="col-sm-12">
                 <div class="panel panel-color panel-info">
                     <div class="panel-heading">
-                        <h3 class="panel-title">系统<span th:if="${filterKeyWordsInfoValidator.businessId eq 'CHECK'}">审核词</span><span th:if="${filterKeyWordsInfoValidator.businessId eq 'BLACK'}">黑词</span>列表</h3>
+                        <h3 class="panel-title">系统白词列表</h3>
                     </div>
                     <div class="panel-body">
                         <div class="table-responsive">
                             <table class="table table table-hover m-10" style="margin-top: -12px;">
                                 <thead>
                                 <tr>
-                                    <th>系统<span th:if="${filterKeyWordsInfoValidator.businessId eq 'CHECK'}">审核词</span><span th:if="${filterKeyWordsInfoValidator.businessId eq 'BLACK'}">黑词</span></th>
-                                    <th><mpm:tag th:value="${filterKeyWordsInfoValidator.businessId}"  identity="keyWordsType" show-type="label" key="code"/>描述</th>
+                                    <th>白词类别</th>
+                                    <th>白词</th>
+                                    <th>处理关键词</th>
+                                    <th>白词描述</th>
                                     <th>创建人</th>
                                     <th>创建日期</th>
                                     <th>操作</th>
@@ -99,18 +111,24 @@
                                 <thead>
                                 <tbody>
                                 <tr th:each="info:${list}">
-
+                                    <td>
+                                        <span th:if="${info.keyWordsType eq 'WHITE_AVOID_CHECK'}" class="btn btn-success btn-rounded btn-sm waves-effect waves-light">免审白词</span>
+                                        <span th:if="${info.keyWordsType eq 'WHITE_AVOID_BLACK'}" class="btn btn-danger btn-rounded btn-sm waves-effect waves-light">洗黑白词</span>
+                                        <span th:if="${info.keyWordsType eq 'SUPER_WHITE'}" class="btn btn-primary btn-rounded btn-sm waves-effect waves-light">超级白词</span>
+                                        <span th:if="${info.keyWordsType eq 'WHITE_AVOID_REGULAR'}" class="btn btn-brown btn-rounded btn-sm waves-effect waves-light">正则白词</span>
+                                    </td>
                                     <td>[[${info.keyWords}]]</td>
+                                    <td>[[${info.waskKeyWords}]]</td>
                                     <td>[[${info.keyDesc}]]</td>
                                     <td>[[${info.createdBy}]]</td>
                                     <td>[[${info.createdTimeStr}]]</td>
                                     <td style="line-height: 26px;">
-                                        <a sec:authorize-url="/filter/keywords/SYSTEM/edit/*"
-                                           th:href="@{/filter/keywords/SYSTEM/edit/{id}(id=${info.id})}" class="on-default edit-row"
+                                        <a sec:authorize-url="/filter/keywords/white/SYSTEM/edit/*"
+                                           th:href="@{/filter/keywords/white/SYSTEM/edit/{id}(id=${info.id})}" class="on-default edit-row"
                                            style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="编辑"><i
                                                 style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/filter/keywords/deleteById/*" data-toggle="modal"
+                                        <a sec:authorize-url="/filter/keywords/white/deleteById/*" data-toggle="modal"
                                            data-target="#confirm-modal" class="on-default remove-row"
                                            th:onclick="confirmDelete([[${info.id}]],this)"
                                            style="padding-left: 5px;color: #f05050" title="删除"><i
@@ -153,7 +171,7 @@
     function deleteById() {
         var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
         $('#preloader').css('display', 'block');
-        location.href = contextPath + "/filter/keywords/deleteById/" + $("#deleteId").val();
+        location.href = contextPath + "/filter/keywords/white/deleteById/" + $("#deleteId").val();
     }
 
     var resizefunc = [];

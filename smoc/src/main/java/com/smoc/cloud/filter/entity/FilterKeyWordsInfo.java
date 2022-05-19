@@ -11,6 +11,7 @@ public class FilterKeyWordsInfo {
     private String keyWordsBusinessType;
     private String businessId;
     private String keyWordsType;
+    private String waskKeyWords;
     private String keyWords;
     private String keyDesc;
     private String createdBy;
@@ -56,6 +57,16 @@ public class FilterKeyWordsInfo {
 
     public void setKeyWordsType(String keyWordsType) {
         this.keyWordsType = keyWordsType;
+    }
+
+    @Basic
+    @Column(name = "WASK_KEY_WORDS")
+    public String getWaskKeyWords() {
+        return waskKeyWords;
+    }
+
+    public void setWaskKeyWords(String waskKeyWords) {
+        this.waskKeyWords = waskKeyWords;
     }
 
     @Basic

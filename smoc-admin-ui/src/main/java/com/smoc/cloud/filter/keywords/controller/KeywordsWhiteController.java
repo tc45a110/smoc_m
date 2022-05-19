@@ -9,6 +9,7 @@ import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.filter.ExcelModel;
 import com.smoc.cloud.common.smoc.filter.FilterKeyWordsInfoValidator;
+import com.smoc.cloud.common.smoc.filter.WhiteExcelModel;
 import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
@@ -36,12 +37,12 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 关键词管理
+ * 白名单关键词管理
  **/
 @Slf4j
 @Controller
-@RequestMapping("/filter/keywords")
-public class KeywordsController {
+@RequestMapping("/filter/keywords/white")
+public class KeywordsWhiteController {
 
     @Autowired
     private KeywordsService keywordsService;
@@ -49,15 +50,17 @@ public class KeywordsController {
     @Autowired
     private SystemUserLogService systemUserLogService;
 
+    private String businessId ="WHITE";
+
     /**
      * 关键字管理列表
      *
      * @return
      */
-    @RequestMapping(value = "/{keywordsType}/{businessId}/list", method = RequestMethod.GET)
-    public ModelAndView list(@PathVariable String keywordsType, @PathVariable String businessId, HttpServletRequest request) {
+    @RequestMapping(value = "/{keywordsType}/list", method = RequestMethod.GET)
+    public ModelAndView list(@PathVariable String keywordsType, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("filter/keywords/keyword_list");
+        ModelAndView view = new ModelAndView("filter/keywords/white/keyword_list");
 
         //初始化数据
         PageParams<FilterKeyWordsInfoValidator> params = new PageParams<FilterKeyWordsInfoValidator>();
@@ -91,10 +94,12 @@ public class KeywordsController {
     @RequestMapping(value = "/{keywordsType}/page", method = RequestMethod.POST)
     public ModelAndView page(@PathVariable String keywordsType, @ModelAttribute FilterKeyWordsInfoValidator filterKeyWordsInfoValidator, PageParams pageParams, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("filter/keywords/keyword_list");
+        ModelAndView view = new ModelAndView("filter/keywords/white/keyword_list");
+
 
         //分页查询
         filterKeyWordsInfoValidator.setKeyWordsBusinessType(keywordsType);
+        filterKeyWordsInfoValidator.setBusinessId(businessId);
         pageParams.setParams(filterKeyWordsInfoValidator);
 
         ResponseData<PageList<FilterKeyWordsInfoValidator>> data = keywordsService.page(pageParams);
@@ -117,14 +122,13 @@ public class KeywordsController {
      *
      * @return
      */
-    @RequestMapping(value = "/{keywordsType}/{businessId}/add", method = RequestMethod.GET)
-    public ModelAndView add(@PathVariable String keywordsType, @PathVariable String businessId, HttpServletRequest request) {
+    @RequestMapping(value = "/{keywordsType}/add", method = RequestMethod.GET)
+    public ModelAndView add(@PathVariable String keywordsType, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("filter/keywords/keyword_edit");
+        ModelAndView view = new ModelAndView("filter/keywords/white/keyword_edit");
 
         view.addObject("op", "add");
 
-        //初始化参数
         FilterKeyWordsInfoValidator filterKeyWordsInfoValidator = new FilterKeyWordsInfoValidator();
         filterKeyWordsInfoValidator.setId(UUID.uuid32());
         filterKeyWordsInfoValidator.setKeyWordsBusinessType(keywordsType);
@@ -143,7 +147,7 @@ public class KeywordsController {
     @RequestMapping(value = "/{keywordsType}/edit/{id}", method = RequestMethod.GET)
     public ModelAndView sysEdit(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("filter/keywords/keyword_edit");
+        ModelAndView view = new ModelAndView("filter/keywords/white/keyword_edit");
 
         //完成参数规则验证
         MpmIdValidator validator = new MpmIdValidator();
@@ -160,82 +164,15 @@ public class KeywordsController {
             return view;
         }
 
-        view.addObject("filterKeyWordsInfoValidator", data.getData());
+        FilterKeyWordsInfoValidator filterKeyWordsInfoValidator = data.getData();
+
+        view.addObject("filterKeyWordsInfoValidator",filterKeyWordsInfoValidator);
         view.addObject("op", "edit");
 
         return view;
 
     }
 
-    /**
-     * 保存关键字
-     *
-     * @param op
-     * @param request
-     * @return
-     */
-    @RequestMapping(value = "/batchSave/{keywordsType}/{businessId}/{op}", method = RequestMethod.POST)
-    public ModelAndView batchSave(@PathVariable String keywordsType,@PathVariable String businessId,@PathVariable String op,String keyWordsType, HttpServletRequest request) {
-        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
-        ModelAndView view = new ModelAndView("filter/keywords/keyword_edit_batch");
-
-        FilterKeyWordsInfoValidator filterKeyWordsInfoValidator = new FilterKeyWordsInfoValidator();
-        List<FilterKeyWordsInfoValidator> filterKeyWords = new ArrayList<>();
-
-        //初始化其他变量
-        if (!StringUtils.isEmpty(op) && "add".equals(op)) {
-            filterKeyWordsInfoValidator.setKeyWordsBusinessType(keywordsType);
-            filterKeyWordsInfoValidator.setBusinessId(businessId);
-            filterKeyWordsInfoValidator.setCreatedTime(new Date());
-            filterKeyWordsInfoValidator.setCreatedBy(user.getRealName());
-        } else if (!StringUtils.isEmpty(op) && "edit".equals(op)) {
-
-        } else {
-            view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":" + ResponseCode.PARAM_LINK_ERROR.getMessage());
-            return view;
-        }
-
-        //封装数据
-        for (int i = 1; i <= 10; i++) {
-            FilterKeyWordsInfoValidator validator = new FilterKeyWordsInfoValidator();
-            String keyWords = request.getParameter("keyWords" + i);
-            String keyDesc = request.getParameter("keyDesc" + i);
-            if (!StringUtils.isEmpty(keyWordsType) && !StringUtils.isEmpty(keyWords)) {
-                validator.setKeyWordsType(keyWordsType);
-                validator.setKeyWords(keyWords);
-                validator.setKeyDesc(keyDesc);
-                filterKeyWords.add(validator);
-            }
-        }
-
-        filterKeyWordsInfoValidator.setFilterKeyWordsList(filterKeyWords);
-
-        //保存操作
-        if (!StringUtils.isEmpty(filterKeyWords) && filterKeyWords.size() > 0) {
-
-            //记录日志
-            log.info("[关键词库管理][{}][{}]数据:{}", op, user.getUserName(), JSON.toJSONString(filterKeyWordsInfoValidator));
-
-            ResponseData data = keywordsService.batchSave(filterKeyWordsInfoValidator, op);
-            if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-                view.addObject("error", data.getCode() + ":" + data.getMessage());
-                return view;
-            }
-
-            //保存操作记录
-            if (ResponseCode.SUCCESS.getCode().equals(data.getCode()) && !"SYSTEM".equals(keywordsType)) {
-                systemUserLogService.logsAsync(keywordsType, businessId, filterKeyWordsInfoValidator.getCreatedBy() , op, "添加关键词" , JSON.toJSONString(filterKeyWordsInfoValidator));
-            }
-        }
-
-        if(!"SYSTEM".equals(keywordsType)){
-            view.setView(new RedirectView("/filter/keywords/list/"+keywordsType+"/"+businessId, true, false));
-            return view;
-        }
-
-        view.setView(new RedirectView("/filter/keywords/"+keywordsType+"/"+businessId+"/list", true, false));
-        return view;
-    }
 
     /**
      * 保存关键字
@@ -244,10 +181,10 @@ public class KeywordsController {
      * @param request
      * @return
      */
-    @RequestMapping(value = "/save/{keywordsType}/{businessId}/{op}", method = RequestMethod.POST)
-    public ModelAndView save(@ModelAttribute @Validated FilterKeyWordsInfoValidator filterKeyWordsInfoValidator, BindingResult result, @PathVariable String businessId,@PathVariable String op,@PathVariable String keywordsType, HttpServletRequest request) {
+    @RequestMapping(value = "/save/{keywordsType}/{op}", method = RequestMethod.POST)
+    public ModelAndView save(@ModelAttribute @Validated FilterKeyWordsInfoValidator filterKeyWordsInfoValidator, BindingResult result, @PathVariable String op,@PathVariable String keywordsType, HttpServletRequest request) {
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
-        ModelAndView view = new ModelAndView("filter/keywords/keyword_edit");
+        ModelAndView view = new ModelAndView("filter/keywords/white/keyword_edit");
 
         if(!"SYSTEM".equals(keywordsType)){
             view.setViewName("filter/keywords/keyword_edit_common");
@@ -296,7 +233,7 @@ public class KeywordsController {
             return view;
         }
 
-        view.setView(new RedirectView("/filter/keywords/"+keywordsType+"/"+businessId+"/list", true, false));
+        view.setView(new RedirectView("/filter/keywords/white/"+keywordsType+"/list", true, false));
         return view;
     }
 
@@ -308,7 +245,7 @@ public class KeywordsController {
     @RequestMapping(value = "/deleteById/{id}", method = RequestMethod.GET)
     public ModelAndView deleteById(@PathVariable String id, HttpServletRequest request) {
         SecurityUser user = (SecurityUser)request.getSession().getAttribute("user");
-        ModelAndView view = new ModelAndView("filter/keywords/keyword_edit");
+        ModelAndView view = new ModelAndView("filter/keywords/white/keyword_edit");
 
         //完成参数规则验证
         MpmIdValidator validator = new MpmIdValidator();
@@ -340,15 +277,15 @@ public class KeywordsController {
             return view;
         }
 
-        view.setView(new RedirectView("/filter/keywords/"+keyData.getData().getKeyWordsBusinessType()+"/"+keyData.getData().getBusinessId()+"/list", true, false));
+        view.setView(new RedirectView("/filter/keywords/white/"+keyData.getData().getKeyWordsBusinessType()+"/list", true, false));
         return view;
 
     }
 
-    @RequestMapping(value = "/{keywordsType}/{businessId}/upFilesView", method = RequestMethod.GET)
-    public ModelAndView upFilesView(@PathVariable String keywordsType,@PathVariable String businessId,HttpServletRequest request) {
+    @RequestMapping(value = "/upFilesView/{keywordsType}", method = RequestMethod.GET)
+    public ModelAndView upFilesView(@PathVariable String keywordsType,HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("filter/keywords/keyword_upfiles_view");
+        ModelAndView view = new ModelAndView("filter/keywords/white/keyword_upfiles_view");
 
         FilterKeyWordsInfoValidator filterKeyWordsInfoValidator = new FilterKeyWordsInfoValidator();
         filterKeyWordsInfoValidator.setKeyWordsBusinessType(keywordsType);
@@ -368,7 +305,7 @@ public class KeywordsController {
     public ModelAndView save(@ModelAttribute FilterKeyWordsInfoValidator filterKeyWordsInfoValidator, BindingResult result, HttpServletRequest request) {
         SecurityUser user = (SecurityUser)request.getSession().getAttribute("user");
 
-        ModelAndView view = new ModelAndView("filter/keywords/keyword_upfiles_view");
+        ModelAndView view = new ModelAndView("filter/keywords/white/keyword_upfiles_view");
 
         if(!"SYSTEM".equals(filterKeyWordsInfoValidator.getKeyWordsBusinessType())){
             view.setViewName("filter/keywords/keyword_upfiles_common");
@@ -391,7 +328,7 @@ public class KeywordsController {
         MultipartFile file = mRequest.getFile("file");
         if (file != null && file.getSize() > 0) {
 
-            List<ExcelModel> list = FileUtils.readFile(file,"2");
+            List<WhiteExcelModel> list = FileUtils.readFileWhite(file);
 
             //批量保存
             if(!StringUtils.isEmpty(list) && list.size()>0){
@@ -399,7 +336,7 @@ public class KeywordsController {
                 validator.setKeyWordsBusinessType(filterKeyWordsInfoValidator.getKeyWordsBusinessType());
                 validator.setBusinessId(filterKeyWordsInfoValidator.getBusinessId());
                 validator.setKeyWordsType(filterKeyWordsInfoValidator.getKeyWordsType());
-                validator.setExccelList(list);
+                validator.setWhiteExccelList(list);
                 validator.setCreatedBy(user.getRealName());
                 ResponseData data  = keywordsService.expBatchSave(validator);
                 if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
@@ -409,7 +346,7 @@ public class KeywordsController {
 
                 //保存操作记录
                 if (ResponseCode.SUCCESS.getCode().equals(data.getCode()) && !"SYSTEM".equals(filterKeyWordsInfoValidator.getKeyWordsBusinessType())) {
-                    systemUserLogService.logsAsync(filterKeyWordsInfoValidator.getKeyWordsBusinessType(), filterKeyWordsInfoValidator.getBusinessId(), filterKeyWordsInfoValidator.getCreatedBy() , "add", "导入关键词" , JSON.toJSONString(validator));
+                    systemUserLogService.logsAsync(filterKeyWordsInfoValidator.getKeyWordsBusinessType(), filterKeyWordsInfoValidator.getBusinessId(), user.getRealName() , "add", "导入关键词" , JSON.toJSONString(validator));
                 }
             }
 
@@ -421,69 +358,11 @@ public class KeywordsController {
             return view;
         }
 
-        view.setView(new RedirectView("/filter/keywords/"+filterKeyWordsInfoValidator.getKeyWordsBusinessType()+"/"+filterKeyWordsInfoValidator.getBusinessId()+"/list", true, false));
+        view.setView(new RedirectView("/filter/keywords/white/"+filterKeyWordsInfoValidator.getKeyWordsBusinessType()+"/list", true, false));
 
         return view;
     }
 
-    /**
-     * 关键字管理列表
-     *
-     * @return
-     */
-    @RequestMapping(value = "/list/{keywordsType}/{businessId}", method = RequestMethod.GET)
-    public ModelAndView commonList(@PathVariable String keywordsType, @PathVariable String businessId, HttpServletRequest request) {
-
-        ModelAndView view = new ModelAndView("filter/keywords/keyword_list_common");
-
-        //初始化数据
-        PageParams<FilterKeyWordsInfoValidator> params = new PageParams<FilterKeyWordsInfoValidator>();
-        params.setPageSize(20);
-        params.setCurrentPage(1);
-        FilterKeyWordsInfoValidator filterKeyWordsInfoValidator = new FilterKeyWordsInfoValidator();
-        filterKeyWordsInfoValidator.setKeyWordsBusinessType(keywordsType);
-        filterKeyWordsInfoValidator.setBusinessId(businessId);
-        params.setParams(filterKeyWordsInfoValidator);
-
-        //查询
-        ResponseData<PageList<FilterKeyWordsInfoValidator>> data = keywordsService.page(params);
-        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            view.addObject("error", data.getCode() + ":" + data.getMessage());
-            return view;
-        }
-
-        view.addObject("filterKeyWordsInfoValidator", filterKeyWordsInfoValidator);
-        view.addObject("list", data.getData().getList());
-        view.addObject("pageParams", data.getData().getPageParams());
-        view.addObject("businessId", businessId);
-        view.addObject("keywordsType", keywordsType);
-
-        return view;
-
-    }
-
-    @RequestMapping(value = "/commonPage", method = RequestMethod.POST)
-    public ModelAndView page(@ModelAttribute FilterKeyWordsInfoValidator filterKeyWordsInfoValidator, PageParams pageParams, HttpServletRequest request) {
-
-        ModelAndView view = new ModelAndView("filter/keywords/keyword_list_common");
-
-        //分页查询
-        pageParams.setParams(filterKeyWordsInfoValidator);
-
-        ResponseData<PageList<FilterKeyWordsInfoValidator>> data = keywordsService.page(pageParams);
-        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            view.addObject("error", data.getCode() + ":" + data.getMessage());
-            return view;
-        }
-        view.addObject("filterKeyWordsInfoValidator", filterKeyWordsInfoValidator);
-        view.addObject("list", data.getData().getList());
-        view.addObject("pageParams", data.getData().getPageParams());
-        view.addObject("businessId", filterKeyWordsInfoValidator.getBusinessId());
-        view.addObject("keywordsType", filterKeyWordsInfoValidator.getKeyWordsType());
-
-        return view;
-
-    }
 
     /**
      * 添加关键字
@@ -493,12 +372,15 @@ public class KeywordsController {
     @RequestMapping(value = "/add/{keywordsType}/{businessId}", method = RequestMethod.GET)
     public ModelAndView commonadd(@PathVariable String keywordsType, @PathVariable String businessId, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("filter/keywords/keyword_edit_batch_common");
+        ModelAndView view = new ModelAndView("filter/keywords/white/keyword_edit_common");
 
         view.addObject("keywordsType", keywordsType);
         view.addObject("businessId", businessId);
 
+        FilterKeyWordsInfoValidator filterKeyWordsInfoValidator = new FilterKeyWordsInfoValidator();
+
         view.addObject("op", "add");
+        view.addObject("filterKeyWordsInfoValidator", filterKeyWordsInfoValidator);
         return view;
 
     }
@@ -511,7 +393,7 @@ public class KeywordsController {
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public ModelAndView edit(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("filter/keywords/keyword_edit_common");
+        ModelAndView view = new ModelAndView("filter/keywords/white/keyword_edit_common");
 
         //完成参数规则验证
         MpmIdValidator validator = new MpmIdValidator();
@@ -536,15 +418,14 @@ public class KeywordsController {
 
     }
 
-    @RequestMapping(value = "/upFilesCommon/{keywordsType}/{businessId}/{keyWordsType}", method = RequestMethod.GET)
-    public ModelAndView upFilesCommon(@PathVariable String keywordsType, @PathVariable String businessId, @PathVariable String keyWordsType, HttpServletRequest request) {
+    @RequestMapping(value = "/upFilesCommon/{keywordsType}/{businessId}", method = RequestMethod.GET)
+    public ModelAndView upFilesCommon(@PathVariable String keywordsType, @PathVariable String businessId, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("filter/keywords/keyword_upfiles_common");
+        ModelAndView view = new ModelAndView("filter/keywords/white/keyword_upfiles_common");
 
         FilterKeyWordsInfoValidator filterKeyWordsInfoValidator = new FilterKeyWordsInfoValidator();
         filterKeyWordsInfoValidator.setKeyWordsBusinessType(keywordsType);
         filterKeyWordsInfoValidator.setBusinessId(businessId);
-        filterKeyWordsInfoValidator.setKeyWordsType(keyWordsType);
 
         view.addObject("filterKeyWordsInfoValidator", filterKeyWordsInfoValidator);
         return view;

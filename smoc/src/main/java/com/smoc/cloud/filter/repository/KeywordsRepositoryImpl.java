@@ -5,6 +5,7 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.smoc.filter.ExcelModel;
 import com.smoc.cloud.common.smoc.filter.FilterKeyWordsInfoValidator;
+import com.smoc.cloud.common.smoc.filter.WhiteExcelModel;
 import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.filter.rowmapper.KeywordsRowMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +38,7 @@ public class KeywordsRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", t.KEY_WORDS_BUSINESS_TYPE");
         sqlBuffer.append(", t.BUSINESS_ID");
         sqlBuffer.append(", t.KEY_WORDS_TYPE");
+        sqlBuffer.append(", t.WASK_KEY_WORDS");
         sqlBuffer.append(", t.KEY_WORDS");
         sqlBuffer.append(", t.KEY_DESC");
         sqlBuffer.append(", t.CREATED_BY");
@@ -81,8 +83,8 @@ public class KeywordsRepositoryImpl extends BasePageRepository {
 
         List<FilterKeyWordsInfoValidator> list = filterKeyWordsInfoValidator.getFilterKeyWordsList();
 
-        final String sql = "insert into filter_key_words_info(ID,KEY_WORDS_BUSINESS_TYPE,BUSINESS_ID,KEY_WORDS_TYPE,KEY_WORDS,KEY_DESC,CREATED_BY,CREATED_TIME) " +
-                "values(?,?,?,?,?,?,?,now()) ";
+        final String sql = "insert into filter_key_words_info(ID,KEY_WORDS_BUSINESS_TYPE,BUSINESS_ID,KEY_WORDS_TYPE,KEY_WORDS,KEY_DESC,CREATED_BY,CREATED_TIME,WASK_KEY_WORDS) " +
+                "values(?,?,?,?,?,?,?,now(),?) ";
 
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             public int getBatchSize() {
@@ -98,6 +100,7 @@ public class KeywordsRepositoryImpl extends BasePageRepository {
                 ps.setString(5, info.getKeyWords());
                 ps.setString(6, info.getKeyDesc());
                 ps.setString(7, filterKeyWordsInfoValidator.getCreatedBy());
+                ps.setString(8, filterKeyWordsInfoValidator.getWaskKeyWords());
             }
 
         });
@@ -106,28 +109,53 @@ public class KeywordsRepositoryImpl extends BasePageRepository {
 
     public void expBatchSave(FilterKeyWordsInfoValidator filterKeyWordsInfoValidator) {
 
-        List<ExcelModel> list = filterKeyWordsInfoValidator.getExccelList();
 
-        final String sql = "insert into filter_key_words_info(ID,KEY_WORDS_BUSINESS_TYPE,BUSINESS_ID,KEY_WORDS_TYPE,KEY_WORDS,KEY_DESC,CREATED_BY,CREATED_TIME) " +
-                "values(?,?,?,?,?,?,?,now()) ";
 
-        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-            public int getBatchSize() {
-                return list.size();
-            }
+        final String sql = "insert into filter_key_words_info(ID,KEY_WORDS_BUSINESS_TYPE,BUSINESS_ID,KEY_WORDS_TYPE,KEY_WORDS,KEY_DESC,CREATED_BY,CREATED_TIME,WASK_KEY_WORDS) " +
+                "values(?,?,?,?,?,?,?,now(),?) ";
 
-            public void setValues(PreparedStatement ps, int i) throws SQLException {
-                ExcelModel info = list.get(i);
-                ps.setString(1, UUID.uuid32());
-                ps.setString(2, filterKeyWordsInfoValidator.getKeyWordsBusinessType());
-                ps.setString(3, filterKeyWordsInfoValidator.getBusinessId());
-                ps.setString(4, filterKeyWordsInfoValidator.getKeyWordsType());
-                ps.setString(5, info.getColumn1());
-                ps.setString(6, info.getColumn2());
-                ps.setString(7, filterKeyWordsInfoValidator.getCreatedBy());
-            }
+        if("CHECK".equals(filterKeyWordsInfoValidator.getKeyWordsType()) || "BLACK".equals(filterKeyWordsInfoValidator.getKeyWordsType())){
+            List<ExcelModel> list = filterKeyWordsInfoValidator.getExccelList();
+            jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+                public int getBatchSize() {
+                    return list.size();
+                }
 
-        });
+                public void setValues(PreparedStatement ps, int i) throws SQLException {
+                    ExcelModel info = list.get(i);
+                    ps.setString(1, UUID.uuid32());
+                    ps.setString(2, filterKeyWordsInfoValidator.getKeyWordsBusinessType());
+                    ps.setString(3, filterKeyWordsInfoValidator.getBusinessId());
+                    ps.setString(4, filterKeyWordsInfoValidator.getKeyWordsType());
+                    ps.setString(5, info.getColumn1());
+                    ps.setString(6, info.getColumn2());
+                    ps.setString(7, filterKeyWordsInfoValidator.getCreatedBy());
+                    ps.setString(8, filterKeyWordsInfoValidator.getWaskKeyWords());
+                }
+            });
+
+        }else{
+            List<WhiteExcelModel> list = filterKeyWordsInfoValidator.getWhiteExccelList();
+            jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+                public int getBatchSize() {
+                    return list.size();
+                }
+
+                public void setValues(PreparedStatement ps, int i) throws SQLException {
+                    WhiteExcelModel info = list.get(i);
+                    ps.setString(1, UUID.uuid32());
+                    ps.setString(2, filterKeyWordsInfoValidator.getKeyWordsBusinessType());
+                    ps.setString(3, filterKeyWordsInfoValidator.getBusinessId());
+                    ps.setString(4, filterKeyWordsInfoValidator.getKeyWordsType());
+                    ps.setString(5, info.getColumn1());
+                    ps.setString(6, info.getColumn2());
+                    ps.setString(7, filterKeyWordsInfoValidator.getCreatedBy());
+                    ps.setString(8, info.getColumn3());
+                }
+
+            });
+        }
+
 
     }
 

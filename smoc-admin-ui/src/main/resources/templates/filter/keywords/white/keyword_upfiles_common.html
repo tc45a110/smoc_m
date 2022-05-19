@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+
+    <link th:href="@{/static/plugins/jquery.filer/css/jquery.filer.css}" rel="stylesheet"/>
+    <link th:href="@{/static/plugins/jquery.filer/css/themes/jquery.filer-dragdropbox-theme.css}" rel="stylesheet"/>
+</head>
+<body style="background-color:#fff">
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content">
+    <div class="container">
+
+        <!-- start row 页面内容-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all" style="margin-top:10px">
+            <div class="col-md-12">
+                <div class="card-box">
+                    <div class="row">
+                    <form  id="submit_form" th:action="@{/filter/keywords/white/upFiles}" method="post" th:object="${filterKeyWordsInfoValidator}" data-parsley-validate=""  enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="p-20">
+                                    <div class="form-group">
+                                        <label>提醒：</label>
+                                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1、选择白词时，要输入对应的关键词，系统会对关键词进行拦截并处理</p>
+                                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2、选择超级白词时，系统不会对关键词进行拦截，不需要输入对应的关键词</p>
+                                    </div>
+                                    <div class="form-group">
+                                        <select data-style="btn-default" name="keyWordsType" data-live-search="true" id="keyWordsType" class="selectpicker form-control" required="true" tabindex="-98">
+                                            <option value="" data-icon="mdi mdi-appnet">--请选择白词类别--</option>
+                                            <option data-icon="mdi mdi-appnet" value="WHITE_AVOID_CHECK" th:selected="${filterKeyWordsInfoValidator.keyWordsType eq 'WHITE_AVOID_CHECK'}">免审白词</option>
+                                            <option data-icon="mdi mdi-appnet" value="WHITE_AVOID_BLACK" th:selected="${filterKeyWordsInfoValidator.keyWordsType eq 'WHITE_AVOID_BLACK'}">洗黑白词</option>
+                                            <option data-icon="mdi mdi-appnet" value="SUPER_WHITE" th:selected="${filterKeyWordsInfoValidator.keyWordsType eq 'SUPER_WHITE'}">超级白词</option>
+                                            <option data-icon="mdi mdi-appnet" value="WHITE_AVOID_REGULAR" th:selected="${filterKeyWordsInfoValidator.keyWordsType eq 'WHITE_AVOID_REGULAR'}" sec:authorize="hasAnyAuthority('SMOC-ADMIN')">正则白词</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>下载模板</label><a sec:authorize-url="/filter/group/downFileTemp/*" th:href="@{/filter/group/downFileTemp/4}" class="btn btn-success waves-effect waves-light m-l-10 btn-sm">
+                                        <i class="glyphicon glyphicon-download"></i> 白词模板.xlsx</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="p-20">
+                                    <label>上传文件</label>
+                                    <div class="form-group">
+                                        <input type="file" name="file" id="input_file"
+                                               multiple="multiple">
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div> <!-- end row -->
+
+                        <div class="text-center">
+                            <input type="hidden" th:field="*{keyWordsBusinessType}">
+                            <input type="hidden" th:field="*{businessId}">
+
+                            <button sec:authorize-url="/filter/keywords/white/upFiles" type="submit"
+                                    class="btn btn-teal waves-effect waves-light">导入</button>
+
+                        </div>
+                    </form>
+                </div> <!-- end row -->
+
+                    <div class="col-md-6">
+
+                    </div> <!-- end col -->
+
+                </div> <!-- end card-box -->
+            </div> <!-- end col -->
+        </div>
+        <!-- end row -->
+
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<script th:src="@{/static/plugins/moment/moment.js}"></script>
+<script th:src="@{/static/js/contractUploadFile.js}"></script>
+<script th:src="@{/static/plugins/jquery.filer/js/jquery.filer.min.js}"></script>
+<th:block th:insert="fragments/common_fragments :: common_submit_form"/>
+<script>
+
+    function changeType(value) {
+
+        if ("SUPER_WHITE" == value) {
+            var s = $("#waskKeyWordsType").val();
+            //$("#waskKeyWordsType").prop("disabled","disabled");
+            $("#waskKeyWordsType").removeAttr("required");
+        }else{
+            //$("#waskKeyWordsType").prop("required","true");
+            $("#waskKeyWordsType").removeAttr("disabled");
+        }
+    }
+
+    function changeSuper() {
+        var value = $("#keyWordsType").val();
+
+        if ("SUPER_WHITE" == value) {
+            $("#waskKeyWordsType").val("");
+            //$("#waskKeyWordsType").prop("disabled","disabled");
+            $("#waskKeyWordsType").removeAttr("required");
+        }
+    }
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+</script>
+</body>
+</html>

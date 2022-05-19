@@ -27,28 +27,38 @@
                                 <div class="p-20">
                                     <div class="form-group">
                                         <div class="row">
-                                            <div class="form-group m-b-20">
-                                                <label>关键词类型<span class="text-danger">*</span>&nbsp;
-                                                </label>
-                                                <div class="form-group m-b-20">
-                                                    <select data-style="btn-default" name="keyWordsType" data-live-search="true" id="keyWordsType"  class="selectpicker form-control" required="true" tabindex="-98">
-                                                        <option value="" data-icon="mdi mdi-appnet">--请选择关键词类别--</option>
-                                                        <option data-icon="mdi mdi-appnet" value="CHECK" th:selected="${filterKeyWordsInfoValidator.keyWordsType eq 'CHECK'}">审核词</option>
-                                                        <option data-icon="mdi mdi-appnet" value="BLACK" th:selected="${filterKeyWordsInfoValidator.keyWordsType eq 'BLACK'}">黑词</option>
-                                                    </select>
-                                                </div>
-
+                                            <div class="form-group">
+                                                <label>提醒：</label>
+                                                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1、选择白词时，要输入对应的关键词，系统会对关键词进行拦截并处理</p>
+                                                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2、选择超级白词时，系统不会对关键词进行拦截，不需要输入对应的关键词</p>
                                             </div>
                                             <div class="form-group m-b-20">
-                                                <label>关键词<span class="text-danger">*</span>&nbsp;<span
+                                                <select data-style="btn-default" name="keyWordsType" data-live-search="true" id="keyWordsType" onchange="changeType(this.value)" class="selectpicker form-control" required="true" tabindex="-98">
+                                                    <option value="" data-icon="mdi mdi-appnet">--请选择白词类别--</option>
+                                                    <option data-icon="mdi mdi-appnet" value="WHITE_AVOID_CHECK" th:selected="${filterKeyWordsInfoValidator.keyWordsType eq 'WHITE_AVOID_CHECK'}">免审白词</option>
+                                                    <option data-icon="mdi mdi-appnet" value="WHITE_AVOID_BLACK" th:selected="${filterKeyWordsInfoValidator.keyWordsType eq 'WHITE_AVOID_BLACK'}">洗黑白词</option>
+                                                    <option data-icon="mdi mdi-appnet" value="SUPER_WHITE" th:selected="${filterKeyWordsInfoValidator.keyWordsType eq 'SUPER_WHITE'}">超级白词</option>
+                                                    <option data-icon="mdi mdi-appnet" value="WHITE_AVOID_REGULAR" th:selected="${filterKeyWordsInfoValidator.keyWordsType eq 'WHITE_AVOID_REGULAR'}" sec:authorize="hasAnyAuthority('SMOC-ADMIN')">正则白词</option>
+                                                </select>
+
+                                            <div class="form-group m-b-20">
+                                                <label>白词<span class="text-danger">*</span>&nbsp;<span
                                                         class="text-danger" style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
                                                 <input type="text" required="" th:field="*{keyWords}" class="form-control" autocomplete="off"
-                                                       placeholder="关键词">
+                                                       placeholder="白词">
                                             </div>
+                                                <div class="form-group m-b-20">
+                                                    <label>关键词<span class="text-danger">*</span>&nbsp;&nbsp;<span
+                                                            class="text-danger" style="font-weight: 200;font-size: 12px"></span>
+                                                    </label>
+                                                    <input type="text" th:field="*{waskKeyWords}" id="waskKeyWords" class="form-control" autocomplete="off"
+                                                           placeholder="对关键进行拦截处理" required="" >
+                                                </div>
 
-                                            <div class="form-group m-b-20">
-                                                <label>关键词描述</label>
+
+                                                <div class="form-group m-b-20">
+                                                <label>白词描述</label>
                                                 <input type="text" th:field="*{keyDesc}" class="form-control" autocomplete="off">
                                             </div>
 
@@ -84,6 +94,22 @@
 <!-- Jquery filer js -->
 <th:block th:insert="fragments/common_fragments :: common_submit_form"/>
 <script>
+
+    $(document).ready(function () {
+        var value = '[[${filterKeyWordsInfoValidator.keyWordsType}]]'
+        changeType(value);
+    })
+
+    function changeType(value) {
+        if("SUPER_WHITE"==value){
+            $("#waskKeyWords").val("");
+            $("#waskKeyWords").removeAttr("required");
+            $("#waskKeyWords").prop("readonly","true");
+        }else{
+            $("#waskKeyWords").prop("required","true");
+            $("#waskKeyWords").removeAttr("readonly");
+        }
+    }
 
     var resizefunc = [];
     //隐藏进度项

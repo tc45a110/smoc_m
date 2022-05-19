@@ -24,6 +24,7 @@ public class KeywordsRowMapper implements RowMapper<FilterKeyWordsInfoValidator>
         data.setKeyDesc(resultSet.getString("KEY_DESC"));
         data.setCreatedTimeStr(resultSet.getString("CREATED_TIME"));
         data.setCreatedBy(resultSet.getString("CREATED_BY"));
+        data.setWaskKeyWords(resultSet.getString("WASK_KEY_WORDS"));
         return data;
     }
 }

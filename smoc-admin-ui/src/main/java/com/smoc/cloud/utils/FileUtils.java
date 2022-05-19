@@ -6,12 +6,14 @@ import com.alibaba.excel.read.metadata.ReadSheet;
 import com.alibaba.excel.write.builder.ExcelWriterBuilder;
 import com.alibaba.excel.write.builder.ExcelWriterSheetBuilder;
 import com.smoc.cloud.common.smoc.filter.ExcelModel;
+import com.smoc.cloud.common.smoc.filter.WhiteExcelModel;
 import com.smoc.cloud.common.smoc.message.model.ComplaintExcelModel;
 import com.smoc.cloud.common.smoc.parameter.model.ErrorCodeExcelModel;
 import com.smoc.cloud.common.utils.Utils;
 import com.smoc.cloud.complaint.model.ComplaintExcelModelListener;
 import com.smoc.cloud.filter.utils.ExcelModelListener;
 import com.smoc.cloud.filter.utils.KeywordsExcelModelListener;
+import com.smoc.cloud.filter.utils.WhiteKeywordsExcelModelListener;
 import com.smoc.cloud.parameter.errorcode.model.ErrorCodeExcelModelListener;
 import com.sun.xml.internal.messaging.saaj.packaging.mime.internet.MimeUtility;
 import lombok.extern.slf4j.Slf4j;
@@ -100,7 +102,7 @@ public class FileUtils {
 
     /**
      * 异步EXCEL
-     * 1:白黑名单 2：关键词
+     * 1:白黑名单 2：关键词 3:白词
      */
     public static List<ExcelModel> readExcel(InputStream inputStream, String type) {
         try {
@@ -287,5 +289,34 @@ public class FileUtils {
         }
 
         return null;
+    }
+
+    public static List<WhiteExcelModel> readFileWhite(MultipartFile file) {
+
+        List<WhiteExcelModel> list = new ArrayList<>();
+
+        try {
+            InputStream in = file.getInputStream();
+            String fileName = file.getOriginalFilename();
+            String fileType = fileName.substring(fileName.lastIndexOf("."));
+            if (".xls".equals(fileType) || ".xlsx".equals(fileType)) {
+                WhiteKeywordsExcelModelListener keywordsExcelModelListener = new WhiteKeywordsExcelModelListener();
+                ExcelReader excelReader = EasyExcel.read(in, WhiteExcelModel.class, keywordsExcelModelListener).build();
+                ReadSheet readSheet = EasyExcel.readSheet(0).build();
+                excelReader.read(readSheet);
+                excelReader.finish();
+                list = keywordsExcelModelListener.getExcelModelList();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //去重
+        if (list.size() > 0) {
+            list = list.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(o -> o.getColumn1().trim() + ":" + o.getColumn2().trim()))), ArrayList::new));
+        }
+
+        return list;
+
     }
 }

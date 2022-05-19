@@ -20,8 +20,10 @@ public class FilterKeyWordsInfoValidator {
     @NotNull(message = "业务ID不能为空！")
     private String businessId;
 
-    @NotNull(message = "关键词类别不能为空！")
     private String keyWordsType;
+
+    @Length(max = 128, message = "关键词最大长度为{max}个字符")
+    private String waskKeyWords;
 
     @NotNull(message = "关键词不能为空！")
     @Length(max = 128, message = "关键词最大长度为{max}个字符")
@@ -37,4 +39,5 @@ public class FilterKeyWordsInfoValidator {
 
     List<FilterKeyWordsInfoValidator> filterKeyWordsList = new ArrayList<>();
     List<ExcelModel> exccelList = new ArrayList<>();
+    List<WhiteExcelModel> whiteExccelList = new ArrayList<>();
 }

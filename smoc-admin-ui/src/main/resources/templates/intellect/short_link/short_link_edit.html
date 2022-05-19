@@ -132,32 +132,16 @@
                                         <div class="col-md-12 form-group">
                                                 <textarea class="form-control" required th:field="*{smsSigns}"
                                                           rows="2"
-                                                          placeholder="终端接收到短信的签名，与短链内的智 能短信编码对应；多个签名用 ' ; '分开；最多 6 个签名，每个 签名长度不超过 18 个字">[[${applyShortUrl.smsSigns}]]</textarea>
+                                                          placeholder="终端接收到短信的签名，与短链内的智 能短信编码对应；多个签名用 ' ; '分开；最多 3 个签名，每个 签名长度不超过 18 个字">[[${applyShortUrl.smsSigns}]]</textarea>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label>短链有效期：<span class="text-danger">*</span>&nbsp;</label>
-                                        <span class="text-teal"></span>
-                                        <div class="btn-group bootstrap-select form-control">
-                                            <select data-style="btn-default" name="expireTimes" required=""
-                                                    data-live-search="true" id="expireTimes"
-                                                    class="selectpicker form-control" tabindex="-98">
-                                                <option value="" data-icon="mdi mdi-arrange-bring-forward">--请选择有效期--
-                                                </option>
-                                                <option data-icon="mdi mdi-arrange-bring-forward" th:attr="selected=${applyShortUrl.expireTimes == 1 ?true:false}"
-                                                        value="1">1
-                                                </option>
-                                                <option data-icon="mdi mdi-arrange-bring-forward" th:attr="selected=${applyShortUrl.expireTimes == 3 ?true:false}"
-                                                        value="3">3
-                                                </option>
-                                                <option data-icon="mdi mdi-arrange-bring-forward" th:attr="selected=${applyShortUrl.expireTimes == 5 ?true:false}"
-                                                        value="5">5
-                                                </option>
-                                                <option data-icon="mdi mdi-arrange-bring-forward" th:attr="selected=${applyShortUrl.expireTimes == 7 ?true:false}"
-                                                        value="7">7
-                                                </option>
-                                            </select>
-                                        </div>
+                                        <span class="text-teal">提示： 有效期不能低于7天，高于30天；</span>
+                                        <input id="expireTimes" type="text" class="form-control" th:field="*{expireTimes}"
+                                               placeholder="短链有效期" min="7" max="29"
+                                               data-parsley-type="number"
+                                               autocomplete="off">
                                     </div>
                                     <div class="form-group">
                                         <label>自定义跳转地址：</label>

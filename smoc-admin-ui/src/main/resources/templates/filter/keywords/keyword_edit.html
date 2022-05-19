@@ -20,13 +20,13 @@
         <div class="row fixed-navigation">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">关键词维护</h4>
+                    <h4 class="page-title">系统<span th:if="${filterKeyWordsInfoValidator.businessId eq 'CHECK'}">审核词</span><span th:if="${filterKeyWordsInfoValidator.businessId eq 'BLACK'}">黑词</span></h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
                             过滤配置
                         </li>
                         <li class="active">
-                            关键词维护
+                            系统<span th:if="${filterKeyWordsInfoValidator.businessId eq 'CHECK'}">审核词</span><span th:if="${filterKeyWordsInfoValidator.businessId eq 'BLACK'}">黑词</span>
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -39,42 +39,39 @@
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all" style="margin-top:80px">
             <div class="col-md-12">
                 <div class="card-box">
-                    <form id="submit_form" th:action="@{/filter/keywords/save/SYSTEM/system/{op}(op=${op})}" th:object="${filterKeyWordsInfoValidator}"
+                    <form id="submit_form" th:action="@{/filter/keywords/save/{keywordsType}/{businessId}/{op}(op=${op},keywordsType=${filterKeyWordsInfoValidator.keyWordsBusinessType},businessId=${filterKeyWordsInfoValidator.businessId})}" th:object="${filterKeyWordsInfoValidator}"
                           method="post" data-parsley-validate="">
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <div class="p-20">
                                     <div class="form-group">
                                         <div class="row">
-                                            <div class="col-md-6 form-group">
-                                                <label>关键词类型<span class="text-danger">*</span>&nbsp;
-                                                </label>
-                                                <mpm:tag id="keyWordsType" identity="keyWordsType" show-type="select" key="code"
-                                                         name="keyWordsType" th:value="${filterKeyWordsInfoValidator.keyWordsType}"
-                                                         required="" class="form-control" data-icon="mdi mdi-view-module" title="关键词类别"/>
-                                            </div>
-                                            <div class="col-md-6 form-group">
-                                                <label>关键词<span class="text-danger">*</span>&nbsp;<span
+
+                                            <div class="form-group m-b-20">
+                                                <label><mpm:tag th:value="${filterKeyWordsInfoValidator.businessId}"  identity="keyWordsType" show-type="label" key="code"/><span class="text-danger">*</span>&nbsp;<span
                                                         class="text-danger" style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
                                                 <input type="text" required="" th:field="*{keyWords}" class="form-control" autocomplete="off"
-                                                       placeholder="关键词">
+                                                       th:placeholder="${businessId eq 'CHECK' ? '审核词' : (businessId eq 'BLACK' ? '黑词' : '关键词')}">
                                             </div>
 
-                                            <div class="col-md-6 form-group">
-                                                <label>关键词描述</label>
-                                                <input type="text" th:field="*{keyDesc}" class="form-control" autocomplete="off">
+                                            <div class="form-group m-b-20">
+                                                <label><mpm:tag th:value="${filterKeyWordsInfoValidator.businessId}"  identity="keyWordsType" show-type="label" key="code"/>描述</label>
+                                                <input type="text" th:field="*{keyDesc}" class="form-control" autocomplete="off"
+                                                       th:placeholder="${businessId eq 'CHECK' ? '审核词描述' : (businessId eq 'BLACK' ? '黑词描述' : '关键词描述')}">
                                             </div>
 
-                                            <div class="col-md-12 text-center">
+                                            <div class="col-md-12 text-right">
                                                 <input type="hidden" th:field="*{id}">
                                                 <input type="hidden" th:field="*{keyWordsBusinessType}">
                                                 <input type="hidden" th:field="*{businessId}">
                                                 <input type="hidden" th:field="*{createdBy}">
+                                                <input type="hidden" name="keyWordsType" value="CHECK" th:if="${filterKeyWordsInfoValidator.businessId eq 'CHECK'}">
+                                                <input type="hidden" name="keyWordsType" value="BLACK" th:if="${filterKeyWordsInfoValidator.businessId eq 'BLACK'}">
                                                 <button sec:authorize-url="/filter/keywords/save/*/*/*" type="submit"
                                                         class="btn btn-teal waves-effect waves-light">提交</button>
-                                                <a  sec:authorize-url="/filter/keywords/SYSTEM/list"
-                                                     th:href="@{/filter/keywords/SYSTEM/list}" style="margin-left:20px"
+                                                <a  sec:authorize-url="/filter/keywords/SYSTEM/CHECK/list"
+                                                     th:href="@{/filter/keywords/{keywordsType}/{businessId}/list(keywordsType=${filterKeyWordsInfoValidator.keyWordsBusinessType},businessId=${filterKeyWordsInfoValidator.businessId})}" style="margin-left:20px"
                                                    class="btn btn-default waves-effect waves-light">返回</a>
                                             </div>
                                         </div>

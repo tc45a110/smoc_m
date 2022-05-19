@@ -70,7 +70,7 @@ public class KeywordsService {
         FilterKeyWordsInfo entity = new FilterKeyWordsInfo();
         BeanUtils.copyProperties(filterKeyWordsInfoValidator, entity);
 
-        List<FilterKeyWordsInfo> data = keywordsRepository.findByKeyWordsBusinessTypeAndBusinessIdAndKeyWordsTypeAndKeyWords(entity.getKeyWordsBusinessType(),entity.getBusinessId(),entity.getKeyWordsType(),entity.getKeyWords());
+        List<FilterKeyWordsInfo> data = keywordsRepository.findByKeyWordsBusinessTypeAndBusinessIdAndKeyWordsTypeAndKeyWordsAndWaskKeyWords(entity.getKeyWordsBusinessType(),entity.getBusinessId(),entity.getKeyWordsType(),entity.getKeyWords(),entity.getWaskKeyWords());
 
         //add查重
         if (data != null && data.iterator().hasNext() && "add".equals(op)) {
