@@ -1,0 +1,54 @@
+package com.smoc.cloud.filters.service.account;
+
+import com.smoc.cloud.common.utils.DateTimeUtils;
+import com.smoc.cloud.filters.utils.FilterResponseCode;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * 业务账号 发送时段限制
+ */
+@Slf4j
+@Component
+public class SendTimeLimitFilter {
+
+    /**
+     * 发送时段限制
+     *
+     * @param sendTimeLimit 限制时间段
+     * @return
+     */
+    public Map<String, String> filter(Object sendTimeLimit) {
+        Map<String, String> result = new HashMap<>();
+        if (null == sendTimeLimit || StringUtils.isEmpty(sendTimeLimit.toString())) {
+            result.put("result", "false");
+            return result;
+        }
+
+        String currentTime = DateTimeUtils.getDateFormat(new Date(), "HHmm");
+        log.info("[发送时间限制]：{}", sendTimeLimit.toString());
+        String[] times = sendTimeLimit.toString().split("-");
+        if (times.length == 2) {
+            if ((times[0].compareTo(currentTime) <= 0 && currentTime.compareTo(times[1]) <= 0)) {
+                result.put("result", "false");
+                return result;
+            } else {
+                result.put("result", "true");
+                result.put("code", FilterResponseCode.TIME_LIMIT.getCode());
+                result.put("message", FilterResponseCode.TIME_LIMIT.getMessage());
+                return result;
+            }
+        }
+
+        result.put("result", "true");
+        result.put("code", FilterResponseCode.TIME_LIMIT_CONFIG_ERROR.getCode());
+        result.put("message", FilterResponseCode.TIME_LIMIT_CONFIG_ERROR.getMessage());
+        return result;
+    }
+
+}

@@ -1,0 +1,45 @@
+package com.smoc.cloud.filters.request.model;
+
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.validation.constraints.Pattern;
+
+@Setter
+@Getter
+public class RequestFullParams {
+
+    //phone     手机号  字段为空，则跳出所有涉及该字段的过滤
+    @Pattern(regexp = "^[0-9]{11}", message = "手机号不符合规则！")
+    private String phone;
+
+    //account   业务账号 字段为空，则跳出所有涉及该字段的过滤
+    private String account;
+
+    //message   消息内容
+    private String message;
+
+    //carrier   运营商  CMCC、UNIC、TELC、INTL 字段为空，则跳出所有涉及该字段的过滤
+    @Pattern(regexp = "(CMCC|UNIC|TELC){1}", message = "运营商不符合规则！")
+    private String carrier;
+    
+    //channelId 通道id
+    private String channelId;
+
+    //infoType  信息分类 INDUSTRY、MARKETING、NEW、COLLECTION 字段为空，则跳出所有涉及该字段的过滤
+    private String infoType;
+
+    //province  省份编码 字段为空，则跳出所有涉及该字段的过滤
+    private String province;
+
+    //模版id
+    private String templateId;
+
+    //短信签名
+    private String sign;
+
+
+    //拆分后短信条数
+    private Integer numbers = 1;
+
+}
