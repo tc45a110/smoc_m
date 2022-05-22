@@ -1,10 +1,8 @@
 package com.smoc.cloud.filters.global;
 
 import com.google.gson.Gson;
-import com.smoc.cloud.common.gateway.utils.ValidatorUtil;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
-import com.smoc.cloud.filters.request.model.RequestFullParams;
 import com.smoc.cloud.filters.utils.FilterResponseCode;
 import lombok.extern.slf4j.Slf4j;
 
@@ -48,26 +46,6 @@ public class GlobalGatewayFilter implements GlobalFilter, Ordered {
             return errorHandle(exchange, FilterResponseCode.REQUEST_LEGAL_ERROR.getCode(), FilterResponseCode.REQUEST_LEGAL_ERROR.getMessage());
         }
 
-        //获取body内容
-        String requestBody = "";
-        if (HttpMethod.POST.equals(exchange.getRequest().getMethod())) {
-            requestBody = exchange.getAttribute("cachedRequestBodyObject");
-        }
-
-        //校验数据请求的数据结构
-        RequestFullParams model;
-        try {
-            model = new Gson().fromJson(requestBody, RequestFullParams.class);
-        } catch (Exception e) {
-            return errorHandle(exchange, FilterResponseCode.PARAM_FORMAT_ERROR.getCode(), FilterResponseCode.PARAM_FORMAT_ERROR.getMessage());
-        }
-
-        //关键参数校验
-        if (!ValidatorUtil.validate(model)) {
-            String errorMessage = ValidatorUtil.validateMessage(model);
-            return errorHandle(exchange, FilterResponseCode.PARAM_FORMAT_ERROR.getCode(), errorMessage);
-        }
-
         return chain.filter(exchange);
     }
 
@@ -76,7 +54,7 @@ public class GlobalGatewayFilter implements GlobalFilter, Ordered {
         ServerHttpResponse response = exchange.getResponse();
         response.getHeaders().set("Content-Type", "application/json;charset=utf-8");
         ResponseData responseData = ResponseDataUtil.buildError(errorCode, errorMessage);
-        log.error("[响应数据]数据:{}", new Gson().toJson(responseData));
+        //log.error("[响应数据]数据:{}", new Gson().toJson(responseData));
         byte[] bytes = new Gson().toJson(responseData).getBytes(StandardCharsets.UTF_8);
         DataBuffer bodyDataBuffer = response.bufferFactory().wrap(bytes);
         return exchange.getResponse().writeWith(Flux.just(bodyDataBuffer));

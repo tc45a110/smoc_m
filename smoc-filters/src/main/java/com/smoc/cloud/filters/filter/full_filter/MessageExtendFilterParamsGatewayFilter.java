@@ -51,7 +51,7 @@ public class MessageExtendFilterParamsGatewayFilter extends BaseGatewayFilter im
          */
         Object blackPatten = filtersService.get(RedisConstant.FILTERS_CONFIG_ACCOUNT_MESSAGE + "black:"+ model.getAccount() );
         if (null != blackPatten && !StringUtils.isEmpty(blackPatten.toString())) {
-            log.info("[内容_黑_过滤参数]{}:{}", model.getAccount(), new Gson().toJson(blackPatten));
+            log.info("[内容_敏感词_扩展参数]{}:{}", model.getAccount(), new Gson().toJson(blackPatten));
         }
 
         /**
@@ -59,7 +59,7 @@ public class MessageExtendFilterParamsGatewayFilter extends BaseGatewayFilter im
          */
         Object whitePatten = filtersService.get(RedisConstant.FILTERS_CONFIG_ACCOUNT_MESSAGE+ "white:" + model.getAccount() );
         if (null != whitePatten && !StringUtils.isEmpty(whitePatten.toString())) {
-            log.info("[内容_白_过滤参数]{}:{}", model.getAccount(), new Gson().toJson(whitePatten));
+            log.info("[内容_白词_扩展参数]{}:{}", model.getAccount(), new Gson().toJson(whitePatten));
         }
 
         /**
@@ -67,13 +67,11 @@ public class MessageExtendFilterParamsGatewayFilter extends BaseGatewayFilter im
          */
         Object regularPatten = filtersService.get(RedisConstant.FILTERS_CONFIG_ACCOUNT_MESSAGE+ "regular:" + model.getAccount() );
         if (null != regularPatten && !StringUtils.isEmpty(regularPatten.toString())) {
-            log.info("[内容_正则_过滤参数]{}:{}", model.getAccount(), new Gson().toJson(regularPatten));
+            log.info("[内容_正则_扩展参数]{}:{}", model.getAccount(), new Gson().toJson(regularPatten));
         }
 
 
-        return chain.filter(exchange).then(Mono.fromRunnable(() -> {
-            //被执行后调用 post
-        }));
+        return chain.filter(exchange);
     }
 
     @Override

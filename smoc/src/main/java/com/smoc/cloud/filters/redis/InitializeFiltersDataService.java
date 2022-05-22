@@ -6,6 +6,7 @@ import com.smoc.cloud.common.filters.utils.RedisConstant;
 import com.smoc.cloud.filter.entity.FilterBlackList;
 import com.smoc.cloud.filter.entity.FilterWhiteList;
 import com.smoc.cloud.filter.repository.BlackRepository;
+import com.smoc.cloud.filter.repository.KeywordsRepository;
 import com.smoc.cloud.filter.repository.WhiteRepository;
 import com.smoc.cloud.parameter.entity.ParameterExtendFiltersValue;
 import com.smoc.cloud.parameter.repository.ParameterExtendFiltersValueRepository;
@@ -35,6 +36,8 @@ public class InitializeFiltersDataService {
     private BlackRepository blackRepository;
     @Resource
     private WhiteRepository whiteRepository;
+    @Resource
+    private KeywordsRepository keywordsRepository;
 
     @Autowired
     private ParameterExtendFiltersValueRepository parameterExtendFiltersValueRepository;
@@ -54,14 +57,22 @@ public class InitializeFiltersDataService {
             this.deleteByKey(RedisConstant.FILTERS_CONFIG_SYSTEM_WHITE);
             this.initializeWhiteList();
         }
-        //系统白名单
+        //账号过滤参数
         if ("1".equals(initializeFiltersData.getReloadAccountFilterParams())) {
             this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_ACCOUNT);
             this.initializeAccountFilterParams();
         }
+
+        //系统敏感词
+        if ("1".equals(initializeFiltersData.getReloadSystemSensitiveWords())) {
+            this.deleteByKey(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_SENSITIVE);
+            this.initializeSensitiveWords();
+        }
     }
 
-
+    /**
+     * 初始化黑名单
+     */
     public void initializeBlackList() {
         List<FilterBlackList> filterBlackListList = blackRepository.findAll();
         if (null != filterBlackListList && filterBlackListList.size() > 0) {
@@ -74,6 +85,9 @@ public class InitializeFiltersDataService {
         }
     }
 
+    /**
+     * 初始化黑名单
+     */
     public void initializeWhiteList() {
         List<FilterWhiteList> filterWhiteList = whiteRepository.findAll();
         if (null != filterWhiteList && filterWhiteList.size() > 0) {
@@ -87,7 +101,20 @@ public class InitializeFiltersDataService {
     }
 
     /**
-     * 加载黑白名单
+     * 初始化系统敏感词
+     */
+    public void initializeSensitiveWords() {
+        List<String> sensitiveWords = keywordsRepository.loadKeyWords("SYSTEM", "BLACK", "BLACK");
+        log.info("加载系统白名单条数：{}", sensitiveWords.size());
+        long start = System.currentTimeMillis();
+        log.info("加载系统白名单start：{}", start);
+        this.multiSaveSet(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_SENSITIVE,sensitiveWords);
+        long end = System.currentTimeMillis();
+        log.info("加载系统白名单  end：{}", end);
+    }
+
+    /**
+     * 批量保存到redis
      *
      * @param source
      * @param prefix
@@ -101,6 +128,28 @@ public class InitializeFiltersDataService {
                 // hset zset都是可以用的，但是要序列化
                 connection.sAdd(RedisSerializer.string().serialize(prefix),
                         RedisSerializer.string().serialize(value));
+            });
+            connection.close();
+            // executePipelined源码要求RedisCallback必须返回null，否则抛异常
+            return null;
+        });
+    }
+
+    /**
+     * 批量保存到redis
+     *
+     * @param source
+     * @param key
+     */
+    public void multiSaveSet(String key, List<String> source) {
+        redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
+            // 这里逻辑简单不会抛异常
+            // 否则需要加上try...catch...finally防止链接未正常关闭 造成泄漏
+            connection.openPipeline();
+            source.forEach((value) -> {
+                // hset zset都是可以用的，但是要序列化
+                connection.sAdd(RedisSerializer.string().serialize(key),
+                        RedisSerializer.string().serialize(new Gson().toJson(value)));
             });
             connection.close();
             // executePipelined源码要求RedisCallback必须返回null，否则抛异常
@@ -255,6 +304,11 @@ public class InitializeFiltersDataService {
         this.redisTemplate.delete(redisKey);
     }
 
+    /**
+     * 批量删除
+     *
+     * @param keyPatten
+     */
     public void batchDeleteByPatten(String keyPatten) {
         this.redisTemplate.delete(redisTemplate.keys(keyPatten + "*"));
     }

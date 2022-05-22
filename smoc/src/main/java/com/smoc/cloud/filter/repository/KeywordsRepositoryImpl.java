@@ -65,7 +65,7 @@ public class KeywordsRepositoryImpl extends BasePageRepository {
 
             if (!StringUtils.isEmpty(data.getKeyWords())) {
                 sqlBuffer.append(" and t.KEY_WORDS like ? ");
-                paramsList.add("%"+data.getKeyWords().trim()+"%");
+                paramsList.add("%" + data.getKeyWords().trim() + "%");
             }
 
         }
@@ -110,11 +110,10 @@ public class KeywordsRepositoryImpl extends BasePageRepository {
     public void expBatchSave(FilterKeyWordsInfoValidator filterKeyWordsInfoValidator) {
 
 
-
         final String sql = "insert into filter_key_words_info(ID,KEY_WORDS_BUSINESS_TYPE,BUSINESS_ID,KEY_WORDS_TYPE,KEY_WORDS,KEY_DESC,CREATED_BY,CREATED_TIME,WASK_KEY_WORDS) " +
                 "values(?,?,?,?,?,?,?,now(),?) ";
 
-        if("CHECK".equals(filterKeyWordsInfoValidator.getKeyWordsType()) || "BLACK".equals(filterKeyWordsInfoValidator.getKeyWordsType())){
+        if ("CHECK".equals(filterKeyWordsInfoValidator.getKeyWordsType()) || "BLACK".equals(filterKeyWordsInfoValidator.getKeyWordsType())) {
             List<ExcelModel> list = filterKeyWordsInfoValidator.getExccelList();
             jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
                 public int getBatchSize() {
@@ -134,7 +133,7 @@ public class KeywordsRepositoryImpl extends BasePageRepository {
                 }
             });
 
-        }else{
+        } else {
             List<WhiteExcelModel> list = filterKeyWordsInfoValidator.getWhiteExccelList();
             jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
                 public int getBatchSize() {
@@ -158,5 +157,28 @@ public class KeywordsRepositoryImpl extends BasePageRepository {
 
 
     }
+
+    /**
+     * 查询 关键词
+     *
+     * @param businessType
+     * @param businessId
+     * @param keyWordType
+     * @return
+     */
+    public List<String> loadKeyWords(String businessType, String businessId, String keyWordType) {
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append("  t.KEY_WORDS");
+        sqlBuffer.append("  from filter_key_words_info t  where t.KEY_WORDS_BUSINESS_TYPE=? and  t.BUSINESS_ID=? and t.KEY_WORDS_TYPE =? ");
+
+        Object[] params = new Object[3];
+        params[0] = businessType;
+        params[1] = businessId;
+        params[2] = keyWordType;
+        List<String> result = this.jdbcTemplate.queryForList(sqlBuffer.toString(),params,String.class);
+        return result;
+    }
+
 
 }

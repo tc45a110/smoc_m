@@ -30,7 +30,6 @@ public class FiltersService {
 
         //是否存在于系统黑名单
         Boolean isExistBlackList = filtersRedisDataService.contains(RedisConstant.FILTERS_CONFIG_SYSTEM_BLACK, phone);
-
         //洗白操作
         if (isExistBlackList) {
             //是否存在白名单中
@@ -39,6 +38,7 @@ public class FiltersService {
                 isExistBlackList = false;
             }
         }
+
 
         return isExistBlackList;
     }
@@ -93,7 +93,7 @@ public class FiltersService {
      * @return 返回true 表示，可以继续发送，返回false表示已触发限流
      */
     public Boolean phoneFrequencyLimiterByAccount(String account, String mobile, int maxBurst, int tokens, int seconds, int times) {
-        return filtersRedisDataService.limiter(RedisConstant.FILTERS_TEMPORARY_ACCOUNT_NUMBER_LIMIT + account, mobile, maxBurst, tokens, seconds, times);
+        return filtersRedisDataService.limiter(RedisConstant.FILTERS_TEMPORARY_LIMIT_ACCOUNT_NUMBER + account, mobile, maxBurst, tokens, seconds, times);
     }
 
     /**
@@ -107,7 +107,7 @@ public class FiltersService {
      * @return 返回true 表示，可以继续发送，返回false表示已触发限流
      */
     public Boolean phoneFrequencyLimiterBySystem(String mobile, int maxBurst, int tokens, int seconds, int times) {
-        return filtersRedisDataService.limiter(RedisConstant.FILTERS_TEMPORARY_SYSTEM_NUMBER_LIMIT + mobile, maxBurst, tokens, seconds, times);
+        return filtersRedisDataService.limiter(RedisConstant.FILTERS_TEMPORARY_LIMIT_SYSTEM_NUMBER + mobile, maxBurst, tokens, seconds, times);
     }
 
     /**
@@ -121,7 +121,7 @@ public class FiltersService {
      */
     public Boolean accountDailyLimit(String account, String carrier, Long dailyLimit, Integer times) {
         String dateFormat = DateTimeUtils.currentDate(new Date());
-        String key = RedisConstant.FILTERS_DAILY_LIMIT + account + ":" + carrier + ":" + dateFormat;
+        String key = RedisConstant.FILTERS_TEMPORARY_LIMIT_DAILY_CARRIER_ACCOUNT_DATE + account + ":" + carrier + ":" + dateFormat;
         log.info("[账号-运营商日限量]-key:{}", key);
         Object count = filtersRedisDataService.get(key);
         if (null == count) {
@@ -161,14 +161,31 @@ public class FiltersService {
     }
 
     /**
+     * 查询敏感词
      * List<String>
      *
      * @return
      */
-    public Set<String> loadSensitiveWords() {
-        Set<String> keyWords = Initialize.sensitiveWords;
-        log.info("[加载敏感词................................]{}", keyWords);
-        return keyWords;
+    public Set<String> getSensitiveWords() {
+        Set<String> sensitiveWords = filtersRedisDataService.sget(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_SENSITIVE);
+        if (null != sensitiveWords) {
+            log.info("[加载敏感词...]：{}条", sensitiveWords.size());
+        }
+        return sensitiveWords;
+    }
+
+    /**
+     * 查询审核词
+     * List<String>
+     *
+     * @return
+     */
+    public Set<String> getCheckWords() {
+        Set<String> sensitiveWords = filtersRedisDataService.sget(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_CHECK);
+        if (null != sensitiveWords) {
+            log.info("[加载审核词...]：{}条", sensitiveWords.size());
+        }
+        return sensitiveWords;
     }
 
 }

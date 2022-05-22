@@ -26,12 +26,12 @@ public class SystemPhoneFilter {
     public Map<String, String> filter(FiltersService filtersService, Object isBlackListType, String phone) {
 
         Map<String, String> result = new HashMap<>();
-        if (null == isBlackListType || StringUtils.isEmpty(isBlackListType.toString()) || StringUtils.isEmpty(phone)) {
+        if (null == isBlackListType || StringUtils.isEmpty(isBlackListType.toString())) {
             result.put("result", "false");
             return result;
         }
         //黑名单过滤层级
-        log.info("[号码_黑名单_层级]:{}", isBlackListType.toString());
+        log.info("[号码_黑名单_层级]:{}", isBlackListType);
         //不过滤
         if ("NO".equals(isBlackListType.toString())) {
             result.put("result", "false");

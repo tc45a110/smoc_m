@@ -57,11 +57,6 @@ public class CommonExtendFilterParamsGatewayFilter extends BaseGatewayFilter imp
 
         //校验数据请求的数据结构
         RequestFullParams model = new Gson().fromJson(requestBody, RequestFullParams.class);
-        if (StringUtils.isEmpty(model.getAccount())) {
-            return chain.filter(exchange).then(Mono.fromRunnable(() -> {
-                //被执行后调用 post
-            }));
-        }
 
         /**
          * 查询业务账号配置的COMMON级别 配置参数
@@ -102,11 +97,11 @@ public class CommonExtendFilterParamsGatewayFilter extends BaseGatewayFilter imp
         }
 
         /**
-         * 内容黑词、审核词过滤
+         * 内容敏感词、审核词过滤
          */
         Object isBlackWordsFilter = entities.get("COMMON_BLACK_WORD_FILTERING"); //是否过滤黑词
         Object isCheckWordsFilter = entities.get("COMMON_AUDIT_WORD_FILTERING"); //是否过滤审核词
-        Map<String, String> blackWordsFilterResult = systemMessageFilter.filter(filtersService, isBlackWordsFilter, isCheckWordsFilter, model.getMessage());
+        Map<String, String> blackWordsFilterResult = systemMessageFilter.filter(filtersService, isBlackWordsFilter, isCheckWordsFilter, model.getAccount(), model.getMessage());
         if (!"false".equals(blackWordsFilterResult.get("result"))) {
             return errorHandle(exchange, blackWordsFilterResult.get("code"), blackWordsFilterResult.get("message"));
         }
@@ -122,9 +117,7 @@ public class CommonExtendFilterParamsGatewayFilter extends BaseGatewayFilter imp
         }
 
 
-        return chain.filter(exchange).then(Mono.fromRunnable(() -> {
-            //被执行后调用 post
-        }));
+        return chain.filter(exchange);
     }
 
     @Override

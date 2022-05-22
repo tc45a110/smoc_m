@@ -10,6 +10,7 @@ import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -31,6 +32,19 @@ public class FiltersRedisDataService {
     public Boolean contains(String key, String value) {
         return redisTemplate.opsForSet().isMember(key, new Long(value));
     }
+
+    /**
+     * 获取set
+     *
+     * @param key
+     * @return
+     */
+    public Set<String> sget(String key) {
+        Set<String> sets = redisTemplate.opsForSet().members(key);
+        return sets;
+    }
+
+
 
     /**
      * HashGet
@@ -90,8 +104,7 @@ public class FiltersRedisDataService {
      */
     public Boolean limiter(String account, String mobile, int maxBurst, int tokens, int seconds, int times) {
 
-        Boolean status = false;
-        status = isActionAllowed(account + ":" + mobile, maxBurst, tokens, seconds, times);
+        Boolean status = isActionAllowed(account + ":" + mobile, maxBurst, tokens, seconds, times);
         return status;
     }
 
@@ -106,8 +119,7 @@ public class FiltersRedisDataService {
      * @return 返回true 表示，可以继续发送，返回false表示已触发限流
      */
     public Boolean limiter(String mobile, int maxBurst, int tokens, int seconds, int times) {
-        Boolean status = false;
-        status = isActionAllowed(mobile, maxBurst, tokens, seconds, times);
+        Boolean status = isActionAllowed(mobile, maxBurst, tokens, seconds, times);
         return status;
     }
 

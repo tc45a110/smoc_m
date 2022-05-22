@@ -39,7 +39,8 @@ public class CarrierDailyLimiterFilter {
             return result;
         }
 
-        Integer times = 1;//计量次数
+        //限量、计量方式
+        Integer times = 1;
         if (!(null == dailyLimitStyle || StringUtils.isEmpty(dailyLimitStyle.toString())) && ("1".equals(dailyLimitStyle) || "3".equals(dailyLimitStyle))) {
             times = numbers == null ? 1 : numbers;
         }

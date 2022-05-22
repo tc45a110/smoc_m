@@ -27,7 +27,7 @@ public class PhoneSendFrequencyLimitFilter {
     public Map<String, String> filter(FiltersService filtersService, Object phoneFrequencyLimit, String account, String phone) {
 
         Map<String, String> result = new HashMap<>();
-        if (null == phoneFrequencyLimit || StringUtils.isEmpty(phoneFrequencyLimit.toString()) || StringUtils.isEmpty(phone)) {
+        if (null == phoneFrequencyLimit || StringUtils.isEmpty(phoneFrequencyLimit.toString())) {
             result.put("result", "false");
             return result;
         }

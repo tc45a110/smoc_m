@@ -1,6 +1,6 @@
 package com.smoc.cloud.filters.configuration;
 
-import com.smoc.cloud.filters.filter.message_filter.FilterInitialize;
+import com.smoc.cloud.filters.service.message.FilterInitialize;
 import com.smoc.cloud.filters.service.FiltersService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +17,7 @@ public class FilterDataInitListener implements ApplicationListener<ContextRefres
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        log.info("[加载系统敏感词]");
-        FilterInitialize.sensitiveWordsFilter.initializeSensitiveWords(filtersService.loadSensitiveWords());
+        FilterInitialize.sensitiveWordsFilter.initializeSensitiveWords(filtersService.getSensitiveWords());
     }
 }
 

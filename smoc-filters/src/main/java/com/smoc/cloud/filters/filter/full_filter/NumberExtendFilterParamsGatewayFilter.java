@@ -60,7 +60,7 @@ public class NumberExtendFilterParamsGatewayFilter extends BaseGatewayFilter imp
                 result.put("code", FilterResponseCode.NUMBER_BLACK_FILTER.getCode());
                 result.put("message", FilterResponseCode.NUMBER_BLACK_FILTER.getMessage());
             }
-            log.info("[号码_黑_过滤参数]{}:{}", model.getAccount(), blackPatten.toString());
+            log.info("[号码_黑名单_扩展参数]{}:{}", model.getAccount(), blackPatten.toString());
         }
 
         /**
@@ -75,7 +75,7 @@ public class NumberExtendFilterParamsGatewayFilter extends BaseGatewayFilter imp
                 }
             }
 
-            log.info("[号码_白_过滤参数]{}:{}", model.getAccount(), new Gson().toJson(whitePatten));
+            log.info("[号码_白名单_扩展参数]{}:{}", model.getAccount(), new Gson().toJson(whitePatten));
         }
 
         /**
@@ -92,7 +92,7 @@ public class NumberExtendFilterParamsGatewayFilter extends BaseGatewayFilter imp
                     result.put("message", FilterResponseCode.NUMBER_REGULAR_FILTER.getMessage());
                 }
 
-                log.info("[正则_正则_过滤参数]{}:{}", model.getAccount(), new Gson().toJson(regularPatten));
+                log.info("[号码_正则_扩展参数]{}:{}", model.getAccount(), new Gson().toJson(regularPatten));
             }
         }
 
@@ -100,9 +100,7 @@ public class NumberExtendFilterParamsGatewayFilter extends BaseGatewayFilter imp
             return errorHandle(exchange, result.get("code"), result.get("message"));
         }
 
-        return chain.filter(exchange).then(Mono.fromRunnable(() -> {
-            //被执行后调用 post
-        }));
+        return chain.filter(exchange);
     }
 
     @Override
