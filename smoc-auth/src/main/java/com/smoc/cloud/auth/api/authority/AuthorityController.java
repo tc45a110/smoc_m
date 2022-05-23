@@ -4,6 +4,7 @@ package com.smoc.cloud.auth.api.authority;
 import com.alibaba.fastjson.JSON;
 import com.smoc.cloud.auth.data.provider.entity.BaseOrganization;
 import com.smoc.cloud.auth.data.provider.service.BaseOrganizationService;
+import com.smoc.cloud.auth.data.provider.service.BaseRoleService;
 import com.smoc.cloud.auth.data.provider.service.BaseUserService;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
 import com.smoc.cloud.common.auth.validator.OrgValidator;
@@ -12,6 +13,7 @@ import com.smoc.cloud.common.auth.validator.UserValidator;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.smoc.customer.qo.ServiceAuthInfo;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +40,9 @@ public class AuthorityController {
 
     @Autowired
     private BaseOrganizationService baseOrganizationService;
+
+    @Autowired
+    private BaseRoleService baseRoleService;
 
     /**
      * 添加、修改
@@ -160,5 +165,27 @@ public class AuthorityController {
     public ResponseData batchForbiddenUser(@RequestBody List<SecurityUser> userList, @PathVariable String status) {
 
         return baseUserService.batchForbiddenUser(userList,status);
+    }
+
+    /**
+     *  根据用户id查询自服务平台角色
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "user/webLoginAuth/{id}", method = RequestMethod.GET)
+    public ResponseData<List<ServiceAuthInfo>> webLoginAuth(@PathVariable String id) {
+
+        return baseRoleService.webLoginAuth(id);
+    }
+
+    /**
+     * WEB登录账号授权
+     * @param serviceAuthInfo
+     * @return
+     */
+    @RequestMapping(value = "user/webAuthSave", method = RequestMethod.POST)
+    public ResponseData<List<ServiceAuthInfo>> webAuthSave(@RequestBody ServiceAuthInfo serviceAuthInfo) {
+
+        return baseRoleService.webAuthSave(serviceAuthInfo);
     }
 }

@@ -3,6 +3,7 @@ package com.smoc.cloud.customer.remote;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.customer.qo.ServiceAuthInfo;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseWebAccountInfoValidator;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -68,4 +69,20 @@ public interface EnterpriseWebFeignClient {
      */
     @RequestMapping(value = "/enterprise/web/webAll", method = RequestMethod.POST)
     ResponseData<PageList<EnterpriseWebAccountInfoValidator>> webAll(@RequestBody PageParams<EnterpriseWebAccountInfoValidator> params);
+
+    /**
+     * 查询自服务平台角色
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/enterprise/web/webLoginAuth/{id}", method = RequestMethod.GET)
+    ResponseData<List<ServiceAuthInfo>> webLoginAuth(@PathVariable String id);
+
+    /**
+     * WEB登录账号授权
+     * @param serviceAuthInfo
+     * @return
+     */
+    @RequestMapping(value = "/enterprise/web/webAuthSave", method = RequestMethod.POST)
+    ResponseData webAuthSave(@RequestBody ServiceAuthInfo serviceAuthInfo);
 }

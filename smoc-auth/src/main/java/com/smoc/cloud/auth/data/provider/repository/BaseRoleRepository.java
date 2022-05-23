@@ -35,4 +35,10 @@ public interface BaseRoleRepository extends CrudRepository<BaseRole, String>, Jp
      */
     List<Map<String, Object>> findRolesAndMenus(String system);
 
+    /**
+     * 查询自服务平台角色
+     * @return
+     */
+    @Query(value = "SELECT role.ID,role.ROLE_CODE,role.ROLE_NAME,role.ORGANIZATION,role.CREATE_DATE,role.UPDATE_DATE FROM base_role role WHERE role.ROLE_CODE like '%SMS%' ", nativeQuery = true)
+    List<BaseRole> webLoginAuth();
 }

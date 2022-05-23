@@ -4,7 +4,7 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
-import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
+import com.smoc.cloud.common.smoc.customer.qo.ServiceAuthInfo;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseWebAccountInfoValidator;
 import com.smoc.cloud.customer.remote.EnterpriseWebFeignClient;
 import lombok.extern.slf4j.Slf4j;
@@ -120,4 +120,31 @@ public class EnterpriseWebService {
         }
     }
 
+    /**
+     * 查询自服务平台角色
+     */
+    public ResponseData<List<ServiceAuthInfo>> webLoginAuth(String id) {
+        try {
+            ResponseData<List<ServiceAuthInfo>> data = this.enterpriseWebFeignClient.webLoginAuth(id);
+            return data;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * WEB登录账号授权
+     * @param serviceAuthInfo
+     * @return
+     */
+    public ResponseData webAuthSave(ServiceAuthInfo serviceAuthInfo) {
+        try {
+            ResponseData data = this.enterpriseWebFeignClient.webAuthSave(serviceAuthInfo);
+            return data;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
 }

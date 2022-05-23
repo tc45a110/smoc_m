@@ -278,6 +278,13 @@
                                                                                        th:onclick="confirmForbidden([[${web.id}]],[[${web.accountStatus}]],this)"
                                                                                        th:class="${web.accountStatus eq '1'?'btn btn-danger':'btn btn-inverse'}"
                                                                                        style="font-size:12px;">[[${web.accountStatus}=='1'?'注销':'启用']]</a>
+                                                                                   <!-- sec:authorize-url="/enterprise/web/webLoginAuth"-->
+                                                                                    <a data-toggle="modal"
+                                                                                       data-target="#confirm-add-auth-modal"
+                                                                                       class="btn btn-primary"
+
+                                                                                       th:onclick="openAuth([[${web.id}]])"
+                                                                                       style="font-size:12px;">授权业务</a>
                                                                                 </div>
                                                                             </div>
                                                                             <!-- end. Card actions -->
@@ -1061,6 +1068,35 @@
         </div>
         <!-- end confirm delete modal  -->
 
+        <!-- start confirm add-user modal  -->
+        <div id="confirm-add-auth-modal" class="modal fade" tabindex="-1" role="dialog" th:remove="${#strings.isEmpty(error)}?none:all"
+             aria-labelledby="custom-width-modalLabel"
+             aria-hidden="true" style="display: none;margin: 60px;margin-top:68px">
+            <div class="modal-dialog" style="width:33%;">
+                <div class="modal-content">
+                    <form id="auth_form" method="post" th:action="@{/enterprise/web/webAuthSave}"data-parsley-validate="">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h4 class="modal-title">WEB登录账号授权</h4>
+                        </div>
+                        <div class="row" style="margin-top:10px" id="sss">
+
+                        </div>
+                        <div class="modal-footer">
+                            <input type="hidden" id="uId" name="uId">
+                            <input type="hidden" id="roleIds" name="roleIds">
+                            <a class="btn btn-default waves-effect" data-dismiss="modal">取消</a>
+                            <button sec:authorize-url="/enterprise/web/webAuthSave" type="button"
+                                    onclick="subAuth()"
+                                    class="btn btn-primary waves-effect waves-light">提交
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- end confirm add-user modal  -->
+
         <!-- start row  错误提示-->
         <th:block th:insert="fragments/common_fragments :: common_error"/>
         <!-- end row -->
@@ -1090,6 +1126,57 @@
             $("#webLoginPassword").val(getCode());
         }
     }
+
+    function openAuth(id) {
+        $("#uId").val(id);
+        document.getElementById("sss").innerText = "";
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $.ajax({
+            url: contextPath + "/enterprise/web/webLoginAuth/"+id,
+            async: false,
+            success: function (result) {
+                var arr = [];
+                for(var item in result){
+                    arr.push(result[item]);
+                }
+                var htmla = ""
+                for (var i = 0; i < arr.length; i++) {
+                    htmla += '<div class="col-md-6"><div class="checkbox checkbox-info m-b-15">'
+                    if(arr[i].checkedStatus){
+                        htmla += '<input name="roleId" value="'+arr[i].roleIds+'" type="checkbox" checked >'
+                    }else{
+                        htmla += '<input name="roleId" value="'+arr[i].roleIds+'" type="checkbox" >'
+                    }
+                    htmla +=  '<label>'+arr[i].roleName+'</label></div></div>';
+                }
+
+                $('#sss').append(htmla)
+            }
+        });
+
+    }
+
+    function subAuth(){
+        var menusId = "";
+        var a = document.getElementsByName("roleId");
+        for ( var i = 0; i < a.length; i++) {
+            if (a[i].checked) {
+               if (menusId == "") {
+                    menusId = a[i].value;
+                } else {
+                    menusId += "," + a[i].value;
+                }
+            }
+        }
+        if (null == menusId || "" == menusId) {
+            alert("请选择角色！");
+            return;
+        }
+
+        $("#roleIds").val(menusId);
+        $('#auth_form').submit();
+    }
+
 
     //打开邮寄信息
     function openExpress(id, postContacts, postPhone, postAddress, postRemark, op) {

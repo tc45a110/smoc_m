@@ -1,10 +1,12 @@
 package com.smoc.cloud.customer.controller;
 
+import com.smoc.cloud.auth.service.AuthorityService;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.smoc.customer.qo.ServiceAuthInfo;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseWebAccountInfoValidator;
 import com.smoc.cloud.common.validator.MpmIdValidator;
@@ -29,6 +31,9 @@ public class EnterpriseWebController {
 
     @Autowired
     private EnterpriseWebService enterpriseWebService;
+
+    @Autowired
+    private AuthorityService authorityService;
 
     /**
      * 查询列表
@@ -126,5 +131,27 @@ public class EnterpriseWebController {
     public ResponseData<PageList<EnterpriseWebAccountInfoValidator>> webAll(@RequestBody PageParams<EnterpriseWebAccountInfoValidator> params) {
 
         return enterpriseWebService.webAll(params);
+    }
+
+    /**
+     *  查询自服务平台角色
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/webLoginAuth/{id}", method = RequestMethod.GET)
+    public ResponseData<List<ServiceAuthInfo>> webLoginAuth(@PathVariable String id) {
+
+        return authorityService.webLoginAuth(id);
+    }
+
+    /**
+     * WEB登录账号授权
+     * @param serviceAuthInfo
+     * @return
+     */
+    @RequestMapping(value = "/webAuthSave", method = RequestMethod.POST)
+    public ResponseData webAuthSave(@RequestBody ServiceAuthInfo serviceAuthInfo) {
+
+        return authorityService.webAuthSave(serviceAuthInfo);
     }
 }

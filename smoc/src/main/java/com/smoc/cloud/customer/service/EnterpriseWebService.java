@@ -178,7 +178,7 @@ public class EnterpriseWebService {
         UserValidator user = new UserValidator();
 
         //设置角色
-        user.setRoleIds("7da61ba9be8f4f6581c20f5a6d449b85");
+        //user.setRoleIds("7da61ba9be8f4f6581c20f5a6d449b85");
 
         BaseUserValidator baseUser = new BaseUserValidator();
         String userId = entity.getId();

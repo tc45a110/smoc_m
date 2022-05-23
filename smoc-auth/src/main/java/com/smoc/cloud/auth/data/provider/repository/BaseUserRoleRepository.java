@@ -1,6 +1,8 @@
 package com.smoc.cloud.auth.data.provider.repository;
 
+import com.smoc.cloud.auth.data.provider.entity.BaseRole;
 import com.smoc.cloud.auth.data.provider.entity.BaseUserRole;
+import com.smoc.cloud.common.smoc.customer.qo.ServiceAuthInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 
@@ -28,5 +30,16 @@ public interface BaseUserRoleRepository extends CrudRepository<BaseUserRole, Str
      */
     void deleteByUserId(String userId);
 
+    /**
+     * 批量删除：根据用户id和角色id
+     * @param uId
+     * @param list
+     */
+    void batchDeleteByUserIdAndRoleId(String uId, List<BaseRole> list);
 
+    /**
+     * 批量保存web登录权限
+     * @param serviceAuthInfo
+     */
+    void batchSaveWebAuth(ServiceAuthInfo serviceAuthInfo);
 }

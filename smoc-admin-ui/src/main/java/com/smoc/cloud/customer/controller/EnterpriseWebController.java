@@ -1,42 +1,41 @@
 package com.smoc.cloud.customer.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
-import com.smoc.cloud.common.auth.entity.SecurityUser;
-import com.smoc.cloud.common.response.ResponseCode;
-import com.smoc.cloud.common.response.ResponseData;
-import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
-import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
-import com.smoc.cloud.common.smoc.customer.validator.EnterpriseWebAccountInfoValidator;
-import com.smoc.cloud.common.utils.DateTimeUtils;
-import com.smoc.cloud.common.utils.UUID;
-import com.smoc.cloud.common.validator.MpmIdValidator;
-import com.smoc.cloud.common.validator.MpmValidatorUtil;
-import com.smoc.cloud.customer.service.BusinessAccountService;
-import com.smoc.cloud.customer.service.EnterpriseService;
-import com.smoc.cloud.customer.service.EnterpriseWebService;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
+        import com.alibaba.fastjson.JSON;
+        import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
+        import com.smoc.cloud.common.auth.entity.SecurityUser;
+        import com.smoc.cloud.common.response.ResponseCode;
+        import com.smoc.cloud.common.response.ResponseData;
+        import com.smoc.cloud.common.smoc.customer.qo.ServiceAuthInfo;
+        import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
+        import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
+        import com.smoc.cloud.common.smoc.customer.validator.EnterpriseWebAccountInfoValidator;
+        import com.smoc.cloud.common.utils.DateTimeUtils;
+        import com.smoc.cloud.common.utils.UUID;
+        import com.smoc.cloud.common.validator.MpmIdValidator;
+        import com.smoc.cloud.common.validator.MpmValidatorUtil;
+        import com.smoc.cloud.customer.service.BusinessAccountService;
+        import com.smoc.cloud.customer.service.EnterpriseService;
+        import com.smoc.cloud.customer.service.EnterpriseWebService;
+        import lombok.extern.slf4j.Slf4j;
+        import org.springframework.beans.factory.annotation.Autowired;
+        import org.springframework.data.redis.core.RedisTemplate;
+        import org.springframework.stereotype.Controller;
+        import org.springframework.util.StringUtils;
+        import org.springframework.validation.BindingResult;
+        import org.springframework.validation.annotation.Validated;
+        import org.springframework.web.bind.annotation.*;
+        import org.springframework.web.servlet.ModelAndView;
+        import org.springframework.web.servlet.view.RedirectView;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.List;
+        import javax.annotation.Resource;
+        import javax.servlet.http.HttpServletRequest;
+        import java.util.ArrayList;
+        import java.util.Date;
+        import java.util.List;
 
 
 @Slf4j
-@Controller
+@RestController
 @RequestMapping("/enterprise/web")
 public class EnterpriseWebController {
 
@@ -191,4 +190,67 @@ public class EnterpriseWebController {
 
     }
 
+    /**
+     * 查询自服务平台角色
+     *
+     * @return
+     */
+    @RequestMapping(value = "/webLoginAuth/{id}", method = RequestMethod.GET)
+    public List<ServiceAuthInfo> webLoginAuth(@PathVariable String id, HttpServletRequest request) {
+
+        //查询账号
+        ResponseData<EnterpriseWebAccountInfoValidator> data = enterpriseWebService.findById(id);
+        if (!StringUtils.isEmpty(data) && !ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            return new ArrayList<>();
+        }
+
+        ResponseData<List<ServiceAuthInfo>> list = enterpriseWebService.webLoginAuth(id);
+
+        return list.getData();
+    }
+
+    /**
+     * WEB登录账号授权
+     *
+     * @return
+     */
+    @RequestMapping(value = "/webAuthSave", method = RequestMethod.POST)
+    public ModelAndView webAuthSave(HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("customer/enterprise/enterprise_center");
+
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        String uId = request.getParameter("uId");
+        String roleIds = request.getParameter("roleIds");
+
+        //查询账号
+        ResponseData<EnterpriseWebAccountInfoValidator> webData = enterpriseWebService.findById(uId);
+        if (!StringUtils.isEmpty(webData) && !ResponseCode.SUCCESS.getCode().equals(webData.getCode())) {
+            view.addObject("error", webData.getCode() + ":" + webData.getMessage());
+            return view;
+        }
+
+        if(StringUtils.isEmpty(roleIds)){
+            view.addObject("error", "请选择角色");
+            return view;
+        }
+
+        ServiceAuthInfo serviceAuthInfo = new ServiceAuthInfo();
+        serviceAuthInfo.setUserId(uId);
+        serviceAuthInfo.setRoleIds(roleIds);
+        ResponseData data = enterpriseWebService.webAuthSave(serviceAuthInfo);
+
+        //保存操作记录
+        if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            systemUserLogService.logsAsync("ENTERPRISE_INFO", webData.getData().getEnterpriseId(), user.getRealName(), "add", webData.getData().getWebLoginName()+"WEB登录账号授权", JSON.toJSONString(serviceAuthInfo));
+        }
+
+        //记录日志
+        log.info("[企业接入][{}][{}][{}]数据:{}", webData.getData().getWebLoginName()+"WEB登录账号授权","add", user.getUserName(), JSON.toJSONString(serviceAuthInfo));
+
+        view.setView(new RedirectView("/enterprise/center/"+webData.getData().getEnterpriseId(), true, false));
+
+        return view;
+
+    }
 }

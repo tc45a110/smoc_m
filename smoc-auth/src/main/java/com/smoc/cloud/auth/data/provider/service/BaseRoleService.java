@@ -3,11 +3,16 @@ package com.smoc.cloud.auth.data.provider.service;
 
 import com.alibaba.fastjson.JSON;
 import com.smoc.cloud.auth.data.provider.entity.BaseRole;
+import com.smoc.cloud.auth.data.provider.entity.BaseUser;
+import com.smoc.cloud.auth.data.provider.entity.BaseUserRole;
 import com.smoc.cloud.auth.data.provider.repository.BaseRoleRepository;
+import com.smoc.cloud.auth.data.provider.repository.BaseUserRepository;
+import com.smoc.cloud.auth.data.provider.repository.BaseUserRoleRepository;
 import com.smoc.cloud.common.constant.RedisConstant;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.smoc.customer.qo.ServiceAuthInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -15,12 +20,10 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @Author 武基慧
@@ -35,10 +38,19 @@ public class BaseRoleService {
     private BaseRoleRepository baseRoleRepository;
 
     @Resource
+    private BaseUserRoleRepository baseUserRoleRepository;
+
+    @Resource
     private RedisTemplate<String, Map<String, Object>> redisTemplate;
 
     @Resource
     private RedisTemplate<String, BaseRole> roleRedisTemplate;
+
+    @Resource
+    private UserCacheService userCacheService;
+
+    @Resource
+    private BaseUserRepository baseUserRepository;
 
     /**
      * 根据用户查询角色  redis 优化查询
@@ -170,5 +182,68 @@ public class BaseRoleService {
     public boolean exists(String id) {
 
         return baseRoleRepository.existsById(id);
+    }
+
+    /**
+     * 根据用户id查询自服务平台角色
+     * @param id
+     * @return
+     */
+    public ResponseData<List<ServiceAuthInfo>> webLoginAuth(String id) {
+
+        List<ServiceAuthInfo> authList = new ArrayList<>();
+
+        //查询自服务平台角色
+        List<BaseRole> list = baseRoleRepository.webLoginAuth();
+
+        //查询用户角色
+        List<BaseUserRole> roles = baseUserRoleRepository.findBaseUserRoleByUserId(id);
+
+        if(!StringUtils.isEmpty(list) && list.size()>0){
+            for(int i=0;i<list.size();i++){
+                BaseRole role = list.get(i);
+                ServiceAuthInfo info = new ServiceAuthInfo();
+                info.setRoleIds(role.getId());
+                info.setRoleName(role.getRoleName());
+                info.setCheckedStatus(false);
+
+                if(!StringUtils.isEmpty(roles) && roles.size()>0){
+                    for(int a=0;a<roles.size();a++){
+                        BaseUserRole b = roles.get(a);
+                        if(role.getId().equals(b.getRoleId())){
+                            info.setCheckedStatus(true);
+                            break;
+                        }
+                    }
+                }
+
+                authList.add(info);
+            }
+        }
+
+        return ResponseDataUtil.buildSuccess(authList);
+    }
+
+    @Transactional
+    public ResponseData<List<ServiceAuthInfo>> webAuthSave(ServiceAuthInfo serviceAuthInfo) {
+        //查询自服务平台角色
+        List<BaseRole> list = baseRoleRepository.webLoginAuth();
+
+        //先把自服务平台用户权限删除(不能删除其他系统权限)
+        baseUserRoleRepository.batchDeleteByUserIdAndRoleId(serviceAuthInfo.getUserId(),list);
+
+        //在把新添加的权限放进去
+        baseUserRoleRepository.batchSaveWebAuth(serviceAuthInfo);
+
+        Optional<BaseUser> data = baseUserRepository.findById(serviceAuthInfo.getUserId());
+        String userName = "";
+        if(data.isPresent()){
+            userName = data.get().getUserName();
+        }
+
+        //清除缓存
+        userCacheService.clearUserCache("smoc-service",serviceAuthInfo.getUserId(),userName);
+
+        return ResponseDataUtil.buildSuccess();
     }
 }

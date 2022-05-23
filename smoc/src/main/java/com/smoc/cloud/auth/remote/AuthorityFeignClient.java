@@ -5,6 +5,7 @@ import com.smoc.cloud.common.auth.validator.OrgValidator;
 import com.smoc.cloud.common.auth.validator.UserPasswordValidator;
 import com.smoc.cloud.common.auth.validator.UserValidator;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.customer.qo.ServiceAuthInfo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -63,4 +64,20 @@ public interface AuthorityFeignClient {
 
     @RequestMapping(value = "/authority/user/batchForbiddenUser/{status}", method = RequestMethod.POST)
     ResponseData batchForbiddenUser(@RequestBody List<SecurityUser> userList, @PathVariable String status) throws Exception;
+
+    /**
+     * 根据用户id查询自服务平台角色
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/authority/user/webLoginAuth/{id}", method = RequestMethod.GET)
+    ResponseData<List<ServiceAuthInfo>> webLoginAuth(@PathVariable String id);
+
+    /**
+     * WEB登录账号授权
+     * @param serviceAuthInfo
+     * @return
+     */
+    @RequestMapping(value = "/authority/user/webAuthSave", method = RequestMethod.POST)
+    ResponseData webAuthSave(@RequestBody ServiceAuthInfo serviceAuthInfo);
 }

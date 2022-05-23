@@ -102,6 +102,8 @@ public class MpmSecurityConfiguation extends WebSecurityConfigurerAdapter {
                 .antMatchers("/authority/user/resetPassword").permitAll()
                 .antMatchers("/authority/user/batchForbiddenUser/*").permitAll()
                 .antMatchers("/authority/user/findById/*").permitAll()
+                .antMatchers("/authority/user/webLoginAuth/*").permitAll()
+                .antMatchers("/authority/user/webAuthSave").permitAll()
                 .antMatchers("/auth/oauth/getUser/*").permitAll()
                 .antMatchers("/oauth/getUser/*").permitAll()
                 .antMatchers("/oauth/token").permitAll()

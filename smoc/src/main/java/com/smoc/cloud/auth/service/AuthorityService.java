@@ -7,6 +7,7 @@ import com.smoc.cloud.common.auth.validator.UserPasswordValidator;
 import com.smoc.cloud.common.auth.validator.UserValidator;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.smoc.customer.qo.ServiceAuthInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -109,6 +110,36 @@ public class AuthorityService {
     public ResponseData batchForbiddenUser(List<SecurityUser> userList, String status) {
         try {
             ResponseData responseData = this.authorityFeignClient.batchForbiddenUser(userList,status);
+            return responseData;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 根据用户id查询自服务平台角色
+     * @param id
+     * @return
+     */
+    public ResponseData<List<ServiceAuthInfo>> webLoginAuth(String id) {
+        try {
+            ResponseData<List<ServiceAuthInfo>> responseData = this.authorityFeignClient.webLoginAuth(id);
+            return responseData;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * WEB登录账号授权
+     * @param serviceAuthInfo
+     * @return
+     */
+    public ResponseData webAuthSave(ServiceAuthInfo serviceAuthInfo) {
+        try {
+            ResponseData responseData = this.authorityFeignClient.webAuthSave(serviceAuthInfo);
             return responseData;
         } catch (Exception e) {
             log.error(e.getMessage());
