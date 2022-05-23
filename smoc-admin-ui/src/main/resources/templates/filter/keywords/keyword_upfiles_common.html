@@ -30,8 +30,8 @@
                             <div class="col-md-9">
                                 <div class="p-20">
                                     <div class="form-group m-b-20">
-                                        <label>关键词类别：<mpm:tag id="keyWordsType" identity="keyWordsType" show-type="label" key="code"
-                                                              name="keyWordsType" th:value="${filterKeyWordsInfoValidator.keyWordsType}"/>
+                                        <label>关键词类别：
+                                            <span th:if="${filterKeyWordsInfoValidator.keyWordsType eq 'CHECK'}">审核词</span><span th:if="${filterKeyWordsInfoValidator.keyWordsType eq 'BLACK'}">敏感词</span>
                                         </label>
                                     </div>
                                     <div class="form-group m-b-20">
@@ -63,6 +63,12 @@
                             <input type="hidden" name="keyWordsType" value="BLACK" th:if="${filterKeyWordsInfoValidator.keyWordsType eq 'BLACK'}">
                             <button sec:authorize-url="/filter/keywords/upFiles" type="submit"
                                     class="btn btn-teal waves-effect waves-light">导入</button>
+                            <a  sec:authorize-url="/filter/keywords/list/BUSINESS_ACCOUNT/*" th:if="${filterKeyWordsInfoValidator.keyWordsBusinessType eq 'BUSINESS_ACCOUNT'}"
+                                th:href="@{/filter/keywords/list/{keywordsType}/{businessId}(keywordsType=${filterKeyWordsInfoValidator.keyWordsBusinessType},businessId=${businessId})}" style="margin-left:20px"
+                                class="btn btn-default waves-effect waves-light">返回</a>
+                            <a  sec:authorize-url="/filter/keywords/list/CHANNEL/*" th:if="${filterKeyWordsInfoValidator.keyWordsBusinessType eq 'CHANNEL'}"
+                                th:href="@{/filter/keywords/list/{keywordsType}/{businessId}(keywordsType=${filterKeyWordsInfoValidator.keyWordsBusinessType},businessId=${businessId})}" style="margin-left:20px"
+                                class="btn btn-default waves-effect waves-light">返回</a>
 
                         </div>
                     </form>

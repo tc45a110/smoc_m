@@ -20,13 +20,13 @@
         <div class="row fixed-navigation">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">系统<mpm:tag th:value="${businessId}"  identity="keyWordsType" show-type="label" key="code"/></h4>
+                    <h4 class="page-title">系统<span th:if="${businessId eq 'CHECK'}">审核词</span><span th:if="${businessId eq 'BLACK'}">敏感词</span></h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
                             过滤配置
                         </li>
                         <li class="active">
-                            系统<mpm:tag th:value="${businessId}"  identity="keyWordsType" show-type="label" key="code"/>
+                            系统<span th:if="${businessId eq 'CHECK'}">审核词</span><span th:if="${businessId eq 'BLACK'}">敏感词</span>
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -49,17 +49,17 @@
                                             <div th:each="count:${#numbers.sequence(1,10)}">
 
                                                 <div class="col-md-5 form-group">
-                                                    <label><mpm:tag th:value="${businessId}"  identity="keyWordsType" show-type="label" key="code"/><span class="text-danger">*</span>&nbsp;<span
+                                                    <label><span th:if="${businessId eq 'CHECK'}">审核词</span><span th:if="${businessId eq 'BLACK'}">敏感词</span><span class="text-danger">*</span>&nbsp;<span
                                                             class="text-danger" style="font-weight: 200;font-size: 12px"></span>
                                                     </label>
                                                     <input type="text" th:name="keyWords+${count}" class="form-control" autocomplete="off"
-                                                           th:placeholder="${businessId eq 'CHECK' ? '审核词' : (businessId eq 'BLACK' ? '黑词' : '关键词')}">
+                                                           th:placeholder="${businessId eq 'CHECK' ? '审核词' : (businessId eq 'BLACK' ? '敏感词' : '关键词')}">
                                                 </div>
 
                                                 <div class="col-md-5 form-group">
                                                     <label><mpm:tag th:value="${businessId}"  identity="keyWordsType" show-type="label" key="code"/>描述</label>
                                                     <input type="text" th:name="keyDesc+${count}" class="form-control" autocomplete="off"
-                                                           th:placeholder="${businessId eq 'CHECK' ? '审核词描述' : (businessId eq 'BLACK' ? '黑词描述' : '关键词描述')}">
+                                                           th:placeholder="${businessId eq 'CHECK' ? '审核词描述' : (businessId eq 'BLACK' ? '敏感词描述' : '关键词描述')}">
                                                 </div>
                                             </div>
 

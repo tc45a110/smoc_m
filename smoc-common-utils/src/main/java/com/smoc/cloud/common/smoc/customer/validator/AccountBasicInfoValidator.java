@@ -7,8 +7,7 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.util.Date;
-import java.util.Objects;
+import java.util.*;
 
 @Setter
 @Getter
@@ -58,4 +57,8 @@ public class AccountBasicInfoValidator {
     private String protocol;
 
     private String errorAccount;
+
+    private int rowspan;
+    private Map<String, AccountFinanceInfoValidator> financeList = new HashMap<>();
+    private Map<String, AccountChannelInfoValidator> channelList = new HashMap<>();
 }

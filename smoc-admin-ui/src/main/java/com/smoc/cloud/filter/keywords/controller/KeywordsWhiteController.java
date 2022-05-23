@@ -197,6 +197,10 @@ public class KeywordsWhiteController {
             return view;
         }
 
+        if("SUPER_WHITE".equals(filterKeyWordsInfoValidator.getKeyWordsType())){
+            filterKeyWordsInfoValidator.setWaskKeyWords("");
+        }
+
         //初始化其他变量
         if (!StringUtils.isEmpty(op) && "add".equals(op)) {
             filterKeyWordsInfoValidator.setKeyWordsBusinessType(keywordsType);

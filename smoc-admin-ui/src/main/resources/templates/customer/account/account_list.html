@@ -9,6 +9,12 @@
     <th:block th:insert="fragments/common_fragments :: select_css"/>
     <!-- Tooltipster css -->
     <link rel="stylesheet" th:href="@{/static/plugins/tooltipster/tooltipster.bundle.min.css}">
+    <style>
+        .bgRow{
+            background-color:#F9F9F9
+        }
+
+    </style>
 </head>
 <body>
 <!-- Loader start 页面加载进度-->
@@ -117,58 +123,64 @@
                     </div>
                     <div class="panel-body">
                         <div class="table-responsive">
-                            <table class="table table table-hover m-10" style="margin-top: -12px;">
+                            <table class="table table m-10" style="margin-top: -12px;">
                                 <thead>
                                 <tr>
                                     <th>企业名称</th>
                                     <th>业务账号/业务账号名称</th>
                                     <th>信息分类/扩展码</th>
                                     <th>业务类型</th>
-                                    <th>发送运营商</th>
-                                    <th>通道组/资费</th>
+                                    <th>发送运营商/资费</th>
+                                    <th>通道</th>
                                     <th>开户完成进度</th>
                                     <th style="text-align:center">状态</th>
                                     <th>操作</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="info:${list}">
-                                    <td style="line-height:44px">
+                                <span th:each="info:${list}">
+                                    <tr th:class="${infoStat.odd} ? 'bgRow'">
+                                    <td style="vertical-align: middle;line-height: 26px" th:rowspan="${info.rowspan}">
                                         <a th:href="@{/account/center/{enterpriseId}(enterpriseId=${info.enterpriseId})}" data-toggle="tooltip"
                                            data-placement="bottom" title="" data-original-title="跳转到业务账号中心">
                                             <span style="color:#797979">[[${info.enterpriseName}]]</span></a>
                                     </td>
-                                    <td>
+                                    <td style="vertical-align: middle;line-height: 26px" th:rowspan="${info.rowspan}">
                                         [[${info.accountId}]]<br>
                                         [[${info.accountName}]]
                                     </td>
-                                    <td>
+                                    <td style="vertical-align: middle;line-height: 26px" th:rowspan="${info.rowspan}">
                                         <mpm:tag identity="infoType" show-type="label" key="code" th:value="${info.infoType}"/>
                                         <br>
                                         [[${info.extendCode}]]
                                     </td>
-                                    <td style="line-height:44px">
+                                    <td style="vertical-align: middle;line-height: 26px" th:rowspan="${info.rowspan}">
                                         <mpm:tag identity="businessType" show-type="button"
                                                  key="code" th:value="${info.businessType}"
                                                  class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;MULTI_SMS,btn btn-brown btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;5G_SMS,btn btn-primary btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-inverse btn-rounded btn-sm waves-effect waves-light"/>
                                     </td>
-                                    <td style="line-height:44px">
-                                        <mpm:tag identity="carrier" show-type="label" key="code" th:value="${info.carrier}"/>
+                                    <td style="vertical-align: middle;line-height: 26px" th:each="finance:${info.financeList}" th:if="${financeStat.index ==0}">
+                                       <span th:if="${info.carrier ne 'INTL'}"><mpm:tag identity="carrier" show-type="label" key="code" th:value="${finance.key}"/>：
+                                            <span th:if="${not #strings.isEmpty(finance.value.carrierPrice)}">[[${finance.value.carrierPrice}]]</span>
+                                            <span th:if="${#strings.isEmpty(finance.value.carrierPrice)}" style="color: red">未配置价格</span>
+                                        </span>
+                                        <span th:if="${info.carrier eq 'INTL'}"><mpm:tag identity="internationalArea" show-type="label" key="code" th:value="${finance.key}"/>：
+                                            <span th:if="${not #strings.isEmpty(finance.value.carrierPrice)}">[[${finance.value.carrierPrice}]]</span>
+                                            <span th:if="${#strings.isEmpty(finance.value.carrierPrice)}" style="color: red">未配置价格</span>
+                                        </span>
                                     </td>
-                                    <td>
-                                        <i data-toggle="tooltip"
-                                           data-placement="right"
-                                           th:id="'channelTooltip'+${info.accountId}"
-                                           th:onmouseover="channelTip([[${info.accountId}]])"
-                                           class="mdi mdi-comment-text" style="margin-left:5px"></i>
-                                        <br>
-                                        <i data-toggle="tooltip"
-                                           data-placement="right"
-                                           th:id="'priceTooltip'+${info.accountId}"
-                                           th:onmouseover="carrierPrice([[${info.accountId}]])"
-                                           class="mdi mdi-comment-text-outline" style="margin-left:5px"></i>
+                                   <td style="vertical-align: middle;line-height: 26px" th:each="channel:${info.channelList}" th:if="${channelStat.index ==0 and info.carrier ne 'INTL'}">
+                                       <mpm:tag identity="carrier" show-type="label" key="code" th:value="${channel.key}"/>：
+                                       <span th:if="${not #strings.isEmpty(channel.value.channelName)}">[[${channel.value.channelName}]]</span>
+                                       <span th:if="${#strings.isEmpty(channel.value.channelName)}" style="color: red">未配置通道</span>
                                     </td>
-                                    <td style="line-height:44px">
+                                    <td style="vertical-align: middle;line-height: 26px" th:each="channel:${info.channelList}" th:if="${channelStat.index ==0 and info.carrier eq 'INTL'}" th:rowspan="${info.rowspan}">
+                                       <mpm:tag identity="carrier" show-type="label" key="code" th:value="${info.carrier}"/>：
+                                        <span th:if="${not #strings.isEmpty(channel.value.channelName)}">[[${channel.value.channelName}]]</span>
+                                        <span th:if="${#strings.isEmpty(channel.value.channelName)}" style="color: red">未配置通道</span>
+                                    </td>
+
+                                    <td style="vertical-align: middle;line-height: 26px" th:rowspan="${info.rowspan}">
                                         <div class="progress" style="margin-top:5px;margin-top:16px">
                                             <div role="progressbar" aria-valuenow="60" aria-valuemin="0"
                                                  aria-valuemax="100" style="width: 20%;"
@@ -194,34 +206,34 @@
                                                  data-toggle="tooltip" data-placement="bottom" title="" data-original-title="过滤信息"></div>
                                         </div>
                                     </td>
-                                    <td style="text-align:center;line-height:44px">
-                                    <mpm:tag identity="accountStatus" show-type="button" key="code" th:value="${info.accountStatus}"
-                                             class="1,btn btn-info btn-rounded btn-sm waves-effect waves-light;2,btn btn-warning btn-rounded btn-sm waves-effect waves-light;3,btn btn-inverse btn-rounded btn-sm waves-effect waves-light;0,btn btn-danger btn-rounded btn-sm waves-effect waves-light;"/>
-                                </td>
-                                    <td>
+                                    <td style="vertical-align: middle;line-height: 26px" th:rowspan="${info.rowspan}">
+                                        <mpm:tag identity="accountStatus" show-type="button" key="code" th:value="${info.accountStatus}"
+                                                 class="1,btn btn-info btn-rounded btn-sm waves-effect waves-light;2,btn btn-warning btn-rounded btn-sm waves-effect waves-light;3,btn btn-inverse btn-rounded btn-sm waves-effect waves-light;0,btn btn-danger btn-rounded btn-sm waves-effect waves-light;"/>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px" th:rowspan="${info.rowspan}">
                                         <a sec:authorize-url="/account/edit/center/*/*"
                                            th:href="@{/account/edit/center/finance/{accountId}(accountId=${info.accountId})}"
                                            data-toggle="tooltip" data-placement="bottom"
                                            data-original-title="修改资费"
                                            class="on-default edit-row"
                                            style="padding-left: 3px;color: #29b6f6;"><i style="font-size: 20px"
-                                           class="mdi mdi-coin"></i></a>
+                                                                                        class="mdi mdi-coin"></i></a>
                                         <a
-                                            sec:authorize-url="/account/edit/center/*/*"
-                                            th:href="@{/account/edit/center/interface/{accountId}(accountId=${info.accountId})}"
-                                            data-toggle="tooltip" data-placement="bottom"
-                                            data-original-title="修改接口信息"
-                                            class="on-default edit-row"
-                                            style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 20px"
-                                            class="mdi mdi-view-grid"></i></a>
+                                                sec:authorize-url="/account/edit/center/*/*"
+                                                th:href="@{/account/edit/center/interface/{accountId}(accountId=${info.accountId})}"
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="修改接口信息"
+                                                class="on-default edit-row"
+                                                style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                             class="mdi mdi-view-grid"></i></a>
                                         <a th:if="${'ACCOUNT_CHANNEL' eq info.accountChannelType}"
-                                            sec:authorize-url="/account/edit/center/*/*"
-                                            th:href="@{/account/edit/center/channel/{accountId}(accountId=${info.accountId})}"
-                                            data-toggle="tooltip" data-placement="bottom"
-                                            data-original-title="修改通道"
-                                            class="on-default edit-row"
-                                            style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 20px"
-                                            class=" mdi mdi-view-headline"></i></a>
+                                           sec:authorize-url="/account/edit/center/*/*"
+                                           th:href="@{/account/edit/center/channel/{accountId}(accountId=${info.accountId})}"
+                                           data-toggle="tooltip" data-placement="bottom"
+                                           data-original-title="修改通道"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                        class=" mdi mdi-view-headline"></i></a>
                                         <a th:if="${'ACCOUNT_CHANNEL_GROUP' eq info.accountChannelType}"
                                            sec:authorize-url="/account/edit/center/*/*"
                                            th:href="@{/account/edit/center/product/{accountId}(accountId=${info.accountId})}"
@@ -229,15 +241,15 @@
                                            data-original-title="修改通道组"
                                            class="on-default edit-row"
                                            style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 20px"
-                                           class=" mdi mdi-view-headline"></i></a>
+                                                                                        class=" mdi mdi-view-headline"></i></a>
                                         <a
-                                            sec:authorize-url="/account/edit/center/*/*"
-                                            th:href="@{/account/edit/center/filter/{accountId}(accountId=${info.accountId})}"
-                                            data-toggle="tooltip" data-placement="bottom"
-                                            data-original-title="修改过滤参数"
-                                            class="on-default edit-row"
-                                            style="padding-left: 3px;color: #29b6f6;"><i style="font-size: 20px"
-                                            class="mdi mdi-window-maximize"></i></a>
+                                                sec:authorize-url="/account/edit/center/*/*"
+                                                th:href="@{/account/edit/center/filter/{accountId}(accountId=${info.accountId})}"
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                data-original-title="修改过滤参数"
+                                                class="on-default edit-row"
+                                                style="padding-left: 3px;color: #29b6f6;"><i style="font-size: 20px"
+                                                                                             class="mdi mdi-window-maximize"></i></a>
                                         <br>
                                         <a sec:authorize-url="/account/view/center/*"
                                            th:href="@{/account/view/center/{accountId}(accountId=${info.accountId})}"
@@ -257,14 +269,36 @@
                                            data-placement="left" title="" data-original-title="EC业务账号中心"
                                         ><i style="font-size: 18px" class="glyphicon glyphicon-cog"></i></a>
                                         <a sec:authorize-url="/account/forbiddenAccountById/*/*"
-                                            th:onclick="confirmDelete([[${info.accountId}]],[[${info.accountStatus}]])"
-                                            data-toggle="modal"
+                                           th:onclick="confirmDelete([[${info.accountId}]],[[${info.accountStatus}]])"
+                                           data-toggle="modal"
                                            data-target="#confirm-modal" class="on-default remove-row"
                                            th:style="${(info.accountStatus eq '1' or info.accountStatus eq '2' or info.accountStatus eq '3')?'padding-left: 5px;color: #f05050':'padding-left: 5px;color: #29b6f6'}"
                                            th:title="${(info.accountStatus eq '1' or info.accountStatus eq '2' or info.accountStatus eq '3') ?'注销EC业务账号':'启用EC业务账号'}"
                                         ><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
                                     </td>
-                                </tr>
+
+                                    </tr>
+                                    <tr th:class="${infoStat.odd} ? 'bgRow'" style="vertical-align: middle;line-height: 26px" th:each="finance:${info.financeList}" th:if="${financeStat.index >0}" >
+                                        <td style="vertical-align: middle;line-height: 26px">
+                                            <span th:if="${info.carrier ne 'INTL'}"><mpm:tag identity="carrier" show-type="label" key="code" th:value="${finance.key}"/>：
+                                                <span th:if="${not #strings.isEmpty(finance.value.carrierPrice)}">[[${finance.value.carrierPrice}]]</span>
+                                                <span th:if="${#strings.isEmpty(finance.value.carrierPrice)}" style="color: red">未配置价格</span>
+                                            </span>
+                                            <span th:if="${info.carrier eq 'INTL'}"><mpm:tag identity="internationalArea" show-type="label" key="code" th:value="${finance.key}"/>：
+                                                <span th:if="${not #strings.isEmpty(finance.value.carrierPrice)}">[[${finance.value.carrierPrice}]]</span>
+                                                <span th:if="${#strings.isEmpty(finance.value.carrierPrice)}" style="color: red">未配置价格</span>
+                                            </span>
+                                        </td>
+                                        <td style="vertical-align: middle;line-height: 26px" th:if="${info.carrier ne 'INTL'}">
+                                            <span ><mpm:tag identity="carrier" show-type="label" key="code" th:value="${finance.key}"/>：
+                                                <span th:if="${not #strings.isEmpty(info.channelList[finance.key].channelName)}">[[${info.channelList[finance.key].channelName}]]</span>
+                                                <span th:if="${#strings.isEmpty(info.channelList[finance.key].channelName)}" style="color: red">未配置通道</span>
+                                            </span>
+                                        </td>
+                                    </tr>
+
+                                </span>
+
 
                                 </tbody>
                             </table>

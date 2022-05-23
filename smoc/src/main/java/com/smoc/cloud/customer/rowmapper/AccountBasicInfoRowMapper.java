@@ -26,6 +26,7 @@ public class AccountBasicInfoRowMapper implements RowMapper<AccountBasicInfoVali
         qo.setAccountProcess(resultSet.getString("ACCOUNT_PROCESS"));
         qo.setAccountStatus(resultSet.getString("ACCOUNT_STATUS"));
         qo.setAccountChannelType(resultSet.getString("ACCOUNT_CHANNEL_TYPE"));
+        qo.setCountryCode(resultSet.getString("COUNTRY_CODE"));
         return qo;
     }
 }

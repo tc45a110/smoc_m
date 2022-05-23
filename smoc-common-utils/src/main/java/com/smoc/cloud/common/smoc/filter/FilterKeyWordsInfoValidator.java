@@ -22,7 +22,7 @@ public class FilterKeyWordsInfoValidator {
 
     private String keyWordsType;
 
-    @Length(max = 128, message = "关键词最大长度为{max}个字符")
+    @Length(max = 128, message = "覆盖词最大长度为{max}个字符")
     private String waskKeyWords;
 
     @NotNull(message = "关键词不能为空！")

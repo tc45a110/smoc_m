@@ -27,11 +27,26 @@
                     <div class="row m-b-60">
                         <div class="col-sm-12">
                             <form id="query_form" method="post"  th:action="@{/filter/keywords/commonPage}" th:object="${filterKeyWordsInfoValidator}">
+                                <div class="form-group  col-sm-3">
+                                    <select data-style="btn-default" name="keyWordsType" data-live-search="true" id="keyWordsType" class="selectpicker form-control" tabindex="-98">
+                                        <option value="" data-icon="mdi mdi-appnet">--请选择类别--</option>
+                                        <option data-icon="mdi mdi-appnet" value="CHECK" th:selected="${filterKeyWordsInfoValidator.keyWordsType eq 'CHECK'}">审核词</option>
+                                        <option data-icon="mdi mdi-appnet" value="BLACK" th:selected="${filterKeyWordsInfoValidator.keyWordsType eq 'BLACK'}">敏感词</option>
+                                        <option data-icon="mdi mdi-appnet" value="WHITE_AVOID_CHECK" th:selected="${filterKeyWordsInfoValidator.keyWordsType eq 'WHITE_AVOID_CHECK'}">免审白词</option>
+                                        <option data-icon="mdi mdi-appnet" value="WHITE_AVOID_BLACK" th:selected="${filterKeyWordsInfoValidator.keyWordsType eq 'WHITE_AVOID_BLACK'}">洗黑白词</option>
+                                        <option data-icon="mdi mdi-appnet" value="SUPER_WHITE" th:selected="${filterKeyWordsInfoValidator.keyWordsType eq 'SUPER_WHITE'}">超级白词</option>
+                                        <option data-icon="mdi mdi-appnet" value="WHITE_AVOID_REGULAR" th:selected="${filterKeyWordsInfoValidator.keyWordsType eq 'WHITE_AVOID_REGULAR'}">正则白词</option>
+                                    </select>
+                                </div>
                                 <input type="hidden" name="keyWordsBusinessType" th:value="${keywordsType}">
                                 <input type="hidden" name="businessId" th:value="${businessId}">
                                 <input type="hidden" name="currentPage" id="currentPage" th:value="${pageParams.currentPage}">
                                 <input type="hidden" name="pageSize" id="pageSize" th:value="${pageParams.pageSize}">
-                                <div class="form-group col-sm-12 pull-right" style="text-align: right">
+                                <div class="form-group col-sm-9 pull-right" style="text-align: right">
+                                    <button sec:authorize-url="/filter/keywords/commonPage"
+                                            class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-search"></i> 查询
+                                    </button>
                                     <a  sec:authorize-url="/filter/keywords/upFilesCommon/*/*/*"
                                         th:href="@{/filter/keywords/upFilesCommon/{keywordsType}/{businessId}/CHECK(businessId=${businessId},keywordsType=${keywordsType})}"
                                         class="btn btn-primary waves-effect waves-light m-l-10 btn-md">
@@ -48,7 +63,7 @@
                                         th:href="@{/filter/keywords/upFilesCommon/{keywordsType}/{businessId}/BLACK(businessId=${businessId},keywordsType=${keywordsType})}"
                                         class="btn btn-inverse waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-import"></i>
-                                        导入黑词
+                                        导入敏感词
                                     </a>
                                 </div>
                             </form>
@@ -73,7 +88,7 @@
                                 <tr>
                                     <th>关键词类别</th>
                                     <th>关键词</th>
-                                    <th>处理关键词</th>
+                                    <th>要覆盖的词</th>
                                     <th>关键词描述</th>
                                     <th>创建人</th>
                                     <th>创建日期</th>
@@ -88,7 +103,7 @@
                                     <span th:if="${info.keyWordsType eq 'SUPER_WHITE'}" class="btn btn-primary btn-rounded btn-sm waves-effect waves-light">超级白词</span>
                                     <span th:if="${info.keyWordsType eq 'WHITE_AVOID_REGULAR'}" class="btn btn-brown btn-rounded btn-sm waves-effect waves-light">正则白词</span>
                                     <span th:if="${info.keyWordsType eq 'CHECK'}" class="btn btn-info btn-rounded btn-sm waves-effect waves-light">审核词</span>
-                                    <span th:if="${info.keyWordsType eq 'BLACK'}" class="btn btn-inverse btn-rounded btn-sm waves-effect waves-light">黑词</span>
+                                    <span th:if="${info.keyWordsType eq 'BLACK'}" class="btn btn-inverse btn-rounded btn-sm waves-effect waves-light">敏感词</span>
                                 </td>
                                 <td>[[${info.keyWords}]]</td>
                                 <td>[[${info.waskKeyWords}]]</td>

@@ -51,7 +51,6 @@ public class ChannelInterfaceValidator {
     @Range(max = 10000, message = "最大速率为{max}！")
     private Integer maxSendSecond;
 
-    @Range(min = 0, max = 10000, message = "心跳间隔单位长度要在{min}-{max}之间！")
     private Integer heartbeatInterval;
 
     @NotNull(message = "通道协议类型不能为空！")

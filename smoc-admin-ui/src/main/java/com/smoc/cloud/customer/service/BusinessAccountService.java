@@ -486,6 +486,11 @@ public class BusinessAccountService {
                 map.put("webPassword",webPassword);
                 webList.add(map);
             }
+        }else{
+            Map<String, Object> map = new HashMap<>();
+            map.put("webLoginName","无");
+            map.put("webPassword","无");
+            webList.add(map);
         }
 
         //接口账号发送属性

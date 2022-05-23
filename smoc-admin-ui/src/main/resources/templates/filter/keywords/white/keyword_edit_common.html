@@ -48,14 +48,13 @@
                                                 <input type="text" required="" th:field="*{keyWords}" class="form-control" autocomplete="off"
                                                        placeholder="白词">
                                             </div>
-                                                <div class="form-group m-b-20">
-                                                    <label>关键词<span class="text-danger">*</span>&nbsp;&nbsp;<span
+                                                <div class="form-group m-b-20" id="superKey">
+                                                    <label><span  id="key-tip">要覆盖的审核词</span><span class="text-danger">*</span>&nbsp;&nbsp;<span
                                                             class="text-danger" style="font-weight: 200;font-size: 12px"></span>
                                                     </label>
                                                     <input type="text" th:field="*{waskKeyWords}" id="waskKeyWords" class="form-control" autocomplete="off"
-                                                           placeholder="对关键进行拦截处理" required="" >
+                                                           placeholder="要覆盖的审核词" required="" >
                                                 </div>
-
 
                                                 <div class="form-group m-b-20">
                                                 <label>白词描述</label>
@@ -69,6 +68,12 @@
                                                 <input type="hidden" th:field="*{createdBy}">
                                                 <button sec:authorize-url="/filter/keywords/save/*/*/*" type="submit"
                                                         class="btn btn-teal waves-effect waves-light">提交</button>
+                                                <a  sec:authorize-url="/filter/keywords/list/BUSINESS_ACCOUNT/*" th:if="${filterKeyWordsInfoValidator.keyWordsBusinessType eq 'BUSINESS_ACCOUNT'}"
+                                                    th:href="@{/filter/keywords/list/{keywordsType}/{businessId}(keywordsType=${filterKeyWordsInfoValidator.keyWordsBusinessType},businessId=${businessId})}" style="margin-left:20px"
+                                                    class="btn btn-default waves-effect waves-light">返回</a>
+                                                <a  sec:authorize-url="/filter/keywords/list/CHANNEL/*" th:if="${filterKeyWordsInfoValidator.keyWordsBusinessType eq 'CHANNEL'}"
+                                                    th:href="@{/filter/keywords/list/{keywordsType}/{businessId}(keywordsType=${filterKeyWordsInfoValidator.keyWordsBusinessType},businessId=${businessId})}" style="margin-left:20px"
+                                                    class="btn btn-default waves-effect waves-light">返回</a>
 
                                             </div>
                                         </div>
@@ -101,13 +106,26 @@
     })
 
     function changeType(value) {
+
+        if("WHITE_AVOID_CHECK"==value){
+            document.getElementById("key-tip").innerText = "要覆盖的审核词";
+            $("#waskKeyWords").prop("placeholder","输入要覆盖的审核词");
+        }
+        if("WHITE_AVOID_BLACK"==value){
+            document.getElementById("key-tip").innerText = "要覆盖的敏感词";
+            $("#waskKeyWords").prop("placeholder","输入要覆盖的敏感词");
+        }
+        if("WHITE_AVOID_REGULAR"==value){
+            document.getElementById("key-tip").innerText = "要覆盖的正则表达式";
+            $("#waskKeyWords").prop("placeholder","输入要覆盖的正则表达式");
+        }
+
         if("SUPER_WHITE"==value){
-            $("#waskKeyWords").val("");
             $("#waskKeyWords").removeAttr("required");
-            $("#waskKeyWords").prop("readonly","true");
+            document.getElementById("superKey").style.display = "none";
         }else{
             $("#waskKeyWords").prop("required","true");
-            $("#waskKeyWords").removeAttr("readonly");
+            document.getElementById("superKey").style.display = "";
         }
     }
 

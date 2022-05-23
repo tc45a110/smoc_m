@@ -68,7 +68,12 @@
 
                             <button sec:authorize-url="/filter/keywords/white/upFiles" type="submit"
                                     class="btn btn-teal waves-effect waves-light">导入</button>
-
+                            <a  sec:authorize-url="/filter/keywords/list/BUSINESS_ACCOUNT/*" th:if="${filterKeyWordsInfoValidator.keyWordsBusinessType eq 'BUSINESS_ACCOUNT'}"
+                                th:href="@{/filter/keywords/list/{keywordsType}/{businessId}(keywordsType=${filterKeyWordsInfoValidator.keyWordsBusinessType},businessId=${businessId})}" style="margin-left:20px"
+                                class="btn btn-default waves-effect waves-light">返回</a>
+                            <a  sec:authorize-url="/filter/keywords/list/CHANNEL/*" th:if="${filterKeyWordsInfoValidator.keyWordsBusinessType eq 'CHANNEL'}"
+                                th:href="@{/filter/keywords/list/{keywordsType}/{businessId}(keywordsType=${filterKeyWordsInfoValidator.keyWordsBusinessType},businessId=${businessId})}" style="margin-left:20px"
+                                class="btn btn-default waves-effect waves-light">返回</a>
                         </div>
                     </form>
                 </div> <!-- end row -->

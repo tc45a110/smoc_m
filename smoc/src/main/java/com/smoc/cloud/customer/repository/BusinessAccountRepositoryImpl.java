@@ -4,16 +4,23 @@ package com.smoc.cloud.customer.repository;
 import com.smoc.cloud.common.BasePageRepository;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
+import com.smoc.cloud.common.smoc.customer.qo.AccountChannelInfoQo;
 import com.smoc.cloud.common.smoc.customer.qo.AccountInfoQo;
 import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticComplaintData;
 import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
+import com.smoc.cloud.common.smoc.customer.validator.AccountChannelInfoValidator;
+import com.smoc.cloud.common.smoc.customer.validator.AccountFinanceInfoValidator;
 import com.smoc.cloud.common.smoc.message.MessageAccountValidator;
 import com.smoc.cloud.customer.rowmapper.*;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 2020/5/28 15:44
@@ -38,6 +45,7 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", t.ACCOUNT_PROCESS");
         sqlBuffer.append(", t.ACCOUNT_STATUS");
         sqlBuffer.append(", t.ACCOUNT_CHANNEL_TYPE");
+        sqlBuffer.append(", t.COUNTRY_CODE");
         sqlBuffer.append(", e.ENTERPRISE_NAME");
         sqlBuffer.append("  from account_base_info t left join enterprise_basic_info e on t.ENTERPRISE_ID = e.ENTERPRISE_ID");
         sqlBuffer.append("  where 1=1 ");
@@ -82,8 +90,38 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
 
         PageList<AccountBasicInfoValidator> pageList = this.queryByPageForMySQL(sqlBuffer.toString(), params, pageParams.getCurrentPage(), pageParams.getPageSize(), new AccountBasicInfoRowMapper());
         pageList.getPageParams().setParams(qo);
+
+        List<AccountBasicInfoValidator> list = pageList.getList();
+        for (int i = 0; i < list.size(); i++) {
+            AccountBasicInfoValidator info = list.get(i);
+            String[] carrier = {};
+            if("INTL".equals(info.getCarrier())){
+                carrier = info.getCountryCode().split(",");
+                info.setRowspan(carrier.length);
+            }else{
+                carrier = info.getCarrier().split(",");
+                info.setRowspan(carrier.length);
+            }
+
+            Map<String, AccountFinanceInfoValidator> financeMap = new HashMap<>();
+            Map<String, AccountChannelInfoValidator> channelMap = new HashMap<>();
+            for (int a = 0; a < carrier.length; a++) {
+                financeMap.put(carrier[a], new AccountFinanceInfoValidator());
+                channelMap.put(carrier[a], new AccountChannelInfoValidator());
+            }
+
+            //查询运营商价格
+            Map<String, AccountFinanceInfoValidator> financeList = queryFinanceByAccountId(info.getAccountId(),financeMap);
+            info.setFinanceList(financeList);
+            //查询通道信息
+            Map<String, AccountChannelInfoValidator> channelList = queryChannelByAccountId(info.getAccountId(),channelMap);
+            info.setChannelList(channelList);
+        }
+
         return pageList;
     }
+
+
 
     public  List<AccountBasicInfoValidator> findBusinessAccountByEnterpriseId(String enterpriseId) {
 
@@ -457,5 +495,78 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
         PageList<AccountInfoQo> pageList = this.queryByPageForMySQL(sqlBuffer.toString(), params, pageParams.getCurrentPage(), pageParams.getPageSize(), new AccountInfoQoRowMapper());
         pageList.getPageParams().setParams(qo);
         return pageList;
+    }
+
+    //查询运营商价格
+    private Map<String, AccountFinanceInfoValidator> queryFinanceByAccountId(String accountId,Map<String, AccountFinanceInfoValidator> map) {
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append("  t.ID");
+        sqlBuffer.append(", t.ACCOUNT_ID");
+        sqlBuffer.append(", t.PAY_TYPE");
+        sqlBuffer.append(", t.CHARGE_TYPE");
+        sqlBuffer.append(", t.FROZEN_RETURN_DATE");
+        sqlBuffer.append(", t.ACCOUNT_CREDIT_SUM");
+        sqlBuffer.append(", t.CARRIER");
+        sqlBuffer.append(", t.CARRIER_PRICE");
+        sqlBuffer.append(", t.CARRIER_TYPE");
+        sqlBuffer.append("  from account_finance_info t where t.ACCOUNT_ID =? ");
+
+        List<Object> paramsList = new ArrayList<Object>();
+        paramsList.add(accountId.trim());
+
+        sqlBuffer.append(" order by t.CARRIER ");
+
+        //根据参数个数，组织参数值
+        Object[] params = new Object[paramsList.size()];
+        paramsList.toArray(params);
+
+        List<AccountFinanceInfoValidator> list = this.queryForObjectList(sqlBuffer.toString(), params,  new AccountFinanceInfoRowMapper());
+
+        if (!StringUtils.isEmpty(list)) {
+            for (AccountFinanceInfoValidator info : list) {
+                map.put(info.getCarrier(), info);
+            }
+        }
+        return map;
+    }
+
+    //查询通道信息
+    private Map<String, AccountChannelInfoValidator> queryChannelByAccountId(String accountId,Map<String, AccountChannelInfoValidator> map) {
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append("  t.ID");
+        sqlBuffer.append(", t.ACCOUNT_ID");
+        sqlBuffer.append(", t.CONFIG_TYPE");
+        sqlBuffer.append(", t.CARRIER");
+        sqlBuffer.append(", t.CHANNEL_ID");
+        sqlBuffer.append(", t.CHANNEL_PRIORITY");
+        sqlBuffer.append(", t.CHANNEL_WEIGHT");
+        sqlBuffer.append(", t.CHANNEL_SOURCE");
+        sqlBuffer.append(", t.CHANGE_SOURCE");
+        sqlBuffer.append(", t.CHANNEL_STATUS");
+        sqlBuffer.append(", t.CREATED_BY");
+        sqlBuffer.append(", b.CHANNEL_NAME");
+        sqlBuffer.append(", DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME");
+        sqlBuffer.append("  from account_channel_info t left join config_channel_basic_info b on t.CHANNEL_ID = b.CHANNEL_ID where t.ACCOUNT_ID = ? ");
+
+        List<Object> paramsList = new ArrayList<Object>();
+        paramsList.add(accountId.trim());
+
+        sqlBuffer.append(" order by t.CARRIER ");
+
+        //根据参数个数，组织参数值
+        Object[] params = new Object[paramsList.size()];
+        paramsList.toArray(params);
+
+        List<AccountChannelInfoValidator> list = this.queryForObjectList(sqlBuffer.toString(), params,  new AccountChannelDetailRowMapper());
+
+        if (!StringUtils.isEmpty(list)) {
+            for (AccountChannelInfoValidator info : list) {
+                map.put(info.getCarrier(), info);
+            }
+        }
+
+        return map;
     }
 }

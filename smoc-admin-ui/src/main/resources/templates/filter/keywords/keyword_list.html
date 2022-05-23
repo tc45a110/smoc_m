@@ -25,14 +25,14 @@
             <div class="col-xs-12">
                 <div class="page-title-box">
                     <h4 class="page-title">
-                        系统<span th:if="${filterKeyWordsInfoValidator.businessId eq 'CHECK'}">审核词</span><span th:if="${filterKeyWordsInfoValidator.businessId eq 'BLACK'}">黑词</span>
+                        系统<span th:if="${filterKeyWordsInfoValidator.businessId eq 'CHECK'}">审核词</span><span th:if="${filterKeyWordsInfoValidator.businessId eq 'BLACK'}">敏感词</span>
                         </h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
                             过滤配置
                         </li>
                         <li class="active">
-                            系统<span th:if="${filterKeyWordsInfoValidator.businessId eq 'CHECK'}">审核词</span><span th:if="${filterKeyWordsInfoValidator.businessId eq 'BLACK'}">黑词</span>
+                            系统<span th:if="${filterKeyWordsInfoValidator.businessId eq 'CHECK'}">审核词</span><span th:if="${filterKeyWordsInfoValidator.businessId eq 'BLACK'}">敏感词</span>
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -50,7 +50,7 @@
                             <form id="query_form" th:action="@{/filter/keywords/SYSTEM/page}" th:object="${filterKeyWordsInfoValidator}" method="post">
                                 <div class="form-group  col-sm-3">
                                     <input type="text" class="form-control" th:field="*{keyWords}" autocomplete="off"
-                                           th:placeholder="${filterKeyWordsInfoValidator.businessId eq 'CHECK' ? '审核词' : (filterKeyWordsInfoValidator.businessId eq 'BLACK' ? '黑词' : '关键词')}">
+                                           th:placeholder="${filterKeyWordsInfoValidator.businessId eq 'CHECK' ? '审核词' : (filterKeyWordsInfoValidator.businessId eq 'BLACK' ? '敏感词' : '关键词')}">
                                 </div>
                                 <input type="hidden" class="form-control" th:field="*{businessId}">
                                 <div class="form-group col-sm-3 pull-right" style="text-align: right">
@@ -83,15 +83,15 @@
             <div class="col-sm-12">
                 <div class="panel panel-color panel-info">
                     <div class="panel-heading">
-                        <h3 class="panel-title">系统<span th:if="${filterKeyWordsInfoValidator.businessId eq 'CHECK'}">审核词</span><span th:if="${filterKeyWordsInfoValidator.businessId eq 'BLACK'}">黑词</span>列表</h3>
+                        <h3 class="panel-title">系统<span th:if="${filterKeyWordsInfoValidator.businessId eq 'CHECK'}">审核词</span><span th:if="${filterKeyWordsInfoValidator.businessId eq 'BLACK'}">敏感词</span>列表</h3>
                     </div>
                     <div class="panel-body">
                         <div class="table-responsive">
                             <table class="table table table-hover m-10" style="margin-top: -12px;">
                                 <thead>
                                 <tr>
-                                    <th>系统<span th:if="${filterKeyWordsInfoValidator.businessId eq 'CHECK'}">审核词</span><span th:if="${filterKeyWordsInfoValidator.businessId eq 'BLACK'}">黑词</span></th>
-                                    <th><mpm:tag th:value="${filterKeyWordsInfoValidator.businessId}"  identity="keyWordsType" show-type="label" key="code"/>描述</th>
+                                    <th>系统<span th:if="${filterKeyWordsInfoValidator.businessId eq 'CHECK'}">审核词</span><span th:if="${filterKeyWordsInfoValidator.businessId eq 'BLACK'}">敏感词</span></th>
+                                    <th><span th:if="${filterKeyWordsInfoValidator.businessId eq 'CHECK'}">审核词</span><span th:if="${filterKeyWordsInfoValidator.businessId eq 'BLACK'}">敏感词</span>描述</th>
                                     <th>创建人</th>
                                     <th>创建日期</th>
                                     <th>操作</th>

@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org"  xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <th:block th:insert="fragments/common_fragments :: common_header"/>
     <th:block th:insert="fragments/common_fragments :: common_css"/>
     <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
     <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
+    <!-- Tooltipster css -->
+    <link rel="stylesheet" th:href="@{/static/plugins/tooltipster/tooltipster.bundle.min.css}">
 
 </head>
 <body>
@@ -78,69 +81,114 @@
                                         通道信息
                                     </h3>
                                 </div>
-                                <div id="login-account" class="panel-body" style="padding-bottom:0px">
+                                <div class="panel-body" style="padding-bottom:0px">
                                     <div class="row">
                                         <div class="col-sm-12">
                                             <div class="property-content"
-                                                 style="height:216px">
+                                                 style="height:280px">
                                                 <div class="listingInfo">
                                                     <div class="">
                                                         <h5 style="padding-left:10px">
-                                                            通道名称：SMPP-短信-三方移动
+                                                            通道名称：[[${channelBasicInfoValidator.channelName}]]
                                                         </h5>
                                                     </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">通道ID：CHID10027</p>
-                                                        <p style="font-size:12px">码号：1000869</p>
-                                                        <p style="font-size:12px">
-                                                            通道资费(元/条)：
-                                                            <span>¥ 0.0020</span>
+                                                    <div class="col-sm-4">
+                                                        <p style="font-size:12px">通道ID：[[${channelBasicInfoValidator.channelId}]]</p>
+                                                        <p style="font-size:12px">抗诉率：<span
+                                                                th:if="${not #strings.isEmpty(channelBasicInfoValidator.maxComplaintRate)}">[[${channelBasicInfoValidator.maxComplaintRate}]]/百万</span>
+                                                        </p>
+                                                        <p style="font-size:12px">签名方式：
+                                                            <span th:if="${channelBasicInfoValidator.businessAreaType ne 'INTL'} ">
+                                                                <mpm:tag identity="signType" show-type="label" key="code"
+                                                                         th:value="${channelBasicInfoValidator.signType}"/>
+                                                            </span>
 
                                                         </p>
-
-                                                        <p style="font-size:12px">业务类型：
-                                                            <span class="btn btn-teal waves-effect waves-light btn-xs">&#26222;&#36890;&#30701;&#20449;</span>
+                                                        <p style="font-size:12px">是否支持携号转网：
+                                                            <mpm:tag identity="isOrNo" show-type="label" key="code"
+                                                                     th:value="${channelBasicInfoValidator.transferEnable}"/>
                                                         </p>
+                                                        <p style="font-size:12px">计价方式：
+                                                            <mpm:tag identity="chargeType" show-type="label" key="code"
+                                                                     th:value="${channelBasicInfoValidator.priceStyle}"/>
+                                                        </p>
+                                                        <p style="font-size:12px">通道对接销售：[[${realName}]]</p>
                                                     </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">通道供应商：
-                                                            <span class="btn btn-custom waves-effect waves-light btn-xs">&#19977;&#26041;&#31227;&#21160;</span>
-                                                        </p>
-                                                        <p style="font-size:12px"><span>SMPP</span>通道账号：000269
-                                                        </p>
-                                                        <p style="font-size:12px">
-                                                            通道区域范围：
-                                                            <span>&#20840;&#22269;</span>
-                                                        </p>
-                                                        <p style="font-size:12px">最大速率(条/秒)：<span>300/秒</span>
-                                                        </p>
-
-                                                    </div>
-                                                    <div class="col-sm-3">
+                                                    <div class="col-sm-4">
                                                         <p style="font-size:12px">发送号码范围：
-                                                            <span>&#31227;&#21160; &#32852;&#36890; &#30005;&#20449; </span>
+                                                            <mpm:tag identity="carrier" show-type="label" key="code"
+                                                                     th:value="${channelBasicInfoValidator.carrier}"/>
                                                         </p>
-
+                                                        <p style="font-size:12px">接入省份：
+                                                            <mpm:tag identity="provices" show-type="label" key="code"
+                                                                     th:value="${channelBasicInfoValidator.accessProvince}"/>
+                                                        </p>
+                                                        <p style="font-size:12px">有无报告：
+                                                            <mpm:tag identity="yesOrNo" show-type="label" key="code"
+                                                                     th:value="${channelBasicInfoValidator.reportEnable}"/>
+                                                        </p>
+                                                        <p style="font-size:12px">携号转网方式 ：
+                                                            <mpm:tag identity="transferType" show-type="label" key="code"
+                                                                     th:value="${channelBasicInfoValidator.transferType}"/>
+                                                        </p>
+                                                        <p style="font-size:12px">通道资费(元/条)：
+                                                            <span th:if="${not #strings.isEmpty(channelBasicInfoValidator.channelPrice)}">¥ [[${channelBasicInfoValidator.channelPrice}]]</span>
+                                                            <i th:if="${channelBasicInfoValidator.priceStyle eq 'AREA_PRICE'}"
+                                                               data-toggle="tooltip"
+                                                               data-placement="right"
+                                                               th:id="${'channelPrice'+channelBasicInfoValidator.channelId}"
+                                                               th:onmouseover="channelPrice([[${channelBasicInfoValidator.channelId}]])"
+                                                               class="mdi mdi-comment-processing"
+                                                               style="margin-left:5px"></i>
+                                                        </p>
                                                         <p style="font-size:12px">通道运行状态：
-                                                            <sapn>正常</sapn>
+                                                            <mpm:tag identity="channelLinkStatus" show-type="label" key="code"
+                                                                     th:value="${channelBasicInfoValidator.channelRunStatus}"/>
+                                                        </p>
 
-                                                        </p>
-                                                        <p style="font-size:12px">内容限制：
-                                                            <span>无</span>
-                                                        </p>
                                                     </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">抗速率：<span>0.40/百万</span>
+                                                    <div class="col-sm-4">
+                                                        <p style="font-size:12px">信息分类：
+                                                            <mpm:tag identity="infoType" show-type="label" key="code"
+                                                                     th:value="${channelBasicInfoValidator.infoType}"/>
                                                         </p>
-                                                        <p style="font-size:12px">通道对接销售：杨英</p>
-                                                        <p style="font-size:12px">通道状态：
-                                                            <span class="btn btn-success waves-effect waves-light btn-xs">&#27491;&#24120;</span>
 
+                                                        <p style="font-size:12px">通道供应商：
+                                                            <mpm:tag identity="channelSupplier" show-type="label" key="code"
+                                                                     th:value="${channelBasicInfoValidator.channelProvder}"/>
+                                                        </p>
+                                                        <p style="font-size:12px">有无上行：
+                                                            <mpm:tag identity="yesOrNo" show-type="label" key="code"
+                                                                     th:value="${channelBasicInfoValidator.upMessageEnable}"/>
+                                                        </p>
+                                                        <p style="font-size:12px"> 通道区域范围：
+                                                            <mpm:tag identity="businessAreaType" show-type="label" key="code"
+                                                                     th:value="${channelBasicInfoValidator.businessAreaType}"/>
+                                                            <i th:if="${channelBasicInfoValidator.supportAreaCodes ne 'ALL'}"
+                                                               data-toggle="tooltip" data-placement="right" title=""
+                                                               data-original-title="这个位置开发时有业务逻辑，可能多条 在这显示"
+                                                               th:id="${channelBasicInfoValidator.channelId}"
+                                                               th:onmouseover="areaCodes([[${channelBasicInfoValidator.channelId}]])"
+                                                               class="mdi mdi-comment-text" style="margin-left:5px"></i>
+                                                            <i th:if="${not #strings.isEmpty(channelBasicInfoValidator.maskProvince)}"
+                                                               data-toggle="tooltip" data-placement="right" title=""
+                                                               data-original-title="屏蔽区域，如果存在屏蔽区域的话"
+                                                               th:id="${channelBasicInfoValidator.channelId}"
+                                                               th:onmouseover="areaCodes([[${channelBasicInfoValidator.channelId}]])"
+                                                               class="mdi mdi-comment-text-outline"
+                                                               style="margin-left:5px"></i>
+                                                        </p>
+
+                                                        <p style="font-size:12px">通道状态：
+                                                            <mpm:tag identity="channelStatus" show-type="button" key="code"
+                                                                     th:value="${channelBasicInfoValidator.channelStatus}"
+                                                                     class="001,btn btn-success waves-effect waves-light btn-xs;002,btn btn-orange waves-effect waves-light btn-xs;003,btn btn-brown waves-effect waves-light btn-xs;004,btn btn-pink waves-effect waves-light btn-xs;005,btn btn-inverse waves-effect waves-light btn-xs;006,btn btn-danger waves-effect waves-light btn-xs;"/>
                                                         </p>
                                                     </div>
                                                 </div>
 
                                             </div>
+
                                         </div>
                                         <!-- /col 8 -->
                                     </div>
@@ -161,8 +209,55 @@
 </div> <!-- content -->
 <th:block th:insert="fragments/common_fragments :: common_js"/>
 <th:block th:insert="fragments/common_fragments :: select_js"/>
-<th:block th:insert="fragments/common_fragments :: common_submit_form"/>
+<!-- Tooltipster js -->
+<script th:src="@{/static/plugins/tooltipster/tooltipster.bundle.min.js}"></script>
 <script>
+
+    function areaCodes(channelId) {
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $.ajax({
+            url: contextPath + "/configure/channel/findChannelBusinessArea/" + channelId,
+            async: false,
+            success: function (data) {
+                $('#' + channelId).attr({
+                    // 设置提示内容
+                    'data-original-title': data,
+                })
+            }
+        });
+    }
+
+    //查看区域价格
+    function channelPrice(channelId) {
+
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $.ajax({
+            url: contextPath + "/configure/channel/findChannelPrice/" + channelId,
+            async: false,
+            success: function (data) {
+                var prices = data.split("@");
+                var channelPrice = ""
+                if (prices.length > 1) {
+                    for (i = 0; i < prices.length; i++) {
+                        if (i % 3 == 0 && i > 0) {
+                            channelPrice += '<br>';
+                        }
+                        channelPrice += '<span style="font-size:12px">' + prices[i] + '</span>';
+                    }
+                } else {
+                    channelPrice = '<span style="font-size:12px">' + prices + '</span>';
+                }
+
+                $('#channelPrice' + channelId).tooltipster({
+                    content: $('<p style="text-align:left;"><strong>区域价格</strong><br>' + channelPrice + '</p>'),
+                    maxWidth: 600,
+                    position: 'right',
+                    multiple: true,
+                });
+            }
+        });
+    }
+
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');

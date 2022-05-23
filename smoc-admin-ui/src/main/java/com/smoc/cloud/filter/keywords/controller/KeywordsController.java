@@ -260,6 +260,10 @@ public class KeywordsController {
             return view;
         }
 
+        if("SUPER_WHITE".equals(filterKeyWordsInfoValidator.getKeyWordsType())){
+            filterKeyWordsInfoValidator.setWaskKeyWords("");
+        }
+
         //初始化其他变量
         if (!StringUtils.isEmpty(op) && "add".equals(op)) {
             filterKeyWordsInfoValidator.setKeyWordsBusinessType(keywordsType);
@@ -479,7 +483,7 @@ public class KeywordsController {
         view.addObject("list", data.getData().getList());
         view.addObject("pageParams", data.getData().getPageParams());
         view.addObject("businessId", filterKeyWordsInfoValidator.getBusinessId());
-        view.addObject("keywordsType", filterKeyWordsInfoValidator.getKeyWordsType());
+        view.addObject("keywordsType", filterKeyWordsInfoValidator.getKeyWordsBusinessType());
 
         return view;
 
