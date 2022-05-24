@@ -31,7 +31,7 @@ public class PhoneSendFrequencyLimitFilter {
             result.put("result", "false");
             return result;
         }
-        log.info("[号码_限量]：{}", phoneFrequencyLimit);
+        //log.info("[号码_发送频率限制]：{}", phoneFrequencyLimit);
 
         //无限制
         if ("0".equals(phoneFrequencyLimit.toString())) {
@@ -47,15 +47,16 @@ public class PhoneSendFrequencyLimitFilter {
         //按分钟限制
         String[] minutes = phoneFrequencyLimit.toString().split("M");
         if (null != minutes && minutes.length == 2) {
-            Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
-            if (!pattern.matcher(minutes[0]).matches() || !pattern.matcher(minutes[1]).matches()) {
-                result.put("result", "true");
-                result.put("code", FilterResponseCode.NUMBER_FREQUENCY_LIMIT_PARAM.getCode());
-                result.put("message", FilterResponseCode.NUMBER_FREQUENCY_LIMIT_PARAM.getMessage());
-                return result;
-            }
+//            Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
+//            if (!pattern.matcher(minutes[0]).matches() || !pattern.matcher(minutes[1]).matches()) {
+//                result.put("result", "true");
+//                result.put("code", FilterResponseCode.NUMBER_FREQUENCY_LIMIT_PARAM.getCode());
+//                result.put("message", FilterResponseCode.NUMBER_FREQUENCY_LIMIT_PARAM.getMessage());
+//                return result;
+//            }
             int seconds = new Integer(minutes[0]) * 60;
             int tokens = new Integer(minutes[1]);
+            maxBurst = tokens;
             if (!filtersService.phoneFrequencyLimiterByAccount(account, phone, maxBurst, tokens, seconds, times)) {
                 result.put("result", "true");
                 result.put("code", FilterResponseCode.NUMBER_FREQUENCY_LIMIT.getCode());
@@ -69,16 +70,17 @@ public class PhoneSendFrequencyLimitFilter {
         //按小时限制
         String[] hours = phoneFrequencyLimit.toString().split("H");
         if (null != hours && hours.length == 2) {
-            Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
-            if (!pattern.matcher(hours[0]).matches() || !pattern.matcher(hours[1]).matches()) {
-                result.put("result", "true");
-                result.put("code", FilterResponseCode.NUMBER_FREQUENCY_LIMIT_PARAM.getCode());
-                result.put("message", FilterResponseCode.NUMBER_FREQUENCY_LIMIT_PARAM.getMessage());
-                return result;
-            }
+//            Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
+//            if (!pattern.matcher(hours[0]).matches() || !pattern.matcher(hours[1]).matches()) {
+//                result.put("result", "true");
+//                result.put("code", FilterResponseCode.NUMBER_FREQUENCY_LIMIT_PARAM.getCode());
+//                result.put("message", FilterResponseCode.NUMBER_FREQUENCY_LIMIT_PARAM.getMessage());
+//                return result;
+//            }
 
             int seconds = new Integer(hours[0]) * 60 * 60;
             int tokens = new Integer(hours[1]);
+            maxBurst = tokens;
             if (!filtersService.phoneFrequencyLimiterByAccount(account, phone, maxBurst, tokens, seconds, times)) {
                 result.put("result", "true");
                 result.put("code", FilterResponseCode.NUMBER_FREQUENCY_LIMIT.getCode());
@@ -92,16 +94,17 @@ public class PhoneSendFrequencyLimitFilter {
         //按天限制
         String[] days = phoneFrequencyLimit.toString().split("D");
         if (null != hours && hours.length == 2) {
-            Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
-            if (!pattern.matcher(days[0]).matches() || !pattern.matcher(days[1]).matches()) {
-                result.put("result", "true");
-                result.put("code", FilterResponseCode.NUMBER_FREQUENCY_LIMIT_PARAM.getCode());
-                result.put("message", FilterResponseCode.NUMBER_FREQUENCY_LIMIT_PARAM.getMessage());
-                return result;
-            }
+//            Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
+//            if (!pattern.matcher(days[0]).matches() || !pattern.matcher(days[1]).matches()) {
+//                result.put("result", "true");
+//                result.put("code", FilterResponseCode.NUMBER_FREQUENCY_LIMIT_PARAM.getCode());
+//                result.put("message", FilterResponseCode.NUMBER_FREQUENCY_LIMIT_PARAM.getMessage());
+//                return result;
+//            }
 
             int seconds = new Integer(days[0]) * 60 * 60 * 24;
             int tokens = new Integer(days[1]);
+            maxBurst = tokens;
             if (!filtersService.phoneFrequencyLimiterByAccount(account, phone, maxBurst, tokens, seconds, times)) {
                 result.put("result", "true");
                 result.put("code", FilterResponseCode.NUMBER_FREQUENCY_LIMIT.getCode());

@@ -1,5 +1,6 @@
 package com.smoc.cloud.configure.filters;
 
+import com.smoc.cloud.common.auth.qo.DictType;
 import com.smoc.cloud.common.filters.utils.InitializeFiltersData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  * 过滤数据初始化
@@ -48,7 +50,9 @@ public class InitializeFiltersDataController {
     public ModelAndView submit(@ModelAttribute InitializeFiltersData initializeFiltersData, HttpServletRequest request) {
 
         ModelAndView view = new ModelAndView("configure/filters/initialize_filters_data");
-
+        Map<String, DictType> dictMap = (Map<String, DictType>) request.getServletContext().getAttribute("dict");
+        DictType infoType = dictMap.get("infoType");
+        initializeFiltersData.setInfoType(infoType);
         initializeFiltersDataService.initialize(initializeFiltersData);
         view.addObject("initialize", new InitializeFiltersData());
         return view;

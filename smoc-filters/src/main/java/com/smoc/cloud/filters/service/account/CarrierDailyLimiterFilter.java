@@ -30,25 +30,26 @@ public class CarrierDailyLimiterFilter {
             return result;
         }
 
-        log.info("[账号-运营商-日限量-方式]:{}", dailyLimitStyle.toString());
-        log.info("[账号-运营商-日限量]:{}", dailyLimit.toString());
+        //log.info("[账号-运营商-日限量-方式]:{}", dailyLimitStyle.toString());
+        //log.info("[账号-运营商-日限量]:{}", dailyLimit.toString());
 
         //无限量
         if (!(null == dailyLimitStyle || StringUtils.isEmpty(dailyLimitStyle.toString())) && "0".equals(dailyLimitStyle)) {
             result.put("result", "false");
             return result;
         }
-
         //限量、计量方式
         Integer times = 1;
         if (!(null == dailyLimitStyle || StringUtils.isEmpty(dailyLimitStyle.toString())) && ("1".equals(dailyLimitStyle) || "3".equals(dailyLimitStyle))) {
             times = numbers == null ? 1 : numbers;
         }
 
+//        //redis 增加次数
+//        Long number = filtersService.incrementAccountDailyLimit(account, carrier,times);
         //触发日限量
         if (filtersService.accountDailyLimit(account, carrier, new Long(dailyLimit.toString()), times)) {
             result.put("result", "true");
-            result.put("code", FilterResponseCode.DAILY_LIMIT_CARRIER.getCode());
+            result.put("code", FilterResponseCode.LIMIT_DAILY_CARRIER.getCode());
             result.put("message", "达到" + carrier + "的日限量限制！");
             return result;
         }

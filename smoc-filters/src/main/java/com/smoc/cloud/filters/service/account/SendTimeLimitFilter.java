@@ -31,23 +31,23 @@ public class SendTimeLimitFilter {
         }
 
         String currentTime = DateTimeUtils.getDateFormat(new Date(), "HHmm");
-        log.info("[发送时间限制]：{}", sendTimeLimit.toString());
+        //log.info("[发送时间限制]：{}", sendTimeLimit.toString());
         String[] times = sendTimeLimit.toString().split("-");
         if (times.length == 2) {
-            if ((times[0].compareTo(currentTime) <= 0 && currentTime.compareTo(times[1]) <= 0)) {
+            if ((new Integer(times[0]) <= new Integer(currentTime) &&  new Integer(currentTime) <= new Integer(times[1]))) {
                 result.put("result", "false");
                 return result;
             } else {
                 result.put("result", "true");
-                result.put("code", FilterResponseCode.TIME_LIMIT.getCode());
-                result.put("message", FilterResponseCode.TIME_LIMIT.getMessage());
+                result.put("code", FilterResponseCode.LIMIT_TIME.getCode());
+                result.put("message", FilterResponseCode.LIMIT_TIME.getMessage());
                 return result;
             }
         }
 
         result.put("result", "true");
-        result.put("code", FilterResponseCode.TIME_LIMIT_CONFIG_ERROR.getCode());
-        result.put("message", FilterResponseCode.TIME_LIMIT_CONFIG_ERROR.getMessage());
+        result.put("code", FilterResponseCode.LIMIT_TIME_CONFIG_ERROR.getCode());
+        result.put("message", FilterResponseCode.LIMIT_TIME_CONFIG_ERROR.getMessage());
         return result;
     }
 

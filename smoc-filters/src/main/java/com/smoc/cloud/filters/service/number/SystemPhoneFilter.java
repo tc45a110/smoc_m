@@ -1,6 +1,7 @@
 package com.smoc.cloud.filters.service.number;
 
 import com.smoc.cloud.filters.service.FiltersService;
+import com.smoc.cloud.filters.utils.DFA.FilterInitialize;
 import com.smoc.cloud.filters.utils.FilterResponseCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -31,7 +32,7 @@ public class SystemPhoneFilter {
             return result;
         }
         //黑名单过滤层级
-        log.info("[号码_黑名单_层级]:{}", isBlackListType);
+        //log.info("[号码_黑名单_层级]:{}", isBlackListType);
         //不过滤
         if ("NO".equals(isBlackListType.toString())) {
             result.put("result", "false");
@@ -39,8 +40,10 @@ public class SystemPhoneFilter {
         }
         //低(系统黑名单)
         if ("LOW".equals(isBlackListType.toString())) {
+
+            Boolean isExistBlackList = filtersService.systemNumberBlackListFilter(phone);//FilterInitialize.numberSystemBlackFilter.isContain(phone,1);
             //系统黑名单
-            if (filtersService.systemNumberBlackListFilter(phone)) {
+            if (isExistBlackList) {
                 result.put("result", "true");
                 result.put("code", FilterResponseCode.IS_EXIST_SYSTEM_NUMBER_BLACK_LIST.getCode());
                 result.put("message", FilterResponseCode.IS_EXIST_SYSTEM_NUMBER_BLACK_LIST.getMessage());
@@ -51,8 +54,9 @@ public class SystemPhoneFilter {
         }
         //中(系统+本地)
         if ("MIDDLE".equals(isBlackListType.toString())) {
+            Boolean isExistBlackList = filtersService.systemNumberBlackListFilter(phone);//FilterInitialize.numberSystemBlackFilter.isContain(phone,1);
             //系统黑名单
-            if (filtersService.systemNumberBlackListFilter(phone)) {
+            if (isExistBlackList) {
                 result.put("result", "true");
                 result.put("code", FilterResponseCode.IS_EXIST_SYSTEM_NUMBER_BLACK_LIST.getCode());
                 result.put("message", FilterResponseCode.IS_EXIST_SYSTEM_NUMBER_BLACK_LIST.getMessage());
@@ -70,8 +74,9 @@ public class SystemPhoneFilter {
         }
         //中(系统+本地+三方)
         if ("HIGH".equals(isBlackListType.toString())) {
+            Boolean isExistBlackList = filtersService.systemNumberBlackListFilter(phone);//FilterInitialize.numberSystemBlackFilter.isContain(phone,1);
             //系统黑名单
-            if (filtersService.systemNumberBlackListFilter(phone)) {
+            if (isExistBlackList) {
                 result.put("result", "true");
                 result.put("code", FilterResponseCode.IS_EXIST_SYSTEM_NUMBER_BLACK_LIST.getCode());
                 result.put("message", FilterResponseCode.IS_EXIST_SYSTEM_NUMBER_BLACK_LIST.getMessage());

@@ -2,6 +2,9 @@ package com.smoc.cloud.filters.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Service;
@@ -11,6 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
@@ -29,7 +33,7 @@ public class FiltersRedisDataService {
      * @param value
      * @return
      */
-    public Boolean contains(String key, String value) {
+    public Boolean isMember(String key, String value) {
         return redisTemplate.opsForSet().isMember(key, new Long(value));
     }
 
@@ -45,7 +49,6 @@ public class FiltersRedisDataService {
     }
 
 
-
     /**
      * HashGet
      *
@@ -55,6 +58,50 @@ public class FiltersRedisDataService {
      */
     public Object hget(String redisKey, String hashKey) {
         return redisTemplate.opsForHash().get(redisKey, hashKey);
+    }
+
+    /**
+     * @param key       (filters:temporary:limit:flow:carrier:20220523)
+     * @param field     (YQT124_CMCC)
+     * @param increment 增加数量
+     * @return java.lang.Long
+     * @description 给 map中指定字段的整数值加上 long型增量 increment
+     */
+    public Long incrementLong(String key, Object field, long increment) {
+        Long num = redisTemplate.opsForHash().increment(key, field, increment);
+        redisTemplate.expire(key, 60 * 60 * 24, TimeUnit.SECONDS);
+        return num;
+    }
+
+    /**
+     * @param key  (filters:temporary:limit:flow:carrier:20220523)
+     * @param field (YQT124_CMCC)
+     * @return java.lang.Object
+     * @description 获取 map中指定的 key值，如果存在则返回值，没有就返回null
+     */
+    public Object getMapValue(String key, String field) {
+        return redisTemplate.opsForHash().get(key, field);
+    }
+
+
+    /**
+     * 批量取hash数据
+     *
+     * @param key
+     * @param keys hash key列表
+     * @return
+     */
+    public List<Object> hashGetBatch(String key, Set<String> keys) {
+        List list = redisTemplate.executePipelined(new RedisCallback<String>() {
+            @Override
+            public String doInRedis(RedisConnection connection) throws DataAccessException {
+                for (String keyValue : keys) {
+                    connection.hGet(key.getBytes(), keyValue.getBytes());
+                }
+                return null;
+            }
+        });
+        return list;
     }
 
     /**

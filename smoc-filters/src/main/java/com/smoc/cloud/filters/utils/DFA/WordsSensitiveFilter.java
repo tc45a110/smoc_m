@@ -1,11 +1,11 @@
-package com.smoc.cloud.filters.service.message;
+package com.smoc.cloud.filters.utils.DFA;
 
 import java.util.*;
 
 /**
  * 基于DFA敏感词过滤器（系统敏感词）
  */
-public class SensitiveWordsFilter {
+public class WordsSensitiveFilter {
 
     @SuppressWarnings("rawtypes")
     private Map sensitiveWordsMap = null;
@@ -18,7 +18,7 @@ public class SensitiveWordsFilter {
     /**
      * 构造函数
      */
-    public SensitiveWordsFilter() {
+    public WordsSensitiveFilter() {
     }
 
     /**
@@ -123,7 +123,7 @@ public class SensitiveWordsFilter {
                 matchFlag++;     //找到相应key，匹配标识+1
                 if ("1".equals(nowMap.get("isEnd"))) {       //如果为最后一个匹配规则,结束循环，返回匹配标识数
                     flag = true;       //结束标志位为true
-                    if (SensitiveWordsFilter.minMatchTYpe == matchType) {    //最小规则，直接返回,最大规则还需继续查找
+                    if (WordsSensitiveFilter.minMatchTYpe == matchType) {    //最小规则，直接返回,最大规则还需继续查找
                         break;
                     }
                 }
@@ -151,7 +151,6 @@ public class SensitiveWordsFilter {
      */
     @SuppressWarnings({"rawtypes", "unchecked"})
     public void initializeSensitiveWords(Set<String> keyWords) {
-        System.out.println("initializeSensitiveWords");
         sensitiveWordsMap = new HashMap(keyWords.size());     //初始化敏感词容器，减少扩容操作
         String key = null;
         Map nowMap = null;
@@ -182,7 +181,7 @@ public class SensitiveWordsFilter {
     }
 
     public static void main(String[] args) {
-        SensitiveWordsFilter filter = new SensitiveWordsFilter();
+        WordsSensitiveFilter filter = new WordsSensitiveFilter();
         System.out.println("敏感词的数量：" + filter.sensitiveWordsMap.size());
         String string = "事件婊子太多的伤感情怀也许只局限于 不良少女日记荧幕中的情节，主人公尝试着去用某种方式渐渐的很潇洒地释自杀指南怀那些自己经历的伤感。"
                 + "然后法轮功我们的扮演的角色就是跟随着主人公的喜红客联盟 怒哀乐而过于牵强的把自己的情感也附加于银幕情节中，然后感动就流泪，"

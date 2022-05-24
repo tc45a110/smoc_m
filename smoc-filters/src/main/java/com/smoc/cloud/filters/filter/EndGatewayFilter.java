@@ -24,6 +24,8 @@ import java.nio.charset.StandardCharsets;
 public class EndGatewayFilter implements Ordered, GatewayFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        Long start = System.currentTimeMillis();
+        log.info("[filter-  end]:{}",start);
         return success(exchange);
     }
 

@@ -15,7 +15,36 @@ import java.nio.charset.StandardCharsets;
 @Slf4j
 public class BaseGatewayFilter {
 
+    /**
+     * 成功响应
+     * @param exchange
+     * @return
+     */
+    public Mono<Void> success(ServerWebExchange exchange) {
+
+        Long start = System.currentTimeMillis();
+        log.info("[filter-  end]:{}",start);
+        //响应信息
+        ServerHttpResponse response = exchange.getResponse();
+        response.getHeaders().set("Content-Type", "application/json;charset=utf-8");
+        ResponseData responseData = ResponseDataUtil.buildSuccess();
+        //log.error("[响应数据]数据:{}", new Gson().toJson(responseData));
+        byte[] bytes = new Gson().toJson(responseData).getBytes(StandardCharsets.UTF_8);
+        DataBuffer bodyDataBuffer = response.bufferFactory().wrap(bytes);
+        return exchange.getResponse().writeWith(Flux.just(bodyDataBuffer));
+    }
+
+    /**
+     * 错误响应
+     * @param exchange
+     * @param errorCode
+     * @param errorMessage
+     * @return
+     */
     public Mono<Void> errorHandle(ServerWebExchange exchange, String errorCode, String errorMessage) {
+
+        Long start = System.currentTimeMillis();
+        log.info("[filter-  end]:{}",start);
         //响应信息
         ServerHttpResponse response = exchange.getResponse();
         response.getHeaders().set("Content-Type", "application/json;charset=utf-8");

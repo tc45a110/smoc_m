@@ -40,12 +40,8 @@ public class NumberExtendFilterParamsGatewayFilter extends BaseGatewayFilter imp
 
         //校验数据请求的数据结构
         RequestFullParams model = new Gson().fromJson(requestBody, RequestFullParams.class);
-        if (StringUtils.isEmpty(model.getAccount()) || StringUtils.isEmpty(model.getPhone())) {
-            return chain.filter(exchange).then(Mono.fromRunnable(() -> {
-                //被执行后调用 post
-            }));
-        }
 
+        //Long start = System.currentTimeMillis();
         Map<String, String> result = new HashMap<>();
         result.put("result", "false");
 
@@ -54,13 +50,13 @@ public class NumberExtendFilterParamsGatewayFilter extends BaseGatewayFilter imp
          */
         Object blackPatten = filtersService.get(RedisConstant.FILTERS_CONFIG_ACCOUNT_NUMBER + "black:" + model.getAccount());
         if (null != blackPatten && !StringUtils.isEmpty(blackPatten.toString())) {
+            //log.info("[号码_黑名单_扩展参数]{}:{}", model.getAccount(), blackPatten.toString());
             Boolean validator = filtersService.validator(blackPatten.toString(), model.getPhone());
             if (validator) {
                 result.put("result", "true");
                 result.put("code", FilterResponseCode.NUMBER_BLACK_FILTER.getCode());
                 result.put("message", FilterResponseCode.NUMBER_BLACK_FILTER.getMessage());
             }
-            log.info("[号码_黑名单_扩展参数]{}:{}", model.getAccount(), blackPatten.toString());
         }
 
         /**
@@ -69,13 +65,13 @@ public class NumberExtendFilterParamsGatewayFilter extends BaseGatewayFilter imp
         if ("true".equals(result.get("result"))) {
             Object whitePatten = filtersService.get(RedisConstant.FILTERS_CONFIG_ACCOUNT_NUMBER + "white:" +  model.getAccount());
             if (null != whitePatten && !StringUtils.isEmpty(whitePatten.toString())) {
+                //log.info("[号码_白名单_扩展参数]{}:{}", model.getAccount(), new Gson().toJson(whitePatten));
                 Boolean validator = filtersService.validator(whitePatten.toString(), model.getPhone());
                 if (validator) {
                     result.put("result", "false");
                 }
             }
 
-            log.info("[号码_白名单_扩展参数]{}:{}", model.getAccount(), new Gson().toJson(whitePatten));
         }
 
         /**
@@ -84,6 +80,7 @@ public class NumberExtendFilterParamsGatewayFilter extends BaseGatewayFilter imp
         if ("false".equals(result.get("result"))) {
             Object regularPatten = filtersService.get(RedisConstant.FILTERS_CONFIG_ACCOUNT_NUMBER + "regular:" +   model.getAccount());
             if (null != regularPatten && !StringUtils.isEmpty(regularPatten.toString())) {
+                //log.info("[号码_正则_扩展参数]{}:{}", model.getAccount(), new Gson().toJson(regularPatten));
                 if (filtersService.validator(regularPatten.toString(), model.getPhone())) {
                     result.put("result", "false");
                 } else {
@@ -91,11 +88,11 @@ public class NumberExtendFilterParamsGatewayFilter extends BaseGatewayFilter imp
                     result.put("code", FilterResponseCode.NUMBER_REGULAR_FILTER.getCode());
                     result.put("message", FilterResponseCode.NUMBER_REGULAR_FILTER.getMessage());
                 }
-
-                log.info("[号码_正则_扩展参数]{}:{}", model.getAccount(), new Gson().toJson(regularPatten));
             }
         }
 
+        //Long end = System.currentTimeMillis();
+        //log.info("[号码_扩展参数]耗时:{}毫秒", end -start);
         if ("true".equals(result.get("result"))) {
             return errorHandle(exchange, result.get("code"), result.get("message"));
         }

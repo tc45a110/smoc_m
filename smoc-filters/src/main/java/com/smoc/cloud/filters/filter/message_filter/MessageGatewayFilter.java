@@ -1,12 +1,12 @@
 package com.smoc.cloud.filters.filter.message_filter;
 
 import com.google.gson.Gson;
-import com.smoc.cloud.common.filters.utils.RedisConstant;
 import com.smoc.cloud.filters.filter.BaseGatewayFilter;
 import com.smoc.cloud.filters.request.model.RequestFullParams;
 import com.smoc.cloud.filters.service.FiltersService;
-import com.smoc.cloud.filters.service.message.FilterInitialize;
-import com.smoc.cloud.filters.service.message.SensitiveWordsFilter;
+import com.smoc.cloud.filters.utils.DFA.WordsCheckFilter;
+import com.smoc.cloud.filters.utils.DFA.FilterInitialize;
+import com.smoc.cloud.filters.utils.DFA.WordsSensitiveFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
@@ -46,9 +46,31 @@ public class MessageGatewayFilter extends BaseGatewayFilter implements Ordered, 
             }));
         }
 
-        SensitiveWordsFilter sensitiveWordsFilter = FilterInitialize.sensitiveWordsFilter;
+        /**
+         * 先过滤超级白词,超级白词比较少
+         */
+        long startSuper = System.currentTimeMillis();
+        Boolean isExistSuperWhiteWords = FilterInitialize.superWhiteWordsFilter.isContain(model.getMessage(), 1);
+        long endSuper = System.currentTimeMillis();
+        log.info("[超级白词过滤]：耗时{}毫秒", endSuper - startSuper);
+        if (isExistSuperWhiteWords) {
+            return chain.filter(exchange);
+        }
+
+        /**
+         * 系统敏感词过滤
+         */
+        long start = System.currentTimeMillis();
+        WordsSensitiveFilter sensitiveWordsFilter = FilterInitialize.sensitiveWordsFilter;
         Set<String> sensitiveWords = sensitiveWordsFilter.getSensitiveWords(model.getMessage(), 1);
-        //log.info("[过滤出来的敏感词]：{}", sensitiveWords);
+        long end = System.currentTimeMillis();
+
+        log.info("[敏感词过滤]：耗时{}毫秒", end - start);
+        log.info("[敏感词过滤]：{}", sensitiveWords);
+
+        WordsCheckFilter checkWordsFilter = FilterInitialize.checkWordsFilter;
+        Set<String> checkWords = checkWordsFilter.getCheckWords(model.getMessage(), 1);
+        log.info("[审核词过滤]：{}", checkWords);
 
         return chain.filter(exchange);
     }

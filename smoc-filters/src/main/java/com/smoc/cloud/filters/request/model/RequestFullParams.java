@@ -22,15 +22,12 @@ public class RequestFullParams {
     //carrier   运营商  CMCC、UNIC、TELC、INTL 字段为空，则跳出所有涉及该字段的过滤
     @Pattern(regexp = "(CMCC|UNIC|TELC){1}", message = "运营商不符合规则！")
     private String carrier;
-    
-    //channelId 通道id
-    private String channelId;
 
     //infoType  信息分类 INDUSTRY、MARKETING、NEW、COLLECTION 字段为空，则跳出所有涉及该字段的过滤
     private String infoType;
 
     //province  省份编码 字段为空，则跳出所有涉及该字段的过滤
-    private String province;
+    private String provinceCode;
 
     //模版id
     private String templateId;

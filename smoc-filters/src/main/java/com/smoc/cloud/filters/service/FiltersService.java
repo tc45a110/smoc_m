@@ -1,15 +1,14 @@
 package com.smoc.cloud.filters.service;
 
+import com.google.gson.Gson;
 import com.smoc.cloud.common.filters.utils.RedisConstant;
 import com.smoc.cloud.common.utils.DateTimeUtils;
-import com.smoc.cloud.filters.utils.Initialize;
+import com.smoc.cloud.filters.utils.DFA.DFAUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,11 +28,11 @@ public class FiltersService {
     public Boolean systemNumberBlackListFilter(String phone) {
 
         //是否存在于系统黑名单
-        Boolean isExistBlackList = filtersRedisDataService.contains(RedisConstant.FILTERS_CONFIG_SYSTEM_BLACK, phone);
+        Boolean isExistBlackList = filtersRedisDataService.isMember(RedisConstant.FILTERS_CONFIG_SYSTEM_BLACK, phone);
         //洗白操作
         if (isExistBlackList) {
             //是否存在白名单中
-            Boolean isExistWhiteList = filtersRedisDataService.contains(RedisConstant.FILTERS_CONFIG_SYSTEM_WHITE, phone);
+            Boolean isExistWhiteList = filtersRedisDataService.isMember(RedisConstant.FILTERS_CONFIG_SYSTEM_WHITE, phone);
             if (isExistWhiteList) {
                 isExistBlackList = false;
             }
@@ -81,6 +80,7 @@ public class FiltersService {
         return filtersRedisDataService.get(redisKey);
     }
 
+
     /**
      * 按账号 检测手机号发送频率限制
      *
@@ -111,6 +111,21 @@ public class FiltersService {
     }
 
     /**
+     * 记录 业务账号某运营商的日限量
+     *
+     * @param account 业务账号
+     * @param carrier 运营商
+     * @param times   增加值
+     * @return java.lang.Long
+     * @description 给 map中指定字段的整数值加上 long型增量 increment
+     */
+    public Long incrementAccountDailyLimit(String account, String carrier, long times) {
+        String dateFormat = DateTimeUtils.currentDate(new Date());
+        String key = RedisConstant.FILTERS_TEMPORARY_LIMIT_FLOW_CARRIER_DATE + dateFormat;
+        return filtersRedisDataService.incrementLong(key, account + "_" + carrier, times);
+    }
+
+    /**
      * 判断 业务账号某运营商的日限量
      *
      * @param account    业务账号
@@ -121,9 +136,9 @@ public class FiltersService {
      */
     public Boolean accountDailyLimit(String account, String carrier, Long dailyLimit, Integer times) {
         String dateFormat = DateTimeUtils.currentDate(new Date());
-        String key = RedisConstant.FILTERS_TEMPORARY_LIMIT_DAILY_CARRIER_ACCOUNT_DATE + account + ":" + carrier + ":" + dateFormat;
-        log.info("[账号-运营商日限量]-key:{}", key);
-        Object count = filtersRedisDataService.get(key);
+        String key = RedisConstant.FILTERS_TEMPORARY_LIMIT_FLOW_CARRIER_DATE + dateFormat;
+        //log.info("[账号-运营商日限量]-key:{}", key);
+        Object count = filtersRedisDataService.getMapValue(key, account + "_" + carrier);
         if (null == count) {
             return false;
         }
@@ -161,15 +176,33 @@ public class FiltersService {
     }
 
     /**
+     * 查询系统黑名单
+     * List<String>
+     *
+     * @return
+     */
+    public Set<String> getSystemBlackList() {
+        long start = System.currentTimeMillis();
+        Set<String> sensitiveWords = filtersRedisDataService.sget(RedisConstant.FILTERS_CONFIG_SYSTEM_BLACK);
+        long end = System.currentTimeMillis();
+        if (null != sensitiveWords) {
+            log.info("[加载系统黑名单]：{}条，耗时：{}毫秒", sensitiveWords.size(), end - start);
+        }
+        return sensitiveWords;
+    }
+
+    /**
      * 查询敏感词
      * List<String>
      *
      * @return
      */
     public Set<String> getSensitiveWords() {
+        long start = System.currentTimeMillis();
         Set<String> sensitiveWords = filtersRedisDataService.sget(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_SENSITIVE);
+        long end = System.currentTimeMillis();
         if (null != sensitiveWords) {
-            log.info("[加载敏感词...]：{}条", sensitiveWords.size());
+            log.info("[加载敏感词]：{}条，耗时：{}毫秒", sensitiveWords.size(), end - start);
         }
         return sensitiveWords;
     }
@@ -181,11 +214,71 @@ public class FiltersService {
      * @return
      */
     public Set<String> getCheckWords() {
-        Set<String> sensitiveWords = filtersRedisDataService.sget(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_CHECK);
-        if (null != sensitiveWords) {
-            log.info("[加载审核词...]：{}条", sensitiveWords.size());
+        long start = System.currentTimeMillis();
+        Set<String> checkWords = filtersRedisDataService.sget(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_CHECK);
+        long end = System.currentTimeMillis();
+        if (null != checkWords) {
+            log.info("[加载审核词]：{}条，耗时：{}毫秒", checkWords.size(), end - start);
         }
-        return sensitiveWords;
+        return checkWords;
+    }
+
+    /**
+     * 查询审超级白词
+     * List<String>
+     *
+     * @return
+     */
+    public Set<String> getSuperWhiteWords() {
+        long start = System.currentTimeMillis();
+        Set<String> checkWords = filtersRedisDataService.sget(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_WHITE_SUPER);
+        long end = System.currentTimeMillis();
+        if (null != checkWords) {
+            log.info("[加载超级白词]：{}条，耗时：{}毫秒", checkWords.size(), end - start);
+        }
+        return checkWords;
+    }
+
+    /**
+     * 通过敏感词，获取洗黑白词
+     *
+     * @param set
+     * @return
+     */
+    public List<Object> getWhiteWordsBySensitive(Set<String> set) {
+        List<Object> whiteWords = filtersRedisDataService.hashGetBatch(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_WHITE_SENSITIVE, set);
+        return whiteWords;
+    }
+
+    /**
+     * 通过审核词，获取免审白词
+     *
+     * @param set
+     * @return
+     */
+    public List<Object> getWhiteWordsByCheck(Set<String> set) {
+        List<Object> whiteWords = filtersRedisDataService.hashGetBatch(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_WHITE_NO_CHECK, set);
+        return whiteWords;
+    }
+
+    /**
+     *  初始化 行业敏感词
+
+     * @return
+     */
+    public Map<String, Map> getInfoTypeSensitiveWords() {
+
+        Map<String, Map> infoTypeSensitiveMap = new HashMap<>();
+        Set<String> infoTypes = filtersRedisDataService.sget(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_INFO_TYPE);
+        //log.info("[infoTypes]:{}",infoTypes);
+        if(null != infoTypes && infoTypes.size()>0){
+              for (String infoType:infoTypes){
+                  Set<String> infoTypeSensitiveWords = filtersRedisDataService.sget(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_INFO_TYPE_SENSITIVE+infoType);
+                  infoTypeSensitiveMap.put(infoType, DFAUtils.buildDFADataModel(infoTypeSensitiveWords));
+              }
+        }
+        //log.info("[infoTypeSensitiveMap]:{}",new Gson().toJson(infoTypeSensitiveMap));
+        return infoTypeSensitiveMap;
     }
 
 }

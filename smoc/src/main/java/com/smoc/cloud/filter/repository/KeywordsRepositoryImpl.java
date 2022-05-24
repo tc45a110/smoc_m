@@ -7,6 +7,8 @@ import com.smoc.cloud.common.smoc.filter.ExcelModel;
 import com.smoc.cloud.common.smoc.filter.FilterKeyWordsInfoValidator;
 import com.smoc.cloud.common.smoc.filter.WhiteExcelModel;
 import com.smoc.cloud.common.utils.UUID;
+import com.smoc.cloud.filter.entity.KeyWordsMaskKeyWords;
+import com.smoc.cloud.filter.rowmapper.KeyWordRowMapper;
 import com.smoc.cloud.filter.rowmapper.KeywordsRowMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -177,6 +179,39 @@ public class KeywordsRepositoryImpl extends BasePageRepository {
         params[1] = businessId;
         params[2] = keyWordType;
         List<String> result = this.jdbcTemplate.queryForList(sqlBuffer.toString(),params,String.class);
+        return result;
+    }
+
+    /**
+     * 查询 关键词
+     * @param businessType
+     * @param businessId
+     * @param keyWordType
+     * @return
+     */
+    public List<KeyWordsMaskKeyWords> loadKeyWordsAndMaskKeyWord(String businessType, String businessId, String keyWordType){
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append("  t.KEY_WORDS,");
+        sqlBuffer.append("  t.BUSINESS_ID");
+        sqlBuffer.append("  t.WASK_KEY_WORDS");
+        sqlBuffer.append("  from filter_key_words_info t  where (1=1) ");
+        List<String> paramsList = new ArrayList<>();
+        if(!StringUtils.isEmpty(businessType)){
+            sqlBuffer.append(" and t.KEY_WORDS_BUSINESS_TYPE=? ");
+            paramsList.add(businessType);
+        }
+        if(!StringUtils.isEmpty(businessId)){
+            sqlBuffer.append(" and  t.BUSINESS_ID=? ");
+            paramsList.add(businessId);
+        }
+        if(!StringUtils.isEmpty(keyWordType)){
+            sqlBuffer.append(" and t.KEY_WORDS_TYPE =? ");
+            paramsList.add(keyWordType);
+        }
+        Object[] params = new Object[paramsList.size()];
+        paramsList.toArray(params);
+        List<KeyWordsMaskKeyWords> result = this.jdbcTemplate.query(sqlBuffer.toString(),params,new KeyWordRowMapper());
         return result;
     }
 

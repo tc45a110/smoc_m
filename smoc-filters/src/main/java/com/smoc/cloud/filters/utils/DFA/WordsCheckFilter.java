@@ -1,11 +1,11 @@
-package com.smoc.cloud.filters.service.message;
+package com.smoc.cloud.filters.utils.DFA;
 
 import java.util.*;
 
 /**
  * 基于DFA审核词过滤器（系统审核词）
  */
-public class CheckWordsFilter {
+public class WordsCheckFilter {
 
     @SuppressWarnings("rawtypes")
     private Map checkWordsMap = null;
@@ -18,7 +18,7 @@ public class CheckWordsFilter {
     /**
      * 构造函数
      */
-    public CheckWordsFilter() {
+    public WordsCheckFilter() {
     }
 
     /**
@@ -32,7 +32,7 @@ public class CheckWordsFilter {
         boolean flag = false;
         for (int i = 0; i < message.length(); i++) {
             //判断是否包含审核字符
-            int matchFlag = this.checkSensitiveWord(message, i, matchType);
+            int matchFlag = this.checkCheckWord(message, i, matchType);
             //大于0存在，返回true
             if (matchFlag > 0) {
                 flag = true;
@@ -50,17 +50,17 @@ public class CheckWordsFilter {
      * @version 1.0
      */
     public Set<String> getCheckWords(String message, int matchType) {
-        Set<String> sensitiveWordList = new HashSet<String>();
+        Set<String> checkWordList = new HashSet<String>();
 
         for (int i = 0; i < message.length(); i++) {
-            int length = checkSensitiveWord(message, i, matchType);    //判断是否包含字符
+            int length = checkCheckWord(message, i, matchType);    //判断是否包含字符
             if (length > 0) {    //存在,加入list中
-                sensitiveWordList.add(message.substring(i, i + length));
+                checkWordList.add(message.substring(i, i + length));
                 i = i + length - 1;    //减1的原因，是因为for会自增
             }
         }
 
-        return sensitiveWordList;
+        return checkWordList;
     }
 
     /**
@@ -110,7 +110,7 @@ public class CheckWordsFilter {
      * @return，如果存在，则返回审核词字符的长度，不存在返回0
      */
     @SuppressWarnings({"rawtypes"})
-    public int checkSensitiveWord(String message, int beginIndex, int matchType) {
+    public int checkCheckWord(String message, int beginIndex, int matchType) {
         boolean flag = false;    //审核词结束标识位：用于审核词只有1位的情况
         int matchFlag = 0;     //匹配标识数默认为0
         char word = 0;
@@ -123,7 +123,7 @@ public class CheckWordsFilter {
                 matchFlag++;     //找到相应key，匹配标识+1
                 if ("1".equals(nowMap.get("isEnd"))) {       //如果为最后一个匹配规则,结束循环，返回匹配标识数
                     flag = true;       //结束标志位为true
-                    if (CheckWordsFilter.minMatchTYpe == matchType) {    //最小规则，直接返回,最大规则还需继续查找
+                    if (WordsCheckFilter.minMatchTYpe == matchType) {    //最小规则，直接返回,最大规则还需继续查找
                         break;
                     }
                 }
@@ -143,7 +143,6 @@ public class CheckWordsFilter {
      */
     @SuppressWarnings({"rawtypes", "unchecked"})
     public void initializeCheckWords(Set<String> keyWords) {
-        System.out.println("initializeCheckWords");
         checkWordsMap = new HashMap(keyWords.size());     //初始化审核词容器，减少扩容操作
         String key = null;
         Map nowMap = null;
@@ -174,7 +173,7 @@ public class CheckWordsFilter {
     }
 
     public static void main(String[] args) {
-        CheckWordsFilter filter = new CheckWordsFilter();
+        WordsCheckFilter filter = new WordsCheckFilter();
         System.out.println("审核词的数量：" + filter.checkWordsMap.size());
         String string = "事件婊子太多的伤感情怀也许只局限于 不良少女日记荧幕中的情节，主人公尝试着去用某种方式渐渐的很潇洒地释自杀指南怀那些自己经历的伤感。"
                 + "然后法轮功我们的扮演的角色就是跟随着主人公的喜红客联盟 怒哀乐而过于牵强的把自己的情感也附加于银幕情节中，然后感动就流泪，"

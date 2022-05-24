@@ -49,7 +49,9 @@ public class SensitiveImport {
     }
 
     public static void main(String[] args) throws Exception {
-        SensitiveImport sensitiveImport = new SensitiveImport();
-        sensitiveImport.readSensitiveWordFile();
+//        SensitiveImport sensitiveImport = new SensitiveImport();
+//        sensitiveImport.readSensitiveWordFile();
+        Integer num = new Integer("02");
+        System.out.println(num);
     }
 }

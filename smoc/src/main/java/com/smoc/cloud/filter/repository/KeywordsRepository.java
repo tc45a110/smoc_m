@@ -5,6 +5,7 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.smoc.filter.FilterKeyWordsInfoValidator;
 import com.smoc.cloud.filter.entity.FilterKeyWordsInfo;
+import com.smoc.cloud.filter.entity.KeyWordsMaskKeyWords;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 
@@ -55,4 +56,13 @@ public interface KeywordsRepository extends CrudRepository<FilterKeyWordsInfo, S
      * @return
      */
     List<String> loadKeyWords(String businessType,String businessId,String keyWordType);
+
+    /**
+     * 查询 关键词
+     * @param businessType
+     * @param businessId
+     * @param keyWordType
+     * @return
+     */
+    List<KeyWordsMaskKeyWords> loadKeyWordsAndMaskKeyWord(String businessType, String businessId, String keyWordType);
 }

@@ -99,6 +99,7 @@ public class KeywordsClassifyController {
 
     /**
      * 列表查询
+     *
      * @param classify
      * @param code
      * @param filterKeyWordsInfoValidator
@@ -161,7 +162,7 @@ public class KeywordsClassifyController {
      * @return
      */
     @RequestMapping(value = "/classify/{classify}/{code}/edit/{id}", method = RequestMethod.GET)
-    public ModelAndView edit(@PathVariable String code, @PathVariable String classify,@PathVariable String id, HttpServletRequest request) {
+    public ModelAndView edit(@PathVariable String code, @PathVariable String classify, @PathVariable String id, HttpServletRequest request) {
 
         ModelAndView view = new ModelAndView("filter/keywords/keyword_classify_edit");
 
@@ -199,7 +200,7 @@ public class KeywordsClassifyController {
      * @return
      */
     @RequestMapping(value = "/classify/{classify}/batchSave/{code}", method = RequestMethod.POST)
-    public ModelAndView batchSave(@PathVariable String classify,@PathVariable String code,HttpServletRequest request) {
+    public ModelAndView batchSave(@PathVariable String classify, @PathVariable String code, HttpServletRequest request) {
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
         ModelAndView view = new ModelAndView("filter/keywords/keyword_classify_edit_batch");
 
@@ -242,7 +243,7 @@ public class KeywordsClassifyController {
 
         }
 
-        view.setView(new RedirectView("/filter/keywords/classify/"+classify+"/list/"+code, true, false));
+        view.setView(new RedirectView("/filter/keywords/classify/" + classify + "/list/" + code, true, false));
         return view;
     }
 
@@ -276,19 +277,20 @@ public class KeywordsClassifyController {
             return view;
         }
 
-        view.setView(new RedirectView("/filter/keywords/classify/"+classify+"/list/"+code, true, false));
+        view.setView(new RedirectView("/filter/keywords/classify/" + classify + "/list/" + code, true, false));
         return view;
     }
 
     /**
      * 删除
+     *
      * @param id
      * @param request
      * @return
      */
     @RequestMapping(value = "/classify/deleteById/{id}", method = RequestMethod.GET)
     public ModelAndView deleteById(@PathVariable String id, HttpServletRequest request) {
-        SecurityUser user = (SecurityUser)request.getSession().getAttribute("user");
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
         ModelAndView view = new ModelAndView("filter/keywords/keyword_classify_edit");
 
         //完成参数规则验证
@@ -316,13 +318,13 @@ public class KeywordsClassifyController {
             return view;
         }
 
-        view.setView(new RedirectView("/filter/keywords/classify/"+keyData.getData().getKeyWordsBusinessType()+"/list/"+keyData.getData().getBusinessId(), true, false));
+        view.setView(new RedirectView("/filter/keywords/classify/" + keyData.getData().getKeyWordsBusinessType() + "/list/" + keyData.getData().getBusinessId(), true, false));
         return view;
 
     }
 
     @RequestMapping(value = "/classify/{classify}/upFilesView/{code}", method = RequestMethod.GET)
-    public ModelAndView upFilesView(@PathVariable String classify,@PathVariable String code,HttpServletRequest request) {
+    public ModelAndView upFilesView(@PathVariable String classify, @PathVariable String code, HttpServletRequest request) {
 
         ModelAndView view = new ModelAndView("filter/keywords/keyword_classify_upfiles_view");
 
@@ -340,19 +342,19 @@ public class KeywordsClassifyController {
     }
 
 
-
     /**
-     *  关键字导入
+     * 关键字导入
+     *
      * @param request
      * @return
      */
     @RequestMapping(value = "/classify/upFiles", method = RequestMethod.POST)
     public ModelAndView save(@ModelAttribute FilterKeyWordsInfoValidator filterKeyWordsInfoValidator, BindingResult result, HttpServletRequest request) {
-        SecurityUser user = (SecurityUser)request.getSession().getAttribute("user");
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
 
         ModelAndView view = new ModelAndView("filter/keywords/keyword_classify_upfiles_view");
 
-        if(StringUtils.isEmpty(filterKeyWordsInfoValidator.getKeyWordsType())){
+        if (StringUtils.isEmpty(filterKeyWordsInfoValidator.getKeyWordsType())) {
             FieldError err = new FieldError("关键词类型", "keyWordsType", "关键词类型不能为空");
             result.addError(err);
         }
@@ -372,17 +374,17 @@ public class KeywordsClassifyController {
         MultipartFile file = mRequest.getFile("file");
         if (file != null && file.getSize() > 0) {
 
-            List<ExcelModel> list = FileUtils.readFile(file,"2");
+            List<ExcelModel> list = FileUtils.readFile(file, "2");
 
             //批量保存
-            if(!StringUtils.isEmpty(list) && list.size()>0){
+            if (!StringUtils.isEmpty(list) && list.size() > 0) {
                 FilterKeyWordsInfoValidator validator = new FilterKeyWordsInfoValidator();
                 validator.setKeyWordsBusinessType(filterKeyWordsInfoValidator.getKeyWordsBusinessType());
                 validator.setBusinessId(filterKeyWordsInfoValidator.getBusinessId());
                 validator.setKeyWordsType(filterKeyWordsInfoValidator.getKeyWordsType());
                 validator.setExccelList(list);
                 validator.setCreatedBy(user.getRealName());
-                ResponseData data  = keywordsService.expBatchSave(validator);
+                ResponseData data = keywordsService.expBatchSave(validator);
                 if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
                     view.addObject("error", data.getCode() + ":" + data.getMessage());
                     return view;
@@ -392,7 +394,7 @@ public class KeywordsClassifyController {
             log.info("[分类关键词管理][导入][{}]数据::{}", user.getUserName(), list.size());
         }
 
-        view.setView(new RedirectView("/filter/keywords/classify/"+filterKeyWordsInfoValidator.getKeyWordsBusinessType()+"/list/"+filterKeyWordsInfoValidator.getBusinessId(), true, false));
+        view.setView(new RedirectView("/filter/keywords/classify/" + filterKeyWordsInfoValidator.getKeyWordsBusinessType() + "/list/" + filterKeyWordsInfoValidator.getBusinessId(), true, false));
 
         return view;
     }
@@ -400,24 +402,24 @@ public class KeywordsClassifyController {
     /**
      * 取字典数据，对关键词进行分类
      */
-    private Map<String,String> dictMap(HttpServletRequest request) {
+    private Map<String, String> dictMap(HttpServletRequest request) {
         Map<String, DictType> dictMap = (Map<String, DictType>) request.getServletContext().getAttribute("dict");
         //运营商
-        DictType carrier = dictMap.get("carrier");
+//        DictType carrier = dictMap.get("carrier");
         //行业分类
-        DictType industryType = dictMap.get("industryType");
+//        DictType industryType = dictMap.get("industryType");
         //信息分类
         DictType infoType = dictMap.get("infoType");
 
-        Map<String,String> dictValueMap = new HashMap<>();
-        for (Dict dict : carrier.getDict()) {
-            dictValueMap.put(dict.getFieldCode(),dict.getFieldName());
-        }
-        for (Dict dict : industryType.getDict()) {
-            dictValueMap.put(dict.getFieldCode(),dict.getFieldName());
-        }
+        Map<String, String> dictValueMap = new HashMap<>();
+//        for (Dict dict : carrier.getDict()) {
+//            dictValueMap.put(dict.getFieldCode(),dict.getFieldName());
+//        }
+//        for (Dict dict : industryType.getDict()) {
+//            dictValueMap.put(dict.getFieldCode(),dict.getFieldName());
+//        }
         for (Dict dict : infoType.getDict()) {
-            dictValueMap.put(dict.getFieldCode(),dict.getFieldName());
+            dictValueMap.put(dict.getFieldCode(), dict.getFieldName());
         }
 
         return dictValueMap;
@@ -438,36 +440,36 @@ public class KeywordsClassifyController {
         root.setHref("0");
         root.setLazyLoad(false);
         root.setSvcType("root");
-        root.setText("分类关键词");
+        root.setText("分类敏感词");
 
         Map<String, DictType> dictMap = (Map<String, DictType>) request.getServletContext().getAttribute("dict");
 
         //运营商
-        DictType carrier = dictMap.get("carrier");
-        Nodes carrierNode = new Nodes();
-        carrierNode.setId("1");
-        carrierNode.setHref("0");
-        carrierNode.setLazyLoad(false);
-        carrierNode.setSvcType("CLASSIFY");
-        carrierNode.setText("运营商");
-        List<Nodes> carrierNodes = new ArrayList<>();
-        for (Dict dict : carrier.getDict()) {
-            Nodes dictNode = new Nodes();
-            dictNode.setId(dict.getFieldCode());
-            dictNode.setHref(dict.getFieldCode());
-            dictNode.setLazyLoad(false);
-            dictNode.setSvcType("leaf");
-            dictNode.setOrgCode("CARRIER");
-            dictNode.setText(dict.getFieldName());
-            dictNode.setIcon(carrier.getIcon());
-            if("CMCC".equals(dict.getFieldCode())){
-                Map<String, Object> stateMap = new HashMap<String, Object>();
-                stateMap.put("selected", true);
-                dictNode.setState(stateMap);
-            }
-            carrierNodes.add(dictNode);
-        }
-        carrierNode.setNodes(carrierNodes);
+//        DictType carrier = dictMap.get("carrier");
+//        Nodes carrierNode = new Nodes();
+//        carrierNode.setId("1");
+//        carrierNode.setHref("0");
+//        carrierNode.setLazyLoad(false);
+//        carrierNode.setSvcType("CLASSIFY");
+//        carrierNode.setText("运营商");
+//        List<Nodes> carrierNodes = new ArrayList<>();
+//        for (Dict dict : carrier.getDict()) {
+//            Nodes dictNode = new Nodes();
+//            dictNode.setId(dict.getFieldCode());
+//            dictNode.setHref(dict.getFieldCode());
+//            dictNode.setLazyLoad(false);
+//            dictNode.setSvcType("leaf");
+//            dictNode.setOrgCode("CARRIER");
+//            dictNode.setText(dict.getFieldName());
+//            dictNode.setIcon(carrier.getIcon());
+//            if ("CMCC".equals(dict.getFieldCode())) {
+//                Map<String, Object> stateMap = new HashMap<String, Object>();
+//                stateMap.put("selected", true);
+//                dictNode.setState(stateMap);
+//            }
+//            carrierNodes.add(dictNode);
+//        }
+//        carrierNode.setNodes(carrierNodes);
 
 
         //行业分类
@@ -515,7 +517,7 @@ public class KeywordsClassifyController {
         infoTypeNode.setNodes(infoTypeNodes);
 
         List<Nodes> rootList = new ArrayList<>();
-        rootList.add(carrierNode);
+//        rootList.add(carrierNode);
         //rootList.add(industryTypeNode);
         rootList.add(infoTypeNode);
         root.setNodes(rootList);
