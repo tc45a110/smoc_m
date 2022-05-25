@@ -26,7 +26,7 @@
                         <mpm:tag identity="keywordsClassify"
                                  th:value="${classify}" show-type="label"
                                  key="code"/>-[[${dictValueMap.get(code)}]]
-                        关键词维护</h4>
+                        敏感词维护</h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
                             过滤配置
@@ -34,7 +34,7 @@
                         <li class="active">
                             <mpm:tag identity="keywordsClassify"
                                      th:value="${classify}" show-type="label"
-                                     key="code"/>-[[${dictValueMap.get(code)}]]关键词维护
+                                     key="code"/>-[[${dictValueMap.get(code)}]]敏感词维护
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -52,31 +52,14 @@
                             <div class="row">
                                 <div class="col-md-9">
                                     <div class="p-20">
-                                        <div class="col-md-6 form-group">
-                                            <label>关键词类型<span class="text-danger">*</span>&nbsp;<span
-                                                    class="text-danger" th:if="${#fields.hasErrors('keyWordsType')}"
-                                                    th:errors="*{keyWordsType}" style="font-weight: 200;font-size: 12px"></span>
-                                            </label>
-                                            <mpm:tag id="keyWordsType" identity="keyWordsType" show-type="select" key="code"
-                                                     name="keyWordsType" th:value="${filterKeyWordsInfoValidator.keyWordsType}"
-                                                     required="" class="form-control" data-icon="mdi mdi-view-module" title="关键词类别"/>
-                                        </div>
-                                    </div>
-
-                                </div> <!-- end col -->
-                                <div class="col-md-9">
-                                    <div class="p-20">
                                         <div class="form-group">
-                                            <label>下载模板</label>
-                                            <div class="row">
-                                                <div class="col-xs-3">
-                                                    <label><a sec:authorize-url="/filter/group/downFileTemp/*" th:href="@{/filter/group/downFileTemp/3}">关键词模板.xlsx</a></label>
-                                                </div>
-                                            </div>
+                                            <label>下载模板</label><a sec:authorize-url="/filter/group/downFileTemp/*" th:href="@{/filter/group/downFileTemp/5}" class="btn btn-success waves-effect waves-light m-l-10 btn-sm">
+                                            <i class="glyphicon glyphicon-download"></i> 敏感词模板.xlsx
+                                        </a>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-9">
+                                <div class="col-md-6">
                                     <div class="p-20">
                                         <label>上传文件</label>
                                         <div class="form-group">
@@ -92,6 +75,7 @@
                             <div class="text-right">
                                 <input type="hidden" th:field="*{keyWordsBusinessType}">
                                 <input type="hidden" th:field="*{businessId}">
+                                <input type="hidden" name="keyWordsType" value="BLACK">
                                 <button sec:authorize-url="/filter/keywords/classify/upFiles" type="submit"
                                         class="btn btn-teal waves-effect waves-light">导入</button>
                                 <a  sec:authorize-url="/filter/keywords/classify/*/list/*"

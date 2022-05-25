@@ -75,7 +75,7 @@ public class EnterpriseWebController {
         }
 
         //查询是否开通业务账号
-        ResponseData<List<AccountBasicInfoValidator>> info = businessAccountService.findBusinessAccountByEnterpriseId(enterpriseWebAccountInfoValidator.getEnterpriseId());
+        /*ResponseData<List<AccountBasicInfoValidator>> info = businessAccountService.findBusinessAccountByEnterpriseId(enterpriseWebAccountInfoValidator.getEnterpriseId());
         if (!ResponseCode.SUCCESS.getCode().equals(info.getCode())) {
             view.addObject("error", info.getCode() + ":" + info.getMessage());
             return view;
@@ -83,7 +83,7 @@ public class EnterpriseWebController {
         if(StringUtils.isEmpty(info.getData()) || info.getData().size()<=0){
             view.addObject("error", "请先开通业务账号！");
             return view;
-        }
+        }*/
 
         String op = "add";
         if(!StringUtils.isEmpty(enterpriseWebAccountInfoValidator.getId())){

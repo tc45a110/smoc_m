@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+<th:block th:fragment="common_header">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>[[${@systemProperties.systemName}]]-[[${@systemProperties.companyName}]]</title>
+    <link rel="shortcut icon" th:href="@{/static/favicon.ico}"/>
+    <link rel="bookmark" th:href="@{/static/favicon.ico}"/>
+</th:block>
+<th:block th:fragment="common_keyword">
+    <!-- start row  查询条件-->
+    <div class="row" style="position: relative;" th:remove="${#strings.isEmpty(error)}?none:all">
+        <div class="col-sm-12">
+
+            <ul class="nav nav-pills pull-right">
+                <li>
+                    <a sec:authorize-url="/filter/keywords/list/*/*/*" style="color:#797979;"
+                       th:href="@{/filter/keywords/list/{keyWordsBusinessType}/{businessId}/CHECK(keyWordsBusinessType=${filterKeyWordsInfoValidator.keyWordsBusinessType},businessId=${filterKeyWordsInfoValidator.businessId})}"
+                    >
+                        审核词列表
+                    </a></li>
+                <li>
+                    <a sec:authorize-url="/filter/keywords/list/*/*/*"  style="color:#797979;"
+                       th:href="@{/filter/keywords/list/{keyWordsBusinessType}/{businessId}/BLACK(keyWordsBusinessType=${filterKeyWordsInfoValidator.keyWordsBusinessType},businessId=${filterKeyWordsInfoValidator.businessId})}"
+                    >
+                        敏感词列表
+                    </a></li>
+                <li>
+                    <a sec:authorize-url="/filter/keywords/list/*/*/*" style="color:#797979;"
+                       th:href="@{/filter/keywords/list/{keyWordsBusinessType}/{businessId}/WHITE(keyWordsBusinessType=${filterKeyWordsInfoValidator.keyWordsBusinessType},businessId=${filterKeyWordsInfoValidator.businessId})}"
+                    >
+                        白词列表
+                    </a></li>
+            </ul>
+
+        </div>
+    </div>
+    <!-- end row -->
+
+
+    <!--<script>
+        /*
+            function activeKey(tab) {
+                for (var num = 1; num < 4; num++) {
+                    document.getElementById('key' + num).className = "btn btn-default waves-effect waves-light m-l-10 btn-md";
+
+                }
+                document.getElementById('key' + tab).className = "btn btn-brown waves-effect waves-light m-l-10 btn-md";
+            }*/
+
+        var resizefunc = [];
+        //隐藏进度项
+        $('#preloader').css('display', 'none');
+
+    </script>-->
+
+</th:block>
+
+
+</body>
+</html>

@@ -14,11 +14,11 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 172.17.65.102:8848
+        server-addr: 172.17.114.232:8848
   redis: #redis配置
-    host: 123.57.216.87
-    port: 6555
-    password: Dj!bm%Mk8DyP
+    host: 172.17.114.232
+    port: 6379
+    password: xz%smoc40#pm
     database: 1
     timeout: 3000
     jedis:
@@ -54,10 +54,18 @@ com:
       smoc:
         enterprise-file-path: /alidata/smoc/enterprise/
         mobile-file-root-path: /alidata/smoc/message/mobile  #短信手机号文件根目录
-        web-url: http://39.107.110.237:8085/service #导出账号信息：自服务平台网址
+        web-url: http://123.57.228.244:8085/service #导出账号信息：自服务平台网址
         message-resource:
-          resource-url: http://39.107.110.237/smoc/message/resource #访问资源路径
+          resource-url: http://123.57.228.244/smoc/message/resource #访问资源路径
           resource-file-root-path: /alidata/smoc/message/resource  #资源文件根目录
+
+        intelligence:
+          account: AP0681
+          password: 679870213340024832lwoSvz
+          domain: domain
+          server-address: https://tpl-aim.monyun.cn:57123
+          view-address: http://localhost:8080
+          resource-file-root-path: /alidata/smoc/intelect/resource/  #资源文件根目录
 
     #**********************************************************
     # 内置tomcat 配置

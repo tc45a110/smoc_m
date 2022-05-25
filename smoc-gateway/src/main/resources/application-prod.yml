@@ -2,7 +2,7 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 172.17.65.102:8848
+        server-addr: 172.17.114.232:8848
     gateway:
       #Global http timeouts.must be specified in milliseconds. must be specified as a java.time.Duration
       httpclient:
@@ -13,9 +13,9 @@ spring:
   # Redis
   #**********************************************************
   redis: #redis配置
-    host: 123.57.216.87
-    port: 6555
-    password: Dj!bm%Mk8DyP
+    host: 172.17.114.232
+    port: 6379
+    password: xz%smoc40#pm
     database: 1
     timeout: 3000
     jedis:
@@ -34,8 +34,20 @@ com:
     cloud:
       gateway:
         configuration:
-          signStyle: md5_HMAC
-          aesIv: BINM6krYfGEvGADKq4iTMvBQ6V/3IWFVaqdwhlUBw5Q=
-          aesKey: qUhpGjKp3caWMHgDmHoQzbOQP2lGxlzEjJNAwBwO4Q7Pv8XUpoDJUxEyPleyqy67
-          md5HmacKey: ad73qUQDMH2HZrYXTfeSqDl3ZjecgW0bDf2h2zs3KaY=
-          shaHmacKey: cgN4u8LsehkotaJKunFAsCign3oaCXJoF6wISxAK+ZRRyfAfrZk/d1EcUnaDi/8C
+          #网关签名配置
+          signature:
+            signStyle: md5_HMAC
+            aesIv: BINM6krYfGEvGADKq4iTMvBQ6V/3IWFVaqdwhlUBw5Q=
+            aesKey: qUhpGjKp3caWMHgDmHoQzbOQP2lGxlzEjJNAwBwO4Q7Pv8XUpoDJUxEyPleyqy67
+            md5HmacKey: ad73qUQDMH2HZrYXTfeSqDl3ZjecgW0bDf2h2zs3KaY=
+            shaHmacKey: cgN4u8LsehkotaJKunFAsCign3oaCXJoF6wISxAK+ZRRyfAfrZk/d1EcUnaDi/8C
+          #智能梦网验证签名
+          intelligence:
+            account: AP0681
+            password: 679870213340024832lwoSvz
+            callback-is-sign: true
+logging:
+  config: classpath:logback-spring.xml
+  path: /home/smoc/smoc-log/smoc-gateway-logs
+  level:
+    root: info

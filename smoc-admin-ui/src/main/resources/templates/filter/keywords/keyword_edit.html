@@ -51,13 +51,13 @@
                                                 <label><span th:if="${filterKeyWordsInfoValidator.businessId eq 'CHECK'}">审核词</span><span th:if="${filterKeyWordsInfoValidator.businessId eq 'BLACK'}">敏感词</span><span class="text-danger">*</span>&nbsp;<span
                                                         class="text-danger" style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
-                                                <input type="text" required="" th:field="*{keyWords}" class="form-control" autocomplete="off"
+                                                <input type="text" required="" th:field="*{keyWords}" class="form-control" autocomplete="off" data-parsley-length="[1,255]"
                                                        th:placeholder="${filterKeyWordsInfoValidator.businessId eq 'CHECK' ? '审核词' : (filterKeyWordsInfoValidator.businessId eq 'BLACK' ? '敏感词' : '关键词')}">
                                             </div>
 
                                             <div class="form-group m-b-20">
                                                 <label><span th:if="${filterKeyWordsInfoValidator.businessId eq 'CHECK'}">审核词</span><span th:if="${filterKeyWordsInfoValidator.businessId eq 'BLACK'}">敏感词</span>描述</label>
-                                                <input type="text" th:field="*{keyDesc}" class="form-control" autocomplete="off"
+                                                <input type="text" th:field="*{keyDesc}" class="form-control" autocomplete="off" data-parsley-length="[1,255]"
                                                        th:placeholder="${filterKeyWordsInfoValidator.businessId eq 'CHECK' ? '审核词描述' : (filterKeyWordsInfoValidator.businessId eq 'BLACK' ? '敏感词描述' : '关键词描述')}">
                                             </div>
 

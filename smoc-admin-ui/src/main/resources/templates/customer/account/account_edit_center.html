@@ -128,8 +128,8 @@
                                             </li>
                                             <li class="" id="tab7">
                                                 <a onclick="active('7')" id="a7"
-                                                   sec:authorize-url="/filter/keywords/list/BUSINESS_ACCOUNT/*"
-                                                   th:href="@{/filter/keywords/list/BUSINESS_ACCOUNT/{id}(id=${accountId})}"
+                                                   sec:authorize-url="/filter/keywords/list/*/*/*"
+                                                   th:href="@{/filter/keywords/list/BUSINESS_ACCOUNT/{id}/CHECK(id=${accountId})}"
                                                    th:target="tab-content">关键词
                                                 </a>
                                             </li>
@@ -231,27 +231,27 @@
 
 
         if("none" == $.cookie("help_display_account_config")){
-           $('#help').css('display', 'none');
+            $('#help').css('display', 'none');
         }
 
         $('#help_display').on("click", function () {
-           if('block' == $('#help').css('display')){
-             $('#help').css('display', 'none');
-             $.cookie("help_display_account_config", 'none', {
-                expires : 180
-             });
-           }else{
-             $('#help').css('display', 'block');
-             $.cookie("help_display_account_config", 'block', {
-                expires : 180
-             });
-           }
+            if('block' == $('#help').css('display')){
+                $('#help').css('display', 'none');
+                $.cookie("help_display_account_config", 'none', {
+                    expires : 180
+                });
+            }else{
+                $('#help').css('display', 'block');
+                $.cookie("help_display_account_config", 'block', {
+                    expires : 180
+                });
+            }
         });
         $('#help_button').on("click", function () {
-           $('#help').css('display', 'none');
-           $.cookie("help_display_account_config", 'none', {
-			expires : 180
-		   });
+            $('#help').css('display', 'none');
+            $.cookie("help_display_account_config", 'none', {
+                expires : 180
+            });
         });
 
     });

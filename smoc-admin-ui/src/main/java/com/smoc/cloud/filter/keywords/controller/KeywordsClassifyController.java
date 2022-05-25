@@ -11,6 +11,7 @@ import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.filter.ExcelModel;
 import com.smoc.cloud.common.smoc.filter.FilterKeyWordsInfoValidator;
+import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.filter.keywords.service.KeywordsService;
@@ -145,12 +146,17 @@ public class KeywordsClassifyController {
     @RequestMapping(value = "/classify/{classify}/{code}/add", method = RequestMethod.GET)
     public ModelAndView add(@PathVariable String code, @PathVariable String classify, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("filter/keywords/keyword_classify_edit_batch");
+        ModelAndView view = new ModelAndView("filter/keywords/keyword_classify_edit");
 
+        FilterKeyWordsInfoValidator filterKeyWordsInfoValidator = new FilterKeyWordsInfoValidator();
+        filterKeyWordsInfoValidator.setKeyWordsBusinessType(classify);
+        filterKeyWordsInfoValidator.setBusinessId(code);
 
         view.addObject("classify", classify);
         view.addObject("code", code);
         view.addObject("dictValueMap", dictMap(request));
+
+        view.addObject("filterKeyWordsInfoValidator", filterKeyWordsInfoValidator);
 
         return view;
 
@@ -262,10 +268,17 @@ public class KeywordsClassifyController {
         }
 
         //初始化其他变量
-        ResponseData<FilterKeyWordsInfoValidator> indoData = keywordsService.findById(filterKeyWordsInfoValidator.getId());
-        filterKeyWordsInfoValidator.setCreatedTime(indoData.getData().getCreatedTime());
-        filterKeyWordsInfoValidator.setUpdatedBy(user.getRealName());
-        filterKeyWordsInfoValidator.setUpdatedTime(new Date());
+        if(StringUtils.isEmpty(filterKeyWordsInfoValidator.getId())){
+            filterKeyWordsInfoValidator.setId(UUID.uuid32());
+            filterKeyWordsInfoValidator.setCreatedTime(new Date());
+            filterKeyWordsInfoValidator.setCreatedBy(user.getRealName());
+        }else{
+            ResponseData<FilterKeyWordsInfoValidator> indoData = keywordsService.findById(filterKeyWordsInfoValidator.getId());
+            filterKeyWordsInfoValidator.setCreatedTime(indoData.getData().getCreatedTime());
+            filterKeyWordsInfoValidator.setUpdatedBy(user.getRealName());
+            filterKeyWordsInfoValidator.setUpdatedTime(new Date());
+        }
+
 
         //记录日志
         log.info("[分类关键词库管理][{}][{}]数据:{}", "edit", user.getUserName(), JSON.toJSONString(filterKeyWordsInfoValidator));

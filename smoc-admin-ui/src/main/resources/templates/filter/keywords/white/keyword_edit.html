@@ -63,24 +63,24 @@
                                             </div>
 
                                             <div class="form-group m-b-20">
-                                                <label>白词<span class="text-danger">*</span>&nbsp;&nbsp;<span
+                                                <label><span id="whiteKey">白词</span><span class="text-danger">*</span>&nbsp;&nbsp;<span
                                                         class="text-danger" style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
-                                                <input type="text" required="" th:field="*{keyWords}" class="form-control" autocomplete="off"
-                                                       placeholder="白词">
+                                                <input type="text" required="" th:field="*{keyWords}" id="keyWords" class="form-control" autocomplete="off"
+                                                       placeholder="白词" data-parsley-length="[1,255]">
                                             </div>
                                             <div class="form-group m-b-20" id="superKey">
                                                 <label><span  id="key-tip">要覆盖的审核词</span><span class="text-danger">*</span>&nbsp;&nbsp;<span
                                                         class="text-danger" style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
                                                 <input type="text" th:field="*{waskKeyWords}" id="waskKeyWords" class="form-control" autocomplete="off"
-                                                       placeholder="要覆盖的审核词" required="" >
+                                                       placeholder="要覆盖的审核词" required="" data-parsley-length="[1,255]">
                                             </div>
 
                                             <div class="form-group m-b-20">
-                                                <label>白词描述</label>
-                                                <input type="text" th:field="*{keyDesc}" class="form-control" autocomplete="off"
-                                                       placeholder="白词描述" >
+                                                <label><span id="whiteRemark">白词描述</span></label>
+                                                <input type="text" th:field="*{keyDesc}" id="keyDesc" class="form-control" autocomplete="off"
+                                                       placeholder="白词描述" data-parsley-length="[1,255]">
                                             </div>
 
                                             <div class="col-md-12 text-right">
@@ -129,22 +129,35 @@
         if("WHITE_AVOID_CHECK"==value){
             document.getElementById("key-tip").innerText = "要覆盖的审核词";
             $("#waskKeyWords").prop("placeholder","输入要覆盖的审核词");
+            $("#waskKeyWords").prop("required","true");
+            document.getElementById("superKey").style.display = "";
+            document.getElementById("whiteRemark").innerText = "白词描述";
+            $("#keyDesc").prop("placeholder","白词描述");
         }
         if("WHITE_AVOID_BLACK"==value){
             document.getElementById("key-tip").innerText = "要覆盖的敏感词";
             $("#waskKeyWords").prop("placeholder","输入要覆盖的敏感词");
+            $("#waskKeyWords").prop("required","true");
+            document.getElementById("superKey").style.display = "";
+            document.getElementById("whiteRemark").innerText = "白词描述";
+            $("#keyDesc").prop("placeholder","白词描述");
         }
         if("WHITE_AVOID_REGULAR"==value){
-            document.getElementById("key-tip").innerText = "要覆盖的正则表达式";
-            $("#waskKeyWords").prop("placeholder","输入要覆盖正的则正则表达式");
+            $("#waskKeyWords").removeAttr("required");
+            document.getElementById("superKey").style.display = "none";
+            document.getElementById("whiteKey").innerText = "正则表达式";
+            $("#keyWords").prop("placeholder","输入正则表达式");
+            document.getElementById("whiteRemark").innerText = "正则表达式描述";
+            $("#keyDesc").prop("placeholder","输入描述");
         }
 
         if("SUPER_WHITE"==value){
             $("#waskKeyWords").removeAttr("required");
             document.getElementById("superKey").style.display = "none";
-        }else{
-            $("#waskKeyWords").prop("required","true");
-            document.getElementById("superKey").style.display = "";
+            document.getElementById("whiteKey").innerText = "白词";
+            $("#keyWords").prop("placeholder","白词");
+            document.getElementById("whiteRemark").innerText = "白词描述";
+            $("#keyDesc").prop("placeholder","白词描述");
         }
     }
 

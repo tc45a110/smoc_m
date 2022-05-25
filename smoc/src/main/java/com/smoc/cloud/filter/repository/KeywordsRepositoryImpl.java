@@ -61,8 +61,13 @@ public class KeywordsRepositoryImpl extends BasePageRepository {
             }
 
             if (!StringUtils.isEmpty(data.getKeyWordsType())) {
-                sqlBuffer.append(" and t.KEY_WORDS_TYPE = ? ");
-                paramsList.add(data.getKeyWordsType().trim());
+                if(data.getKeyWordsType().contains("WHITE")){
+                    sqlBuffer.append(" and t.KEY_WORDS_TYPE like ? ");
+                    paramsList.add("%"+data.getKeyWordsType().trim()+"%");
+                }else{
+                    sqlBuffer.append(" and t.KEY_WORDS_TYPE = ? ");
+                    paramsList.add(data.getKeyWordsType().trim());
+                }
             }
 
             if (!StringUtils.isEmpty(data.getKeyWords())) {
@@ -149,9 +154,9 @@ public class KeywordsRepositoryImpl extends BasePageRepository {
                     ps.setString(3, filterKeyWordsInfoValidator.getBusinessId());
                     ps.setString(4, filterKeyWordsInfoValidator.getKeyWordsType());
                     ps.setString(5, info.getColumn1());
-                    ps.setString(6, info.getColumn2());
+                    ps.setString(6, info.getColumn3());
                     ps.setString(7, filterKeyWordsInfoValidator.getCreatedBy());
-                    ps.setString(8, info.getColumn3());
+                    ps.setString(8, info.getColumn2());
                 }
 
             });

@@ -297,14 +297,17 @@ public class GroupController {
             fileName = "模板.xlsx";
         }
         if("3".equals(type)){
-            fileName = "关键词模板.xlsx";
+            fileName = "审核词模板.xlsx";
         }
         if("4".equals(type)){
             fileName = "白词模板.xlsx";
         }
+        if("5".equals(type)){
+            fileName = "敏感词模板.xlsx";
+        }
 
         //设置文件路径
-        ClassPathResource classPathResource = new ClassPathResource("static/files/" + fileName);
+        ClassPathResource classPathResource = new ClassPathResource("static/files/keywords/" + fileName);
         try {
             response.setHeader("content-type", "application/octet-stream");
             response.setContentType("application/octet-stream");

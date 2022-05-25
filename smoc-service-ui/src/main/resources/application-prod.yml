@@ -1,12 +1,14 @@
 server: #服务端口
-  port: 8081
+  port: 8085
   servlet:
-    context-path: /auth
+    context-path: /service
     session:
       cookie:
         name: OAUTH2SESSION
       timeout: 240m
   connection-timeout: 15000
+  tomcat:
+    basedir:  /home/smoc/apps/temp
 
 spring:
   cloud:
@@ -27,6 +29,11 @@ spring:
         min-idle: 0
         time-between-eviction-runs: 1000
 
+  servlet:
+    multipart:
+      max-file-size: 50MB  #单个数据大小
+      max-request-size: 100MB #总数据大小
+
 #**********************************************************
 # manpuman oauth2 token参数设置
 #**********************************************************
@@ -39,13 +46,33 @@ com:
         user-name: authSystemUser    #authSystemUser #用户
         password: 049CB2A5480C582E54EBB82683F67410 #密码
       security: #系统信息配置
-        system-marking: smoc-auth #系统标识  本系统和授权管理中心配置的系统标识对应
+        system-marking: smoc-service #系统标识  本系统和授权管理中心配置的系统标识对应
         login-post-path: /security_login #spring security 拦截登录Post path   用户字段userName  密码字段 password  验证码字段 verificationCode
-        system-name: 认证、鉴权中心 #系统名称
+        system-name: smoc自服务平台 #系统名称
         company-name: 北京星语互联科技有限公司  #公司名称
-        ssl: false
         enable-verify-code: false #是否启用验证码
         help-mobile: 联系电话 #帮助电话
+        main-url: /service_main
+
+      smoc:
+        message:
+          enterprise-file-path: /alidata/smoc/enterprise/ #签名资质文件根目录
+          mobile-file-root-path: /alidata/smoc/message/mobile  #短信手机号文件根目录
+        message-resource:
+          resource-url: http://123.57.228.244/smoc/message/resource #访问资源路径
+          resource-file-root-path: /alidata/smoc/message/resource  #彩信资源文件根目录
+          resource-allow-format[0]: jpg,jpeg,gif,png  #彩信资源图片格式
+          resource-allow-format[1]: midi,wav,amr,mp3,aac  #彩信资源音频格式
+          resource-allow-format[2]: 3gp,mp4  #彩信资源视频频格式
+          resource-file-size-limit: 4096  #彩信资源文件大小限制，以K为单位
+          stay-times: 2 #彩信帧默认停留时间（秒）
+
+        intelligence:
+          account: AP0681
+          password: 679870213340024832lwoSvz
+          domain: domain
+          server-address: https://tpl-aim.monyun.cn:57123
+
     #**********************************************************
     # 内置tomcat 配置
     #**********************************************************
@@ -59,13 +86,9 @@ com:
       max-threads: 500
       protocol: org.apache.coyote.http11.Http11NioProtocol #org.apache.coyote.http11.Http11AprProtocol
 
-#**********************************************************
-# Redis
-#**********************************************************
-
-
 logging:
   config: classpath:logback-spring.xml
-  path: /home/smoc/smoc-log/smoc-auth-ui-logs
+  path: /home/smoc/smoc-log/smoc-service-ui-logs
   level:
     root: info
+

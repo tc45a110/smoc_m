@@ -31,7 +31,7 @@
                             <i class="mdi mdi-menu"></i>
                         </button>
                     </li>
-                    <li th:each="type,typeStat:${businessTypes}"  class="hidden-xs" th:style="${type.id == activeId?'background-color:#e34724':''}" th:id="${typeStat.index+1}" th:onclick="|select(${typeStat.index+1})|">
+                    <li th:each="type,typeStat:${businessTypes}"  class="hidden-xs" th:style="${type.id == activeId?'background-color:#0095A8':''}" th:id="${typeStat.index+1}" th:onclick="|select(${typeStat.index+1})|">
                         <a  th:href="@{/message/{id}(id=${type.id})}" class="menu-item waves-effect waves-light" style="font-size:16px;font-weight:600;color:#fff">[[${type.text}]]</a>
                     </li>
 
@@ -75,7 +75,7 @@
 
             <!--- Sidemenu -->
             <div id="sidebar-menu" th:remove="${#strings.isEmpty(error)}?none:all">
-                <div class="user-details" style="min-height:62px;padding-top:1px;background-color:#00acc1;">
+                <div  style="min-height:62px;padding-top:1px;background-color:#0095A8;">
                     <div style="font-size:16px;font-weight:600;color:#fff;text-align:center;line-height:62px">
                         [[${businessTypeName}]]
                     </div>
@@ -165,7 +165,7 @@
        for(var i =1;i<5;i++){
          $("#"+i).removeAttr("style");
        }
-       $("#"+id).css("background-color","#e34724");
+       $("#"+id).css("background-color","#0095A8");
 
 
     }

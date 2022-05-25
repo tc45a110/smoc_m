@@ -24,7 +24,7 @@
                         <mpm:tag identity="keywordsClassify"
                                  th:value="${classify}" show-type="label"
                                  key="code"/>-[[${dictValueMap.get(code)}]]
-                        关键词维护</h4>
+                        敏感词维护</h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
                             过滤配置
@@ -32,7 +32,7 @@
                         <li class="active">
                             <mpm:tag identity="keywordsClassify"
                                      th:value="${classify}" show-type="label"
-                                     key="code"/>-[[${dictValueMap.get(code)}]]关键词维护
+                                     key="code"/>-[[${dictValueMap.get(code)}]]敏感词维护
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -52,30 +52,24 @@
                                 <div class="p-20">
                                     <div class="form-group">
                                         <div class="row">
-                                            <div class="col-md-6 form-group">
-                                                <label>关键词类型<span class="text-danger">*</span>&nbsp;
-                                                </label>
-                                                <mpm:tag id="keyWordsType" identity="keyWordsType" show-type="select" key="code"
-                                                         name="keyWordsType" th:value="${filterKeyWordsInfoValidator.keyWordsType}"
-                                                         required="" class="form-control" data-icon="mdi mdi-view-module" title="关键词类别"/>
-                                            </div>
-                                            <div class="col-md-6 form-group">
-                                                <label>关键词<span class="text-danger">*</span>&nbsp;<span
+                                            <div class="col-md-9 form-group">
+                                                <label>敏感词<span class="text-danger">*</span>&nbsp;<span
                                                         class="text-danger" style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
                                                 <input type="text" required="" th:field="*{keyWords}" class="form-control" autocomplete="off"
-                                                       placeholder="关键词">
+                                                       placeholder="敏感词" data-parsley-length="[1,255]">
                                             </div>
 
-                                            <div class="col-md-6 form-group">
-                                                <label>关键词描述</label>
-                                                <input type="text" th:field="*{keyDesc}" class="form-control" autocomplete="off">
+                                            <div class="col-md-9 form-group">
+                                                <label>敏感词描述</label>
+                                                <input type="text" th:field="*{keyDesc}" class="form-control" autocomplete="off" data-parsley-length="[1,255]">
                                             </div>
 
                                             <div class="col-md-12 text-center">
                                                 <input type="hidden" th:field="*{id}">
                                                 <input type="hidden" th:field="*{keyWordsBusinessType}">
                                                 <input type="hidden" th:field="*{businessId}">
+                                                <input type="hidden" name="keyWordsType" value="BLACK">
                                                 <input type="hidden" th:field="*{createdBy}">
                                                 <button sec:authorize-url="/filter/keywords/classify/*/save/*" type="submit" class="btn btn-teal waves-effect waves-light">提交
                                                 </button>

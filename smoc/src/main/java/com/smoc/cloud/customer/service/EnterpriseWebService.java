@@ -194,7 +194,12 @@ public class EnterpriseWebService {
 
         BaseUserExtendsValidator baseUserExtendsValidator = new BaseUserExtendsValidator();
         baseUserExtendsValidator.setId(userId);
-        baseUserExtendsValidator.setRealName(entity.getWebLoginName());
+        if(!StringUtils.isEmpty(entity.getWebRealName())){
+            baseUserExtendsValidator.setRealName(entity.getWebRealName());
+        }else{
+            baseUserExtendsValidator.setRealName(entity.getWebLoginName());
+        }
+
         baseUserExtendsValidator.setCorporation(corporation);
         baseUserExtendsValidator.setCode("0");
         baseUserExtendsValidator.setParentCode(parentCode);

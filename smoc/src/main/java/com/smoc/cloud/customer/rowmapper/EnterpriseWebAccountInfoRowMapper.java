@@ -25,7 +25,7 @@ public class EnterpriseWebAccountInfoRowMapper implements RowMapper<EnterpriseWe
         qo.setCreatedBy(resultSet.getString("CREATED_BY"));
         qo.setCreatedTime(resultSet.getString("CREATED_TIME"));
         qo.setAesPassword(resultSet.getString("AES_PASSWORD"));
-
+        qo.setWebRealName(resultSet.getString("WEB_REAL_NAME"));
         return qo;
     }
 }

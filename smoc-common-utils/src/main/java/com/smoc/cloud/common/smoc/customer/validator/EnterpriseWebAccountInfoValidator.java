@@ -25,6 +25,7 @@ public class EnterpriseWebAccountInfoValidator {
     @NotNull(message = "用户名不能为空！")
     @Length(min = 4, max = 30, message = "用户名长度不符合规则！")
     private String webLoginName;
+    private String webRealName;
     @NotNull(message = "密码不能为空！")
     @Length(min = 6, max = 20, message = "密码长度不符合规则！")
     private String webLoginPassword;

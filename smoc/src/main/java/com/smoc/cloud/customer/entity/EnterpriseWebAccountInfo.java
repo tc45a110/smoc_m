@@ -13,6 +13,7 @@ public class EnterpriseWebAccountInfo {
     private String accountType;
     private String webLoginName;
     private String webLoginPassword;
+    private String webRealName;
     private String aesPassword;
     private String accountStatus;
     private String createdBy;
@@ -58,6 +59,16 @@ public class EnterpriseWebAccountInfo {
 
     public void setWebLoginName(String webLoginName) {
         this.webLoginName = webLoginName;
+    }
+
+    @Basic
+    @Column(name = "WEB_REAL_NAME")
+    public String getWebRealName() {
+        return webRealName;
+    }
+
+    public void setWebRealName(String webRealName) {
+        this.webRealName = webRealName;
     }
 
     @Basic

@@ -11,41 +11,48 @@
     <link th:href="@{/static/plugins/custombox/css/custombox.min.css}" rel="stylesheet">
     <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
 </head>
-<body>
+<body style="background-color:#fff">
 <!-- Loader start 页面加载进度-->
 <th:block th:insert="fragments/common_fragments :: common_loader"/>
 <!-- Loader end -->
 
 <!-- Start content -->
-<div class="content">
+<div class="content" style="margin-top: 0px">
     <div class="container">
+
+        <th:block th:insert="filter/keywords/account/keyword_common_fragments :: common_keyword"/>
+
         <!-- start row  查询条件-->
-        <div class="row" style="position: relative;margin-top: 0px" th:remove="${#strings.isEmpty(error)}?none:all">
+        <div class="row" style="position: relative;margin-top: 10px" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
                 <div class="card-box">
                     <div class="row m-b-60">
                         <div class="col-sm-12">
-                            <form id="query_form" th:action="@{/filter/keywords/classify/{classify}/page/{code}(classify=${classify},code=${code})}" th:object="${filterKeyWordsInfoValidator}"  method="post">
+                            <form id="query_form" method="post"  th:action="@{/filter/keywords/commonPage}" th:object="${filterKeyWordsInfoValidator}">
                                 <div class="form-group  col-sm-3">
-                                    <input type="text" class="form-control" th:field="*{keyWords}" placeholder="敏感词" autocomplete="off">
+                                    <input type="text" class="form-control" th:field="*{keyWords}" autocomplete="off"
+                                           th:placeholder="${filterKeyWordsInfoValidator.keyWordsType eq 'CHECK' ? '审核词' : (filterKeyWordsInfoValidator.keyWordsType eq 'BLACK' ? '敏感词' : '关键词')}">
                                 </div>
-
-                                <div class="form-group col-sm-6 pull-right" style="text-align: right">
-                                    <button sec:authorize-url="/filter/keywords/classify/*/page/*"
+                                <input type="hidden" th:field="*{keyWordsBusinessType}">
+                                <input type="hidden" th:field="*{businessId}">
+                                <input type="hidden" th:field="*{keyWordsType}">
+                                <input type="hidden" name="currentPage" id="currentPage" th:value="${pageParams.currentPage}">
+                                <input type="hidden" name="pageSize" id="pageSize" th:value="${pageParams.pageSize}">
+                                <div class="form-group col-sm-9 pull-right" style="text-align: right">
+                                    <button sec:authorize-url="/filter/keywords/commonPage"
                                             class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search"></i> 查询
                                     </button>
-                                    <a sec:authorize-url="/filter/keywords/classify/*/*/add"
-                                       th:href="@{/filter/keywords/classify/{classify}/{code}/add(classify=${classify},code=${code})}"
+                                    <a sec:authorize-url="/filter/keywords/add/*/*/*"
+                                       th:href="@{/filter/keywords/add/{keyWordsBusinessType}/{businessId}/{keyWordsType}(keyWordsBusinessType=${filterKeyWordsInfoValidator.keyWordsBusinessType},businessId=${filterKeyWordsInfoValidator.businessId},keyWordsType=${filterKeyWordsInfoValidator.keyWordsType})}"
                                        class="btn btn-success waves-effect waves-light m-l-10 btn-md">
-                                        <i class="glyphicon glyphicon-plus-sign"></i> 新建</a>
-                                    <a sec:authorize-url="/filter/keywords/classify/*/upFilesView/*"
-                                       th:href="@{/filter/keywords/classify/{classify}/upFilesView/{code}(classify=${classify},code=${code})}"
-                                       class="btn btn-primary waves-effect waves-light m-l-10 btn-md">
-                                        <i class="glyphicon glyphicon-import"></i> 导入
-                                    </a>
-                                    <input type="hidden" name="currentPage" id="currentPage" th:value="${pageParams.currentPage}">
-                                    <input type="hidden" name="pageSize" id="pageSize" th:value="${pageParams.pageSize}">
+                                        <i class="glyphicon glyphicon-plus-sign"></i> 新建<span th:if="${filterKeyWordsInfoValidator.keyWordsType eq 'CHECK'}">审核词</span><span th:if="${filterKeyWordsInfoValidator.keyWordsType eq 'BLACK'}">敏感词</span></a>
+                                    <a  sec:authorize-url="/filter/keywords/upFilesCommon/*/*/*"
+                                    th:href="@{/filter/keywords/upFilesCommon/{keyWordsBusinessType}/{businessId}/{keyWordsType}(keyWordsBusinessType=${filterKeyWordsInfoValidator.keyWordsBusinessType},businessId=${filterKeyWordsInfoValidator.businessId},keyWordsType=${filterKeyWordsInfoValidator.keyWordsType})}"
+                                    class="btn btn-primary waves-effect waves-light m-l-10 btn-md">
+                                    <i class="glyphicon glyphicon-import"></i>
+                                        导入<span th:if="${filterKeyWordsInfoValidator.keyWordsType eq 'CHECK'}">审核词</span><span th:if="${filterKeyWordsInfoValidator.keyWordsType eq 'BLACK'}">敏感词</span></a>
+
                                 </div>
                             </form>
                         </div>
@@ -60,33 +67,34 @@
             <div class="col-sm-12">
                 <div class="panel panel-color panel-info">
                     <div class="panel-heading">
-                        <h3 class="panel-title">
-                            <mpm:tag identity="keywordsClassify"
-                                     th:value="${classify}" show-type="label"
-                                     key="code"/>-[[${dictValueMap.get(code)}]]
-                            敏感词列表</h3>
+                        <h3 class="panel-title">[[${filterKeyWordsInfoValidator.keyWordsBusinessType =='CHANNEL'?'通道':'业务账号'}]]<span th:if="${filterKeyWordsInfoValidator.keyWordsType eq 'CHECK'}">审核词</span><span th:if="${filterKeyWordsInfoValidator.keyWordsType eq 'BLACK'}">敏感词</span>列表</h3>
                     </div>
                     <div class="panel-body">
                         <div class="table-responsive">
                             <table class="table table table-hover m-10" style="margin-top: -12px;">
                                 <thead>
                                 <tr>
-                                    <th>敏感词</th>
-                                    <th>敏感词描述</th>
+                                    <th><span th:if="${filterKeyWordsInfoValidator.keyWordsType eq 'CHECK'}">审核词</span><span th:if="${filterKeyWordsInfoValidator.keyWordsType eq 'BLACK'}">敏感词</span></th>
+                                    <th><span th:if="${filterKeyWordsInfoValidator.keyWordsType eq 'CHECK'}">审核词</span><span th:if="${filterKeyWordsInfoValidator.keyWordsType eq 'BLACK'}">敏感词</span>描述</th>
+                                    <th>创建人</th>
+                                    <th>创建日期</th>
                                     <th>操作</th>
                                 </tr>
                                 <thead>
                                 <tbody>
                                 <tr th:each="info:${list}">
+
                                     <td>[[${info.keyWords}]]</td>
                                     <td>[[${info.keyDesc}]]</td>
+                                    <td>[[${info.createdBy}]]</td>
+                                    <td>[[${info.createdTimeStr}]]</td>
                                     <td style="line-height: 26px;">
-                                        <a sec:authorize-url="/filter/keywords/classify/*/*/edit/*"
-                                           th:href="@{/filter/keywords/classify/{classify}/{code}/edit/{id}(classify=${classify},code=${code},id=${info.id})}" class="on-default edit-row"
+                                        <a sec:authorize-url="/filter/keywords/edit/*"
+                                           th:href="@{/filter/keywords/edit/{id}(id=${info.id})}" class="on-default edit-row"
                                            style="padding-left: 5px;color: #29b6f6;" data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="编辑"><i
                                                 style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                        <a sec:authorize-url="/filter/keywords/classify/deleteById/*" data-toggle="modal"
+                                        <a sec:authorize-url="/filter/keywords/deleteById/*" data-toggle="modal"
                                            data-target="#confirm-modal" class="on-default remove-row"
                                            th:onclick="confirmDelete([[${info.id}]],this)"
                                            style="padding-left: 5px;color: #f05050" title="删除"><i
@@ -122,7 +130,6 @@
 
 <script>
 
-
     function confirmDelete(id) {
         $("#deleteId").val(id);
     }
@@ -130,14 +137,13 @@
     function deleteById() {
         var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
         $('#preloader').css('display', 'block');
-        location.href = contextPath + "/filter/keywords/classify/deleteById/" + $("#deleteId").val();
+        location.href = contextPath + "/filter/keywords/deleteById/" + $("#deleteId").val();
     }
 
 
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
-
 
 </script>
 </body>

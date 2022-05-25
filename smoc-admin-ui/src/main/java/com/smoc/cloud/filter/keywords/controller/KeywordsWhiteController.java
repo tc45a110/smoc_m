@@ -187,7 +187,7 @@ public class KeywordsWhiteController {
         ModelAndView view = new ModelAndView("filter/keywords/white/keyword_edit");
 
         if(!"SYSTEM".equals(keywordsType)){
-            view.setViewName("filter/keywords/keyword_edit_common");
+            view.setViewName("filter/keywords/white/keyword_edit_common");
         }
 
         //完成参数规则验证
@@ -203,8 +203,6 @@ public class KeywordsWhiteController {
 
         //初始化其他变量
         if (!StringUtils.isEmpty(op) && "add".equals(op)) {
-            filterKeyWordsInfoValidator.setKeyWordsBusinessType(keywordsType);
-            filterKeyWordsInfoValidator.setBusinessId(businessId);
             filterKeyWordsInfoValidator.setCreatedTime(new Date());
             filterKeyWordsInfoValidator.setCreatedBy(user.getRealName());
         } else if (!StringUtils.isEmpty(op) && "edit".equals(op)) {
@@ -218,7 +216,7 @@ public class KeywordsWhiteController {
         }
 
         //记录日志
-        log.info("[关键词库管理][{}][{}]数据:{}", op, user.getUserName(), JSON.toJSONString(filterKeyWordsInfoValidator));
+        log.info("[白词管理][{}][{}]数据:{}", op, user.getUserName(), JSON.toJSONString(filterKeyWordsInfoValidator));
 
         //保存操作
         ResponseData data = keywordsService.save(filterKeyWordsInfoValidator, op);
@@ -229,11 +227,11 @@ public class KeywordsWhiteController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode()) && !"SYSTEM".equals(keywordsType)) {
-            systemUserLogService.logsAsync(keywordsType, businessId, filterKeyWordsInfoValidator.getCreatedBy() , op, "修改关键词" , JSON.toJSONString(filterKeyWordsInfoValidator));
+            systemUserLogService.logsAsync(keywordsType, businessId, filterKeyWordsInfoValidator.getCreatedBy() , op, "add".equals(op)?"添加白词":"修改白词" , JSON.toJSONString(filterKeyWordsInfoValidator));
         }
 
         if(!"SYSTEM".equals(keywordsType)){
-            view.setView(new RedirectView("/filter/keywords/list/"+keywordsType+"/"+businessId, true, false));
+            view.setView(new RedirectView("/filter/keywords/list/"+filterKeyWordsInfoValidator.getKeyWordsBusinessType()+"/"+filterKeyWordsInfoValidator.getBusinessId()+"/WHITE", true, false));
             return view;
         }
 
@@ -267,7 +265,7 @@ public class KeywordsWhiteController {
         }
 
         //记录日志
-        log.info("[关键词库管理][delete][{}]数据::{}", user.getUserName(), JSON.toJSONString(keyData.getData()));
+        log.info("[白词管理][delete][{}]数据::{}", user.getUserName(), JSON.toJSONString(keyData.getData()));
 
         //删除操作
         ResponseData data = keywordsService.deleteById(id);
@@ -277,7 +275,7 @@ public class KeywordsWhiteController {
         }
 
         if(!"SYSTEM".equals(keyData.getData().getKeyWordsBusinessType())){
-            view.setView(new RedirectView("/filter/keywords/list/"+keyData.getData().getKeyWordsBusinessType()+"/"+keyData.getData().getBusinessId(), true, false));
+            view.setView(new RedirectView("/filter/keywords/list/"+keyData.getData().getKeyWordsBusinessType()+"/"+keyData.getData().getBusinessId()+"/WHITE", true, false));
             return view;
         }
 
@@ -312,11 +310,11 @@ public class KeywordsWhiteController {
         ModelAndView view = new ModelAndView("filter/keywords/white/keyword_upfiles_view");
 
         if(!"SYSTEM".equals(filterKeyWordsInfoValidator.getKeyWordsBusinessType())){
-            view.setViewName("filter/keywords/keyword_upfiles_common");
+            view.setViewName("filter/keywords/white/keyword_upfiles_common");
         }
 
         if(StringUtils.isEmpty(filterKeyWordsInfoValidator.getKeyWordsType())){
-            FieldError err = new FieldError("关键词类型", "keyWordsType", "关键词类型不能为空");
+            FieldError err = new FieldError("白词类型", "keyWordsType", "白词类型不能为空");
             result.addError(err);
         }
         //完成参数规则验证
@@ -350,15 +348,15 @@ public class KeywordsWhiteController {
 
                 //保存操作记录
                 if (ResponseCode.SUCCESS.getCode().equals(data.getCode()) && !"SYSTEM".equals(filterKeyWordsInfoValidator.getKeyWordsBusinessType())) {
-                    systemUserLogService.logsAsync(filterKeyWordsInfoValidator.getKeyWordsBusinessType(), filterKeyWordsInfoValidator.getBusinessId(), user.getRealName() , "add", "导入关键词" , JSON.toJSONString(validator));
+                    systemUserLogService.logsAsync(filterKeyWordsInfoValidator.getKeyWordsBusinessType(), filterKeyWordsInfoValidator.getBusinessId(), user.getRealName() , "add", "导入白词" , JSON.toJSONString(validator));
                 }
             }
 
-            log.info("[关键词管理][导入][{}]数据::{}", user.getUserName(), list.size());
+            log.info("[白词管理][导入][{}]数据::{}", user.getUserName(), list.size());
         }
 
         if(!"SYSTEM".equals(filterKeyWordsInfoValidator.getKeyWordsBusinessType())){
-            view.setView(new RedirectView("/filter/keywords/list/"+filterKeyWordsInfoValidator.getKeyWordsBusinessType()+"/"+filterKeyWordsInfoValidator.getBusinessId(), true, false));
+            view.setView(new RedirectView("/filter/keywords/list/"+filterKeyWordsInfoValidator.getKeyWordsBusinessType()+"/"+filterKeyWordsInfoValidator.getBusinessId()+"/WHITE", true, false));
             return view;
         }
 
@@ -373,15 +371,15 @@ public class KeywordsWhiteController {
      *
      * @return
      */
-    @RequestMapping(value = "/add/{keywordsType}/{businessId}", method = RequestMethod.GET)
-    public ModelAndView commonadd(@PathVariable String keywordsType, @PathVariable String businessId, HttpServletRequest request) {
+    @RequestMapping(value = "/add/{keyWordsBusinessType}/{businessId}", method = RequestMethod.GET)
+    public ModelAndView commonadd(@PathVariable String keyWordsBusinessType, @PathVariable String businessId, HttpServletRequest request) {
 
         ModelAndView view = new ModelAndView("filter/keywords/white/keyword_edit_common");
 
-        view.addObject("keywordsType", keywordsType);
-        view.addObject("businessId", businessId);
-
         FilterKeyWordsInfoValidator filterKeyWordsInfoValidator = new FilterKeyWordsInfoValidator();
+        filterKeyWordsInfoValidator.setId(UUID.uuid32());
+        filterKeyWordsInfoValidator.setKeyWordsBusinessType(keyWordsBusinessType);
+        filterKeyWordsInfoValidator.setBusinessId(businessId);
 
         view.addObject("op", "add");
         view.addObject("filterKeyWordsInfoValidator", filterKeyWordsInfoValidator);
@@ -416,8 +414,6 @@ public class KeywordsWhiteController {
 
         view.addObject("filterKeyWordsInfoValidator", data.getData());
         view.addObject("op", "edit");
-        view.addObject("keywordsType", data.getData().getKeyWordsBusinessType());
-        view.addObject("businessId", data.getData().getBusinessId());
         return view;
 
     }

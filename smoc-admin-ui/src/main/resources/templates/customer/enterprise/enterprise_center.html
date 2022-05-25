@@ -270,7 +270,7 @@
                                                                                        data-target="#confirm-add-user-modal"
                                                                                        class="btn btn-info"
                                                                                        sec:authorize-url="/enterprise/web/save"
-                                                                                       th:onclick="openPassword([[${web.id}]],[[${web.webLoginName}]],'edit')"
+                                                                                       th:onclick="openPassword([[${web.id}]],[[${web.webLoginName}]],'edit',[[${web.webRealName}]])"
                                                                                        style="font-size:12px;">密码重置</a>
                                                                                     <a data-toggle="modal"
                                                                                        data-target="#user-forbiden"
@@ -310,7 +310,7 @@
                                                                                     <a data-toggle="modal"
                                                                                        data-target="#confirm-add-user-modal"
                                                                                        sec:authorize-url="/enterprise/web/save"
-                                                                                       th:onclick="openPassword('','','add')"
+                                                                                       th:onclick="openPassword('','','add','')"
                                                                                        class="btn btn-info waves-effect waves-light m-l-10 btn-md">
                                                                                         <i class="glyphicon glyphicon-plus-sign"
                                                                                            style="margin-right:5px"></i>新建企业WEB登录账号</a>
@@ -777,11 +777,17 @@
                         <div class="row" style="margin-top:10px">
                             <div class="col-md-12">
                                 <div class="form-group m-b-20">
-                                    <label>用户名<span class="text-danger">*</span>&nbsp;</label>
+                                    <label>用户名(登录账号)<span class="text-danger">*</span>&nbsp;</label>
                                     <input type="text" class="form-control" th:field="*{webLoginName}"
                                            required="" data-parsley-length="[4,30]" autocomplete="off"
                                            data-parsley-pattern="^[0-9A-Za-z]{4,30}$"
                                            placeholder="输入字母或数字">
+                                </div>
+                                <div class="form-group m-b-20">
+                                    <label>姓名&nbsp;</label>
+                                    <input type="text" class="form-control" th:field="*{webRealName}"
+                                           data-parsley-length="[1,30]" autocomplete="off"
+                                           placeholder="输入姓名">
                                 </div>
                                 <div class="form-group m-b-20">
                                     <label>密码<span class="text-danger">*</span>&nbsp;</label>
@@ -1113,7 +1119,7 @@
 <script>
 
     //打开密码框
-    function openPassword(id, webLoginName, op) {
+    function openPassword(id, webLoginName, op,realName) {
         if ("add" == op) {
             $("#id").val('');
             $("#webLoginName").val('');
@@ -1123,6 +1129,8 @@
             $("#id").val(id);
             $("#webLoginName").val(webLoginName);
             $("#webLoginName").attr("readOnly", true);
+            $("#webRealName").val(realName);
+            $("#webRealName").attr("readOnly", true);
             $("#webLoginPassword").val(getCode());
         }
     }
