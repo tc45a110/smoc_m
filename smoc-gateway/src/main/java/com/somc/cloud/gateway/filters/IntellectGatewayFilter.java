@@ -50,24 +50,15 @@ public class IntellectGatewayFilter {
                 ServerHttpRequest request = exchange.getRequest();
                 URI uri = request.getURI();
                 log.info("[梦网回执请求]URI:{}", uri);
+
                 String ip = IpUtil.getIpAddr(request);
                 log.info("[请求IP]IP：{}", ip);
-                Pattern checkPattern = Pattern.compile("TemplateManage/aimTplAuditRpt");
-                Matcher matcher = checkPattern.matcher(uri.toString());
-                //模版审核请求
-                if (matcher.find()) {
-
-                    Pattern ipPattern = Pattern.compile(ip);
-                    Matcher ipMatcher = ipPattern.matcher(intelligenceProperties.getDomain());
-                    if (!ipMatcher.find()) {
-                        log.info("[IP鉴权]被限制IP：{}", ip);
-                        return errorHandle(exchange, "2006", "IP签权失败！");
-                    }
-
+                Pattern ipPattern = Pattern.compile(ip);
+                Matcher ipMatcher = ipPattern.matcher(intelligenceProperties.getDomain());
+                if (ipMatcher.find()) {
                     return chain.filter(exchange).then(Mono.fromRunnable(() -> {
                         //被执行后调用 post
                     }));
-
                 }
 
                 //回执是否验证签名
