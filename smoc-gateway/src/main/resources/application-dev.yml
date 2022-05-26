@@ -47,7 +47,7 @@ com:
             account: AP0681
             password: 679870213340024832lwoSvz
             callback-is-sign: true
-            domain: 218.25.208.15
+            domain: 218.25.208.15,127.0.0.1
 logging:
   config: classpath:logback-spring.xml
   path: E:/log/smoc-log/smoc-gateway-logs

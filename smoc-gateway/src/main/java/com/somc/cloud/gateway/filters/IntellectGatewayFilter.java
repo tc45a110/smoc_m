@@ -59,7 +59,7 @@ public class IntellectGatewayFilter {
 
                     Pattern ipPattern = Pattern.compile(ip);
                     Matcher ipMatcher = ipPattern.matcher(intelligenceProperties.getDomain());
-                    if (!matcher.find()) {
+                    if (!ipMatcher.find()) {
                         log.info("[IP鉴权]被限制IP：{}", ip);
                         return errorHandle(exchange, "2006", "IP签权失败！");
                     }
