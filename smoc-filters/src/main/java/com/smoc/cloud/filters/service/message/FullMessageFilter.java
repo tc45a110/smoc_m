@@ -35,7 +35,7 @@ public class FullMessageFilter {
 
         Map<String, String> result = new HashMap<>();
 
-        long start = System.currentTimeMillis();
+        //long start = System.currentTimeMillis();
 
         /**
          * 业务外账号超级白词
@@ -59,8 +59,11 @@ public class FullMessageFilter {
         /**
          * 业务账号敏感词过滤
          */
-        DfaSensitiveWordsFilter dfaAccountSensitiveWordsFilter = new DfaSensitiveWordsFilter(FilterInitialize.accountSensitiveMap.get(account));
+        Map accountSensitiveMap = FilterInitialize.accountSensitiveMap.get(account);
+        //log.info("[accountSensitiveMap]:{}",new Gson().toJson(accountSensitiveMap));
+        DfaSensitiveWordsFilter dfaAccountSensitiveWordsFilter = new DfaSensitiveWordsFilter(accountSensitiveMap);
         Set<String> accountSensitiveWords = dfaAccountSensitiveWordsFilter.getSensitiveWords(message, 1);
+        //log.info("[检测出来账号敏感词]：{}",accountSensitiveWords);
         //洗白过滤出来的敏感词 业务账号洗黑白词，清洗敏感词
         if (null != accountSensitiveWords && accountSensitiveWords.size() > 0) {
             List<Object> whiteAccountWords = filtersService.getWhiteWordsByAccountSensitive(account, accountSensitiveWords);
@@ -110,10 +113,10 @@ public class FullMessageFilter {
         /**
          * 系统敏感词过滤
          */
-        if (null != isBlackWordsFilter && !StringUtils.isEmpty(isBlackWordsFilter) && "1".equals(isBlackWordsFilter.toString())) {
+        if (!StringUtils.isEmpty(isBlackWordsFilter) && "1".equals(isBlackWordsFilter.toString())) {
             WordsSensitiveFilter sensitiveWordsFilter = FilterInitialize.sensitiveWordsFilter;
             Set<String> systemSensitiveWords = sensitiveWordsFilter.getSensitiveWords(message, 1);
-
+            //log.info("[检测出来系统敏感词]：{}",systemSensitiveWords);
             //洗白过滤出来的敏感词 业务账号洗黑白词，清洗敏感词
             if (null != systemSensitiveWords && systemSensitiveWords.size() > 0) {
                 List<Object> whiteAccountWords = filtersService.getWhiteWordsByAccountSensitive(account, systemSensitiveWords);
@@ -133,7 +136,7 @@ public class FullMessageFilter {
                     systemSensitiveWords.remove(washWord);
                 }
             }
-
+            //log.info("[账号洗黑白词洗白]：{}",systemSensitiveWords);
             //洗白过滤出来的敏感词 系统洗黑白词，清洗敏感词
             if (null != systemSensitiveWords && systemSensitiveWords.size() > 0) {
                 List<Object> whiteSystemWords = filtersService.getWhiteWordsBySystemSensitive(systemSensitiveWords);
@@ -153,6 +156,7 @@ public class FullMessageFilter {
                     systemSensitiveWords.remove(washWord);
                 }
             }
+            //log.info("[账户洗黑白词洗白]：{}",systemSensitiveWords);
             if (null != systemSensitiveWords && systemSensitiveWords.size() > 0) {
                 result.put("result", "true");
                 result.put("code", FilterResponseCode.MESSAGE_SENSITIVE_FILTER.getCode());
@@ -164,7 +168,7 @@ public class FullMessageFilter {
         /**
          * 行业敏感词
          */
-        if (null != infoTypeSensitiveWordsFilter && !StringUtils.isEmpty(infoTypeSensitiveWordsFilter)) {
+        if (!StringUtils.isEmpty(infoTypeSensitiveWordsFilter)) {
             DfaSensitiveWordsFilter dfaSensitiveWordsFilter = new DfaSensitiveWordsFilter(FilterInitialize.infoTypeSensitiveMap.get(infoTypeSensitiveWordsFilter));
             Set<String> infoSensitiveWords = dfaSensitiveWordsFilter.getSensitiveWords(message, 1);
             //洗白过滤出来的行业敏感词 业务账号洗黑白词，清洗敏感词
@@ -266,7 +270,7 @@ public class FullMessageFilter {
         /**
          * 系统审核词过滤
          */
-        if (null != isCheckWordsFilter && !StringUtils.isEmpty(isCheckWordsFilter) && "1".equals(isCheckWordsFilter.toString())) {
+        if (!StringUtils.isEmpty(isCheckWordsFilter) && "1".equals(isCheckWordsFilter.toString())) {
 
             Set<String> systemCheckWords = FilterInitialize.checkWordsFilter.getCheckWords(message, 1);
             //包含审核词 用业务账号免审白词，洗白
@@ -316,8 +320,8 @@ public class FullMessageFilter {
 
         }
 
-        long end = System.currentTimeMillis();
-        log.info("[内容过滤]：耗时{}毫秒", end - start);
+        //long end = System.currentTimeMillis();
+        //log.info("[内容过滤]：耗时{}毫秒", end - start);
         result.put("result", "false");
         return result;
 

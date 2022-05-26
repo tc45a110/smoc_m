@@ -49,7 +49,7 @@ public class NumberExtendFilterParamsGatewayFilter extends BaseGatewayFilter imp
          * 查询业务账号配置的NUMBER_BLACK_级别配置参数
          */
         Object blackPatten = filtersService.get(RedisConstant.FILTERS_CONFIG_ACCOUNT_NUMBER + "black:" + model.getAccount());
-        if (null != blackPatten && !StringUtils.isEmpty(blackPatten.toString())) {
+        if (!StringUtils.isEmpty(blackPatten)) {
             //log.info("[号码_黑名单_扩展参数]{}:{}", model.getAccount(), blackPatten.toString());
             Boolean validator = filtersService.validator(blackPatten.toString(), model.getPhone());
             if (validator) {
@@ -63,8 +63,8 @@ public class NumberExtendFilterParamsGatewayFilter extends BaseGatewayFilter imp
          * 查询业务账号配置的NUMBER_WHITE_级别配置参数 超级洗白
          */
         if ("true".equals(result.get("result"))) {
-            Object whitePatten = filtersService.get(RedisConstant.FILTERS_CONFIG_ACCOUNT_NUMBER + "white:" +  model.getAccount());
-            if (null != whitePatten && !StringUtils.isEmpty(whitePatten.toString())) {
+            Object whitePatten = filtersService.get(RedisConstant.FILTERS_CONFIG_ACCOUNT_NUMBER + "white:" + model.getAccount());
+            if (!StringUtils.isEmpty(whitePatten)) {
                 //log.info("[号码_白名单_扩展参数]{}:{}", model.getAccount(), new Gson().toJson(whitePatten));
                 Boolean validator = filtersService.validator(whitePatten.toString(), model.getPhone());
                 if (validator) {
@@ -78,8 +78,8 @@ public class NumberExtendFilterParamsGatewayFilter extends BaseGatewayFilter imp
          * 查询业务账号配置的NUMBER_REGULAR_级别配置参数  满足则通过
          */
         if ("false".equals(result.get("result"))) {
-            Object regularPatten = filtersService.get(RedisConstant.FILTERS_CONFIG_ACCOUNT_NUMBER + "regular:" +   model.getAccount());
-            if (null != regularPatten && !StringUtils.isEmpty(regularPatten.toString())) {
+            Object regularPatten = filtersService.get(RedisConstant.FILTERS_CONFIG_ACCOUNT_NUMBER + "regular:" + model.getAccount());
+            if (!StringUtils.isEmpty(regularPatten)){
                 //log.info("[号码_正则_扩展参数]{}:{}", model.getAccount(), new Gson().toJson(regularPatten));
                 if (filtersService.validator(regularPatten.toString(), model.getPhone())) {
                     result.put("result", "false");
@@ -104,6 +104,8 @@ public class NumberExtendFilterParamsGatewayFilter extends BaseGatewayFilter imp
     public int getOrder() {
         return 40;
     }
+
+
 
 
 }

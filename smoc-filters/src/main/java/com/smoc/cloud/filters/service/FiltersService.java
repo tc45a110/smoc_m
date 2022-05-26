@@ -256,8 +256,8 @@ public class FiltersService {
      * @param set
      * @return
      */
-    public List<Object> getWhiteWordsByAccountSensitive(String account,Set<String> set) {
-        List<Object> whiteWords = filtersRedisDataService.hashGetBatch(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_WHITE_SENSITIVE+account, set);
+    public List<Object> getWhiteWordsByAccountSensitive(String account, Set<String> set) {
+        List<Object> whiteWords = filtersRedisDataService.hashGetBatch(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_WHITE_SENSITIVE + account, set);
         return whiteWords;
     }
 
@@ -279,8 +279,8 @@ public class FiltersService {
      * @param set
      * @return
      */
-    public List<Object> getWhiteWordsByAccountCheck(String account,Set<String> set) {
-        List<Object> whiteWords = filtersRedisDataService.hashGetBatch(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_WHITE_NO_CHECK+account, set);
+    public List<Object> getWhiteWordsByAccountCheck(String account, Set<String> set) {
+        List<Object> whiteWords = filtersRedisDataService.hashGetBatch(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_WHITE_NO_CHECK + account, set);
         return whiteWords;
     }
 
@@ -290,7 +290,7 @@ public class FiltersService {
      * @return
      */
     public Map<String, Map> getInfoTypeSensitiveWords() {
-
+        long start = System.currentTimeMillis();
         Map<String, Map> infoTypeSensitiveMap = new HashMap<>();
         Set<String> infoTypes = filtersRedisDataService.sget(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_INFO_TYPE);
         //log.info("[infoTypes]:{}",infoTypes);
@@ -300,7 +300,9 @@ public class FiltersService {
                 infoTypeSensitiveMap.put(infoType, DFAUtils.buildDFADataModel(infoTypeSensitiveWords));
             }
         }
-        log.info("[infoTypeSensitiveMap]:{}",new Gson().toJson(infoTypeSensitiveMap));
+        long end = System.currentTimeMillis();
+        log.info("[加载行业敏感词]：耗时：{}毫秒", end - start);
+        //log.info("[infoTypeSensitiveMap]:{}", new Gson().toJson(infoTypeSensitiveMap));
         return infoTypeSensitiveMap;
     }
 
@@ -310,7 +312,7 @@ public class FiltersService {
      * @return
      */
     public Map<String, Map> getAccountSensitiveWords() {
-
+        long start = System.currentTimeMillis();
         Map<String, Map> accountSensitiveMap = new HashMap<>();
         Set<String> accounts = filtersRedisDataService.sget(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_SENSITIVE + "list");
         //log.info("[accounts]:{}",accounts);
@@ -320,7 +322,9 @@ public class FiltersService {
                 accountSensitiveMap.put(account, DFAUtils.buildDFADataModel(accountSensitiveWords));
             }
         }
-        //log.info("[accountSensitiveMap]:{}",new Gson().toJson(accountSensitiveMap));
+        long end = System.currentTimeMillis();
+        log.info("[加载业务账号敏感词]：耗时：{}毫秒", end - start);
+        //log.info("[accountSensitiveMap]:{}", new Gson().toJson(accountSensitiveMap));
         return accountSensitiveMap;
     }
 
@@ -330,7 +334,7 @@ public class FiltersService {
      * @return
      */
     public Map<String, Map> getAccountCheckWords() {
-
+        long start = System.currentTimeMillis();
         Map<String, Map> accountCheckMap = new HashMap<>();
         Set<String> accounts = filtersRedisDataService.sget(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_CHECK + "list");
         //log.info("[accounts]:{}",accounts);
@@ -340,6 +344,8 @@ public class FiltersService {
                 accountCheckMap.put(account, DFAUtils.buildDFADataModel(accountCheckWords));
             }
         }
+        long end = System.currentTimeMillis();
+        log.info("[加载业务账号审核词]：耗时：{}毫秒", end - start);
         //log.info("[accountCheckMap]:{}",new Gson().toJson(accountCheckMap));
         return accountCheckMap;
     }
@@ -350,7 +356,7 @@ public class FiltersService {
      * @return
      */
     public Map<String, Map> getAccountSuperWhiteWords() {
-
+        long start = System.currentTimeMillis();
         Map<String, Map> accountSuperWhiteMap = new HashMap<>();
         Set<String> accounts = filtersRedisDataService.sget(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_WHITE_SUPER + "list");
         //log.info("[accounts]:{}",accounts);
@@ -360,6 +366,8 @@ public class FiltersService {
                 accountSuperWhiteMap.put(account, DFAUtils.buildDFADataModel(accountSuperWhiteWords));
             }
         }
+        long end = System.currentTimeMillis();
+        log.info("[加载业务账号超级白词]：耗时：{}毫秒", end - start);
         //log.info("[accountSuperWhiteMap]:{}",new Gson().toJson(accountSuperWhiteMap));
         return accountSuperWhiteMap;
     }

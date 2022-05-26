@@ -27,7 +27,7 @@ public class SystemPhoneFilter {
     public Map<String, String> filter(FiltersService filtersService, Object isBlackListType, String phone) {
 
         Map<String, String> result = new HashMap<>();
-        if (null == isBlackListType || StringUtils.isEmpty(isBlackListType.toString())) {
+        if (StringUtils.isEmpty(isBlackListType)) {
             result.put("result", "false");
             return result;
         }
@@ -40,8 +40,9 @@ public class SystemPhoneFilter {
         }
         //低(系统黑名单)
         if ("LOW".equals(isBlackListType.toString())) {
-
+            log.info("[号码_mobile]:{}", phone);
             Boolean isExistBlackList = filtersService.systemNumberBlackListFilter(phone);//FilterInitialize.numberSystemBlackFilter.isContain(phone,1);
+            log.info("[号码_isExistBlackList]:{}", isExistBlackList);
             //系统黑名单
             if (isExistBlackList) {
                 result.put("result", "true");

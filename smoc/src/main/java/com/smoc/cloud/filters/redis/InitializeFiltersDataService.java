@@ -62,7 +62,7 @@ public class InitializeFiltersDataService {
         }
         //账号过滤参数
         if ("1".equals(initializeFiltersData.getReloadAccountFilterParams())) {
-            this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_ACCOUNT);
+            this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_ACCOUNT_COMMON);
             this.initializeAccountFilterParams();
         }
 
@@ -299,7 +299,7 @@ public class InitializeFiltersDataService {
         log.info("加载系统洗黑白词条数：{}", wordsMaskKeyWords.size());
         long start = System.currentTimeMillis();
         log.info("加载系统洗黑白词start：{}", start);
-        this.multiSaveHash(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_WHITE_SENSITIVE, wordsMaskKeyWords);
+        this.multiSaveHashNoCheck(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_WHITE_SENSITIVE, wordsMaskKeyWords);
         long end = System.currentTimeMillis();
         log.info("加载系统洗黑白词  end：{}", end);
     }
@@ -312,7 +312,7 @@ public class InitializeFiltersDataService {
         log.info("加载系统免审白词条数：{}", wordsMaskKeyWords.size());
         long start = System.currentTimeMillis();
         log.info("加载系统免审白词start：{}", start);
-        this.multiSaveHash(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_WHITE_NO_CHECK, wordsMaskKeyWords);
+        this.multiSaveHashNoCheck(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_WHITE_NO_CHECK, wordsMaskKeyWords);
         long end = System.currentTimeMillis();
         log.info("加载系统免审白词  end：{}", end);
     }
@@ -355,6 +355,20 @@ public class InitializeFiltersDataService {
             list.forEach((value) -> {
                 // hset zset都是可以用的，但是要序列化
                 connection.hSet(RedisSerializer.string().serialize(redisKey + value.getBusinessId()),
+                        RedisSerializer.string().serialize(value.getMaskKeyWord()), RedisSerializer.string().serialize(new Gson().toJson(value.getKeyWord())));
+            });
+            connection.close();
+            // executePipelined源码要求RedisCallback必须返回null，否则抛异常
+            return null;
+        });
+    }
+
+    public void multiSaveHashNoCheck(String redisKey, List<KeyWordsMaskKeyWords> list) {
+        redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
+            connection.openPipeline();
+            list.forEach((value) -> {
+                // hset zset都是可以用的，但是要序列化
+                connection.hSet(RedisSerializer.string().serialize(redisKey),
                         RedisSerializer.string().serialize(value.getMaskKeyWord()), RedisSerializer.string().serialize(new Gson().toJson(value.getKeyWord())));
             });
             connection.close();

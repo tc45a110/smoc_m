@@ -18,10 +18,10 @@ public class IntellectTemplateStatus {
 
        //自定义header协议
        Map<String, String> header = new HashMap<>();
-       header.put("account","AP0681");
-       String timestamp = DateTimeUtils.getDateFormat(new Date(), "MMddHHmmss");
-       header.put("timestamp", timestamp);
-       header.put("pwd", DigestUtils.md5Hex("AP0681".toUpperCase() + "00000000" + "679870213340024832lwoSvz" + timestamp));
+//       header.put("account","AP06811");
+//       String timestamp = DateTimeUtils.getDateFormat(new Date(), "MMddHHmmss");
+//       header.put("timestamp", timestamp);
+//       header.put("pwd", DigestUtils.md5Hex("AP0681".toUpperCase() + "00000000" + "679870213340024832lwoSvz" + timestamp));
 
        //
        Map<String,Object> data = new HashMap<>();

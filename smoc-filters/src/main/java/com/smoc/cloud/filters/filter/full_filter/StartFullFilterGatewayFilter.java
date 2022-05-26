@@ -42,8 +42,8 @@ public class StartFullFilterGatewayFilter extends BaseGatewayFilter implements O
         if (StringUtils.isEmpty(model.getAccount()) || StringUtils.isEmpty(model.getPhone()) || StringUtils.isEmpty(model.getMessage())) {
             return errorHandle(exchange, FilterResponseCode.PARAM_FORMAT_ERROR.getCode(), FilterResponseCode.PARAM_FORMAT_ERROR.getMessage());
         }
-        Long start = System.currentTimeMillis();
-        log.info("[filter-start]:{}",start);
+        //Long start = System.currentTimeMillis();
+        //log.info("[filter-start]:{}", start);
         return chain.filter(exchange);
     }
 

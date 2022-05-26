@@ -25,7 +25,7 @@ public class SendTimeLimitFilter {
      */
     public Map<String, String> filter(Object sendTimeLimit) {
         Map<String, String> result = new HashMap<>();
-        if (null == sendTimeLimit || StringUtils.isEmpty(sendTimeLimit.toString())) {
+        if (StringUtils.isEmpty(sendTimeLimit)) {
             result.put("result", "false");
             return result;
         }

@@ -88,6 +88,16 @@ public class CommonExtendFilterParamsGatewayFilter extends BaseGatewayFilter imp
         }
 
         /**
+         * 业务账号日限量
+         */
+        Object dailyLimitStyle = entities.get("COMMON_SEND_LIMIT_STYLE_DAILY");//运营商日限量方式
+        Object dailyLimit = entities.get("COMMON_SEND_LIMIT_NUMBER_DAILY_" + model.getCarrier());//日限量
+        Map<String, String> dailyLimitFilterResult = carrierDailyLimiterFilter.filter(filtersService, dailyLimitStyle, dailyLimit, model.getAccount(), model.getCarrier(), model.getNumbers());
+        if (!"false".equals(dailyLimitFilterResult.get("result"))) {
+            return errorHandle(exchange, dailyLimitFilterResult.get("code"), dailyLimitFilterResult.get("message"));
+        }
+
+        /**
          * 手机号黑名单过滤
          */
         Object isBlackListType = entities.get("COMMON_BLACK_LIST_LEVEL_FILTERING");
@@ -105,16 +115,6 @@ public class CommonExtendFilterParamsGatewayFilter extends BaseGatewayFilter imp
         Map<String, String> blackWordsFilterResult = fullMessageFilter.filter(filtersService, isBlackWordsFilter, isCheckWordsFilter,infoTypeSensitiveWordsFilter, model.getAccount(), model.getMessage());
         if (!"false".equals(blackWordsFilterResult.get("result"))) {
             return errorHandle(exchange, blackWordsFilterResult.get("code"), blackWordsFilterResult.get("message"));
-        }
-
-        /**
-         * 业务账号日限量
-         */
-        Object dailyLimitStyle = entities.get("COMMON_SEND_LIMIT_STYLE_DAILY");//运营商日限量方式
-        Object dailyLimit = entities.get("COMMON_SEND_LIMIT_NUMBER_DAILY_" + model.getCarrier());//日限量
-        Map<String, String> dailyLimitFilterResult = carrierDailyLimiterFilter.filter(filtersService, dailyLimitStyle, dailyLimit, model.getAccount(), model.getCarrier(), model.getNumbers());
-        if (!"false".equals(dailyLimitFilterResult.get("result"))) {
-            return errorHandle(exchange, dailyLimitFilterResult.get("code"), dailyLimitFilterResult.get("message"));
         }
 
         /**

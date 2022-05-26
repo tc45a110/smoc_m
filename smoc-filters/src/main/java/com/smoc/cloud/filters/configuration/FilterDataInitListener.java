@@ -21,7 +21,7 @@ public class FilterDataInitListener implements ApplicationListener<ContextRefres
         FilterInitialize.checkWordsFilter.initializeCheckWords(filtersService.getCheckWords());
         FilterInitialize.superWhiteWordsFilter.initializeSuperWhiteWords(filtersService.getSuperWhiteWords());
         FilterInitialize.infoTypeSensitiveMap = filtersService.getInfoTypeSensitiveWords();
-        FilterInitialize.infoTypeSensitiveMap = filtersService.getAccountSensitiveWords();
+        FilterInitialize.accountSensitiveMap = filtersService.getAccountSensitiveWords();
         FilterInitialize.accountCheckMap = filtersService.getAccountCheckWords();
         FilterInitialize.accountSuperWhiteMap = filtersService.getAccountSuperWhiteWords();
     }

@@ -26,17 +26,17 @@ public class FilterExample {
             Map<String, String> header = new HashMap<>();
             //
             Map<String, Object> data = new HashMap<>();
-            data.put("phone", "18510816771");
+            data.put("phone", "13910816771");
             data.put("account", "YQT124");
             data.put("carrier", "CMCC");
-            String message = "事情不大，还是要处理，奖励优秀共产党员，朝阳医院代检乙肝，共产党建党100周年，通讯详单记录，工商银行贷款";
+            String message = "事情不大，还是要处理，奖,禁止1bp2p贷款的";
             data.put("message", message);
-            data.put("provinceCode", "14");
+            data.put("provinceCode", "11");
             data.put("numbers", 1);
 
             //转JSON请求数据
             String requestJsonData = new Gson().toJson(data);
-
+            //System.out.println(requestJsonData);
             String result = Okhttp3Utils.postJson(url, requestJsonData, header);
             //Thread.currentThread().sleep(1000);
             System.out.println(System.currentTimeMillis()+"[请求响应]数据:" + result);

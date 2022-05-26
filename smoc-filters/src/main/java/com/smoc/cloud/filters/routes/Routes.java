@@ -52,7 +52,6 @@ public class Routes {
                  * 全量过滤
                  */
                 .route(r -> r.method(HttpMethod.POST).and().path("/smoc-filters/full-filter/**").and().readBody(String.class, requestBody -> {
-                            //相当于缓存了body信息，在filter 中可以这么获取 exchange.getAttribute("cachedRequestBodyObject");
                             return true;
                         }).filters(f -> f.stripPrefix(1).filter(startFullFilterGatewayFilter).filter(commonExtendFilterParamsGatewayFilter).filter(numberExtendFilterParamsGatewayFilter).filter(messageExtendFilterParamsGatewayFilter).filter(endGatewayFilter)).uri("lb://smoc")
 
@@ -61,7 +60,6 @@ public class Routes {
                  * 单独内容过滤
                  */
                 .route(r -> r.method(HttpMethod.POST).and().path("/smoc-filters/message-filter/**").and().readBody(String.class, requestBody -> {
-                            //相当于缓存了body信息，在filter 中可以这么获取 exchange.getAttribute("cachedRequestBodyObject");
                             return true;
                         }).filters(f -> f.stripPrefix(1).filter(messageGatewayFilter).filter(endGatewayFilter)).uri("lb://smoc")
 
@@ -70,7 +68,6 @@ public class Routes {
                  * 单独手机号码过滤
                  */
                 .route(r -> r.method(HttpMethod.POST).and().path("/smoc-filters/number-filter/**").and().readBody(String.class, requestBody -> {
-                            //相当于缓存了body信息，在filter 中可以这么获取 exchange.getAttribute("cachedRequestBodyObject");
                             return true;
                         }).filters(f -> f.stripPrefix(1).filter(endGatewayFilter)).uri("lb://smoc")
 

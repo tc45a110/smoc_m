@@ -3,6 +3,7 @@ package com.somc.cloud.gateway.filters;
 import com.google.gson.Gson;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.somc.cloud.gateway.configuration.IntelligenceProperties;
+import com.somc.cloud.gateway.util.IpUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,8 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 梦网回执 验证签名
@@ -46,7 +49,27 @@ public class IntellectGatewayFilter {
 
                 ServerHttpRequest request = exchange.getRequest();
                 URI uri = request.getURI();
-                log.info("[梦网回执请求]URI:{}", uri.toString());
+                log.info("[梦网回执请求]URI:{}", uri);
+                String ip = IpUtil.getIpAddr(request);
+                log.info("[请求IP]IP：{}", ip);
+                Pattern checkPattern = Pattern.compile("TemplateManage/aimTplAuditRpt");
+                Matcher matcher = checkPattern.matcher(uri.toString());
+                //模版审核请求
+                if (matcher.find()) {
+
+                    Pattern ipPattern = Pattern.compile(ip);
+                    Matcher ipMatcher = ipPattern.matcher(intelligenceProperties.getDomain());
+                    if (!matcher.find()) {
+                        log.info("[IP鉴权]被限制IP：{}", ip);
+                        return errorHandle(exchange, "2006", "IP签权失败！");
+                    }
+
+                    return chain.filter(exchange).then(Mono.fromRunnable(() -> {
+                        //被执行后调用 post
+                    }));
+
+                }
+
                 //回执是否验证签名
                 if (null != intelligenceProperties.getCallbackIsSign() && intelligenceProperties.getCallbackIsSign()) {
                     //HttpHeaders

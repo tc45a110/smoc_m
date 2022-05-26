@@ -48,7 +48,7 @@ public class MessageExtendFilterParamsGatewayFilter extends BaseGatewayFilter im
          * 查询业务账号配置的MESSAGE_BLACK_级别配置参数
          */
         Object blackPatten = filtersService.get(RedisConstant.FILTERS_CONFIG_ACCOUNT_MESSAGE + "black:" + model.getAccount());
-        if (null != blackPatten && !StringUtils.isEmpty(blackPatten.toString())) {
+        if (!StringUtils.isEmpty(blackPatten)) {
             //log.info("[内容_敏感词_扩展参数]{}:{}", model.getAccount(), new Gson().toJson(blackPatten));
             Boolean validator = filtersService.validator(blackPatten.toString(), model.getMessage());
             if (validator) {
@@ -63,7 +63,7 @@ public class MessageExtendFilterParamsGatewayFilter extends BaseGatewayFilter im
          */
         if ("true".equals(result.get("result"))) {
             Object whitePatten = filtersService.get(RedisConstant.FILTERS_CONFIG_ACCOUNT_MESSAGE + "white:" + model.getAccount());
-            if (null != whitePatten && !StringUtils.isEmpty(whitePatten.toString())) {
+            if (!StringUtils.isEmpty(whitePatten)) {
                 //log.info("[内容_白词_扩展参数]{}:{}", model.getAccount(), new Gson().toJson(whitePatten));
                 if (null != whitePatten && !StringUtils.isEmpty(whitePatten.toString())) {
                     Boolean validator = filtersService.validator(whitePatten.toString(), model.getMessage());
@@ -79,7 +79,7 @@ public class MessageExtendFilterParamsGatewayFilter extends BaseGatewayFilter im
          */
         if ("false".equals(result.get("result"))) {
             Object regularPatten = filtersService.get(RedisConstant.FILTERS_CONFIG_ACCOUNT_MESSAGE + "regular:" + model.getAccount());
-            if (null != regularPatten && !StringUtils.isEmpty(regularPatten.toString())) {
+            if (!StringUtils.isEmpty(regularPatten)) {
                 //log.info("[内容_正则_扩展参数]{}:{}", model.getAccount(), new Gson().toJson(regularPatten));
                 if (filtersService.validator(regularPatten.toString(), model.getMessage())) {
                     result.put("result", "false");
@@ -103,6 +103,8 @@ public class MessageExtendFilterParamsGatewayFilter extends BaseGatewayFilter im
     public int getOrder() {
         return 40;
     }
+
+
 
 
 }

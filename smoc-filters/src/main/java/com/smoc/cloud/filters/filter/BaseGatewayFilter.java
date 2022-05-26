@@ -22,8 +22,8 @@ public class BaseGatewayFilter {
      */
     public Mono<Void> success(ServerWebExchange exchange) {
 
-        Long start = System.currentTimeMillis();
-        log.info("[filter-  end]:{}",start);
+        //Long start = System.currentTimeMillis();
+        //log.info("[filter-  end]:{}",start);
         //响应信息
         ServerHttpResponse response = exchange.getResponse();
         response.getHeaders().set("Content-Type", "application/json;charset=utf-8");
@@ -43,8 +43,8 @@ public class BaseGatewayFilter {
      */
     public Mono<Void> errorHandle(ServerWebExchange exchange, String errorCode, String errorMessage) {
 
-        Long start = System.currentTimeMillis();
-        log.info("[filter-  end]:{}",start);
+        //Long start = System.currentTimeMillis();
+        //log.info("[filter-  end]:{}",errorCode);
         //响应信息
         ServerHttpResponse response = exchange.getResponse();
         response.getHeaders().set("Content-Type", "application/json;charset=utf-8");

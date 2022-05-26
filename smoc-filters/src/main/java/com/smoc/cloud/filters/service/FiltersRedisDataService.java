@@ -34,7 +34,7 @@ public class FiltersRedisDataService {
      * @return
      */
     public Boolean isMember(String key, String value) {
-        return redisTemplate.opsForSet().isMember(key, new Long(value));
+        return redisTemplate.opsForSet().isMember(key, value);
     }
 
     /**
