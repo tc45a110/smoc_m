@@ -70,18 +70,21 @@ public class InitializeFiltersDataService {
         if ("1".equals(initializeFiltersData.getReloadSystemSensitiveWords())) {
             this.deleteByKey(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_SENSITIVE);
             this.initializeSensitiveWords();
+            this.pubMessage(RedisConstant.MESSAGE_SYSTEM_SENSITIVE);
         }
 
         //系统审核词
         if ("1".equals(initializeFiltersData.getReloadSystemCheckWords())) {
             this.deleteByKey(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_CHECK);
             this.initializeCheckWords();
+            this.pubMessage(RedisConstant.MESSAGE_SYSTEM_CHECK);
         }
 
         //系统超级白词
         if ("1".equals(initializeFiltersData.getReloadSystemSuperWhiteWords())) {
             this.deleteByKey(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_WHITE_SUPER);
             this.initializeSuperWhiteWords();
+            this.pubMessage(RedisConstant.MESSAGE_SYSTEM_SUPER_WHITE);
         }
 
         //系统洗黑白词
@@ -104,23 +107,27 @@ public class InitializeFiltersDataService {
         if ("1".equals(initializeFiltersData.getReloadInfoSensitiveWords())) {
             this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_INFO_TYPE_SENSITIVE);
             this.initializeInfoTypeSensitiveWords(initializeFiltersData.getInfoType());
+            this.pubMessage(RedisConstant.MESSAGE_TYPE_INFO_SENSITIVE);
         }
 
         //业务账号敏感词
         if ("1".equals(initializeFiltersData.getReloadAccountSensitiveWords())) {
             this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_SENSITIVE);
             this.initializeAccountSensitiveWords();
+            this.pubMessage(RedisConstant.MESSAGE_ACCOUNT_SENSITIVE);
         }
         //业务账号审核词
         if ("1".equals(initializeFiltersData.getReloadAccountCheckWords())) {
             this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_CHECK);
             this.initializeAccountCheckWords();
+            this.pubMessage(RedisConstant.MESSAGE_ACCOUNT_CHECK);
         }
 
         //业务账号超级白词
         if ("1".equals(initializeFiltersData.getReloadAccountSuperWhiteWords())) {
             this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_WHITE_SUPER);
             this.initializeAccountSuperWhiteWords();
+            this.pubMessage(RedisConstant.MESSAGE_ACCOUNT_SUPER_WHITE);
         }
 
         //业务账号洗黑白词
@@ -605,6 +612,15 @@ public class InitializeFiltersDataService {
      */
     public void batchDeleteByPatten(String keyPatten) {
         this.redisTemplate.delete(redisTemplate.keys(keyPatten + "*"));
+    }
+
+    /**
+     * 发布消息
+     *
+     * @param message
+     */
+    public void pubMessage(String message) {
+        this.redisTemplate.convertAndSend(RedisConstant.CHANNEL, message);
     }
 
 

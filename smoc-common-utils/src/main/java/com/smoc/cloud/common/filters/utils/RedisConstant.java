@@ -79,4 +79,25 @@ public class RedisConstant {
     public static final String FILTERS_TEMPORARY_LIMIT_SYSTEM_NUMBER = FILTERS_TEMPORARY_LIMIT + "flow:system:";
 
 
+    /**
+     * pub/sub
+     */
+    public static final String CHANNEL ="FILTER_CHANNEL_KEY_WORDS";
+    //系统敏感词
+    public static final String MESSAGE_SYSTEM_SENSITIVE ="systemSensitive";
+    //系统审核词
+    public static final String MESSAGE_SYSTEM_CHECK ="systemCheck";
+    //系统超级白词
+    public static final String MESSAGE_SYSTEM_SUPER_WHITE ="systemSuperWhite";
+    //行业敏感词
+    public static final String MESSAGE_TYPE_INFO_SENSITIVE ="typeInfoSensitive";
+
+    //业务账号敏感词
+    public static final String MESSAGE_ACCOUNT_SENSITIVE ="accountSensitive";
+    //业务账号审核词
+    public static final String MESSAGE_ACCOUNT_CHECK ="accountCheck";
+    //业务账号超级白词
+    public static final String MESSAGE_ACCOUNT_SUPER_WHITE ="accountSuperWhite";
+
+
 }

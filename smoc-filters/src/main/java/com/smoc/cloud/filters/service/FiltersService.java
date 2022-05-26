@@ -202,7 +202,7 @@ public class FiltersService {
         Set<String> sensitiveWords = filtersRedisDataService.sget(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_SENSITIVE);
         long end = System.currentTimeMillis();
         if (null != sensitiveWords) {
-            log.info("[加载敏感词]：{}条，耗时：{}毫秒", sensitiveWords.size(), end - start);
+            log.info("[加载系统敏感词]：{}条，耗时：{}毫秒", sensitiveWords.size(), end - start);
         }
         return sensitiveWords;
     }
@@ -218,7 +218,7 @@ public class FiltersService {
         Set<String> checkWords = filtersRedisDataService.sget(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_CHECK);
         long end = System.currentTimeMillis();
         if (null != checkWords) {
-            log.info("[加载审核词]：{}条，耗时：{}毫秒", checkWords.size(), end - start);
+            log.info("[加载系统审核词]：{}条，耗时：{}毫秒", checkWords.size(), end - start);
         }
         return checkWords;
     }
@@ -234,7 +234,7 @@ public class FiltersService {
         Set<String> checkWords = filtersRedisDataService.sget(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_WHITE_SUPER);
         long end = System.currentTimeMillis();
         if (null != checkWords) {
-            log.info("[加载超级白词]：{}条，耗时：{}毫秒", checkWords.size(), end - start);
+            log.info("[加载系统超级白词]：{}条，耗时：{}毫秒", checkWords.size(), end - start);
         }
         return checkWords;
     }
