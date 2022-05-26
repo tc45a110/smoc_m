@@ -23,12 +23,13 @@ public enum FilterResponseCode {
     NUMBER_BLACK_FILTER("1203", "手机号码被号码扩展字段拦截！"),
     NUMBER_REGULAR_FILTER("1204", "手机号码被号码正则拦截！"),
 
-    MESSAGE_SENSITIVE_EXTEND_FILTER("1205", "被内容敏感词扩展字段拦截！"),
-    MESSAGE_REGULAR_FILTER("1206", "被内容敏感词正则拦截！"),
-    MESSAGE_SENSITIVE_FILTER("1207", "被内容敏感词拦截！"),
-    MESSAGE_CHECK_FILTER("1208", "被内容审核词拦截！"),
+    MESSAGE_SENSITIVE_EXTEND_FILTER("1205", "被扩展字段敏感词拦截！"),
+    MESSAGE_REGULAR_FILTER("1206", "被系统敏感词正则拦截！"),
+    MESSAGE_SENSITIVE_FILTER("1207", "被系统敏感词拦截！"),
+    MESSAGE_CHECK_FILTER("1208", "被系统审核词拦截！"),
     MESSAGE_INFO_TYPE_SENSITIVE_FILTER("1209", "被行业敏感词拦截！"),
-
+    MESSAGE_ACCOUNT_SENSITIVE_FILTER("1210", "被业务账号敏感词拦截！"),
+    MESSAGE_ACCOUNT_CHECK_FILTER("1211", "被业务账号审核词拦截！"),
 
     LIMIT_DAILY_CARRIER("1301", "达到运营商日限量限制！"),
     LIMIT_TIME_CONFIG_ERROR("1302", "发送时间段参数配置错误！"),

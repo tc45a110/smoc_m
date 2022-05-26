@@ -52,6 +52,7 @@ public class SystemPhoneFilter {
             result.put("result", "false");
             return result;
         }
+
         //中(系统+本地)
         if ("MIDDLE".equals(isBlackListType.toString())) {
             Boolean isExistBlackList = filtersService.systemNumberBlackListFilter(phone);//FilterInitialize.numberSystemBlackFilter.isContain(phone,1);
@@ -72,6 +73,7 @@ public class SystemPhoneFilter {
             result.put("result", "false");
             return result;
         }
+
         //中(系统+本地+三方)
         if ("HIGH".equals(isBlackListType.toString())) {
             Boolean isExistBlackList = filtersService.systemNumberBlackListFilter(phone);//FilterInitialize.numberSystemBlackFilter.isContain(phone,1);

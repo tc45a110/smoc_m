@@ -35,7 +35,7 @@ public class RedisConstant {
     //行业分类敏感词
     public static final String FILTERS_CONFIG_SYSTEM_WORDS_INFO_TYPE_SENSITIVE = FILTERS_CONFIG_SYSTEM_WORDS + "info_type:sensitive:";
     //行业敏感词类型
-    public static final String FILTERS_CONFIG_SYSTEM_WORDS_INFO_TYPE = FILTERS_CONFIG_SYSTEM_WORDS + "info_type:type";
+    public static final String FILTERS_CONFIG_SYSTEM_WORDS_INFO_TYPE = FILTERS_CONFIG_SYSTEM_WORDS_INFO_TYPE_SENSITIVE + "list";
 
     /**
      * 账户级过滤

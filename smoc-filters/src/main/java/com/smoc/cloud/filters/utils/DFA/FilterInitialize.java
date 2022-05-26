@@ -20,4 +20,10 @@ public class FilterInitialize {
     //存放加载的业务账号敏感词 及构造完成的DFA算法map
     public static Map<String, Map> accountSensitiveMap = new HashMap();
 
+    //存放加载的业务账号审核词 及构造完成的DFA算法map
+    public static Map<String, Map> accountCheckMap = new HashMap();
+
+    //存放加载的业务账号超级白词 及构造完成的DFA算法map
+    public static Map<String, Map> accountSuperWhiteMap = new HashMap();
+
 }

@@ -240,30 +240,53 @@ public class FiltersService {
     }
 
     /**
-     * 通过敏感词，获取洗黑白词
+     * 通过敏感词，获取洗黑白词(系统洗黑白词)
      *
      * @param set
      * @return
      */
-    public List<Object> getWhiteWordsBySensitive(Set<String> set) {
+    public List<Object> getWhiteWordsBySystemSensitive(Set<String> set) {
         List<Object> whiteWords = filtersRedisDataService.hashGetBatch(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_WHITE_SENSITIVE, set);
         return whiteWords;
     }
 
     /**
-     * 通过审核词，获取免审白词
+     * 通过敏感词，获取洗黑白词(账号洗黑白词)
      *
      * @param set
      * @return
      */
-    public List<Object> getWhiteWordsByCheck(Set<String> set) {
+    public List<Object> getWhiteWordsByAccountSensitive(String account,Set<String> set) {
+        List<Object> whiteWords = filtersRedisDataService.hashGetBatch(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_WHITE_SENSITIVE+account, set);
+        return whiteWords;
+    }
+
+
+    /**
+     * 通过审核词，获取免审白词(系统免审白词)
+     *
+     * @param set
+     * @return
+     */
+    public List<Object> getWhiteWordsBySystemCheck(Set<String> set) {
         List<Object> whiteWords = filtersRedisDataService.hashGetBatch(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_WHITE_NO_CHECK, set);
         return whiteWords;
     }
 
     /**
-     *  初始化 行业敏感词
+     * 通过审核词，获取免审白词(业务账号免审白词)
+     *
+     * @param set
+     * @return
+     */
+    public List<Object> getWhiteWordsByAccountCheck(String account,Set<String> set) {
+        List<Object> whiteWords = filtersRedisDataService.hashGetBatch(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_WHITE_NO_CHECK+account, set);
+        return whiteWords;
+    }
 
+    /**
+     * 初始化 行业敏感词
+     *
      * @return
      */
     public Map<String, Map> getInfoTypeSensitiveWords() {
@@ -271,14 +294,74 @@ public class FiltersService {
         Map<String, Map> infoTypeSensitiveMap = new HashMap<>();
         Set<String> infoTypes = filtersRedisDataService.sget(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_INFO_TYPE);
         //log.info("[infoTypes]:{}",infoTypes);
-        if(null != infoTypes && infoTypes.size()>0){
-              for (String infoType:infoTypes){
-                  Set<String> infoTypeSensitiveWords = filtersRedisDataService.sget(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_INFO_TYPE_SENSITIVE+infoType);
-                  infoTypeSensitiveMap.put(infoType, DFAUtils.buildDFADataModel(infoTypeSensitiveWords));
-              }
+        if (null != infoTypes && infoTypes.size() > 0) {
+            for (String infoType : infoTypes) {
+                Set<String> infoTypeSensitiveWords = filtersRedisDataService.sget(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_INFO_TYPE_SENSITIVE + infoType);
+                infoTypeSensitiveMap.put(infoType, DFAUtils.buildDFADataModel(infoTypeSensitiveWords));
+            }
         }
-        //log.info("[infoTypeSensitiveMap]:{}",new Gson().toJson(infoTypeSensitiveMap));
+        log.info("[infoTypeSensitiveMap]:{}",new Gson().toJson(infoTypeSensitiveMap));
         return infoTypeSensitiveMap;
+    }
+
+    /**
+     * 初始化 业务账号敏感词
+     *
+     * @return
+     */
+    public Map<String, Map> getAccountSensitiveWords() {
+
+        Map<String, Map> accountSensitiveMap = new HashMap<>();
+        Set<String> accounts = filtersRedisDataService.sget(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_SENSITIVE + "list");
+        //log.info("[accounts]:{}",accounts);
+        if (null != accounts && accounts.size() > 0) {
+            for (String account : accounts) {
+                Set<String> accountSensitiveWords = filtersRedisDataService.sget(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_SENSITIVE + account);
+                accountSensitiveMap.put(account, DFAUtils.buildDFADataModel(accountSensitiveWords));
+            }
+        }
+        //log.info("[accountSensitiveMap]:{}",new Gson().toJson(accountSensitiveMap));
+        return accountSensitiveMap;
+    }
+
+    /**
+     * 初始化 业务账号审核词
+     *
+     * @return
+     */
+    public Map<String, Map> getAccountCheckWords() {
+
+        Map<String, Map> accountCheckMap = new HashMap<>();
+        Set<String> accounts = filtersRedisDataService.sget(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_CHECK + "list");
+        //log.info("[accounts]:{}",accounts);
+        if (null != accounts && accounts.size() > 0) {
+            for (String account : accounts) {
+                Set<String> accountCheckWords = filtersRedisDataService.sget(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_CHECK + account);
+                accountCheckMap.put(account, DFAUtils.buildDFADataModel(accountCheckWords));
+            }
+        }
+        //log.info("[accountCheckMap]:{}",new Gson().toJson(accountCheckMap));
+        return accountCheckMap;
+    }
+
+    /**
+     * 初始化 业务账号超级白词
+     *
+     * @return
+     */
+    public Map<String, Map> getAccountSuperWhiteWords() {
+
+        Map<String, Map> accountSuperWhiteMap = new HashMap<>();
+        Set<String> accounts = filtersRedisDataService.sget(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_WHITE_SUPER + "list");
+        //log.info("[accounts]:{}",accounts);
+        if (null != accounts && accounts.size() > 0) {
+            for (String account : accounts) {
+                Set<String> accountSuperWhiteWords = filtersRedisDataService.sget(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_WHITE_SUPER + account);
+                accountSuperWhiteMap.put(account, DFAUtils.buildDFADataModel(accountSuperWhiteWords));
+            }
+        }
+        //log.info("[accountSuperWhiteMap]:{}",new Gson().toJson(accountSuperWhiteMap));
+        return accountSuperWhiteMap;
     }
 
 }

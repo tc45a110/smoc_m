@@ -1,3 +1,8 @@
 mac nacos启动
-/Users/wujihui/desktop/工具/nacos/bin
+cd /Users/wujihui/desktop/工具/nacos/bin
 sh startup.sh -m standalone
+
+/usr/local/opt/redis/bin/redis-server 127.0.0.1:6379
+brew services restart redis
+127.0.0.1:6379
+ps axu|grep redis

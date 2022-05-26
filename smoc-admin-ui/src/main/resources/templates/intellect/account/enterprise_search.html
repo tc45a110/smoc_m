@@ -42,7 +42,8 @@
         <div class="row" style="position: relative;margin-top: 80px" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
                 <div class="card-box">
-                    <form th:action="@{/intellect/enterprise/page}" th:object="${enterpriseBasicInfoValidator}" id="query_form" method="post">
+                    <form th:action="@{/intellect/enterprise/page}" th:object="${enterpriseBasicInfoValidator}"
+                          id="query_form" method="post">
                         <div class="row m-b-60">
                             <div class="col-sm-12">
                                 <div class="form-group  col-sm-3">
@@ -62,7 +63,7 @@
                                            th:value="${pageParams.currentPage}">
                                     <input type="hidden" name="pageSize" id="pageSize"
                                            th:value="${pageParams.pageSize}">
-<!--                                    <input type="hidden" th:field="*{enterpriseType}" id="enterpriseType">-->
+                                    <!--                                    <input type="hidden" th:field="*{enterpriseType}" id="enterpriseType">-->
                                 </div>
 
                             </div>
@@ -93,7 +94,8 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr  th:each="info:${list}">
+                                <span th:each="info:${list}">
+                                <tr>
                                     <td>
                                         [[${info.enterpriseName}]]
                                     </td>
@@ -103,7 +105,8 @@
                                                  th:value="${info.accessCorporation}"/>
                                     </td>
                                     <td>
-                                        <mpm:tag identity="enterpriseType" show-type="button" key="code" th:value="${info.enterpriseType}"
+                                        <mpm:tag identity="enterpriseType" show-type="button" key="code"
+                                                 th:value="${info.enterpriseType}"
                                                  class="DIRECTCUSTOMER,btn btn-info btn-rounded btn-sm waves-effect waves-light;CHANNELCUSTOMER,btn btn-teal btn-rounded btn-sm waves-effect waves-light;IDENTIFICATION,btn btn-success btn-rounded btn-sm waves-effect waves-light;"/>
                                     </td>
                                     <td>
@@ -114,8 +117,30 @@
                                                style="margin-right:5px"></i>开通智能短信账号</a>
                                     </td>
                                 </tr>
-
-
+                                <tr th:each="enterprise:${info.enterprises}" class="m-t-20">
+                                     <td>
+                                                <div style="float:left;margin-top:-12px;margin-left:13px;width:25px;height:25px;border-left:1px solid #DCDCDC;border-bottom:1px solid #DCDCDC"></div>
+                                                <span style="color:#797979">[[${enterprise.enterpriseName}]]</span>
+                                     </td>
+                                     <td>[[${enterprise.enterpriseContacts}]]</td>
+                                    <td>
+                                        <mpm:tag identity="corporation" show-type="label" key="code"
+                                                 th:value="${enterprise.accessCorporation}"/>
+                                    </td>
+                                    <td>
+                                        <mpm:tag identity="enterpriseType" show-type="button" key="code"
+                                                 th:value="${enterprise.enterpriseType}"
+                                                 class="DIRECTCUSTOMER,btn btn-info btn-rounded btn-sm waves-effect waves-light;CHANNELCUSTOMER,btn btn-teal btn-rounded btn-sm waves-effect waves-light;IDENTIFICATION,btn btn-success btn-rounded btn-sm waves-effect waves-light;"/>
+                                    </td>
+                                    <td>
+                                        <a sec:authorize-url="/intellect/account/add/*"
+                                           th:href="@{/intellect/account/add/{id}(id=${enterprise.enterpriseId})}"
+                                           class="btn btn-success waves-effect waves-light m-l-10 btn-sm">
+                                            <i class="glyphicon glyphicon-plus-sign"
+                                               style="margin-right:5px"></i>开通智能短信账号</a>
+                                    </td>
+                                </tr>
+                                </span>
                                 </tbody>
                             </table>
                         </div>
@@ -147,8 +172,6 @@
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
-
-
 
 </script>
 </body>

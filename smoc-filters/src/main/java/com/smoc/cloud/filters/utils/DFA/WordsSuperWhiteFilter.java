@@ -30,6 +30,9 @@ public class WordsSuperWhiteFilter {
      */
     public boolean isContain(String message, int matchType) {
         boolean flag = false;
+        if (null == superWhiteWordsMap || superWhiteWordsMap.size() < 0) {
+            return flag;
+        }
         for (int i = 0; i < message.length(); i++) {
             //判断是否包含超级白字符
             int matchFlag = this.checkSuperWhiteWord(message, i, matchType);
@@ -51,7 +54,9 @@ public class WordsSuperWhiteFilter {
      */
     public Set<String> getSuperWhiteWords(String message, int matchType) {
         Set<String> superWhiteWordList = new HashSet<String>();
-
+        if (null == superWhiteWordsMap || superWhiteWordsMap.size() < 0) {
+            return superWhiteWordList;
+        }
         for (int i = 0; i < message.length(); i++) {
             int length = checkSuperWhiteWord(message, i, matchType);    //判断是否包含字符
             if (length > 0) {    //存在,加入list中

@@ -35,7 +35,7 @@ public class MaskProvinceFilter {
         }
 
         //移动省份屏蔽
-        if ("CMCC".equals(carrier) && !StringUtils.isEmpty(cmccMaskProvince)) {
+        if (!StringUtils.isEmpty(cmccMaskProvince) && "CMCC".equals(carrier)) {
             Pattern pattern = Pattern.compile(provinceCode);
             Matcher matcher = pattern.matcher(cmccMaskProvince.toString());
             if (matcher.find()) {
@@ -44,10 +44,12 @@ public class MaskProvinceFilter {
                 result.put("message", FilterResponseCode.LIMIT_MASK_PROVINCE.getMessage());
                 return result;
             }
+            result.put("result", "false");
+            return result;
         }
 
         //联通省份屏蔽
-        if ("UNIC".equals(carrier) && !StringUtils.isEmpty(unicMaskProvince)) {
+        if (!StringUtils.isEmpty(unicMaskProvince) && "UNIC".equals(carrier)) {
             Pattern pattern = Pattern.compile(provinceCode);
             Matcher matcher = pattern.matcher(unicMaskProvince.toString());
             if (matcher.find()) {
@@ -56,10 +58,12 @@ public class MaskProvinceFilter {
                 result.put("message", FilterResponseCode.LIMIT_MASK_PROVINCE.getMessage());
                 return result;
             }
+            result.put("result", "false");
+            return result;
         }
 
         //电信省份屏蔽
-        if ("TELC".equals(carrier) && !StringUtils.isEmpty(telcMaskProvince)) {
+        if (!StringUtils.isEmpty(telcMaskProvince) && "TELC".equals(carrier)) {
             Pattern pattern = Pattern.compile(provinceCode);
             Matcher matcher = pattern.matcher(telcMaskProvince.toString());
             if (matcher.find()) {
@@ -68,6 +72,8 @@ public class MaskProvinceFilter {
                 result.put("message", FilterResponseCode.LIMIT_MASK_PROVINCE.getMessage());
                 return result;
             }
+            result.put("result", "false");
+            return result;
         }
 
         result.put("result", "false");

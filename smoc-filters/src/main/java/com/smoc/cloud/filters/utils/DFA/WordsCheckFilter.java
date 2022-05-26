@@ -30,6 +30,9 @@ public class WordsCheckFilter {
      */
     public boolean isContain(String message, int matchType) {
         boolean flag = false;
+        if (null == checkWordsMap || checkWordsMap.size() < 0) {
+            return flag;
+        }
         for (int i = 0; i < message.length(); i++) {
             //判断是否包含审核字符
             int matchFlag = this.checkCheckWord(message, i, matchType);
@@ -51,7 +54,9 @@ public class WordsCheckFilter {
      */
     public Set<String> getCheckWords(String message, int matchType) {
         Set<String> checkWordList = new HashSet<String>();
-
+        if (null == checkWordsMap || checkWordsMap.size() < 0) {
+            return checkWordList;
+        }
         for (int i = 0; i < message.length(); i++) {
             int length = checkCheckWord(message, i, matchType);    //判断是否包含字符
             if (length > 0) {    //存在,加入list中

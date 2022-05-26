@@ -32,6 +32,9 @@ public class DfaSensitiveWordsFilter {
      */
     public boolean isContain(String phone, int matchType) {
         boolean flag = false;
+        if (null == dfaDataMap || dfaDataMap.size() < 0) {
+            return flag;
+        }
         for (int i = 0; i < phone.length(); i++) {
             //判断是否包含黑名单
             int matchFlag = this.checkSensitiveWords(phone, i, matchType);
@@ -46,18 +49,20 @@ public class DfaSensitiveWordsFilter {
     /**
      * 获取文字中的敏感词
      *
-     * @param phone     手机号
+     * @param message     手机号
      * @param matchType 匹配规则 1：最小匹配规则，2：最大匹配规则
      * @return
      * @version 1.0
      */
-    public Set<String> getSensitiveWords(String phone, int matchType) {
+    public Set<String> getSensitiveWords(String message, int matchType) {
         Set<String> superWhiteWordList = new HashSet<String>();
-
-        for (int i = 0; i < phone.length(); i++) {
-            int length = checkSensitiveWords(phone, i, matchType);    //判断是否包含字符
+        if (null == dfaDataMap || dfaDataMap.size() < 0) {
+            return superWhiteWordList;
+        }
+        for (int i = 0; i < message.length(); i++) {
+            int length = checkSensitiveWords(message, i, matchType);    //判断是否包含字符
             if (length > 0) {    //存在,加入list中
-                superWhiteWordList.add(phone.substring(i, i + length));
+                superWhiteWordList.add(message.substring(i, i + length));
                 i = i + length - 1;    //减1的原因，是因为for会自增
             }
         }

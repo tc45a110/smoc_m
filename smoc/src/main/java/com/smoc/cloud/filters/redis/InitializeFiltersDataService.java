@@ -164,7 +164,7 @@ public class InitializeFiltersDataService {
         log.info("加载业务账号免审白词条数：{}", wordsMaskKeyWords.size());
         long start = System.currentTimeMillis();
         log.info("加载业务账号免审白词start：{}", start);
-        this.multiSaveHash(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_WHITE_SENSITIVE, wordsMaskKeyWords);
+        this.multiSaveHash(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_WHITE_NO_CHECK, wordsMaskKeyWords);
         long end = System.currentTimeMillis();
         log.info("加载业务账号免审白词  end：{}", end);
     }
@@ -354,7 +354,7 @@ public class InitializeFiltersDataService {
             connection.openPipeline();
             list.forEach((value) -> {
                 // hset zset都是可以用的，但是要序列化
-                connection.hSet(RedisSerializer.string().serialize(redisKey + value.getMaskKeyWord()),
+                connection.hSet(RedisSerializer.string().serialize(redisKey + value.getBusinessId()),
                         RedisSerializer.string().serialize(value.getMaskKeyWord()), RedisSerializer.string().serialize(new Gson().toJson(value.getKeyWord())));
             });
             connection.close();
@@ -382,6 +382,8 @@ public class InitializeFiltersDataService {
             connection.openPipeline();
             list.forEach((value) -> {
                 // hset zset都是可以用的，但是要序列化
+                connection.sAdd(RedisSerializer.string().serialize(redisKey + "list"),
+                        RedisSerializer.string().serialize(new Gson().toJson(value.getBusinessId())));
                 connection.sAdd(RedisSerializer.string().serialize(redisKey + value.getBusinessId()),
                         RedisSerializer.string().serialize(new Gson().toJson(value.getKeyWord())));
             });

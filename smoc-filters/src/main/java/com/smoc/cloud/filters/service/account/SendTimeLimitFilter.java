@@ -34,15 +34,14 @@ public class SendTimeLimitFilter {
         //log.info("[发送时间限制]：{}", sendTimeLimit.toString());
         String[] times = sendTimeLimit.toString().split("-");
         if (times.length == 2) {
-            if ((new Integer(times[0]) <= new Integer(currentTime) &&  new Integer(currentTime) <= new Integer(times[1]))) {
+            if ((new Integer(times[0]) <= new Integer(currentTime) && new Integer(currentTime) <= new Integer(times[1]))) {
                 result.put("result", "false");
                 return result;
-            } else {
-                result.put("result", "true");
-                result.put("code", FilterResponseCode.LIMIT_TIME.getCode());
-                result.put("message", FilterResponseCode.LIMIT_TIME.getMessage());
-                return result;
             }
+            result.put("result", "true");
+            result.put("code", FilterResponseCode.LIMIT_TIME.getCode());
+            result.put("message", FilterResponseCode.LIMIT_TIME.getMessage());
+            return result;
         }
 
         result.put("result", "true");

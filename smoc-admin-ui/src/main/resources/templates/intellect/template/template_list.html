@@ -134,7 +134,8 @@
                                            class="btn btn-info btn-rounded  waves-effect waves-light btn-ms">待审核</a>
                                         <a th:if="${2==info.templateCheckStatus}"
                                            class="btn btn-success btn-rounded  waves-effect waves-light btn-ms">通过审核</a>
-                                        <a th:if="${3==info.templateCheckStatus}"
+                                        <a th:if="${3==info.templateCheckStatus}"   data-toggle="tooltip" data-placement="bottom"
+                                           th:data-original-title="${info.templateCheckMessage}"
                                            class="btn btn-danger btn-rounded  waves-effect waves-light btn-ms">审核失败</a>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
@@ -301,13 +302,6 @@
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
-
-
-
-
-
-
-
 
 
 </script>

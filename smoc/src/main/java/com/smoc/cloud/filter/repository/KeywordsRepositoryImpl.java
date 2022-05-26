@@ -198,7 +198,7 @@ public class KeywordsRepositoryImpl extends BasePageRepository {
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");
         sqlBuffer.append("  t.KEY_WORDS,");
-        sqlBuffer.append("  t.BUSINESS_ID");
+        sqlBuffer.append("  t.BUSINESS_ID,");
         sqlBuffer.append("  t.WASK_KEY_WORDS");
         sqlBuffer.append("  from filter_key_words_info t  where (1=1) ");
         List<String> paramsList = new ArrayList<>();

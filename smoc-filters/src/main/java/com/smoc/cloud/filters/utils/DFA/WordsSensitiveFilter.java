@@ -30,6 +30,9 @@ public class WordsSensitiveFilter {
      */
     public boolean isContain(String message, int matchType) {
         boolean flag = false;
+        if (null == sensitiveWordsMap || sensitiveWordsMap.size() < 0) {
+            return flag;
+        }
         for (int i = 0; i < message.length(); i++) {
             //判断是否包含敏感字符
             int matchFlag = this.checkSensitiveWord(message, i, matchType);
@@ -51,7 +54,9 @@ public class WordsSensitiveFilter {
      */
     public Set<String> getSensitiveWords(String message, int matchType) {
         Set<String> sensitiveWordList = new HashSet<String>();
-
+        if (null == sensitiveWordsMap || sensitiveWordsMap.size() < 0) {
+            return sensitiveWordList;
+        }
         for (int i = 0; i < message.length(); i++) {
             int length = checkSensitiveWord(message, i, matchType);    //判断是否包含敏感字符
             if (length > 0) {    //存在,加入list中
