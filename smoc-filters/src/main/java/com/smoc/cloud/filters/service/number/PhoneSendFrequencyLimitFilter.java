@@ -39,18 +39,21 @@ public class PhoneSendFrequencyLimitFilter {
             return result;
         }
 
-        //每次消耗的条数 默认1
-        int times = 1;
-        //限流默认数量
-        int maxBurst = 1;
 
+        //限流默认数量
+        int maxBurst;
         //按分钟限制
         String[] minutes = phoneFrequencyLimit.toString().split("M");
-        if (null != minutes && minutes.length == 2) {
+        if (null != minutes) {
+            //时间，转换成秒
             int seconds = new Integer(minutes[0]) * 60;
-            int tokens = new Integer(minutes[1]);
-            maxBurst = tokens;
-            if (!filtersService.phoneFrequencyLimiterByAccount(account, phone, maxBurst, tokens, seconds, times)) {
+            //次数
+            String[] times = minutes[1].split("B");
+            //tokens表示每seconds生成的次数
+            int tokens = new Integer(times[0]);
+            //最大爆发数，可以连续发送数
+            maxBurst = new Integer(times[1])-1;
+            if (!filtersService.phoneFrequencyLimiterByAccount(account, phone, maxBurst, tokens, seconds, 1)) {
                 result.put("result", "true");
                 result.put("code", FilterResponseCode.NUMBER_FREQUENCY_LIMIT.getCode());
                 result.put("message", FilterResponseCode.NUMBER_FREQUENCY_LIMIT.getMessage());
@@ -64,9 +67,13 @@ public class PhoneSendFrequencyLimitFilter {
         String[] hours = phoneFrequencyLimit.toString().split("H");
         if (null != hours && hours.length == 2) {
             int seconds = new Integer(hours[0]) * 60 * 60;
-            int tokens = new Integer(hours[1]);
-            maxBurst = tokens;
-            if (!filtersService.phoneFrequencyLimiterByAccount(account, phone, maxBurst, tokens, seconds, times)) {
+            //次数
+            String[] times = minutes[1].split("B");
+            //tokens表示每seconds生成的次数
+            int tokens = new Integer(times[0]);
+            //最大爆发数，可以连续发送数
+            maxBurst = new Integer(times[1])-1;
+            if (!filtersService.phoneFrequencyLimiterByAccount(account, phone, maxBurst, tokens, seconds, 1)) {
                 result.put("result", "true");
                 result.put("code", FilterResponseCode.NUMBER_FREQUENCY_LIMIT.getCode());
                 result.put("message", FilterResponseCode.NUMBER_FREQUENCY_LIMIT.getMessage());
@@ -80,9 +87,13 @@ public class PhoneSendFrequencyLimitFilter {
         String[] days = phoneFrequencyLimit.toString().split("D");
         if (null != hours && hours.length == 2) {
             int seconds = new Integer(days[0]) * 60 * 60 * 24;
-            int tokens = new Integer(days[1]);
-            maxBurst = tokens;
-            if (!filtersService.phoneFrequencyLimiterByAccount(account, phone, maxBurst, tokens, seconds, times)) {
+            //次数
+            String[] times = minutes[1].split("B");
+            //tokens表示每seconds生成的次数
+            int tokens = new Integer(times[0]);
+            //最大爆发数，可以连续发送数
+            maxBurst = new Integer(times[1])-1;
+            if (!filtersService.phoneFrequencyLimiterByAccount(account, phone, maxBurst, tokens, seconds, 1)) {
                 result.put("result", "true");
                 result.put("code", FilterResponseCode.NUMBER_FREQUENCY_LIMIT.getCode());
                 result.put("message", FilterResponseCode.NUMBER_FREQUENCY_LIMIT.getMessage());

@@ -39,7 +39,7 @@
                                                 <div class="form-group">
                                                     <label>提醒：</label>
                                                     <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1、选择白词时，要输入对应的关键词，系统会对关键词进行拦截并处理</p>
-                                                    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2、选择超级白词时，系统不会对关键词进行拦截，不需要输入对应的关键词</p>
+<!--                                                    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2、选择超级白词时，系统不会对关键词进行拦截，不需要输入对应的关键词</p>-->
                                                 </div>
                                                 <div class="form-group m-b-20">
                                                     <select data-style="btn-default" name="keyWordsType"
@@ -54,12 +54,12 @@
                                                         </option>
                                                         <option data-icon="mdi mdi-appnet" value="WHITE_AVOID_BLACK"
                                                                 th:selected="${filterKeyWordsInfoValidator.keyWordsType eq 'WHITE_AVOID_BLACK'}">
-                                                            洗黑白词
+                                                            洗敏白词
                                                         </option>
-                                                        <option data-icon="mdi mdi-appnet" value="SUPER_WHITE"
-                                                                th:selected="${filterKeyWordsInfoValidator.keyWordsType eq 'SUPER_WHITE'}">
-                                                            超级白词
-                                                        </option>
+<!--                                                        <option data-icon="mdi mdi-appnet" value="SUPER_WHITE"-->
+<!--                                                                th:selected="${filterKeyWordsInfoValidator.keyWordsType eq 'SUPER_WHITE'}">-->
+<!--                                                            超级白词-->
+<!--                                                        </option>-->
                                                         <option data-icon="mdi mdi-appnet" value="WHITE_AVOID_REGULAR"
                                                                 th:selected="${filterKeyWordsInfoValidator.keyWordsType eq 'WHITE_AVOID_REGULAR'}"
                                                                 sec:authorize="hasAnyAuthority('SMOC-ADMIN')">正则白词

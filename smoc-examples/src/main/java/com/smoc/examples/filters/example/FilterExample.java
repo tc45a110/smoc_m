@@ -17,7 +17,7 @@ public class FilterExample {
 
     public static void main(String[] args) throws Exception {
         System.out.println(System.currentTimeMillis());
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 10; i++) {
 
             //请求路径（具体参见技术文档）
             String url = "http://localhost:18090/smoc-filters/full-filter/filters";

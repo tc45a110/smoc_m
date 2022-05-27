@@ -68,6 +68,9 @@ public class AccountTemplateInfo {
     @Column(name = "TEMPLATE_FLAG")
     private String templateFlag;
 
+    @Column(name = "IS_FILTER")
+    private String isFilter;
+
     @Column(name = "MM_ATTCHMENT")
     private String mmAttchment;
 
@@ -248,5 +251,13 @@ public class AccountTemplateInfo {
 
     public void setForbiddenContent(String forbiddenContent) {
         this.forbiddenContent = forbiddenContent;
+    }
+
+    public String getIsFilter() {
+        return isFilter;
+    }
+
+    public void setIsFilter(String isFilter) {
+        this.isFilter = isFilter;
     }
 }

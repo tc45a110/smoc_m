@@ -31,6 +31,7 @@ public class AccountTemplateInfoRowMapper  implements RowMapper<AccountTemplateI
         qo.setInfoType(resultSet.getString("INFO_TYPE"));
         qo.setTemplateTitle(resultSet.getString("TEMPLATE_TITLE"));
         qo.setTemplateClassify(resultSet.getString("TEMPLATE_CLASSIFY"));
+        qo.setIsFilter(resultSet.getString("IS_FILTER"));
 
         return qo;
     }

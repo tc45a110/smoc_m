@@ -97,7 +97,7 @@
                                     <th style="width:100px">业务类型</th>
                                     <th style="width:100px">模板分类</th>
                                     <th>模板内容</th>
-                                    <th style="width:100px">状态</th>
+                                    <th style="width:100px">敏感词过滤</th>
                                     <th style="width:160px">操作</th>
                                 </tr>
                                 <thead>
@@ -119,17 +119,16 @@
                                                  class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;MULTI_SMS,btn btn-brown btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;5G_SMS,btn btn-primary btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-inverse btn-rounded btn-sm waves-effect waves-light"/>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
-                                        <span th:if="${info.templateClassify eq '1'}">精准模板</span>
-                                        <span th:if="${info.templateClassify eq '2'}">模糊模板</span>
+                                        <span th:if="${info.templateClassify eq '1'}">固定模板</span>
+                                        <span th:if="${info.templateClassify eq '2'}">变量模板</span>
+                                        <span th:if="${info.templateClassify eq '3'}">签名模板</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
                                         [[${info.templateContent}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
-                                        <a class="btn btn-success btn-rounded btn-sm waves-effect waves-light" th:if="${info.templateStatus eq '2'}">通过审核</a>
-                                        <a class="btn btn-warning btn-rounded btn-sm waves-effect waves-light" th:if="${info.templateStatus eq '3'}">待审核</a>
-                                        <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light" th:if="${info.templateStatus eq '1'}">拒绝</a>
-                                        <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light" th:if="${info.templateStatus eq '0'}">无效</a>
+                                        <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light" th:if="${info.isFilter eq 'FILTER'}">过滤</a>
+                                        <a class="btn btn-teal btn-rounded btn-sm waves-effect waves-light" th:if="${info.isFilter eq 'NO_FILTER'}">不过滤</a>
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px;">

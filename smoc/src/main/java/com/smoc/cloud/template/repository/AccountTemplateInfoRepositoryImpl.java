@@ -46,6 +46,7 @@ public class AccountTemplateInfoRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(" t.CREATED_BY,");
         sqlBuffer.append(" t.INFO_TYPE,");
         sqlBuffer.append(" t.TEMPLATE_CLASSIFY,");
+        sqlBuffer.append(" t.IS_FILTER,");
         sqlBuffer.append(" DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME ");
         sqlBuffer.append(" from account_template_info t left join enterprise_basic_info e on t.ENTERPRISE_ID = e.ENTERPRISE_ID left join account_base_info a on t.BUSINESS_ACCOUNT = a.ACCOUNT_ID ");
         sqlBuffer.append(" where 1=1 ");

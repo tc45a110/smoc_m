@@ -33,8 +33,8 @@
                                     <select data-style="btn-default" name="keyWordsType" data-live-search="true" id="keyWordsType" class="selectpicker form-control" tabindex="-98">
                                         <option value="WHITE" data-icon="mdi mdi-appnet">--请选择白词类别--</option>
                                         <option data-icon="mdi mdi-appnet" value="WHITE_AVOID_CHECK" th:selected="${filterKeyWordsInfoValidator.keyWordsType eq 'WHITE_AVOID_CHECK'}">免审白词</option>
-                                        <option data-icon="mdi mdi-appnet" value="WHITE_AVOID_BLACK" th:selected="${filterKeyWordsInfoValidator.keyWordsType eq 'WHITE_AVOID_BLACK'}">洗黑白词</option>
-                                        <option data-icon="mdi mdi-appnet" value="SUPER_WHITE" th:selected="${filterKeyWordsInfoValidator.keyWordsType eq 'SUPER_WHITE'}">超级白词</option>
+                                        <option data-icon="mdi mdi-appnet" value="WHITE_AVOID_BLACK" th:selected="${filterKeyWordsInfoValidator.keyWordsType eq 'WHITE_AVOID_BLACK'}">洗敏白词</option>
+<!--                                        <option data-icon="mdi mdi-appnet" value="SUPER_WHITE" th:selected="${filterKeyWordsInfoValidator.keyWordsType eq 'SUPER_WHITE'}">超级白词</option>-->
                                         <option data-icon="mdi mdi-appnet" value="WHITE_AVOID_REGULAR" th:selected="${filterKeyWordsInfoValidator.keyWordsType eq 'WHITE_AVOID_REGULAR'}">正则白词</option>
                                     </select>
                                 </div>
@@ -95,7 +95,7 @@
                                 <tr th:each="info:${list}">
                                     <td>
                                         <span th:if="${info.keyWordsType eq 'WHITE_AVOID_CHECK'}" class="btn btn-success btn-rounded btn-sm waves-effect waves-light">免审白词</span>
-                                        <span th:if="${info.keyWordsType eq 'WHITE_AVOID_BLACK'}" class="btn btn-danger btn-rounded btn-sm waves-effect waves-light">洗黑白词</span>
+                                        <span th:if="${info.keyWordsType eq 'WHITE_AVOID_BLACK'}" class="btn btn-danger btn-rounded btn-sm waves-effect waves-light">洗敏白词</span>
                                         <span th:if="${info.keyWordsType eq 'SUPER_WHITE'}" class="btn btn-primary btn-rounded btn-sm waves-effect waves-light">超级白词</span>
                                         <span th:if="${info.keyWordsType eq 'WHITE_AVOID_REGULAR'}" class="btn btn-brown btn-rounded btn-sm waves-effect waves-light">正则白词</span>
                                     </td>

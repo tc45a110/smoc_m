@@ -152,13 +152,14 @@ public class TemplateController {
         AccountTemplateInfoValidator accountTemplateInfoValidator = new AccountTemplateInfoValidator();
         accountTemplateInfoValidator.setTemplateId("TEMP" + sequenceService.findSequence("TEMPLATE"));
         accountTemplateInfoValidator.setBusinessAccount(businessAccount);
-        accountTemplateInfoValidator.setTemplateClassify("1");
+        accountTemplateInfoValidator.setTemplateClassify("3");
+        accountTemplateInfoValidator.setIsFilter("FILTER");
         accountTemplateInfoValidator.setTemplateAgreementType(protocol);
         accountTemplateInfoValidator.setTemplateType(accountBasicInfoValidatorResponseData.getData().getBusinessType());
         accountTemplateInfoValidator.setEnterpriseId(enterpriseData.getData().getEnterpriseId());
         accountTemplateInfoValidator.setInfoType(accountBasicInfoValidatorResponseData.getData().getInfoType());
         accountTemplateInfoValidator.setTemplateStatus("2");//通过审核
-        accountTemplateInfoValidator.setTemplateFlag("1");//默认普通模板
+        accountTemplateInfoValidator.setTemplateFlag("1");//默认签名模版
 
         view.addObject("op", "add");
         view.addObject("accountBasicInfoValidator", accountBasicInfoValidatorResponseData.getData());
@@ -292,6 +293,13 @@ public class TemplateController {
         } else {
             view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":" + ResponseCode.PARAM_LINK_ERROR.getMessage());
             return view;
+        }
+
+        if("1".equals(accountTemplateInfoValidator.getTemplateClassify())){
+            accountTemplateInfoValidator.setIsFilter("NO_FILTER");
+        }
+        if("3".equals(accountTemplateInfoValidator.getTemplateClassify())){
+            accountTemplateInfoValidator.setIsFilter("FILTER");
         }
 
         //保存数据

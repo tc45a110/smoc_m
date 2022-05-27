@@ -48,6 +48,8 @@ public class AccountTemplateInfoValidator {
 
     private String templateAgreementType;
 
+    private String isFilter;
+
     private String createdBy;
 
     private String createdTime;

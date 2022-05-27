@@ -23,18 +23,8 @@ public class RequestFullParams {
     @Pattern(regexp = "(CMCC|UNIC|TELC){1}", message = "运营商不符合规则！")
     private String carrier;
 
-    //infoType  信息分类 INDUSTRY、MARKETING、NEW、COLLECTION 字段为空，则跳出所有涉及该字段的过滤
-    private String infoType;
-
     //province  省份编码 字段为空，则跳出所有涉及该字段的过滤
     private String provinceCode;
-
-    //模版id
-    private String templateId;
-
-    //短信签名
-    private String sign;
-
 
     //拆分后短信条数
     private Integer numbers = 1;
