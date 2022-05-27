@@ -29,29 +29,28 @@
                     <div class="panel-body">
                         <form  id="submit_form" th:action="@{/filter/white/upFiles}" method="post" data-parsley-validate=""  enctype="multipart/form-data">
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-9">
                                     <div class="p-20">
                                         <div class="form-group">
                                             <label>下载模板</label>
-                                            <div class="row">
-                                                <div class="col-xs-3">
-                                                    <label><a sec:authorize-url="/filter/group/downFileTemp/*" th:onclick="downFile('1')">模板.txt</a></label>
-                                                </div>
-                                                <div class="col-xs-3">
-                                                    <label><a sec:authorize-url="/filter/group/downFileTemp/*" th:onclick="downFile('2')">模板.xlsx</a></label>
-                                                </div>
-                                            </div>
+                                            <a sec:authorize-url="/filter/group/downFileTemp/*" th:onclick="downFile('1')" class="btn btn-success waves-effect waves-light m-l-10 btn-sm">
+                                                <i class="glyphicon glyphicon-download"></i> 模板.txt
+                                            </a>
+                                            <a sec:authorize-url="/filter/group/downFileTemp/*" th:onclick="downFile('2')" class="btn btn-primary waves-effect waves-light m-l-10 btn-sm">
+                                                <i class="glyphicon glyphicon-download"></i> 模板.xlsx
+                                            </a>
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="p-20">
                                         <label>上传文件</label>
                                         <div class="form-group">
                                             <input type="file" name="file" id="input_file"
                                                    multiple="multiple">
                                         </div>
-
-
                                     </div>
-                                    <!-- end class p-20 -->
-                                </div> <!-- end col -->
+                                </div>
 
 
                             </div> <!-- end row -->

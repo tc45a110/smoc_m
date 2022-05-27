@@ -23,10 +23,11 @@
             <div class="col-md-12">
                 <div class="panel panel-color panel-info">
                     <div class="panel-heading">
-                        <h3 class="panel-title">[[${filterGroupListValidator.groupName}]]</h3>
+                        <h3 class="panel-title">[[${dictValueMap.get(parentId)}]]黑名单维护</h3>
                     </div>
                     <div class="panel-body">
-                        <form  id="submit_form"  th:action="@{/filter/black/upFiles}" method="post" data-parsley-validate=""  enctype="multipart/form-data">
+                        <form  id="submit_form"  th:action="@{/filter/industry/black/upFiles}" method="post" data-parsley-validate=""  enctype="multipart/form-data">
+
                             <div class="row">
                                 <div class="col-md-9">
                                     <div class="p-20">
@@ -56,9 +57,9 @@
 
                             <div class="text-right">
                                 <input type="hidden" name="groupId" th:value="${parentId}">
-                                <button sec:authorize-url="/filter/black/upFiles" type="submit"
+                                <button sec:authorize-url="/filter/industry/black/upFiles" type="submit"
                                         class="btn btn-teal waves-effect waves-light">导入</button>
-                                <a sec:authorize-url="/filter/black/list/*" th:href="@{/filter/black/list/{parentId}(parentId=${parentId})}"
+                                <a sec:authorize-url="/filter/industry/black/list/*" th:href="@{/filter/industry/black/list/{parentId}(parentId=${parentId})}"
                                    class="btn btn-default waves-effect waves-light">返回
                                 </a>
                             </div>

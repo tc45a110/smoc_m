@@ -40,6 +40,11 @@ public class WhiteRepositoryImpl extends BasePageRepository {
         if (null != filterWhiteListValidator) {
             paramsList.add( filterWhiteListValidator.getGroupId().trim());
 
+            if(!StringUtils.isEmpty(filterWhiteListValidator.getEnterpriseId())){
+                sqlBuffer.append(" and t.ENTERPRISE_ID = ? ");
+                paramsList.add(filterWhiteListValidator.getEnterpriseId().trim());
+            }
+
             if (!StringUtils.isEmpty(filterWhiteListValidator.getName())) {
                 sqlBuffer.append(" and t.NAME like ? ");
                 paramsList.add(  "%" + filterWhiteListValidator.getName().trim() + "%");
@@ -76,7 +81,7 @@ public class WhiteRepositoryImpl extends BasePageRepository {
             int i=0;
             for (ExcelModel entry : list) {
                 statement.setString(1, UUID.uuid32());
-                statement.setString(2, "SMOC");
+                statement.setString(2, filterWhiteListValidator.getEnterpriseId());
                 statement.setString(3, filterWhiteListValidator.getGroupId());
                 statement.setString(4, entry.getColumn2());
                 statement.setString(5, entry.getColumn1());
@@ -123,6 +128,10 @@ public class WhiteRepositoryImpl extends BasePageRepository {
         List<Object> paramsList = new ArrayList<Object>();
         if (null != filterWhiteListValidator) {
             paramsList.add( filterWhiteListValidator.getGroupId().trim());
+        }
+        if(!StringUtils.isEmpty(filterWhiteListValidator.getEnterpriseId())){
+            sqlBuffer.append(" and t.ENTERPRISE_ID = ? ");
+            paramsList.add(filterWhiteListValidator.getEnterpriseId().trim());
         }
         sqlBuffer.append(" order by t.CREATED_TIME desc,t.ID ");
 

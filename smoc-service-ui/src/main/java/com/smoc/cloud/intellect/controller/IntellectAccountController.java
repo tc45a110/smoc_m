@@ -55,6 +55,7 @@ public class IntellectAccountController {
         SystemAccountInfoValidator systemAccountInfoValidator = new SystemAccountInfoValidator();
         systemAccountInfoValidator.setBusinessType(this.businessType);
         systemAccountInfoValidator.setEnterpriseId(user.getOrganization());
+        systemAccountInfoValidator.setAccountStatus("1");
         params.setParams(systemAccountInfoValidator);
 
         //查询
@@ -91,6 +92,7 @@ public class IntellectAccountController {
         //分页查询
         systemAccountInfoValidator.setBusinessType(this.businessType);
         systemAccountInfoValidator.setEnterpriseId(user.getOrganization());
+        systemAccountInfoValidator.setAccountStatus("1");
         pageParams.setParams(systemAccountInfoValidator);
 
         ResponseData<PageList<SystemAccountInfoValidator>> data = systemAccountInfoService.page(pageParams);

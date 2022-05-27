@@ -15,13 +15,13 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">行业敏感词</h4>
+                    <h4 class="page-title">行业黑白名单</h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
                             过滤管理
                         </li>
                         <li class="active">
-                            行业敏感词
+                            行业黑白名单
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -46,8 +46,8 @@
                         <div class="table-detail mail-right col-md-9">
                             <div class="row">
                                 <div class="col-lg-12">
-                                    <iframe sec:authorize-url="/filter/keywords/classify/*/list/*" name="group" id="groupFrame"
-                                            th:src="@{/filter/keywords/classify/INFO_TYPE/list/{code}(code=${code})}"
+                                    <iframe sec:authorize-url="/filter/industry/*/list/*" name="group" id="groupFrame"
+                                            th:src="@{/filter/industry/black/list/{code}(code=${code})}"
                                             style="padding: 0px; width: 100%;margin-bottom: 10px"
                                             scrolling="yes" onload="changeFrameHeight()"
                                             frameborder="0"></iframe>
@@ -85,9 +85,12 @@
                 iconBackground: "#4c4c4c",
                 lazyLoad: loadSubData,
                 onNodeSelected: function (event, data) {
-                  if("leaf"==data.svcType){
-                      window.frames[0].location.href = contextPath + "/filter/keywords/classify/"+data.orgCode+"/list/"+data.id ;
+                  if("BLACK"==data.orgCode){
+                      window.frames[0].location.href = contextPath + "/filter/industry/black/list/"+data.id ;
                   }
+                    if("WHITE"==data.orgCode){
+                        window.frames[0].location.href = contextPath + "/filter/industry/white/list/"+data.id ;
+                    }
                 }
             });
         });
@@ -96,7 +99,7 @@
 
             var treeData = {};
             $.ajax({
-                url: contextPath + "/filter/keywords/tree/" + id,
+                url: contextPath + "/filter/industry/black/tree/" + id,
                 type: "get",
                 contentType: "application/json",
                 timeout: 30000, //超时时间：30秒

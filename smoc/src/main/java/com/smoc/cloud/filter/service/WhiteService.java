@@ -68,7 +68,7 @@ public class WhiteService {
         FilterWhiteList entity = new FilterWhiteList();
         BeanUtils.copyProperties(whiteListValidator, entity);
 
-        List<FilterWhiteList> data = whiteRepository.findByGroupIdAndMobileAndStatus(entity.getGroupId(),entity.getMobile(), "1");
+        List<FilterWhiteList> data = whiteRepository.findByEnterpriseIdAndGroupIdAndMobileAndStatus(entity.getEnterpriseId(),entity.getGroupId(),entity.getMobile(), "1");
 
         //add查重
         if (data != null && data.iterator().hasNext() && "add".equals(op)) {

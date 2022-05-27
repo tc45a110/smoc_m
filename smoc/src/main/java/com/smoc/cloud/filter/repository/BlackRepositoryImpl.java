@@ -43,6 +43,11 @@ public class BlackRepositoryImpl extends BasePageRepository {
         if (null != filterBlackListValidator) {
             paramsList.add( filterBlackListValidator.getGroupId().trim());
 
+            if(!StringUtils.isEmpty(filterBlackListValidator.getEnterpriseId())){
+                sqlBuffer.append(" and t.ENTERPRISE_ID = ? ");
+                paramsList.add(filterBlackListValidator.getEnterpriseId().trim());
+            }
+
             if (!StringUtils.isEmpty(filterBlackListValidator.getName())) {
                 sqlBuffer.append(" and t.NAME like ? ");
                 paramsList.add( "%" + filterBlackListValidator.getName().trim() + "%");
@@ -79,7 +84,7 @@ public class BlackRepositoryImpl extends BasePageRepository {
             int i=0;
             for (ExcelModel entry : list) {
                 statement.setString(1, UUID.uuid32());
-                statement.setString(2, "SMOC");
+                statement.setString(2, filterBlackListValidator.getEnterpriseId());
                 statement.setString(3, filterBlackListValidator.getGroupId());
                 statement.setString(4, entry.getColumn2());
                 statement.setString(5, entry.getColumn1());
@@ -127,6 +132,11 @@ public class BlackRepositoryImpl extends BasePageRepository {
         if (null != filterBlackListValidator) {
             paramsList.add( filterBlackListValidator.getGroupId().trim());
         }
+        if(!StringUtils.isEmpty(filterBlackListValidator.getEnterpriseId())){
+            sqlBuffer.append(" and t.ENTERPRISE_ID = ? ");
+            paramsList.add(filterBlackListValidator.getEnterpriseId().trim());
+        }
+
         sqlBuffer.append(" order by t.CREATED_TIME desc,t.ID ");
 
         //根据参数个数，组织参数值
@@ -156,7 +166,7 @@ public class BlackRepositoryImpl extends BasePageRepository {
             int i=0;
             for (ComplaintExcelModel entry : list) {
                 statement.setString(1, UUID.uuid32());
-                statement.setString(2, "SMOC");
+                statement.setString(2, "SYSTEM");
                 statement.setString(3, groupComplaintId);
                 statement.setString(4, "");
                 statement.setString(5, entry.getReportNumber());

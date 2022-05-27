@@ -48,10 +48,19 @@ public class KeywordsClassifyController {
      * @return
      */
     @RequestMapping(value = "/main", method = RequestMethod.GET)
-    public ModelAndView main() {
+    public ModelAndView main(HttpServletRequest request) {
 
         ModelAndView view = new ModelAndView("filter/keywords/keyword_classify_main");
         view.addObject("parentId", "root");
+
+        Map<String, DictType> dictMap = (Map<String, DictType>) request.getServletContext().getAttribute("dict");
+        DictType infoType = dictMap.get("industryBlackList");
+        List<Dict> list = infoType.getDict();
+        String code = "root";
+        if(!StringUtils.isEmpty(list) && list.size()>0){
+            code = list.get(0).getFieldCode();
+        }
+        view.addObject("code", code);
         return view;
 
     }
@@ -422,7 +431,7 @@ public class KeywordsClassifyController {
         //行业分类
 //        DictType industryType = dictMap.get("industryType");
         //信息分类
-        DictType infoType = dictMap.get("infoType");
+        DictType infoType = dictMap.get("industryBlackList");
 
         Map<String, String> dictValueMap = new HashMap<>();
 //        for (Dict dict : carrier.getDict()) {
@@ -508,7 +517,7 @@ public class KeywordsClassifyController {
         industryTypeNode.setNodes(industryTypeNodes);*/
 
         //信息分类
-        DictType infoType = dictMap.get("infoType");
+        DictType infoType = dictMap.get("industryBlackList");
         Nodes infoTypeNode = new Nodes();
         infoTypeNode.setId("1");
         infoTypeNode.setHref("0");

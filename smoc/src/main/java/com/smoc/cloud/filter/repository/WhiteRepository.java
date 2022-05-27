@@ -49,4 +49,6 @@ public interface WhiteRepository extends CrudRepository<FilterWhiteList, String>
      * @param id
      */
     void deleteByGroupId(String id);
+
+    List<FilterWhiteList> findByEnterpriseIdAndGroupIdAndMobileAndStatus(String enterpriseId, String groupId, String mobile, String s);
 }

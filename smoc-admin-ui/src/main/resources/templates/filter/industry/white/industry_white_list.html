@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <!-- Custom box css -->
+    <link th:href="@{/static/plugins/custombox/css/custombox.min.css}" rel="stylesheet">
+</head>
+<body>
+<!-- Loader -->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content">
+    <div class="container">
+
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <div class="row m-b-60">
+                        <form  id="query_form" th:action="@{/filter/industry/white/page}" th:object="${filterWhiteListValidator}" method="post">
+                            <div class="col-sm-12">
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control" th:field="*{mobile}" placeholder="手机号" autocomplete="off">
+                                </div>
+                                <div class="form-group pull-right" style="text-align: right">
+                                    <input type="hidden" name="currentPage" id="currentPage" th:value="${pageParams.currentPage}">
+                                    <input type="hidden" name="pageSize" id="pageSize" th:value="${pageParams.pageSize}">
+                                    <input type="hidden" th:field="*{groupId}">
+                                    <button sec:authorize-url="/filter/industry/white/page" class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-search"></i> 查询
+                                    </button>
+                                    <a sec:authorize-url="/filter/industry/white/add/*" th:href="@{/filter/industry/white/add/{parentId}(parentId=${parentId})}" class="btn btn-success waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-plus-sign"></i> 新建</a>
+                                    <a sec:authorize-url="/filter/industry/white/upFilesView/*" th:href="@{/filter/industry/white/upFilesView/{parentId}(parentId=${parentId})}" class="btn btn-primary waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-import"></i>
+                                        导入
+                                    </a>
+                                    <a sec:authorize-url="/filter/industry/white/downFilesView/*"
+                                       th:href="@{/filter/industry/white/downFilesView/{parentId}(parentId=${parentId})}"
+                                       class="btn btn-purple waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-export"></i> 导出
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="panel panel-color panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            [[${dictValueMap.get(parentId)}]]
+                            白名单列表</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table table-hover m-10" style="margin-top: -12px;">
+                                <thead>
+                                <tr>
+                                    <th>手机号</th>
+                                    <th>名称</th>
+                                    <th>创建人</th>
+                                    <th>创建时间</th>
+                                    <th>操作</th>
+                                </tr>
+                                <thead>
+                                <tbody>
+                                <tr th:each="info:${list}">
+                                    <td>[[${info.mobile}]]</td>
+                                    <td>[[${info.name}]]</td>
+                                    <td>[[${info.createdBy}]]</td>
+                                    <td>[[${info.createdTimeStr}]]</td>
+                                    <td>
+                                        <a sec:authorize-url="/filter/industry/white/edit/*"
+                                           th:href="@{/filter/industry/white/edit/{id}(id=${info.id})}"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color: #29b6f6;"
+                                           title="编辑"><i style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
+                                        <a sec:authorize-url="/filter/industry/white/deleteById/*" data-toggle="modal"
+                                           data-target="#confirm-modal" class="on-default remove-row"
+                                           th:onclick="confirmDelete([[${info.id}]],this)" style="padding-left: 5px;color: #f05050"
+                                           title="删除"><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
+                                    </td>
+                                </tr>
+
+                                </tbody>
+
+                            </table>
+                        </div>
+                        <th:block th:insert="fragments/page_fragments :: page"/>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- end row -->
+
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <th:block th:insert="fragments/common_fragments :: confirm-modal"/>
+
+    </div> <!-- container -->
+
+</div> <!-- content -->
+
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<script th:src="@{/static/plugins/moment/moment.js}"></script>
+<!-- Modal-Effect -->
+
+<script>
+
+    function confirmDelete(id) {
+        $("#deleteId").val(id);
+    }
+
+    function deleteById() {
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $('#preloader').css('display', 'block');
+        location.href = contextPath + "/filter/industry/white/deleteById/" + $("#deleteId").val();
+    }
+
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+</script>
+</body>
+</html>

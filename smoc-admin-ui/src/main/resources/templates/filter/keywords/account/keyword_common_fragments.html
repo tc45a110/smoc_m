@@ -19,16 +19,16 @@
 
             <ul class="nav nav-pills pull-right">
                 <li>
-                    <a sec:authorize-url="/filter/keywords/list/*/*/*" style="color:#797979;"
-                       th:href="@{/filter/keywords/list/{keyWordsBusinessType}/{businessId}/CHECK(keyWordsBusinessType=${filterKeyWordsInfoValidator.keyWordsBusinessType},businessId=${filterKeyWordsInfoValidator.businessId})}"
-                    >
-                        审核词列表
-                    </a></li>
-                <li>
                     <a sec:authorize-url="/filter/keywords/list/*/*/*"  style="color:#797979;"
                        th:href="@{/filter/keywords/list/{keyWordsBusinessType}/{businessId}/BLACK(keyWordsBusinessType=${filterKeyWordsInfoValidator.keyWordsBusinessType},businessId=${filterKeyWordsInfoValidator.businessId})}"
                     >
                         敏感词列表
+                    </a></li>
+                <li>
+                    <a sec:authorize-url="/filter/keywords/list/*/*/*" style="color:#797979;"
+                       th:href="@{/filter/keywords/list/{keyWordsBusinessType}/{businessId}/CHECK(keyWordsBusinessType=${filterKeyWordsInfoValidator.keyWordsBusinessType},businessId=${filterKeyWordsInfoValidator.businessId})}"
+                    >
+                        审核词列表
                     </a></li>
                 <li>
                     <a sec:authorize-url="/filter/keywords/list/*/*/*" style="color:#797979;"

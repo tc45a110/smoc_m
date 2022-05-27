@@ -1,18 +1,18 @@
-package com.smoc.cloud.filter.white.controller;
+package com.smoc.cloud.filter.industry.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
+import com.smoc.cloud.common.auth.qo.Dict;
+import com.smoc.cloud.common.auth.qo.DictType;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.filter.ExcelModel;
-import com.smoc.cloud.common.smoc.filter.FilterGroupListValidator;
 import com.smoc.cloud.common.smoc.filter.FilterWhiteListValidator;
 import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
-import com.smoc.cloud.filter.group.service.GroupService;
 import com.smoc.cloud.filter.white.service.WhiteService;
 import com.smoc.cloud.utils.FileUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -28,51 +28,38 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
- * 白名单管理
- **/
+ * 行业白名单
+ */
 @Slf4j
 @RestController
-@RequestMapping("/filter/white")
-public class WhiteController {
-
-    @Autowired
-    private GroupService groupService;
+@RequestMapping("/filter/industry/white")
+public class IndustryWhiteController {
 
     @Autowired
     private WhiteService whiteService;
 
-    private String type = "SYSTEM";
-
-    @RequestMapping(value = "/main", method = RequestMethod.GET)
-    public ModelAndView main(HttpServletRequest request) {
-
-        ModelAndView view = new ModelAndView("filter/white/white_main");
-
-        view.addObject("parentId","smoc_white");
-
-        return view;
-    }
+    private String industry = "INDUSTRY";
 
     /**
-     * 白名单列表
+     * 名单 列表页
      *
+     * @param request
      * @return
      */
     @RequestMapping(value = "/list/{parentId}", method = RequestMethod.GET)
     public ModelAndView list(@PathVariable String parentId, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("filter/white/white_list");
+        ModelAndView view = new ModelAndView("filter/industry/white/industry_white_list");
 
         //初始化数据
         PageParams<FilterWhiteListValidator> params = new PageParams<FilterWhiteListValidator>();
         params.setPageSize(10);
         params.setCurrentPage(1);
         FilterWhiteListValidator filterWhiteListValidator = new FilterWhiteListValidator();
-        filterWhiteListValidator.setEnterpriseId(type);
+        filterWhiteListValidator.setEnterpriseId(industry);
         filterWhiteListValidator.setGroupId(parentId);
         params.setParams(filterWhiteListValidator);
 
@@ -83,18 +70,11 @@ public class WhiteController {
             return view;
         }
 
-        //查询组
-        ResponseData<FilterGroupListValidator> groupData = groupService.findById(parentId);
-        if (!ResponseCode.SUCCESS.getCode().equals(groupData.getCode())) {
-            view.addObject("error", groupData.getCode() + ":" + groupData.getMessage());
-            return view;
-        }
-
         view.addObject("filterWhiteListValidator", filterWhiteListValidator);
         view.addObject("list", data.getData().getList());
         view.addObject("pageParams", data.getData().getPageParams());
-        view.addObject("filterGroupListValidator",groupData.getData());
         view.addObject("parentId",parentId);
+        view.addObject("dictValueMap", dictMap(request));
 
         return view;
 
@@ -106,12 +86,12 @@ public class WhiteController {
      * @return
      */
     @RequestMapping(value = "/page", method = RequestMethod.POST)
-    public ModelAndView page(@ModelAttribute FilterWhiteListValidator filterWhiteListValidator, PageParams pageParams) {
+    public ModelAndView page(@ModelAttribute FilterWhiteListValidator filterWhiteListValidator, PageParams pageParams, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("filter/white/white_list");
+        ModelAndView view = new ModelAndView("filter/industry/white/industry_white_list");
 
         //分页查询
-        filterWhiteListValidator.setEnterpriseId(type);
+        filterWhiteListValidator.setEnterpriseId(industry);
         pageParams.setParams(filterWhiteListValidator);
 
         ResponseData<PageList<FilterWhiteListValidator>> data = whiteService.page(pageParams);
@@ -120,18 +100,11 @@ public class WhiteController {
             return view;
         }
 
-        //查询组
-        ResponseData<FilterGroupListValidator> groupData = groupService.findById(filterWhiteListValidator.getGroupId());
-        if (!ResponseCode.SUCCESS.getCode().equals(groupData.getCode())) {
-            view.addObject("error", groupData.getCode() + ":" + groupData.getMessage());
-            return view;
-        }
-
         view.addObject("filterWhiteListValidator", filterWhiteListValidator);
         view.addObject("list", data.getData().getList());
         view.addObject("pageParams", data.getData().getPageParams());
-        view.addObject("filterGroupListValidator",groupData.getData());
         view.addObject("parentId",filterWhiteListValidator.getGroupId());
+        view.addObject("dictValueMap", dictMap(request));
 
         return view;
 
@@ -143,9 +116,9 @@ public class WhiteController {
      * @return
      */
     @RequestMapping(value = "/add/{parentId}", method = RequestMethod.GET)
-    public ModelAndView add(@PathVariable String parentId, HttpServletRequest request) {
+    public ModelAndView add(@PathVariable String parentId,HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("filter/white/white_edit");
+        ModelAndView view = new ModelAndView("filter/industry/white/industry_white_edit");
 
         //完成参数规则验证
         MpmIdValidator validator = new MpmIdValidator();
@@ -159,20 +132,15 @@ public class WhiteController {
         FilterWhiteListValidator filterWhiteListValidator = new FilterWhiteListValidator();
         filterWhiteListValidator.setId(UUID.uuid32());
         filterWhiteListValidator.setGroupId(parentId);
-        filterWhiteListValidator.setEnterpriseId(type);
+        filterWhiteListValidator.setEnterpriseId(industry);
         filterWhiteListValidator.setStatus("1");
         filterWhiteListValidator.setIsSync("0");
 
-        //查询组
-        ResponseData<FilterGroupListValidator> data = groupService.findById(parentId);
-        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            view.addObject("error", data.getCode() + ":" + data.getMessage());
-            return view;
-        }
-
         view.addObject("filterWhiteListValidator",filterWhiteListValidator);
-        view.addObject("filterGroupListValidator",data.getData());
         view.addObject("op","add");
+        view.addObject("parentId",parentId);
+        view.addObject("dictValueMap", dictMap(request));
+
         return view;
 
     }
@@ -185,7 +153,7 @@ public class WhiteController {
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public ModelAndView edit(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("filter/white/white_edit");
+        ModelAndView view = new ModelAndView("filter/industry/white/industry_white_edit");
 
         //完成参数规则验证
         MpmIdValidator validator = new MpmIdValidator();
@@ -201,43 +169,25 @@ public class WhiteController {
             return view;
         }
 
-        //查询组
-        ResponseData<FilterGroupListValidator> groupData = groupService.findById(data.getData().getGroupId());
-        if (!ResponseCode.SUCCESS.getCode().equals(groupData.getCode())) {
-            view.addObject("error", groupData.getCode() + ":" + groupData.getMessage());
-            return view;
-        }
-
-
         view.addObject("filterWhiteListValidator",data.getData());
-        view.addObject("filterGroupListValidator",groupData.getData());
         view.addObject("op","edit");
+        view.addObject("parentId",data.getData().getGroupId());
+        view.addObject("dictValueMap", dictMap(request));
+
         return view;
+
     }
 
-    /**
-     * 保存白名单
-     * @param filterWhiteListValidator
-     * @param result
-     * @param op
-     * @param request
-     * @return
-     */
     @RequestMapping(value = "/save/{op}", method = RequestMethod.POST)
     public ModelAndView save(@ModelAttribute @Validated FilterWhiteListValidator filterWhiteListValidator, BindingResult result, @PathVariable String op, HttpServletRequest request) {
         SecurityUser user = (SecurityUser)request.getSession().getAttribute("user");
-        ModelAndView view = new ModelAndView("filter/white/white_edit");
+        ModelAndView view = new ModelAndView("filter/industry/white/industry_white_edit");
 
-        //查询组
-        ResponseData<FilterGroupListValidator> groupData = groupService.findById(filterWhiteListValidator.getGroupId());
-        if (!ResponseCode.SUCCESS.getCode().equals(groupData.getCode())) {
-            view.addObject("error", groupData.getCode() + ":" + groupData.getMessage());
-            return view;
-        }
-        view.addObject("filterGroupListValidator",groupData.getData());
 
         //完成参数规则验证
         if (result.hasErrors()) {
+            view.addObject("dictValueMap", dictMap(request));
+            view.addObject("parentId",filterWhiteListValidator.getGroupId());
             view.addObject("filterWhiteListValidator", filterWhiteListValidator);
             view.addObject("op", op);
             return view;
@@ -258,7 +208,7 @@ public class WhiteController {
         }
 
         //记录日志
-        log.info("[白名单管理][{}][{}]数据:{}",op, user.getUserName(), JSON.toJSONString(filterWhiteListValidator));
+        log.info("[行业白名单管理][{}][{}]数据:{}",op, user.getUserName(), JSON.toJSONString(filterWhiteListValidator));
 
         //保存操作
         ResponseData data = whiteService.save(filterWhiteListValidator, op);
@@ -267,7 +217,7 @@ public class WhiteController {
             return view;
         }
 
-        view.setView(new RedirectView("/filter/white/list/" + filterWhiteListValidator.getGroupId(), true, false));
+        view.setView(new RedirectView("/filter/industry/white/list/" + filterWhiteListValidator.getGroupId(), true, false));
         return view;
     }
 
@@ -279,7 +229,7 @@ public class WhiteController {
     @RequestMapping(value = "/deleteById/{id}", method = RequestMethod.GET)
     public ModelAndView deleteById(@PathVariable String id, HttpServletRequest request) {
         SecurityUser user = (SecurityUser)request.getSession().getAttribute("user");
-        ModelAndView view = new ModelAndView("filter/white/white_edit");
+        ModelAndView view = new ModelAndView("filter/industry/white/industry_white_edit");
         //完成参数规则验证
         MpmIdValidator validator = new MpmIdValidator();
         validator.setId(id);
@@ -295,7 +245,7 @@ public class WhiteController {
         }
 
         //记录日志
-        log.info("[白名单管理][delete][{}]数据::{}", user.getUserName(), JSON.toJSONString(whiteData.getData()));
+        log.info("[行业白名单管理][delete][{}]数据::{}", user.getUserName(), JSON.toJSONString(whiteData.getData()));
         //删除操作
         ResponseData data = whiteService.deleteById(id);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
@@ -303,19 +253,19 @@ public class WhiteController {
             return view;
         }
 
-        view.setView(new RedirectView("/filter/white/list/" + whiteData.getData().getGroupId(), true, false));
+        view.setView(new RedirectView("/filter/industry/white/list/" + whiteData.getData().getGroupId(), true, false));
         return view;
     }
 
     /**
-     * 导入白名单
+     * 添加白名单
      *
      * @return
      */
     @RequestMapping(value = "/upFilesView/{parentId}", method = RequestMethod.GET)
     public ModelAndView upFilesView(@PathVariable String parentId, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("filter/white/white_upfiles_view");
+        ModelAndView view = new ModelAndView("filter/industry/white/industry_white_upfiles_view");
 
         //完成参数规则验证
         MpmIdValidator validator = new MpmIdValidator();
@@ -325,15 +275,8 @@ public class WhiteController {
             return view;
         }
 
-        //查询组
-        ResponseData<FilterGroupListValidator> groupData = groupService.findById(parentId);
-        if (!ResponseCode.SUCCESS.getCode().equals(groupData.getCode())) {
-            view.addObject("error", groupData.getCode() + ":" + groupData.getMessage());
-            return view;
-        }
-
-        view.addObject("parentId", groupData.getData().getId());
-        view.addObject("filterGroupListValidator", groupData.getData());
+        view.addObject("parentId",parentId);
+        view.addObject("dictValueMap", dictMap(request));
 
         return view;
 
@@ -348,20 +291,13 @@ public class WhiteController {
     public ModelAndView save(String groupId, HttpServletRequest request) {
         SecurityUser user = (SecurityUser)request.getSession().getAttribute("user");
 
-        ModelAndView view = new ModelAndView("filter/white/white_upfiles_view");
+        ModelAndView view = new ModelAndView("filter/industry/white/industry_white_upfiles_view");
 
         //完成参数规则验证
         MpmIdValidator validator = new MpmIdValidator();
         validator.setId(groupId);
         if (!MpmValidatorUtil.validate(validator)) {
             view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
-            return view;
-        }
-
-        //查询组
-        ResponseData<FilterGroupListValidator> groupData = groupService.findById(groupId);
-        if (!ResponseCode.SUCCESS.getCode().equals(groupData.getCode())) {
-            view.addObject("error", groupData.getCode() + ":" + groupData.getMessage());
             return view;
         }
 
@@ -377,8 +313,8 @@ public class WhiteController {
             //批量保存
             if(!StringUtils.isEmpty(list) && list.size()>0){
                 FilterWhiteListValidator filterWhiteListValidator = new FilterWhiteListValidator();
-                filterWhiteListValidator.setEnterpriseId(type);
-                filterWhiteListValidator.setGroupId(groupData.getData().getGroupId());
+                filterWhiteListValidator.setEnterpriseId(industry);
+                filterWhiteListValidator.setGroupId(groupId);
                 filterWhiteListValidator.setExcelModelList(list);
                 filterWhiteListValidator.setIsSync("0");
                 filterWhiteListValidator.setStatus("1");
@@ -390,10 +326,10 @@ public class WhiteController {
                 }
             }
 
-            log.info("[白名单管理][导入][{}]数据::{}", user.getUserName(), list.size());
+            log.info("[行业白名单管理][导入][{}]数据::{}", user.getUserName(), list.size());
         }
 
-        view.setView(new RedirectView("/filter/white/list/" + groupId, true, false));
+        view.setView(new RedirectView("/filter/industry/white/list/" + groupId, true, false));
 
         return view;
     }
@@ -404,9 +340,9 @@ public class WhiteController {
      * @return
      */
     @RequestMapping(value = "/downFilesView/{parentId}", method = RequestMethod.GET)
-    public ModelAndView downFilesView(@PathVariable String parentId, HttpServletRequest request) {
+    public ModelAndView downFilesView(@PathVariable String parentId,HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("filter/white/white_downfiles_view");
+        ModelAndView view = new ModelAndView("filter/industry/white/industry_white_downfiles_view");
 
         //完成参数规则验证
         MpmIdValidator validator = new MpmIdValidator();
@@ -416,16 +352,10 @@ public class WhiteController {
             return view;
         }
 
-        //查询组
-        ResponseData<FilterGroupListValidator> groupData = groupService.findById(parentId);
-        if (!ResponseCode.SUCCESS.getCode().equals(groupData.getCode())) {
-            view.addObject("error", groupData.getCode() + ":" + groupData.getMessage());
-            return view;
-        }
-
-        view.addObject("parentId", groupData.getData().getId());
         view.addObject("type", "1");
-        view.addObject("filterGroupListValidator", groupData.getData());
+        view.addObject("parentId",parentId);
+        view.addObject("dictValueMap", dictMap(request));
+
         return view;
 
     }
@@ -440,12 +370,6 @@ public class WhiteController {
     @RequestMapping(value = "/downFiles", method = RequestMethod.POST)
     public void exceBookData(String groupId,String expType,HttpServletRequest request, HttpServletResponse response) {
 
-        //查询组
-        ResponseData<FilterGroupListValidator> groupData = groupService.findById(groupId);
-        if (!ResponseCode.SUCCESS.getCode().equals(groupData.getCode())) {
-            return ;
-        }
-
         /**
          * 查询要导出的数据
          */
@@ -453,16 +377,34 @@ public class WhiteController {
         params.setPageSize(100000);
         params.setCurrentPage(1);
         FilterWhiteListValidator filterWhiteListValidator = new FilterWhiteListValidator();
-        filterWhiteListValidator.setGroupId(groupData.getData().getGroupId());
-        filterWhiteListValidator.setEnterpriseId(type);
+        filterWhiteListValidator.setGroupId(groupId);
         params.setParams(filterWhiteListValidator);
         ResponseData<List<ExcelModel>> data = whiteService.excelModel(params);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             return ;
         }
 
-        String excelname = groupData.getData().getGroupName();
+        Map<String, String> dictMap = dictMap(request);
+        String excelname = dictMap.get(groupId)+"白名单";
 
         FileUtils.downFiles(excelname,expType,data.getData(),request,response);
     }
+
+    /**
+     * 取字典数据，对关键词进行分类
+     */
+    private Map<String, String> dictMap(HttpServletRequest request) {
+        Map<String, DictType> dictMap = (Map<String, DictType>) request.getServletContext().getAttribute("dict");
+        //行业分类
+        DictType infoType = dictMap.get("industryBlackList");
+
+        Map<String, String> dictValueMap = new HashMap<>();
+
+        for (Dict dict : infoType.getDict()) {
+            dictValueMap.put(dict.getFieldCode(), dict.getFieldName());
+        }
+
+        return dictValueMap;
+    }
+
 }

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+
+</head>
+<body>
+<!-- Loader -->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content">
+    <div class="container">
+
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-md-12">
+                <div class="panel panel-color panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">[[${dictValueMap.get(parentId)}]]黑名单维护</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form th:action="@{/filter/industry/black/save/{op}(op=${op})}" id="submit_form" th:object="${filterBlackListValidator}" method="post">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="p-20">
+                                        <div class="form-group">
+                                            <label for="mobile">手机号<span class="text-danger">*</span>&nbsp;<span
+                                                    class="text-danger" style="font-weight: 200;font-size: 12px" th:if="${#fields.hasErrors('mobile')}"
+                                                    th:errors="*{mobile}"></span>
+                                            </label>
+                                            <input id="mobile" type="text" th:field="*{mobile}"
+                                                   placeholder="手机号" autocomplete="off"
+                                                   required="" data-parsley-type="number"
+                                                   data-parsley-maxlength="11" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="name">名称<span
+                                                    class="text-danger" style="font-weight: 200;font-size: 12px"
+                                                    th:if="${#fields.hasErrors('name')}"
+                                                    th:errors="*{name}"></span>
+                                            </label>
+                                            <input id="name" type="text" th:field="*{name}"
+                                                   class="form-control" autocomplete="off"
+                                                   data-parsley-length="[1,32]"
+                                                   placeholder="名称">
+                                        </div>
+
+                                    </div>
+                                    <!-- end class p-20 -->
+                                </div> <!-- end col -->
+
+                                <div class="col-md-6">
+
+                                </div> <!-- end col -->
+                            </div> <!-- end row -->
+
+                            <div class="text-right">
+                                <input type="hidden" th:field="*{id}">
+                                <input type="hidden" th:field="*{groupId}">
+                                <input type="hidden" th:field="*{createdBy}">
+                                <input type="hidden" th:field="*{status}">
+                                <input type="hidden" th:field="*{isSync}">
+                                <input type="hidden" th:field="*{enterpriseId}">
+                                <button sec:authorize-url="/filter/industry/black/save/*" type="submit" class="btn btn-teal waves-effect waves-light">提交
+                                </button>
+                                <a sec:authorize-url="/filter/industry/black/list/*" th:href="@{/filter/industry/black/list/{groupId}(groupId=${filterBlackListValidator.groupId})}"
+                                   class="btn btn-default waves-effect waves-light">返回
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-6">
+
+                </div> <!-- end card-box -->
+            </div> <!-- end col -->
+        </div>
+        <!-- end row -->
+
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<script th:src="@{/static/plugins/moment/moment.js}"></script>
+<!-- Jquery filer js -->
+<th:block th:insert="fragments/common_fragments :: common_submit_form"/>
+<script>
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+</script>
+</body>
+</html>

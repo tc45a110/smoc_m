@@ -290,7 +290,8 @@ public class KeywordsController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode()) && !"SYSTEM".equals(keywordsType)) {
-            systemUserLogService.logsAsync(keywordsType, businessId, filterKeyWordsInfoValidator.getCreatedBy() , op ,"add".equals(op)?"添加":"修改" + (filterKeyWordsInfoValidator.getKeyWordsType().equals("CHECK")? "审核词":"敏感词") , JSON.toJSONString(filterKeyWordsInfoValidator));
+            String flag = "add".equals(op)?"添加":"修改";
+            systemUserLogService.logsAsync(keywordsType, businessId, filterKeyWordsInfoValidator.getCreatedBy() , op , flag+ (filterKeyWordsInfoValidator.getKeyWordsType().equals("CHECK")? "审核词":"敏感词") , JSON.toJSONString(filterKeyWordsInfoValidator));
         }
 
         //记录日志

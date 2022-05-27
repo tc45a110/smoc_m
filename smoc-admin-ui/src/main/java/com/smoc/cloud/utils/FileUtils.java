@@ -77,6 +77,7 @@ public class FileUtils {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "utf-8"));
             String lineTxt = null;
             while ((lineTxt = bufferedReader.readLine()) != null) {
+                lineTxt = lineTxt.replaceAll("，", ",");
                 String[] s = lineTxt.split(",");
                 ExcelModel book = new ExcelModel();
                 if (!StringUtils.isEmpty(s[0].trim()) && Utils.isPhone(s[0].trim())) {

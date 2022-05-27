@@ -68,7 +68,7 @@ public class BlackService {
         FilterBlackList entity = new FilterBlackList();
         BeanUtils.copyProperties(filterBlackListValidator, entity);
 
-        List<FilterBlackList> data = blackRepository.findByGroupIdAndMobileAndStatus(entity.getGroupId(),entity.getMobile(), "1");
+        List<FilterBlackList> data = blackRepository.findByEnterpriseIdAndGroupIdAndMobileAndStatus(entity.getEnterpriseId(),entity.getGroupId(),entity.getMobile(), "1");
 
         //add查重
         if (data != null && data.iterator().hasNext() && "add".equals(op)) {
