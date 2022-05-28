@@ -35,20 +35,9 @@ public enum FilterResponseCode {
     LIMIT_TIME_CONFIG_ERROR("1302", "发送时间段参数配置错误！"),
     LIMIT_TIME("1303", "该时间不能发送短信！"),
     LIMIT_MASK_PROVINCE("1304", "该发送省份已被屏蔽！"),
-    PARAM_LINK_ERROR("1103", "链接错误！"),
-    PRAM_SENSITIVEWORDS_ERROR("1104", "参数含有敏感词！"),
-    PARAM_ORDER_ERROR("1103", "订单号重复"),
-    PARAM_ABLE_ERROR("1104", "余额不足"),
-    PARAM_MULTIMEDIA_ERROR("1105", "多媒体文件过大"),
-    PARAM_MULTIMEDIA_FILE_ERROR("1106", "多媒体文件生成异常"),
-    PARAM_TEMPLATE_ERROR("1107", "普通模版中包含变量字符$"),
-    PARAM_TEMPLATE_VARIABLE_ERROR("1108", "变量模版中不包含变量字符$"),
-    PARAM_MOBILE_ERROR("1109", "发送号码不能为空!"),
-    PARAM_TEMPLATE_NOT_EXIST_ERROR("1110", "模版不存在!"),
-    PARAM_TEMPLATE_STATUS_ERROR("1111", "模版未经审核!"),
-    PARAM_MOBILE_NUM_ERROR("1112", "单批次发送量超过1000条!"),
-    PARAM_MOBILE_LIMITER_ERROR("1113", "发送速率，到达了受限速率！"),
-    PARAM_SUBMIT_LIMITER_ERROR("1114", "提交速率太快，到达了受限提交速率！"),
+
+    SIGN_IS_NULL("1400", "签名不能为空！"),
+    SIGN_IS_NOT_FOUND("1401", "签名没有报备！"),
 
     REQUEST_LEGAL_ERROR("3004", "非法请求"),
     REQUEST_IP_ERROR("3005", "IP访问受限");

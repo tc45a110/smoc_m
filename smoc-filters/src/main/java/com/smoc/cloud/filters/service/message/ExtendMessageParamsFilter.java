@@ -1,56 +1,40 @@
-package com.smoc.cloud.filters.filter.full_filter;
+package com.smoc.cloud.filters.service.message;
 
-import com.google.gson.Gson;
+
 import com.smoc.cloud.common.filters.utils.RedisConstant;
-import com.smoc.cloud.filters.filter.BaseGatewayFilter;
-import com.smoc.cloud.filters.request.model.RequestFullParams;
-import com.smoc.cloud.filters.service.FiltersRedisDataService;
 import com.smoc.cloud.filters.service.FiltersService;
 import com.smoc.cloud.filters.utils.FilterResponseCode;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.gateway.filter.GatewayFilter;
-import org.springframework.cloud.gateway.filter.GatewayFilterChain;
-import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import org.springframework.web.server.ServerWebExchange;
-import reactor.core.publisher.Mono;
 
 import java.util.HashMap;
 import java.util.Map;
 
-
 /**
- * MESSAGE_高级扩展参数过滤；
- * 这些过滤参数，可以根据参数规则进行配置，可以扩展；具体功能参照文档
+ * 业务账号短信内容扩展参数过滤
  */
 @Slf4j
 @Component
-public class MessageExtendFilterParamsGatewayFilter extends BaseGatewayFilter implements Ordered, GatewayFilter {
+public class ExtendMessageParamsFilter {
 
-
-    @Autowired
-    private FiltersService filtersService;
-
-
-    @Override
-    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-
-        //获取body内容
-        String requestBody = exchange.getAttribute("cachedRequestBodyObject");
-        //校验数据请求的数据结构
-        RequestFullParams model = new Gson().fromJson(requestBody, RequestFullParams.class);
+    /**
+     * 业务账号短信内容扩展参数过滤
+     *
+     * @param account 业务账号
+     * @return
+     */
+    public Map<String, String> filter(FiltersService filtersService, String account) {
         //Long start = System.currentTimeMillis();
         Map<String, String> result = new HashMap<>();
         result.put("result", "false");
         /**
          * 查询业务账号配置的MESSAGE_BLACK_级别配置参数
          */
-        Object blackPatten = filtersService.get(RedisConstant.FILTERS_CONFIG_ACCOUNT_MESSAGE + "black:" + model.getAccount());
+        Object blackPatten = filtersService.get(RedisConstant.FILTERS_CONFIG_ACCOUNT_MESSAGE + "black:" + account);
         if (!StringUtils.isEmpty(blackPatten)) {
             //log.info("[内容_敏感词_扩展参数]{}:{}", model.getAccount(), new Gson().toJson(blackPatten));
-            Boolean validator = filtersService.validator(blackPatten.toString(), model.getMessage());
+            Boolean validator = filtersService.validator(blackPatten.toString(), account);
             if (validator) {
                 result.put("result", "true");
                 result.put("code", FilterResponseCode.MESSAGE_SENSITIVE_EXTEND_FILTER.getCode());
@@ -62,11 +46,11 @@ public class MessageExtendFilterParamsGatewayFilter extends BaseGatewayFilter im
          * 查询业务账号配置的MESSAGE_WHITE_级别配置参数
          */
         if ("true".equals(result.get("result"))) {
-            Object whitePatten = filtersService.get(RedisConstant.FILTERS_CONFIG_ACCOUNT_MESSAGE + "white:" + model.getAccount());
+            Object whitePatten = filtersService.get(RedisConstant.FILTERS_CONFIG_ACCOUNT_MESSAGE + "white:" + account);
             if (!StringUtils.isEmpty(whitePatten)) {
                 //log.info("[内容_白词_扩展参数]{}:{}", model.getAccount(), new Gson().toJson(whitePatten));
                 if (null != whitePatten && !StringUtils.isEmpty(whitePatten.toString())) {
-                    Boolean validator = filtersService.validator(whitePatten.toString(), model.getMessage());
+                    Boolean validator = filtersService.validator(whitePatten.toString(), account);
                     if (validator) {
                         result.put("result", "false");
                     }
@@ -78,10 +62,10 @@ public class MessageExtendFilterParamsGatewayFilter extends BaseGatewayFilter im
          * 查询业务账号配置的MESSAGE_REGULAR_级别配置参数
          */
         if ("false".equals(result.get("result"))) {
-            Object regularPatten = filtersService.get(RedisConstant.FILTERS_CONFIG_ACCOUNT_MESSAGE + "regular:" + model.getAccount());
+            Object regularPatten = filtersService.get(RedisConstant.FILTERS_CONFIG_ACCOUNT_MESSAGE + "regular:" + account);
             if (!StringUtils.isEmpty(regularPatten)) {
                 //log.info("[内容_正则_扩展参数]{}:{}", model.getAccount(), new Gson().toJson(regularPatten));
-                if (filtersService.validator(regularPatten.toString(), model.getMessage())) {
+                if (filtersService.validator(regularPatten.toString(), account)) {
                     result.put("result", "false");
                 } else {
                     result.put("result", "true");
@@ -90,21 +74,7 @@ public class MessageExtendFilterParamsGatewayFilter extends BaseGatewayFilter im
                 }
             }
         }
-        //Long end = System.currentTimeMillis();
-        //log.info("[内容_扩展参数]耗时:{}毫秒", end -start);
-        if ("true".equals(result.get("result"))) {
-            return errorHandle(exchange, result.get("code"), result.get("message"));
-        }
 
-        return chain.filter(exchange);
+        return result;
     }
-
-    @Override
-    public int getOrder() {
-        return 40;
-    }
-
-
-
-
 }

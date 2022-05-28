@@ -21,7 +21,7 @@ public class RedisReceiver {
      */
     public void receiveMessage(String message) {
 
-        //log.info("[收到发布的消息]:{}", message);
+        log.info("[收到发布的消息]:{}", message);
         message = message.replace("\"", "");
         try {
 
@@ -51,6 +51,11 @@ public class RedisReceiver {
 
             if (RedisConstant.MESSAGE_ACCOUNT_SUPER_WHITE.equals(message)) {
                 FilterInitialize.accountSuperWhiteMap = filtersService.getAccountSuperWhiteWords();
+            }
+            if (RedisConstant.MESSAGE_TEMPLATE.equals(message)) {
+                FilterInitialize.accountSignTemplateMap = filtersService.getAccountSignTemplates();
+                FilterInitialize.accountFilterVariableTemplateMap = filtersService.getAccountFilterVariableTemplates();
+                FilterInitialize.accountNoFilterVariableTemplateMap = filtersService.getAccountNoFilterVariableTemplates();
             }
         } catch (Exception e) {
             e.printStackTrace();

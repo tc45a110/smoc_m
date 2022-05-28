@@ -55,6 +55,14 @@
                                          class="form-control" data-icon="mdi mdi-view-module" title="业务类型"/>
                             </div>
                             <div class="form-group  col-sm-4">
+                                <select data-style="btn-default" name="templateClassify" data-live-search="true" id="carrier" class="selectpicker form-control" tabindex="-98">
+                                    <option value="" data-icon="mdi mdi-apps">--请选择模版类型--</option>
+                                    <option data-icon="mdi mdi-apps" value="3" th:selected="${accountTemplateInfoValidator.templateClassify eq '3'}">签名模版</option>
+                                    <option data-icon="mdi mdi-apps" value="2" th:selected="${accountTemplateInfoValidator.templateClassify eq '2'}">变量模版</option>
+                                    <option data-icon="mdi mdi-apps" value="1" th:selected="${accountTemplateInfoValidator.templateClassify eq '1'}">固定模版</option>
+                                </select>
+                            </div>
+                            <div class="form-group  col-sm-4">
                                 <input type="text" class="form-control"
                                        placeholder="模板内容" autocomplete="off" th:field="*{templateContent}">
                             </div>
@@ -92,17 +100,19 @@
                             <table class="table table table-hover m-10" style="margin-top: -12px;table-layout:fixed;">
                                 <thead>
                                 <tr>
+
                                     <th style="width:240px">模板ID/企业名称</th>
                                     <th style="width:180px">业务账号/账号名称</th>
                                     <th style="width:100px">业务类型</th>
-                                    <th style="width:100px">模板分类</th>
                                     <th>模板内容</th>
+                                    <th style="width:100px">模板类型</th>
                                     <th style="width:100px">敏感词过滤</th>
                                     <th style="width:160px">操作</th>
                                 </tr>
                                 <thead>
                                 <tbody>
                                 <tr th:each="info:${list}">
+
                                     <td style="vertical-align: middle;line-height: 26px;">
                                         [[${info.templateId}]]
                                         <br>
@@ -119,12 +129,12 @@
                                                  class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;MULTI_SMS,btn btn-brown btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;5G_SMS,btn btn-primary btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-inverse btn-rounded btn-sm waves-effect waves-light"/>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
-                                        <span th:if="${info.templateClassify eq '1'}">固定模板</span>
-                                        <span th:if="${info.templateClassify eq '2'}">变量模板</span>
-                                        <span th:if="${info.templateClassify eq '3'}">签名模板</span>
+                                        [[${info.templateContent}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
-                                        [[${info.templateContent}]]
+                                        <span th:if="${info.templateClassify eq '1'}"><a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light">固定模版</a></span>
+                                        <span th:if="${info.templateClassify eq '2'}"><a class="btn btn-primary btn-rounded btn-sm waves-effect waves-light">变量模版</a></span>
+                                        <span th:if="${info.templateClassify eq '3'}"><a class="btn btn-purple btn-rounded btn-sm waves-effect waves-light">签名模版</a></span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
                                         <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light" th:if="${info.isFilter eq 'FILTER'}">过滤</a>

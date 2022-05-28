@@ -79,37 +79,47 @@
                                                           th:errors="*{templateClassify}"></span></label>
                                                 <div style="margin-top:0px" class="radio radio-info checkbox-inline">
                                                     <input name="templateClassify" type="radio" value="3" required
-                                                           th:checked="${accountTemplateInfoValidator.templateClassify eq '3'}" onclick="changeRadio('3')"><label>签名模板</label>
+                                                           th:checked="${accountTemplateInfoValidator.templateClassify eq '3'}"
+                                                           onclick="changeRadio('3')"><label>签名模板</label>
                                                 </div>
                                                 <div style="margin-top:0px" class="radio radio-info checkbox-inline">
                                                     <input name="templateClassify" type="radio" value="2" required
-                                                           th:checked="${accountTemplateInfoValidator.templateClassify eq '2'}" onclick="changeRadio('2')"><label>变量模板</label>
+                                                           th:checked="${accountTemplateInfoValidator.templateClassify eq '2'}"
+                                                           onclick="changeRadio('2')"><label>变量模板</label>
                                                 </div>
                                                 <div style="margin-top:0px" class="radio radio-info checkbox-inline">
                                                     <input name="templateClassify" type="radio" value="1" required
-                                                           th:checked="${accountTemplateInfoValidator.templateClassify eq '1'}" onclick="changeRadio('1')"><label>固定模板</label>
+                                                           th:checked="${accountTemplateInfoValidator.templateClassify eq '1'}"
+                                                           onclick="changeRadio('1')"><label>固定模板</label>
                                                 </div>
                                             </div>
                                             <div class="col-md-6 form-group">
                                                 <label class="m-b-10">是否需要过滤敏感词
                                                     <span class="text-danger">*</span>&nbsp</label>
                                                 <div style="margin-top:0px" class="radio radio-info checkbox-inline">
-                                                    <input id="FILTER" name="isFilter" type="radio" value="FILTER" required th:attr="disabled=${accountTemplateInfoValidator.templateClassify !='2'}"
+                                                    <input id="FILTER" name="isFilter" type="radio" value="FILTER"
+                                                           required
+                                                           th:attr="disabled=${accountTemplateInfoValidator.templateClassify !='2'}"
                                                            th:checked="${accountTemplateInfoValidator.isFilter eq 'FILTER'}"><label>过滤敏感词</label>
                                                 </div>
-                                                <div  style="margin-top:0px" class="radio radio-info checkbox-inline">
-                                                    <input id="NO_FILTER" name="isFilter" type="radio" value="NO_FILTER" required th:attr="disabled=${accountTemplateInfoValidator.templateClassify !='2'}"
+                                                <div style="margin-top:0px" class="radio radio-info checkbox-inline">
+                                                    <input id="NO_FILTER" name="isFilter" type="radio" value="NO_FILTER"
+                                                           required
+                                                           th:attr="disabled=${accountTemplateInfoValidator.templateClassify !='2'}"
                                                            th:checked="${accountTemplateInfoValidator.isFilter eq 'NO_FILTER'}"><label>不过滤敏感词</label>
                                                 </div>
                                             </div>
-                                            <div class="col-md-12 form-group" id="content_title_1" th:style="${accountTemplateInfoValidator.templateClassify eq '1'?'display:block':'display:none'}">
+                                            <div class="col-md-12 form-group" id="content_title_1"
+                                                 th:style="${accountTemplateInfoValidator.templateClassify eq '1'?'display:block':'display:none'}">
                                                 <label>模板内容</label> <span style="margin-left:20px;color:#F5707A">固定模版：模版内容与发送内容完全一致，经过审核后，自动免除其他内容过滤。不支持多个</span>
                                             </div>
-                                            <div class="col-md-12 form-group" id="content_title_2" th:style="${accountTemplateInfoValidator.templateClassify eq '2'?'display:block':'display:none'}">
-                                                <label>模板内容</label> <span style="margin-left:20px;color:#198AE2">变量模版：发送短信内容格式相对固定，发送格式有规律，对于有规律性文字，固定文字加**来表示，**表示规律文字中的变化部分。支持多个签名，请用 | 隔开</span>
+                                            <div class="col-md-12 form-group" id="content_title_2"
+                                                 th:style="${accountTemplateInfoValidator.templateClassify eq '2'?'display:block':'display:none'}">
+                                                <label>模板内容</label> <span style="margin-left:20px;color:#198AE2">变量模版：发送短信内容格式相对固定，发送格式有规律，对于有规律性文字，固定文字加${1}来表示，${1}表示规律文字中的变化部分,${}中数字最大10，无顺序要求，可重复。支持多个签名，请用 | 隔开</span>
                                             </div>
-                                            <div class="col-md-12 form-group" id="content_title_3" th:style="${accountTemplateInfoValidator.templateClassify eq '3'?'display:block':'display:none'}">
-                                                <label>模板内容</label> <span style="margin-left:20px;color:#6B5FB6">签名模版：该模版只填写报备的签名，不涉及内容。支持多个签名，请用 | 隔开</span>
+                                            <div class="col-md-12 form-group" id="content_title_3"
+                                                 th:style="${accountTemplateInfoValidator.templateClassify eq '3'?'display:block':'display:none'}">
+                                                <label>模板内容</label> <span style="margin-left:20px;color:#6B5FB6">签名模版：该模版只填写报备的签名，不涉及内容，签名格式【xxxx】。支持多个签名，请用 | 隔开</span>
                                             </div>
                                             <div class="col-md-12 form-group">
                                                 <textarea class="form-control" required th:field="*{templateContent}"
@@ -120,13 +130,16 @@
                                                 <label>模版示例</label> <span
                                                     style="margin-left:20px;color:#F5707A"></span>
                                             </div>
-                                            <div class="col-md-12 form-group" style="display:none" id="example_1">
+                                            <div class="col-md-12 form-group" style="display:none" id="example_1"
+                                                 th:style="${accountTemplateInfoValidator.templateClassify eq '1'?'display:block':'display:none'}">
                                                 【招商银行】尊敬的客户，为更好保障持卡人用卡权益，并逐步关闭部分账单日，建议您可拨打信用卡客服热线400-820-5555申请更改至新账单日。退订回#C
                                             </div>
-                                            <div class="col-md-12 form-group" style="display:none" id="example_2">
+                                            <div class="col-md-12 form-group" style="display:none" id="example_2"
+                                                 th:style="${accountTemplateInfoValidator.templateClassify eq '2'?'display:block':'display:none'}">
                                                 【广发银行】尾号**客户，您的信用卡申请资格已到达，请于**小时内填写**过期作废！以银审为准，退订回T
                                             </div>
-                                            <div class="col-md-12 form-group" style="display:block" id="example_3">
+                                            <div class="col-md-12 form-group" style="display:block" id="example_3"
+                                                 th:style="${accountTemplateInfoValidator.templateClassify eq '3'?'display:block':'display:none'}">
                                                 【京东金融】|【众安贷】|【滴滴数科】|【恒易贷】|【小米分期】|【小赢卡贷】|【小米随星借】|【好分期】
                                             </div>
                                             <div id="check-tooltip-warning" class="col-md-12 form-group"
@@ -272,6 +285,7 @@
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
+
 
 </script>
 </body>

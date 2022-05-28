@@ -13,6 +13,8 @@ import com.smoc.cloud.filter.repository.KeywordsRepository;
 import com.smoc.cloud.filter.repository.WhiteRepository;
 import com.smoc.cloud.parameter.entity.ParameterExtendFiltersValue;
 import com.smoc.cloud.parameter.repository.ParameterExtendFiltersValueRepository;
+import com.smoc.cloud.template.entity.AccountTemplateContent;
+import com.smoc.cloud.template.repository.AccountTemplateInfoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisCallback;
@@ -41,6 +43,8 @@ public class InitializeFiltersDataService {
     private WhiteRepository whiteRepository;
     @Resource
     private KeywordsRepository keywordsRepository;
+    @Resource
+    private AccountTemplateInfoRepository accountTemplateInfoRepository;
 
     @Autowired
     private ParameterExtendFiltersValueRepository parameterExtendFiltersValueRepository;
@@ -52,110 +56,129 @@ public class InitializeFiltersDataService {
 
         //系统黑名单
         if ("1".equals(initializeFiltersData.getReloadBlackList())) {
-            this.deleteByKey(RedisConstant.FILTERS_CONFIG_SYSTEM_BLACK);
             this.initializeBlackList();
         }
         //系统白名单
         if ("1".equals(initializeFiltersData.getReloadWhiteList())) {
-            this.deleteByKey(RedisConstant.FILTERS_CONFIG_SYSTEM_WHITE);
             this.initializeWhiteList();
         }
         //账号过滤参数
         if ("1".equals(initializeFiltersData.getReloadAccountFilterParams())) {
-            this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_ACCOUNT_COMMON);
             this.initializeAccountFilterParams();
         }
 
         //系统敏感词
         if ("1".equals(initializeFiltersData.getReloadSystemSensitiveWords())) {
-            this.deleteByKey(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_SENSITIVE);
             this.initializeSensitiveWords();
             this.pubMessage(RedisConstant.MESSAGE_SYSTEM_SENSITIVE);
         }
 
         //系统审核词
         if ("1".equals(initializeFiltersData.getReloadSystemCheckWords())) {
-            this.deleteByKey(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_CHECK);
             this.initializeCheckWords();
             this.pubMessage(RedisConstant.MESSAGE_SYSTEM_CHECK);
         }
 
         //系统超级白词
         if ("1".equals(initializeFiltersData.getReloadSystemSuperWhiteWords())) {
-            this.deleteByKey(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_WHITE_SUPER);
             this.initializeSuperWhiteWords();
             this.pubMessage(RedisConstant.MESSAGE_SYSTEM_SUPER_WHITE);
         }
 
-        //系统洗黑白词
+        //系统洗敏白词
         if ("1".equals(initializeFiltersData.getReloadSystemWhiteBlackWords())) {
-            this.deleteByKey(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_WHITE_SENSITIVE);
             this.initializeWhiteBlackWords();
         }
         //系统免审白词
         if ("1".equals(initializeFiltersData.getReloadSystemNoCheckWhiteWords())) {
-            this.deleteByKey(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_WHITE_NO_CHECK);
             this.initializeNoCheckWhiteWords();
         }
         //系统正则白词
         if ("1".equals(initializeFiltersData.getReloadSystemRegularWhiteWords())) {
-            this.deleteByKey(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_WHITE_REGULAR);
             this.initializeRegularWhiteWords();
         }
 
         //行业敏感词
         if ("1".equals(initializeFiltersData.getReloadInfoSensitiveWords())) {
-            this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_INFO_TYPE_SENSITIVE);
             this.initializeInfoTypeSensitiveWords(initializeFiltersData.getInfoType());
             this.pubMessage(RedisConstant.MESSAGE_TYPE_INFO_SENSITIVE);
         }
 
         //业务账号敏感词
         if ("1".equals(initializeFiltersData.getReloadAccountSensitiveWords())) {
-            this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_SENSITIVE);
             this.initializeAccountSensitiveWords();
             this.pubMessage(RedisConstant.MESSAGE_ACCOUNT_SENSITIVE);
         }
         //业务账号审核词
         if ("1".equals(initializeFiltersData.getReloadAccountCheckWords())) {
-            this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_CHECK);
             this.initializeAccountCheckWords();
             this.pubMessage(RedisConstant.MESSAGE_ACCOUNT_CHECK);
         }
 
         //业务账号超级白词
         if ("1".equals(initializeFiltersData.getReloadAccountSuperWhiteWords())) {
-            this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_WHITE_SUPER);
             this.initializeAccountSuperWhiteWords();
             this.pubMessage(RedisConstant.MESSAGE_ACCOUNT_SUPER_WHITE);
         }
 
         //业务账号洗黑白词
         if ("1".equals(initializeFiltersData.getReloadAccountWhiteBlackWords())) {
-            this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_WHITE_SENSITIVE);
             this.initializeAccountWhiteBlackWords();
         }
 
         //业务账号免审白词
         if ("1".equals(initializeFiltersData.getReloadAccountNoCheckWhiteWords())) {
-            this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_WHITE_NO_CHECK);
             this.initializeAccountNoCheckWhiteWords();
         }
         //业务账号正则白词
         if ("1".equals(initializeFiltersData.getReloadAccountRegularWhiteWords())) {
-            this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_WHITE_REGULAR);
             this.initializeAccountRegularWhiteWords();
         }
 
+        //业务账号模版
+        if ("1".equals(initializeFiltersData.getReloadAccountTemplate())) {
+            this.initializeAccountTemplate();
+            this.pubMessage(RedisConstant.MESSAGE_TEMPLATE);
+        }
 
+    }
+
+    /**
+     * 初始化业务账号模版
+     */
+    public void initializeAccountTemplate() {
+        //加载固定模版数据
+        List<AccountTemplateContent> fixedTemplates = accountTemplateInfoRepository.findFixedTemplate();
+        //加载变量模版数据,匹配后，不再进行后续过滤
+        Map<String, String> variableNoFilterVariableTemplates = accountTemplateInfoRepository.findNoFilterVariableTemplate();
+        log.info("不再进行后续过滤start：{}",new Gson().toJson(variableNoFilterVariableTemplates));
+        //加载CMPP变量模版数据
+        Map<String, String> variableCMPPTemplates = accountTemplateInfoRepository.findCMPPVariableTemplate();
+        //加载CMPP签名模版数据
+        Map<String, String> signCMPPTemplates = accountTemplateInfoRepository.findCMPPSignTemplate();
+        //删除redis 现有缓存
+        long start = System.currentTimeMillis();
+        log.info("加载业务账号模版start：{}", start);
+        this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_FIXED);
+        this.multiSaveSetTemplate(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_FIXED, fixedTemplates);
+        this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_VARIABLE_CMPP);
+        this.multiSaveFiltersTemplate(variableNoFilterVariableTemplates,RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_VARIABLE_CMPP+"no_filter:");
+        this.multiSaveFiltersTemplate(variableCMPPTemplates,RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_VARIABLE_CMPP+"filter:");
+        this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_SIGN);
+        this.multiSaveFiltersTemplate(signCMPPTemplates,RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_SIGN);
+        long end = System.currentTimeMillis();
+        log.info("加载业务账号模版  end：{}", end);
     }
 
     /**
      * 初始化业务账号正则白词
      */
     public void initializeAccountRegularWhiteWords() {
+        //加载数据
         List<KeyWordsMaskKeyWords> wordsMaskKeyWords = keywordsRepository.loadKeyWordsAndMaskKeyWord("BUSINESS_ACCOUNT", null, "WHITE_AVOID_REGULAR");
         log.info("加载业务账号免审白词条数：{}", wordsMaskKeyWords.size());
+        //删除redis现有缓存
+        this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_WHITE_REGULAR);
         long start = System.currentTimeMillis();
         log.info("加载业务账号免审白词start：{}", start);
         this.multiSaveSetBatch(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_WHITE_REGULAR, wordsMaskKeyWords);
@@ -167,8 +190,11 @@ public class InitializeFiltersDataService {
      * 初始化业务账号免审白词
      */
     public void initializeAccountNoCheckWhiteWords() {
+        //加载数据
         List<KeyWordsMaskKeyWords> wordsMaskKeyWords = keywordsRepository.loadKeyWordsAndMaskKeyWord("BUSINESS_ACCOUNT", null, "WHITE_AVOID_CHECK");
         log.info("加载业务账号免审白词条数：{}", wordsMaskKeyWords.size());
+        //删除redis现有缓存
+        this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_WHITE_NO_CHECK);
         long start = System.currentTimeMillis();
         log.info("加载业务账号免审白词start：{}", start);
         this.multiSaveHash(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_WHITE_NO_CHECK, wordsMaskKeyWords);
@@ -181,8 +207,11 @@ public class InitializeFiltersDataService {
      * 初始化业务账号洗黑白词
      */
     public void initializeAccountWhiteBlackWords() {
+        //加载数据
         List<KeyWordsMaskKeyWords> wordsMaskKeyWords = keywordsRepository.loadKeyWordsAndMaskKeyWord("BUSINESS_ACCOUNT", null, "WHITE_AVOID_BLACK");
         log.info("加载业务账号洗黑白词条数：{}", wordsMaskKeyWords.size());
+        //删除redis现有缓存
+        this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_WHITE_SENSITIVE);
         long start = System.currentTimeMillis();
         log.info("加载业务账号洗黑白词start：{}", start);
         this.multiSaveHash(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_WHITE_SENSITIVE, wordsMaskKeyWords);
@@ -194,8 +223,11 @@ public class InitializeFiltersDataService {
      * 初始化业务账号超级白词
      */
     public void initializeAccountSuperWhiteWords() {
+        //加载数据
         List<KeyWordsMaskKeyWords> wordsMaskKeyWords = keywordsRepository.loadKeyWordsAndMaskKeyWord("BUSINESS_ACCOUNT", null, "SUPER_WHITE");
         log.info("加载业务账号超级白词条数：{}", wordsMaskKeyWords.size());
+        //删除redis现有缓存
+        this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_WHITE_SUPER);
         long start = System.currentTimeMillis();
         log.info("加载业务账号超级白词start：{}", start);
         this.multiSaveSetBatch(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_WHITE_SUPER, wordsMaskKeyWords);
@@ -207,8 +239,11 @@ public class InitializeFiltersDataService {
      * 初始化业务账号审核词
      */
     public void initializeAccountCheckWords() {
+        //加载数据
         List<KeyWordsMaskKeyWords> wordsMaskKeyWords = keywordsRepository.loadKeyWordsAndMaskKeyWord("BUSINESS_ACCOUNT", null, "CHECK");
         log.info("加载业务账号审核词条数：{}", wordsMaskKeyWords.size());
+        //删除redis 现有缓存
+        this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_CHECK);
         long start = System.currentTimeMillis();
         log.info("加载业务账号审核词start：{}", start);
         this.multiSaveSetBatch(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_CHECK, wordsMaskKeyWords);
@@ -220,8 +255,11 @@ public class InitializeFiltersDataService {
      * 初始化业务账号敏感词
      */
     public void initializeAccountSensitiveWords() {
+        //加载数据
         List<KeyWordsMaskKeyWords> wordsMaskKeyWords = keywordsRepository.loadKeyWordsAndMaskKeyWord("BUSINESS_ACCOUNT", null, "BLACK");
         log.info("加载业务账号敏感词条数：{}", wordsMaskKeyWords.size());
+        //删除redis现有缓存
+        this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_SENSITIVE);
         long start = System.currentTimeMillis();
         log.info("加载业务账号敏感词start：{}", start);
         this.multiSaveSetBatch(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_SENSITIVE, wordsMaskKeyWords);
@@ -233,7 +271,10 @@ public class InitializeFiltersDataService {
      * 初始化黑名单
      */
     public void initializeBlackList() {
+        //加载数据
         List<FilterBlackList> filterBlackListList = blackRepository.findAll();
+        //删除现有redis缓存
+        this.deleteByKey(RedisConstant.FILTERS_CONFIG_SYSTEM_BLACK);
         if (null != filterBlackListList && filterBlackListList.size() > 0) {
             long start = System.currentTimeMillis();
             log.info("加载系统黑名单start：{}", start);
@@ -248,7 +289,10 @@ public class InitializeFiltersDataService {
      * 初始化黑名单
      */
     public void initializeWhiteList() {
+        //加载数据
         List<FilterWhiteList> filterWhiteList = whiteRepository.findAll();
+        //删除现有redis缓存
+        this.deleteByKey(RedisConstant.FILTERS_CONFIG_SYSTEM_WHITE);
         if (null != filterWhiteList && filterWhiteList.size() > 0) {
             long start = System.currentTimeMillis();
             log.info("加载系统白名单start：{}", start);
@@ -263,8 +307,11 @@ public class InitializeFiltersDataService {
      * 初始化系统敏感词
      */
     public void initializeSensitiveWords() {
+        //加载数据
         List<String> sensitiveWords = keywordsRepository.loadKeyWords("SYSTEM", "BLACK", "BLACK");
         log.info("加载系统敏感词条数：{}", sensitiveWords.size());
+        //删除现有redis 缓存
+        this.deleteByKey(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_SENSITIVE);
         long start = System.currentTimeMillis();
         log.info("加载系统敏感词start：{}", start);
         this.multiSaveSet(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_SENSITIVE, sensitiveWords);
@@ -276,8 +323,11 @@ public class InitializeFiltersDataService {
      * 初始化系统审核词
      */
     public void initializeCheckWords() {
+        //加载数据
         List<String> checkWords = keywordsRepository.loadKeyWords("SYSTEM", "CHECK", "CHECK");
         log.info("加载系统审核词条数：{}", checkWords.size());
+        //删除redis现有缓存
+        this.deleteByKey(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_CHECK);
         long start = System.currentTimeMillis();
         log.info("加载系统审核词start：{}", start);
         this.multiSaveSet(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_CHECK, checkWords);
@@ -289,8 +339,11 @@ public class InitializeFiltersDataService {
      * 初始化系统超级白词
      */
     public void initializeSuperWhiteWords() {
+        //加载数据
         List<String> superWhiteWords = keywordsRepository.loadKeyWords("SYSTEM", "WHITE", "SUPER_WHITE");
         log.info("加载系统超级白词条数：{}", superWhiteWords.size());
+        //删除redis现有缓存
+        this.deleteByKey(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_WHITE_SUPER);
         long start = System.currentTimeMillis();
         log.info("加载系统超级白词start：{}", start);
         this.multiSaveSet(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_WHITE_SUPER, superWhiteWords);
@@ -302,8 +355,11 @@ public class InitializeFiltersDataService {
      * 初始化系统洗黑白词
      */
     public void initializeWhiteBlackWords() {
+        //加载数据
         List<KeyWordsMaskKeyWords> wordsMaskKeyWords = keywordsRepository.loadKeyWordsAndMaskKeyWord("SYSTEM", "WHITE", "WHITE_AVOID_BLACK");
         log.info("加载系统洗黑白词条数：{}", wordsMaskKeyWords.size());
+        //删除redis现有缓存
+        this.deleteByKey(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_WHITE_SENSITIVE);
         long start = System.currentTimeMillis();
         log.info("加载系统洗黑白词start：{}", start);
         this.multiSaveHashNoCheck(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_WHITE_SENSITIVE, wordsMaskKeyWords);
@@ -315,8 +371,11 @@ public class InitializeFiltersDataService {
      * 初始化系统免审白词
      */
     public void initializeNoCheckWhiteWords() {
+        //加载数据
         List<KeyWordsMaskKeyWords> wordsMaskKeyWords = keywordsRepository.loadKeyWordsAndMaskKeyWord("SYSTEM", "WHITE", "WHITE_AVOID_CHECK");
         log.info("加载系统免审白词条数：{}", wordsMaskKeyWords.size());
+        //删除redis 现有缓存
+        this.deleteByKey(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_WHITE_NO_CHECK);
         long start = System.currentTimeMillis();
         log.info("加载系统免审白词start：{}", start);
         this.multiSaveHashNoCheck(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_WHITE_NO_CHECK, wordsMaskKeyWords);
@@ -328,8 +387,11 @@ public class InitializeFiltersDataService {
      * 初始化系统正则白词
      */
     public void initializeRegularWhiteWords() {
+        //加载数据
         List<String> regulars = keywordsRepository.loadKeyWords("SYSTEM", "WHITE", "WHITE_AVOID_REGULAR");
         log.info("加载系统正则白词条数：{}", regulars.size());
+        //删除redis现有缓存
+        this.deleteByKey(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_WHITE_REGULAR);
         long start = System.currentTimeMillis();
         log.info("加载系统正则白词start：{}", start);
         this.multiSaveSet(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_WHITE_REGULAR, regulars);
@@ -341,8 +403,10 @@ public class InitializeFiltersDataService {
      * 初始化行业敏感词
      */
     public void initializeInfoTypeSensitiveWords(DictType infoType) {
+        this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_INFO_TYPE_SENSITIVE);
+        this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_INFO_TYPE);
         long start = System.currentTimeMillis();
-        log.info("加载系统正则白词start：{}", start);
+        log.info("加载行业敏感词start：{}", start);
         if (null != infoType && infoType.getDict().size() > 0) {
             for (Dict dict : infoType.getDict()) {
                 List<String> infoTypes = keywordsRepository.loadKeyWords("INFO_TYPE", dict.getFieldCode(), "BLACK");
@@ -353,7 +417,7 @@ public class InitializeFiltersDataService {
             }
         }
         long end = System.currentTimeMillis();
-        log.info("加载系统正则白词  end：{}", end);
+        log.info("加载行业敏感词  end：{}", end);
     }
 
     public void multiSaveHash(String redisKey, List<KeyWordsMaskKeyWords> list) {
@@ -414,6 +478,23 @@ public class InitializeFiltersDataService {
         });
     }
 
+    public void multiSaveSetTemplate(String redisKey, List<AccountTemplateContent> list) {
+        redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
+            connection.openPipeline();
+            list.forEach((value) -> {
+                // hset zset都是可以用的，但是要序列化
+                connection.sAdd(RedisSerializer.string().serialize(redisKey + "list"),
+                        RedisSerializer.string().serialize(new Gson().toJson(value.getAccount())));
+                connection.sAdd(RedisSerializer.string().serialize(redisKey + value.getAccount()),
+                        RedisSerializer.string().serialize(new Gson().toJson(value.getContent())));
+            });
+            connection.close();
+            // executePipelined源码要求RedisCallback必须返回null，否则抛异常
+            return null;
+        });
+    }
+
+
     /**
      * 批量保存到redis
      *
@@ -462,6 +543,7 @@ public class InitializeFiltersDataService {
      * 业务账号过滤参数
      */
     public void initializeAccountFilterParams() {
+        //加载并处理数据格式
         List<ParameterExtendFiltersValue> params = this.parameterExtendFiltersValueRepository.findParameterExtendFiltersValueByBusinessType("BUSINESS_ACCOUNT_FILTER");
         if (null != params && params.size() > 0) {
             Map<String, Map<String, Object>> commonMap = new HashMap<>();
@@ -542,10 +624,17 @@ public class InitializeFiltersDataService {
                     continue;
                 }
             }
+
             long start = System.currentTimeMillis();
             log.info("加载业务账号过滤参数start：{}", start);
+            //删除redis现有缓存
+            this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_ACCOUNT_COMMON);
             this.multiSaveHash(commonMap, RedisConstant.FILTERS_CONFIG_ACCOUNT_COMMON);
+            //删除redis现有缓存
+            this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_ACCOUNT_NUMBER);
             this.multiSaveFilters(numberMap, RedisConstant.FILTERS_CONFIG_ACCOUNT_NUMBER);
+            //删除redis现有缓存
+            this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_ACCOUNT_MESSAGE);
             this.multiSaveFilters(messageMap, RedisConstant.FILTERS_CONFIG_ACCOUNT_MESSAGE);
             long end = System.currentTimeMillis();
             log.info("加载业务账号过滤参数  end：{}", end);
@@ -563,6 +652,30 @@ public class InitializeFiltersDataService {
             connection.openPipeline();
             source.forEach((key, value) -> {
                 // hset zset都是可以用的，但是要序列化
+                connection.set(RedisSerializer.string().serialize(prefix + key),
+                        RedisSerializer.string().serialize(new Gson().toJson(value)));
+//                // 设置过期时间 10天
+//                connection.expire(RedisSerializer.string().serialize(prefix + key), TimeUnit.DAYS.toSeconds(1));
+            });
+            connection.close();
+            // executePipelined源码要求RedisCallback必须返回null，否则抛异常
+            return null;
+        });
+    }
+
+    /**
+     * @param source
+     * @param prefix
+     */
+    public void multiSaveFiltersTemplate(Map<String, String> source, String prefix) {
+        redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
+            // 这里逻辑简单不会抛异常
+            // 否则需要加上try...catch...finally防止链接未正常关闭 造成泄漏
+            connection.openPipeline();
+            source.forEach((key, value) -> {
+                // hset zset都是可以用的，但是要序列化
+                connection.sAdd(RedisSerializer.string().serialize(prefix + "list"),
+                        RedisSerializer.string().serialize(new Gson().toJson(key)));
                 connection.set(RedisSerializer.string().serialize(prefix + key),
                         RedisSerializer.string().serialize(new Gson().toJson(value)));
 //                // 设置过期时间 10天

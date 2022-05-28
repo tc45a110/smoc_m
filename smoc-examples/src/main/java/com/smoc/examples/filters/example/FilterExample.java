@@ -17,7 +17,7 @@ public class FilterExample {
 
     public static void main(String[] args) throws Exception {
         System.out.println(System.currentTimeMillis());
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 20; i++) {
 
             //请求路径（具体参见技术文档）
             String url = "http://localhost:18090/smoc-filters/full-filter/filters";
@@ -29,7 +29,7 @@ public class FilterExample {
             data.put("phone", "13910816771");
             data.put("account", "YQT124");
             data.put("carrier", "CMCC");
-            String message = "事情不大，还是要处理，奖,禁止1bp2p贷款的";
+            String message = "【京东金融】尾号ddddfddfd客户，aaa您的信用卡申请资格已到达，请于adfdafdfd小时内填写fdfdfdfdfdfdfd过期作废！以银审为准，退订回T";
             data.put("message", message);
             data.put("provinceCode", "11");
             data.put("numbers", 1);
@@ -39,7 +39,7 @@ public class FilterExample {
             //System.out.println(requestJsonData);
             String result = Okhttp3Utils.postJson(url, requestJsonData, header);
             //Thread.currentThread().sleep(1000);
-            System.out.println(System.currentTimeMillis()+"[请求响应]数据:" + result);
+            System.out.println(System.currentTimeMillis() + "[请求响应]数据:" + result);
         }
         System.out.println(System.currentTimeMillis());
     }

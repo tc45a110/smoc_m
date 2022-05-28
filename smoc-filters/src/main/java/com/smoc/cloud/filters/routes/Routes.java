@@ -1,9 +1,7 @@
 package com.smoc.cloud.filters.routes;
 
-import com.smoc.cloud.filters.filter.EndGatewayFilter;
-import com.smoc.cloud.filters.filter.full_filter.CommonExtendFilterParamsGatewayFilter;
-import com.smoc.cloud.filters.filter.full_filter.MessageExtendFilterParamsGatewayFilter;
-import com.smoc.cloud.filters.filter.full_filter.NumberExtendFilterParamsGatewayFilter;
+
+import com.smoc.cloud.filters.filter.full_filter.FullFilterParamsGatewayFilter;
 import com.smoc.cloud.filters.filter.full_filter.StartFullFilterGatewayFilter;
 import com.smoc.cloud.filters.filter.message_filter.MessageGatewayFilter;
 import lombok.extern.slf4j.Slf4j;
@@ -22,13 +20,7 @@ import org.springframework.stereotype.Component;
 public class Routes {
 
     @Autowired
-    private CommonExtendFilterParamsGatewayFilter commonExtendFilterParamsGatewayFilter;
-
-    @Autowired
-    private NumberExtendFilterParamsGatewayFilter numberExtendFilterParamsGatewayFilter;
-
-    @Autowired
-    private MessageExtendFilterParamsGatewayFilter messageExtendFilterParamsGatewayFilter;
+    private FullFilterParamsGatewayFilter fullFilterParamsGatewayFilter;
 
     //只过滤短信内容
     @Autowired
@@ -36,9 +28,6 @@ public class Routes {
 
     @Autowired
     private StartFullFilterGatewayFilter startFullFilterGatewayFilter;
-
-    @Autowired
-    private EndGatewayFilter endGatewayFilter;
 
 
     @Bean
@@ -53,7 +42,7 @@ public class Routes {
                  */
                 .route(r -> r.method(HttpMethod.POST).and().path("/smoc-filters/full-filter/**").and().readBody(String.class, requestBody -> {
                             return true;
-                        }).filters(f -> f.stripPrefix(1).filter(startFullFilterGatewayFilter).filter(commonExtendFilterParamsGatewayFilter).filter(numberExtendFilterParamsGatewayFilter).filter(messageExtendFilterParamsGatewayFilter).filter(endGatewayFilter)).uri("lb://smoc")
+                        }).filters(f -> f.stripPrefix(1).filter(startFullFilterGatewayFilter).filter(fullFilterParamsGatewayFilter)).uri("lb://smoc")
 
                 )
                 /**
@@ -61,7 +50,7 @@ public class Routes {
                  */
                 .route(r -> r.method(HttpMethod.POST).and().path("/smoc-filters/message-filter/**").and().readBody(String.class, requestBody -> {
                             return true;
-                        }).filters(f -> f.stripPrefix(1).filter(messageGatewayFilter).filter(endGatewayFilter)).uri("lb://smoc")
+                        }).filters(f -> f.stripPrefix(1).filter(messageGatewayFilter)).uri("lb://smoc")
 
                 )
                 /**
@@ -69,7 +58,7 @@ public class Routes {
                  */
                 .route(r -> r.method(HttpMethod.POST).and().path("/smoc-filters/number-filter/**").and().readBody(String.class, requestBody -> {
                             return true;
-                        }).filters(f -> f.stripPrefix(1).filter(endGatewayFilter)).uri("lb://smoc")
+                        }).filters(f -> f.stripPrefix(1)).uri("lb://smoc")
 
                 ).build();
     }

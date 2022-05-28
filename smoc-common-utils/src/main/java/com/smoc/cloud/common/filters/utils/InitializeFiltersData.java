@@ -58,5 +58,8 @@ public class InitializeFiltersData {
     //账号正则白词
     private String reloadAccountRegularWhiteWords = "0";
 
+    //账号模版
+    private String reloadAccountTemplate = "0";
+
 
 }

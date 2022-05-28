@@ -43,6 +43,17 @@ public class FiltersService {
     }
 
     /**
+     * set 中是否存在值
+     * @param redisKey
+     * @param value
+     * @return
+     */
+    public Boolean isSetMember(String redisKey,String value){
+        Boolean isExist = filtersRedisDataService.isMember(redisKey, value);
+        return isExist;
+    }
+
+    /**
      * 手机号本地黑名单，白名单过滤(进行洗白操作)
      *
      * @param phone 手机号
@@ -370,6 +381,72 @@ public class FiltersService {
         log.info("[加载业务账号超级白词]：耗时：{}毫秒", end - start);
         //log.info("[accountSuperWhiteMap]:{}",new Gson().toJson(accountSuperWhiteMap));
         return accountSuperWhiteMap;
+    }
+
+    /**
+     * 初始化 账号签名模版
+     *
+     * @return
+     */
+    public Map<String, String> getAccountSignTemplates() {
+        long start = System.currentTimeMillis();
+        Map<String, String> accountSignTemplateMap = new HashMap<>();
+        Set<String> accounts = filtersRedisDataService.sget(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_SIGN + "list");
+        //log.info("[accounts]:{}",accounts);
+        if (null != accounts && accounts.size() > 0) {
+            for (String account : accounts) {
+                Object sign = filtersRedisDataService.get(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_SIGN + account);
+                accountSignTemplateMap.put(account, sign.toString());
+            }
+        }
+        long end = System.currentTimeMillis();
+        log.info("[加载业务账号签名模版]：耗时：{}毫秒", end - start);
+        log.info("[accountSignTemplateMap]:{}",new Gson().toJson(accountSignTemplateMap));
+        return accountSignTemplateMap;
+    }
+
+    /**
+     * 初始化 账号签名变量模版，匹配模版后，要继续进行下一步过滤
+     *
+     * @return
+     */
+    public Map<String, String> getAccountFilterVariableTemplates() {
+        long start = System.currentTimeMillis();
+        Map<String, String> accountFilterVariableTemplatesMap = new HashMap<>();
+        Set<String> accounts = filtersRedisDataService.sget(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_VARIABLE_CMPP + "filter:list");
+        //log.info("[accounts]:{}",accounts);
+        if (null != accounts && accounts.size() > 0) {
+            for (String account : accounts) {
+                Object sign = filtersRedisDataService.get(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_VARIABLE_CMPP + "filter:" + account);
+                accountFilterVariableTemplatesMap.put(account, sign.toString());
+            }
+        }
+        long end = System.currentTimeMillis();
+        log.info("[加载业务账号变量模版-FILTER]：耗时：{}毫秒", end - start);
+        log.info("[accountFilterVariableTemplatesMap]:{}",new Gson().toJson(accountFilterVariableTemplatesMap));
+        return accountFilterVariableTemplatesMap;
+    }
+
+    /**
+     * 初始化 账号签名变量模版，匹配模版后，要继续进行下一步过滤
+     *
+     * @return
+     */
+    public Map<String, String> getAccountNoFilterVariableTemplates() {
+        long start = System.currentTimeMillis();
+        Map<String, String> accountNoFilterVariableTemplatesMap = new HashMap<>();
+        Set<String> accounts = filtersRedisDataService.sget(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_VARIABLE_CMPP + "no_filter:list");
+        //log.info("[accounts]:{}",accounts);
+        if (null != accounts && accounts.size() > 0) {
+            for (String account : accounts) {
+                Object sign = filtersRedisDataService.get(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_VARIABLE_CMPP + "no_filter:" + account);
+                accountNoFilterVariableTemplatesMap.put(account, sign.toString());
+            }
+        }
+        long end = System.currentTimeMillis();
+        log.info("[加载业务账号变量模版-NO_FILTER]：耗时：{}毫秒", end - start);
+        log.info("[accountNoFilterVariableTemplatesMap]:{}",new Gson().toJson(accountNoFilterVariableTemplatesMap));
+        return accountNoFilterVariableTemplatesMap;
     }
 
 }

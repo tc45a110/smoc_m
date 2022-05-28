@@ -24,6 +24,9 @@ public class FilterDataInitListener implements ApplicationListener<ContextRefres
         FilterInitialize.accountSensitiveMap = filtersService.getAccountSensitiveWords();
         FilterInitialize.accountCheckMap = filtersService.getAccountCheckWords();
         FilterInitialize.accountSuperWhiteMap = filtersService.getAccountSuperWhiteWords();
+        FilterInitialize.accountSignTemplateMap = filtersService.getAccountSignTemplates();
+        FilterInitialize.accountFilterVariableTemplateMap = filtersService.getAccountFilterVariableTemplates();
+        FilterInitialize.accountNoFilterVariableTemplateMap = filtersService.getAccountNoFilterVariableTemplates();
     }
 }
 

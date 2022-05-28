@@ -66,6 +66,17 @@ public class RedisConstant {
     //业务账号正则白词
     public static final String FILTERS_CONFIG_ACCOUNT_WORDS_WHITE_REGULAR = FILTERS_CONFIG_ACCOUNT_WORDS_WHITE + "regular:";
 
+    //业务账号模版
+    public static final String FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE = FILTERS_CONFIG_ACCOUNT_WORDS + "template:";
+    //业务账号固定模版
+    public static final String FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_FIXED = FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE + "fixed:";
+    //业务账号HTTP模版
+    public static final String FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_VARIABLE_HTTP = FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE + "variable:http:";
+    //业务账号CMPP模版
+    public static final String FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_VARIABLE_CMPP = FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE + "variable:cmpp:";
+    //业务账号签名模版
+    public static final String FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_SIGN = FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE + "sign:";
+
     /**
      * 临时数据，表示有有效期，基本上都是限流、限量
      */
@@ -82,22 +93,25 @@ public class RedisConstant {
     /**
      * pub/sub
      */
-    public static final String CHANNEL ="FILTER_CHANNEL_KEY_WORDS";
+    public static final String CHANNEL = "FILTER_CHANNEL_KEY_WORDS";
     //系统敏感词
-    public static final String MESSAGE_SYSTEM_SENSITIVE ="systemSensitive";
+    public static final String MESSAGE_SYSTEM_SENSITIVE = "systemSensitive";
     //系统审核词
-    public static final String MESSAGE_SYSTEM_CHECK ="systemCheck";
+    public static final String MESSAGE_SYSTEM_CHECK = "systemCheck";
     //系统超级白词
-    public static final String MESSAGE_SYSTEM_SUPER_WHITE ="systemSuperWhite";
+    public static final String MESSAGE_SYSTEM_SUPER_WHITE = "systemSuperWhite";
     //行业敏感词
-    public static final String MESSAGE_TYPE_INFO_SENSITIVE ="typeInfoSensitive";
+    public static final String MESSAGE_TYPE_INFO_SENSITIVE = "typeInfoSensitive";
+
+    //模版
+    public static final String MESSAGE_TEMPLATE = "template";
 
     //业务账号敏感词
-    public static final String MESSAGE_ACCOUNT_SENSITIVE ="accountSensitive";
+    public static final String MESSAGE_ACCOUNT_SENSITIVE = "accountSensitive";
     //业务账号审核词
-    public static final String MESSAGE_ACCOUNT_CHECK ="accountCheck";
+    public static final String MESSAGE_ACCOUNT_CHECK = "accountCheck";
     //业务账号超级白词
-    public static final String MESSAGE_ACCOUNT_SUPER_WHITE ="accountSuperWhite";
+    public static final String MESSAGE_ACCOUNT_SUPER_WHITE = "accountSuperWhite";
 
 
 }

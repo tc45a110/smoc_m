@@ -297,9 +297,14 @@ public class TemplateController {
 
         if("1".equals(accountTemplateInfoValidator.getTemplateClassify())){
             accountTemplateInfoValidator.setIsFilter("NO_FILTER");
+            accountTemplateInfoValidator.setTemplateFlag("1");
+        }
+        if("2".equals(accountTemplateInfoValidator.getTemplateClassify())){
+            accountTemplateInfoValidator.setTemplateFlag("2");
         }
         if("3".equals(accountTemplateInfoValidator.getTemplateClassify())){
             accountTemplateInfoValidator.setIsFilter("FILTER");
+            accountTemplateInfoValidator.setTemplateFlag("3");
         }
 
         //保存数据

@@ -51,7 +51,8 @@ public class InitializeFiltersDataController {
 
         ModelAndView view = new ModelAndView("configure/filters/initialize_filters_data");
         Map<String, DictType> dictMap = (Map<String, DictType>) request.getServletContext().getAttribute("dict");
-        DictType infoType = dictMap.get("infoType");
+        //行业敏感词、行业黑白名单分类
+        DictType infoType = dictMap.get("industryBlackList");
         initializeFiltersData.setInfoType(infoType);
         initializeFiltersDataService.initialize(initializeFiltersData);
         view.addObject("initialize", new InitializeFiltersData());

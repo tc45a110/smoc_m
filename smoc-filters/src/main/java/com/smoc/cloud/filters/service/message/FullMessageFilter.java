@@ -1,11 +1,13 @@
 package com.smoc.cloud.filters.service.message;
 
+import com.smoc.cloud.common.filters.utils.RedisConstant;
 import com.smoc.cloud.filters.service.FiltersService;
 import com.smoc.cloud.filters.utils.DFA.DfaSensitiveWordsFilter;
 import com.smoc.cloud.filters.utils.DFA.FilterInitialize;
 import com.smoc.cloud.filters.utils.DFA.WordsSensitiveFilter;
 import com.smoc.cloud.filters.utils.FilterResponseCode;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
@@ -38,23 +40,23 @@ public class FullMessageFilter {
         //long start = System.currentTimeMillis();
 
         /**
-         * 业务外账号超级白词
+         * 业务账号超级白词 (暂时屏蔽)
          */
-        DfaSensitiveWordsFilter dfaAccountSuperWhiteWordsFilter = new DfaSensitiveWordsFilter(FilterInitialize.accountSuperWhiteMap.get(account));
-        Boolean isExistAccountSuperWhiteWords = dfaAccountSuperWhiteWordsFilter.isContain(message, 1);
-        if (isExistAccountSuperWhiteWords) {
-            result.put("result", "false");
-            return result;
-        }
+//        DfaSensitiveWordsFilter dfaAccountSuperWhiteWordsFilter = new DfaSensitiveWordsFilter(FilterInitialize.accountSuperWhiteMap.get(account));
+//        Boolean isExistAccountSuperWhiteWords = dfaAccountSuperWhiteWordsFilter.isContain(message, 1);
+//        if (isExistAccountSuperWhiteWords) {
+//            result.put("result", "false");
+//            return result;
+//        }
 
         /**
-         * 先过滤超级白词,超级白词比较少
+         * 先过滤超级白词,超级白词比较少（暂时屏蔽）
          */
-        Boolean isExistSystemSuperWhiteWords = FilterInitialize.superWhiteWordsFilter.isContain(message, 1);
-        if (isExistSystemSuperWhiteWords) {
-            result.put("result", "false");
-            return result;
-        }
+//        Boolean isExistSystemSuperWhiteWords = FilterInitialize.superWhiteWordsFilter.isContain(message, 1);
+//        if (isExistSystemSuperWhiteWords) {
+//            result.put("result", "false");
+//            return result;
+//        }
 
         /**
          * 业务账号敏感词过滤

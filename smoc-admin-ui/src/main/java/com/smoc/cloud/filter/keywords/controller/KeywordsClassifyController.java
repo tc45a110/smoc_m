@@ -462,7 +462,7 @@ public class KeywordsClassifyController {
         root.setHref("0");
         root.setLazyLoad(false);
         root.setSvcType("root");
-        root.setText("分类敏感词");
+        root.setText("行业分类敏感词");
 
         Map<String, DictType> dictMap = (Map<String, DictType>) request.getServletContext().getAttribute("dict");
 
@@ -518,13 +518,8 @@ public class KeywordsClassifyController {
 
         //信息分类
         DictType infoType = dictMap.get("industryBlackList");
-        Nodes infoTypeNode = new Nodes();
-        infoTypeNode.setId("1");
-        infoTypeNode.setHref("0");
-        infoTypeNode.setLazyLoad(false);
-        infoTypeNode.setSvcType("CLASSIFY");
-        infoTypeNode.setText("信息分类");
-        List<Nodes> infoTypeNodes = new ArrayList<>();
+
+        List<Nodes> rootList = new ArrayList<>();
         for (Dict dict : infoType.getDict()) {
             Nodes dictNode = new Nodes();
             dictNode.setId(dict.getFieldCode());
@@ -534,14 +529,8 @@ public class KeywordsClassifyController {
             dictNode.setOrgCode("INFO_TYPE");
             dictNode.setText(dict.getFieldName());
             dictNode.setIcon(infoType.getIcon());
-            infoTypeNodes.add(dictNode);
+            rootList.add(dictNode);
         }
-        infoTypeNode.setNodes(infoTypeNodes);
-
-        List<Nodes> rootList = new ArrayList<>();
-//        rootList.add(carrierNode);
-        //rootList.add(industryTypeNode);
-        rootList.add(infoTypeNode);
         root.setNodes(rootList);
 
         List<Nodes> list = new ArrayList<>();
