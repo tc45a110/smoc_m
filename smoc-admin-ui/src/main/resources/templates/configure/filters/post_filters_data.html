@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
+</head>
+<body>
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <!-- start row  页面导航-->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">过滤服务过滤测试</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            系统参数配置
+                        </li>
+                        <li>
+                            过滤服务过滤测试
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  页面内容-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-md-12">
+                <div class="card-box">
+                    <form id="submit_form" th:action="@{/filters/post}" th:object="${requestFullParams}"
+                          method="post">
+                        <div class="row">
+                            <div class="col-md-10">
+                                <div class="p-10">
+                                    <div class="form-group">
+                                        <label for="account">业务账号<span class="text-danger">*</span></label>
+                                        <input id="account" type="text"  class="form-control" th:field="*{account}"
+                                               required="" data-parsley-length="[1,6]" autocomplete="off"
+                                               placeholder="业务账号">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-10">
+                                <div class="p-10">
+                                    <div class="form-group">
+                                        <label for="phone">手机号<span class="text-danger">*</span></label>
+                                        <input id="phone" type="text"  class="form-control" th:field="*{phone}"
+                                               required="" data-parsley-length="[1,13]" autocomplete="off"
+                                               placeholder="手机号">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-10">
+                                <div class="p-10">
+                                    <div class="form-group">
+                                        <label for="message">短信内容<span class="text-danger">*</span></label>
+                                        <input id="message" type="text"  class="form-control" th:field="*{message}"
+                                               required="" data-parsley-length="[1,200]" autocomplete="off"
+                                               placeholder="短信内容">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-10">
+                                <div class="p-10">
+                                    <div class="form-group">
+                                        <label for="carrier">运营商</label>
+                                        <input id="carrier" type="text"  class="form-control" th:field="*{carrier}"
+                                               data-parsley-length="[1,200]" autocomplete="off"
+                                               placeholder="运营商 三选一 CMCC|UNIC|TELC">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-10">
+                                <div class="p-10">
+                                    <div class="form-group">
+                                        <label for="carrier">省份编码</label>
+                                        <input id="provinceCode" type="text"  class="form-control" th:field="*{provinceCode}"
+                                               data-parsley-length="[1,200]" autocomplete="off"
+                                               placeholder="省份编码：参见字典编码">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-10">
+                                <div class="p-10">
+                                    <div class="form-group">
+                                        <label for="carrier">模版ID</label>
+                                        <input id="templateId" type="text"  class="form-control" th:field="*{templateId}"
+                                               data-parsley-length="[1,200]" autocomplete="off"
+                                               placeholder="WEB\HTTP 提交，要经过 templateId校验">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div> <!-- end row -->
+
+                        <div class="col-md-12 form-group">
+                            <label>内容检测结果</label> <span id="success-content"
+                                                        style="margin-left:20px;color:#4CD396">[[${result}]]</span>
+                        </div>
+                        <div class="text-center m-b-20">
+                            <input type="hidden" th:field="*{numbers}">
+                            <button sec:authorize-url="/filters/post" type="submit"
+                                    class="btn btn-teal waves-effect waves-light">提交过滤
+                            </button>
+                        </div>
+                    </form>
+                    <!-- end form -->
+
+                </div> <!-- end card-box -->
+            </div> <!-- end col -->
+        </div>
+        <!-- end row -->
+
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<script th:src="@{/static/plugins/moment/moment.js}"></script>
+<script th:src="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.js}"></script>
+<th:block th:insert="fragments/common_fragments :: common_submit_form"/>
+<script>
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+
+
+
+
+
+
+
+
+</script>
+</body>
+</html>
