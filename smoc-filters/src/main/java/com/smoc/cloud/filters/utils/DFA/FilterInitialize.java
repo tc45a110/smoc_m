@@ -26,6 +26,9 @@ public class FilterInitialize {
     //存放加载的业务账号超级白词 及构造完成的DFA算法map
     public static Map<String, Map> accountSuperWhiteMap = new HashMap();
 
+    //存放加载的业务账号固定模版，匹配后要跳过其他内容过滤
+    public static Map<String, String> accountFilterFixedTemplateMap = new HashMap();
+
     //存放加载的业务账号变量模版，匹配后要继续过滤
     public static Map<String, String> accountFilterVariableTemplateMap = new HashMap();
 

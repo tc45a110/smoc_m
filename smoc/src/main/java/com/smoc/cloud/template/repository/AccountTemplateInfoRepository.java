@@ -18,6 +18,7 @@ public interface AccountTemplateInfoRepository extends JpaRepository<AccountTemp
 
     /**
      * 分页查询
+     *
      * @param pageParams
      * @return
      */
@@ -25,33 +26,51 @@ public interface AccountTemplateInfoRepository extends JpaRepository<AccountTemp
 
     /**
      * 注销模板
+     *
      * @param templateId
      */
     @Modifying
-    @Query(value = "update account_template_info set TEMPLATE_STATUS = :templateStatus where TEMPLATE_ID=:templateId ",nativeQuery = true)
-    void cancelTemplate(@Param("templateId") String templateId,@Param("templateStatus") String templateStatus);
+    @Query(value = "update account_template_info set TEMPLATE_STATUS = :templateStatus where TEMPLATE_ID=:templateId ", nativeQuery = true)
+    void cancelTemplate(@Param("templateId") String templateId, @Param("templateStatus") String templateStatus);
 
     /**
-     * 查询绑定账号的固定模版，包括CMPP、HTTP的普通模版
+     * 查询绑定账号的固定模版，包括CMPP类型
+     *
      * @return
      */
-    List<AccountTemplateContent> findFixedTemplate();
+    Map<String, String> findFixedTemplate();
+
+    /**
+     * 查询绑定账号的固定模版，包括HTTP、WEB类型
+     *
+     * @return
+     */
+    Map<String, String> findHttpFixedTemplate();
+
+    /**
+     * 查询绑定的变量模版，包括HTTP、WEB类型
+     *
+     * @return
+     */
+    Map<String, String> findHttpVariableTemplate();
 
     /**
      * 查询绑定账号的变量模版，而且该变量模版 匹配后，不在进行后续过滤
      *
      * @return
      */
-     Map<String, String> findNoFilterVariableTemplate();
+    Map<String, String> findNoFilterVariableTemplate();
 
     /**
      * 查询绑定账号的CMPP变量模版，该部分只查询匹配上模版后，需要继续过滤的模版
+     *
      * @return
      */
     Map<String, String> findCMPPVariableTemplate();
 
     /**
      * 查询绑定账号的CMPP签名模版
+     *
      * @return
      */
     Map<String, String> findCMPPSignTemplate();

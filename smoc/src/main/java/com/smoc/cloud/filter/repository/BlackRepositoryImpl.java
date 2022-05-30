@@ -41,20 +41,20 @@ public class BlackRepositoryImpl extends BasePageRepository {
 
         List<Object> paramsList = new ArrayList<Object>();
         if (null != filterBlackListValidator) {
-            paramsList.add( filterBlackListValidator.getGroupId().trim());
+            paramsList.add(filterBlackListValidator.getGroupId().trim());
 
-            if(!StringUtils.isEmpty(filterBlackListValidator.getEnterpriseId())){
+            if (!StringUtils.isEmpty(filterBlackListValidator.getEnterpriseId())) {
                 sqlBuffer.append(" and t.ENTERPRISE_ID = ? ");
                 paramsList.add(filterBlackListValidator.getEnterpriseId().trim());
             }
 
             if (!StringUtils.isEmpty(filterBlackListValidator.getName())) {
                 sqlBuffer.append(" and t.NAME like ? ");
-                paramsList.add( "%" + filterBlackListValidator.getName().trim() + "%");
+                paramsList.add("%" + filterBlackListValidator.getName().trim() + "%");
             }
             if (!StringUtils.isEmpty(filterBlackListValidator.getMobile())) {
                 sqlBuffer.append(" and t.MOBILE like ? ");
-                paramsList.add( "%" + filterBlackListValidator.getMobile().trim()+ "%");
+                paramsList.add("%" + filterBlackListValidator.getMobile().trim() + "%");
             }
         }
         sqlBuffer.append(" order by t.CREATED_TIME desc,t.ID ");
@@ -73,15 +73,15 @@ public class BlackRepositoryImpl extends BasePageRepository {
         int batchSize = 60000;
         Connection connection = null;
         PreparedStatement statement = null;
-        List<ExcelModel> list= filterBlackListValidator.getExcelModelList();
+        List<ExcelModel> list = filterBlackListValidator.getExcelModelList();
         final String sql = "insert into filter_black_list(ID,ENTERPRISE_ID,GROUP_ID,NAME,MOBILE,IS_SYNC,STATUS,CREATED_BY,CREATED_TIME) values(?,?,?,?,?,?,?,?,now()) ";
         log.info(sql);
-        log.info("[系统黑名单导入开始]数据：{}- 共{}条", System.currentTimeMillis(),list.size());
+        log.info("[系统黑名单导入开始]数据：{}- 共{}条", System.currentTimeMillis(), list.size());
         try {
             connection = jdbcTemplate.getDataSource().getConnection();
             connection.setAutoCommit(false);
             statement = connection.prepareStatement(sql);
-            int i=0;
+            int i = 0;
             for (ExcelModel entry : list) {
                 statement.setString(1, UUID.uuid32());
                 statement.setString(2, filterBlackListValidator.getEnterpriseId());
@@ -121,7 +121,7 @@ public class BlackRepositoryImpl extends BasePageRepository {
 
     }
 
-    public  List<ExcelModel> excelModel(PageParams<FilterBlackListValidator> pageParams) {
+    public List<ExcelModel> excelModel(PageParams<FilterBlackListValidator> pageParams) {
         //组织查询条件
         FilterBlackListValidator filterBlackListValidator = pageParams.getParams();
 
@@ -130,9 +130,9 @@ public class BlackRepositoryImpl extends BasePageRepository {
 
         List<Object> paramsList = new ArrayList<Object>();
         if (null != filterBlackListValidator) {
-            paramsList.add( filterBlackListValidator.getGroupId().trim());
+            paramsList.add(filterBlackListValidator.getGroupId().trim());
         }
-        if(!StringUtils.isEmpty(filterBlackListValidator.getEnterpriseId())){
+        if (!StringUtils.isEmpty(filterBlackListValidator.getEnterpriseId())) {
             sqlBuffer.append(" and t.ENTERPRISE_ID = ? ");
             paramsList.add(filterBlackListValidator.getEnterpriseId().trim());
         }
@@ -154,16 +154,16 @@ public class BlackRepositoryImpl extends BasePageRepository {
         Connection connection = null;
         PreparedStatement statement = null;
 
-        List<ComplaintExcelModel> list= messageComplaintInfoValidator.getComplaintList();
+        List<ComplaintExcelModel> list = messageComplaintInfoValidator.getComplaintList();
 
         final String sql = "insert into filter_black_list(ID,ENTERPRISE_ID,GROUP_ID,NAME,MOBILE,IS_SYNC,STATUS,CREATED_BY,CREATED_TIME) values(?,?,?,?,?,?,?,?,now()) ";
         log.info(sql);
-        log.info("[系统投诉黑名单导入开始]数据：{}- 共{}条", System.currentTimeMillis(),list.size());
+        log.info("[系统投诉黑名单导入开始]数据：{}- 共{}条", System.currentTimeMillis(), list.size());
         try {
             connection = jdbcTemplate.getDataSource().getConnection();
             connection.setAutoCommit(false);
             statement = connection.prepareStatement(sql);
-            int i=0;
+            int i = 0;
             for (ComplaintExcelModel entry : list) {
                 statement.setString(1, UUID.uuid32());
                 statement.setString(2, "SYSTEM");
@@ -201,5 +201,34 @@ public class BlackRepositoryImpl extends BasePageRepository {
 
         log.info("[系统投诉黑名单导入结束]数据：{}", System.currentTimeMillis());
 
+    }
+
+    /**
+     * 查询系统黑名单
+     *
+     * @return
+     */
+    public List<String> findSystemBlackList() {
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select t.MOBILE from filter_black_list t  where t.ENTERPRISE_ID='SYSTEM' ");
+        List<String> result = this.jdbcTemplate.queryForList(sqlBuffer.toString(), String.class);
+
+        return result;
+
+    }
+
+    /**
+     * 查询行业黑名单
+     *
+     * @return
+     */
+    public List<FilterBlackListValidator> findIndustryBlackList(){
+        //查询sql
+        //查询sql
+        StringBuffer sqlBuffer = new StringBuffer("select t.ID,t.GROUP_ID,t.NAME,t.MOBILE,t.STATUS,str_to_date(t.CREATED_TIME,'%Y-%m-%d %H:%i:%S')CREATED_TIME,t.CREATED_BY " +
+                " from filter_black_list t where t.ENTERPRISE_ID='INDUSTRY'");
+        List<FilterBlackListValidator> result = this.jdbcTemplate.query(sqlBuffer.toString(), new BlackRowMapper());
+
+        return result;
     }
 }

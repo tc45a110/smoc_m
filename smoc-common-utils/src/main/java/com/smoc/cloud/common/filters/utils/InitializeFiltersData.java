@@ -14,6 +14,12 @@ public class InitializeFiltersData {
     //系统白名单
     private String reloadWhiteList = "0";
 
+    //行业黑名单
+    private String reloadIndustryBlackList = "0";
+
+    //行业白名单
+    private String reloadIndustryWhiteList = "0";
+
     //业务账户过滤参数
     private String reloadAccountFilterParams = "0";
 

@@ -24,7 +24,7 @@ public class ExtendMessageParamsFilter {
      * @param account 业务账号
      * @return
      */
-    public Map<String, String> filter(FiltersService filtersService, String account) {
+    public Map<String, String> filter(FiltersService filtersService, String account, String message) {
         //Long start = System.currentTimeMillis();
         Map<String, String> result = new HashMap<>();
         result.put("result", "false");
@@ -34,7 +34,7 @@ public class ExtendMessageParamsFilter {
         Object blackPatten = filtersService.get(RedisConstant.FILTERS_CONFIG_ACCOUNT_MESSAGE + "black:" + account);
         if (!StringUtils.isEmpty(blackPatten)) {
             //log.info("[内容_敏感词_扩展参数]{}:{}", model.getAccount(), new Gson().toJson(blackPatten));
-            Boolean validator = filtersService.validator(blackPatten.toString(), account);
+            Boolean validator = filtersService.validator(blackPatten.toString(), message);
             if (validator) {
                 result.put("result", "true");
                 result.put("code", FilterResponseCode.MESSAGE_SENSITIVE_EXTEND_FILTER.getCode());
@@ -50,7 +50,7 @@ public class ExtendMessageParamsFilter {
             if (!StringUtils.isEmpty(whitePatten)) {
                 //log.info("[内容_白词_扩展参数]{}:{}", model.getAccount(), new Gson().toJson(whitePatten));
                 if (null != whitePatten && !StringUtils.isEmpty(whitePatten.toString())) {
-                    Boolean validator = filtersService.validator(whitePatten.toString(), account);
+                    Boolean validator = filtersService.validator(whitePatten.toString(), message);
                     if (validator) {
                         result.put("result", "false");
                     }
@@ -61,11 +61,11 @@ public class ExtendMessageParamsFilter {
         /**
          * 查询业务账号配置的MESSAGE_REGULAR_级别配置参数
          */
-        if ("false".equals(result.get("result"))) {
+        if ("true".equals(result.get("result"))) {
             Object regularPatten = filtersService.get(RedisConstant.FILTERS_CONFIG_ACCOUNT_MESSAGE + "regular:" + account);
             if (!StringUtils.isEmpty(regularPatten)) {
                 //log.info("[内容_正则_扩展参数]{}:{}", model.getAccount(), new Gson().toJson(regularPatten));
-                if (filtersService.validator(regularPatten.toString(), account)) {
+                if (filtersService.validator(regularPatten.toString(), message)) {
                     result.put("result", "false");
                 } else {
                     result.put("result", "true");

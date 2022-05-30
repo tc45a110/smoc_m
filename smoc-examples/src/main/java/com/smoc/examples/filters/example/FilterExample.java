@@ -17,7 +17,7 @@ public class FilterExample {
 
     public static void main(String[] args) throws Exception {
         System.out.println(System.currentTimeMillis());
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 1; i++) {
 
             //请求路径（具体参见技术文档）
             String url = "http://localhost:18090/smoc-filters/full-filter/filters";
@@ -26,12 +26,13 @@ public class FilterExample {
             Map<String, String> header = new HashMap<>();
             //
             Map<String, Object> data = new HashMap<>();
-            data.put("phone", "13910816771");
+            data.put("phone", "13910986771");
             data.put("account", "YQT124");
             data.put("carrier", "CMCC");
-            String message = "【京东金融】尾号ddddfddfd客户，aaa您的信用卡申请资格已到达，请于adfdafdfd小时内填写fdfdfdfdfdfdfd过期作废！以银审为准，退订回T";
+            String message = "【招商银行】尊敬的客户，为更好保障持卡人用卡权益，并逐步关闭部分账单日，通讯详单记录建议您可拨打热线400-820-5555申请更改至新账单日com。退订回#C";
             data.put("message", message);
             data.put("provinceCode", "11");
+//            data.put("templateId", "TEMP100293");
             data.put("numbers", 1);
 
             //转JSON请求数据

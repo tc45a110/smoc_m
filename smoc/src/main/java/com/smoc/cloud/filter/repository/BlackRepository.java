@@ -62,4 +62,18 @@ public interface BlackRepository extends CrudRepository<FilterBlackList, String>
     void complaintBathSave(MessageComplaintInfoValidator messageComplaintInfoValidator, String groupComplaintId);
 
     List<FilterBlackList> findByEnterpriseIdAndGroupIdAndMobileAndStatus(String enterpriseId, String groupId, String mobile, String s);
+
+    /**
+     * 查询系统黑名单
+     *
+     * @return
+     */
+    List<String> findSystemBlackList();
+
+    /**
+     * 查询行业黑名单
+     *
+     * @return
+     */
+    List<FilterBlackListValidator> findIndustryBlackList();
 }

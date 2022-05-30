@@ -7,6 +7,7 @@ import lombok.Setter;
 @Setter
 public class AccountTemplateContent {
 
+    private String templateId;
     private String account;
     private String content;
     private String isFilter;

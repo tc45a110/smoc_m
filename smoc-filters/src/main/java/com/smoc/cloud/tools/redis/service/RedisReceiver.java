@@ -53,6 +53,7 @@ public class RedisReceiver {
                 FilterInitialize.accountSuperWhiteMap = filtersService.getAccountSuperWhiteWords();
             }
             if (RedisConstant.MESSAGE_TEMPLATE.equals(message)) {
+                FilterInitialize.accountFilterFixedTemplateMap = filtersService.getAccountFixedTemplates();
                 FilterInitialize.accountSignTemplateMap = filtersService.getAccountSignTemplates();
                 FilterInitialize.accountFilterVariableTemplateMap = filtersService.getAccountFilterVariableTemplates();
                 FilterInitialize.accountNoFilterVariableTemplateMap = filtersService.getAccountNoFilterVariableTemplates();

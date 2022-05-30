@@ -19,6 +19,8 @@ public class RequestFullParams {
     //message   消息内容
     private String message;
 
+    private String templateId;
+
     //carrier   运营商  CMCC、UNIC、TELC、INTL 字段为空，则跳出所有涉及该字段的过滤
     @Pattern(regexp = "(CMCC|UNIC|TELC){1}", message = "运营商不符合规则！")
     private String carrier;

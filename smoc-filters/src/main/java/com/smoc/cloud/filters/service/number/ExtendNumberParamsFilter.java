@@ -63,7 +63,7 @@ public class ExtendNumberParamsFilter {
         /**
          * 查询业务账号配置的NUMBER_REGULAR_级别配置参数  满足则通过
          */
-        if ("false".equals(result.get("result"))) {
+        if ("true".equals(result.get("result"))) {
             Object regularPatten = filtersService.get(RedisConstant.FILTERS_CONFIG_ACCOUNT_NUMBER + "regular:" + account);
             if (!StringUtils.isEmpty(regularPatten)) {
                 //log.info("[号码_正则_扩展参数]{}:{}", model.getAccount(), new Gson().toJson(regularPatten));

@@ -13,6 +13,7 @@ public class AccountTemplateContentRowMapper implements RowMapper<AccountTemplat
         qo.setAccount(resultSet.getString("BUSINESS_ACCOUNT"));
         qo.setContent(resultSet.getString("TEMPLATE_CONTENT"));
         qo.setIsFilter(resultSet.getString("IS_FILTER"));
+        qo.setTemplateId(resultSet.getString("TEMPLATE_ID"));
         return qo;
     }
 }

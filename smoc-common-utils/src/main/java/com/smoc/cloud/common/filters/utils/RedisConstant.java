@@ -33,6 +33,10 @@ public class RedisConstant {
     public static final String FILTERS_CONFIG_SYSTEM_WORDS_WHITE_REGULAR = FILTERS_CONFIG_SYSTEM_WORDS_WHITE + "regular";
 
     //行业分类敏感词
+    public static final String FILTERS_CONFIG_SYSTEM_INDUSTRY_BLACK = FILTERS_CONFIG_SYSTEM + "list:industry:black:";
+    //行业敏感词类型
+    public static final String FILTERS_CONFIG_SYSTEM_INDUSTRY_WHITE = FILTERS_CONFIG_SYSTEM + "list:industry:white:";
+    //行业分类敏感词
     public static final String FILTERS_CONFIG_SYSTEM_WORDS_INFO_TYPE_SENSITIVE = FILTERS_CONFIG_SYSTEM_WORDS + "info_type:sensitive:";
     //行业敏感词类型
     public static final String FILTERS_CONFIG_SYSTEM_WORDS_INFO_TYPE = FILTERS_CONFIG_SYSTEM_WORDS_INFO_TYPE_SENSITIVE + "list";
@@ -70,8 +74,10 @@ public class RedisConstant {
     public static final String FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE = FILTERS_CONFIG_ACCOUNT_WORDS + "template:";
     //业务账号固定模版
     public static final String FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_FIXED = FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE + "fixed:";
+    //业务账号固定模版
+    public static final String FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_HTTP_FIXED = FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE + "http:fixed";
     //业务账号HTTP模版
-    public static final String FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_VARIABLE_HTTP = FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE + "variable:http:";
+    public static final String FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_HTTP_VARIABLE = FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE + "http:variable";
     //业务账号CMPP模版
     public static final String FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_VARIABLE_CMPP = FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE + "variable:cmpp:";
     //业务账号签名模版

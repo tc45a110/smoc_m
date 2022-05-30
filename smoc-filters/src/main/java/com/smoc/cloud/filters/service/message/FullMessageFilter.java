@@ -322,6 +322,19 @@ public class FullMessageFilter {
 
         }
 
+//        log.info("[系统正则]:{}",RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_WHITE + "regular");
+//        Object regularPatten = filtersService.get(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_WHITE + "regular");
+//        if (!StringUtils.isEmpty(regularPatten)) {
+//            log.info("[内容_系统正则]{}:{}", regularPatten);
+//            if (filtersService.validator(regularPatten.toString(), account)) {
+//                result.put("result", "false");
+//            } else {
+//                result.put("result", "true");
+//                result.put("code", FilterResponseCode.MESSAGE_REGULAR_FILTER.getCode());
+//                result.put("message", FilterResponseCode.MESSAGE_REGULAR_FILTER.getMessage());
+//            }
+//        }
+
         //long end = System.currentTimeMillis();
         //log.info("[内容过滤]：耗时{}毫秒", end - start);
         result.put("result", "false");

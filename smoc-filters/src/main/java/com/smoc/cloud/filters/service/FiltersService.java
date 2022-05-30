@@ -38,7 +38,6 @@ public class FiltersService {
             }
         }
 
-
         return isExistBlackList;
     }
 
@@ -51,6 +50,18 @@ public class FiltersService {
     public Boolean isSetMember(String redisKey,String value){
         Boolean isExist = filtersRedisDataService.isMember(redisKey, value);
         return isExist;
+    }
+
+    /**
+     * 获取map 中的key值
+     * @param redisKey
+     * @param key
+     * @return
+     */
+    public Object getMapValue(String redisKey,String key){
+        Object object = filtersRedisDataService.getMapValue(redisKey,key);
+        //log.info("[object]:{}",object);
+        return object;
     }
 
     /**
@@ -384,6 +395,28 @@ public class FiltersService {
     }
 
     /**
+     * 初始化 账号固定模版
+     *
+     * @return
+     */
+    public Map<String, String> getAccountFixedTemplates() {
+        long start = System.currentTimeMillis();
+        Map<String, String> accountFixedTemplateMap = new HashMap<>();
+        Set<String> accounts = filtersRedisDataService.sget(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_FIXED + "list");
+        //log.info("[accounts]:{}",accounts);
+        if (null != accounts && accounts.size() > 0) {
+            for (String account : accounts) {
+                Object sign = filtersRedisDataService.get(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_FIXED + account);
+                accountFixedTemplateMap.put(account, sign.toString());
+            }
+        }
+        long end = System.currentTimeMillis();
+        log.info("[加载业务账号固定模版]：耗时：{}毫秒", end - start);
+        //log.info("[accountSignTemplateMap]:{}",new Gson().toJson(accountFixedTemplateMap));
+        return accountFixedTemplateMap;
+    }
+
+    /**
      * 初始化 账号签名模版
      *
      * @return
@@ -401,7 +434,7 @@ public class FiltersService {
         }
         long end = System.currentTimeMillis();
         log.info("[加载业务账号签名模版]：耗时：{}毫秒", end - start);
-        log.info("[accountSignTemplateMap]:{}",new Gson().toJson(accountSignTemplateMap));
+        //log.info("[accountSignTemplateMap]:{}",new Gson().toJson(accountSignTemplateMap));
         return accountSignTemplateMap;
     }
 

@@ -171,9 +171,35 @@ public class AccountTemplateInfoRepositoryImpl extends BasePageRepository {
      *
      * @return
      */
-    public List<AccountTemplateContent> findFixedTemplate() {
+//    public List<AccountTemplateContent> findFixedTemplate() {
+//        //查询sql
+//        StringBuilder sqlBuffer = new StringBuilder("select ");
+//        sqlBuffer.append(" t.BUSINESS_ACCOUNT,");
+//        sqlBuffer.append(" t.IS_FILTER,");
+//        sqlBuffer.append(" t.TEMPLATE_CONTENT ");
+//        sqlBuffer.append(" from account_template_info t ");
+//        sqlBuffer.append(" where t.TEMPLATE_FLAG='1' and (TEMPLATE_AGREEMENT_TYPE = 'CMPP' or TEMPLATE_AGREEMENT_TYPE = 'HTTP' ) ");
+//
+//        List<AccountTemplateContent> result = this.jdbcTemplate.query(sqlBuffer.toString(), new AccountTemplateContentRowMapper());
+//        //对内容进行md5加密
+//        if (null != result && result.size() > 0) {
+//            for (AccountTemplateContent obj : result) {
+//                String md5Content = DigestUtils.md5Hex(obj.getContent());
+//                obj.setContent(md5Content);
+//            }
+//        }
+//        return result;
+//    }
+
+    /**
+     * 查询绑定账号的固定模版，包括CMPP类型
+     *
+     * @return
+     */
+    public Map<String, String> findFixedTemplate() {
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append(" t.TEMPLATE_ID,");
         sqlBuffer.append(" t.BUSINESS_ACCOUNT,");
         sqlBuffer.append(" t.IS_FILTER,");
         sqlBuffer.append(" t.TEMPLATE_CONTENT ");
@@ -181,14 +207,78 @@ public class AccountTemplateInfoRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(" where t.TEMPLATE_FLAG='1' and (TEMPLATE_AGREEMENT_TYPE = 'CMPP' or TEMPLATE_AGREEMENT_TYPE = 'HTTP' ) ");
 
         List<AccountTemplateContent> result = this.jdbcTemplate.query(sqlBuffer.toString(), new AccountTemplateContentRowMapper());
-        //对内容进行md5加密
+        Map<String, String> resultMap = new HashMap<>();
+        //对模版进行加工处理
         if (null != result && result.size() > 0) {
             for (AccountTemplateContent obj : result) {
-                String md5Content = DigestUtils.md5Hex(obj.getContent());
-                obj.setContent(md5Content);
+                String messageContent = obj.getContent();
+                if (null == resultMap.get(obj.getAccount())) {
+                    resultMap.put(obj.getAccount(), messageContent);
+                } else {
+                    String content = resultMap.get(obj.getAccount());
+                    resultMap.put(obj.getAccount(), content + "|" + messageContent);
+                }
             }
         }
-        return result;
+        return resultMap;
+    }
+
+    /**
+     * 查询绑定企业的固定模版，包括HTTP、WEB类型
+     *
+     * @return
+     */
+    public Map<String, String> findHttpFixedTemplate() {
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append(" t.TEMPLATE_ID,");
+        sqlBuffer.append(" t.BUSINESS_ACCOUNT,");
+        sqlBuffer.append(" t.IS_FILTER,");
+        sqlBuffer.append(" t.TEMPLATE_CONTENT ");
+        sqlBuffer.append(" from account_template_info t ");
+        sqlBuffer.append(" where t.TEMPLATE_FLAG='1' and (TEMPLATE_AGREEMENT_TYPE = 'WEB' or TEMPLATE_AGREEMENT_TYPE = 'HTTP' ) ");
+
+        List<AccountTemplateContent> result = this.jdbcTemplate.query(sqlBuffer.toString(), new AccountTemplateContentRowMapper());
+        Map<String, String> resultMap = new HashMap<>();
+        if (null != result && result.size() > 0) {
+            for (AccountTemplateContent obj : result) {
+                resultMap.put(obj.getTemplateId(), obj.getContent());
+            }
+        }
+        return resultMap;
+    }
+
+    /**
+     * 查询绑定的固定模版，包括HTTP、WEB类型
+     *
+     * @return
+     */
+    public Map<String, String> findHttpVariableTemplate() {
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append(" t.TEMPLATE_ID,");
+        sqlBuffer.append(" t.BUSINESS_ACCOUNT,");
+        sqlBuffer.append(" t.IS_FILTER,");
+        sqlBuffer.append(" t.TEMPLATE_CONTENT ");
+        sqlBuffer.append(" from account_template_info t ");
+        sqlBuffer.append(" where t.TEMPLATE_FLAG='2' and (TEMPLATE_AGREEMENT_TYPE = 'WEB' or TEMPLATE_AGREEMENT_TYPE = 'HTTP' ) ");
+
+        List<AccountTemplateContent> result = this.jdbcTemplate.query(sqlBuffer.toString(), new AccountTemplateContentRowMapper());
+        Map<String, String> resultMap = new HashMap<>();
+        //对内HTTP的变量模版进行加工处理  HTTP变量结构是 ${1}、${2}、${3}、${4}、${5}、占位符。
+        if (null != result && result.size() > 0) {
+            for (AccountTemplateContent obj : result) {
+                //替换占位符
+                Map<String, String> paramMap = new HashMap<>();
+                for (int j = 1; j < 11; j++) {
+                    paramMap.put(j + "", ".*");
+                }
+                StrSubstitutor strSubstitutor = new StrSubstitutor(paramMap);
+                String messageContent = strSubstitutor.replace(obj.getContent());
+                resultMap.put(obj.getTemplateId(), messageContent);
+            }
+        }
+        return resultMap;
     }
 
     /**
@@ -199,11 +289,12 @@ public class AccountTemplateInfoRepositoryImpl extends BasePageRepository {
     public Map<String, String> findNoFilterVariableTemplate() {
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append(" t.TEMPLATE_ID,");
         sqlBuffer.append(" t.BUSINESS_ACCOUNT,");
         sqlBuffer.append(" t.IS_FILTER,");
         sqlBuffer.append(" t.TEMPLATE_CONTENT ");
         sqlBuffer.append(" from account_template_info t ");
-        sqlBuffer.append(" where t.TEMPLATE_FLAG='2' and (TEMPLATE_AGREEMENT_TYPE = 'HTTP' or  (TEMPLATE_AGREEMENT_TYPE = 'CMPP' and IS_FILTER='NO_FILTER'))");
+        sqlBuffer.append(" where t.TEMPLATE_FLAG='2' and (TEMPLATE_AGREEMENT_TYPE = 'CMPP' and IS_FILTER='NO_FILTER')");
 
         List<AccountTemplateContent> result = this.jdbcTemplate.query(sqlBuffer.toString(), new AccountTemplateContentRowMapper());
         Map<String, String> resultMap = new HashMap<>();
@@ -230,11 +321,13 @@ public class AccountTemplateInfoRepositoryImpl extends BasePageRepository {
 
     /**
      * 查询绑定账号的CMPP变量模版，该部分只查询匹配上模版后，需要继续过滤的模版
+     *
      * @return
      */
-    public Map<String, String>  findCMPPVariableTemplate() {
+    public Map<String, String> findCMPPVariableTemplate() {
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append(" t.TEMPLATE_ID,");
         sqlBuffer.append(" t.BUSINESS_ACCOUNT,");
         sqlBuffer.append(" t.IS_FILTER,");
         sqlBuffer.append(" t.TEMPLATE_CONTENT ");
@@ -272,6 +365,7 @@ public class AccountTemplateInfoRepositoryImpl extends BasePageRepository {
     public Map<String, String> findCMPPSignTemplate() {
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append(" t.TEMPLATE_ID,");
         sqlBuffer.append(" t.BUSINESS_ACCOUNT,");
         sqlBuffer.append(" t.IS_FILTER,");
         sqlBuffer.append(" t.TEMPLATE_CONTENT ");
@@ -280,7 +374,7 @@ public class AccountTemplateInfoRepositoryImpl extends BasePageRepository {
 
         List<AccountTemplateContent> result = this.jdbcTemplate.query(sqlBuffer.toString(), new AccountTemplateContentRowMapper());
         Map<String, String> resultMap = new HashMap<>();
-        //对内模版进行加工处理
+        //对签名模版进行加工处理
         if (null != result && result.size() > 0) {
             for (AccountTemplateContent obj : result) {
                 String messageContent = obj.getContent();

@@ -4,8 +4,10 @@ import com.smoc.cloud.common.BasePageRepository;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.smoc.filter.ExcelModel;
+import com.smoc.cloud.common.smoc.filter.FilterBlackListValidator;
 import com.smoc.cloud.common.smoc.filter.FilterWhiteListValidator;
 import com.smoc.cloud.common.utils.UUID;
+import com.smoc.cloud.filter.rowmapper.BlackRowMapper;
 import com.smoc.cloud.filter.rowmapper.ExcelModelRowMapper;
 import com.smoc.cloud.filter.rowmapper.WhiteRowMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -141,5 +143,31 @@ public class WhiteRepositoryImpl extends BasePageRepository {
 
         PageList<ExcelModel> pageList = this.queryByPageForMySQL(sqlBuffer.toString(), params, pageParams.getCurrentPage(), pageParams.getPageSize(), new ExcelModelRowMapper());
         return pageList.getList();
+    }
+
+    /**
+     * 查询系统白名单
+     *
+     * @return
+     */
+    public List<String> findSystemWhiteList(){
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select t.MOBILE from filter_white_list t  where t.ENTERPRISE_ID='SYSTEM' ");
+        List<String> result = this.jdbcTemplate.queryForList(sqlBuffer.toString(), String.class);
+
+        return result;
+    }
+
+    /**
+     * 查询行业白名单
+     *
+     * @return
+     */
+    public List<FilterWhiteListValidator> findIndustryWhiteList(){
+        //查询sql
+        StringBuffer sqlBuffer = new StringBuffer("select t.ID,t.GROUP_ID,t.NAME,t.MOBILE,t.STATUS,str_to_date(t.CREATED_TIME,'%Y-%m-%d %H:%i:%S')CREATED_TIME,t.CREATED_BY " +
+                " from filter_white_list t where t.ENTERPRISE_ID='INDUSTRY' ");
+        List<FilterWhiteListValidator> result = this.jdbcTemplate.query(sqlBuffer.toString(),  new WhiteRowMapper());
+        return result;
     }
 }

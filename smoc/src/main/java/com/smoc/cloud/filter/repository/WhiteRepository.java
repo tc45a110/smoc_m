@@ -16,7 +16,8 @@ public interface WhiteRepository extends CrudRepository<FilterWhiteList, String>
 
 
     /**
-     *  根据群id查询白名单
+     * 根据群id查询白名单
+     *
      * @param pageParams
      * @return
      */
@@ -24,6 +25,7 @@ public interface WhiteRepository extends CrudRepository<FilterWhiteList, String>
 
     /**
      * 查询组里是否存在手机号
+     *
      * @param groupId
      * @param mobile
      * @param status
@@ -33,12 +35,14 @@ public interface WhiteRepository extends CrudRepository<FilterWhiteList, String>
 
     /**
      * 批量保存
+     *
      * @param filterWhiteListValidator
      */
     void bathSave(FilterWhiteListValidator filterWhiteListValidator);
 
     /**
      * 查询导出数据
+     *
      * @param pageParams
      * @return
      */
@@ -46,9 +50,24 @@ public interface WhiteRepository extends CrudRepository<FilterWhiteList, String>
 
     /**
      * 根据组id删除联系人
+     *
      * @param id
      */
     void deleteByGroupId(String id);
 
     List<FilterWhiteList> findByEnterpriseIdAndGroupIdAndMobileAndStatus(String enterpriseId, String groupId, String mobile, String s);
+
+    /**
+     * 查询系统白名单
+     *
+     * @return
+     */
+    List<String> findSystemWhiteList();
+
+    /**
+     * 查询行业白名单
+     *
+     * @return
+     */
+    List<FilterWhiteListValidator> findIndustryWhiteList();
 }

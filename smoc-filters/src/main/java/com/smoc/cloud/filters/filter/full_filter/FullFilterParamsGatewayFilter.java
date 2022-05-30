@@ -9,6 +9,7 @@ import com.smoc.cloud.filters.service.account.SendTimeLimitFilter;
 import com.smoc.cloud.filters.service.message.ExtendMessageParamsFilter;
 import com.smoc.cloud.filters.service.message.FullMessageFilter;
 import com.smoc.cloud.filters.service.number.ExtendNumberParamsFilter;
+import com.smoc.cloud.filters.service.number.IndustryBlackListFilter;
 import com.smoc.cloud.filters.service.number.PhoneSendFrequencyLimitFilter;
 import com.smoc.cloud.filters.service.number.SystemPhoneFilter;
 import com.smoc.cloud.filters.request.model.RequestFullParams;
@@ -16,7 +17,6 @@ import com.smoc.cloud.filters.service.FiltersService;
 import com.smoc.cloud.filters.utils.DFA.FilterInitialize;
 import com.smoc.cloud.filters.utils.FilterResponseCode;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -62,6 +62,9 @@ public class FullFilterParamsGatewayFilter extends BaseGatewayFilter implements 
 
     @Autowired
     private ExtendNumberParamsFilter extendNumberParamsFilter;
+
+    @Autowired
+    private IndustryBlackListFilter industryBlackListFilter;
 
     @Autowired
     private FiltersService filtersService;
@@ -138,20 +141,30 @@ public class FullFilterParamsGatewayFilter extends BaseGatewayFilter implements 
         //////////////////////////////////////////////////////////////////////////////////////////
         /**
          *以下是手机号过滤逻辑
-         * 1、手机号黑名单过滤
-         * 2、业务账号手机号扩展参数过滤
+         * 1、手机号系统黑名单过滤；并且实现系统黑名单洗白，洗白依据系统白名单，业务账号配置的白名单规则
+         * 2、行业黑名单过滤
+         * 3、业务账号手机号扩展参数过滤
          */
         /**
-         * 1、手机号黑名单过滤
+         * 1、手机号黑名单过滤，
          */
         Object isBlackListType = entities.get("COMMON_BLACK_LIST_LEVEL_FILTERING");
-        Map<String, String> blackListFilterResult = systemPhoneFilter.filter(filtersService, isBlackListType, model.getPhone());
+        Object isIndustryBlackListType = entities.get("COMMON_INFO_BLACK_LIST_FILTERING");//行业黑名单
+        Map<String, String> blackListFilterResult = systemPhoneFilter.filter(filtersService, isBlackListType,model.getAccount(), model.getPhone(),isIndustryBlackListType);
         if (!"false".equals(blackListFilterResult.get("result"))) {
             return errorHandle(exchange, blackListFilterResult.get("code"), blackListFilterResult.get("message"));
         }
 
         /**
-         * 2、业务账号手机号扩展参数过滤
+         * 2、行业黑名单过滤
+         */
+        Map<String, String> industryBlackListFilterResult = industryBlackListFilter.filter(filtersService,isIndustryBlackListType, model.getAccount(), model.getPhone());
+        if (!"false".equals(industryBlackListFilterResult.get("result"))) {
+            return errorHandle(exchange, industryBlackListFilterResult.get("code"), industryBlackListFilterResult.get("message"));
+        }
+
+        /**
+         * 3、业务账号手机号扩展参数过滤
          */
         Map<String, String> extendNumberParamsFilterResult = extendNumberParamsFilter.filter(filtersService, model.getAccount(), model.getPhone());
         if (!"false".equals(extendNumberParamsFilterResult.get("result"))) {
@@ -163,24 +176,57 @@ public class FullFilterParamsGatewayFilter extends BaseGatewayFilter implements 
         //////////////////////////////////////////////////////////////////////////////////////////
         /**
          * 以下逻辑是内容过滤，内容过滤有着过滤的逻辑规则，下面说下顾虑的逻辑规则
-         * 1、固定模版匹配，匹配成功，则跳过其他内容过滤
-         * 2、变量模版匹配，根据配置（1）匹配上变量模版 则跳过其他内容过滤 （2）匹配上变量模版，继续其他的内容过滤项
-         * 3、签名模版匹配，（1）提取短信内容签名 （2）匹配签名；  如果匹配上签名，继续其他内容过滤，如果没匹配上签名，则返回过滤失败
-         * 4、系统内容敏感词、审核词过滤、账号敏感词、行业敏感词账号审核词、各种白词洗白
-         * 5、业务账号内容扩展参数过滤
+         * 1、根据模版ID匹配，匹配成功，则跳过其他内容过滤 匹配不成功则响应错误
+         * 2、固定模版匹配，匹配成功，则跳过其他内容过滤
+         * 3、变量模版匹配，根据配置（1）匹配上变量模版 则跳过其他内容过滤 （2）匹配上变量模版，继续其他的内容过滤项
+         * 4、签名模版匹配，（1）提取短信内容签名 （2）匹配签名；  如果匹配上签名，继续其他内容过滤，如果没匹配上签名，则返回过滤失败
+         * 5、系统内容敏感词、审核词过滤、账号敏感词、行业敏感词账号审核词、各种白词洗白
+         * 6、业务账号内容扩展参数过滤
          */
 
         /**
-         * 1、固定模版匹配，匹配成功，则跳过其他内容过滤
+         * 1、根据模版ID匹配，匹配成功，则跳过其他内容过滤 匹配不成功则响应错误
          */
-        String md5Content = DigestUtils.md5Hex(model.getMessage());
-        Boolean isExistFixedTemplate = filtersService.isSetMember(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_FIXED + model.getAccount(), md5Content);
-        if (isExistFixedTemplate) {
-            return success(exchange);
+        if (!StringUtils.isEmpty(model.getTemplateId())) {
+            //先去匹配固定格式模版
+            Object fixedTemplate = filtersService.getMapValue(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_HTTP_FIXED, model.getTemplateId());
+            if (!StringUtils.isEmpty(fixedTemplate)) {
+                log.info("templateId 固定模版:{}",fixedTemplate);
+                log.info("           短信内容:{}", model.getMessage());
+
+                if (model.getMessage().equals(fixedTemplate)) {
+
+                    return success(exchange);
+                }
+            }
+            //根据模版id 去找变量模版
+            Object variableTemplate = filtersService.getMapValue(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_HTTP_VARIABLE, model.getTemplateId());
+            if (!StringUtils.isEmpty(variableTemplate)) {
+                log.info("templateId 变量模版:{}",variableTemplate);
+                log.info("           短信内容:{}", model.getMessage());
+                Pattern pattern = Pattern.compile(variableTemplate.toString());
+                Matcher matcher = pattern.matcher(model.getMessage());
+                if (matcher.find()) {
+                    return success(exchange);
+                }
+            }
+            return errorHandle(exchange, FilterResponseCode.TEMPLATE_IS_NOT_FOUND.getCode(), FilterResponseCode.TEMPLATE_IS_NOT_FOUND.getMessage());
         }
 
         /**
-         * 2、变量模版匹配，根据配置（1）匹配上变量模版 则跳过其他内容过滤  （2）突然发觉过滤没有意义，匹配上匹配不上都要向下过滤
+         * 2、固定模版匹配，匹配成功，则跳过其他内容过滤
+         */
+        String noFilterFixedTemplate = FilterInitialize.accountFilterFixedTemplateMap.get(model.getAccount());
+        if (!StringUtils.isEmpty(noFilterFixedTemplate)) {
+            Pattern pattern = Pattern.compile(noFilterFixedTemplate);
+            Matcher matcher = pattern.matcher(model.getMessage());
+            if (matcher.find()) {
+                return success(exchange);
+            }
+        }
+
+        /**
+         * 3、变量模版匹配，根据配置（1）匹配上变量模版 则跳过其他内容过滤  （2）突然发觉过滤没有意义，匹配上匹配不上都要向下过滤
          */
         String noFilterVariableTemplate = FilterInitialize.accountNoFilterVariableTemplateMap.get(model.getAccount());
         if (!StringUtils.isEmpty(noFilterVariableTemplate)) {
@@ -192,9 +238,9 @@ public class FullFilterParamsGatewayFilter extends BaseGatewayFilter implements 
         }
 
         /**
-         * 3、签名模版匹配，（1）提取短信内容签名 （2）匹配签名；  如果匹配上签名，继续其他内容过滤，如果没匹配上签名，则返回过滤失败
+         * 4、签名模版匹配，（1）提取短信内容签名 （2）匹配签名；  如果匹配上签名，继续其他内容过滤，如果没匹配上签名，则返回过滤失败
          */
-        long start = System.currentTimeMillis();
+
         String signTemplate = FilterInitialize.accountSignTemplateMap.get(model.getAccount());
         if (!StringUtils.isEmpty(signTemplate)) {
 
@@ -216,10 +262,9 @@ public class FullFilterParamsGatewayFilter extends BaseGatewayFilter implements 
             }
 
         }
-        long end = System.currentTimeMillis();
-        log.info("[签名模版匹配]：耗时{}毫秒", end - start);
+
         /**
-         * 4、系统内容敏感词、审核词过滤、账号敏感词、行业敏感词账号审核词、各种白词洗白
+         * 5、系统内容敏感词、审核词过滤、账号敏感词、行业敏感词账号审核词、各种白词洗白
          */
         Object isBlackWordsFilter = entities.get("COMMON_BLACK_WORD_FILTERING"); //是否过滤黑词
         Object isCheckWordsFilter = entities.get("COMMON_AUDIT_WORD_FILTERING"); //是否过滤审核词
@@ -230,9 +275,9 @@ public class FullFilterParamsGatewayFilter extends BaseGatewayFilter implements 
         }
 
         /**
-         * 5、业务账号内容扩展参数过滤
+         * 6、业务账号内容扩展参数过滤
          */
-        Map<String, String> extendMessageParamsFilterResult = extendMessageParamsFilter.filter(filtersService, model.getAccount());
+        Map<String, String> extendMessageParamsFilterResult = extendMessageParamsFilter.filter(filtersService, model.getAccount(),model.getMessage());
         if (!"false".equals(extendMessageParamsFilterResult.get("result"))) {
             return errorHandle(exchange, extendMessageParamsFilterResult.get("code"), extendMessageParamsFilterResult.get("message"));
         }

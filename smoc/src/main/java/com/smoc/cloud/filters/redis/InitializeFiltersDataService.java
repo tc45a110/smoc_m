@@ -5,6 +5,8 @@ import com.smoc.cloud.common.auth.qo.Dict;
 import com.smoc.cloud.common.auth.qo.DictType;
 import com.smoc.cloud.common.filters.utils.InitializeFiltersData;
 import com.smoc.cloud.common.filters.utils.RedisConstant;
+import com.smoc.cloud.common.smoc.filter.FilterBlackListValidator;
+import com.smoc.cloud.common.smoc.filter.FilterWhiteListValidator;
 import com.smoc.cloud.filter.entity.FilterBlackList;
 import com.smoc.cloud.filter.entity.FilterWhiteList;
 import com.smoc.cloud.filter.entity.KeyWordsMaskKeyWords;
@@ -61,6 +63,14 @@ public class InitializeFiltersDataService {
         //系统白名单
         if ("1".equals(initializeFiltersData.getReloadWhiteList())) {
             this.initializeWhiteList();
+        }
+        //行业黑名单
+        if ("1".equals(initializeFiltersData.getReloadIndustryBlackList())) {
+            this.initializeIndustryBlackList();
+        }
+        //行业白名单
+        if ("1".equals(initializeFiltersData.getReloadIndustryWhiteList())) {
+           this.initializeIndustryWhiteList();
         }
         //账号过滤参数
         if ("1".equals(initializeFiltersData.getReloadAccountFilterParams())) {
@@ -147,11 +157,17 @@ public class InitializeFiltersDataService {
      * 初始化业务账号模版
      */
     public void initializeAccountTemplate() {
-        //加载固定模版数据
-        List<AccountTemplateContent> fixedTemplates = accountTemplateInfoRepository.findFixedTemplate();
+        //http固定模版
+        Map<String, String> httpFixedTemplates = accountTemplateInfoRepository.findHttpFixedTemplate();
+        log.info("http固定模版start：{}",new Gson().toJson(httpFixedTemplates));
+        //http变量模版
+        Map<String, String> httpVariableTemplates = accountTemplateInfoRepository.findHttpVariableTemplate();
+        log.info("http变量模版start：{}",new Gson().toJson(httpVariableTemplates));
+        //加载cmpp固定模版数据
+        Map<String, String> fixedTemplates = accountTemplateInfoRepository.findFixedTemplate();
         //加载变量模版数据,匹配后，不再进行后续过滤
         Map<String, String> variableNoFilterVariableTemplates = accountTemplateInfoRepository.findNoFilterVariableTemplate();
-        log.info("不再进行后续过滤start：{}",new Gson().toJson(variableNoFilterVariableTemplates));
+
         //加载CMPP变量模版数据
         Map<String, String> variableCMPPTemplates = accountTemplateInfoRepository.findCMPPVariableTemplate();
         //加载CMPP签名模版数据
@@ -159,11 +175,20 @@ public class InitializeFiltersDataService {
         //删除redis 现有缓存
         long start = System.currentTimeMillis();
         log.info("加载业务账号模版start：{}", start);
+        //http固定模版
+        this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_HTTP_FIXED);
+        this.multiSaveHashMap(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_HTTP_FIXED,httpFixedTemplates);
+        //http固定模版
+        this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_HTTP_VARIABLE);
+        this.multiSaveHashMap(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_HTTP_VARIABLE,httpVariableTemplates);
+        //cmpp固定模版
         this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_FIXED);
-        this.multiSaveSetTemplate(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_FIXED, fixedTemplates);
+        this.multiSaveFiltersTemplate(fixedTemplates,RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_FIXED);
+        //cmpp变量模版 由分为后续是否过滤或不过滤
         this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_VARIABLE_CMPP);
         this.multiSaveFiltersTemplate(variableNoFilterVariableTemplates,RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_VARIABLE_CMPP+"no_filter:");
         this.multiSaveFiltersTemplate(variableCMPPTemplates,RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_VARIABLE_CMPP+"filter:");
+        //cmpp签名模版
         this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_SIGN);
         this.multiSaveFiltersTemplate(signCMPPTemplates,RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_SIGN);
         long end = System.currentTimeMillis();
@@ -268,40 +293,73 @@ public class InitializeFiltersDataService {
     }
 
     /**
-     * 初始化黑名单
+     * 初始化系统黑名单
      */
     public void initializeBlackList() {
         //加载数据
-        List<FilterBlackList> filterBlackListList = blackRepository.findAll();
+        List<String> filterBlackListList = blackRepository.findSystemBlackList();
         //删除现有redis缓存
         this.deleteByKey(RedisConstant.FILTERS_CONFIG_SYSTEM_BLACK);
         if (null != filterBlackListList && filterBlackListList.size() > 0) {
             long start = System.currentTimeMillis();
             log.info("加载系统黑名单start：{}", start);
-            Map<String, String> maps = filterBlackListList.stream().collect(Collectors.toMap(FilterBlackList::getMobile, FilterBlackList::getMobile, (key1, key2) -> key2));
-            this.multiSaveSet(maps, RedisConstant.FILTERS_CONFIG_SYSTEM_BLACK);
+            this.multiSaveSet(RedisConstant.FILTERS_CONFIG_SYSTEM_BLACK,filterBlackListList);
             long end = System.currentTimeMillis();
             log.info("加载系统黑名单  end：{}", end);
         }
     }
 
     /**
-     * 初始化黑名单
+     * 初始化系统白名单
      */
     public void initializeWhiteList() {
         //加载数据
-        List<FilterWhiteList> filterWhiteList = whiteRepository.findAll();
+        List<String> filterWhiteList = whiteRepository.findSystemWhiteList();
         //删除现有redis缓存
         this.deleteByKey(RedisConstant.FILTERS_CONFIG_SYSTEM_WHITE);
         if (null != filterWhiteList && filterWhiteList.size() > 0) {
             long start = System.currentTimeMillis();
             log.info("加载系统白名单start：{}", start);
-            Map<String, String> maps = filterWhiteList.stream().collect(Collectors.toMap(FilterWhiteList::getMobile, FilterWhiteList::getMobile, (key1, key2) -> key2));
-            this.multiSaveSet(maps, RedisConstant.FILTERS_CONFIG_SYSTEM_WHITE);
+            this.multiSaveSet(RedisConstant.FILTERS_CONFIG_SYSTEM_WHITE,filterWhiteList);
             long end = System.currentTimeMillis();
             log.info("加载系统白名单  end：{}", end);
         }
     }
+
+    /**
+     * 初始化行业黑名单
+     */
+    public void initializeIndustryBlackList() {
+        //加载数据
+        List<FilterBlackListValidator> filterIndustryBlackListList = blackRepository.findIndustryBlackList();
+        //删除现有redis缓存
+        this.deleteByKey(RedisConstant.FILTERS_CONFIG_SYSTEM_INDUSTRY_BLACK);
+        if (null != filterIndustryBlackListList && filterIndustryBlackListList.size() > 0) {
+            long start = System.currentTimeMillis();
+            log.info("加载行业黑名单start：{}", start);
+            this.multiSaveSet(filterIndustryBlackListList,RedisConstant.FILTERS_CONFIG_SYSTEM_INDUSTRY_BLACK);
+            long end = System.currentTimeMillis();
+            log.info("加载行业黑名单  end：{}", end);
+        }
+    }
+
+    /**
+     * 初始化行业白名单
+     */
+    public void initializeIndustryWhiteList() {
+        //加载数据
+        List<FilterWhiteListValidator> filterIndustryWhiteList = whiteRepository.findIndustryWhiteList();
+        //删除现有redis缓存
+        this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_SYSTEM_INDUSTRY_WHITE);
+        if (null != filterIndustryWhiteList && filterIndustryWhiteList.size() > 0) {
+            long start = System.currentTimeMillis();
+            log.info("加载行业白名单start：{}", start);
+            this.multiSaveSetWhite(filterIndustryWhiteList,RedisConstant.FILTERS_CONFIG_SYSTEM_INDUSTRY_WHITE);
+            long end = System.currentTimeMillis();
+            log.info("加载行业白名单  end：{}", end);
+        }
+    }
+
 
     /**
      * 初始化系统敏感词
@@ -462,6 +520,20 @@ public class InitializeFiltersDataService {
         });
     }
 
+    public void multiSaveHashMap(String redisKey, Map<String,String> map) {
+        redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
+            connection.openPipeline();
+            map.forEach((key,value) -> {
+                // hset zset都是可以用的，但是要序列化
+                connection.hSet(RedisSerializer.string().serialize(redisKey),
+                        RedisSerializer.string().serialize(key), RedisSerializer.string().serialize(new Gson().toJson(value)));
+            });
+            connection.close();
+            // executePipelined源码要求RedisCallback必须返回null，否则抛异常
+            return null;
+        });
+    }
+
     public void multiSaveSetBatch(String redisKey, List<KeyWordsMaskKeyWords> list) {
         redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
             connection.openPipeline();
@@ -494,6 +566,49 @@ public class InitializeFiltersDataService {
         });
     }
 
+    /**
+     * 批量保存到redis
+     *
+     * @param source
+     * @param prefix
+     */
+    public void multiSaveSet(List<FilterBlackListValidator> source, String prefix) {
+        redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
+            // 这里逻辑简单不会抛异常
+            // 否则需要加上try...catch...finally防止链接未正常关闭 造成泄漏
+            connection.openPipeline();
+            source.forEach((value) -> {
+                // hset zset都是可以用的，但是要序列化
+                connection.sAdd(RedisSerializer.string().serialize(prefix+ value.getGroupId()),
+                        RedisSerializer.string().serialize(new Gson().toJson(value.getMobile())));
+            });
+            connection.close();
+            // executePipelined源码要求RedisCallback必须返回null，否则抛异常
+            return null;
+        });
+    }
+
+    /**
+     * 批量保存到redis
+     *
+     * @param source
+     * @param prefix
+     */
+    public void multiSaveSetWhite(List<FilterWhiteListValidator> source, String prefix) {
+        redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
+            // 这里逻辑简单不会抛异常
+            // 否则需要加上try...catch...finally防止链接未正常关闭 造成泄漏
+            connection.openPipeline();
+            source.forEach((value) -> {
+                // hset zset都是可以用的，但是要序列化
+                connection.sAdd(RedisSerializer.string().serialize(prefix+ value.getGroupId()),
+                        RedisSerializer.string().serialize(new Gson().toJson(value.getMobile())));
+            });
+            connection.close();
+            // executePipelined源码要求RedisCallback必须返回null，否则抛异常
+            return null;
+        });
+    }
 
     /**
      * 批量保存到redis
