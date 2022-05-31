@@ -39,7 +39,7 @@ public class ChannelGroupInternationalController {
 
         ///初始化数据
         PageParams<ChannelGroupInfoValidator> params = new PageParams<ChannelGroupInfoValidator>();
-        params.setPageSize(8);
+        params.setPageSize(10);
         params.setCurrentPage(1);
         ChannelGroupInfoValidator channelGroupInfoValidator = new ChannelGroupInfoValidator();
         channelGroupInfoValidator.setCarrier("INTL");

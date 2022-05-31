@@ -31,9 +31,9 @@ spring:
   # Redis
   #**********************************************************
   redis: #redis配置
-    host: r-2zegyswwjdbicif2hd.redis.rds.aliyuncs.com
-    port: 6379
-    password: Tsmoc40#RedistEst
+    host: 123.57.216.87
+    port: 6555
+    password: Dj!bm%Mk8DyP
     database: 1
     timeout: 3000
     jedis:

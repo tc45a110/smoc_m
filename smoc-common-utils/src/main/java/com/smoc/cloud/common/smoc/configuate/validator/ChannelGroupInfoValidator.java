@@ -1,11 +1,14 @@
 package com.smoc.cloud.common.smoc.configuate.validator;
 
+import com.smoc.cloud.common.smoc.configuate.qo.ConfigChannelGroupQo;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Setter
 @Getter
@@ -44,4 +47,7 @@ public class ChannelGroupInfoValidator {
     private Integer channelNum;
     private String accountId;
     private String countryCode;
+
+    private String rowspan;
+    private List<ConfigChannelGroupQo> channelList = new ArrayList<>();
 }

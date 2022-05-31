@@ -91,8 +91,8 @@ public class AccountInterfaceController {
             view.addObject("op", "edit");
         }else{
             view.addObject("op", "add");
-            accountInterfaceInfoValidator.setMaxSubmitSecond(20);//账号提交速率
-            accountInterfaceInfoValidator.setMaxConnect(2);//最大连接数
+            //accountInterfaceInfoValidator.setMaxSubmitSecond(20);//账号提交速率
+            //accountInterfaceInfoValidator.setMaxConnect(2);//最大连接数
             accountInterfaceInfoValidator.setExecuteCheck("1");
             accountInterfaceInfoValidator.setMatchingCheck("1");
         }
@@ -119,7 +119,6 @@ public class AccountInterfaceController {
 
         if("WEB".equals(accountInterfaceInfoValidator.getProtocol())){
             accountInterfaceInfoValidator.setExecuteCheck("0");
-            accountInterfaceInfoValidator.setMaxSendSecond(0);
         }
 
         //完成参数规则验证

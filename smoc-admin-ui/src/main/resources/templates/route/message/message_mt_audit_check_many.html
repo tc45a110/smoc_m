@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+</head>
+<body>
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <!-- start row 页面导航-->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">批量审核下发信息</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            业务管理
+                        </li>
+                        <li class="active">
+                            批量审核下发信息
+                        </li>
+
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  页面内容-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <div class="row m-b-10">
+                        <h4>
+                            <div class="pull-right" style="margin-top: -12px;margin-right:10px">
+                                <a sec:authorize-url="/route/message/mt/audit/list"
+                                   th:href="@{/route/message/mt/audit/list}" style="margin-left:10px"
+                                   class="btn btn-default waves-effect waves-light btn-md">
+                                    <i class="glyphicon  glyphicon-share-alt" style="margin-right:5px"></i>
+                                    返回列表</a>
+                            </div>
+                        </h4>
+                    </div>
+
+                    <!-- start row  操作提示-->
+                    <div class="row alert alert-icon alert-success alert-dismissible fade in" role="alert">
+                        <strong>操作提示：</strong> 根据业务账号、信息分类、通道、短信内容查询，共找到 <span style="font-size: 20px;color: red">[[${totalNum}]]</span> 条记录！
+                    </div>
+                    <!-- end row -->
+
+                    <!-- start row  通道信息-->
+                    <div class="row m-b-10">
+                        <div class="col-md-12">
+                            <div class="card-box">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="p-20">
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col-md-3 form-group">
+                                                        <label>业务账号： <span style="color:#00acc1">[[${routeAuditMessageMtInfoValidator.accountId}]]</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-md-3 form-group">
+                                                        <label>信息分类： <span style="color:#00acc1"><mpm:tag identity="infoType" show-type="label" key="code" th:value="${routeAuditMessageMtInfoValidator.infoType}"/></span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-md-3 form-group">
+                                                        <label>通道ID：<span style="color:#00acc1">[[${routeAuditMessageMtInfoValidator.channelId}]]</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-md-12 form-group">
+                                                        <label>进审原因：<span style="color:#00acc1">[[${routeAuditMessageMtInfoValidator.reason}]]</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-md-12 form-group">
+                                                        <label>短信内容：[[${routeAuditMessageMtInfoValidator.messageContent}]]
+                                                        </label>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- end class p-20 -->
+                                    </div> <!-- end col -->
+                                </div>
+                            </div> <!-- end card-box -->
+                        </div>
+                    </div>
+                    <!--end row-->
+
+                    <form id="query_form" th:action="@{/route/message/mt/audit/check/page}" th:object="${queryMessageMtInfoValidator}"
+                          method="post">
+                        <input type="hidden" name="currentPage" id="currentPage" th:value="${pageParams.currentPage}">
+                        <input type="hidden" name="pageSize" id="pageSize" th:value="${pageParams.pageSize}">
+                        <input type="hidden" th:field="*{id}">
+                    </form>
+
+                    <!-- start row  页面内容-->
+                    <div class="row m-b-0" style="padding-left:20px;padding-right:20px">
+                        <form id="submit_form" th:action="@{/route/message/mt/audit/saveCheck/many}"
+                              th:object="${routeAuditMessageMtInfoValidator}"
+                              method="post" data-parsley-validate="">
+                            <div class="row">
+                                <div class="col-md-12 panel panel-color panel-info">
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group m-b-20">
+                                                    <select data-style="btn-default" name="auditFlag" data-live-search="true" id="auditFlag" class="selectpicker" required="true" tabindex="-98">
+                                                        <option value="" data-icon="mdi mdi-buffer">--请选择审批状态--</option>
+                                                        <option data-icon="mdi mdi-buffer" value="1" th:selected="${routeAuditMessageMtInfoValidator.auditFlag eq '1'}">通过</option>
+                                                        <option data-icon="mdi mdi-buffer" value="-1" th:selected="${routeAuditMessageMtInfoValidator.auditFlag eq '-1'}">驳回</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 pull-right" style="text-align: right">
+                                                <button sec:authorize-url="/route/message/mt/audit/saveCheck/*" type="submit"
+                                                        class="btn btn-success waves-effect waves-light m-l-10 btn-md">
+                                                    提交
+                                                </button>
+                                                <input type="hidden" th:field="*{id}">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="panel panel-color panel-info">
+                                                    <div class="panel-heading">
+                                                        <h3 class="panel-title">待审批下发列表</h3>
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <div class="table-responsive">
+                                                            <table class="table table table-hover m-10"
+                                                                   style="margin-top: -10px;">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th style="min-width:150px">账号</th>
+                                                                    <th style="min-width:120px">信息分类</th>
+                                                                    <th style="min-width:250px">短信内容</th>
+                                                                    <th style="min-width:130px">通道ID</th>
+                                                                    <th style="min-width:180px">进审原因</th>
+                                                                    <th style="min-width:120px">手机号</th>
+                                                                    <th style="min-width:170px">进审时间</th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                <tr th:each="info:${list}">
+                                                                    <td style="vertical-align: middle;line-height: 26px;">
+                                                                        [[${info.accountId}]]
+
+                                                                    </td>
+                                                                    <td style="vertical-align: middle;;line-height: 26px;">
+                                                                        <mpm:tag identity="infoType" show-type="label" key="code"th:value="${info.infoType}"/>
+                                                                    </td>
+                                                                    <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
+                                                                        [[${info.messageContent}]]
+                                                                    </td>
+                                                                    <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
+                                                                        [[${info.channelId}]]
+                                                                    </td>
+                                                                    <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
+                                                                        [[${info.reason}]]
+                                                                    </td>
+                                                                    <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
+                                                                        [[${info.phoneNumber}]]
+                                                                    </td>
+                                                                    <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
+                                                                        [[${info.createdTime}]]
+                                                                    </td>
+
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                        <th:block th:insert="fragments/page_fragments :: page"/>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div> <!-- end col -->
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<th:block th:insert="fragments/cookie_fragments :: cookie_js"/>
+<th:block th:insert="fragments/common_fragments :: common_submit_form"/>
+<!-- Modal-Effect -->
+<script>
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+</script>
+</body>
+</html>
