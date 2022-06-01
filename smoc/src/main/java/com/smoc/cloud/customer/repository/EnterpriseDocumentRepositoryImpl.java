@@ -128,6 +128,12 @@ public class EnterpriseDocumentRepositoryImpl extends BasePageRepository {
 
         List<Object> paramsList = new ArrayList<Object>();
 
+        if (!StringUtils.isEmpty(qo.getEnterpriseId())) {
+            sqlBuffer.append(" and t.ENTERPRISE_ID = ? ");
+            paramsList.add(qo.getEnterpriseId().trim());
+        }
+
+
         if (!StringUtils.isEmpty(qo.getEnterpriseType())) {
             sqlBuffer.append(" and e.ENTERPRISE_TYPE = ? ");
             paramsList.add(qo.getEnterpriseType().trim());

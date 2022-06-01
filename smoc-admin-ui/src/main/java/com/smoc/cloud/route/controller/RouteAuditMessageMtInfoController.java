@@ -228,4 +228,59 @@ public class RouteAuditMessageMtInfoController {
         view.setView(new RedirectView("/route/message/mt/audit/list/", true, false));
         return view;
     }
+
+    /**
+     * 模糊查询待审批
+     *
+     * @return
+     */
+    @RequestMapping(value = "/likeCheck/list", method = RequestMethod.POST)
+    public ModelAndView likeCheck(@ModelAttribute RouteAuditMessageMtInfoValidator routeAuditMessageMtInfoValidator) {
+        ModelAndView view = new ModelAndView("route/message/message_mt_audit_check_like");
+
+        //分页查询
+        PageParams<RouteAuditMessageMtInfoValidator> pageParams = new PageParams<RouteAuditMessageMtInfoValidator>();
+        pageParams.setPageSize(10);
+        pageParams.setCurrentPage(1);
+        pageParams.setParams(routeAuditMessageMtInfoValidator);
+
+        ResponseData<PageList<RouteAuditMessageMtInfoValidator>> data = routeAuditMessageMtInfoService.page(pageParams);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("routeAuditMessageMtInfoValidator", routeAuditMessageMtInfoValidator);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
+        view.addObject("totalNum", data.getData().getPageParams().getTotalRows());
+
+        return view;
+    }
+
+    /**
+     * 模糊查询待审批分页
+     *
+     * @return
+     */
+    @RequestMapping(value = "/likeCheck/page", method = RequestMethod.POST)
+    public ModelAndView likeCheck(@ModelAttribute RouteAuditMessageMtInfoValidator routeAuditMessageMtInfoValidator, PageParams pageParams) {
+        ModelAndView view = new ModelAndView("route/message/message_mt_audit_check_like");
+
+        //分页查询
+        pageParams.setParams(routeAuditMessageMtInfoValidator);
+
+        ResponseData<PageList<RouteAuditMessageMtInfoValidator>> data = routeAuditMessageMtInfoService.page(pageParams);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("routeAuditMessageMtInfoValidator", routeAuditMessageMtInfoValidator);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
+        view.addObject("totalNum", data.getData().getPageParams().getTotalRows());
+
+        return view;
+    }
 }

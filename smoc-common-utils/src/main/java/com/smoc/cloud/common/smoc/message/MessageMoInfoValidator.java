@@ -14,7 +14,7 @@ public class MessageMoInfoValidator {
     private String accountId;
     private String channelId;
     private String channelSrc;
-    private String srcId;
+    private String moSrcId;
     private String businessType;
     private String infoType;
     private String mobile;
@@ -33,6 +33,10 @@ public class MessageMoInfoValidator {
     private String area;
 
     private String accountName;
+    private String protocol;
     private String startDate;
     private String endDate;
+
+    private String mtStartDate;
+    private String mtEndDate;
 }

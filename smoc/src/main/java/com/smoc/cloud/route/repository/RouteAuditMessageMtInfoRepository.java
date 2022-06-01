@@ -40,6 +40,7 @@ public class RouteAuditMessageMtInfoRepository  extends BasePageRepository {
         sqlBuffer.append(" t.REASON,");
         sqlBuffer.append(" t.AUDIT_FLAG,");
         sqlBuffer.append(" t.MESSAGE_MD5,");
+        sqlBuffer.append(" t.MESSAGE_JSON,");
         sqlBuffer.append(" str_to_date(t.CREATED_TIME,'%Y-%m-%d %H:%i:%S')CREATED_TIME");
         sqlBuffer.append(" from smoc_route.route_audit_message_mt_info t ");
         sqlBuffer.append(" where t.AUDIT_FLAG=0 ");
@@ -145,6 +146,7 @@ public class RouteAuditMessageMtInfoRepository  extends BasePageRepository {
         sqlBuffer.append(" t.REASON,");
         sqlBuffer.append(" t.AUDIT_FLAG,");
         sqlBuffer.append(" t.MESSAGE_MD5,");
+        sqlBuffer.append(" t.MESSAGE_JSON,");
         sqlBuffer.append(" str_to_date(t.CREATED_TIME,'%Y-%m-%d %H:%i:%S')CREATED_TIME");
         sqlBuffer.append(" from smoc_route.route_audit_message_mt_info t ");
         sqlBuffer.append(" where t.ID = ? ");
@@ -165,7 +167,7 @@ public class RouteAuditMessageMtInfoRepository  extends BasePageRepository {
      * @param id
      */
     public void updateAuditFlagById(Integer auditFlag, long id) {
-        String sql = "update smoc_route.route_audit_message_mt_info t set t.AUDIT_FLAG = ? where id = ? ";
+        String sql = "update smoc_route.route_audit_message_mt_info t set t.AUDIT_FLAG = ? where t.id = ? and t.AUDIT_FLAG =0 ";
 
         Object[] params = new Object[2];
         params[0] = auditFlag;
@@ -180,12 +182,54 @@ public class RouteAuditMessageMtInfoRepository  extends BasePageRepository {
      * @param messageMd5
      */
     public void updateAuditFlagByMessageMd5(Integer auditFlag, String messageMd5) {
-        String sql = "update smoc_route.route_audit_message_mt_info t set t.AUDIT_FLAG = ? where MESSAGE_MD5 = ? ";
+        String sql = "update smoc_route.route_audit_message_mt_info t set t.AUDIT_FLAG = ? where t.AUDIT_FLAG =0 and t.MESSAGE_MD5 = ? ";
 
         Object[] params = new Object[2];
         params[0] = auditFlag;
         params[1] = messageMd5;
 
         jdbcTemplate.update(sql,params);
+    }
+
+    /**
+     * 模糊审批
+     * @param qo
+     */
+    public void updateAuditFlagByLike(RouteAuditMessageMtInfoValidator qo) {
+
+        StringBuilder sqlBuffer = new StringBuilder("update smoc_route.route_audit_message_mt_info t set t.AUDIT_FLAG = ? where t.AUDIT_FLAG =0 ");
+
+        List<Object> paramsList = new ArrayList<Object>();
+        paramsList.add(qo.getAuditFlag());
+
+        if (!StringUtils.isEmpty(qo.getAccountId())) {
+            sqlBuffer.append(" and t.ACCOUNT_ID like ? ");
+            paramsList.add("%" + qo.getAccountId().trim() + "%");
+        }
+
+        if (!StringUtils.isEmpty(qo.getInfoType())) {
+            sqlBuffer.append(" and t.INFO_TYPE =?");
+            paramsList.add(qo.getInfoType().trim());
+        }
+
+        if (!StringUtils.isEmpty(qo.getChannelId())) {
+            sqlBuffer.append(" and t.CHANNEL_ID =?");
+            paramsList.add(qo.getChannelId().trim());
+        }
+
+        if (!StringUtils.isEmpty(qo.getPhoneNumber())) {
+            sqlBuffer.append(" and t.PHONE_NUMBER like ? ");
+            paramsList.add("%" + qo.getPhoneNumber().trim() + "%");
+        }
+
+        if (!StringUtils.isEmpty(qo.getMessageContent())) {
+            sqlBuffer.append(" and t.MESSAGE_CONTENT like ? ");
+            paramsList.add("%" + qo.getMessageContent().trim() + "%");
+        }
+
+        Object[] params = new Object[paramsList.size()];
+        paramsList.toArray(params);
+
+        jdbcTemplate.update(sqlBuffer.toString(),params);
     }
 }

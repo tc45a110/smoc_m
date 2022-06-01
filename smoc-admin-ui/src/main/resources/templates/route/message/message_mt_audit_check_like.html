@@ -55,61 +55,23 @@
 
                     <!-- start row  操作提示-->
                     <div class="row alert alert-icon alert-success alert-dismissible fade in" role="alert">
-                        <strong>操作提示：</strong> 根据业务账号、信息分类、通道、短信内容查询，共找到 <span style="font-size: 20px;color: red">[[${totalNum}]]</span> 条记录！
+                        <strong>操作提示：</strong> 模糊匹配，共找到 <span style="font-size: 20px;color: red">[[${totalNum}]]</span> 条记录！
                     </div>
                     <!-- end row -->
 
-                    <!-- start row  通道信息-->
-                    <div class="row m-b-10">
-                        <div class="col-md-12">
-                            <div class="card-box">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="p-20">
-                                            <div class="form-group">
-                                                <div class="row">
-                                                    <div class="col-md-3 form-group">
-                                                        <label>业务账号： <span style="color:#00acc1">[[${routeAuditMessageMtInfoValidator.accountId}]]</span>
-                                                        </label>
-                                                    </div>
-                                                    <div class="col-md-3 form-group">
-                                                        <label>信息分类： <span style="color:#00acc1"><mpm:tag identity="infoType" show-type="label" key="code" th:value="${routeAuditMessageMtInfoValidator.infoType}"/></span>
-                                                        </label>
-                                                    </div>
-                                                    <div class="col-md-3 form-group">
-                                                        <label>通道ID：<span style="color:#00acc1">[[${routeAuditMessageMtInfoValidator.channelId}]]</span>
-                                                        </label>
-                                                    </div>
-                                                    <div class="col-md-12 form-group">
-                                                        <label>进审原因：<span style="color:#00acc1">[[${routeAuditMessageMtInfoValidator.reason}]]</span>
-                                                        </label>
-                                                    </div>
-                                                    <div class="col-md-12 form-group">
-                                                        <label>短信内容：[[${routeAuditMessageMtInfoValidator.messageContent}]]
-                                                        </label>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- end class p-20 -->
-                                    </div> <!-- end col -->
-                                </div>
-                            </div> <!-- end card-box -->
-                        </div>
-                    </div>
-                    <!--end row-->
-
-                    <form id="query_form" th:action="@{/route/message/mt/audit/check/page}" th:object="${queryMessageMtInfoValidator}"
+                    <form id="query_form" th:action="@{/route/message/mt/audit/likeCheck/page}" th:object="${routeAuditMessageMtInfoValidator}"
                           method="post">
+                        <input type="hidden" th:field="*{accountId}">
+                        <input type="hidden" th:field="*{phoneNumber}">
+                        <input type="hidden" th:field="*{messageContent}">
+                        <input type="hidden" th:field="*{infoType}">
                         <input type="hidden" name="currentPage" id="currentPage" th:value="${pageParams.currentPage}">
                         <input type="hidden" name="pageSize" id="pageSize" th:value="${pageParams.pageSize}">
-                        <input type="hidden" th:field="*{id}">
                     </form>
 
                     <!-- start row  页面内容-->
                     <div class="row m-b-0" style="padding-left:20px;padding-right:20px">
-                        <form id="submit_form" th:action="@{/route/message/mt/audit/saveCheck/many}"
+                        <form id="submit_form" th:action="@{/route/message/mt/audit/saveCheck/like}"
                               th:object="${routeAuditMessageMtInfoValidator}"
                               method="post" data-parsley-validate="">
                             <div class="row">
@@ -126,11 +88,14 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-6 pull-right" style="text-align: right">
+                                                <input type="hidden" th:field="*{accountId}">
+                                                <input type="hidden" th:field="*{phoneNumber}">
+                                                <input type="hidden" th:field="*{messageContent}">
+                                                <input type="hidden" th:field="*{infoType}">
                                                 <button sec:authorize-url="/route/message/mt/audit/saveCheck/*" type="submit"
                                                         class="btn btn-success waves-effect waves-light m-l-10 btn-md">
                                                     提交
                                                 </button>
-                                                <input type="hidden" th:field="*{id}">
                                             </div>
                                         </div>
                                         <div class="row">

@@ -16,6 +16,10 @@ public class MessageMoInfoRowMapper implements RowMapper<MessageMoInfoValidator>
         MessageMoInfoValidator qo = new MessageMoInfoValidator();
         qo.setId(resultSet.getString("ID"));
         qo.setAccountId(resultSet.getString("ACCOUNT_ID"));
+        qo.setAccountName(resultSet.getString("ACCOUNT_NAME"));
+        qo.setProtocol(resultSet.getString("PROTOCOL"));
+        qo.setChannelId(resultSet.getString("CHANNEL_ID"));
+        qo.setMoSrcId(resultSet.getString("MO_SRC_ID"));
         qo.setTaskId(resultSet.getString("TASK_ID"));
         qo.setBusinessType(resultSet.getString("BUSINESS_TYPE"));
         qo.setInfoType(resultSet.getString("INFO_TYPE"));

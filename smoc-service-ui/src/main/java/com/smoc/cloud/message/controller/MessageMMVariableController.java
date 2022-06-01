@@ -129,12 +129,12 @@ public class MessageMMVariableController {
 
         //初始化参数
         MessageWebTaskInfoValidator messageWebTaskInfoValidator = new MessageWebTaskInfoValidator();
-        messageWebTaskInfoValidator.setId("TASK"+ sequenceService.findSequence("BUSINESS_ACCOUNT"));
+        messageWebTaskInfoValidator.setId("TASK"+ sequenceService.findSequence("TASK"));
         messageWebTaskInfoValidator.setEnterpriseId(user.getOrganization());
         messageWebTaskInfoValidator.setBusinessType(businessType);
         messageWebTaskInfoValidator.setSendType("1");
         messageWebTaskInfoValidator.setMessageType("2");
-        messageWebTaskInfoValidator.setSendStatus("01");
+        messageWebTaskInfoValidator.setSendStatus("02");
         messageWebTaskInfoValidator.setUpType("2");
 
         //查询企业下得所有WEB业务账号

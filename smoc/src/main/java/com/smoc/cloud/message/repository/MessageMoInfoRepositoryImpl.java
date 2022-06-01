@@ -30,6 +30,10 @@ public class MessageMoInfoRepositoryImpl extends BasePageRepository {
 
         sqlBuffer.append(" t.ID,");
         sqlBuffer.append(" t.ACCOUNT_ID,");
+        sqlBuffer.append(" a.ACCOUNT_NAME,");
+        sqlBuffer.append(" i.PROTOCOL,");
+        sqlBuffer.append(" t.CHANNEL_ID,");
+        sqlBuffer.append(" t.MO_SRC_ID,");
         sqlBuffer.append(" t.TASK_ID,");
         sqlBuffer.append(" t.BUSINESS_TYPE,");
         sqlBuffer.append(" t.INFO_TYPE,");
@@ -40,7 +44,8 @@ public class MessageMoInfoRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(" t.AREA,");
         sqlBuffer.append(" DATE_FORMAT(t.MO_DATE, '%Y-%m-%d %H:%i:%S')MO_DATE, ");
         sqlBuffer.append(" DATE_FORMAT(t.MT_DATE, '%Y-%m-%d %H:%i:%S')MT_DATE ");
-        sqlBuffer.append(" from message_mo_info t ");
+        sqlBuffer.append(" from message_mo_info t left join account_base_info a on t.ACCOUNT_ID = a.ACCOUNT_ID ");
+        sqlBuffer.append(" left join account_interface_info i on t.ACCOUNT_ID = i.ACCOUNT_ID ");
         sqlBuffer.append(" where 1=1 ");
 
         List<Object> paramsList = new ArrayList<Object>();
@@ -75,9 +80,24 @@ public class MessageMoInfoRepositoryImpl extends BasePageRepository {
             paramsList.add("%" + qo.getMobile().trim()+ "%" );
         }
 
+        if (!StringUtils.isEmpty(qo.getArea())) {
+            sqlBuffer.append(" and t.AREA like ? ");
+            paramsList.add("%" + qo.getArea().trim() + "%");
+        }
+
+        if (!StringUtils.isEmpty(qo.getChannelId())) {
+            sqlBuffer.append(" and t.CHANNEL_ID like ? ");
+            paramsList.add("%" + qo.getChannelId().trim() + "%");
+        }
+
         if (!StringUtils.isEmpty(qo.getMoMessageContent())) {
-            sqlBuffer.append(" and t.MESSAGE_CONTENT like ? ");
+            sqlBuffer.append(" and t.MO_MESSAGE_CONTENT like ? ");
             paramsList.add("%" + qo.getMoMessageContent().trim() + "%");
+        }
+
+        if (!StringUtils.isEmpty(qo.getMtMessageContent())) {
+            sqlBuffer.append(" and t.MT_MESSAGE_CONTENT like ? ");
+            paramsList.add("%" + qo.getMtMessageContent().trim() + "%");
         }
 
         //时间起
@@ -89,6 +109,17 @@ public class MessageMoInfoRepositoryImpl extends BasePageRepository {
         if (!StringUtils.isEmpty(qo.getEndDate())) {
             sqlBuffer.append(" and DATE_FORMAT(t.MO_DATE,'%Y-%m-%d') <=? ");
             paramsList.add(qo.getEndDate().trim());
+        }
+
+        //下行时间起
+        if (!StringUtils.isEmpty(qo.getMtStartDate())) {
+            sqlBuffer.append(" and DATE_FORMAT(t.MT_DATE,'%Y-%m-%d') >=? ");
+            paramsList.add(qo.getMtStartDate().trim());
+        }
+        //下行时间止
+        if (!StringUtils.isEmpty(qo.getMtEndDate())) {
+            sqlBuffer.append(" and DATE_FORMAT(t.MT_DATE,'%Y-%m-%d') <=? ");
+            paramsList.add(qo.getMtEndDate().trim());
         }
 
         sqlBuffer.append(" order by t.MO_DATE desc");

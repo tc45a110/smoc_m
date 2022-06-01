@@ -181,7 +181,7 @@ public class MessageController {
         messageWebTaskInfoValidator.setBusinessType(businessType);
         messageWebTaskInfoValidator.setSendType("1");
         messageWebTaskInfoValidator.setMessageType("1");
-        messageWebTaskInfoValidator.setSendStatus("01");
+        messageWebTaskInfoValidator.setSendStatus("02");
         messageWebTaskInfoValidator.setUpType("1");
 
         //查询企业下得所有WEB业务账号

@@ -65,6 +65,11 @@ public class RouteAuditMessageMtInfoService {
             routeAuditMessageMtInfoRepository.updateAuditFlagByMessageMd5(routeAuditMessageMtInfoValidator.getAuditFlag(),routeAuditMessageMtInfoValidator.getMessageMd5());
         }
 
+        //模糊审批
+        if("like".equals(type)){
+            routeAuditMessageMtInfoRepository.updateAuditFlagByLike(routeAuditMessageMtInfoValidator);
+        }
+
         return ResponseDataUtil.buildSuccess();
     }
 

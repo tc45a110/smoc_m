@@ -23,13 +23,13 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">回复记录</h4>
+                    <h4 class="page-title">上行信息查询</h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
-                            数据统计
+                            信息查询
                         </li>
                         <li>
-                            回复记录
+                            上行信息查询
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -45,26 +45,41 @@
                     <form id="query_form" th:action="@{/message/mo/page}" th:object="${messageMoInfoValidator}" method="post">
                         <div class="row m-b-60">
                             <div class="col-sm-12">
-                                <div class="form-group col-sm-3">
-                                    <input id="dateQueryStr" class="form-control" th:field="*{startDate}" type="text"/>
-                                </div>
-
-                                <div class="form-group  col-sm-3">
-                                    <input type="text" class="form-control" th:field="*{accountId}"
-                                           placeholder="账号" autocomplete="off">
-                                </div>
                                 <div class="form-group  col-sm-3">
                                     <input type="text" class="form-control" th:field="*{mobile}"
                                            placeholder="手机号" autocomplete="off">
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <mpm:tag id="infoType" identity="infoType"
-                                             show-type="select" key="code" class="form-control"
-                                             name="infoType" th:value="${messageMoInfoValidator.infoType}" title="信息分类"/>
+                                    <input type="text" class="form-control" th:field="*{accountId}"
+                                           placeholder="账号" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control" th:field="*{area}"
+                                           placeholder="省份" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control" th:field="*{channelId}"
+                                           placeholder="通道ID" autocomplete="off">
+                                </div>
+                                <div class="form-group col-sm-3">
+                                    <label>上行时间</label>
+                                    <input id="dateQueryStr" class="form-control" th:field="*{startDate}" type="text"/>
+                                </div>
+                                <div class="form-group col-sm-3">
+                                    <label>下行时间</label>
+                                    <input id="mtDateQueryStr" class="form-control" th:field="*{mtStartDate}" type="text"/>
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control" th:field="*{moMessageContent}"
+                                           placeholder="上行内容" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control" th:field="*{mtMessageContent}"
+                                           placeholder="下行内容" autocomplete="off">
                                 </div>
 
+
                                 <div class="form-group col-sm-3 pull-right" style="text-align: right">
-                                    <input type="hidden" th:field="*{businessType}">
                                     <button sec:authorize-url="/message/mo/page" type="submit"
                                             class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search"></i> 查询
@@ -85,27 +100,29 @@
             <div class="col-sm-12">
                 <div class="panel panel-color panel-info">
                     <div class="panel-heading">
-                        <h3 class="panel-title">回复记录</h3>
+                        <h3 class="panel-title">上行信息查询</h3>
                     </div>
                     <div class="panel-body">
                         <div class="table-responsive">
                             <table class="table table table-hover m-10" style="margin-top: -12px;table-layout:fixed;">
                                 <thead>
                                 <tr>
-                                    <th style="width:160px">回复时间</th>
-                                    <th style="width:150px">手机号</th>
-                                    <th style="width:300px">回复内容</th>
-                                    <th style="width:150px">运营商/属地</th>
-                                    <th style="width:150px">账号</th>
-                                    <th style="width:300px">对应短信内容</th>
-                                    <th style="width:160px">发送时间</th>
+                                    <th style="width:150px">手机号/上行时间</th>
+                                    <th style="width:120px">运营商/省份</th>
+                                    <th style="width:120px">上行内容</th>
+                                    <th style="width:150px">通道ID/上行码号</th>
+                                    <th style="width:180px">账号/名称</th>
+                                    <th style="width:220px">下行内容</th>
+                                    <th style="width:100px">下行平台</th>
+                                    <th style="width:150px">下行时间</th>
                                 </tr>
                                 <thead>
                                 <tbody>
                                 <tr th:each="info:${list}">
-                                    <td style="vertical-align: middle;line-height: 26px">[[${info.moDate}]]</td>
+                                    <td style="vertical-align: middle;line-height: 26px">[[${info.mobile}]]<br>[[${info.moDate}]]</td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        [[${info.mobile}]]
+                                        <mpm:tag identity="carrier" show-type="label" key="code"
+                                                 th:value="${info.carrier}"/>[[${info.area}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         <span class="text-overflow"
@@ -113,15 +130,17 @@
                                               th:data-original-title="${info.moMessageContent}">[[${info.moMessageContent}]]</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <mpm:tag identity="carrier" show-type="label" key="code"
-                                                 th:value="${info.carrier}"/>[[${info.area}]]
+                                        [[${info.channelId}]]<br>[[${info.moSrcId}]]
                                     </td>
-                                    <td style="vertical-align: middle;line-height: 26px">[[${info.accountId}]]</td>
+                                    <td style="vertical-align: middle;line-height: 26px">[[${info.accountId}]]<br>[[${info.accountName}]]</td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         <span class="text-overflow"
                                               data-toggle="tooltip" data-placement="bottom"
                                               th:data-original-title="${info.mtMessageContent}">[[${info.mtMessageContent}]]</span>
 
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px;width:160px">
+                                        [[${info.protocol}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;width:160px">
                                         [[${info.mtDate}]]
@@ -158,6 +177,49 @@
         format: 'YYYY-MM-DD',
         startDate: '[[${messageMoInfoValidator.startDate}]]',
         endDate: '[[${messageMoInfoValidator.endDate}]]',
+        minDate: '2019-01-01',
+        maxDate: '2080-12-31',
+        dateLimit: {
+            days: 365
+        },
+        showDropdowns: true,
+        showWeekNumbers: true,
+        timePicker: false,
+        timePickerIncrement: 1,
+        timePicker12Hour: true,
+        ranges: {
+            '今天': [moment(), moment()],
+            '昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            '最近7天': [moment().subtract(6, 'days'), moment()],
+            '最近30天': [moment().subtract(29, 'days'), moment()],
+            '本月': [moment().startOf('month'), moment().endOf('month')],
+            '上月': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        },
+        opens: 'right',
+        buttonClasses: ['btn btn-default'],
+        applyClass: 'btn-small btn-primary',
+        cancelClass: 'btn-small',
+        format: 'YYYY-MM-DD',
+        separator: ' - ',
+        locale: {
+            applyLabel: '确认',
+            cancelLabel: '取消',
+            fromLabel: '从',
+            toLabel: '到',
+            customRangeLabel: '自定义',
+            format: "YYYY-MM-DD",
+            daysOfWeek: ['日', '一', '二', '三', '四', '五', '六'],
+            monthNames: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+            firstDay: 1
+        }
+    }, function (start, end, label) {
+        //alert('A date range was chosen: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+    });
+
+    $('#mtDateQueryStr').daterangepicker({
+        format: 'YYYY-MM-DD',
+        startDate: '[[${messageMoInfoValidator.mtStartDate}]]',
+        endDate: '[[${messageMoInfoValidator.mtEndDate}]]',
         minDate: '2019-01-01',
         maxDate: '2080-12-31',
         dateLimit: {

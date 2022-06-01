@@ -96,16 +96,16 @@
                     </div>
                     <div class="panel-body">
                         <div class="table-responsive">
-                            <table class="table table table-hover m-10" style="margin-top: -12px;">
+                            <table class="table table table-hover m-10" style="margin-top: -12px;table-layout:fixed;">
                                 <thead>
                                 <tr>
-                                    <th>模板ID</th>
-                                    <th>信息分类</th>
-                                    <th>模板标题</th>
-                                    <th>签名</th>
-                                    <th>模板内容</th>
-                                    <th>审核状态</th>
-                                    <th>提交时间</th>
+                                    <th style="width:100px">模板ID</th>
+                                    <th style="width:100px">信息分类</th>
+                                    <th  style="width:150px">模板标题</th>
+                                    <th  style="width:150px">签名</th>
+                                    <th  style="width:350px">模板内容</th>
+                                    <th style="width:100px">审核状态</th>
+                                    <th  style="width:130px">提交时间</th>
                                     <th style="width:100px">操作</th>
                                 </tr>
                                 <thead>
@@ -124,12 +124,10 @@
                                         [[${info.signName}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
-                                        <span data-toggle="tooltip" data-placement="bottom"
-                                              th:if="${#strings.length(info.templateContent)>25}"
-                                              th:data-original-title="${info.templateContent}">
-                                            [[${#strings.substring(info.templateContent,0,25)}]]......</span>
-                                        <span th:if="${#strings.length(info.templateContent)<=25}">
-                                            [[${info.templateContent}]]</span>
+                                        <span class="text-overflow"
+                                              data-toggle="tooltip" data-placement="bottom"
+                                              th:data-original-title="${info.templateContent}">[[${info.templateContent}]]</span>
+
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         <a class="btn btn-success btn-rounded btn-sm waves-effect waves-light" th:if="${info.templateStatus eq '2'}">通过审核</a>
