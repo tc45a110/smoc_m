@@ -4,6 +4,8 @@ import com.smoc.cloud.common.BasePageRepository;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.smoc.route.RouteAuditMessageMtInfoValidator;
+import com.smoc.cloud.common.smoc.route.qo.RouteAuditMessageAccountQo;
+import com.smoc.cloud.route.rowmapper.RouteAuditMessageAccountRowMapper;
 import com.smoc.cloud.route.rowmapper.RouteAuditMessageMtInfoRowMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -177,7 +179,7 @@ public class RouteAuditMessageMtInfoRepository  extends BasePageRepository {
     }
 
     /**
-     * 批量审批
+     * 精准批量审批
      * @param auditFlag
      * @param messageMd5
      */
@@ -189,6 +191,20 @@ public class RouteAuditMessageMtInfoRepository  extends BasePageRepository {
         params[1] = messageMd5;
 
         jdbcTemplate.update(sql,params);
+    }
+
+    /**
+     * 按账号批量审核
+     */
+    public void updateAuditFlagByAccountId(RouteAuditMessageMtInfoValidator routeAuditMessageMtInfoValidator) {
+        String sql = "update smoc_route.route_audit_message_mt_info t set t.AUDIT_FLAG = ? where t.AUDIT_FLAG =0 and t.ACCOUNT_ID = ? ";
+
+        Object[] params = new Object[2];
+        params[0] = routeAuditMessageMtInfoValidator.getAuditFlag();
+        params[1] = routeAuditMessageMtInfoValidator.getAccountId();
+
+        jdbcTemplate.update(sql,params);
+
     }
 
     /**
@@ -232,4 +248,41 @@ public class RouteAuditMessageMtInfoRepository  extends BasePageRepository {
 
         jdbcTemplate.update(sqlBuffer.toString(),params);
     }
+
+    /**
+     * 账号条数查询
+     * @param pageParams
+     * @return
+     */
+    public PageList<RouteAuditMessageAccountQo> accountPage(PageParams<RouteAuditMessageAccountQo> pageParams) {
+        //查询条件
+        RouteAuditMessageAccountQo qo = pageParams.getParams();
+
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append("  count(*) TOTAL_NUM,");
+        sqlBuffer.append(" t.ACCOUNT_ID,");
+        sqlBuffer.append(" REPLACE(json_extract(t.MESSAGE_JSON,'$.accountName'),'\"','') ACCOUNT_NAME");
+        sqlBuffer.append(" from smoc_route.route_audit_message_mt_info t ");
+        sqlBuffer.append(" where t.AUDIT_FLAG=0 ");
+
+        List<Object> paramsList = new ArrayList<Object>();
+
+        if (!StringUtils.isEmpty(qo.getAccountId())) {
+            sqlBuffer.append(" and t.ACCOUNT_ID like ? ");
+            paramsList.add("%" + qo.getAccountId().trim() + "%");
+        }
+
+        sqlBuffer.append("group by t.ACCOUNT_ID,REPLACE(json_extract(t.MESSAGE_JSON,'$.accountName'),'\"','') order by t.ACCOUNT_ID");
+
+        //根据参数个数，组织参数值
+        Object[] params = new Object[paramsList.size()];
+        paramsList.toArray(params);
+
+        PageList<RouteAuditMessageAccountQo> pageList = this.queryByPageForMySQL(sqlBuffer.toString(), params, pageParams.getCurrentPage(), pageParams.getPageSize(), new RouteAuditMessageAccountRowMapper());
+        pageList.getPageParams().setParams(qo);
+        return pageList;
+    }
+
+
 }

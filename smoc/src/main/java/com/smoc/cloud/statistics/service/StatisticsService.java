@@ -4,6 +4,7 @@ import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.customer.qo.StatisticProfitData;
 import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountRechargeValidator;
+import com.smoc.cloud.common.smoc.index.CheckRemindModel;
 import com.smoc.cloud.finance.repository.FinanceAccountRechargeRepository;
 import com.smoc.cloud.statistics.repository.IndexStatisticsRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -93,5 +94,15 @@ public class StatisticsService {
 
         List<StatisticProfitData> list = indexStatisticsRepository.statisticProfitMonth(statisticProfitData);
         return ResponseDataUtil.buildSuccess(list);
+    }
+
+    /**
+     * 首页:签名资质、web模板、待下发短信提醒
+     * @param checkRemindModel
+     * @return
+     */
+    public ResponseData<CheckRemindModel> remindCheck(CheckRemindModel checkRemindModel) {
+        CheckRemindModel data = indexStatisticsRepository.remindCheck(checkRemindModel);
+        return ResponseDataUtil.buildSuccess(data);
     }
 }

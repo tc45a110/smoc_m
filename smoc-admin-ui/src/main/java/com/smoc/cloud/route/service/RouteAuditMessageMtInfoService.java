@@ -5,6 +5,7 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.route.RouteAuditMessageMtInfoValidator;
+import com.smoc.cloud.common.smoc.route.qo.RouteAuditMessageAccountQo;
 import com.smoc.cloud.route.remote.RouteAuditMessageMtInfoFeignClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,6 +83,20 @@ public class RouteAuditMessageMtInfoService {
             return data;
         } catch (Exception e) {
             log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 账号条数统计
+     * @param pageParams
+     * @return
+     */
+    public ResponseData<PageList<RouteAuditMessageAccountQo>> accountPage(PageParams<RouteAuditMessageAccountQo> pageParams) {
+        try {
+            ResponseData<PageList<RouteAuditMessageAccountQo>> page = routeAuditMessageMtInfoFeignClient.accountPage(pageParams);
+            return page;
+        } catch (Exception e) {
             return ResponseDataUtil.buildError(e.getMessage());
         }
     }

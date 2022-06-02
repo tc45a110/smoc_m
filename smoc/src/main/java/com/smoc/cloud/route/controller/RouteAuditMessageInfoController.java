@@ -6,6 +6,7 @@ import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.route.RouteAuditMessageMtInfoValidator;
+import com.smoc.cloud.common.smoc.route.qo.RouteAuditMessageAccountQo;
 import com.smoc.cloud.common.smoc.template.AccountResourceInfoValidator;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
@@ -84,5 +85,17 @@ public class RouteAuditMessageInfoController {
     public ResponseData<Map<String, Object>> count(@RequestBody RouteAuditMessageMtInfoValidator routeAuditMessageMtInfoValidator) {
 
         return routeAuditMessageMtInfoService.count(routeAuditMessageMtInfoValidator);
+    }
+
+    /**
+     * 账号条数查询
+     *
+     * @param pageParams
+     * @return
+     */
+    @RequestMapping(value = "/accountPage", method = RequestMethod.POST)
+    public ResponseData<PageList<RouteAuditMessageAccountQo>> accountPage(@RequestBody PageParams<RouteAuditMessageAccountQo> pageParams) {
+
+        return routeAuditMessageMtInfoService.accountPage(pageParams);
     }
 }

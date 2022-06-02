@@ -163,7 +163,7 @@
                                         <div class="row">
                                             <div class="col-md-12 form-group">
                                                 <label>审核状态：<span class="text-danger">*</span>&nbsp;</label>
-                                                <select data-style="btn-default" name="checkStatus" data-live-search="true" id="checkStatus" class="selectpicker" required="true" tabindex="-98">
+                                                <select data-style="btn-default" name="checkStatus" data-live-search="true" id="checkStatus" onchange="changeType(this.value)" class="selectpicker" required="true" tabindex="-98">
                                                     <option value="" data-icon="mdi mdi-buffer">--请选择审核状态--</option>
                                                     <option data-icon="mdi mdi-buffer" value="1" th:selected="${enterpriseDocumentInfoValidator.checkStatus eq '1'}">拒绝</option>
                                                     <option data-icon="mdi mdi-buffer" value="2" th:selected="${enterpriseDocumentInfoValidator.checkStatus eq '2'}">审核通过</option>
@@ -209,6 +209,17 @@
 <th:block th:insert="fragments/common_fragments :: select_js"/>
 <th:block th:insert="fragments/common_fragments :: common_submit_form"/>
 <script>
+
+    function changeType(value) {
+
+        if (2 == value ) {
+            document.getElementById("checkOpinions").innerText = "审核通过";
+        }else{
+            document.getElementById("checkOpinions").innerText = "";
+        }
+
+    }
+
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');

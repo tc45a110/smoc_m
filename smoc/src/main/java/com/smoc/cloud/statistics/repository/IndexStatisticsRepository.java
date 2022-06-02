@@ -3,7 +3,9 @@ package com.smoc.cloud.statistics.repository;
 import com.smoc.cloud.common.BasePageRepository;
 import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
 import com.smoc.cloud.common.smoc.customer.qo.StatisticProfitData;
+import com.smoc.cloud.common.smoc.index.CheckRemindModel;
 import com.smoc.cloud.customer.rowmapper.AccountStatisticSendRowMapper;
+import com.smoc.cloud.statistics.rowmapper.StatisticCheckRemindRowMapper;
 import com.smoc.cloud.statistics.rowmapper.StatisticProfitRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -163,5 +165,30 @@ public class IndexStatisticsRepository  extends BasePageRepository {
 
         List<StatisticProfitData> list = this.queryForObjectList(sqlBuffer.toString(), null, new StatisticProfitRowMapper());
         return list;
+    }
+
+    /**
+     * 首页:签名资质、web模板、待下发短信提醒
+     * @param checkRemindModel
+     * @return
+     */
+    public CheckRemindModel remindCheck(CheckRemindModel checkRemindModel) {
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder();
+        sqlBuffer.append(" select count(*)TOTAL_NUM from enterprise_document_info t where t.DOC_STATUS=3 ");
+        sqlBuffer.append(" UNION ALL ");
+        sqlBuffer.append(" select count(*)TOTAL_NUM from account_template_info t where t.TEMPLATE_STATUS=3 and TEMPLATE_AGREEMENT_TYPE!='CMPP' ");
+        sqlBuffer.append(" UNION ALL ");
+        sqlBuffer.append(" select count(*)TOTAL_NUM from smoc_route.route_audit_message_mt_info t where t.AUDIT_FLAG=0 ");
+
+        List<CheckRemindModel> list = this.queryForObjectList(sqlBuffer.toString(), null, new StatisticCheckRemindRowMapper());
+
+        CheckRemindModel checkRemind = new CheckRemindModel();
+        checkRemind.setSignNum(list.get(0).getTotalNum());
+        checkRemind.setTemplateNum(list.get(1).getTotalNum());
+        checkRemind.setMessageNum(list.get(2).getTotalNum());
+        checkRemind.setTotalNum(list.get(0).getTotalNum()+list.get(1).getTotalNum()+list.get(2).getTotalNum());
+
+        return checkRemind;
     }
 }

@@ -5,6 +5,7 @@ import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
 import com.smoc.cloud.common.smoc.customer.qo.StatisticProfitData;
+import com.smoc.cloud.common.smoc.index.CheckRemindModel;
 import com.smoc.cloud.common.smoc.message.MessageChannelComplaintValidator;
 import com.smoc.cloud.customer.remote.BusinessAccountFeignClient;
 import com.smoc.cloud.customer.service.BusinessAccountService;
@@ -161,6 +162,20 @@ public class StatisticsService {
     public ResponseData<List<MessageChannelComplaintValidator>> channelComplaintRanking(MessageChannelComplaintValidator messageChannelComplaintValidator) {
         try {
             ResponseData<List<MessageChannelComplaintValidator>> data = statisticsFeignClient.channelComplaintRanking(messageChannelComplaintValidator);
+            return data;
+        } catch (Exception e) {
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 首页:签名资质、web模板、待下发短信提醒
+     * @param checkRemindModel
+     * @return
+     */
+    public ResponseData<CheckRemindModel>  remindCheck(CheckRemindModel checkRemindModel) {
+        try {
+            ResponseData<CheckRemindModel> data = statisticsFeignClient.remindCheck(checkRemindModel);
             return data;
         } catch (Exception e) {
             return ResponseDataUtil.buildError(e.getMessage());

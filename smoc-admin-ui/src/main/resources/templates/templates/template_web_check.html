@@ -197,7 +197,7 @@
                                         <div class="row">
                                             <div class="col-md-12 form-group">
                                                 <label>审核状态：<span class="text-danger">*</span>&nbsp;</label>
-                                                <select data-style="btn-default" name="checkStatus" data-live-search="true" id="checkStatus" class="selectpicker" required="true" tabindex="-98">
+                                                <select data-style="btn-default" name="checkStatus" data-live-search="true" id="checkStatus" onchange="changeType(this.value)" class="selectpicker" required="true" tabindex="-98">
                                                     <option value="" data-icon="mdi mdi-buffer">--请选择审核状态--</option>
                                                     <option data-icon="mdi mdi-buffer" value="1" th:selected="${accountTemplateInfoValidator.checkStatus eq '1'}">拒绝</option>
                                                     <option data-icon="mdi mdi-buffer" value="2" th:selected="${accountTemplateInfoValidator.checkStatus eq '2'}">审核通过</option>
@@ -206,7 +206,7 @@
                                             <div class="col-md-12 form-group">
                                                 <label>审核意见：<span class="text-danger">*</span>&nbsp
                                                 </label>
-                                                <textarea class="form-control" th:field="*{checkOpinions}" required
+                                                <textarea class="form-control" th:field="*{checkOpinions}" id="checkOpinions" required
                                                           rows="3"></textarea>
                                             </div>
                                             <div class="col-md-12 text-center" style="margin-top:20px">
@@ -292,6 +292,16 @@
                 this.init();
         });
     });
+
+    function changeType(value) {
+
+        if (2 == value ) {
+            document.getElementById("checkOpinions").innerText = "审核通过";
+        }else{
+            document.getElementById("checkOpinions").innerText = "";
+        }
+
+    }
 
 </script>
 <script>

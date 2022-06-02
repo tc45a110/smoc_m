@@ -8,6 +8,7 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.route.RouteAuditMessageMtInfoValidator;
+import com.smoc.cloud.common.smoc.route.qo.RouteAuditMessageAccountQo;
 import com.smoc.cloud.route.service.RouteAuditMessageMtInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -225,6 +226,12 @@ public class RouteAuditMessageMtInfoController {
         //记录日志
         log.info("[待审批下发信息][{}][{}]数据:{}",type, user.getUserName(), JSON.toJSONString(routeAuditMessageMtInfoValidator));
 
+        //按账号条数审核
+        if("account".equals(type)){
+            view.setView(new RedirectView("/route/message/mt/audit/account/list/", true, false));
+            return view;
+        }
+
         view.setView(new RedirectView("/route/message/mt/audit/list/", true, false));
         return view;
     }
@@ -266,6 +273,119 @@ public class RouteAuditMessageMtInfoController {
     @RequestMapping(value = "/likeCheck/page", method = RequestMethod.POST)
     public ModelAndView likeCheck(@ModelAttribute RouteAuditMessageMtInfoValidator routeAuditMessageMtInfoValidator, PageParams pageParams) {
         ModelAndView view = new ModelAndView("route/message/message_mt_audit_check_like");
+
+        //分页查询
+        pageParams.setParams(routeAuditMessageMtInfoValidator);
+
+        ResponseData<PageList<RouteAuditMessageMtInfoValidator>> data = routeAuditMessageMtInfoService.page(pageParams);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("routeAuditMessageMtInfoValidator", routeAuditMessageMtInfoValidator);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
+        view.addObject("totalNum", data.getData().getPageParams().getTotalRows());
+
+        return view;
+    }
+
+    /**
+     * 账号条数统计
+     *
+     * @return
+     */
+    @RequestMapping(value = "/account/list", method = RequestMethod.GET)
+    public ModelAndView account() {
+        ModelAndView view = new ModelAndView("route/message/message_mt_audit_account");
+
+        //分页查询
+        PageParams<RouteAuditMessageAccountQo> pageParams = new PageParams<RouteAuditMessageAccountQo>();
+        pageParams.setPageSize(12);
+        pageParams.setCurrentPage(1);
+        RouteAuditMessageAccountQo routeAuditMessageAccount = new RouteAuditMessageAccountQo();
+        pageParams.setParams(routeAuditMessageAccount);
+
+        ResponseData<PageList<RouteAuditMessageAccountQo>> data = routeAuditMessageMtInfoService.accountPage(pageParams);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("routeAuditMessageAccount", routeAuditMessageAccount);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
+        view.addObject("total", data.getData().getPageParams().getTotalRows());
+
+        return view;
+    }
+
+    /**
+     * 账号条数统计分页
+     *
+     * @return
+     */
+    @RequestMapping(value = "/account/page", method = RequestMethod.POST)
+    public ModelAndView account(@ModelAttribute RouteAuditMessageAccountQo routeAuditMessageAccount, PageParams pageParams) {
+        ModelAndView view = new ModelAndView("route/message/message_mt_audit_account");
+
+        //分页查询
+        pageParams.setParams(routeAuditMessageAccount);
+
+        ResponseData<PageList<RouteAuditMessageAccountQo>> data = routeAuditMessageMtInfoService.accountPage(pageParams);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("routeAuditMessageAccount", routeAuditMessageAccount);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
+        view.addObject("total", data.getData().getPageParams().getTotalRows());
+
+        return view;
+    }
+
+    /**
+     * 账号待审批页面
+     *
+     * @return
+     */
+    @RequestMapping(value = "/check/account/{accountId}", method = RequestMethod.GET)
+    public ModelAndView accountCheck(@PathVariable String accountId) {
+        ModelAndView view = new ModelAndView("route/message/message_mt_audit_check_account");
+
+        //分页查询
+        PageParams<RouteAuditMessageMtInfoValidator> pageParams = new PageParams<RouteAuditMessageMtInfoValidator>();
+        pageParams.setPageSize(10);
+        pageParams.setCurrentPage(1);
+        RouteAuditMessageMtInfoValidator routeAuditMessageMtInfoValidator = new RouteAuditMessageMtInfoValidator();
+        routeAuditMessageMtInfoValidator.setAccountId(accountId);
+        pageParams.setParams(routeAuditMessageMtInfoValidator);
+
+        ResponseData<PageList<RouteAuditMessageMtInfoValidator>> data = routeAuditMessageMtInfoService.page(pageParams);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("routeAuditMessageMtInfoValidator", routeAuditMessageMtInfoValidator);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
+        view.addObject("totalNum", data.getData().getPageParams().getTotalRows());
+
+        return view;
+    }
+
+    /**
+     * 账号待审批分页
+     *
+     * @return
+     */
+    @RequestMapping(value = "/accountCheck/page", method = RequestMethod.POST)
+    public ModelAndView accountCheckPage(@ModelAttribute RouteAuditMessageMtInfoValidator routeAuditMessageMtInfoValidator, PageParams pageParams) {
+        ModelAndView view = new ModelAndView("route/message/message_mt_audit_check_account");
 
         //分页查询
         pageParams.setParams(routeAuditMessageMtInfoValidator);

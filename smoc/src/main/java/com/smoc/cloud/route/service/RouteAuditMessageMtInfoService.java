@@ -6,6 +6,7 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.route.RouteAuditMessageMtInfoValidator;
+import com.smoc.cloud.common.smoc.route.qo.RouteAuditMessageAccountQo;
 import com.smoc.cloud.route.repository.RouteAuditMessageMtInfoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -70,6 +71,11 @@ public class RouteAuditMessageMtInfoService {
             routeAuditMessageMtInfoRepository.updateAuditFlagByLike(routeAuditMessageMtInfoValidator);
         }
 
+        //模糊审批
+        if("account".equals(type)){
+            routeAuditMessageMtInfoRepository.updateAuditFlagByAccountId(routeAuditMessageMtInfoValidator);
+        }
+
         return ResponseDataUtil.buildSuccess();
     }
 
@@ -81,5 +87,15 @@ public class RouteAuditMessageMtInfoService {
     public ResponseData<Map<String, Object>> count(RouteAuditMessageMtInfoValidator routeAuditMessageMtInfoValidator) {
         Map<String, Object> map = routeAuditMessageMtInfoRepository.count(routeAuditMessageMtInfoValidator);
         return ResponseDataUtil.buildSuccess(map);
+    }
+
+    /**
+     * 账号条数查询
+     * @param pageParams
+     * @return
+     */
+    public ResponseData<PageList<RouteAuditMessageAccountQo>> accountPage(PageParams<RouteAuditMessageAccountQo> pageParams) {
+        PageList<RouteAuditMessageAccountQo> data = routeAuditMessageMtInfoRepository.accountPage(pageParams);
+        return ResponseDataUtil.buildSuccess(data);
     }
 }

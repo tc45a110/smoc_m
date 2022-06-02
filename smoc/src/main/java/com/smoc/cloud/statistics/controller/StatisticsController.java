@@ -2,6 +2,7 @@ package com.smoc.cloud.statistics.controller;
 
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.customer.qo.StatisticProfitData;
+import com.smoc.cloud.common.smoc.index.CheckRemindModel;
 import com.smoc.cloud.statistics.service.StatisticsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,5 +58,16 @@ public class StatisticsController {
     public ResponseData<List<StatisticProfitData>> statisticProfitMonth(@RequestBody StatisticProfitData statisticProfitData){
 
         return statisticsService.statisticProfitMonth(statisticProfitData);
+    }
+
+    /**
+     * 首页:签名资质、web模板、待下发短信提醒
+     * @param checkRemindModel
+     * @return
+     */
+    @RequestMapping(value = "/index/remind/check", method = RequestMethod.POST)
+    public ResponseData<CheckRemindModel> remindCheck(@RequestBody CheckRemindModel checkRemindModel){
+
+        return statisticsService.remindCheck(checkRemindModel);
     }
 }

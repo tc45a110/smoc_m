@@ -377,7 +377,9 @@ public class MessageWebTaskInfoRepositoryImpl extends BasePageRepository {
      * @param phoneCount   发送手机号数量
      */
     public void saveMessageBatch(List<MessageFormat> messages, Integer messageCount, Integer phoneCount) {
-        final String sql = "insert into smoc_route.route_message_mt_info(ID,ACCOUNT_ID,PHONE_NUMBER,SUBMIT_TIME,MESSAGE_CONTENT,MESSAGE_FORMAT,MESSAGE_ID,TEMPLATE_ID,PROTOCOL,ACCOUNT_SRC_ID,ACCOUNT_BUSINESS_CODE,PHONE_NUMBER_NUMBER,MESSAGE_CONTENT_NUMBER,REPORT_FLAG,OPTION_PARAM,CREATED_TIME) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,now()) ";
+        final String sql = "insert into smoc_route.route_message_mt_info(ID,ACCOUNT_ID,PHONE_NUMBER,SUBMIT_TIME,MESSAGE_CONTENT,MESSAGE_FORMAT,MESSAGE_ID,TEMPLATE_ID,PROTOCOL,ACCOUNT_SRC_ID,ACCOUNT_BUSINESS_CODE,PHONE_NUMBER_NUMBER,MESSAGE_CONTENT_NUMBER,REPORT_FLAG,OPTION_PARAM) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
+
+        log.info("[自服务短信群发-异步添加开始]数据：{}- 共{}条", System.currentTimeMillis(), messages.size());
 
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             public int getBatchSize() {
@@ -405,6 +407,6 @@ public class MessageWebTaskInfoRepositoryImpl extends BasePageRepository {
             }
 
         });
-
+        log.info("[自服务短信群发-异步添加结束]数据：{}", System.currentTimeMillis());
     }
 }

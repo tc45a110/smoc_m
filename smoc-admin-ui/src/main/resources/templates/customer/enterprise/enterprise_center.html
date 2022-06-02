@@ -253,7 +253,15 @@
                                                                             <div class="listingInfo">
                                                                                 <div class="">
                                                                                     <h5 style="padding-left:10px">
-                                                                                        WEB账号：[[${web.webLoginName}]]</h5>
+                                                                                        WEB账号：[[${web.webLoginName}]]
+                                                                                        <a href="javascript:void(0)" data-placement="bottom" data-toggle="tooltip" data-original-title="查看密码"
+                                                                                            sec:authorize-url="/enterprise/web/look/*"
+                                                                                            th:onclick="lookPassword([[${web.id}]])">
+                                                                                            &nbsp;<i class="glyphicon glyphicon-eye-open" style="color: #00aced"></i>
+                                                                                            <span th:id="${web.id}"></span>
+                                                                                        </a>
+                                                                                    </h5>
+
                                                                                 </div>
                                                                                 <div class="col-sm-12">
                                                                                     <p style="font-size:12px">
@@ -1117,6 +1125,19 @@
 <script th:src="@{/static/plugins/tooltipster/tooltipster.bundle.min.js}"></script>
 
 <script>
+
+    //查看密码
+    function lookPassword(id) {
+
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $.ajax({
+            url: contextPath + "/enterprise/web/look/"+id,
+            async: false,
+            success: function (data) {
+                document.getElementById(id).innerText = data;
+            }
+        });
+    }
 
     //打开密码框
     function openPassword(id, webLoginName, op,realName) {

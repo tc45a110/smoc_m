@@ -1,37 +1,34 @@
 package com.smoc.cloud.customer.controller;
 
-        import com.alibaba.fastjson.JSON;
-        import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
-        import com.smoc.cloud.common.auth.entity.SecurityUser;
-        import com.smoc.cloud.common.response.ResponseCode;
-        import com.smoc.cloud.common.response.ResponseData;
-        import com.smoc.cloud.common.smoc.customer.qo.ServiceAuthInfo;
-        import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
-        import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
-        import com.smoc.cloud.common.smoc.customer.validator.EnterpriseWebAccountInfoValidator;
-        import com.smoc.cloud.common.utils.DateTimeUtils;
-        import com.smoc.cloud.common.utils.UUID;
-        import com.smoc.cloud.common.validator.MpmIdValidator;
-        import com.smoc.cloud.common.validator.MpmValidatorUtil;
-        import com.smoc.cloud.customer.service.BusinessAccountService;
-        import com.smoc.cloud.customer.service.EnterpriseService;
-        import com.smoc.cloud.customer.service.EnterpriseWebService;
-        import lombok.extern.slf4j.Slf4j;
-        import org.springframework.beans.factory.annotation.Autowired;
-        import org.springframework.data.redis.core.RedisTemplate;
-        import org.springframework.stereotype.Controller;
-        import org.springframework.util.StringUtils;
-        import org.springframework.validation.BindingResult;
-        import org.springframework.validation.annotation.Validated;
-        import org.springframework.web.bind.annotation.*;
-        import org.springframework.web.servlet.ModelAndView;
-        import org.springframework.web.servlet.view.RedirectView;
+import com.alibaba.fastjson.JSON;
+import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
+import com.smoc.cloud.common.auth.entity.SecurityUser;
+import com.smoc.cloud.common.gateway.utils.AESConstUtil;
+import com.smoc.cloud.common.response.ResponseCode;
+import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.customer.qo.ServiceAuthInfo;
+import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
+import com.smoc.cloud.common.smoc.customer.validator.EnterpriseWebAccountInfoValidator;
+import com.smoc.cloud.common.utils.DateTimeUtils;
+import com.smoc.cloud.common.utils.UUID;
+import com.smoc.cloud.common.validator.MpmIdValidator;
+import com.smoc.cloud.common.validator.MpmValidatorUtil;
+import com.smoc.cloud.customer.service.BusinessAccountService;
+import com.smoc.cloud.customer.service.EnterpriseService;
+import com.smoc.cloud.customer.service.EnterpriseWebService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
-        import javax.annotation.Resource;
-        import javax.servlet.http.HttpServletRequest;
-        import java.util.ArrayList;
-        import java.util.Date;
-        import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 
 @Slf4j
@@ -253,4 +250,29 @@ public class EnterpriseWebController {
         return view;
 
     }
+
+    /**
+     * 查看web密码
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/look/{id}", method = RequestMethod.GET)
+    public String look(@PathVariable String id) {
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            return "";
+        }
+
+        //查询数据
+        ResponseData<EnterpriseWebAccountInfoValidator> data = enterpriseWebService.findById(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            return "";
+        }
+
+        return AESConstUtil.decrypt(data.getData().getAesPassword());
+    }
+
 }

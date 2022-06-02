@@ -56,15 +56,19 @@
                                          th:value="${routeAuditMessageMtInfoValidator.infoType}"
                                          class="form-control" data-icon="mdi mdi-view-module" title="信息分类"/>
                             </div>
-                            <div class="form-group col-sm-4 pull-right" style="text-align: right">
+                            <div class="form-group col-sm-8 pull-right" style="text-align: right">
                                 <button sec:authorize-url="/route/message/mt/audit/page" type="submit"
                                         class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                     <i class="glyphicon glyphicon-search"></i> 查询
                                 </button>
                                 <button sec:authorize-url="/route/message/mt/audit/likeCheck/list" type="button" id="submitbut"
                                         class="btn btn-primary waves-effect waves-light m-l-10 btn-md">
-                                    <i class="mdi mdi-comment-check-outline"></i> 模糊匹配审批
+                                    <i class="mdi mdi-comment-check-outline"></i> 模糊批量审批
                                 </button>
+                                <a sec:authorize-url="/route/message/mt/audit/account/list"
+                                   th:href="@{/route/message/mt/audit/account/list}"
+                                   class="btn btn-success waves-effect waves-light m-l-10 btn-md">
+                                    <i class="mdi mdi-chart-areaspline"></i> 账号条数统计</a>
                                 <input type="hidden" name="currentPage" id="currentPage"
                                        th:value="${pageParams.currentPage}">
                                 <input type="hidden" name="pageSize" id="pageSize"
@@ -143,18 +147,18 @@
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;">
                                         <a sec:authorize-url="/route/message/mt/audit/check/*/*"
-                                           th:href="@{/route/message/mt/audit/check/single/{templateId}(templateId=${info.id})}"
+                                           th:href="@{/route/message/mt/audit/check/single/{id}(id=${info.id})}"
                                            class="on-default edit-row"
                                            style="padding-left: 5px;color: #29b6f6;"
                                            data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="单条审核">
                                             <i style="font-size: 18px" class="mdi mdi-comment-check-outline"></i></a>
                                         <a sec:authorize-url="/route/message/mt/audit/check/*/*"
-                                           th:href="@{/route/message/mt/audit/check/many/{templateId}(templateId=${info.id})}"
+                                           th:href="@{/route/message/mt/audit/check/many/{id}(id=${info.id})}"
                                            class="on-default edit-row"
                                            style="padding-left: 5px;color: #8D6E63;"
                                            data-toggle="tooltip"
-                                           data-placement="left" title="" data-original-title="按内容批量审核">
+                                           data-placement="left" title="" data-original-title="精准批量审核">
                                             <i style="font-size: 18px" class="glyphicon glyphicon-th"></i></a>
 
                                     </td>

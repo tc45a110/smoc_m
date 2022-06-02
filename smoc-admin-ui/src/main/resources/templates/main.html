@@ -43,6 +43,52 @@
 
                 <!-- Right(Notification) -->
                 <ul class="nav navbar-nav navbar-right">
+
+                    <li>
+                        <a href="#" class="right-menu-item dropdown-toggle" data-toggle="dropdown">
+                            <i class="mdi mdi-bell"></i>
+                            <span class="badge up bg-danger" id="totalNum"></span>
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-menu-right arrow-dropdown-menu arrow-menu-right dropdown-lg user-list notify-list">
+
+                            <li>
+                                <a sec:authorize-url="/ec/customer/material/list" target="iframe"
+                                   th:href="@{/ec/customer/material/list}" class="user-list-item">
+                                    <div class="icon bg-info" style="width: 22px;height: 22px">
+                                        <i class="mdi mdi-file-document" style="line-height: 22px;font-size: 14px"></i>
+                                    </div>
+                                    <div class="user-desc" style="margin-left: 32px">
+                                        <span class="name">签名资质审核：<span id="signId">0</span> 条</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a sec:authorize-url="/template/web/list" target="iframe"
+                                   th:href="@{/template/web/list}" class="user-list-item">
+                                    <div class="icon bg-brown" style="width: 22px;height: 22px">
+                                        <i class="mdi mdi-content-save"style="line-height: 22px;font-size: 14px"></i>
+                                    </div>
+                                    <div class="user-desc" style="margin-left: 32px">
+                                        <span class="name">WEB模板审核：<span id="templateId">0</span> 条</span>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a sec:authorize-url="/route/message/mt/audit/list" target="iframe"
+                                   th:href="@{/route/message/mt/audit/list}" class="user-list-item">
+                                    <div class="icon bg-warning" style="width: 22px;height: 22px">
+                                        <i class="mdi mdi-comment"style="line-height: 22px;font-size: 14px"></i>
+                                    </div>
+                                    <div class="user-desc" style="margin-left: 32px">
+                                        <span class="name">待审批下发信息：<span id="messageId">0</span> 条</span>
+                                    </div>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </li>
+
                     <li th:remove="${#lists.isEmpty(sysList)}?all:none">
                         <a href="javascript:void(0);" class="right-bar-toggle right-menu-item" title="其他系统入口">
                             <i class="glyphicon glyphicon-cog"></i>
@@ -179,6 +225,34 @@
 <!-- ============================================================== -->
 <!-- resize  windows-->
 <!-- ============================================================== -->
+<script type="text/javascript">
+
+   $(function(){
+
+       remind();
+
+    })
+
+   function remind(){
+       setTimeout(remind,1000*60*30);
+       $.ajax({
+           url : '[[${#httpServletRequest.getContextPath()}]]/index/remind/check',
+           success : function(data) {
+               articles = eval(data);
+               $("#signId").html(articles.signNum);
+               $("#templateId").html(articles.templateNum);
+               $("#messageId").html(articles.messageNum);
+               if(articles.totalNum >0 ){
+                   $("#totalNum").html(articles.totalNum);
+               }else{
+                   $("#totalNum").html("");
+               }
+           }
+       });
+   }
+
+
+</script>
 <script>
 
     function changeFrameHeight() {

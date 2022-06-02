@@ -5,6 +5,7 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.route.RouteAuditMessageMtInfoValidator;
+import com.smoc.cloud.common.smoc.route.qo.RouteAuditMessageAccountQo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -53,4 +54,12 @@ public interface RouteAuditMessageMtInfoFeignClient {
      */
     @RequestMapping(value = "/route/message/mt/audit/count", method = RequestMethod.POST)
     ResponseData<Map<String, Object>> count(@RequestBody RouteAuditMessageMtInfoValidator routeAuditMessageMtInfoValidator);
+
+    /**
+     * 账号条数统计
+     * @param pageParams
+     * @return
+     */
+    @RequestMapping(value = "/route/message/mt/audit/accountPage", method = RequestMethod.POST)
+    ResponseData<PageList<RouteAuditMessageAccountQo>> accountPage(@RequestBody PageParams<RouteAuditMessageAccountQo> pageParams);
 }

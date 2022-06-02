@@ -43,35 +43,35 @@
                     <form th:action="@{/complaint/complaintSourcePage}" th:object="${messageComplaintInfoValidator}" id="query_form" method="post">
                         <div class="row m-b-60">
                             <div class="col-sm-12">
-                                <div class="form-group  col-sm-3">
+                                <div class="form-group  col-sm-4">
                                     <input id="reportrange" class="form-control" th:field="*{startDate}" type="text"/>
                                 </div>
-                                <div class="form-group  col-sm-3">
+                                <div class="form-group  col-sm-4">
                                     <input type="text" class="form-control"
                                            placeholder="被举报码号" th:field="*{reportedNumber}" autocomplete="off">
                                 </div>
-                                <div class="form-group  col-sm-3">
+                                <div class="form-group  col-sm-4">
                                     <input type="text" class="form-control"
                                            placeholder="举报手机号" th:field="*{reportNumber}" autocomplete="off">
                                 </div>
-                                <div class="form-group  col-sm-3">
+                                <div class="form-group  col-sm-4">
                                     <input type="text" class="form-control"
                                            placeholder="举报内容" th:field="*{reportContent}" autocomplete="off">
                                 </div>
-                                <div class="form-group  col-sm-3">
+                                <div class="form-group  col-sm-4">
                                     <mpm:tag id="carrier" identity="carrier" show-type="select" key="code" mask-value="INTL"
                                              class="form-control" name="carrierSource" th:value="${messageComplaintInfoValidator.carrierSource}" title="运营商来源"/>
                                 </div>
-                                <div class="form-group  col-sm-3">
+                                <div class="form-group  col-sm-4">
                                     <input type="text" class="form-control"
                                            placeholder="举被报省份" th:field="*{reportedProvince}" autocomplete="off">
                                 </div>
-                                <div class="form-group  col-sm-3">
+                                <div class="form-group  col-sm-4">
                                     <input type="text" class="form-control"
                                            placeholder="被举报地市" th:field="*{reportedCity}" autocomplete="off">
                                 </div>
 
-                                <div class="form-group col-sm-3 pull-right" style="text-align: right">
+                                <div class="form-group col-sm-6 pull-right" style="text-align: right">
                                     <button sec:authorize-url="/complaint/complaintSourcePage" type="submit"
                                             class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search" style="margin-right:5px"></i> 查询

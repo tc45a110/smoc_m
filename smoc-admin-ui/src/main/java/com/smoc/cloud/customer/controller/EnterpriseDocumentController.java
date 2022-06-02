@@ -439,7 +439,7 @@ public class EnterpriseDocumentController {
     @RequestMapping(value = "/material/sign/check/{id}", method = RequestMethod.GET)
     public ModelAndView check(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("customer/material/cuxtomer_material_sign_check");
+        ModelAndView view = new ModelAndView("customer/material/customer_material_sign_check");
 
         //完成参数规则验证
         MpmIdValidator validator = new MpmIdValidator();
@@ -492,7 +492,7 @@ public class EnterpriseDocumentController {
      */
     @RequestMapping(value = "/material/sign/save", method = RequestMethod.POST)
     public ModelAndView checkSave(@ModelAttribute @Validated EnterpriseDocumentInfoValidator enterpriseDocumentInfoValidator, BindingResult result, HttpServletRequest request) {
-        ModelAndView view = new ModelAndView("customer/material/cuxtomer_material_sign_check");
+        ModelAndView view = new ModelAndView("customer/material/customer_material_sign_check");
 
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
 

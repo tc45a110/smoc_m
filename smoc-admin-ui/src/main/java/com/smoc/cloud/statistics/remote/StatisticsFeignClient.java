@@ -3,6 +3,7 @@ package com.smoc.cloud.statistics.remote;
 
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.customer.qo.StatisticProfitData;
+import com.smoc.cloud.common.smoc.index.CheckRemindModel;
 import com.smoc.cloud.common.smoc.message.MessageChannelComplaintValidator;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,4 +50,12 @@ public interface StatisticsFeignClient {
      */
     @RequestMapping(value = "/complaint/channelComplaintRanking", method = RequestMethod.POST)
     ResponseData<List<MessageChannelComplaintValidator>> channelComplaintRanking(@RequestBody MessageChannelComplaintValidator messageChannelComplaintValidator);
+
+    /**
+     * 首页:签名资质、web模板、待下发短信提醒
+     * @param checkRemindModel
+     * @return
+     */
+    @RequestMapping(value = "/statistics/index/remind/check", method = RequestMethod.POST)
+    ResponseData<CheckRemindModel> remindCheck(@RequestBody CheckRemindModel checkRemindModel);
 }

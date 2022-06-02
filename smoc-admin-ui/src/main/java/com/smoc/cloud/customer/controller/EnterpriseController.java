@@ -15,7 +15,6 @@ import com.smoc.cloud.common.smoc.customer.validator.EnterpriseExpressInfoValida
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseInvoiceInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseWebAccountInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
-import com.smoc.cloud.common.utils.RandomUtil;
 import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
@@ -25,14 +24,10 @@ import com.smoc.cloud.customer.service.EnterpriseService;
 import com.smoc.cloud.customer.service.EnterpriseWebService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -46,7 +41,7 @@ import java.util.stream.Collectors;
 
 
 @Slf4j
-@Controller
+@RestController
 @RequestMapping("/enterprise")
 public class EnterpriseController {
 
@@ -433,6 +428,5 @@ public class EnterpriseController {
         return view;
 
     }
-
 
 }
