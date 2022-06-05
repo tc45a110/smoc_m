@@ -65,6 +65,20 @@ public interface WhiteRepository extends CrudRepository<FilterWhiteList, String>
     List<String> findSystemWhiteList();
 
     /**
+     * 更新系统白名单状态
+     *
+     * @param list
+     */
+    void bathUpdate(List<String> list);
+
+    /**
+     * 更新系统白名单状态
+     *
+     * @param list
+     */
+    void bathUpdateIndustry(List<FilterWhiteListValidator> list);
+
+    /**
      * 查询行业白名单
      *
      * @return

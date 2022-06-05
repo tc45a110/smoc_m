@@ -5,6 +5,7 @@ import com.smoc.cloud.common.auth.qo.Dict;
 import com.smoc.cloud.common.auth.qo.DictType;
 import com.smoc.cloud.common.filters.utils.InitializeFiltersData;
 import com.smoc.cloud.common.filters.utils.RedisConstant;
+import com.smoc.cloud.common.filters.utils.RedisFilterConstant;
 import com.smoc.cloud.common.smoc.filter.FilterBlackListValidator;
 import com.smoc.cloud.common.smoc.filter.FilterWhiteListValidator;
 import com.smoc.cloud.filter.entity.FilterBlackList;
@@ -15,6 +16,8 @@ import com.smoc.cloud.filter.repository.KeywordsRepository;
 import com.smoc.cloud.filter.repository.WhiteRepository;
 import com.smoc.cloud.parameter.entity.ParameterExtendFiltersValue;
 import com.smoc.cloud.parameter.repository.ParameterExtendFiltersValueRepository;
+import com.smoc.cloud.redis.RedisModuleBloomFilter;
+import com.smoc.cloud.redis.RedisModuleCuckooFilter;
 import com.smoc.cloud.template.entity.AccountTemplateContent;
 import com.smoc.cloud.template.repository.AccountTemplateInfoRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +42,12 @@ import java.util.stream.Collectors;
 @Service
 public class InitializeFiltersDataService {
 
+    @Autowired
+    private RedisModuleBloomFilter redisModuleBloomFilter;
+
+    @Autowired
+    private RedisModuleCuckooFilter redisModuleCuckooFilter;
+
     @Resource
     private BlackRepository blackRepository;
     @Resource
@@ -57,93 +66,93 @@ public class InitializeFiltersDataService {
     public void initialize(InitializeFiltersData initializeFiltersData) {
 
         //系统黑名单
-        if ("1".equals(initializeFiltersData.getReloadBlackList())) {
-            this.initializeBlackList();
-        }
-        //系统白名单
-        if ("1".equals(initializeFiltersData.getReloadWhiteList())) {
-            this.initializeWhiteList();
-        }
-        //行业黑名单
-        if ("1".equals(initializeFiltersData.getReloadIndustryBlackList())) {
-            this.initializeIndustryBlackList();
-        }
-        //行业白名单
-        if ("1".equals(initializeFiltersData.getReloadIndustryWhiteList())) {
-           this.initializeIndustryWhiteList();
-        }
-        //账号过滤参数
-        if ("1".equals(initializeFiltersData.getReloadAccountFilterParams())) {
-            this.initializeAccountFilterParams();
-        }
+//        if ("1".equals(initializeFiltersData.getReloadBlackList())) {
+//            this.initializeBlackList();
+//        }
+//        //系统白名单
+//        if ("1".equals(initializeFiltersData.getReloadWhiteList())) {
+//            this.initializeWhiteList();
+//        }
+//        //行业黑名单
+//        if ("1".equals(initializeFiltersData.getReloadIndustryBlackList())) {
+//            this.initializeIndustryBlackList();
+//        }
+//        //行业白名单
+//        if ("1".equals(initializeFiltersData.getReloadIndustryWhiteList())) {
+//            this.initializeIndustryWhiteList();
+//        }
+//        //账号过滤参数
+//        if ("1".equals(initializeFiltersData.getReloadAccountFilterParams())) {
+//            this.initializeAccountFilterParams();
+//        }
 
-        //系统敏感词
-        if ("1".equals(initializeFiltersData.getReloadSystemSensitiveWords())) {
-            this.initializeSensitiveWords();
-            this.pubMessage(RedisConstant.MESSAGE_SYSTEM_SENSITIVE);
-        }
-
-        //系统审核词
-        if ("1".equals(initializeFiltersData.getReloadSystemCheckWords())) {
-            this.initializeCheckWords();
-            this.pubMessage(RedisConstant.MESSAGE_SYSTEM_CHECK);
-        }
+//        //系统敏感词
+//        if ("1".equals(initializeFiltersData.getReloadSystemSensitiveWords())) {
+//            this.initializeSensitiveWords();
+//            this.pubMessage(RedisConstant.MESSAGE_SYSTEM_SENSITIVE);
+//        }
+//
+//        //系统审核词
+//        if ("1".equals(initializeFiltersData.getReloadSystemCheckWords())) {
+//            this.initializeCheckWords();
+//            this.pubMessage(RedisConstant.MESSAGE_SYSTEM_CHECK);
+//        }
 
         //系统超级白词
-        if ("1".equals(initializeFiltersData.getReloadSystemSuperWhiteWords())) {
-            this.initializeSuperWhiteWords();
-            this.pubMessage(RedisConstant.MESSAGE_SYSTEM_SUPER_WHITE);
-        }
+//        if ("1".equals(initializeFiltersData.getReloadSystemSuperWhiteWords())) {
+//            this.initializeSuperWhiteWords();
+//            this.pubMessage(RedisConstant.MESSAGE_SYSTEM_SUPER_WHITE);
+//        }
 
-        //系统洗敏白词
-        if ("1".equals(initializeFiltersData.getReloadSystemWhiteBlackWords())) {
-            this.initializeWhiteBlackWords();
-        }
-        //系统免审白词
-        if ("1".equals(initializeFiltersData.getReloadSystemNoCheckWhiteWords())) {
-            this.initializeNoCheckWhiteWords();
-        }
+//        //系统洗敏白词
+//        if ("1".equals(initializeFiltersData.getReloadSystemWhiteBlackWords())) {
+//            this.initializeWhiteBlackWords();
+//        }
+//        //系统免审白词
+//        if ("1".equals(initializeFiltersData.getReloadSystemNoCheckWhiteWords())) {
+//            this.initializeNoCheckWhiteWords();
+//        }
         //系统正则白词
-        if ("1".equals(initializeFiltersData.getReloadSystemRegularWhiteWords())) {
-            this.initializeRegularWhiteWords();
-        }
+//        if ("1".equals(initializeFiltersData.getReloadSystemRegularWhiteWords())) {
+//            this.initializeRegularWhiteWords();
+//        }
 
         //行业敏感词
-        if ("1".equals(initializeFiltersData.getReloadInfoSensitiveWords())) {
-            this.initializeInfoTypeSensitiveWords(initializeFiltersData.getInfoType());
-            this.pubMessage(RedisConstant.MESSAGE_TYPE_INFO_SENSITIVE);
-        }
+//        if ("1".equals(initializeFiltersData.getReloadInfoSensitiveWords())) {
+//            this.initializeInfoTypeSensitiveWords(initializeFiltersData.getInfoType());
+//            this.pubMessage(RedisConstant.MESSAGE_TYPE_INFO_SENSITIVE);
+//        }
 
         //业务账号敏感词
-        if ("1".equals(initializeFiltersData.getReloadAccountSensitiveWords())) {
-            this.initializeAccountSensitiveWords();
-            this.pubMessage(RedisConstant.MESSAGE_ACCOUNT_SENSITIVE);
-        }
-        //业务账号审核词
-        if ("1".equals(initializeFiltersData.getReloadAccountCheckWords())) {
-            this.initializeAccountCheckWords();
-            this.pubMessage(RedisConstant.MESSAGE_ACCOUNT_CHECK);
-        }
-
-        //业务账号超级白词
-        if ("1".equals(initializeFiltersData.getReloadAccountSuperWhiteWords())) {
-            this.initializeAccountSuperWhiteWords();
-            this.pubMessage(RedisConstant.MESSAGE_ACCOUNT_SUPER_WHITE);
-        }
-
-        //业务账号洗黑白词
-        if ("1".equals(initializeFiltersData.getReloadAccountWhiteBlackWords())) {
-            this.initializeAccountWhiteBlackWords();
-        }
-
-        //业务账号免审白词
-        if ("1".equals(initializeFiltersData.getReloadAccountNoCheckWhiteWords())) {
-            this.initializeAccountNoCheckWhiteWords();
-        }
-        //业务账号正则白词
-        if ("1".equals(initializeFiltersData.getReloadAccountRegularWhiteWords())) {
-            this.initializeAccountRegularWhiteWords();
-        }
+//        if ("1".equals(initializeFiltersData.getReloadAccountSensitiveWords())) {
+//            this.initializeAccountSensitiveWords();
+//            this.pubMessage(RedisConstant.MESSAGE_ACCOUNT_SENSITIVE);
+//        }
+//        //业务账号审核词
+//        if ("1".equals(initializeFiltersData.getReloadAccountCheckWords())) {
+//            this.initializeAccountCheckWords();
+//            this.pubMessage(RedisConstant.MESSAGE_ACCOUNT_CHECK);
+//        }
+//
+//        //业务账号超级白词
+//        if ("1".equals(initializeFiltersData.getReloadAccountSuperWhiteWords())) {
+//            this.initializeAccountSuperWhiteWords();
+//            this.pubMessage(RedisConstant.MESSAGE_ACCOUNT_SUPER_WHITE);
+//        }
+//
+//        //业务账号洗黑白词
+//        if ("1".equals(initializeFiltersData.getReloadAccountWhiteBlackWords())) {
+//            this.initializeAccountWhiteBlackWords();
+//        }
+//
+//        //业务账号免审白词
+//        if ("1".equals(initializeFiltersData.getReloadAccountNoCheckWhiteWords())) {
+//            this.initializeAccountNoCheckWhiteWords();
+//        }
+//        //业务账号正则白词
+//        if ("1".equals(initializeFiltersData.getReloadAccountRegularWhiteWords())) {
+//            this.initializeAccountRegularWhiteWords();
+//        }
 
         //业务账号模版
         if ("1".equals(initializeFiltersData.getReloadAccountTemplate())) {
@@ -159,10 +168,10 @@ public class InitializeFiltersDataService {
     public void initializeAccountTemplate() {
         //http固定模版
         Map<String, String> httpFixedTemplates = accountTemplateInfoRepository.findHttpFixedTemplate();
-        log.info("http固定模版start：{}",new Gson().toJson(httpFixedTemplates));
+        log.info("http固定模版start：{}", new Gson().toJson(httpFixedTemplates));
         //http变量模版
         Map<String, String> httpVariableTemplates = accountTemplateInfoRepository.findHttpVariableTemplate();
-        log.info("http变量模版start：{}",new Gson().toJson(httpVariableTemplates));
+        log.info("http变量模版start：{}", new Gson().toJson(httpVariableTemplates));
         //加载cmpp固定模版数据
         Map<String, String> fixedTemplates = accountTemplateInfoRepository.findFixedTemplate();
         //加载变量模版数据,匹配后，不再进行后续过滤
@@ -177,20 +186,20 @@ public class InitializeFiltersDataService {
         log.info("加载业务账号模版start：{}", start);
         //http固定模版
         this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_HTTP_FIXED);
-        this.multiSaveHashMap(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_HTTP_FIXED,httpFixedTemplates);
-        //http固定模版
+        this.multiSaveHashMap(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_HTTP_FIXED, httpFixedTemplates);
+        //http变量模版
         this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_HTTP_VARIABLE);
-        this.multiSaveHashMap(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_HTTP_VARIABLE,httpVariableTemplates);
+        this.multiSaveHashMap(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_HTTP_VARIABLE, httpVariableTemplates);
         //cmpp固定模版
         this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_FIXED);
-        this.multiSaveFiltersTemplate(fixedTemplates,RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_FIXED);
+        this.multiSaveFiltersTemplate(fixedTemplates, RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_FIXED);
         //cmpp变量模版 由分为后续是否过滤或不过滤
         this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_VARIABLE_CMPP);
-        this.multiSaveFiltersTemplate(variableNoFilterVariableTemplates,RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_VARIABLE_CMPP+"no_filter:");
-        this.multiSaveFiltersTemplate(variableCMPPTemplates,RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_VARIABLE_CMPP+"filter:");
+        this.multiSaveFiltersTemplate(variableNoFilterVariableTemplates, RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_VARIABLE_CMPP + "no_filter:");
+        this.multiSaveFiltersTemplate(variableCMPPTemplates, RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_VARIABLE_CMPP + "filter:");
         //cmpp签名模版
         this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_SIGN);
-        this.multiSaveFiltersTemplate(signCMPPTemplates,RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_SIGN);
+        this.multiSaveFiltersTemplate(signCMPPTemplates, RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_SIGN);
         long end = System.currentTimeMillis();
         log.info("加载业务账号模版  end：{}", end);
     }
@@ -298,15 +307,15 @@ public class InitializeFiltersDataService {
     public void initializeBlackList() {
         //加载数据
         List<String> filterBlackListList = blackRepository.findSystemBlackList();
-        //删除现有redis缓存
-        this.deleteByKey(RedisConstant.FILTERS_CONFIG_SYSTEM_BLACK);
-        if (null != filterBlackListList && filterBlackListList.size() > 0) {
-            long start = System.currentTimeMillis();
-            log.info("加载系统黑名单start：{}", start);
-            this.multiSaveSet(RedisConstant.FILTERS_CONFIG_SYSTEM_BLACK,filterBlackListList);
-            long end = System.currentTimeMillis();
-            log.info("加载系统黑名单  end：{}", end);
+        if (null == filterBlackListList || filterBlackListList.size() < 1) {
+            return;
         }
+        String[] array = new String[filterBlackListList.size()];
+        filterBlackListList.toArray(array);
+        redisModuleBloomFilter.addFilter(RedisFilterConstant.REDIS_BLOOM_FILTERS_SYSTEM_BLACK_COMPLAINT, array);
+        //更新黑名单状态
+        blackRepository.bathUpdate(filterBlackListList);
+
     }
 
     /**
@@ -315,15 +324,13 @@ public class InitializeFiltersDataService {
     public void initializeWhiteList() {
         //加载数据
         List<String> filterWhiteList = whiteRepository.findSystemWhiteList();
-        //删除现有redis缓存
-        this.deleteByKey(RedisConstant.FILTERS_CONFIG_SYSTEM_WHITE);
-        if (null != filterWhiteList && filterWhiteList.size() > 0) {
-            long start = System.currentTimeMillis();
-            log.info("加载系统白名单start：{}", start);
-            this.multiSaveSet(RedisConstant.FILTERS_CONFIG_SYSTEM_WHITE,filterWhiteList);
-            long end = System.currentTimeMillis();
-            log.info("加载系统白名单  end：{}", end);
+        if (null == filterWhiteList || filterWhiteList.size() < 1) {
+            return;
         }
+        String[] array = new String[filterWhiteList.size()];
+        filterWhiteList.toArray(array);
+        redisModuleCuckooFilter.addFilter(RedisFilterConstant.REDIS_BLOOM_FILTERS_SYSTEM_WHITE, array);
+        whiteRepository.bathUpdate(filterWhiteList);
     }
 
     /**
@@ -337,7 +344,7 @@ public class InitializeFiltersDataService {
         if (null != filterIndustryBlackListList && filterIndustryBlackListList.size() > 0) {
             long start = System.currentTimeMillis();
             log.info("加载行业黑名单start：{}", start);
-            this.multiSaveSet(filterIndustryBlackListList,RedisConstant.FILTERS_CONFIG_SYSTEM_INDUSTRY_BLACK);
+            this.multiSaveSet(filterIndustryBlackListList, RedisConstant.FILTERS_CONFIG_SYSTEM_INDUSTRY_BLACK);
             long end = System.currentTimeMillis();
             log.info("加载行业黑名单  end：{}", end);
         }
@@ -354,7 +361,7 @@ public class InitializeFiltersDataService {
         if (null != filterIndustryWhiteList && filterIndustryWhiteList.size() > 0) {
             long start = System.currentTimeMillis();
             log.info("加载行业白名单start：{}", start);
-            this.multiSaveSetWhite(filterIndustryWhiteList,RedisConstant.FILTERS_CONFIG_SYSTEM_INDUSTRY_WHITE);
+            this.multiSaveSetWhite(filterIndustryWhiteList, RedisConstant.FILTERS_CONFIG_SYSTEM_INDUSTRY_WHITE);
             long end = System.currentTimeMillis();
             log.info("加载行业白名单  end：{}", end);
         }
@@ -520,10 +527,10 @@ public class InitializeFiltersDataService {
         });
     }
 
-    public void multiSaveHashMap(String redisKey, Map<String,String> map) {
+    public void multiSaveHashMap(String redisKey, Map<String, String> map) {
         redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
             connection.openPipeline();
-            map.forEach((key,value) -> {
+            map.forEach((key, value) -> {
                 // hset zset都是可以用的，但是要序列化
                 connection.hSet(RedisSerializer.string().serialize(redisKey),
                         RedisSerializer.string().serialize(key), RedisSerializer.string().serialize(new Gson().toJson(value)));
@@ -579,7 +586,7 @@ public class InitializeFiltersDataService {
             connection.openPipeline();
             source.forEach((value) -> {
                 // hset zset都是可以用的，但是要序列化
-                connection.sAdd(RedisSerializer.string().serialize(prefix+ value.getGroupId()),
+                connection.sAdd(RedisSerializer.string().serialize(prefix + value.getGroupId()),
                         RedisSerializer.string().serialize(new Gson().toJson(value.getMobile())));
             });
             connection.close();
@@ -601,7 +608,7 @@ public class InitializeFiltersDataService {
             connection.openPipeline();
             source.forEach((value) -> {
                 // hset zset都是可以用的，但是要序列化
-                connection.sAdd(RedisSerializer.string().serialize(prefix+ value.getGroupId()),
+                connection.sAdd(RedisSerializer.string().serialize(prefix + value.getGroupId()),
                         RedisSerializer.string().serialize(new Gson().toJson(value.getMobile())));
             });
             connection.close();

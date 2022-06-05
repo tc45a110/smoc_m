@@ -1,10 +1,14 @@
 package com.smoc.cloud.filters.service.number;
 
 import com.smoc.cloud.common.filters.utils.RedisConstant;
+import com.smoc.cloud.common.filters.utils.RedisFilterConstant;
 import com.smoc.cloud.filters.service.FiltersService;
 import com.smoc.cloud.filters.utils.DFA.FilterInitialize;
 import com.smoc.cloud.filters.utils.FilterResponseCode;
+import com.smoc.cloud.tools.redis.RedisModuleBloomFilter;
+import com.smoc.cloud.tools.redis.RedisModuleCuckooFilter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -18,6 +22,12 @@ import java.util.Map;
 @Slf4j
 @Component
 public class SystemPhoneFilter {
+
+    @Autowired
+    private RedisModuleBloomFilter redisModuleBloomFilter;
+
+    @Autowired
+    private RedisModuleCuckooFilter redisModuleCuckooFilter;
 
     /**
      * @param filtersService          业务服务
@@ -44,7 +54,7 @@ public class SystemPhoneFilter {
         //低(系统黑名单)
         if ("LOW".equals(isBlackListType.toString())) {
             log.info("[号码_mobile]:{}", phone);
-            Boolean isExistBlackList = filtersService.systemNumberBlackListFilter(phone);//FilterInitialize.numberSystemBlackFilter.isContain(phone,1);
+            Boolean isExistBlackList = redisModuleBloomFilter.isExist(RedisFilterConstant.REDIS_BLOOM_FILTERS_SYSTEM_BLACK_COMPLAINT, phone);//FilterInitialize.numberSystemBlackFilter.isContain(phone,1);
             log.info("[号码_isExistBlackList]:{}", isExistBlackList);
             //系统黑名单
             if (isExistBlackList) {
@@ -55,7 +65,13 @@ public class SystemPhoneFilter {
                     return result;
                 }
                 //行业白名单洗白
-                if(industryWhite(filtersService,isIndustryBlackListType,phone)){
+                if (industryWhite(filtersService, isIndustryBlackListType, phone)) {
+                    result.put("result", "false");
+                    return result;
+                }
+                //系统白名单
+                Boolean systemWhiteList = redisModuleCuckooFilter.isExist(RedisFilterConstant.REDIS_BLOOM_FILTERS_SYSTEM_WHITE, phone);
+                if (systemWhiteList) {
                     result.put("result", "false");
                     return result;
                 }
@@ -80,7 +96,12 @@ public class SystemPhoneFilter {
                     return result;
                 }
                 //行业白名单洗白
-                if(industryWhite(filtersService,isIndustryBlackListType,phone)){
+                if (industryWhite(filtersService, isIndustryBlackListType, phone)) {
+                    result.put("result", "false");
+                    return result;
+                }
+                Boolean systemWhiteList = redisModuleCuckooFilter.isExist(RedisFilterConstant.REDIS_BLOOM_FILTERS_SYSTEM_WHITE, phone);
+                if (systemWhiteList) {
                     result.put("result", "false");
                     return result;
                 }
@@ -90,12 +111,12 @@ public class SystemPhoneFilter {
                 return result;
             }
             //本地黑名单
-            if (filtersService.localNumberBlackListFilter(phone)) {
-                result.put("result", "true");
-                result.put("code", FilterResponseCode.IS_EXIST_LOCAL_NUMBER_BLACK_LIST.getCode());
-                result.put("message", FilterResponseCode.IS_EXIST_LOCAL_NUMBER_BLACK_LIST.getMessage());
-                return result;
-            }
+//            if (filtersService.localNumberBlackListFilter(phone)) {
+//                result.put("result", "true");
+//                result.put("code", FilterResponseCode.IS_EXIST_LOCAL_NUMBER_BLACK_LIST.getCode());
+//                result.put("message", FilterResponseCode.IS_EXIST_LOCAL_NUMBER_BLACK_LIST.getMessage());
+//                return result;
+//            }
             result.put("result", "false");
             return result;
         }
@@ -112,7 +133,12 @@ public class SystemPhoneFilter {
                     return result;
                 }
                 //行业白名单洗白
-                if(industryWhite(filtersService,isIndustryBlackListType,phone)){
+                if (industryWhite(filtersService, isIndustryBlackListType, phone)) {
+                    result.put("result", "false");
+                    return result;
+                }
+                Boolean systemWhiteList = redisModuleCuckooFilter.isExist(RedisFilterConstant.REDIS_BLOOM_FILTERS_SYSTEM_WHITE, phone);
+                if (systemWhiteList) {
                     result.put("result", "false");
                     return result;
                 }
@@ -121,20 +147,20 @@ public class SystemPhoneFilter {
                 result.put("message", FilterResponseCode.IS_EXIST_SYSTEM_NUMBER_BLACK_LIST.getMessage());
                 return result;
             }
-            //本地黑名单
-            if (filtersService.localNumberBlackListFilter(phone)) {
-                result.put("result", "true");
-                result.put("code", FilterResponseCode.IS_EXIST_LOCAL_NUMBER_BLACK_LIST.getCode());
-                result.put("message", FilterResponseCode.IS_EXIST_LOCAL_NUMBER_BLACK_LIST.getMessage());
-                return result;
-            }
-            //第三方黑名单
-            if (filtersService.thirdNumberBlackListFilter(phone)) {
-                result.put("result", "true");
-                result.put("code", FilterResponseCode.IS_EXIST_THIRD_NUMBER_BLACK_LIST.getCode());
-                result.put("message", FilterResponseCode.IS_EXIST_THIRD_NUMBER_BLACK_LIST.getMessage());
-                return result;
-            }
+//            //本地黑名单
+//            if (filtersService.localNumberBlackListFilter(phone)) {
+//                result.put("result", "true");
+//                result.put("code", FilterResponseCode.IS_EXIST_LOCAL_NUMBER_BLACK_LIST.getCode());
+//                result.put("message", FilterResponseCode.IS_EXIST_LOCAL_NUMBER_BLACK_LIST.getMessage());
+//                return result;
+//            }
+//            //第三方黑名单
+//            if (filtersService.thirdNumberBlackListFilter(phone)) {
+//                result.put("result", "true");
+//                result.put("code", FilterResponseCode.IS_EXIST_THIRD_NUMBER_BLACK_LIST.getCode());
+//                result.put("message", FilterResponseCode.IS_EXIST_THIRD_NUMBER_BLACK_LIST.getMessage());
+//                return result;
+//            }
 
             result.put("result", "false");
             return result;
@@ -158,7 +184,7 @@ public class SystemPhoneFilter {
     public Boolean accountWhiteRegular(FiltersService filtersService, String account, String phone) {
         Object whitePatten = filtersService.get(RedisConstant.FILTERS_CONFIG_ACCOUNT_NUMBER + "white:" + account);
         if (!StringUtils.isEmpty(whitePatten)) {
-            log.info("[号码_白名单_扩展参数]");
+            //log.info("[号码_白名单_扩展参数]");
             Boolean validator = filtersService.validator(whitePatten.toString(), phone);
             if (validator) {
                 return validator;
@@ -166,7 +192,7 @@ public class SystemPhoneFilter {
         }
         Object regularPatten = filtersService.get(RedisConstant.FILTERS_CONFIG_ACCOUNT_NUMBER + "regular:" + account);
         if (!StringUtils.isEmpty(regularPatten)) {
-            log.info("[号码_正则_扩展参数]");
+            //log.info("[号码_正则_扩展参数]");
             if (filtersService.validator(regularPatten.toString(), phone)) {
                 return true;
             }
@@ -184,10 +210,10 @@ public class SystemPhoneFilter {
      * @return 如果洗白，则返回true
      */
     public Boolean industryWhite(FiltersService filtersService, Object industry, String phone) {
-        if(StringUtils.isEmpty(industry)){
+        if (StringUtils.isEmpty(industry)) {
             return false;
         }
-        Boolean isMember = filtersService.isSetMember(RedisConstant.FILTERS_CONFIG_SYSTEM_INDUSTRY_WHITE+industry, phone);
+        Boolean isMember = filtersService.isSetMember(RedisConstant.FILTERS_CONFIG_SYSTEM_INDUSTRY_WHITE + industry, phone);
         return isMember;
     }
 

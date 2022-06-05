@@ -71,6 +71,18 @@ public interface BlackRepository extends CrudRepository<FilterBlackList, String>
     List<String> findSystemBlackList();
 
     /**
+     * 更新系统黑名单状态
+     * @param list
+     */
+    void bathUpdate(List<String> list);
+
+    /**
+     * 更新系统黑名单状态
+     * @param list
+     */
+    void bathUpdateIndustry(List<FilterBlackListValidator> list);
+
+    /**
      * 查询行业黑名单
      *
      * @return

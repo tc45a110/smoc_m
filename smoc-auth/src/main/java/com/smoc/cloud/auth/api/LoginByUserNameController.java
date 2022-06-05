@@ -34,9 +34,9 @@ public class LoginByUserNameController {
     @PostMapping("/token")
     public Object postAccessToken(Principal principal, @RequestParam Map<String, String> parameters, @RequestHeader Map<String, String> headers) throws HttpRequestMethodNotSupportedException {
 
-        log.info("[自定义登录][请求参数]数据:{}", JSON.toJSONString(parameters));
+        //log.info("[自定义登录][请求参数]数据:{}", JSON.toJSONString(parameters));
         Object object = tokenEndpoint.postAccessToken(principal, parameters).getBody();
-        log.info("[自定义登录][验证后参数]数据:{}", JSON.toJSONString(object));
+        //log.info("[自定义登录][验证后参数]数据:{}", JSON.toJSONString(object));
         return object;
     }
 

@@ -65,4 +65,21 @@ public interface KeywordsRepository extends CrudRepository<FilterKeyWordsInfo, S
      * @return
      */
     List<KeyWordsMaskKeyWords> loadKeyWordsAndMaskKeyWord(String businessType, String businessId, String keyWordType);
+
+    /**
+     * 查询 关键词
+     *
+     * @param businessType
+     * @param businessId
+     * @param keyWordType  默认 IS_SYNC ='0'
+     * @return
+     */
+     List<FilterKeyWordsInfoValidator> loadWords(String businessType, String businessId, String keyWordType);
+
+    /**
+     * 更新关键字同步状态
+     *
+     * @param list
+     */
+    void updateIsSyncStatus(List<FilterKeyWordsInfoValidator> list);
 }

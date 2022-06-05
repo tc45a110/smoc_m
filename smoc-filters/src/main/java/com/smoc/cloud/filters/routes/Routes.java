@@ -40,9 +40,9 @@ public class Routes {
                 /**
                  * 全量过滤
                  */
-                .route(r -> r.method(HttpMethod.POST).and().path("/smoc-filters/full-filter/**").and().readBody(String.class, requestBody -> {
-                            return true;
-                        }).filters(f -> f.stripPrefix(1).filter(startFullFilterGatewayFilter).filter(fullFilterParamsGatewayFilter)).uri("lb://smoc")
+                .route(r -> r.method(HttpMethod.POST).and().path("/smoc-filters/full-filter/**").and().readBody(String.class, requestBody -> true).filters(f -> f.stripPrefix(1).filter(fullFilterParamsGatewayFilter).circuitBreaker(config -> config
+                        .setName("mycmd")
+                        .setFallbackUri("forward:/fallback"))).uri("lb://smoc")
 
                 )
                 /**

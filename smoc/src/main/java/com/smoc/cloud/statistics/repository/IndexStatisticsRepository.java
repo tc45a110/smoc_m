@@ -1,18 +1,14 @@
 package com.smoc.cloud.statistics.repository;
 
 import com.smoc.cloud.common.BasePageRepository;
-import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
 import com.smoc.cloud.common.smoc.customer.qo.StatisticProfitData;
 import com.smoc.cloud.common.smoc.index.CheckRemindModel;
-import com.smoc.cloud.customer.rowmapper.AccountStatisticSendRowMapper;
 import com.smoc.cloud.statistics.rowmapper.StatisticCheckRemindRowMapper;
 import com.smoc.cloud.statistics.rowmapper.StatisticProfitRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 

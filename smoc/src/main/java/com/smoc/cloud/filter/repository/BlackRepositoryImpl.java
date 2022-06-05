@@ -210,7 +210,7 @@ public class BlackRepositoryImpl extends BasePageRepository {
      */
     public List<String> findSystemBlackList() {
         //查询sql
-        StringBuilder sqlBuffer = new StringBuilder("select t.MOBILE from filter_black_list t  where t.ENTERPRISE_ID='SYSTEM' ");
+        StringBuilder sqlBuffer = new StringBuilder("select t.MOBILE from filter_black_list t  where t.ENTERPRISE_ID='SYSTEM' and IS_SYNC ='0' ");
         List<String> result = this.jdbcTemplate.queryForList(sqlBuffer.toString(), String.class);
 
         return result;
@@ -226,9 +226,97 @@ public class BlackRepositoryImpl extends BasePageRepository {
         //查询sql
         //查询sql
         StringBuffer sqlBuffer = new StringBuffer("select t.ID,t.GROUP_ID,t.NAME,t.MOBILE,t.STATUS,str_to_date(t.CREATED_TIME,'%Y-%m-%d %H:%i:%S')CREATED_TIME,t.CREATED_BY " +
-                " from filter_black_list t where t.ENTERPRISE_ID='INDUSTRY'");
+                " from filter_black_list t where t.ENTERPRISE_ID='INDUSTRY' and IS_SYNC ='0' ");
         List<FilterBlackListValidator> result = this.jdbcTemplate.query(sqlBuffer.toString(), new BlackRowMapper());
 
         return result;
+    }
+
+    /**
+     * 更新系统黑名单状态
+     * @param list
+     */
+    public void bathUpdate(List<String> list) {
+
+        //每batchSize 分批执行一次
+        Connection connection = null;
+        PreparedStatement statement = null;
+        final String sql = "update filter_black_list set IS_SYNC ='1' where MOBILE=? ";
+        log.info(sql);
+        log.info("[更新系统黑名单状态]数据：{}- 共{}条", System.currentTimeMillis(), list.size());
+        try {
+            connection = jdbcTemplate.getDataSource().getConnection();
+            connection.setAutoCommit(false);
+            statement = connection.prepareStatement(sql);
+            for (String mobile : list) {
+                statement.setString(1, mobile);
+                statement.addBatch();
+            }
+            statement.executeBatch();
+            connection.commit();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            try {
+                if (null != statement) {
+                    statement.close();
+                }
+                if (null != connection) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        log.info("[更新系统黑名单状态]数据：{}", System.currentTimeMillis());
+
+    }
+
+    /**
+     * 更新系统黑名单状态
+     * @param list
+     */
+    public void bathUpdateIndustry(List<FilterBlackListValidator> list) {
+
+        //每batchSize 分批执行一次
+        Connection connection = null;
+        PreparedStatement statement = null;
+        final String sql = "update filter_black_list set IS_SYNC ='1' where MOBILE=? ";
+        log.info(sql);
+        log.info("[更新行业黑名单状态]数据：{}- 共{}条", System.currentTimeMillis(), list.size());
+        try {
+            connection = jdbcTemplate.getDataSource().getConnection();
+            connection.setAutoCommit(false);
+            statement = connection.prepareStatement(sql);
+            for (FilterBlackListValidator validator : list) {
+                statement.setString(1, validator.getMobile());
+                statement.addBatch();
+            }
+            statement.executeBatch();
+            connection.commit();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            try {
+                if (null != statement) {
+                    statement.close();
+                }
+                if (null != connection) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        log.info("[更新行业黑名单状态]数据：{}", System.currentTimeMillis());
+
     }
 }

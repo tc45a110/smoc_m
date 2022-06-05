@@ -41,6 +41,13 @@ public interface AccountTemplateInfoRepository extends JpaRepository<AccountTemp
     Map<String, String> findFixedTemplate();
 
     /**
+     * 查询绑定账号的固定模版，包括CMPP类型
+     *
+     * @return
+     */
+    List<AccountTemplateContent> findFixedTemplate(String account);
+
+    /**
      * 查询绑定账号的固定模版，包括HTTP、WEB类型
      *
      * @return
@@ -62,6 +69,13 @@ public interface AccountTemplateInfoRepository extends JpaRepository<AccountTemp
     Map<String, String> findNoFilterVariableTemplate();
 
     /**
+     * 查询绑定账号的变量模版，而且该变量模版 匹配后，不在进行后续过滤
+     *
+     * @return
+     */
+     List<AccountTemplateContent> findNoFilterVariableTemplate(String account);
+
+    /**
      * 查询绑定账号的CMPP变量模版，该部分只查询匹配上模版后，需要继续过滤的模版
      *
      * @return
@@ -69,10 +83,24 @@ public interface AccountTemplateInfoRepository extends JpaRepository<AccountTemp
     Map<String, String> findCMPPVariableTemplate();
 
     /**
+     * 查询绑定账号的CMPP变量模版，该部分只查询匹配上模版后，需要继续过滤的模版
+     *
+     * @return
+     */
+    List<AccountTemplateContent> findCMPPVariableTemplate(String account);
+
+    /**
      * 查询绑定账号的CMPP签名模版
      *
      * @return
      */
     Map<String, String> findCMPPSignTemplate();
+
+    /**
+     * 查询绑定账号的CMPP签名模版
+     *
+     * @return
+     */
+    List<AccountTemplateContent> findCMPPSignTemplate(String account);
 
 }

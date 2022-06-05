@@ -166,10 +166,10 @@
                                                 <button sec:authorize-url="/template/save/*" type="submit"
                                                         class="btn btn-teal waves-effect waves-light">提交
                                                 </button>
-                                                <a sec:authorize-url="/template/check" style="margin-left:20px"
-                                                   id="check"
-                                                   class="btn btn-info waves-effect waves-light">内容检测
-                                                </a>
+<!--                                                <a sec:authorize-url="/template/check" style="margin-left:20px"-->
+<!--                                                   id="check"-->
+<!--                                                   class="btn btn-info waves-effect waves-light">内容检测-->
+<!--                                                </a>-->
                                                 <a th:href="@{/template/list/{protocol}(protocol=${accountTemplateInfoValidator.templateAgreementType})}"
                                                    style="margin-left:20px"
                                                    class="btn btn-default waves-effect waves-light">返回</a>
@@ -218,8 +218,8 @@
         if("2"==type){
           $('#FILTER').removeAttr("disabled");
           $('#NO_FILTER').removeAttr("disabled");
-          $('#NO_FILTER').removeAttr("checked");
-          $('#FILTER').prop("checked", true);
+          $('#NO_FILTER').prop("checked",true);
+          $('#FILTER').prop("checked", false);
        }
         if("3"==type){
           $('#FILTER').removeAttr("disabled");

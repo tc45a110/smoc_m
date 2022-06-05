@@ -10,11 +10,11 @@ import com.smoc.cloud.common.smoc.filter.ExcelModel;
 import com.smoc.cloud.common.smoc.filter.FilterWhiteListValidator;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
+import com.smoc.cloud.filter.entity.FilterWhiteList;
 import com.smoc.cloud.filter.service.WhiteService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -78,8 +78,21 @@ public class WhiteController {
         if (!MpmValidatorUtil.validate(filterWhiteListValidator)) {
             return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(filterWhiteListValidator));
         }
+        ResponseData responseData = whiteService.save(filterWhiteListValidator, op);
+        //加载系统到白名单过滤器
+        if (ResponseCode.SUCCESS.getCode().equals(responseData.getCode())) {
 
-        return whiteService.save(filterWhiteListValidator, op);
+            if ("SYSTEM".equals(filterWhiteListValidator.getEnterpriseId())) {
+                //加载白名单到白名单过滤器
+                this.whiteService.loadWhiteList();
+            }
+
+            if ("INDUSTRY".equals(filterWhiteListValidator.getEnterpriseId())) {
+                //加载行业白名单
+                this.whiteService.loadIndustryWhiteList();
+            }
+        }
+        return responseData;
     }
 
 
@@ -98,8 +111,23 @@ public class WhiteController {
         if (!MpmValidatorUtil.validate(validator)) {
             return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(validator));
         }
+        ResponseData<FilterWhiteList> findById = whiteService.findById(id);
 
-        return whiteService.deleteById(id);
+        ResponseData responseData = whiteService.deleteById(id);
+        //把明白从白名单过滤器删除
+        if (ResponseCode.SUCCESS.getCode().equals(responseData.getCode())) {
+            if ("SYSTEM".equals(findById.getData().getEnterpriseId())) {
+                //删除白名单到白名单过滤器
+                this.whiteService.delWhiteList(findById.getData().getMobile());
+            }
+
+            if ("INDUSTRY".equals(findById.getData().getEnterpriseId())) {
+                //删除行业白名单
+                this.whiteService.deleteIndustryWhiteList(findById.getData().getGroupId(), findById.getData().getMobile());
+            }
+
+        }
+        return responseData;
     }
 
     /**
@@ -116,6 +144,7 @@ public class WhiteController {
 
     /**
      * 查询导出数据
+     *
      * @param pageParams
      * @return
      */

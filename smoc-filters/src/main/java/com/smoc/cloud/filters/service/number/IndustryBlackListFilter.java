@@ -32,11 +32,13 @@ public class IndustryBlackListFilter {
             return result;
         }
 
-        log.info("[isIndustryBlackListType]:{}",isIndustryBlackListType);
-        log.info("[phone]:{}",phone);
+        //log.info("[isIndustryBlackListType]:{}",isIndustryBlackListType);
+        //log.info("[phone]:{}",phone);
         Boolean isExistIndustryBlackList= filtersService.isSetMember(RedisConstant.FILTERS_CONFIG_SYSTEM_INDUSTRY_BLACK+isIndustryBlackListType,phone);
+        //log.info("[isExistIndustryBlackList]:{}",isExistIndustryBlackList);
         if(isExistIndustryBlackList){
             Boolean isMember = filtersService.isSetMember(RedisConstant.FILTERS_CONFIG_SYSTEM_INDUSTRY_WHITE+isIndustryBlackListType,phone);
+            //log.info("[isMember]:{}",isMember);
             //行业白名单洗白
             if(isMember){
                 result.put("result", "false");
@@ -59,7 +61,6 @@ public class IndustryBlackListFilter {
     }
 
     /**
-     * 业务账号配置的白名单规则
      *
      * @param filtersService
      * @param account
@@ -69,7 +70,7 @@ public class IndustryBlackListFilter {
     public Boolean accountWhiteRegular(FiltersService filtersService, String account, String phone) {
         Object whitePatten = filtersService.get(RedisConstant.FILTERS_CONFIG_ACCOUNT_NUMBER + "white:" + account);
         if (!StringUtils.isEmpty(whitePatten)) {
-            log.info("[号码_白名单_扩展参数]");
+            //log.info("[号码_白名单_扩展参数]");
             Boolean validator = filtersService.validator(whitePatten.toString(), phone);
             if (validator) {
                 return validator;
@@ -77,7 +78,7 @@ public class IndustryBlackListFilter {
         }
         Object regularPatten = filtersService.get(RedisConstant.FILTERS_CONFIG_ACCOUNT_NUMBER + "regular:" + account);
         if (!StringUtils.isEmpty(regularPatten)) {
-            log.info("[号码_正则_扩展参数]");
+            //log.info("[号码_正则_扩展参数]");
             if (filtersService.validator(regularPatten.toString(), phone)) {
                 return true;
             }

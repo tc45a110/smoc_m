@@ -36,8 +36,8 @@ public class SmocFiltersController {
 
         RequestFullParams requestFullParams = new RequestFullParams();
         requestFullParams.setAccount("WHZ119");
-        requestFullParams.setPhone("13910986771");
-        requestFullParams.setMessage("【招商银行】尊敬的客户，为更好保障持卡人用卡权益，并逐步关闭部分账单日，通讯详单记录建议您可拨打热线400-820-5555申请更改至新账单日com。退订回#C");
+        requestFullParams.setPhone("18510816772");
+        requestFullParams.setMessage("【招商银行】尊敬的客户，为更好保障持卡人用卡权益，并逐步关闭部分账单日，建议您可拨打热线400-820-5555申请更改至新账单日。退订回#C");
         requestFullParams.setCarrier("");
         requestFullParams.setProvinceCode("");
         requestFullParams.setTemplateId("");

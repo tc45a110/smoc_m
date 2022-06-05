@@ -55,7 +55,7 @@ public class ParameterExtendFiltersValueService {
      */
     public ResponseData save(List<ParameterExtendFiltersValueValidator> list, String businessId,String createdBy,String businessType) {
         try {
-            ResponseData data = this.parameterExtendFiltersValueFeignClient.save(list, businessId);
+            ResponseData data = this.parameterExtendFiltersValueFeignClient.save(list, businessId,businessType);
 
             //记录操作日志
             if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {

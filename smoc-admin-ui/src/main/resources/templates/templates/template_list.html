@@ -107,6 +107,7 @@
                                     <th style="width:400px">模板内容</th>
                                     <th style="width:100px">模板类型</th>
                                     <th style="width:100px">敏感词过滤</th>
+                                    <th style="width:80px">状态</th>
                                     <th style="width:160px">操作</th>
                                 </tr>
                                 <thead>
@@ -140,7 +141,10 @@
                                         <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light" th:if="${info.isFilter eq 'FILTER'}">过滤</a>
                                         <a class="btn btn-teal btn-rounded btn-sm waves-effect waves-light" th:if="${info.isFilter eq 'NO_FILTER'}">不过滤</a>
                                     </td>
-
+                                    <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
+                                        <a class="btn btn-success btn-rounded btn-sm waves-effect waves-light" th:if="${info.templateStatus eq '2'}">生效中</a>
+                                        <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light" th:if="${info.templateStatus eq '0'}">已失效</a>
+                                    </td>
                                     <td style="vertical-align: middle;line-height: 26px;">
                                         <a sec:authorize-url="/template/view/center/*/*"
                                            th:href="@{/template/view/center/{templateId}/{protocol}(templateId=${info.templateId},protocol=${info.templateAgreementType})}"

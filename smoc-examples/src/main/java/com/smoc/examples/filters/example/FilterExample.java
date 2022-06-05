@@ -29,7 +29,7 @@ public class FilterExample {
             data.put("phone", "13910986771");
             data.put("account", "YQT124");
             data.put("carrier", "CMCC");
-            String message = "【招商银行】尊敬的客户，为更好保障持卡人用卡权益，并逐步关闭部分账单日，通讯详单记录建议您可拨打热线400-820-5555申请更改至新账单日com。退订回#C";
+            String message = "【招商银行】尊敬的客户，婊子为更好保障持卡人用卡权益，并逐步关闭部分账单日，建议您可拨打热线400-820-5555申请更改至新账单日com。退订回#C";
             data.put("message", message);
             data.put("provinceCode", "11");
 //            data.put("templateId", "TEMP100293");
@@ -37,7 +37,7 @@ public class FilterExample {
 
             //转JSON请求数据
             String requestJsonData = new Gson().toJson(data);
-            //System.out.println(requestJsonData);
+            System.out.println(requestJsonData);
             String result = Okhttp3Utils.postJson(url, requestJsonData, header);
             //Thread.currentThread().sleep(1000);
             System.out.println(System.currentTimeMillis() + "[请求响应]数据:" + result);

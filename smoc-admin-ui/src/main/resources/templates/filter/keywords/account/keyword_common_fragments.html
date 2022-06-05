@@ -19,19 +19,19 @@
 
             <ul class="nav nav-pills pull-right">
                 <li>
-                    <a sec:authorize-url="/filter/keywords/list/*/*/*"  style="color:#797979;"
+                    <a sec:authorize-url="/filter/keywords/list/*/*/*"  style="color:#797979;" th:attr="class=${filterKeyWordsInfoValidator.keyWordsType == 'BLACK'?'btn btn-purple btn-rounded w-md waves-effect disabled':'btn btn-default btn-rounded w-md '}"
                        th:href="@{/filter/keywords/list/{keyWordsBusinessType}/{businessId}/BLACK(keyWordsBusinessType=${filterKeyWordsInfoValidator.keyWordsBusinessType},businessId=${filterKeyWordsInfoValidator.businessId})}"
                     >
                         敏感词列表
                     </a></li>
                 <li>
-                    <a sec:authorize-url="/filter/keywords/list/*/*/*" style="color:#797979;"
+                    <a sec:authorize-url="/filter/keywords/list/*/*/*" style="color:#797979;margin-left:10px" th:attr="class=${filterKeyWordsInfoValidator.keyWordsType == 'CHECK'?'btn btn-purple btn-rounded w-md waves-effect disabled':'btn btn-default btn-rounded w-md '}"
                        th:href="@{/filter/keywords/list/{keyWordsBusinessType}/{businessId}/CHECK(keyWordsBusinessType=${filterKeyWordsInfoValidator.keyWordsBusinessType},businessId=${filterKeyWordsInfoValidator.businessId})}"
                     >
                         审核词列表
                     </a></li>
                 <li>
-                    <a sec:authorize-url="/filter/keywords/list/*/*/*" style="color:#797979;"
+                    <a sec:authorize-url="/filter/keywords/list/*/*/*" style="color:#797979;margin-left:10px" th:attr="class=${filterKeyWordsInfoValidator.keyWordsType == 'WHITE'?'btn btn-purple btn-rounded w-md waves-effect disabled':'btn btn-default btn-rounded w-md '}"
                        th:href="@{/filter/keywords/list/{keyWordsBusinessType}/{businessId}/WHITE(keyWordsBusinessType=${filterKeyWordsInfoValidator.keyWordsBusinessType},businessId=${filterKeyWordsInfoValidator.businessId})}"
                     >
                         白词列表

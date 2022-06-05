@@ -74,9 +74,18 @@ public class FullFilterParamsGatewayFilter extends BaseGatewayFilter implements 
 
         //获取body内容
         String requestBody = exchange.getAttribute("cachedRequestBodyObject");
+        //log.info("[requestBody]:{}",requestBody);
 
         //校验数据请求的数据结构
         RequestFullParams model = new Gson().fromJson(requestBody, RequestFullParams.class);
+        //log.info("[model]:{}",requestBody);
+        /**
+         * 关键参数校验
+         */
+        if (StringUtils.isEmpty(model.getAccount()) || StringUtils.isEmpty(model.getPhone()) || StringUtils.isEmpty(model.getMessage())) {
+            return errorHandle(exchange, FilterResponseCode.PARAM_FORMAT_ERROR.getCode(), FilterResponseCode.PARAM_FORMAT_ERROR.getMessage());
+        }
+
 
         /**
          * 查询业务账号配置的COMMON级别 配置参数
@@ -150,7 +159,7 @@ public class FullFilterParamsGatewayFilter extends BaseGatewayFilter implements 
          */
         Object isBlackListType = entities.get("COMMON_BLACK_LIST_LEVEL_FILTERING");
         Object isIndustryBlackListType = entities.get("COMMON_INFO_BLACK_LIST_FILTERING");//行业黑名单
-        Map<String, String> blackListFilterResult = systemPhoneFilter.filter(filtersService, isBlackListType,model.getAccount(), model.getPhone(),isIndustryBlackListType);
+        Map<String, String> blackListFilterResult = systemPhoneFilter.filter(filtersService, isBlackListType, model.getAccount(), model.getPhone(), isIndustryBlackListType);
         if (!"false".equals(blackListFilterResult.get("result"))) {
             return errorHandle(exchange, blackListFilterResult.get("code"), blackListFilterResult.get("message"));
         }
@@ -158,7 +167,7 @@ public class FullFilterParamsGatewayFilter extends BaseGatewayFilter implements 
         /**
          * 2、行业黑名单过滤
          */
-        Map<String, String> industryBlackListFilterResult = industryBlackListFilter.filter(filtersService,isIndustryBlackListType, model.getAccount(), model.getPhone());
+        Map<String, String> industryBlackListFilterResult = industryBlackListFilter.filter(filtersService, isIndustryBlackListType, model.getAccount(), model.getPhone());
         if (!"false".equals(industryBlackListFilterResult.get("result"))) {
             return errorHandle(exchange, industryBlackListFilterResult.get("code"), industryBlackListFilterResult.get("message"));
         }
@@ -191,19 +200,18 @@ public class FullFilterParamsGatewayFilter extends BaseGatewayFilter implements 
             //先去匹配固定格式模版
             Object fixedTemplate = filtersService.getMapValue(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_HTTP_FIXED, model.getTemplateId());
             if (!StringUtils.isEmpty(fixedTemplate)) {
-                log.info("templateId 固定模版:{}",fixedTemplate);
-                log.info("           短信内容:{}", model.getMessage());
+//                log.info("templateId 固定模版:{}", fixedTemplate);
+//                log.info("           短信内容:{}", model.getMessage());
 
                 if (model.getMessage().equals(fixedTemplate)) {
-
                     return success(exchange);
                 }
             }
             //根据模版id 去找变量模版
             Object variableTemplate = filtersService.getMapValue(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_HTTP_VARIABLE, model.getTemplateId());
             if (!StringUtils.isEmpty(variableTemplate)) {
-                log.info("templateId 变量模版:{}",variableTemplate);
-                log.info("           短信内容:{}", model.getMessage());
+//                log.info("templateId 变量模版:{}", variableTemplate);
+//                log.info("           短信内容:{}", model.getMessage());
                 Pattern pattern = Pattern.compile(variableTemplate.toString());
                 Matcher matcher = pattern.matcher(model.getMessage());
                 if (matcher.find()) {
@@ -261,6 +269,8 @@ public class FullFilterParamsGatewayFilter extends BaseGatewayFilter implements 
                 return errorHandle(exchange, FilterResponseCode.SIGN_IS_NOT_FOUND.getCode(), FilterResponseCode.SIGN_IS_NOT_FOUND.getMessage());
             }
 
+        } else {
+            return errorHandle(exchange, FilterResponseCode.SIGN_IS_NOT_FOUND.getCode(), FilterResponseCode.SIGN_IS_NOT_FOUND.getMessage());
         }
 
         /**
@@ -277,7 +287,7 @@ public class FullFilterParamsGatewayFilter extends BaseGatewayFilter implements 
         /**
          * 6、业务账号内容扩展参数过滤
          */
-        Map<String, String> extendMessageParamsFilterResult = extendMessageParamsFilter.filter(filtersService, model.getAccount(),model.getMessage());
+        Map<String, String> extendMessageParamsFilterResult = extendMessageParamsFilter.filter(filtersService, model.getAccount(), model.getMessage());
         if (!"false".equals(extendMessageParamsFilterResult.get("result"))) {
             return errorHandle(exchange, extendMessageParamsFilterResult.get("code"), extendMessageParamsFilterResult.get("message"));
         }

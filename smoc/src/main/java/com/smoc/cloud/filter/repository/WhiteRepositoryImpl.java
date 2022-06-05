@@ -40,20 +40,20 @@ public class WhiteRepositoryImpl extends BasePageRepository {
 
         List<Object> paramsList = new ArrayList<Object>();
         if (null != filterWhiteListValidator) {
-            paramsList.add( filterWhiteListValidator.getGroupId().trim());
+            paramsList.add(filterWhiteListValidator.getGroupId().trim());
 
-            if(!StringUtils.isEmpty(filterWhiteListValidator.getEnterpriseId())){
+            if (!StringUtils.isEmpty(filterWhiteListValidator.getEnterpriseId())) {
                 sqlBuffer.append(" and t.ENTERPRISE_ID = ? ");
                 paramsList.add(filterWhiteListValidator.getEnterpriseId().trim());
             }
 
             if (!StringUtils.isEmpty(filterWhiteListValidator.getName())) {
                 sqlBuffer.append(" and t.NAME like ? ");
-                paramsList.add(  "%" + filterWhiteListValidator.getName().trim() + "%");
+                paramsList.add("%" + filterWhiteListValidator.getName().trim() + "%");
             }
             if (!StringUtils.isEmpty(filterWhiteListValidator.getMobile())) {
                 sqlBuffer.append(" and t.MOBILE like ? ");
-                paramsList.add( "%" + filterWhiteListValidator.getMobile().trim()+ "%");
+                paramsList.add("%" + filterWhiteListValidator.getMobile().trim() + "%");
             }
         }
         sqlBuffer.append(" order by t.CREATED_TIME desc,t.ID ");
@@ -72,15 +72,15 @@ public class WhiteRepositoryImpl extends BasePageRepository {
         int batchSize = 60000;
         Connection connection = null;
         PreparedStatement statement = null;
-        List<ExcelModel> list= filterWhiteListValidator.getExcelModelList();
+        List<ExcelModel> list = filterWhiteListValidator.getExcelModelList();
         final String sql = "insert into filter_white_list(ID,ENTERPRISE_ID,GROUP_ID,NAME,MOBILE,IS_SYNC,STATUS,CREATED_BY,CREATED_TIME) values(?,?,?,?,?,?,?,?,now()) ";
         log.info(sql);
-        log.info("[系统白名单导入开始]数据：{}- 共{}条", System.currentTimeMillis(),list.size());
+        log.info("[系统白名单导入开始]数据：{}- 共{}条", System.currentTimeMillis(), list.size());
         try {
             connection = jdbcTemplate.getDataSource().getConnection();
             connection.setAutoCommit(false);
             statement = connection.prepareStatement(sql);
-            int i=0;
+            int i = 0;
             for (ExcelModel entry : list) {
                 statement.setString(1, UUID.uuid32());
                 statement.setString(2, filterWhiteListValidator.getEnterpriseId());
@@ -120,7 +120,7 @@ public class WhiteRepositoryImpl extends BasePageRepository {
 
     }
 
-    public  List<ExcelModel> excelModel(PageParams<FilterWhiteListValidator> pageParams) {
+    public List<ExcelModel> excelModel(PageParams<FilterWhiteListValidator> pageParams) {
         //组织查询条件
         FilterWhiteListValidator filterWhiteListValidator = pageParams.getParams();
 
@@ -129,9 +129,9 @@ public class WhiteRepositoryImpl extends BasePageRepository {
 
         List<Object> paramsList = new ArrayList<Object>();
         if (null != filterWhiteListValidator) {
-            paramsList.add( filterWhiteListValidator.getGroupId().trim());
+            paramsList.add(filterWhiteListValidator.getGroupId().trim());
         }
-        if(!StringUtils.isEmpty(filterWhiteListValidator.getEnterpriseId())){
+        if (!StringUtils.isEmpty(filterWhiteListValidator.getEnterpriseId())) {
             sqlBuffer.append(" and t.ENTERPRISE_ID = ? ");
             paramsList.add(filterWhiteListValidator.getEnterpriseId().trim());
         }
@@ -150,9 +150,9 @@ public class WhiteRepositoryImpl extends BasePageRepository {
      *
      * @return
      */
-    public List<String> findSystemWhiteList(){
+    public List<String> findSystemWhiteList() {
         //查询sql
-        StringBuilder sqlBuffer = new StringBuilder("select t.MOBILE from filter_white_list t  where t.ENTERPRISE_ID='SYSTEM' ");
+        StringBuilder sqlBuffer = new StringBuilder("select t.MOBILE from filter_white_list t  where t.ENTERPRISE_ID='SYSTEM' and IS_SYNC ='0'");
         List<String> result = this.jdbcTemplate.queryForList(sqlBuffer.toString(), String.class);
 
         return result;
@@ -163,11 +163,101 @@ public class WhiteRepositoryImpl extends BasePageRepository {
      *
      * @return
      */
-    public List<FilterWhiteListValidator> findIndustryWhiteList(){
+    public List<FilterWhiteListValidator> findIndustryWhiteList() {
         //查询sql
         StringBuffer sqlBuffer = new StringBuffer("select t.ID,t.GROUP_ID,t.NAME,t.MOBILE,t.STATUS,str_to_date(t.CREATED_TIME,'%Y-%m-%d %H:%i:%S')CREATED_TIME,t.CREATED_BY " +
-                " from filter_white_list t where t.ENTERPRISE_ID='INDUSTRY' ");
-        List<FilterWhiteListValidator> result = this.jdbcTemplate.query(sqlBuffer.toString(),  new WhiteRowMapper());
+                " from filter_white_list t where t.ENTERPRISE_ID='INDUSTRY' and IS_SYNC ='0' ");
+        List<FilterWhiteListValidator> result = this.jdbcTemplate.query(sqlBuffer.toString(), new WhiteRowMapper());
         return result;
+    }
+
+    /**
+     * 更新系统白名单状态
+     *
+     * @param list
+     */
+    public void bathUpdate(List<String> list) {
+
+        //每batchSize 分批执行一次
+        Connection connection = null;
+        PreparedStatement statement = null;
+        final String sql = "update filter_white_list set IS_SYNC ='1' where MOBILE=? ";
+        //log.info(sql);
+        log.info("[更新系统白名单状态]数据：{}- 共{}条", System.currentTimeMillis(), list.size());
+        try {
+            connection = jdbcTemplate.getDataSource().getConnection();
+            connection.setAutoCommit(false);
+            statement = connection.prepareStatement(sql);
+            for (String mobile : list) {
+                statement.setString(1, mobile);
+                statement.addBatch();
+            }
+            statement.executeBatch();
+            connection.commit();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            try {
+                if (null != statement) {
+                    statement.close();
+                }
+                if (null != connection) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        log.info("[更新系统白名单状态]数据：{}", System.currentTimeMillis());
+
+    }
+
+    /**
+     * 更新系统白名单状态
+     *
+     * @param list
+     */
+    public void bathUpdateIndustry(List<FilterWhiteListValidator> list) {
+
+        //每batchSize 分批执行一次
+        Connection connection = null;
+        PreparedStatement statement = null;
+        final String sql = "update filter_white_list set IS_SYNC ='1' where MOBILE=? ";
+        //log.info(sql);
+        log.info("[更新行业白名单状态]数据：{}- 共{}条", System.currentTimeMillis(), list.size());
+        try {
+            connection = jdbcTemplate.getDataSource().getConnection();
+            connection.setAutoCommit(false);
+            statement = connection.prepareStatement(sql);
+            for (FilterWhiteListValidator validator : list) {
+                statement.setString(1, validator.getMobile());
+                statement.addBatch();
+            }
+            statement.executeBatch();
+            connection.commit();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            try {
+                if (null != statement) {
+                    statement.close();
+                }
+                if (null != connection) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        log.info("[更新行业白名单状态]数据：{}", System.currentTimeMillis());
+
     }
 }

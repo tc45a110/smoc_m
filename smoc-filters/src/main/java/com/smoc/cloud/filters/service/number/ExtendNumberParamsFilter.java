@@ -63,19 +63,19 @@ public class ExtendNumberParamsFilter {
         /**
          * 查询业务账号配置的NUMBER_REGULAR_级别配置参数  满足则通过
          */
-        if ("true".equals(result.get("result"))) {
-            Object regularPatten = filtersService.get(RedisConstant.FILTERS_CONFIG_ACCOUNT_NUMBER + "regular:" + account);
-            if (!StringUtils.isEmpty(regularPatten)) {
-                //log.info("[号码_正则_扩展参数]{}:{}", model.getAccount(), new Gson().toJson(regularPatten));
-                if (filtersService.validator(regularPatten.toString(), phone)) {
-                    result.put("result", "false");
-                } else {
-                    result.put("result", "true");
-                    result.put("code", FilterResponseCode.NUMBER_REGULAR_FILTER.getCode());
-                    result.put("message", FilterResponseCode.NUMBER_REGULAR_FILTER.getMessage());
-                }
-            }
-        }
+//        if ("true".equals(result.get("result"))) {
+//            Object regularPatten = filtersService.get(RedisConstant.FILTERS_CONFIG_ACCOUNT_NUMBER + "regular:" + account);
+//            if (!StringUtils.isEmpty(regularPatten)) {
+//                //log.info("[号码_正则_扩展参数]{}:{}", model.getAccount(), new Gson().toJson(regularPatten));
+//                if (filtersService.validator(regularPatten.toString(), phone)) {
+//                    result.put("result", "false");
+//                } else {
+//                    result.put("result", "true");
+//                    result.put("code", FilterResponseCode.NUMBER_REGULAR_FILTER.getCode());
+//                    result.put("message", FilterResponseCode.NUMBER_REGULAR_FILTER.getMessage());
+//                }
+//            }
+//        }
 
         return result;
     }

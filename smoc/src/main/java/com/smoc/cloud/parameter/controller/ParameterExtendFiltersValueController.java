@@ -1,5 +1,7 @@
 package com.smoc.cloud.parameter.controller;
 
+import com.google.gson.Gson;
+import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.parameter.ParameterExtendFiltersValueValidator;
 import com.smoc.cloud.parameter.entity.ParameterExtendFiltersValue;
@@ -27,7 +29,7 @@ public class ParameterExtendFiltersValueController {
 
     @RequestMapping(value = "/findParameterValue/{businessId}", method = RequestMethod.GET)
     public ResponseData<List<ParameterExtendFiltersValue>> findParameterValue(@PathVariable String businessId) {
-
+        log.info("[businessId]:{}", businessId);
         ResponseData<List<ParameterExtendFiltersValue>> data = parameterExtendFiltersValueService.findParameterExtendFiltersValueByBusinessId(businessId);
         return data;
     }
@@ -38,11 +40,19 @@ public class ParameterExtendFiltersValueController {
      * @param businessId 业务id
      * @return
      */
-    @RequestMapping(value = "/save/{businessId}", method = RequestMethod.POST)
-    public ResponseData save(@RequestBody List<ParameterExtendFiltersValueValidator> list, @PathVariable String businessId) {
-
+    @RequestMapping(value = "/save/{businessId}/{businessType}", method = RequestMethod.POST)
+    public ResponseData save(@RequestBody List<ParameterExtendFiltersValueValidator> list, @PathVariable String businessId, @PathVariable String businessType) {
+        log.info("[businessType]:{}:{}", businessType, businessId);
         //保存操作
         ResponseData data = parameterExtendFiltersValueService.save(list, businessId);
+
+        //更新业务账号参数配置到redis的缓存
+        if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            if ("BUSINESS_ACCOUNT_FILTER".equals(businessType)) {
+                parameterExtendFiltersValueService.reloadRedisCache(businessId, list);
+            }
+        }
+
         return data;
     }
 }

@@ -42,6 +42,11 @@ public enum FilterResponseCode {
     SIGN_IS_NOT_FOUND("1401", "签名没有报备！"),
     TEMPLATE_IS_NOT_FOUND("1402", "没匹配到模版ID对应模版！"),
 
+    REQUEST_LIMIT_ERROR("2000","请求达到限流上限"),
+    REQUEST_CIRCUIT_BREAKER_ERROR("2001","触发熔断机制"),
+
+
+
     REQUEST_LEGAL_ERROR("3004", "非法请求"),
     REQUEST_IP_ERROR("3005", "IP访问受限");
 

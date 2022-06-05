@@ -61,19 +61,19 @@ public class ExtendMessageParamsFilter {
         /**
          * 查询业务账号配置的MESSAGE_REGULAR_级别配置参数
          */
-        if ("true".equals(result.get("result"))) {
-            Object regularPatten = filtersService.get(RedisConstant.FILTERS_CONFIG_ACCOUNT_MESSAGE + "regular:" + account);
-            if (!StringUtils.isEmpty(regularPatten)) {
-                //log.info("[内容_正则_扩展参数]{}:{}", model.getAccount(), new Gson().toJson(regularPatten));
-                if (filtersService.validator(regularPatten.toString(), message)) {
-                    result.put("result", "false");
-                } else {
-                    result.put("result", "true");
-                    result.put("code", FilterResponseCode.MESSAGE_REGULAR_FILTER.getCode());
-                    result.put("message", FilterResponseCode.MESSAGE_REGULAR_FILTER.getMessage());
-                }
-            }
-        }
+//        if ("true".equals(result.get("result"))) {
+//            Object regularPatten = filtersService.get(RedisConstant.FILTERS_CONFIG_ACCOUNT_MESSAGE + "regular:" + account);
+//            if (!StringUtils.isEmpty(regularPatten)) {
+//                //log.info("[内容_正则_扩展参数]{}:{}", model.getAccount(), new Gson().toJson(regularPatten));
+//                if (filtersService.validator(regularPatten.toString(), message)) {
+//                    result.put("result", "false");
+//                } else {
+//                    result.put("result", "true");
+//                    result.put("code", FilterResponseCode.MESSAGE_REGULAR_FILTER.getCode());
+//                    result.put("message", FilterResponseCode.MESSAGE_REGULAR_FILTER.getMessage());
+//                }
+//            }
+//        }
 
         return result;
     }

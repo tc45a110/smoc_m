@@ -31,6 +31,6 @@ public interface ParameterExtendFiltersValueFeignClient {
      * @param businessId 业务id
      * @return
      */
-    @RequestMapping(value = "/parameter/filter/save/{businessId}", method = RequestMethod.POST)
-    ResponseData save(@RequestBody List<ParameterExtendFiltersValueValidator> list, @PathVariable String businessId) throws Exception;
+    @RequestMapping(value = "/parameter/filter/save/{businessId}/{businessType}", method = RequestMethod.POST)
+    ResponseData save(@RequestBody List<ParameterExtendFiltersValueValidator> list, @PathVariable String businessId,@PathVariable String businessType) throws Exception;
 }

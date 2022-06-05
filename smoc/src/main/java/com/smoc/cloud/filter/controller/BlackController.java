@@ -11,6 +11,7 @@ import com.smoc.cloud.common.smoc.filter.FilterBlackListValidator;
 import com.smoc.cloud.common.smoc.filter.FilterWhiteListValidator;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
+import com.smoc.cloud.filter.entity.FilterBlackList;
 import com.smoc.cloud.filter.service.BlackService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/filter/black")
-@Scope(value= WebApplicationContext.SCOPE_REQUEST)
+@Scope(value = WebApplicationContext.SCOPE_REQUEST)
 public class BlackController {
 
     @Autowired
@@ -35,6 +36,7 @@ public class BlackController {
 
     /**
      * 根据群id查询通讯录
+     *
      * @param pageParams
      * @return
      */
@@ -52,7 +54,6 @@ public class BlackController {
      */
     @RequestMapping(value = "/findById/{id}", method = RequestMethod.GET)
     public ResponseData findById(@PathVariable String id) {
-
 
         //完成参数规则验证
         MpmIdValidator validator = new MpmIdValidator();
@@ -78,7 +79,23 @@ public class BlackController {
             return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(filterBlackListValidator));
         }
 
-        return blackService.save(filterBlackListValidator, op);
+        ResponseData responseData = blackService.save(filterBlackListValidator, op);
+        //更新黑名单过滤器
+        if (ResponseCode.SUCCESS.getCode().equals(responseData.getCode())) {
+
+            if ("SYSTEM".equals(filterBlackListValidator.getEnterpriseId())) {
+                //加载黑名单到黑名单过滤器
+                this.blackService.loadBlackList();
+            }
+
+            if ("INDUSTRY".equals(filterBlackListValidator.getEnterpriseId())) {
+                //加载行业黑名单
+                this.blackService.loadIndustryBlackList();
+            }
+
+        }
+
+        return responseData;
     }
 
 
@@ -97,8 +114,16 @@ public class BlackController {
         if (!MpmValidatorUtil.validate(validator)) {
             return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(validator));
         }
-
-        return blackService.deleteById(id);
+        ResponseData<FilterBlackList> model = blackService.findById(id);
+        ResponseData responseData = blackService.deleteById(id);
+        //更新黑名单过滤器
+        if (ResponseCode.SUCCESS.getCode().equals(responseData.getCode())) {
+            //删除行业黑名单
+            if ("INDUSTRY".equals(model.getData().getEnterpriseId())) {
+                this.blackService.deleteIndustryBlackList(model.getData().getGroupId(), model.getData().getMobile());
+            }
+        }
+        return responseData;
     }
 
     /**
@@ -115,6 +140,7 @@ public class BlackController {
 
     /**
      * 查询导出数据
+     *
      * @param pageParams
      * @return
      */

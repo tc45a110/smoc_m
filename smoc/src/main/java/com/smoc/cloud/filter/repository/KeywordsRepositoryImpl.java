@@ -5,6 +5,7 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.smoc.filter.ExcelModel;
 import com.smoc.cloud.common.smoc.filter.FilterKeyWordsInfoValidator;
+import com.smoc.cloud.common.smoc.filter.FilterWhiteListValidator;
 import com.smoc.cloud.common.smoc.filter.WhiteExcelModel;
 import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.filter.entity.KeyWordsMaskKeyWords;
@@ -16,6 +17,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -61,10 +63,10 @@ public class KeywordsRepositoryImpl extends BasePageRepository {
             }
 
             if (!StringUtils.isEmpty(data.getKeyWordsType())) {
-                if(data.getKeyWordsType().contains("WHITE")){
+                if (data.getKeyWordsType().contains("WHITE")) {
                     sqlBuffer.append(" and t.KEY_WORDS_TYPE like ? ");
-                    paramsList.add("%"+data.getKeyWordsType().trim()+"%");
-                }else{
+                    paramsList.add("%" + data.getKeyWordsType().trim() + "%");
+                } else {
                     sqlBuffer.append(" and t.KEY_WORDS_TYPE = ? ");
                     paramsList.add(data.getKeyWordsType().trim());
                 }
@@ -90,8 +92,8 @@ public class KeywordsRepositoryImpl extends BasePageRepository {
 
         List<FilterKeyWordsInfoValidator> list = filterKeyWordsInfoValidator.getFilterKeyWordsList();
 
-        final String sql = "insert into filter_key_words_info(ID,KEY_WORDS_BUSINESS_TYPE,BUSINESS_ID,KEY_WORDS_TYPE,KEY_WORDS,KEY_DESC,CREATED_BY,CREATED_TIME,WASK_KEY_WORDS) " +
-                "values(?,?,?,?,?,?,?,now(),?) ";
+        final String sql = "insert into filter_key_words_info(ID,KEY_WORDS_BUSINESS_TYPE,BUSINESS_ID,KEY_WORDS_TYPE,KEY_WORDS,KEY_DESC,CREATED_BY,CREATED_TIME,WASK_KEY_WORDS,IS_SYNC) " +
+                "values(?,?,?,?,?,?,?,now(),?,'0') ";
 
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             public int getBatchSize() {
@@ -117,8 +119,8 @@ public class KeywordsRepositoryImpl extends BasePageRepository {
     public void expBatchSave(FilterKeyWordsInfoValidator filterKeyWordsInfoValidator) {
 
 
-        final String sql = "insert into filter_key_words_info(ID,KEY_WORDS_BUSINESS_TYPE,BUSINESS_ID,KEY_WORDS_TYPE,KEY_WORDS,KEY_DESC,CREATED_BY,CREATED_TIME,WASK_KEY_WORDS) " +
-                "values(?,?,?,?,?,?,?,now(),?) ";
+        final String sql = "insert into filter_key_words_info(ID,KEY_WORDS_BUSINESS_TYPE,BUSINESS_ID,KEY_WORDS_TYPE,KEY_WORDS,KEY_DESC,CREATED_BY,CREATED_TIME,WASK_KEY_WORDS,IS_SYNC) " +
+                "values(?,?,?,?,?,?,?,now(),?,'0') ";
 
         if ("CHECK".equals(filterKeyWordsInfoValidator.getKeyWordsType()) || "BLACK".equals(filterKeyWordsInfoValidator.getKeyWordsType())) {
             List<ExcelModel> list = filterKeyWordsInfoValidator.getExccelList();
@@ -177,24 +179,25 @@ public class KeywordsRepositoryImpl extends BasePageRepository {
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");
         sqlBuffer.append("  t.KEY_WORDS");
-        sqlBuffer.append("  from filter_key_words_info t  where t.KEY_WORDS_BUSINESS_TYPE=? and  t.BUSINESS_ID=? and t.KEY_WORDS_TYPE =? ");
+        sqlBuffer.append("  from filter_key_words_info t  where t.KEY_WORDS_BUSINESS_TYPE=? and  t.BUSINESS_ID=? and t.KEY_WORDS_TYPE =?  and IS_SYNC ='0'");
 
         Object[] params = new Object[3];
         params[0] = businessType;
         params[1] = businessId;
         params[2] = keyWordType;
-        List<String> result = this.jdbcTemplate.queryForList(sqlBuffer.toString(),params,String.class);
+        List<String> result = this.jdbcTemplate.queryForList(sqlBuffer.toString(), params, String.class);
         return result;
     }
 
     /**
      * 查询 关键词
+     *
      * @param businessType
      * @param businessId
      * @param keyWordType
      * @return
      */
-    public List<KeyWordsMaskKeyWords> loadKeyWordsAndMaskKeyWord(String businessType, String businessId, String keyWordType){
+    public List<KeyWordsMaskKeyWords> loadKeyWordsAndMaskKeyWord(String businessType, String businessId, String keyWordType) {
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");
         sqlBuffer.append("  t.KEY_WORDS,");
@@ -202,22 +205,106 @@ public class KeywordsRepositoryImpl extends BasePageRepository {
         sqlBuffer.append("  t.WASK_KEY_WORDS");
         sqlBuffer.append("  from filter_key_words_info t  where (1=1) ");
         List<String> paramsList = new ArrayList<>();
-        if(!StringUtils.isEmpty(businessType)){
+        if (!StringUtils.isEmpty(businessType)) {
             sqlBuffer.append(" and t.KEY_WORDS_BUSINESS_TYPE=? ");
             paramsList.add(businessType);
         }
-        if(!StringUtils.isEmpty(businessId)){
+        if (!StringUtils.isEmpty(businessId)) {
             sqlBuffer.append(" and  t.BUSINESS_ID=? ");
             paramsList.add(businessId);
         }
-        if(!StringUtils.isEmpty(keyWordType)){
+        if (!StringUtils.isEmpty(keyWordType)) {
             sqlBuffer.append(" and t.KEY_WORDS_TYPE =? ");
             paramsList.add(keyWordType);
         }
         Object[] params = new Object[paramsList.size()];
         paramsList.toArray(params);
-        List<KeyWordsMaskKeyWords> result = this.jdbcTemplate.query(sqlBuffer.toString(),params,new KeyWordRowMapper());
+        List<KeyWordsMaskKeyWords> result = this.jdbcTemplate.query(sqlBuffer.toString(), params, new KeyWordRowMapper());
         return result;
+    }
+
+    /**
+     * 查询 关键词
+     *
+     * @param businessType
+     * @param businessId
+     * @param keyWordType  默认 IS_SYNC ='0'
+     * @return
+     */
+    public List<FilterKeyWordsInfoValidator> loadWords(String businessType, String businessId, String keyWordType) {
+
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append("  t.ID");
+        sqlBuffer.append(", t.KEY_WORDS_BUSINESS_TYPE");
+        sqlBuffer.append(", t.BUSINESS_ID");
+        sqlBuffer.append(", t.KEY_WORDS_TYPE");
+        sqlBuffer.append(", t.WASK_KEY_WORDS");
+        sqlBuffer.append(", t.KEY_WORDS");
+        sqlBuffer.append(", t.KEY_DESC");
+        sqlBuffer.append(", t.CREATED_BY");
+        sqlBuffer.append(", str_to_date(t.CREATED_TIME,'%Y-%m-%d %H:%i:%S')CREATED_TIME");
+        sqlBuffer.append("  from filter_key_words_info t  where IS_SYNC ='0' ");
+        List<String> paramsList = new ArrayList<>();
+        if (!StringUtils.isEmpty(businessType)) {
+            sqlBuffer.append(" and t.KEY_WORDS_BUSINESS_TYPE=? ");
+            paramsList.add(businessType);
+        }
+        if (!StringUtils.isEmpty(businessId)) {
+            sqlBuffer.append(" and  t.BUSINESS_ID=? ");
+            paramsList.add(businessId);
+        }
+        if (!StringUtils.isEmpty(keyWordType)) {
+            sqlBuffer.append(" and t.KEY_WORDS_TYPE =? ");
+            paramsList.add(keyWordType);
+        }
+        Object[] params = new Object[paramsList.size()];
+        paramsList.toArray(params);
+        List<FilterKeyWordsInfoValidator> result = this.jdbcTemplate.query(sqlBuffer.toString(), params, new KeywordsRowMapper());
+        return result;
+    }
+
+    /**
+     * 更新关键字同步状态
+     *
+     * @param list
+     */
+    public void updateIsSyncStatus(List<FilterKeyWordsInfoValidator> list) {
+        //每batchSize 分批执行一次
+        Connection connection = null;
+        PreparedStatement statement = null;
+        final String sql = "update filter_key_words_info set IS_SYNC ='1' where ID=? ";
+        //log.info(sql);
+        log.info("[更新关键字同步状态]数据：{}- 共{}条", System.currentTimeMillis(), list.size());
+        try {
+            connection = jdbcTemplate.getDataSource().getConnection();
+            connection.setAutoCommit(false);
+            statement = connection.prepareStatement(sql);
+            for (FilterKeyWordsInfoValidator validator : list) {
+                statement.setString(1, validator.getId());
+                statement.addBatch();
+            }
+            statement.executeBatch();
+            connection.commit();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            try {
+                if (null != statement) {
+                    statement.close();
+                }
+                if (null != connection) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        log.info("[更新关键字同步状态]数据：{}", System.currentTimeMillis());
     }
 
 

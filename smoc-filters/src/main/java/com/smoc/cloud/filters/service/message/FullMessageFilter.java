@@ -1,13 +1,11 @@
 package com.smoc.cloud.filters.service.message;
 
-import com.smoc.cloud.common.filters.utils.RedisConstant;
 import com.smoc.cloud.filters.service.FiltersService;
 import com.smoc.cloud.filters.utils.DFA.DfaSensitiveWordsFilter;
 import com.smoc.cloud.filters.utils.DFA.FilterInitialize;
 import com.smoc.cloud.filters.utils.DFA.WordsSensitiveFilter;
 import com.smoc.cloud.filters.utils.FilterResponseCode;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;

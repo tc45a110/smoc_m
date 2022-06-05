@@ -14,6 +14,7 @@ public class FilterKeyWordsInfo {
     private String waskKeyWords;
     private String keyWords;
     private String keyDesc;
+    private String isSync;
     private String createdBy;
     private Date createdTime;
     private String updatedBy;
@@ -87,6 +88,16 @@ public class FilterKeyWordsInfo {
 
     public void setKeyDesc(String keyDesc) {
         this.keyDesc = keyDesc;
+    }
+
+    @Basic
+    @Column(name = "IS_SYNC")
+    public String getIsSync() {
+        return isSync;
+    }
+
+    public void setIsSync(String isSync) {
+        this.isSync = isSync;
     }
 
     @Basic
