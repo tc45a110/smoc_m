@@ -54,7 +54,7 @@
                             <!--<li sec:authorize-url="/sysUser/userProfile/*"><a
                                     th:href="@{/sysUser/userProfile/{userId}(userId=${session.user.id})}"
                                     target="iframe"><i class="ti-user m-r-5"></i> 个人属性</a></li>-->
-                            <li sec:authorize-url="/sysUser/resetPassword"><a th:href="@{/sysUser/resetPassword}"
+                            <li sec:authorize-url="/sysUser/web/resetPassword"><a th:href="@{/sysUser/web/resetPassword}"
                                                                               target="iframe"><i
                                     class="ti-lock m-r-5"></i> 重置密码</a></li>
                             <li sec:authorize-url="/userCache/clearUserCache"><a th:href="@{/userCache/clearUserCache}"
@@ -86,7 +86,7 @@
                         <!--<li sec:authorize-url="/sysUser/userProfile/*"><a
                                 th:href="@{/sysUser/userProfile/{userId}(userId=${session.user.id})}"
                                 target="iframe"><i class="ti-user m-r-5"></i> 个人属性</a></li>-->
-                        <li sec:authorize-url="/sysUser/resetPassword"><a th:href="@{/sysUser/resetPassword}"
+                        <li sec:authorize-url="/sysUser/web/resetPassword"><a th:href="@{/sysUser/web/resetPassword}"
                                                                           target="iframe"><i
                                 class="ti-lock m-r-5"></i> 重置密码</a></li>
                         <li sec:authorize-url="/userCache/clearUserCache"><a th:href="@{/userCache/clearUserCache}"

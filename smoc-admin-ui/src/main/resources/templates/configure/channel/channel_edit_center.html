@@ -59,11 +59,16 @@
                                 <div class="col-md-12">
                                     <div class="card-box">
                                         <ul class="nav nav-pills m-b-30 pull-right">
-                                            <li class="active" id="tab1"><a onclick="active('1')"
+                                            <li class="active" id="tab1"><a onclick="active('1')" th:if="${flag ne 'copy'}"
                                                                             sec:authorize-url="/configure/channel/edit/base/*"
                                                                             th:href="@{/configure/channel/edit/base/{id}(id=${id})}"
                                                                             th:target="tab-content"><i
                                                     class="mdi mdi-star" style="margin-right:5px;color:#f35864"></i>通道基本信息</a>
+                                                <a onclick="active('1')"  th:if="${flag eq 'copy'}"
+                                                   sec:authorize-url="/configure/channel/edit/copy/*"
+                                                   th:href="@{/configure/channel/edit/copy/{id}(id=${id})}"
+                                                   th:target="tab-content"><i
+                                                        class="mdi mdi-star" style="margin-right:5px;color:#f35864"></i>通道基本信息</a>
                                             </li>
                                             <li class="" id="tab2"><a onclick="active('2')" id="a2"
                                                                       sec:authorize-url="/configure/channel/edit/interface/*"
@@ -103,8 +108,12 @@
                                         </ul>
                                         <div class="tab-cotent" style="background-color:#fff">
                                             <iframe name="tab-content" id="tab-content" th:frameBorder="0"
-                                                    th:scrolling="auto"
+                                                    th:scrolling="auto"  th:if="${flag ne 'copy'}"
                                                     th:src="@{/configure/channel/edit/base/{id}(id=${id})}"
+                                                    style="padding: 0px; width: 100%; height: 1000px;background-color:#fff"></iframe>
+                                            <iframe name="tab-content" th:frameBorder="0"
+                                                    th:scrolling="auto"  th:if="${flag eq 'copy'}"
+                                                    th:src="@{/configure/channel/edit/copy/{id}(id=${id})}"
                                                     style="padding: 0px; width: 100%; height: 1000px;background-color:#fff"></iframe>
                                         </div>
                                     </div>
@@ -131,7 +140,7 @@
 
     $(document).ready(function () {
 
-        if("base" == '[[${id}]]'){
+        if("base" == '[[${id}]]' || "copy" == '[[${flag}]]'){
             for(var num = 2;num<8;num++){
                 document.getElementById('tab'+num).style.backgroundColor="#DCDBDC";
                 $("#a"+num).attr("onclick","");

@@ -16,7 +16,9 @@ import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.configure.channel.entity.ConfigChannelBasicInfo;
+import com.smoc.cloud.configure.channel.entity.ConfigChannelInterface;
 import com.smoc.cloud.configure.channel.entity.ConfigChannelPrice;
+import com.smoc.cloud.configure.channel.repository.ChannelInterfaceRepository;
 import com.smoc.cloud.configure.channel.repository.ChannelPriceRepository;
 import com.smoc.cloud.configure.channel.repository.ChannelRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +32,7 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.nio.file.CopyOption;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -48,6 +51,9 @@ public class ChannelService {
 
     @Resource
     private ChannelPriceRepository channelPriceRepository;
+
+    @Resource
+    private ChannelInterfaceRepository channelInterfaceRepository;
 
     /**
      * 查询列表
@@ -195,15 +201,38 @@ public class ChannelService {
         }
         entity.setChannelProcess(channelProcess.toString());
 
-        //记录日志
-        log.info("[通道管理][通道基本信息][{}]数据:{}",op,JSON.toJSONString(entity));
-        channelRepository.saveAndFlush(entity);
-
         //如果修改的时候，修改了区域数据
         if("AREA_PRICE".equals(channelBasicInfoValidator.getPriceStyle()) && "edit".equals(op)){
             //根据区域编号先删除库里多余的区域(比如：添加的时候选择了5个区域，修改的时候选择了3个区域，那么就得把多余的2个区域删除)
             channelPriceRepository.deleteByChannelIdAndAreaCode(channelBasicInfoValidator.getChannelId(), entity.getSupportAreaCodes());
         }
+
+        //如果不为空：代表是复制通道，需要查接口信息
+        if(StringUtils.hasText(channelBasicInfoValidator.getCopyChannelId())){
+            ConfigChannelInterface channelInterface = channelInterfaceRepository.findByChannelId(channelBasicInfoValidator.getCopyChannelId());
+            if(null != channelInterface){
+                ConfigChannelInterface terface = null;
+                try {
+                    terface = (ConfigChannelInterface) channelInterface.clone();
+                } catch (CloneNotSupportedException e) {
+                    e.printStackTrace();
+                }
+                terface.setChannelId(entity.getChannelId());
+                terface.setCreatedBy(entity.getCreatedBy());
+                terface.setCreatedTime(entity.getCreatedTime());
+                channelInterfaceRepository.saveAndFlush(terface);
+
+                StringBuffer process = new StringBuffer(entity.getChannelProcess());
+                process = process.replace(1, 2, "1");
+                entity.setChannelProcess(process.toString());
+            }
+
+            //channelPriceRepository.findChannelPrice();
+        }
+
+        //记录日志
+        log.info("[通道管理][通道基本信息][{}]数据:{}",op,JSON.toJSONString(entity));
+        channelRepository.saveAndFlush(entity);
 
         return ResponseDataUtil.buildSuccess();
     }

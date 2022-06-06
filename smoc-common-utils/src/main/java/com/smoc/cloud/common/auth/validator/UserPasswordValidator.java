@@ -17,10 +17,9 @@ import javax.validation.constraints.Pattern;
 public class UserPasswordValidator extends MpmIdValidator {
 
     @NotNull(message = "密码不能为空！")
-    @Length(min = 6, max = 20, message = "字段长度要在{min}-{max}之间！")
     //@Pattern(regexp = "^(?=.*\\d)(?=.*[a-zA-Z])(?=.*[~!@#$%^&*._])[\\da-zA-Z~!@#$%^&*._]{8,}$", message = "密码不符合规则")
     private String password;
 
-
+    @NotNull(message = "原密码不能为空！")
     private String oldPassword;
 }

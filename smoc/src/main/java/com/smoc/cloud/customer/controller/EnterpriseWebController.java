@@ -1,6 +1,7 @@
 package com.smoc.cloud.customer.controller;
 
 import com.smoc.cloud.auth.service.AuthorityService;
+import com.smoc.cloud.common.auth.validator.UserPasswordValidator;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
@@ -15,6 +16,7 @@ import com.smoc.cloud.customer.service.EnterpriseWebService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -153,5 +155,35 @@ public class EnterpriseWebController {
     public ResponseData webAuthSave(@RequestBody ServiceAuthInfo serviceAuthInfo) {
 
         return authorityService.webAuthSave(serviceAuthInfo);
+    }
+
+    /**
+     * 自服务端重置密码
+     * @param userPasswordValidator
+     * @return
+     */
+    @RequestMapping(value = "/resetOwnPassword", method = RequestMethod.POST)
+    public ResponseData  resetOwnPassword(@RequestBody UserPasswordValidator userPasswordValidator) {
+
+        //完成参数规则验证
+        if (!MpmValidatorUtil.validate(userPasswordValidator)) {
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(userPasswordValidator));
+        }
+
+        /**
+         * 判断旧密码是否正确
+         */
+        ResponseData<EnterpriseWebAccountInfoValidator> validator = enterpriseWebService.findById(userPasswordValidator.getId());
+        if (!new BCryptPasswordEncoder().matches(userPasswordValidator.getOldPassword(), validator.getData().getWebLoginPassword())) {
+            return ResponseDataUtil.buildError(ResponseCode.USER_PASSWORD_NULL);
+        }
+
+        EnterpriseWebAccountInfoValidator enterpriseWebAccountInfoValidator = new EnterpriseWebAccountInfoValidator();
+        enterpriseWebAccountInfoValidator.setId(userPasswordValidator.getId());
+        enterpriseWebAccountInfoValidator.setWebLoginPassword(userPasswordValidator.getPassword());
+        //保存操作
+        ResponseData data = enterpriseWebService.resetPassword(enterpriseWebAccountInfoValidator);
+
+        return data;
     }
 }

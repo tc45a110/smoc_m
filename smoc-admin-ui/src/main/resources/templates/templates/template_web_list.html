@@ -87,8 +87,9 @@
                                     <th style="min-width:200px">模板ID/企业名称</th>
                                     <th style="min-width:120px">业务类型</th>
                                     <th style="min-width:120px">签名</th>
-                                    <th style="min-width:250px">模板内容</th>
+                                    <th style="min-width:200px">模板内容</th>
                                     <th style="min-width:180px">接口类型/信息分类</th>
+                                    <th style="min-width:120px">模板类型</th>
                                     <th style="min-width:120px">状态</th>
                                     <th style="min-width:180px">申请人/申请时间</th>
                                     <th style="min-width:100px">操作</th>
@@ -114,6 +115,10 @@
                                     </td>
                                     <td style="vertical-align: middle;;line-height: 26px;">[[${info.templateAgreementType}]]<br>
                                         <mpm:tag identity="infoType" show-type="label" key="code"th:value="${info.infoType}"/>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
+                                        <span th:if="${info.templateFlag eq '1'}"><a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">固定模版</a></span>
+                                        <span th:if="${info.templateFlag eq '2'}"><a class="btn btn-primary btn-rounded btn-sm waves-effect waves-light">变量模版</a></span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
                                         <a class="btn btn-success btn-rounded btn-sm waves-effect waves-light" th:if="${info.templateStatus eq '2'}">通过审核</a>

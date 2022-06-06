@@ -74,6 +74,11 @@
                                                 </label>
                                             </div>
                                             <div class="col-md-12 form-group">
+                                                <label>模板类型：<span style="color:#00acc1" th:if="${accountTemplateInfoValidator.templateFlag eq '1'}">固定模版</span>
+                                                    <span style="color:#00acc1" th:if="${accountTemplateInfoValidator.templateFlag eq '2'}">变量模版</span>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-12 form-group">
                                                 <label>模板内容</label>
                                             </div>
                                             <div class="col-md-12 form-group">

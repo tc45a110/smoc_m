@@ -139,12 +139,14 @@
                                                     <div class="">
                                                         <h5 style="padding-left:10px">
                                                             通道名称：[[${info.channelName}]]
-                                                            <!--<div class="pull-right">
-                                                                <i class="mdi mdi-file-document"
-                                                                   th:onclick="channelCopy([[${info.channelId}]])"
-                                                                   style="margin-right:5px;"
-                                                                   title="复制通道信息"></i>
-                                                            </div>-->
+                                                            <div class="pull-right">
+                                                                <a sec:authorize-url="/configure/channel/channelCopy/*"
+                                                                   th:href="@{/configure/channel/channelCopy/{id}(id=${info.channelId})}"
+                                                                   data-toggle="tooltip" data-placement="left"
+                                                                   data-original-title="复制通道信息">
+                                                                    <i class="mdi mdi-file-document"style="margin-right:5px;"></i>
+                                                                </a>
+                                                            </div>
                                                         </h5>
                                                     </div>
                                                     <div class="col-sm-3">
@@ -287,11 +289,6 @@
 <script th:src="@{/static/plugins/tooltipster/tooltipster.bundle.min.js}"></script>
 
 <script>
-
-    //复制通道信息
-    function channelCopy(id){
-
-    }
 
     //查看区域
     function areaCodes(channelId) {

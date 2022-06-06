@@ -787,8 +787,8 @@
                                 <div class="form-group m-b-20">
                                     <label>用户名(登录账号)<span class="text-danger">*</span>&nbsp;</label>
                                     <input type="text" class="form-control" th:field="*{webLoginName}"
-                                           required="" data-parsley-length="[4,30]" autocomplete="off"
-                                           data-parsley-pattern="^[0-9A-Za-z]{4,30}$"
+                                           required="" data-parsley-length="[4,20]" autocomplete="off"
+                                           data-parsley-pattern="^[0-9A-Za-z]{4,20}$"
                                            placeholder="输入字母或数字">
                                 </div>
                                 <div class="form-group m-b-20">
@@ -798,10 +798,10 @@
                                            placeholder="输入姓名">
                                 </div>
                                 <div class="form-group m-b-20">
-                                    <label>密码<span class="text-danger">*</span>&nbsp;</label>
+                                    <label>密码(包含字母和数字组成的8位)<span class="text-danger">*</span>&nbsp;</label>
                                     <input type="text" class="form-control" th:field="*{webLoginPassword}"
-                                           required="" data-parsley-length="[6,20]" id="webLoginPassword"
-                                           data-parsley-pattern="^[0-9A-Za-z]{4,30}$" autocomplete="off"
+                                           required="" data-parsley-length="[8,20]" id="webLoginPassword"
+                                           data-parsley-pattern="^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,20}$" autocomplete="off"
                                            placeholder="密码">
                                 </div>
 

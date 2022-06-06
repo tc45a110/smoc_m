@@ -91,4 +91,5 @@ public class ChannelBasicInfoValidator {
     private String channelBill;
 
     private String protocol;
+    private String copyChannelId;
 }

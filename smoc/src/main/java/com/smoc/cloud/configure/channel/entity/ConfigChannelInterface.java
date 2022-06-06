@@ -7,7 +7,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "config_channel_interface")
-public class ConfigChannelInterface {
+public class ConfigChannelInterface implements Cloneable{
     private String id;
     private String channelId;
     private String channelAccessAccount;
@@ -223,5 +223,11 @@ public class ConfigChannelInterface {
     @Override
     public int hashCode() {
         return Objects.hash(id, channelId, channelAccessAccount, channelAccessPassword, channelServiceUrl, spId, srcId, businessCode, connectNumber, maxSendSecond, heartbeatInterval, protocol, version, createdBy, createdTime, updatedBy, updatedTime);
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException
+    {
+        return super.clone();
     }
 }
