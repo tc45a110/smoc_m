@@ -88,19 +88,18 @@
                     </div>
                     <div class="panel-body">
                         <div class="table-responsive">
-                            <table class="table table table-hover m-10" style="margin-top: -12px;">
+                            <table class="table table table-hover m-10" style="margin-top: -12px;table-layout:fixed;">
                                 <thead>
                                 <tr>
-                                    <th>账号</th>
-                                    <th>发送方式</th>
-                                    <th>批次号</th>
-                                    <th>发送内容</th>
-                                    <th>手机号</th>
-                                    <th>运营商</th>
-                                    <th>归属地</th>
-                                    <th>接收状态</th>
-                                    <th>发送时间</th>
-                                    <th>到达时间</th>
+                                    <th style="width:80px">账号</th>
+                                    <th style="width:80px">发送方式</th>
+                                    <th style="width:100px">批次号</th>
+                                    <th style="width:200px">发送内容</th>
+                                    <th style="width:100px">手机号</th>
+                                    <th style="width:120px">运营商/属地</th>
+                                    <th style="width:100px">接收状态</th>
+                                    <th style="width:150px">发送时间</th>
+                                    <th style="width:150px">到达时间</th>
                                 </tr>
                                 <thead>
                                 <tbody>
@@ -113,25 +112,19 @@
                                         [[${info.taskId}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-toggle="tooltip" data-placement="bottom"
-                                              th:if="${#strings.length(info.messageContent)>25}"
-                                              th:data-original-title="${info.messageContent}">
-                                            [[${#strings.substring(info.messageContent,0,25)}]]......</span>
-                                        <span th:if="${#strings.length(info.messageContent)<=25}">
-                                            [[${info.messageContent}]]</span>
+                                        <span class="text-overflow"
+                                              data-toggle="tooltip" data-placement="bottom"
+                                              th:data-original-title="${info.messageContent}">[[${info.messageContent}]]</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;width:100px">
                                         [[${info.phoneNumber}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;width:100px">
                                         <mpm:tag identity="carrier" show-type="label" key="code"
-                                                 th:value="${info.carrier}"/>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px;width:100px">
-                                        [[${info.area}]]
+                                                 th:value="${info.carrier}"/>&nbsp;[[${info.area}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;width:80px">
-                                        [[${info.reportStatus}]][[${info.customerStatus}]]
+                                        [[${info.customerStatus}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;width:160px">[[${info.submitTime}]]
                                     </td>

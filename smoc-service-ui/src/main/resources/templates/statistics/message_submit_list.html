@@ -92,17 +92,17 @@
                     </div>
                     <div class="panel-body">
                         <div class="table-responsive">
-                            <table class="table table table-hover m-10" style="margin-top: -12px;">
+                            <table class="table table table-hover m-10" style="margin-top: -12px;table-layout:fixed;">
                                 <thead>
                                 <tr>
-                                    <th>账号</th>
-                                    <th>批次号</th>
-                                    <th>模板ID</th>
-                                    <th>发送内容</th>
-                                    <th>提交条数</th>
-                                    <th>接收条数</th>
-                                    <th>提交时间</th>
-                                    <th>操作</th>
+                                    <th style="width:80px">账号</th>
+                                    <th style="width:100px">批次号</th>
+                                    <th style="width:100px">模板ID</th>
+                                    <th style="width:300px">发送内容</th>
+                                    <th style="width:80px">提交条数</th>
+                                    <th style="width:80px">接收条数</th>
+                                    <th style="width:150px">提交时间</th>
+                                    <th style="width:110px">操作</th>
                                 </tr>
                                 <thead>
                                 <tbody>
@@ -115,12 +115,9 @@
                                         [[${info.templateId}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-toggle="tooltip" data-placement="bottom"
-                                              th:if="${#strings.length(info.messageContent)>25}"
-                                              th:data-original-title="${info.messageContent}">
-                                            [[${#strings.substring(info.messageContent,0,25)}]]......</span>
-                                        <span th:if="${#strings.length(info.messageContent)<=25}">
-                                            [[${info.messageContent}]]</span>
+                                        <span class="text-overflow"
+                                              data-toggle="tooltip" data-placement="bottom"
+                                              th:data-original-title="${info.messageContent}">[[${info.messageContent}]]</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;width:100px">
                                         <span data-d-group="3" data-a-sign=" " data-v-min="0" data-v-max="999999999"
@@ -140,9 +137,9 @@
                                            data-toggle="tooltip" data-placement="bottom"
                                            class="btn btn-success waves-effect waves-light btn-xs"
                                            style="padding-left: 5px;">明细</a>
-                                        <a sec:authorize-url="/message/expMessage" href="javascript:void(0)"
+                                        <a sec:authorize-url="/statistics/submit/detail/expMessage" href="javascript:void(0)"
                                            th:onclick="confirmExp([[${info.id}]], this)"
-                                           data-toggle="modal" data-target="#confirm-exp"
+                                           data-toggle="modal" data-target="#confirm-exp-message"
                                            class="btn btn-primary waves-effect waves-light btn-xs" style="padding-left: 5px;"
                                            data-placement="left" >导出</a>
                                     </td>
@@ -162,11 +159,34 @@
         <th:block th:insert="fragments/common_fragments :: common_error"/>
         <!-- end row -->
 
-        <th:block th:insert="fragments/common_fragments :: confirm-message-send"/>
 
     </div>
 </div> <!-- content -->
+<!-- start confirm delete modal  -->
+<div id="confirm-exp-message" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="custom-width-modalLabel"
+     aria-hidden="true" style="display: none;margin: 60px">
+    <div class="modal-dialog" style="width:33%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
 
+                <p>确认导出短信明细？</p>
+
+            </div>
+            <div class="modal-footer">
+                <form id="exp_form" th:action="@{/statistics/submit/detail/expMessage}" method="post">
+                    <input type="hidden" id="expId" name="taskId">
+                </form>
+                <a class="btn btn-default waves-effect" data-dismiss="modal" id="excelId">取消</a>
+                <button onclick="expById()" class="btn btn-primary waves-effect waves-light">确认导出</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end confirm delete modal  -->
 <th:block th:insert="fragments/common_fragments :: common_js"/>
 <th:block th:insert="fragments/common_fragments :: select_js"/>
 <th:block th:insert="fragments/cookie_fragments :: cookie_js"/>

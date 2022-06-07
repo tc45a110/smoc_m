@@ -211,12 +211,9 @@ public class ChannelService {
         if(StringUtils.hasText(channelBasicInfoValidator.getCopyChannelId())){
             ConfigChannelInterface channelInterface = channelInterfaceRepository.findByChannelId(channelBasicInfoValidator.getCopyChannelId());
             if(null != channelInterface){
-                ConfigChannelInterface terface = null;
-                try {
-                    terface = (ConfigChannelInterface) channelInterface.clone();
-                } catch (CloneNotSupportedException e) {
-                    e.printStackTrace();
-                }
+                ConfigChannelInterface terface = new ConfigChannelInterface();
+                BeanUtils.copyProperties(channelInterface, terface);
+                terface.setId(UUID.uuid32());
                 terface.setChannelId(entity.getChannelId());
                 terface.setCreatedBy(entity.getCreatedBy());
                 terface.setCreatedTime(entity.getCreatedTime());

@@ -12,13 +12,14 @@ public class MessageTaskDetailRowMapper implements RowMapper<MessageTaskDetail> 
     public MessageTaskDetail mapRow(ResultSet resultSet, int i) throws SQLException {
 
         MessageTaskDetail qo = new MessageTaskDetail();
-        qo.setMobile(resultSet.getString("SEND_NUMBER"));
-        qo.setCarrier(resultSet.getString("CARRIER"));
-        qo.setArea(resultSet.getString("AREA"));
-        qo.setSendTime(resultSet.getString("SEND_TIME"));
-        qo.setCustomerStatus(resultSet.getString("CUSTOMER_STATUS"));
+        qo.setMobile(resultSet.getString("PHONE_NUMBER"));
         qo.setMessageContent(resultSet.getString("MESSAGE_CONTENT"));
         qo.setChargeNumber(resultSet.getInt("CHARGE_NUMBER"));
+        qo.setCarrier(resultSet.getString("CARRIER"));
+        qo.setArea(resultSet.getString("AREA_NAME"));
+        qo.setSendTime(resultSet.getString("REPORT_TIME"));
+        qo.setCustomerStatus(resultSet.getString("STATUS_CODE"));
+
 
         return qo;
     }

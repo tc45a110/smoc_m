@@ -15,6 +15,7 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
+import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBookInfoValidator;
 import com.smoc.cloud.common.smoc.filter.FilterGroupListValidator;
 import com.smoc.cloud.common.smoc.message.model.MessageTaskDetail;
@@ -28,6 +29,7 @@ import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.material.service.BusinessAccountService;
 import com.smoc.cloud.material.service.MessageTemplateService;
 import com.smoc.cloud.material.service.SequenceService;
+import com.smoc.cloud.message.service.EnterpriseService;
 import com.smoc.cloud.message.service.MessageService;
 import com.smoc.cloud.message.utils.SendMessage;
 import com.smoc.cloud.properties.MessageProperties;
@@ -50,6 +52,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.annotation.Resource;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -77,9 +80,6 @@ public class MessageController {
     private SequenceService sequenceService;
 
     @Autowired
-    private MessageTemplateService messageTemplateService;
-
-    @Autowired
     private SystemUserLogService systemUserLogService;
 
     @Autowired
@@ -90,6 +90,9 @@ public class MessageController {
 
     @Autowired
     private BookService bookService;
+
+    @Autowired
+    private EnterpriseService enterpriseService;
 
     /**
      * 短信发送列表
@@ -563,12 +566,20 @@ public class MessageController {
             return view;
         }
 
+        //查询企业，获取标识
+        ResponseData<EnterpriseBasicInfoValidator> enterpriseData = enterpriseService.findById(user.getOrganization());
+        if (!ResponseCode.SUCCESS.getCode().equals(enterpriseData.getCode())) {
+            view.addObject("error", enterpriseData.getCode() + ":" + enterpriseData.getMessage());
+            return view;
+        }
+
         //初始化数据
         PageParams<MessageTaskDetail> params = new PageParams<MessageTaskDetail>();
         params.setPageSize(20);
         params.setCurrentPage(1);
         MessageTaskDetail messageTaskDetail = new MessageTaskDetail();
         messageTaskDetail.setTaskId(id);
+        messageTaskDetail.setEnterpriseFlag(enterpriseData.getData().getEnterpriseFlag().toLowerCase());
         params.setParams(messageTaskDetail);
 
         //查询
@@ -612,7 +623,15 @@ public class MessageController {
             return view;
         }
 
+        //查询企业，获取标识
+        ResponseData<EnterpriseBasicInfoValidator> enterpriseData = enterpriseService.findById(user.getOrganization());
+        if (!ResponseCode.SUCCESS.getCode().equals(enterpriseData.getCode())) {
+            view.addObject("error", enterpriseData.getCode() + ":" + enterpriseData.getMessage());
+            return view;
+        }
+
         //查询
+        messageTaskDetail.setEnterpriseFlag(enterpriseData.getData().getEnterpriseFlag().toLowerCase());
         params.setParams(messageTaskDetail);
         ResponseData<PageList<MessageTaskDetail>> data = messageService.webTaskDetailList(params);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
@@ -655,12 +674,19 @@ public class MessageController {
             return ;
         }
 
+        //查询企业，获取标识
+        ResponseData<EnterpriseBasicInfoValidator> enterpriseData = enterpriseService.findById(user.getOrganization());
+        if (!ResponseCode.SUCCESS.getCode().equals(enterpriseData.getCode())) {
+            return ;
+        }
+
         //初始化数据
         PageParams<MessageTaskDetail> params = new PageParams<MessageTaskDetail>();
         params.setPageSize(1000000);
         params.setCurrentPage(1);
         MessageTaskDetail messageTaskDetail = new MessageTaskDetail();
         messageTaskDetail.setTaskId(taskId);
+        messageTaskDetail.setEnterpriseFlag(enterpriseData.getData().getEnterpriseFlag().toLowerCase());
         params.setParams(messageTaskDetail);
 
         //查询

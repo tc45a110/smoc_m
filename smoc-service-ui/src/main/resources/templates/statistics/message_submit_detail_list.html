@@ -51,11 +51,16 @@
                                            placeholder="手机号" autocomplete="off">
                                 </div>
 
-                                <div class="form-group col-sm-3 pull-right" style="text-align: right">
+                                <div class="form-group col-sm-6 pull-right" style="text-align: right">
                                     <button sec:authorize-url="/statistics/submit/message/detail/page" type="submit"
                                             class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search"></i> 查询
                                     </button>
+                                    <a sec:authorize-url="/statistics/submit/list/*"
+                                       th:href="@{/statistics/submit/list/{businessType}(businessType=${messageWebTaskInfoValidator.businessType})}" style="margin-left:10px"
+                                       class="btn btn-default waves-effect waves-light btn-md">
+                                        <i class="glyphicon  glyphicon-share-alt" style="margin-right:5px"></i>
+                                        返回列表</a>
                                     <input type="hidden" th:field="*{taskId}">
                                     <input type="hidden" name="currentPage" id="currentPage" th:value="${pageParams.currentPage}">
                                     <input type="hidden" name="pageSize" id="pageSize" th:value="${pageParams.pageSize}">
@@ -78,16 +83,16 @@
                     </div>
                     <div class="panel-body">
                         <div class="table-responsive">
-                            <table class="table table table-hover m-10" style="margin-top: -12px;">
+                            <table class="table table table-hover m-10" style="margin-top: -12px;table-layout:fixed;">
                                 <thead>
                                 <tr>
-                                    <th>手机号</th>
-                                    <th>发送内容</th>
-                                    <th>计费条数</th>
-                                    <th>归属地</th>
-                                    <th>运营商</th>
-                                    <th>接收状态</th>
-                                    <th>接收时间</th>
+                                    <th style="width:100px">手机号</th>
+                                    <th style="width:330px">发送内容</th>
+                                    <th style="width:80px">计费条数</th>
+                                    <th style="width:80px">归属地</th>
+                                    <th style="width:90px">运营商</th>
+                                    <th style="width:100px">接收状态</th>
+                                    <th style="width:150px">接收时间</th>
 
                                 </tr>
                                 <thead>
@@ -95,12 +100,9 @@
                                 <tr th:each="info:${list}">
                                     <td style="vertical-align: middle;line-height: 26px">[[${info.mobile}]]</td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <span data-toggle="tooltip" data-placement="bottom"
-                                              th:if="${#strings.length(info.messageContent)>25}"
-                                              th:data-original-title="${info.messageContent}">
-                                            [[${#strings.substring(info.messageContent,0,25)}]]......</span>
-                                        <span th:if="${#strings.length(info.messageContent)<=25}">
-                                            [[${info.messageContent}]]</span>
+                                        <span class="text-overflow"
+                                              data-toggle="tooltip" data-placement="bottom"
+                                              th:data-original-title="${info.messageContent}">[[${info.messageContent}]]</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">[[${info.chargeNumber}]]</td>
                                     <td style="vertical-align: middle;line-height: 26px">[[${info.area}]]</td>

@@ -11,17 +11,16 @@ public class MessageMessageRecordRowMapper implements RowMapper<MessageDetailInf
     public MessageDetailInfoValidator mapRow(ResultSet resultSet, int i) throws SQLException {
 
         MessageDetailInfoValidator qo = new MessageDetailInfoValidator();
-        qo.setTaskId(resultSet.getString("TASK_ID"));
-        qo.setProtocol(resultSet.getString("PROTOCOL"));
-        qo.setBusinessAccount(resultSet.getString("BUSINESS_ACCOUNT"));
-        qo.setMessageContent(resultSet.getString("MESSAGE_CONTENT"));
+        qo.setBusinessAccount(resultSet.getString("ACCOUNT_ID"));
         qo.setPhoneNumber(resultSet.getString("PHONE_NUMBER"));
+        qo.setTaskId(resultSet.getString("MESSAGE_ID"));
+        qo.setProtocol(resultSet.getString("PROTOCOL"));
+        qo.setMessageContent(resultSet.getString("MESSAGE_CONTENT"));
         qo.setCarrier(resultSet.getString("CARRIER"));
-        qo.setArea(resultSet.getString("AREA"));
-        qo.setReportStatus(resultSet.getString("REPORT_STATUS"));
-        qo.setCustomerStatus(resultSet.getString("CUSTOMER_STATUS"));
+        qo.setArea(resultSet.getString("AREA_NAME"));
+        qo.setCustomerStatus(resultSet.getString("STATUS_CODE"));
         qo.setSubmitTime(resultSet.getString("SUBMIT_TIME"));
-        qo.setSendTime(resultSet.getString("SEND_TIME"));
+        qo.setSendTime(resultSet.getString("REPORT_TIME"));
 
         return qo;
     }

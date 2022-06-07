@@ -60,5 +60,7 @@ public class MessageDetailInfoValidator {
 
     private String enterpriseId;
 
+    private String enterpriseFlag;
+
     private String businessType;
 }

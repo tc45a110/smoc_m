@@ -14,13 +14,13 @@ import java.util.Date;
 @Getter
 public class MessageTaskDetail {
 
-    @ExcelProperty(value = "发送内容")
-    @ColumnWidth(40)
-    private String messageContent;
-
     @ExcelProperty(value = "手机号")
     @ColumnWidth(20)
     private String mobile;
+
+    @ExcelProperty(value = "发送内容")
+    @ColumnWidth(40)
+    private String messageContent;
 
     @ExcelProperty(value = "计费条数")
     @ColumnWidth(15)
@@ -45,5 +45,8 @@ public class MessageTaskDetail {
 
     @ExcelIgnore
     private String taskId;
+
+    @ExcelIgnore
+    private String enterpriseFlag;
 
 }

@@ -60,8 +60,12 @@ public class ChannelPriceRepositoryImpl extends BasePageRepository {
     }
 
     public void deleteByChannelIdAndAreaCode(String channelId, String areaCode) {
-        String sql = "delete from config_channel_price where CHANNEL_ID = '" + channelId + "' and  AREA_CODE not in ("+areaCode+") ";
-        jdbcTemplate.execute(sql);
+        String[] carriers = areaCode.split(",");
+        StringBuilder sql = new StringBuilder("delete from config_channel_price where CHANNEL_ID = '" + channelId + "'  ");
+        for(int i=0;i<carriers.length;i++){
+            sql.append("and  AREA_CODE !='"+carriers[i]+"' ");
+        }
+        jdbcTemplate.execute(sql.toString());
     }
 
     public void batchSave(ChannelPriceValidator channelPriceValidator) {

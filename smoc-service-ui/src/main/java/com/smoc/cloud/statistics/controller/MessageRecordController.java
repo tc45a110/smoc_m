@@ -5,8 +5,10 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
 import com.smoc.cloud.common.smoc.message.MessageDetailInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
+import com.smoc.cloud.message.service.EnterpriseService;
 import com.smoc.cloud.statistics.service.StatisticsMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,6 +32,9 @@ public class MessageRecordController {
     @Autowired
     private StatisticsMessageService statisticsMessageService;
 
+    @Autowired
+    private EnterpriseService enterpriseService;
+
     /**
      * 短信记录列表
      * @param request
@@ -41,6 +46,13 @@ public class MessageRecordController {
 
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
 
+        //查询企业，获取标识
+        ResponseData<EnterpriseBasicInfoValidator> enterpriseData = enterpriseService.findById(user.getOrganization());
+        if (!ResponseCode.SUCCESS.getCode().equals(enterpriseData.getCode())) {
+            view.addObject("error", enterpriseData.getCode() + ":" + enterpriseData.getMessage());
+            return view;
+        }
+
         //初始化数据
         PageParams<MessageDetailInfoValidator> params = new PageParams<>();
         params.setPageSize(10);
@@ -48,6 +60,7 @@ public class MessageRecordController {
         MessageDetailInfoValidator messageDetailInfoValidator = new MessageDetailInfoValidator();
         messageDetailInfoValidator.setEnterpriseId(user.getOrganization());
         messageDetailInfoValidator.setBusinessType(businessType);
+        messageDetailInfoValidator.setEnterpriseFlag(enterpriseData.getData().getEnterpriseFlag().toLowerCase());
         Date startDate = DateTimeUtils.getFirstMonth(1);
         messageDetailInfoValidator.setStartDate(DateTimeUtils.getDateFormat(startDate));
         messageDetailInfoValidator.setEndDate(DateTimeUtils.getDateFormat(new Date()));
@@ -77,7 +90,15 @@ public class MessageRecordController {
         ModelAndView view = new ModelAndView("statistics/message_record_list");
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
 
+        //查询企业，获取标识
+        ResponseData<EnterpriseBasicInfoValidator> enterpriseData = enterpriseService.findById(user.getOrganization());
+        if (!ResponseCode.SUCCESS.getCode().equals(enterpriseData.getCode())) {
+            view.addObject("error", enterpriseData.getCode() + ":" + enterpriseData.getMessage());
+            return view;
+        }
+
         //分页查询
+        messageDetailInfoValidator.setEnterpriseFlag(enterpriseData.getData().getEnterpriseFlag().toLowerCase());
         messageDetailInfoValidator.setEnterpriseId(user.getOrganization());
         messageDetailInfoValidator.setBusinessType(messageDetailInfoValidator.getBusinessType());
         if (!StringUtils.isEmpty(messageDetailInfoValidator.getStartDate())) {
