@@ -29,7 +29,6 @@ public class Routes {
     @Autowired
     private StartFullFilterGatewayFilter startFullFilterGatewayFilter;
 
-
     @Bean
     public RouteLocator identityRouteLocator(RouteLocatorBuilder builder) {
 
@@ -40,11 +39,12 @@ public class Routes {
                 /**
                  * 全量过滤
                  */
-                .route(r -> r.method(HttpMethod.POST).and().path("/smoc-filters/full-filter/**").and().readBody(String.class, requestBody -> true).filters(f -> f.stripPrefix(1).filter(fullFilterParamsGatewayFilter).circuitBreaker(config -> config
-                        .setName("mycmd")
-                        .setFallbackUri("forward:/fallback"))).uri("lb://smoc")
+                .route(r -> r.method(HttpMethod.POST).and().path("/smoc-filters/full-filter/**").and().readBody(String.class, requestBody -> true).filters(f -> f.stripPrefix(1).filter(fullFilterParamsGatewayFilter)).uri("lb://smoc")
 
                 )
+//                .circuitBreaker(config -> config
+//                        .setName("mycmd")
+//                        .setFallbackUri("forward:/fallback"))
                 /**
                  * 单独内容过滤
                  */
