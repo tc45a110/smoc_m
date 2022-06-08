@@ -15,6 +15,7 @@ import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.template.entity.AccountTemplateContent;
 import com.smoc.cloud.template.entity.AccountTemplateInfo;
 import com.smoc.cloud.template.repository.AccountTemplateInfoRepository;
+import com.smoc.cloud.tools.message.RocketProducerFilterMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.text.StrSubstitutor;
 import org.springframework.beans.BeanUtils;
@@ -41,6 +42,9 @@ public class AccountTemplateInfoService {
 
     @Autowired
     private RedisTemplate redisTemplate;
+
+    @Autowired
+    private RocketProducerFilterMessage rocketProducerFilterMessage;
 
     @Resource
     private AccountTemplateInfoRepository accountTemplateInfoRepository;
@@ -147,7 +151,7 @@ public class AccountTemplateInfoService {
             redisTemplate.delete(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_FIXED + account);
             this.delFromSet(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_FIXED + "list", account);
             //发送广播通知
-            this.redisTemplate.convertAndSend(RedisConstant.CHANNEL, RedisConstant.MESSAGE_TEMPLATE);
+            this.rocketProducerFilterMessage.sendRocketMessage(RedisConstant.MESSAGE_TEMPLATE);
             return;
         }
         String templateContent = "";
@@ -161,7 +165,7 @@ public class AccountTemplateInfoService {
         redisTemplate.opsForValue().set(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_FIXED + account, templateContent);
         redisTemplate.opsForSet().add(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_FIXED + "list", account);
         //发送广播通知
-        this.redisTemplate.convertAndSend(RedisConstant.CHANNEL, RedisConstant.MESSAGE_TEMPLATE);
+        this.rocketProducerFilterMessage.sendRocketMessage(RedisConstant.MESSAGE_TEMPLATE);
     }
 
     /**
@@ -176,7 +180,7 @@ public class AccountTemplateInfoService {
             redisTemplate.delete(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_VARIABLE_CMPP + "no_filter:" + account);
             this.delFromSet(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_VARIABLE_CMPP + "no_filter:list", account);
             //发送广播通知
-            this.redisTemplate.convertAndSend(RedisConstant.CHANNEL, RedisConstant.MESSAGE_TEMPLATE);
+            this.rocketProducerFilterMessage.sendRocketMessage(RedisConstant.MESSAGE_TEMPLATE);
             return;
         }
         String templateContent = "";
@@ -197,7 +201,7 @@ public class AccountTemplateInfoService {
         redisTemplate.opsForValue().set(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_VARIABLE_CMPP + "no_filter:" + account, messageContent);
         redisTemplate.opsForSet().add(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_VARIABLE_CMPP + "no_filter:list", account);
         //发送广播通知
-        this.redisTemplate.convertAndSend(RedisConstant.CHANNEL, RedisConstant.MESSAGE_TEMPLATE);
+        this.rocketProducerFilterMessage.sendRocketMessage(RedisConstant.MESSAGE_TEMPLATE);
     }
 
     /**
@@ -212,7 +216,7 @@ public class AccountTemplateInfoService {
             redisTemplate.delete(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_VARIABLE_CMPP + "filter:" + account);
             this.delFromSet(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_VARIABLE_CMPP + "filter:list", account);
             //发送广播通知
-            this.redisTemplate.convertAndSend(RedisConstant.CHANNEL, RedisConstant.MESSAGE_TEMPLATE);
+            this.rocketProducerFilterMessage.sendRocketMessage(RedisConstant.MESSAGE_TEMPLATE);
             return;
         }
         String templateContent = "";
@@ -233,7 +237,7 @@ public class AccountTemplateInfoService {
         redisTemplate.opsForValue().set(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_VARIABLE_CMPP + "filter:" + account, messageContent);
         redisTemplate.opsForSet().add(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_VARIABLE_CMPP + "filter:list", account);
         //发送广播通知
-        this.redisTemplate.convertAndSend(RedisConstant.CHANNEL, RedisConstant.MESSAGE_TEMPLATE);
+        this.rocketProducerFilterMessage.sendRocketMessage(RedisConstant.MESSAGE_TEMPLATE);
     }
 
     /**
@@ -248,7 +252,7 @@ public class AccountTemplateInfoService {
             redisTemplate.delete(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_SIGN + account);
             this.delFromSet(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_SIGN + "list", account);
             //发送广播通知
-            this.redisTemplate.convertAndSend(RedisConstant.CHANNEL, RedisConstant.MESSAGE_TEMPLATE);
+            this.rocketProducerFilterMessage.sendRocketMessage(RedisConstant.MESSAGE_TEMPLATE);
             return;
         }
         String templateContent = "";
@@ -263,7 +267,7 @@ public class AccountTemplateInfoService {
         redisTemplate.opsForValue().set(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_SIGN + account, templateContent);
         redisTemplate.opsForSet().add(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_SIGN + "list", account);
         //发送广播通知
-        this.redisTemplate.convertAndSend(RedisConstant.CHANNEL, RedisConstant.MESSAGE_TEMPLATE);
+        this.rocketProducerFilterMessage.sendRocketMessage(RedisConstant.MESSAGE_TEMPLATE);
     }
 
     /**

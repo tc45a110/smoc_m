@@ -19,11 +19,11 @@ public class FilterDataInitListener implements ApplicationListener<ContextRefres
     public void onApplicationEvent(ContextRefreshedEvent event) {
         FilterInitialize.sensitiveWordsFilter.initializeSensitiveWords(filtersService.getSensitiveWords());
         FilterInitialize.checkWordsFilter.initializeCheckWords(filtersService.getCheckWords());
-        FilterInitialize.superWhiteWordsFilter.initializeSuperWhiteWords(filtersService.getSuperWhiteWords());
+//        FilterInitialize.superWhiteWordsFilter.initializeSuperWhiteWords(filtersService.getSuperWhiteWords());
         FilterInitialize.infoTypeSensitiveMap = filtersService.getInfoTypeSensitiveWords();
         FilterInitialize.accountSensitiveMap = filtersService.getAccountSensitiveWords();
         FilterInitialize.accountCheckMap = filtersService.getAccountCheckWords();
-        FilterInitialize.accountSuperWhiteMap = filtersService.getAccountSuperWhiteWords();
+//        FilterInitialize.accountSuperWhiteMap = filtersService.getAccountSuperWhiteWords();
         FilterInitialize.accountFilterFixedTemplateMap = filtersService.getAccountFixedTemplates();
         FilterInitialize.accountSignTemplateMap = filtersService.getAccountSignTemplates();
         FilterInitialize.accountFilterVariableTemplateMap = filtersService.getAccountFilterVariableTemplates();

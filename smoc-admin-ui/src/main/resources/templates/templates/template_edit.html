@@ -94,19 +94,19 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-6 form-group">
-                                                <label class="m-b-10">是否需要过滤敏感词
+                                                <label class="m-b-10">是否需要继续内容过滤
                                                     <span class="text-danger">*</span>&nbsp</label>
                                                 <div style="margin-top:0px" class="radio radio-info checkbox-inline">
                                                     <input id="FILTER" name="isFilter" type="radio" value="FILTER"
                                                            required
                                                            th:attr="disabled=${accountTemplateInfoValidator.templateClassify !='2'}"
-                                                           th:checked="${accountTemplateInfoValidator.isFilter eq 'FILTER'}"><label>过滤敏感词</label>
+                                                           th:checked="${accountTemplateInfoValidator.isFilter eq 'FILTER'}"><label>继续内容过滤</label>
                                                 </div>
                                                 <div style="margin-top:0px" class="radio radio-info checkbox-inline">
                                                     <input id="NO_FILTER" name="isFilter" type="radio" value="NO_FILTER"
                                                            required
                                                            th:attr="disabled=${accountTemplateInfoValidator.templateClassify !='2'}"
-                                                           th:checked="${accountTemplateInfoValidator.isFilter eq 'NO_FILTER'}"><label>不过滤敏感词</label>
+                                                           th:checked="${accountTemplateInfoValidator.isFilter eq 'NO_FILTER'}"><label>不继续内容过滤</label>
                                                 </div>
                                             </div>
                                             <div class="col-md-12 form-group" id="content_title_1"
@@ -136,7 +136,7 @@
                                             </div>
                                             <div class="col-md-12 form-group" style="display:none" id="example_2"
                                                  th:style="${accountTemplateInfoValidator.templateClassify eq '2'?'display:block':'display:none'}">
-                                                【广发银行】尾号**客户，您的信用卡申请资格已到达，请于**小时内填写**过期作废！以银审为准，退订回T
+                                                【广发银行】尾号${1}客户，您的信用卡申请资格已到达，请于${2}小时内填写${3}过期作废！以银审为准，退订回T
                                             </div>
                                             <div class="col-md-12 form-group" style="display:block" id="example_3"
                                                  th:style="${accountTemplateInfoValidator.templateClassify eq '3'?'display:block':'display:none'}">

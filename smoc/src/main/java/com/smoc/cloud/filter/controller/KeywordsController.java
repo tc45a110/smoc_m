@@ -13,6 +13,7 @@ import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.filter.entity.FilterKeyWordsInfo;
 import com.smoc.cloud.filter.service.KeywordsService;
+import com.smoc.cloud.tools.message.RocketProducerFilterMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -32,7 +33,7 @@ import org.springframework.web.context.WebApplicationContext;
 public class KeywordsController {
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RocketProducerFilterMessage rocketProducerFilterMessage;
 
     @Autowired
     private KeywordsService keywordsService;
@@ -151,13 +152,13 @@ public class KeywordsController {
             if ("SYSTEM".equals(entity.getData().getKeyWordsBusinessType()) && "BLACK".equals(entity.getData().getBusinessId()) && "BLACK".equals(entity.getData().getKeyWordsType())) {
                 this.keywordsService.delFromSet(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_SENSITIVE, entity.getData().getKeyWords());
                 //发送广播通知
-                this.redisTemplate.convertAndSend(RedisConstant.CHANNEL, RedisConstant.MESSAGE_SYSTEM_SENSITIVE);
+                this.rocketProducerFilterMessage.sendRocketMessage(RedisConstant.MESSAGE_SYSTEM_SENSITIVE);
             }
             //删除系统审核词
             if ("SYSTEM".equals(entity.getData().getKeyWordsBusinessType()) && "CHECK".equals(entity.getData().getBusinessId()) && "CHECK".equals(entity.getData().getKeyWordsType())) {
                 this.keywordsService.delFromSet(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_CHECK, entity.getData().getKeyWords());
                 //发送广播通知
-                this.redisTemplate.convertAndSend(RedisConstant.CHANNEL, RedisConstant.MESSAGE_SYSTEM_CHECK);
+                this.rocketProducerFilterMessage.sendRocketMessage(RedisConstant.MESSAGE_SYSTEM_CHECK);
             }
             //删除系统洗敏白词
             if ("SYSTEM".equals(entity.getData().getKeyWordsBusinessType()) && "WHITE".equals(entity.getData().getBusinessId()) && "WHITE_AVOID_BLACK".equals(entity.getData().getKeyWordsType())) {
@@ -171,19 +172,19 @@ public class KeywordsController {
             if ("INFO_TYPE".equals(entity.getData().getKeyWordsBusinessType()) && "BLACK".equals(entity.getData().getKeyWordsType())) {
                 this.keywordsService.delFromSet(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_INFO_TYPE_SENSITIVE + entity.getData().getBusinessId(), entity.getData().getKeyWords());
                 //发送广播通知
-                this.redisTemplate.convertAndSend(RedisConstant.CHANNEL, RedisConstant.MESSAGE_TYPE_INFO_SENSITIVE);
+                this.rocketProducerFilterMessage.sendRocketMessage(RedisConstant.MESSAGE_TYPE_INFO_SENSITIVE);
             }
             //业务账号敏感词
             if ("BUSINESS_ACCOUNT".equals(entity.getData().getKeyWordsBusinessType()) && "BLACK".equals(entity.getData().getKeyWordsType())) {
                 this.keywordsService.delFromSet(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_SENSITIVE + entity.getData().getBusinessId(), entity.getData().getKeyWords());
                 //发送广播通知
-                this.redisTemplate.convertAndSend(RedisConstant.CHANNEL, RedisConstant.MESSAGE_ACCOUNT_SENSITIVE);
+                this.rocketProducerFilterMessage.sendRocketMessage(RedisConstant.MESSAGE_ACCOUNT_SENSITIVE);
             }
             //业务账号审核词
             if ("BUSINESS_ACCOUNT".equals(entity.getData().getKeyWordsBusinessType()) && "CHECK".equals(entity.getData().getKeyWordsType())) {
                 this.keywordsService.delFromSet(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_CHECK + entity.getData().getBusinessId(), entity.getData().getKeyWords());
                 //发送广播通知
-                this.redisTemplate.convertAndSend(RedisConstant.CHANNEL, RedisConstant.MESSAGE_ACCOUNT_CHECK);
+                this.rocketProducerFilterMessage.sendRocketMessage(RedisConstant.MESSAGE_ACCOUNT_CHECK);
             }
             //业务账号洗敏白词
             if ("BUSINESS_ACCOUNT".equals(entity.getData().getKeyWordsBusinessType()) && "WHITE_AVOID_BLACK".equals(entity.getData().getKeyWordsType())) {

@@ -1,4 +1,4 @@
-package com.smoc.cloud.redis;
+package com.smoc.cloud.tools.redis;
 
 import com.google.gson.Gson;
 import org.springframework.dao.DataAccessException;

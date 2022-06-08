@@ -3,3 +3,9 @@
 
 2 引起这一原因是redis.conf中的tcp-keepalive影响的，这个配置默认是0
   官方建议值为60 单位是秒，
+
+  ps -ef|grep redis
+
+3 rocketMQ 内网启动模式、外网启动模式
+  brokerIP1 当前broker监听的IP
+  一开始我以为是Broker启动失败，但我从日志文件中观察到并没有启动失败并且可以telnent通，以及从末后BrokersSent字段的内容来看也不像是Broker报错，因为BrokersSent字段信息有主机名。后来经过一番查询，可能是端口导致的。RocketMQ除了要开放9876和10911端口外，还需要开放10909和10912端口

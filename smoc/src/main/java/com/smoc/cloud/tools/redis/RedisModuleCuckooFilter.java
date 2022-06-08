@@ -1,4 +1,4 @@
-package com.smoc.cloud.redis;
+package com.smoc.cloud.tools.redis;
 
 import com.smoc.cloud.common.filters.utils.RedisFilterConstant;
 import io.rebloom.client.Client;

@@ -12,6 +12,7 @@ import com.smoc.cloud.common.smoc.filter.FilterKeyWordsInfoValidator;
 import com.smoc.cloud.filter.entity.FilterKeyWordsInfo;
 import com.smoc.cloud.filter.entity.KeyWordsMaskKeyWords;
 import com.smoc.cloud.filter.repository.KeywordsRepository;
+import com.smoc.cloud.tools.message.RocketProducerFilterMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,9 @@ public class KeywordsService {
 
     @Autowired
     private RedisTemplate redisTemplate;
+
+    @Autowired
+    private RocketProducerFilterMessage rocketProducerFilterMessage;
 
     /**
      * 根据群组id查询通讯录
@@ -246,7 +250,7 @@ public class KeywordsService {
         //更新关键词同步状态
         keywordsRepository.updateIsSyncStatus(sensitiveWords);
         //发送广播通知
-        this.redisTemplate.convertAndSend(RedisConstant.CHANNEL, RedisConstant.MESSAGE_SYSTEM_SENSITIVE);
+        this.rocketProducerFilterMessage.sendRocketMessage(RedisConstant.MESSAGE_SYSTEM_SENSITIVE);
     }
 
     /**
@@ -280,7 +284,7 @@ public class KeywordsService {
         //更新关键词同步状态
         keywordsRepository.updateIsSyncStatus(checkWords);
         //发送广播通知
-        this.redisTemplate.convertAndSend(RedisConstant.CHANNEL, RedisConstant.MESSAGE_SYSTEM_CHECK);
+        this.rocketProducerFilterMessage.sendRocketMessage(RedisConstant.MESSAGE_SYSTEM_CHECK);
     }
 
     /**
@@ -315,7 +319,7 @@ public class KeywordsService {
         //更新关键词同步状态
         keywordsRepository.updateIsSyncStatus(industrySensitiveWords);
         //发送广播通知
-        this.redisTemplate.convertAndSend(RedisConstant.CHANNEL, RedisConstant.MESSAGE_TYPE_INFO_SENSITIVE);
+        this.rocketProducerFilterMessage.sendRocketMessage(RedisConstant.MESSAGE_TYPE_INFO_SENSITIVE);
     }
 
     /**
@@ -333,7 +337,7 @@ public class KeywordsService {
         //更新关键词同步状态
         keywordsRepository.updateIsSyncStatus(accountSensitiveWords);
         //发送广播通知
-        this.redisTemplate.convertAndSend(RedisConstant.CHANNEL, RedisConstant.MESSAGE_ACCOUNT_SENSITIVE);
+        this.rocketProducerFilterMessage.sendRocketMessage(RedisConstant.MESSAGE_ACCOUNT_SENSITIVE);
     }
 
     /**
@@ -351,7 +355,7 @@ public class KeywordsService {
         //更新关键词同步状态
         keywordsRepository.updateIsSyncStatus(accountCheckWords);
         //发送广播通知
-        this.redisTemplate.convertAndSend(RedisConstant.CHANNEL, RedisConstant.MESSAGE_ACCOUNT_CHECK);
+        this.rocketProducerFilterMessage.sendRocketMessage(RedisConstant.MESSAGE_ACCOUNT_CHECK);
     }
 
     /**

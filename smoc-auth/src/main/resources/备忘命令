@@ -4,5 +4,8 @@ sh startup.sh -m standalone
 
 /usr/local/opt/redis/bin/redis-server 127.0.0.1:6379
 brew services restart redis
+brew services restart redis
+brew services cleanup              #清除已卸载无用的启动配置文件
+brew remove
 127.0.0.1:6379
 ps axu|grep redis

@@ -8,16 +8,15 @@ import com.smoc.cloud.common.filters.utils.RedisConstant;
 import com.smoc.cloud.common.filters.utils.RedisFilterConstant;
 import com.smoc.cloud.common.smoc.filter.FilterBlackListValidator;
 import com.smoc.cloud.common.smoc.filter.FilterWhiteListValidator;
-import com.smoc.cloud.filter.entity.FilterBlackList;
-import com.smoc.cloud.filter.entity.FilterWhiteList;
 import com.smoc.cloud.filter.entity.KeyWordsMaskKeyWords;
 import com.smoc.cloud.filter.repository.BlackRepository;
 import com.smoc.cloud.filter.repository.KeywordsRepository;
 import com.smoc.cloud.filter.repository.WhiteRepository;
 import com.smoc.cloud.parameter.entity.ParameterExtendFiltersValue;
 import com.smoc.cloud.parameter.repository.ParameterExtendFiltersValueRepository;
-import com.smoc.cloud.redis.RedisModuleBloomFilter;
-import com.smoc.cloud.redis.RedisModuleCuckooFilter;
+import com.smoc.cloud.tools.message.RocketProducerFilterMessage;
+import com.smoc.cloud.tools.redis.RedisModuleBloomFilter;
+import com.smoc.cloud.tools.redis.RedisModuleCuckooFilter;
 import com.smoc.cloud.template.entity.AccountTemplateContent;
 import com.smoc.cloud.template.repository.AccountTemplateInfoRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +32,6 @@ import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * 初始化 系统过滤服务数据
@@ -62,6 +60,9 @@ public class InitializeFiltersDataService {
 
     @Autowired
     private RedisTemplate redisTemplate;
+
+    @Autowired
+    private RocketProducerFilterMessage rocketProducerFilterMessage;
 
     public void initialize(InitializeFiltersData initializeFiltersData) {
 
@@ -156,8 +157,9 @@ public class InitializeFiltersDataService {
 
         //业务账号模版
         if ("1".equals(initializeFiltersData.getReloadAccountTemplate())) {
-            this.initializeAccountTemplate();
-            this.pubMessage(RedisConstant.MESSAGE_TEMPLATE);
+            rocketProducerFilterMessage.sendRocketMessage("Hello Rocket");
+//            this.initializeAccountTemplate();
+//            this.pubMessage(RedisConstant.MESSAGE_TEMPLATE);
         }
 
     }
@@ -855,7 +857,7 @@ public class InitializeFiltersDataService {
      * @param message
      */
     public void pubMessage(String message) {
-        this.redisTemplate.convertAndSend(RedisConstant.CHANNEL, message);
+        this.rocketProducerFilterMessage.sendRocketMessage(message);
     }
 
 

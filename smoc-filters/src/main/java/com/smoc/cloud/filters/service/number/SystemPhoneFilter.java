@@ -53,9 +53,9 @@ public class SystemPhoneFilter {
         }
         //低(系统黑名单)
         if ("LOW".equals(isBlackListType.toString())) {
-            log.info("[号码_mobile]:{}", phone);
+            //log.info("[号码_mobile]:{}", phone);
             Boolean isExistBlackList = redisModuleBloomFilter.isExist(RedisFilterConstant.REDIS_BLOOM_FILTERS_SYSTEM_BLACK_COMPLAINT, phone);//FilterInitialize.numberSystemBlackFilter.isContain(phone,1);
-            log.info("[号码_isExistBlackList]:{}", isExistBlackList);
+            //log.info("[号码_isExistBlackList]:{}", isExistBlackList);
             //系统黑名单
             if (isExistBlackList) {
                 //业务账号配置洗白操作
@@ -86,7 +86,7 @@ public class SystemPhoneFilter {
 
         //中(系统+本地)
         if ("MIDDLE".equals(isBlackListType.toString())) {
-            Boolean isExistBlackList = filtersService.systemNumberBlackListFilter(phone);//FilterInitialize.numberSystemBlackFilter.isContain(phone,1);
+            Boolean isExistBlackList = redisModuleBloomFilter.isExist(RedisFilterConstant.REDIS_BLOOM_FILTERS_SYSTEM_BLACK_COMPLAINT, phone);//FilterInitialize.numberSystemBlackFilter.isContain(phone,1);
             //系统黑名单
             if (isExistBlackList) {
                 //业务账号配置洗白操作
@@ -110,20 +110,14 @@ public class SystemPhoneFilter {
                 result.put("message", FilterResponseCode.IS_EXIST_SYSTEM_NUMBER_BLACK_LIST.getMessage());
                 return result;
             }
-            //本地黑名单
-//            if (filtersService.localNumberBlackListFilter(phone)) {
-//                result.put("result", "true");
-//                result.put("code", FilterResponseCode.IS_EXIST_LOCAL_NUMBER_BLACK_LIST.getCode());
-//                result.put("message", FilterResponseCode.IS_EXIST_LOCAL_NUMBER_BLACK_LIST.getMessage());
-//                return result;
-//            }
+
             result.put("result", "false");
             return result;
         }
 
         //中(系统+本地+三方)
         if ("HIGH".equals(isBlackListType.toString())) {
-            Boolean isExistBlackList = filtersService.systemNumberBlackListFilter(phone);//FilterInitialize.numberSystemBlackFilter.isContain(phone,1);
+            Boolean isExistBlackList = redisModuleBloomFilter.isExist(RedisFilterConstant.REDIS_BLOOM_FILTERS_SYSTEM_BLACK_COMPLAINT, phone);//FilterInitialize.numberSystemBlackFilter.isContain(phone,1);
             //系统黑名单
             if (isExistBlackList) {
                 //业务账号配置洗白操作
@@ -147,20 +141,6 @@ public class SystemPhoneFilter {
                 result.put("message", FilterResponseCode.IS_EXIST_SYSTEM_NUMBER_BLACK_LIST.getMessage());
                 return result;
             }
-//            //本地黑名单
-//            if (filtersService.localNumberBlackListFilter(phone)) {
-//                result.put("result", "true");
-//                result.put("code", FilterResponseCode.IS_EXIST_LOCAL_NUMBER_BLACK_LIST.getCode());
-//                result.put("message", FilterResponseCode.IS_EXIST_LOCAL_NUMBER_BLACK_LIST.getMessage());
-//                return result;
-//            }
-//            //第三方黑名单
-//            if (filtersService.thirdNumberBlackListFilter(phone)) {
-//                result.put("result", "true");
-//                result.put("code", FilterResponseCode.IS_EXIST_THIRD_NUMBER_BLACK_LIST.getCode());
-//                result.put("message", FilterResponseCode.IS_EXIST_THIRD_NUMBER_BLACK_LIST.getMessage());
-//                return result;
-//            }
 
             result.put("result", "false");
             return result;

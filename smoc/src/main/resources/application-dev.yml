@@ -68,9 +68,24 @@ spring:
         min-idle: 0
         time-between-eviction-runs: 1000
 
-  #**********************************************************
-  # 内置tomcat 配置
-  #**********************************************************
+rocketmq:
+  name-server: 123.57.216.87:9876
+  producer:
+    #生产者组名，规定在一个应用里面必须唯一
+    group: group-filter
+    #消息发送的超时时间，默认为3000ms
+    send-message-timeout: 50000
+    #消息达到4096字节的时候，消息就会被压缩。默认4096
+    compress-message-body-threshold: 4096
+    #最大的消息限制 默认为128K
+    maxMessageSize: 4096
+    #同步消息发送失败重试次数 默认2次
+    retry-times-when-send-failed: 5
+    #在内部发送失败时是否重试其他代理,这个参数在有多个broker才生效。
+    retry-next-server: true
+    #异步消息发送失败重试的次数 默认2次
+    retry-times-when-send-async-failed: 5
+
 com:
   manpuman:
     tomcat:

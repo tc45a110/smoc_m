@@ -48,19 +48,19 @@ public class MpmRedisConfiguration {
     }
 
     //初始化监听器
-    @Bean
-    RedisMessageListenerContainer container(RedisConnectionFactory connectionFactory,
-                                            MessageListenerAdapter listenerAdapter) {
-        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
-        container.setConnectionFactory(connectionFactory);
-        container.addMessageListener(listenerAdapter, new PatternTopic(RedisConstant.CHANNEL));
-        return container;
-    }
-
-    //利用反射来创建监听到消息之后的执行方法
-    @Bean
-    MessageListenerAdapter listenerAdapter(RedisReceiver redisReceiver) {
-        return new MessageListenerAdapter(redisReceiver, "receiveMessage");
-    }
+//    @Bean
+//    RedisMessageListenerContainer container(RedisConnectionFactory connectionFactory,
+//                                            MessageListenerAdapter listenerAdapter) {
+//        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+//        container.setConnectionFactory(connectionFactory);
+//        container.addMessageListener(listenerAdapter, new PatternTopic(RedisConstant.CHANNEL));
+//        return container;
+//    }
+//
+//    //利用反射来创建监听到消息之后的执行方法
+//    @Bean
+//    MessageListenerAdapter listenerAdapter(RedisReceiver redisReceiver) {
+//        return new MessageListenerAdapter(redisReceiver, "receiveMessage");
+//    }
 
 }
