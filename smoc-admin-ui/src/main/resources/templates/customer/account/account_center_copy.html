@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
+</head>
+<body>
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <!-- start row 页面导航-->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">配置、修改EC业务账号信息</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            客户管理
+                        </li>
+                        <li class="active">
+                            EC业务账号管理
+                        </li>
+                        <li class="active">
+                            配置、修改EC业务账号信息
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row 页面内容-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <div class="row">
+                                <h4 class="m-b-10">
+                                    <div class="pull-right">
+                                        <a sec:authorize-url="/account/list"
+                                           th:href="@{/account/list}"
+                                           class="btn btn-default waves-effect waves-light btn-md">
+                                            <i class="glyphicon  glyphicon-share-alt" style="margin-right:5px"></i>
+                                            返回EC业务账号列表</a>
+                                        <a sec:authorize-url="/account/center/*"
+                                           th:href="@{/account/center/{enterpriseId}(enterpriseId=${enterpriseId})}"
+                                           style="margin-left:10px;"
+                                           class="btn btn-instagram waves-effect waves-light btn-md">
+                                            <i class="mdi mdi-vector-circle" style="margin-right:5px"></i>
+                                            EC业务账号中心
+                                        </a>
+                                        <a sec:authorize-url="/account/excelAccountInfo/*" th:if="${'base' ne flag}"
+                                           th:href="@{/account/excelAccountInfo/{accountId}(accountId=${accountId})}"
+                                           class="btn btn-purple waves-effect waves-light m-l-10 btn-md">
+                                            <i class="glyphicon glyphicon-export"></i> 导出账号信息
+                                        </a>
+                                        <a id="help_display" style="margin-left:10px"><i
+                                                class="mdi mdi-help-circle-outline"></i></a>
+                                    </div>
+                                </h4>
+                            </div>
+                            <div id="help" class="row alert alert-icon alert-success alert-dismissible fade in" style="margin-top:10px" role="alert">
+                                <button id="help_button" type="button" class="close"
+                                        aria-label="Close">
+                                    <span>&times;</span>
+                                </button>
+                                <i class="mdi mdi-help-circle-outline"></i>
+                                <strong>操作提示：</strong> 完成一个通道账户开户工作，要完成下面一系列工作，红色代表没进行设置。
+                            </div>
+
+                            <div class="row" style="margin-top:10px">
+                                <div class="col-md-12">
+                                    <div class="card-box">
+                                        <ul class="nav nav-pills m-b-30 pull-right">
+                                            <li class="active" id="tab1">
+                                                <a onclick="active('1')"
+                                                   sec:authorize-url="/account/edit/copy/*"
+                                                   th:href="@{/account/edit/copy/{id}(id=${accountId})}"
+                                                   th:target="tab-content"><i class="mdi mdi-star"
+                                                                              style="margin-right:5px;color:#f35864"></i>业务账号基本信息
+                                                </a>
+                                            </li>
+                                            <li class="" id="tab2">
+                                                <a onclick="active('2')" id="a2"
+                                                   sec:authorize-url="/account/edit/finance/*"
+                                                   th:href="@{/account/edit/finance/{id}(id=${accountId})}"
+                                                   th:target="tab-content"><i class="mdi mdi-star"
+                                                                              style="margin-right:5px;color:#f35864"></i>财务信息
+                                                </a>
+                                            </li>
+                                            <li class="" id="tab3">
+                                                <a onclick="active('3')" id="a3"
+                                                   sec:authorize-url="/account/edit/interface/*"
+                                                   th:href="@{/account/edit/interface/{id}(id=${accountId})}"
+                                                   th:target="tab-content"><i class="mdi mdi-star"
+                                                                              style="margin-right:5px;color:#f35864"></i>接口信息
+                                                </a>
+                                            </li>
+                                            <li class="" id="tab4"><a onclick="active('4')" id="a4"
+                                                                      sec:authorize-url="/parameter/filter/list/BUSINESS_ACCOUNT_FILTER/*/*"
+                                                                      th:href="@{/parameter/filter/list/BUSINESS_ACCOUNT_FILTER/{id}/6(id=${accountId})}"
+                                                                      th:target="tab-content">过滤参数</a>
+                                            <li class="" id="tab5">
+                                                <a onclick="active('5')" id="a5" th:if="${(flag eq 'base' or flag eq 'international') or accountChannelType eq 'ACCOUNT_CHANNEL_GROUP'}"
+                                                   sec:authorize-url="/account/edit/product/*"
+                                                   th:href="@{/account/edit/product/{id}(id=${accountId})}"
+                                                   th:target="tab-content"><i class="mdi mdi-star"
+                                                                              style="margin-right:5px;color:#f35864"></i>通道组配置
+                                                </a>
+                                            </li>
+                                            <li class="" id="tab6">
+                                                <a onclick="active('6')" id="a6" th:if="${(flag eq 'base' or flag eq 'international') or accountChannelType eq 'ACCOUNT_CHANNEL'}"
+                                                   sec:authorize-url="/account/edit/channel/*"
+                                                   th:href="@{/account/edit/channel/{id}(id=${accountId})}"
+                                                   th:target="tab-content"><i class="mdi mdi-star"
+                                                                              style="margin-right:5px;color:#f35864"></i>通道配置
+                                                </a>
+                                            </li>
+                                            <li class="" id="tab7">
+                                                <a onclick="active('7')" id="a7"
+                                                   sec:authorize-url="/filter/keywords/list/*/*/*"
+                                                   th:href="@{/filter/keywords/list/BUSINESS_ACCOUNT/{id}/BLACK(id=${accountId})}"
+                                                   th:target="tab-content">关键词
+                                                </a>
+                                            </li>
+                                            <li class="" id="tab8">
+                                                <a onclick="active('8')" id="a8"
+                                                   sec:authorize-url="/parameter/business/list/BUSINESS_ACCOUNT/*/*"
+                                                   th:href="@{/parameter/business/list/BUSINESS_ACCOUNT/{id}/4(id=${accountId})}"
+                                                   th:target="tab-content">扩展参数
+                                                </a>
+                                            </li>
+                                            <li class="" id="tab9">
+                                                <a onclick="active('9')" id="a9"
+                                                   sec:authorize-url="/account/view/channel/detail/*"
+                                                   th:href="@{/account/view/channel/detail/{id}(id=${accountId})}"
+                                                   th:target="tab-content">通道状态
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        <div class="tab-cotent" style="background-color:#fff">
+                                            <iframe name="tab-content" th:frameBorder="0"
+                                                    th:scrolling="auto"
+                                                    th:src="@{/account/edit/copy/{id}(id=${accountId})}"
+                                                    style="padding: 0px; width: 100%; height: 2600px;background-color:#fff"></iframe>
+                                        </div>
+                                    </div>
+                                </div> <!-- end col -->
+                            </div>
+                            <!-- end row -->
+                        </div> <!-- end col -->
+
+                    </div> <!-- end row -->
+
+                </div>
+            </div>
+        </div>
+        <!-- End row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/cookie_fragments :: cookie_js"/>
+
+<script>
+
+    /**
+     * 处理cookie
+     */
+    $(document).ready(function() {
+
+        for(var num = 1;num<10;num++){
+            $('#tab'+num).removeClass("active");
+        }
+
+        if("base" == '[[${flag}]]' || "international" =='[[${flag}]]' ){
+            for(var num = 2;num<10;num++){
+                document.getElementById('tab'+num).style.backgroundColor="#DCDBDC";
+                $("#a"+num).attr("onclick","");
+                $("#a"+num).removeAttr("href");
+            }
+            $('#tab1').attr("class","active");
+        }
+
+
+        if("none" == $.cookie("help_display_account_config")){
+            $('#help').css('display', 'none');
+        }
+
+        $('#help_display').on("click", function () {
+            if('block' == $('#help').css('display')){
+                $('#help').css('display', 'none');
+                $.cookie("help_display_account_config", 'none', {
+                    expires : 180
+                });
+            }else{
+                $('#help').css('display', 'block');
+                $.cookie("help_display_account_config", 'block', {
+                    expires : 180
+                });
+            }
+        });
+        $('#help_button').on("click", function () {
+            $('#help').css('display', 'none');
+            $.cookie("help_display_account_config", 'none', {
+                expires : 180
+            });
+        });
+
+    });
+
+    //页签切换
+    function active(tab) {
+        for(var num = 1;num<10;num++){
+            $('#tab'+num).removeClass("active");
+        }
+        $('#tab'+tab).attr("class","active");
+    }
+
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+
+
+
+</script>
+</body>
+</html>

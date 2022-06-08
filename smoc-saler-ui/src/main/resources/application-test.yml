@@ -12,11 +12,11 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 127.0.0.1:8848
+        server-addr: 172.28.235.186:8848
   redis: #redis配置
-    host: r-2zegyswwjdbicif2hd.redis.rds.aliyuncs.com
-    port: 6379
-    password: Tsmoc40#RedistEst
+    host: 172.28.235.188
+    port: 6555
+    password: Dj!bm%Mk8DyP
     database: 1
     timeout: 3000
     jedis:

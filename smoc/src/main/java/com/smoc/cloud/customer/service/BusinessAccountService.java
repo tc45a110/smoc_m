@@ -16,6 +16,8 @@ import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.common.smoc.message.MessageAccountValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
+import com.smoc.cloud.common.utils.UUID;
+import com.smoc.cloud.configure.channel.entity.ConfigChannelInterface;
 import com.smoc.cloud.customer.entity.AccountBasicInfo;
 import com.smoc.cloud.customer.entity.AccountInterfaceInfo;
 import com.smoc.cloud.customer.repository.AccountChannelRepository;
@@ -187,6 +189,23 @@ public class BusinessAccountService {
                 if (!accountBasicInfoValidator.getCarrier().equals(carrier)) {
                     deleteConfigChannelByCarrier(entity);
                 }
+            }
+        }
+
+        //如果不为空：代表是复制账号，需要查接口信息
+        if(StringUtils.hasText(accountBasicInfoValidator.getAccountCopyId())){
+            Optional<AccountInterfaceInfo> accountInterfaceInfo = accountInterfaceRepository.findById(accountBasicInfoValidator.getAccountCopyId());
+            if(accountInterfaceInfo.isPresent()){
+                AccountInterfaceInfo terface = new AccountInterfaceInfo();
+                BeanUtils.copyProperties(accountInterfaceInfo.get(), terface);
+                terface.setAccountId(entity.getAccountId());
+                terface.setCreatedBy(entity.getCreatedBy());
+                terface.setCreatedTime(entity.getCreatedTime());
+                accountInterfaceRepository.saveAndFlush(terface);
+
+                StringBuffer process = new StringBuffer(entity.getAccountProcess());
+                process = process.replace(1, 2, "1");
+                entity.setAccountProcess(process.toString());
             }
         }
 

@@ -136,6 +136,9 @@ public class MessageHttpsTaskInfoRepositoryImpl extends BasePageRepository {
             sqlBuffer.append(" sum(t.SUCCESS_SEND_NUMBER),");
             sqlBuffer.append(" sum(t.FAILURE_NUMBER),");
             sqlBuffer.append(" sum(t.NO_REPORT_NUMBER),");
+            sqlBuffer.append(" DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d')CREATED_TIME ");
+            sqlBuffer.append(" from message_https_task_info t ");
+            sqlBuffer.append(" where 1=1 ");
 
             groupBySql = "group by DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d'),t.BUSINESS_ACCOUNT ";
         }
@@ -149,6 +152,9 @@ public class MessageHttpsTaskInfoRepositoryImpl extends BasePageRepository {
             sqlBuffer.append(" sum(t.SUCCESS_SEND_NUMBER)SUCCESS_SEND_NUMBER,");
             sqlBuffer.append(" sum(t.FAILURE_NUMBER)FAILURE_NUMBER,");
             sqlBuffer.append(" sum(t.NO_REPORT_NUMBER)NO_REPORT_NUMBER,");
+            sqlBuffer.append(" DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d')CREATED_TIME ");
+            sqlBuffer.append(" from message_https_task_info t ");
+            sqlBuffer.append(" where 1=1 ");
 
             groupBySql = "group by DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d') ";
         }
@@ -162,6 +168,9 @@ public class MessageHttpsTaskInfoRepositoryImpl extends BasePageRepository {
             sqlBuffer.append(" sum(t.SUCCESS_SEND_NUMBER)SUCCESS_SEND_NUMBER,");
             sqlBuffer.append(" sum(t.FAILURE_NUMBER)FAILURE_NUMBER,");
             sqlBuffer.append(" sum(t.NO_REPORT_NUMBER)NO_REPORT_NUMBER,");
+            sqlBuffer.append(" DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d')CREATED_TIME ");
+            sqlBuffer.append(" from message_https_task_info t ");
+            sqlBuffer.append(" where 1=1 ");
 
             groupBySql = "group by DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d') ";
         }else{
@@ -173,15 +182,22 @@ public class MessageHttpsTaskInfoRepositoryImpl extends BasePageRepository {
             sqlBuffer.append(" sum(t.SUCCESS_SEND_NUMBER)SUCCESS_SEND_NUMBER,");
             sqlBuffer.append(" sum(t.FAILURE_NUMBER)FAILURE_NUMBER,");
             sqlBuffer.append(" sum(t.NO_REPORT_NUMBER)NO_REPORT_NUMBER,");
+            sqlBuffer.append(" DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d')CREATED_TIME ");
+            sqlBuffer.append(" from message_https_task_info t ");
+            sqlBuffer.append(" where 1=1 ");
 
             groupBySql = "group by DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d'),t.BUSINESS_ACCOUNT ";
         }
 
-        sqlBuffer.append(" DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d')CREATED_TIME ");
-        sqlBuffer.append(" from message_https_task_info t ");
-        sqlBuffer.append(" where 1=1 ");
+
 
         List<Object> paramsList = new ArrayList<Object>();
+
+        //业务ID
+        if (!StringUtils.isEmpty(qo.getEnterpriseId())) {
+            sqlBuffer.append(" and t.ENTERPRISE_ID =?");
+            paramsList.add(qo.getEnterpriseId().trim());
+        }
 
         //业务账号
         if (!StringUtils.isEmpty(qo.getBusinessAccount())) {

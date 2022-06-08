@@ -194,4 +194,71 @@ public class ChannelInternationalController {
 
         return view;
     }
+
+    /**
+     * 复制通道中心
+     *
+     * @return
+     */
+    @RequestMapping(value = "/channelCopy/{id}", method = RequestMethod.GET)
+    public ModelAndView channelCopy(@PathVariable String id, HttpServletRequest request) {
+
+        ModelAndView view = new ModelAndView("configure/channel/international/channel_international_edit_center");
+        view.addObject("id", id);
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
+
+        view.addObject("flag", "copy");
+
+        return view;
+    }
+
+    /**
+     * 复制通道基本信息
+     * @param id
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/edit/copy/{id}", method = RequestMethod.GET)
+    public ModelAndView copy(@PathVariable String id, HttpServletRequest request) {
+
+        ModelAndView view = new ModelAndView("configure/channel/international/channel_international_edit_base");
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
+
+        //查询销售人员
+        view.addObject("salesList", sysUserService.salesList());
+
+        /**
+         * 修改:查询数据
+         */
+        ResponseData<ChannelBasicInfoValidator> data = channelService.findChannelById(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+        }
+
+        ChannelBasicInfoValidator channelBasicInfoValidator = data.getData();
+        channelBasicInfoValidator.setCopyChannelId(channelBasicInfoValidator.getChannelId());
+        channelBasicInfoValidator.setChannelStatus("002");//默认编辑中
+        channelBasicInfoValidator.setChannelProcess("1000");//配置进度
+        channelBasicInfoValidator.setChannelId("");
+
+        //op操作标记，add表示添加，edit表示修改
+        view.addObject("op", "add");
+        view.addObject("channelBasicInfoValidator", channelBasicInfoValidator);
+
+        return view;
+    }
 }

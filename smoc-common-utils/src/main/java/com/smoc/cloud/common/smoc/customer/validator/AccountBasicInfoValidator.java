@@ -58,6 +58,8 @@ public class AccountBasicInfoValidator {
 
     private String errorAccount;
 
+    private String accountCopyId;
+
     private int rowspan;
     private Map<String, AccountFinanceInfoValidator> financeList = new HashMap<>();
     private Map<String, AccountChannelInfoValidator> channelList = new HashMap<>();

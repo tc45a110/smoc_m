@@ -133,10 +133,12 @@
                                                         <h5 style="padding-left:10px">
                                                             通道名称：[[${info.channelName}]]
                                                             <div class="pull-right">
-                                                                <i class="mdi mdi-file-document"
-                                                                   th:onclick="channelCopy([[${info.channelId}]])"
-                                                                   style="margin-right:5px;"
-                                                                   title="复制通道信息"></i>
+                                                                <a sec:authorize-url="/configure/channel/international/channelCopy/*"
+                                                                   th:href="@{/configure/channel/international/channelCopy/{id}(id=${info.channelId})}"
+                                                                   data-toggle="tooltip" data-placement="left"
+                                                                   data-original-title="复制通道模板">
+                                                                    <i class="mdi mdi-file-document"style="margin-right:5px;"></i>
+                                                                </a>
                                                             </div>
                                                         </h5>
                                                     </div>

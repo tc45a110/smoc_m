@@ -735,34 +735,6 @@ public class AccountController {
      *
      * @return
      */
-    /*@RequestMapping(value = "/excelAccountInfo1/{accountId}", method = RequestMethod.GET)
-    public void excelAccountInfo1(@PathVariable String accountId, HttpServletRequest request, HttpServletResponse response) {
-
-        *//**
-         * 查询账号信息
-         *//*
-        ResponseData<AccountBasicInfoValidator> data = businessAccountService.findById(accountId);
-        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            return ;
-        }
-
-        AccountBasicInfoValidator accountBasicInfoValidator = data.getData();
-
-        CopyOnWriteArrayList<AccountExcelModel> list = businessAccountService.excelAccountInfo(accountBasicInfoValidator,request);
-
-        String fileName = accountBasicInfoValidator.getAccountId()+"账号信息";
-        try {
-            ExcelUtils.writeExcel(fileName, AccountExcelModel.class ,response,list);
-        } catch (Exception e) {
-            log.error("导出excel表格失败:", e);
-        }
-    }*/
-
-    /**
-     * 生成excel：导出账号信息
-     *
-     * @return
-     */
     @RequestMapping(value = "/excelAccountInfo/{accountId}", method = RequestMethod.GET)
     public void excelAccountInfo(@PathVariable String accountId, HttpServletRequest request, HttpServletResponse response) {
 
@@ -816,5 +788,96 @@ public class AccountController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 业务账号复制中心
+     *
+     * @return
+     */
+    @RequestMapping(value = "/center/accountCopy/{accountId}", method = RequestMethod.GET)
+    public ModelAndView accountCopy(@PathVariable String accountId, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("customer/account/account_center_copy");
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(accountId);
+        if (!MpmValidatorUtil.validate(validator)) {
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
+
+        //查询账号
+        ResponseData<AccountBasicInfoValidator> info = businessAccountService.findById(accountId);
+        if (!ResponseCode.SUCCESS.getCode().equals(info.getCode())) {
+            view.addObject("error", info.getCode() + ":" + info.getMessage());
+            return view;
+        }
+
+        view.addObject("accountChannelType", info.getData().getAccountChannelType());
+        view.addObject("enterpriseId", info.getData().getEnterpriseId());
+        if("INTL".equals(info.getData().getCarrier())){
+            view.addObject("flag", "international");
+        }else{
+            view.addObject("flag", "base");
+        }
+        view.addObject("accountId", accountId);
+
+        return view;
+
+    }
+
+    /**
+     * 业务账号复制
+     *
+     * @return
+     */
+    @RequestMapping(value = "/edit/copy/{accountId}", method = RequestMethod.GET)
+    public ModelAndView copy(@PathVariable String accountId, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("customer/account/account_edit_base");
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(accountId);
+        if (!MpmValidatorUtil.validate(validator)) {
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
+
+        /**
+         * 修改:查询数据
+         */
+        ResponseData<AccountBasicInfoValidator> info = businessAccountService.findById(accountId);
+        if (!ResponseCode.SUCCESS.getCode().equals(info.getCode())) {
+            view.addObject("error", info.getCode() + ":" + info.getMessage());
+            return view;
+        }
+
+        //查询企业数据
+        ResponseData<EnterpriseBasicInfoValidator> data = enterpriseService.findById(info.getData().getEnterpriseId());
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+        }
+
+        //生成业务账号
+        ResponseData<String> bussinessAccountId = businessAccountService.createAccountId(data.getData().getEnterpriseFlag());
+
+        //初始化数据
+        AccountBasicInfoValidator accountBasicInfoValidator = info.getData();
+        accountBasicInfoValidator.setAccountStatus("2");
+        accountBasicInfoValidator.setAccountProcess("10000");
+        accountBasicInfoValidator.setAccountId(data.getData().getEnterpriseFlag()+bussinessAccountId.getMessage());
+        accountBasicInfoValidator.setAccountCopyId(accountId);
+
+        view.addObject("op", "add");
+        view.addObject("accountBasicInfoValidator", info.getData());
+        view.addObject("enterpriseBasicInfoValidator", data.getData());
+
+        if("INTL".equals(info.getData().getCarrier())){
+            view.setViewName("customer/account/international/account_international_edit_base");
+        }
+
+        return view;
+
     }
 }

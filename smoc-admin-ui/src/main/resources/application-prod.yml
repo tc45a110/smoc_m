@@ -8,7 +8,7 @@ server: #服务端口
       timeout: 240m
   connection-timeout: 15000
   tomcat:
-    basedir:  /home/smoc/apps/temp
+    basedir:  /smoc/apps/temp
 
 spring:
   cloud:
@@ -52,12 +52,12 @@ com:
         help-mobile: 联系电话 #帮助电话
 
       smoc:
-        enterprise-file-path: /alidata/smoc/enterprise/
-        mobile-file-root-path: /alidata/smoc/message/mobile  #短信手机号文件根目录
+        enterprise-file-path: /share/resourceFile/enterprise/
+        mobile-file-root-path: /share/resourceFile/message/mobile  #短信手机号文件根目录
         web-url: http://123.57.228.244:8085/service #导出账号信息：自服务平台网址
         message-resource:
           resource-url: http://123.57.228.244/smoc/message/resource #访问资源路径
-          resource-file-root-path: /alidata/smoc/message/resource  #资源文件根目录
+          resource-file-root-path: /share/resourceFile/message/resource  #资源文件根目录
 
         intelligence:
           account: AP0681
@@ -65,7 +65,7 @@ com:
           domain: domain
           server-address: https://tpl-aim.monyun.cn:57123
           view-address: http://localhost:8080
-          resource-file-root-path: /alidata/smoc/intelect/resource/  #资源文件根目录
+          resource-file-root-path: /share/resourceFile/intelect/resource/  #资源文件根目录
 
     #**********************************************************
     # 内置tomcat 配置
@@ -82,7 +82,7 @@ com:
 
 logging:
   config: classpath:logback-spring.xml
-  path: /home/smoc/smoc-log/smoc-admin-ui-logs
+  path: /smoc/smoc-log/smoc-admin-ui-logs
   level:
     root: info
 

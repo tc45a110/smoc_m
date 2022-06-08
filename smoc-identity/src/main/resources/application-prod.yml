@@ -38,7 +38,7 @@ com:
 
 logging:
   config: classpath:logback-spring.xml
-  path: /home/smoc/smoc-log/smoc-identity-logs
+  path: /smoc/smoc-log/smoc-identity-logs
   level:
     root: info
 

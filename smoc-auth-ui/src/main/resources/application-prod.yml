@@ -66,6 +66,6 @@ com:
 
 logging:
   config: classpath:logback-spring.xml
-  path: /home/smoc/smoc-log/smoc-auth-ui-logs
+  path: /smoc/smoc-log/smoc-auth-ui-logs
   level:
     root: info
