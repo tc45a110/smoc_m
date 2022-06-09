@@ -158,12 +158,13 @@ public class FiltersService {
     public Boolean accountDailyLimit(String account, String carrier, Long dailyLimit, Integer times) {
         String dateFormat = DateTimeUtils.currentDate(new Date());
         String key = RedisConstant.FILTERS_TEMPORARY_LIMIT_FLOW_CARRIER_DATE + dateFormat;
-        //log.info("[账号-运营商日限量]-key:{}", key);
+//        log.info("[账号-运营商日限量]-key:{}", key);
         Object count = filtersRedisDataService.getMapValue(key, account + "_" + carrier);
         if (null == count) {
             return false;
         }
         Long existNum = new Long(count.toString());
+//        log.info("[existNum]:{}",existNum);
         return (dailyLimit < (existNum + times));
 
     }

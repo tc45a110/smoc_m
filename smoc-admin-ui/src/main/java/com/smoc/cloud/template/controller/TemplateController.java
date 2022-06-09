@@ -276,6 +276,22 @@ public class TemplateController {
         ModelAndView view = new ModelAndView("templates/template_edit");
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
 
+        //检查模板内容非法字符
+        if (accountTemplateInfoValidator.getTemplateContent().indexOf("*") != -1) {
+
+            //查询业务账号信息
+            ResponseData<AccountBasicInfoValidator> accountBasicInfoValidatorResponseData = businessAccountService.findById(accountTemplateInfoValidator.getBusinessAccount());
+            //查询企业信息
+            ResponseData<EnterpriseBasicInfoValidator> enterpriseData = enterpriseService.findById(accountBasicInfoValidatorResponseData.getData().getEnterpriseId());
+            view.addObject("accountBasicInfoValidator", accountBasicInfoValidatorResponseData.getData());
+            view.addObject("enterpriseBasicInfoValidator", enterpriseData.getData());
+            view.addObject("accountTemplateInfoValidator",accountTemplateInfoValidator);
+            view.addObject("op", op);
+            view.addObject("illegal", "illegal");
+            return view;
+        }
+
+
         //完成参数规则验证
         if (result.hasErrors()) {
             view.addObject("accountTemplateInfoValidator", accountTemplateInfoValidator);
@@ -295,14 +311,14 @@ public class TemplateController {
             return view;
         }
 
-        if("1".equals(accountTemplateInfoValidator.getTemplateClassify())){
+        if ("1".equals(accountTemplateInfoValidator.getTemplateClassify())) {
             accountTemplateInfoValidator.setIsFilter("NO_FILTER");
             accountTemplateInfoValidator.setTemplateFlag("1");
         }
-        if("2".equals(accountTemplateInfoValidator.getTemplateClassify())){
+        if ("2".equals(accountTemplateInfoValidator.getTemplateClassify())) {
             accountTemplateInfoValidator.setTemplateFlag("2");
         }
-        if("3".equals(accountTemplateInfoValidator.getTemplateClassify())){
+        if ("3".equals(accountTemplateInfoValidator.getTemplateClassify())) {
             accountTemplateInfoValidator.setIsFilter("FILTER");
             accountTemplateInfoValidator.setTemplateFlag("3");
         }
@@ -363,8 +379,8 @@ public class TemplateController {
     }
 
     @RequestMapping(value = "/check", method = RequestMethod.POST)
-    public Map<String,String> checkKeyWord(@RequestBody CheckModel model) {
-        Map<String,String> resultMap = new HashMap<>();
+    public Map<String, String> checkKeyWord(@RequestBody CheckModel model) {
+        Map<String, String> resultMap = new HashMap<>();
         //初始化数据
         PageParams<FilterKeyWordsInfoValidator> params = new PageParams<FilterKeyWordsInfoValidator>();
         params.setPageSize(10000);
@@ -377,11 +393,11 @@ public class TemplateController {
 
         ResponseData<PageList<FilterKeyWordsInfoValidator>> accountKeyWords = keywordsService.page(params);
         if (null != accountKeyWords && null != accountKeyWords.getData() && null != accountKeyWords.getData().getList() && accountKeyWords.getData().getList().size() > 0) {
-            for(FilterKeyWordsInfoValidator validator:accountKeyWords.getData().getList()){
+            for (FilterKeyWordsInfoValidator validator : accountKeyWords.getData().getList()) {
                 Pattern regPattern = Pattern.compile(validator.getKeyWords());
                 Matcher matcher = regPattern.matcher(model.getTemplateContent());
                 if (matcher.find()) {
-                    resultMap.put("account",validator.getKeyWords());
+                    resultMap.put("account", validator.getKeyWords());
                     break;
                 }
             }
@@ -392,11 +408,11 @@ public class TemplateController {
         params.setParams(filterKeyWordsInfoValidator);
         ResponseData<PageList<FilterKeyWordsInfoValidator>> systemKeyWords = keywordsService.page(params);
         if (null != systemKeyWords && null != systemKeyWords.getData() && null != systemKeyWords.getData().getList() && systemKeyWords.getData().getList().size() > 0) {
-            for(FilterKeyWordsInfoValidator validator:systemKeyWords.getData().getList()){
+            for (FilterKeyWordsInfoValidator validator : systemKeyWords.getData().getList()) {
                 Pattern regPattern = Pattern.compile(validator.getKeyWords());
                 Matcher matcher = regPattern.matcher(model.getTemplateContent());
                 if (matcher.find()) {
-                    resultMap.put("system",validator.getKeyWords());
+                    resultMap.put("system", validator.getKeyWords());
                     break;
                 }
             }

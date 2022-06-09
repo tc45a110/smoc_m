@@ -121,7 +121,6 @@ public class RedisModuleBloomFilter {
     }
 
     public Client getClient() {
-
         Client client = new Client(jedisPool);
         return client;
     }

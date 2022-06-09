@@ -1,7 +1,7 @@
 package com.smoc.cloud.filters.service;
 
+import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.RedisCallback;
@@ -20,11 +20,11 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class FiltersRedisDataService {
 
-    @Resource
-    private RedisTemplate<String, Object> limitTemplate;
-
-    @Autowired
+    @Resource(name = "defaultRedisTemplate")
     private RedisTemplate redisTemplate;
+
+    @Resource(name = "redisTemplate2")
+    private RedisTemplate<String ,Object> redisTemplate2;
 
     /**
      * 是否包含 set 存储
@@ -184,7 +184,7 @@ public class FiltersRedisDataService {
 
         DefaultRedisScript<List> script = new DefaultRedisScript<>("return redis.call('cl.throttle',KEYS[1],ARGV[1],ARGV[2],ARGV[3],ARGV[4])", List.class);
 
-        List<Long> rst = limitTemplate.execute(script, Arrays.asList(key), maxBurst, tokens, seconds, apply);
+        List<Long> rst = redisTemplate2.execute(script, Arrays.asList(key), maxBurst, tokens, seconds, apply);
         //响应结果
         /**
          * 1) (integer) 0       # 当前请求是否被允许，0表示允许，1表示不允许

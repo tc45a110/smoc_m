@@ -1,11 +1,10 @@
-package com.smoc.cloud.tools.redis.service;
+package com.smoc.cloud.tools.redis.message;
 
 import com.smoc.cloud.common.filters.utils.RedisConstant;
 import com.smoc.cloud.filters.service.FiltersService;
 import com.smoc.cloud.filters.utils.DFA.FilterInitialize;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 @Slf4j
 public class RedisReceiver {

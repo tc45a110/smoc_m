@@ -40,6 +40,7 @@ import java.util.Map;
 @Service
 public class InitializeFiltersDataService {
 
+
     @Autowired
     private RedisModuleBloomFilter redisModuleBloomFilter;
 
@@ -67,99 +68,98 @@ public class InitializeFiltersDataService {
     public void initialize(InitializeFiltersData initializeFiltersData) {
 
         //系统黑名单
-//        if ("1".equals(initializeFiltersData.getReloadBlackList())) {
-//            this.initializeBlackList();
-//        }
-//        //系统白名单
-//        if ("1".equals(initializeFiltersData.getReloadWhiteList())) {
-//            this.initializeWhiteList();
-//        }
-//        //行业黑名单
-//        if ("1".equals(initializeFiltersData.getReloadIndustryBlackList())) {
-//            this.initializeIndustryBlackList();
-//        }
-//        //行业白名单
-//        if ("1".equals(initializeFiltersData.getReloadIndustryWhiteList())) {
-//            this.initializeIndustryWhiteList();
-//        }
-//        //账号过滤参数
-//        if ("1".equals(initializeFiltersData.getReloadAccountFilterParams())) {
-//            this.initializeAccountFilterParams();
-//        }
+        if ("1".equals(initializeFiltersData.getReloadBlackList())) {
+            this.initializeBlackList();
+        }
+        //系统白名单
+        if ("1".equals(initializeFiltersData.getReloadWhiteList())) {
+            this.initializeWhiteList();
+        }
+        //行业黑名单
+        if ("1".equals(initializeFiltersData.getReloadIndustryBlackList())) {
+            this.initializeIndustryBlackList();
+        }
+        //行业白名单
+        if ("1".equals(initializeFiltersData.getReloadIndustryWhiteList())) {
+            this.initializeIndustryWhiteList();
+        }
+        //账号过滤参数
+        if ("1".equals(initializeFiltersData.getReloadAccountFilterParams())) {
+            this.initializeAccountFilterParams();
+        }
 
-//        //系统敏感词
-//        if ("1".equals(initializeFiltersData.getReloadSystemSensitiveWords())) {
-//            this.initializeSensitiveWords();
-//            this.pubMessage(RedisConstant.MESSAGE_SYSTEM_SENSITIVE);
-//        }
-//
-//        //系统审核词
-//        if ("1".equals(initializeFiltersData.getReloadSystemCheckWords())) {
-//            this.initializeCheckWords();
-//            this.pubMessage(RedisConstant.MESSAGE_SYSTEM_CHECK);
-//        }
+        //系统敏感词
+        if ("1".equals(initializeFiltersData.getReloadSystemSensitiveWords())) {
+            this.initializeSensitiveWords();
+            this.pubMessage(RedisConstant.MESSAGE_SYSTEM_SENSITIVE);
+        }
+
+        //系统审核词
+        if ("1".equals(initializeFiltersData.getReloadSystemCheckWords())) {
+            this.initializeCheckWords();
+            this.pubMessage(RedisConstant.MESSAGE_SYSTEM_CHECK);
+        }
 
         //系统超级白词
-//        if ("1".equals(initializeFiltersData.getReloadSystemSuperWhiteWords())) {
-//            this.initializeSuperWhiteWords();
-//            this.pubMessage(RedisConstant.MESSAGE_SYSTEM_SUPER_WHITE);
-//        }
+        if ("1".equals(initializeFiltersData.getReloadSystemSuperWhiteWords())) {
+            this.initializeSuperWhiteWords();
+            this.pubMessage(RedisConstant.MESSAGE_SYSTEM_SUPER_WHITE);
+        }
 
-//        //系统洗敏白词
-//        if ("1".equals(initializeFiltersData.getReloadSystemWhiteBlackWords())) {
-//            this.initializeWhiteBlackWords();
-//        }
-//        //系统免审白词
-//        if ("1".equals(initializeFiltersData.getReloadSystemNoCheckWhiteWords())) {
-//            this.initializeNoCheckWhiteWords();
-//        }
+        //系统洗敏白词
+        if ("1".equals(initializeFiltersData.getReloadSystemWhiteBlackWords())) {
+            this.initializeWhiteBlackWords();
+        }
+        //系统免审白词
+        if ("1".equals(initializeFiltersData.getReloadSystemNoCheckWhiteWords())) {
+            this.initializeNoCheckWhiteWords();
+        }
         //系统正则白词
-//        if ("1".equals(initializeFiltersData.getReloadSystemRegularWhiteWords())) {
-//            this.initializeRegularWhiteWords();
-//        }
+        if ("1".equals(initializeFiltersData.getReloadSystemRegularWhiteWords())) {
+            this.initializeRegularWhiteWords();
+        }
 
         //行业敏感词
-//        if ("1".equals(initializeFiltersData.getReloadInfoSensitiveWords())) {
-//            this.initializeInfoTypeSensitiveWords(initializeFiltersData.getInfoType());
-//            this.pubMessage(RedisConstant.MESSAGE_TYPE_INFO_SENSITIVE);
-//        }
+        if ("1".equals(initializeFiltersData.getReloadInfoSensitiveWords())) {
+            this.initializeInfoTypeSensitiveWords(initializeFiltersData.getInfoType());
+            this.pubMessage(RedisConstant.MESSAGE_TYPE_INFO_SENSITIVE);
+        }
 
         //业务账号敏感词
-//        if ("1".equals(initializeFiltersData.getReloadAccountSensitiveWords())) {
-//            this.initializeAccountSensitiveWords();
-//            this.pubMessage(RedisConstant.MESSAGE_ACCOUNT_SENSITIVE);
-//        }
-//        //业务账号审核词
-//        if ("1".equals(initializeFiltersData.getReloadAccountCheckWords())) {
-//            this.initializeAccountCheckWords();
-//            this.pubMessage(RedisConstant.MESSAGE_ACCOUNT_CHECK);
-//        }
-//
-//        //业务账号超级白词
-//        if ("1".equals(initializeFiltersData.getReloadAccountSuperWhiteWords())) {
-//            this.initializeAccountSuperWhiteWords();
-//            this.pubMessage(RedisConstant.MESSAGE_ACCOUNT_SUPER_WHITE);
-//        }
-//
-//        //业务账号洗黑白词
-//        if ("1".equals(initializeFiltersData.getReloadAccountWhiteBlackWords())) {
-//            this.initializeAccountWhiteBlackWords();
-//        }
-//
-//        //业务账号免审白词
-//        if ("1".equals(initializeFiltersData.getReloadAccountNoCheckWhiteWords())) {
-//            this.initializeAccountNoCheckWhiteWords();
-//        }
-//        //业务账号正则白词
-//        if ("1".equals(initializeFiltersData.getReloadAccountRegularWhiteWords())) {
-//            this.initializeAccountRegularWhiteWords();
-//        }
+        if ("1".equals(initializeFiltersData.getReloadAccountSensitiveWords())) {
+            this.initializeAccountSensitiveWords();
+            this.pubMessage(RedisConstant.MESSAGE_ACCOUNT_SENSITIVE);
+        }
+        //业务账号审核词
+        if ("1".equals(initializeFiltersData.getReloadAccountCheckWords())) {
+            this.initializeAccountCheckWords();
+            this.pubMessage(RedisConstant.MESSAGE_ACCOUNT_CHECK);
+        }
+
+        //业务账号超级白词
+        if ("1".equals(initializeFiltersData.getReloadAccountSuperWhiteWords())) {
+            this.initializeAccountSuperWhiteWords();
+            this.pubMessage(RedisConstant.MESSAGE_ACCOUNT_SUPER_WHITE);
+        }
+
+        //业务账号洗黑白词
+        if ("1".equals(initializeFiltersData.getReloadAccountWhiteBlackWords())) {
+            this.initializeAccountWhiteBlackWords();
+        }
+
+        //业务账号免审白词
+        if ("1".equals(initializeFiltersData.getReloadAccountNoCheckWhiteWords())) {
+            this.initializeAccountNoCheckWhiteWords();
+        }
+        //业务账号正则白词
+        if ("1".equals(initializeFiltersData.getReloadAccountRegularWhiteWords())) {
+            this.initializeAccountRegularWhiteWords();
+        }
 
         //业务账号模版
         if ("1".equals(initializeFiltersData.getReloadAccountTemplate())) {
-            rocketProducerFilterMessage.sendRocketMessage("Hello Rocket");
-//            this.initializeAccountTemplate();
-//            this.pubMessage(RedisConstant.MESSAGE_TEMPLATE);
+            this.initializeAccountTemplate();
+            this.pubMessage(RedisConstant.MESSAGE_TEMPLATE);
         }
 
     }

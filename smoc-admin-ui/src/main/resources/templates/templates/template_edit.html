@@ -94,19 +94,19 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-6 form-group">
-                                                <label class="m-b-10">是否需要继续内容过滤
+                                                <label class="m-b-10">是否需要过滤审核词及敏感词
                                                     <span class="text-danger">*</span>&nbsp</label>
                                                 <div style="margin-top:0px" class="radio radio-info checkbox-inline">
                                                     <input id="FILTER" name="isFilter" type="radio" value="FILTER"
                                                            required
                                                            th:attr="disabled=${accountTemplateInfoValidator.templateClassify !='2'}"
-                                                           th:checked="${accountTemplateInfoValidator.isFilter eq 'FILTER'}"><label>继续内容过滤</label>
+                                                           th:checked="${accountTemplateInfoValidator.isFilter eq 'FILTER'}"><label>继续过滤审核词及敏感词</label>
                                                 </div>
                                                 <div style="margin-top:0px" class="radio radio-info checkbox-inline">
                                                     <input id="NO_FILTER" name="isFilter" type="radio" value="NO_FILTER"
                                                            required
                                                            th:attr="disabled=${accountTemplateInfoValidator.templateClassify !='2'}"
-                                                           th:checked="${accountTemplateInfoValidator.isFilter eq 'NO_FILTER'}"><label>不继续内容过滤</label>
+                                                           th:checked="${accountTemplateInfoValidator.isFilter eq 'NO_FILTER'}"><label>不继续过滤审核词及敏感词</label>
                                                 </div>
                                             </div>
                                             <div class="col-md-12 form-group" id="content_title_1"
@@ -143,14 +143,9 @@
                                                 【京东金融】|【众安贷】|【滴滴数科】|【恒易贷】|【小米分期】|【小赢卡贷】|【小米随星借】|【好分期】
                                             </div>
                                             <div id="check-tooltip-warning" class="col-md-12 form-group"
-                                                 style="display:none">
+                                                 th:style="${illegal eq 'illegal'?'display:block':'display:none'}">
                                                 <label>内容检测结果</label> <span id="warning-content"
-                                                                            style="margin-left:20px;color:#F5707A"></span>
-                                            </div>
-                                            <div id="check-tooltip-success" class="col-md-12 form-group"
-                                                 style="display:none">
-                                                <label>内容检测结果</label> <span id="success-content"
-                                                                            style="margin-left:20px;color:#4CD396">模板内容很纯洁，再接再厉！</span>
+                                                                            style="margin-left:20px;color:#F5707A">还有非法字符  *  </span>
                                             </div>
                                             <div class="col-md-12 text-center" style="margin-top:20px">
                                                 <input type="hidden" th:field="*{templateId}">

@@ -1,4 +1,4 @@
-package com.smoc.cloud.configuration;
+package com.smoc.cloud.tools.redis;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,19 +14,19 @@ import redis.clients.jedis.JedisPoolConfig;
 public class RedisCacheConfiguration extends CachingConfigurerSupport {
     Logger logger = LoggerFactory.getLogger(RedisCacheConfiguration.class);
 
-    @Value("${spring.redis.host}")
+    @Value("${spring.redis2.host}")
     private String host;
 
-    @Value("${spring.redis.port}")
+    @Value("${spring.redis2.port}")
     private int port;
 
-    @Value("${spring.redis.timeout}")
+    @Value("${spring.redis2.timeout}")
     private int timeout;
 
-    @Value("${spring.redis.password}")
+    @Value("${spring.redis2.password}")
     private String password;
 
-    @Value("${spring.redis.database}")
+    @Value("${spring.redis2.database}")
     private int database;
 
     @Bean
