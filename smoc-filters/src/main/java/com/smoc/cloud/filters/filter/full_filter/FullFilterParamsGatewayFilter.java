@@ -91,7 +91,7 @@ public class FullFilterParamsGatewayFilter extends BaseGatewayFilter implements 
          * 查询业务账号配置的COMMON级别 配置参数
          */
         Map<Object, Object> entities = filtersService.getEntries(RedisConstant.FILTERS_CONFIG_ACCOUNT_COMMON + model.getAccount());
-        log.info("COMMON 配置参数:{}", new Gson().toJson(entities));
+        //log.info("COMMON 配置参数:{}", new Gson().toJson(entities));
         if (null == entities || entities.size() < 1) {
             return success(exchange);
         }
