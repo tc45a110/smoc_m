@@ -186,6 +186,10 @@ public class KeywordsService {
         if ("BUSINESS_ACCOUNT".equals(filterKeyWordsInfoValidator.getKeyWordsBusinessType()) && "WHITE_AVOID_CHECK".equals(filterKeyWordsInfoValidator.getKeyWordsType())) {
             this.loadAccountWhiteCheckWords(filterKeyWordsInfoValidator.getBusinessId());
         }
+        //通道敏感词
+        if ("CHANNEL".equals(filterKeyWordsInfoValidator.getKeyWordsBusinessType()) && "BLACK".equals(filterKeyWordsInfoValidator.getKeyWordsType())) {
+            this.loadChannelSensitiveWords(filterKeyWordsInfoValidator.getBusinessId());
+        }
     }
 
     /**
@@ -232,6 +236,10 @@ public class KeywordsService {
         //业务账号免审白词
         if ("BUSINESS_ACCOUNT".equals(filterKeyWordsInfoValidator.getKeyWordsBusinessType()) && "WHITE_AVOID_CHECK".equals(filterKeyWordsInfoValidator.getKeyWordsType())) {
             this.loadAccountWhiteCheckWords(filterKeyWordsInfoValidator.getBusinessId());
+        }
+        //通道敏感词
+        if ("CHANNEL".equals(filterKeyWordsInfoValidator.getKeyWordsBusinessType()) && "BLACK".equals(filterKeyWordsInfoValidator.getKeyWordsType())) {
+            this.loadChannelSensitiveWords(filterKeyWordsInfoValidator.getBusinessId());
         }
     }
 
@@ -320,6 +328,24 @@ public class KeywordsService {
         keywordsRepository.updateIsSyncStatus(industrySensitiveWords);
         //发送广播通知
         this.rocketProducerFilterMessage.sendRocketMessage(RedisConstant.MESSAGE_TYPE_INFO_SENSITIVE);
+    }
+
+    /**
+     * 加载通道敏感词到缓存
+     */
+    @Async
+    public void loadChannelSensitiveWords(String businessId) {
+        //加载数据
+        List<FilterKeyWordsInfoValidator> channelSensitiveWords = keywordsRepository.loadWords("CHANNEL", businessId, "BLACK");
+        if (null == channelSensitiveWords || channelSensitiveWords.size() < 1) {
+            return;
+        }
+        log.info("加载通道敏感词条数：{}", channelSensitiveWords.size());
+        this.multiSaveSetBatch(RedisConstant.FILTERS_CONFIG_CHANNEL_SENSITIVE, channelSensitiveWords);
+        //更新关键词同步状态
+        keywordsRepository.updateIsSyncStatus(channelSensitiveWords);
+        //发送广播通知
+        this.rocketProducerFilterMessage.sendRocketMessage(RedisConstant.MESSAGE_CHANNEL_SENSITIVE);
     }
 
     /**

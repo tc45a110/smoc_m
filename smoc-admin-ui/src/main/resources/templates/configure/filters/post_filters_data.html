@@ -103,12 +103,26 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-md-10">
+                                <div class="p-10">
+                                    <div class="form-group">
+                                        <label for="carrier">通道ID</label>
+                                        <input id="channelId" type="text"  class="form-control" th:field="*{channelId}"
+                                               data-parsley-length="[1,200]" autocomplete="off"
+                                               placeholder="通道ID">
+                                    </div>
+                                </div>
+                            </div>
 
                         </div> <!-- end row -->
 
-                        <div class="col-md-12 form-group">
-                            <label>内容检测结果</label> <span id="success-content"
+                        <div class="col-md-12 form-group" th:if="${status=='0000'}">
+                            <label>内容检测结果</label> <span
                                                         style="margin-left:20px;color:#4CD396">[[${result}]]</span>
+                        </div>
+                        <div class="col-md-12 form-group" th:if="${status=='1111'}">
+                            <label>内容检测结果</label> <span
+                                                        style="margin-left:20px;color:#f5707a">[[${result}]]</span>
                         </div>
                         <div class="text-center m-b-20">
                             <input type="hidden" th:field="*{numbers}">
@@ -123,7 +137,6 @@
             </div> <!-- end col -->
         </div>
         <!-- end row -->
-
 
         <!-- start row  错误提示-->
         <th:block th:insert="fragments/common_fragments :: common_error"/>
@@ -141,14 +154,6 @@
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
-
-
-
-
-
-
-
-
 
 </script>
 </body>

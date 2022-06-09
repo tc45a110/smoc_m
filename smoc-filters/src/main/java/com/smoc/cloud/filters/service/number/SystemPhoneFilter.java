@@ -70,11 +70,11 @@ public class SystemPhoneFilter {
                     return result;
                 }
                 //系统白名单
-                Boolean systemWhiteList = redisModuleCuckooFilter.isExist(RedisFilterConstant.REDIS_BLOOM_FILTERS_SYSTEM_WHITE, phone);
-                if (systemWhiteList) {
-                    result.put("result", "false");
-                    return result;
-                }
+//                Boolean systemWhiteList = redisModuleCuckooFilter.isExist(RedisFilterConstant.REDIS_BLOOM_FILTERS_SYSTEM_WHITE, phone);
+//                if (systemWhiteList) {
+//                    result.put("result", "false");
+//                    return result;
+//                }
                 result.put("result", "true");
                 result.put("code", FilterResponseCode.IS_EXIST_SYSTEM_NUMBER_BLACK_LIST.getCode());
                 result.put("message", FilterResponseCode.IS_EXIST_SYSTEM_NUMBER_BLACK_LIST.getMessage());
@@ -100,11 +100,11 @@ public class SystemPhoneFilter {
                     result.put("result", "false");
                     return result;
                 }
-                Boolean systemWhiteList = redisModuleCuckooFilter.isExist(RedisFilterConstant.REDIS_BLOOM_FILTERS_SYSTEM_WHITE, phone);
-                if (systemWhiteList) {
-                    result.put("result", "false");
-                    return result;
-                }
+//                Boolean systemWhiteList = redisModuleCuckooFilter.isExist(RedisFilterConstant.REDIS_BLOOM_FILTERS_SYSTEM_WHITE, phone);
+//                if (systemWhiteList) {
+//                    result.put("result", "false");
+//                    return result;
+//                }
                 result.put("result", "true");
                 result.put("code", FilterResponseCode.IS_EXIST_SYSTEM_NUMBER_BLACK_LIST.getCode());
                 result.put("message", FilterResponseCode.IS_EXIST_SYSTEM_NUMBER_BLACK_LIST.getMessage());
@@ -131,11 +131,11 @@ public class SystemPhoneFilter {
                     result.put("result", "false");
                     return result;
                 }
-                Boolean systemWhiteList = redisModuleCuckooFilter.isExist(RedisFilterConstant.REDIS_BLOOM_FILTERS_SYSTEM_WHITE, phone);
-                if (systemWhiteList) {
-                    result.put("result", "false");
-                    return result;
-                }
+//                Boolean systemWhiteList = redisModuleCuckooFilter.isExist(RedisFilterConstant.REDIS_BLOOM_FILTERS_SYSTEM_WHITE, phone);
+//                if (systemWhiteList) {
+//                    result.put("result", "false");
+//                    return result;
+//                }
                 result.put("result", "true");
                 result.put("code", FilterResponseCode.IS_EXIST_SYSTEM_NUMBER_BLACK_LIST.getCode());
                 result.put("message", FilterResponseCode.IS_EXIST_SYSTEM_NUMBER_BLACK_LIST.getMessage());

@@ -42,7 +42,7 @@ public class InfoTypeMessageFilter {
          */
         //long start = System.currentTimeMillis();
         if (null != infoTypeSensitiveWordsFilter && !StringUtils.isEmpty(infoTypeSensitiveWordsFilter)) {
-            log.info("[行业过滤_行业]：{}", infoTypeSensitiveWordsFilter);
+            //log.info("[行业过滤_行业]：{}", infoTypeSensitiveWordsFilter);
             DfaSensitiveWordsFilter dfaSensitiveWordsFilter = new DfaSensitiveWordsFilter(FilterInitialize.infoTypeSensitiveMap.get(infoTypeSensitiveWordsFilter));
             Set<String> sensitiveWords = dfaSensitiveWordsFilter.getSensitiveWords(message, 1);
             //log.info("[行业敏感词过滤]：{}", sensitiveWords);

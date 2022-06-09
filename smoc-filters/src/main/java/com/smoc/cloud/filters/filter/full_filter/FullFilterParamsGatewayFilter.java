@@ -6,6 +6,7 @@ import com.smoc.cloud.filters.filter.BaseGatewayFilter;
 import com.smoc.cloud.filters.service.account.CarrierDailyLimiterFilter;
 import com.smoc.cloud.filters.service.account.MaskProvinceFilter;
 import com.smoc.cloud.filters.service.account.SendTimeLimitFilter;
+import com.smoc.cloud.filters.service.message.ChannelMessageFilter;
 import com.smoc.cloud.filters.service.message.ExtendMessageParamsFilter;
 import com.smoc.cloud.filters.service.message.FullMessageFilter;
 import com.smoc.cloud.filters.service.number.ExtendNumberParamsFilter;
@@ -65,6 +66,9 @@ public class FullFilterParamsGatewayFilter extends BaseGatewayFilter implements 
 
     @Autowired
     private IndustryBlackListFilter industryBlackListFilter;
+
+    @Autowired
+    private ChannelMessageFilter channelMessageFilter;
 
     @Autowired
     private FiltersService filtersService;
@@ -191,7 +195,8 @@ public class FullFilterParamsGatewayFilter extends BaseGatewayFilter implements 
          * 3、变量模版匹配，根据配置（1）匹配上变量模版 则跳过其他内容过滤 （2）匹配上变量模版，继续其他的内容过滤项
          * 4、签名模版匹配，（1）提取短信内容签名 （2）匹配签名；  如果匹配上签名，继续其他内容过滤，如果没匹配上签名，则返回过滤失败
          * 5、系统内容敏感词、审核词过滤、账号敏感词、行业敏感词账号审核词、各种白词洗白
-         * 6、业务账号内容扩展参数过滤
+         * 6、通道敏感词过滤
+         * 7、业务账号内容扩展参数过滤
          */
 
         /**
@@ -286,7 +291,15 @@ public class FullFilterParamsGatewayFilter extends BaseGatewayFilter implements 
         }
 
         /**
-         * 6、业务账号内容扩展参数过滤
+         * 6、通道过滤参数
+         */
+        Map<String, String> channelMessageParamsFilterResult = channelMessageFilter.filter(model.getChannelId(), model.getMessage());
+        if (!"false".equals(channelMessageParamsFilterResult.get("result"))) {
+            return errorHandle(exchange, channelMessageParamsFilterResult.get("code"), channelMessageParamsFilterResult.get("message"));
+        }
+        
+        /**
+         * 7、业务账号内容扩展参数过滤
          */
         Map<String, String> extendMessageParamsFilterResult = extendMessageParamsFilter.filter(filtersService, model.getAccount(), model.getMessage());
         if (!"false".equals(extendMessageParamsFilterResult.get("result"))) {

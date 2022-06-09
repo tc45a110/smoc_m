@@ -329,6 +329,27 @@ public class FiltersService {
     }
 
     /**
+     * 初始化 通道敏感词
+     *
+     * @return
+     */
+    public Map<String, Map> getChannelSensitiveWords() {
+        long start = System.currentTimeMillis();
+        Map<String, Map> channelSensitiveMap = new HashMap<>();
+        Set<String> accounts = filtersRedisDataService.sget(RedisConstant.FILTERS_CONFIG_CHANNEL_SENSITIVE + "list");
+        if (null != accounts && accounts.size() > 0) {
+            for (String account : accounts) {
+                Set<String> accountSensitiveWords = filtersRedisDataService.sget(RedisConstant.FILTERS_CONFIG_CHANNEL_SENSITIVE + account);
+                log.info("[加载通道敏感词]：耗时：{}毫秒", accountSensitiveWords);
+                channelSensitiveMap.put(account, DFAUtils.buildDFADataModel(accountSensitiveWords));
+            }
+        }
+        long end = System.currentTimeMillis();
+        log.info("[加载通道敏感词]：耗时：{}毫秒", end - start);
+        return channelSensitiveMap;
+    }
+
+    /**
      * 初始化 业务账号敏感词
      *
      * @return

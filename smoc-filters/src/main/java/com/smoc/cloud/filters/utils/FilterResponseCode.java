@@ -32,6 +32,7 @@ public enum FilterResponseCode {
     MESSAGE_ACCOUNT_SENSITIVE_FILTER("1210", "被业务账号敏感词拦截！"),
     MESSAGE_ACCOUNT_CHECK_FILTER("1211", "被业务账号审核词拦截！"),
     NUMBER_INDUSTRY_BLACK_FILTER("1212", "手机号码被行业黑名单拦截！"),
+    MESSAGE_CHANNEL_SENSITIVE_FILTER("1213", "被通道敏感词拦截！"),
 
     LIMIT_DAILY_CARRIER("1301", "达到运营商日限量限制！"),
     LIMIT_TIME_CONFIG_ERROR("1302", "发送时间段参数配置错误！"),

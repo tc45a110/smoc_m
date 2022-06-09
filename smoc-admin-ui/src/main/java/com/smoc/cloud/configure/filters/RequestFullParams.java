@@ -28,6 +28,9 @@ public class RequestFullParams {
     //province  省份编码 字段为空，则跳出所有涉及该字段的过滤
     private String provinceCode;
 
+    //通道id
+    private String channelId;
+
     //拆分后短信条数
     private Integer numbers = 1;
 

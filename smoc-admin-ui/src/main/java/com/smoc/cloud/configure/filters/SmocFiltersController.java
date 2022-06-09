@@ -60,6 +60,11 @@ public class SmocFiltersController {
         ResponseData responseData = smocFiltersService.filter(requestFullParams);
         view.addObject("requestFullParams", requestFullParams);
         view.addObject("result", new Gson().toJson(responseData));
+        if("0000".equals(responseData.getCode())){
+            view.addObject("status", "0000");
+        }else{
+            view.addObject("status","1111");
+        }
         return view;
 
     }

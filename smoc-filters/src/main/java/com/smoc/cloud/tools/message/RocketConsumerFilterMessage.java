@@ -41,6 +41,12 @@ public class RocketConsumerFilterMessage implements RocketMQListener<String> {
                 FilterInitialize.infoTypeSensitiveMap = filtersService.getInfoTypeSensitiveWords();
             }
 
+            //通道敏感词
+            if (RedisConstant.MESSAGE_CHANNEL_SENSITIVE.equals(message)) {
+                FilterInitialize.channelSensitiveMap = filtersService.getChannelSensitiveWords();
+                return;
+            }
+
             //业务账号敏感词
             if (RedisConstant.MESSAGE_ACCOUNT_SENSITIVE.equals(message)) {
                 FilterInitialize.accountSensitiveMap = filtersService.getAccountSensitiveWords();

@@ -124,6 +124,10 @@ public class KeywordsController {
             if ("BUSINESS_ACCOUNT".equals(filterKeyWordsInfoValidator.getKeyWordsBusinessType()) && "WHITE_AVOID_CHECK".equals(filterKeyWordsInfoValidator.getKeyWordsType())) {
                 this.keywordsService.loadAccountWhiteCheckWords(filterKeyWordsInfoValidator.getBusinessId());
             }
+            //通道敏感词
+            if ("CHANNEL".equals(filterKeyWordsInfoValidator.getKeyWordsBusinessType()) && "BLACK".equals(filterKeyWordsInfoValidator.getKeyWordsType())) {
+                this.keywordsService.loadChannelSensitiveWords(filterKeyWordsInfoValidator.getBusinessId());
+            }
         }
         return responseData;
     }
@@ -193,6 +197,10 @@ public class KeywordsController {
             //业务账号免审白词
             if ("BUSINESS_ACCOUNT".equals(entity.getData().getKeyWordsBusinessType()) && "WHITE_AVOID_CHECK".equals(entity.getData().getKeyWordsType())) {
                 this.keywordsService.delFromHash(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_WHITE_NO_CHECK + entity.getData().getBusinessId(), entity.getData().getWaskKeyWords());
+            }
+            //通道敏感词
+            if ("CHANNEL".equals(entity.getData().getKeyWordsBusinessType()) && "BLACK".equals(entity.getData().getKeyWordsType())) {
+                this.keywordsService.loadChannelSensitiveWords(entity.getData().getBusinessId());
             }
         }
         return responseData;

@@ -31,9 +31,9 @@ public class RedisModuleBloomFilter {
 
         boolean booleans = false;
         try {
-            log.info("[名单过滤]数据：应用过滤器：{}，开始：{}", filterName, System.currentTimeMillis());
+            //log.info("[名单过滤]数据：应用过滤器：{}，开始：{}", filterName, System.currentTimeMillis());
             booleans = getClient().exists(filterName, phone);
-            log.info("[名单过滤]数据：应用过滤器：{}，结束：{}", filterName, System.currentTimeMillis());
+            //log.info("[名单过滤]数据：应用过滤器：{}，结束：{}", filterName, System.currentTimeMillis());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -62,9 +62,9 @@ public class RedisModuleBloomFilter {
         boolean[] booleans = null;
         try {
 
-            log.info("[名单过滤]数据：应用过滤器：{}，开始：{}", filterName, System.currentTimeMillis());
+            //log.info("[名单过滤]数据：应用过滤器：{}，开始：{}", filterName, System.currentTimeMillis());
             booleans = getClient().existsMulti(filterName, phones);
-            log.info("[名单过滤]数据：应用过滤器：{}，结束：{}", filterName, System.currentTimeMillis());
+            //log.info("[名单过滤]数据：应用过滤器：{}，结束：{}", filterName, System.currentTimeMillis());
 
         } catch (Exception e) {
             e.printStackTrace();

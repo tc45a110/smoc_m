@@ -17,6 +17,9 @@ public class FilterInitialize {
     //存放加载的行业敏感词 及构造完成的DFA算法map
     public static Map<String, Map> infoTypeSensitiveMap = new HashMap();
 
+    //存放加载的通道敏感词 及构造完成的DFA算法map
+    public static Map<String, Map> channelSensitiveMap = new HashMap();
+
     //存放加载的业务账号敏感词 及构造完成的DFA算法map
     public static Map<String, Map> accountSensitiveMap = new HashMap();
 
@@ -24,7 +27,7 @@ public class FilterInitialize {
     public static Map<String, Map> accountCheckMap = new HashMap();
 
     //存放加载的业务账号超级白词 及构造完成的DFA算法map
-    public static Map<String, Map> accountSuperWhiteMap = new HashMap();
+//    public static Map<String, Map> accountSuperWhiteMap = new HashMap();
 
     //存放加载的业务账号固定模版，匹配后要跳过其他内容过滤
     public static Map<String, String> accountFilterFixedTemplateMap = new HashMap();

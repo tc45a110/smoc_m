@@ -42,6 +42,14 @@ public class RedisConstant {
     public static final String FILTERS_CONFIG_SYSTEM_WORDS_INFO_TYPE = FILTERS_CONFIG_SYSTEM_WORDS_INFO_TYPE_SENSITIVE + "list";
 
     /**
+     * 通道级过滤
+     */
+    //通道参数-参数前缀
+    public static final String FILTERS_CONFIG_CHANNEL = "filters:config:channel:";
+
+    public static final String FILTERS_CONFIG_CHANNEL_SENSITIVE = FILTERS_CONFIG_CHANNEL+"sensitive:";
+
+    /**
      * 账户级过滤
      */
     //账号参数-参数前缀
@@ -111,6 +119,9 @@ public class RedisConstant {
 
     //模版
     public static final String MESSAGE_TEMPLATE = "template";
+
+    //通道敏感词
+    public static final String MESSAGE_CHANNEL_SENSITIVE = "channelSensitive";
 
     //业务账号敏感词
     public static final String MESSAGE_ACCOUNT_SENSITIVE = "accountSensitive";
