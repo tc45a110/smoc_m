@@ -24,26 +24,8 @@ spring:
     hibernate:
       ddl-auto: none
     generate-ddl: false
-    show-sql: false
+    show-sql: true
     open-in-view: true
-
-  #**********************************************************
-  # Redis
-  #**********************************************************
-  redis: #redis配置
-    host: 172.28.235.188
-    port: 6555
-    password: Dj!bm%Mk8DyP
-    database: 1
-    timeout: 3000
-    jedis:
-      pool:
-        max-active: 8
-        max-wait: 2000
-        max-idle: 8
-        min-idle: 0
-        time-between-eviction-runs: 1000
-
 
   # ========================================================================================
   #  datasource hikari pool
@@ -70,8 +52,54 @@ spring:
         useServerPrepStmts: true
 
   #**********************************************************
-  # 内置tomcat 配置
+  # Redis
   #**********************************************************
+  redis: #redis配置  配置了布隆过滤器、限流插件
+    host: r-2zegyswwjdbicif2hd.redis.rds.aliyuncs.com
+    port: 6379
+    password: Tsmoc40#RedistEst
+    database: 1
+    timeout: 3000
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: 2000
+        max-idle: 8
+        min-idle: 0
+        time-between-eviction-runs: 1000
+
+  redis2: #redis2配置
+    host: 172.28.235.188
+    port: 6555
+    password: Dj!bm%Mk8DyP
+    database: 1
+    timeout: 3000
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: 2000
+        max-idle: 8
+        min-idle: 0
+        time-between-eviction-runs: 1000
+
+rocketmq:
+  name-server: 172.28.235.188:9876
+  producer:
+    #生产者组名，规定在一个应用里面必须唯一
+    group: group-filter
+    #消息发送的超时时间，默认为3000ms
+    send-message-timeout: 50000
+    #消息达到4096字节的时候，消息就会被压缩。默认4096
+    compress-message-body-threshold: 4096
+    #最大的消息限制 默认为128K
+    maxMessageSize: 4096
+    #同步消息发送失败重试次数 默认2次
+    retry-times-when-send-failed: 5
+    #在内部发送失败时是否重试其他代理,这个参数在有多个broker才生效。
+    retry-next-server: true
+    #异步消息发送失败重试的次数 默认2次
+    retry-times-when-send-async-failed: 5
+
 com:
   manpuman:
     tomcat:
