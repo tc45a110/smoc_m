@@ -14,7 +14,7 @@
 </th:block>
 <th:block th:fragment="common_keyword">
     <!-- start row  查询条件-->
-    <div class="row" style="position: relative;" th:remove="${#strings.isEmpty(error)}?none:all">
+    <div th:if="${filterKeyWordsInfoValidator.keyWordsBusinessType !='CHANNEL'}" class="row" style="position: relative;" th:remove="${#strings.isEmpty(error)}?none:all">
         <div class="col-sm-12">
 
             <ul class="nav nav-pills pull-right">

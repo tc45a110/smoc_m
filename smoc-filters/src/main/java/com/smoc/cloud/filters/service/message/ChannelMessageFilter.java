@@ -20,7 +20,6 @@ import java.util.Set;
 public class ChannelMessageFilter {
 
     /**
-     * @param filtersService 业务服务
      * @param channelId      通道ID
      * @param message        短信内容
      * @return
@@ -42,7 +41,7 @@ public class ChannelMessageFilter {
         if (null != sensitiveWords && sensitiveWords.size() > 0) {
             result.put("result", "true");
             result.put("code", FilterResponseCode.MESSAGE_CHANNEL_SENSITIVE_FILTER.getCode());
-            result.put("message", "内容中包含通道敏感词" + sensitiveWords.toString());
+            result.put("message", "内容中包含通道敏感词" + sensitiveWords);
             return result;
         }
         result.put("result", "false");

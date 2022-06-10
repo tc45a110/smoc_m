@@ -99,6 +99,8 @@ public class KeywordsService {
             Iterator iter = data.iterator();
             while (iter.hasNext()) {
                 FilterKeyWordsInfo organization = (FilterKeyWordsInfo) iter.next();
+
+                log.info("[FilterKeyWordsInfo]:{}", organization.getKeyWords());
                 if (!entity.getId().equals(organization.getId())) {
                     status = true;
                     break;
@@ -107,6 +109,14 @@ public class KeywordsService {
             if (status) {
                 return ResponseDataUtil.buildError(ResponseCode.PARAM_CREATE_ERROR);
             }
+        }
+
+        /**
+         * 如果存在记录，则先把存在的关键词从缓存删除
+         */
+        if (isExist(filterKeyWordsInfoValidator.getId())) {
+            Optional<FilterKeyWordsInfo> keyWordsInfo = keywordsRepository.findById(filterKeyWordsInfoValidator.getId());
+            this.delFromSet(RedisConstant.FILTERS_CONFIG_CHANNEL_SENSITIVE+filterKeyWordsInfoValidator.getBusinessId(), keyWordsInfo.get().getKeyWords());
         }
 
         //op 不为 edit 或 add
@@ -241,6 +251,17 @@ public class KeywordsService {
         if ("CHANNEL".equals(filterKeyWordsInfoValidator.getKeyWordsBusinessType()) && "BLACK".equals(filterKeyWordsInfoValidator.getKeyWordsType())) {
             this.loadChannelSensitiveWords(filterKeyWordsInfoValidator.getBusinessId());
         }
+    }
+
+    /**
+     * 是否存在记录
+     *
+     * @param id
+     * @return
+     */
+    public Boolean isExist(String id) {
+        Boolean isExist = keywordsRepository.existsById(id);
+        return isExist;
     }
 
     /**
@@ -395,7 +416,7 @@ public class KeywordsService {
             return;
         }
         log.info("加载业务账号洗敏白词条数：{}", whiteSensitiveWords.size());
-        this.multiSaveHash(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_WHITE_SENSITIVE+businessId, whiteSensitiveWords);
+        this.multiSaveHash(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_WHITE_SENSITIVE + businessId, whiteSensitiveWords);
         //更新关键词同步状态
         keywordsRepository.updateIsSyncStatus(whiteSensitiveWords);
     }
@@ -411,7 +432,7 @@ public class KeywordsService {
             return;
         }
         log.info("加载业务账号免审白词条数：{}", whiteCheckWords.size());
-        this.multiSaveHash(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_WHITE_NO_CHECK+businessId, whiteCheckWords);
+        this.multiSaveHash(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_WHITE_NO_CHECK + businessId, whiteCheckWords);
         //更新关键词同步状态
         keywordsRepository.updateIsSyncStatus(whiteCheckWords);
     }
@@ -427,8 +448,7 @@ public class KeywordsService {
         redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
             connection.openPipeline();
             list.forEach((value) -> {
-                connection.sAdd(RedisSerializer.string().serialize(key),
-                        RedisSerializer.string().serialize(new Gson().toJson(value.getKeyWords())));
+                connection.sAdd(RedisSerializer.string().serialize(key), RedisSerializer.string().serialize(new Gson().toJson(value.getKeyWords())));
 
             });
             connection.close();
@@ -447,8 +467,7 @@ public class KeywordsService {
             connection.openPipeline();
             list.forEach((value) -> {
                 connection.sAdd(RedisSerializer.string().serialize(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_INFO_TYPE), RedisSerializer.string().serialize(new Gson().toJson(value.getBusinessId())));
-                connection.sAdd(RedisSerializer.string().serialize(key),
-                        RedisSerializer.string().serialize(new Gson().toJson(value.getKeyWords())));
+                connection.sAdd(RedisSerializer.string().serialize(key), RedisSerializer.string().serialize(new Gson().toJson(value.getKeyWords())));
             });
             connection.close();
             return null;
@@ -457,6 +476,7 @@ public class KeywordsService {
 
     /**
      * multiSaveSetBatch Set 同时维护一个list
+     *
      * @param redisKey
      * @param list
      */
@@ -464,10 +484,8 @@ public class KeywordsService {
         redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
             connection.openPipeline();
             list.forEach((value) -> {
-                connection.sAdd(RedisSerializer.string().serialize(redisKey + "list"),
-                        RedisSerializer.string().serialize(new Gson().toJson(value.getBusinessId())));
-                connection.sAdd(RedisSerializer.string().serialize(redisKey + value.getBusinessId()),
-                        RedisSerializer.string().serialize(new Gson().toJson(value.getKeyWords())));
+                connection.sAdd(RedisSerializer.string().serialize(redisKey + "list"), RedisSerializer.string().serialize(new Gson().toJson(value.getBusinessId())));
+                connection.sAdd(RedisSerializer.string().serialize(redisKey + value.getBusinessId()), RedisSerializer.string().serialize(new Gson().toJson(value.getKeyWords())));
             });
             connection.close();
             return null;
@@ -484,8 +502,7 @@ public class KeywordsService {
         redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
             connection.openPipeline();
             list.forEach((value) -> {
-                connection.hSet(RedisSerializer.string().serialize(redisKey),
-                        RedisSerializer.string().serialize(value.getWaskKeyWords()), RedisSerializer.string().serialize(new Gson().toJson(value.getKeyWords())));
+                connection.hSet(RedisSerializer.string().serialize(redisKey), RedisSerializer.string().serialize(value.getWaskKeyWords()), RedisSerializer.string().serialize(new Gson().toJson(value.getKeyWords())));
             });
             connection.close();
             return null;

@@ -8,7 +8,6 @@ import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 /**
  * 单手机号发送频率限制
@@ -31,7 +30,7 @@ public class PhoneSendFrequencyLimitFilter {
             result.put("result", "false");
             return result;
         }
-        //log.info("[号码_发送频率限制]：{}", phoneFrequencyLimit);
+//        log.info("[号码_发送频率限制]：{}", phoneFrequencyLimit);
 
         //无限制
         if ("0".equals(phoneFrequencyLimit.toString())) {
@@ -39,12 +38,11 @@ public class PhoneSendFrequencyLimitFilter {
             return result;
         }
 
-
         //限流默认数量
         int maxBurst;
         //按分钟限制
         String[] minutes = phoneFrequencyLimit.toString().split("M");
-        if (null != minutes) {
+        if (null != minutes && minutes.length ==2) {
             //时间，转换成秒
             int seconds = new Integer(minutes[0]) * 60;
             //次数
@@ -68,7 +66,7 @@ public class PhoneSendFrequencyLimitFilter {
         if (null != hours && hours.length == 2) {
             int seconds = new Integer(hours[0]) * 60 * 60;
             //次数
-            String[] times = minutes[1].split("B");
+            String[] times = hours[1].split("B");
             //tokens表示每seconds生成的次数
             int tokens = new Integer(times[0]);
             //最大爆发数，可以连续发送数
@@ -82,13 +80,12 @@ public class PhoneSendFrequencyLimitFilter {
             result.put("result", "false");
             return result;
         }
-
         //按天限制
         String[] days = phoneFrequencyLimit.toString().split("D");
-        if (null != hours && hours.length == 2) {
+        if (null != days && days.length == 2) {
             int seconds = new Integer(days[0]) * 60 * 60 * 24;
             //次数
-            String[] times = minutes[1].split("B");
+            String[] times = days[1].split("B");
             //tokens表示每seconds生成的次数
             int tokens = new Integer(times[0]);
             //最大爆发数，可以连续发送数

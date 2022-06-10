@@ -200,7 +200,9 @@ public class KeywordsController {
             }
             //通道敏感词
             if ("CHANNEL".equals(entity.getData().getKeyWordsBusinessType()) && "BLACK".equals(entity.getData().getKeyWordsType())) {
-                this.keywordsService.loadChannelSensitiveWords(entity.getData().getBusinessId());
+                this.keywordsService.delFromSet(RedisConstant.FILTERS_CONFIG_CHANNEL_SENSITIVE+ entity.getData().getBusinessId(),entity.getData().getKeyWords());
+                //发送广播通知
+                this.rocketProducerFilterMessage.sendRocketMessage(RedisConstant.MESSAGE_CHANNEL_SENSITIVE);
             }
         }
         return responseData;
