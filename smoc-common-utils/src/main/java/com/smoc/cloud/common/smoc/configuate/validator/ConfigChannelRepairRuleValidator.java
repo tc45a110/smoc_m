@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
-import java.util.Objects;
 
 @Setter
 @Getter
@@ -20,5 +19,5 @@ public class ConfigChannelRepairRuleValidator {
     private Date createdTime;
     private String updatedBy;
 
-
+    private String channelRepairName;
 }

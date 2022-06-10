@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"  xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
+    <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
+    <!-- Tooltipster css -->
+    <link rel="stylesheet" th:href="@{/static/plugins/tooltipster/tooltipster.bundle.min.css}">
+
+</head>
+<body>
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <!-- start row 页面导航-->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">通道失败补发配置</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            通道管理
+                        </li>
+                        <li class="active">
+                            通道失败补发配置
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  页面数据-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <div class="row" style="margin-top:10px">
+                        <div class="col-lg-12" style="margin-top:0px">
+                            <div class="panel panel-color panel-info">
+                                <div id="login-account-down" class="panel-heading"
+                                     style="display:block">
+                                    <h3 class="panel-title">
+                                        <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
+                                        主通道信息
+                                    </h3>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="p-20">
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col-md-3 form-group">
+                                                        <label>通道名称： <span style="color:#00acc1">[[${channelBasicInfoValidator.channelName}]]</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-md-3 form-group">
+                                                        <label>通道ID： <span style="color:#00acc1">[[${channelBasicInfoValidator.channelId}]]</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-md-3 form-group">
+                                                        <label>发送号码范围：<span style="color:#00acc1"><mpm:tag identity="carrier" show-type="label" key="code"
+                                                                                                           th:value="${channelBasicInfoValidator.carrier}"/></span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-md-3 form-group">
+                                                        <label>信息分类：<span style="color:#00acc1"><mpm:tag identity="infoType" show-type="label" key="code"
+                                                                                                         th:value="${channelBasicInfoValidator.infoType}"/></span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-md-3 form-group">
+                                                        <label>业务类型：<span style="color:#00acc1">
+                                                             <mpm:tag identity="businessType" show-type="button"
+                                                                      key="code" th:value="${channelBasicInfoValidator.businessType}"
+                                                                      class="TEXT_SMS,btn btn-teal waves-effect waves-light btn-xs;MULTI_SMS,btn btn-brown waves-effect waves-light btn-xs;MMS,btn btn-info waves-effect waves-light btn-xs;5G_SMS,btn btn-primary waves-effect waves-light btn-xs;INTERNATIONAL_SMS,btn btn-purple waves-effect waves-light btn-xs;BLACK_SERVICE,btn btn-inverse waves-effect waves-light btn-xs"/>
+                                                        </span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-md-3 form-group">
+                                                        <label>通道状态：<mpm:tag identity="channelStatus" show-type="button" key="code"
+                                                                             th:value="${channelBasicInfoValidator.channelStatus}"
+                                                                             class="001,btn btn-success waves-effect waves-light btn-xs;002,btn btn-orange waves-effect waves-light btn-xs;003,btn btn-brown waves-effect waves-light btn-xs;004,btn btn-pink waves-effect waves-light btn-xs;005,btn btn-inverse waves-effect waves-light btn-xs;006,btn btn-danger waves-effect waves-light btn-xs;"/>
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-md-3 form-group">
+                                                        <label>通道运行状态：<mpm:tag identity="channelLinkStatus" show-type="label" key="code"
+                                                                               th:value="${channelBasicInfoValidator.channelRunStatus}"/>
+                                                        </label>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- end class p-20 -->
+                                    </div> <!-- end col -->
+                                    <!-- /col 8 -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" th:remove="${#strings.isEmpty(error)}?none:all" style="margin-top:10px">
+                        <div class="col-md-12">
+                            <div class="card-box">
+                                <form id="submit_form"  th:action="@{/configure/channel/repair/save/{op}(op=${op})}" th:object="${configChannelRepairValidator}"
+                                      method="post" data-parsley-validate="">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="p-20">
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <div th:each="info:${repairRuleList}">
+                                                            <div class="col-md-4 form-group">
+                                                                <select th:name="channelRepairId+${infoStat.index}" data-style="btn-default"
+                                                                        class="selectpicker  form-control" tabindex="-98">
+                                                                    <option data-icon="mdi mdi-key-plus" value="">--请选择备用通道--
+                                                                    </option>
+                                                                    <option data-icon="mdi mdi-key-plus" th:each="channel:${channelList}"
+                                                                            th:selected="${info.value.channelRepairId eq channel.channelId}"
+                                                                            th:value="${channel.channelId}">[[${channel.channelName}]]
+                                                                    </option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-md-6 form-group">
+                                                                <input type="text" th:name="repairCode+${infoStat.index}" class="form-control" autocomplete="off"
+                                                                       th:value="${info.value.repairCode}" placeholder="失败补发错误码">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-12 text-center">
+                                                            <input type="hidden" th:field="*{channelId}">
+                                                            <button type="submit" sec:authorize-url="/configure/channel/repair/save/*"
+                                                                    class="btn btn-teal waves-effect waves-light">提交
+                                                            </button>
+                                                            <a sec:authorize-url="/configure/channel/repair/list"
+                                                               th:href="@{/configure/channel/repair/list}" style="margin-left:10px"
+                                                               class="btn btn-default waves-effect waves-light">
+                                                                返回</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- end class p-20 -->
+                                        </div> <!-- end col -->
+                                    </div> <!-- end row -->
+                                </form>
+                                <!-- end form -->
+                            </div> <!-- end card-box -->
+                        </div> <!-- end col -->
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        <!-- End row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<!-- Tooltipster js -->
+<script th:src="@{/static/plugins/tooltipster/tooltipster.bundle.min.js}"></script>
+<script>
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+</script>
+</body>
+</html>
