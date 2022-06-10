@@ -67,10 +67,10 @@
             <scope>test</scope>
         </dependency>
         <!--引⼊webflux-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework.boot</groupId>-->
-        <!--            <artifactId>spring-boot-starter-webflux</artifactId>-->
-        <!--        </dependency>-->
+<!--                <dependency>-->
+<!--                    <groupId>org.springframework.boot</groupId>-->
+<!--                    <artifactId>spring-boot-starter-webflux</artifactId>-->
+<!--                </dependency>-->
         <!--loadbalancer 使用的 cache-->
         <dependency>
             <groupId>com.github.ben-manes.caffeine</groupId>
