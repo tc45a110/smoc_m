@@ -38,15 +38,37 @@ public interface ChannelRepairFeignClient {
     @RequestMapping(value = "/configure/channel/repair/findSpareChannel", method = RequestMethod.POST)
     ResponseData<List<ConfigChannelRepairValidator>> findSpareChannel(@RequestBody ChannelBasicInfoValidator channelBasicInfoValidator);
 
-    @RequestMapping(value = "/configure/channel/repair/editRepairRule/{channelId}", method = RequestMethod.GET)
-    ResponseData<Map<String, ConfigChannelRepairRuleValidator>> editRepairRule(@PathVariable String channelId);
+    /**
+     * 根据id查询
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/configure/channel/repair/findById/{id}", method = RequestMethod.GET)
+    ResponseData<ConfigChannelRepairRuleValidator> findById(@PathVariable String id);
+
+    /**
+     * 根据ID 删除
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/configure/channel/repair/deleteById/{id}", method = RequestMethod.GET)
+    ResponseData deleteById(@PathVariable String id);
 
     /**
      * 保存补发通道
-     * @param configChannelRepairValidator
+     * @param configChannelRepairRuleValidator
      * @param op
      * @return
      */
     @RequestMapping(value = "/configure/channel/repair/save/{op}", method = RequestMethod.POST)
-    ResponseData save(@RequestBody ConfigChannelRepairValidator configChannelRepairValidator, @PathVariable String op);
+    ResponseData save(@RequestBody ConfigChannelRepairRuleValidator configChannelRepairRuleValidator, @PathVariable String op);
+
+    /**
+     * 查询已经存在的备用通道
+     * @param configChannelRepairRuleValidator
+     * @return
+     */
+    @RequestMapping(value = "/configure/channel/repair/findChannelRepairByChannelId", method = RequestMethod.POST)
+    ResponseData<List<ConfigChannelRepairRuleValidator>> findChannelRepairByChannelId(@RequestBody ConfigChannelRepairRuleValidator configChannelRepairRuleValidator);
+
 }

@@ -8,15 +8,15 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 172.17.114.232:8848
+        server-addr: 172.22.171.216:8848
 
   #**********************************************************
   # Redis
   #**********************************************************
   redis: #redis配置
-    host: 172.17.114.232
+    host: 172.22.171.220
     port: 6379
-    password: xz%smoc40#pm
+    password: J15mDngG
     database: 1
     timeout: 3000
     jedis:

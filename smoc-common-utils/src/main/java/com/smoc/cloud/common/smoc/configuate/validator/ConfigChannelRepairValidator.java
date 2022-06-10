@@ -21,6 +21,8 @@ public class ConfigChannelRepairValidator {
 
     private String infoType;
 
+    private String repairStatus;
+
     private String rowspan;
 
     private List<ConfigChannelRepairRuleValidator> repairList = new ArrayList<>();

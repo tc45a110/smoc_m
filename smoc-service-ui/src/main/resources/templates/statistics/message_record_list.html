@@ -93,7 +93,7 @@
                                 <tr>
                                     <th style="width:80px">账号</th>
                                     <th style="width:80px">发送方式</th>
-                                    <th style="width:100px">批次号</th>
+                                    <th style="width:120px">批次号</th>
                                     <th style="width:200px">发送内容</th>
                                     <th style="width:100px">手机号</th>
                                     <th style="width:120px">运营商/属地</th>
@@ -109,7 +109,9 @@
                                         [[${info.protocol}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        [[${info.taskId}]]
+                                        <span class="text-overflow"
+                                              data-toggle="tooltip" data-placement="bottom"
+                                              th:data-original-title="${info.taskId}">[[${info.taskId}]]</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         <span class="text-overflow"

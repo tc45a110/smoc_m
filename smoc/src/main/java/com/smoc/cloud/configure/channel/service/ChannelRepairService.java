@@ -4,14 +4,20 @@ package com.smoc.cloud.configure.channel.service;
 import com.alibaba.fastjson.JSON;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
+import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelBasicInfoValidator;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelPriceValidator;
 import com.smoc.cloud.common.smoc.configuate.validator.ConfigChannelRepairRuleValidator;
 import com.smoc.cloud.common.smoc.configuate.validator.ConfigChannelRepairValidator;
+import com.smoc.cloud.common.smoc.customer.validator.EnterpriseContractInfoValidator;
+import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.configure.channel.entity.ConfigChannelRepairRule;
 import com.smoc.cloud.configure.channel.repository.ChannelRepairRepository;
+import com.smoc.cloud.customer.entity.EnterpriseContractInfo;
+import com.smoc.cloud.customer.entity.SystemAttachmentInfo;
+import com.smoc.cloud.filter.entity.FilterBlackList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -23,9 +29,7 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 通道失败补发接口管理
@@ -59,45 +63,89 @@ public class ChannelRepairService {
     }
 
     /**
-     * 初始化备用通道
-     * @param channelId
+     * 根据id获取信息
+     * @param id
      * @return
      */
-    public ResponseData<Map<String, ConfigChannelRepairRuleValidator>> editRepairRule(String channelId) {
-        Map<String, ConfigChannelRepairRuleValidator> map = new LinkedHashMap<>();
-        for (int i = 0; i < 5; i++) {
-            ConfigChannelRepairRuleValidator info = new ConfigChannelRepairRuleValidator();
-            map.put(""+i, info);
+    public ResponseData findById(String id) {
+        Optional<ConfigChannelRepairRule> data = channelRepairRepository.findById(id);
+
+        if (!data.isPresent()) {
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_QUERY_ERROR);
         }
 
-        List<ConfigChannelRepairRuleValidator> list = channelRepairRepository.findByChannelIdAndBusinessType(channelId,"CHANNEL");
+        ConfigChannelRepairRule entity = data.get();
+        ConfigChannelRepairRuleValidator configChannelRepairRuleValidator = new ConfigChannelRepairRuleValidator();
+        BeanUtils.copyProperties(entity, configChannelRepairRuleValidator);
 
-        if (!StringUtils.isEmpty(list)) {
-            for (int i = 0; i < list.size(); i++) {
-                map.put(""+i, list.get(i));
+        //转换日期
+        configChannelRepairRuleValidator.setCreatedTime(DateTimeUtils.getDateTimeFormat(entity.getCreatedTime()));
+
+        return ResponseDataUtil.buildSuccess(configChannelRepairRuleValidator);
+    }
+
+    @Transactional
+    public ResponseData save(ConfigChannelRepairRuleValidator configChannelRepairRuleValidator, String op) {
+
+        //转BaseUser存放对象
+        ConfigChannelRepairRule entity = new ConfigChannelRepairRule();
+        BeanUtils.copyProperties(configChannelRepairRuleValidator, entity);
+
+        List<ConfigChannelRepairRule> data = channelRepairRepository.findByChannelIdAndChannelRepairIdAndBusinessTypeAndRepairStatus(configChannelRepairRuleValidator.getChannelId(),configChannelRepairRuleValidator.getChannelRepairId(),configChannelRepairRuleValidator.getBusinessType(),"1");
+
+        //add查重
+        if (data != null && data.iterator().hasNext() && "add".equals(op)) {
+            return ResponseDataUtil.buildError("主通道下已经存在该备用通道，请更换！");
+        }
+        //edit查重orgName
+        else if (data != null && data.iterator().hasNext() && "edit".equals(op)) {
+            boolean status = false;
+            Iterator iter = data.iterator();
+            while (iter.hasNext()) {
+                ConfigChannelRepairRule organization = (ConfigChannelRepairRule) iter.next();
+                if (!entity.getId().equals(organization.getId())) {
+                    status = true;
+                    break;
+                }
+            }
+            if (status) {
+                return ResponseDataUtil.buildError(ResponseCode.PARAM_CREATE_ERROR);
             }
         }
 
-        return ResponseDataUtil.buildSuccess(map);
+        entity.setCreatedTime(new Date());
+
+        //记录日志
+        log.info("[失败补发通道管理][补发配置][{}]数据:{}",op, JSON.toJSONString(configChannelRepairRuleValidator));
+
+        channelRepairRepository.saveAndFlush(entity);
+        return ResponseDataUtil.buildSuccess();
     }
 
     /**
-     * 保存补发通道
-     * @param configChannelRepairValidator
-     * @param op
+     * 根据ID 删除
+     * @param id
      * @return
      */
     @Transactional
-    public ResponseData batchSave(ConfigChannelRepairValidator configChannelRepairValidator, String op) {
-
-        //先删除在添加
-        channelRepairRepository.deleteByChannelIdAndBusinessType(configChannelRepairValidator.getChannelId(),configChannelRepairValidator.getBusinessType());
-
-        channelRepairRepository.batchSave(configChannelRepairValidator);
-
+    public ResponseData deleteById(String id) {
+        ConfigChannelRepairRule data = channelRepairRepository.findById(id).get();
         //记录日志
-        log.info("[失败补发通道管理][补发配置][{}]数据:{}",op, JSON.toJSONString(configChannelRepairValidator));
+        log.info("[失败补发通道管理][delete]数据:{}",JSON.toJSONString(data));
+        channelRepairRepository.updateStatusById(id);
 
         return ResponseDataUtil.buildSuccess();
     }
+
+    /**
+     * 查询已经存在的备用通道
+     * @param configChannelRepairRuleValidator
+     * @return
+     */
+    public ResponseData<List<ConfigChannelRepairRuleValidator>> findChannelRepairByChannelId(ConfigChannelRepairRuleValidator configChannelRepairRuleValidator) {
+
+        List<ConfigChannelRepairRuleValidator> list = channelRepairRepository.findByChannelIdAndBusinessType(configChannelRepairRuleValidator.getChannelId(),configChannelRepairRuleValidator.getBusinessType());
+        return ResponseDataUtil.buildSuccess(list);
+    }
+
 }

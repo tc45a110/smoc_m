@@ -32,13 +32,11 @@ public interface ChannelRepairRepository extends CrudRepository<ConfigChannelRep
 
     List<ConfigChannelRepairRuleValidator> findByChannelIdAndBusinessType(String channelId, String businessType);
 
-    /**
-     * 保存补发通道
-     * @param configChannelRepairValidator
-     */
-    void batchSave(ConfigChannelRepairValidator configChannelRepairValidator);
 
     @Modifying
-    @Query(value = "delete from config_channel_repair_rule where CHANNEL_ID =:channelId and BUSINESS_TYPE =:businessType ",nativeQuery = true)
-    void deleteByChannelIdAndBusinessType(@Param("channelId") String channelId, @Param("businessType") String businessType);
+    @Query(value = "update config_channel_repair_rule set REPAIR_STATUS = 0 where ID =:id ",nativeQuery = true)
+    void updateStatusById(@Param("id") String id);
+
+    List<ConfigChannelRepairRule> findByChannelIdAndChannelRepairIdAndBusinessTypeAndRepairStatus(String channelId, String channelRepairId, String businessType, String repairStatus);
+
 }

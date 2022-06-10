@@ -2,7 +2,7 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 172.17.65.102:8848
+        server-addr: 172.22.171.216:8848
     gateway:
       #Global http timeouts.must be specified in milliseconds. must be specified as a java.time.Duration
       httpclient:
@@ -13,9 +13,9 @@ spring:
   # Redis
   #**********************************************************
   redis: #redis配置
-    host: 123.57.216.87
-    port: 6555
-    password: Dj!bm%Mk8DyP
+    host: r-2ze52zqfr1odqdu0ri.redis.rds.aliyuncs.com
+    port: 6379
+    password: J15mDngG
     database: 1
     timeout: 3000
     jedis:
@@ -25,17 +25,41 @@ spring:
         max-idle: 8
         min-idle: 0
         time-between-eviction-runs: 1000
-  #**********************************************************
-  # 内置tomcat 配置
-  #**********************************************************
+  redis2: #redis配置
+    host: 172.22.171.220
+    port: 6379
+    password: J15mDngG
+    database: 1
+    timeout: 3000
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: 2000
+        max-idle: 8
+        min-idle: 0
+        time-between-eviction-runs: 1000
 
-com:
-  smoc:
-    cloud:
-      gateway:
-        configuration:
-          signStyle: md5_HMAC
-          aesIv: BINM6krYfGEvGADKq4iTMvBQ6V/3IWFVaqdwhlUBw5Q=
-          aesKey: qUhpGjKp3caWMHgDmHoQzbOQP2lGxlzEjJNAwBwO4Q7Pv8XUpoDJUxEyPleyqy67
-          md5HmacKey: ad73qUQDMH2HZrYXTfeSqDl3ZjecgW0bDf2h2zs3KaY=
-          shaHmacKey: cgN4u8LsehkotaJKunFAsCign3oaCXJoF6wISxAK+ZRRyfAfrZk/d1EcUnaDi/8C
+rocketmq:
+  name-server: 172.22.171.220:9876
+  producer:
+    #生产者组名，规定在一个应用里面必须唯一
+    group: group-filter
+    #消息发送的超时时间，默认为3000ms
+    send-message-timeout: 50000
+    #消息达到4096字节的时候，消息就会被压缩。默认4096
+    compress-message-body-threshold: 4096
+    #最大的消息限制 默认为128K
+    maxMessageSize: 4096
+    #同步消息发送失败重试次数 默认2次
+    retry-times-when-send-failed: 5
+    #在内部发送失败时是否重试其他代理,这个参数在有多个broker才生效。
+    retry-next-server: true
+    #异步消息发送失败重试的次数 默认2次
+    retry-times-when-send-async-failed: 5
+
+
+logging:
+  config: classpath:logback-spring.xml
+  path: /smoc/smoc-log/smoc-filters-logs
+  level:
+    root: info

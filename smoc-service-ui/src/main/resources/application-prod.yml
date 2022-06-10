@@ -14,11 +14,11 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 172.17.114.232:8848
+        server-addr: 172.22.171.216:8848
   redis: #redis配置
-    host: 172.17.114.232
+    host: 172.22.171.220
     port: 6379
-    password: xz%smoc40#pm
+    password: J15mDngG
     database: 1
     timeout: 3000
     jedis:
@@ -59,7 +59,7 @@ com:
           enterprise-file-path: /share/resourceFile/enterprise/ #签名资质文件根目录
           mobile-file-root-path: /share/resourceFile/message/mobile  #短信手机号文件根目录
         message-resource:
-          resource-url: http://123.57.228.244/smoc/message/resource #访问资源路径
+          resource-url: http://39.96.175.93/smoc/message/resource #访问资源路径
           resource-file-root-path: /share/resourceFile/message/resource  #彩信资源文件根目录
           resource-allow-format[0]: jpg,jpeg,gif,png  #彩信资源图片格式
           resource-allow-format[1]: midi,wav,amr,mp3,aac  #彩信资源音频格式

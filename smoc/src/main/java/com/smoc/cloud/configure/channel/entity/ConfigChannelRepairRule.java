@@ -15,6 +15,7 @@ public class ConfigChannelRepairRule {
     private String channelRepairId;
     private String repairCode;
     private String repairStatus;
+    private Integer sort;
     private String createdBy;
     private Date createdTime;
     private String updatedBy;
@@ -88,6 +89,16 @@ public class ConfigChannelRepairRule {
 
     public void setRepairStatus(String repairStatus) {
         this.repairStatus = repairStatus;
+    }
+
+    @Basic
+    @Column(name = "SORT")
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
     }
 
     @Basic

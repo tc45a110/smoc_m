@@ -15,8 +15,9 @@ public class ConfigChannelRepairRuleValidator {
     private String channelRepairId;
     private String repairCode;
     private String repairStatus;
+    private Integer sort;
     private String createdBy;
-    private Date createdTime;
+    private String createdTime;
     private String updatedBy;
 
     private String channelRepairName;

@@ -60,10 +60,30 @@ public class ChannelRepairService {
         }
     }
 
-    public ResponseData<Map<String, ConfigChannelRepairRuleValidator>> editRepairRule(String channelId) {
+    /**
+     * 根据id查询
+     * @param id
+     * @return
+     */
+    public ResponseData<ConfigChannelRepairRuleValidator> findById(String id) {
         try {
-            ResponseData<Map<String, ConfigChannelRepairRuleValidator>> list = this.channelRepairFeignClient.editRepairRule(channelId);
-            return list;
+            ResponseData<ConfigChannelRepairRuleValidator> data = this.channelRepairFeignClient.findById(id);
+            return data;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 根据ID 删除
+     * @param id
+     * @return
+     */
+    public ResponseData deleteById(String id) {
+        try {
+            ResponseData data = this.channelRepairFeignClient.deleteById(id);
+            return data;
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseDataUtil.buildError(e.getMessage());
@@ -72,17 +92,34 @@ public class ChannelRepairService {
 
     /**
      * 保存补发通道
-     * @param configChannelRepairValidator
+     * @param configChannelRepairRuleValidator
      * @param op
      * @return
      */
-    public ResponseData save(ConfigChannelRepairValidator configChannelRepairValidator, String op) {
+    public ResponseData save(ConfigChannelRepairRuleValidator configChannelRepairRuleValidator, String op) {
         try {
-            ResponseData data = this.channelRepairFeignClient.save(configChannelRepairValidator, op);
+            ResponseData data = this.channelRepairFeignClient.save(configChannelRepairRuleValidator, op);
             return data;
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseDataUtil.buildError(e.getMessage());
         }
     }
+
+    /**
+     * 查询已经存在的备用通道
+     * @param configChannelRepairRuleValidator
+     * @return
+     */
+    public ResponseData<List<ConfigChannelRepairRuleValidator>> findChannelRepairByChannelId(ConfigChannelRepairRuleValidator configChannelRepairRuleValidator) {
+        try {
+            ResponseData<List<ConfigChannelRepairRuleValidator>> list = this.channelRepairFeignClient.findChannelRepairByChannelId(configChannelRepairRuleValidator);
+            return list;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+
 }

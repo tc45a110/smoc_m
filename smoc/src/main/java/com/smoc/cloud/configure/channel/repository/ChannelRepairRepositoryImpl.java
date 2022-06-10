@@ -4,16 +4,11 @@ package com.smoc.cloud.configure.channel.repository;
 import com.smoc.cloud.common.BasePageRepository;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
-import com.smoc.cloud.common.smoc.configuate.qo.ConfigChannelGroupQo;
 import com.smoc.cloud.common.smoc.configuate.validator.*;
-import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.configure.channel.rowmapper.ChannelRepairRowMapper;
 import com.smoc.cloud.configure.channel.rowmapper.ChannelRepairRuleRowMapper;
-import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.util.StringUtils;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -127,13 +122,17 @@ public class ChannelRepairRepositoryImpl extends BasePageRepository {
 
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");
-        sqlBuffer.append("  t.CHANNEL_ID");
+        sqlBuffer.append("  t.ID");
+        sqlBuffer.append(", t.CHANNEL_ID");
         sqlBuffer.append(", t.BUSINESS_ID");
         sqlBuffer.append(", t.BUSINESS_TYPE");
         sqlBuffer.append(", t.CHANNEL_REPAIR_ID");
         sqlBuffer.append(", b.CHANNEL_NAME");
         sqlBuffer.append(", t.REPAIR_CODE");
         sqlBuffer.append(", t.REPAIR_STATUS");
+        sqlBuffer.append(", t.SORT");
+        sqlBuffer.append(", t.CREATED_BY");
+        sqlBuffer.append(", DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME");
         sqlBuffer.append("  from config_channel_repair_rule t left join config_channel_basic_info b on t.CHANNEL_REPAIR_ID = b.CHANNEL_ID ");
         sqlBuffer.append("  where t.CHANNEL_ID =? and t.BUSINESS_TYPE =? and t.REPAIR_STATUS=1 ");
 
@@ -141,7 +140,7 @@ public class ChannelRepairRepositoryImpl extends BasePageRepository {
         paramsList.add( channelId.trim());
         paramsList.add( businessType.trim());
 
-        sqlBuffer.append(" order by t.CREATED_TIME desc,t.id");
+        sqlBuffer.append(" order by t.SORT ,t.id");
 
         //根据参数个数，组织参数值
         Object[] params = new Object[paramsList.size()];
@@ -151,29 +150,4 @@ public class ChannelRepairRepositoryImpl extends BasePageRepository {
         return list;
     }
 
-    public void batchSave(ConfigChannelRepairValidator configChannelRepairValidator) {
-
-        List<ConfigChannelRepairRuleValidator> list = configChannelRepairValidator.getRepairList();
-
-       final String sql = "insert into config_channel_repair_rule(ID,CHANNEL_ID,BUSINESS_ID,BUSINESS_TYPE,CHANNEL_REPAIR_ID,REPAIR_CODE,REPAIR_STATUS,CREATED_BY,CREATED_TIME) values(?,?,?,?,?,?,?,?,now()) ";
-
-        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-            public int getBatchSize() {
-                return list.size();
-            }
-
-            public void setValues(PreparedStatement ps, int i) throws SQLException {
-                ConfigChannelRepairRuleValidator info = list.get(i);
-                ps.setString(1, UUID.uuid32());
-                ps.setString(2, info.getChannelId());
-                ps.setString(3, info.getBusinessId());
-                ps.setString(4, info.getBusinessType());
-                ps.setString(5, info.getChannelRepairId());
-                ps.setString(6, info.getRepairCode());
-                ps.setString(7, info.getRepairStatus());
-                ps.setString(8, info.getCreatedBy());
-            }
-        });
-
-    }
 }

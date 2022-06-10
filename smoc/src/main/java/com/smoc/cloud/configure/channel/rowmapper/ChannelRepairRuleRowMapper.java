@@ -16,6 +16,7 @@ public class ChannelRepairRuleRowMapper implements RowMapper<ConfigChannelRepair
     public ConfigChannelRepairRuleValidator mapRow(ResultSet resultSet, int i) throws SQLException {
 
         ConfigChannelRepairRuleValidator qo = new ConfigChannelRepairRuleValidator();
+        qo.setId(resultSet.getString("ID"));
         qo.setChannelId(resultSet.getString("CHANNEL_ID"));
         qo.setBusinessId(resultSet.getString("BUSINESS_ID"));
         qo.setBusinessType(resultSet.getString("BUSINESS_TYPE"));
@@ -23,6 +24,9 @@ public class ChannelRepairRuleRowMapper implements RowMapper<ConfigChannelRepair
         qo.setChannelRepairName(resultSet.getString("CHANNEL_NAME"));
         qo.setRepairCode(resultSet.getString("REPAIR_CODE"));
         qo.setRepairStatus(resultSet.getString("REPAIR_STATUS"));
+        qo.setCreatedBy(resultSet.getString("CREATED_BY"));
+        qo.setCreatedTime(resultSet.getString("CREATED_TIME"));
+        qo.setSort(resultSet.getInt("SORT"));
 
         return qo;
     }
