@@ -47,6 +47,7 @@ public class RedisPrimaryConfiguration extends RedisConfiguration {
         RedisTemplate template = new RedisTemplate();
         template.setConnectionFactory(defaultRedisConnectionFactory());
         setSerializer(template);
+
         /**
          * 非spring注入使用RedisTemplate,需先调用afterPropertiesSet()方法
          * 不然会报：JedisConnectionFactory was not initialized through afterPropertiesSet()

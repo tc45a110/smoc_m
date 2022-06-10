@@ -61,6 +61,7 @@ public class RedisSecondConfiguration extends RedisConfiguration {
          * 非spring注入使用RedisTemplate,需先调用afterPropertiesSet()方法
          * 不然会报：JedisConnectionFactory was not initialized through afterPropertiesSet()
          */
+
         template.afterPropertiesSet();
         return template;
     }
