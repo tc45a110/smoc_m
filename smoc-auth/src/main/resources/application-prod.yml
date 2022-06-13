@@ -8,7 +8,7 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 172.17.114.232:8848
+        server-addr: 172.22.171.216:8848
   data:
     jpa:
       repositories:
@@ -34,10 +34,10 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
       pool-name: MpmSpringHikariCP
-      jdbc-url: jdbc:mysql://rm-2zefkckgwskwj59yb.mysql.rds.aliyuncs.com:3306/smoc_oauth?characterEncoding=UTF-8&useSSL=true&serverTimezone=GMT%2B8&rewriteBatchedStatements=true&autoReconnect=true
+      jdbc-url: jdbc:mysql://rm-2ze57z500ugv7p42g.mysql.rds.aliyuncs.com:3306/smoc_oauth?characterEncoding=UTF-8&useSSL=true&serverTimezone=GMT%2B8&rewriteBatchedStatements=true&autoReconnect=true
       driver-class-name: com.mysql.cj.jdbc.Driver
       username: yunsen_smoc
-      password: xz%smoc40#pm
+      password: A%dEjB9!h40
       auto-commit: true
       connection-timeout: 30000
       idle-timeout: 60000
@@ -54,9 +54,9 @@ spring:
   # Redis
   #**********************************************************
   redis: #redis配置
-    host: 172.17.114.232
+    host: 172.22.171.220
     port: 6379
-    password: xz%smoc40#pm
+    password: J15mDngG
     database: 1
     timeout: 3000
     jedis:
