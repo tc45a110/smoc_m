@@ -1,0 +1,23 @@
+server: #服务端口
+  port: 18091
+grpc:
+  server:
+    port: 18092
+    security:
+      enabled: false
+spring:
+  application: #服务应用名称
+    name: smoc-filters-grpc-server
+  profiles: #指定启动模式
+    active: dev
+
+
+# actuator management
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: '*'

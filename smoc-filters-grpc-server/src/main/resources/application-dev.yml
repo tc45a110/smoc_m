@@ -1,0 +1,11 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+
+logging:
+  config: classpath:logback-spring.xml
+  path: E:/log/smoc-log/smoc-filters-grpc-logs
+  level:
+    root: info
