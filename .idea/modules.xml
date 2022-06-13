@@ -11,7 +11,9 @@
       <module fileurl="file://$PROJECT_DIR$/smoc-filter/smoc-filter.iml" filepath="$PROJECT_DIR$/smoc-filter/smoc-filter.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-filters/smoc-filters.iml" filepath="$PROJECT_DIR$/smoc-filters/smoc-filters.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-filters-grpc/smoc-filters-grpc.iml" filepath="$PROJECT_DIR$/smoc-filters-grpc/smoc-filters-grpc.iml" />
-      <module fileurl="file://$PROJECT_DIR$/smoc-filters-grpc/smoc-filters-grpc-lib/smoc-filters-grpc-lib.iml" filepath="$PROJECT_DIR$/smoc-filters-grpc/smoc-filters-grpc-lib/smoc-filters-grpc-lib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/smoc-filters-grpc-client/smoc-filters-grpc-client.iml" filepath="$PROJECT_DIR$/smoc-filters-grpc-client/smoc-filters-grpc-client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/smoc-filters-grpc-lib/smoc-filters-grpc-lib.iml" filepath="$PROJECT_DIR$/smoc-filters-grpc-lib/smoc-filters-grpc-lib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/smoc-filters-grpc-server/smoc-filters-grpc-server.iml" filepath="$PROJECT_DIR$/smoc-filters-grpc-server/smoc-filters-grpc-server.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-gateway/smoc-gateway.iml" filepath="$PROJECT_DIR$/smoc-gateway/smoc-gateway.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-filters-grpc/smoc-grpc-server/smoc-grpc-server.iml" filepath="$PROJECT_DIR$/smoc-filters-grpc/smoc-grpc-server/smoc-grpc-server.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-http-server/smoc-http-server.iml" filepath="$PROJECT_DIR$/smoc-http-server/smoc-http-server.iml" />
