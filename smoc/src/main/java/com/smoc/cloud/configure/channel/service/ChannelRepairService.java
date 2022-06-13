@@ -64,11 +64,11 @@ public class ChannelRepairService {
 
     /**
      * 根据运营商、业务类型、信息分类查询符合要求的备用通道
-     * @param channelBasicInfoValidator
+     * @param configChannelRepairValidator
      * @return
      */
-    public ResponseData<List<ConfigChannelRepairValidator>> findSpareChannel(ChannelBasicInfoValidator channelBasicInfoValidator) {
-        List<ConfigChannelRepairValidator> list = channelRepairRepository.findSpareChannel(channelBasicInfoValidator);
+    public ResponseData<List<ConfigChannelRepairValidator>> findSpareChannel(ConfigChannelRepairValidator configChannelRepairValidator) {
+        List<ConfigChannelRepairValidator> list = channelRepairRepository.findSpareChannel(configChannelRepairValidator);
         return ResponseDataUtil.buildSuccess(list);
     }
 
@@ -101,11 +101,11 @@ public class ChannelRepairService {
         ConfigChannelRepairRule entity = new ConfigChannelRepairRule();
         BeanUtils.copyProperties(configChannelRepairRuleValidator, entity);
 
-        List<ConfigChannelRepairRule> data = channelRepairRepository.findByChannelIdAndChannelRepairIdAndBusinessTypeAndRepairStatus(configChannelRepairRuleValidator.getChannelId(),configChannelRepairRuleValidator.getChannelRepairId(),configChannelRepairRuleValidator.getBusinessType(),"1");
+        List<ConfigChannelRepairRule> data = channelRepairRepository.findByBusinessIdAndChannelRepairIdAndBusinessTypeAndRepairStatus(configChannelRepairRuleValidator.getBusinessId(),configChannelRepairRuleValidator.getChannelRepairId(),configChannelRepairRuleValidator.getBusinessType(),"1");
 
         //add查重
         if (data != null && data.iterator().hasNext() && "add".equals(op)) {
-            return ResponseDataUtil.buildError("主通道下已经存在该备用通道，请更换！");
+            return ResponseDataUtil.buildError("业务下已经存在该备用通道，请更换！");
         }
         //edit查重orgName
         else if (data != null && data.iterator().hasNext() && "edit".equals(op)) {
@@ -154,6 +154,9 @@ public class ChannelRepairService {
      */
     public ResponseData<List<ConfigChannelRepairRuleValidator>> findChannelRepairByChannelId(ConfigChannelRepairRuleValidator configChannelRepairRuleValidator) {
 
+        if("ACCOUNT".equals(configChannelRepairRuleValidator.getBusinessType())){
+            configChannelRepairRuleValidator.setChannelId(configChannelRepairRuleValidator.getBusinessId());
+        }
         List<ConfigChannelRepairRuleValidator> list = channelRepairRepository.findByChannelIdAndBusinessType(configChannelRepairRuleValidator.getChannelId(),configChannelRepairRuleValidator.getBusinessType());
         return ResponseDataUtil.buildSuccess(list);
     }

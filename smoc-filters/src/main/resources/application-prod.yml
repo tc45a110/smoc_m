@@ -26,7 +26,7 @@ spring:
         min-idle: 0
         time-between-eviction-runs: 1000
   redis2: #redis配置
-    host: 172.22.171.220
+    host: 172.22.171.219
     port: 6379
     password: J15mDngG
     database: 1
@@ -40,7 +40,7 @@ spring:
         time-between-eviction-runs: 1000
 
 rocketmq:
-  name-server: 172.22.171.220:9876
+  name-server: 172.22.171.219:9876
   producer:
     #生产者组名，规定在一个应用里面必须唯一
     group: group-filter
@@ -60,6 +60,7 @@ rocketmq:
 
 logging:
   config: classpath:logback-spring.xml
-  path: /smoc/smoc-log/smoc-filters-logs
   level:
     root: info
+  file:
+    path: /smoc/smoc-log/smoc-filters-logs

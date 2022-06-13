@@ -126,7 +126,11 @@ public class ChannelRepairController {
         }
 
         //根据运营商、业务类型、信息分类查询符合要求的备用通道
-        ResponseData<List<ConfigChannelRepairValidator>> channelList = channelRepairService.findSpareChannel(data.getData());
+        ConfigChannelRepairValidator configChannelRepairValidator = new ConfigChannelRepairValidator();
+        configChannelRepairValidator.setBusinessType(data.getData().getBusinessType());
+        configChannelRepairValidator.setChannelId(data.getData().getChannelId());
+        configChannelRepairValidator.setFlag("CHANNEL");
+        ResponseData<List<ConfigChannelRepairValidator>> channelList = channelRepairService.findSpareChannel(configChannelRepairValidator);
         if (!ResponseCode.SUCCESS.getCode().equals(channelList.getCode())) {
             view.addObject("error", channelList.getCode() + ":" + channelList.getMessage());
             return view;

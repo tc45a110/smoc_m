@@ -24,13 +24,13 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">通道失败补发配置</h4>
+                    <h4 class="page-title">账号失败补发配置</h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
-                            通道管理
+                            业务办理
                         </li>
                         <li class="active">
-                            通道失败补发配置
+                            账号失败补发配置
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -59,40 +59,34 @@
                                             <div class="form-group">
                                                 <div class="row">
                                                     <div class="col-md-3 form-group">
-                                                        <label>通道名称： <span style="color:#00acc1">[[${channelBasicInfoValidator.channelName}]]</span>
+                                                        <label>账号名称： <span style="color:#00acc1">[[${accountBasicInfoValidator.accountName}]]</span>
                                                         </label>
                                                     </div>
                                                     <div class="col-md-3 form-group">
-                                                        <label>通道ID： <span style="color:#00acc1">[[${channelBasicInfoValidator.channelId}]]</span>
+                                                        <label>账号ID： <span style="color:#00acc1">[[${accountBasicInfoValidator.accountId}]]</span>
                                                         </label>
                                                     </div>
                                                     <div class="col-md-3 form-group">
                                                         <label>发送号码范围：<span style="color:#00acc1"><mpm:tag identity="carrier" show-type="label" key="code"
-                                                                                                           th:value="${channelBasicInfoValidator.carrier}"/></span>
+                                                                                                           th:value="${accountBasicInfoValidator.carrier}"/></span>
                                                         </label>
                                                     </div>
                                                     <div class="col-md-3 form-group">
                                                         <label>信息分类：<span style="color:#00acc1"><mpm:tag identity="infoType" show-type="label" key="code"
-                                                                                                         th:value="${channelBasicInfoValidator.infoType}"/></span>
+                                                                                                         th:value="${accountBasicInfoValidator.infoType}"/></span>
                                                         </label>
                                                     </div>
                                                     <div class="col-md-3 form-group">
                                                         <label>业务类型：<span style="color:#00acc1">
                                                              <mpm:tag identity="businessType" show-type="button"
-                                                                      key="code" th:value="${channelBasicInfoValidator.businessType}"
-                                                                      class="TEXT_SMS,btn btn-teal waves-effect waves-light btn-xs;MULTI_SMS,btn btn-brown waves-effect waves-light btn-xs;MMS,btn btn-info waves-effect waves-light btn-xs;5G_SMS,btn btn-primary waves-effect waves-light btn-xs;INTERNATIONAL_SMS,btn btn-purple waves-effect waves-light btn-xs;BLACK_SERVICE,btn btn-inverse waves-effect waves-light btn-xs"/>
-                                                        </span>
+                                                                      key="code" th:value="${accountBasicInfoValidator.businessType}"
+                                                                      class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;MULTI_SMS,btn btn-brown btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;5G_SMS,btn btn-primary btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-inverse btn-rounded btn-sm waves-effect waves-light"/>
+                                                            </span>
                                                         </label>
                                                     </div>
                                                     <div class="col-md-3 form-group">
-                                                        <label>通道状态：<mpm:tag identity="channelStatus" show-type="button" key="code"
-                                                                             th:value="${channelBasicInfoValidator.channelStatus}"
-                                                                             class="001,btn btn-success waves-effect waves-light btn-xs;002,btn btn-orange waves-effect waves-light btn-xs;003,btn btn-brown waves-effect waves-light btn-xs;004,btn btn-pink waves-effect waves-light btn-xs;005,btn btn-inverse waves-effect waves-light btn-xs;006,btn btn-danger waves-effect waves-light btn-xs;"/>
-                                                        </label>
-                                                    </div>
-                                                    <div class="col-md-3 form-group">
-                                                        <label>通道运行状态：<mpm:tag identity="channelLinkStatus" show-type="label" key="code"
-                                                                               th:value="${channelBasicInfoValidator.channelRunStatus}"/>
+                                                        <label>账号状态： <mpm:tag identity="accountStatus" show-type="button" key="code" th:value="${accountBasicInfoValidator.accountStatus}"
+                                                                              class="1,btn btn-info btn-rounded btn-sm waves-effect waves-light;2,btn btn-warning btn-rounded btn-sm waves-effect waves-light;3,btn btn-inverse btn-rounded btn-sm waves-effect waves-light;0,btn btn-danger btn-rounded btn-sm waves-effect waves-light;"/>
                                                         </label>
                                                     </div>
 
@@ -144,7 +138,7 @@
                                                 <td style="vertical-align: middle;line-height: 26px;">[[${info.createdBy}]]</td>
                                                 <td style="vertical-align: middle;line-height: 26px;">[[${info.createdTime}]]</td>
                                                 <td style="vertical-align: middle;line-height: 26px" >
-                                                    <a sec:authorize-url="/configure/channel/repair/deleteById/*" data-toggle="modal"
+                                                    <a sec:authorize-url="/account/channel/repair/deleteById/*" data-toggle="modal"
                                                        data-target="#confirm-modal" class="on-default remove-row"
                                                        th:onclick="confirmDelete([[${info.id}]],this)" style="padding-left: 5px;color: #f05050" title="删除"><i
                                                             style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
@@ -160,8 +154,8 @@
                                                data-target="#confirm-add-user-modal"
                                                class="btn btn-teal waves-effect waves-light">
                                                 添加补发通道</a>
-                                            <a sec:authorize-url="/configure/channel/repair/list"
-                                               th:href="@{/configure/channel/repair/list}" style="margin-left:10px"
+                                            <a sec:authorize-url="/account/channel/repair/list"
+                                               th:href="@{/account/channel/repair/list}" style="margin-left:10px"
                                                class="btn btn-default waves-effect waves-light">
                                                 返回</a>
                                         </div>
@@ -195,7 +189,7 @@
      aria-hidden="true" style="display: none;margin: 60px;margin-top:68px">
     <div class="modal-dialog" style="width:50%;">
         <div class="modal-content">
-            <form id="submit_form" method="post" th:action="@{/configure/channel/repair/save/add}"
+            <form id="submit_form" method="post" th:action="@{/account/channel/repair/save/add}"
                   th:object="${configChannelRepairRuleValidator}" data-parsley-validate="">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -228,9 +222,9 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <input type="hidden" th:field="*{channelId}">
+                    <input type="hidden" th:field="*{businessId}">
                     <a class="btn btn-default waves-effect" data-dismiss="modal">取消</a>
-                    <button sec:authorize-url="/configure/channel/repair/save/add" type="submit"
+                    <button sec:authorize-url="/account/channel/repair/save/add" type="submit"
                             class="btn btn-primary waves-effect waves-light">提交
                     </button>
                 </div>
@@ -253,7 +247,7 @@
     function deleteById() {
         var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
         $('#preloader').css('display', 'block');
-        location.href = contextPath + "/configure/channel/repair/deleteById/" + $("#deleteId").val();
+        location.href = contextPath + "/account/channel/repair/deleteById/" + $("#deleteId").val();
     }
 
     var resizefunc = [];

@@ -33,10 +33,10 @@ public interface ChannelRepairRepository extends CrudRepository<ConfigChannelRep
 
     /**
      * 根据运营商、业务类型查询符合要求的备用通道
-     * @param channelBasicInfoValidator
+     * @param configChannelRepairValidator
      * @return
      */
-    List<ConfigChannelRepairValidator> findSpareChannel(ChannelBasicInfoValidator channelBasicInfoValidator);
+    List<ConfigChannelRepairValidator> findSpareChannel(ConfigChannelRepairValidator configChannelRepairValidator);
 
     List<ConfigChannelRepairRuleValidator> findByChannelIdAndBusinessType(String channelId, String businessType);
 
@@ -45,7 +45,7 @@ public interface ChannelRepairRepository extends CrudRepository<ConfigChannelRep
     @Query(value = "update config_channel_repair_rule set REPAIR_STATUS = 0 where ID =:id ",nativeQuery = true)
     void updateStatusById(@Param("id") String id);
 
-    List<ConfigChannelRepairRule> findByChannelIdAndChannelRepairIdAndBusinessTypeAndRepairStatus(String channelId, String channelRepairId, String businessType, String repairStatus);
+    List<ConfigChannelRepairRule> findByBusinessIdAndChannelRepairIdAndBusinessTypeAndRepairStatus(String businessId, String channelRepairId, String businessType, String repairStatus);
 
 
 }

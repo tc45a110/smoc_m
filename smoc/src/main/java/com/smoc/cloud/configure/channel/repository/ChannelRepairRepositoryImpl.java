@@ -82,7 +82,7 @@ public class ChannelRepairRepositoryImpl extends BasePageRepository {
         return pageList;
     }
 
-    public List<ConfigChannelRepairValidator> findSpareChannel(ChannelBasicInfoValidator qo) {
+    public List<ConfigChannelRepairValidator> findSpareChannel(ConfigChannelRepairValidator qo) {
 
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");
@@ -91,7 +91,11 @@ public class ChannelRepairRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", t.CARRIER");
         sqlBuffer.append(", t.BUSINESS_TYPE");
         sqlBuffer.append("  from config_channel_basic_info t ");
-        sqlBuffer.append("  where t.CHANNEL_ID!='"+qo.getChannelId()+"' and t.CHANNEL_STATUS='001' ");
+        if("CHANNEL".equals(qo.getFlag())){
+            sqlBuffer.append("  where t.CHANNEL_ID!='"+qo.getChannelId()+"' and t.CHANNEL_STATUS='001' ");
+        }else{
+            sqlBuffer.append("  where t.CHANNEL_STATUS='001' ");
+        }
 
         List<Object> paramsList = new ArrayList<Object>();
 

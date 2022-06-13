@@ -25,5 +25,7 @@ public class ConfigChannelRepairValidator {
 
     private String rowspan;
 
+    private String flag;
+
     private List<ConfigChannelRepairRuleValidator> repairList = new ArrayList<>();
 }

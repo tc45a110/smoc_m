@@ -7,6 +7,7 @@ import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelBasicInfoValidator;
 import com.smoc.cloud.common.smoc.configuate.validator.ConfigChannelRepairRuleValidator;
 import com.smoc.cloud.common.smoc.configuate.validator.ConfigChannelRepairValidator;
+import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.configure.channel.remote.ChannelRepairFeignClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,13 +47,13 @@ public class ChannelRepairService {
     }
 
     /**
-     * 根据运营商、业务类型、信息分类查询符合要求的备用通道
-     * @param channelBasicInfoValidator
+     * 根据运营商、业务类型查询通道符合要求的备用通道
+     * @param configChannelRepairValidator
      * @return
      */
-    public ResponseData<List<ConfigChannelRepairValidator>> findSpareChannel(ChannelBasicInfoValidator channelBasicInfoValidator) {
+    public ResponseData<List<ConfigChannelRepairValidator>> findSpareChannel(ConfigChannelRepairValidator configChannelRepairValidator) {
         try {
-            ResponseData<List<ConfigChannelRepairValidator>> list = this.channelRepairFeignClient.findSpareChannel(channelBasicInfoValidator);
+            ResponseData<List<ConfigChannelRepairValidator>> list = this.channelRepairFeignClient.findSpareChannel(configChannelRepairValidator);
             return list;
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -120,6 +121,5 @@ public class ChannelRepairService {
             return ResponseDataUtil.buildError(e.getMessage());
         }
     }
-
 
 }

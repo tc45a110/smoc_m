@@ -57,13 +57,13 @@ public class ChannelRepairController {
 
     /**
      * 根据运营商、业务类型查询符合要求的备用通道
-     * @param channelBasicInfoValidator
+     * @param configChannelRepairValidator
      * @return
      */
     @RequestMapping(value = "/findSpareChannel", method = RequestMethod.POST)
-    public ResponseData<List<ConfigChannelRepairValidator>> findSpareChannel(@RequestBody ChannelBasicInfoValidator channelBasicInfoValidator) {
+    public ResponseData<List<ConfigChannelRepairValidator>> findSpareChannel(@RequestBody ConfigChannelRepairValidator configChannelRepairValidator) {
 
-        return channelRepairService.findSpareChannel(channelBasicInfoValidator);
+        return channelRepairService.findSpareChannel(configChannelRepairValidator);
     }
 
     /**
@@ -129,4 +129,5 @@ public class ChannelRepairController {
 
         return channelRepairService.findChannelRepairByChannelId(configChannelRepairRuleValidator);
     }
+
 }

@@ -6,6 +6,7 @@ import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelBasicInfoValidator;
 import com.smoc.cloud.common.smoc.configuate.validator.ConfigChannelRepairRuleValidator;
 import com.smoc.cloud.common.smoc.configuate.validator.ConfigChannelRepairValidator;
+import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,11 +33,11 @@ public interface ChannelRepairFeignClient {
 
     /**
      * 根据运营商、业务类型、信息分类查询符合要求的备用通道
-     * @param channelBasicInfoValidator
+     * @param configChannelRepairValidator
      * @return
      */
     @RequestMapping(value = "/configure/channel/repair/findSpareChannel", method = RequestMethod.POST)
-    ResponseData<List<ConfigChannelRepairValidator>> findSpareChannel(@RequestBody ChannelBasicInfoValidator channelBasicInfoValidator);
+    ResponseData<List<ConfigChannelRepairValidator>> findSpareChannel(@RequestBody ConfigChannelRepairValidator configChannelRepairValidator);
 
     /**
      * 根据id查询

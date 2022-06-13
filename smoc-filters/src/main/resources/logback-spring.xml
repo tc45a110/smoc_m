@@ -36,7 +36,7 @@
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
         </filter>
-        <File>${LOG_PATH}/smoc-gateway-error.log</File>
+        <File>${LOG_PATH}/smoc-filters-error.log</File>
         <rollingPolicy
                 class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${LOG_PATH}/smoc-error-%d{yyyyMMdd}.log.%i
