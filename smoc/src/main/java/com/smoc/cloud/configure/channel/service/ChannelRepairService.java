@@ -11,6 +11,7 @@ import com.smoc.cloud.common.smoc.configuate.validator.ChannelBasicInfoValidator
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelPriceValidator;
 import com.smoc.cloud.common.smoc.configuate.validator.ConfigChannelRepairRuleValidator;
 import com.smoc.cloud.common.smoc.configuate.validator.ConfigChannelRepairValidator;
+import com.smoc.cloud.common.smoc.customer.qo.AccountChannelRepairQo;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseContractInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.configure.channel.entity.ConfigChannelRepairRule;
@@ -50,6 +51,15 @@ public class ChannelRepairService {
      */
     public PageList<ConfigChannelRepairValidator> page(PageParams<ConfigChannelRepairValidator> pageParams) {
         return channelRepairRepository.page(pageParams);
+    }
+
+    /**
+     * 查询账号失败补发列表
+     * @param pageParams
+     * @return
+     */
+    public PageList<AccountChannelRepairQo> accountChannelRepairPage(PageParams<AccountChannelRepairQo> pageParams) {
+        return channelRepairRepository.accountChannelRepairPage(pageParams);
     }
 
     /**
@@ -147,5 +157,6 @@ public class ChannelRepairService {
         List<ConfigChannelRepairRuleValidator> list = channelRepairRepository.findByChannelIdAndBusinessType(configChannelRepairRuleValidator.getChannelId(),configChannelRepairRuleValidator.getBusinessType());
         return ResponseDataUtil.buildSuccess(list);
     }
+
 
 }

@@ -8,6 +8,7 @@ import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelBasicInfoValidator;
 import com.smoc.cloud.common.smoc.configuate.validator.ConfigChannelRepairRuleValidator;
 import com.smoc.cloud.common.smoc.configuate.validator.ConfigChannelRepairValidator;
+import com.smoc.cloud.common.smoc.customer.qo.AccountChannelRepairQo;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.configure.channel.service.ChannelRepairService;
@@ -33,7 +34,7 @@ public class ChannelRepairController {
     private ChannelRepairService channelRepairService;
 
     /**
-     * 查询列表
+     * 查询通道失败补发列表
      * @param pageParams
      * @return
      */
@@ -44,7 +45,18 @@ public class ChannelRepairController {
     }
 
     /**
-     * 根据运营商、业务类型、信息分类查询符合要求的备用通道
+     * 查询账号失败补发列表
+     * @param pageParams
+     * @return
+     */
+    @RequestMapping(value = "/accountChannelRepairPage", method = RequestMethod.POST)
+    public PageList<AccountChannelRepairQo> accountChannelRepairPage(@RequestBody PageParams<AccountChannelRepairQo> pageParams) {
+
+        return channelRepairService.accountChannelRepairPage(pageParams);
+    }
+
+    /**
+     * 根据运营商、业务类型查询符合要求的备用通道
      * @param channelBasicInfoValidator
      * @return
      */
