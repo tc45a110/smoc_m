@@ -29,6 +29,10 @@ public class FilterDataInitListener implements ApplicationListener<ContextRefres
         FilterInitialize.accountSignTemplateMap = filtersService.getAccountSignTemplates();
         FilterInitialize.accountFilterVariableTemplateMap = filtersService.getAccountFilterVariableTemplates();
         FilterInitialize.accountNoFilterVariableTemplateMap = filtersService.getAccountNoFilterVariableTemplates();
+        log.info("[netty]:{}","reactor.netty.ioSelectCount");
+        System.setProperty("reactor.netty.ioSelectCount","1");
+        // 这里工作线程数为2-4倍都可以。看具体情况
+        System.setProperty("reactor.netty.ioWorkerCount",String.valueOf(Math.max(Runtime.getRuntime().availableProcessors()*3, 4)));
     }
 }
 
