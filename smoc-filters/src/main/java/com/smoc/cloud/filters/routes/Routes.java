@@ -39,7 +39,7 @@ public class Routes {
                 /**
                  * 全量过滤
                  */
-                .route(r -> r.method(HttpMethod.POST).and().path("/smoc-filters/full-filter/**").and().readBody(String.class, requestBody -> true).filters(f -> f.stripPrefix(1).filter(fullFilterParamsGatewayFilter)).uri("lb://smoc")
+                .route(r -> r.method(HttpMethod.POST).and().path("/smoc-filters/full-filter/**").and().readBody(String.class, requestBody -> true).filters(f -> f.stripPrefix(1).filter(fullFilterParamsGatewayFilter)).uri("lb://smoc_cloud_service")
 
                 )
 //                .circuitBreaker(config -> config
@@ -50,7 +50,7 @@ public class Routes {
                  */
                 .route(r -> r.method(HttpMethod.POST).and().path("/smoc-filters/message-filter/**").and().readBody(String.class, requestBody -> {
                             return true;
-                        }).filters(f -> f.stripPrefix(1).filter(messageGatewayFilter)).uri("lb://smoc")
+                        }).filters(f -> f.stripPrefix(1).filter(messageGatewayFilter)).uri("lb://smoc_cloud_service")
 
                 )
                 /**
@@ -58,7 +58,7 @@ public class Routes {
                  */
                 .route(r -> r.method(HttpMethod.POST).and().path("/smoc-filters/number-filter/**").and().readBody(String.class, requestBody -> {
                             return true;
-                        }).filters(f -> f.stripPrefix(1)).uri("lb://smoc")
+                        }).filters(f -> f.stripPrefix(1)).uri("lb://smoc_cloud_service")
 
                 ).build();
     }

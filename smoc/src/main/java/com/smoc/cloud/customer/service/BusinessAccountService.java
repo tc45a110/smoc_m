@@ -74,8 +74,8 @@ public class BusinessAccountService {
     private RedisTemplate<String, String> stringRedisTemplate;
 
 
-    @Resource
-    private RedisTemplate<String, RedisModel> redisTemplate;
+    @Resource(name = "redisTemplate2")
+    private RedisTemplate<String, RedisModel> redisTemplate2;
 
 
     /**
@@ -314,7 +314,7 @@ public class BusinessAccountService {
                 redisModel.setSendRate(accountInterfaceInfo.getMaxSendSecond());
                 redisModel.setIps(accountInterfaceInfo.getIdentifyIp());
                 //把数据放到redis里
-                redisTemplate.opsForValue().set(RedisConstant.HTTP_SERVER_KEY + entity.getAccountId(), redisModel);
+                redisTemplate2.opsForValue().set(RedisConstant.HTTP_SERVER_KEY + entity.getAccountId(), redisModel);
             }
 
 
@@ -324,7 +324,7 @@ public class BusinessAccountService {
         } else {
             status = "0";
             //注销
-            redisTemplate.delete(RedisConstant.HTTP_SERVER_KEY + entity.getAccountId());
+            redisTemplate2.delete(RedisConstant.HTTP_SERVER_KEY + entity.getAccountId());
         }
 
         businessAccountRepository.updateAccountStatusById(id, status);

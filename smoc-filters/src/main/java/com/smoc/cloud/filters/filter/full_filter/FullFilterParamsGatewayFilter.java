@@ -105,20 +105,11 @@ public class FullFilterParamsGatewayFilter extends BaseGatewayFilter implements 
         //////////////////////////////////////////////////////////////////////////////////////////
         /**
          * 以下逻辑是业务账号，约定的配置参数，该过滤参数业务是固定的
-         * 1、单手机号发送频率限制；未配置则跳过
+         * 1、单手机号发送频率限制；未配置则跳过（调整到过滤的最后，如果过滤失败，不计次数）
          * 2、账号发送时间段限制；未配置则跳过
          * 3、业务账号日限量；未配置则跳过
          * 4、屏蔽省份；未配置则跳过
          */
-
-        /**
-         * 1、单手机号发送频率限制
-         */
-        Object phoneFrequencyLimit = entities.get("COMMON_SEND_FREQUENCY_LIMIT");
-        Map<String, String> phoneFrequencyLimitResult = phoneSendFrequencyLimitFilter.filter(filtersService, phoneFrequencyLimit, model.getAccount(), model.getPhone());
-        if (!"false".equals(phoneFrequencyLimitResult.get("result"))) {
-            return errorHandle(exchange, phoneFrequencyLimitResult.get("code"), phoneFrequencyLimitResult.get("message"));
-        }
 
         /**
          * 2、账号发送时间段限制
@@ -206,9 +197,6 @@ public class FullFilterParamsGatewayFilter extends BaseGatewayFilter implements 
             //先去匹配固定格式模版
             Object fixedTemplate = filtersService.getMapValue(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_HTTP_FIXED, model.getTemplateId());
             if (!StringUtils.isEmpty(fixedTemplate)) {
-//                log.info("templateId 固定模版:{}", fixedTemplate);
-//                log.info("           短信内容:{}", model.getMessage());
-
                 if (model.getMessage().equals(fixedTemplate)) {
                     return success(exchange);
                 }
@@ -216,8 +204,6 @@ public class FullFilterParamsGatewayFilter extends BaseGatewayFilter implements 
             //根据模版id 去找变量模版
             Object variableTemplate = filtersService.getMapValue(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_HTTP_VARIABLE, model.getTemplateId());
             if (!StringUtils.isEmpty(variableTemplate)) {
-//                log.info("templateId 变量模版:{}", variableTemplate);
-//                log.info("           短信内容:{}", model.getMessage());
                 Pattern pattern = Pattern.compile(variableTemplate.toString());
                 Matcher matcher = pattern.matcher(model.getMessage());
                 if (matcher.find()) {
@@ -254,7 +240,6 @@ public class FullFilterParamsGatewayFilter extends BaseGatewayFilter implements 
         /**
          * 4、签名模版匹配，（1）提取短信内容签名 （2）匹配签名；  如果匹配上签名，继续其他内容过滤，如果没匹配上签名，则返回过滤失败
          */
-
         String signTemplate = FilterInitialize.accountSignTemplateMap.get(model.getAccount());
         if (!StringUtils.isEmpty(signTemplate)) {
 
@@ -304,6 +289,16 @@ public class FullFilterParamsGatewayFilter extends BaseGatewayFilter implements 
         Map<String, String> extendMessageParamsFilterResult = extendMessageParamsFilter.filter(filtersService, model.getAccount(), model.getMessage());
         if (!"false".equals(extendMessageParamsFilterResult.get("result"))) {
             return errorHandle(exchange, extendMessageParamsFilterResult.get("code"), extendMessageParamsFilterResult.get("message"));
+        }
+
+
+        /**
+         * 1、单手机号发送频率限制
+         */
+        Object phoneFrequencyLimit = entities.get("COMMON_SEND_FREQUENCY_LIMIT");
+        Map<String, String> phoneFrequencyLimitResult = phoneSendFrequencyLimitFilter.filter(filtersService, phoneFrequencyLimit, model.getAccount(), model.getPhone());
+        if (!"false".equals(phoneFrequencyLimitResult.get("result"))) {
+            return errorHandle(exchange, phoneFrequencyLimitResult.get("code"), phoneFrequencyLimitResult.get("message"));
         }
 
         return success(exchange);

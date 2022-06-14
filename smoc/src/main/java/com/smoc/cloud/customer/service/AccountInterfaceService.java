@@ -41,8 +41,8 @@ public class AccountInterfaceService {
     @Resource
     private BusinessAccountRepository businessAccountRepository;
 
-    @Resource
-    private RedisTemplate<String, RedisModel> redisTemplate;
+    @Resource(name = "redisTemplate2")
+    private RedisTemplate<String, RedisModel> redisTemplate2;
 
 
     /**
@@ -142,9 +142,9 @@ public class AccountInterfaceService {
             redisModel.setSendRate(entity.getMaxSendSecond());
             redisModel.setIps(entity.getIdentifyIp());
             //把数据放到redis里
-            redisTemplate.opsForValue().set(RedisConstant.HTTP_SERVER_KEY + entity.getAccountId(), redisModel);
+            redisTemplate2.opsForValue().set(RedisConstant.HTTP_SERVER_KEY + entity.getAccountId(), redisModel);
         } else {
-            redisTemplate.delete(RedisConstant.HTTP_SERVER_KEY + entity.getAccountId());
+            redisTemplate2.delete(RedisConstant.HTTP_SERVER_KEY + entity.getAccountId());
         }
 
         return ResponseDataUtil.buildSuccess();

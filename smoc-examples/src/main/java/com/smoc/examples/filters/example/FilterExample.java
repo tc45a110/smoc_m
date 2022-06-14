@@ -17,7 +17,7 @@ public class FilterExample {
 
     public static void main(String[] args) throws Exception {
         System.out.println(System.currentTimeMillis());
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 1; i++) {
 
             //请求路径（具体参见技术文档）
             String url = "http://localhost:18090/smoc-filters/full-filter/filters";
@@ -26,18 +26,18 @@ public class FilterExample {
             Map<String, String> header = new HashMap<>();
             //
             Map<String, Object> data = new HashMap<>();
-            data.put("phone", "13910986771");
-            data.put("account", "YQT124");
+            data.put("phone", "18510816778");
+            data.put("account", "UGR100");
             data.put("carrier", "CMCC");
-            String message = "【招商银行】尊敬的客户，为更好保障持卡人用卡权益，并逐步关闭部分账单日，建议您可拨打热线400-820-5555申请更改至新账单日com。退订回#C";
+            String message = "【招商银行】尊敬的客户，为更好保障持卡人用卡权益，并逐步关闭部分账单日，建议您可拨打热线400-820-5555申请更改至新账单日。退订回#C";
             data.put("message", message);
-            data.put("provinceCode", "11");
+//            data.put("provinceCode", "11");
 //            data.put("templateId", "TEMP100293");
-            data.put("numbers", 1);
+//            data.put("numbers", 1);
 
             //转JSON请求数据
             String requestJsonData = new Gson().toJson(data);
-            //ystem.out.println(requestJsonData);
+            System.out.println(requestJsonData);
             String result = Okhttp3Utils.postJson(url, requestJsonData, header);
             //Thread.currentThread().sleep(1000);
             //System.out.println(System.currentTimeMillis() + "[请求响应]数据:" + result);
