@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.smoc.cloud.filters.grpc.lib.filter";
+option java_outer_classname = "FullFilterProto";
+
+service FilterService {
+    rpc Filter (FilterRequest) returns (FilterResponse) {
+    }
+}
+
+message FilterRequest {
+    string phone =1;
+    string account =2;
+    string message =3;
+    string templateId =4;
+    string carrier =5;
+    string provinceCode =6;
+    string channelId =7;
+}
+
+message FilterResponse {
+    string code =1;
+    string message =2;
+}

@@ -1,7 +1,7 @@
 package com.smoc.cloud.filters.grpc.controller;
-import com.smoc.cloud.filters.grpc.service.GreeterService;
+
+import com.smoc.cloud.filters.grpc.service.FiltersService;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -12,14 +12,14 @@ import javax.annotation.Resource;
  * @date: 2022/5/6 1:35 上午
  */
 @RestController
-public class GreeterController {
+public class FilterController {
 
     @Resource
-    private GreeterService greeterService;
+    private FiltersService filtersService;
 
-    @GetMapping("greeter")
-    public String greet(@RequestParam("name")String name){
-        String result = greeterService.greet(name);
+    @GetMapping("filter")
+    public String filter() {
+        String result = filtersService.filter();
         return result;
     }
 }
