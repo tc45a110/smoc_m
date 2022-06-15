@@ -18,8 +18,8 @@ public class ReactNettyConfiguration {
         System.setProperty("reactor.netty.ioSelectCount", "1");
         System.setProperty("reactor.ipc.netty.selectCount", "1");
         // 这里工作线程数为2-4倍都可以。看具体情况
-        System.setProperty("reactor.netty.ioWorkerCount", String.valueOf(Math.max(Runtime.getRuntime().availableProcessors() * 6, 4)));
-        System.setProperty("reactor.ipc.netty.workerCount", String.valueOf(Math.max(Runtime.getRuntime().availableProcessors() * 6, 4)));
+        System.setProperty("reactor.netty.ioWorkerCount", String.valueOf(Math.max(Runtime.getRuntime().availableProcessors() * 4, 4)));
+        System.setProperty("reactor.ipc.netty.workerCount", String.valueOf(Math.max(Runtime.getRuntime().availableProcessors() * 4, 4)));
         return new ReactorResourceFactory();
     }
 }

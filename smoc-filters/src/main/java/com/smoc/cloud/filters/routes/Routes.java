@@ -34,7 +34,7 @@ public class Routes {
 
         return builder.routes()
                 //拦截所有GET请求
-                .route(r -> r.method(HttpMethod.GET).filters(f -> f.stripPrefix(1)).uri("lb://smoc"))
+                .route(r -> r.method(HttpMethod.GET).filters(f -> f.stripPrefix(1)).uri("lb://smoc_cloud_service"))
 
                 /**
                  * 全量过滤
