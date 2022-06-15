@@ -94,7 +94,7 @@ public class ChannelRepairRepositoryImpl extends BasePageRepository {
         if("CHANNEL".equals(qo.getFlag())){
             sqlBuffer.append("  where t.CHANNEL_ID!='"+qo.getChannelId()+"' and t.CHANNEL_STATUS='001' ");
         }else{
-            sqlBuffer.append("  where t.CHANNEL_STATUS='001' ");
+            sqlBuffer.append("  where t.CHANNEL_STATUS='001' and t.CHANNEL_ID not in(select a.CHANNEL_ID from account_channel_info a where a.ACCOUNT_ID = '"+qo.getChannelId()+"') ");
         }
 
         List<Object> paramsList = new ArrayList<Object>();

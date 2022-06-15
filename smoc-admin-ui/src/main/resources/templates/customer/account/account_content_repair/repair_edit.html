@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
+
+</head>
+<body>
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <!-- start row 页面导航-->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">新建、修改内容失败补发</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            合同管理
+                        </li>
+                        <li class="active">
+                            新建、修改内容失败补发
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row 页面内容-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-md-12">
+                <div class="card-box">
+                    <form id="submit_form" th:action="@{/account/content/repair/save/{op}(op=${op})}"
+                          th:object="${configContentRepairRuleValidator}"
+                          method="post" data-parsley-validate="" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="p-20">
+                                    <div class="form-group m-b-20">
+                                        <label>业务账号：[[${configContentRepairRuleValidator.accountId}]]</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>业务类型：
+                                            <mpm:tag identity="businessType" show-type="label" key="code"
+                                                     th:value="${accountBasicInfoValidator.businessType}"/>
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>运营商：
+                                            <mpm:tag identity="carrier" show-type="label" key="code"
+                                                     th:value="${configContentRepairRuleValidator.carrier}"/>
+                                        </label>
+                                    </div>
+                                    <div class="form-group m-b-20">
+                                        <label>补发通道<span class="text-danger">*</span></label>
+                                        <select name="channelRepairId" data-style="btn-default" required
+                                                class="selectpicker  form-control" tabindex="-98" data-live-search="true">
+                                            <option data-icon="mdi mdi-key-plus" value="">--请选择补发通道--</option>
+                                            <option data-icon="mdi mdi-key-plus" th:each="channel:${channelList}"
+                                                    th:selected="${configContentRepairRuleValidator.channelRepairId eq channel.channelId}"
+                                                    th:value="${channel.channelId}">[[${channel.channelName}]]
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group m-b-20">
+                                        <label>路由内容<span class="text-danger">*</span></label><span style="margin-left:15px;color:#F5707A">支持多个内容，请用 | 隔开</span>
+                                        <textarea type="text" class="form-control" th:field="*{repairContent}"
+                                                  required="" data-parsley-length="[1,800]" autocomplete="off"
+                                                  rows="5"   placeholder="输入内容"></textarea>
+                                    </div>
+                                    <div class="form-group m-b-20">
+                                        <label>区域</label>
+                                        <span th:if="${configContentRepairRuleValidator.carrier ne 'INTL'}">
+                                            <mpm:tag id="province" identity="provices" name="areaCodes"
+                                                     show-type="checkbox" key="code"
+                                                     class="form-control"
+                                                     th:value="${configContentRepairRuleValidator.areaCodes}"
+                                                     title="业务区域"/>
+                                        </span>
+
+                                        <span th:if="${configContentRepairRuleValidator.carrier eq 'INTL'}">
+                                            <mpm:tag id="countryCode" identity="internationalArea" required="true"
+                                                       name="countryCode" show-type="checkbox"  key="code" class="form-control"
+                                                       th:value="${configContentRepairRuleValidator.countryCode}" title="业务区域"/>
+                                        </span>
+
+                                    </div>
+
+
+                                </div>
+                                <!-- end class p-20 -->
+
+                            </div> <!-- end col -->
+
+                        </div> <!-- end row -->
+
+                        <div class="text-center">
+                            <input type="hidden" th:field="*{id}">
+                            <input type="hidden" th:field="*{accountId}">
+                            <input type="hidden" th:field="*{carrier}">
+                            <input type="hidden" th:field="*{createdTime}">
+                            <input type="hidden" th:field="*{createdBy}">
+                            <button sec:authorize-url="/account/content/repair/save/*" type="submit"
+                                    class="btn btn-teal waves-effect waves-light">提交
+                            </button>
+                            <a sec:authorize-url="/account/content/repair/search" th:href="@{/account/content/repair/search}"
+                               class="btn btn-default waves-effect waves-light" style="margin-left:20px">返回</a>
+                        </div>
+                    </form>
+                    <!-- end form -->
+
+                </div> <!-- end card-box -->
+            </div> <!-- end col -->
+        </div>
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<script th:src="@{/static/plugins/moment/moment.js}"></script>
+<th:block th:insert="fragments/common_fragments :: common_submit_form"/>
+
+<script>
+
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+
+</script>
+</body>
+</html>

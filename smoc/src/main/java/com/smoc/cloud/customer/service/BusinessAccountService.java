@@ -70,7 +70,7 @@ public class BusinessAccountService {
     @Autowired
     private RandomService randomService;
 
-    @Resource
+    @Resource(name = "defaultRedisTemplate")
     private RedisTemplate<String, String> stringRedisTemplate;
 
 
@@ -214,9 +214,7 @@ public class BusinessAccountService {
         businessAccountRepository.saveAndFlush(entity);
 
         //把账号id放到redis里
-        String accountId = entity.getAccountId();
-        accountId = accountId.substring(accountId.length() - 3);
-        stringRedisTemplate.opsForValue().set(RandomService.PREFIX + ":" + accountId, accountId);
+        stringRedisTemplate.opsForValue().set(RandomService.PREFIX + ":" + entity.getAccountId(), entity.getAccountId());
 
         return ResponseDataUtil.buildSuccess();
     }

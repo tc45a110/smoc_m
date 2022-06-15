@@ -3,6 +3,7 @@ package com.smoc.cloud.utils;
 import com.smoc.cloud.common.utils.RandomUtil;
 import com.smoc.cloud.sequence.repository.SequenceRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -22,7 +23,7 @@ public class RandomService {
     public static String PREFIX = "auth:enterprise:code";
 
 
-    @Resource
+    @Resource(name = "defaultRedisTemplate")
     private RedisTemplate<String, String> stringRedisTemplate;
 
     public String getBusinessAccount(String code){

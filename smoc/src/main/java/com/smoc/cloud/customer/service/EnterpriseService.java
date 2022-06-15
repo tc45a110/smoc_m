@@ -53,7 +53,7 @@ public class EnterpriseService {
     @Resource
     private AuthorityService authorityService;
 
-    @Resource
+    @Resource(name = "defaultRedisTemplate")
     private RedisTemplate<String, String> stringRedisTemplate;
 
     /**

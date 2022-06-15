@@ -34,7 +34,7 @@ public class EnterpriseInvoiceInfoValidator {
     @Length(max = 64, message = "开户账号长度不符合规则！")
     private String openAccount;
 
-    @Length(max = 11, message = "注册电话长度不符合规则！")
+    @Length(max = 30, message = "注册电话长度不符合规则！")
     private String registerPhone;
 
     @Length(max = 64, message = "注册地址长度不符合规则！")
