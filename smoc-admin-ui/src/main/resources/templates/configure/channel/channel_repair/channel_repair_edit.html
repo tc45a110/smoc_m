@@ -107,72 +107,109 @@
                         </div>
                     </div>
 
-                    <div class="row" th:remove="${#strings.isEmpty(error)}?none:all" style="margin-top:10px">
-                        <div class="col-md-12">
+                    <div class="row m-b-0" style="padding-left:20px;padding-right:20px">
+                        <form id="submit_form1" th:action="@{/configure/channel/suspend/save/{op}(op=${op})}"
+                              method="post" data-parsley-validate="">
+                            <div class="row">
+                                <div class="col-md-12 panel panel-color panel-info">
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group m-b-20">
+                                                    <label for="changeReason">通道失败补发错误码<span
+                                                            class="text-danger">*</span></label>
+                                                    <input id="changeReason" type="text" class="form-control"
+                                                           autocomplete="off"
+                                                           placeholder="失败补发错误码" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group m-b-20">
+                                                    <label for="changeReason">补发生效时间<span
+                                                            class="text-danger">*</span></label>
+                                                    <input id="changeReason1" type="text" class="form-control"
+                                                           autocomplete="off"
+                                                           placeholder="失败补发错误码" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 pull-right" style="text-align: right">
+                                                <button
+                                                        type="submit"
+                                                        class="btn btn-danger waves-effect waves-light m-l-10 btn-md">
+                                                    提交规则
+                                                </button>
 
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="panel panel-color panel-info">
+                                                    <div class="panel-heading">
+                                                        <h3 class="panel-title">失败补发通道列表</h3>
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <div class="table-responsive">
+                                                            <table class="table table table-hover m-10" style="margin-top: -12px;">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th>补发顺序</th>
+                                                                    <th>补发通道ID</th>
+                                                                    <th>补发通道名称</th>
+                                                                    <th>失败补发错误码</th>
+                                                                    <th>创建人</th>
+                                                                    <th>创建日期</th>
+                                                                    <th>操作</th>
+                                                                </tr>
+                                                                <thead>
+                                                                <tbody>
+                                                                <tr th:each="info:${channelRepairList}">
+                                                                    <td style="vertical-align: middle;line-height: 26px;">
+                                                                        [[${info.sort}]]
+                                                                    </td>
+                                                                    <td style="vertical-align: middle;line-height: 26px;">
+                                                                        [[${info.channelRepairId}]]
+                                                                    </td>
+                                                                    <td style="vertical-align: middle;line-height: 26px;">[[${info.channelRepairName}]]</td>
+                                                                    <td style="vertical-align: middle;line-height: 26px;">
+                                                                        [[${info.repairCode}]]
+                                                                    </td>
+                                                                    <td style="vertical-align: middle;line-height: 26px;">[[${info.createdBy}]]</td>
+                                                                    <td style="vertical-align: middle;line-height: 26px;">[[${info.createdTime}]]</td>
+                                                                    <td style="vertical-align: middle;line-height: 26px" >
+                                                                        <a sec:authorize-url="/configure/channel/repair/deleteById/*" data-toggle="modal"
+                                                                           data-target="#confirm-modal" class="on-default remove-row"
+                                                                           th:onclick="confirmDelete([[${info.id}]],this)" style="padding-left: 5px;color: #f05050" title="删除"><i
+                                                                                style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
+                                                                    </td>
+                                                                </tr>
+                                                                </tbody>
 
-                            <div class="panel panel-color panel-info">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">失败补发通道列表</h3>
-                                </div>
-                                <div class="panel-body">
-                                    <div class="table-responsive">
-                                        <table class="table table table-hover m-10" style="margin-top: -12px;">
-                                            <thead>
-                                            <tr>
-                                                <th>补发顺序</th>
-                                                <th>补发通道ID</th>
-                                                <th>补发通道名称</th>
-                                                <th>失败补发错误码</th>
-                                                <th>创建人</th>
-                                                <th>创建日期</th>
-                                                <th>操作</th>
-                                            </tr>
-                                            <thead>
-                                            <tbody>
-                                            <tr th:each="info:${channelRepairList}">
-                                                <td style="vertical-align: middle;line-height: 26px;">
-                                                    [[${info.sort}]]
-                                                </td>
-                                                <td style="vertical-align: middle;line-height: 26px;">
-                                                    [[${info.channelRepairId}]]
-                                                </td>
-                                                <td style="vertical-align: middle;line-height: 26px;">[[${info.channelRepairName}]]</td>
-                                                <td style="vertical-align: middle;line-height: 26px;">
-                                                    [[${info.repairCode}]]
-                                                </td>
-                                                <td style="vertical-align: middle;line-height: 26px;">[[${info.createdBy}]]</td>
-                                                <td style="vertical-align: middle;line-height: 26px;">[[${info.createdTime}]]</td>
-                                                <td style="vertical-align: middle;line-height: 26px" >
-                                                    <a sec:authorize-url="/configure/channel/repair/deleteById/*" data-toggle="modal"
-                                                       data-target="#confirm-modal" class="on-default remove-row"
-                                                       th:onclick="confirmDelete([[${info.id}]],this)" style="padding-left: 5px;color: #f05050" title="删除"><i
-                                                            style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
-                                                </td>
-                                            </tr>
-                                            </tbody>
+                                                            </table>
 
-                                        </table>
+                                                            <hr>
+                                                            <div class="text-center" style="margin-bottom:20px">
+                                                                <a style="margin-left:10px" data-toggle="modal"
+                                                                   data-target="#confirm-add-user-modal"
+                                                                   class="btn btn-teal waves-effect waves-light">
+                                                                    添加补发通道</a>
+                                                                <a sec:authorize-url="/configure/channel/repair/list"
+                                                                   th:href="@{/configure/channel/repair/list}" style="margin-left:10px"
+                                                                   class="btn btn-default waves-effect waves-light">
+                                                                    返回</a>
+                                                            </div>
 
-                                        <hr>
-                                        <div class="text-center" style="margin-bottom:20px">
-                                            <a style="margin-left:10px" data-toggle="modal"
-                                               data-target="#confirm-add-user-modal"
-                                               class="btn btn-teal waves-effect waves-light">
-                                                添加补发通道</a>
-                                            <a sec:authorize-url="/configure/channel/repair/list"
-                                               th:href="@{/configure/channel/repair/list}" style="margin-left:10px"
-                                               class="btn btn-default waves-effect waves-light">
-                                                返回</a>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                            </div>
                                         </div>
 
                                     </div>
-
-                                </div>
+                                </div> <!-- end col -->
                             </div>
-
-
-                        </div> <!-- end col -->
+                        </form>
                     </div>
 
                 </div>

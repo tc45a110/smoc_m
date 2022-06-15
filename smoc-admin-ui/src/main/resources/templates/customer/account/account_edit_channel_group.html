@@ -66,6 +66,16 @@
                                                            th:onmouseover="channelGroupTip([[${info.value.channelGroupId}]])"
                                                            class="mdi mdi-comment-text"
                                                            style="margin-left:5px"></i>
+
+                                                        <a sec:authorize-url="/account/channelGroup/deleteChannelGroup/*/*/*"
+                                                           data-toggle="modal" data-target="#confirm-delete-modal"
+                                                           title="移除该已选中产品" th:if="${info.value !=null}"
+                                                           th:onclick="deleteChannelGroup([[${info.value.accountId}]],[[${info.value.carrier}]],[[${info.value.channelGroupId}]])"
+                                                           class="pull-right" style="padding-left: 5px;">
+                                                            <i class="glyphicon glyphicon-remove"
+                                                               style="font-size:16px;color:#F5707A;"></i>
+                                                        </a>
+
                                                         <a sec:authorize-url="/account/channelGroup/channelGroupList/*/*"
                                                            th:href="@{/account/channelGroup/channelGroupList/{accountId}/{carrier}(accountId=${accountBasicInfoValidator.accountId},carrier=${info.key})}"
                                                            data-toggle="tooltip" data-placement="left"
@@ -73,6 +83,7 @@
                                                             <i class="mdi mdi-link-variant"
                                                                style="font-size:16px;color:#fff;"></i>
                                                         </a>
+
                                                     </p>
                                                 </div>
                                             </div>
@@ -100,12 +111,6 @@
                                                         <div class="row m-b-60">
                                                             <div class="col-sm-12">
                                                                 <div class="form-group  col-sm-4">
-                                                                    <label>业务类型：</label>
-                                                                    <mpm:tag identity="businessType" show-type="label"
-                                                                             key="code"
-                                                                             th:value="${channelGroupInfoValidator.businessType}"/>
-                                                                </div>
-                                                                <div class="form-group  col-sm-4">
                                                                     <label>运营商：</label>
                                                                     <mpm:tag identity="carrier" show-type="label"
                                                                              key="code"
@@ -118,6 +123,13 @@
                                                                              th:value="${channelGroupInfoValidator.infoType}"/>
                                                                 </div>
                                                                 <div class="form-group  col-sm-4">
+                                                                    <label>业务类型：</label>
+                                                                    <mpm:tag identity="businessType" show-type="label"
+                                                                             key="code"
+                                                                             th:value="${channelGroupInfoValidator.businessType}"/>
+                                                                </div>
+
+                                                                <div class="form-group  col-sm-4">
                                                                     <input type="text" class="form-control"
                                                                            th:field="*{channelGroupName}"
                                                                            placeholder="通道组名称" autocomplete="off">
@@ -128,7 +140,7 @@
                                                                              key="code"
                                                                              th:value="${channelGroupInfoValidator.countryCode}"/>
                                                                 </div>
-                                                                <div class="form-group col-sm-4 pull-right"
+                                                                <div class="form-group col-sm-8 pull-right"
                                                                      style="text-align: right">
                                                                     <input type="hidden" th:field="*{accountId}">
                                                                     <input type="hidden" th:field="*{carrier}">

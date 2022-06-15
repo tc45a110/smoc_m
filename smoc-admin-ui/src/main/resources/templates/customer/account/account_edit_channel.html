@@ -35,7 +35,6 @@
                                                 <div class="wigdet-two-content text-white">
                                                     <p class="m-0 text-uppercase font-600 font-secondary text-overflow">
                                                         [[${info.value!=null?info.value.channelName:'未配置通道'}]]
-
                                                     </p>
                                                     <p class="text-white"><b>业务类型：
                                                         <mpm:tag identity="businessType" show-type="label" key="code"
@@ -55,20 +54,30 @@
                                                                      show-type="label" key="code"
                                                                      th:value="${info.value.protocol}"/>
                                                         </span>
-                                                    </b>
+
                                                         <a data-toggle="tooltip" data-placement="bottom" title=""
                                                            th:data-original-title="${info.value.channelIntroduce}"
                                                            th:if="${info.value !=null}">
                                                             <i class="mdi mdi-checkbox-multiple-blank-outline"
                                                                style="font-size:16px;color:#fff;;margin-left:10px"></i>
                                                         </a>
+                                                        <a data-toggle="modal" data-placement="left"
+                                                           title="移除该已选中产品"
+                                                           data-target="#confirm-delete-modal"
+                                                           th:if="${info.value !=null}"
+                                                           th:onclick="deleteChannel([[${info.value.id}]])"
+                                                           class="pull-right" style="padding-left: 5px;">
+                                                            <i class="glyphicon glyphicon-remove"
+                                                               style="font-size:16px;color:#F5707A;"></i>
+                                                        </a>
                                                         <a sec:authorize-url="/account/channel/findChannelList/*/*"
                                                            th:href="@{/account/channel/findChannelList/{accountId}/{carrier}(accountId=${accountBasicInfoValidator.accountId},carrier=${info.key})}"
-                                                           data-toggle="tooltip" data-placement="left"
+                                                           data-toggle="tooltip" data-placement="left" style="padding-left: 5px;"
                                                            data-original-title="点击检索右侧通道" class="pull-right">
                                                             <i class="mdi mdi-link-variant"
                                                                style="font-size:16px;color:#fff;"></i>
                                                         </a>
+                                                    </b>
                                                     </p>
                                                 </div>
                                             </div>
@@ -136,7 +145,7 @@
                                                                 </div>
 
 
-                                                                <div class="form-group col-sm-3 pull-right"
+                                                                <div class="form-group col-sm-6 pull-right"
                                                                      style="text-align: right">
                                                                     <input type="hidden" th:field="*{accountId}">
                                                                     <input type="hidden" th:field="*{carrier}">
@@ -298,14 +307,14 @@
                                 <label>优先级：正常
                                 </label>
                             </div>
-                            <div class="form-group">
+                            <!--<div class="form-group">
                                 <label>权重
                                 </label>
                                 <input type="text" class="form-control" required="" id="channelWeight"
                                        th:field="*{channelWeight}"
                                        data-parsley-type="number" min="10" max="100" autocomplete="off"
                                        placeholder="默认 10，总共100">
-                            </div>
+                            </div>-->
                             <div class="text-right">
                                 <input type="hidden" id="carrier" name="carrier" th:value="${accountChannelInfoValidator.carrier}">
                                 <input type="hidden" id="accountId" name="accountId" th:value="${accountChannelInfoValidator.accountId}">
@@ -336,8 +345,6 @@
     function openChannel(carrier, channelId, channelName,op) {
         $("#carrier").val(carrier);
         $("#channelId").val(channelId);
-        $("#channelName").val(channelName);
-        $("#channelWeight").val('10');
         $("#name").html(channelName);
         $("#op").val(op);
 

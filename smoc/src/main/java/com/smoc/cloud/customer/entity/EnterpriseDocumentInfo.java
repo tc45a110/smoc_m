@@ -21,6 +21,7 @@ public class EnterpriseDocumentInfo {
     private String updatedBy;
     private Date updatedTime;
     private String checkDate;
+    private String signSource;
 
     @Id
     @Column(name = "ID")
@@ -150,6 +151,16 @@ public class EnterpriseDocumentInfo {
 
     public void setCheckDate(String checkDate) {
         this.checkDate = checkDate;
+    }
+
+    @Basic
+    @Column(name = "SIGN_SOURCE")
+    public String getSignSource() {
+        return signSource;
+    }
+
+    public void setSignSource(String signSource) {
+        this.signSource = signSource;
     }
 
     @Override

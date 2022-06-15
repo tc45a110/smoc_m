@@ -7,14 +7,6 @@
     <th:block th:insert="fragments/common_fragments :: common_css"/>
     <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
     <th:block th:insert="fragments/common_fragments :: select_css"/>
-    <!-- Tooltipster css -->
-    <link rel="stylesheet" th:href="@{/static/plugins/tooltipster/tooltipster.bundle.min.css}">
-    <style>
-        .bgRow{
-            background-color:#F9F9F9
-        }
-
-    </style>
 </head>
 <body>
 <!-- Loader start 页面加载进度-->
@@ -25,17 +17,17 @@
 <div class="content" style="margin-top: 60px">
     <div class="container">
 
-        <!-- start row  页面导航-->
+        <!-- start row 页面导航-->
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">内容失败补发配置</h4>
+                    <h4 class="page-title">内容路由配置</h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
                             业务办理
                         </li>
                         <li>
-                            内容失败补发配置
+                            内容路由配置
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -87,7 +79,7 @@
                                        th:href="@{/account/content/repair/search}"
                                        class="btn btn-success waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-plus-sign"
-                                           style="margin-right:5px"></i>新建内容失败补发</a>
+                                           style="margin-right:5px"></i>新建内容路由配置</a>
                                     <input type="hidden" name="currentPage" id="currentPage"
                                            th:value="${pageParams.currentPage}">
                                     <input type="hidden" name="pageSize" id="pageSize"
@@ -107,80 +99,77 @@
             <div class="col-sm-12">
                 <div class="panel panel-color panel-info">
                     <div class="panel-heading">
-                        <h3 class="panel-title">内容失败补发列表
+                        <h3 class="panel-title">内容路由配置列表
                         </h3>
                     </div>
                     <div class="panel-body">
                         <div class="table-responsive">
-                            <table class="table table table-hover m-10" style="margin-top: -12px;table-layout:fixed;">
+                            <table class="table table m-10" style="margin-top: -12px;">
                                 <thead>
                                 <tr>
                                     <th style="width:130px">业务账号/账号名称</th>
-                                    <th style="width:60px">业务类型</th>
-                                    <th style="width:60px">发送运营商</th>
-                                    <th style="width:150px">内容</th>
-                                    <th style="width:100px">省份</th>
-                                    <th style="width:130px">补发通道</th>
+                                    <th style="width:90px">业务类型</th>
+                                    <th style="width:90px">发送运营商</th>
+                                    <th style="width:180px">内容</th>
+                                    <th style="width:150px">区域</th>
+                                    <th style="width:180px">补发通道</th>
                                     <th style="width:80px">操作</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    <tr th:each="info:${list}">
-                                        <td style="vertical-align: middle;line-height: 26px">
-                                            [[${info.accountId}]]<br>[[${info.accountName}]]
-                                        </td>
-                                        <td style="vertical-align: middle;line-height: 26px">
-                                            <mpm:tag identity="businessType" show-type="button"
-                                                     key="code" th:value="${info.businessType}"
-                                                     class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;MULTI_SMS,btn btn-brown btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;5G_SMS,btn btn-primary btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-inverse btn-rounded btn-sm waves-effect waves-light"/>
-                                        </td>
-                                        <td style="vertical-align: middle;line-height: 26px">
-                                           <mpm:tag identity="carrier" show-type="label" key="code"
-                                                        th:value="${info.carrier}"/>
-                                        </td>
-                                        <td style="vertical-align: middle;line-height: 26px">
-                                            <span style="color:#26A69A;" class="text-overflow"
-                                                  data-toggle="tooltip" data-placement="bottom"
-                                                  th:data-original-title="${info.repairContent}">
-                                                [[${info.repairContent}]]
-                                            </span>
-                                        </td>
-                                        <td style="vertical-align: middle;line-height: 26px">
-                                            <span th:if="${configContentRepairRuleValidator.carrier ne 'INTL'}">
-                                                 <mpm:tag identity="provices" show-type="label" key="code"
-                                                          th:value="${info.areaCodes}"/>
-                                            </span>
-                                            <span th:if="${configContentRepairRuleValidator.carrier eq 'INTL'}">
-                                                 <mpm:tag identity="internationalArea" show-type="label" key="code"
-                                                          th:value="${info.areaCodes}"/>
-                                            </span>
+                                <tr th:each="info:${list}">
+                                    <td style="line-height: 26px">
+                                        [[${info.accountId}]]<br>[[${info.accountName}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <mpm:tag identity="businessType" show-type="button"
+                                                 key="code" th:value="${info.businessType}"
+                                                 class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;MULTI_SMS,btn btn-brown btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;5G_SMS,btn btn-primary btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-inverse btn-rounded btn-sm waves-effect waves-light"/>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <mpm:tag identity="carrier" show-type="label" key="code"
+                                                 th:value="${info.carrier}"/>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px;">
+                                        [[${info.repairContent}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <span th:if="${info.carrier ne 'INTL'}">
+                                             <mpm:tag identity="provices" show-type="label" key="code"
+                                                      th:value="${info.areaCodes}"/>
+                                        </span>
+                                        <span th:if="${info.carrier eq 'INTL'}">
+                                             <mpm:tag identity="internationalArea" show-type="label" key="code"
+                                                      th:value="${info.areaCodes}"/>
+                                        </span>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        [[${info.channelRepairId}]]：[[${info.channelName}]]
+                                    </td>
 
-                                        </td>
-                                        <td style="vertical-align: middle;line-height: 26px">
-                                            [[${info.channelRepairId}]]：[[${info.channelName}]]
-                                        </td>
-
-                                        <td style="vertical-align: middle;line-height: 26px">
-                                            <a sec:authorize-url="/account/content/repair/edit/*"
-                                               th:href="@{/account/content/repair/edit/{id}(id=${info.Id})}"
-                                               data-toggle="tooltip" data-placement="left" title=""
-                                               data-original-title="编辑内容失败补发" style="padding-left: 3px;color: #29b6f6;">
-                                                <i style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
-                                            <a sec:authorize-url="/account/content/repair/deleteById/*"
-                                               th:onclick="confirmDelete([[${info.id}]],this)"data-toggle="modal"
-                                               data-target="#confirm-modal" class="on-default remove-row"
-                                               style="padding-left: 5px;color: #f05050" title="删除"><i
-                                                    style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
-                                        </td>
-
-                                    </tr>
+                                    <td style="vertical-align: middle;line-height: 26px;">
+                                        <a sec:authorize-url="/account/content/repair/edit/*"
+                                           th:href="@{/account/content/repair/edit/{id}(id=${info.Id})}"
+                                           data-toggle="tooltip" data-placement="left" title=""
+                                           data-original-title="编辑内容路由配置" style="padding-left: 3px;color: #29b6f6;">
+                                            <i style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
+                                        <a sec:authorize-url="/account/content/repair/deleteById/*"
+                                           th:onclick="confirmDelete([[${info.id}]],this)"data-toggle="modal"
+                                           data-target="#confirm-modal" class="on-default remove-row"
+                                           style="padding-left: 5px;color: #f05050" title="删除"><i
+                                                style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
+                                    </td>
+                                </tr>
 
                                 </tbody>
+
                             </table>
+
+                            <hr>
                         </div>
+
                         <th:block th:insert="fragments/page_fragments :: page"/>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -194,13 +183,13 @@
         <th:block th:insert="fragments/common_fragments :: confirm-modal"/>
         <!-- end row -->
 
-    </div><!-- container -->
+    </div>
 </div> <!-- content -->
+
 <th:block th:insert="fragments/common_fragments :: common_js"/>
 <th:block th:insert="fragments/common_fragments :: select_js"/>
-<script th:src="@{/static/plugins/moment/moment.js}"></script>
 
-<script>
+<script  th:remove="${#strings.isEmpty(error)}?none:all">
 
     function confirmDelete(id) {
         $("#deleteId").val(id);

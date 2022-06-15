@@ -39,6 +39,7 @@ public class EnterpriseDocumentRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", e.ENTERPRISE_NAME");
         sqlBuffer.append(", e.ENTERPRISE_TYPE");
         sqlBuffer.append(", t.CHECK_DATE");
+        sqlBuffer.append(", t.SIGN_SOURCE");
         sqlBuffer.append("  from enterprise_document_info t left join enterprise_basic_info e on t.ENTERPRISE_ID = e.ENTERPRISE_ID ");
         sqlBuffer.append("  where t.DOC_STATUS!=0  ");
 
@@ -123,6 +124,7 @@ public class EnterpriseDocumentRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", e.ENTERPRISE_NAME");
         sqlBuffer.append(", e.ENTERPRISE_TYPE");
         sqlBuffer.append(", t.CHECK_DATE");
+        sqlBuffer.append(", t.SIGN_SOURCE");
         sqlBuffer.append("  from enterprise_document_info t left join enterprise_basic_info e on t.ENTERPRISE_ID = e.ENTERPRISE_ID ");
         sqlBuffer.append("  where t.DOC_STATUS!=0  ");
 

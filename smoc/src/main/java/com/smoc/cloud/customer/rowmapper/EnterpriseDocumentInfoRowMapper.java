@@ -29,6 +29,7 @@ public class EnterpriseDocumentInfoRowMapper implements RowMapper<EnterpriseDocu
         qo.setCreatedTime(resultSet.getString("CREATED_TIME"));
         qo.setCreatedBy(resultSet.getString("CREATED_BY"));
         qo.setCheckDate(resultSet.getString("CHECK_DATE"));
+        qo.setSignSource(resultSet.getString("SIGN_SOURCE"));
 
         return qo;
     }

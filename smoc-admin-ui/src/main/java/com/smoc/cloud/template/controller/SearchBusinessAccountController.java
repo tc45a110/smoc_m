@@ -41,6 +41,9 @@ public class SearchBusinessAccountController {
         params.setPageSize(10);
         params.setCurrentPage(1);
         AccountBasicInfoValidator accountBasicInfoValidator = new AccountBasicInfoValidator();
+        if("CMPP".equals(protocol)){
+            accountBasicInfoValidator.setProtocol(protocol);
+        }
         params.setParams(accountBasicInfoValidator);
 
         //查询

@@ -60,14 +60,7 @@
                                                              class="form-control" name="businessType" request=""
                                                              title="业务类型"/>
                                                 </div>
-                                                <div class="col-sm-6 ">
-                                                    <label>信息类型<span class="text-danger">*</span>
-                                                        <span class="text-danger" th:if="${#fields.hasErrors('infoType')}"
-                                                              th:errors="*{infoType}"></span></label>
-                                                    <mpm:tag required="true" identity="infoType" show-type="select"
-                                                             key="code" th:value="${enterpriseDocumentInfoValidator.infoType}"
-                                                             class="form-control" name="infoType" title="信息类型"/>
-                                                </div>
+
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -82,18 +75,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-sm-12 ">
-                                                    <label>短链&nbsp;
-                                                        <span class="text-danger" th:if="${#fields.hasErrors('shortLink')}"
-                                                              th:errors="*{shortLink}"></span></label>
-                                                    <input type="text" class="form-control" th:field="*{shortLink}"
-                                                           data-parsley-length="[2,128]" autocomplete="off"
-                                                           placeholder="短链">
-                                                </div>
-                                            </div>
-                                        </div>
+
 
                                         <div class="form-group ">
                                             <label>备注关键字(方便根据关键字查询)
