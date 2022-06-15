@@ -226,8 +226,9 @@ public class FullFilterParamsGatewayFilter extends BaseGatewayFilter implements 
         }
 
         /**
-         * 3、变量模版匹配，根据配置（1）匹配上变量模版 则跳过其他内容过滤  （2）突然发觉过滤没有意义，匹配上匹配不上都要向下过滤
+         * 3、变量模版匹配，根据配置
          */
+        //（1）匹配上变量模版 则跳过其他内容过滤
         String noFilterVariableTemplate = FilterInitialize.accountNoFilterVariableTemplateMap.get(model.getAccount());
         if (!StringUtils.isEmpty(noFilterVariableTemplate)) {
             Pattern pattern = Pattern.compile(noFilterVariableTemplate);
@@ -236,6 +237,15 @@ public class FullFilterParamsGatewayFilter extends BaseGatewayFilter implements 
                 return success(exchange);
             }
         }
+        //（2）突然发觉过滤没有意义，匹配上匹配不上都要向下过滤
+//        String filterVariableTemplate = FilterInitialize.accountFilterVariableTemplateMap.get(model.getAccount());
+//        if (!StringUtils.isEmpty(filterVariableTemplate)) {
+//            Pattern pattern = Pattern.compile(filterVariableTemplate);
+//            Matcher matcher = pattern.matcher(model.getMessage());
+//            if (matcher.find()) {
+//                return success(exchange);
+//            }
+//        }
 
         /**
          * 4、签名模版匹配，（1）提取短信内容签名 （2）匹配签名；  如果匹配上签名，继续其他内容过滤，如果没匹配上签名，则返回过滤失败
