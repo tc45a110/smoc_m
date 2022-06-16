@@ -1,4 +1,4 @@
-package com.smoc.cloud.filters.configuration;
+package com.somc.cloud.gateway.configuration;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
