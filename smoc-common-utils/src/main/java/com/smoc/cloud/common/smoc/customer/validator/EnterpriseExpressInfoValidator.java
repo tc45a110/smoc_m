@@ -28,7 +28,7 @@ public class EnterpriseExpressInfoValidator {
     private String postContacts;
 
     @NotNull(message = "联系电话不能为空！")
-    @Length(max = 32, message = "联系电话长度不符合规则！")
+    @Length(max = 30, message = "联系电话长度不符合规则！")
     private String postPhone;
 
     @NotNull(message = "地址不能为空！")

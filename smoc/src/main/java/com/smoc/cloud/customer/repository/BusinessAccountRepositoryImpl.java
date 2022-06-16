@@ -114,7 +114,7 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
             Map<String, AccountFinanceInfoValidator> financeList = queryFinanceByAccountId(info.getAccountId(),financeMap);
             info.setFinanceList(financeList);
             //查询通道信息
-            Map<String, AccountChannelInfoValidator> channelList = queryChannelByAccountId(info.getAccountId(),channelMap);
+            Map<String, AccountChannelInfoValidator> channelList = queryChannelByAccountId(info.getAccountId(),info.getAccountChannelType(),channelMap);
             info.setChannelList(channelList);
         }
 
@@ -532,7 +532,7 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
     }
 
     //查询通道信息
-    private Map<String, AccountChannelInfoValidator> queryChannelByAccountId(String accountId,Map<String, AccountChannelInfoValidator> map) {
+    private Map<String, AccountChannelInfoValidator> queryChannelByAccountId(String accountId,String accountChannelType,Map<String, AccountChannelInfoValidator> map) {
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");
         sqlBuffer.append("  t.ID");
@@ -546,9 +546,14 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", t.CHANGE_SOURCE");
         sqlBuffer.append(", t.CHANNEL_STATUS");
         sqlBuffer.append(", t.CREATED_BY");
-        sqlBuffer.append(", b.CHANNEL_NAME");
         sqlBuffer.append(", DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME");
-        sqlBuffer.append("  from account_channel_info t left join config_channel_basic_info b on t.CHANNEL_ID = b.CHANNEL_ID where t.ACCOUNT_ID = ? ");
+        if("ACCOUNT_CHANNEL_GROUP".equals(accountChannelType)){
+            sqlBuffer.append(", b.CHANNEL_GROUP_NAME as CHANNEL_NAME  from account_channel_info t left join config_channel_group_info b on t.CHANNEL_GROUP_ID = b.CHANNEL_GROUP_ID ");
+            sqlBuffer.append(" where t.ACCOUNT_ID = ? group by t.CHANNEL_GROUP_ID,t.CARRIER ");
+        }else{
+            sqlBuffer.append(", b.CHANNEL_NAME from account_channel_info t left join config_channel_basic_info b on t.CHANNEL_ID = b.CHANNEL_ID where t.ACCOUNT_ID = ? ");
+        }
+
 
         List<Object> paramsList = new ArrayList<Object>();
         paramsList.add(accountId.trim());

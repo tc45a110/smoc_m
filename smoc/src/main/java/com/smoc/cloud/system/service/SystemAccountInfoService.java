@@ -29,7 +29,7 @@ import java.util.Optional;
 @Service
 public class SystemAccountInfoService {
 
-    @Resource
+    @Resource(name = "redisTemplate2")
     private RedisTemplate<String, Object> redisTemplate;
 
     @Resource

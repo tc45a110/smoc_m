@@ -137,6 +137,7 @@ public class AccountChannelRepairController {
         configChannelRepairValidator.setBusinessType(data.getData().getBusinessType());
         configChannelRepairValidator.setCarrier(data.getData().getCarrier());
         configChannelRepairValidator.setFlag("ACCOUNT");
+        configChannelRepairValidator.setChannelId(data.getData().getAccountId());
         ResponseData<List<ConfigChannelRepairValidator>> channelList = channelRepairService.findSpareChannel(configChannelRepairValidator);
         if (!ResponseCode.SUCCESS.getCode().equals(channelList.getCode())) {
             view.addObject("error", channelList.getCode() + ":" + channelList.getMessage());

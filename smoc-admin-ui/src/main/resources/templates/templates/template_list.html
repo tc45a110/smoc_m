@@ -49,17 +49,18 @@
                                        placeholder="业务账号名称" autocomplete="off" th:field="*{accountName}">
                             </div>
                             <div class="form-group  col-sm-4">
-                                <mpm:tag id="templateType" identity="businessType" show-type="select" key="code"
-                                         name="templateType"
-                                         th:value="${accountTemplateInfoValidator.templateType}"
-                                         class="form-control" data-icon="mdi mdi-view-module" title="业务类型"/>
-                            </div>
-                            <div class="form-group  col-sm-4">
                                 <select data-style="btn-default" name="templateClassify" data-live-search="true" id="carrier" class="selectpicker form-control" tabindex="-98">
                                     <option value="" data-icon="mdi mdi-apps">--请选择模版类型--</option>
                                     <option data-icon="mdi mdi-apps" value="3" th:selected="${accountTemplateInfoValidator.templateClassify eq '3'}">签名模版</option>
                                     <option data-icon="mdi mdi-apps" value="2" th:selected="${accountTemplateInfoValidator.templateClassify eq '2'}">变量模版</option>
                                     <option data-icon="mdi mdi-apps" value="1" th:selected="${accountTemplateInfoValidator.templateClassify eq '1'}">固定模版</option>
+                                </select>
+                            </div>
+                            <div class="form-group  col-sm-4">
+                                <select data-style="btn-default" name="templateStatus" data-live-search="true" id="templateStatus" class="selectpicker form-control" tabindex="-98">
+                                    <option value="" data-icon="mdi mdi-apps">--请选择模版状态--</option>
+                                    <option data-icon="mdi mdi-apps" value="2" th:selected="${accountTemplateInfoValidator.templateStatus eq '2'}">生效中</option>
+                                    <option data-icon="mdi mdi-apps" value="0" th:selected="${accountTemplateInfoValidator.templateStatus eq '0'}">已失效</option>
                                 </select>
                             </div>
                             <div class="form-group  col-sm-4">
@@ -103,9 +104,8 @@
 
                                     <th style="width:200px">模板ID/企业名称</th>
                                     <th style="width:200px">业务账号/账号名称</th>
-                                    <th style="width:100px">业务类型</th>
-                                    <th style="width:400px">模板内容</th>
                                     <th style="width:100px">模板类型</th>
+                                    <th style="width:400px">模板内容</th>
                                     <th style="width:100px">继续内容过滤</th>
                                     <th style="width:80px">状态</th>
                                     <th style="width:160px">操作</th>
@@ -124,18 +124,13 @@
                                         <br>
                                         [[${info.accountName}]]
                                     </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <mpm:tag identity="businessType" show-type="button"
-                                                 key="code" th:value="${info.templateType}"
-                                                 class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;MULTI_SMS,btn btn-brown btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;5G_SMS,btn btn-primary btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-inverse btn-rounded btn-sm waves-effect waves-light"/>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
-                                        [[${info.templateContent}]]
-                                    </td>
                                     <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
                                         <span th:if="${info.templateClassify eq '1'}"><a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light">固定模版</a></span>
                                         <span th:if="${info.templateClassify eq '2'}"><a class="btn btn-primary btn-rounded btn-sm waves-effect waves-light">变量模版</a></span>
                                         <span th:if="${info.templateClassify eq '3'}"><a class="btn btn-purple btn-rounded btn-sm waves-effect waves-light">签名模版</a></span>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
+                                        [[${info.templateContent}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
                                         <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light" th:if="${info.isFilter eq 'FILTER'}">过滤</a>

@@ -3,6 +3,7 @@ package com.smoc.cloud.tools.redis;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 
+import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import java.util.List;
  */
 public class RedisModuleRedisCell {
 
+    @Resource(name = "redisTemplate2")
     private RedisTemplate<String, Object> redisTemplate;
 
     /**

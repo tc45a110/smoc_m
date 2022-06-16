@@ -60,13 +60,6 @@
                                    class="btn btn-purple waves-effect waves-light m-l-10 btn-md">
                                     <i class="glyphicon glyphicon-export"></i> 导出账号信息
                                 </a>
-                                <a sec:authorize-url="/account/center/accountCopy/*"
-                                   th:href="@{/account/center/accountCopy/{accountId}(accountId=${accountId})}"
-                                   class="btn btn-brown waves-effect waves-light m-l-10 btn-md"
-                                   data-toggle="tooltip" data-placement="bottom"
-                                   data-original-title="复制账号模板，只会复制账号基本信息和接口参数">
-                                    <i class="mdi mdi-file-document"></i> 复制账号模板
-                                </a>
                             </div>
                         </h4>
                     </div>

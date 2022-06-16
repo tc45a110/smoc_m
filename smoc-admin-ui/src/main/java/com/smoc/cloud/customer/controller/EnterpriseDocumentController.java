@@ -189,6 +189,7 @@ public class EnterpriseDocumentController {
             EnterpriseDocumentInfoValidator enterpriseDocumentInfoValidator = new EnterpriseDocumentInfoValidator();
             enterpriseDocumentInfoValidator.setId(UUID.uuid32());
             enterpriseDocumentInfoValidator.setEnterpriseId(data.getData().getEnterpriseId());
+            enterpriseDocumentInfoValidator.setBusinessType("TEXT_SMS");
             enterpriseDocumentInfoValidator.setDocStatus("2");//正常状态
             enterpriseDocumentInfoValidator.setEnterpriseName(data.getData().getEnterpriseName());
             enterpriseDocumentInfoValidator.setEnterpriseType(data.getData().getEnterpriseType());
@@ -275,6 +276,7 @@ public class EnterpriseDocumentController {
         }
 
         //保存数据
+        enterpriseDocumentInfoValidator.setSignSource("1");
         ResponseData data = enterpriseDocumentService.save(enterpriseDocumentInfoValidator, file, enterpriseData.getData().getEnterpriseName(),op);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());

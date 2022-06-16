@@ -110,9 +110,9 @@
                                     <th style="width:350px">签名/企业名称</th>
                                     <th style="width:120px">企业类型</th>
                                     <th style="width:130px">业务类型</th>
-                                    <th style="width:120px">信息类型</th>
-                                    <th style="width:160px">短链/签名合同链</th>
+                                    <th style="width:160px">签名合同链</th>
                                     <th style="width:150px">审核状态</th>
+                                    <th style="width:130px">数据来源</th>
                                     <th style="width:160px">创建人/创建日期</th>
                                     <th style="width:140px">操作</th>
                                 </tr>
@@ -136,9 +136,6 @@
                                                  class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;MULTI_SMS,btn btn-brown btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;5G_SMS,btn btn-primary btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-inverse btn-rounded btn-sm waves-effect waves-light"/>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <mpm:tag identity="infoType" th:value="${info.infoType}" show-type="label" key="code"/>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">[[${info.shortLink}]]<br>
                                         <i class="mdi mdi-comment-text" style="margin-left:5px"
                                            th:id="chain+${info.id}"
                                            th:onmouseover="chainTip([[${info.id}]])"
@@ -153,6 +150,10 @@
                                           <a class="btn btn-success btn-rounded btn-sm waves-effect waves-light" th:if="${info.docStatus eq '2'}">通过审核</a>
                                           <a class="btn btn-warning btn-rounded btn-sm waves-effect waves-light" th:if="${info.docStatus eq '3'}">待审核</a>
                                           <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light" th:if="${info.docStatus eq '1'}">拒绝</a>
+                                      </td>
+                                      <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
+                                          <span th:if="${info.signSource eq '1'}">管理端</span>
+                                          <span th:if="${info.signSource eq '2'}">自服务</span>
                                       </td>
                                       <td style="vertical-align: middle;line-height: 26px">[[${info.createdBy}]]<br>[[${info.createdTime}]]</td>
 
@@ -292,11 +293,8 @@
         format: 'YYYY-MM-DD',
         startDate: '[[${enterpriseDocumentInfoValidator.startDate}]]',
         endDate: '[[${enterpriseDocumentInfoValidator.endDate}]]',
-        minDate: '2019-01-01',
+        minDate: '2015-01-01',
         maxDate: '2080-12-31',
-        dateLimit: {
-            days: 720
-        },
         showDropdowns: true,
         showWeekNumbers: true,
         timePicker: false,

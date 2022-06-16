@@ -240,6 +240,7 @@ public class MessageSignController {
         }
 
         //保存数据
+        enterpriseDocumentInfoValidator.setSignSource("2");
         ResponseData data = messageSignService.save(enterpriseDocumentInfoValidator, file, user.getCorporation(),op,user.getId());
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
