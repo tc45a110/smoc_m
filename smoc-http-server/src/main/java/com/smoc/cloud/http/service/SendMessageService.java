@@ -118,7 +118,7 @@ public class SendMessageService {
 
             messageFormat.setId(Int64UUID.random());
             messageFormat.setAccountId(params.getAccount());
-            messageFormat.setMessageId(params.getOrderNo());
+            messageFormat.setMessageId(messageId);
             messageFormat.setTemplateId(params.getTemplateId());
             messageFormat.setAccountSrcId(params.getExtNumber());
             messageFormat.setAccountBusinessCode(params.getBusiness());
@@ -229,7 +229,7 @@ public class SendMessageService {
 
             messageFormat.setId(Int64UUID.random());
             messageFormat.setAccountId(params.getAccount());
-            messageFormat.setMessageId(params.getOrderNo());
+            messageFormat.setMessageId(messageId);
             messageFormat.setTemplateId(params.getTemplateId());
             messageFormat.setAccountSrcId(params.getExtNumber());
             messageFormat.setAccountBusinessCode(params.getBusiness());
