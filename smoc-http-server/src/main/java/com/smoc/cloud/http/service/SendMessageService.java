@@ -81,6 +81,9 @@ public class SendMessageService {
         //该批次手机号总量
         Integer phoneCount = 0;
 
+        //获取模板ID
+        String messageId = "TASK" + sequenceService.findSequence("TASK");
+
         for (int i = 0; i < length; i++) {
 
             if (StringUtils.isEmpty(params.getContent()[i])) {
@@ -137,7 +140,7 @@ public class SendMessageService {
         }
 
         //异步 批量保存短消息
-        this.saveMessageBatch(messages, messageCount, phoneCount, templateContent, params.getTemplateId(), params.getAccount(), params.getExtNumber());
+        this.saveMessageBatch(messageId,messages, messageCount, phoneCount, templateContent, params.getTemplateId(), params.getAccount(), params.getExtNumber());
 
         //log.info("[普通短信]:{}", new Gson().toJson(messages));
         Map<String, String> result = new HashMap<>();
@@ -186,6 +189,9 @@ public class SendMessageService {
         Integer messageCount = 0;
         //该批次手机号总量
         Integer phoneCount = 0;
+
+        //获取模板ID
+        String messageId = "TASK" + sequenceService.findSequence("TASK");
 
         for (int i = 0; i < length; i++) {
 
@@ -245,7 +251,7 @@ public class SendMessageService {
         }
 
         //异步 批量保存短消息
-        this.saveMessageBatch(messages, messageCount, phoneCount, "", params.getTemplateId(), params.getAccount(), params.getExtNumber());
+        this.saveMessageBatch(messageId,messages, messageCount, phoneCount, "", params.getTemplateId(), params.getAccount(), params.getExtNumber());
         Map<String, String> result = new HashMap<>();
         result.put("orderNo", params.getOrderNo());
         result.put("template", params.getTemplateId());
@@ -293,6 +299,9 @@ public class SendMessageService {
         //该批次手机号总量
         Integer phoneCount = 0;
 
+        //获取模板ID
+        String messageId = "TASK" + sequenceService.findSequence("TASK");
+
         for (int i = 0; i < length; i++) {
 
             if (StringUtils.isEmpty(params.getContent()[i])) {
@@ -327,7 +336,7 @@ public class SendMessageService {
 
             messageFormat.setId(Int64UUID.random());
             messageFormat.setAccountId(params.getAccount());
-            messageFormat.setMessageId(params.getOrderNo());
+            messageFormat.setMessageId(messageId);
             messageFormat.setTemplateId(params.getTemplateId());
             messageFormat.setAccountSrcId(params.getExtNumber());
             messageFormat.setAccountBusinessCode(params.getBusiness());
@@ -349,7 +358,7 @@ public class SendMessageService {
         }
 
         //异步 批量保存短消息
-        this.saveMessageBatch(messages, messageCount, phoneCount, templateContent, params.getTemplateId(), params.getAccount(), params.getExtNumber());
+        this.saveMessageBatch(messageId,messages, messageCount, phoneCount, templateContent, params.getTemplateId(), params.getAccount(), params.getExtNumber());
         Map<String, String> result = new HashMap<>();
         result.put("orderNo", params.getOrderNo());
         result.put("template", params.getTemplateId());
@@ -360,14 +369,14 @@ public class SendMessageService {
 
     /**
      * 异步 批量保存 待发短信
-     *
+     * @param messageId 任务id
      * @param messages     短消息
      * @param messageCount 发送短信数量
      * @param phoneCount   发送手机号数量
      */
     @Async
     @Transactional
-    public void saveMessageBatch(List<MessageFormat> messages, Integer messageCount, Integer phoneCount, String templateContent, String templateId, String account, String extNumber) {
+    public void saveMessageBatch(String messageId,List<MessageFormat> messages, Integer messageCount, Integer phoneCount, String templateContent, String templateId, String account, String extNumber) {
 
         if (phoneCount > 0) {
             //发送消息
@@ -377,10 +386,8 @@ public class SendMessageService {
         //保存订单任务
         if (phoneCount > 1) {
 
-            //获取模板ID
-            String id = "TASK" + sequenceService.findSequence("TASK");
             MessageHttpsTaskInfo taskInfo = new MessageHttpsTaskInfo();
-            taskInfo.setId(id);
+            taskInfo.setId(messageId);
             taskInfo.setTemplateId(templateId);
             taskInfo.setBusinessAccount(account);
             taskInfo.setMessageContent(templateContent);
