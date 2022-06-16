@@ -23,6 +23,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -102,4 +103,19 @@ public class ConfigRepairRuleService {
         return ResponseDataUtil.buildSuccess();
     }
 
+    public ResponseData findByBusinessId(String businessId) {
+        ConfigRepairRule entity = configRepairRuleRepository.findByBusinessIdAndRepairStatus(businessId,"1");
+
+        if (StringUtils.isEmpty(entity)) {
+            return ResponseDataUtil.buildSuccess();
+        }
+
+        ConfigRepairRuleValidator configRepairRuleValidator = new ConfigRepairRuleValidator();
+        BeanUtils.copyProperties(entity, configRepairRuleValidator);
+
+        //转换日期
+        configRepairRuleValidator.setCreatedTime(DateTimeUtils.getDateTimeFormat(entity.getCreatedTime()));
+
+        return ResponseDataUtil.buildSuccess(configRepairRuleValidator);
+    }
 }

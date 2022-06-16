@@ -11,169 +11,91 @@
     <link rel="stylesheet" th:href="@{/static/plugins/tooltipster/tooltipster.bundle.min.css}">
 
 </head>
-<body>
+<body style="background-color:#fff">
 <!-- Loader start 页面加载进度-->
 <th:block th:insert="fragments/common_fragments :: common_loader"/>
 <!-- Loader end -->
 
 <!-- Start content -->
-<div class="content" style="margin-top: 60px">
+<div class="content">
     <div class="container">
 
-        <!-- start row 页面导航-->
-        <div class="row">
-            <div class="col-xs-12">
-                <div class="page-title-box">
-                    <h4 class="page-title">账号失败补发配置</h4>
-                    <ol class="breadcrumb p-0 m-0">
-                        <li>
-                            业务办理
-                        </li>
-                        <li class="active">
-                            账号失败补发配置
-                        </li>
-                    </ol>
-                    <div class="clearfix"></div>
-                </div>
-            </div>
-        </div>
-        <!-- end row -->
+        <!-- start row  页面内容-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all" style="background-color:#fff">
+            <div class="col-md-12">
 
-        <!-- start row  页面数据-->
-        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
-            <div class="col-sm-12">
-                <div class="card-box">
-                    <div class="row" style="margin-top:10px">
-                        <div class="col-lg-12" style="margin-top:0px">
-                            <div class="panel panel-color panel-info">
-                                <div id="login-account-down" class="panel-heading"
-                                     style="display:block">
-                                    <h3 class="panel-title">
-                                        <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
-                                        主通道信息<small>&nbsp;根据发送号码范围和业务类型来匹配符合的失败补发通道</small>
-                                    </h3>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="p-20">
-                                            <div class="form-group">
-                                                <div class="row">
-                                                    <div class="col-md-3 form-group">
-                                                        <label>账号名称： <span style="color:#00acc1">[[${accountBasicInfoValidator.accountName}]]</span>
-                                                        </label>
-                                                    </div>
-                                                    <div class="col-md-3 form-group">
-                                                        <label>账号ID： <span style="color:#00acc1">[[${accountBasicInfoValidator.accountId}]]</span>
-                                                        </label>
-                                                    </div>
-                                                    <div class="col-md-3 form-group">
-                                                        <label>发送号码范围：<span style="color:#00acc1"><mpm:tag identity="carrier" show-type="label" key="code"
-                                                                                                           th:value="${accountBasicInfoValidator.carrier}"/></span>
-                                                        </label>
-                                                    </div>
-                                                    <div class="col-md-3 form-group">
-                                                        <label>信息分类：<span style="color:#00acc1"><mpm:tag identity="infoType" show-type="label" key="code"
-                                                                                                         th:value="${accountBasicInfoValidator.infoType}"/></span>
-                                                        </label>
-                                                    </div>
-                                                    <div class="col-md-3 form-group">
-                                                        <label>业务类型：<span style="color:#00acc1">
-                                                             <mpm:tag identity="businessType" show-type="button"
-                                                                      key="code" th:value="${accountBasicInfoValidator.businessType}"
-                                                                      class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;MULTI_SMS,btn btn-brown btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;5G_SMS,btn btn-primary btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-inverse btn-rounded btn-sm waves-effect waves-light"/>
-                                                            </span>
-                                                        </label>
-                                                    </div>
-                                                    <div class="col-md-3 form-group">
-                                                        <label>账号状态： <mpm:tag identity="accountStatus" show-type="button" key="code" th:value="${accountBasicInfoValidator.accountStatus}"
-                                                                              class="1,btn btn-info btn-rounded btn-sm waves-effect waves-light;2,btn btn-warning btn-rounded btn-sm waves-effect waves-light;3,btn btn-inverse btn-rounded btn-sm waves-effect waves-light;0,btn btn-danger btn-rounded btn-sm waves-effect waves-light;"/>
-                                                        </label>
-                                                    </div>
+                <div class="row">
+                    <div class="col-md-12 panel panel-color panel-info"
+                         style="padding-left:0px;padding-right:0px">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">失败补发通道列表</h3>
+                        </div>
 
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- end class p-20 -->
-                                    </div> <!-- end col -->
-                                    <!-- /col 8 -->
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table table-hover m-10" style="margin-top: -12px;">
+                                    <thead>
+                                    <tr>
+                                        <th>补发顺序</th>
+                                        <th>运营商</th>
+                                        <th>补发通道ID</th>
+                                        <th>补发通道名称</th>
+                                        <th>失败补发错误码</th>
+                                        <th>创建人</th>
+                                        <th>创建日期</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    <thead>
+                                    <tbody>
+                                <tr th:each="info:${channelRepairList}">
+                                    <td style="vertical-align: middle;line-height: 26px;">
+                                        [[${info.sort}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px;">
+                                        <mpm:tag identity="carrier" show-type="label" key="code"
+                                                 th:value="${info.carrier}"/>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px;">
+                                        [[${info.channelRepairId}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px;">[[${info.channelRepairName}]]</td>
+                                    <td style="vertical-align: middle;line-height: 26px;">
+                                        [[${info.repairCode}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px;">[[${info.createdBy}]]</td>
+                                    <td style="vertical-align: middle;line-height: 26px;">[[${info.createdTime}]]</td>
+                                    <td style="vertical-align: middle;line-height: 26px" >
+                                        <a sec:authorize-url="/account/channel/repair/deleteById/*" data-toggle="modal"
+                                           data-target="#confirm-modal" class="on-default remove-row"
+                                           th:onclick="confirmDelete([[${info.id}]],this)" style="padding-left: 5px;color: #f05050" title="删除"><i
+                                                style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
+                                    </td>
+                                </tr>
+                                    </tbody>
+
+                                </table>
+
+                                <hr>
+                                <div class="text-center" style="margin-bottom:20px">
+                                    <!--<a style="margin-left:10px" data-toggle="modal"
+                                       data-target="#confirm-add-user-modal"
+                                       class="btn btn-teal waves-effect waves-light">
+                                        添加补发通道</a>-->
+                                    <a style="margin-left:10px" sec:authorize-url="/account/channel/repair/add/*"
+                                       th:href="@{/account/channel/repair/add/{id}(id=${accountBasicInfoValidator.accountId})}"
+                                       class="btn btn-teal waves-effect waves-light">
+                                        添加补发通道</a>
+
                                 </div>
+
                             </div>
                         </div>
                     </div>
-
-                    <div class="row" th:remove="${#strings.isEmpty(error)}?none:all" style="margin-top:10px">
-                        <div class="col-md-12">
-
-
-                            <div class="panel panel-color panel-info">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">失败补发通道列表</h3>
-                                </div>
-                                <div class="panel-body">
-                                    <div class="table-responsive">
-                                        <table class="table table table-hover m-10" style="margin-top: -12px;">
-                                            <thead>
-                                            <tr>
-                                                <th>补发顺序</th>
-                                                <th>补发通道ID</th>
-                                                <th>补发通道名称</th>
-                                                <th>失败补发错误码</th>
-                                                <th>创建人</th>
-                                                <th>创建日期</th>
-                                                <th>操作</th>
-                                            </tr>
-                                            <thead>
-                                            <tbody>
-                                            <tr th:each="info:${channelRepairList}">
-                                                <td style="vertical-align: middle;line-height: 26px;">
-                                                    [[${info.sort}]]
-                                                </td>
-                                                <td style="vertical-align: middle;line-height: 26px;">
-                                                    [[${info.channelRepairId}]]
-                                                </td>
-                                                <td style="vertical-align: middle;line-height: 26px;">[[${info.channelRepairName}]]</td>
-                                                <td style="vertical-align: middle;line-height: 26px;">
-                                                    [[${info.repairCode}]]
-                                                </td>
-                                                <td style="vertical-align: middle;line-height: 26px;">[[${info.createdBy}]]</td>
-                                                <td style="vertical-align: middle;line-height: 26px;">[[${info.createdTime}]]</td>
-                                                <td style="vertical-align: middle;line-height: 26px" >
-                                                    <a sec:authorize-url="/account/channel/repair/deleteById/*" data-toggle="modal"
-                                                       data-target="#confirm-modal" class="on-default remove-row"
-                                                       th:onclick="confirmDelete([[${info.id}]],this)" style="padding-left: 5px;color: #f05050" title="删除"><i
-                                                            style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-
-                                        </table>
-
-                                        <hr>
-                                        <div class="text-center" style="margin-bottom:20px">
-                                            <a style="margin-left:10px" data-toggle="modal"
-                                               data-target="#confirm-add-user-modal"
-                                               class="btn btn-teal waves-effect waves-light">
-                                                添加补发通道</a>
-                                            <a sec:authorize-url="/account/channel/repair/list"
-                                               th:href="@{/account/channel/repair/list}" style="margin-left:10px"
-                                               class="btn btn-default waves-effect waves-light">
-                                                返回</a>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-                            </div>
-
-
-                        </div> <!-- end col -->
-                    </div>
-
                 </div>
-            </div>
 
+            </div> <!-- end col -->
         </div>
-        <!-- End row -->
+        <!-- end row -->
 
         <!-- start row  错误提示-->
         <th:block th:insert="fragments/common_fragments :: common_error"/>

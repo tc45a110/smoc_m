@@ -225,6 +225,7 @@ public class AccountController {
             accountBasicInfoValidator.setTransferType("0");//是否支持携号转网：默认否
             accountBasicInfoValidator.setAccountPriority("2");//账号优先级：默认中
             accountBasicInfoValidator.setAccountChannelType("ACCOUNT_CHANNEL_GROUP");//设置通道方式:默认通道组
+            accountBasicInfoValidator.setRepairStatus("0");//默认不补发
 
             //查询企业数据
             ResponseData<EnterpriseBasicInfoValidator> data = enterpriseService.findById(accountId);
@@ -241,6 +242,7 @@ public class AccountController {
                 accountBasicInfoValidator.setCarrier("INTL");
                 accountBasicInfoValidator.setBusinessType("INTERNATIONAL_SMS");
                 accountBasicInfoValidator.setTransferType("0");
+                accountBasicInfoValidator.setRepairStatus("0");//默认不补发
                 view.setViewName("customer/account/international/account_international_edit_base");
             }
 

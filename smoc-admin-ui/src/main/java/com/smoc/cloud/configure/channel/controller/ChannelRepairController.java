@@ -8,13 +8,16 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.configuate.validator.*;
+import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.configure.channel.service.ChannelRepairService;
 import com.smoc.cloud.configure.channel.service.ChannelService;
+import com.smoc.cloud.configure.channel.service.ConfigRepairRuleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -36,6 +39,9 @@ public class ChannelRepairController {
 
     @Autowired
     private ChannelRepairService channelRepairService;
+
+    @Autowired
+    private ConfigRepairRuleService configRepairRuleService;
 
     @Autowired
     private SystemUserLogService systemUserLogService;
@@ -97,6 +103,154 @@ public class ChannelRepairController {
     }
 
     /**
+     * 失败补发中心
+     * @param id
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/center/{id}", method = RequestMethod.GET)
+    public ModelAndView center(@PathVariable String id, HttpServletRequest request) {
+
+        ModelAndView view = new ModelAndView("configure/channel/channel_repair/channel_repair_center");
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
+
+        //查询通道数据是否存在
+        ResponseData<ChannelBasicInfoValidator> data = channelService.findById(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("channelBasicInfoValidator", data.getData());
+
+        return view;
+    }
+
+    /**
+     * 失败补发规则
+     * @param id
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/rule/edit/{id}", method = RequestMethod.GET)
+    public ModelAndView rule(@PathVariable String id, HttpServletRequest request) {
+
+        ModelAndView view = new ModelAndView("configure/channel/channel_repair/config_repair_rule");
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
+
+        //op操作标记，add表示添加，edit表示修改
+        view.addObject("op", "add");
+
+        //查询通道数据是否存在
+        ResponseData<ChannelBasicInfoValidator> data = channelService.findById(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        //查询规则
+        ResponseData<ConfigRepairRuleValidator> ruleData = configRepairRuleService.findByBusinessId(data.getData().getChannelId());
+        if (!ResponseCode.SUCCESS.getCode().equals(ruleData.getCode())) {
+            view.addObject("error", ruleData.getCode() + ":" + ruleData.getMessage());
+            return view;
+        }
+
+        //不为空代表是修改
+        if(!StringUtils.isEmpty(ruleData.getData())){
+            view.addObject("op", "edit");
+            view.addObject("configRepairRuleValidator", ruleData.getData());
+            view.addObject("channelBasicInfoValidator", data.getData());
+            return view;
+        }
+
+        //初始化数据
+        ConfigRepairRuleValidator configRepairRuleValidator = new ConfigRepairRuleValidator();
+        configRepairRuleValidator.setId(UUID.uuid32());
+        configRepairRuleValidator.setRepairCode("ALLFAILED");
+        configRepairRuleValidator.setRepairDate(60);
+        configRepairRuleValidator.setBusinessId(data.getData().getChannelId());
+        configRepairRuleValidator.setBusinessType("CHANNEL");
+
+        view.addObject("configRepairRuleValidator", configRepairRuleValidator);
+        view.addObject("channelBasicInfoValidator", data.getData());
+
+        return view;
+    }
+
+    /**
+     * 保存规则
+     *
+     * @return
+     */
+    @RequestMapping(value = "/rule/save/{op}", method = RequestMethod.POST)
+    public ModelAndView ruleSave(@ModelAttribute @Validated ConfigRepairRuleValidator configRepairRuleValidator, @PathVariable String op, HttpServletRequest request) {
+
+        ModelAndView view = new ModelAndView("configure/channel/channel_repair/config_repair_rule");
+
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(configRepairRuleValidator.getBusinessId());
+        if (!MpmValidatorUtil.validate(validator)) {
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
+
+        //查询通道是否存在
+        ResponseData<ChannelBasicInfoValidator> data = channelService.findById(configRepairRuleValidator.getBusinessId());
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        //初始化其他变量
+        if (!StringUtils.isEmpty(op) && "add".equals(op)) {
+            configRepairRuleValidator.setCreatedTime(DateTimeUtils.getDateTimeFormat(new Date()));
+            configRepairRuleValidator.setCreatedBy(user.getRealName());
+        } else if (!StringUtils.isEmpty(op) && "edit".equals(op)) {
+            configRepairRuleValidator.setUpdatedTime(new Date());
+            configRepairRuleValidator.setUpdatedBy(user.getRealName());
+        } else {
+            view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":" + ResponseCode.PARAM_LINK_ERROR.getMessage());
+            return view;
+        }
+
+        //保存操作
+        configRepairRuleValidator.setRepairStatus("1");
+        ResponseData repairData = configRepairRuleService.save(configRepairRuleValidator, op);
+        if (!ResponseCode.SUCCESS.getCode().equals(repairData.getCode())) {
+            view.addObject("error", repairData.getCode() + ":" + repairData.getMessage());
+            return view;
+        }
+
+        //保存操作记录
+        if (ResponseCode.SUCCESS.getCode().equals(repairData.getCode())) {
+            systemUserLogService.logsAsync("CHANNEL_BASE", configRepairRuleValidator.getBusinessId(), "add".equals(op) ? user.getRealName() : user.getRealName(), op, "add".equals(op) ? "添加失败补发规则" : "修改失败补发规则", JSON.toJSONString(configRepairRuleValidator));
+        }
+
+        //记录日志
+        log.info("[失败补发规则][补发配置][{}][{}]数据:{}", op, user.getUserName(), JSON.toJSONString(configRepairRuleValidator));
+
+        view.setView(new RedirectView("/configure/channel/repair/rule/edit/"+configRepairRuleValidator.getBusinessId(), true, false));
+        return view;
+    }
+
+    /**
      * 失败补发页面
      * @param id
      * @param request
@@ -122,6 +276,17 @@ public class ChannelRepairController {
         ResponseData<ChannelBasicInfoValidator> data = channelService.findById(id);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        //查询规则
+        ResponseData<ConfigRepairRuleValidator> ruleData = configRepairRuleService.findByBusinessId(data.getData().getChannelId());
+        if (!ResponseCode.SUCCESS.getCode().equals(ruleData.getCode())) {
+            view.addObject("error", ruleData.getCode() + ":" + ruleData.getMessage());
+            return view;
+        }
+        if(StringUtils.isEmpty(ruleData.getData())){
+            view.addObject("error", "先添加主通道失败补发规则！");
             return view;
         }
 

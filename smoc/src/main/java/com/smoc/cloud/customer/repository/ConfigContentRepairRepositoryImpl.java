@@ -36,12 +36,16 @@ public class ConfigContentRepairRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", t.AREA_CODES");
         sqlBuffer.append(", t.REPAIR_CONTENT");
         sqlBuffer.append(", t.CHANNEL_REPAIR_ID");
+        sqlBuffer.append(", t.MOBILE_NUM");
+        sqlBuffer.append(", t.MIN_CONTENT");
+        sqlBuffer.append(", t.MAX_CONTENT");
+        sqlBuffer.append(", t.REPAIR_STATUS");
         sqlBuffer.append(", e.ACCOUNT_NAME");
         sqlBuffer.append(", b.CHANNEL_NAME");
         sqlBuffer.append(", e.BUSINESS_TYPE");
         sqlBuffer.append("  from config_content_repair_rule t left join account_base_info e on t.ACCOUNT_ID = e.ACCOUNT_ID");
         sqlBuffer.append("  left join config_channel_basic_info b on t.CHANNEL_REPAIR_ID = b.CHANNEL_ID");
-        sqlBuffer.append("  where t.REPAIR_STATUS=1 ");
+        sqlBuffer.append("  where 1=1");
 
         List<Object> paramsList = new ArrayList<Object>();
 
@@ -78,6 +82,11 @@ public class ConfigContentRepairRepositoryImpl extends BasePageRepository {
         if (!StringUtils.isEmpty(qo.getChannelName())) {
             sqlBuffer.append(" and b.CHANNEL_NAME like ?");
             paramsList.add("%"+qo.getChannelName().trim()+"%");
+        }
+
+        if (!StringUtils.isEmpty(qo.getRepairStatus())) {
+            sqlBuffer.append(" and t.REPAIR_STATUS = ?");
+            paramsList.add(qo.getRepairStatus().trim());
         }
 
         sqlBuffer.append(" order by t.CREATED_TIME desc, t.id");

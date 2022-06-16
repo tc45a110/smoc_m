@@ -80,6 +80,36 @@
                                                   rows="5"   placeholder="输入内容"></textarea>
                                     </div>
 
+                                    <div class="form-group m-b-20">
+                                        <label>手机号段</label><span style="margin-left:15px;color:#F5707A">支持多个号段，请用 | 隔开</span>
+                                        <input type="text" class="form-control" th:field="*{mobileNum}"
+                                               data-parsley-length="[1,30]" autocomplete="off"
+                                               placeholder="失败补发错误码">
+                                    </div>
+
+                                    <div class="form-group m-b-20">
+                                        <div class="row">
+                                            <div class="col-sm-6 m-b-10">
+                                                <label>当短信字数小于</label>
+                                                <input type="text" class="form-control" th:field="*{minContent}"
+                                                       data-parsley-type="number" autocomplete="off"
+                                                       placeholder="短信字数小于">
+                                            </div>
+                                            <div class="col-sm-6 m-b-10">
+                                                <label>当短信字数大于</label>
+                                                <input type="text" class="form-control" th:field="*{maxContent}"
+                                                       data-parsley-type="number" autocomplete="off"
+                                                       placeholder="短信字数大于">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group m-b-20">
+                                        <label>有效状态<span class="text-danger">*</span>&nbsp;
+                                        </label>
+                                        <mpm:tag id="repairStatus" identity="isOrNo" name="repairStatus" show-type="radio" style="margin-top:0px"
+                                                 key="code" th:value="${configContentRepairRuleValidator.repairStatus}" required="true" title="是否"/>
+                                    </div>
 
                                     </div>
 

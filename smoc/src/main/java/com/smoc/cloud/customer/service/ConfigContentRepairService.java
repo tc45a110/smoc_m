@@ -111,7 +111,7 @@ public class ConfigContentRepairService {
             }
         }
 
-        entity.setCreatedTime(new Date());
+        entity.setCreatedTime(DateTimeUtils.getDateTimeFormat(configContentRepairRuleValidator.getCreatedTime()));
 
         //记录日志
         log.info("[内容失败补发配置][补发配置][{}]数据:{}",op, JSON.toJSONString(configContentRepairRuleValidator));

@@ -20,6 +20,7 @@ public class ConfigChannelRepairRule {
     private Date createdTime;
     private String updatedBy;
     private Date updatedTime;
+    private String carrier;
 
     @Id
     @Column(name = "ID")
@@ -139,6 +140,16 @@ public class ConfigChannelRepairRule {
 
     public void setUpdatedTime(Date updatedTime) {
         this.updatedTime = updatedTime;
+    }
+
+    @Basic
+    @Column(name = "CARRIER")
+    public String getCarrier() {
+        return carrier;
+    }
+
+    public void setCarrier(String carrier) {
+        this.carrier = carrier;
     }
 
     @Override

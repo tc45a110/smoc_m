@@ -109,6 +109,7 @@
                                     <th style="min-width:130px">业务账号/业务账号名称</th>
                                     <th style="min-width:90px">业务类型</th>
                                     <th style="min-width:90px">信息分类/发送运营商</th>
+                                    <th style="min-width:100px">补发规则</th>
                                     <th style="min-width:180px">补发通道</th>
                                     <th style="min-width:80px">操作</th>
                                 </tr>
@@ -133,7 +134,17 @@
                                        <mpm:tag identity="carrier" show-type="label" key="code"
                                                     th:value="${info.carrier}"/>
                                     </td>
+                                     <td style="vertical-align: middle;line-height: 26px" th:rowspan="${info.rowspan}">
+                                       <span th:if="${#strings.isEmpty(info.repairCode)}" style="color: red">未配置</span>
+                                       <span th:if="${not #strings.isEmpty(info.repairCode)}">错误码：[[${info.repairCode}]]</span><br>
+                                        <span th:if="${not #strings.isEmpty(info.repairDate)}">
+                                             生效时间：<mpm:tag identity="repairRuleData" show-type="label" key="code"
+                                                           th:value="${info.repairDate}"/>
+                                        </span>
+                                    </td>
                                     <td style="vertical-align: middle;line-height: 26px" th:each="channel:${info.repairList}" th:if="${not #lists.isEmpty(info.repairList) and channelStat.index ==0}">
+                                        <mpm:tag identity="carrier" show-type="label" key="code"
+                                                 th:value="${channel.carrier}"/>&nbsp;
                                         [[${channel.channelRepairId}]]：[[${channel.channelRepairName}]]&nbsp;<span th:if="${not #strings.isEmpty(channel.repairCode)}">错误码：[[${channel.repairCode}]]</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px" th:rowspan="${info.rowspan}" th:if="${#lists.isEmpty(info.repairList)}">
@@ -141,8 +152,8 @@
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px" th:rowspan="${info.rowspan}">
-                                        <a sec:authorize-url="/account/channel/repair/edit/*"
-                                           th:href="@{/account/channel/repair/edit/{id}(id=${info.accountId})}"
+                                        <a sec:authorize-url="/account/channel/repair/center/*"
+                                           th:href="@{/account/channel/repair/center/{id}(id=${info.accountId})}"
                                            data-toggle="tooltip" data-placement="left" title=""
                                            data-original-title="账号失败补发配置" style="padding-left: 3px;color: #29b6f6;">
                                             <i class="glyphicon glyphicon-cog"
@@ -152,6 +163,8 @@
                                     </tr>
                                     <tr th:class="${infoStat.odd} ? 'bgRow'" style="vertical-align: middle;line-height: 26px" th:each="channel:${info.repairList}"} th:if="${not #lists.isEmpty(info.repairList) and channelStat.index >0}">
                                         <td style="vertical-align: middle;line-height: 26px">
+                                            <mpm:tag identity="carrier" show-type="label" key="code"
+                                                     th:value="${channel.carrier}"/>&nbsp;
                                              [[${channel.channelRepairId}]]：[[${channel.channelRepairName}]]&nbsp;<span th:if="${not #strings.isEmpty(channel.repairCode)}">错误码：[[${channel.repairCode}]]</span>
                                         </td>
                                     </tr>

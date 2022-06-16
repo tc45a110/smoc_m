@@ -12,6 +12,7 @@ public class ConfigChannelRepairRuleValidator {
     private String channelId;
     private String businessId;
     private String businessType;
+    private String carrier;
     private String channelRepairId;
     private String repairCode;
     private String repairStatus;

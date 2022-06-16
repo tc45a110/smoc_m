@@ -28,6 +28,7 @@ public class AccountBasicInfo {
     private String updatedBy;
     private Date updatedTime;
     private String countryCode;
+    private String repairStatus;
 
     @Id
     @Column(name = "ACCOUNT_ID")
@@ -237,6 +238,16 @@ public class AccountBasicInfo {
 
     public void setIndustryType(String industryType) {
         this.industryType = industryType;
+    }
+
+    @Basic
+    @Column(name = "REPAIR_STATUS")
+    public String getRepairStatus() {
+        return repairStatus;
+    }
+
+    public void setRepairStatus(String repairStatus) {
+        this.repairStatus = repairStatus;
     }
 
     @Override

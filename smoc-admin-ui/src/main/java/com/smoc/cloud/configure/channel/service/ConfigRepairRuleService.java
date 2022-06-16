@@ -56,4 +56,19 @@ public class ConfigRepairRuleService {
         }
     }
 
+    /**
+     * 根据业务ID查询
+     * @param channelId
+     * @return
+     */
+    public ResponseData<ConfigRepairRuleValidator> findByBusinessId(String channelId) {
+        try {
+            ResponseData<ConfigRepairRuleValidator> data = this.configRepairRuleFeignClient.findByBusinessId(channelId);
+            return data;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
 }

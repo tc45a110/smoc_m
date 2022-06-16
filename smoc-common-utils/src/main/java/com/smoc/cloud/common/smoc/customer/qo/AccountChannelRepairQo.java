@@ -25,6 +25,9 @@ public class AccountChannelRepairQo {
 
     private String rowspan;
 
+    private String repairCode;
+    private String repairDate;
+
     private List<ConfigChannelRepairRuleValidator> repairList = new ArrayList<>();
 
 }

@@ -12,7 +12,7 @@ public class ConfigRepairRule {
     private String businessId;
     private String businessType;
     private String repairCode;
-    private int repairData;
+    private int repairDate;
     private String repairStatus;
     private String createdBy;
     private Date createdTime;
@@ -60,13 +60,13 @@ public class ConfigRepairRule {
     }
 
     @Basic
-    @Column(name = "REPAIR_DATA")
-    public int getRepairData() {
-        return repairData;
+    @Column(name = "REPAIR_DATE")
+    public int getRepairDate() {
+        return repairDate;
     }
 
-    public void setRepairData(int repairData) {
-        this.repairData = repairData;
+    public void setRepairDate(int repairDate) {
+        this.repairDate = repairDate;
     }
 
     @Basic
@@ -124,7 +124,7 @@ public class ConfigRepairRule {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ConfigRepairRule that = (ConfigRepairRule) o;
-        return repairData == that.repairData &&
+        return repairDate == that.repairDate &&
                 Objects.equals(id, that.id) &&
                 Objects.equals(businessId, that.businessId) &&
                 Objects.equals(businessType, that.businessType) &&
@@ -138,6 +138,6 @@ public class ConfigRepairRule {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, businessId, businessType, repairCode, repairData, repairStatus, createdBy, createdTime, updatedBy, updatedTime);
+        return Objects.hash(id, businessId, businessType, repairCode, repairDate, repairStatus, createdBy, createdTime, updatedBy, updatedTime);
     }
 }

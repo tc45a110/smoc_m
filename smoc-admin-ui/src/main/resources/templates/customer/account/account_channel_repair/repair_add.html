@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+</head>
+<body style="background-color:#fff">
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content">
+    <div class="container">
+
+        <!-- start row  页面内容-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all" style="background-color:#fff">
+            <div class="col-md-12">
+                <form id="submit_form" th:action="@{/account/channel/repair/save/add}" th:object="${configChannelRepairRuleValidator}"
+                      method="post" data-parsley-validate="">
+                    <div class="row">
+                        <div class="col-md-12 panel panel-color panel-info"
+                             style="padding-left:0px;padding-right:0px">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">新建失败补发通道</h3>
+                            </div>
+
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="p-20">
+                                            <div class="form-group">
+                                                <label>运营商<span class="text-danger">*</span>&nbsp;</label>
+                                                <select name="carrier" data-style="btn-default" required onchange="isCarrier(this.value)"
+                                                        class="selectpicker  form-control" tabindex="-98" data-live-search="true">
+                                                    <option data-icon="mdi mdi-key-plus" value="">--请选择运营商--</option>
+                                                    <option data-icon="mdi mdi-key-plus" th:each="carrier:${carrierList}"
+                                                            th:value="${carrier}"><mpm:tag identity="carrier" show-type="label" key="code"
+                                                                                           th:value="${carrier}"/>
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>补发通道<span class="text-danger">*</span>&nbsp;</label>
+                                                <select name="channelRepairId" data-style="btn-default" required id="problemTypeId"
+                                                        class="selectpicker  form-control" tabindex="-98" data-live-search="true">
+                                                    <option data-icon="mdi mdi-key-plus" value="">--请选择补发通道--</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>失败补发错误码&nbsp;</label>
+                                                <input type="text" class="form-control" th:field="*{repairCode}"
+                                                       data-parsley-length="[1,30]" autocomplete="off"
+                                                       placeholder="失败补发错误码">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>补发顺序<span class="text-danger">*</span></label>
+                                                <input class="form-control" type="text"
+                                                       th:field="*{sort}" required="" data-parsley-type="number" autocomplete="off">
+                                            </div>
+
+                                        </div>
+                                        <!-- end class p-20 -->
+                                    </div> <!-- end col -->
+                                </div>
+
+                                <div class="text-center" style="margin-bottom:20px">
+                                    <input type="hidden" th:field="*{businessId}" id="accountId">
+                                    <button sec:authorize-url="/account/channel/repair/save/*" type="submit" class="btn btn-teal waves-effect waves-light">提交
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- end form -->
+            </div> <!-- end col -->
+        </div>
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<th:block th:insert="fragments/common_fragments :: common_submit_form"/>
+<script>
+
+    function isCarrier(value){
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+
+        var channelName ="--请选择补发通道--";
+        $("#problemTypeId").html("<option value=''>"+channelName+"</option>");
+        $('#problemTypeId').selectpicker('refresh');
+        //render方法强制重新渲染引导程序 - 选择ui。
+        $('#problemTypeId').selectpicker('render');
+        $.ajax({
+            url : contextPath + "/account/channel/repair/findChannel/" + $("#accountId").val()+"/"+ value,
+            success : function(data) {
+                if(""==data){return}
+                var _html="<option value=''>--请选择补发通道--</option>";
+                for(var i=0; i<data.length; i++){
+                    var channelName = data[i].channelName;
+                    var channelId = data[i].channelId;
+                    if(null==channelName || ""==channelName){
+                        channelName = "";
+                    }
+                    _html=_html+"<option value='"+channelId+"'>"+channelName+"</option>";
+                };
+                $("#problemTypeId").html(_html);
+                $('#problemTypeId').selectpicker('refresh');
+                //render方法强制重新渲染引导程序 - 选择ui。
+                $('#problemTypeId').selectpicker('render');
+            }
+        });
+
+    }
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+</script>
+</body>
+</html>

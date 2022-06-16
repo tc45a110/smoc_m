@@ -24,6 +24,9 @@ public class ConfigContentRepairRuleValidator {
     private String createdTime;
     private String updatedBy;
     private Date updatedTime;
+    private String mobileNum;
+    private Integer minContent;
+    private Integer maxContent;
 
     private String accountName;
     private String channelName;

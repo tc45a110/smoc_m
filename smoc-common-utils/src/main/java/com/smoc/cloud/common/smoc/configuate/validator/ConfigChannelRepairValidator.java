@@ -27,5 +27,8 @@ public class ConfigChannelRepairValidator {
 
     private String flag;
 
+    private String repairCode;
+    private String repairDate;
+
     private List<ConfigChannelRepairRuleValidator> repairList = new ArrayList<>();
 }

@@ -13,7 +13,7 @@ public class ConfigRepairRuleValidator {
     private String businessId;
     private String businessType;
     private String repairCode;
-    private int repairData;
+    private int repairDate;
     private String repairStatus;
     private String createdBy;
     private String createdTime;

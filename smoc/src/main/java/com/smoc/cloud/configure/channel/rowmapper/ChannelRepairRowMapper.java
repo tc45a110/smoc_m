@@ -19,6 +19,8 @@ public class ChannelRepairRowMapper implements RowMapper<ConfigChannelRepairVali
         qo.setChannelName(resultSet.getString("CHANNEL_NAME"));
         qo.setCarrier(resultSet.getString("CARRIER"));
         qo.setBusinessType(resultSet.getString("BUSINESS_TYPE"));
+        qo.setRepairCode(resultSet.getString("REPAIR_CODE"));
+        qo.setRepairDate(resultSet.getString("REPAIR_DATE"));
 
         return qo;
     }

@@ -21,7 +21,7 @@ public interface ConfigRepairRuleFeignClient {
      * @param id
      * @return
      */
-    @RequestMapping(value = "/configure/repair/findById/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/configure/repair/rule/findById/{id}", method = RequestMethod.GET)
     ResponseData<ConfigRepairRuleValidator> findById(@PathVariable String id);
 
 
@@ -31,7 +31,14 @@ public interface ConfigRepairRuleFeignClient {
      * @param op
      * @return
      */
-    @RequestMapping(value = "/configure/repair/save/{op}", method = RequestMethod.POST)
+    @RequestMapping(value = "/configure/repair/rule/save/{op}", method = RequestMethod.POST)
     ResponseData save(@RequestBody ConfigRepairRuleValidator configRepairRuleValidator, @PathVariable String op);
 
+    /**
+     * 根据业务ID查询
+     * @param channelId
+     * @return
+     */
+    @RequestMapping(value = "/configure/repair/rule/findByBusinessId/{channelId}", method = RequestMethod.GET)
+    ResponseData<ConfigRepairRuleValidator> findByBusinessId(@PathVariable String channelId);
 }

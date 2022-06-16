@@ -210,6 +210,10 @@ public class AccountContentRepairController {
         configContentRepairRuleValidator.setId(UUID.uuid32());
         configContentRepairRuleValidator.setAccountId(data.getData().getAccountId());
         configContentRepairRuleValidator.setCarrier(carrier);
+        configContentRepairRuleValidator.setRepairStatus("1");
+        if(!"INTL".equals(carrier)){
+            configContentRepairRuleValidator.setAreaCodes("ALL");
+        }
 
         view.addObject("channelList", channelList.getData());
         view.addObject("configContentRepairRuleValidator", configContentRepairRuleValidator);
@@ -311,7 +315,6 @@ public class AccountContentRepairController {
         //保存数据
         configContentRepairRuleValidator.setBusinessId(configContentRepairRuleValidator.getAccountId());
         configContentRepairRuleValidator.setBusinessType("ACCOUNT");
-        configContentRepairRuleValidator.setRepairStatus("1");
         ResponseData data = accountContentRepairService.save(configContentRepairRuleValidator, op);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());

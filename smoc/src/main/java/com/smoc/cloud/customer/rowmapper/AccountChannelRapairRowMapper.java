@@ -22,6 +22,9 @@ public class AccountChannelRapairRowMapper implements RowMapper<AccountChannelRe
         qo.setCarrier(resultSet.getString("CARRIER"));
         qo.setBusinessType(resultSet.getString("BUSINESS_TYPE"));
         qo.setInfoType(resultSet.getString("INFO_TYPE"));
+        qo.setRepairCode(resultSet.getString("REPAIR_CODE"));
+        qo.setRepairDate(resultSet.getString("REPAIR_DATE"));
+
         return qo;
     }
 }

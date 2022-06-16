@@ -29,7 +29,9 @@ public class ChannelRepairRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", t.CHANNEL_NAME");
         sqlBuffer.append(", t.CARRIER");
         sqlBuffer.append(", t.BUSINESS_TYPE");
-        sqlBuffer.append("  from config_channel_basic_info t ");
+        sqlBuffer.append(", a.REPAIR_CODE");
+        sqlBuffer.append(", a.REPAIR_DATE");
+        sqlBuffer.append("  from config_channel_basic_info t left join config_repair_rule a on t.CHANNEL_ID = a.BUSINESS_ID ");
         sqlBuffer.append("  where 1=1 ");
 
         List<Object> paramsList = new ArrayList<Object>();
@@ -90,6 +92,8 @@ public class ChannelRepairRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", t.CHANNEL_NAME");
         sqlBuffer.append(", t.CARRIER");
         sqlBuffer.append(", t.BUSINESS_TYPE");
+        sqlBuffer.append(", ''REPAIR_CODE");
+        sqlBuffer.append(", ''REPAIR_DATE");
         sqlBuffer.append("  from config_channel_basic_info t ");
         if("CHANNEL".equals(qo.getFlag())){
             sqlBuffer.append("  where t.CHANNEL_ID!='"+qo.getChannelId()+"' and t.CHANNEL_STATUS='001' ");
@@ -124,6 +128,7 @@ public class ChannelRepairRepositoryImpl extends BasePageRepository {
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");
         sqlBuffer.append("  t.ID");
+        sqlBuffer.append(", t.CARRIER");
         sqlBuffer.append(", t.CHANNEL_ID");
         sqlBuffer.append(", t.BUSINESS_ID");
         sqlBuffer.append(", t.BUSINESS_TYPE");
@@ -145,7 +150,7 @@ public class ChannelRepairRepositoryImpl extends BasePageRepository {
         paramsList.add( channelId.trim());
         paramsList.add( businessType.trim());
 
-        sqlBuffer.append(" order by t.SORT ,t.id");
+        sqlBuffer.append(" order by t.SORT ,t.CARRIER,t.id");
 
         //根据参数个数，组织参数值
         Object[] params = new Object[paramsList.size()];
@@ -172,9 +177,12 @@ public class ChannelRepairRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", t.BUSINESS_TYPE");
         sqlBuffer.append(", t.CARRIER");
         sqlBuffer.append(", t.INFO_TYPE");
+        sqlBuffer.append(", a.REPAIR_CODE");
+        sqlBuffer.append(", a.REPAIR_DATE");
         sqlBuffer.append(", e.ENTERPRISE_NAME");
         sqlBuffer.append("  from account_base_info t left join enterprise_basic_info e on t.ENTERPRISE_ID = e.ENTERPRISE_ID");
-        sqlBuffer.append("  where 1=1 ");
+        sqlBuffer.append("  left join config_repair_rule a on t.ACCOUNT_ID = a.BUSINESS_ID ");
+        sqlBuffer.append("  where t.REPAIR_STATUS=1 ");
 
         List<Object> paramsList = new ArrayList<Object>();
 

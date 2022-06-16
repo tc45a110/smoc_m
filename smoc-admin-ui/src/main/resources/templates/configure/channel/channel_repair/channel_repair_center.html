@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"  xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
+    <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
+    <!-- Tooltipster css -->
+    <link rel="stylesheet" th:href="@{/static/plugins/tooltipster/tooltipster.bundle.min.css}">
+
+</head>
+<body>
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <!-- start row 页面导航-->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">通道失败补发配置</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            通道管理
+                        </li>
+                        <li class="active">
+                            通道失败补发配置
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  页面数据-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <div class="row" style="margin-top:10px">
+                        <div class="col-lg-12" style="margin-top:0px">
+                            <div class="panel panel-color panel-info">
+                                <div id="login-account-down" class="panel-heading"
+                                     style="display:block">
+                                    <h3 class="panel-title">
+                                        <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
+                                        主通道信息<small>&nbsp;根据发送号码范围和业务类型来匹配符合的失败补发通道</small>
+                                    </h3>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="p-20">
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col-md-3 form-group">
+                                                        <label>通道名称： <span style="color:#00acc1">[[${channelBasicInfoValidator.channelName}]]</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-md-3 form-group">
+                                                        <label>通道ID： <span style="color:#00acc1">[[${channelBasicInfoValidator.channelId}]]</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-md-3 form-group">
+                                                        <label>发送号码范围：<span style="color:#00acc1"><mpm:tag identity="carrier" show-type="label" key="code"
+                                                                                                           th:value="${channelBasicInfoValidator.carrier}"/></span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-md-3 form-group">
+                                                        <label>信息分类：<span style="color:#00acc1"><mpm:tag identity="infoType" show-type="label" key="code"
+                                                                                                         th:value="${channelBasicInfoValidator.infoType}"/></span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-md-3 form-group">
+                                                        <label>业务类型：<span style="color:#00acc1">
+                                                             <mpm:tag identity="businessType" show-type="button"
+                                                                      key="code" th:value="${channelBasicInfoValidator.businessType}"
+                                                                      class="TEXT_SMS,btn btn-teal waves-effect waves-light btn-xs;MULTI_SMS,btn btn-brown waves-effect waves-light btn-xs;MMS,btn btn-info waves-effect waves-light btn-xs;5G_SMS,btn btn-primary waves-effect waves-light btn-xs;INTERNATIONAL_SMS,btn btn-purple waves-effect waves-light btn-xs;BLACK_SERVICE,btn btn-inverse waves-effect waves-light btn-xs"/>
+                                                        </span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-md-3 form-group">
+                                                        <label>通道状态：<mpm:tag identity="channelStatus" show-type="button" key="code"
+                                                                             th:value="${channelBasicInfoValidator.channelStatus}"
+                                                                             class="001,btn btn-success waves-effect waves-light btn-xs;002,btn btn-orange waves-effect waves-light btn-xs;003,btn btn-brown waves-effect waves-light btn-xs;004,btn btn-pink waves-effect waves-light btn-xs;005,btn btn-inverse waves-effect waves-light btn-xs;006,btn btn-danger waves-effect waves-light btn-xs;"/>
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-md-3 form-group">
+                                                        <label>通道运行状态：<mpm:tag identity="channelLinkStatus" show-type="label" key="code"
+                                                                               th:value="${channelBasicInfoValidator.channelRunStatus}"/>
+                                                        </label>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- end class p-20 -->
+                                    </div> <!-- end col -->
+                                    <!-- /col 8 -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card-box">
+                                <ul class="nav nav-pills m-b-30 pull-left">
+                                    <li class="active" id="tab1"><a onclick="active('1')"
+                                                                    sec:authorize-url="/configure/channel/repair/rule/edit/*"
+                                                                    th:href="@{/configure/channel/repair/rule/edit/{id}(id=${channelBasicInfoValidator.channelId})}"
+                                                                    th:target="tab-content"><i
+                                            class="mdi mdi-star" style="margin-right:5px;color:#f35864"></i>通道补发规则</a>
+                                    </li>
+                                    <li class="" id="tab2"><a onclick="active('2')" id="a2"
+                                                              sec:authorize-url="/configure/channel/repair/edit/*"
+                                                              th:href="@{/configure/channel/repair/edit/{id}(id=${channelBasicInfoValidator.channelId})}"
+                                                              th:target="tab-content"><i class="mdi mdi-star"
+                                                                                         style="margin-right:5px;color:#f35864"></i>补发通道列表</a>
+                                    </li>
+
+
+                                </ul>
+                                <div class="tab-cotent" style="background-color:#fff">
+                                    <iframe name="tab-content" id="tab-content" th:frameBorder="0"
+                                            th:scrolling="auto"
+                                            th:src="@{/configure/channel/repair/rule/edit/{id}(id=${channelBasicInfoValidator.channelId})}"
+                                            style="padding: 0px; width: 100%; height: 1000px;background-color:#fff"></iframe>
+                                </div>
+                            </div>
+                        </div> <!-- end col -->
+                    </div>
+                    <!-- end row -->
+
+
+
+                </div>
+            </div>
+
+        </div>
+        <!-- End row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+    </div> <!-- container -->
+</div> <!-- content -->
+
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<th:block th:insert="fragments/common_fragments :: common_submit_form"/>
+<!-- Tooltipster js -->
+<script th:src="@{/static/plugins/tooltipster/tooltipster.bundle.min.js}"></script>
+<script>
+
+    function active(tab) {
+        for(var num = 1;num<3;num++){
+            $('#tab'+num).removeClass("active");
+        }
+        $('#tab'+tab).attr("class","active");
+    }
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+</script>
+</body>
+</html>

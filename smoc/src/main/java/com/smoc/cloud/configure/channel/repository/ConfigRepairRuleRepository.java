@@ -15,4 +15,6 @@ public interface ConfigRepairRuleRepository extends CrudRepository<ConfigRepairR
 
 
     List<ConfigRepairRule> findByBusinessIdAndBusinessTypeAndRepairStatus(String businessId, String businessType, String s);
+
+    ConfigRepairRule findByBusinessIdAndRepairStatus(String businessId, String status);
 }

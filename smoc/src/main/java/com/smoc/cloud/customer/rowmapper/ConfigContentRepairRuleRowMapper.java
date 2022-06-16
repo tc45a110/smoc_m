@@ -24,6 +24,10 @@ public class ConfigContentRepairRuleRowMapper implements RowMapper<ConfigContent
         qo.setChannelRepairId(resultSet.getString("CHANNEL_REPAIR_ID"));
         qo.setChannelName(resultSet.getString("CHANNEL_NAME"));
         qo.setBusinessType(resultSet.getString("BUSINESS_TYPE"));
+        qo.setMobileNum(resultSet.getString("MOBILE_NUM"));
+        qo.setMinContent(resultSet.getInt("MIN_CONTENT"));
+        qo.setMaxContent(resultSet.getInt("MAX_CONTENT"));
+        qo.setRepairStatus(resultSet.getString("REPAIR_STATUS"));
 
         return qo;
     }

@@ -27,6 +27,7 @@ public class ChannelRepairRuleRowMapper implements RowMapper<ConfigChannelRepair
         qo.setCreatedBy(resultSet.getString("CREATED_BY"));
         qo.setCreatedTime(resultSet.getString("CREATED_TIME"));
         qo.setSort(resultSet.getInt("SORT"));
+        qo.setCarrier(resultSet.getString("CARRIER"));
 
         return qo;
     }

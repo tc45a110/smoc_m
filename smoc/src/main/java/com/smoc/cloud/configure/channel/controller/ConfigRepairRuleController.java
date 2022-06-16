@@ -68,4 +68,22 @@ public class ConfigRepairRuleController {
         return data;
     }
 
+    /**
+     * 根据业务ID查询
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/findByBusinessId/{id}", method = RequestMethod.GET)
+    public ResponseData findByBusinessId(@PathVariable String id) {
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(validator));
+        }
+
+        ResponseData data = configRepairRuleService.findByBusinessId(id);
+        return data;
+    }
 }

@@ -22,6 +22,10 @@ public class ConfigContentRepairRule {
     private String updatedBy;
     private Date updatedTime;
 
+    private String mobileNum;
+    private Integer minContent;
+    private Integer maxContent;
+
     @Id
     @Column(name = "ID")
     public String getId() {
@@ -160,6 +164,36 @@ public class ConfigContentRepairRule {
 
     public void setUpdatedTime(Date updatedTime) {
         this.updatedTime = updatedTime;
+    }
+
+    @Basic
+    @Column(name = "MOBILE_NUM")
+    public String getMobileNum() {
+        return mobileNum;
+    }
+
+    public void setMobileNum(String mobileNum) {
+        this.mobileNum = mobileNum;
+    }
+
+    @Basic
+    @Column(name = "MIN_CONTENT")
+    public Integer getMinContent() {
+        return minContent;
+    }
+
+    public void setMinContent(Integer minContent) {
+        this.minContent = minContent;
+    }
+
+    @Basic
+    @Column(name = "MAX_CONTENT")
+    public Integer getMaxContent() {
+        return maxContent;
+    }
+
+    public void setMaxContent(Integer maxContent) {
+        this.maxContent = maxContent;
     }
 
     @Override
