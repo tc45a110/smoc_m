@@ -4,6 +4,7 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
+import com.smoc.cloud.common.smoc.customer.validator.AccountInterfaceInfoValidator;
 import com.smoc.cloud.common.smoc.message.MessageAccountValidator;
 import com.smoc.cloud.common.smoc.message.model.StatisticMessageSend;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -52,4 +53,12 @@ public interface BusinessAccountFeignClient {
      */
     @RequestMapping(value = "/account/messageAccountInfoList", method = RequestMethod.POST)
     ResponseData<PageList<MessageAccountValidator>> messageAccountInfoList(@RequestBody PageParams<MessageAccountValidator> params);
+
+    /**
+     * 查询账号接口信息
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/account/interface/findById/{id}", method = RequestMethod.GET)
+    ResponseData<AccountInterfaceInfoValidator> findAccountInterfaceByAccountId(@PathVariable String id);
 }

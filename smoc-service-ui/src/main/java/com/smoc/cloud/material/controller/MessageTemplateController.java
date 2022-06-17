@@ -13,6 +13,7 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
+import com.smoc.cloud.common.smoc.customer.validator.AccountInterfaceInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseDocumentInfoValidator;
 import com.smoc.cloud.common.smoc.template.AccountTemplateInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
@@ -254,9 +255,9 @@ public class MessageTemplateController {
             FieldError err = new FieldError("签名", "signName", "签名不能为空");
             result.addError(err);
         }
-        if(StringUtils.isEmpty(accountTemplateInfoValidator.getInfoType())){
+        if(StringUtils.isEmpty(accountTemplateInfoValidator.getBusinessAccount())){
             // 提交前台错误提示
-            FieldError err = new FieldError("信息分类", "infoType", "信息分类不能为空");
+            FieldError err = new FieldError("业务账号", "businessAccount", "业务账号不能为空");
             result.addError(err);
         }
 
@@ -293,7 +294,21 @@ public class MessageTemplateController {
             }
         }
 
+        //查询账号
+        ResponseData<AccountBasicInfoValidator> account = businessAccountService.findById(accountTemplateInfoValidator.getBusinessAccount());
+        if (ResponseCode.SUCCESS.getCode().equals(account.getCode())) {
+            accountTemplateInfoValidator.setInfoType(account.getData().getInfoType());
+        }
+
+        //默认需要审核
         accountTemplateInfoValidator.setTemplateStatus("3");
+        //查询账号接口信息
+        ResponseData<AccountInterfaceInfoValidator> accountInterfaceInfo = businessAccountService.findAccountInterfaceByAccountId(accountTemplateInfoValidator.getBusinessAccount());
+        if (ResponseCode.SUCCESS.getCode().equals(accountInterfaceInfo.getCode()) && !StringUtils.isEmpty(accountInterfaceInfo.getData())) {
+            if("0".equals(accountInterfaceInfo.getData().getExecuteCheck())){
+                accountTemplateInfoValidator.setTemplateStatus("2");
+            }
+        }
 
         //初始化其他变量
         if (!StringUtils.isEmpty(op) && "add".equals(op)) {

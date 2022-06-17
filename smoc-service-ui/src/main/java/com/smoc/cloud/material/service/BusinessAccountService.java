@@ -5,6 +5,7 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
+import com.smoc.cloud.common.smoc.customer.validator.AccountInterfaceInfoValidator;
 import com.smoc.cloud.common.smoc.message.MessageAccountValidator;
 import com.smoc.cloud.common.smoc.message.model.StatisticMessageSend;
 import com.smoc.cloud.material.remote.BusinessAccountFeignClient;
@@ -83,6 +84,21 @@ public class BusinessAccountService {
         try {
             ResponseData<PageList<MessageAccountValidator>> pageList = this.businessAccountFeignClient.messageAccountInfoList(params);
             return pageList;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 查询账号接口信息
+     * @param businessAccount
+     * @return
+     */
+    public ResponseData<AccountInterfaceInfoValidator> findAccountInterfaceByAccountId(String businessAccount) {
+        try {
+            ResponseData<AccountInterfaceInfoValidator> data = this.businessAccountFeignClient.findAccountInterfaceByAccountId(businessAccount);
+            return data;
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseDataUtil.buildError(e.getMessage());
