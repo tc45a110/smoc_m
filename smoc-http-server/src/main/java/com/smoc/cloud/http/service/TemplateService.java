@@ -7,6 +7,8 @@ import com.smoc.cloud.common.http.server.message.request.TemplateAddRequestParam
 import com.smoc.cloud.common.http.server.message.request.TemplateStatusRequestParams;
 import com.smoc.cloud.common.http.server.multimedia.request.MultimediaTemplateAddParams;
 import com.smoc.cloud.common.http.server.multimedia.request.MultimediaTemplateModel;
+import com.smoc.cloud.common.redis.RedisConstant;
+import com.smoc.cloud.common.redis.RedisModel;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
@@ -19,6 +21,7 @@ import com.smoc.cloud.http.repository.AccountTemplateInfoRepository;
 import com.smoc.cloud.http.utils.FileBASE64Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,6 +49,9 @@ public class TemplateService {
     @Resource
     private AccountTemplateInfoRepository accountTemplateInfoRepository;
 
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
+
     /**
      * 添加普通短信模板
      *
@@ -70,8 +76,15 @@ public class TemplateService {
         entity.setTemplateFlag(params.getTemplateType());
         entity.setTemplateAgreementType("HTTP");
 
-        //模板状态 2 表示待审核
-        entity.setTemplateStatus("3");
+        //取账户参数
+        //redis 查询  模板状态  3表示待审核 2表示通过审核
+        RedisModel redisModel = (RedisModel) redisTemplate.opsForValue().get(RedisConstant.HTTP_SERVER_KEY + params.getAccount());
+        if(null != redisModel || "0".equals(redisModel.getNoCheck())){
+            entity.setTemplateStatus("2");
+        }else{
+            entity.setTemplateStatus("3");
+        }
+
         entity.setCreatedBy("API");
         entity.setCreatedTime(DateTimeUtils.getNowDateTime());
 
@@ -186,8 +199,14 @@ public class TemplateService {
 
         entity.setMmAttchment(new Gson().toJson(multimediaFormats));
 
-        //模板状态 2 表示待审核
-        entity.setTemplateStatus("3");
+        //取账户参数
+        //redis 查询  模板状态  3表示待审核 2表示通过审核
+        RedisModel redisModel = (RedisModel) redisTemplate.opsForValue().get(RedisConstant.HTTP_SERVER_KEY + params.getAccount());
+        if(null != redisModel || "0".equals(redisModel.getNoCheck())){
+            entity.setTemplateStatus("2");
+        }else{
+            entity.setTemplateStatus("3");
+        }
         entity.setCreatedBy("API");
         entity.setCreatedTime(DateTimeUtils.getNowDateTime());
         //异步保存
@@ -225,8 +244,14 @@ public class TemplateService {
         entity.setTemplateFlag(params.getTemplateType());
         entity.setTemplateAgreementType("HTTP");
 
-        //模板状态 2 表示待审核
-        entity.setTemplateStatus("3");
+        //取账户参数
+        //redis 查询  模板状态  3表示待审核 2表示通过审核
+        RedisModel redisModel = (RedisModel) redisTemplate.opsForValue().get(RedisConstant.HTTP_SERVER_KEY + params.getAccount());
+        if(null != redisModel || "0".equals(redisModel.getNoCheck())){
+            entity.setTemplateStatus("2");
+        }else{
+            entity.setTemplateStatus("3");
+        }
         entity.setCreatedBy("API");
         entity.setCreatedTime(DateTimeUtils.getNowDateTime());
 

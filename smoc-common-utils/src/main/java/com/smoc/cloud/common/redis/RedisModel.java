@@ -29,5 +29,8 @@ public class RedisModel {
     //客户鉴权IP
     private String ips;
 
+    //模板免审
+    private String noCheck;
+
 
 }

@@ -141,6 +141,7 @@ public class AccountInterfaceService {
             redisModel.setSubmitRate(entity.getMaxSubmitSecond());
             redisModel.setSendRate(entity.getMaxSendSecond());
             redisModel.setIps(entity.getIdentifyIp());
+            redisModel.setNoCheck(entity.getExecuteCheck());
             //把数据放到redis里
             redisTemplate2.opsForValue().set(RedisConstant.HTTP_SERVER_KEY + entity.getAccountId(), redisModel);
         } else {

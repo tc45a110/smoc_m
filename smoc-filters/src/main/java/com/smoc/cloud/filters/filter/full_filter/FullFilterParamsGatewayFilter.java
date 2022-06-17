@@ -213,28 +213,33 @@ public class FullFilterParamsGatewayFilter extends BaseGatewayFilter implements 
             return errorHandle(exchange, FilterResponseCode.TEMPLATE_IS_NOT_FOUND.getCode(), FilterResponseCode.TEMPLATE_IS_NOT_FOUND.getMessage());
         }
 
-        /**
-         * 2、固定模版匹配，匹配成功，则跳过其他内容过滤
-         */
-        String noFilterFixedTemplate = FilterInitialize.accountFilterFixedTemplateMap.get(model.getAccount());
-        if (!StringUtils.isEmpty(noFilterFixedTemplate)) {
-            Pattern pattern = Pattern.compile(noFilterFixedTemplate);
-            Matcher matcher = pattern.matcher(model.getMessage());
-            if (matcher.find()) {
-                return success(exchange);
+        //是否模板匹配
+        Object isMatchTemplate = entities.get("COMMON_CMPP_MATCH_TEMPLATE_FILTERING");
+        log.info("isMatchTemplate:{}",isMatchTemplate);
+        if (null == isMatchTemplate || isMatchTemplate.toString().equals("1")) {
+            /**
+             * 2、固定模版匹配，匹配成功，则跳过其他内容过滤
+             */
+            String noFilterFixedTemplate = FilterInitialize.accountFilterFixedTemplateMap.get(model.getAccount());
+            if (!StringUtils.isEmpty(noFilterFixedTemplate)) {
+                Pattern pattern = Pattern.compile(noFilterFixedTemplate);
+                Matcher matcher = pattern.matcher(model.getMessage());
+                if (matcher.find()) {
+                    return success(exchange);
+                }
             }
-        }
 
-        /**
-         * 3、变量模版匹配，根据配置
-         */
-        //（1）匹配上变量模版 则跳过其他内容过滤
-        String noFilterVariableTemplate = FilterInitialize.accountNoFilterVariableTemplateMap.get(model.getAccount());
-        if (!StringUtils.isEmpty(noFilterVariableTemplate)) {
-            Pattern pattern = Pattern.compile(noFilterVariableTemplate);
-            Matcher matcher = pattern.matcher(model.getMessage());
-            if (matcher.find()) {
-                return success(exchange);
+            /**
+             * 3、变量模版匹配，根据配置
+             */
+            //（1）匹配上变量模版 则跳过其他内容过滤
+            String noFilterVariableTemplate = FilterInitialize.accountNoFilterVariableTemplateMap.get(model.getAccount());
+            if (!StringUtils.isEmpty(noFilterVariableTemplate)) {
+                Pattern pattern = Pattern.compile(noFilterVariableTemplate);
+                Matcher matcher = pattern.matcher(model.getMessage());
+                if (matcher.find()) {
+                    return success(exchange);
+                }
             }
         }
         //（2）突然发觉过滤没有意义，匹配上匹配不上都要向下过滤
@@ -292,7 +297,7 @@ public class FullFilterParamsGatewayFilter extends BaseGatewayFilter implements 
         if (!"false".equals(channelMessageParamsFilterResult.get("result"))) {
             return errorHandle(exchange, channelMessageParamsFilterResult.get("code"), channelMessageParamsFilterResult.get("message"));
         }
-        
+
         /**
          * 7、业务账号内容扩展参数过滤
          */
