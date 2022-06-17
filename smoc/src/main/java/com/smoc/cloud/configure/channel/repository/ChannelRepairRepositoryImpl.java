@@ -98,7 +98,8 @@ public class ChannelRepairRepositoryImpl extends BasePageRepository {
         if("CHANNEL".equals(qo.getFlag())){
             sqlBuffer.append("  where t.CHANNEL_ID!='"+qo.getChannelId()+"' and t.CHANNEL_STATUS='001' ");
         }else{
-            sqlBuffer.append("  where t.CHANNEL_STATUS='001' and t.CHANNEL_ID not in(select a.CHANNEL_ID from account_channel_info a where a.ACCOUNT_ID = '"+qo.getChannelId()+"') ");
+            //sqlBuffer.append("  where t.CHANNEL_STATUS='001' and t.CHANNEL_ID not in(select a.CHANNEL_ID from account_channel_info a where a.ACCOUNT_ID = '"+qo.getChannelId()+"') ");
+            sqlBuffer.append("  where t.CHANNEL_STATUS='001' ");
         }
 
         List<Object> paramsList = new ArrayList<Object>();
@@ -227,15 +228,49 @@ public class ChannelRepairRepositoryImpl extends BasePageRepository {
 
         List<AccountChannelRepairQo> list = pageList.getList();
         for (AccountChannelRepairQo info : list) {
+            //补发方式：0：未配置  1：自定义补发 2：原始通道补发
+            info.setRepairType("0");
+            //查询自定义的通道补发
             List<ConfigChannelRepairRuleValidator> channelList = findByChannelIdAndBusinessType(info.getAccountId(),"ACCOUNT");
             if(!StringUtils.isEmpty(channelList) && channelList.size()>0){
                 info.setRepairList(channelList);
                 info.setRowspan(""+channelList.size());
+                info.setRepairType("1");
             }else{
                 info.setRowspan("1");
+            }
+            //如果自定义通道为空，需要去查原始通道补发
+            if(StringUtils.isEmpty(channelList) || channelList.size()<=0){
+                List<ConfigChannelRepairValidator> spareList = findSpareChannelByAccountId(info.getAccountId());
+                if(!StringUtils.isEmpty(spareList) && spareList.size()>0){
+                    info.setRepairType("2");
+                }
             }
         }
 
         return pageList;
+    }
+
+    private List<ConfigChannelRepairValidator> findSpareChannelByAccountId(String accountId) {
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append("  t.CHANNEL_ID");
+        sqlBuffer.append(", ''CHANNEL_NAME");
+        sqlBuffer.append(", t.CARRIER");
+        sqlBuffer.append(", ''BUSINESS_TYPE");
+        sqlBuffer.append(", ''REPAIR_CODE");
+        sqlBuffer.append(", ''REPAIR_DATE");
+        sqlBuffer.append("  from account_channel_info t left join config_channel_repair_rule a on t.CHANNEL_ID = a.CHANNEL_ID ");
+        sqlBuffer.append("  where t.ACCOUNT_ID = ? and a.CHANNEL_REPAIR_ID is not null ");
+
+        List<Object> paramsList = new ArrayList<Object>();
+        paramsList.add( accountId);
+
+        //根据参数个数，组织参数值
+        Object[] params = new Object[paramsList.size()];
+        paramsList.toArray(params);
+
+        List<ConfigChannelRepairValidator> list = this.queryForObjectList(sqlBuffer.toString(), params, new ChannelRepairRowMapper());
+        return list;
     }
 }

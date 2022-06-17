@@ -3,6 +3,7 @@ package com.smoc.cloud.tools.redis;
 import org.springframework.data.redis.connection.DataType;
 import org.springframework.data.redis.core.RedisTemplate;
 
+import javax.annotation.Resource;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -11,6 +12,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class RedisValueOperations {
 
+    @Resource(name = "defaultRedisTemplate")
     private RedisTemplate redisTemplate;
 
     /**

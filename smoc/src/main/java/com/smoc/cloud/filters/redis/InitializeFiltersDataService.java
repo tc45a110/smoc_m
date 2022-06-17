@@ -59,7 +59,7 @@ public class InitializeFiltersDataService {
     @Autowired
     private ParameterExtendFiltersValueRepository parameterExtendFiltersValueRepository;
 
-    @Autowired
+    @Resource(name = "defaultRedisTemplate")
     private RedisTemplate redisTemplate;
 
     @Autowired

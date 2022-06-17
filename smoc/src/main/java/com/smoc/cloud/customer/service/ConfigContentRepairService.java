@@ -89,7 +89,7 @@ public class ConfigContentRepairService {
         ConfigContentRepairRule entity = new ConfigContentRepairRule();
         BeanUtils.copyProperties(configContentRepairRuleValidator, entity);
 
-        List<ConfigContentRepairRule> data = configContentRepairRepository.findByAccountIdAndCarrierAndRepairStatus(configContentRepairRuleValidator.getAccountId(),configContentRepairRuleValidator.getCarrier(),"1");
+        List<ConfigContentRepairRule> data = configContentRepairRepository.findByAccountIdAndCarrierAndRepairContentAndRepairStatus(configContentRepairRuleValidator.getAccountId(),configContentRepairRuleValidator.getCarrier(),configContentRepairRuleValidator.getRepairContent(),"1");
 
         //add查重
         if (data != null && data.iterator().hasNext() && "add".equals(op)) {

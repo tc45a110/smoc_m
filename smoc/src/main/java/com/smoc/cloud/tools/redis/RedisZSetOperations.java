@@ -3,6 +3,7 @@ package com.smoc.cloud.tools.redis;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 
+import javax.annotation.Resource;
 import java.util.Collection;
 import java.util.Set;
 
@@ -11,6 +12,7 @@ import java.util.Set;
  */
 public class RedisZSetOperations {
 
+    @Resource(name = "defaultRedisTemplate")
     private RedisTemplate redisTemplate;
 
     /**

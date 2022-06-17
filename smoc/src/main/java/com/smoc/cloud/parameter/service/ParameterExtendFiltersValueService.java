@@ -35,7 +35,7 @@ import java.util.Map;
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class ParameterExtendFiltersValueService {
 
-    @Autowired
+    @Resource(name = "defaultRedisTemplate")
     private RedisTemplate redisTemplate;
 
     @Resource

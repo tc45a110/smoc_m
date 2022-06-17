@@ -43,7 +43,7 @@ public class KeywordsService {
     @Resource
     private KeywordsRepository keywordsRepository;
 
-    @Autowired
+    @Resource(name = "defaultRedisTemplate")
     private RedisTemplate redisTemplate;
 
     @Autowired

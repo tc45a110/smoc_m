@@ -4,6 +4,7 @@ import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
 
+import javax.annotation.Resource;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -13,6 +14,7 @@ import java.util.Set;
  */
 public class RedisSetOperations {
 
+    @Resource(name = "defaultRedisTemplate")
     private RedisTemplate redisTemplate;
 
     /**

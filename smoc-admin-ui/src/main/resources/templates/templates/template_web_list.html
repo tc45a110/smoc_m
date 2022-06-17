@@ -86,7 +86,6 @@
                                 <tr>
                                     <th style="min-width:200px">模板ID/企业名称</th>
                                     <th style="min-width:120px">业务类型</th>
-                                    <th style="min-width:120px">签名</th>
                                     <th style="min-width:200px">模板内容</th>
                                     <th style="min-width:180px">接口类型/信息分类</th>
                                     <th style="min-width:120px">模板类型</th>
@@ -106,9 +105,6 @@
                                         <mpm:tag identity="businessType" show-type="button"
                                                  key="code" th:value="${info.templateType}"
                                                  class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;MULTI_SMS,btn btn-brown btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;5G_SMS,btn btn-primary btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-inverse btn-rounded btn-sm waves-effect waves-light"/>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
-                                        [[${info.signName}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
                                         [[${info.templateContent}]]
@@ -136,7 +132,7 @@
                                            th:href="@{/template/web/view/center/{templateId}(templateId=${info.templateId})}"
                                            style="padding-left: 5px;color: #4BD396;"
                                            data-toggle="tooltip"
-                                           data-placement="left" title="" data-original-title="CMPP模板明细"><i
+                                           data-placement="left" title="" data-original-title="模板明细"><i
                                                 style="font-size: 18px"
                                                 class="glyphicon glyphicon-search"></i></a>
                                         <a th:if="${'3'== info.templateStatus}" sec:authorize-url="/template/web/check/*"

@@ -53,11 +53,11 @@
                             <div class="col-sm-12">
                                 <div class="form-group  col-sm-3">
                                     <input type="text" class="form-control" th:field="*{accountId}"
-                                           placeholder="账号ID" autocomplete="off">
+                                           placeholder="业务账号" autocomplete="off">
                                 </div>
                                 <div class="form-group  col-sm-3">
                                     <input type="text" class="form-control" th:field="*{accountName}"
-                                           placeholder="账号名称" autocomplete="off">
+                                           placeholder="业务账号名称" autocomplete="off">
                                 </div>
                                 <div class="form-group  col-sm-3">
                                     <mpm:tag id="businessType" identity="businessType" show-type="select" key="code"
@@ -148,7 +148,8 @@
                                         [[${channel.channelRepairId}]]：[[${channel.channelRepairName}]]&nbsp;<span th:if="${not #strings.isEmpty(channel.repairCode)}">错误码：[[${channel.repairCode}]]</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px" th:rowspan="${info.rowspan}" th:if="${#lists.isEmpty(info.repairList)}">
-                                        <span style="color: red">未配置</span>
+                                        <span style="color: red" th:if="${info.repairType eq '0'}">未配置</span>
+                                        <span style="color: orange" th:if="${info.repairType eq '2'}">默认按原始通道补发规则</span>
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px" th:rowspan="${info.rowspan}">

@@ -43,7 +43,7 @@ public class BlackService {
     @Autowired
     private RedisModuleBloomFilter redisModuleBloomFilter;
 
-    @Autowired
+    @Resource(name = "defaultRedisTemplate")
     private RedisTemplate redisTemplate;
 
     /**

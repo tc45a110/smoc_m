@@ -28,6 +28,9 @@ public class AccountChannelRepairQo {
     private String repairCode;
     private String repairDate;
 
+    //补发方式：0：未配置  1：自定义补发 2：原始通道补发
+    private String repairType;
+
     private List<ConfigChannelRepairRuleValidator> repairList = new ArrayList<>();
 
 }

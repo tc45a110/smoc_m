@@ -40,7 +40,7 @@ import java.util.Optional;
 @Service
 public class AccountTemplateInfoService {
 
-    @Autowired
+    @Resource(name = "defaultRedisTemplate")
     private RedisTemplate redisTemplate;
 
     @Autowired

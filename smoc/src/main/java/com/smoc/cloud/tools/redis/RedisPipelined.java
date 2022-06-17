@@ -7,6 +7,7 @@ import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -16,6 +17,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class RedisPipelined {
 
+    @Resource(name = "defaultRedisTemplate")
     private RedisTemplate redisTemplate;
 
     /**
