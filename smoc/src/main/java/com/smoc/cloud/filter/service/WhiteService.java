@@ -43,7 +43,7 @@ public class WhiteService {
     @Autowired
     private RedisModuleCuckooFilter redisModuleCuckooFilter;
 
-    @Resource(name = "defaultRedisTemplate")
+    @Resource(name = "redisTemplate2")
     private RedisTemplate redisTemplate;
 
     /**
