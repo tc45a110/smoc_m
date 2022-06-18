@@ -65,10 +65,10 @@ public class SystemPhoneFilter {
                     return result;
                 }
                 //行业白名单洗白
-                if (industryWhite(filtersService, isIndustryBlackListType, phone)) {
-                    result.put("result", "false");
-                    return result;
-                }
+//                if (industryWhite(filtersService, isIndustryBlackListType, phone)) {
+//                    result.put("result", "false");
+//                    return result;
+//                }
                 //系统白名单
                 Boolean systemWhiteList = redisModuleCuckooFilter.isExist(RedisFilterConstant.REDIS_BLOOM_FILTERS_SYSTEM_WHITE, phone);
                 if (systemWhiteList) {
@@ -96,10 +96,10 @@ public class SystemPhoneFilter {
                     return result;
                 }
                 //行业白名单洗白
-                if (industryWhite(filtersService, isIndustryBlackListType, phone)) {
-                    result.put("result", "false");
-                    return result;
-                }
+//                if (industryWhite(filtersService, isIndustryBlackListType, phone)) {
+//                    result.put("result", "false");
+//                    return result;
+//                }
                 Boolean systemWhiteList = redisModuleCuckooFilter.isExist(RedisFilterConstant.REDIS_BLOOM_FILTERS_SYSTEM_WHITE, phone);
                 if (systemWhiteList) {
                     result.put("result", "false");
@@ -127,10 +127,10 @@ public class SystemPhoneFilter {
                     return result;
                 }
                 //行业白名单洗白
-                if (industryWhite(filtersService, isIndustryBlackListType, phone)) {
-                    result.put("result", "false");
-                    return result;
-                }
+//                if (industryWhite(filtersService, isIndustryBlackListType, phone)) {
+//                    result.put("result", "false");
+//                    return result;
+//                }
                 Boolean systemWhiteList = redisModuleCuckooFilter.isExist(RedisFilterConstant.REDIS_BLOOM_FILTERS_SYSTEM_WHITE, phone);
                 if (systemWhiteList) {
                     result.put("result", "false");
