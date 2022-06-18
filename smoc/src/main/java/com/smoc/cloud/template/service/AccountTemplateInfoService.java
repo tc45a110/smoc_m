@@ -110,6 +110,7 @@ public class AccountTemplateInfoService {
 
         //记录日志
         log.info("[模板管理][模板信息][{}]数据:{}", op, JSON.toJSONString(entity));
+        entity.setTemplateContent(entity.getTemplateContent().trim());
         accountTemplateInfoRepository.saveAndFlush(entity);
 
 

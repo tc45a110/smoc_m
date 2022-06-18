@@ -122,7 +122,7 @@
                                                 <label>模板内容</label> <span style="margin-left:20px;color:#6B5FB6">签名模版：该模版只填写报备的签名，不涉及内容，签名格式【xxxx】。支持多个签名，请用 | 隔开</span>
                                             </div>
                                             <div class="col-md-12 form-group">
-                                                <textarea class="form-control" required th:field="*{templateContent}"
+                                                <textarea class="form-control" required th:field="*{templateContent}" data-parsley-pattern="^((?![｜,\*]).)*$"
                                                           rows="12">[[${accountTemplateInfoValidator.templateContent}]]</textarea>
                                             </div>
                                             <div sec:authorize-url="/regular_expression" id="forbidden-title"
@@ -136,7 +136,7 @@
                                             </div>
                                             <div class="col-md-12 form-group" style="display:none" id="example_2"
                                                  th:style="${accountTemplateInfoValidator.templateClassify eq '2'?'display:block':'display:none'}">
-                                                【光大银行】|【广发银行】尾号${1}客户，您的信用卡申请资格已到达，请于${2}小时内填写${3}过期作废！以银审为准，退订回T
+                                                【广发银行】尾号${1}客户，您的信用卡申请资格已到达，请于${2}小时内填写${3}过期作废！以银审为准，退订回T|【广发银行】尾号${1}客户，您的信用卡申请资格已到达，请于${2}小时内填写${3}过期作废！以银审为准，退订回T
                                             </div>
                                             <div class="col-md-12 form-group" style="display:block" id="example_3"
                                                  th:style="${accountTemplateInfoValidator.templateClassify eq '3'?'display:block':'display:none'}">

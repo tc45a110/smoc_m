@@ -204,8 +204,9 @@ public class FullFilterParamsGatewayFilter extends BaseGatewayFilter implements 
             //根据模版id 去找变量模版
             Object variableTemplate = filtersService.getMapValue(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_HTTP_VARIABLE, model.getTemplateId());
             if (!StringUtils.isEmpty(variableTemplate)) {
-                Pattern pattern = Pattern.compile(variableTemplate.toString());
-                Matcher matcher = pattern.matcher(model.getMessage());
+                String template = this.clean(variableTemplate.toString());
+                Pattern pattern = Pattern.compile(template);
+                Matcher matcher = pattern.matcher(this.clean(model.getMessage()));
                 if (matcher.find()) {
                     return success(exchange);
                 }
@@ -215,15 +216,16 @@ public class FullFilterParamsGatewayFilter extends BaseGatewayFilter implements 
 
         //是否模板匹配
         Object isMatchTemplate = entities.get("COMMON_CMPP_MATCH_TEMPLATE_FILTERING");
-        log.info("isMatchTemplate:{}",isMatchTemplate);
         if (null == isMatchTemplate || isMatchTemplate.toString().equals("1")) {
             /**
              * 2、固定模版匹配，匹配成功，则跳过其他内容过滤
              */
             String noFilterFixedTemplate = FilterInitialize.accountFilterFixedTemplateMap.get(model.getAccount());
+            noFilterFixedTemplate = this.clean(noFilterFixedTemplate);
             if (!StringUtils.isEmpty(noFilterFixedTemplate)) {
+                String target = this.clean(model.getMessage());
                 Pattern pattern = Pattern.compile(noFilterFixedTemplate);
-                Matcher matcher = pattern.matcher(model.getMessage());
+                Matcher matcher = pattern.matcher(target);
                 if (matcher.find()) {
                     return success(exchange);
                 }
@@ -234,9 +236,11 @@ public class FullFilterParamsGatewayFilter extends BaseGatewayFilter implements 
              */
             //（1）匹配上变量模版 则跳过其他内容过滤
             String noFilterVariableTemplate = FilterInitialize.accountNoFilterVariableTemplateMap.get(model.getAccount());
+            noFilterVariableTemplate =this.clean(noFilterVariableTemplate);
             if (!StringUtils.isEmpty(noFilterVariableTemplate)) {
                 Pattern pattern = Pattern.compile(noFilterVariableTemplate);
-                Matcher matcher = pattern.matcher(model.getMessage());
+                String target = this.clean(model.getMessage());
+                Matcher matcher = pattern.matcher(target);
                 if (matcher.find()) {
                     return success(exchange);
                 }
@@ -317,6 +321,15 @@ public class FullFilterParamsGatewayFilter extends BaseGatewayFilter implements 
         }
 
         return success(exchange);
+    }
+
+    /**
+     * 清除模版及内容中的 干扰正则表达式的特殊字符
+     * @param str
+     * @return
+     */
+    public String clean(String str){
+        return str.replace("?","").replace("+","").replace("$","").replace("^","").replace("&","").replace("[","").replace("]","").replace("-","").replace("\\","");
     }
 
     @Override

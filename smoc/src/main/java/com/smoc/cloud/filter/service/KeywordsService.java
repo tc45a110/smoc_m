@@ -128,6 +128,7 @@ public class KeywordsService {
         log.info("[关键词管理][{}]数据:{}", op, JSON.toJSONString(entity));
 
         entity.setIsSync("0");
+        entity.setKeyWords(entity.getKeyWords().trim());
         keywordsRepository.saveAndFlush(entity);
         return ResponseDataUtil.buildSuccess();
     }
