@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/smoc-admin-ui/smoc-admin-ui.iml" filepath="$PROJECT_DIR$/smoc-admin-ui/smoc-admin-ui.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-auth/smoc-auth.iml" filepath="$PROJECT_DIR$/smoc-auth/smoc-auth.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-auth-ui/smoc-auth-ui.iml" filepath="$PROJECT_DIR$/smoc-auth-ui/smoc-auth-ui.iml" />
+      <module fileurl="file://$PROJECT_DIR$/smoc-base-common/smoc-base-common.iml" filepath="$PROJECT_DIR$/smoc-base-common/smoc-base-common.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-common-utils/smoc-common-utils.iml" filepath="$PROJECT_DIR$/smoc-common-utils/smoc-common-utils.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-examples/smoc-examples.iml" filepath="$PROJECT_DIR$/smoc-examples/smoc-examples.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-filter/smoc-filter.iml" filepath="$PROJECT_DIR$/smoc-filter/smoc-filter.iml" />
@@ -20,6 +21,8 @@
       <module fileurl="file://$PROJECT_DIR$/smoc-identity/smoc-identity.iml" filepath="$PROJECT_DIR$/smoc-identity/smoc-identity.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-parent/smoc-parent.iml" filepath="$PROJECT_DIR$/smoc-parent/smoc-parent.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-parent-ui/smoc-parent-ui.iml" filepath="$PROJECT_DIR$/smoc-parent-ui/smoc-parent-ui.iml" />
+      <module fileurl="file://$PROJECT_DIR$/smoc-protocol-access-cmpp/smoc-protocol-access-cmpp.iml" filepath="$PROJECT_DIR$/smoc-protocol-access-cmpp/smoc-protocol-access-cmpp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/smoc-protocol-proxy-cmpp/smoc-protocol-proxy-cmpp.iml" filepath="$PROJECT_DIR$/smoc-protocol-proxy-cmpp/smoc-protocol-proxy-cmpp.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-saler-ui/smoc-saler-ui.iml" filepath="$PROJECT_DIR$/smoc-saler-ui/smoc-saler-ui.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-scheduler/smoc-scheduler.iml" filepath="$PROJECT_DIR$/smoc-scheduler/smoc-scheduler.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-service-ui/smoc-service-ui.iml" filepath="$PROJECT_DIR$/smoc-service-ui/smoc-service-ui.iml" />
