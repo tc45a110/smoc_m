@@ -36,7 +36,7 @@ public class HttpClientUtil {
 	/**
 	 * 
 	 * @param url:请求路径
-	 * @param header:请求头 json格式
+	 * @param headerMap:请求头 json格式
 	 * @param body:请求体
 	 * @param connectTimeout:连接超时时间，单位毫秒
 	 * @param socketTimeout:请求获取数据的超时时间，单位毫秒
@@ -50,7 +50,7 @@ public class HttpClientUtil {
 	 * 
 	 * @param url:请求路径
 	 * @param method:请求方法GET/POST
-	 * @param header:请求头 json格式
+	 * @param headerMap:请求头 json格式
 	 * @param body:请求体
 	 * @param connectTimeout:连接超时时间，单位毫秒
 	 * @param socketTimeout:请求获取数据的超时时间，单位毫秒

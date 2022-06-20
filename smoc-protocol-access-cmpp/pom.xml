@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.example</groupId>
-    <artifactId>smoc-business-access</artifactId>
+    <artifactId>smoc-protocol-access-cmpp</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -29,7 +29,7 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.2.0</version>
                 <configuration>
-                    <finalName>${artifactId}</finalName>   <!-- 配置打包后的文件前缀名 -->
+                    <finalName>protocol-access-cmpp</finalName>   <!-- 配置打包后的文件前缀名 -->
                     <descriptors>
                         <descriptor>${project.basedir}/src/main/resources/assembly/package.xml</descriptor>   <!-- 配置文件路径 -->
                     </descriptors>
@@ -44,15 +44,31 @@
                     </execution>
                 </executions>
             </plugin>
+
         </plugins>
     </build>
 
     <dependencies>
         <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.15</version>
+        </dependency>
+        <dependency>
             <groupId>org.example</groupId>
             <artifactId>smoc-base-common</artifactId>
             <version>4.0.0</version>
         </dependency>
+        <!--  mina  -->
+        <dependency>
+            <groupId>org.apache.mina</groupId>
+            <artifactId>mina-core</artifactId>
+            <version>2.1.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.mina</groupId>
+            <artifactId>mina-integration-jmx</artifactId>
+            <version>2.1.5</version>
+        </dependency>
     </dependencies>
-
 </project>

@@ -53,7 +53,7 @@ public class ChannelRepairManager extends SuperMapWorker<String, ArrayList<Strin
 		return "";
 	}
 	
-	public int getAccountRepairTime(String channelID) {
+	public int getChannelRepairTime(String channelID) {
 		HashMap<String,Object> map = repairRuleMap.get(channelID);
 		if(map != null) {
 			return (int)map.get("repairDate") * 60;

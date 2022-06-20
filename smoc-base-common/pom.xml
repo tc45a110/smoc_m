@@ -8,6 +8,11 @@
     <artifactId>smoc-base-common</artifactId>
     <version>4.0.0</version>
 
+    <properties>
+        <!--编译编码-->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
     <build>
         <plugins>
             <plugin>
@@ -61,6 +66,11 @@
             <artifactId>httpclient</artifactId>
             <version>4.5.13</version>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.apache.httpcomponents</groupId>-->
+<!--            <artifactId>httpcore</artifactId>-->
+<!--            <version>4.4.15</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib</artifactId>

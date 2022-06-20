@@ -7,13 +7,23 @@
         <format>zip</format>
     </formats>
 
+    <includeBaseDirectory>true</includeBaseDirectory>
+
     <!-- 把依赖的jar包打包进zip的lib目录下-->
     <dependencySets>
         <dependencySet>
             <!-- 不使用项目的artifact -->
-            <useProjectArtifact>false</useProjectArtifact>
+            <useProjectArtifact>true</useProjectArtifact>
             <!-- 打包进zip文件下的lib目录中  -->
             <outputDirectory>lib</outputDirectory>
+            <excludes>
+                <exclude>com.googlecode.libphonenumber:*</exclude>
+                <exclude>org.jetbrains*:*</exclude>
+                <exclude>*:protobuf-java</exclude>
+                <exclude>com.squareup.*:*</exclude>
+                <exclude>org.springframework:spring-aop</exclude>
+                <exclude>org.springframework:spring-jcl</exclude>
+            </excludes>
             <!-- 第三方jar不要解压 -->
             <unpack>false</unpack>
         </dependencySet>
@@ -44,18 +54,6 @@
             </includes>
             <outputDirectory>conf</outputDirectory>
         </fileSet>
-
-        <!-- 把项目自己编译出来根目录下的jar文件，打包进zip文件的根目录 -->
-<!--        <fileSet>-->
-<!--            <directory>${project.build.directory}</directory>-->
-<!--            <outputDirectory>lib/</outputDirectory>-->
-<!--            <excludes>-->
-<!--                <exclude>lib/*.jar</exclude>-->
-<!--            </excludes>-->
-<!--            <includes>-->
-<!--                <include>*.jar</include>-->
-<!--            </includes>-->
-<!--        </fileSet>-->
 
         <!-- 把项目自己编译出来的jar文件夹下的jar文件，去除第三方jar，打包进zip文件的根目录 -->
 <!--        <fileSet>-->
