@@ -4,11 +4,11 @@ public class DictionariesTypeConstant {
 	/**
 	 * 账号接口类型
 	 */
-	public static final String ACCOUNT_INTERFACE_TYPE = "accountInterfaceType";         //账号接口类型
+	public static String ACCOUNT_INTERFACE_TYPE = "accountInterfaceType";         //账号接口类型
 	/**
 	 * 关键词分类的大类别
 	 */
-	public static final String KEYWORDS_CLASSIFY = "keywordsClassify";      //关键词分类的大类别
+	public static String KEYWORDS_CLASSIFY = "keywordsClassify";      //关键词分类的大类别
 	/**
 	 * 签名方式
 	 */
@@ -260,7 +260,7 @@ public class DictionariesTypeConstant {
 	/**
 	 * 企业类型
 	 */
-	public static final String ENTERPRISE_TYPE = "enterpriseType";		//企业类型
+	public static String ENTERPRISE_TYPE = "enterpriseType";		//企业类型
 	/**
 	 * 通用数据状态
 	 */

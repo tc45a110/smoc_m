@@ -333,6 +333,19 @@ public class BusinessRouteValue implements Serializable,Cloneable {
 	 * 进入审核原因
 	 */
 	private String auditReason;
+	
+	/**
+	 * 补发通道
+	 */
+	private String channelRepairID;
+
+	public String getChannelRepairID() {
+		return channelRepairID;
+	}
+
+	public void setChannelRepairID(String channelRepairID) {
+		this.channelRepairID = channelRepairID;
+	}
 
 	public String getAuditReason() {
 		return auditReason;

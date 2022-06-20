@@ -12,7 +12,6 @@ import java.util.Date;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 
-import com.base.common.constant.DynamicConstant;
 import com.base.common.constant.LogPathConstant;
 import com.base.common.util.DateUtil;
 import com.base.common.worker.SuperQueueWorker;
@@ -39,11 +38,10 @@ public class MOBusinessLogManager extends SuperQueueWorker<String>{
 	@Override
 	public void doRun() throws Exception {
 		String contentLog = take();
-		String filePath = new StringBuilder(LogPathConstant.LOG_BASE_PATH).append(LogPathConstant.PROXY_PROTOCOL_MO_LOG_PATH).toString();
+		String filePath = new StringBuilder(LogPathConstant.LOG_BASE_PATH).append(LogPathConstant.BUSINESS_MO_LOG_PATH).toString();
 		
 		String fileName = new StringBuilder().append(LogPathConstant.LOG_FILENAME_PREFIX_MO)
-											 .append(DateFormatUtils.format(new Date(), DateUtil.DATE_FORMAT_COMPACT_HOUR)).append(".")
-											 .append(DynamicConstant.PLATFORM_IDENTIFIER).append(".").append(LogPathConstant.LOCALHOST_IP).toString();
+											 .append(DateFormatUtils.format(new Date(), DateUtil.DATE_FORMAT_COMPACT_HOUR)).append(".").append(LogPathConstant.LOCALHOST_IP).toString();
 		
 		File file = new File(filePath,fileName);
 		FileUtils.writeStringToFile(file, contentLog, "UTF-8", true);

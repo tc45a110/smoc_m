@@ -193,4 +193,23 @@ public class JedisClientPool implements JedisClient {
 		return result;
 	}
 
+	@Override
+	public Long expire(String key, long seconds, int database) {
+		Jedis jedis = jedisPool.getResource();
+		jedis.select(database);
+		Long result = jedis.expire(key, seconds);
+		jedis.close();
+		return result;
+	}
+
+	@Override
+	public Long hincrBy(String key, String field, long by, int database) {
+		Jedis jedis = jedisPool.getResource();
+		jedis.select(database);
+		Long result = jedis.hincrBy(key,field,by);
+		jedis.close();
+		return result;
+	}
+	
+	
 }

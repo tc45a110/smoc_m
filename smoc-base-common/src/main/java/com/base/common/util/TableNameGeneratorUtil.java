@@ -33,7 +33,7 @@ public class TableNameGeneratorUtil {
 	
 	/**
 	 * 生成通道码号级下行数据临时表名
-	 * @param channelSRCID
+	 * @param channelID
 	 * @return
 	 */
 	public static final String generateRouteChannelSRCIDMessageMTInfoTableName(String channelSRCID) {

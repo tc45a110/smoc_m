@@ -12,14 +12,14 @@ public interface CacheServiceInter {
 	  * @param timeout
 	  * @param str
 	  */
-	 public void putString(String key, int timeout, String str);
+	 public void putString(String key, int timeout,String str);
 	 
 	 /**
 	  * 存储永久字符串
 	  * @param key
 	  * @param str
 	  */
-	 public void putString(String key, String str);
+	 public void putString(String key,String str);
 	 
 	 /**
 	  * 获取字符串
@@ -67,7 +67,7 @@ public interface CacheServiceInter {
 	  * @param key
 	  * @param object
 	  */
-	 public void pushQueue(String key, Object object);
+	 public void pushQueue(String key,Object object);
 	 
 	 /**
 	  * 移除列表最后一个元素
@@ -80,12 +80,13 @@ public interface CacheServiceInter {
 	 /**
 	  * 用于控制次数
 	  * @param key
+	  * @param field
 	  * @param timeout
 	  * @param times
 	  * @param by
 	  * @return
 	  */
-	 public boolean isOverFlow(String key, int timeout, int times, int by);
+	 public boolean isOverFlow(String key, String field,int timeout, int times, int by);
 	 
 	 /**
 	  * 获取分布式锁
@@ -94,7 +95,7 @@ public interface CacheServiceInter {
 	  * @param timeout 单位秒
 	  * @return
 	  */
-	 public boolean lock(String key, String requestId, int timeout);
+	 public boolean lock(String key,String requestId,int timeout);
 	 
 	 /**
 	  * 释放分布式锁
@@ -102,15 +103,7 @@ public interface CacheServiceInter {
 	  * @param requestId
 	  * @return
 	  */
-	 public boolean unlock(String key, String requestId);
-	 
-	 /**
-	  * 增加一个值
-	  * @param key
-	  * @param timeout
-	  * @param by
-	  */
-	 public void increase(String key, int timeout, int by);
+	 public boolean unlock(String key,String requestId);
 	 
 	 /**
 	  * 获取一个队列元素数量
@@ -126,7 +119,17 @@ public interface CacheServiceInter {
 	  * @param timeout
 	  * @param by
 	  */
-	 public void increase(String key, String field, int timeout, int by);
+	 public void increase(String key, String field,int timeout,int by);
+	 
+	 /**
+	  * 在一个hash中增加一个field的值,指定database
+	  * @param key
+	  * @param field
+	  * @param timeout
+	  * @param by
+	  * @param database
+	  */
+	 public void increase(String key, String field,int timeout,int by,int database);
 	 
 	 /**
 	  * 在hash中设置一个field的值
@@ -136,7 +139,7 @@ public interface CacheServiceInter {
 	  * @param value
 	  * @return
 	  */
-	 public void putHashString(String key, int timeout, String field, String value);
+	 public void putHashString(String key, int timeout, String field,String value);
 	 
 	 /**
 	  * 从一个hash中获取属性值

@@ -50,7 +50,8 @@ public class DateUtil {
 	
 	/**
 	 * 得到当前日期
-	 * @param format
+	 * 
+	 * @param format日期格式
 	 * @return String 当前日期 format日期格式
 	 * @author kevin
 	 */
@@ -131,7 +132,7 @@ public class DateUtil {
 	
 	/**
 	 * 获取N天之后的数据  -:前 	 +:后
-	 * @param day
+	 * @param minute
 	 * @param format
 	 * @return
 	 */

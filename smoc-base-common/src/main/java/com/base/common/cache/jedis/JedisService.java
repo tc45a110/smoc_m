@@ -97,17 +97,17 @@ public class JedisService implements CacheServiceInter{
 	}
 
 	@Override
-	public boolean isOverFlow(String key, int timeout, int times, int by) {
+	public boolean isOverFlow(String key, String field, int timeout, int times, int by) {
 		try {
-			String value = jedisClient.get(key);
+			String value = jedisClient.hget(key, field);
 			if (value == null) {
-				jedisClient.incrBy(key.getBytes(), by);
+				jedisClient.hincrBy(key,field, by);
 				jedisClient.expire(key, timeout);
 				return false;
 			} else {
 				int intvalue = Integer.parseInt(value);
 				if (intvalue + by <= times) {
-					jedisClient.incrBy(key.getBytes(), by);
+					jedisClient.hincrBy(key,field, by);
 					jedisClient.expire(key, timeout);
 					return false;
 				}
@@ -134,17 +134,6 @@ public class JedisService implements CacheServiceInter{
 		Object result = jedisClient.eval(script, Collections.singletonList(key), Collections.singletonList(requestId));
 		return Commons.RELEASE_SUCCESS.equals(result);
 	}
-
-	@Override
-	public void increase(String key, int timeout, int by) {
-		try {
-			jedisClient.incrBy(key.getBytes(), by);
-			jedisClient.expire(key, timeout);
-		} catch (Exception e) {
-			logger.error(e.getMessage(),e);
-		}
-		
-	}
 	
 	private byte[] serialize(Object object) {
 		return SerializationUtils.serialize(object);
@@ -164,6 +153,17 @@ public class JedisService implements CacheServiceInter{
 		try {
 			jedisClient.hincrBy(key,field, by);
 			jedisClient.expire(key, timeout);
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+		}
+	}
+
+	@Override
+	public void increase(String key, String field, int timeout, int by,
+			int database) {
+		try {
+			jedisClient.hincrBy(key,field, by,database);
+			jedisClient.expire(key, timeout,database);
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 		}

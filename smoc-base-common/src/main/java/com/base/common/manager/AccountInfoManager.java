@@ -30,7 +30,8 @@ public class AccountInfoManager extends SuperMapWorker<String, AccountInfo> {
 
 	@Override
 	public void doRun() throws Exception {
-		Thread.sleep(INTERVAL);
+		//发送时涉及财务需要指定单独的加载时间
+		Thread.sleep(BusinessDataManager.getInstance().getAccountFinanceLoadIntervalTime());
 		loadData();
 	}
 
@@ -236,6 +237,20 @@ public class AccountInfoManager extends SuperMapWorker<String, AccountInfo> {
 	}
 	
 	/**
+	 * 是否进行模板匹配
+	 * @param accountID
+	 * @return
+	 */
+	public String getTemplateMatch(String accountID) {
+		AccountInfo accountInfo = get(accountID);
+		if (accountInfo != null) {
+			return getTemplateMatch(accountID);
+		}
+		return FixedConstant.AccountChargeType.SUBMIT.name();
+	}
+
+	
+	/**
 	 * 获取账号的行业分类
 	 * @param accountID
 	 * @return
@@ -260,6 +275,19 @@ public class AccountInfoManager extends SuperMapWorker<String, AccountInfo> {
 		}
 		return null;
 	}
+	
+	/**
+	 * 获取财务账号的余额，若共享则获取共享账号的余额: 可用金额+授信额度
+	 * @param accountID
+	 * @return
+	 */
+	public boolean isPositiveAvailableAmount(String accountID) {
+		AccountInfo accountInfo = get(accountID);
+		if (accountInfo != null) {
+			return accountInfo.getAccountUsableSum() + accountInfo.getAccountCreditSum() > 0;
+		}
+		return false;
+	}
 
 	/**
 	 * 加载数据
@@ -269,10 +297,9 @@ public class AccountInfoManager extends SuperMapWorker<String, AccountInfo> {
 
 		Map<String, Map<String, Object>> accountFinanceResultMap = AccountInfoDAO.loadAccountFinance();
 		Map<String, Map<String, Object>> accountBaseInfoResultMap = AccountInfoDAO.loadAccountBaseInfo();
-		Map<String, Map<String, Double>> accountPriceResultMap = AccountInfoDAO.loadAccountPrice();
 
 		// 获取账号信息和账号财务数据都获取成功
-		if (accountFinanceResultMap != null && accountBaseInfoResultMap != null && accountPriceResultMap != null ) {
+		if (accountFinanceResultMap != null && accountBaseInfoResultMap != null ) {
 			Map<String, AccountInfo> accountInfoMap = new HashMap<String, AccountInfo>();
 
 			for (Map.Entry<String, Map<String, Object>> entry : accountFinanceResultMap.entrySet()) {
@@ -346,13 +373,6 @@ public class AccountInfoManager extends SuperMapWorker<String, AccountInfo> {
 				} else {
 					CategoryLog.commonLogger.error("{}未获取到账号基本信息", accountID);
 				}
-				Map<String, Double> priceMap = accountPriceResultMap.get(accountID);
-				// 获取账号设置的运营商/国家区域的价格
-				if (priceMap != null) {
-					accountInfo.setPriceMap(priceMap);
-				} else {
-					CategoryLog.commonLogger.error("{}未获取到账号价格", accountID);
-				}
 			}
 
 			superMap = accountInfoMap;
@@ -413,11 +433,6 @@ public class AccountInfoManager extends SuperMapWorker<String, AccountInfo> {
 		 * 接口协议
 		 */
 		private String protocol;
-
-		/**
-		 * carrier/Country-价格
-		 */
-		private Map<String, Double> priceMap;
 
 		/**
 		 * 业务账号携转标识
@@ -551,14 +566,6 @@ public class AccountInfoManager extends SuperMapWorker<String, AccountInfo> {
 			this.protocol = protocol;
 		}
 
-		public Map<String, Double> getPriceMap() {
-			return priceMap;
-		}
-
-		public void setPriceMap(Map<String, Double> priceMap) {
-			this.priceMap = priceMap;
-		}
-
 		public String getTransferType() {
 			return transferType;
 		}
@@ -673,7 +680,7 @@ public class AccountInfoManager extends SuperMapWorker<String, AccountInfo> {
 					+ accountStatus + ", accountPriority=" + accountPriority + ", financeAccountID=" + financeAccountID
 					+ ", accountUsableSum=" + accountUsableSum + ", accountCreditSum=" + accountCreditSum
 					+ ", enterpriseFlag=" + enterpriseFlag + ", enterpriseID=" + enterpriseID + ", protocol=" + protocol
-					+ ", priceMap=" + priceMap + ", transferType=" + transferType + ", businessType=" + businessType
+					+ ", transferType=" + transferType + ", businessType=" + businessType
 					+ ", payType=" + payType + ", chargeType=" + chargeType + ", accountSRCID=" + accountSRCID
 					+ ", accountExtendCode=" + accountExtendCode + ", accountRandomExtendCodeLength="
 					+ accountRandomExtendCodeLength + ", industryTypes=" + industryTypes + ", infoType=" + infoType

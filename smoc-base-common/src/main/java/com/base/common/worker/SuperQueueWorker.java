@@ -24,6 +24,13 @@ public abstract class SuperQueueWorker<T> extends SuperWorker{
 		return superQueue.take();
 	}
 	
+	/**
+	 * 获取集合大小
+	 * @return
+	 */
+	protected int size(){
+		return superQueue.size();
+	}
 }
 
 

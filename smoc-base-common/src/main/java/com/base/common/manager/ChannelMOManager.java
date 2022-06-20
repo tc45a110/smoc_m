@@ -12,10 +12,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.base.common.constant.FixedConstant;
 import com.base.common.dao.LavenderDBSingleton;
-import com.base.common.log.MOBusinessLogManager;
-import com.base.common.util.DateUtil;
 import com.base.common.vo.ChannelMO;
 import com.base.common.worker.SuperQueueWorker;
 
@@ -32,22 +29,6 @@ public class ChannelMOManager extends SuperQueueWorker<ChannelMO> {
 	
 	public static ChannelMOManager getInstance() {
 		return manager;
-	}
-	
-	public void add(ChannelMO channelMO) {
-		//记录日志
-		StringBuilder sb = new StringBuilder()
-		.append(DateUtil.getCurDateTime(DateUtil.DATE_FORMAT_COMPACT_STANDARD_MILLI))
-		.append(FixedConstant.LOG_SEPARATOR)
-		.append(channelMO.getChannelID())
-		.append(FixedConstant.LOG_SEPARATOR)
-		.append(channelMO.getPhoneNumber())
-		.append(FixedConstant.LOG_SEPARATOR)
-		.append(channelMO.getChannelMOSRCID())
-		.append(FixedConstant.LOG_SEPARATOR)
-		.append(channelMO.getMessageContent());
-		MOBusinessLogManager.getInstance().add(sb.toString());
-		super.add(channelMO);
 	}
 	
 	@Override

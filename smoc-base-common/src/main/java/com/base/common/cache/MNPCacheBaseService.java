@@ -1,12 +1,20 @@
 package com.base.common.cache;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.base.common.cache.jedis.JedisService;
 import com.base.common.util.CacheNameGeneratorUtil;
+
+
+
 
 /**
  * 对外部提供带有业务含义的服务
  */
 public class MNPCacheBaseService {
+	private static final Logger logger = LoggerFactory.getLogger(MNPCacheBaseService.class);
+	
 	private static CacheServiceInter MNPCacheBaseService = new JedisService("jedisClientPool1");
 
 	/**
@@ -15,7 +23,12 @@ public class MNPCacheBaseService {
 	 * @return
 	 */
 	public static String getMNPFromMiddlewareCache(String phoneNumber){
-		return MNPCacheBaseService.getString(CacheNameGeneratorUtil.generateMNPCacheName(phoneNumber));
+		try {
+			return MNPCacheBaseService.getString(CacheNameGeneratorUtil.generateMNPCacheName(phoneNumber));
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+		}
+		return null;
 	}
 	
 	/**
@@ -24,7 +37,11 @@ public class MNPCacheBaseService {
 	 * @param carrier
 	 */
 	public static void saveMNPToMiddlewareCache(String phoneNumber,String carrier){
-		MNPCacheBaseService.putString(CacheNameGeneratorUtil.generateMNPCacheName(phoneNumber), carrier);
+		try {
+			MNPCacheBaseService.putString(CacheNameGeneratorUtil.generateMNPCacheName(phoneNumber), carrier);
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+		}
 	}
 	
 }

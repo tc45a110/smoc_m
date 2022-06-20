@@ -19,6 +19,7 @@ public abstract class SuperSetWorker<T> extends SuperWorker{
 	/**
 	 * 添加数据
 	 * @param t
+	 * @param m
 	 */
 	protected void add(T t){
 		superSet.add(t);

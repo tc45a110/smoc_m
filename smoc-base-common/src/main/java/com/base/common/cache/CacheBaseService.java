@@ -1,19 +1,22 @@
 package com.base.common.cache;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.base.common.cache.jedis.JedisService;
-import com.base.common.constant.FixedConstant;
 import com.base.common.manager.BusinessDataManager;
 import com.base.common.util.CacheNameGeneratorUtil;
 import com.base.common.vo.BusinessRouteValue;
+
+
 
 
 /**
  * 对外部提供带有业务含义的服务
  */
 public class CacheBaseService {
-	
+	private static final Logger logger = LoggerFactory.getLogger(CacheBaseService.class);
 	private static CacheServiceInter cacheBaseService = new JedisService();
 	
 	/**
@@ -24,7 +27,12 @@ public class CacheBaseService {
 	 * @return
 	 */
 	public static boolean isOverAccountSpeed(String accountID,int messageNumber,int speed){
-		return cacheBaseService.isOverFlow(CacheNameGeneratorUtil.generateSpeedCacheName(accountID), 60, speed, messageNumber);
+		try {
+			return cacheBaseService.isOverFlow(CacheNameGeneratorUtil.generateAccountSpeedCacheName(), accountID,60, speed*60, messageNumber);
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+		}
+		return false;
 	}
 	
 	/**
@@ -33,7 +41,12 @@ public class CacheBaseService {
 	 * @return
 	 */
 	public static BusinessRouteValue getReportFromMiddlewareCache(String accountID){
-		return cacheBaseService.popQueue(CacheNameGeneratorUtil.generateReportCacheName(accountID), BusinessRouteValue.class);
+		try {
+			return cacheBaseService.popQueue(CacheNameGeneratorUtil.generateAccessReportCacheName(accountID), BusinessRouteValue.class);
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+		}
+		return null;
 	}
 	
 	/**
@@ -42,7 +55,11 @@ public class CacheBaseService {
 	 * @param businessRouteValue
 	 */
 	public static void saveReportToMiddlewareCache(String accountID,BusinessRouteValue businessRouteValue){
-		cacheBaseService.pushQueue(CacheNameGeneratorUtil.generateReportCacheName(accountID), businessRouteValue);
+		try {
+			cacheBaseService.pushQueue(CacheNameGeneratorUtil.generateAccessReportCacheName(accountID), businessRouteValue);
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+		}
 	}
 	
 	/**
@@ -51,40 +68,64 @@ public class CacheBaseService {
 	 * @param businessRouteValue
 	 */
 	public static void saveSubmitToMiddlewareCache(String channelID,BusinessRouteValue businessRouteValue){
-		cacheBaseService.pushQueue(CacheNameGeneratorUtil.generateSubmitCacheName(channelID), businessRouteValue);
+		try {
+			cacheBaseService.pushQueue(CacheNameGeneratorUtil.generateSubmitCacheName(channelID), businessRouteValue);
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+		}
 	}
 	
 	/**
 	 * 从中间件缓存中获取提交记录
-	 * @param channelID
+	 * @param accountID
 	 * @return
 	 */
 	public static BusinessRouteValue getSubmitFromMiddlewareCache(String channelID){
-		return cacheBaseService.popQueue(CacheNameGeneratorUtil.generateSubmitCacheName(channelID), BusinessRouteValue.class);
+		try {
+			return cacheBaseService.popQueue(CacheNameGeneratorUtil.generateSubmitCacheName(channelID), BusinessRouteValue.class);
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+		}
+		return null;
 	}
 	
 	/**
 	 * 保存响应记录到中间件缓存
+	 * @param channelID
 	 * @param businessRouteValue
 	 */
 	public static void saveResponseToMiddlewareCache(BusinessRouteValue businessRouteValue){
-		cacheBaseService.pushQueue(CacheNameGeneratorUtil.generateResponseCacheName(), businessRouteValue);
+		try {
+			cacheBaseService.pushQueue(CacheNameGeneratorUtil.generateResponseCacheName(), businessRouteValue);
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+		}
 	}
 	
 	/**
-	 * 从中间件缓存获取状态报告：代理协议层使用
+	 * 从中间件缓存获取状态报告：代理层使用
 	 * @return
 	 */
 	public static BusinessRouteValue getReportFromMiddlewareCache(){
-		return cacheBaseService.popQueue(CacheNameGeneratorUtil.generateReportCacheName(), BusinessRouteValue.class);
+		try {
+			return cacheBaseService.popQueue(CacheNameGeneratorUtil.generateProxyReportCacheName(), BusinessRouteValue.class);
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+		}
+		return null;
 	}
 	
 	/**
 	 * 保存状态报告到中间件缓存：代理协议层使用
+	 * @param channelID
 	 * @param businessRouteValue
 	 */
 	public static void saveReportToMiddlewareCache(BusinessRouteValue businessRouteValue){
-		cacheBaseService.pushQueue(CacheNameGeneratorUtil.generateReportCacheName(), businessRouteValue);
+		try {
+			cacheBaseService.pushQueue(CacheNameGeneratorUtil.generateProxyReportCacheName(), businessRouteValue);
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+		}
 	}
 	
 	/**
@@ -92,7 +133,12 @@ public class CacheBaseService {
 	 * @return
 	 */
 	public static BusinessRouteValue getResponseToMiddlewareCache(){
-		return cacheBaseService.popQueue(CacheNameGeneratorUtil.generateResponseCacheName(), BusinessRouteValue.class);
+		try {
+			return cacheBaseService.popQueue(CacheNameGeneratorUtil.generateResponseCacheName(), BusinessRouteValue.class);
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+		}
+		return null;
 	}
 	
 	/**
@@ -101,12 +147,16 @@ public class CacheBaseService {
 	 * @return
 	 */
 	public static long getChannelTodaySuccessNumberFromMiddlewareCache(String channelID){
-		String result = cacheBaseService.getHashValue(
-				CacheNameGeneratorUtil.generateChannelDailyLimitCacheName(), 
-				channelID
-				);
-		if(StringUtils.isNotEmpty(result)){
-			return Long.parseLong(result);
+		try {
+			String result = cacheBaseService.getHashValue(
+					CacheNameGeneratorUtil.generateChannelDailyLimitCacheName(), 
+					channelID
+					);
+			if(StringUtils.isNotEmpty(result)){
+				return Long.parseLong(result);
+			}
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
 		}
 		return 0;
 	}
@@ -117,13 +167,17 @@ public class CacheBaseService {
 	 * @return
 	 */
 	public static long getChannelMonthSuccessNumberFromMiddlewareCache(String channelID){
-		String result = cacheBaseService.getHashValue(
-				CacheNameGeneratorUtil.generateChannelMonthlyLimitCacheName(), 
-				channelID
-				);
-				
-		if(StringUtils.isNotEmpty(result)){
-			return Long.parseLong(result);
+		try {
+			String result = cacheBaseService.getHashValue(
+					CacheNameGeneratorUtil.generateChannelMonthlyLimitCacheName(), 
+					channelID
+					);
+					
+			if(StringUtils.isNotEmpty(result)){
+				return Long.parseLong(result);
+			}
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
 		}
 		return 0;
 	}
@@ -136,26 +190,33 @@ public class CacheBaseService {
 	 */
 	public static void saveChannelSuccessNumberToMiddlewareCache(String channelID,int successNumber){
 		
-		cacheBaseService.increase(CacheNameGeneratorUtil.generateChannelDailyLimitCacheName(),
-				channelID
-				,60*60*24, successNumber);
-		
-		cacheBaseService.increase(CacheNameGeneratorUtil.generateChannelMonthlyLimitCacheName(),
-				channelID
-				,60*60*24*31, successNumber);
+		try {
+			cacheBaseService.increase(CacheNameGeneratorUtil.generateChannelDailyLimitCacheName(),
+					channelID
+					,60*60*24, successNumber);
+			
+			cacheBaseService.increase(CacheNameGeneratorUtil.generateChannelMonthlyLimitCacheName(),
+					channelID
+					,60*60*24*31, successNumber);
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+		}
 	}
 	
 	/**
 	 * 维护账号运营商日提交/成功量
-	 * @param accountID
-	 * @param carrier
-	 * @param number
+	 * @param channelID
+	 * @param successNumber
 	 * @return
 	 */
 	public static void saveAccountCarrierDailyToMiddlewareCache(String accountID,String carrier,int number){
-		cacheBaseService.increase(CacheNameGeneratorUtil.generateAccountCarrierDailyLimitCacheName(),
-				new StringBuilder().append(accountID).append("_").append(carrier).toString()
-				,60*60*24, number);
+		try {
+			cacheBaseService.increase(CacheNameGeneratorUtil.generateAccountCarrierDailyLimitCacheName(),
+					new StringBuilder().append(accountID).append("_").append(carrier).toString()
+					,60*60*24, number,1);
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+		}
 	}
 	
 	/**
@@ -164,7 +225,12 @@ public class CacheBaseService {
 	 * @return
 	 */
 	public static int getChannelQueueSizeFromMiddlewareCache(String channelID){
-		return (int)cacheBaseService.getQueueSize(CacheNameGeneratorUtil.generateSubmitCacheName(channelID));
+		try {
+			return (int)cacheBaseService.getQueueSize(CacheNameGeneratorUtil.generateSubmitCacheName(channelID));
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+		}
+		return 0;
 	}
 	
 	/**
@@ -174,11 +240,15 @@ public class CacheBaseService {
 	 * @param price
 	 */
 	public static void saveAccountPriceToMiddlewareCache(String accountID,String dimension,String price){	
-		cacheBaseService.putHashString(
-				CacheNameGeneratorUtil.generateAccountPriceCacheName(), 
-				3600*24, 
-				new StringBuilder().append(accountID).append("_").append(dimension).toString(), 
-				price);
+		try {
+			cacheBaseService.putHashString(
+					CacheNameGeneratorUtil.generateAccountPriceCacheName(), 
+					3600*24, 
+					new StringBuilder().append(accountID).append("_").append(dimension).toString(), 
+					price);
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+		}
 	}
 	
 	/**
@@ -188,37 +258,51 @@ public class CacheBaseService {
 	 * @return
 	 */
 	public static String getAccountPriceFromMiddlewareCache(String accountID,String dimension){	
-		return cacheBaseService.getHashValue(
-				CacheNameGeneratorUtil.generateAccountPriceCacheName(), 
-				new StringBuilder().append(accountID).append("_").append(dimension).toString()
-				);
+		try {
+			return cacheBaseService.getHashValue(
+					CacheNameGeneratorUtil.generateAccountPriceCacheName(), 
+					new StringBuilder().append(accountID).append("_").append(dimension).toString()
+					);
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+		}
+		return null;
 	}
 	
 	/**
 	 * 保存通道价格到中间件缓存
 	 * @param channelID
-	 * @param areaCode 业务区域;值为ALL表示全国
+	 * @param areaCoden 业务区域;值为ALL表示全国
 	 * @param price
 	 */
 	public static void saveChannelPriceToMiddlewareCache(String channelID,String areaCode,String price){	
-		cacheBaseService.putHashString(
-				CacheNameGeneratorUtil.generateChannelPriceCacheName(), 
-				3600*24, 
-				new StringBuilder().append(channelID).append("_").append(areaCode).toString(), 
-				price);
+		try {
+			cacheBaseService.putHashString(
+					CacheNameGeneratorUtil.generateChannelPriceCacheName(), 
+					3600*24, 
+					new StringBuilder().append(channelID).append("_").append(areaCode).toString(), 
+					price);
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+		}
 	}
 	
 	/**
 	 * 从中间件缓存获取通道价格
 	 * @param channelID
-	 * @param areaCode 业务区域;值为ALL表示全国
+	 * @param areaCoden 业务区域;值为ALL表示全国
 	 * @return
 	 */
 	public static String getChannelPriceFromMiddlewareCache(String channelID,String areaCode){	
-		return cacheBaseService.getHashValue(
-				CacheNameGeneratorUtil.generateChannelPriceCacheName(), 
-				new StringBuilder().append(channelID).append("_").append(areaCode).toString()
-				);
+		try {
+			return cacheBaseService.getHashValue(
+					CacheNameGeneratorUtil.generateChannelPriceCacheName(), 
+					new StringBuilder().append(channelID).append("_").append(areaCode).toString()
+					);
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+		}
+		return null;
 	}
 	
 	
@@ -227,11 +311,15 @@ public class CacheBaseService {
 	 * @param businessRouteValue
 	 */
 	public static void saveBusinessRouteValueToMiddlewareCache(BusinessRouteValue businessRouteValue) {
-		cacheBaseService.putObject(
-				CacheNameGeneratorUtil.generateMessageIDCacheName(
-				businessRouteValue.getPhoneNumber(), businessRouteValue.getChannelMessageID()),
-				BusinessDataManager.getInstance().getResponseStoreToRedisExpirationTime(),
-				businessRouteValue);
+		try {
+			cacheBaseService.putObject(
+					CacheNameGeneratorUtil.generateMessageIDCacheName(
+					businessRouteValue.getPhoneNumber(), businessRouteValue.getChannelMessageID()),
+					BusinessDataManager.getInstance().getResponseStoreToRedisExpirationTime(),
+					businessRouteValue);
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+		}
 	}
 
 	/**
@@ -240,8 +328,13 @@ public class CacheBaseService {
 	 * @return
 	 */
 	public static BusinessRouteValue getBusinessRouteValueFromMiddlewareCache(BusinessRouteValue businessRouteValue) {
-		return cacheBaseService.getObject(CacheNameGeneratorUtil.generateMessageIDCacheName(businessRouteValue.getPhoneNumber(),
-						businessRouteValue.getChannelMessageID()), BusinessRouteValue.class);
+		try {
+			return cacheBaseService.getObject(CacheNameGeneratorUtil.generateMessageIDCacheName(businessRouteValue.getPhoneNumber(),
+							businessRouteValue.getChannelMessageID()), BusinessRouteValue.class);
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+		}
+		return null;
 	}
 	
 	/**
@@ -250,24 +343,39 @@ public class CacheBaseService {
 	 * @return
 	 */
 	public static void deleteBusinessRouteValueFromMiddlewareCache(BusinessRouteValue businessRouteValue) {
-		cacheBaseService.delObject(CacheNameGeneratorUtil.generateMessageIDCacheName(businessRouteValue.getPhoneNumber(),
-						businessRouteValue.getChannelMessageID()));
+		try {
+			cacheBaseService.delObject(CacheNameGeneratorUtil.generateMessageIDCacheName(businessRouteValue.getPhoneNumber(),
+							businessRouteValue.getChannelMessageID()));
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+		}
 	}
 	
 	/**
-	 * 保存状态报告到中间件缓存：代理业务层使用
+	 * 保存状态报告到中间件缓存：保留到接入层
+	 * @param channelID
 	 * @param businessRouteValue
 	 */
 	public static void saveBusinessReportToMiddlewareCache(BusinessRouteValue businessRouteValue){
-		cacheBaseService.pushQueue(CacheNameGeneratorUtil.generateReportCacheName(FixedConstant.MiddlewareCacheName.BUSINESS.name()), businessRouteValue);
+		try {
+			cacheBaseService.pushQueue(CacheNameGeneratorUtil.generateAccessReportCacheName(), businessRouteValue);
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+		}
 	}
 	
 	/**
 	 * 接入业务层从中间件缓存中获取状态报告：接入业务层使用
+	 * @param accountID
 	 * @return
 	 */
 	public static BusinessRouteValue getBusinessReportFromMiddlewareCache(){
-		return cacheBaseService.popQueue(CacheNameGeneratorUtil.generateReportCacheName(FixedConstant.MiddlewareCacheName.BUSINESS.name()), BusinessRouteValue.class);
+		try {
+			return cacheBaseService.popQueue(CacheNameGeneratorUtil.generateAccessReportCacheName(), BusinessRouteValue.class);
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+		}
+		return null;
 	}
 	
 	/**
@@ -277,7 +385,12 @@ public class CacheBaseService {
 	 * @param timeout
 	 */
 	public static boolean lock(String key, String requestId, int timeout) {
-		return cacheBaseService.lock(key, requestId, timeout);
+		try {
+			return cacheBaseService.lock(key, requestId, timeout);
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+		}
+		return false;
 	}
 	
 	/**
@@ -286,7 +399,12 @@ public class CacheBaseService {
 	 * @param requestId
 	 */
 	public static boolean unlock(String key, String requestId) {
-		return cacheBaseService.unlock(key, requestId);
+		try {
+			return cacheBaseService.unlock(key, requestId);
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+		}
+		return false;
 	}
 }
 

@@ -112,6 +112,21 @@ public class BusinessDataManager {
 	}
 	
 	/**
+	 * 加载账号财务信息的间隔时间
+	 * @return
+	 */
+	public long getAccountFinanceLoadIntervalTime(){
+		String result = getBusinessParamValue(BusinessDataCategory.SYSTEM_PARAM,BusinessDataItem.ACCOUNT_FINANCE_LOAD_INTERVAL_TIME,null);
+		try {
+			return Long.parseLong(result);
+		} catch (Exception e) {
+			CategoryLog.commonLogger.error(e.getMessage(),e);
+		}
+		
+		return FixedConstant.COMMON_EFFECTIVE_TIME;
+	}
+	
+	/**
 	 * 单次数据加载最大条数
 	 * @return
 	 */
@@ -153,7 +168,7 @@ public class BusinessDataManager {
 	}
 	
 	/**
-	 * redis分布锁过期时间
+	 * redis分布锁过期时间 单位:秒
 	 */
 	public int getRedisLockExpirationTime(){
 		String result = getBusinessParamValue(BusinessDataCategory.SYSTEM_PARAM,BusinessDataItem.REDIS_LOCK_EXPIRATION_TIME,null);
@@ -162,7 +177,7 @@ public class BusinessDataManager {
 		} catch (Exception e) {
 			CategoryLog.commonLogger.error(e.getMessage(),e);
 		}	
-		return 60 * 1000;
+		return 60;
 	}
 	
 	/**
@@ -501,7 +516,7 @@ public class BusinessDataManager {
 		public static BusinessDataItem MESSAGE_LOAD_INTERVAL_TIME = new BusinessDataItem(FixedConstant.SystemItem.MESSAGE_LOAD_INTERVAL_TIME.toString());
 		public static BusinessDataItem MESSAGE_LOAD_MAX_NUMBER = new BusinessDataItem(FixedConstant.SystemItem.MESSAGE_LOAD_MAX_NUMBER.toString());
 		public static BusinessDataItem CHANNEL_MO_LOAD_INTERVAL_TIME = new BusinessDataItem(FixedConstant.SystemItem.CHANNEL_MO_LOAD_INTERVAL_TIME.toString());
-
+		public static BusinessDataItem ACCOUNT_FINANCE_LOAD_INTERVAL_TIME = new BusinessDataItem(FixedConstant.SystemItem.CHANNEL_MO_LOAD_INTERVAL_TIME.toString());
 		
 		public static BusinessDataItem SESSION_MONITOR_INTERVAL_TIME = new BusinessDataItem(FixedConstant.SystemItem.SESSION_MONITOR_INTERVAL_TIME.toString());
 		public static BusinessDataItem REPORT_REDIS_POP_INTERVAL_TIME = new BusinessDataItem(FixedConstant.SystemItem.REPORT_REDIS_POP_INTERVAL_TIME.toString());
@@ -520,18 +535,18 @@ public class BusinessDataManager {
 		
 		
 		//账号过滤数据项
-		public static BusinessDataItem BLACK_WORD_FILTERING = new BusinessDataItem(FixedConstant.AccountFilterItem.BLACK_WORD_FILTERING.toString());
-		public static BusinessDataItem AUDIT_WORD_FILTERING = new BusinessDataItem(FixedConstant.AccountFilterItem.AUDIT_WORD_FILTERING.toString());
-		public static BusinessDataItem SEND_FREQUENCY_LIMIT = new BusinessDataItem(FixedConstant.AccountFilterItem.SEND_FREQUENCY_LIMIT.toString());
-		public static BusinessDataItem BLACK_LIST_LEVEL_FILTERING = new BusinessDataItem(FixedConstant.AccountFilterItem.BLACK_LIST_LEVEL_FILTERING.toString());
-		public static BusinessDataItem SEND_LIMIT_STYLE_DAILY = new BusinessDataItem(FixedConstant.AccountFilterItem.SEND_LIMIT_STYLE_DAILY.toString());
-		public static BusinessDataItem SEND_LIMIT_NUMBER_DAILY_CMCC = new BusinessDataItem(FixedConstant.AccountFilterItem.SEND_LIMIT_NUMBER_DAILY_CMCC.toString());
-		public static BusinessDataItem SEND_LIMIT_NUMBER_DAILY_UNIC = new BusinessDataItem(FixedConstant.AccountFilterItem.SEND_LIMIT_NUMBER_DAILY_UNIC.toString());
-		public static BusinessDataItem SEND_LIMIT_NUMBER_DAILY_TELC = new BusinessDataItem(FixedConstant.AccountFilterItem.SEND_LIMIT_NUMBER_DAILY_TELC.toString());
-		public static BusinessDataItem SEND_TIME_LIMIT = new BusinessDataItem(FixedConstant.AccountFilterItem.SEND_TIME_LIMIT.toString());
-		public static BusinessDataItem CMCC_MASK_PROVINCE = new BusinessDataItem(FixedConstant.AccountFilterItem.CMCC_MASK_PROVINCE.toString());
-		public static BusinessDataItem UNIC_MASK_PROVINCE = new BusinessDataItem(FixedConstant.AccountFilterItem.UNIC_MASK_PROVINCE.toString());
-		public static BusinessDataItem TELC_MASK_PROVINCE = new BusinessDataItem(FixedConstant.AccountFilterItem.TELC_MASK_PROVINCE.toString());
+		public static BusinessDataItem BLACK_WORD_FILTERING = new BusinessDataItem(FixedConstant.AccountFilterItem.COMMON_BLACK_WORD_FILTERING.toString());
+		public static BusinessDataItem AUDIT_WORD_FILTERING = new BusinessDataItem(FixedConstant.AccountFilterItem.COMMON_AUDIT_WORD_FILTERING.toString());
+		public static BusinessDataItem SEND_FREQUENCY_LIMIT = new BusinessDataItem(FixedConstant.AccountFilterItem.COMMON_SEND_FREQUENCY_LIMIT.toString());
+		public static BusinessDataItem BLACK_LIST_LEVEL_FILTERING = new BusinessDataItem(FixedConstant.AccountFilterItem.COMMON_BLACK_LIST_LEVEL_FILTERING.toString());
+		public static BusinessDataItem SEND_LIMIT_STYLE_DAILY = new BusinessDataItem(FixedConstant.AccountFilterItem.COMMON_SEND_LIMIT_STYLE_DAILY.toString());
+		public static BusinessDataItem SEND_LIMIT_NUMBER_DAILY_CMCC = new BusinessDataItem(FixedConstant.AccountFilterItem.COMMON_SEND_LIMIT_NUMBER_DAILY_CMCC.toString());
+		public static BusinessDataItem SEND_LIMIT_NUMBER_DAILY_UNIC = new BusinessDataItem(FixedConstant.AccountFilterItem.COMMON_SEND_LIMIT_NUMBER_DAILY_UNIC.toString());
+		public static BusinessDataItem SEND_LIMIT_NUMBER_DAILY_TELC = new BusinessDataItem(FixedConstant.AccountFilterItem.COMMON_SEND_LIMIT_NUMBER_DAILY_TELC.toString());
+		public static BusinessDataItem SEND_TIME_LIMIT = new BusinessDataItem(FixedConstant.AccountFilterItem.COMMON_SEND_TIME_LIMIT.toString());
+		public static BusinessDataItem CMCC_MASK_PROVINCE = new BusinessDataItem(FixedConstant.AccountFilterItem.COMMON_CMCC_MASK_PROVINCE.toString());
+		public static BusinessDataItem UNIC_MASK_PROVINCE = new BusinessDataItem(FixedConstant.AccountFilterItem.COMMON_UNIC_MASK_PROVINCE.toString());
+		public static BusinessDataItem TELC_MASK_PROVINCE = new BusinessDataItem(FixedConstant.AccountFilterItem.COMMON_TELC_MASK_PROVINCE.toString());
 		
 		//业务账号的扩展项
 		public static BusinessDataItem ACCOUNT_REPORT_PUSH_INTERVAL_TIME = new BusinessDataItem(FixedConstant.AccountExtendItem.ACCOUNT_REPORT_PUSH_INTERVAL_TIME.toString());

@@ -6,27 +6,14 @@ import com.base.common.constant.FixedConstant;
 public class CacheNameGeneratorUtil {
 	
 	/**
-	 * 生成流速的缓存名称
-	 * @param key
-	 * @return
-	 */
-	public static final String generateSpeedCacheName(String key) {
-		return new StringBuilder()
-		.append(FixedConstant.MiddlewareCacheName.SPEED)
-		.append(FixedConstant.SPLICER)
-		.append(key)
-		.toString();
-	}
-	
-	/**
 	 * 生成携号转网的缓存名称
 	 * @param key
 	 * @return
 	 */
 	public static final String generateMNPCacheName(String key) {
 		return new StringBuilder()
-		.append(FixedConstant.MiddlewareCacheName.MNP)
-		.append(FixedConstant.SPLICER)
+		.append(FixedConstant.MiddlewareCacheName.MNP.name())
+		.append(FixedConstant.REIDS_SPLICER)
 		.append(key)
 		.toString();
 	}
@@ -54,37 +41,46 @@ public class CacheNameGeneratorUtil {
 	}
 	
 	/**
-	 * 生成状态报告队列名称
+	 * 账号级接入层状态报告队列
 	 * @param key
 	 * @return
 	 */
-	public static final String generateReportCacheName(String key) {
+	public static final String generateAccessReportCacheName(String key) {
 		return new StringBuilder()
-		.append(FixedConstant.MiddlewareCacheName.REPORT)
-		.append(FixedConstant.SPLICER)
+		.append(FixedConstant.MiddlewareCacheName.ACCESS_REPORT.name())
+		.append(FixedConstant.REIDS_SPLICER)
 		.append(key)
 		.toString();
 	}
 	
 	/**
-	 * 状态报告队列
+	 * 接入层状态报告队列
 	 * @return
 	 */
-	public static final String generateReportCacheName() {
+	public static final String generateAccessReportCacheName() {
 		return new StringBuilder()
-		.append(FixedConstant.MiddlewareCacheName.REPORT)
-		.append(FixedConstant.SPLICER)
+		.append(FixedConstant.MiddlewareCacheName.ACCESS_REPORT.name())
+		.toString();
+	}
+	
+	/**
+	 * 代理层状态报告队列
+	 * @return
+	 */
+	public static final String generateProxyReportCacheName() {
+		return new StringBuilder()
+		.append(FixedConstant.MiddlewareCacheName.PROXY_REPORT.name())
 		.toString();
 	}
 	
 	/**
 	 * 生成响应队列名称
+	 * @param key
 	 * @return
 	 */
 	public static final String generateResponseCacheName() {
 		return new StringBuilder()
-		.append(FixedConstant.MiddlewareCacheName.RESPONSE)
-		.append(FixedConstant.SPLICER)
+		.append(FixedConstant.MiddlewareCacheName.RESPONSE.name())
 		.toString();
 	}
 	
@@ -95,8 +91,8 @@ public class CacheNameGeneratorUtil {
 	 */
 	public static final String generateSubmitCacheName(String key){
 		return new StringBuilder()
-		.append(FixedConstant.MiddlewareCacheName.SUBMIT)
-		.append(FixedConstant.SPLICER)
+		.append(FixedConstant.MiddlewareCacheName.SUBMIT.name())
+		.append(FixedConstant.REIDS_SPLICER)
 		.append(key)
 		.toString();
 	}
@@ -109,16 +105,18 @@ public class CacheNameGeneratorUtil {
 	 */
 	public static final String generateMessageIDCacheName(String mobile,String channelMessageID){
 		return new StringBuilder()
-		.append(FixedConstant.MiddlewareCacheName.MESSAGE_ID)
-		.append(FixedConstant.SPLICER)
+		.append(FixedConstant.MiddlewareCacheName.MESSAGE_ID.name())
+		.append(FixedConstant.REIDS_SPLICER)
 		.append(mobile)
-		.append(FixedConstant.SPLICER)
+		.append(FixedConstant.REIDS_SPLICER)
 		.append(channelMessageID)
 		.toString();
 	}
 	
 	/**
 	 * 获取账号运营商日限量key
+	 * @param accountID
+	 * @param carrier
 	 * @return
 	 */
 	public static final String generateAccountCarrierDailyLimitCacheName(){
@@ -129,7 +127,19 @@ public class CacheNameGeneratorUtil {
 	}
 	
 	/**
+	 * 获取账号流控key
+	 * @return
+	 */
+	public static final String generateAccountSpeedCacheName(){
+		return new StringBuilder()
+		.append(RedisHashKeyConstant.ACCOUNT_SPEED_PREFIX)
+		.append(DateUtil.getCurDateTime(DateUtil.DATE_FORMAT_COMPACT_MINUTE))
+		.toString();
+	}
+	
+	/**
 	 * 获取通道日限量key
+	 * @param channelID
 	 * @return
 	 */
 	public static final String generateChannelDailyLimitCacheName(){
@@ -141,6 +151,7 @@ public class CacheNameGeneratorUtil {
 	
 	/**
 	 * 获取通道月限量key
+	 * @param channelID
 	 * @return
 	 */
 	public static final String generateChannelMonthlyLimitCacheName(){
@@ -157,8 +168,8 @@ public class CacheNameGeneratorUtil {
 	 */
 	public static final String generateReportRedisLockCacheName(String accountID){
 		return new StringBuilder()
-		.append(FixedConstant.MiddlewareCacheName.LOCK_REPORT)
-		.append(FixedConstant.SPLICER)
+		.append(FixedConstant.MiddlewareCacheName.LOCK_REPORT.name())
+		.append(FixedConstant.REIDS_SPLICER)
 		.append(accountID)
 		.toString();
 	}
@@ -171,8 +182,8 @@ public class CacheNameGeneratorUtil {
 	 */
 	public static final String generateMORedisLockCacheName(String accountID){
 		return new StringBuilder()
-		.append(FixedConstant.MiddlewareCacheName.LOCK_MO)
-		.append(FixedConstant.SPLICER)
+		.append(FixedConstant.MiddlewareCacheName.LOCK_MO.name())
+		.append(FixedConstant.REIDS_SPLICER)
 		.append(accountID)
 		.toString();
 	}

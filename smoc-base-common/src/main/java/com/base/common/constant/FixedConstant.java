@@ -8,17 +8,19 @@ public class FixedConstant {
 	/**
 	 * 系统数据之间的拼接符
 	 */
-	public static String SPLICER ="&";
+	public final static String SPLICER ="&";
+	
+	public final static String REIDS_SPLICER =":";
 	
 	/**
 	 * 日志字段之间的分隔符
 	 */
-	public static String LOG_SEPARATOR =",";
+	public final static String LOG_SEPARATOR =",";
 	
 	/**
 	 * 数据库存储多个字段的分隔符
 	 */
-	public static String DATABASE_SEPARATOR =",";
+	public final static String DATABASE_SEPARATOR =",";
 	
 	/**
 	 * 通用运行标识，可以通过更改该标识，停止线程运行。
@@ -28,27 +30,37 @@ public class FixedConstant {
 	/**
 	 * 数据库账号密码加密的key
 	 */
-	public static String ENCRYPT_KEY = "f38b5b64-c2ba-4e59-901c-5f0c1ec19fe4";
+	public final static String ENCRYPT_KEY = "f38b5b64-c2ba-4e59-901c-5f0c1ec19fe4";
 	
 	/***
 	 * 通用生效时间：一般指某个数据项增、删、改之后系统多长时间生效，如果黑名单、白名单、省地市号段、运营商号段、频次限制、签名限制等
 	 */
-	public static long COMMON_EFFECTIVE_TIME = 60 * 1000;
+	public final static long COMMON_EFFECTIVE_TIME = 60 * 1000;
 	
 	/**
 	 * 通用间隔时间:一般指某项操作之后需要暂停的时间，如从redis拉取状态报告、给客户推送状态报告、数据保存的间隔时间
 	 */
-	public static long COMMON_INTERVAL_TIME = 1000;
+	public final static long COMMON_INTERVAL_TIME = 1000;
 	
 	/**
 	 * 通用监控间隔时间:特指监控打印数据的间隔时间
 	 */
-	public static long COMMON_MONITOR_INTERVAL_TIME = 60 * 1000;
+	public final static long COMMON_MONITOR_INTERVAL_TIME = 60 * 1000;
+	
+	/**
+	 * 失败补发错误码-不是成功就行补发
+	 */
+	public final static String FAIL_REPAIR_ALL_FAILED_CODE = "ALLFAILED";
+	
+	/**
+	 * 失败补发错误码-不是成功就行补发-正则表达式
+	 */
+	public final static String REPAIR_ALL_FAILED_CODE_REGEXP = "^((?!DELIVRD).)*$";
 	
 	/**
 	 * 服务器cpu数量
 	 */
-	public static final int CPU_NUMBER = Runtime.getRuntime().availableProcessors();
+	public final static int CPU_NUMBER = Runtime.getRuntime().availableProcessors();
 	
 	/**
 	 * 运营商
@@ -133,8 +145,8 @@ public class FixedConstant {
 	 * 缓存队列或key的名称
 	 */
 	public static enum MiddlewareCacheName {
-		//提交，响应，报告，流速，携号转网,价格，消息ID，业务级状态报告，上行
-		SUBMIT,RESPONSE,REPORT,SPEED,MNP,MESSAGE_ID,BUSINESS,MO,LOCK_MO,LOCK_REPORT
+		//提交，响应，代理层状态报告，接入层状态报告,携号转网,消息ID，上行锁,状态锁，审核锁
+		SUBMIT,RESPONSE,PROXY_REPORT,ACCESS_REPORT,MNP,MESSAGE_ID,LOCK_MO,LOCK_REPORT,LOCK_AUDIT
 	}
 	
 	/**
@@ -203,22 +215,23 @@ public class FixedConstant {
 		CHANNEL_MO_MATCH_EXPIRATION_TIME,//上行匹配有效期
 		CHANNEL_MO_LOAD_INTERVAL_TIME,//通道上行数据加载间隔时间
 		REDIS_LOCK_EXPIRATION_TIME,//redis分布锁的过期时间
+		ACCOUNT_FINANCE_LOAD_INTERVAL_TIME,//账号财务信息加载间隔时间
 	}
 	
 	//业务账号的过滤项
 	public static enum AccountFilterItem {
-		BLACK_WORD_FILTERING,//黑词过滤
-		AUDIT_WORD_FILTERING,//审核词过滤
-		SEND_FREQUENCY_LIMIT,//相同手机号频次限制
-		BLACK_LIST_LEVEL_FILTERING,//黑名单层级过滤
-		SEND_LIMIT_STYLE_DAILY,//日限量方式
-		SEND_LIMIT_NUMBER_DAILY_CMCC,//移动日限量
-		SEND_LIMIT_NUMBER_DAILY_UNIC,//联通日限量
-		SEND_LIMIT_NUMBER_DAILY_TELC,//电信日限量	
-		SEND_TIME_LIMIT,//发送时间限制
-		CMCC_MASK_PROVINCE,//移动屏蔽省份
-		UNIC_MASK_PROVINCE,//联通屏蔽省份
-		TELC_MASK_PROVINCE//电信屏蔽省份
+		COMMON_BLACK_WORD_FILTERING,//黑词过滤
+		COMMON_AUDIT_WORD_FILTERING,//审核词过滤
+		COMMON_SEND_FREQUENCY_LIMIT,//相同手机号频次限制
+		COMMON_BLACK_LIST_LEVEL_FILTERING,//黑名单层级过滤
+		COMMON_SEND_LIMIT_STYLE_DAILY,//日限量方式
+		COMMON_SEND_LIMIT_NUMBER_DAILY_CMCC,//移动日限量
+		COMMON_SEND_LIMIT_NUMBER_DAILY_UNIC,//联通日限量
+		COMMON_SEND_LIMIT_NUMBER_DAILY_TELC,//电信日限量	
+		COMMON_SEND_TIME_LIMIT,//发送时间限制
+		COMMON_CMCC_MASK_PROVINCE,//移动屏蔽省份
+		COMMON_UNIC_MASK_PROVINCE,//联通屏蔽省份
+		COMMON_TELC_MASK_PROVINCE//电信屏蔽省份
 		
 	}
 	
@@ -258,6 +271,12 @@ public class FixedConstant {
 		MARKETING,//会销
 		NEW,//拉新
 		COLLECTION,//催收
+	}
+	
+	public static enum RepairStatus {
+		NO_CONFIG,//未配置
+		NO_REPAIR,//不补发
+		REPAIR,//补发
 	}
 }
 

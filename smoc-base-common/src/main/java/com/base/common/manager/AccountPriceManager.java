@@ -68,7 +68,7 @@ public class AccountPriceManager extends SuperMapWorker<String, String> {
 
 	
 	/**获取账号价格
-	 * @param accountID  账号id
+	 * @param accountId  账号id
 	 * @param carrier    运营商
 	 * @param time       当天日期
 	 * @return

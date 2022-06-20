@@ -30,8 +30,8 @@ public class ResourceManager extends SuperMapWorker<String, String>{
 			return 0;
 		try {
 			return Integer.parseInt(value.trim());
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception e) {
+			CategoryLog.commonLogger.error(e.getMessage(),e);
 		}
 		return 0;
 	}
@@ -42,8 +42,8 @@ public class ResourceManager extends SuperMapWorker<String, String>{
 			return 0L;
 		try {
 			return Long.parseLong(value.trim());
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception e) {
+			CategoryLog.commonLogger.error(e.getMessage(),e);
 		}
 		return 0L;
 	}

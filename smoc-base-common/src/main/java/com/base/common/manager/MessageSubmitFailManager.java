@@ -3,10 +3,10 @@ package com.base.common.manager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.base.common.cache.CacheBaseService;
 import com.base.common.constant.FixedConstant;
 import com.base.common.util.DateUtil;
 import com.base.common.vo.BusinessRouteValue;
+import com.base.common.worker.MessageSubmitFailWorker;
 import com.base.common.worker.SuperQueueWorker;
 
 /**
@@ -21,6 +21,12 @@ public class MessageSubmitFailManager extends SuperQueueWorker<BusinessRouteValu
 	}
 	
 	private MessageSubmitFailManager(){
+		//启动cpu的数量*8的系数
+		for(int i=0;i<FixedConstant.CPU_NUMBER*2;i++){
+			MessageSubmitFailWorker messageSubmitFailWorker = new MessageSubmitFailWorker(superQueue);
+			messageSubmitFailWorker.setName(new StringBuilder("MessageSubmitFailWorker-").append(i).toString());
+			messageSubmitFailWorker.start();
+		}
 		this.start();
 	}
 	
@@ -36,17 +42,8 @@ public class MessageSubmitFailManager extends SuperQueueWorker<BusinessRouteValu
 	
 	@Override
 	protected void doRun() throws Exception {
-		BusinessRouteValue businessRouteValue = take();
-		String accountMessageIDs =businessRouteValue.getAccountMessageIDs();
-		int messageIndex = 0;
-		for(String accountMessageID : accountMessageIDs.split(FixedConstant.SPLICER)){
-			messageIndex++;
-			businessRouteValue.setAccountMessageIDs(accountMessageID);
-			businessRouteValue.setMessageIndex(messageIndex);
-			logger.info("模拟回执{}{}",FixedConstant.SPLICER,businessRouteValue.toString());
-			CacheBaseService.saveBusinessReportToMiddlewareCache(businessRouteValue);
-		}
-		
+		logger.info("下发失败缓存队列数量{}",size());
+		Thread.sleep(FixedConstant.COMMON_MONITOR_INTERVAL_TIME);
 	}
 	
 }

@@ -24,7 +24,7 @@ public class AccountInfoDAO {
 		ResultSet rs = null;
 		sql.append(
 				"SELECT a.ACCOUNT_ID,a.ACCOUNT_USABLE_SUM,a.ACCOUNT_CREDIT_SUM,asd.SHARE_ACCOUNT_ID FROM smoc.finance_account a ");
-		sql.append("LEFT JOIN smoc.finance_account_share_detail asd ON a.ACCOUNT_ID = asd.ACCOUNT_ID ");
+		sql.append("LEFT JOIN smoc.finance_account_share_detail asd ON a.ACCOUNT_ID = asd.ACCOUNT_ID AND  asd.SHARE_STATUS = 1 ");
 
 		try {
 			conn = LavenderDBSingleton.getInstance().getConnection();

@@ -36,7 +36,7 @@ public class BusinessDictionaryManager {
 	
 	/**
 	 * 根据国家名称获取国家编码
-	 * @param internationalAreaName
+	 * @param provinceName
 	 * @return
 	 */
 	public String getInternationalAreaCode(String internationalAreaName){
@@ -45,7 +45,7 @@ public class BusinessDictionaryManager {
 	
 	/**
 	 * 根据手机号获取国家编码
-	 * @param phoneNumber
+	 * @param internationalAreaName
 	 * @return
 	 */
 	public String getInternationalAreaCodeByPhoneNumber(String phoneNumber){
@@ -81,7 +81,7 @@ public class BusinessDictionaryManager {
 	/**
      * 匹配函数
      * @param regex
-     * @param phoneNumber
+     * @param tel
      * @return
      */
     private boolean match(String regex, String phoneNumber) {

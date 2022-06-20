@@ -21,25 +21,23 @@ public class LogPathConstant {
 	public static String LOG_FILENAME_PREFIX_MO = "mo.";
 	
 	//接入协议层日志路径
-	public static String ACCESS_PROTOCOL_MT_LOG_PATH = "access/protocol/mt";
-	public static String ACCESS_PROTOCOL_MR_LOG_PATH = "access/protocol/mr";
-	public static String ACCESS_PROTOCOL_MO_LOG_PATH = "access/protocol/mo";
+	//public static String ACCESS_PROTOCOL_MT_LOG_PATH = "access/protocol/mt";
+	//public static String ACCESS_PROTOCOL_MR_LOG_PATH = "access/protocol/mr";
 	
 	//接入业务层日志路径
-	private static String ACCESS_BUSINESS_MT_LOG_PATH = "access/business/mt";
-	private static String ACCESS_BUSINESS_MR_LOG_PATH = "access/business/mr";
+	private static String ACCESS_BUSINESS_MT_LOG_PATH = "business/access/mt";
+	private static String ACCESS_BUSINESS_MR_LOG_PATH = "business/access/mr";
 	
 	//代理业务层日志路径
-	private static String PROXY_BUSINESS_MT_LOG_PATH = "proxy/business/mt";
-	private static String PROXY_BUSINESS_MR_LOG_PATH = "proxy/business/mr";
+	private static String PROXY_BUSINESS_MT_LOG_PATH = "business/proxy/mt";
+	private static String PROXY_BUSINESS_MR_LOG_PATH = "business/proxy/mr";
 	
 	//业务层上行日志
 	public static String BUSINESS_MO_LOG_PATH = "business/mo";
 	
 	//代理协议层日志路径
-	public static String PROXY_PROTOCOL_MT_LOG_PATH = "proxy/protocol/mt";
-	public static String PROXY_PROTOCOL_MR_LOG_PATH = "proxy/protocol/mr";
-	public static String PROXY_PROTOCOL_MO_LOG_PATH = "proxy/protocol/mo";
+	//public static String PROXY_PROTOCOL_MT_LOG_PATH = "proxy/protocol/mt";
+	//public static String PROXY_PROTOCOL_MR_LOG_PATH = "proxy/protocol/mr";
 	
 	//文件前缀集合:lable-文件前缀
 	private static Map<String,String> fileNamePrefixMap = new HashMap<String, String>();
@@ -50,12 +48,11 @@ public class LogPathConstant {
 	}
 	
 	//接入协议层文件路径集合:lable-文件路径
-	private static Map<String,String> accessProtocolFilePathPartMap = new HashMap<String, String>();
-	static{
-		accessProtocolFilePathPartMap.put(FixedConstant.RouteLable.MT.name(), ACCESS_PROTOCOL_MT_LOG_PATH);
-		accessProtocolFilePathPartMap.put(FixedConstant.RouteLable.MR.name(), ACCESS_PROTOCOL_MR_LOG_PATH);
-		accessProtocolFilePathPartMap.put(FixedConstant.RouteLable.MO.name(), ACCESS_PROTOCOL_MO_LOG_PATH);
-	}
+//	private static Map<String,String> accessProtocolFilePathPartMap = new HashMap<String, String>();
+//	static{
+//		accessProtocolFilePathPartMap.put(FixedConstant.RouteLable.MT.name(), ACCESS_PROTOCOL_MT_LOG_PATH);
+//		accessProtocolFilePathPartMap.put(FixedConstant.RouteLable.MR.name(), ACCESS_PROTOCOL_MR_LOG_PATH);
+//	}
 	
 	//接入业务层文件路径集合:lable-文件路径
 	private static Map<String,String> accessBusinessFilePathPartMap = new HashMap<String, String>();
@@ -75,9 +72,9 @@ public class LogPathConstant {
 		return fileNamePrefixMap.get(lable);
 	}
 	
-	public static String getAccessProtocolFilePathPart(String lable){
-		return accessProtocolFilePathPartMap.get(lable);
-	}
+//	public static String getAccessProtocolFilePathPart(String lable){
+//		return accessProtocolFilePathPartMap.get(lable);
+//	}
 	
 	public static String getAccessBusinessFilePathPart(String lable){
 		return accessBusinessFilePathPartMap.get(lable);

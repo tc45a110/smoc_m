@@ -1,3 +1,9 @@
+/**
+ * @desc
+ * @author ma
+ * @date 2017年10月10日
+ * 
+ */
 package com.base.common.manager;
 
 import java.sql.Connection;
@@ -58,7 +64,7 @@ public class ChannelRunStatusManager extends SuperQueueWorker<ChannelRunStatusVa
 	
 	/**
 	 * 批量维护通道运行状态
-	 * @param channelRunStatusValueSet
+	 * @param channelRunStatusValueList
 	 */
 	private void saveChannelRunStatusInfo(Set<ChannelRunStatusValue> channelRunStatusValueSet) {
 		

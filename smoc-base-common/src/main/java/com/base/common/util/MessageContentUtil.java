@@ -176,7 +176,7 @@ public class MessageContentUtil {
 	
 	/**
 	 *  GSM7bit方式编码的字节数组，进行解码成字符串
-	 * @param data
+	 * @param d
 	 * @return
 	 */
 	public static String gsm7BitDecode(byte[] data) {

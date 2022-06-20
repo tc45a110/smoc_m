@@ -12,6 +12,11 @@ public class RedisHashKeyConstant {
 	public static final String ACCOUNT_CARRIER_DAILY_LIMIT_PREFIX = "filters:temporary:limit:flow:carrier:";
 	
 	/**
+	 *  账号流控hash的key值前缀
+	 */
+	public static final String ACCOUNT_SPEED_PREFIX = "account:temporary:speed:";
+	
+	/**
 	 * 账号日价格hash的key值前缀
 	 */
 	public static final String ACCOUNT_PRICE_PREFIX = "account:temporary:price:";
