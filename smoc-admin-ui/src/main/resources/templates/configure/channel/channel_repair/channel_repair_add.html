@@ -51,9 +51,9 @@
                                                 </select>
                                             </div>
                                             <div class="form-group">
-                                                <label>失败补发错误码&nbsp;</label>
+                                                <label>失败补发错误码<span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control" th:field="*{repairCode}"
-                                                       data-parsley-length="[1,30]" autocomplete="off"
+                                                       required="" data-parsley-length="[1,30]" autocomplete="off"
                                                        placeholder="失败补发错误码">
                                             </div>
                                             <div class="form-group">
@@ -64,6 +64,17 @@
 
                                         </div>
                                         <!-- end class p-20 -->
+                                    </div> <!-- end col -->
+                                    <div class="col-md-6">
+                                        <div class="form-group m-b-20" style="background-color:padding: 5px 10px;">
+                                            <label>
+                                                备注:<span class="text-danger"></span>&nbsp;
+                                            </label>
+                                            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;若所有失败都需补发，则错误码需填入ALLFAILED</p>
+                                            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;同一运营商的补发通道，其错误码需一致</p>
+                                            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;不同运营商的补发通道，其错误码可不一致</p>
+                                        </div>
+
                                     </div> <!-- end col -->
                                 </div>
 

@@ -256,8 +256,8 @@ public class MessageDetailInfoRepositoryImpl extends BasePageRepository {
 
             //任务Id
             if (!StringUtils.isEmpty(qo.getTaskId())) {
-                sqlBuffer.append(" and t.MESSAGE_ID =?");
-                paramsList.add("%" + qo.getTaskId().trim() + "%");
+                sqlBuffer.append(" and t.MESSAGE_ID = ?");
+                paramsList.add(qo.getTaskId().trim());
             }
 
             //手机号

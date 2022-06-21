@@ -33,6 +33,9 @@ public class FinanceAccountRecharge {
     @Column(name = "RECHARGE_ACCOUNT_USABLE", precision = 24, scale = 6)
     private BigDecimal rechargeAccountUsable;
 
+    @Column(name = "REMARK")
+    private String remark;
+
     @Column(name = "CREATED_BY", nullable = false, length = 32)
     private String createdBy;
 
@@ -109,5 +112,13 @@ public class FinanceAccountRecharge {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

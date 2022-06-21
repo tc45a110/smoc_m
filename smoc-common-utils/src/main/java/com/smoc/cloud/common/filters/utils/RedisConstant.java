@@ -77,6 +77,8 @@ public class RedisConstant {
     public static final String FILTERS_CONFIG_ACCOUNT_WORDS_WHITE_NO_CHECK = FILTERS_CONFIG_ACCOUNT_WORDS_WHITE + "no_check:";
     //业务账号正则白词
     public static final String FILTERS_CONFIG_ACCOUNT_WORDS_WHITE_REGULAR = FILTERS_CONFIG_ACCOUNT_WORDS_WHITE + "regular:";
+    //业务账号白名单
+    public static final String FILTERS_CONFIG_ACCOUNT_NUMBER_WHITE = FILTERS_CONFIG_ACCOUNT + "list:white:";
 
     //业务账号模版
     public static final String FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE = FILTERS_CONFIG_ACCOUNT_WORDS + "template:";

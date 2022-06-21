@@ -146,8 +146,8 @@
                                         <div class="col-md-12">
                                             <div class="card-box">
                                                 <ul class="nav nav-tabs tabs-bordered">
-                                                    <li class="active" id="recharge">
-                                                        <a onclick="activeTab('recharge')"
+                                                    <li class="active" id="tab1">
+                                                        <a onclick="active('1')"
                                                            sec:authorize-url="/finance/account/recharge/account/list/*"
                                                            th:href="@{/finance/account/recharge/account/list/{accountId}(accountId=${financeAccountValidator.accountId})}"
                                                            th:target="tab-content">充值记录
@@ -160,8 +160,9 @@
 <!--                                                           th:target="tab-content">消费记录-->
 <!--                                                        </a>-->
 <!--                                                    </li>-->
-                                                    <li class="" id="logs">
-                                                        <a  sec:authorize-url="/user/logs/list/*/*"
+                                                    <li class=""  id="tab2">
+                                                        <a  onclick="active('2')"
+                                                            sec:authorize-url="/user/logs/list/*/*"
                                                             th:href="@{/user/logs/list/ACCOUNT_FINANCE/{accountId}(accountId=${financeAccountValidator.accountId})}" th:target="tab-content">
                                                             <span class="visible-xs"><i class="fa fa-cog"></i></span>
                                                             <span class="hidden-xs">操作日志</span>
@@ -202,12 +203,11 @@
 <script th:src="@{/static/plugins/autoNumeric/autoNumeric.js}"></script>
 <script>
 
-    //页签切换
-    function activeTab(id){
-       $("#recharge").removeClass("active");
-       $("#consume").removeClass("active");
-       $("#logs").removeClass("active");
-       $("#"+id).addClass("active");
+    function active(tab) {
+        for(var num = 1;num<3;num++){
+            $('#tab'+num).removeClass("active");
+        }
+        $('#tab'+tab).attr("class","active");
     }
 
     $(document).ready(function() {

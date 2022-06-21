@@ -7,15 +7,15 @@ import java.math.BigDecimal;
 
 @Setter
 @Getter
-public class FinanceAccountRechargeValidator {
+public class FinanceAccountRefundValidator {
 
     private String id;
     private String accountId;
-    private String rechargeFlowNo;
-    private String rechargeSource;
-    private BigDecimal rechargeSum;
-    private BigDecimal rechargeCost;
-    private BigDecimal rechargeAccountUsable;
+    private String refundFlowNo;
+    private String refundSource;
+    private BigDecimal refundSum;
+    private BigDecimal refundCost;
+    private BigDecimal refundAccountUsable;
     private String createdBy;
     private String createdTime;
     private String remark;

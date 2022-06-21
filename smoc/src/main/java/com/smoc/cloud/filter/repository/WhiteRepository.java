@@ -84,4 +84,17 @@ public interface WhiteRepository extends CrudRepository<FilterWhiteList, String>
      * @return
      */
     List<FilterWhiteListValidator> findIndustryWhiteList();
+
+    /**
+     * 查询账号白名单
+     * @return
+     */
+    List<FilterWhiteListValidator> findAccountWhiteList();
+
+    /**
+     * 更新账号白名单状态
+     *
+     * @param list
+     */
+    void bathUpdateAccount(List<FilterWhiteListValidator> list);
 }

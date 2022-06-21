@@ -36,11 +36,14 @@ public class WhiteRepositoryImpl extends BasePageRepository {
 
         //查询sql
         StringBuffer sqlBuffer = new StringBuffer("select t.ID,t.GROUP_ID,t.NAME,t.MOBILE,t.STATUS,str_to_date(t.CREATED_TIME,'%Y-%m-%d %H:%i:%S')CREATED_TIME,t.CREATED_BY " +
-                " from filter_white_list t where t.GROUP_ID=? ");
+                " from filter_white_list t where 1=1 ");
 
         List<Object> paramsList = new ArrayList<Object>();
         if (null != filterWhiteListValidator) {
-            paramsList.add(filterWhiteListValidator.getGroupId().trim());
+            if(!StringUtils.isEmpty(filterWhiteListValidator.getGroupId())){
+                sqlBuffer.append(" and  t.GROUP_ID=? ");
+                paramsList.add(filterWhiteListValidator.getGroupId().trim());
+            }
 
             if (!StringUtils.isEmpty(filterWhiteListValidator.getEnterpriseId())) {
                 sqlBuffer.append(" and t.ENTERPRISE_ID = ? ");
@@ -172,6 +175,19 @@ public class WhiteRepositoryImpl extends BasePageRepository {
     }
 
     /**
+     * 查询账号白名单
+     *
+     * @return
+     */
+    public List<FilterWhiteListValidator> findAccountWhiteList() {
+        //查询sql
+        StringBuffer sqlBuffer = new StringBuffer("select t.ID,t.GROUP_ID,t.NAME,t.MOBILE,t.STATUS,str_to_date(t.CREATED_TIME,'%Y-%m-%d %H:%i:%S')CREATED_TIME,t.CREATED_BY " +
+                " from filter_white_list t where t.ENTERPRISE_ID='ACCOUNT' and IS_SYNC ='0' ");
+        List<FilterWhiteListValidator> result = this.jdbcTemplate.query(sqlBuffer.toString(), new WhiteRowMapper());
+        return result;
+    }
+
+    /**
      * 更新系统白名单状态
      *
      * @param list
@@ -258,6 +274,51 @@ public class WhiteRepositoryImpl extends BasePageRepository {
         }
 
         log.info("[更新行业白名单状态]数据：{}", System.currentTimeMillis());
+
+    }
+
+    /**
+     * 更新账号白名单状态
+     *
+     * @param list
+     */
+    public void bathUpdateAccount(List<FilterWhiteListValidator> list) {
+
+        //每batchSize 分批执行一次
+        Connection connection = null;
+        PreparedStatement statement = null;
+        final String sql = "update filter_white_list set IS_SYNC ='1' where MOBILE=? ";
+        //log.info(sql);
+        log.info("[更新账号白名单状态]数据：{}- 共{}条", System.currentTimeMillis(), list.size());
+        try {
+            connection = jdbcTemplate.getDataSource().getConnection();
+            connection.setAutoCommit(false);
+            statement = connection.prepareStatement(sql);
+            for (FilterWhiteListValidator validator : list) {
+                statement.setString(1, validator.getMobile());
+                statement.addBatch();
+            }
+            statement.executeBatch();
+            connection.commit();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            try {
+                if (null != statement) {
+                    statement.close();
+                }
+                if (null != connection) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        log.info("[账号白名单状态]数据：{}", System.currentTimeMillis());
 
     }
 }

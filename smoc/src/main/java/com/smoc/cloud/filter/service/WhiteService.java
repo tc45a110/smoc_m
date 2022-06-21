@@ -155,6 +155,12 @@ public class WhiteService {
         if ("INDUSTRY".equals(filterWhiteListValidator.getEnterpriseId())) {
             this.loadIndustryWhiteList();
         }
+
+        //加载账号白名单
+        if ("ACCOUNT".equals(filterWhiteListValidator.getEnterpriseId())) {
+            this.loadAccountWhiteList();
+        }
+
         this.loadWhiteList();
     }
 
@@ -225,5 +231,37 @@ public class WhiteService {
      */
     public void deleteIndustryWhiteList(String groupId, String mobile) {
         redisTemplate.opsForSet().remove(RedisConstant.FILTERS_CONFIG_SYSTEM_INDUSTRY_WHITE + groupId, mobile);
+    }
+
+    /**
+     * 加载账号白名单
+     */
+    public void loadAccountWhiteList() {
+        List<FilterWhiteListValidator> findIndustryWhiteList = this.whiteRepository.findAccountWhiteList();
+        if (null == findIndustryWhiteList || findIndustryWhiteList.size() < 1) {
+            return;
+        }
+        redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
+            connection.openPipeline();
+            findIndustryWhiteList.forEach((value) -> {
+                connection.sAdd(RedisSerializer.string().serialize(RedisConstant.FILTERS_CONFIG_ACCOUNT_NUMBER_WHITE + value.getGroupId()),
+                        RedisSerializer.string().serialize(new Gson().toJson(value.getMobile())));
+            });
+            connection.close();
+            return null;
+        });
+
+        //变更加载状态
+        this.whiteRepository.bathUpdateAccount(findIndustryWhiteList);
+    }
+
+    /**
+     * 删除账号白名单
+     *
+     * @param groupId
+     * @param mobile
+     */
+    public void deleteAccountWhiteList(String groupId, String mobile) {
+        redisTemplate.opsForSet().remove(RedisConstant.FILTERS_CONFIG_ACCOUNT_NUMBER_WHITE + groupId, mobile);
     }
 }

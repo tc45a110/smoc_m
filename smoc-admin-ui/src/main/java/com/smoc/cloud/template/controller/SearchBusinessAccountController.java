@@ -41,13 +41,11 @@ public class SearchBusinessAccountController {
         params.setPageSize(10);
         params.setCurrentPage(1);
         AccountBasicInfoValidator accountBasicInfoValidator = new AccountBasicInfoValidator();
-        if("CMPP".equals(protocol)){
-            accountBasicInfoValidator.setProtocol(protocol);
-        }
+        accountBasicInfoValidator.setProtocol(protocol);
         params.setParams(accountBasicInfoValidator);
 
         //查询
-        ResponseData<PageList<AccountBasicInfoValidator>> data = businessAccountService.page(params);
+        ResponseData<PageList<AccountBasicInfoValidator>> data = businessAccountService.accountByProtocol(params);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;
@@ -73,7 +71,7 @@ public class SearchBusinessAccountController {
         //分页查询
         pageParams.setParams(accountBasicInfoValidator);
 
-        ResponseData<PageList<AccountBasicInfoValidator>> data = businessAccountService.page(pageParams);
+        ResponseData<PageList<AccountBasicInfoValidator>> data = businessAccountService.accountByProtocol(pageParams);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;

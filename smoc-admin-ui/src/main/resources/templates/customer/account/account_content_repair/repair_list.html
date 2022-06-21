@@ -77,8 +77,15 @@
                                              th:value="${configContentRepairRuleValidator.areaCodes}"
                                              title="业务区域"/>
                                 </div>
+                                <div class="form-group  col-sm-4">
+                                    <select data-style="btn-default" name="repairStatus" data-live-search="true" id="repairStatus" class="selectpicker form-control" tabindex="-98">
+                                        <option value="" data-icon="mdi mdi-apps">--请选择状态--</option>
+                                        <option data-icon="mdi mdi-apps" value="1" th:selected="${configContentRepairRuleValidator.repairStatus eq '1'}">生效中</option>
+                                        <option data-icon="mdi mdi-apps" value="0" th:selected="${configContentRepairRuleValidator.repairStatus eq '0'}">已失效</option>
+                                    </select>
+                                </div>
 
-                                <div class="form-group col-sm-6 pull-right" style="text-align: right">
+                                <div class="form-group col-sm-4 pull-right" style="text-align: right">
                                     <button sec:authorize-url="/account/content/repair/page" type="submit"
                                             class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search" style="margin-right:5px"></i> 查询
@@ -115,15 +122,14 @@
                             <table class="table table table-hover m-10" style="margin-top: -12px;table-layout:fixed;">
                                 <thead>
                                 <tr>
-                                    <th style="width:130px">业务账号/账号名称</th>
-                                    <th style="width:90px">业务类型</th>
-                                    <th style="width:90px">发送运营商</th>
-                                    <th style="width:180px">内容</th>
-                                    <th style="width:120px">区域</th>
-                                    <th style="width:180px">内容路由通道</th>
-                                    <th style="width:120px">手机号段/短信字数</th>
-                                    <th style="width:80px">状态</th>
-                                    <th style="width:80px">操作</th>
+                                    <th>业务账号/账号名称</th>
+                                    <th>业务类型</th>
+                                    <th>发送运营商</th>
+                                    <th>内容</th>
+                                    <th>区域/内容路由通道</th>
+                                    <th>手机号段/短信字数</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -145,6 +151,7 @@
                                               data-toggle="tooltip" data-placement="bottom"
                                               th:data-original-title="${info.repairContent}">[[${info.repairContent}]]</span>
                                     </td>
+
                                     <td style="vertical-align: middle;line-height: 26px">
                                         <span th:if="${info.carrier ne 'INTL'}">
                                              <mpm:tag identity="provices" show-type="label" key="code"
@@ -153,9 +160,7 @@
                                         <span th:if="${info.carrier eq 'INTL'}">
                                              <mpm:tag identity="internationalArea" show-type="label" key="code"
                                                       th:value="${info.areaCodes}"/>
-                                        </span>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
+                                        </span><br>
                                         [[${info.channelRepairId}]]：[[${info.channelName}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">

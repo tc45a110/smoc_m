@@ -395,9 +395,17 @@ public class BusinessAccountService {
             interfaceMap.put("accountPassword",DES.decrypt(interfaceInfo.getAccountPassword()));
             interfaceMap.put("maxSendSecond",interfaceInfo.getMaxSendSecond());
             //查询系统参数:系统对外IP
-            ResponseData<ParameterExtendSystemParamValueValidator> systemParamValue = parameterExtendSystemParamValueFeignClient.findByBusinessTypeAndBusinessIdAndParamKey("SYSTEM_PARAM","SYSTEM","SYSTEM_PARAM_IP");
-            if(!StringUtils.isEmpty(systemParamValue.getData())){
-                interfaceMap.put("sysIp",systemParamValue.getData().getParamValue());
+            if("WEB".equals(interfaceInfo.getProtocol()) || "HTTPS".equals(interfaceInfo.getProtocol())){
+                ResponseData<ParameterExtendSystemParamValueValidator> systemParamValue = parameterExtendSystemParamValueFeignClient.findByBusinessTypeAndBusinessIdAndParamKey("SYSTEM_PARAM","SYSTEM","SYSTEM_PARAM_IP_HTTP");
+                if(!StringUtils.isEmpty(systemParamValue.getData())){
+                    interfaceMap.put("sysIp",systemParamValue.getData().getParamValue());
+                }
+            }
+            if("CMPP".equals(interfaceInfo.getProtocol()) || "SGIP".equals(interfaceInfo.getProtocol()) || "SMGP".equals(interfaceInfo.getProtocol())){
+                ResponseData<ParameterExtendSystemParamValueValidator> systemParamValue = parameterExtendSystemParamValueFeignClient.findByBusinessTypeAndBusinessIdAndParamKey("SYSTEM_PARAM","SYSTEM","SYSTEM_PARAM_IP_CMPP");
+                if(!StringUtils.isEmpty(systemParamValue.getData())){
+                    interfaceMap.put("sysIp",systemParamValue.getData().getParamValue());
+                }
             }
 
             if("WEB".equals(interfaceInfo.getProtocol())){
@@ -422,13 +430,13 @@ public class BusinessAccountService {
                 map1.put("interKey","最大链接数");
                 map1.put("interValue",interfaceInfo.getMaxConnect());
 
-                Map<String, Object> map2 = new HashMap<>();
+               /* Map<String, Object> map2 = new HashMap<>();
                 map2.put("interKey","是否匹配模板");
                 map2.put("interValue",interfaceInfo.getExecuteCheck().equals("1") ? "是" : "否");
 
                 Map<String, Object> map3 = new HashMap<>();
                 map3.put("interKey","是否审核内容");
-                map3.put("interValue",interfaceInfo.getMatchingCheck().equals("1") ? "是" : "否");
+                map3.put("interValue",interfaceInfo.getMatchingCheck().equals("1") ? "是" : "否");*/
 
                 Map<String, Object> map4 = new HashMap<>();
                 map4.put("interKey","客户鉴权IP");
@@ -436,8 +444,8 @@ public class BusinessAccountService {
 
                 interfaceList.add(map);
                 interfaceList.add(map1);
-                interfaceList.add(map2);
-                interfaceList.add(map3);
+                //interfaceList.add(map2);
+                //interfaceList.add(map3);
                 interfaceList.add(map4);
             }
 
@@ -639,5 +647,20 @@ public class BusinessAccountService {
         }
 
         return values;
+    }
+
+    /**
+     * 查询账户列表根据接口类型
+     * @param pageParams
+     * @return
+     */
+    public ResponseData<PageList<AccountBasicInfoValidator>> accountByProtocol(PageParams<AccountBasicInfoValidator> pageParams) {
+        try {
+            PageList<AccountBasicInfoValidator> pageList = this.businessAccountFeignClient.accountByProtocol(pageParams);
+            return ResponseDataUtil.buildSuccess(pageList);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
     }
 }

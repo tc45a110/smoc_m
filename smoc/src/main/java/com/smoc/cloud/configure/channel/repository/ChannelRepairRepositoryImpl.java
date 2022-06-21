@@ -151,7 +151,7 @@ public class ChannelRepairRepositoryImpl extends BasePageRepository {
         paramsList.add( channelId.trim());
         paramsList.add( businessType.trim());
 
-        sqlBuffer.append(" order by t.SORT ,t.CARRIER,t.id");
+        sqlBuffer.append(" order by t.CARRIER,t.SORT,t.id");
 
         //根据参数个数，组织参数值
         Object[] params = new Object[paramsList.size()];

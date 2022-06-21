@@ -106,4 +106,11 @@ public interface BusinessAccountFeignClient {
     @RequestMapping(value = "/account/accountAll", method = RequestMethod.POST)
     ResponseData<PageList<AccountInfoQo>> accountAll(@RequestBody PageParams<AccountInfoQo> params);
 
+    /**
+     * 查询账户列表根据接口类型
+     * @param pageParams
+     * @return
+     */
+    @RequestMapping(value = "/account/accountByProtocol", method = RequestMethod.POST)
+    PageList<AccountBasicInfoValidator> accountByProtocol(@RequestBody PageParams<AccountBasicInfoValidator> pageParams);
 }

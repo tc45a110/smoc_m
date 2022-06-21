@@ -170,11 +170,17 @@
                                         </span>
                                     </td>
                                    <td style="vertical-align: middle;line-height: 26px" th:each="channel:${info.channelList}" th:if="${channelStat.index ==0 and info.carrier ne 'INTL'}">
+                                       <span th:if="${info.accountChannelType eq 'ACCOUNT_CHANNEL'}" style="color: green">单通道</span>
+                                       <span th:if="${info.accountChannelType eq 'ACCOUNT_CHANNEL_GROUP'}" style="color: royalblue">通道组</span>
+                                       <br>
                                        <mpm:tag identity="carrier" show-type="label" key="code" th:value="${channel.key}"/>：
                                        <span th:if="${not #strings.isEmpty(channel.value.channelName)}">[[${channel.value.channelName}]]</span>
                                        <span th:if="${#strings.isEmpty(channel.value.channelName)}" style="color: red">未配置通道</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px" th:each="channel:${info.channelList}" th:if="${channelStat.index ==0 and info.carrier eq 'INTL'}" th:rowspan="${info.rowspan}">
+                                        <span th:if="${info.accountChannelType eq 'ACCOUNT_CHANNEL'}" style="color: green">单通道</span>
+                                       <span th:if="${info.accountChannelType eq 'ACCOUNT_CHANNEL_GROUP'}" style="color: royalblue">通道组</span>
+                                       <br>
                                        <mpm:tag identity="carrier" show-type="label" key="code" th:value="${info.carrier}"/>：
                                         <span th:if="${not #strings.isEmpty(channel.value.channelName)}">[[${channel.value.channelName}]]</span>
                                         <span th:if="${#strings.isEmpty(channel.value.channelName)}" style="color: red">未配置通道</span>

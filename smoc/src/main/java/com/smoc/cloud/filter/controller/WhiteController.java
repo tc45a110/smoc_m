@@ -91,6 +91,11 @@ public class WhiteController {
                 //加载行业白名单
                 this.whiteService.loadIndustryWhiteList();
             }
+
+            if ("ACCOUNT".equals(filterWhiteListValidator.getEnterpriseId())) {
+                //加载账号白名单
+                this.whiteService.loadAccountWhiteList();
+            }
         }
         return responseData;
     }
@@ -124,6 +129,11 @@ public class WhiteController {
             if ("INDUSTRY".equals(findById.getData().getEnterpriseId())) {
                 //删除行业白名单
                 this.whiteService.deleteIndustryWhiteList(findById.getData().getGroupId(), findById.getData().getMobile());
+            }
+
+            if ("ACCOUNT".equals(findById.getData().getEnterpriseId())) {
+                //删除账号白名单
+                this.whiteService.deleteAccountWhiteList(findById.getData().getGroupId(), findById.getData().getMobile());
             }
 
         }

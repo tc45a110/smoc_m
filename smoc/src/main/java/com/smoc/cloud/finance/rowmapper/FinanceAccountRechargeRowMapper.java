@@ -22,6 +22,7 @@ public class FinanceAccountRechargeRowMapper implements RowMapper<FinanceAccount
         qo.setRechargeSum(resultSet.getBigDecimal("RECHARGE_SUM"));
         qo.setCreatedBy(resultSet.getString("CREATED_BY"));
         qo.setCreatedTime(resultSet.getString("CREATED_TIME"));
+        qo.setRemark(resultSet.getString("REMARK"));
         return qo;
     }
 }

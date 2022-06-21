@@ -225,4 +225,15 @@ public class BusinessAccountController {
 
         return businessAccountService.accountAll(pageParams);
     }
+
+    /**
+     * 查询账户列表根据接口类型
+     * @param pageParams
+     * @return
+     */
+    @RequestMapping(value = "/accountByProtocol", method = RequestMethod.POST)
+    public PageList<AccountBasicInfoValidator> accountByProtocol(@RequestBody PageParams<AccountBasicInfoValidator> pageParams) {
+
+        return businessAccountService.accountByProtocol(pageParams);
+    }
 }

@@ -433,4 +433,13 @@ public class BusinessAccountService {
         PageList<AccountInfoQo> list = businessAccountRepository.accountAll(pageParams);
         return ResponseDataUtil.buildSuccess(list);
     }
+
+    /**
+     * 查询账户列表根据接口类型
+     * @param pageParams
+     * @return
+     */
+    public PageList<AccountBasicInfoValidator> accountByProtocol(PageParams<AccountBasicInfoValidator> pageParams) {
+        return businessAccountRepository.accountByProtocol(pageParams);
+    }
 }

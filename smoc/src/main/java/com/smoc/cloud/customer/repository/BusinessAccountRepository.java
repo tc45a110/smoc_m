@@ -107,4 +107,11 @@ public interface BusinessAccountRepository extends CrudRepository<AccountBasicIn
      * @return
      */
     PageList<AccountInfoQo> accountAll(PageParams<AccountInfoQo> pageParams);
+
+    /**
+     * 查询账户列表根据接口类型
+     * @param pageParams
+     * @return
+     */
+    PageList<AccountBasicInfoValidator> accountByProtocol(PageParams<AccountBasicInfoValidator> pageParams);
 }

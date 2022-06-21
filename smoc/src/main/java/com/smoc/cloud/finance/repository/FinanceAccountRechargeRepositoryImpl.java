@@ -38,6 +38,7 @@ public class FinanceAccountRechargeRepositoryImpl extends BasePageRepository {
         sqlBuffer.append("  t.RECHARGE_COST,");
         sqlBuffer.append("  t.RECHARGE_ACCOUNT_USABLE,");
         sqlBuffer.append("  t.CREATED_BY,");
+        sqlBuffer.append("  t.REMARK,");
         sqlBuffer.append("  DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME ");
         sqlBuffer.append("  from finance_account_recharge t,identification_account_info i,enterprise_basic_info e ");
         sqlBuffer.append("  where t.ACCOUNT_ID = i.IDENTIFICATION_ACCOUNT and i.ENTERPRISE_ID = e.ENTERPRISE_ID and t.RECHARGE_SOURCE ='IDENTIFICATION_ACCOUNT' ");
@@ -94,6 +95,7 @@ public class FinanceAccountRechargeRepositoryImpl extends BasePageRepository {
         sqlBuffer.append("  t.RECHARGE_COST,");
         sqlBuffer.append("  t.RECHARGE_ACCOUNT_USABLE,");
         sqlBuffer.append("  t.CREATED_BY,");
+        sqlBuffer.append("  t.REMARK,");
         sqlBuffer.append("  DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME ");
         sqlBuffer.append("  from finance_account_recharge t,system_account_info i,enterprise_basic_info e ");
         sqlBuffer.append("  where t.ACCOUNT_ID = i.ACCOUNT and i.ENTERPRISE_ID = e.ENTERPRISE_ID ");
@@ -164,6 +166,7 @@ public class FinanceAccountRechargeRepositoryImpl extends BasePageRepository {
         sqlBuffer.append("  t.RECHARGE_COST,");
         sqlBuffer.append("  t.RECHARGE_ACCOUNT_USABLE,");
         sqlBuffer.append("  t.CREATED_BY,");
+        sqlBuffer.append("  t.REMARK,");
         sqlBuffer.append("  DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME ");
         sqlBuffer.append("  from finance_recharge_view t ");
         sqlBuffer.append("  where (1=1) ");

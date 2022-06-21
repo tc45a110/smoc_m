@@ -128,7 +128,7 @@
                                         </span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px" th:each="channel:${info.repairList}" th:if="${not #lists.isEmpty(info.repairList) and channelStat.index ==0}">
-                                        <mpm:tag identity="carrier" show-type="label" key="code"
+                                        [[${channel.sort}]]、<mpm:tag identity="carrier" show-type="label" key="code"
                                                  th:value="${channel.carrier}"/>&nbsp;
                                         [[${channel.channelRepairId}]]：[[${channel.channelRepairName}]]&nbsp;<span th:if="${not #strings.isEmpty(channel.repairCode)}">错误码：[[${channel.repairCode}]]</span>
                                     </td>
@@ -148,7 +148,7 @@
                                     </tr>
                                     <tr th:class="${infoStat.odd} ? 'bgRow'" style="vertical-align: middle;line-height: 26px" th:each="channel:${info.repairList}"} th:if="${not #lists.isEmpty(info.repairList) and channelStat.index >0}">
                                         <td style="vertical-align: middle;line-height: 26px">
-                                            <mpm:tag identity="carrier" show-type="label" key="code"
+                                            [[${channel.sort}]]、<mpm:tag identity="carrier" show-type="label" key="code"
                                                      th:value="${channel.carrier}"/>&nbsp;
                                              [[${channel.channelRepairId}]]：[[${channel.channelRepairName}]]&nbsp;<span th:if="${not #strings.isEmpty(channel.repairCode)}">错误码：[[${channel.repairCode}]]</span>
                                         </td>

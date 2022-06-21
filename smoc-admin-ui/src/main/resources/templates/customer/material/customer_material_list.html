@@ -63,11 +63,6 @@
                                              class="form-control" title="业务类型"/>
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <mpm:tag id="infoType" identity="infoType" name="infoType" show-type="select" key="code"
-                                             th:value="${enterpriseDocumentInfoValidator.infoType}"
-                                             class="form-control" title="信息类型"/>
-                                </div>
-                                <div class="form-group  col-sm-3">
                                     <mpm:tag id="enterpriseType" identity="enterpriseType" name="enterpriseType" show-type="select" key="code"
                                              th:value="${enterpriseDocumentInfoValidator.enterpriseType}"
                                              class="form-control" title="企业类型"/>
@@ -107,14 +102,14 @@
                             <table class="table table table-hover m-10" style="margin-top: -12px;table-layout:fixed;">
                                 <thead>
                                 <tr>
-                                    <th style="width:350px">签名/企业名称</th>
-                                    <th style="width:120px">企业类型</th>
-                                    <th style="width:130px">业务类型</th>
-                                    <th style="width:160px">签名合同链</th>
-                                    <th style="width:150px">审核状态</th>
-                                    <th style="width:130px">数据来源</th>
-                                    <th style="width:160px">创建人/创建日期</th>
-                                    <th style="width:140px">操作</th>
+                                    <th style="min-width:200px">签名/企业名称</th>
+                                    <th style="min-width:120px">企业类型</th>
+                                    <th style="min-width:130px">业务类型</th>
+                                    <th style="min-width:150px">签名合同链</th>
+                                    <th style="min-width:120px">审核状态</th>
+                                    <th style="min-width:120px">数据来源</th>
+                                    <th style="min-width:150px">创建人/创建日期</th>
+                                    <th style="min-width:140px">操作</th>
                                 </tr>
                                 <thead>
                                 <tbody>
