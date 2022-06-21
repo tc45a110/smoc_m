@@ -135,8 +135,7 @@
                                                     th:value="${info.carrier}"/>
                                     </td>
                                      <td style="vertical-align: middle;line-height: 26px" th:rowspan="${info.rowspan}">
-                                       <span th:if="${#strings.isEmpty(info.repairCode)}" style="color: red">未配置</span>
-                                       <span th:if="${not #strings.isEmpty(info.repairCode)}">错误码：[[${info.repairCode}]]</span><br>
+                                       <span th:if="${#strings.isEmpty(info.repairDate)}" style="color: red">未配置</span>
                                         <span th:if="${not #strings.isEmpty(info.repairDate)}">
                                              生效时间：<mpm:tag identity="repairRuleData" show-type="label" key="code"
                                                            th:value="${info.repairDate}"/>

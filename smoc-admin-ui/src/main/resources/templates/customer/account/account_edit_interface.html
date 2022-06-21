@@ -172,21 +172,14 @@
                                         </div>
 
                                         <div class="form-group m-b-20" id="CHECK_TEMPL" style="display: none">
-                                            <label class="m-b-10"><sapn id="checkTemplId">是否审核内容</sapn><span
+                                            <label class="m-b-10"><sapn id="checkTemplId">是否审核模板</sapn><span
                                                     class="text-danger">*</span>&nbsp;</label><br>
                                             <mpm:tag identity="isOrNo" id="executeCheck" name="executeCheck"
                                                      th:value="${accountInterfaceInfoValidator.executeCheck}"
                                                      show-type="radio" style="margin-top:0px" key="code" required="true"
                                                      title="是否"/>
                                         </div>
-                                        <div class="form-group m-b-20" id="MATCHING_CHECK" style="display: none">
-                                            <label class="m-b-10">是否匹配模板<span
-                                                    class="text-danger">*</span>&nbsp;</label><br>
-                                            <mpm:tag identity="isOrNo" id="matchingCheck" name="matchingCheck"
-                                                     th:value="${accountInterfaceInfoValidator.matchingCheck}"
-                                                     show-type="radio" style="margin-top:0px" key="code" required="true"
-                                                     title="是否"/>
-                                        </div>
+
                                     </div>
 
                                 </div>
@@ -282,13 +275,13 @@
 
         if ("CMPP" == value || "SGIP" == value || "SMGP" == value || "SMPP" == value) {
             document.getElementById("CMPP").style.display = "";
-            document.getElementById("CHECK_TEMPL").style.display = "";
+            document.getElementById("CHECK_TEMPL").style.display = "none";
             document.getElementById("sendSecond").style.display = "";
             document.getElementById("IP").style.display = "";
-            document.getElementById("MATCHING_CHECK").style.display = "";
+            //document.getElementById("MATCHING_CHECK").style.display = "";
             document.getElementById("HTTP_SMS").style.display = "none";
 
-            document.getElementById("checkTemplId").innerText = "是否审核内容";
+            //document.getElementById("checkTemplId").innerText = "是否审核内容";
 
             $('#srcId').prop("required","true");
             $('#maxConnect').prop("required","true");
@@ -322,9 +315,9 @@
             document.getElementById("CHECK_TEMPL").style.display = "";
             document.getElementById("sendSecond").style.display = "";
             document.getElementById("IP").style.display = "";
-            document.getElementById("MATCHING_CHECK").style.display = "none";
+            //document.getElementById("MATCHING_CHECK").style.display = "none";
 
-            document.getElementById("checkTemplId").innerText = "是否审核模板";
+            //document.getElementById("checkTemplId").innerText = "是否审核模板";
 
             if("WEB" == value){
                 document.getElementById("SMS_URL").style.display = "none";

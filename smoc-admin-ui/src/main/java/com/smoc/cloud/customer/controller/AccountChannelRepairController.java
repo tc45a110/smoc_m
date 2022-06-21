@@ -188,8 +188,6 @@ public class AccountChannelRepairController {
         //初始化数据
         ConfigRepairRuleValidator configRepairRuleValidator = new ConfigRepairRuleValidator();
         configRepairRuleValidator.setId(UUID.uuid32());
-        configRepairRuleValidator.setRepairCode("ALLFAILED");
-        configRepairRuleValidator.setRepairDate(60);
         configRepairRuleValidator.setBusinessId(data.getData().getAccountId());
         configRepairRuleValidator.setBusinessType("ACCOUNT");
 

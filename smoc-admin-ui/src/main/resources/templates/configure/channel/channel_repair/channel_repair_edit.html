@@ -40,6 +40,7 @@
                                         <thead>
                                         <tr>
                                             <th>补发顺序</th>
+                                            <th>运营商</th>
                                             <th>补发通道ID</th>
                                             <th>补发通道名称</th>
                                             <th>失败补发错误码</th>
@@ -52,6 +53,10 @@
                                         <tr th:each="info:${channelRepairList}">
                                             <td style="vertical-align: middle;line-height: 26px;">
                                                 [[${info.sort}]]
+                                            </td>
+                                            <td style="vertical-align: middle;line-height: 26px;">
+                                                <mpm:tag identity="carrier" show-type="label" key="code"
+                                                         th:value="${info.carrier}"/>
                                             </td>
                                             <td style="vertical-align: middle;line-height: 26px;">
                                                 [[${info.channelRepairId}]]
@@ -85,8 +90,8 @@
 
                                     <hr>
                                     <div class="text-center" style="margin-bottom:20px">
-                                        <a style="margin-left:10px" data-toggle="modal"
-                                           data-target="#confirm-add-user-modal"
+                                        <a style="margin-left:10px" sec:authorize-url="/configure/channel/repair/add/*"
+                                           th:href="@{/configure/channel/repair/add/{id}(id=${channelBasicInfoValidator.channelId})}"
                                            class="btn btn-teal waves-effect waves-light">
                                             添加补发通道</a>
 

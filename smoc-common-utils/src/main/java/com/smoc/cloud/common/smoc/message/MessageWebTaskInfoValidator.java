@@ -72,6 +72,8 @@ public class MessageWebTaskInfoValidator {
 
     private Date updatedTime;
 
+    private String protocolType;
+
     private String enterpriseName;
     private String startDate;
     private String endDate;

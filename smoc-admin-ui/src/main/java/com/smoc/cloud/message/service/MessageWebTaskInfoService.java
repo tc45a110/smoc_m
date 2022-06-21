@@ -4,6 +4,7 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.smoc.message.MessageHttpsTaskInfoValidator;
 import com.smoc.cloud.common.smoc.message.MessageWebTaskInfoValidator;
 import com.smoc.cloud.message.remote.MessageWebTaskInfoFeignClient;
 import lombok.extern.slf4j.Slf4j;
@@ -64,6 +65,16 @@ public class MessageWebTaskInfoService {
     public ResponseData<MessageWebTaskInfoValidator> findById(String id) {
         try {
             ResponseData<MessageWebTaskInfoValidator> data = this.messageWebTaskInfoFeignClient.findById(id);
+            return data;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    public ResponseData<MessageHttpsTaskInfoValidator> findHttpById(String id) {
+        try {
+            ResponseData<MessageHttpsTaskInfoValidator> data = this.messageWebTaskInfoFeignClient.findHttpById(id);
             return data;
         } catch (Exception e) {
             log.error(e.getMessage());
