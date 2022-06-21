@@ -17,12 +17,15 @@
             <!-- 打包进zip文件下的lib目录中  -->
             <outputDirectory>lib</outputDirectory>
             <excludes>
+                <!--  获取国际区号(SMPP)  -->
                 <exclude>com.googlecode.libphonenumber:*</exclude>
+                <!--  http请求  -->
+                <exclude>org.apache.httpcomponents:*</exclude>
+                <!--  okhttp请求  -->
                 <exclude>org.jetbrains*:*</exclude>
-                <exclude>*:protobuf-java</exclude>
                 <exclude>com.squareup.*:*</exclude>
-                <exclude>org.springframework:spring-aop</exclude>
-                <exclude>org.springframework:spring-jcl</exclude>
+                <!--  spring(构建redis) -->
+                <exclude>org.springframework:*</exclude>
             </excludes>
             <!-- 第三方jar不要解压 -->
             <unpack>false</unpack>
