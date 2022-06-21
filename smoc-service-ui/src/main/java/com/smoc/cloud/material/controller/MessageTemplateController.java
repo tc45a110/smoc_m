@@ -36,6 +36,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -203,7 +204,7 @@ public class MessageTemplateController {
         ResponseData<AccountTemplateInfoValidator> data = messageTemplateService.findById(id);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
-        }
+        };
 
         //查询签名
         EnterpriseDocumentInfoValidator enterpriseDocumentInfoValidator = new EnterpriseDocumentInfoValidator();

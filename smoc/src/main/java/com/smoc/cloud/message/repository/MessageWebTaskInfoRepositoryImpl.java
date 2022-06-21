@@ -37,10 +37,9 @@ public class MessageWebTaskInfoRepositoryImpl extends BasePageRepository {
 
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");
-
         sqlBuffer.append(" t.ID,");
-        sqlBuffer.append(" t.SUBJECT,");
-        sqlBuffer.append(" e.ENTERPRISE_NAME,");
+        sqlBuffer.append(" t.PROTOCOL_TYPE,");
+        sqlBuffer.append(" t.ENTERPRISE_NAME,");
         sqlBuffer.append(" t.TEMPLATE_ID,");
         sqlBuffer.append(" t.BUSINESS_ACCOUNT,");
         sqlBuffer.append(" t.INFO_TYPE,");
@@ -53,17 +52,15 @@ public class MessageWebTaskInfoRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(" t.SUCCESS_SEND_NUMBER,");
         sqlBuffer.append(" t.FAILURE_NUMBER,");
         sqlBuffer.append(" t.NO_REPORT_NUMBER,");
-        sqlBuffer.append(" t.APPLE_SEND_TIME,");
         sqlBuffer.append(" t.SEND_TIME,");
         sqlBuffer.append(" t.SEND_STATUS,");
-        sqlBuffer.append(" t.INPUT_NUMBER,");
-        sqlBuffer.append(" t.NUMBER_FILES,");
         sqlBuffer.append(" t.MESSAGE_CONTENT,");
         sqlBuffer.append(" t.SPLIT_NUMBER,");
         sqlBuffer.append(" t.CREATED_BY,");
+        sqlBuffer.append(" t.MESSAGE_TYPE,");
         sqlBuffer.append(" DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME ");
-        sqlBuffer.append(" from message_web_task_info t,account_base_info a,enterprise_basic_info e ");
-        sqlBuffer.append(" where t.BUSINESS_ACCOUNT = a.ACCOUNT_ID and a.ENTERPRISE_ID = e.ENTERPRISE_ID ");
+        sqlBuffer.append(" from view_message_task_info t ");
+        sqlBuffer.append(" where 1=1 ");
 
         List<Object> paramsList = new ArrayList<Object>();
 
@@ -74,14 +71,8 @@ public class MessageWebTaskInfoRepositoryImpl extends BasePageRepository {
         }
 
         //企业名称
-        if (!StringUtils.isEmpty(qo.getEnterpriseId())) {
-            sqlBuffer.append(" and t.ENTERPRISE_ID = ? ");
-            paramsList.add(qo.getEnterpriseId().trim() );
-        }
-
-        //企业名称
         if (!StringUtils.isEmpty(qo.getEnterpriseName())) {
-            sqlBuffer.append(" and e.ENTERPRISE_NAME like ? ");
+            sqlBuffer.append(" and t.ENTERPRISE_NAME like ? ");
             paramsList.add("%" + qo.getEnterpriseName().trim() + "%");
         }
 
@@ -163,8 +154,8 @@ public class MessageWebTaskInfoRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(" sum(t.SUCCESS_NUMBER) SUCCESS_NUMBER,");
         sqlBuffer.append(" sum(t.SUCCESS_SEND_NUMBER) SUCCESS_SEND_NUMBER,");
         sqlBuffer.append(" sum(t.FAILURE_NUMBER) FAILURE_NUMBER");
-        sqlBuffer.append(" from message_web_task_info t,account_base_info a,enterprise_basic_info e ");
-        sqlBuffer.append(" where t.BUSINESS_ACCOUNT = a.ACCOUNT_ID and a.ENTERPRISE_ID = e.ENTERPRISE_ID ");
+        sqlBuffer.append(" from view_message_task_info t  ");
+        sqlBuffer.append(" where 1=1 ");
 
         List<Object> paramsList = new ArrayList<Object>();
 
@@ -176,14 +167,14 @@ public class MessageWebTaskInfoRepositoryImpl extends BasePageRepository {
 
         //企业名称
         if (!StringUtils.isEmpty(qo.getEnterpriseName())) {
-            sqlBuffer.append(" and e.ENTERPRISE_NAME like ? ");
+            sqlBuffer.append(" and t.ENTERPRISE_NAME like ? ");
             paramsList.add("%" + qo.getEnterpriseName().trim() + "%");
         }
 
         //业务账号
         if (!StringUtils.isEmpty(qo.getBusinessAccount())) {
-            sqlBuffer.append(" and t.BUSINESS_ACCOUNT =?");
-            paramsList.add(qo.getBusinessAccount().trim());
+            sqlBuffer.append(" and t.BUSINESS_ACCOUNT like ?");
+            paramsList.add("%" + qo.getBusinessAccount().trim() + "%");
         }
 
         //模板ID
@@ -196,6 +187,24 @@ public class MessageWebTaskInfoRepositoryImpl extends BasePageRepository {
         if (!StringUtils.isEmpty(qo.getBusinessType())) {
             sqlBuffer.append(" and t.BUSINESS_TYPE =?");
             paramsList.add(qo.getBusinessType().trim());
+        }
+
+        //信息分类
+        if (!StringUtils.isEmpty(qo.getInfoType())) {
+            sqlBuffer.append(" and t.INFO_TYPE =?");
+            paramsList.add(qo.getInfoType().trim());
+        }
+
+        //短信类型
+        if (!StringUtils.isEmpty(qo.getMessageType())) {
+            sqlBuffer.append(" and t.MESSAGE_TYPE =?");
+            paramsList.add(qo.getMessageType().trim());
+        }
+
+        //企业名称
+        if (!StringUtils.isEmpty(qo.getMessageContent())) {
+            sqlBuffer.append(" and t.MESSAGE_CONTENT like ? ");
+            paramsList.add("%" + qo.getMessageContent().trim() + "%");
         }
 
         //发送状态

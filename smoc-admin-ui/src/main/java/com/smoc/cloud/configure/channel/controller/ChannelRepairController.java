@@ -8,6 +8,7 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.configuate.validator.*;
+import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.common.validator.MpmIdValidator;
@@ -180,8 +181,6 @@ public class ChannelRepairController {
         //初始化数据
         ConfigRepairRuleValidator configRepairRuleValidator = new ConfigRepairRuleValidator();
         configRepairRuleValidator.setId(UUID.uuid32());
-        configRepairRuleValidator.setRepairCode("ALLFAILED");
-        configRepairRuleValidator.setRepairDate(60);
         configRepairRuleValidator.setBusinessId(data.getData().getChannelId());
         configRepairRuleValidator.setBusinessType("CHANNEL");
 
@@ -256,6 +255,85 @@ public class ChannelRepairController {
      * @param request
      * @return
      */
+    @RequestMapping(value = "/add/{id}", method = RequestMethod.GET)
+    public ModelAndView add(@PathVariable String id, HttpServletRequest request) {
+
+        ModelAndView view = new ModelAndView("configure/channel/channel_repair/channel_repair_add");
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
+            return view;
+        }
+
+        //op操作标记，add表示添加，edit表示修改
+        view.addObject("op", "add");
+
+        //查询通道数据是否存在
+        ResponseData<ChannelBasicInfoValidator> data = channelService.findById(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        List<String> carrierList = Arrays.asList(data.getData().getCarrier().split(","));
+
+        //初始化数据
+        ConfigChannelRepairRuleValidator configChannelRepairRuleValidator = new ConfigChannelRepairRuleValidator();
+        configChannelRepairRuleValidator.setChannelId(data.getData().getChannelId());
+        configChannelRepairRuleValidator.setBusinessType("CHANNEL");
+
+        view.addObject("channelBasicInfoValidator", data.getData());
+        view.addObject("configChannelRepairRuleValidator", configChannelRepairRuleValidator);
+        view.addObject("carrierList", carrierList);
+
+        return view;
+    }
+
+    /**
+     * 查询备用通道
+     * @param id
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/findChannel/{id}/{carrier}", method = RequestMethod.GET)
+    public List<ConfigChannelRepairValidator> findChannel(@PathVariable String id,@PathVariable String carrier,  HttpServletRequest request) {
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            return null;
+        }
+
+        //查询通道数据是否存在
+        ResponseData<ChannelBasicInfoValidator> data = channelService.findById(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            return null;
+        }
+
+        //根据运营商、业务类型查询符合要求的备用通道
+        ConfigChannelRepairValidator configChannelRepairValidator = new ConfigChannelRepairValidator();
+        configChannelRepairValidator.setBusinessType(data.getData().getBusinessType());
+        configChannelRepairValidator.setCarrier(carrier);
+        configChannelRepairValidator.setFlag("CHANNEL");
+        configChannelRepairValidator.setChannelId(data.getData().getChannelId());
+        ResponseData<List<ConfigChannelRepairValidator>> channelList = channelRepairService.findSpareChannel(configChannelRepairValidator);
+        if (!ResponseCode.SUCCESS.getCode().equals(channelList.getCode())) {
+            return null;
+        }
+
+        return channelList.getData();
+    }
+
+    /**
+     * 失败补发页面
+     * @param id
+     * @param request
+     * @return
+     */
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public ModelAndView detail(@PathVariable String id, HttpServletRequest request) {
 
@@ -290,17 +368,6 @@ public class ChannelRepairController {
             return view;
         }
 
-        //根据运营商、业务类型、信息分类查询符合要求的备用通道
-        ConfigChannelRepairValidator configChannelRepairValidator = new ConfigChannelRepairValidator();
-        configChannelRepairValidator.setBusinessType(data.getData().getBusinessType());
-        configChannelRepairValidator.setChannelId(data.getData().getChannelId());
-        configChannelRepairValidator.setFlag("CHANNEL");
-        ResponseData<List<ConfigChannelRepairValidator>> channelList = channelRepairService.findSpareChannel(configChannelRepairValidator);
-        if (!ResponseCode.SUCCESS.getCode().equals(channelList.getCode())) {
-            view.addObject("error", channelList.getCode() + ":" + channelList.getMessage());
-            return view;
-        }
-
         //初始化数据
         ConfigChannelRepairRuleValidator configChannelRepairRuleValidator = new ConfigChannelRepairRuleValidator();
         configChannelRepairRuleValidator.setChannelId(data.getData().getChannelId());
@@ -313,7 +380,6 @@ public class ChannelRepairController {
             return view;
         }
 
-        view.addObject("channelList", channelList.getData());
         view.addObject("channelRepairList", channelRepairList.getData());
         view.addObject("channelBasicInfoValidator", data.getData());
         view.addObject("configChannelRepairRuleValidator", configChannelRepairRuleValidator);

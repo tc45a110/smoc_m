@@ -155,8 +155,8 @@
                                     <th>发送类型/定时时间</th>
                                     <th>创建时间/发送时间</th>
                                     <th>发送状态</th>
-                                    <th>内容/号码文件</th>
-                                    <th>提交人</th>
+                                    <th>内容</th>
+                                    <th>接口类型</th>
                                     <th>操作</th>
                                 </tr>
                                 <thead>
@@ -215,18 +215,12 @@
                                                data-placement="bottom"
                                                th:data-content="${info.messageContent}"></i>
                                         </a>
-                                        <a data-toggle="tooltip"
-                                           class="on-default edit-row"
-                                           th:id="interaction+${info.id}"
-                                           th:onmouseover="downloadFiles([[${info.id}]])"
-                                           style="padding-left: 5px;color: #6B5FB5;" ><i
-                                                style="font-size: 18px" class="glyphicon glyphicon-download"></i></a>
                                     </td>
-                                    <td style="vertical-align: middle;line-height: 26px"> [[${info.createdBy}]]
+                                    <td style="vertical-align: middle;line-height: 26px"> [[${info.protocolType}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a sec:authorize-url="/message/order/web/detail/*"
-                                           th:href="@{/message/order/web/detail/{id}(id=${info.id})}"
+                                        <a sec:authorize-url="/message/order/web/detail/*/*"
+                                           th:href="@{/message/order/web/detail/{id}/{protocolType}(id=${info.id},protocolType=${info.protocolType})}"
                                            data-toggle="tooltip" data-placement="bottom"
                                            data-original-title="明细"
                                            class="on-default edit-row"

@@ -175,8 +175,11 @@
                                                                  style="height:195px">
                                                                 <div class="listingInfo">
                                                                     <div class="">
-                                                                        <h5 style="padding-left:10px">
-                                                                            通道名称：[[${info.channelName}]]
+                                                                        <h5 style="padding-left:10px" class="text-overflow">
+                                                                                通道名称：<span  data-toggle="tooltip" data-placement="bottom"
+                                                                                            th:data-original-title="${info.channelName}">
+                                                                            [[${info.channelName}]]
+                                                                        </span>
                                                                             <div class="pull-right">
                                                                                 <a data-toggle="modal"
                                                                                    data-target="#confirm-add-modal"
@@ -193,36 +196,41 @@
                                                                         </h5>
                                                                     </div>
                                                                     <div class="col-sm-6">
-                                                                        <p style="font-size:12px">业务类型：
+                                                                        <p style="font-size:12px" class="text-overflow">业务类型：
                                                                             <mpm:tag identity="businessType"
                                                                                      show-type="label" key="code"
                                                                                      th:value="${info.businessType}"/>
                                                                         </p>
-                                                                        <p style="font-size:12px">
-                                                                            码号：[[${info.srcId}]]</p>
+                                                                        <p style="font-size:12px" class="text-overflow">
+                                                                            码号：[[${info.srcId}]]
+                                                                           </p>
+
+                                                                    </div>
+                                                                    <div class="col-sm-6">
+                                                                        <p style="font-size:12px" class="text-overflow">运营商：
+                                                                           <mpm:tag identity="carrier"
+                                                                                    show-type="label" key="code"
+                                                                                    th:value="${info.carrier}"/>
+                                                                        </p>
+                                                                        <p style="font-size:12px" class="text-overflow">协议类型：
+                                                                            <mpm:tag identity="channelProtocolType"
+                                                                                     show-type="label" key="code"
+                                                                                     th:value="${info.protocol}"/>
+                                                                        </p>
+                                                                    </div>
+                                                                    <div class="col-sm-12">
                                                                         <p style="font-size:12px">信息分类：
                                                                             <mpm:tag identity="infoType"
                                                                                      show-type="label" key="code"
                                                                                      th:value="${info.infoType}"/>
                                                                         </p>
                                                                     </div>
-                                                                    <div class="col-sm-6">
-                                                                        <p style="font-size:12px">运营商：
-                                                                            <mpm:tag identity="carrier"
-                                                                                     show-type="label" key="code"
-                                                                                     th:value="${info.carrier}"/>
-                                                                        </p>
-                                                                        <p style="font-size:12px">协议类型：
-                                                                            <mpm:tag identity="channelProtocolType"
-                                                                                     show-type="label" key="code"
-                                                                                     th:value="${info.protocol}"/>
-                                                                        </p>
-
-                                                                    </div>
 
                                                                 </div>
                                                                 <div class="property-action">
                                                                                      <span style="padding-left:10px;font-size:12px"
+                                                                                           data-toggle="tooltip" data-placement="bottom"
+                                                                                           th:data-original-title="${info.channelIntroduce}"
                                                                                            class="text-overflow">
                                                                                             通道业务介绍：[[${info.channelIntroduce}]]
                                                                                      </span>

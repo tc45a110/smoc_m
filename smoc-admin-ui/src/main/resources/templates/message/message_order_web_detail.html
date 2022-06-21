@@ -78,18 +78,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-sm-6 m-b-10">
-                                                <label>申请发送时间：</label>
-                                                [[${messageWebTaskInfoValidator.appleSendTime}]]
-                                            </div>
-                                            <div class="col-sm-6 m-b-10">
-                                                <label>实际接收时间：</label>
-                                                [[${messageWebTaskInfoValidator.sendTime}]]
-                                            </div>
-                                        </div>
-                                    </div>
+
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-sm-6 m-b-10">
@@ -129,7 +118,10 @@
                                                 <span th:if="${messageWebTaskInfoValidator.sendType eq '1'}">立即发送</span>
                                                 <span th:if="${messageWebTaskInfoValidator.sendType eq '2'}">定时发送 [[${messageWebTaskInfoValidator.timingTime}]]</span>
                                             </div>
-
+                                            <div class="col-sm-6 m-b-10">
+                                                <label>发送时间：</label>
+                                                [[${messageWebTaskInfoValidator.sendTime}]]
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -166,7 +158,7 @@
                     </div>
                 </div>
             </div> <!-- end col -->
-            <div class="col-md-6">
+            <div class="col-md-6"  th:if="${protocolType eq 'WEB'}">
                 <div class="panel panel-color panel-success">
                     <div class="panel-heading">
                         <h3 class="panel-title">

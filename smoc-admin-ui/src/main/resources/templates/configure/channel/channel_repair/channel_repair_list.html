@@ -121,14 +121,15 @@
                                                  class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;MULTI_SMS,btn btn-brown btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;5G_SMS,btn btn-primary btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-inverse btn-rounded btn-sm waves-effect waves-light"/>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px" th:rowspan="${info.rowspan}">
-                                       <span th:if="${#strings.isEmpty(info.repairCode)}" style="color: red">未配置</span>
-                                       <span th:if="${not #strings.isEmpty(info.repairCode)}">错误码：[[${info.repairCode}]]</span><br>
+                                       <span th:if="${#strings.isEmpty(info.repairDate)}" style="color: red">未配置</span>
                                         <span th:if="${not #strings.isEmpty(info.repairDate)}">
                                              生效时间：<mpm:tag identity="repairRuleData" show-type="label" key="code"
                                                       th:value="${info.repairDate}"/>
                                         </span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px" th:each="channel:${info.repairList}" th:if="${not #lists.isEmpty(info.repairList) and channelStat.index ==0}">
+                                        <mpm:tag identity="carrier" show-type="label" key="code"
+                                                 th:value="${channel.carrier}"/>&nbsp;
                                         [[${channel.channelRepairId}]]：[[${channel.channelRepairName}]]&nbsp;<span th:if="${not #strings.isEmpty(channel.repairCode)}">错误码：[[${channel.repairCode}]]</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px" th:rowspan="${info.rowspan}" th:if="${#lists.isEmpty(info.repairList)}">
@@ -147,6 +148,8 @@
                                     </tr>
                                     <tr th:class="${infoStat.odd} ? 'bgRow'" style="vertical-align: middle;line-height: 26px" th:each="channel:${info.repairList}"} th:if="${not #lists.isEmpty(info.repairList) and channelStat.index >0}">
                                         <td style="vertical-align: middle;line-height: 26px">
+                                            <mpm:tag identity="carrier" show-type="label" key="code"
+                                                     th:value="${channel.carrier}"/>&nbsp;
                                              [[${channel.channelRepairId}]]：[[${channel.channelRepairName}]]&nbsp;<span th:if="${not #strings.isEmpty(channel.repairCode)}">错误码：[[${channel.repairCode}]]</span>
                                         </td>
                                     </tr>

@@ -9,6 +9,7 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.message.MessageHttpsTaskInfoValidator;
 import com.smoc.cloud.common.smoc.template.AccountTemplateInfoValidator;
 import com.smoc.cloud.common.smoc.template.MessageFrameParamers;
 import com.smoc.cloud.common.smoc.message.MessageWebTaskInfoValidator;
@@ -150,8 +151,8 @@ public class MessageWebOrderController {
      *
      * @return
      */
-    @RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
-    public ModelAndView detail(@PathVariable String id, HttpServletRequest request) {
+    @RequestMapping(value = "/detail/{id}/{protocolType}", method = RequestMethod.GET)
+    public ModelAndView detail(@PathVariable String id, @PathVariable String protocolType, HttpServletRequest request) {
         ModelAndView view = new ModelAndView("message/message_order_web_detail");
 
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
@@ -165,6 +166,10 @@ public class MessageWebOrderController {
         }
 
         //查询信息
+        if("HTTP".equals(protocolType)){
+            return httpDetail(id);
+        }
+
         ResponseData<MessageWebTaskInfoValidator> infoData = messageWebTaskInfoService.findById(id);
         if (!ResponseCode.SUCCESS.getCode().equals(infoData.getCode())) {
             view.addObject("error", infoData.getCode() + ":" + infoData.getMessage());
@@ -196,6 +201,31 @@ public class MessageWebOrderController {
             }
             view.addObject("params", paramsSort);
             view.addObject("allSize", allSize);
+        }
+
+        view.addObject("messageWebTaskInfoValidator", infoData.getData());
+        view.addObject("accountTemplateInfoValidator", data.getData());
+        view.addObject("signType", infoData.getData().getInfoType());
+        view.addObject("businessType", infoData.getData().getBusinessType());
+        view.addObject("protocolType", "WEB");
+
+        return view;
+    }
+
+    public ModelAndView httpDetail(String id) {
+        ModelAndView view = new ModelAndView("message/message_order_web_detail");
+
+        ResponseData<MessageHttpsTaskInfoValidator> infoData = messageWebTaskInfoService.findHttpById(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(infoData.getCode())) {
+            view.addObject("error", infoData.getCode() + ":" + infoData.getMessage());
+            return view;
+        }
+
+        //查询模板
+        ResponseData<AccountTemplateInfoValidator> data = accountTemplateInfoService.findById(infoData.getData().getTemplateId());
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
         }
 
         view.addObject("messageWebTaskInfoValidator", infoData.getData());

@@ -41,6 +41,14 @@
                                        placeholder="企业名称" autocomplete="off" th:field="*{enterpriseName}">
                             </div>
                             <div class="form-group  col-sm-4">
+                                <input type="text" class="form-control"
+                                       placeholder="业务账号名称" autocomplete="off" th:field="*{accountName}">
+                            </div>
+                            <div class="form-group  col-sm-4">
+                                <input type="text" class="form-control"
+                                       placeholder="业务账号" autocomplete="off" th:field="*{businessAccount}">
+                            </div>
+                            <div class="form-group  col-sm-4">
                                 <mpm:tag id="templateType" identity="businessType" show-type="select" key="code"
                                          name="templateType"
                                          th:value="${accountTemplateInfoValidator.templateType}"
@@ -81,17 +89,17 @@
                     </div>
                     <div class="panel-body">
                         <div class="table-responsive">
-                            <table class="table table table-hover m-10" style="margin-top: -12px;">
+                            <table class="table table table-hover m-10" style="margin-top: -12px;table-layout:fixed;">
                                 <thead>
                                 <tr>
-                                    <th style="min-width:200px">模板ID/企业名称</th>
-                                    <th style="min-width:120px">业务类型</th>
-                                    <th style="min-width:200px">模板内容</th>
-                                    <th style="min-width:180px">接口类型/信息分类</th>
-                                    <th style="min-width:120px">模板类型</th>
-                                    <th style="min-width:120px">状态</th>
-                                    <th style="min-width:180px">申请人/申请时间</th>
-                                    <th style="min-width:100px">操作</th>
+                                    <th style="width:170px">模板ID/企业名称</th>
+                                    <th style="width:170px">业务账号/账号名称</th>
+                                    <th style="width:100px">业务类型</th>
+                                    <th style="width:260px">模板内容</th>
+                                    <th style="width:140px">接口类型/信息分类</th>
+                                    <th style="width:100px">模板类型</th>
+                                    <th style="width:100px">状态</th>
+                                    <th style="width:90px">操作</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -101,15 +109,22 @@
                                         <br>
                                         [[${info.enterpriseName}]]
                                     </td>
+                                    <td style="vertical-align: middle;;line-height: 26px;">
+                                        [[${info.businessAccount}]]
+                                        <br>
+                                        [[${info.accountName}]]
+                                    </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         <mpm:tag identity="businessType" show-type="button"
                                                  key="code" th:value="${info.templateType}"
                                                  class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;MULTI_SMS,btn btn-brown btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;5G_SMS,btn btn-primary btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-inverse btn-rounded btn-sm waves-effect waves-light"/>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
-                                        [[${info.templateContent}]]
+                                        <span class="text-overflow"
+                                              data-toggle="tooltip" data-placement="bottom"
+                                              th:data-original-title="${info.templateContent}">[[${info.templateContent}]]</span>
                                     </td>
-                                    <td style="vertical-align: middle;;line-height: 26px;">[[${info.templateAgreementType}]]<br>
+                                    <td style="vertical-align: middle;;line-height: 26px;">[[${info.templateAgreementType}]]/
                                         <mpm:tag identity="infoType" show-type="label" key="code"th:value="${info.infoType}"/>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
@@ -121,11 +136,6 @@
                                         <a class="btn btn-warning btn-rounded btn-sm waves-effect waves-light" th:if="${info.templateStatus eq '3'}">待审核</a>
                                         <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light" th:if="${info.templateStatus eq '1'}">拒绝</a>
                                         <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light" th:if="${info.templateStatus eq '0'}">无效</a>
-                                    </td>
-                                    <td style="vertical-align: middle;;line-height: 26px;">
-                                        [[${info.createdBy}]]
-                                        <br>
-                                        [[${info.createdTime}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;">
                                         <a sec:authorize-url="/template/view/center/*/*"

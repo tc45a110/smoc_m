@@ -14,7 +14,7 @@ public class MessageWebTaskInfoRowMapper implements RowMapper<MessageWebTaskInfo
 
         MessageWebTaskInfoValidator qo = new MessageWebTaskInfoValidator();
         qo.setId(resultSet.getString("ID"));
-        qo.setSubject(resultSet.getString("SUBJECT"));
+        qo.setProtocolType(resultSet.getString("PROTOCOL_TYPE"));
         qo.setEnterpriseName(resultSet.getString("ENTERPRISE_NAME"));
         qo.setTemplateId(resultSet.getString("TEMPLATE_ID"));
         qo.setBusinessAccount(resultSet.getString("BUSINESS_ACCOUNT"));
@@ -27,16 +27,14 @@ public class MessageWebTaskInfoRowMapper implements RowMapper<MessageWebTaskInfo
         qo.setSuccessSendNumber(resultSet.getInt("SUCCESS_SEND_NUMBER"));
         qo.setFailureNumber(resultSet.getInt("FAILURE_NUMBER"));
         qo.setNoReportNumber(resultSet.getInt("NO_REPORT_NUMBER"));
-        qo.setAppleSendTime(resultSet.getString("APPLE_SEND_TIME"));
         qo.setSendTime(resultSet.getString("SEND_TIME"));
         qo.setSendStatus(resultSet.getString("SEND_STATUS"));
-        qo.setInputNumber(resultSet.getString("INPUT_NUMBER"));
-        qo.setNumberFiles(resultSet.getString("NUMBER_FILES"));
         qo.setMessageContent(resultSet.getString("MESSAGE_CONTENT"));
         qo.setCreatedBy(resultSet.getString("CREATED_BY"));
         qo.setCreatedTime(resultSet.getString("CREATED_TIME"));
         qo.setInfoType(resultSet.getString("INFO_TYPE"));
         qo.setSplitNumber(resultSet.getInt("SPLIT_NUMBER"));
+        qo.setMessageType(resultSet.getString("MESSAGE_TYPE"));
 
         return qo;
     }

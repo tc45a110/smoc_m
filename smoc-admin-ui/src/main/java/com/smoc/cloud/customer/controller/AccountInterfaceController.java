@@ -94,7 +94,7 @@ public class AccountInterfaceController {
             //accountInterfaceInfoValidator.setMaxSubmitSecond(20);//账号提交速率
             //accountInterfaceInfoValidator.setMaxConnect(2);//最大连接数
             accountInterfaceInfoValidator.setExecuteCheck("1");
-            accountInterfaceInfoValidator.setMatchingCheck("1");
+            //accountInterfaceInfoValidator.setMatchingCheck("1");
         }
 
         view.addObject("accountInterfaceInfoValidator", accountInterfaceInfoValidator);
@@ -116,10 +116,6 @@ public class AccountInterfaceController {
         ModelAndView view = new ModelAndView("customer/account/account_edit_interface");
 
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
-
-        if("WEB".equals(accountInterfaceInfoValidator.getProtocol())){
-            accountInterfaceInfoValidator.setExecuteCheck("0");
-        }
 
         //完成参数规则验证
         if (result.hasErrors()) {
