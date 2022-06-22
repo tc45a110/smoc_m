@@ -1,0 +1,1 @@
+nohup /apps/smoc-protocol-proxy-cmpp/bin/_startup.sh > /alidata/smoc-protocol-proxy-cmpp/logs/system.log &
