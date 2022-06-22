@@ -73,10 +73,10 @@ public class GlobalGatewayFilter implements GlobalFilter, Ordered {
         //log.info("[HttpHeader][数据]{}",new Gson().toJson(requestStardardHeaders));
 
         //处理signatureNonce 重放攻击
-        boolean replayAttacks = dataService.nonce(requestStardardHeaders.getSignatureNonce());
-        if (replayAttacks) {
-            return errorHandle(exchange, ResponseCode.NONCE_ERROR.getCode(), ResponseCode.NONCE_ERROR.getMessage());
-        }
+//        boolean replayAttacks = dataService.nonce(requestStardardHeaders.getSignatureNonce());
+//        if (replayAttacks) {
+//            return errorHandle(exchange, ResponseCode.NONCE_ERROR.getCode(), ResponseCode.NONCE_ERROR.getMessage());
+//        }
 
         //取账户参数
         RedisModel redisModel = dataService.getHttpServerKey(headers.getFirst("account"));

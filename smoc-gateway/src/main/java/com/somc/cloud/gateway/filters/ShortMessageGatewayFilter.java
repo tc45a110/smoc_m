@@ -62,7 +62,7 @@ public class ShortMessageGatewayFilter {
 
                 ServerHttpRequest request = exchange.getRequest();
                 URI uri = request.getURI();
-                log.info("[http短信服务请求]URI:{}", uri.toString());
+                //log.info("[http短信服务请求]URI:{}", uri.toString());
 
                 //HttpHeaders 自定义的headers 组织签名信息;headers 数据已经经过了非空验证
                 HttpHeaders headers = exchange.getRequest().getHeaders();
@@ -100,7 +100,7 @@ public class ShortMessageGatewayFilter {
                     return errorHandle(exchange, ResponseCode.PARAM_FORMAT_ERROR.getCode(), "account数据不一致");
                 }
 
-                //身份证规则验证  验证身证号 及姓名
+                //验证数据类型
                 if (!ValidatorUtil.validate(model)) {
                     String errorMessage = ValidatorUtil.validateMessage(model);
                     return errorHandle(exchange, ResponseCode.PARAM_FORMAT_ERROR.getCode(), errorMessage);
@@ -136,10 +136,10 @@ public class ShortMessageGatewayFilter {
                 signData.append(model.getTimestamp().trim());
 
                 //校验签名
-                boolean verifySign = HMACUtil.verifySign(signData.toString(), requestHeaderData.getSignature(), md5HmacKey, gatewayConfigurationProperties.getSignStyle());
-                if (!verifySign) {
-                    return errorHandle(exchange, ResponseCode.SIGN_ERROR.getCode(), ResponseCode.SIGN_ERROR.getMessage());
-                }
+//                boolean verifySign = HMACUtil.verifySign(signData.toString(), requestHeaderData.getSignature(), md5HmacKey, gatewayConfigurationProperties.getSignStyle());
+//                if (!verifySign) {
+//                    return errorHandle(exchange, ResponseCode.SIGN_ERROR.getCode(), ResponseCode.SIGN_ERROR.getMessage());
+//                }
 
                 return chain.filter(exchange).then(Mono.fromRunnable(() -> {
                     //被执行后调用 post

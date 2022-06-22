@@ -20,7 +20,8 @@ public class SendMessageByTemplate {
         //自定义header协议
         Map<String, String> header = new HashMap<>();
         //signature-nonce 为17位数字，并且每次请求signature-nonce不能重复
-        header.put("signature-nonce", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(10));
+        //header.put("signature-nonce", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(10));
+        header.put("signature-nonce", "202206221043192902026871940");
         header.put("account", "WHZ119");
 
         //请求的数据
@@ -35,7 +36,7 @@ public class SendMessageByTemplate {
 
         //模板短信内容
         List<String> list = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 100; i++) {
             String item = "13" + Utils.getRandom(9) + "|" + Utils.getRandom(4);
             list.add(item);
         }
@@ -67,6 +68,8 @@ public class SendMessageByTemplate {
         System.out.println("[接口请求][签名]数据:" + sign);
 
         header.put("signature", sign);
+
+        System.out.println(requestJsonData);
 
         String result = Okhttp3Utils.postJson(url, requestJsonData, header);
         System.out.println("[请求响应]数据:" + result);
