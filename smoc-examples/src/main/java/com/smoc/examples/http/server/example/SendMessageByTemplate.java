@@ -17,7 +17,7 @@ public class SendMessageByTemplate {
 
         String url = "http://localhost:18088/smoc-gateway/http-server/message/sendMessageByTemplate";
 
-        for (int j = 0; j < 10; j++) {
+        for (int j = 0; j < 1; j++) {
             //自定义header协议
             Map<String, String> header = new HashMap<>();
             //signature-nonce 为17位数字，并且每次请求signature-nonce不能重复
@@ -31,9 +31,8 @@ public class SendMessageByTemplate {
             requestDataMap.put("orderNo", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(10));
             //业务账号；参见给的账号EXCEL文件
             requestDataMap.put("account", "WHZ119");
-
             //模板ID
-            requestDataMap.put("templateId", "TEMP100568");
+            requestDataMap.put("templateId", "TEMP100609");
 
             //模板短信内容
             List<String> list = new ArrayList<>();

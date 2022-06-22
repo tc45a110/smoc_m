@@ -81,9 +81,11 @@ public class SendMessageService {
         //该批次手机号总量
         Integer phoneCount = 0;
 
+
+        log.info("[组织短信]1：{}", System.currentTimeMillis());
         //获取模板ID
         String messageId = "TASK" + sequenceService.findSequence("TASK");
-
+        log.info("[组织短信]2：{}", System.currentTimeMillis());
         for (int i = 0; i < length; i++) {
 
             if (StringUtils.isEmpty(params.getContent()[i])) {
@@ -92,6 +94,7 @@ public class SendMessageService {
 
             phoneCount++;
             MessageFormat messageFormat = new MessageFormat();
+            log.info("[组织短信@1]：{}", System.currentTimeMillis());
             //普通模版短信
             if ("1".equals(optional.get().getTemplateFlag())) {
                 String phoneNumber = params.getContent()[i].split("\\|")[0];
@@ -99,7 +102,7 @@ public class SendMessageService {
                 messageFormat.setMessageContent(templateContent);
                 messageCount += MessageContentUtil.splitSMSContentNumber(templateContent);
             }
-
+            log.info("[组织短信@2]：{}", System.currentTimeMillis());
             //变量模版短信
             if ("2".equals(optional.get().getTemplateFlag())) {
                 String[] content = params.getContent()[i].split("\\|");
@@ -115,6 +118,7 @@ public class SendMessageService {
                 messageCount += MessageContentUtil.splitSMSContentNumber(messageContent);
                 messageFormat.setMessageContent(messageContent);
             }
+            log.info("[组织短信@3]：{}", System.currentTimeMillis());
 
             messageFormat.setId(Int64UUID.random());
             messageFormat.setAccountId(params.getAccount());
@@ -133,6 +137,8 @@ public class SendMessageService {
             messages.add(messageFormat);
         }
 
+        log.info("[组织短信]3：{}", System.currentTimeMillis());
+
         log.info("messageCount：{}",messageCount);
         //流控、限流
         Boolean limiter = accountRateLimiter.limiter(params.getAccount(), messageCount);
@@ -142,7 +148,7 @@ public class SendMessageService {
 
         log.info("messageCount：{}",messageCount);
         //异步 批量保存短消息
-        this.saveMessageBatch(messageId,messages, messageCount, phoneCount, templateContent, params.getTemplateId(), params.getAccount(), params.getExtNumber());
+       // this.saveMessageBatch(messageId,messages, messageCount, phoneCount, templateContent, params.getTemplateId(), params.getAccount(), params.getExtNumber());
 
         //log.info("[普通短信]:{}", new Gson().toJson(messages));
         Map<String, String> result = new HashMap<>();

@@ -42,7 +42,7 @@ public class Okhttp3Utils {
                     .build();
             response = client.newCall(request).execute();
             jsonString = response.body().string();
-            System.out.println("[请求响应]原数据:" + jsonString);
+            //System.out.println("[请求响应]原数据:" + jsonString);
             if (response.isSuccessful()) {
                 return jsonString;
             }else{

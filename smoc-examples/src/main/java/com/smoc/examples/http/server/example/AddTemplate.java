@@ -32,9 +32,9 @@ public class AddTemplate {
         //业务账号；参见给的账号EXCEL文件
         requestDataMap.put("account", "UGR100");
         //模板类型 1 表示普通模板 2 表示变量模板
-        requestDataMap.put("templateType", "2");
+        requestDataMap.put("templateType", "1");
         //模板内容
-        requestDataMap.put("content", "【小小鸟】你的验证码为${1}, 请勿告诉他人，我们不会向你索要验证码。");
+        requestDataMap.put("content", "【小小鸟】你的验证码为, 请勿告诉他人，我们不会向你索要验证码。");
         //时间戳
         requestDataMap.put("timestamp", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS"));
         //转JSON请求数据
