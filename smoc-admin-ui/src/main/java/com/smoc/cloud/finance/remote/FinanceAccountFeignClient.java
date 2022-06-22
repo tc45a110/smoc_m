@@ -4,6 +4,7 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountRechargeValidator;
+import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountRefundValidator;
 import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountValidator;
 import com.smoc.cloud.common.smoc.identification.validator.IdentificationOrdersInfoValidator;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -90,4 +91,11 @@ public interface FinanceAccountFeignClient {
     @RequestMapping(value = "/finance/account/save/{op}", method = RequestMethod.POST)
     public ResponseData save(@RequestBody FinanceAccountValidator financeAccountValidator,@PathVariable String op) throws Exception;
 
+    /**
+     * 账户充值,保存充值记录，变更财务账户
+     *
+     * @return
+     */
+    @RequestMapping(value = "/finance/account/refund", method = RequestMethod.POST)
+    ResponseData refund(@RequestBody FinanceAccountRefundValidator financeAccountRefundValidator);
 }

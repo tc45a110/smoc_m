@@ -24,9 +24,9 @@
             <div class="col-sm-12">
                 <div class="panel panel-color panel-info">
                     <div class="panel-heading">
-                        <h3 class="panel-title">账户充值记录</h3>
+                        <h3 class="panel-title">账户退款记录</h3>
                     </div>
-                    <form id="query_form" th:action="@{/finance/account/recharge/account/list/page}" th:object="${financeAccountRechargeValidator}" method="post">
+                    <form id="query_form" th:action="@{/finance/account/refund/account/list/page}" th:object="${financeAccountRefundValidator}" method="post">
                         <input type="hidden" name="currentPage" id="currentPage"
                                th:value="${pageParams.currentPage}">
                         <input type="hidden" name="pageSize" id="pageSize"
@@ -37,8 +37,8 @@
                                 <table class="table table table-hover m-10" style="margin-top: -12px;">
                                     <thead>
                                     <tr>
-                                        <th>充值流水号</th>
-                                        <th>充值金额(元)</th>
+                                        <th>退款流水号</th>
+                                        <th>退款金额(元)</th>
                                         <th>备注</th>
                                         <th>操作人</th>
                                         <th>操作时间</th>
@@ -47,10 +47,10 @@
                                     <tbody>
                                     <tr th:each="info:${list}">
                                         <td style="vertical-align: middle;line-height: 26px">
-                                            [[${info.rechargeFlowNo}]]
+                                            [[${info.refundFlowNo}]]
                                         </td>
                                         <td style="vertical-align: middle;line-height: 26px">
-                                            ¥ [[${#numbers.formatDecimal(info.rechargeSum,1,'COMMA',2,'POINT')}]]
+                                            ¥ [[${#numbers.formatDecimal(info.refundSum,1,'COMMA',2,'POINT')}]]
 
                                         </td>
                                         <td style="vertical-align: middle;line-height: 26px">

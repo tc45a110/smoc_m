@@ -31,4 +31,7 @@ public interface ParameterExtendFiltersValueRepository extends JpaRepository<Par
     List<ParameterExtendFiltersValue> findParameterExtendFiltersValueByBusinessId(String businessId);
 
     List<ParameterExtendFiltersValue> findParameterExtendFiltersValueByBusinessType(String businessType);
+
+    List<ParameterExtendFiltersValue> findParameterExtendFiltersValueByBusinessIdAndBusinessType(String accountCopyId, String business_account_filter);
+
 }

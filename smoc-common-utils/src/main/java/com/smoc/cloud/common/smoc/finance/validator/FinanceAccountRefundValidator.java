@@ -20,6 +20,8 @@ public class FinanceAccountRefundValidator {
     private String createdTime;
     private String remark;
 
+    private BigDecimal accountUsableSum;
+
     private String enterpriseName;
     private String enterpriseId;
 

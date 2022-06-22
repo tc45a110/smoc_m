@@ -1,6 +1,8 @@
 package com.smoc.cloud.parameter.repository;
 
 import com.smoc.cloud.common.smoc.parameter.ParameterExtendFiltersValueValidator;
+import com.smoc.cloud.common.utils.UUID;
+import com.smoc.cloud.parameter.entity.ParameterExtendFiltersValue;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -21,7 +23,7 @@ public class ParameterExtendFiltersValueRepositoryImpl {
      * @param list
      */
     public void batchSave(List<ParameterExtendFiltersValueValidator> list) {
-        final String sql = "insert into parameter_extend_filters_value(ID,BUSINESS_TYPE,BUSINESS_ID,PARAM_NAME,PARAM_KEY,PARAM_VALUE,CREATED_BY,CREATED_TIME) values(?,?,?,?,?,?,?,?) ";
+        final String sql = "insert into parameter_extend_filters_value(ID,BUSINESS_TYPE,BUSINESS_ID,PARAM_NAME,PARAM_KEY,PARAM_VALUE,CREATED_BY,CREATED_TIME) values(?,?,?,?,?,?,?,now()) ";
 
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             public int getBatchSize() {
@@ -37,7 +39,6 @@ public class ParameterExtendFiltersValueRepositoryImpl {
                 ps.setString(5, parameterExtendFiltersValueValidator.getParamKey());
                 ps.setString(6, parameterExtendFiltersValueValidator.getParamValue());
                 ps.setString(7, parameterExtendFiltersValueValidator.getCreatedBy());
-                ps.setDate(8, new Date(parameterExtendFiltersValueValidator.getCreatedTime().getTime()));
             }
 
         });
@@ -56,4 +57,5 @@ public class ParameterExtendFiltersValueRepositoryImpl {
         jdbcTemplate.update(sql, params);
 
     }
+
 }

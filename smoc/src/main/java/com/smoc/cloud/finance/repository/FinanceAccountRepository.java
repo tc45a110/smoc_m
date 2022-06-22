@@ -147,4 +147,13 @@ public interface FinanceAccountRepository extends CrudRepository<FinanceAccount,
      * @return
      */
     PageList<FinanceAccountValidator> pageSystemAccount(PageParams<FinanceAccountValidator> pageParams);
+
+    /**
+     * 账户退款
+     * @param refundSum
+     * @param accountId
+     */
+    @Modifying
+    @Query(value = "update finance_account set ACCOUNT_TOTAL_SUM = ACCOUNT_TOTAL_SUM-:refundSum,ACCOUNT_USABLE_SUM =ACCOUNT_USABLE_SUM-:refundSum where ACCOUNT_ID = :accountId",nativeQuery = true)
+    void refund(@Param("refundSum") BigDecimal refundSum, @Param("accountId") String accountId);
 }

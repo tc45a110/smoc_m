@@ -6,6 +6,7 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountRechargeValidator;
+import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountRefundValidator;
 import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountValidator;
 import com.smoc.cloud.finance.service.FinanceAccountService;
 import lombok.extern.slf4j.Slf4j;
@@ -64,6 +65,18 @@ public class FinanceAccountController {
     public ResponseData recharge(@RequestBody FinanceAccountRechargeValidator financeAccountRechargeValidator) {
 
         return financeAccountService.recharge(financeAccountRechargeValidator);
+    }
+
+    /**
+     * 账户退款
+     *
+     * @param financeAccountRefundValidator
+     * @return
+     */
+    @RequestMapping(value = "/refund", method = RequestMethod.POST)
+    public ResponseData refund(@RequestBody FinanceAccountRefundValidator financeAccountRefundValidator) {
+
+        return financeAccountService.refund(financeAccountRefundValidator);
     }
 
     /**

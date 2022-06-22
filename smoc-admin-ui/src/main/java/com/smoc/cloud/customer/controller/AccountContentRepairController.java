@@ -196,7 +196,7 @@ public class AccountContentRepairController {
         //根据运营商符合要求的备用通道
         ConfigChannelRepairValidator configChannelRepairValidator = new ConfigChannelRepairValidator();
         configChannelRepairValidator.setBusinessType(data.getData().getBusinessType());
-        configChannelRepairValidator.setCarrier(data.getData().getCarrier());
+        configChannelRepairValidator.setCarrier(carrier);
         configChannelRepairValidator.setFlag("ACCOUNT");
         configChannelRepairValidator.setChannelId(data.getData().getAccountId());
         ResponseData<List<ConfigChannelRepairValidator>> channelList = channelRepairService.findSpareChannel(configChannelRepairValidator);

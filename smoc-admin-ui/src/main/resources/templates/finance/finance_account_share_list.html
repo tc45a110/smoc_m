@@ -180,6 +180,13 @@
                                            class="on-default edit-row"
                                            style="padding-left: 5px;color: #29b6f6;"><i style="font-size: 20px"
                                                                                         class="mdi mdi-coin"></i></a>
+                                        <a sec:authorize-url="/finance/account/share/refund/*/*"
+                                           th:href="@{/finance/account/share/refund/{accountId}/{enterpriseId}(enterpriseId=${info.enterpriseId},accountId=${info.accountId})}"
+                                           data-toggle="tooltip" data-placement="bottom"
+                                           data-original-title="共享财务账户退款"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color: red;"><i style="font-size: 20px"
+                                                                                    class="mdi mdi-coin"></i></a>
                                         <a sec:authorize-url="/finance/account/share/edit/*"
                                            th:href="@{/finance/account/share/edit/{accountId}(accountId=${info.accountId})}"
                                            class="on-default edit-row"

@@ -5,6 +5,7 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountRechargeValidator;
+import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountRefundValidator;
 import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountValidator;
 import com.smoc.cloud.finance.remote.FinanceAccountFeignClient;
 import lombok.extern.slf4j.Slf4j;
@@ -139,6 +140,20 @@ public class FinanceAccountService {
     public ResponseData save(FinanceAccountValidator financeAccountValidator, String op) {
         try {
             return this.financeAccountFeignClient.save(financeAccountValidator, op);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 账户退款,保存退款记录，变更财务账户
+     *
+     * @return
+     */
+    public ResponseData refund(FinanceAccountRefundValidator financeAccountRefundValidator) {
+        try {
+            return this.financeAccountFeignClient.refund(financeAccountRefundValidator);
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseDataUtil.buildError(e.getMessage());

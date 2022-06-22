@@ -6,13 +6,16 @@ import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountConsumeValidator;
 import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountRechargeValidator;
+import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountRefundValidator;
 import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.customer.repository.BusinessAccountRepository;
 import com.smoc.cloud.customer.repository.EnterpriseRepository;
 import com.smoc.cloud.finance.entity.FinanceAccount;
 import com.smoc.cloud.finance.entity.FinanceAccountRecharge;
+import com.smoc.cloud.finance.entity.FinanceAccountRefund;
 import com.smoc.cloud.finance.repository.FinanceAccountRechargeRepository;
+import com.smoc.cloud.finance.repository.FinanceAccountRefundRepository;
 import com.smoc.cloud.finance.repository.FinanceAccountRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -34,13 +37,13 @@ public class FinanceAccountService {
     private EnterpriseRepository enterpriseRepository;
 
     @Resource
-    private BusinessAccountRepository businessAccountRepository;
-
-    @Resource
     private FinanceAccountRepository financeAccountRepository;
 
     @Resource
     private FinanceAccountRechargeRepository financeAccountRechargeRepository;
+
+    @Resource
+    private FinanceAccountRefundRepository financeAccountRefundRepository;
 
 
     /**
@@ -243,6 +246,23 @@ public class FinanceAccountService {
             List<FinanceAccountValidator> data = financeAccountRepository.findSubsidiaryFinanceAccountByAccountId(optional.get().getShareId());
             return ResponseDataUtil.buildSuccess(data);
         }
+
+        return ResponseDataUtil.buildSuccess();
+    }
+
+    /**
+     * 账户退款
+     * @param financeAccountRefundValidator
+     * @return
+     */
+    @Transactional
+    public ResponseData refund(FinanceAccountRefundValidator financeAccountRefundValidator) {
+        financeAccountRepository.refund(financeAccountRefundValidator.getRefundSum(), financeAccountRefundValidator.getAccountId());
+        FinanceAccountRefund entity = new FinanceAccountRefund();
+        BeanUtils.copyProperties(financeAccountRefundValidator, entity);
+        //转换日期格式
+        entity.setCreatedTime(DateTimeUtils.getDateTimeFormat(financeAccountRefundValidator.getCreatedTime()));
+        financeAccountRefundRepository.saveAndFlush(entity);
 
         return ResponseDataUtil.buildSuccess();
     }

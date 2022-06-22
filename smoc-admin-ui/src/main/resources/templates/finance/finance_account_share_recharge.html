@@ -50,7 +50,7 @@
                             财务共享账号充值
                         </h3>
                     </div>
-                    <div class="panel-body">
+                    <div class="panel-body" style="height: 552px">
                         <div class="row">
                             <div class="col-md-10">
                                 <div class="p-20">
@@ -103,7 +103,7 @@
                             充值信息
                         </h3>
                     </div>
-                    <div class="panel-body" style="height: 532px">
+                    <div class="panel-body" style="height: 552px">
                         <form id="submit_form" th:action="@{/finance/account/share/recharge/save}" th:object="${financeAccountRechargeValidator}"
                               method="post" data-parsley-validate="">
                             <div class="p-20">
@@ -129,6 +129,12 @@
                                     <label for="address">操作时间<span class="text-danger">*</span>&nbsp;</label>
                                     <input id="address" type="text" class="form-control" th:field="*{createdTime}" readonly
                                            required="">
+                                </div>
+                                <div class="form-group m-b-20">
+                                    <label for="remark">备注&nbsp;</label>
+                                    <input id="remark" type="text" class="form-control"
+                                           autocomplete="off" th:field="*{remark}" data-parsley-length="[1,255]"
+                                           placeholder="备注">
                                 </div>
                             </div>
                             <div class="text-center" style="margin-bottom:30px">

@@ -139,4 +139,8 @@ public interface AccountChannelRepository extends CrudRepository<AccountChannelI
     @Modifying
     @Query(value = "delete from account_channel_info where ACCOUNT_ID = :accountId and CARRIER = :carrier ",nativeQuery = true)
     void deleteByAccountIdAndCarrier(@Param("accountId")String accountId, @Param("carrier")String carrier);
+
+    List<AccountChannelInfo> findByAccountId(String accountId);
+
+    void batchChannelCopy(AccountChannelInfoValidator accountChannelInfoValidator, List<AccountChannelInfo> channelList);
 }

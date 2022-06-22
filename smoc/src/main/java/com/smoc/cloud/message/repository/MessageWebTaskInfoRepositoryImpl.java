@@ -70,6 +70,12 @@ public class MessageWebTaskInfoRepositoryImpl extends BasePageRepository {
             paramsList.add(qo.getId().trim());
         }
 
+        //企业
+        if (!StringUtils.isEmpty(qo.getEnterpriseId())) {
+            sqlBuffer.append(" and t.ENTERPRISE_ID =?");
+            paramsList.add(qo.getEnterpriseId().trim());
+        }
+
         //企业名称
         if (!StringUtils.isEmpty(qo.getEnterpriseName())) {
             sqlBuffer.append(" and t.ENTERPRISE_NAME like ? ");
@@ -163,6 +169,12 @@ public class MessageWebTaskInfoRepositoryImpl extends BasePageRepository {
         if (!StringUtils.isEmpty(qo.getId())) {
             sqlBuffer.append(" and t.ID =?");
             paramsList.add(qo.getId().trim());
+        }
+
+        //企业
+        if (!StringUtils.isEmpty(qo.getEnterpriseId())) {
+            sqlBuffer.append(" and t.ENTERPRISE_ID =?");
+            paramsList.add(qo.getEnterpriseId().trim());
         }
 
         //企业名称

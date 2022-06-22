@@ -25,8 +25,8 @@ public class BaseUserValidator implements Serializable {
     public String id;
 
     @NotNull(message = "用户名不能为空！")
-    @Pattern(regexp = "^[0-9A-Za-z_-]{4,20}$", message = "用户名不符合规则！")
-    @Length(min = 4, max = 20, message = "字段长度要在{min}-{max}之间！")
+    @Pattern(regexp = "^[0-9A-Za-z_-]{4,30}$", message = "用户名不符合规则！")
+    @Length(min = 4, max = 30, message = "字段长度要在{min}-{max}之间！")
     private String userName;
 
     @Length(max = 255, message = "密码最大长度为{max}！")

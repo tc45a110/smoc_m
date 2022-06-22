@@ -6,6 +6,7 @@ import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelGroupInfoValidator;
 import com.smoc.cloud.common.smoc.customer.qo.AccountChannelInfoQo;
 import com.smoc.cloud.common.smoc.customer.validator.AccountChannelInfoValidator;
+import com.smoc.cloud.common.smoc.customer.validator.AccountFinanceInfoValidator;
 import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.configure.channel.group.entity.ConfigChannelGroup;
 import com.smoc.cloud.customer.entity.AccountChannelInfo;
@@ -453,5 +454,33 @@ public class AccountChannelRepositoryImpl extends BasePageRepository {
         List<AccountChannelInfoValidator> list = this.queryForObjectList(sqlBuffer.toString(), params,  new AccountChannelInfoDetailRowMapper());
         return list;
 
+    }
+
+    public void batchChannelCopy(AccountChannelInfoValidator accountChannelInfoValidator, List<AccountChannelInfo> list) {
+
+        final String sql = "insert into account_channel_info(ID,ACCOUNT_ID,CONFIG_TYPE,CARRIER,CHANNEL_GROUP_ID,CHANNEL_ID,CHANNEL_PRIORITY,CHANNEL_WEIGHT,CHANNEL_SOURCE,CHANNEL_STATUS,CREATED_BY,CREATED_TIME) " +
+                "values(?,?,?,?,?,?,?,?,?,?,?,now()) ";
+
+        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+            public int getBatchSize() {
+                return list.size();
+            }
+
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                AccountChannelInfo info = list.get(i);
+                ps.setString(1, UUID.uuid32());
+                ps.setString(2, accountChannelInfoValidator.getAccountId());
+                ps.setString(3, info.getConfigType());
+                ps.setString(4, info.getCarrier());
+                ps.setString(5, info.getChannelGroupId());
+                ps.setString(6, info.getChannelId());
+                ps.setString(7, info.getChannelPriority());
+                ps.setInt(8, info.getChannelWeight());
+                ps.setString(9, info.getChannelSource());
+                ps.setString(10, info.getChannelStatus());
+                ps.setString(11, accountChannelInfoValidator.getCreatedBy());
+            }
+
+        });
     }
 }

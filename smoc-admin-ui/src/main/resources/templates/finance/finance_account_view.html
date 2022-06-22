@@ -153,6 +153,13 @@
                                                            th:target="tab-content">充值记录
                                                         </a>
                                                     </li>
+                                                    <li class="" id="tab2">
+                                                        <a onclick="active('2')"
+                                                           sec:authorize-url="/finance/account/refund/account/list/*"
+                                                           th:href="@{/finance/account/refund/account/list/{accountId}(accountId=${financeAccountValidator.accountId})}"
+                                                           th:target="tab-content">退款记录
+                                                        </a>
+                                                    </li>
 <!--                                                    <li class="" id="consume">-->
 <!--                                                        <a onclick="activeTab('consume')"-->
 <!--                                                           sec:authorize-url="/finance/account/consume/list"-->
@@ -160,8 +167,8 @@
 <!--                                                           th:target="tab-content">消费记录-->
 <!--                                                        </a>-->
 <!--                                                    </li>-->
-                                                    <li class=""  id="tab2">
-                                                        <a  onclick="active('2')"
+                                                    <li class=""  id="tab3">
+                                                        <a  onclick="active('3')"
                                                             sec:authorize-url="/user/logs/list/*/*"
                                                             th:href="@{/user/logs/list/ACCOUNT_FINANCE/{accountId}(accountId=${financeAccountValidator.accountId})}" th:target="tab-content">
                                                             <span class="visible-xs"><i class="fa fa-cog"></i></span>
@@ -204,7 +211,7 @@
 <script>
 
     function active(tab) {
-        for(var num = 1;num<3;num++){
+        for(var num = 1;num<5;num++){
             $('#tab'+num).removeClass("active");
         }
         $('#tab'+tab).attr("class","active");
