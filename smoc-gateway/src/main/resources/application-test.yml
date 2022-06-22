@@ -6,8 +6,26 @@ spring:
     gateway:
       #Global http timeouts.must be specified in milliseconds. must be specified as a java.time.Duration
       httpclient:
-        connect-timeout: 15000
-        response-timeout: 5s
+        connect-timeout: 30000
+        response-timeout: 30s
+        # 线程池类型，除了默认的elastic，还支持fixed和disabled
+        # elastic：无限扩展的线程池
+        # fixed：固定数量线程池
+        # disabled：不使用线程池——只有一个线程
+        pool:
+          #          type: elastic
+          # 最大线程数，只在类型为fixed时有效
+          #          max-connections: 16
+          # 从线程池获取连接的最大等待时间（毫秒）
+          acquire-timeout: 30000
+          # 线程空闲多久会被回收（毫秒）
+          # max-idle-time: null
+          # 线程最大存活时间（毫秒）
+          # max-life-time=null
+          # 定时检测周期（毫秒），检测哪些线程需要被回收
+          # （1）只有空闲的线程会被回收
+          # （2）即使未达到max-idle-time，当达到max-life-time时也会被回收
+          # eviction-interval: null
 
   #**********************************************************
   # Redis

@@ -55,7 +55,7 @@ public class PushReportService {
                 Thread.sleep(10000);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.info("[报告推送失败]：原因:{}", e.getMessage());
         }
 
     }
@@ -131,7 +131,7 @@ public class PushReportService {
                 }
             });
         } catch (Exception e) {
-            e.printStackTrace();
+            log.info("[报告推送失败]：原因:{}", e.getMessage());
         }
     }
 

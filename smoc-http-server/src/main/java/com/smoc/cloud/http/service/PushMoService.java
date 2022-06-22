@@ -54,7 +54,8 @@ public class PushMoService {
                 Thread.sleep(10000);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("上行推送失败：{}",e.getMessage());
+            //e.printStackTrace();
         }
 
     }
@@ -111,7 +112,7 @@ public class PushMoService {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     //子线程
-                    log.info("[报告推送失败]：url:{};原因:{}",url, e.getMessage());
+                    log.info("[上行推送失败]：url:{};原因:{}",url, e.getMessage());
                 }
 
                 @Override
@@ -122,12 +123,13 @@ public class PushMoService {
                     if ("0000".equals(code)) {
                         messageRepository.batchDelete(mos);
                     }else{
-                        log.info("[报告推送失败]：url:{};原因:{}",url, code);
+                        log.info("[上行推送失败]：url:{};原因:{}",url, code);
                     }
                 }
             });
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("推送状态报告异常：{}",e.getMessage());
+            //e.printStackTrace();
         }
     }
 
