@@ -133,12 +133,14 @@ public class SendMessageService {
             messages.add(messageFormat);
         }
 
+        log.info("messageCount：{}",messageCount);
         //流控、限流
         Boolean limiter = accountRateLimiter.limiter(params.getAccount(), messageCount);
         if (!limiter) {
             return ResponseDataUtil.buildError(ResponseCode.PARAM_MOBILE_LIMITER_ERROR.getCode(), ResponseCode.PARAM_MOBILE_LIMITER_ERROR.getMessage());
         }
 
+        log.info("messageCount：{}",messageCount);
         //异步 批量保存短消息
         this.saveMessageBatch(messageId,messages, messageCount, phoneCount, templateContent, params.getTemplateId(), params.getAccount(), params.getExtNumber());
 
