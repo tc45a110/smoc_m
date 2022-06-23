@@ -16,6 +16,7 @@ public class FinanceAccount {
     private BigDecimal accountFrozenSum;
     private BigDecimal accountConsumeSum;
     private BigDecimal accountRechargeSum;
+    private BigDecimal accountRefundSum;
     private BigDecimal accountCreditSum;
     private String accountStatus;
     private String isShare;
@@ -104,6 +105,16 @@ public class FinanceAccount {
 
     public void setAccountRechargeSum(BigDecimal accountRechargeSum) {
         this.accountRechargeSum = accountRechargeSum;
+    }
+
+    @Basic
+    @Column(name = "ACCOUNT_REFUND_SUM")
+    public BigDecimal getAccountRefundSum() {
+        return accountRefundSum;
+    }
+
+    public void setAccountRefundSum(BigDecimal accountRefundSum) {
+        this.accountRefundSum = accountRefundSum;
     }
 
     @Basic

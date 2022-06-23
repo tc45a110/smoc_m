@@ -117,6 +117,7 @@ public class SystemAccountInfoService {
             financeAccount.setAccountFrozenSum(new BigDecimal("0.00000"));
             financeAccount.setAccountConsumeSum(new BigDecimal("0.00000"));
             financeAccount.setAccountRechargeSum(new BigDecimal("0.00000"));
+            financeAccount.setAccountRefundSum(new BigDecimal("0.00000"));
             financeAccount.setAccountCreditSum(entity.getGrantingCredit());
             financeAccount.setEnterpriseId(entity.getEnterpriseId());
             financeAccount.setAccountStatus("1");

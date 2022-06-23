@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+
+    <link th:href="@{/static/plugins/jquery.filer/css/jquery.filer.css}" rel="stylesheet"/>
+    <link th:href="@{/static/plugins/jquery.filer/css/themes/jquery.filer-dragdropbox-theme.css}" rel="stylesheet"/>
+
+</head>
+<body>
+<!-- Loader -->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <!-- start row 页面导航-->
+        <div class="row fixed-navigation">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">
+                        省号码配置
+                    </h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            系统参数配置
+                        </li>
+                        <li class="active">
+                            省号码配置
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row 页面内容-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all" style="margin-top:80px">
+            <div class="col-md-12">
+                <div class="panel panel-color panel-info">
+                    <div class="panel-body">
+                        <form  id="submit_form" th:action="@{/configure/number/province/upFiles}" method="post" th:object="${configNumberInfoValidator}" data-parsley-validate=""  enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <div class="p-20">
+                                        <div class="form-group">
+                                            <label>下载模板</label>
+                                            <a sec:authorize-url="/configure/number/downFileTemp/*" th:onclick="downFile('3')" class="btn btn-success waves-effect waves-light m-l-10 btn-sm">
+                                                <i class="glyphicon glyphicon-download"></i> 省号码模板.txt
+                                            </a>
+                                            <a sec:authorize-url="/configure/number/downFileTemp/*" th:onclick="downFile('4')" class="btn btn-primary waves-effect waves-light m-l-10 btn-sm">
+                                                <i class="glyphicon glyphicon-download"></i> 省号码模板.xlsx
+                                            </a>
+                                        </div>
+
+                                        <div class="form-group col-md-7">
+                                            <label>省份<span class="text-danger">*</span>&nbsp;
+                                                <span class="text-danger" th:if="${#fields.hasErrors('carrier')}"
+                                                      th:errors="*{carrier}"></span></label><br>
+                                            <mpm:tag id="provices" required="true" identity="provices"
+                                                     show-type="select" key="code" name="province"
+                                                     th:value="${configNumberInfoValidator.province}" title="省份"/>
+                                        </div>
+                                        <div class="form-group col-md-7">
+                                            <label>运营商<span class="text-danger">*</span>&nbsp;
+                                                <span class="text-danger" th:if="${#fields.hasErrors('carrier')}"
+                                                      th:errors="*{carrier}"></span></label><br>
+                                            <mpm:tag id="carrier" required="true" identity="carrier"
+                                                     show-type="select" key="code" name="carrier"
+                                                     th:value="${configNumberInfoValidator.carrier}" title="运营商"/>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="p-20">
+                                        <label>上传文件</label>
+                                        <div class="form-group">
+                                            <input type="file" name="file" id="input_file"
+                                                   multiple="multiple">
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div> <!-- end row -->
+
+                            <div class="text-center">
+                                <button sec:authorize-url="/configure/number/province/upFiles" type="submit"
+                                        class="btn btn-teal waves-effect waves-light">导入</button>
+                                <a sec:authorize-url="/configure/number/province/list" th:href="@{/configure/number/province/list}"
+                                   class="btn btn-default waves-effect waves-light">返回
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-6">
+
+                    </div> <!-- end col -->
+
+                </div>
+            </div> <!-- end col -->
+        </div>
+        <!-- end row -->
+
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<script th:src="@{/static/js/contractUploadFile.js}"></script>
+<script th:src="@{/static/plugins/jquery.filer/js/jquery.filer.min.js}"></script>
+<th:block th:insert="fragments/common_fragments :: common_submit_form"/>
+<!-- Jquery filer js -->
+<script>
+
+    function downFile(type) {
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        location.href = contextPath + "/configure/number/downFileTemp/" + type;
+    }
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+</script>
+</body>
+</html>

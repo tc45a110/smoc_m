@@ -11,6 +11,7 @@ import com.smoc.cloud.common.smoc.message.model.ComplaintExcelModel;
 import com.smoc.cloud.common.smoc.parameter.model.ErrorCodeExcelModel;
 import com.smoc.cloud.common.utils.Utils;
 import com.smoc.cloud.complaint.model.ComplaintExcelModelListener;
+import com.smoc.cloud.configure.number.utils.CodeNumberExcelModelListener;
 import com.smoc.cloud.filter.utils.ExcelModelListener;
 import com.smoc.cloud.filter.utils.KeywordsExcelModelListener;
 import com.smoc.cloud.filter.utils.WhiteKeywordsExcelModelListener;
@@ -49,7 +50,7 @@ public class FileUtils {
             if (".xls".equals(fileType) || ".xlsx".equals(fileType)) {
                 list = readExcel(in, type);
             } else if (".txt".equals(fileType)) {
-                list = readerTxt(in);
+                list = readerTxt(in,type);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -70,7 +71,7 @@ public class FileUtils {
      * @param inputStream
      * @return
      */
-    private static List<ExcelModel> readerTxt(InputStream inputStream) {
+    private static List<ExcelModel> readerTxt(InputStream inputStream,String type) {
 
         try {
             List<ExcelModel> list = new ArrayList<>();
@@ -80,10 +81,18 @@ public class FileUtils {
                 lineTxt = lineTxt.replaceAll("，", ",");
                 String[] s = lineTxt.split(",");
                 ExcelModel book = new ExcelModel();
-                if (!StringUtils.isEmpty(s[0].trim()) && Utils.isPhone(s[0].trim())) {
-                    book.setColumn1(s[0].trim());
-                } else {
-                    break;
+                if("4".equals(type)){
+                    if (!StringUtils.isEmpty(s[0].trim())) {
+                        book.setColumn1(s[0].trim());
+                    } else {
+                        break;
+                    }
+                }else{
+                    if (!StringUtils.isEmpty(s[0].trim()) && Utils.isPhone(s[0].trim())) {
+                        book.setColumn1(s[0].trim());
+                    } else {
+                        break;
+                    }
                 }
 
                 if (s.length == 2) {
@@ -103,7 +112,7 @@ public class FileUtils {
 
     /**
      * 异步EXCEL
-     * 1:白黑名单 2：关键词 3:白词
+     * 1:白黑名单 2：关键词 3:白词 4：号段
      */
     public static List<ExcelModel> readExcel(InputStream inputStream, String type) {
         try {
@@ -125,6 +134,15 @@ public class FileUtils {
                 excelReader.read(readSheet);
                 excelReader.finish();
                 list = keywordsExcelModelListener.getExcelModelList();
+            }
+
+            if ("4".equals(type)) {
+                CodeNumberExcelModelListener codeNumberExcelModelListener = new CodeNumberExcelModelListener();
+                ExcelReader excelReader = EasyExcel.read(inputStream, ExcelModel.class, codeNumberExcelModelListener).build();
+                ReadSheet readSheet = EasyExcel.readSheet(0).build();
+                excelReader.read(readSheet);
+                excelReader.finish();
+                list = codeNumberExcelModelListener.getExcelModelList();
             }
 
             return list;

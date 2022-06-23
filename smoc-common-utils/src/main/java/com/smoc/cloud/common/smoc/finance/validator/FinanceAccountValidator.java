@@ -19,6 +19,7 @@ public class FinanceAccountValidator {
     private BigDecimal accountFrozenSum;
     private BigDecimal accountConsumeSum;
     private BigDecimal accountRechargeSum;
+    private BigDecimal accountRefundSum;
     private BigDecimal accountCreditSum;
     private String accountStatus;
     private String isShare;

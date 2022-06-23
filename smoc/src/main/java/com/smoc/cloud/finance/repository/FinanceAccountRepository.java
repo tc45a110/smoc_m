@@ -154,6 +154,6 @@ public interface FinanceAccountRepository extends CrudRepository<FinanceAccount,
      * @param accountId
      */
     @Modifying
-    @Query(value = "update finance_account set ACCOUNT_TOTAL_SUM = ACCOUNT_TOTAL_SUM-:refundSum,ACCOUNT_USABLE_SUM =ACCOUNT_USABLE_SUM-:refundSum where ACCOUNT_ID = :accountId",nativeQuery = true)
+    @Query(value = "update finance_account set ACCOUNT_TOTAL_SUM = ACCOUNT_TOTAL_SUM-:refundSum,ACCOUNT_USABLE_SUM =ACCOUNT_USABLE_SUM-:refundSum,ACCOUNT_REFUND_SUM=ACCOUNT_REFUND_SUM+:refundSum where ACCOUNT_ID = :accountId",nativeQuery = true)
     void refund(@Param("refundSum") BigDecimal refundSum, @Param("accountId") String accountId);
 }
