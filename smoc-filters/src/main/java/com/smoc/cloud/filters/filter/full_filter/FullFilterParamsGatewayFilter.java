@@ -221,8 +221,8 @@ public class FullFilterParamsGatewayFilter extends BaseGatewayFilter implements 
              * 2、固定模版匹配，匹配成功，则跳过其他内容过滤
              */
             String noFilterFixedTemplate = FilterInitialize.accountFilterFixedTemplateMap.get(model.getAccount());
-            noFilterFixedTemplate = this.clean(noFilterFixedTemplate);
             if (!StringUtils.isEmpty(noFilterFixedTemplate)) {
+                noFilterFixedTemplate = this.clean(noFilterFixedTemplate);
                 String target = this.clean(model.getMessage());
                 Pattern pattern = Pattern.compile(noFilterFixedTemplate);
                 Matcher matcher = pattern.matcher(target);
@@ -236,8 +236,8 @@ public class FullFilterParamsGatewayFilter extends BaseGatewayFilter implements 
              */
             //（1）匹配上变量模版 则跳过其他内容过滤
             String noFilterVariableTemplate = FilterInitialize.accountNoFilterVariableTemplateMap.get(model.getAccount());
-            noFilterVariableTemplate =this.clean(noFilterVariableTemplate);
             if (!StringUtils.isEmpty(noFilterVariableTemplate)) {
+                noFilterVariableTemplate =this.clean(noFilterVariableTemplate);
                 Pattern pattern = Pattern.compile(noFilterVariableTemplate);
                 String target = this.clean(model.getMessage());
                 Matcher matcher = pattern.matcher(target);
@@ -260,27 +260,29 @@ public class FullFilterParamsGatewayFilter extends BaseGatewayFilter implements 
          * 4、签名模版匹配，（1）提取短信内容签名 （2）匹配签名；  如果匹配上签名，继续其他内容过滤，如果没匹配上签名，则返回过滤失败
          */
         String signTemplate = FilterInitialize.accountSignTemplateMap.get(model.getAccount());
-        if (!StringUtils.isEmpty(signTemplate)) {
+        //是否模板匹配，如果选择是，才会去判断签名
+        if (null == isMatchTemplate || isMatchTemplate.toString().equals("1")){
+            if (!StringUtils.isEmpty(signTemplate)) {
+                //解析内容签名
+                String sign = null;
+                Pattern pattern = Pattern.compile("【.*】");
+                Matcher matcher = pattern.matcher(model.getMessage());
+                if (matcher.find()) {
+                    sign = matcher.group(0);
+                }
+                if (StringUtils.isEmpty(sign)) {
+                    return errorHandle(exchange, FilterResponseCode.SIGN_IS_NULL.getCode(), FilterResponseCode.SIGN_IS_NULL.getMessage());
+                }
+                //验证签名是否报备
+                Pattern signPattern = Pattern.compile(signTemplate);
+                Matcher signMatcher = signPattern.matcher(sign);
+                if (!signMatcher.find()) {
+                    return errorHandle(exchange, FilterResponseCode.SIGN_IS_NOT_FOUND.getCode(), FilterResponseCode.SIGN_IS_NOT_FOUND.getMessage());
+                }
 
-            //解析内容签名
-            String sign = null;
-            Pattern pattern = Pattern.compile("【.*】");
-            Matcher matcher = pattern.matcher(model.getMessage());
-            if (matcher.find()) {
-                sign = matcher.group(0);
-            }
-            if (StringUtils.isEmpty(sign)) {
-                return errorHandle(exchange, FilterResponseCode.SIGN_IS_NULL.getCode(), FilterResponseCode.SIGN_IS_NULL.getMessage());
-            }
-            //验证签名是否报备
-            Pattern signPattern = Pattern.compile(signTemplate);
-            Matcher signMatcher = signPattern.matcher(sign);
-            if (!signMatcher.find()) {
+            } else {
                 return errorHandle(exchange, FilterResponseCode.SIGN_IS_NOT_FOUND.getCode(), FilterResponseCode.SIGN_IS_NOT_FOUND.getMessage());
             }
-
-        } else {
-            return errorHandle(exchange, FilterResponseCode.SIGN_IS_NOT_FOUND.getCode(), FilterResponseCode.SIGN_IS_NOT_FOUND.getMessage());
         }
 
         /**
