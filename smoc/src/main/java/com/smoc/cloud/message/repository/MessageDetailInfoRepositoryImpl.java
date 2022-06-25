@@ -276,7 +276,16 @@ public class MessageDetailInfoRepositoryImpl extends BasePageRepository {
             return pageList;
         }
 
-        return new PageList<MessageTaskDetail>();
+        //返回分页格式数据
+        PageList<MessageTaskDetail> pageList = new PageList<>();
+        //设置当前页
+        pageList.getPageParams().setCurrentPage(pageParams.getCurrentPage());
+        //设置每页显示条数
+        pageList.getPageParams().setPageSize(pageParams.getPageSize());
+        //设置当前页数据
+        pageList.setList(null);
+
+        return pageList;
     }
 
     /**
@@ -332,7 +341,16 @@ public class MessageDetailInfoRepositoryImpl extends BasePageRepository {
             return pageList;
         }
 
-        return new PageList<MessageTaskDetail>();
+        //返回分页格式数据
+        PageList<MessageTaskDetail> pageList = new PageList<>();
+        //设置当前页
+        pageList.getPageParams().setCurrentPage(pageParams.getCurrentPage());
+        //设置每页显示条数
+        pageList.getPageParams().setPageSize(pageParams.getPageSize());
+        //设置当前页数据
+        pageList.setList(null);
+
+        return pageList;
     }
 
     /**
@@ -414,7 +432,16 @@ public class MessageDetailInfoRepositoryImpl extends BasePageRepository {
             return pageList;
         }
 
-        return new PageList<MessageDetailInfoValidator>();
+        //返回分页格式数据
+        PageList<MessageDetailInfoValidator> pageList = new PageList<>();
+        //设置当前页
+        pageList.getPageParams().setCurrentPage(pageParams.getCurrentPage());
+        //设置每页显示条数
+        pageList.getPageParams().setPageSize(pageParams.getPageSize());
+        //设置当前页数据
+        pageList.setList(null);
+
+        return pageList;
     }
 
 

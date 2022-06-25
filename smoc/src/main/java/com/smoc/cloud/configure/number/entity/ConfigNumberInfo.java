@@ -13,6 +13,7 @@ public class ConfigNumberInfo {
     private String carrier;
     private String province;
     private String numberCodeType;
+    private String isSync;
     private String status;
     private String createdBy;
     private Date createdTime;
@@ -67,6 +68,16 @@ public class ConfigNumberInfo {
 
     public void setNumberCodeType(String numberCodeType) {
         this.numberCodeType = numberCodeType;
+    }
+
+    @Basic
+    @Column(name = "IS_SYNC")
+    public String getIsSync() {
+        return isSync;
+    }
+
+    public void setIsSync(String isSync) {
+        this.isSync = isSync;
     }
 
     @Basic

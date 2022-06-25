@@ -18,6 +18,7 @@ public class ConfigNumberInfoValidator {
     private String province;
     private String numberCodeType;
     private String status;
+    private String isSync;
     private String createdBy;
     private String createdTime;
     private String updatedBy;

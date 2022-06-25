@@ -69,20 +69,20 @@
                                         业务账号名称：[[${accountBasicInfoValidator.accountName}]]</p>
                                     </div>
                                     <div class="form-group m-b-20">
-                                        账户可用余额： ¥ [[${#numbers.formatDecimal(financeAccountValidator.accountUsableSum,1,'COMMA',2,'POINT')}]]
+                                        账户可用余额： ¥ [[${financeAccountValidator.accountUsableSum}]]
 
                                     </div>
                                     <div class="form-group m-b-20">
-                                        账户冻结金额： ¥ [[${#numbers.formatDecimal(financeAccountValidator.accountFrozenSum,1,'COMMA',2,'POINT')}]]
+                                        账户冻结金额： ¥ [[${financeAccountValidator.accountFrozenSum}]]
                                     </div>
                                     <div class="form-group m-b-20">
-                                        账户消费总金额：¥ [[${#numbers.formatDecimal(financeAccountValidator.accountConsumeSum,1,'COMMA',2,'POINT')}]]
+                                        账户消费总金额：¥ [[${financeAccountValidator.accountConsumeSum}]]
                                     </div>
                                     <div class="form-group m-b-20">
-                                        账户充值总金额：¥ [[${#numbers.formatDecimal(financeAccountValidator.accountRechargeSum,1,'COMMA',2,'POINT')}]]
+                                        账户充值总金额：¥ [[${financeAccountValidator.accountRechargeSum}]]
                                     </div>
                                     <div class="form-group m-b-20">
-                                        授信额度：¥ [[${#numbers.formatDecimal(financeAccountValidator.accountCreditSum,1,'COMMA',2,'POINT')}]]
+                                        授信额度：¥ [[${financeAccountValidator.accountCreditSum}]]
                                     </div>
 
                                     <div class="alert alert-icon alert-danger alert-dismissible fade in" role="alert">

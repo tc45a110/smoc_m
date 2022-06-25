@@ -63,6 +63,7 @@ public class MessageMMVariableController {
         messageWebTaskInfoValidator.setEnterpriseId(user.getOrganization());
         messageWebTaskInfoValidator.setBusinessType(businessType);
         messageWebTaskInfoValidator.setMessageType("2");
+        messageWebTaskInfoValidator.setProtocolType("WEB");
         Date startDate = DateTimeUtils.getFirstMonth(6);
         messageWebTaskInfoValidator.setStartDate(DateTimeUtils.getDateFormat(startDate));
         messageWebTaskInfoValidator.setEndDate(DateTimeUtils.getDateFormat(new Date()));
@@ -94,6 +95,7 @@ public class MessageMMVariableController {
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
 
         //分页查询
+        messageWebTaskInfoValidator.setProtocolType("WEB");
         messageWebTaskInfoValidator.setMessageType("2");
         messageWebTaskInfoValidator.setEnterpriseId(user.getOrganization());
         if (!StringUtils.isEmpty(messageWebTaskInfoValidator.getStartDate())) {

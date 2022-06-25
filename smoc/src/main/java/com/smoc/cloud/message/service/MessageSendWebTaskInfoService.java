@@ -202,6 +202,7 @@ public class MessageSendWebTaskInfoService {
         BeanUtils.copyProperties(messageWebTaskInfoValidator, entity);
 
         entity.setSplitNumber(messageCount);
+        entity.setSuccessNumber(messageCount);
         entity.setSubmitNumber(phoneCount);
         entity.setInfoType(accountBasicInfo.get().getInfoType());
         entity.setCreatedTime(DateTimeUtils.getDateTimeFormat(messageWebTaskInfoValidator.getCreatedTime()));

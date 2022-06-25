@@ -21,4 +21,8 @@ public interface ConfigNumberInfoRepository extends CrudRepository<ConfigNumberI
     List<ConfigNumberInfo> findByNumberCodeAndCarrierAndNumberCodeType(String numberCode, String carrier, String numberCodeType);
 
     void batchSave(ConfigNumberInfoValidator configNumberInfoValidator);
+
+    List<ConfigNumberInfoValidator> findConfigNumberInfoList();
+
+    void bathUpdateStatus(List<ConfigNumberInfoValidator> list);
 }

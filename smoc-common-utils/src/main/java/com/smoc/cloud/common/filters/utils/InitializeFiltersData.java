@@ -67,5 +67,7 @@ public class InitializeFiltersData {
     //账号模版
     private String reloadAccountTemplate = "0";
 
+    //携号转网
+    private String reloadPortability = "0";
 
 }

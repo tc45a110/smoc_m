@@ -113,6 +113,7 @@ public class MessageController {
         messageWebTaskInfoValidator.setEnterpriseId(user.getOrganization());
         messageWebTaskInfoValidator.setBusinessType(businessType);
         messageWebTaskInfoValidator.setMessageType("1");
+        messageWebTaskInfoValidator.setProtocolType("WEB");
         Date startDate = DateTimeUtils.getFirstMonth(6);
         messageWebTaskInfoValidator.setStartDate(DateTimeUtils.getDateFormat(startDate));
         messageWebTaskInfoValidator.setEndDate(DateTimeUtils.getDateFormat(new Date()));
@@ -144,6 +145,7 @@ public class MessageController {
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
 
         //分页查询
+        messageWebTaskInfoValidator.setProtocolType("WEB");
         messageWebTaskInfoValidator.setMessageType("1");
         messageWebTaskInfoValidator.setEnterpriseId(user.getOrganization());
         if (!StringUtils.isEmpty(messageWebTaskInfoValidator.getStartDate())) {

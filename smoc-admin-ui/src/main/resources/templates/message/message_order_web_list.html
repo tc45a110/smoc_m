@@ -74,12 +74,7 @@
                                              class="form-control" data-icon="mdi mdi-view-module" title="业务类型"
                                              th:value="${messageWebTaskInfoValidator.businessType}"/>
                                 </div>
-                                <div class="form-group  col-sm-3">
-                                    <mpm:tag id="sendStatus" identity="messageStatus" show-type="select" key="code"
-                                             name="sendStatus"
-                                             th:value="${messageWebTaskInfoValidator.sendStatus}"
-                                             class="form-control" data-icon="mdi mdi-view-module" title="发送状态"/>
-                                </div>
+
 
                                 <div class="form-group pull-right" style="text-align: right">
                                     <button sec:authorize-url="/message/order/web/page"

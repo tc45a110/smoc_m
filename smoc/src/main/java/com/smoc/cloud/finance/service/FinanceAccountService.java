@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -157,6 +158,15 @@ public class FinanceAccountService {
         BeanUtils.copyProperties(optional.get(), financeAccountValidator);
         //转换日期
         financeAccountValidator.setCreatedTime(DateTimeUtils.getDateTimeFormat(optional.get().getCreatedTime()));
+
+        //去除多余的0
+        financeAccountValidator.setAccountTotalSum(new BigDecimal(optional.get().getAccountTotalSum().stripTrailingZeros().toPlainString()));
+        financeAccountValidator.setAccountUsableSum(new BigDecimal(optional.get().getAccountUsableSum().stripTrailingZeros().toPlainString()));
+        financeAccountValidator.setAccountFrozenSum(new BigDecimal(optional.get().getAccountFrozenSum().stripTrailingZeros().toPlainString()));
+        financeAccountValidator.setAccountConsumeSum(new BigDecimal(optional.get().getAccountConsumeSum().stripTrailingZeros().toPlainString()));
+        financeAccountValidator.setAccountRechargeSum(new BigDecimal(optional.get().getAccountRechargeSum().stripTrailingZeros().toPlainString()));
+        financeAccountValidator.setAccountCreditSum(new BigDecimal(optional.get().getAccountCreditSum().stripTrailingZeros().toPlainString()));
+        financeAccountValidator.setAccountRefundSum(new BigDecimal(optional.get().getAccountRefundSum().stripTrailingZeros().toPlainString()));
 
         return ResponseDataUtil.buildSuccess(financeAccountValidator);
     }

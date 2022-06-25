@@ -1,8 +1,11 @@
 package com.smoc.cloud.admin.security.remote.client;
 
 import com.smoc.cloud.common.auth.validator.DictValidator;
+import com.smoc.cloud.common.page.PageList;
+import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,5 +45,10 @@ public interface DictFeignClient {
     @RequestMapping(value = "/dict/deleteById/{id}", method = RequestMethod.GET)
     ResponseData deleteById(@PathVariable(value="id") String id) throws Exception;
 
+    /**
+     * 分页查询列表
+     */
+    @RequestMapping(value = "/dict/page", method = RequestMethod.POST)
+    ResponseData<PageList<DictValidator>> page(@RequestBody PageParams<DictValidator> dictValidator) throws Exception;
 
 }

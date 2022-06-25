@@ -1005,11 +1005,6 @@
             $("#alert-modal").modal();
             return false;
         }
-        if(""== infoType ||  null == infoType){
-            $("#alert-modal").find("#alert-message").html("信息分类不能为空");
-            $("#alert-modal").modal();
-            return false;
-        }
 
 
         //去除换行符，否则json转换不了

@@ -6,8 +6,10 @@ import com.smoc.cloud.common.auth.qo.DictType;
 import com.smoc.cloud.common.filters.utils.InitializeFiltersData;
 import com.smoc.cloud.common.filters.utils.RedisConstant;
 import com.smoc.cloud.common.filters.utils.RedisFilterConstant;
+import com.smoc.cloud.common.smoc.configuate.validator.ConfigNumberInfoValidator;
 import com.smoc.cloud.common.smoc.filter.FilterBlackListValidator;
 import com.smoc.cloud.common.smoc.filter.FilterWhiteListValidator;
+import com.smoc.cloud.configure.number.repository.ConfigNumberInfoRepository;
 import com.smoc.cloud.filter.entity.KeyWordsMaskKeyWords;
 import com.smoc.cloud.filter.repository.BlackRepository;
 import com.smoc.cloud.filter.repository.KeywordsRepository;
@@ -55,12 +57,17 @@ public class InitializeFiltersDataService {
     private KeywordsRepository keywordsRepository;
     @Resource
     private AccountTemplateInfoRepository accountTemplateInfoRepository;
+    @Resource
+    private ConfigNumberInfoRepository configNumberInfoRepository;
 
     @Autowired
     private ParameterExtendFiltersValueRepository parameterExtendFiltersValueRepository;
 
     @Resource(name = "defaultRedisTemplate")
     private RedisTemplate redisTemplate;
+
+    @Resource(name = "redisTemplate3")
+    private RedisTemplate redisTemplate3;
 
     @Autowired
     private RocketProducerFilterMessage rocketProducerFilterMessage;
@@ -162,7 +169,13 @@ public class InitializeFiltersDataService {
             this.pubMessage(RedisConstant.MESSAGE_TEMPLATE);
         }
 
+        //携号转网
+        if ("1".equals(initializeFiltersData.getReloadPortability())) {
+            this.initializePortability();
+        }
+
     }
+
 
     /**
      * 初始化业务账号模版
@@ -485,6 +498,21 @@ public class InitializeFiltersDataService {
         }
         long end = System.currentTimeMillis();
         log.info("加载行业敏感词  end：{}", end);
+    }
+
+    //加载携号转网
+    private void initializePortability() {
+        //加载数据
+        List<ConfigNumberInfoValidator> configNumberInfoValidatorList = configNumberInfoRepository.findConfigNumberInfoList();
+        //删除现有redis缓存
+        this.deleteByKey(RedisConstant.MOBILE_PORTABILITY);
+        if (null != configNumberInfoValidatorList && configNumberInfoValidatorList.size() > 0) {
+            long start = System.currentTimeMillis();
+            log.info("加载携号转网start：{}", start);
+            this.multiSaveSet(configNumberInfoValidatorList);
+            long end = System.currentTimeMillis();
+            log.info("加载携号转网  end：{}", end);
+        }
     }
 
     public void multiSaveHash(String redisKey, List<KeyWordsMaskKeyWords> list) {
@@ -828,6 +856,18 @@ public class InitializeFiltersDataService {
             });
             connection.close();
             // executePipelined源码要求RedisCallback必须返回null，否则抛异常
+            return null;
+        });
+    }
+
+    private void multiSaveSet(List<ConfigNumberInfoValidator> list) {
+        redisTemplate3.executePipelined((RedisCallback<Object>) connection -> {
+            connection.openPipeline();
+            list.forEach((value) -> {
+                connection.sAdd(RedisSerializer.string().serialize(RedisConstant.MOBILE_PORTABILITY + value.getNumberCode()),
+                        RedisSerializer.string().serialize(new Gson().toJson(value.getCarrier())));
+            });
+            connection.close();
             return null;
         });
     }

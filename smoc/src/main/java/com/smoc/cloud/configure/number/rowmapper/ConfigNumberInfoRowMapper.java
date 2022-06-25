@@ -22,7 +22,7 @@ public class ConfigNumberInfoRowMapper implements RowMapper<ConfigNumberInfoVali
         qo.setNumberCode(resultSet.getString("NUMBER_CODE"));
         qo.setCarrier(resultSet.getString("CARRIER"));
         qo.setProvince(resultSet.getString("PROVINCE"));
-        qo.setNumberCodeType(resultSet.getString("NUMBER_CODE_TYPE"));
+        qo.setIsSync(resultSet.getString("IS_SYNC"));
         qo.setStatus(resultSet.getString("STATUS"));
         qo.setCreatedBy(resultSet.getString("CREATED_BY"));
         qo.setCreatedTime(resultSet.getString("CREATED_TIME"));

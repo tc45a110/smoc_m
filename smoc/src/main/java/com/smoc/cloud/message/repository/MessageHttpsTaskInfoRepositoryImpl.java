@@ -140,7 +140,7 @@ public class MessageHttpsTaskInfoRepositoryImpl extends BasePageRepository {
             sqlBuffer.append(" from message_https_task_info t ");
             sqlBuffer.append(" where 1=1 ");
 
-            groupBySql = "group by DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d'),t.BUSINESS_ACCOUNT ";
+            groupBySql = "group by DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d'),t.BUSINESS_ACCOUNT,PROTOCOL,SIGN,CARRIER ";
         }
         //按签名维度
         else if("2".equals(qo)){
@@ -156,7 +156,7 @@ public class MessageHttpsTaskInfoRepositoryImpl extends BasePageRepository {
             sqlBuffer.append(" from message_https_task_info t ");
             sqlBuffer.append(" where 1=1 ");
 
-            groupBySql = "group by DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d') ";
+            groupBySql = "group by DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d'),SIGN,BUSINESS_ACCOUNT,PROTOCOL,CARRIER ";
         }
         //按运营商维度
         else if("2".equals(qo)){
@@ -172,7 +172,7 @@ public class MessageHttpsTaskInfoRepositoryImpl extends BasePageRepository {
             sqlBuffer.append(" from message_https_task_info t ");
             sqlBuffer.append(" where 1=1 ");
 
-            groupBySql = "group by DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d') ";
+            groupBySql = "group by DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d'),CARRIER,BUSINESS_ACCOUNT,PROTOCOL,SIGN ";
         }else{
             sqlBuffer.append(" ''CARRIER,");
             sqlBuffer.append(" t.BUSINESS_ACCOUNT,");
@@ -186,7 +186,7 @@ public class MessageHttpsTaskInfoRepositoryImpl extends BasePageRepository {
             sqlBuffer.append(" from message_https_task_info t ");
             sqlBuffer.append(" where 1=1 ");
 
-            groupBySql = "group by DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d'),t.BUSINESS_ACCOUNT ";
+            groupBySql = "group by DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d'),t.BUSINESS_ACCOUNT,CARRIER,PROTOCOL,SIGN ";
         }
 
 

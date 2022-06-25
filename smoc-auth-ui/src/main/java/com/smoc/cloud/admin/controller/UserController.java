@@ -298,7 +298,7 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "/resetPassword", method = RequestMethod.POST)
-    public ModelAndView resetPassword(@ModelAttribute @Validated UserPasswordValidator userPasswordValidator, BindingResult result, HttpServletRequest request) {
+    public ModelAndView resetPassword(@ModelAttribute UserPasswordValidator userPasswordValidator, BindingResult result, HttpServletRequest request) {
 
         ModelAndView view = new ModelAndView("users/list");
         //完成参数规则验证

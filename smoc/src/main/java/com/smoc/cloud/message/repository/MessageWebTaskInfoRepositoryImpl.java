@@ -39,6 +39,7 @@ public class MessageWebTaskInfoRepositoryImpl extends BasePageRepository {
         StringBuilder sqlBuffer = new StringBuilder("select ");
         sqlBuffer.append(" t.ID,");
         sqlBuffer.append(" t.PROTOCOL_TYPE,");
+        sqlBuffer.append(" t.SUBJECT,");
         sqlBuffer.append(" t.ENTERPRISE_NAME,");
         sqlBuffer.append(" t.TEMPLATE_ID,");
         sqlBuffer.append(" t.BUSINESS_ACCOUNT,");
@@ -122,6 +123,12 @@ public class MessageWebTaskInfoRepositoryImpl extends BasePageRepository {
         if (!StringUtils.isEmpty(qo.getSendStatus())) {
             sqlBuffer.append(" and t.SEND_STATUS =?");
             paramsList.add(qo.getSendStatus().trim());
+        }
+
+        //企业
+        if (!StringUtils.isEmpty(qo.getProtocolType())) {
+            sqlBuffer.append(" and t.PROTOCOL_TYPE =?");
+            paramsList.add(qo.getProtocolType().trim());
         }
 
         //时间起

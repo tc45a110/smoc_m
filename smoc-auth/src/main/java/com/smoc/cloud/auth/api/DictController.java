@@ -3,6 +3,8 @@ package com.smoc.cloud.auth.api;
 import com.smoc.cloud.auth.data.provider.entity.BaseCommDict;
 import com.smoc.cloud.auth.data.provider.service.BaseCommDictService;
 import com.smoc.cloud.common.auth.validator.DictValidator;
+import com.smoc.cloud.common.page.PageList;
+import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
@@ -102,4 +104,8 @@ public class DictController {
         return baseCommDictService.deleteById(id);
     }
 
+    @RequestMapping(value = "/page", method = RequestMethod.POST)
+    public ResponseData<PageList<DictValidator>> page(@RequestBody PageParams<DictValidator> dictValidator) {
+        return baseCommDictService.page(dictValidator);
+    }
 }

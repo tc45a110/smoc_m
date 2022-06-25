@@ -2,13 +2,15 @@ package com.smoc.cloud.configure.number.service;
 
 
 import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
+import com.smoc.cloud.common.filters.utils.RedisConstant;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.configuate.validator.ConfigNumberInfoValidator;
-import com.smoc.cloud.common.smoc.filter.FilterBlackListValidator;
+import com.smoc.cloud.common.smoc.filter.ExcelModel;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.configure.number.entity.ConfigNumberInfo;
 import com.smoc.cloud.configure.number.repository.ConfigNumberInfoRepository;
@@ -17,6 +19,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.data.redis.core.RedisCallback;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +42,9 @@ public class ConfigNumberInfoService {
 
     @Resource
     private ConfigNumberInfoRepository configNumberInfoRepository;
+
+    @Resource(name = "redisTemplate3")
+    private RedisTemplate redisTemplate;
 
     /**
      * 查询列表
@@ -106,10 +114,16 @@ public class ConfigNumberInfoService {
 
         entity.setCreatedTime(new Date());
 
+        entity.setIsSync("1");
+
         //记录日志
-        log.info("[配置号段][{}]数据:{}",op, JSON.toJSONString(codeNumberInfoValidator));
+        log.info("[携号转网][{}]数据:{}",op, JSON.toJSONString(codeNumberInfoValidator));
 
         configNumberInfoRepository.saveAndFlush(entity);
+
+        //放到redis里
+        redisTemplate.opsForValue().set(RedisConstant.MOBILE_PORTABILITY + entity.getNumberCode(),entity.getCarrier());
+
         return ResponseDataUtil.buildSuccess();
     }
 
@@ -118,8 +132,10 @@ public class ConfigNumberInfoService {
         ConfigNumberInfo data = configNumberInfoRepository.findById(id).get();
 
         //记录日志
-        log.info("[配置号段][delete]数据:{}", JSON.toJSONString(data));
+        log.info("[携号转网][delete]数据:{}", JSON.toJSONString(data));
         configNumberInfoRepository.deleteById(id);
+
+        redisTemplate.delete(RedisConstant.MOBILE_PORTABILITY + data.getNumberCode());
 
         return ResponseDataUtil.buildSuccess();
     }
@@ -132,5 +148,32 @@ public class ConfigNumberInfoService {
     @Async
     public void batchSave(ConfigNumberInfoValidator configNumberInfoValidator) {
         configNumberInfoRepository.batchSave(configNumberInfoValidator);
+
+        this.loadPortabilityList(configNumberInfoValidator);
+    }
+
+    public void loadPortabilityList(ConfigNumberInfoValidator configNumberInfoValidator) {
+        List<ExcelModel> list = configNumberInfoValidator.getExcelModelList();
+
+        if (null == list || list.size() < 1) {
+            return;
+        }
+
+        log.info("[携号转网导入redis结束]数据：{}", System.currentTimeMillis());
+
+        redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
+            connection.openPipeline();
+            list.forEach((value) -> {
+                connection.set(RedisSerializer.string().serialize(RedisConstant.MOBILE_PORTABILITY + value.getColumn1()),
+                        RedisSerializer.string().serialize(new Gson().toJson(configNumberInfoValidator.getCarrier())));
+            });
+            connection.close();
+            return null;
+        });
+
+        log.info("[携号转网导入redis结束]数据：{}", System.currentTimeMillis());
+
+        //变更加载状态
+        //this.configNumberInfoRepository.bathUpdateStatus(list);
     }
 }

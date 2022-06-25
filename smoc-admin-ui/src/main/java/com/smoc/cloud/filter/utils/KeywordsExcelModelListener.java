@@ -5,6 +5,7 @@ import com.alibaba.excel.event.AnalysisEventListener;
 import com.smoc.cloud.common.smoc.filter.ExcelModel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,9 @@ public class KeywordsExcelModelListener extends AnalysisEventListener<ExcelModel
 
     @Override
     public void invoke(ExcelModel data, AnalysisContext context) {
-        excelModelList.add(data);
+        if(!StringUtils.isEmpty(data.getColumn1())){
+            excelModelList.add(data);
+        }
     }
 
     @Override

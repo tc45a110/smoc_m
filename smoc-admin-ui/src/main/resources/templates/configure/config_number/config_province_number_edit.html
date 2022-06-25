@@ -41,36 +41,38 @@
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all" style="margin-top:80px">
             <div class="col-md-12">
                 <div class="card-box">
-                    <form th:action="@{/configure/number/province/save/{op}(op=${op})}" id="submit_form" th:object="${configNumberInfoValidator}" method="post">
+                    <form th:action="@{/configure/number/province/save/{op}(op=${op})}" id="submit_form" th:object="${systemSegmentProvinceCityValidator}" method="post">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="p-20">
                                     <div class="form-group">
                                         <label for="mobile">省号码<span class="text-danger">*</span>&nbsp;<span
-                                                class="text-danger" style="font-weight: 200;font-size: 12px" th:if="${#fields.hasErrors('numberCode')}"
-                                                th:errors="*{numberCode}"></span>
+                                                class="text-danger" style="font-weight: 200;font-size: 12px" th:if="${#fields.hasErrors('segment')}"
+                                                th:errors="*{segment}"></span>
                                         </label>
-                                        <input id="mobile" type="text" th:field="*{numberCode}"
+                                        <input id="mobile" type="text" th:field="*{segment}"
                                                placeholder="省号码" autocomplete="off"
                                                required="" data-parsley-type="number"
                                                data-parsley-maxlength="11" class="form-control">
                                     </div>
                                     <div class="form-group">
                                         <label>省份<span class="text-danger">*</span>&nbsp;
-                                            <span class="text-danger" th:if="${#fields.hasErrors('carrier')}"
-                                                  th:errors="*{carrier}"></span></label><br>
+                                            <span class="text-danger" th:if="${#fields.hasErrors('provinceCode')}"
+                                                  th:errors="*{provinceCode}"></span></label><br>
                                         <mpm:tag id="provices" required="true" identity="provices"
-                                                 show-type="select" key="code" name="province"
-                                                 th:value="${configNumberInfoValidator.province}" title="省份"/>
+                                                 show-type="select" key="code" name="provinceCode"
+                                                 th:value="${systemSegmentProvinceCityValidator.provinceCode}" title="省份"/>
                                     </div>
                                     <div class="form-group">
-                                        <label>运营商<span class="text-danger">*</span>&nbsp;
-                                            <span class="text-danger" th:if="${#fields.hasErrors('carrier')}"
-                                                  th:errors="*{carrier}"></span></label><br>
-                                        <mpm:tag id="carrier" required="true" identity="carrier"
-                                                 show-type="select" key="code" name="carrier"
-                                                 th:value="${configNumberInfoValidator.carrier}" title="运营商"/>
+                                        <label for="cityName">地市&nbsp;<span
+                                                class="text-danger" style="font-weight: 200;font-size: 12px" th:if="${#fields.hasErrors('cityName')}"
+                                                th:errors="*{cityName}"></span>
+                                        </label>
+                                        <input id="cityName" type="text" th:field="*{cityName}"
+                                               placeholder="地市" autocomplete="off"
+                                               data-parsley-length="[1,32]" class="form-control">
                                     </div>
+
 
                                 </div>
                                 <!-- end class p-20 -->
@@ -83,9 +85,6 @@
 
                         <div class="text-center">
                             <input type="hidden" th:field="*{id}">
-                            <input type="hidden" th:field="*{createdBy}">
-                            <input type="hidden" th:field="*{status}">
-                            <input type="hidden" th:field="*{numberCodeType}">
                             <button sec:authorize-url="/configure/number/province/save/*" type="submit" class="btn btn-teal waves-effect waves-light">提交
                             </button>
                             <a sec:authorize-url="/configure/number/province/list" th:href="@{/configure/number/province/list}"

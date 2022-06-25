@@ -263,7 +263,7 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", f.PARAM_VALUE AS SEND_LIMIT");
         sqlBuffer.append(", f1.PARAM_VALUE AS DAY_LIMIT");
         sqlBuffer.append(", f2.PARAM_VALUE AS MASK_AREA");
-        sqlBuffer.append("  from account_base_info t left join (select PAY_TYPE,ACCOUNT_ID from account_finance_info group by ACCOUNT_ID)a on t.ACCOUNT_ID=a.ACCOUNT_ID ");
+        sqlBuffer.append("  from account_base_info t left join (select PAY_TYPE,ACCOUNT_ID from account_finance_info group by ACCOUNT_ID,PAY_TYPE)a on t.ACCOUNT_ID=a.ACCOUNT_ID ");
         sqlBuffer.append("  left join account_interface_info i on t.ACCOUNT_ID=i.ACCOUNT_ID");
         sqlBuffer.append("  left join parameter_extend_filters_value f on t.ACCOUNT_ID=f.BUSINESS_ID and f.BUSINESS_TYPE='BUSINESS_ACCOUNT_FILTER' and f.PARAM_KEY='SEND_RATE_LIMIT_SECOND'");
         sqlBuffer.append("  left join parameter_extend_filters_value f1 on t.ACCOUNT_ID=f1.BUSINESS_ID and f1.BUSINESS_TYPE='BUSINESS_ACCOUNT_FILTER' and f1.PARAM_KEY='SEND_LIMIT_NUMBER_DAILY'");
@@ -433,7 +433,7 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", f.CHARGE_TYPE");
         sqlBuffer.append(", p.PROTOCOL");
         sqlBuffer.append("  from account_base_info t left join enterprise_basic_info e on t.ENTERPRISE_ID = e.ENTERPRISE_ID");
-        sqlBuffer.append("  left join (select ACCOUNT_ID,PAY_TYPE,CHARGE_TYPE from account_finance_info  group by ACCOUNT_ID)f on t.ACCOUNT_ID = f.ACCOUNT_ID");
+        sqlBuffer.append("  left join (select ACCOUNT_ID,PAY_TYPE,CHARGE_TYPE from account_finance_info  group by ACCOUNT_ID,PAY_TYPE,CHARGE_TYPE)f on t.ACCOUNT_ID = f.ACCOUNT_ID");
         sqlBuffer.append("  left join account_interface_info p on t.ACCOUNT_ID = p.ACCOUNT_ID");
         sqlBuffer.append("  where 1=1 ");
 

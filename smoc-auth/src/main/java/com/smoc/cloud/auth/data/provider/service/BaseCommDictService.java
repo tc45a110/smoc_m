@@ -8,6 +8,9 @@ import com.smoc.cloud.auth.data.provider.repository.BaseCommDictTypeRepository;
 import com.smoc.cloud.auth.data.provider.repository.SystemExtendBusinessParamRepository;
 import com.smoc.cloud.common.auth.qo.Dict;
 import com.smoc.cloud.common.auth.qo.DictType;
+import com.smoc.cloud.common.auth.validator.DictValidator;
+import com.smoc.cloud.common.page.PageList;
+import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
@@ -99,7 +102,7 @@ public class BaseCommDictService {
     @Transactional
     public ResponseData<BaseCommDict> save(BaseCommDict entity, String op) {
 
-        List<BaseCommDict> data = baseCommDictRepository.findBaseCommDictByDictNameAndTypeIdAndActive(entity.getDictName(), entity.getTypeId(), 1);
+        List<BaseCommDict> data = baseCommDictRepository.findBaseCommDictByDictNameAndTypeIdAndActive(entity.getDictCode(), entity.getTypeId(), 1);
 
         //add查重dictName
         if (data != null && data.iterator().hasNext() && "add".equals(op)) {
@@ -157,5 +160,10 @@ public class BaseCommDictService {
      */
     public boolean exists(String id) {
         return baseCommDictRepository.existsById(id);
+    }
+
+    public ResponseData<PageList<DictValidator>> page(PageParams<DictValidator> dictValidator) {
+        PageList<DictValidator> data = baseCommDictRepository.page(dictValidator);
+        return ResponseDataUtil.buildSuccess(data);
     }
 }

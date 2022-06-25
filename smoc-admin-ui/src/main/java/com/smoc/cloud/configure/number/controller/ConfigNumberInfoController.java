@@ -1,7 +1,9 @@
 package com.smoc.cloud.configure.number.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.smoc.cloud.admin.security.remote.service.DictService;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
+import com.smoc.cloud.common.auth.validator.DictValidator;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
@@ -53,7 +55,10 @@ public class ConfigNumberInfoController {
     @Autowired
     private ConfigNumberInfoService configNumberInfoService;
 
-    private String type = "1";
+    @Autowired
+    private DictService dictService;
+
+    private String type = "carrierSegment";
 
     /**
      * 号段列表
@@ -66,21 +71,21 @@ public class ConfigNumberInfoController {
         ModelAndView view = new ModelAndView("configure/config_number/config_number_list");
 
         //初始化数据
-        PageParams<ConfigNumberInfoValidator> params = new PageParams<ConfigNumberInfoValidator>();
+        PageParams<DictValidator> params = new PageParams<DictValidator>();
         params.setPageSize(10);
         params.setCurrentPage(1);
-        ConfigNumberInfoValidator configNumberInfoValidator = new ConfigNumberInfoValidator();
-        configNumberInfoValidator.setNumberCodeType(type);
-        params.setParams(configNumberInfoValidator);
+        DictValidator dictValidator = new DictValidator();
+        dictValidator.setDictType(type);
+        params.setParams(dictValidator);
 
         //查询
-        ResponseData<PageList<ConfigNumberInfoValidator>> data = configNumberInfoService.page(params);
+        ResponseData<PageList<DictValidator>> data = dictService.page(params);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;
         }
 
-        view.addObject("configNumberInfoValidator", configNumberInfoValidator);
+        view.addObject("dictValidator", dictValidator);
         view.addObject("list", data.getData().getList());
         view.addObject("pageParams", data.getData().getPageParams());
 
@@ -94,21 +99,21 @@ public class ConfigNumberInfoController {
      * @return
      */
     @RequestMapping(value = "/page", method = RequestMethod.POST)
-    public ModelAndView page(@ModelAttribute ConfigNumberInfoValidator configNumberInfoValidator, PageParams pageParams) {
+    public ModelAndView page(@ModelAttribute DictValidator dictValidator, PageParams pageParams) {
 
         ModelAndView view = new ModelAndView("configure/config_number/config_number_list");
 
         //分页查询
-        configNumberInfoValidator.setNumberCodeType(type);
-        pageParams.setParams(configNumberInfoValidator);
+        dictValidator.setDictType(type);
+        pageParams.setParams(dictValidator);
 
-        ResponseData<PageList<ConfigNumberInfoValidator>> data = configNumberInfoService.page(pageParams);
+        ResponseData<PageList<DictValidator>> data = dictService.page(pageParams);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;
         }
 
-        view.addObject("configNumberInfoValidator", configNumberInfoValidator);
+        view.addObject("dictValidator", dictValidator);
         view.addObject("list", data.getData().getList());
         view.addObject("pageParams", data.getData().getPageParams());
 
@@ -127,12 +132,13 @@ public class ConfigNumberInfoController {
         ModelAndView view = new ModelAndView("configure/config_number/config_number_edit");
 
         //初始化参数
-        ConfigNumberInfoValidator configNumberInfoValidator = new ConfigNumberInfoValidator();
-        configNumberInfoValidator.setId(UUID.uuid32());
-        configNumberInfoValidator.setNumberCodeType(type);
-        configNumberInfoValidator.setStatus("1");
+        DictValidator dictValidator = new DictValidator();
+        dictValidator.setId(UUID.uuid32());
+        dictValidator.setDictType(type);
+        dictValidator.setActive(1);
+        dictValidator.setTypeId("88be0adffe8f4c65a27f857e3253e4c0");
 
-        view.addObject("configNumberInfoValidator",configNumberInfoValidator);
+        view.addObject("dictValidator",dictValidator);
         view.addObject("op","add");
 
         return view;
@@ -157,13 +163,13 @@ public class ConfigNumberInfoController {
             return view;
         }
 
-        ResponseData<ConfigNumberInfoValidator> data = configNumberInfoService.findById(id);
+        ResponseData<DictValidator> data = dictService.findById(id);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;
         }
 
-        view.addObject("configNumberInfoValidator",data.getData());
+        view.addObject("dictValidator",data.getData());
         view.addObject("op","edit");
 
         return view;
@@ -171,34 +177,23 @@ public class ConfigNumberInfoController {
     }
 
     @RequestMapping(value = "/save/{op}", method = RequestMethod.POST)
-    public ModelAndView save(@ModelAttribute @Validated ConfigNumberInfoValidator configNumberInfoValidator, BindingResult result, @PathVariable String op, HttpServletRequest request) {
+    public ModelAndView save(@ModelAttribute DictValidator dictValidator, BindingResult result, @PathVariable String op, HttpServletRequest request) {
         SecurityUser user = (SecurityUser)request.getSession().getAttribute("user");
         ModelAndView view = new ModelAndView("configure/config_number/config_number_edit");
 
         //完成参数规则验证
         if (result.hasErrors()) {
-            view.addObject("configNumberInfoValidator", configNumberInfoValidator);
+            view.addObject("dictValidator", dictValidator);
             view.addObject("op", op);
             return view;
         }
 
-        //初始化其他变量
-        if (!StringUtils.isEmpty(op) && "add".equals(op)) {
-            configNumberInfoValidator.setCreatedTime(DateTimeUtils.getDateTimeFormat(new Date()));
-            configNumberInfoValidator.setCreatedBy(user.getRealName());
-        } else if (!StringUtils.isEmpty(op) && "edit".equals(op)) {
-            configNumberInfoValidator.setUpdatedBy(user.getRealName());
-            configNumberInfoValidator.setUpdatedTime(new Date());
-        } else {
-            view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":" + ResponseCode.PARAM_LINK_ERROR.getMessage());
-            return view;
-        }
-
         //记录日志
-        log.info("[号段管理][{}][{}]数据:{}",op, user.getUserName(), JSON.toJSONString(configNumberInfoValidator));
+        log.info("[号段管理][{}][{}]数据:{}",op, user.getUserName(), JSON.toJSONString(dictValidator));
 
         //保存操作
-        ResponseData data = configNumberInfoService.save(configNumberInfoValidator, op);
+        dictValidator.setCreateDateTime(DateTimeUtils.getDateTimeFormat(new Date()));
+        ResponseData data = dictService.save(dictValidator, op);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;
@@ -225,7 +220,7 @@ public class ConfigNumberInfoController {
             return view;
         }
 
-        ResponseData<ConfigNumberInfoValidator> numberData = configNumberInfoService.findById(id);
+        ResponseData<DictValidator> numberData = dictService.findById(id);
         if (!ResponseCode.SUCCESS.getCode().equals(numberData.getCode())) {
             view.addObject("error", numberData.getCode() + ":" + numberData.getMessage());
             return view;
@@ -234,7 +229,7 @@ public class ConfigNumberInfoController {
         //记录日志
         log.info("[号段管理][delete][{}]数据::{}", user.getUserName(), JSON.toJSONString(numberData.getData()));
         //删除操作
-        ResponseData data = configNumberInfoService.deleteById(id);
+        ResponseData data = dictService.deleteById(id);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;

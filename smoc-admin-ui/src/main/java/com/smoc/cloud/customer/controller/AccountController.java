@@ -474,7 +474,7 @@ public class AccountController {
                 if("TEXT_SMS".equals(accountBasicInfoValidator.getBusinessType())){
                     TEXT_SMS+=1;
                 }else if("MULTI_SMS".equals(accountBasicInfoValidator.getBusinessType())){
-                    TEXT_SMS+=1;
+                    MULTI_SMS+=1;
                 }else if("MMS".equals(accountBasicInfoValidator.getBusinessType())){
                     MMS+=1;
                 }else if("5G_SMS".equals(accountBasicInfoValidator.getBusinessType())){

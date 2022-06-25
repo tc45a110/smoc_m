@@ -71,9 +71,9 @@
                                         </i>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
-                                        <a class="btn btn-success btn-rounded btn-sm waves-effect waves-light" th:if="${info.docStatus eq '1'}">通过审核</a>
-                                        <a class="btn btn-warning btn-rounded btn-sm waves-effect waves-light" th:if="${info.docStatus eq '2'}">待审核</a>
-                                        <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light" th:if="${info.docStatus eq '3'}">拒绝</a>
+                                        <a class="btn btn-success btn-rounded btn-sm waves-effect waves-light" th:if="${info.docStatus eq '2'}">通过审核</a>
+                                        <a class="btn btn-warning btn-rounded btn-sm waves-effect waves-light" th:if="${info.docStatus eq '3'}">待审核</a>
+                                        <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light" th:if="${info.docStatus eq '1'}">拒绝</a>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">[[${info.createdBy}]]<br>[[${info.createdTime}]]</td>
 

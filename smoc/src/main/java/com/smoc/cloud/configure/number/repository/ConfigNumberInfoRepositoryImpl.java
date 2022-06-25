@@ -36,8 +36,8 @@ public class ConfigNumberInfoRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", t.NUMBER_CODE");
         sqlBuffer.append(", t.CARRIER");
         sqlBuffer.append(", t.PROVINCE");
-        sqlBuffer.append(", t.NUMBER_CODE_TYPE");
         sqlBuffer.append(", t.STATUS");
+        sqlBuffer.append(", t.IS_SYNC");
         sqlBuffer.append(", t.CREATED_BY");
         sqlBuffer.append(", DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME");
         sqlBuffer.append("  from config_number_info t where 1=1 ");
@@ -77,8 +77,8 @@ public class ConfigNumberInfoRepositoryImpl extends BasePageRepository {
         Connection connection = null;
         PreparedStatement statement = null;
         List<ExcelModel> list= configNumberInfoValidator.getExcelModelList();
-        final String sql = "insert into config_number_info(ID,NUMBER_CODE,CARRIER,PROVINCE,NUMBER_CODE_TYPE,STATUS,CREATED_BY,CREATED_TIME) values(?,?,?,?,?,?,?,now()) ";
-        log.info("[号段导入开始]数据：{}- 共{}条", System.currentTimeMillis(),list.size());
+        final String sql = "insert into config_number_info(ID,NUMBER_CODE,CARRIER,PROVINCE,NUMBER_CODE_TYPE,STATUS,CREATED_BY,CREATED_TIME,IS_SYNC) values(?,?,?,?,?,?,?,now(),?) ";
+        log.info("[携号转网导入开始]数据：{}- 共{}条", System.currentTimeMillis(),list.size());
         try {
             connection = jdbcTemplate.getDataSource().getConnection();
             connection.setAutoCommit(false);
@@ -92,6 +92,7 @@ public class ConfigNumberInfoRepositoryImpl extends BasePageRepository {
                 statement.setString(5, configNumberInfoValidator.getNumberCodeType());
                 statement.setString(6, configNumberInfoValidator.getStatus());
                 statement.setString(7, configNumberInfoValidator.getCreatedBy());
+                statement.setString(8, "1");
                 statement.addBatch();
                 i++;
                 if (i % batchSize == 0) {
@@ -118,7 +119,72 @@ public class ConfigNumberInfoRepositoryImpl extends BasePageRepository {
 
         }
 
-        log.info("[号段导入结束]数据：{}", System.currentTimeMillis());
+        log.info("[携号转网导入结束]数据：{}", System.currentTimeMillis());
+
+    }
+
+    /**
+     * 查询携号转网
+     *
+     * @return
+     */
+    public List<ConfigNumberInfoValidator> findConfigNumberInfoList(){
+        //查询sql
+        //查询sql
+        StringBuffer sqlBuffer = new StringBuffer("select t.ID,t.NUMBER_CODE,t.CARRIER,t.PROVINCE,t.STATUS,t.IS_SYNC,str_to_date(t.CREATED_TIME,'%Y-%m-%d %H:%i:%S')CREATED_TIME,t.CREATED_BY " +
+                " from config_number_info t ");
+        List<ConfigNumberInfoValidator> result = this.jdbcTemplate.query(sqlBuffer.toString(), new ConfigNumberInfoRowMapper());
+
+        return result;
+    }
+
+    /**
+     * 更新携号转网状态
+     * @param list
+     */
+    public void bathUpdateStatus(List<ConfigNumberInfoValidator> list) {
+
+        //每batchSize 分批执行一次
+        int batchSize = 30000;
+        Connection connection = null;
+        PreparedStatement statement = null;
+        final String sql = "update config_number_info set IS_SYNC ='1' where NUMBER_CODE=?  ";
+        log.info("[更新携号转网状态开始]数据：{}- 共{}条", System.currentTimeMillis(),list.size());
+        try {
+            connection = jdbcTemplate.getDataSource().getConnection();
+            connection.setAutoCommit(false);
+            statement = connection.prepareStatement(sql);
+            int i=0;
+            for (ConfigNumberInfoValidator info : list) {
+                statement.setString(1, info.getNumberCode());
+                statement.addBatch();
+                i++;
+                if (i % batchSize == 0) {
+                    statement.executeBatch();
+                }
+            }
+
+            statement.executeBatch();
+            connection.commit();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            try {
+                if (null != statement) {
+                    statement.close();
+                }
+                if (null != connection) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        log.info("[更新携号转网状态结束]数据：{}", System.currentTimeMillis());
 
     }
 }

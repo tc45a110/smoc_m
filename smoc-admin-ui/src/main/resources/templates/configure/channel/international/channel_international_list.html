@@ -219,13 +219,13 @@
                                                         通道业务介绍：[[${info.channelIntroduce}]]
                                                     </span>
                                                     <div class="pull-right">
-                                                        <a sec:authorize-url="/configure/channel/test/*"
+                                                        <!--<a sec:authorize-url="/configure/channel/test/*"
                                                            th:if="${info.channelStatus eq '001'}"
                                                            th:href="@{/configure/channel/test/{id}(id=${info.channelId})}"
                                                            data-toggle="tooltip" data-placement="left" title=""
                                                            data-original-title="通道状态测试" style="font-size:12px">
                                                             <i class="mdi mdi-battery-charging-30"
-                                                               style="margin-right:5px;font-size:12px;color:#0095a8"></i>通道状态测试</a>
+                                                               style="margin-right:5px;font-size:12px;color:#0095a8"></i>通道状态测试</a>-->
                                                         <a sec:authorize-url="/configure/channel/view/center/*"
                                                            th:href="@{/configure/channel/view/center/{id}(id=${info.channelId})}"
                                                            data-toggle="tooltip" data-placement="left" title=""

@@ -132,5 +132,6 @@ public class RedisConstant {
     //业务账号超级白词
     public static final String MESSAGE_ACCOUNT_SUPER_WHITE = "accountSuperWhite";
 
-
+    //携号转网
+    public static final String MOBILE_PORTABILITY = "MNP:";
 }

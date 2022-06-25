@@ -552,8 +552,8 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
         //如果没有选择 共享分账号 则只创建 共享账号本身信息
         if (StringUtils.isEmpty(qo.getAccountIds())) {
             //创建共享账户语句
-            StringBuffer sb = new StringBuffer("insert into finance_account(ACCOUNT_ID,ACCOUNT_TYPE,ACCOUNT_NAME,ENTERPRISE_ID,ACCOUNT_TOTAL_SUM,ACCOUNT_USABLE_SUM,ACCOUNT_FROZEN_SUM,ACCOUNT_CONSUME_SUM,ACCOUNT_RECHARGE_SUM,ACCOUNT_CREDIT_SUM,ACCOUNT_STATUS,IS_SHARE,SHARE_ID,CREATED_BY,CREATED_TIME) ");
-            sb.append(" values('" + qo.getAccountId() + "','SHARE_ACCOUNT','" + qo.getAccountName() + "','" + qo.getEnterpriseId() + "',0.00,0.00,0.00,0.00,0.00," + qo.getAccountCreditSum() + ",'1','0','" + qo.getAccountIds() + "','" + qo.getCreatedBy() + "',now()) ");
+            StringBuffer sb = new StringBuffer("insert into finance_account(ACCOUNT_ID,ACCOUNT_TYPE,ACCOUNT_NAME,ENTERPRISE_ID,ACCOUNT_TOTAL_SUM,ACCOUNT_USABLE_SUM,ACCOUNT_FROZEN_SUM,ACCOUNT_CONSUME_SUM,ACCOUNT_RECHARGE_SUM,ACCOUNT_CREDIT_SUM,ACCOUNT_REFUND_SUM,ACCOUNT_STATUS,IS_SHARE,SHARE_ID,CREATED_BY,CREATED_TIME) ");
+            sb.append(" values('" + qo.getAccountId() + "','SHARE_ACCOUNT','" + qo.getAccountName() + "','" + qo.getEnterpriseId() + "',0.00,0.00,0.00,0.00,0.00," + qo.getAccountCreditSum() + ",0.00,'1','0','" + qo.getAccountIds() + "','" + qo.getCreatedBy() + "',now()) ");
             this.jdbcTemplate.batchUpdate(sb.toString());
             return;
         }
@@ -635,8 +635,8 @@ public class FinanceAccountRepositoryImpl extends BasePageRepository {
 
 
         //创建共享账户语句
-        StringBuffer sb = new StringBuffer("insert into finance_account(ACCOUNT_ID,ACCOUNT_TYPE,ACCOUNT_NAME,ENTERPRISE_ID,ACCOUNT_TOTAL_SUM,ACCOUNT_USABLE_SUM,ACCOUNT_FROZEN_SUM,ACCOUNT_CONSUME_SUM,ACCOUNT_RECHARGE_SUM,ACCOUNT_CREDIT_SUM,ACCOUNT_STATUS,IS_SHARE,SHARE_ID,CREATED_BY,CREATED_TIME) ");
-        sb.append(" select '" + qo.getAccountId() + "','SHARE_ACCOUNT','" + qo.getAccountName() + "','" + qo.getEnterpriseId() + "',0.00,sum(USABLE_SUM_POOL) USABLE_SUM_POOL,sum(FREEZE_SUM_POOL) FREEZE_SUM_POOL,0.00,0.00," + qo.getAccountCreditSum() + ",'1','0','" + qo.getAccountIds() + "','" + qo.getCreatedBy() + "',now() ");
+        StringBuffer sb = new StringBuffer("insert into finance_account(ACCOUNT_ID,ACCOUNT_TYPE,ACCOUNT_NAME,ENTERPRISE_ID,ACCOUNT_TOTAL_SUM,ACCOUNT_USABLE_SUM,ACCOUNT_FROZEN_SUM,ACCOUNT_CONSUME_SUM,ACCOUNT_RECHARGE_SUM,ACCOUNT_CREDIT_SUM,ACCOUNT_REFUND_SUM,ACCOUNT_STATUS,IS_SHARE,SHARE_ID,CREATED_BY,CREATED_TIME) ");
+        sb.append(" select '" + qo.getAccountId() + "','SHARE_ACCOUNT','" + qo.getAccountName() + "','" + qo.getEnterpriseId() + "',0.00,sum(USABLE_SUM_POOL) USABLE_SUM_POOL,sum(FREEZE_SUM_POOL) FREEZE_SUM_POOL,0.00,0.00," + qo.getAccountCreditSum() + ",0.00,'1','0','" + qo.getAccountIds() + "','" + qo.getCreatedBy() + "',now() ");
         sb.append(" from finance_account_share_detail where SHARE_ACCOUNT_ID ='" + qo.getAccountId() + "' ");
         //log.info(sb.toString());
         sql[accountIds.length * 2] = sb.toString();

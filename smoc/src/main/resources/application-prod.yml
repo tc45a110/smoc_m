@@ -54,7 +54,7 @@ spring:
   #**********************************************************
   # Redis
   #**********************************************************
-  redis: #redis配置  配置了布隆过滤器、限流插件
+  redis: #redis配置
     host: r-2ze52zqfr1odqdu0ri.redis.rds.aliyuncs.com
     port: 6379
     password: J15mDngG
@@ -68,11 +68,25 @@ spring:
         min-idle: 0
         time-between-eviction-runs: 1000
 
-  redis2: #redis2配置
+  redis2: #redis2配置 布隆过滤器、限流插件
     host: 172.22.171.219
     port: 6379
     password: J15mDngG
     database: 1
+    timeout: 3000
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: 2000
+        max-idle: 8
+        min-idle: 0
+        time-between-eviction-runs: 1000
+
+  redis3: #redis3配置：携号转网redis
+    host: 172.22.171.220
+    port: 6379
+    password: J15mDngG
+    database: 0
     timeout: 3000
     jedis:
       pool:

@@ -62,12 +62,6 @@
                                            placeholder="短信内容" autocomplete="off">
                                 </div>
 
-                                <div class="form-group  col-sm-3">
-                                    <mpm:tag id="infoType" identity="infoType"
-                                             show-type="select" key="code" class="form-control"
-                                             name="infoType" th:value="${messageWebTaskInfoValidator.infoType}" title="信息分类"/>
-                                </div>
-
                                 <div class="form-group col-sm-3 pull-right" style="text-align: right">
                                     <input type="hidden" th:field="*{businessType}">
                                     <button sec:authorize-url="/message/variable/page" type="submit"
@@ -109,7 +103,7 @@
                                     <th style="width:130px">模板ID</th>
                                     <th style="width:150px">标题</th>
                                     <th style="width:250px">发送内容</th>
-                                    <th style="width:120px">提交号码数</th>
+                                    <th style="width:120px">提交条数</th>
                                     <th style="width:110px">接收条数</th>
                                     <th style="width:120px">发送状态</th>
                                     <th style="width:160px">提交时间</th>
@@ -135,7 +129,7 @@
                                     <td style="vertical-align: middle;line-height: 26px;width:100px">
                                         <span data-d-group="3" data-a-sign=" " data-v-min="0" data-v-max="999999999"
                                               style="width:90px;text-align:left"
-                                              class="autonumber">[[${info.submitNumber}]]</span>
+                                              class="autonumber">[[${info.successNumber}]]</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;width:100px">
                                         <span data-d-group="3" data-a-sign=" " data-v-min="0" data-v-max="999999999"

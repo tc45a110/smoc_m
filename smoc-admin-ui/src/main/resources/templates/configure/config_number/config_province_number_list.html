@@ -47,21 +47,17 @@
                 <div class="card-box">
                     <div class="row m-b-60">
                         <div class="col-sm-12">
-                            <form id="query_form" th:action="@{/configure/number/province/page}" th:object="${configNumberInfoValidator}" method="post">
-                                <div class="form-group  col-sm-4">
-                                    <input type="text" class="form-control" th:field="*{numberCode}" autocomplete="off"
+                            <form id="query_form" th:action="@{/configure/number/province/page}" th:object="${systemSegmentProvinceCityValidator}" method="post">
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control" th:field="*{segment}" autocomplete="off"
                                            placeholder="省号码">
                                 </div>
-                                <div class="form-group  col-sm-4">
+                                <div class="form-group  col-sm-3">
                                     <mpm:tag id="provice" identity="provices" show-type="select" key="code"
-                                             name="province" class="form-control"
-                                             th:value="${configNumberInfoValidator.province}" title="省份"/>
+                                             name="provinceCode" class="form-control"
+                                             th:value="${systemSegmentProvinceCityValidator.provinceCode}" title="省份"/>
                                 </div>
-                                <div class="form-group  col-sm-4">
-                                    <mpm:tag id="carrier" identity="carrier" show-type="select" key="code"
-                                             name="carrier" class="form-control"
-                                             th:value="${configNumberInfoValidator.carrier}" title="运营商"/>
-                                </div>
+
                                 <div class="form-group col-sm-6 pull-right" style="text-align: right">
                                     <button sec:authorize-url="/configure/number/province/page"
                                             class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
@@ -105,20 +101,16 @@
                                 <tr>
                                     <th>省号码</th>
                                     <th>省份</th>
-                                    <th>运营商</th>
-                                    <th>创建人</th>
-                                    <th>创建日期</th>
+                                    <th>地市</th>
                                     <th>操作</th>
                                 </tr>
                                 <thead>
                                 <tbody>
                                 <tr th:each="info:${list}">
 
-                                    <td>[[${info.numberCode}]]</td>
-                                    <td><mpm:tag identity="provices" show-type="label" key="code" th:value="${info.province}"/></td>
-                                    <td><mpm:tag identity="carrier" show-type="label" key="code" th:value="${info.carrier}"/></td>
-                                    <td>[[${info.createdBy}]]</td>
-                                    <td>[[${info.createdTime}]]</td>
+                                    <td>[[${info.segment}]]</td>
+                                    <td><mpm:tag identity="provices" show-type="label" key="code" th:value="${info.provinceCode}"/></td>
+                                    <td>[[${info.cityName}]]</td>
                                     <td style="line-height: 26px;">
                                         <a sec:authorize-url="/configure/number/province/edit/*"
                                            th:href="@{/configure/number/province/edit/{id}(id=${info.id})}" class="on-default edit-row"

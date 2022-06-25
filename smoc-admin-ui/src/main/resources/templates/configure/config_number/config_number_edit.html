@@ -41,27 +41,37 @@
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all" style="margin-top:80px">
             <div class="col-md-12">
                 <div class="card-box">
-                    <form th:action="@{/configure/number/save/{op}(op=${op})}" id="submit_form" th:object="${configNumberInfoValidator}" method="post">
+                    <form th:action="@{/configure/number/save/{op}(op=${op})}" id="submit_form" th:object="${dictValidator}" method="post">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="p-20">
                                     <div class="form-group">
                                         <label for="mobile">号段<span class="text-danger">*</span>&nbsp;<span
-                                                class="text-danger" style="font-weight: 200;font-size: 12px" th:if="${#fields.hasErrors('numberCode')}"
-                                                th:errors="*{numberCode}"></span>
+                                                class="text-danger" style="font-weight: 200;font-size: 12px" th:if="${#fields.hasErrors('dictCode')}"
+                                                th:errors="*{dictCode}"></span>
                                         </label>
-                                        <input id="mobile" type="text" th:field="*{numberCode}"
+                                        <input id="mobile" type="text" th:field="*{dictCode}"
                                                placeholder="号段" autocomplete="off"
                                                required="" data-parsley-type="number"
                                                data-parsley-maxlength="11" class="form-control">
                                     </div>
                                     <div class="form-group">
                                         <label>运营商<span class="text-danger">*</span>&nbsp;
-                                            <span class="text-danger" th:if="${#fields.hasErrors('carrier')}"
-                                                  th:errors="*{carrier}"></span></label><br>
+                                            <span class="text-danger" th:if="${#fields.hasErrors('dictName')}"
+                                                  th:errors="*{dictName}"></span></label><br>
                                         <mpm:tag id="carrier" required="true" identity="carrier"
-                                                 show-type="select" key="code" name="carrier"
-                                                 th:value="${configNumberInfoValidator.carrier}" title="运营商"/>
+                                                 show-type="select" key="code" name="dictName"
+                                                 th:value="${dictValidator.dictName}" title="运营商"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="sort">显示顺序<span class="text-danger">*</span>&nbsp;<span
+                                                class="text-danger" style="font-weight: 200;font-size: 12px"
+                                                th:if="${#fields.hasErrors('sort')}"
+                                                th:errors="*{sort}"></span></label>
+                                        <input id="sort" type="text" th:field="*{sort}"
+                                               class="form-control" autocomplete="off" required="true"
+                                               data-parsley-type="digits" data-parsley-length="[1,10]"
+                                               placeholder="数字-升序排列">
                                     </div>
 
                                 </div>
@@ -75,9 +85,9 @@
 
                         <div class="text-center">
                             <input type="hidden" th:field="*{id}">
-                            <input type="hidden" th:field="*{createdBy}">
-                            <input type="hidden" th:field="*{status}">
-                            <input type="hidden" th:field="*{numberCodeType}">
+                            <input type="hidden" th:field="*{active}">
+                            <input type="hidden" th:field="*{dictType}">
+                            <input type="hidden" th:field="*{typeId}">
                             <button sec:authorize-url="/configure/number/save/*" type="submit" class="btn btn-teal waves-effect waves-light">提交
                             </button>
                             <a sec:authorize-url="/configure/number/list" th:href="@{/configure/number/list}"

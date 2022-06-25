@@ -1,5 +1,6 @@
 package com.smoc.cloud.statistics.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
@@ -10,6 +11,7 @@ import com.smoc.cloud.common.smoc.message.MessageDetailInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.message.service.EnterpriseService;
 import com.smoc.cloud.statistics.service.StatisticsMessageService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -25,6 +27,7 @@ import java.util.Date;
 /**
  * 短信记录
  */
+@Slf4j
 @Controller
 @RequestMapping("/statistics/record")
 public class MessageRecordController {
@@ -65,6 +68,9 @@ public class MessageRecordController {
         messageDetailInfoValidator.setStartDate(DateTimeUtils.getDateFormat(startDate));
         messageDetailInfoValidator.setEndDate(DateTimeUtils.getDateFormat(new Date()));
         params.setParams(messageDetailInfoValidator);
+
+        //记录日志
+        log.info("[日期][{}]数据:{}", user.getUserName(), JSON.toJSONString(messageDetailInfoValidator));
 
         //查询
         ResponseData<PageList<MessageDetailInfoValidator>> data = statisticsMessageService.sendMessageList(params);
