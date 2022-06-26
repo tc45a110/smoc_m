@@ -144,6 +144,8 @@ public class AccountInterfaceService {
             redisModel.setNoCheck(entity.getExecuteCheck());
             //把数据放到redis里
             redisTemplate2.opsForValue().set(RedisConstant.HTTP_SERVER_KEY + entity.getAccountId(), redisModel);
+
+            log.info("[reid库][业务账号接口信息][{}]数据:{}", op, JSON.toJSONString(redisModel));
         } else {
             redisTemplate2.delete(RedisConstant.HTTP_SERVER_KEY + entity.getAccountId());
         }

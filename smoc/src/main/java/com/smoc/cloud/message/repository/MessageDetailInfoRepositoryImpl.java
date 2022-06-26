@@ -244,7 +244,7 @@ public class MessageDetailInfoRepositoryImpl extends BasePageRepository {
             StringBuilder sqlBuffer = new StringBuilder("select ");
             sqlBuffer.append(" t.PHONE_NUMBER,");
             sqlBuffer.append(" t.MESSAGE_CONTENT,");
-            sqlBuffer.append(" t.MESSAGE_INDEX as CHARGE_NUMBER,");
+            sqlBuffer.append(" t.MESSAGE_TOTAL as CHARGE_NUMBER,");
             sqlBuffer.append(" t.AREA_NAME,");
             sqlBuffer.append(" t.CARRIER,");
             sqlBuffer.append(" t.REPORT_TIME,");
@@ -309,7 +309,7 @@ public class MessageDetailInfoRepositoryImpl extends BasePageRepository {
             StringBuilder sqlBuffer = new StringBuilder("select ");
             sqlBuffer.append(" t.PHONE_NUMBER,");
             sqlBuffer.append(" t.MESSAGE_CONTENT,");
-            sqlBuffer.append(" t.MESSAGE_INDEX as CHARGE_NUMBER,");
+            sqlBuffer.append(" t.MESSAGE_TOTAL as CHARGE_NUMBER,");
             sqlBuffer.append(" t.AREA_NAME,");
             sqlBuffer.append(" t.CARRIER,");
             sqlBuffer.append(" t.REPORT_TIME,");
@@ -321,7 +321,7 @@ public class MessageDetailInfoRepositoryImpl extends BasePageRepository {
 
             //任务Id
             if (!StringUtils.isEmpty(qo.getTaskId())) {
-                sqlBuffer.append(" and t.MESSAGE_ID =?");
+                sqlBuffer.append(" and t.MESSAGE_ID like ?");
                 paramsList.add("%" + qo.getTaskId().trim() + "%");
             }
 
@@ -388,13 +388,13 @@ public class MessageDetailInfoRepositoryImpl extends BasePageRepository {
             List<Object> paramsList = new ArrayList<Object>();
 
             if (!StringUtils.isEmpty(qo.getTaskId())) {
-                sqlBuffer.append(" and t.MESSAGE_ID =?");
+                sqlBuffer.append(" and t.MESSAGE_ID like ?");
                 paramsList.add("%" + qo.getTaskId().trim() + "%");
             }
 
             //手机号
             if (!StringUtils.isEmpty(qo.getPhoneNumber())) {
-                sqlBuffer.append(" and t.PHONE_NUMBER =?");
+                sqlBuffer.append(" and t.PHONE_NUMBER like ?");
                 paramsList.add("%" + qo.getPhoneNumber().trim() + "%");
             }
 

@@ -59,7 +59,7 @@
                                              name="infoType" th:value="${accountTemplateInfoValidator.infoType}" title="信息分类"/>
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <select data-style="btn-default" name="docStatus" data-live-search="true" id="signStatus" class="selectpicker form-control" tabindex="-98">
+                                    <select data-style="btn-default" name="templateStatus" data-live-search="true" id="signStatus" class="selectpicker form-control" tabindex="-98">
                                         <option value="" data-icon="mdi mdi-bell-ring-outline">--请选择模板状态--</option>
                                         <option data-icon="mdi mdi-bell-ring-outline" value="2" th:selected="${accountTemplateInfoValidator.templateStatus eq '2'}">通过审核</option>
                                         <option data-icon="mdi mdi-bell-ring-outline" value="3" th:selected="${accountTemplateInfoValidator.templateStatus eq '3'}">待审核</option>

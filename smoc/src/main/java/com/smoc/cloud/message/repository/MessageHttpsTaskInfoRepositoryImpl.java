@@ -137,7 +137,7 @@ public class MessageHttpsTaskInfoRepositoryImpl extends BasePageRepository {
             sqlBuffer.append(" sum(t.FAILURE_NUMBER),");
             sqlBuffer.append(" sum(t.NO_REPORT_NUMBER),");
             sqlBuffer.append(" DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d')CREATED_TIME ");
-            sqlBuffer.append(" from message_https_task_info t ");
+            sqlBuffer.append(" from view_message_task_info t ");
             sqlBuffer.append(" where 1=1 ");
 
             groupBySql = "group by DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d'),t.BUSINESS_ACCOUNT,PROTOCOL,SIGN,CARRIER ";
@@ -153,7 +153,7 @@ public class MessageHttpsTaskInfoRepositoryImpl extends BasePageRepository {
             sqlBuffer.append(" sum(t.FAILURE_NUMBER)FAILURE_NUMBER,");
             sqlBuffer.append(" sum(t.NO_REPORT_NUMBER)NO_REPORT_NUMBER,");
             sqlBuffer.append(" DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d')CREATED_TIME ");
-            sqlBuffer.append(" from message_https_task_info t ");
+            sqlBuffer.append(" from view_message_task_info t ");
             sqlBuffer.append(" where 1=1 ");
 
             groupBySql = "group by DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d'),SIGN,BUSINESS_ACCOUNT,PROTOCOL,CARRIER ";
@@ -169,7 +169,7 @@ public class MessageHttpsTaskInfoRepositoryImpl extends BasePageRepository {
             sqlBuffer.append(" sum(t.FAILURE_NUMBER)FAILURE_NUMBER,");
             sqlBuffer.append(" sum(t.NO_REPORT_NUMBER)NO_REPORT_NUMBER,");
             sqlBuffer.append(" DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d')CREATED_TIME ");
-            sqlBuffer.append(" from message_https_task_info t ");
+            sqlBuffer.append(" from view_message_task_info t ");
             sqlBuffer.append(" where 1=1 ");
 
             groupBySql = "group by DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d'),CARRIER,BUSINESS_ACCOUNT,PROTOCOL,SIGN ";
@@ -183,7 +183,7 @@ public class MessageHttpsTaskInfoRepositoryImpl extends BasePageRepository {
             sqlBuffer.append(" sum(t.FAILURE_NUMBER)FAILURE_NUMBER,");
             sqlBuffer.append(" sum(t.NO_REPORT_NUMBER)NO_REPORT_NUMBER,");
             sqlBuffer.append(" DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d')CREATED_TIME ");
-            sqlBuffer.append(" from message_https_task_info t ");
+            sqlBuffer.append(" from view_message_task_info t ");
             sqlBuffer.append(" where 1=1 ");
 
             groupBySql = "group by DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d'),t.BUSINESS_ACCOUNT,CARRIER,PROTOCOL,SIGN ";

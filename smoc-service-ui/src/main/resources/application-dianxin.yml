@@ -63,7 +63,7 @@ com:
           resource-allow-format[0]: jpg,jpeg,gif,png  #彩信资源图片格式
           resource-allow-format[1]: midi,wav,amr,mp3,aac  #彩信资源音频格式
           resource-allow-format[2]: 3gp,mp4  #彩信资源视频频格式
-          resource-file-size-limit: 4096  #彩信资源文件大小限制，以K为单位
+          resource-file-size-limit: 2048  #彩信资源文件大小限制，以K为单位
           stay-times: 2 #彩信帧默认停留时间（秒）
 
     #**********************************************************

@@ -153,6 +153,8 @@ public class MessageSendWebTaskInfoService {
                     }
                     messageFormat.setMessageContent(multimedia);
                 }
+
+                messageCount++;
             }
 
             //国际短信
@@ -210,11 +212,20 @@ public class MessageSendWebTaskInfoService {
         //记录日志
         log.info("[短信群发][{}]数据:{}", op, JSON.toJSONString(entity));
 
+        //定时发送
+        if("2".equals(entity.getSendType())){
+            entity.setSendStatus("05");//待发送
+        }
+
         //保存任务单
         messageWebTaskInfoRepository.saveAndFlush(entity);
 
-        //异步 批量保存短消息
-        messageWebTaskInfoService.saveMessageBatch(messages, messageCount, phoneCount);
+        //及时发送
+        if("1".equals(entity.getSendType())){
+            //异步 批量保存短消息
+            messageWebTaskInfoService.saveMessageBatch(messages, messageCount, phoneCount);
+        }
+
 
         return ResponseDataUtil.buildSuccess();
     }

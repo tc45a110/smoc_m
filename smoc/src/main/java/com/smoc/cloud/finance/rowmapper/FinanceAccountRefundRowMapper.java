@@ -3,6 +3,7 @@ package com.smoc.cloud.finance.rowmapper;
 import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountRefundValidator;
 import org.springframework.jdbc.core.RowMapper;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -19,7 +20,7 @@ public class FinanceAccountRefundRowMapper implements RowMapper<FinanceAccountRe
         qo.setAccountName(resultSet.getString("ACCOUNT_NAME"));
         qo.setRefundFlowNo(resultSet.getString("REFUND_FLOW_NO"));
         qo.setRefundSource(resultSet.getString("REFUND_SOURCE"));
-        qo.setRefundSum(resultSet.getBigDecimal("REFUND_SUM"));
+        qo.setRefundSum(new BigDecimal(resultSet.getBigDecimal("REFUND_SUM").stripTrailingZeros().toPlainString()));
         qo.setCreatedBy(resultSet.getString("CREATED_BY"));
         qo.setCreatedTime(resultSet.getString("CREATED_TIME"));
         qo.setRemark(resultSet.getString("REMARK"));

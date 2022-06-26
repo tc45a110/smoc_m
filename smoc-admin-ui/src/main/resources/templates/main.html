@@ -234,7 +234,7 @@
     })
 
    function remind(){
-       setTimeout(remind,1000*60*30);
+       setTimeout(remind,1000*60);
        $.ajax({
            url : '[[${#httpServletRequest.getContextPath()}]]/index/remind/check',
            success : function(data) {

@@ -146,12 +146,12 @@
                                     <th>任务ID/模板ID</th>
                                     <th>提交号码数/成功提交数</th>
                                     <th>成功发送条数/失败条数</th>
+                                    <th>未知数</th>
                                     <th>业务类型</th>
                                     <th>发送类型/定时时间</th>
                                     <th>创建时间/发送时间</th>
                                     <th>发送状态</th>
-                                    <th>内容</th>
-                                    <th>接口类型</th>
+                                    <th>内容/接口类型</th>
                                     <th>操作</th>
                                 </tr>
                                 <thead>
@@ -186,6 +186,12 @@
                                               class="autonumber">[[${info.failureNumber}]]</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
+                                        <span style="width:100px;text-align:left"
+                                              data-d-group="4" data-a-sign=" " data-v-min="0"
+                                              data-v-max="999999999"
+                                              class="autonumber">[[${info.noReportNumber}]]</span>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
                                         <mpm:tag identity="businessType" show-type="button"
                                                  key="code" th:value="${info.businessType}"
                                                  class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;MULTI_SMS,btn btn-brown btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;5G_SMS,btn btn-primary btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-inverse btn-rounded btn-sm waves-effect waves-light"/>
@@ -203,15 +209,13 @@
                                           th:value="${info.sendStatus}"
                                           class="01,btn btn-warning btn-rounded waves-effect waves-light btn-sm;02,btn btn-success btn-rounded waves-effect waves-light btn-sm;03,btn btn-brown btn-rounded waves-effect waves-light btn-sm;04,btn btn-danger btn-rounded waves-effect waves-light btn-sm;05,btn btn-info btn-rounded waves-effect waves-light btn-sm;06,btn btn-purple btn-rounded waves-effect waves-light btn-sm"/>
                                     </td>
-                                    <td style="vertical-align: middle">
-                                        <a class="on-default edit-row">
-                                            <i style="font-size: 18px" class="mdi mdi-stackexchange"
-                                               data-container="body" title="" data-toggle="popover"
-                                               data-placement="bottom"
-                                               th:data-content="${info.messageContent}"></i>
-                                        </a>
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px"> [[${info.protocolType}]]
+
+                                    <td style="vertical-align: middle;line-height: 26px"><a class="on-default edit-row">
+                                        <i style="font-size: 18px" class="mdi mdi-stackexchange"
+                                           data-container="body" title="" data-toggle="popover"
+                                           data-placement="bottom"
+                                           th:data-content="${info.messageContent}"></i>
+                                    </a><br> [[${info.protocolType}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         <a sec:authorize-url="/message/order/web/detail/*/*"

@@ -260,14 +260,14 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", a.PAY_TYPE");
         sqlBuffer.append(", i.PROTOCOL");
         sqlBuffer.append(", DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME");
-        sqlBuffer.append(", f.PARAM_VALUE AS SEND_LIMIT");
-        sqlBuffer.append(", f1.PARAM_VALUE AS DAY_LIMIT");
-        sqlBuffer.append(", f2.PARAM_VALUE AS MASK_AREA");
+        sqlBuffer.append(", ''SEND_LIMIT");
+        sqlBuffer.append(", ''DAY_LIMIT");
+        sqlBuffer.append(", ''MASK_AREA");
         sqlBuffer.append("  from account_base_info t left join (select PAY_TYPE,ACCOUNT_ID from account_finance_info group by ACCOUNT_ID,PAY_TYPE)a on t.ACCOUNT_ID=a.ACCOUNT_ID ");
         sqlBuffer.append("  left join account_interface_info i on t.ACCOUNT_ID=i.ACCOUNT_ID");
-        sqlBuffer.append("  left join parameter_extend_filters_value f on t.ACCOUNT_ID=f.BUSINESS_ID and f.BUSINESS_TYPE='BUSINESS_ACCOUNT_FILTER' and f.PARAM_KEY='SEND_RATE_LIMIT_SECOND'");
+        /*sqlBuffer.append("  left join parameter_extend_filters_value f on t.ACCOUNT_ID=f.BUSINESS_ID and f.BUSINESS_TYPE='BUSINESS_ACCOUNT_FILTER' and f.PARAM_KEY='SEND_RATE_LIMIT_SECOND'");
         sqlBuffer.append("  left join parameter_extend_filters_value f1 on t.ACCOUNT_ID=f1.BUSINESS_ID and f1.BUSINESS_TYPE='BUSINESS_ACCOUNT_FILTER' and f1.PARAM_KEY='SEND_LIMIT_NUMBER_DAILY'");
-        sqlBuffer.append("  left join parameter_extend_filters_value f2 on t.ACCOUNT_ID=f2.BUSINESS_ID and f2.BUSINESS_TYPE='BUSINESS_ACCOUNT_FILTER' and f2.PARAM_KEY='MASK_PROVINCE'");
+        sqlBuffer.append("  left join parameter_extend_filters_value f2 on t.ACCOUNT_ID=f2.BUSINESS_ID and f2.BUSINESS_TYPE='BUSINESS_ACCOUNT_FILTER' and f2.PARAM_KEY='MASK_PROVINCE'");*/
         sqlBuffer.append("  where 1=1 ");
 
         List<Object> paramsList = new ArrayList<Object>();

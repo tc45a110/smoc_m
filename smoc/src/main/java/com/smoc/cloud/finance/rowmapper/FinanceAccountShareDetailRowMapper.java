@@ -3,6 +3,7 @@ package com.smoc.cloud.finance.rowmapper;
 import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountShareDetailValidator;
 import org.springframework.jdbc.core.RowMapper;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -16,8 +17,8 @@ public class FinanceAccountShareDetailRowMapper implements RowMapper<FinanceAcco
         qo.setAccountId(resultSet.getString("ACCOUNT_ID"));
         qo.setIsFreezeSumPool(resultSet.getString("IS_FREEZE_SUM_POOL"));
         qo.setIsUsableSumPool(resultSet.getString("IS_USABLE_SUM_POOL"));
-        qo.setUsableSumPool(resultSet.getBigDecimal("USABLE_SUM_POOL"));
-        qo.setFreezeSumPool(resultSet.getBigDecimal("FREEZE_SUM_POOL"));
+        qo.setUsableSumPool(new BigDecimal(resultSet.getBigDecimal("USABLE_SUM_POOL").stripTrailingZeros().toPlainString()));
+        qo.setFreezeSumPool(new BigDecimal(resultSet.getBigDecimal("FREEZE_SUM_POOL").stripTrailingZeros().toPlainString()));
         qo.setShareStatus(resultSet.getString("SHARE_STATUS"));
         qo.setCreatedBy(resultSet.getString("CREATED_BY"));
         qo.setCreatedTime(resultSet.getString("CREATED_TIME"));

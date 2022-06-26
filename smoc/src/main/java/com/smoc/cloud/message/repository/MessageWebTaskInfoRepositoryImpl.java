@@ -274,7 +274,7 @@ public class MessageWebTaskInfoRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(" sum(t.SUCCESS_SEND_NUMBER) SUCCESS_SEND_NUMBER,");
         sqlBuffer.append(" sum(t.FAILURE_NUMBER) FAILURE_NUMBER,");
         sqlBuffer.append(" sum(t.NO_REPORT_NUMBER) NO_REPORT_NUMBER");
-        sqlBuffer.append(" from message_web_task_info t");
+        sqlBuffer.append(" from view_message_task_info t");
         sqlBuffer.append(" where 1=1 ");
 
         List<Object> paramsList = new ArrayList<Object>();

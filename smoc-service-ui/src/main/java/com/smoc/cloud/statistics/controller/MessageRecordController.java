@@ -69,9 +69,6 @@ public class MessageRecordController {
         messageDetailInfoValidator.setEndDate(DateTimeUtils.getDateFormat(new Date()));
         params.setParams(messageDetailInfoValidator);
 
-        //记录日志
-        log.info("[日期][{}]数据:{}", user.getUserName(), JSON.toJSONString(messageDetailInfoValidator));
-
         //查询
         ResponseData<PageList<MessageDetailInfoValidator>> data = statisticsMessageService.sendMessageList(params);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
@@ -81,7 +78,7 @@ public class MessageRecordController {
 
         view.addObject("messageDetailInfoValidator", messageDetailInfoValidator);
         view.addObject("list", data.getData().getList());
-        view.addObject("pageParams",params);
+        view.addObject("pageParams",data.getData().getPageParams());
         view.addObject("businessType", businessType);
         return view;
     }
@@ -123,7 +120,7 @@ public class MessageRecordController {
 
         view.addObject("messageDetailInfoValidator", messageDetailInfoValidator);
         view.addObject("list", data.getData().getList());
-        view.addObject("pageParams",params);
+        view.addObject("pageParams",data.getData().getPageParams());
         view.addObject("businessType", messageDetailInfoValidator.getBusinessType());
         return view;
     }

@@ -210,15 +210,29 @@ public class MessageVariableController {
             previewList = FileUtils.readMessageTemplateTxt(desFile);
         }
 
-        for(int i=0;i<previewList.size();i++){
-            String[] inputInfo = previewList.get(i).split("\\|");
-            String content = messageTemplateValidator.getTemplateContent();
-            for(int j=1;j<inputInfo.length;j++){
-                String replaceKey = "\\$\\{"+j+"\\}";
-                content = content.replaceAll(replaceKey, inputInfo[j]);
+        if(previewList.size()>4){
+            for(int i=0;i<3;i++){
+                String[] inputInfo = previewList.get(i).split("\\|");
+                String content = messageTemplateValidator.getTemplateContent();
+                for(int j=1;j<inputInfo.length;j++){
+                    String replaceKey = "\\$\\{"+j+"\\}";
+                    content = content.replaceAll(replaceKey, inputInfo[j]);
+                }
+                previewList.set(i, inputInfo[0]+","+content);
             }
-            previewList.set(i, inputInfo[0]+","+content);
+        }else{
+            for(int i=0;i<previewList.size();i++){
+                String[] inputInfo = previewList.get(i).split("\\|");
+                String content = messageTemplateValidator.getTemplateContent();
+                for(int j=1;j<inputInfo.length;j++){
+                    String replaceKey = "\\$\\{"+j+"\\}";
+                    content = content.replaceAll(replaceKey, inputInfo[j]);
+                }
+                previewList.set(i, inputInfo[0]+","+content);
+            }
         }
+
+
 
         result.put("previewList", previewList);
 

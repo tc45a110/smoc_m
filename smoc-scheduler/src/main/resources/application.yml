@@ -1,5 +1,5 @@
 server: #服务端口
-  port: 18088
+  port: 18089
   servlet:
     context-path: /smoc_scheduler
   connection-timeout: 15000

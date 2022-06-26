@@ -3,6 +3,7 @@ package com.smoc.cloud.finance.rowmapper;
 import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountRechargeValidator;
 import org.springframework.jdbc.core.RowMapper;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -19,7 +20,7 @@ public class FinanceAccountRechargeRowMapper implements RowMapper<FinanceAccount
         qo.setAccountName(resultSet.getString("ACCOUNT_NAME"));
         qo.setRechargeFlowNo(resultSet.getString("RECHARGE_FLOW_NO"));
         qo.setRechargeSource(resultSet.getString("RECHARGE_SOURCE"));
-        qo.setRechargeSum(resultSet.getBigDecimal("RECHARGE_SUM"));
+        qo.setRechargeSum(new BigDecimal(resultSet.getBigDecimal("RECHARGE_SUM").stripTrailingZeros().toPlainString()));
         qo.setCreatedBy(resultSet.getString("CREATED_BY"));
         qo.setCreatedTime(resultSet.getString("CREATED_TIME"));
         qo.setRemark(resultSet.getString("REMARK"));
