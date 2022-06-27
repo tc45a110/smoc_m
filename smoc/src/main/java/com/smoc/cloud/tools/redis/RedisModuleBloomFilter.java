@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.JedisPool;
 
+import javax.annotation.Resource;
+
 /**
  * redis BloomFilter 布隆过滤器module 基于位图算法
  * 功能：海量数据（亿级）查重
@@ -17,7 +19,7 @@ import redis.clients.jedis.JedisPool;
 @Service
 public class RedisModuleBloomFilter {
 
-    @Autowired
+    @Resource(name="defaultJedisPool")
     private JedisPool jedisPool;
 
     /**

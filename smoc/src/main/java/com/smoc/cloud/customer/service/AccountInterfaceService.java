@@ -2,6 +2,7 @@ package com.smoc.cloud.customer.service;
 
 
 import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
 import com.smoc.cloud.common.redis.RedisConstant;
 import com.smoc.cloud.common.redis.RedisModel;
 import com.smoc.cloud.common.response.ResponseCode;
@@ -17,12 +18,14 @@ import com.smoc.cloud.customer.repository.AccountInterfaceRepository;
 import com.smoc.cloud.customer.repository.BusinessAccountRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import redis.clients.jedis.JedisPool;
 
 import javax.annotation.Resource;
 import java.util.Optional;
@@ -42,8 +45,7 @@ public class AccountInterfaceService {
     private BusinessAccountRepository businessAccountRepository;
 
     @Resource(name = "redisTemplate2")
-    private RedisTemplate<String, RedisModel> redisTemplate2;
-
+    private RedisTemplate redisTemplate2;
 
     /**
      * 根据id获取信息
@@ -142,10 +144,10 @@ public class AccountInterfaceService {
             redisModel.setSendRate(entity.getMaxSendSecond());
             redisModel.setIps(entity.getIdentifyIp());
             redisModel.setNoCheck(entity.getExecuteCheck());
+
             //把数据放到redis里
             redisTemplate2.opsForValue().set(RedisConstant.HTTP_SERVER_KEY + entity.getAccountId(), redisModel);
 
-            log.info("[reid库][业务账号接口信息][{}]数据:{}", op, JSON.toJSONString(redisModel));
         } else {
             redisTemplate2.delete(RedisConstant.HTTP_SERVER_KEY + entity.getAccountId());
         }

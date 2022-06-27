@@ -3,6 +3,8 @@ package com.smoc.cloud.scheduler.message.processor;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelReader;
 import com.alibaba.excel.read.metadata.ReadSheet;
+import com.smoc.cloud.common.response.ResponseCode;
+import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.message.model.MessageTemplateExcelModel;
 import com.smoc.cloud.common.utils.Utils;
 import com.smoc.cloud.scheduler.message.properties.MessageProperties;
@@ -41,6 +43,12 @@ public class MessageTimingTaskProcessor implements ItemProcessor<MessageTimingMo
         List<String> mobileList = handleMobile(messageTimingModel);
 
         if(!StringUtils.isEmpty(mobileList) && mobileList.size()>0){
+
+            //判断发送数量
+            if (mobileList.size() > messageProperties.getMobileCountLimit()) {
+                return messageTimingModel;
+            }
+
             messageTimingTaskService.sendMessage(messageTimingModel,mobileList);
         }
 
