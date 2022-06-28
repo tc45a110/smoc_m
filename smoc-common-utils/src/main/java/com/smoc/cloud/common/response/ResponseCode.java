@@ -26,7 +26,7 @@ public enum ResponseCode {
     PARAM_MOBILE_ERROR("1109", "发送号码不能为空!"),
     PARAM_TEMPLATE_NOT_EXIST_ERROR("1110", "模版不存在!"),
     PARAM_TEMPLATE_STATUS_ERROR("1111", "模版未经审核!"),
-    PARAM_MOBILE_NUM_ERROR("1112", "单批次发送量超过1000条!"),
+    PARAM_MOBILE_NUM_ERROR("1112", "单批次发送量超过500条!"),
     PARAM_MOBILE_LIMITER_ERROR("1113", "发送速率，到达了受限速率！"),
     PARAM_SUBMIT_LIMITER_ERROR("1114", "提交速率太快，到达了受限提交速率！"),
 

@@ -17,4 +17,6 @@ public class MessageProperties {
     //手机号文件根目录
     private String mobileFileRootPath;
 
+    private int mobileCountLimit;
+
 }

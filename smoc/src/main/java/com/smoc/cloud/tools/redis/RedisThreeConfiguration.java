@@ -11,8 +11,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 
 
 @Slf4j
-@EnableCaching
-@Configuration
+/*@EnableCaching
+@Configuration*/
 public class RedisThreeConfiguration extends RedisConfiguration {
 
     @Value("${spring.redis3.host}")

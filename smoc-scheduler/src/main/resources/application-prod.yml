@@ -2,7 +2,7 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 127.0.0.1:8848
+        server-addr: 172.22.171.216:8848
   # ========================================================================================
   # spring  JPA
   # ========================================================================================
@@ -21,7 +21,7 @@ spring:
     hibernate:
       ddl-auto: none
     generate-ddl: false
-    show-sql: true
+    show-sql: false
     open-in-view: true
   # ========================================================================================
   #  datasource hikari pool
@@ -30,10 +30,10 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
       pool-name: MpmSpringHikariCP
-      jdbc-url: jdbc:mysql://rm-2zergmfbo0d88p44aao.mysql.rds.aliyuncs.com:3306/smoc_scheduler?characterEncoding=UTF-8&useSSL=true&serverTimezone=GMT%2B8&rewriteBatchedStatements=true&autoReconnect=true
+      jdbc-url: jdbc:mysql://rm-2ze57z500ugv7p42g.mysql.rds.aliyuncs.com:3306/smoc_scheduler?characterEncoding=UTF-8&useSSL=true&serverTimezone=GMT%2B8&rewriteBatchedStatements=true&autoReconnect=true
       driver-class-name: com.mysql.cj.jdbc.Driver
       username: yunsen_smoc
-      password: YUN%smoc9#40
+      password: A%dEjB9!h40
       auto-commit: true
       connection-timeout: 30000
       idle-timeout: 60000
@@ -53,9 +53,10 @@ com:
       smoc:
         message:
           mobile-file-root-path: /share/resourceFile/message/mobile  #短信手机号文件根目录
+          mobile-count-limit: 1000 #该批次手机号总量
 
 logging:
   config: classpath:logback-spring.xml
-  path: d:/smoc-log/smoc_scheduler-logs
+  path: /smoc/smoc-log/smoc_scheduler-logs
   level:
     root: info

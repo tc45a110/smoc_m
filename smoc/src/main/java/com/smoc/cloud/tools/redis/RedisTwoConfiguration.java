@@ -6,33 +6,32 @@ import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
+import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 @Configuration
 @EnableCaching
-public class RedisCacheConfiguration extends CachingConfigurerSupport {
-    Logger logger = LoggerFactory.getLogger(RedisCacheConfiguration.class);
+public class RedisTwoConfiguration{
+    Logger logger = LoggerFactory.getLogger(RedisTwoConfiguration.class);
 
-    @Value("${spring.redis2.host}")
+    @Value("${spring.redis3.host}")
     private String host;
 
-    @Value("${spring.redis2.port}")
+    @Value("${spring.redis3.port}")
     private int port;
 
-    @Value("${spring.redis2.timeout}")
+    @Value("${spring.redis3.timeout}")
     private int timeout;
 
-    @Value("${spring.redis2.password}")
+    @Value("${spring.redis3.password}")
     private String password;
 
-    @Value("${spring.redis2.database}")
+    @Value("${spring.redis3.database}")
     private int database;
 
-    @Primary
-    @Bean(name = "defaultJedisPool")
-    public JedisPool redisPoolFactory() {
+    @Bean(name = "jedisPool1")
+    public JedisPool redisPoolFactory1() {
         JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
         JedisPool jedisPool = new JedisPool(jedisPoolConfig, host, port, timeout, password,database);
         return jedisPool;

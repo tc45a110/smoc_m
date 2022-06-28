@@ -28,6 +28,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.Pipeline;
 
 
 import javax.annotation.Resource;
@@ -66,8 +69,8 @@ public class InitializeFiltersDataService {
     @Resource(name = "defaultRedisTemplate")
     private RedisTemplate redisTemplate;
 
-    @Resource(name = "redisTemplate3")
-    private RedisTemplate redisTemplate3;
+    @Resource(name="jedisPool1")
+    private JedisPool jedisPool;
 
     @Autowired
     private RocketProducerFilterMessage rocketProducerFilterMessage;
@@ -861,15 +864,18 @@ public class InitializeFiltersDataService {
     }
 
     private void multiSaveSet(List<ConfigNumberInfoValidator> list) {
-        redisTemplate3.executePipelined((RedisCallback<Object>) connection -> {
-            connection.openPipeline();
-            list.forEach((value) -> {
-                connection.sAdd(RedisSerializer.string().serialize(RedisConstant.MOBILE_PORTABILITY + value.getNumberCode()),
-                        RedisSerializer.string().serialize(new Gson().toJson(value.getCarrier())));
-            });
-            connection.close();
-            return null;
-        });
+
+        Jedis jedis = jedisPool.getResource();
+        try {
+            Pipeline pipelined = jedis.pipelined();
+            for (int i = 0; i < list.size(); i++) {
+                pipelined.hdel(RedisSerializer.string().serialize(RedisConstant.MOBILE_PORTABILITY + list.get(i).getNumberCode()), RedisSerializer.string().serialize(new Gson().toJson(list.get(i).getCarrier())));
+            }
+            pipelined.sync();
+        } finally {
+            jedis.close();
+        }
+
     }
 
 

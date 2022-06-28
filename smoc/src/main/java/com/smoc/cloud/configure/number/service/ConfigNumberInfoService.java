@@ -16,6 +16,7 @@ import com.smoc.cloud.configure.number.entity.ConfigNumberInfo;
 import com.smoc.cloud.configure.number.repository.ConfigNumberInfoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -25,6 +26,9 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.Pipeline;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -43,7 +47,9 @@ public class ConfigNumberInfoService {
     @Resource
     private ConfigNumberInfoRepository configNumberInfoRepository;
 
-    @Resource(name = "redisTemplate3")
+    @Resource(name="jedisPool1")
+    private JedisPool jedisPool;
+
     private RedisTemplate redisTemplate;
 
     /**
@@ -121,8 +127,16 @@ public class ConfigNumberInfoService {
 
         configNumberInfoRepository.saveAndFlush(entity);
 
+        Jedis jedis = jedisPool.getResource();
+        try {
+            jedis.set(RedisSerializer.string().serialize(RedisConstant.MOBILE_PORTABILITY +entity.getNumberCode()), RedisSerializer.string().serialize(new Gson().toJson(entity.getCarrier())));
+        } finally {
+            jedis.close();
+        }
+
+
         //放到redis里
-        redisTemplate.opsForValue().set(RedisConstant.MOBILE_PORTABILITY + entity.getNumberCode(),entity.getCarrier());
+        //redisTemplate.opsForValue().set(RedisConstant.MOBILE_PORTABILITY + entity.getNumberCode(),entity.getCarrier());
 
         return ResponseDataUtil.buildSuccess();
     }
@@ -135,7 +149,12 @@ public class ConfigNumberInfoService {
         log.info("[携号转网][delete]数据:{}", JSON.toJSONString(data));
         configNumberInfoRepository.deleteById(id);
 
-        redisTemplate.delete(RedisConstant.MOBILE_PORTABILITY + data.getNumberCode());
+        Jedis jedis = jedisPool.getResource();
+        try {
+            jedis.del(RedisConstant.MOBILE_PORTABILITY + data.getNumberCode());
+        } finally {
+            jedis.close();
+        }
 
         return ResponseDataUtil.buildSuccess();
     }
@@ -161,15 +180,16 @@ public class ConfigNumberInfoService {
 
         log.info("[携号转网导入redis结束]数据：{}", System.currentTimeMillis());
 
-        redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
-            connection.openPipeline();
-            list.forEach((value) -> {
-                connection.set(RedisSerializer.string().serialize(RedisConstant.MOBILE_PORTABILITY + value.getColumn1()),
-                        RedisSerializer.string().serialize(new Gson().toJson(configNumberInfoValidator.getCarrier())));
-            });
-            connection.close();
-            return null;
-        });
+        Jedis jedis = jedisPool.getResource();
+        try {
+            Pipeline pipelined = jedis.pipelined();
+            for (int i = 0; i < list.size(); i++) {
+                pipelined.set(RedisSerializer.string().serialize(RedisConstant.MOBILE_PORTABILITY + list.get(i).getColumn1()), RedisSerializer.string().serialize(new Gson().toJson(configNumberInfoValidator.getCarrier())));
+            }
+            pipelined.sync();
+        } finally {
+            jedis.close();
+        }
 
         log.info("[携号转网导入redis结束]数据：{}", System.currentTimeMillis());
 

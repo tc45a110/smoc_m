@@ -21,6 +21,7 @@ import com.smoc.cloud.configure.channel.service.ChannelInterfaceService;
 import com.smoc.cloud.filter.entity.FilterGroupList;
 import com.smoc.cloud.filter.repository.BlackRepository;
 import com.smoc.cloud.filter.repository.GroupRepository;
+import com.smoc.cloud.filter.service.BlackService;
 import com.smoc.cloud.message.entity.MessageDetailInfo;
 import com.smoc.cloud.message.repository.MessageDetailInfoRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -59,6 +60,9 @@ public class ComplaintService {
 
     @Resource
     private ChannelInterfaceRepository channelInterfaceRepository;
+
+    @Resource
+    private BlackService blackService;
 
     /**
      * 查询列表
@@ -226,6 +230,8 @@ public class ComplaintService {
             //导入黑名单
             blackRepository.complaintBathSave(messageComplaintInfoValidator,SysFilterUtil.GROUP_COMPLAINT_ID);
 
+            //加载到redis库
+            blackService.loadBlackList();
         }
 
         //12321投诉
@@ -252,6 +258,9 @@ public class ComplaintService {
 
             //导入黑名单
             blackRepository.complaintBathSave(messageComplaintInfoValidator,SysFilterUtil.GROUP_12321_ID);
+
+            //加载到redis库
+            blackService.loadBlackList();
 
         }
 

@@ -136,10 +136,10 @@ public class ShortMessageGatewayFilter {
                 signData.append(model.getTimestamp().trim());
 
                 //校验签名
-//                boolean verifySign = HMACUtil.verifySign(signData.toString(), requestHeaderData.getSignature(), md5HmacKey, gatewayConfigurationProperties.getSignStyle());
-//                if (!verifySign) {
-//                    return errorHandle(exchange, ResponseCode.SIGN_ERROR.getCode(), ResponseCode.SIGN_ERROR.getMessage());
-//                }
+                boolean verifySign = HMACUtil.verifySign(signData.toString(), requestHeaderData.getSignature(), md5HmacKey, gatewayConfigurationProperties.getSignStyle());
+                if (!verifySign) {
+                    return errorHandle(exchange, ResponseCode.SIGN_ERROR.getCode(), ResponseCode.SIGN_ERROR.getMessage());
+                }
 
                 return chain.filter(exchange).then(Mono.fromRunnable(() -> {
                     //被执行后调用 post
