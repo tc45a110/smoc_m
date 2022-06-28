@@ -74,7 +74,7 @@ public class ChannelWorker extends SuperQueueWorker<BusinessRouteValue>{
 			conn = LavenderDBSingleton.getInstance().getConnection();
 			conn.setAutoCommit(false);
 			pstmt = conn.prepareStatement(sql.toString());
-
+			int count = 0;
 			for (BusinessRouteValue businessRouteValue : businessRouteValueList) {
 				pstmt.setString(1, businessRouteValue.getAccountID());
 				pstmt.setString(2, businessRouteValue.getAccountPriority());
@@ -83,11 +83,15 @@ public class ChannelWorker extends SuperQueueWorker<BusinessRouteValue>{
 				pstmt.setString(5, businessRouteValue.getAccountSubmitTime());
 				pstmt.setString(6, businessRouteValue.getMessageContent());
 				pstmt.setString(7, businessRouteValue.toJSONString());
-
 				pstmt.addBatch();
+				count++;
+				if( count % 10240 == 0){
+					pstmt.executeBatch();
+					pstmt.clearBatch();
+				}
 			}
-
 			pstmt.executeBatch();
+			pstmt.clearBatch();
 			conn.commit();
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
