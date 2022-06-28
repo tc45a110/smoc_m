@@ -49,7 +49,7 @@ public class MessageDetailController {
         params.setParams(messageDetailInfoValidator);
 
         //查询
-        ResponseData<PageList<MessageDetailInfoValidator>> data = messageDetailInfoService.page(params);
+        ResponseData<PageList<MessageDetailInfoValidator>> data = messageDetailInfoService.tableStorePage(params);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;
@@ -81,7 +81,7 @@ public class MessageDetailController {
         //分页查询
         pageParams.setParams(messageDetailInfoValidator);
 
-        ResponseData<PageList<MessageDetailInfoValidator>> data = messageDetailInfoService.page(pageParams);
+        ResponseData<PageList<MessageDetailInfoValidator>> data = messageDetailInfoService.tableStorePage(pageParams);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;

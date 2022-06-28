@@ -1,8 +1,0 @@
-spring:
-  application: #服务应用名称
-    name: smoc-schedluer
-  profiles: #指定启动模式
-    active: dev
-  main:
-    allow-bean-definition-overriding: true
-    

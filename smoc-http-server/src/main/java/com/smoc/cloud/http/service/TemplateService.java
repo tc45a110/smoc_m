@@ -79,7 +79,7 @@ public class TemplateService {
         //取账户参数
         //redis 查询  模板状态  3表示待审核 2表示通过审核
         RedisModel redisModel = (RedisModel) redisTemplate.opsForValue().get(RedisConstant.HTTP_SERVER_KEY + params.getAccount());
-        if(null != redisModel || "0".equals(redisModel.getNoCheck())){
+        if(null != redisModel && "0".equals(redisModel.getNoCheck())){
             entity.setTemplateStatus("2");
         }else{
             entity.setTemplateStatus("3");

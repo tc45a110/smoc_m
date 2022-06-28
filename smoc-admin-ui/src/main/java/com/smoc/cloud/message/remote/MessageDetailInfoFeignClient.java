@@ -24,4 +24,7 @@ public interface MessageDetailInfoFeignClient {
      */
     @RequestMapping(value = "/message/detail/page", method = RequestMethod.POST)
     ResponseData<PageList<MessageDetailInfoValidator>> page(@RequestBody PageParams<MessageDetailInfoValidator> pageParams) throws Exception;
+
+    @RequestMapping(value = "/message/detail/tableStorePage", method = RequestMethod.POST)
+    ResponseData<PageList<MessageDetailInfoValidator>> tableStorePage(@RequestBody PageParams<MessageDetailInfoValidator> params);
 }

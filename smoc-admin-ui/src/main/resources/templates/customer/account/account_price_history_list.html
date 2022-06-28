@@ -57,7 +57,7 @@
                                                      show-type="button" key="code" th:value="${histories.carrier}"  class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;"/>
                                         </td>
                                         <td>
-                                            ¥ [[${#numbers.formatDecimal(histories.carrierPrice,1,'COMMA',6,'POINT')}]]
+                                            ¥ [[${histories.carrierPrice}]]
                                         </td>
                                         <td>[[${histories.createdTime}]]</td>
                                         <td>[[${histories.updatedTime}]]</td>

@@ -78,4 +78,9 @@ public class MessageDetailInfoService {
         return ResponseDataUtil.buildSuccess(page);
     }
 
+    public ResponseData<PageList<MessageDetailInfoValidator>> tableStorePage(PageParams<MessageDetailInfoValidator> pageParams) {
+        PageList<MessageDetailInfoValidator> page = messageDetailInfoRepository.tableStorePage(pageParams);
+
+        return ResponseDataUtil.buildSuccess(page);
+    }
 }

@@ -2,4 +2,16 @@ server: #服务端口
   port: 18089
   servlet:
     context-path: /smoc_scheduler
+    session:
+      cookie:
+        name: OAUTH2SESSION
   connection-timeout: 15000
+
+spring:
+
+  application: #服务应用名称
+    name: smoc-schedluer
+
+  profiles: #指定启动模式
+    active: dev
+

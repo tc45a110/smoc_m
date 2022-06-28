@@ -54,7 +54,7 @@
                                                      th:value="${histories.areaCode}" title="业务区域"/>
                                         </td>
                                         <td>
-                                            ¥ [[${#numbers.formatDecimal(histories.channelPrice,1,'COMMA',6,'POINT')}]]
+                                            ¥ [[${histories.channelPrice}]]
                                         </td>
                                         <td>[[${histories.createTime}]]</td>
                                         <td>[[${histories.updatedTime}]]</td>

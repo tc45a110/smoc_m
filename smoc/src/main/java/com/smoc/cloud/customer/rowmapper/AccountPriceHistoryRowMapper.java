@@ -3,6 +3,7 @@ package com.smoc.cloud.customer.rowmapper;
 import com.smoc.cloud.common.smoc.customer.validator.AccountPriceHistoryValidator;
 import org.springframework.jdbc.core.RowMapper;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -16,7 +17,7 @@ public class AccountPriceHistoryRowMapper implements RowMapper<AccountPriceHisto
         qo.setAccountId(resultSet.getString("ACCOUNT_ID"));
         qo.setCarrierType(resultSet.getString("CARRIER_TYPE"));
         qo.setCarrier(resultSet.getString("CARRIER"));
-        qo.setCarrierPrice(resultSet.getBigDecimal("CARRIER_PRICE"));
+        qo.setCarrierPrice(new BigDecimal(resultSet.getBigDecimal("CARRIER_PRICE").stripTrailingZeros().toPlainString()));
         qo.setPriceDate(resultSet.getString("PRICE_DATE"));
         qo.setCreatedTime(resultSet.getString("CREATED_TIME"));
         qo.setUpdatedTime(resultSet.getString("UPDATED_TIME"));

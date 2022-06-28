@@ -12,10 +12,10 @@
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
         </filter>
-        <File>${LOG_PATH}/smoc-auth-info.log</File>
+        <File>${LOG_PATH}/smoc-scheduler-info.log</File>
         <rollingPolicy
                 class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH}/smoc-auth-info-%d{yyyyMMdd}.log.%i
+            <fileNamePattern>${LOG_PATH}/smoc-scheduler-info-%d{yyyyMMdd}.log.%i
             </fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy
                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
@@ -36,10 +36,10 @@
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
         </filter>
-        <File>${LOG_PATH}/smoc-auth-error.log</File>
+        <File>${LOG_PATH}/smoc-scheduler-error.log</File>
         <rollingPolicy
                 class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH}/smoc-auth-error-%d{yyyyMMdd}.log.%i
+            <fileNamePattern>${LOG_PATH}/smoc-scheduler-error-%d{yyyyMMdd}.log.%i
             </fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy
                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
@@ -60,10 +60,10 @@
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
         </filter>
-        <File>${LOG_PATH}/smoc-auth-debug.log</File>
+        <File>${LOG_PATH}/smoc-scheduler-debug.log</File>
         <rollingPolicy
                 class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>${LOG_PATH}/smoc-auth-debug.%d{yyyy-MM-dd}.log
+            <FileNamePattern>${LOG_PATH}/smoc-scheduler-debug.%d{yyyy-MM-dd}.log
             </FileNamePattern>
         </rollingPolicy>
         <layout>
@@ -81,11 +81,11 @@
             <onMismatch>DENY</onMismatch>
         </filter>
         <File>
-            ${LOG_PATH}/smoc-auth-warn.log
+            ${LOG_PATH}/smoc-scheduler-warn.log
         </File>
         <rollingPolicy
                 class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>${LOG_PATH}/smoc-auth-warn.%d{yyyy-MM-dd}.log
+            <FileNamePattern>${LOG_PATH}/smoc-scheduler-warn.%d{yyyy-MM-dd}.log
             </FileNamePattern>
         </rollingPolicy>
         <layout>

@@ -36,4 +36,13 @@ public class MessageDetailInfoService {
             return ResponseDataUtil.buildError(e.getMessage());
         }
     }
+
+    public ResponseData<PageList<MessageDetailInfoValidator>> tableStorePage(PageParams<MessageDetailInfoValidator> params) {
+        try {
+            ResponseData<PageList<MessageDetailInfoValidator>> page = messageDetailInfoFeignClient.tableStorePage(params);
+            return page;
+        } catch (Exception e) {
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
 }

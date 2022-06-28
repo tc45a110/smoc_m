@@ -131,6 +131,11 @@ com:
         message:
           mobile-file-root-path: /alidata/smoc/message/mobile  #短信手机号文件根目录
           mobile-count-limit: 1000 #该批次手机号总量
+        tablestore:
+          end-point: https://message-log.cn-beijing.ots.aliyuncs.com #访问地址
+          access-key-id: LTAI5tA6ZbwmPhL578Tq4w7P #AccessKey ID
+          access-key-secret: R1QXpJAvrUW8rNf9Zn3zLvc81TquV9 #AccessKey Secret
+          instance-name: message-log #访问实例
 
 logging:
   config: classpath:logback-spring.xml
