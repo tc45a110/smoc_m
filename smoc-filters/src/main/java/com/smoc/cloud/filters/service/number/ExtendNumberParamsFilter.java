@@ -39,6 +39,14 @@ public class ExtendNumberParamsFilter {
             //log.info("[号码_黑名单_扩展参数]{}:{}", model.getAccount(), blackPatten.toString());
             Boolean validator = filtersService.validator(blackPatten.toString(), phone);
             if (validator) {
+                //业务账号白名单
+                Boolean isExistAccountWhiteList = filtersService.isSetMember(RedisConstant.FILTERS_CONFIG_ACCOUNT_NUMBER_WHITE + account, phone);
+                if (isExistAccountWhiteList) {
+                    result.put("result", "false");
+                    return result;
+                }
+            }
+            if (validator) {
                 result.put("result", "true");
                 result.put("code", FilterResponseCode.NUMBER_BLACK_FILTER.getCode());
                 result.put("message", FilterResponseCode.NUMBER_BLACK_FILTER.getMessage());

@@ -58,6 +58,13 @@ public class SystemPhoneFilter {
             //log.info("[号码_isExistBlackList]:{}", isExistBlackList);
             //系统黑名单
             if (isExistBlackList) {
+
+                //业务账号白名单
+                Boolean isExistAccountWhiteList = filtersService.isSetMember(RedisConstant.FILTERS_CONFIG_ACCOUNT_NUMBER_WHITE + account, phone);
+                if (isExistAccountWhiteList) {
+                    result.put("result", "false");
+                    return result;
+                }
                 //业务账号配置洗白操作
                 Boolean accountWhite = this.accountWhiteRegular(filtersService, account, phone);
                 if (accountWhite) {
@@ -89,6 +96,14 @@ public class SystemPhoneFilter {
             Boolean isExistBlackList = redisModuleBloomFilter.isExist(RedisFilterConstant.REDIS_BLOOM_FILTERS_SYSTEM_BLACK_COMPLAINT, phone);//FilterInitialize.numberSystemBlackFilter.isContain(phone,1);
             //系统黑名单
             if (isExistBlackList) {
+
+                //业务账号白名单
+                Boolean isExistAccountWhiteList = filtersService.isSetMember(RedisConstant.FILTERS_CONFIG_ACCOUNT_NUMBER_WHITE + account, phone);
+                if (isExistAccountWhiteList) {
+                    result.put("result", "false");
+                    return result;
+                }
+
                 //业务账号配置洗白操作
                 Boolean accountWhite = this.accountWhiteRegular(filtersService, account, phone);
                 if (accountWhite) {
@@ -120,6 +135,13 @@ public class SystemPhoneFilter {
             Boolean isExistBlackList = redisModuleBloomFilter.isExist(RedisFilterConstant.REDIS_BLOOM_FILTERS_SYSTEM_BLACK_COMPLAINT, phone);//FilterInitialize.numberSystemBlackFilter.isContain(phone,1);
             //系统黑名单
             if (isExistBlackList) {
+
+                //业务账号白名单
+                Boolean isExistAccountWhiteList = filtersService.isSetMember(RedisConstant.FILTERS_CONFIG_ACCOUNT_NUMBER_WHITE + account, phone);
+                if (isExistAccountWhiteList) {
+                    result.put("result", "false");
+                    return result;
+                }
                 //业务账号配置洗白操作
                 Boolean accountWhite = this.accountWhiteRegular(filtersService, account, phone);
                 if (accountWhite) {
