@@ -23,21 +23,21 @@ public class SendMessageByTemplate {
             //signature-nonce 为17位数字，并且每次请求signature-nonce不能重复
             //header.put("signature-nonce", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(10));
             header.put("signature-nonce", "202206221043192902026871940");
-            header.put("account", "WHZ119");
+            header.put("account", "XYK106");
 
             //请求的数据
             Map<String, Object> requestDataMap = new HashMap<>();
             //订单号，成功后的订单不能重复
             requestDataMap.put("orderNo", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(10));
             //业务账号；参见给的账号EXCEL文件
-            requestDataMap.put("account", "WHZ119");
+            requestDataMap.put("account", "XYK106");
             //模板ID
-            requestDataMap.put("templateId", "TEMP100609");
+            requestDataMap.put("templateId", "TEMP100624");
 
             //模板短信内容
             List<String> list = new ArrayList<>();
-            for (int i = 0; i < 1000; i++) {
-                String item = "13" + Utils.getRandom(9) + "|" + Utils.getRandom(4);
+            for (int i = 0; i < 500; i++) {
+                String item = "13" + Utils.getRandom(9);
                 list.add(item);
             }
             requestDataMap.put("content", list);
@@ -63,7 +63,7 @@ public class SendMessageByTemplate {
             //加密后的身份证号
             signData.append(requestDataMap.get("timestamp"));
             //签名 MD5_HMAC 签名KEY,参见给的账号EXCEL文件
-            String sign = HMACUtil.md5_HMAC_sign(signData.toString(), "F7748H?cI");
+            String sign = HMACUtil.md5_HMAC_sign(signData.toString(), "E*Z8zK2le");
             //System.out.println("[接口请求][签名数据]数据:" + signData);
             //System.out.println("[接口请求][签名]数据:" + sign);
 

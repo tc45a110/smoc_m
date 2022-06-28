@@ -86,5 +86,4 @@ public class IndustryBlackListFilter {
 
         return false;
     }
-
 }
