@@ -135,11 +135,9 @@ public class FinanceWorkerManager{
 				consumeFlowMap.put("CONSUME_NUM", (Long)consumeFlowMap.get("CONSUME_NUM") + Long.parseLong(messageNumber));
 				consumeFlowMap.put("CONSUME_SUM", (Double)consumeFlowMap.get("CONSUME_SUM") +Double.parseDouble(messageAmount));
 			}
-			
-			AccountFinanceDAO.deductBalance(accountConsumeFlowMap, accountFinanceMap, consumeType, DateUtil.getCurDateTime(DateUtil.DATE_FORMAT_COMPACT_DAY));
-			
 		}
 		
+		AccountFinanceDAO.deductBalance(accountConsumeFlowMap, accountFinanceMap, consumeType, DateUtil.getCurDateTime(DateUtil.DATE_FORMAT_COMPACT_DAY));
 	}
 	
 	/**

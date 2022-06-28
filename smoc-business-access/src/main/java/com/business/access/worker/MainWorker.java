@@ -28,7 +28,7 @@ public class MainWorker extends SuperQueueWorker<BusinessRouteValue>{
 		long startTime = System.currentTimeMillis();
 		int messageLoadMaxNumber = BusinessDataManager.getInstance().getMessageLoadMaxNumber();
 		
-		if(BusinessWorkerManager.getInstance().getSize() < messageLoadMaxNumber * 2){
+		if(BusinessWorkerManager.getInstance().getSize() < messageLoadMaxNumber * 10){
 			List<BusinessRouteValue> businessRouteValueList = loadRouteMessageMtInfo(messageLoadMaxNumber);
 			if(businessRouteValueList != null && businessRouteValueList.size() > 0 ){
 				long interval = System.currentTimeMillis() - startTime;
@@ -51,13 +51,14 @@ public class MainWorker extends SuperQueueWorker<BusinessRouteValue>{
 				}
 				interval = System.currentTimeMillis() - startTime;
 				logger.info("本次分发数据条数{},耗时{}毫秒",businessRouteValueList.size(),interval);
-				return;
 			}
 		}
 		
-		//当没有数据时，需要暂停一会
-		long interval = BusinessDataManager.getInstance().getMessageLoadIntervalTime();
-		Thread.sleep(interval);
+		//每次加载都需按照时间暂停，避免缓存数量过大，造成内存溢出	
+		long interval = BusinessDataManager.getInstance().getMessageLoadIntervalTime() - (System.currentTimeMillis() - startTime);
+		if(interval > 0 ){
+			Thread.sleep(interval);
+		}
 		
 	}
 	
@@ -77,6 +78,7 @@ public class MainWorker extends SuperQueueWorker<BusinessRouteValue>{
 		sql.append(messageLoadMaxNumber);
 		List<BusinessRouteValue> businessRouteValueList = new ArrayList<BusinessRouteValue>();
 		BusinessRouteValue businessRouteValue = null;
+		ArrayList<Long> ids = new ArrayList<Long>();
 		long maxID = 0L;
 		try {
 			conn = LavenderDBSingleton.getInstance().getConnection();
@@ -86,6 +88,7 @@ public class MainWorker extends SuperQueueWorker<BusinessRouteValue>{
 			while (rs.next()) {
 				businessRouteValue = new BusinessRouteValue();
 				maxID = rs.getLong("ID");
+				ids.add(maxID);
 				String accountID = StringUtils.defaultString(rs.getString("ACCOUNT_ID"));
 				String phoneNumber = StringUtils.defaultString(rs.getString("PHONE_NUMBER"));
 				String accountSubmitTime = StringUtils.defaultString(rs.getString("SUBMIT_TIME"));
@@ -131,14 +134,19 @@ public class MainWorker extends SuperQueueWorker<BusinessRouteValue>{
 				businessRouteValueList.add(businessRouteValue);
 			}
 			
-			if(maxID > 0) {
+			if(ids.size() > 0) {
 				sql.setLength(0);
-				sql.append("DELETE FROM smoc_route.route_message_mt_info WHERE ID <= ?");
+				sql.append("DELETE FROM smoc_route.route_message_mt_info WHERE ID in (");
+				for(int i = 0;i < ids.size();i++) {
+					sql.append(ids.get(i));
+					if(i != (ids.size() -1)) {
+						sql.append(",");
+					}
+				}
+				sql.append(")");
 				pstmt2 = conn.prepareStatement(sql.toString());
-				pstmt2.setLong(1, maxID);
-				int count = pstmt2.executeUpdate();
-				
-				logger.info("删除ROUTE_MESSAGE_MT_INFO ID<={}，共{}条",maxID,count);
+				pstmt2.execute();
+				logger.info("删除ROUTE_MESSAGE_MT_INFO 共{}条",ids.size());
 			}
 			conn.commit();
 		} catch (Exception e) {

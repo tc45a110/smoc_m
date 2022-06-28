@@ -43,13 +43,6 @@ public class InsideFilterWorker extends SuperCacheWorker{
 		int socketTimeout = ResourceManager.getInstance().getIntValue("inside.filter.request.socket.timeout");
 		
 		String responseBody = HttpClientUtil.doRequest(requestURL, requestBody, connectTimeout, socketTimeout);
-
-		JSONObject json = JSON.parseObject(requestBody);
-		json.put("provinceName", businessRouteValue.getAreaName());
-
-		logger.info("过滤服务请求报文,url={},body={}",requestURL,json.toString());
-
-		logger.info("过滤服务响应报文,url={},body={}",requestURL,responseBody);
 		
 		ResponseValue responseValue = parseResponseBody(responseBody);
 		
@@ -144,7 +137,7 @@ public class InsideFilterWorker extends SuperCacheWorker{
 					responseValue = new ResponseValue(responseCode, null, message);
 				} else if (InsideStatusCodeConstant.StatusCode.AUDIT.name().equals(responseCode)){
 					//进审
-					responseValue = new ResponseValue(responseCode, code, message);
+					responseValue = new ResponseValue(responseCode, null, message);
 				}else {
 					//未通过
 					responseValue = new ResponseValue(responseCode, code, message);
