@@ -4,12 +4,14 @@
  */
 package com.business.access.server;
 
+
 import com.base.common.constant.FixedConstant;
 import com.base.common.log.AccessBusinessLogManager;
 import com.base.common.manager.AccountChannelManager;
 import com.base.common.manager.ExtendParameterManager;
 import com.base.common.manager.ResourceManager;
 import com.business.access.manager.BusinessWorkerManager;
+import com.business.access.manager.ContentRouteManager;
 import com.business.access.manager.EnterpriseFlagManager;
 import com.business.access.manager.ExternalBlacklistFilterWorkerManager;
 import com.business.access.manager.InsideFilterWorkerManager;
@@ -57,6 +59,8 @@ public class AccessServer {
 		ReportPullWorkerManager.getInstance();
 		//账号通道对应关系服务
 		AccountChannelManager.getInstance();
+		//内容路由加载
+		ContentRouteManager.getInstance();
 		//业务线程启动
 		BusinessWorkerManager.getInstance();
 		

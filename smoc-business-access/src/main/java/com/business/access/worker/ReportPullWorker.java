@@ -4,6 +4,8 @@
  */
 package com.business.access.worker;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.base.common.cache.CacheBaseService;
 import com.base.common.constant.FixedConstant;
 import com.base.common.log.AccessBusinessLogManager;
@@ -27,8 +29,14 @@ public class ReportPullWorker extends SuperCacheWorker{
 	protected void doRun() throws Exception {
 		BusinessRouteValue businessRouteValue = CacheBaseService.getBusinessReportFromMiddlewareCache();
 		if(businessRouteValue != null){
-			doLog(businessRouteValue);
+			
+			String statusCode = BusinessDataManager.getInstance().getAccountStatusCodeConversion(businessRouteValue.getAccountID(), businessRouteValue.getStatusCode());
+			//当账号存在状态码转换时，需设置转换后的值
+			if(StringUtils.isNotEmpty(statusCode)){
+				businessRouteValue.setStatusCode(statusCode);
+			}
 			FinanceWorkerManager.getInstance().process(businessRouteValue);
+			doLog(businessRouteValue);
 			if(BusinessDataManager.getInstance().getReportStoreToRedisProtocol().contains(businessRouteValue.getProtocol())){
 				CacheBaseService.saveReportToMiddlewareCache(businessRouteValue.getAccountID(), businessRouteValue);
 				logger.info("保存回执{}{}",FixedConstant.SPLICER,businessRouteValue.toString());

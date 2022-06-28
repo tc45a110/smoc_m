@@ -5,6 +5,7 @@
 package com.business.access.manager;
 
 import com.base.common.constant.FixedConstant;
+import com.base.common.manager.BusinessDataManager;
 import com.base.common.vo.BusinessRouteValue;
 import com.base.common.worker.SuperQueueWorker;
 import com.business.access.worker.InsideFilterWorker;
@@ -30,8 +31,24 @@ public class InsideFilterWorkerManager extends SuperQueueWorker<BusinessRouteVal
 		return manager;
 	}
 	
+	//判断过滤缓存队列数量，避免造成内存溢出	
 	public void process(BusinessRouteValue businessRouteValue){
-		add(businessRouteValue);
+		while(true){
+			int threshold = BusinessDataManager.getInstance().getMessageLoadMaxNumber()*5;
+			int size = size() ;
+			if(size > threshold){
+				logger.warn("内部过滤缓存队列数量{},超过阈值{}",size,threshold);
+				try {
+					sleep(5);
+				} catch (Exception e) {
+					logger.error(e.getMessage(),e);
+				}
+				continue;
+			}
+			add(businessRouteValue);
+			break;
+		}
+
 	}
 	
 	public void doRun() throws Exception {
