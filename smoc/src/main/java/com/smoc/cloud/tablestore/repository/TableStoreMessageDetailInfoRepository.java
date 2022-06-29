@@ -214,9 +214,9 @@ public class TableStoreMessageDetailInfoRepository extends TableStorePageReposit
         //手机号
         sqlBuffer.append(" and phone_number = '"+reportNumber.trim()+"'");
         //运营商
-        sqlBuffer.append(" and segment_carrier = '"+carrier.trim()+"'");
+        //sqlBuffer.append(" and segment_carrier = '"+carrier.trim()+"'");
         //运营商
-        sqlBuffer.append(" and message_content = '"+reportContent.trim()+"'");
+       // sqlBuffer.append(" and message_content = '"+reportContent.trim()+"'");
         sqlBuffer.append(" limit 0,1");
 
         //初始化
