@@ -1,0 +1,11 @@
+server: #服务端口
+  port: 18090
+  servlet:
+    context-path: /smoc-scheduler-filters
+spring:
+  application: #服务应用名称
+    name: smoc-scheduler-filters
+  profiles: #指定启动模式
+    active: dev
+
+

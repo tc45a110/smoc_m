@@ -6,6 +6,7 @@ import com.smoc.cloud.common.http.server.message.request.ReportStatusRequestPara
 import com.smoc.cloud.common.http.server.message.response.MobileOriginalResponseParams;
 import com.smoc.cloud.common.http.server.message.response.ReportResponseParams;
 import com.smoc.cloud.common.page.PageList;
+import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.http.entity.MessageFormat;
 import com.smoc.cloud.http.entity.MessageHttpsTaskInfo;
 import com.smoc.cloud.http.rowmapper.MobileOriginalResponseParamsRowMapper;
@@ -16,10 +17,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -207,8 +208,8 @@ public class MessageRepository extends BasePageRepository {
      * @param phoneCount   发送手机号数量
      */
     public void saveMessageBatch(final List<MessageFormat> messages, Integer messageCount, Integer phoneCount) {
-        final String sql = "insert into smoc_route.route_message_mt_info(ID,ACCOUNT_ID,PHONE_NUMBER,SUBMIT_TIME,MESSAGE_CONTENT,MESSAGE_FORMAT,MESSAGE_ID,TEMPLATE_ID,PROTOCOL,ACCOUNT_SRC_ID,ACCOUNT_BUSINESS_CODE,PHONE_NUMBER_NUMBER,MESSAGE_CONTENT_NUMBER,REPORT_FLAG,OPTION_PARAM,CREATED_TIME) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,now()) ";
-
+        final String sql = "insert into smoc_route.route_message_mt_info1(ID,ACCOUNT_ID,PHONE_NUMBER,SUBMIT_TIME,MESSAGE_CONTENT,MESSAGE_FORMAT,MESSAGE_ID,TEMPLATE_ID,PROTOCOL,ACCOUNT_SRC_ID,ACCOUNT_BUSINESS_CODE,PHONE_NUMBER_NUMBER,MESSAGE_CONTENT_NUMBER,REPORT_FLAG,OPTION_PARAM,CREATED_TIME) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,now()) ";
+        log.info("[短信过滤 Listener][开始]数据：{}", DateTimeUtils.getDateFormat(new Date(), "yyyy-MM-dd HH mm ss SSS"));
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             public int getBatchSize() {
                 return messages.size();
@@ -234,6 +235,7 @@ public class MessageRepository extends BasePageRepository {
             }
 
         });
+        log.info("[短信过滤 Listener][结束]数据：{}", DateTimeUtils.getDateFormat(new Date(), "yyyy-MM-dd HH mm ss SSS"));
 
     }
 
