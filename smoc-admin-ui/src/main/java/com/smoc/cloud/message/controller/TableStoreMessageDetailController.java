@@ -5,6 +5,7 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.message.MessageDetailInfoValidator;
+import com.smoc.cloud.common.smoc.message.TableStoreMessageDetailInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.message.service.MessageDetailInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ import java.util.Date;
  **/
 @Controller
 @RequestMapping("/message/detail")
-public class MessageDetailController {
+public class TableStoreMessageDetailController {
 
     @Autowired
     private MessageDetailInfoService messageDetailInfoService;
@@ -33,23 +34,23 @@ public class MessageDetailController {
      *
      * @return
      */
-    @RequestMapping(value = "/list1", method = RequestMethod.GET)
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ModelAndView list(HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("message/message_detail_list");
+        ModelAndView view = new ModelAndView("message/tablestore_message_detail_list");
 
         //初始化数据
-        PageParams<MessageDetailInfoValidator> params = new PageParams<>();
+        PageParams<TableStoreMessageDetailInfoValidator> params = new PageParams<>();
         params.setPageSize(10);
         params.setCurrentPage(1);
-        MessageDetailInfoValidator messageDetailInfoValidator = new MessageDetailInfoValidator();
+        TableStoreMessageDetailInfoValidator messageDetailInfoValidator = new TableStoreMessageDetailInfoValidator();
         Date startDate = DateTimeUtils.getFirstMonth(1);
         messageDetailInfoValidator.setStartDate(DateTimeUtils.getDateFormat(startDate));
         messageDetailInfoValidator.setEndDate(DateTimeUtils.getDateFormat(new Date()));
         params.setParams(messageDetailInfoValidator);
 
         //查询
-        ResponseData<PageList<MessageDetailInfoValidator>> data = messageDetailInfoService.page(params);
+        ResponseData<PageList<TableStoreMessageDetailInfoValidator>> data = messageDetailInfoService.tableStorePage(params);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;
@@ -67,9 +68,9 @@ public class MessageDetailController {
      *
      * @return
      */
-    @RequestMapping(value = "/page1", method = RequestMethod.POST)
-    public ModelAndView page(@ModelAttribute MessageDetailInfoValidator messageDetailInfoValidator, PageParams pageParams) {
-        ModelAndView view = new ModelAndView("message/message_detail_list");
+    @RequestMapping(value = "/page", method = RequestMethod.POST)
+    public ModelAndView page(@ModelAttribute TableStoreMessageDetailInfoValidator messageDetailInfoValidator, PageParams pageParams) {
+        ModelAndView view = new ModelAndView("message/tablestore_message_detail_list");
 
         //日期格式
         if (!StringUtils.isEmpty(messageDetailInfoValidator.getStartDate())) {
@@ -81,7 +82,7 @@ public class MessageDetailController {
         //分页查询
         pageParams.setParams(messageDetailInfoValidator);
 
-        ResponseData<PageList<MessageDetailInfoValidator>> data = messageDetailInfoService.page(pageParams);
+        ResponseData<PageList<TableStoreMessageDetailInfoValidator>> data = messageDetailInfoService.tableStorePage(pageParams);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;

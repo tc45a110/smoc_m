@@ -8,6 +8,7 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.smoc.message.MessageDetailInfoValidator;
 import com.smoc.cloud.common.smoc.message.model.MessageTaskDetail;
+import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.message.rowmapper.MessageDetailInfoRowMapper;
 import com.smoc.cloud.message.rowmapper.MessageMessageRecordRowMapper;
 import com.smoc.cloud.message.rowmapper.MessageTaskDetailRowMapper;
@@ -19,6 +20,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -104,101 +106,6 @@ public class MessageDetailInfoRepositoryImpl extends BasePageRepository {
         //log.info("[SQL1]:{}",sqlBuffer);
         PageList<MessageDetailInfoValidator> pageList = this.queryByPageForMySQL(sqlBuffer.toString(), params, pageParams.getCurrentPage(), pageParams.getPageSize(), new MessageDetailInfoRowMapper());
         pageList.getPageParams().setParams(qo);
-        return pageList;
-
-    }
-
-    public PageList<MessageDetailInfoValidator> tableStorePage(PageParams<MessageDetailInfoValidator> pageParams) {
-
-        SyncClient client = tableStoreUtils.client();
-
-        //查询sql
-        StringBuilder sqlBuffer = new StringBuilder("select ");
-        sqlBuffer.append(" phone_number,");
-        sqlBuffer.append(" business_message_flag,");
-        sqlBuffer.append(" user_submit_time,");
-        sqlBuffer.append(" account_id");
-        sqlBuffer.append(" from access_log where 1=1 ");
-
-        //查询条件
-        MessageDetailInfoValidator qo = pageParams.getParams();
-
-        //手机号
-        if (!StringUtils.isEmpty(qo.getPhoneNumber())) {
-            sqlBuffer.append(" and phone_number like '%"+qo.getPhoneNumber().trim()+"%'");
-        }
-
-        sqlBuffer.append(" limit "+(pageParams.getCurrentPage()-1)+","+pageParams.getPageSize()+"");
-
-        // 创建SQL请求。
-        SQLQueryRequest request = new SQLQueryRequest(sqlBuffer.toString());
-
-        // 获取SQL的响应结果。
-        SQLQueryResponse response = client.sqlQuery(request);
-
-        // 获取SQL返回值的Schema。
-        SQLTableMeta tableMeta = response.getSQLResultSet().getSQLTableMeta();
-        System.out.println("response table meta: " + tableMeta.getSchema());
-
-        // 获取SQL的返回结果。
-        SQLResultSet resultSet = response.getSQLResultSet();
-        List<MessageDetailInfoValidator> list = new ArrayList<>();
-        while (resultSet.hasNext()) {
-            SQLRow row = resultSet.next();
-            MessageDetailInfoValidator messageDetailInfoValidator = new MessageDetailInfoValidator();
-            messageDetailInfoValidator.setPhoneNumber(row.getString("phone_number"));
-            messageDetailInfoValidator.setBusinessAccount(row.getString("account_id"));
-            messageDetailInfoValidator.setId(row.getString("business_message_flag"));
-            list.add(messageDetailInfoValidator);
-        }
-
-        //总页数
-        int pages = 0;
-        //查询总行数
-        int rows = list.size();
-        //开始行
-        int startRow = 0;
-        //结束行
-        int endRow = 0;
-        //每页数量
-        int pageSize = pageParams.getPageSize();
-        //当前页
-        int currentPage = pageParams.getCurrentPage();
-        //判断页数,如果是页大小的整数倍就为rows/pageRow如果不是整数倍就为rows/pageRow+1
-        if (rows % pageSize == 0) {
-            pages = rows / pageSize;
-        } else {
-            pages = rows / pageSize + 1;
-        }
-
-        if (currentPage > pages) {
-            currentPage = pages;
-        }
-
-        //查询第page页的数据sql语句
-        if (currentPage <= 1) {
-            endRow = pageSize < rows ? pageSize : rows;
-        } else {
-            startRow = ((currentPage - 1) * pageSize);
-            endRow = (((currentPage - 1) * pageSize) + pageSize) < rows ? (((currentPage - 1) * pageSize) + pageSize) : rows;
-        }
-
-        //返回分页格式数据
-        PageList<MessageDetailInfoValidator> pageList = new PageList<>();
-        //设置当前页
-        pageList.getPageParams().setCurrentPage(currentPage);
-        //设置总页数
-        pageList.getPageParams().setPages(pages);
-        //设置每页显示条数
-        pageList.getPageParams().setPageSize(pageSize);
-        //设置总记录数
-        pageList.getPageParams().setTotalRows(rows);
-        //设置开始行
-        pageList.getPageParams().setStartRow(startRow + 1);
-        //设置结束行
-        pageList.getPageParams().setEndRow(endRow);
-        //设置当前页数据
-        pageList.setList(list);
         return pageList;
 
     }

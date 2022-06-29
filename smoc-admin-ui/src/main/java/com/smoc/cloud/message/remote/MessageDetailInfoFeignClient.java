@@ -5,6 +5,7 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.message.MessageDetailInfoValidator;
+import com.smoc.cloud.common.smoc.message.TableStoreMessageDetailInfoValidator;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,5 +27,5 @@ public interface MessageDetailInfoFeignClient {
     ResponseData<PageList<MessageDetailInfoValidator>> page(@RequestBody PageParams<MessageDetailInfoValidator> pageParams) throws Exception;
 
     @RequestMapping(value = "/message/detail/tableStorePage", method = RequestMethod.POST)
-    ResponseData<PageList<MessageDetailInfoValidator>> tableStorePage(@RequestBody PageParams<MessageDetailInfoValidator> params);
+    ResponseData<PageList<TableStoreMessageDetailInfoValidator>> tableStorePage(@RequestBody PageParams<TableStoreMessageDetailInfoValidator> params);
 }

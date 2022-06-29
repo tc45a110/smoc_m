@@ -9,6 +9,7 @@ import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.message.MessageChannelComplaintValidator;
 import com.smoc.cloud.common.smoc.message.MessageComplaintInfoValidator;
 import com.smoc.cloud.common.smoc.message.MessageDetailInfoValidator;
+import com.smoc.cloud.common.smoc.message.TableStoreMessageDetailInfoValidator;
 import com.smoc.cloud.common.smoc.message.model.ComplaintExcelModel;
 import com.smoc.cloud.common.smoc.utils.ChannelUtils;
 import com.smoc.cloud.common.smoc.utils.SysFilterUtil;
@@ -24,6 +25,7 @@ import com.smoc.cloud.filter.repository.GroupRepository;
 import com.smoc.cloud.filter.service.BlackService;
 import com.smoc.cloud.message.entity.MessageDetailInfo;
 import com.smoc.cloud.message.repository.MessageDetailInfoRepository;
+import com.smoc.cloud.tablestore.repository.TableStoreMessageDetailInfoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -63,6 +65,9 @@ public class ComplaintService {
 
     @Resource
     private BlackService blackService;
+
+    @Resource
+    private TableStoreMessageDetailInfoRepository tableStoreMessageDetailInfoRepository;
 
     /**
      * 查询列表
@@ -160,14 +165,12 @@ public class ComplaintService {
         if("day".equals(messageComplaintInfoValidator.getComplaintSource())){
             for(ComplaintExcelModel info:list){
                 //查询日志表
-                List<MessageDetailInfo> messageList =  messageDetailInfoRepository.findByCarrierAndPhoneNumberAndMessageContent(messageComplaintInfoValidator.getCarrier(),info.getReportNumber(),info.getReportContent());
-                if(!StringUtils.isEmpty(messageList) && messageList.size()>0){
-                    MessageDetailInfo message =  messageList.get(0);
+                TableStoreMessageDetailInfoValidator message =  tableStoreMessageDetailInfoRepository.findByCarrierAndPhoneNumberAndMessageContent(messageComplaintInfoValidator.getCarrier(),info.getReportNumber(),info.getReportContent());
+                if(!StringUtils.isEmpty(message)){
                     info.setBusinessAccount(message.getBusinessAccount());
-                    info.setSendDate(message.getSendTime());
+                    info.setSendDate(message.getUserSubmitTime());
                     info.setChannelId(message.getChannelId());
-                    info.setNumberCode(message.getNumberCode());
-
+                    info.setNumberCode(message.getChannelSrcid());
 
                     //查询30天内下发频次
                     MessageDetailInfoValidator validator = new MessageDetailInfoValidator();
@@ -175,7 +178,7 @@ public class ComplaintService {
                     Date startDate = DateTimeUtils.dateAddDays(new Date(),-30);
                     validator.setStartDate(DateTimeUtils.getDateFormat(startDate));
                     validator.setEndDate(DateTimeUtils.getDateFormat(new Date()));
-                    int number = messageDetailInfoRepository.statisticMessageNumber(validator);
+                    int number = tableStoreMessageDetailInfoRepository.statisticMessageNumberByMobile(validator);
                     info.setSendRate(""+number);
                 }
                 //查询

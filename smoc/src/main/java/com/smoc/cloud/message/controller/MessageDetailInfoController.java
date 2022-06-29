@@ -4,6 +4,7 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.message.MessageDetailInfoValidator;
+import com.smoc.cloud.common.smoc.message.TableStoreMessageDetailInfoValidator;
 import com.smoc.cloud.common.smoc.message.model.MessageTaskDetail;
 import com.smoc.cloud.common.smoc.message.model.StatisticMessageSendData;
 import com.smoc.cloud.message.service.MessageDetailInfoService;
@@ -49,7 +50,7 @@ public class MessageDetailInfoController {
      * @return
      */
     @RequestMapping(value = "/tableStorePage", method = RequestMethod.POST)
-    public ResponseData<PageList<MessageDetailInfoValidator>> tableStorePage(@RequestBody PageParams<MessageDetailInfoValidator> pageParams) {
+    public ResponseData<PageList<TableStoreMessageDetailInfoValidator>> tableStorePage(@RequestBody PageParams<TableStoreMessageDetailInfoValidator> pageParams) {
 
         return messageDetailInfoService.tableStorePage(pageParams);
     }

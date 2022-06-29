@@ -45,7 +45,7 @@ public interface ChannelRepairRepository extends CrudRepository<ConfigChannelRep
     @Query(value = "update config_channel_repair_rule set REPAIR_STATUS = 0 where ID =:id ",nativeQuery = true)
     void updateStatusById(@Param("id") String id);
 
-    List<ConfigChannelRepairRule> findByBusinessIdAndChannelRepairIdAndBusinessTypeAndRepairStatus(String businessId, String channelRepairId, String businessType, String repairStatus);
+    List<ConfigChannelRepairRule> findByBusinessIdAndChannelRepairIdAndBusinessTypeAndCarrierAndRepairStatus(String businessId, String channelRepairId, String businessType, String carrier, String repairStatus);
 
 
 }

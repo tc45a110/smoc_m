@@ -46,6 +46,7 @@ public class ChannelRepairService {
 
     /**
      * 查询列表
+     *
      * @param pageParams
      * @return
      */
@@ -55,6 +56,7 @@ public class ChannelRepairService {
 
     /**
      * 查询账号失败补发列表
+     *
      * @param pageParams
      * @return
      */
@@ -64,6 +66,7 @@ public class ChannelRepairService {
 
     /**
      * 根据运营商、业务类型、信息分类查询符合要求的备用通道
+     *
      * @param configChannelRepairValidator
      * @return
      */
@@ -74,6 +77,7 @@ public class ChannelRepairService {
 
     /**
      * 根据id获取信息
+     *
      * @param id
      * @return
      */
@@ -101,7 +105,7 @@ public class ChannelRepairService {
         ConfigChannelRepairRule entity = new ConfigChannelRepairRule();
         BeanUtils.copyProperties(configChannelRepairRuleValidator, entity);
 
-        List<ConfigChannelRepairRule> data = channelRepairRepository.findByBusinessIdAndChannelRepairIdAndBusinessTypeAndRepairStatus(configChannelRepairRuleValidator.getBusinessId(),configChannelRepairRuleValidator.getChannelRepairId(),configChannelRepairRuleValidator.getBusinessType(),"1");
+        List<ConfigChannelRepairRule> data = channelRepairRepository.findByBusinessIdAndChannelRepairIdAndBusinessTypeAndCarrierAndRepairStatus(configChannelRepairRuleValidator.getBusinessId(), configChannelRepairRuleValidator.getChannelRepairId(), configChannelRepairRuleValidator.getBusinessType(), configChannelRepairRuleValidator.getCarrier(), "1");
 
         //add查重
         if (data != null && data.iterator().hasNext() && "add".equals(op)) {
@@ -126,7 +130,7 @@ public class ChannelRepairService {
         entity.setCreatedTime(new Date());
 
         //记录日志
-        log.info("[失败补发通道管理][补发配置][{}]数据:{}",op, JSON.toJSONString(configChannelRepairRuleValidator));
+        log.info("[失败补发通道管理][补发配置][{}]数据:{}", op, JSON.toJSONString(configChannelRepairRuleValidator));
 
         channelRepairRepository.saveAndFlush(entity);
         return ResponseDataUtil.buildSuccess();
@@ -134,6 +138,7 @@ public class ChannelRepairService {
 
     /**
      * 根据ID 删除
+     *
      * @param id
      * @return
      */
@@ -141,7 +146,7 @@ public class ChannelRepairService {
     public ResponseData deleteById(String id) {
         ConfigChannelRepairRule data = channelRepairRepository.findById(id).get();
         //记录日志
-        log.info("[失败补发通道管理][delete]数据:{}",JSON.toJSONString(data));
+        log.info("[失败补发通道管理][delete]数据:{}", JSON.toJSONString(data));
         channelRepairRepository.updateStatusById(id);
 
         return ResponseDataUtil.buildSuccess();
@@ -149,15 +154,16 @@ public class ChannelRepairService {
 
     /**
      * 查询已经存在的备用通道
+     *
      * @param configChannelRepairRuleValidator
      * @return
      */
     public ResponseData<List<ConfigChannelRepairRuleValidator>> findChannelRepairByChannelId(ConfigChannelRepairRuleValidator configChannelRepairRuleValidator) {
 
-        if("ACCOUNT".equals(configChannelRepairRuleValidator.getBusinessType())){
+        if ("ACCOUNT".equals(configChannelRepairRuleValidator.getBusinessType())) {
             configChannelRepairRuleValidator.setChannelId(configChannelRepairRuleValidator.getBusinessId());
         }
-        List<ConfigChannelRepairRuleValidator> list = channelRepairRepository.findByChannelIdAndBusinessType(configChannelRepairRuleValidator.getChannelId(),configChannelRepairRuleValidator.getBusinessType());
+        List<ConfigChannelRepairRuleValidator> list = channelRepairRepository.findByChannelIdAndBusinessType(configChannelRepairRuleValidator.getChannelId(), configChannelRepairRuleValidator.getBusinessType());
         return ResponseDataUtil.buildSuccess(list);
     }
 

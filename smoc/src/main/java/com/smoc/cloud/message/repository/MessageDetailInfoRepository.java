@@ -65,5 +65,4 @@ public interface MessageDetailInfoRepository extends JpaRepository<MessageDetail
      */
     PageList<MessageDetailInfoValidator> sendMessageList(PageParams<MessageDetailInfoValidator> pageParams);
 
-    PageList<MessageDetailInfoValidator> tableStorePage(PageParams<MessageDetailInfoValidator> pageParams);
 }

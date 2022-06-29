@@ -5,14 +5,14 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.message.MessageDetailInfoValidator;
+import com.smoc.cloud.common.smoc.message.TableStoreMessageDetailInfoValidator;
 import com.smoc.cloud.common.smoc.message.model.MessageTaskDetail;
-import com.smoc.cloud.common.smoc.message.model.StatisticMessageSendData;
 import com.smoc.cloud.message.repository.MessageDetailInfoRepository;
+import com.smoc.cloud.tablestore.repository.TableStoreMessageDetailInfoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * 短信明细
@@ -23,6 +23,9 @@ public class MessageDetailInfoService {
 
     @Resource
     private MessageDetailInfoRepository messageDetailInfoRepository;
+
+    @Resource
+    private TableStoreMessageDetailInfoRepository tableStoreMessageDetailInfoRepository;
 
     /**
      * 分页查询
@@ -78,8 +81,8 @@ public class MessageDetailInfoService {
         return ResponseDataUtil.buildSuccess(page);
     }
 
-    public ResponseData<PageList<MessageDetailInfoValidator>> tableStorePage(PageParams<MessageDetailInfoValidator> pageParams) {
-        PageList<MessageDetailInfoValidator> page = messageDetailInfoRepository.tableStorePage(pageParams);
+    public ResponseData<PageList<TableStoreMessageDetailInfoValidator>> tableStorePage(PageParams<TableStoreMessageDetailInfoValidator> pageParams) {
+        PageList<TableStoreMessageDetailInfoValidator> page = tableStoreMessageDetailInfoRepository.tableStorePage(pageParams);
 
         return ResponseDataUtil.buildSuccess(page);
     }
