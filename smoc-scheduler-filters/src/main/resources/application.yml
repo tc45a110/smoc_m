@@ -1,5 +1,5 @@
 server: #服务端口
-  port: 18090
+  port: 18098
   servlet:
     context-path: /smoc-scheduler-filters
 spring:

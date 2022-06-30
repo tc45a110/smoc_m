@@ -1,4 +1,4 @@
-package com.smoc.cloud.http.configuration;
+package com.smoc.cloud.scheduler.configuration;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.AsyncConfigurer;

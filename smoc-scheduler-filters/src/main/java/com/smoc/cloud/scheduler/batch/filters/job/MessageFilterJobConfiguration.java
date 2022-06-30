@@ -1,34 +1,22 @@
 package com.smoc.cloud.scheduler.batch.filters.job;
 
-import com.smoc.cloud.scheduler.batch.filters.listener.MessageFilterListener;
 import com.smoc.cloud.scheduler.batch.filters.model.BusinessRouteValue;
-import com.smoc.cloud.scheduler.batch.filters.model.BusinessRouteValueRowMapper;
-import com.smoc.cloud.scheduler.batch.filters.processor.MessageFilterProcessor;
 import com.smoc.cloud.scheduler.batch.filters.writer.MessageFilterWriter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.StepScope;
-import org.springframework.batch.core.launch.support.RunIdIncrementer;
-import org.springframework.batch.item.ItemProcessor;
-import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider;
-import org.springframework.batch.item.database.JdbcBatchItemWriter;
+import org.springframework.batch.core.job.builder.FlowBuilder;
+import org.springframework.batch.core.job.flow.Flow;
 import org.springframework.batch.item.database.JdbcPagingItemReader;
-import org.springframework.batch.item.database.Order;
-import org.springframework.batch.item.database.support.MySqlPagingQueryProvider;
-import org.springframework.batch.item.support.CompositeItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
 
-import javax.sql.DataSource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import javax.annotation.Resource;
 
 /**
  * 短信过滤JOB配置
@@ -37,104 +25,162 @@ import java.util.List;
 @Configuration
 public class MessageFilterJobConfiguration {
 
+    //每批次处理数量
+    private Integer chunk = 1000;
+
     @Autowired
     public JobBuilderFactory jobBuilderFactory;
 
     @Autowired
     public StepBuilderFactory stepBuilderFactory;
 
-    @Autowired
-    public DataSource dataSource;
+    @Resource(name = "messageFilterReader0")
+    public JdbcPagingItemReader<BusinessRouteValue> messageFilterReader0;
 
-    @Autowired
-    public MessageFilterListener messageFilterListener;
+    @Resource(name = "messageFilterReader1")
+    public JdbcPagingItemReader<BusinessRouteValue> messageFilterReader1;
 
-    @Autowired
-    public MessageFilterProcessor messageFilterProcessor;
+    @Resource(name = "messageFilterReader2")
+    public JdbcPagingItemReader<BusinessRouteValue> messageFilterReader2;
+
+    @Resource(name = "messageFilterReader3")
+    public JdbcPagingItemReader<BusinessRouteValue> messageFilterReader3;
+
+    @Resource(name = "messageFilterReader4")
+    public JdbcPagingItemReader<BusinessRouteValue> messageFilterReader4;
+
+    @Resource(name = "messageFilterReader5")
+    public JdbcPagingItemReader<BusinessRouteValue> messageFilterReader5;
+
+    @Resource(name = "messageFilterReader6")
+    public JdbcPagingItemReader<BusinessRouteValue> messageFilterReader6;
+
+    @Resource(name = "messageFilterReader7")
+    public JdbcPagingItemReader<BusinessRouteValue> messageFilterReader7;
+
+    @Resource(name = "messageFilterReader8")
+    public JdbcPagingItemReader<BusinessRouteValue> messageFilterReader8;
+
+    @Resource(name = "messageFilterReader9")
+    public JdbcPagingItemReader<BusinessRouteValue> messageFilterReader9;
+
 
     @Autowired
     public MessageFilterWriter messageFilterWriter;
 
     @Bean("messageFilterJob")
     public Job messageFilterJob() {
-        return jobBuilderFactory.get("messageFilterJob").incrementer(new RunIdIncrementer()).listener(messageFilterListener).start(messageFilterJobConfigurationStep()).build();
-    }
-
-    /**
-     * 分批次多线程处理 待发送的数据
-     *
-     * @return
-     */
-    @Bean
-    public Step messageFilterJobConfigurationStep() {
-        return stepBuilderFactory.get("messageFilterJobConfigurationStep")
-                .<BusinessRouteValue, BusinessRouteValue>chunk(1000)
-                .reader(messageFilterReader())
-                .processor(messageFilterProcessor)
-                .writer(deleteMessageFilterWriter())
-                .taskExecutor(messageFilterExecutor())
-                .throttleLimit(10)
-                .build();
-    }
-
-    /**
-     * 查询 route_message_mt_info 表中，等待发送的短信数据
-     *
-     * @return
-     */
-    @Bean
-    @StepScope
-    public JdbcPagingItemReader<BusinessRouteValue> messageFilterReader() {
-        JdbcPagingItemReader<BusinessRouteValue> reader = new JdbcPagingItemReader<>();
-        // 设置数据源
-        reader.setDataSource(dataSource);
-        // 设置一次最大读取条数
-        reader.setFetchSize(10000);
-        reader.setPageSize(10000);
-        // 把数据库中的每条数据映射到BusinessRouteValueRowMapper对像中
-        reader.setRowMapper(new BusinessRouteValueRowMapper());
-        MySqlPagingQueryProvider queryProvider = new MySqlPagingQueryProvider();
-        queryProvider.setSelectClause(" ID,ACCOUNT_ID,PHONE_NUMBER,SUBMIT_TIME,MESSAGE_CONTENT,MESSAGE_FORMAT,MESSAGE_ID,TEMPLATE_ID,PROTOCOL,ACCOUNT_SRC_ID,ACCOUNT_BUSINESS_CODE,PHONE_NUMBER_NUMBER,MESSAGE_CONTENT_NUMBER,REPORT_FLAG,OPTION_PARAM,DATE_FORMAT(CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME "); // 设置查询的列
-        queryProvider.setFromClause(" from smoc_route.route_message_mt_info1 "); // 设置要查询的表
-//        queryProvider.setWhereClause(" where 1=1 ");
-        //设置排序
-        queryProvider.setSortKeys(new HashMap<String, Order>() {{
-            put("ID", Order.ASCENDING);
-        }});
-//        reader.setParameterValues(new HashMap<String, Object>() {{
-//        }});
-        reader.setQueryProvider(queryProvider);
-        return reader;
+        return this.jobBuilderFactory.get("messageFilterJob").start(parallelFlow()).end().build();
     }
 
     @Bean
-    @StepScope
-    public CompositeItemProcessor<BusinessRouteValue, BusinessRouteValue> compositeMessageFilterProcessor() {
-        CompositeItemProcessor<BusinessRouteValue, BusinessRouteValue> processor = new CompositeItemProcessor<>();
-        List<ItemProcessor<BusinessRouteValue, BusinessRouteValue>> listProcessor = new ArrayList<>();
-        listProcessor.add(messageFilterProcessor);
-        processor.setDelegates(listProcessor);
-        return processor;
+    public Flow parallelFlow() {
+        return new FlowBuilder<Flow>("parallelFlow").split(messageFilterExecutor()).add(flow0(), flow1(), flow2(), flow3(), flow4(), flow5(), flow6(), flow7(), flow8(), flow9()).build();
+    }
+
+    @Bean
+    public Flow flow0() {
+        return new FlowBuilder<Flow>("flow0").start(filterStep0()).build();
+    }
+
+    @Bean
+    public Flow flow1() {
+        return new FlowBuilder<Flow>("flow1").start(filterStep1()).build();
+    }
+
+    @Bean
+    public Flow flow2() {
+        return new FlowBuilder<Flow>("flow2").start(filterStep2()).build();
+    }
+
+    @Bean
+    public Flow flow3() {
+        return new FlowBuilder<Flow>("flow3").start(filterStep3()).build();
+    }
+
+    @Bean
+    public Flow flow4() {
+        return new FlowBuilder<Flow>("flow4").start(filterStep4()).build();
+    }
+
+    @Bean
+    public Flow flow5() {
+        return new FlowBuilder<Flow>("flow5").start(filterStep5()).build();
+    }
+
+    @Bean
+    public Flow flow6() {
+        return new FlowBuilder<Flow>("flow6").start(filterStep6()).build();
+    }
+
+    @Bean
+    public Flow flow7() {
+        return new FlowBuilder<Flow>("flow7").start(filterStep7()).build();
+    }
+
+    @Bean
+    public Flow flow8() {
+        return new FlowBuilder<Flow>("flow8").start(filterStep8()).build();
+    }
+
+    @Bean
+    public Flow flow9() {
+        return new FlowBuilder<Flow>("flow9").start(filterStep9()).build();
+    }
+
+    @Bean("filterStep0")
+    public Step filterStep0() {
+        return this.stepBuilderFactory.get("filterStep0").<BusinessRouteValue, BusinessRouteValue>chunk(chunk).reader(messageFilterReader0).writer(messageFilterWriter).build();
+    }
+
+    @Bean("filterStep1")
+    public Step filterStep1() {
+        return this.stepBuilderFactory.get("filterStep1").<BusinessRouteValue, BusinessRouteValue>chunk(chunk).reader(messageFilterReader1).writer(messageFilterWriter).build();
+    }
+
+    @Bean("filterStep2")
+    public Step filterStep2() {
+        return this.stepBuilderFactory.get("filterStep2").<BusinessRouteValue, BusinessRouteValue>chunk(chunk).reader(messageFilterReader2).writer(messageFilterWriter).build();
+    }
+
+    @Bean("filterStep3")
+    public Step filterStep3() {
+        return this.stepBuilderFactory.get("filterStep3").<BusinessRouteValue, BusinessRouteValue>chunk(chunk).reader(messageFilterReader3).writer(messageFilterWriter).build();
+    }
+
+    @Bean("filterStep4")
+    public Step filterStep4() {
+        return this.stepBuilderFactory.get("filterStep4").<BusinessRouteValue, BusinessRouteValue>chunk(chunk).reader(messageFilterReader4).writer(messageFilterWriter).build();
+    }
+
+    @Bean("filterStep5")
+    public Step filterStep5() {
+        return this.stepBuilderFactory.get("filterStep5").<BusinessRouteValue, BusinessRouteValue>chunk(chunk).reader(messageFilterReader5).writer(messageFilterWriter).build();
+    }
+
+    @Bean("filterStep6")
+    public Step filterStep6() {
+        return this.stepBuilderFactory.get("filterStep6").<BusinessRouteValue, BusinessRouteValue>chunk(chunk).reader(messageFilterReader6).writer(messageFilterWriter).build();
+    }
+
+    @Bean("filterStep7")
+    public Step filterStep7() {
+        return this.stepBuilderFactory.get("filterStep7").<BusinessRouteValue, BusinessRouteValue>chunk(chunk).reader(messageFilterReader7).writer(messageFilterWriter).build();
+    }
+
+    @Bean("filterStep8")
+    public Step filterStep8() {
+        return this.stepBuilderFactory.get("filterStep8").<BusinessRouteValue, BusinessRouteValue>chunk(chunk).reader(messageFilterReader8).writer(messageFilterWriter).build();
+    }
+
+    @Bean("filterStep9")
+    public Step filterStep9() {
+        return this.stepBuilderFactory.get("filterStep9").<BusinessRouteValue, BusinessRouteValue>chunk(chunk).reader(messageFilterReader9).writer(messageFilterWriter).build();
     }
 
     @Bean
     public TaskExecutor messageFilterExecutor() {
-        return new SimpleAsyncTaskExecutor("filterExecutor-");
+        return new SimpleAsyncTaskExecutor("filter-t-");
     }
 
-    /**
-     * 删除 route_message_mt_info数据
-     *
-     * @return
-     */
-    @Bean("deleteMessageFilterWriter")
-    public JdbcBatchItemWriter<BusinessRouteValue> deleteMessageFilterWriter() {
-        JdbcBatchItemWriter<BusinessRouteValue> writer = new JdbcBatchItemWriter<>();
-        //设置数据源
-        writer.setDataSource(dataSource);
-        //设置sql
-        writer.setSql("delete from smoc_route.route_message_mt_info1 where id=:id");
-        writer.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>());
-        return writer;
-    }
 }

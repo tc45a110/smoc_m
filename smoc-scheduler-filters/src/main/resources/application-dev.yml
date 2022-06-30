@@ -78,6 +78,7 @@ spring:
   batch:
     job:
       enabled: false
+      names: filters
 #rocketmq:
 #  name-server: 123.57.216.87:9876
 #  producer:
@@ -98,6 +99,7 @@ spring:
 
 logging:
   config: classpath:logback-spring.xml
-  path: E:/log/smoc-log/smoc-filters-logs
   level:
     root: info
+  file:
+    path: E:/log/smoc-log/smoc-scheduler-filters

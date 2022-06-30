@@ -5,15 +5,16 @@ import org.springframework.batch.core.configuration.annotation.EnableBatchProces
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * smoc
  */
+@EnableAsync
 @EnableScheduling
 @EnableBatchProcessing
 @SpringBootApplication
-@EnableDiscoveryClient
 public class SmocSchedulerFiltersApplication {
     public static void main(String[] args) {
         SpringApplication.run(SmocSchedulerFiltersApplication.class, args);

@@ -2,7 +2,6 @@ package com.smoc.cloud.scheduler.batch.filters.service;
 
 import com.smoc.cloud.common.filters.utils.RedisConstant;
 
-import com.smoc.cloud.scheduler.service.filters.model.RequestFullParams;
 import com.smoc.cloud.scheduler.service.filters.service.FiltersService;
 import com.smoc.cloud.scheduler.service.filters.service.account.CarrierDailyLimiterFilter;
 import com.smoc.cloud.scheduler.service.filters.service.account.MaskProvinceFilter;
@@ -68,12 +67,12 @@ public class FullFilterParamsFilterService {
     @Autowired
     private FiltersService filtersService;
 
-    public Map<String, String> filter(RequestFullParams model) {
+    public Map<String, String> filter(String phone, String account, String message, String templateId, String carrier, String provinceCode, String channelId) {
 
         /**
          * 关键参数校验
          */
-        if (StringUtils.isEmpty(model.getAccount()) || StringUtils.isEmpty(model.getPhone()) || StringUtils.isEmpty(model.getMessage())) {
+        if (StringUtils.isEmpty(account) || StringUtils.isEmpty(phone) || StringUtils.isEmpty(message)) {
             return errorHandle(FilterResponseCode.PARAM_FORMAT_ERROR.getCode(), FilterResponseCode.PARAM_FORMAT_ERROR.getMessage());
         }
 
@@ -81,7 +80,7 @@ public class FullFilterParamsFilterService {
         /**
          * 查询业务账号配置的COMMON级别 配置参数
          */
-        Map<Object, Object> entities = filtersService.getEntries(RedisConstant.FILTERS_CONFIG_ACCOUNT_COMMON + model.getAccount());
+        Map<Object, Object> entities = filtersService.getEntries(RedisConstant.FILTERS_CONFIG_ACCOUNT_COMMON + account);
         //log.info("COMMON 配置参数:{}", new Gson().toJson(entities));
         if (null == entities || entities.size() < 1) {
             return success();
@@ -111,8 +110,8 @@ public class FullFilterParamsFilterService {
          * 3、业务账号日限量
          */
         Object dailyLimitStyle = entities.get("COMMON_SEND_LIMIT_STYLE_DAILY");//运营商日限量方式
-        Object dailyLimit = entities.get("COMMON_SEND_LIMIT_NUMBER_DAILY_" + model.getCarrier());//日限量
-        Map<String, String> dailyLimitFilterResult = carrierDailyLimiterFilter.filter(filtersService, dailyLimitStyle, dailyLimit, model.getAccount(), model.getCarrier(), model.getNumbers());
+        Object dailyLimit = entities.get("COMMON_SEND_LIMIT_NUMBER_DAILY_" + carrier);//日限量
+        Map<String, String> dailyLimitFilterResult = carrierDailyLimiterFilter.filter(filtersService, dailyLimitStyle, dailyLimit, account, carrier, 1);
         if (!"false".equals(dailyLimitFilterResult.get("result"))) {
             return errorHandle(dailyLimitFilterResult.get("code"), dailyLimitFilterResult.get("message"));
         }
@@ -123,7 +122,7 @@ public class FullFilterParamsFilterService {
         Object cmccMaskProvince = entities.get("COMMON_CMCC_MASK_PROVINCE");
         Object unicMaskProvince = entities.get("COMMON_UNIC_MASK_PROVINCE");
         Object telcMaskProvince = entities.get("COMMON_TELC_MASK_PROVINCE");
-        Map<String, String> maskProvinceResult = maskProvinceFilter.filter(model.getProvinceCode(), model.getCarrier(), cmccMaskProvince, unicMaskProvince, telcMaskProvince);
+        Map<String, String> maskProvinceResult = maskProvinceFilter.filter(provinceCode, carrier, cmccMaskProvince, unicMaskProvince, telcMaskProvince);
         if (!"false".equals(maskProvinceResult.get("result"))) {
             return errorHandle(maskProvinceResult.get("code"), maskProvinceResult.get("message"));
         }
@@ -142,7 +141,7 @@ public class FullFilterParamsFilterService {
          */
         Object isBlackListType = entities.get("COMMON_BLACK_LIST_LEVEL_FILTERING");
         Object isIndustryBlackListType = entities.get("COMMON_INFO_BLACK_LIST_FILTERING");//行业黑名单
-        Map<String, String> blackListFilterResult = systemPhoneFilter.filter(filtersService, isBlackListType, model.getAccount(), model.getPhone(), isIndustryBlackListType);
+        Map<String, String> blackListFilterResult = systemPhoneFilter.filter(filtersService, isBlackListType, account, phone, isIndustryBlackListType);
         if (!"false".equals(blackListFilterResult.get("result"))) {
             return errorHandle(blackListFilterResult.get("code"), blackListFilterResult.get("message"));
         }
@@ -150,7 +149,7 @@ public class FullFilterParamsFilterService {
         /**
          * 2、行业黑名单过滤
          */
-        Map<String, String> industryBlackListFilterResult = industryBlackListFilter.filter(filtersService, isIndustryBlackListType, model.getAccount(), model.getPhone());
+        Map<String, String> industryBlackListFilterResult = industryBlackListFilter.filter(filtersService, isIndustryBlackListType, account, phone);
         if (!"false".equals(industryBlackListFilterResult.get("result"))) {
             return errorHandle(industryBlackListFilterResult.get("code"), industryBlackListFilterResult.get("message"));
         }
@@ -158,7 +157,7 @@ public class FullFilterParamsFilterService {
         /**
          * 3、业务账号手机号扩展参数过滤
          */
-        Map<String, String> extendNumberParamsFilterResult = extendNumberParamsFilter.filter(filtersService, model.getAccount(), model.getPhone());
+        Map<String, String> extendNumberParamsFilterResult = extendNumberParamsFilter.filter(filtersService, account, phone);
         if (!"false".equals(extendNumberParamsFilterResult.get("result"))) {
             return errorHandle(extendNumberParamsFilterResult.get("code"), extendNumberParamsFilterResult.get("message"));
         }
@@ -180,20 +179,20 @@ public class FullFilterParamsFilterService {
         /**
          * 1、根据模版ID匹配，匹配成功，则跳过其他内容过滤 匹配不成功则响应错误
          */
-        if (!StringUtils.isEmpty(model.getTemplateId())) {
+        if (!StringUtils.isEmpty(templateId)) {
             //先去匹配固定格式模版
-            Object fixedTemplate = filtersService.getMapValue(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_HTTP_FIXED, model.getTemplateId());
+            Object fixedTemplate = filtersService.getMapValue(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_HTTP_FIXED, templateId);
             if (!StringUtils.isEmpty(fixedTemplate)) {
-                if (model.getMessage().equals(fixedTemplate)) {
+                if (message.equals(fixedTemplate)) {
                     return success();
                 }
             }
             //根据模版id 去找变量模版
-            Object variableTemplate = filtersService.getMapValue(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_HTTP_VARIABLE, model.getTemplateId());
+            Object variableTemplate = filtersService.getMapValue(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_HTTP_VARIABLE, templateId);
             if (!StringUtils.isEmpty(variableTemplate)) {
                 String template = this.clean(variableTemplate.toString());
                 Pattern pattern = Pattern.compile(template);
-                Matcher matcher = pattern.matcher(this.clean(model.getMessage()));
+                Matcher matcher = pattern.matcher(this.clean(message));
                 if (matcher.find()) {
                     return success();
                 }
@@ -207,10 +206,10 @@ public class FullFilterParamsFilterService {
             /**
              * 2、固定模版匹配，匹配成功，则跳过其他内容过滤
              */
-            String noFilterFixedTemplate = FilterInitialize.accountFilterFixedTemplateMap.get(model.getAccount());
+            String noFilterFixedTemplate = FilterInitialize.accountFilterFixedTemplateMap.get(account);
             if (!StringUtils.isEmpty(noFilterFixedTemplate)) {
                 noFilterFixedTemplate = this.clean(noFilterFixedTemplate);
-                String target = this.clean(model.getMessage());
+                String target = this.clean(message);
                 Pattern pattern = Pattern.compile(noFilterFixedTemplate);
                 Matcher matcher = pattern.matcher(target);
                 if (matcher.find()) {
@@ -222,11 +221,11 @@ public class FullFilterParamsFilterService {
              * 3、变量模版匹配，根据配置
              */
             //（1）匹配上变量模版 则跳过其他内容过滤
-            String noFilterVariableTemplate = FilterInitialize.accountNoFilterVariableTemplateMap.get(model.getAccount());
+            String noFilterVariableTemplate = FilterInitialize.accountNoFilterVariableTemplateMap.get(account);
             if (!StringUtils.isEmpty(noFilterVariableTemplate)) {
                 noFilterVariableTemplate = this.clean(noFilterVariableTemplate);
                 Pattern pattern = Pattern.compile(noFilterVariableTemplate);
-                String target = this.clean(model.getMessage());
+                String target = this.clean(message);
                 Matcher matcher = pattern.matcher(target);
                 if (matcher.find()) {
                     return success();
@@ -234,10 +233,10 @@ public class FullFilterParamsFilterService {
             }
         }
         //（2）突然发觉过滤没有意义，匹配上匹配不上都要向下过滤
-//        String filterVariableTemplate = FilterInitialize.accountFilterVariableTemplateMap.get(model.getAccount());
+//        String filterVariableTemplate = FilterInitialize.accountFilterVariableTemplateMap.get(account);
 //        if (!StringUtils.isEmpty(filterVariableTemplate)) {
 //            Pattern pattern = Pattern.compile(filterVariableTemplate);
-//            Matcher matcher = pattern.matcher(model.getMessage());
+//            Matcher matcher = pattern.matcher(message);
 //            if (matcher.find()) {
 //                return success(exchange);
 //            }
@@ -246,14 +245,14 @@ public class FullFilterParamsFilterService {
         /**
          * 4、签名模版匹配，（1）提取短信内容签名 （2）匹配签名；  如果匹配上签名，继续其他内容过滤，如果没匹配上签名，则返回过滤失败
          */
-        String signTemplate = FilterInitialize.accountSignTemplateMap.get(model.getAccount());
+        String signTemplate = FilterInitialize.accountSignTemplateMap.get(account);
         //是否模板匹配，如果选择是，才会去判断签名
         if (null == isMatchTemplate || isMatchTemplate.toString().equals("1")) {
             if (!StringUtils.isEmpty(signTemplate)) {
                 //解析内容签名
                 String sign = null;
                 Pattern pattern = Pattern.compile("【.*】");
-                Matcher matcher = pattern.matcher(model.getMessage());
+                Matcher matcher = pattern.matcher(message);
                 if (matcher.find()) {
                     sign = matcher.group(0);
                 }
@@ -278,7 +277,7 @@ public class FullFilterParamsFilterService {
         Object isBlackWordsFilter = entities.get("COMMON_BLACK_WORD_FILTERING"); //是否过滤黑词
         Object isCheckWordsFilter = entities.get("COMMON_AUDIT_WORD_FILTERING"); //是否过滤审核词
         Object infoTypeSensitiveWordsFilter = entities.get("COMMON_INFO_SENSITIVE_WORD_FILTERING"); //过滤行业敏感词
-        Map<String, String> blackWordsFilterResult = fullMessageFilter.filter(filtersService, isBlackWordsFilter, isCheckWordsFilter, infoTypeSensitiveWordsFilter, model.getAccount(), model.getMessage());
+        Map<String, String> blackWordsFilterResult = fullMessageFilter.filter(filtersService, isBlackWordsFilter, isCheckWordsFilter, infoTypeSensitiveWordsFilter, account, message);
         if (!"false".equals(blackWordsFilterResult.get("result"))) {
             return errorHandle(blackWordsFilterResult.get("code"), blackWordsFilterResult.get("message"));
         }
@@ -286,7 +285,7 @@ public class FullFilterParamsFilterService {
         /**
          * 6、通道过滤参数
          */
-        Map<String, String> channelMessageParamsFilterResult = channelMessageFilter.filter(model.getChannelId(), model.getMessage());
+        Map<String, String> channelMessageParamsFilterResult = channelMessageFilter.filter(channelId, message);
         if (!"false".equals(channelMessageParamsFilterResult.get("result"))) {
             return errorHandle(channelMessageParamsFilterResult.get("code"), channelMessageParamsFilterResult.get("message"));
         }
@@ -294,7 +293,7 @@ public class FullFilterParamsFilterService {
         /**
          * 7、业务账号内容扩展参数过滤
          */
-        Map<String, String> extendMessageParamsFilterResult = extendMessageParamsFilter.filter(filtersService, model.getAccount(), model.getMessage());
+        Map<String, String> extendMessageParamsFilterResult = extendMessageParamsFilter.filter(filtersService, account, message);
         if (!"false".equals(extendMessageParamsFilterResult.get("result"))) {
             return errorHandle(extendMessageParamsFilterResult.get("code"), extendMessageParamsFilterResult.get("message"));
         }
@@ -304,7 +303,7 @@ public class FullFilterParamsFilterService {
          * 1、单手机号发送频率限制
          */
         Object phoneFrequencyLimit = entities.get("COMMON_SEND_FREQUENCY_LIMIT");
-        Map<String, String> phoneFrequencyLimitResult = phoneSendFrequencyLimitFilter.filter(filtersService, phoneFrequencyLimit, model.getAccount(), model.getPhone());
+        Map<String, String> phoneFrequencyLimitResult = phoneSendFrequencyLimitFilter.filter(filtersService, phoneFrequencyLimit, account, phone);
         if (!"false".equals(phoneFrequencyLimitResult.get("result"))) {
             return errorHandle(phoneFrequencyLimitResult.get("code"), phoneFrequencyLimitResult.get("message"));
         }

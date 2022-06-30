@@ -17,10 +17,10 @@ public class FilterExample {
 
     public static void main(String[] args) throws Exception {
         System.out.println(System.currentTimeMillis());
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 800; i++) {
 
             //请求路径（具体参见技术文档）
-            String url = "http://localhost:18090/smoc-filters/full-filter/filters";
+            String url = "http://localhost:18099/smoc-filters/full-filter/filters";
 
             //自定义header协议
             Map<String, String> header = new HashMap<>();
@@ -37,7 +37,7 @@ public class FilterExample {
 
             //转JSON请求数据
             String requestJsonData = new Gson().toJson(data);
-            System.out.println(requestJsonData);
+            //System.out.println(requestJsonData);
             String result = Okhttp3Utils.postJson(url, requestJsonData, header);
             //Thread.currentThread().sleep(1000);
             //System.out.println(System.currentTimeMillis() + "[请求响应]数据:" + result);
