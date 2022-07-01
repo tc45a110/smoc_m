@@ -52,7 +52,7 @@ public class MessageTimingTaskRepository {
     }
 
     public void saveMessageBatch(List<MessageFormat> messages, Integer messageCount, Integer phoneCount, String taskId) {
-        final String sql = "insert into smoc_route.route_message_mt_info(ID,ACCOUNT_ID,PHONE_NUMBER,SUBMIT_TIME,MESSAGE_CONTENT,MESSAGE_FORMAT,MESSAGE_ID,TEMPLATE_ID,PROTOCOL,ACCOUNT_SRC_ID,ACCOUNT_BUSINESS_CODE,PHONE_NUMBER_NUMBER,MESSAGE_CONTENT_NUMBER,REPORT_FLAG,OPTION_PARAM) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
+        final String sql = "insert into smoc_route.route_message_mt_info(ACCOUNT_ID,PHONE_NUMBER,SUBMIT_TIME,MESSAGE_CONTENT,MESSAGE_FORMAT,MESSAGE_ID,TEMPLATE_ID,PROTOCOL,ACCOUNT_SRC_ID,ACCOUNT_BUSINESS_CODE,PHONE_NUMBER_NUMBER,MESSAGE_CONTENT_NUMBER,REPORT_FLAG,OPTION_PARAM) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
 
         log.info("[定时短信群发-异步添加开始]数据：{}-{}- 共{}条", taskId,System.currentTimeMillis(), messages.size());
 
@@ -63,21 +63,20 @@ public class MessageTimingTaskRepository {
 
             public void setValues(PreparedStatement ps, int i) throws SQLException {
                 MessageFormat message = messages.get(i);
-                ps.setLong(1, message.getId());
-                ps.setString(2, message.getAccountId());
-                ps.setString(3, message.getPhoneNumber());
-                ps.setString(4, message.getSubmitTime());
-                ps.setString(5, message.getMessageContent());
-                ps.setString(6, message.getMessageFormat());
-                ps.setString(7, message.getMessageId());
-                ps.setString(8, message.getTemplateId());
-                ps.setString(9, message.getProtocol());
-                ps.setString(10, message.getAccountSrcId());
-                ps.setString(11, message.getAccountBusinessCode());
-                ps.setInt(12, phoneCount);
-                ps.setInt(13, messageCount);
-                ps.setInt(14, message.getReportFlag());
-                ps.setString(15, message.getOptionParam());
+                ps.setString(1, message.getAccountId());
+                ps.setString(2, message.getPhoneNumber());
+                ps.setString(3, message.getSubmitTime());
+                ps.setString(4, message.getMessageContent());
+                ps.setString(5, message.getMessageFormat());
+                ps.setString(6, message.getMessageId());
+                ps.setString(7, message.getTemplateId());
+                ps.setString(8, message.getProtocol());
+                ps.setString(9, message.getAccountSrcId());
+                ps.setString(10, message.getAccountBusinessCode());
+                ps.setInt(11, phoneCount);
+                ps.setInt(12, messageCount);
+                ps.setInt(13, message.getReportFlag());
+                ps.setString(14, message.getOptionParam());
 
             }
 

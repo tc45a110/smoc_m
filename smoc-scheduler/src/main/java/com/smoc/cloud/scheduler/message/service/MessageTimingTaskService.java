@@ -129,7 +129,6 @@ public class MessageTimingTaskService {
                 }
             }
 
-            messageFormat.setId(Int64UUID.random());
             messageFormat.setAccountId(messageTimingModel.getAccountId());
             messageFormat.setMessageId(messageTimingModel.getId());
             messageFormat.setTemplateId(messageTimingModel.getTemplateId());

@@ -216,7 +216,8 @@
                                             </div>
                                         </h4>
                                     </div>
-                                    <div id="login-panel" class="row" style="display:block" th:if="${enterpriseBasicInfoValidator.enterpriseType ne 'IDENTIFICATION'}">
+                                    <div id="login-panel" class="row" style="display:block"
+                                         th:if="${enterpriseBasicInfoValidator.enterpriseType ne 'IDENTIFICATION'}">
                                         <div class="col-lg-12" style="margin-top:10px">
                                             <div class="panel panel-color panel-info">
                                                 <div id="login-account-down" class="panel-heading"
@@ -254,10 +255,15 @@
                                                                                 <div class="">
                                                                                     <h5 style="padding-left:10px">
                                                                                         WEB账号：[[${web.webLoginName}]]
-                                                                                        <a href="javascript:void(0)" data-placement="bottom" data-toggle="tooltip" data-original-title="查看密码"
-                                                                                            sec:authorize-url="/enterprise/web/look/*"
-                                                                                            th:onclick="lookPassword([[${web.id}]])">
-                                                                                            &nbsp;<i class="glyphicon glyphicon-eye-open" style="color: #00aced"></i>
+                                                                                        <a href="javascript:void(0)"
+                                                                                           data-placement="bottom"
+                                                                                           data-toggle="tooltip"
+                                                                                           data-original-title="查看密码"
+                                                                                           sec:authorize-url="/enterprise/web/look/*"
+                                                                                           th:onclick="lookPassword([[${web.id}]])">
+                                                                                            &nbsp;<i
+                                                                                                class="glyphicon glyphicon-eye-open"
+                                                                                                style="color: #00aced"></i>
                                                                                             <span th:id="${web.id}"></span>
                                                                                         </a>
                                                                                     </h5>
@@ -286,7 +292,7 @@
                                                                                        th:onclick="confirmForbidden([[${web.id}]],[[${web.accountStatus}]],this)"
                                                                                        th:class="${web.accountStatus eq '1'?'btn btn-danger':'btn btn-inverse'}"
                                                                                        style="font-size:12px;">[[${web.accountStatus}=='1'?'注销':'启用']]</a>
-                                                                                   <!-- sec:authorize-url="/enterprise/web/webLoginAuth"-->
+                                                                                    <!-- sec:authorize-url="/enterprise/web/webLoginAuth"-->
                                                                                     <a data-toggle="modal"
                                                                                        data-target="#confirm-add-auth-modal"
                                                                                        class="btn btn-primary"
@@ -376,7 +382,8 @@
                                                                                     <h5 style="padding-left:10px">
                                                                                         联系方式：[[${express.postPhone}]]
                                                                                         <div class="pull-right">
-                                                                                            <span style="display:none" class="btn btn-inverse waves-effect waves-light m-l-10 btn-xs"
+                                                                                            <span style="display:none"
+                                                                                                  class="btn btn-inverse waves-effect waves-light m-l-10 btn-xs"
                                                                                                   th:id="${'copyId'+express.id}">已复制到剪贴板</span>
                                                                                             <i class="fa  fa-copy"
                                                                                                th:id="${'expressCopy'+express.id}"
@@ -497,7 +504,8 @@
                                                                                     <h5 style="padding-left:10px">
                                                                                         增值税普通发票
                                                                                         <div class="pull-right">
-                                                                                            <span style="display:none" class="btn btn-inverse waves-effect waves-light m-l-10 btn-xs"
+                                                                                            <span style="display:none"
+                                                                                                  class="btn btn-inverse waves-effect waves-light m-l-10 btn-xs"
                                                                                                   th:id="${'copyCommonId'}">已复制到剪贴板</span>
                                                                                             <i class="fa fa-copy"
                                                                                                id="commonCopy"
@@ -586,7 +594,8 @@
                                                                                     <h5 style="padding-left:10px">
                                                                                         增值税专用发票
                                                                                         <div class="pull-right">
-                                                                                            <span style="display:none" class="btn btn-inverse waves-effect waves-light m-l-10 btn-xs"
+                                                                                            <span style="display:none"
+                                                                                                  class="btn btn-inverse waves-effect waves-light m-l-10 btn-xs"
                                                                                                   th:id="${'copySpecialId'}">已复制到剪贴板</span>
                                                                                             <i class="fa  fa-copy"
                                                                                                id="specialCopy"
@@ -692,14 +701,16 @@
                                                         </a>
                                                     </li>
                                                     <li class="" id="tab2">
-                                                        <a onclick="active('2')" th:if="${enterpriseBasicInfoValidator.enterpriseType ne 'IDENTIFICATION'}"
+                                                        <a onclick="active('2')"
+                                                           th:if="${enterpriseBasicInfoValidator.enterpriseType ne 'IDENTIFICATION'}"
                                                            sec:authorize-url="/ec/customer/center/material/list/*"
                                                            th:href="@{/ec/customer/center/material/list/{id}(id=${enterpriseWebAccountInfoValidator.enterpriseId})}"
                                                            th:target="tab-content">资质信息
                                                         </a>
                                                     </li>
                                                     <li class="" id="tab3">
-                                                        <a onclick="active('3')" th:if="${enterpriseBasicInfoValidator.enterpriseType ne 'IDENTIFICATION'}"
+                                                        <a onclick="active('3')"
+                                                           th:if="${enterpriseBasicInfoValidator.enterpriseType ne 'IDENTIFICATION'}"
                                                            sec:authorize-url="/complaint/ec/customer/center/list/*"
                                                            th:href="@{/complaint/ec/customer/center/list/{id}(id=${enterpriseWebAccountInfoValidator.enterpriseId})}"
                                                            th:target="tab-content">投诉记录
@@ -745,7 +756,8 @@
 
         <!-- start confirm user-forbiden modal  -->
         <div id="enterprise-forbiden" class="modal fade" tabindex="-1" role="dialog"
-             aria-labelledby="custom-width-modalLabel" aria-hidden="true" style="display: none;margin-top: 80px" th:remove="${#strings.isEmpty(error)}?none:all">
+             aria-labelledby="custom-width-modalLabel" aria-hidden="true" style="display: none;margin-top: 80px"
+             th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="modal-dialog" style="width:33%;">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -767,11 +779,12 @@
                     </div>
                 </div>
             </div>
-        </div >
+        </div>
         <!-- end confirm user-forbiden modal  -->
 
         <!-- start confirm add-user modal  -->
-        <div id="confirm-add-user-modal" class="modal fade" tabindex="-1" role="dialog" th:remove="${#strings.isEmpty(error)}?none:all"
+        <div id="confirm-add-user-modal" class="modal fade" tabindex="-1" role="dialog"
+             th:remove="${#strings.isEmpty(error)}?none:all"
              aria-labelledby="custom-width-modalLabel"
              aria-hidden="true" style="display: none;margin: 60px;margin-top:68px">
             <div class="modal-dialog" style="width:33%;">
@@ -801,7 +814,8 @@
                                     <label>密码(包含字母和数字组成的8位)<span class="text-danger">*</span>&nbsp;</label>
                                     <input type="text" class="form-control" th:field="*{webLoginPassword}"
                                            required="" data-parsley-length="[8,20]" id="webLoginPassword"
-                                           data-parsley-pattern="^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,20}$" autocomplete="off"
+                                           data-parsley-pattern="^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,20}$"
+                                           autocomplete="off"
                                            placeholder="密码">
                                 </div>
 
@@ -822,7 +836,8 @@
         <!-- end confirm add-user modal  -->
 
         <!-- start confirm user-forbiden modal  -->
-        <div id="user-forbiden" class="modal fade" tabindex="-1" role="dialog" th:remove="${#strings.isEmpty(error)}?none:all"
+        <div id="user-forbiden" class="modal fade" tabindex="-1" role="dialog"
+             th:remove="${#strings.isEmpty(error)}?none:all"
              aria-labelledby="custom-width-modalLabel" aria-hidden="true" style="display: none;margin-top: 80px">
             <div class="modal-dialog" style="width:33%;">
                 <div class="modal-content">
@@ -848,7 +863,8 @@
         <!-- end confirm user-forbiden modal  -->
 
         <!-- start confirm add-mail modal  -->
-        <div id="confirm-add-mail-modal" class="modal fade" tabindex="-1" role="dialog" th:remove="${#strings.isEmpty(error)}?none:all"
+        <div id="confirm-add-mail-modal" class="modal fade" tabindex="-1" role="dialog"
+             th:remove="${#strings.isEmpty(error)}?none:all"
              aria-labelledby="custom-width-modalLabel"
              aria-hidden="true" style="display: none;margin: 60px;margin-top:68px">
             <div class="modal-dialog" style="width:33%;">
@@ -903,7 +919,8 @@
         <!-- end confirm add-mail modal  -->
 
         <!-- start confirm set-invoice modal  -->
-        <div id="confirm-set-invoice-modal" class="modal fade" tabindex="-1" role="dialog" th:remove="${#strings.isEmpty(error)}?none:all"
+        <div id="confirm-set-invoice-modal" class="modal fade" tabindex="-1" role="dialog"
+             th:remove="${#strings.isEmpty(error)}?none:all"
              aria-labelledby="custom-width-modalLabel"
              aria-hidden="true" style="display: none;margin: 60px;margin-top:68px">
             <div class="modal-dialog" style="width:50%;">
@@ -951,7 +968,7 @@
                                 <div class="col-md-6 form-group">
                                     <label>开户账号&nbsp;</label>
                                     <input type="text" class="form-control" th:field="*{openAccount}"
-                                           data-parsley-length="[2,64]" autocomplete="off"  id="openAccount"
+                                           data-parsley-length="[2,64]" autocomplete="off" id="openAccount"
                                            placeholder="开户账号">
                                 </div>
                                 <div class="col-md-12 form-group">
@@ -980,7 +997,8 @@
         <!-- end confirm add-invoice modal  -->
 
         <!-- start confirm set-special-invoice modal  -->
-        <div id="confirm-set-invoice-special-modal" class="modal fade" tabindex="-1" role="dialog" th:remove="${#strings.isEmpty(error)}?none:all"
+        <div id="confirm-set-invoice-special-modal" class="modal fade" tabindex="-1" role="dialog"
+             th:remove="${#strings.isEmpty(error)}?none:all"
              aria-labelledby="custom-width-modalLabel"
              aria-hidden="true" style="display: none;margin: 60px;margin-top:68px">
             <div class="modal-dialog" style="width:50%;">
@@ -1083,12 +1101,14 @@
         <!-- end confirm delete modal  -->
 
         <!-- start confirm add-user modal  -->
-        <div id="confirm-add-auth-modal" class="modal fade" tabindex="-1" role="dialog" th:remove="${#strings.isEmpty(error)}?none:all"
+        <div id="confirm-add-auth-modal" class="modal fade" tabindex="-1" role="dialog"
+             th:remove="${#strings.isEmpty(error)}?none:all"
              aria-labelledby="custom-width-modalLabel"
              aria-hidden="true" style="display: none;margin: 60px;margin-top:68px">
             <div class="modal-dialog" style="width:33%;">
                 <div class="modal-content">
-                    <form id="auth_form" method="post" th:action="@{/enterprise/web/webAuthSave}"data-parsley-validate="">
+                    <form id="auth_form" method="post" th:action="@{/enterprise/web/webAuthSave}"
+                          data-parsley-validate="">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                             <h4 class="modal-title">WEB登录账号授权</h4>
@@ -1131,7 +1151,7 @@
 
         var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
         $.ajax({
-            url: contextPath + "/enterprise/web/look/"+id,
+            url: contextPath + "/enterprise/web/look/" + id,
             async: false,
             success: function (data) {
                 document.getElementById(id).innerText = data;
@@ -1140,7 +1160,7 @@
     }
 
     //打开密码框
-    function openPassword(id, webLoginName, op,realName) {
+    function openPassword(id, webLoginName, op, realName) {
         if ("add" == op) {
             $("#id").val('');
             $("#webLoginName").val('');
@@ -1161,22 +1181,22 @@
         document.getElementById("sss").innerText = "";
         var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
         $.ajax({
-            url: contextPath + "/enterprise/web/webLoginAuth/"+id,
+            url: contextPath + "/enterprise/web/webLoginAuth/" + id,
             async: false,
             success: function (result) {
                 var arr = [];
-                for(var item in result){
+                for (var item in result) {
                     arr.push(result[item]);
                 }
                 var htmla = ""
                 for (var i = 0; i < arr.length; i++) {
                     htmla += '<div class="col-md-6"><div class="checkbox checkbox-info m-b-15">'
-                    if(arr[i].checkedStatus){
-                        htmla += '<input name="roleId" value="'+arr[i].roleIds+'" type="checkbox" checked >'
-                    }else{
-                        htmla += '<input name="roleId" value="'+arr[i].roleIds+'" type="checkbox" >'
+                    if (arr[i].checkedStatus) {
+                        htmla += '<input name="roleId" value="' + arr[i].roleIds + '" type="checkbox" checked >'
+                    } else {
+                        htmla += '<input name="roleId" value="' + arr[i].roleIds + '" type="checkbox" >'
                     }
-                    htmla +=  '<label>'+arr[i].roleName+'</label></div></div>';
+                    htmla += '<label>' + arr[i].roleName + '</label></div></div>';
                 }
 
                 $('#sss').append(htmla)
@@ -1185,12 +1205,12 @@
 
     }
 
-    function subAuth(){
+    function subAuth() {
         var menusId = "";
         var a = document.getElementsByName("roleId");
-        for ( var i = 0; i < a.length; i++) {
+        for (var i = 0; i < a.length; i++) {
             if (a[i].checked) {
-               if (menusId == "") {
+                if (menusId == "") {
                     menusId = a[i].value;
                 } else {
                     menusId += "," + a[i].value;
@@ -1320,17 +1340,17 @@
             var clipboard = new ClipboardJS(invoiceCopy);
             invoiceCopy.click();
             clipboard.destroy();
-            if("1"== type){
-                document.getElementById("copyCommonId").style.display="";
-                setTimeout(function(){
-                    document.getElementById("copyCommonId").style.display="none";
-                },1000);
+            if ("1" == type) {
+                document.getElementById("copyCommonId").style.display = "";
+                setTimeout(function () {
+                    document.getElementById("copyCommonId").style.display = "none";
+                }, 1000);
             }
-            if("2"== type){
-                document.getElementById("copySpecialId").style.display="";
-                setTimeout(function(){
-                    document.getElementById("copySpecialId").style.display="none";
-                },1000);
+            if ("2" == type) {
+                document.getElementById("copySpecialId").style.display = "";
+                setTimeout(function () {
+                    document.getElementById("copySpecialId").style.display = "none";
+                }, 1000);
             }
 
         }
@@ -1343,51 +1363,71 @@
             var clipboard = new ClipboardJS(expressCopy);
             expressCopy.click();
             clipboard.destroy();
-            document.getElementById("copyId"+id).style.display="";
-            setTimeout(function(){
-                document.getElementById("copyId"+id).style.display="none";
-            },1000);
+            document.getElementById("copyId" + id).style.display = "";
+            setTimeout(function () {
+                document.getElementById("copyId" + id).style.display = "none";
+            }, 1000);
         }
     }
 
 </script>
 
 <script>
-     //封装一个随机生成数字的函数
-     /*function random(a, b) {
-             var n = Math.round(Math.random() * (a - b) + b);
-             return n;
-         }
+    //封装一个随机生成数字的函数
+    /*function random(a, b) {
+            var n = Math.round(Math.random() * (a - b) + b);
+            return n;
+        }
 
-     function getCode(){
-         //定义一个字符串把所有可能都装进去，全部字母以及数字
-         var codeStr = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    function getCode(){
+        //定义一个字符串把所有可能都装进去，全部字母以及数字
+        var codeStr = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
-         //声明一个空的字符串，用作装随机生成的四个数。
-         var str = "";
+        //声明一个空的字符串，用作装随机生成的四个数。
+        var str = "";
 
-         //写一个循环用来重复随机生成几个数，以及将东西一个一个放进上面声明的空字符串内
-         for (var i = 0; i < 8; i++) {
-                 var m = random(0,61);
-                 str += codeStr.charAt(m);
-             }
-         //在外面调用函数时，一定要在函数内写返回值
-         return str;
-     }*/
+        //写一个循环用来重复随机生成几个数，以及将东西一个一个放进上面声明的空字符串内
+        for (var i = 0; i < 8; i++) {
+                var m = random(0,61);
+                str += codeStr.charAt(m);
+            }
+        //在外面调用函数时，一定要在函数内写返回值
+        return str;
+    }*/
 
-     function getCode() {
+    function getCode() {
+        var length = 8;
+        // 密码串----默认 大写字母 小写字母 数字
+        var passwordArray = ['ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz', '1234567890'];
+        var password = '';
+        // 随机生成开始字符串
+        var startIndex = parseInt(Math.random() * (length));
+        var randIndex = [];
+        for (var i = 0; i < length; i++) {
+            // 创建数组，用于取随机位置  [0,1,2,3,4,5,....]
+            randIndex.push(i);
+        }
+        for (var i = 0; i < length; i++) {
+            // 根据随机数组生成随机位置
+            var r = parseInt(Math.random() * (randIndex.length));
+            var num = randIndex[r] + startIndex;
+            // 根据随机值取余数
+            var randRemainder = num % passwordArray.length;
+            // 当前密码串【大写字母，小写字母，数字等】
+            var currentPassword = passwordArray[randRemainder];
+            // 根据当前密码串长度取随机数
+            var index = parseInt(Math.random() * (currentPassword.length));
+            // 获取随机字符串
+            var str = currentPassword.substr(index, 1);
+            // 删除随机数组中已经使用的值
+            randIndex.splice(r, 1);
+            password += str;
+        }
+        return password;
 
-         var returnStr = "";
-         var charStr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-         for(var i=0; i<8; i++){
-             var index = Math.round(Math.random() * (charStr.length-1));
-             returnStr += charStr.substring(index,index+1);
-         }
+    }
 
-         return returnStr;
-     }
-
- </script>
+</script>
 
 <script>
 

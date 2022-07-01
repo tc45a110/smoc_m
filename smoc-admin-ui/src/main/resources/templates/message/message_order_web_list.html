@@ -110,7 +110,7 @@
                                                data-d-group="4" data-a-sign=" " data-v-min="0"
                                                data-v-max="999999999"
                                                class="autonumber">[[${countMap.get('SUBMIT_NUMBER')}]]</span></a><i></i>
-                                <a>总成功提数：<span style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
+                                <a>总成功提交数：<span style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
                                                data-d-group="4" data-a-sign=" " data-v-min="0"
                                                data-v-max="999999999"
                                                class="autonumber">[[${countMap.get('SUCCESS_NUMBER')}]]</span></a><i></i>
@@ -149,7 +149,7 @@
                                     <th>未知数</th>
                                     <th>业务类型</th>
                                     <th>发送类型/定时时间</th>
-                                    <th>创建时间/发送时间</th>
+                                    <th>创建时间</th>
                                     <th>发送状态</th>
                                     <th>内容/接口类型</th>
                                     <th>操作</th>
@@ -202,7 +202,7 @@
                                         <br>
                                         [[${info.timingTime}]]
                                     </td>
-                                    <td style="vertical-align: middle;line-height: 26px">[[${info.createdTime}]]<br/>[[${info.sendTime}]]
+                                    <td style="vertical-align: middle;line-height: 26px">[[${info.createdTime}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         <mpm:tag identity="messageStatus" show-type="button" key="code"

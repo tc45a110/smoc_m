@@ -94,6 +94,7 @@ public class TableStoreMessageDetailInfoRepository extends TableStorePageReposit
             messageDetailInfoValidator.setBusinessType(row.getString("business_type"));
             messageDetailInfoValidator.setTemplateId(row.getString("template_id"));
             messageDetailInfoValidator.setConsumeType(row.getString("consume_type"));
+             messageDetailInfoValidator.setTimeElapsed(row.getString("time_elapsed"));
             messageDetailInfoValidator.setMrTime(DateTimeUtils.getDateTimeFormat(new Date(row.getLong("mr_time"))));
             messageDetailInfoValidator.setStatusCodeExtend(row.getString("status_code_extend"));*/
 

@@ -432,6 +432,7 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", f.PAY_TYPE");
         sqlBuffer.append(", f.CHARGE_TYPE");
         sqlBuffer.append(", p.PROTOCOL");
+        sqlBuffer.append(", p.SRC_ID");
         sqlBuffer.append("  from account_base_info t left join enterprise_basic_info e on t.ENTERPRISE_ID = e.ENTERPRISE_ID");
         sqlBuffer.append("  left join (select ACCOUNT_ID,PAY_TYPE,CHARGE_TYPE from account_finance_info  group by ACCOUNT_ID,PAY_TYPE,CHARGE_TYPE)f on t.ACCOUNT_ID = f.ACCOUNT_ID");
         sqlBuffer.append("  left join account_interface_info p on t.ACCOUNT_ID = p.ACCOUNT_ID");

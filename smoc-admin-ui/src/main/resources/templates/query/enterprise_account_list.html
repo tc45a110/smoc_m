@@ -117,7 +117,7 @@
                                     <th>信息分类/发送运营商</th>
                                     <th>付费方式/计费方式</th>
                                     <th>接口类型</th>
-                                    <th>扩展码/随机长度</th>
+                                    <th>扩展码/服务代码</th>
                                     <th>状态</th>
                                 </tr>
                                 </thead>
@@ -155,7 +155,7 @@
                                         <mpm:tag identity="accountInterfaceType" show-type="label" key="code" th:value="${info.protocol}"/>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;">
-                                        [[${info.extendCode}]]<br>[[${info.randomExtendCodeLength}]]
+                                        [[${info.extendCode}]]<br>[[${info.srcId}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;">
                                         <mpm:tag identity="accountStatus" show-type="button" key="code" th:value="${info.accountStatus}"

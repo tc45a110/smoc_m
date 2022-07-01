@@ -16,6 +16,7 @@ import com.smoc.cloud.message.properties.MessageProperties;
 import com.smoc.cloud.message.repository.MessageWebTaskInfoRepository;
 import com.smoc.cloud.template.entity.AccountTemplateInfo;
 import com.smoc.cloud.template.repository.AccountTemplateInfoRepository;
+import com.smoc.cloud.utils.IdGeneratorFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.text.StrSubstitutor;
 import org.springframework.beans.BeanUtils;
@@ -48,6 +49,8 @@ public class MessageSendWebTaskInfoService {
     @Resource
     private MessageWebTaskInfoService messageWebTaskInfoService;
 
+    @Resource
+    private IdGeneratorFactory idGeneratorFactory;
 
     /**
      * 发送短信
@@ -95,6 +98,8 @@ public class MessageSendWebTaskInfoService {
         //模版内容
         String templateContent = optional.get().getTemplateContent();
         String submitTime = DateTimeUtils.getDateFormat(new Date(), "yyyy-MM-dd HH:mm:ss");
+
+        messageWebTaskInfoValidator.setId(idGeneratorFactory.getTaskId());
 
         //该批次发送短信总数量
         Integer messageCount = 0;
@@ -183,7 +188,6 @@ public class MessageSendWebTaskInfoService {
                 }
             }
 
-            messageFormat.setId(Int64UUID.random());
             messageFormat.setAccountId(messageWebTaskInfoValidator.getBusinessAccount());
             messageFormat.setMessageId(messageWebTaskInfoValidator.getId());
             messageFormat.setTemplateId(messageWebTaskInfoValidator.getTemplateId());

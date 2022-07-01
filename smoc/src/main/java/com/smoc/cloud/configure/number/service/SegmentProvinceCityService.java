@@ -134,7 +134,7 @@ public class SegmentProvinceCityService {
         log.info("[省号码配置][delete]数据:{}", JSON.toJSONString(data));
         segmentProvinceCityRepository.deleteById(id);
 
-        redisTemplate.opsForHash().delete(RedisConstant.FILTERS_CONFIG_SYSTEM_PROVINCE_NUMBER, data.getSegment());
+        redisTemplate.opsForHash().delete(RedisConstant.FILTERS_CONFIG_SYSTEM_PROVINCE_NUMBER, new Gson().toJson(data.getSegment()));
 
         return ResponseDataUtil.buildSuccess();
     }

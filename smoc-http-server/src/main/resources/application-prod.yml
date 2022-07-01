@@ -1,5 +1,8 @@
 server: #服务端口
   port: 18091
+  undertow:
+    io-threads: 8
+    worker-threads: 256
   servlet:
     context-path: /http-server
   connection-timeout: 15000

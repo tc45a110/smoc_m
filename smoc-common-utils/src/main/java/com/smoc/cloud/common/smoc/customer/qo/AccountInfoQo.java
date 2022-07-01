@@ -39,5 +39,7 @@ public class AccountInfoQo {
 
     private String protocol;
 
+    private String srcId;
+
 
 }

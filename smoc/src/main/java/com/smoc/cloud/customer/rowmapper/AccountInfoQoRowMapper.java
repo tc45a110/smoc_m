@@ -28,6 +28,7 @@ public class AccountInfoQoRowMapper implements RowMapper<AccountInfoQo> {
         qo.setPayType(resultSet.getString("PAY_TYPE"));
         qo.setChargeType(resultSet.getString("CHARGE_TYPE"));
         qo.setProtocol(resultSet.getString("PROTOCOL"));
+        qo.setSrcId(resultSet.getString("SRC_ID"));
 
         return qo;
     }
