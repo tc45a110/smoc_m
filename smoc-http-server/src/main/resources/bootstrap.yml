@@ -1,5 +1,4 @@
 spring:
-
   application: #服务应用名称
     name: smoc-http-server
 

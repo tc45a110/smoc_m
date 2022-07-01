@@ -12,11 +12,17 @@ import com.smoc.cloud.http.entity.MessageHttpsTaskInfo;
 import com.smoc.cloud.http.rowmapper.MobileOriginalResponseParamsRowMapper;
 import com.smoc.cloud.http.rowmapper.ReportResponseParamsRowMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StopWatch;
 import org.springframework.util.StringUtils;
 
 
+import javax.sql.DataSource;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -26,6 +32,9 @@ import java.util.List;
 @Slf4j
 @Service
 public class MessageRepository extends BasePageRepository {
+
+    @Autowired
+    public DataSource dataSource;
 
 
     /**
@@ -207,41 +216,57 @@ public class MessageRepository extends BasePageRepository {
      * @param messageCount 发送短信数量
      * @param phoneCount   发送手机号数量
      */
-    public void saveMessageBatch(final List<MessageFormat> messages, Integer messageCount, Integer phoneCount) {
-        final String sql = "insert into smoc_route.route_message_mt_info1(ID,ACCOUNT_ID,PHONE_NUMBER,SUBMIT_TIME,MESSAGE_CONTENT,MESSAGE_FORMAT,MESSAGE_ID,TEMPLATE_ID,PROTOCOL,ACCOUNT_SRC_ID,ACCOUNT_BUSINESS_CODE,PHONE_NUMBER_NUMBER,MESSAGE_CONTENT_NUMBER,REPORT_FLAG,OPTION_PARAM,CREATED_TIME) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,now()) ";
-        log.info("[短信过滤 Listener][开始]数据：{}", DateTimeUtils.getDateFormat(new Date(), "yyyy-MM-dd HH mm ss SSS"));
-        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-            public int getBatchSize() {
-                return messages.size();
+    public void saveMessageBatch(List<MessageFormat> messages, Integer messageCount, Integer phoneCount) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try {
+            conn = dataSource.getConnection();
+            conn.setAutoCommit(false);
+            final String sql = "insert into smoc_route.route_message_mt_info(ACCOUNT_ID,PHONE_NUMBER,SUBMIT_TIME,MESSAGE_CONTENT,MESSAGE_FORMAT,MESSAGE_ID,TEMPLATE_ID,PROTOCOL,ACCOUNT_SRC_ID,ACCOUNT_BUSINESS_CODE,PHONE_NUMBER_NUMBER,MESSAGE_CONTENT_NUMBER,REPORT_FLAG,OPTION_PARAM,CREATED_TIME) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,now()) ";
+            stmt = conn.prepareStatement(sql);
+            for (MessageFormat message : messages) {
+                stmt.setString(1, message.getAccountId());
+                stmt.setString(2, message.getPhoneNumber());
+                stmt.setString(3, message.getSubmitTime());
+                stmt.setString(4, message.getMessageContent());
+                stmt.setString(5, message.getMessageFormat());
+                stmt.setString(6, message.getMessageId());
+                stmt.setString(7, message.getTemplateId());
+                stmt.setString(8, message.getProtocol());
+                stmt.setString(9, message.getAccountSrcId());
+                stmt.setString(10, message.getAccountBusinessCode());
+                stmt.setInt(11, phoneCount);
+                stmt.setInt(12, messageCount);
+                stmt.setInt(13, message.getReportFlag());
+                stmt.setString(14, message.getOptionParam());
+                stmt.addBatch();
             }
-
-            public void setValues(PreparedStatement ps, int i) throws SQLException {
-                MessageFormat message = messages.get(i);
-                ps.setLong(1, message.getId());
-                ps.setString(2, message.getAccountId());
-                ps.setString(3, message.getPhoneNumber());
-                ps.setString(4, message.getSubmitTime());
-                ps.setString(5, message.getMessageContent());
-                ps.setString(6, message.getMessageFormat());
-                ps.setString(7, message.getMessageId());
-                ps.setString(8, message.getTemplateId());
-                ps.setString(9, message.getProtocol());
-                ps.setString(10, message.getAccountSrcId());
-                ps.setString(11, message.getAccountBusinessCode());
-                ps.setInt(12, phoneCount);
-                ps.setInt(13, messageCount);
-                ps.setInt(14, message.getReportFlag());
-                ps.setString(15, message.getOptionParam());
+            stmt.executeBatch();
+            conn.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (null != conn) {
+                    conn.setAutoCommit(true);
+                    conn.close();
+                }
+                if (null != stmt) {
+                    stmt.clearBatch();
+                    stmt.clearParameters();
+                    stmt.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-        });
-        log.info("[短信过滤 Listener][结束]数据：{}", DateTimeUtils.getDateFormat(new Date(), "yyyy-MM-dd HH mm ss SSS"));
+        }
 
     }
 
     /**
      * 批量保存 待发短信
      */
+    @Transactional
     public void saveBatchTask(MessageHttpsTaskInfo task) {
 
         StringBuffer sql = new StringBuffer("insert into message_https_task_info(ID,TEMPLATE_ID,BUSINESS_ACCOUNT,ENTERPRISE_ID,BUSINESS_TYPE,INFO_TYPE,MESSAGE_TYPE,SEND_TYPE,EXPAND_NUMBER,SPLIT_NUMBER,SUBMIT_NUMBER,MESSAGE_CONTENT,CREATED_BY,CREATED_TIME)");

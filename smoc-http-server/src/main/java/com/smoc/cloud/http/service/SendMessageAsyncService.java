@@ -5,16 +5,15 @@ import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.http.entity.AccountTemplateInfo;
 import com.smoc.cloud.http.entity.MessageFormat;
 import com.smoc.cloud.http.entity.MessageHttpsTaskInfo;
+import com.smoc.cloud.http.redis.IdGeneratorFactory;
 import com.smoc.cloud.http.repository.AccountTemplateInfoRepository;
 import com.smoc.cloud.http.repository.MessageRepository;
-import com.smoc.cloud.http.utils.Int64UUID;
 import com.smoc.cloud.http.utils.MessageContentUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.text.StrSubstitutor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
@@ -28,8 +27,7 @@ public class SendMessageAsyncService {
     private AccountRateLimiter accountRateLimiter;
 
     @Autowired
-    private SequenceService sequenceService;
-
+    private IdGeneratorFactory idGeneratorFactory;
     @Autowired
     private MessageRepository messageRepository;
 
@@ -47,9 +45,8 @@ public class SendMessageAsyncService {
      * @param params
      * @param accountTemplateInfo
      */
-    @Async
+    @Async("threadPoolTaskExecutor")
     public void sendMessageByTemplate(Integer length, SendMessageByTemplateRequestParams params, AccountTemplateInfo accountTemplateInfo) {
-
         List<MessageFormat> messages = new ArrayList<>();
         //模版内容
         String templateContent = accountTemplateInfo.getTemplateContent();
@@ -62,11 +59,12 @@ public class SendMessageAsyncService {
 //
 //        log.info("[组织短信]1：{}", System.currentTimeMillis());
         //获取模板ID
-        String messageId = "TASK" + sequenceService.findSequence("TASK");
+        String messageId = idGeneratorFactory.getTaskId();
         //log.info("[组织短信]2：{}", System.currentTimeMillis());
         for (int i = 0; i < length; i++) {
 
-            if (StringUtils.isEmpty(params.getContent()[i])) {
+            String item = params.getContent()[i];
+            if (StringUtils.isEmpty(item)) {
                 continue;
             }
 
@@ -75,7 +73,7 @@ public class SendMessageAsyncService {
             //log.info("[组织短信@1]：{}", System.currentTimeMillis());
             //普通模版短信
             if ("1".equals(accountTemplateInfo.getTemplateFlag())) {
-                String phoneNumber = params.getContent()[i].split("\\|")[0];
+                String phoneNumber = item.split("\\|")[0];
                 messageFormat.setPhoneNumber(phoneNumber);
                 messageFormat.setMessageContent(templateContent);
                 messageCount += MessageContentUtil.splitSMSContentNumber(templateContent);
@@ -83,7 +81,7 @@ public class SendMessageAsyncService {
             //log.info("[组织短信@2]：{}", System.currentTimeMillis());
             //变量模版短信
             if ("2".equals(accountTemplateInfo.getTemplateFlag())) {
-                String[] content = params.getContent()[i].split("\\|");
+                String[] content = item.split("\\|");
                 messageFormat.setPhoneNumber(content[0]);
 
                 //替换占位符
@@ -97,8 +95,6 @@ public class SendMessageAsyncService {
                 messageFormat.setMessageContent(messageContent);
             }
             //log.info("[组织短信@3]：{}", System.currentTimeMillis());
-
-            messageFormat.setId(Int64UUID.random());
             messageFormat.setAccountId(params.getAccount());
             messageFormat.setMessageId(messageId);
             messageFormat.setTemplateId(params.getTemplateId());
@@ -116,9 +112,7 @@ public class SendMessageAsyncService {
         }
         //异步 批量保存短消息
         this.saveMessageBatch(messageId, messages, messageCount, phoneCount, templateContent, params.getTemplateId(), params.getAccount(), params.getExtNumber());
-//        log.info("[组织短信]3：{}", System.currentTimeMillis());
     }
-
 
 
     /**
@@ -128,7 +122,7 @@ public class SendMessageAsyncService {
      * @param params
      * @param accountTemplateInfo
      */
-    @Async
+    @Async("threadPoolTaskExecutor")
     public void sendMultimediaMessageByTemplate(Integer length, SendMessageByTemplateRequestParams params, AccountTemplateInfo accountTemplateInfo) {
         List<MessageFormat> messages = new ArrayList<>();
         //多媒体模板内容
@@ -141,7 +135,7 @@ public class SendMessageAsyncService {
         Integer phoneCount = 0;
 //        log.info("[组织短信]1：{}", System.currentTimeMillis());
         //获取模板ID
-        String messageId = "TASK" + sequenceService.findSequence("TASK");
+        String messageId = idGeneratorFactory.getTaskId();
 
         for (int i = 0; i < length; i++) {
 
@@ -176,7 +170,6 @@ public class SendMessageAsyncService {
             phoneCount++;
             messageCount++;
 
-            messageFormat.setId(Int64UUID.random());
             messageFormat.setAccountId(params.getAccount());
             messageFormat.setMessageId(messageId);
             messageFormat.setTemplateId(params.getTemplateId());
@@ -205,7 +198,7 @@ public class SendMessageAsyncService {
      * @param params
      * @param accountTemplateInfo
      */
-    @Async
+    @Async("threadPoolTaskExecutor")
     public void sendInterMessageByTemplate(Integer length, SendMessageByTemplateRequestParams params, AccountTemplateInfo accountTemplateInfo) {
         List<MessageFormat> messages = new ArrayList<>();
         //模版内容
@@ -218,7 +211,7 @@ public class SendMessageAsyncService {
         Integer phoneCount = 0;
 //        log.info("[组织短信]1：{}", System.currentTimeMillis());
         //获取模板ID
-        String messageId = "TASK" + sequenceService.findSequence("TASK");
+        String messageId = idGeneratorFactory.getTaskId();
 
         for (int i = 0; i < length; i++) {
 
@@ -252,7 +245,6 @@ public class SendMessageAsyncService {
                 messageFormat.setMessageContent(messageContent);
             }
 
-            messageFormat.setId(Int64UUID.random());
             messageFormat.setAccountId(params.getAccount());
             messageFormat.setMessageId(messageId);
             messageFormat.setTemplateId(params.getTemplateId());
@@ -282,11 +274,11 @@ public class SendMessageAsyncService {
      * @param messageCount 发送短信数量
      * @param phoneCount   发送手机号数量
      */
-    @Transactional
+
     public void saveMessageBatch(String messageId, List<MessageFormat> messages, Integer messageCount, Integer phoneCount, String templateContent, String templateId, String account, String extNumber) {
 
+        //发送消息
         if (phoneCount > 0) {
-            //发送消息
             messageRepository.saveMessageBatch(messages, messageCount, phoneCount);
         }
 

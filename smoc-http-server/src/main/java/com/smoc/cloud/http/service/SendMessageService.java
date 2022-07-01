@@ -1,25 +1,15 @@
 package com.smoc.cloud.http.service;
 
-import com.google.gson.Gson;
 import com.smoc.cloud.common.http.server.message.request.SendMessageByTemplateRequestParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
-import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.http.entity.AccountTemplateInfo;
-import com.smoc.cloud.http.entity.MessageFormat;
-import com.smoc.cloud.http.entity.MessageHttpsTaskInfo;
 import com.smoc.cloud.http.repository.AccountTemplateInfoRepository;
 import com.smoc.cloud.http.repository.MessageRepository;
-import com.smoc.cloud.http.utils.Int64UUID;
-import com.smoc.cloud.http.utils.MessageContentUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.text.StrSubstitutor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -71,7 +61,7 @@ public class SendMessageService {
 
         //批次发送数量
         Integer length = params.getContent().length;
-        if (500 < length) {
+        if (1000 < length) {
             return ResponseDataUtil.buildError(ResponseCode.PARAM_MOBILE_NUM_ERROR.getCode(), ResponseCode.PARAM_MOBILE_NUM_ERROR.getMessage());
         }
 
@@ -117,7 +107,7 @@ public class SendMessageService {
 
         //批次发送数量
         Integer length = params.getContent().length;
-        if (500 < length) {
+        if (1000 < length) {
             return ResponseDataUtil.buildError(ResponseCode.PARAM_MOBILE_NUM_ERROR.getCode(), ResponseCode.PARAM_MOBILE_NUM_ERROR.getMessage());
         }
 
@@ -164,7 +154,7 @@ public class SendMessageService {
 
         //批次发送数量
         Integer length = params.getContent().length;
-        if (500 < length) {
+        if (1000 < length) {
             return ResponseDataUtil.buildError(ResponseCode.PARAM_MOBILE_NUM_ERROR.getCode(), ResponseCode.PARAM_MOBILE_NUM_ERROR.getMessage());
         }
 

@@ -33,10 +33,6 @@ public class MessageBusinessHandle {
         }
 
         /**
-         *  根据手机号、业务账号、进一步初始化数据
-         */
-
-        /**
          * 过滤操作
          */
         List<BusinessRouteValue> successList = new ArrayList<>();

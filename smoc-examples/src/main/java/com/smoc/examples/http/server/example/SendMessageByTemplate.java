@@ -17,7 +17,7 @@ public class SendMessageByTemplate {
 
         String url = "http://localhost:18088/smoc-gateway/http-server/message/sendMessageByTemplate";
 
-        for (int j = 0; j < 10; j++) {
+        for (int j = 0; j < 1; j++) {
             //自定义header协议
             Map<String, String> header = new HashMap<>();
             //signature-nonce 为17位数字，并且每次请求signature-nonce不能重复
@@ -72,7 +72,7 @@ public class SendMessageByTemplate {
             System.out.println(requestJsonData);
 
             String result = Okhttp3Utils.postJson(url, requestJsonData, header);
-            System.out.println("[请求响应]数据:" + result);
+            //System.out.println("[请求响应]数据:" + result);
         }
     }
 }
