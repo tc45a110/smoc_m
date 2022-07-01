@@ -25,7 +25,7 @@ public class RouteMessageRepository {
      *
      * @param list
      */
-    @Async
+    @Async("threadPoolTaskExecutor")
     public void generateMessageAudit(List<BusinessRouteValue> list) {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -75,7 +75,7 @@ public class RouteMessageRepository {
      *
      * @param list
      */
-    @Async
+    @Async("threadPoolTaskExecutor")
     public void generateMessageResponse(List<BusinessRouteValue> list) {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -132,6 +132,7 @@ public class RouteMessageRepository {
     public void deleteByBatch(final List<? extends BusinessRouteValue> list) {
         Connection conn = null;
         PreparedStatement stmt = null;
+//        log.info("[删除数据]：{}",list.size());
         try {
             conn = dataSource.getConnection();
             conn.setAutoCommit(false);

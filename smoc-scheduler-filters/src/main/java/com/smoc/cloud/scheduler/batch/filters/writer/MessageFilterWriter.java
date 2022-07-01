@@ -2,7 +2,7 @@ package com.smoc.cloud.scheduler.batch.filters.writer;
 
 import com.smoc.cloud.scheduler.batch.filters.model.BusinessRouteValue;
 import com.smoc.cloud.scheduler.batch.filters.repository.RouteMessageRepository;
-import com.smoc.cloud.scheduler.batch.filters.service.MessageBusinessHandle;
+import com.smoc.cloud.scheduler.filters.service.MessageBusinessHandle;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import redis.clients.jedis.JedisPoolConfig;
 
 /**
  * redis配置  使用Jackson2JsonRedisSerializer 序列化
@@ -30,11 +31,14 @@ public class RedisPrimaryConfiguration extends RedisConfiguration {
     @Value("${spring.redis.timeout}")
     private int timeout;
 
+
+
     /**
      * 配置redis连接工厂
      */
     @Bean
     public RedisConnectionFactory defaultRedisConnectionFactory() {
+        JedisPoolConfig jedisPoolConfig = this.setPoolConfig(redisPoolMaxIdle,redisPoolMinIdle,redisPoolMaxActive,redisPoolMaxWait,true);
         return createJedisConnectionFactory(dbIndex, host, port, password, timeout);
     }
 
@@ -46,6 +50,7 @@ public class RedisPrimaryConfiguration extends RedisConfiguration {
     public RedisTemplate defaultRedisTemplate() {
         RedisTemplate template = new RedisTemplate();
         template.setConnectionFactory(defaultRedisConnectionFactory());
+
         setSerializer(template);
 
         /**

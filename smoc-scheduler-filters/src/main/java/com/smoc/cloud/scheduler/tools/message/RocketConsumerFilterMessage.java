@@ -1,8 +1,8 @@
 package com.smoc.cloud.scheduler.tools.message;
 
 import com.smoc.cloud.common.filters.utils.RedisConstant;
-import com.smoc.cloud.scheduler.service.filters.service.FiltersService;
-import com.smoc.cloud.scheduler.batch.filters.service.utils.DFA.FilterInitialize;
+import com.smoc.cloud.scheduler.filters.service.service.FiltersService;
+import com.smoc.cloud.scheduler.filters.service.utils.DFA.FilterInitialize;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.core.RocketMQListener;
 import org.springframework.beans.factory.annotation.Autowired;

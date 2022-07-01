@@ -25,16 +25,16 @@ public class RedisConfiguration {
 
 
     @Value("${spring.redis.jedis.pool.max-active}")
-    private int redisPoolMaxActive;
+    public int redisPoolMaxActive;
 
     @Value("${spring.redis.jedis.pool.max-wait}")
-    private int redisPoolMaxWait;
+    public int redisPoolMaxWait;
 
     @Value("${spring.redis.jedis.pool.max-idle}")
-    private int redisPoolMaxIdle;
+    public int redisPoolMaxIdle;
 
     @Value("${spring.redis.jedis.pool.min-idle}")
-    private int redisPoolMinIdle;
+    public int redisPoolMinIdle;
 
     /**
      * 创建redis连接工厂

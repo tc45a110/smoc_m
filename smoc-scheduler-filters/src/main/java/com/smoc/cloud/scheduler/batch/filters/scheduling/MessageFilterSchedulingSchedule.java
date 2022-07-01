@@ -27,7 +27,7 @@ public class MessageFilterSchedulingSchedule {
     @Resource(name="messageFilterJob")
     private Job messageFilterJob;
 
-    @Scheduled(cron = "*/1 * * * * ?")
+    @Scheduled(cron = "*/50 * * * * ?")
     public void accountPriceHistorySchedule() throws Exception {
         JobParameters jobParameter = new JobParametersBuilder().addLong("filters",System.currentTimeMillis()).toJobParameters();
         JobExecution run = jobLauncher.run(messageFilterJob, jobParameter);
