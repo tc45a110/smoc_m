@@ -60,7 +60,7 @@
                                             <span class="text-danger" th:if="${#fields.hasErrors('provinceCode')}"
                                                   th:errors="*{provinceCode}"></span></label><br>
                                         <mpm:tag id="provices" required="true" identity="provices"
-                                                 show-type="select" key="code" name="provinceCode"
+                                                 show-type="select" key="code" name="provinceCode" mask-value="ALL"
                                                  th:value="${systemSegmentProvinceCityValidator.provinceCode}" title="省份"/>
                                     </div>
                                     <div class="form-group">

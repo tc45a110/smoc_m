@@ -2,6 +2,8 @@ package com.smoc.cloud.configure.number.service;
 
 
 import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
+import com.smoc.cloud.common.filters.utils.RedisConstant;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
@@ -9,6 +11,8 @@ import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.configuate.validator.ConfigNumberInfoValidator;
 import com.smoc.cloud.common.smoc.configuate.validator.SystemSegmentProvinceCityValidator;
+import com.smoc.cloud.common.smoc.filter.ExcelModel;
+import com.smoc.cloud.common.smoc.filter.FilterBlackListValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.configure.number.entity.ConfigNumberInfo;
 import com.smoc.cloud.configure.number.entity.SystemSegmentProvinceCity;
@@ -19,6 +23,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.data.redis.core.RedisCallback;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +46,9 @@ public class SegmentProvinceCityService {
 
     @Resource
     private SegmentProvinceCityRepository segmentProvinceCityRepository;
+
+    @Resource(name = "defaultRedisTemplate")
+    private RedisTemplate redisTemplate;
 
     /**
      * 查询列表
@@ -107,7 +117,12 @@ public class SegmentProvinceCityService {
         //记录日志
         log.info("[省号码配置][{}]数据:{}",op, JSON.toJSONString(systemSegmentProvinceCityValidator));
 
+        entity.setIsSync("1");
+
         segmentProvinceCityRepository.saveAndFlush(entity);
+
+        redisTemplate.opsForHash().put(RedisConstant.FILTERS_CONFIG_SYSTEM_PROVINCE_NUMBER , new Gson().toJson(entity.getSegment()), entity.getProvinceCode()+"-"+entity.getProvinceName());
+
         return ResponseDataUtil.buildSuccess();
     }
 
@@ -118,6 +133,8 @@ public class SegmentProvinceCityService {
         //记录日志
         log.info("[省号码配置][delete]数据:{}", JSON.toJSONString(data));
         segmentProvinceCityRepository.deleteById(id);
+
+        redisTemplate.opsForHash().delete(RedisConstant.FILTERS_CONFIG_SYSTEM_PROVINCE_NUMBER, data.getSegment());
 
         return ResponseDataUtil.buildSuccess();
     }
@@ -130,5 +147,28 @@ public class SegmentProvinceCityService {
     @Async
     public void batchSave(SystemSegmentProvinceCityValidator systemSegmentProvinceCityValidator) {
         segmentProvinceCityRepository.batchSave(systemSegmentProvinceCityValidator);
+
+        this.loadSystemSegmentProvinceList(systemSegmentProvinceCityValidator);
+    }
+
+    public void loadSystemSegmentProvinceList(SystemSegmentProvinceCityValidator systemSegmentProvinceCityValidator) {
+
+        List<ExcelModel> provinceList = systemSegmentProvinceCityValidator.getExcelModelList();
+        if (null == provinceList || provinceList.size() < 1) {
+            return;
+        }
+
+        log.info("[省号码导入redis开始]数据：{}", System.currentTimeMillis());
+
+        redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
+            connection.openPipeline();
+            provinceList.forEach((value) -> {
+                connection.hSet(RedisSerializer.string().serialize(RedisConstant.FILTERS_CONFIG_SYSTEM_PROVINCE_NUMBER), RedisSerializer.string().serialize(new Gson().toJson(value.getColumn1())), RedisSerializer.string().serialize(new Gson().toJson(systemSegmentProvinceCityValidator.getProvinceCode()+"-"+systemSegmentProvinceCityValidator.getProvinceName())));
+            });
+            connection.close();
+            return null;
+        });
+
+        log.info("[省号码导入redis结束]数据：{}", System.currentTimeMillis());
     }
 }

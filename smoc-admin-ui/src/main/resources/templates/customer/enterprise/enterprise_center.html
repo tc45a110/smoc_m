@@ -1354,7 +1354,7 @@
 
 <script>
      //封装一个随机生成数字的函数
-     function random(a, b) {
+     /*function random(a, b) {
              var n = Math.round(Math.random() * (a - b) + b);
              return n;
          }
@@ -1373,8 +1373,19 @@
              }
          //在外面调用函数时，一定要在函数内写返回值
          return str;
-     }
+     }*/
 
+     function getCode() {
+
+         var returnStr = "";
+         var charStr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+         for(var i=0; i<8; i++){
+             var index = Math.round(Math.random() * (charStr.length-1));
+             returnStr += charStr.substring(index,index+1);
+         }
+
+         return returnStr;
+     }
 
  </script>
 

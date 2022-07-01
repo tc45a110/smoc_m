@@ -70,4 +70,10 @@ public class InitializeFiltersData {
     //携号转网
     private String reloadPortability = "0";
 
+    //省号码
+    private String reloadSystemSegmentProvince = "0";
+
+    //号段
+    private String reloadSystemNumberCarrier = "0";
+
 }

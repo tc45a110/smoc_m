@@ -27,7 +27,6 @@ public class AccountFinanceInfoValidator {
     private String chargeType;
     @NotNull(message = "金额返还时间不能为空！")
     private String frozenReturnDate;
-    @NotNull(message = "授信额度不能为空！")
     private BigDecimal accountCreditSum;
     private String carrierType;
     private String carrier;

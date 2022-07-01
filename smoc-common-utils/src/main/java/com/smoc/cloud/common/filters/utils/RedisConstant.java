@@ -32,6 +32,12 @@ public class RedisConstant {
     //系统正则白词
     public static final String FILTERS_CONFIG_SYSTEM_WORDS_WHITE_REGULAR = FILTERS_CONFIG_SYSTEM_WORDS_WHITE + "regular";
 
+    //系统省号码
+    public static final String FILTERS_CONFIG_SYSTEM_PROVINCE_NUMBER = FILTERS_CONFIG_SYSTEM + "number:province";
+    //系统省号码
+    public static final String FILTERS_CONFIG_SYSTEM_CARRIER_NUMBER = FILTERS_CONFIG_SYSTEM + "number:carrier";
+
+
     //行业分类敏感词
     public static final String FILTERS_CONFIG_SYSTEM_INDUSTRY_BLACK = FILTERS_CONFIG_SYSTEM + "list:industry:black:";
     //行业敏感词类型

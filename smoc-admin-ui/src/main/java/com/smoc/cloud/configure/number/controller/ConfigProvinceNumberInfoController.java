@@ -2,6 +2,8 @@ package com.smoc.cloud.configure.number.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
+import com.smoc.cloud.common.auth.qo.Dict;
+import com.smoc.cloud.common.auth.qo.DictType;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
@@ -28,8 +30,10 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 省号码管理
@@ -168,6 +172,20 @@ public class ConfigProvinceNumberInfoController {
         //记录日志
         log.info("[省号码管理][{}][{}]数据:{}",op, user.getUserName(), JSON.toJSONString(systemSegmentProvinceCityValidator));
 
+        //取字典数据
+        ServletContext context = request.getServletContext();
+        Map<String, DictType> dictMap = (Map<String, DictType>) context.getAttribute("dict");
+        DictType dictType  = dictMap.get("provices");
+        List<Dict> dictList = dictType.getDict();
+        if(!StringUtils.isEmpty(dictList) && dictList.size()>0){
+            for(Dict dict: dictList){
+                if(systemSegmentProvinceCityValidator.getProvinceCode().equals(dict.getFieldCode())){
+                    systemSegmentProvinceCityValidator.setProvinceName(dict.getFieldName());
+                    break;
+                }
+            }
+        }
+
         //保存操作
         ResponseData data = segmentProvinceCityService.save(systemSegmentProvinceCityValidator, op);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
@@ -248,6 +266,20 @@ public class ConfigProvinceNumberInfoController {
         if (file != null && file.getSize() > 0) {
 
             List<ExcelModel> list = FileUtils.readFile(file,"4");
+
+            //取字典数据
+            ServletContext context = request.getServletContext();
+            Map<String, DictType> dictMap = (Map<String, DictType>) context.getAttribute("dict");
+            DictType dictType  = dictMap.get("provices");
+            List<Dict> dictList = dictType.getDict();
+            if(!StringUtils.isEmpty(dictList) && dictList.size()>0){
+                for(Dict dict: dictList){
+                    if(systemSegmentProvinceCityValidator.getProvinceCode().equals(dict.getFieldCode())){
+                        systemSegmentProvinceCityValidator.setProvinceName(dict.getFieldName());
+                        continue;
+                    }
+                }
+            }
 
             //批量保存
             if(!StringUtils.isEmpty(list) && list.size()>0){

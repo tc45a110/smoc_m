@@ -5,11 +5,13 @@ import com.smoc.cloud.common.BasePageRepository;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.smoc.configuate.validator.ConfigNumberInfoValidator;
+import com.smoc.cloud.common.smoc.configuate.validator.SystemNumberCarrierValidator;
 import com.smoc.cloud.common.smoc.configuate.validator.SystemSegmentProvinceCityValidator;
 import com.smoc.cloud.common.smoc.filter.ExcelModel;
 import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.configure.number.rowmapper.ConfigNumberInfoRowMapper;
 import com.smoc.cloud.configure.number.rowmapper.SegmentProvinceCityRowMapper;
+import com.smoc.cloud.configure.number.rowmapper.SystemNumberCarrierRowMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
@@ -111,5 +113,33 @@ public class SegmentProvinceCityRepositoryImpl extends BasePageRepository {
 
         log.info("[省号码入结束]数据：{}", System.currentTimeMillis());
 
+    }
+
+    /**
+     * 查询省号码
+     *
+     * @return
+     */
+    public List<SystemSegmentProvinceCityValidator> findSegmentProvinceList(){
+        //查询sql
+        StringBuffer sqlBuffer = new StringBuffer("select t.ID,t.SEGMENT,t.PROVINCE_CODE,t.PROVINCE_NAME,t.CITY_NAME " +
+                " from system_segment_province_city t ");
+        List<SystemSegmentProvinceCityValidator> result = this.jdbcTemplate.query(sqlBuffer.toString(), new SegmentProvinceCityRowMapper());
+
+        return result;
+    }
+
+    /**
+     * 查询号段
+     *
+     * @return
+     */
+    public List<SystemNumberCarrierValidator> findNumberCarrierList(){
+        //查询sql
+        StringBuffer sqlBuffer = new StringBuffer("select t.DICT_NAME,t.DICT_CODE " +
+                " from smoc_oauth.base_comm_dict t where t.DICT_TYPE = 'carrierSegment' ");
+        List<SystemNumberCarrierValidator> result = this.jdbcTemplate.query(sqlBuffer.toString(), new SystemNumberCarrierRowMapper());
+
+        return result;
     }
 }

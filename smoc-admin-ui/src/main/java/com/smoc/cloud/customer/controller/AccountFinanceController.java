@@ -102,6 +102,9 @@ public class AccountFinanceController {
         if (!StringUtils.isEmpty(list.getData())) {
             view.addObject("op", "edit");
             accountFinanceInfoValidator = list.getData().get(0);
+            if(!StringUtils.isEmpty(accountFinanceInfoValidator.getAccountCreditSum())){
+                accountFinanceInfoValidator.setAccountCreditSum(new BigDecimal(accountFinanceInfoValidator.getAccountCreditSum().stripTrailingZeros().toPlainString()));
+            }
         } else {
             accountFinanceInfoValidator.setCarrierType("1");
             accountFinanceInfoValidator.setAccountCreditSum(new BigDecimal("0"));
@@ -140,9 +143,12 @@ public class AccountFinanceController {
         }
 
         //如果是后付费，授信额度必须大于0
-        if("2".equals(accountFinanceInfoValidator.getPayType()) && accountFinanceInfoValidator.getAccountCreditSum().compareTo(BigDecimal.ZERO) <=0){
+        /*if("2".equals(accountFinanceInfoValidator.getPayType()) && accountFinanceInfoValidator.getAccountCreditSum().compareTo(BigDecimal.ZERO) <=0){
             view.addObject("error", "如果选择后付费，授信额度必须大于0");
             return view;
+        }*/
+        if(StringUtils.isEmpty(accountFinanceInfoValidator.getAccountCreditSum())){
+            accountFinanceInfoValidator.setAccountCreditSum(new BigDecimal(0));
         }
 
         //查询业务账号

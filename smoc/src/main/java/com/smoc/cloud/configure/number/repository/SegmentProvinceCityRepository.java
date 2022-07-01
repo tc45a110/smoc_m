@@ -3,6 +3,7 @@ package com.smoc.cloud.configure.number.repository;
 
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
+import com.smoc.cloud.common.smoc.configuate.validator.SystemNumberCarrierValidator;
 import com.smoc.cloud.common.smoc.configuate.validator.SystemSegmentProvinceCityValidator;
 import com.smoc.cloud.configure.number.entity.SystemSegmentProvinceCity;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,4 +22,8 @@ public interface SegmentProvinceCityRepository extends CrudRepository<SystemSegm
     List<SystemSegmentProvinceCity> findBySegmentAndProvinceCode(String segment, String provinceCode);
 
     void batchSave(SystemSegmentProvinceCityValidator systemSegmentProvinceCityValidator);
+
+    List<SystemSegmentProvinceCityValidator> findSegmentProvinceList();
+
+    List<SystemNumberCarrierValidator> findNumberCarrierList();
 }

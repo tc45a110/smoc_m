@@ -7,9 +7,12 @@ import com.smoc.cloud.common.filters.utils.InitializeFiltersData;
 import com.smoc.cloud.common.filters.utils.RedisConstant;
 import com.smoc.cloud.common.filters.utils.RedisFilterConstant;
 import com.smoc.cloud.common.smoc.configuate.validator.ConfigNumberInfoValidator;
+import com.smoc.cloud.common.smoc.configuate.validator.SystemNumberCarrierValidator;
+import com.smoc.cloud.common.smoc.configuate.validator.SystemSegmentProvinceCityValidator;
 import com.smoc.cloud.common.smoc.filter.FilterBlackListValidator;
 import com.smoc.cloud.common.smoc.filter.FilterWhiteListValidator;
 import com.smoc.cloud.configure.number.repository.ConfigNumberInfoRepository;
+import com.smoc.cloud.configure.number.repository.SegmentProvinceCityRepository;
 import com.smoc.cloud.filter.entity.KeyWordsMaskKeyWords;
 import com.smoc.cloud.filter.repository.BlackRepository;
 import com.smoc.cloud.filter.repository.KeywordsRepository;
@@ -26,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import redis.clients.jedis.Jedis;
@@ -62,6 +66,8 @@ public class InitializeFiltersDataService {
     private AccountTemplateInfoRepository accountTemplateInfoRepository;
     @Resource
     private ConfigNumberInfoRepository configNumberInfoRepository;
+    @Resource
+    private SegmentProvinceCityRepository segmentProvinceCityRepository;
 
     @Autowired
     private ParameterExtendFiltersValueRepository parameterExtendFiltersValueRepository;
@@ -175,6 +181,16 @@ public class InitializeFiltersDataService {
         //携号转网
         if ("1".equals(initializeFiltersData.getReloadPortability())) {
             this.initializePortability();
+        }
+
+        //省号码
+        if ("1".equals(initializeFiltersData.getReloadSystemSegmentProvince())) {
+            this.initializeSystemSegmentProvince();
+        }
+
+        //号段
+        if ("1".equals(initializeFiltersData.getReloadSystemNumberCarrier())) {
+            this.initializeSystemNumberCarrier();
         }
 
     }
@@ -517,6 +533,37 @@ public class InitializeFiltersDataService {
             log.info("加载携号转网  end：{}", end);
         }
     }
+
+    //号段
+    public void initializeSystemNumberCarrier() {
+        //加载数据
+        List<SystemNumberCarrierValidator> numberCarrierList = segmentProvinceCityRepository.findNumberCarrierList();
+        //删除现有redis缓存
+        this.deleteByKey(RedisConstant.FILTERS_CONFIG_SYSTEM_CARRIER_NUMBER);
+        if (null != numberCarrierList && numberCarrierList.size() > 0) {
+            long start = System.currentTimeMillis();
+            log.info("加载号段start：{}", start);
+            this.multiSaveSetNumberCarrier(numberCarrierList);
+            long end = System.currentTimeMillis();
+            log.info("加载号段  end：{}", end);
+        }
+    }
+
+    //加载省号码
+    public void initializeSystemSegmentProvince() {
+        //加载数据
+        List<SystemSegmentProvinceCityValidator> segmentProvinceList = segmentProvinceCityRepository.findSegmentProvinceList();
+        //删除现有redis缓存
+        this.deleteByKey(RedisConstant.FILTERS_CONFIG_SYSTEM_PROVINCE_NUMBER);
+        if (null != segmentProvinceList && segmentProvinceList.size() > 0) {
+            long start = System.currentTimeMillis();
+            log.info("加载省号码start：{}", start);
+            this.multiSaveSetSegment(segmentProvinceList);
+            long end = System.currentTimeMillis();
+            log.info("加载省号码  end：{}", end);
+        }
+    }
+
 
     public void multiSaveHash(String redisKey, List<KeyWordsMaskKeyWords> list) {
         redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
@@ -869,13 +916,35 @@ public class InitializeFiltersDataService {
         try {
             Pipeline pipelined = jedis.pipelined();
             for (int i = 0; i < list.size(); i++) {
-                pipelined.hdel(RedisSerializer.string().serialize(RedisConstant.MOBILE_PORTABILITY + list.get(i).getNumberCode()), RedisSerializer.string().serialize(new Gson().toJson(list.get(i).getCarrier())));
+                pipelined.set(RedisSerializer.string().serialize(RedisConstant.MOBILE_PORTABILITY + list.get(i).getNumberCode()), RedisSerializer.string().serialize(new Gson().toJson(list.get(i).getCarrier())));
             }
             pipelined.sync();
         } finally {
             jedis.close();
         }
 
+    }
+
+    public void multiSaveSetSegment(List<SystemSegmentProvinceCityValidator> provinceList) {
+        redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
+            connection.openPipeline();
+            provinceList.forEach((value) -> {
+                connection.hSet(RedisSerializer.string().serialize(RedisConstant.FILTERS_CONFIG_SYSTEM_PROVINCE_NUMBER), RedisSerializer.string().serialize(new Gson().toJson(value.getSegment())), RedisSerializer.string().serialize(new Gson().toJson(value.getProvinceCode()+"-"+value.getProvinceName())));
+            });
+            connection.close();
+            return null;
+        });
+    }
+
+    public void multiSaveSetNumberCarrier(List<SystemNumberCarrierValidator> provinceList) {
+        redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
+            connection.openPipeline();
+            provinceList.forEach((value) -> {
+                connection.hSet(RedisSerializer.string().serialize(RedisConstant.FILTERS_CONFIG_SYSTEM_CARRIER_NUMBER), RedisSerializer.string().serialize(new Gson().toJson(value.getNumberCode())), RedisSerializer.string().serialize(new Gson().toJson(value.getCarrier()+"-"+value.getCarrierName())));
+            });
+            connection.close();
+            return null;
+        });
     }
 
 

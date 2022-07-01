@@ -11,6 +11,7 @@ public class SystemSegmentProvinceCity {
     private String provinceCode;
     private String provinceName;
     private String cityName;
+    private String isSync;
 
     @Id
     @Column(name = "ID")
@@ -60,6 +61,16 @@ public class SystemSegmentProvinceCity {
 
     public void setCityName(String cityName) {
         this.cityName = cityName;
+    }
+
+    @Basic
+    @Column(name = "IS_SYNC")
+    public String getIsSync() {
+        return isSync;
+    }
+
+    public void setIsSync(String isSync) {
+        this.isSync = isSync;
     }
 
     @Override
