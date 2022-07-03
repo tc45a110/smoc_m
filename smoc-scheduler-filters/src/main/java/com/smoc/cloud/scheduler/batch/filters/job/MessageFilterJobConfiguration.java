@@ -1,7 +1,7 @@
 package com.smoc.cloud.scheduler.batch.filters.job;
 
 import com.smoc.cloud.scheduler.batch.filters.model.BusinessRouteValue;
-import com.smoc.cloud.scheduler.batch.filters.writer.MessageFilterWriter;
+import com.smoc.cloud.scheduler.batch.filters.writer.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -9,6 +9,7 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.job.builder.FlowBuilder;
 import org.springframework.batch.core.job.flow.Flow;
+import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.database.JdbcPagingItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -33,6 +34,23 @@ public class MessageFilterJobConfiguration {
 
     @Autowired
     public StepBuilderFactory stepBuilderFactory;
+
+    @Autowired
+    public MessageFilterWriter messageFilterWriter;
+
+
+    @Bean("messageFilterJob")
+    public Job messageFilterJob() {
+        return this.jobBuilderFactory.get("messageFilterJob") .incrementer(new RunIdIncrementer())
+                .start(parallelFlow())
+                .end()
+                .build();
+    }
+
+    @Bean
+    public Flow parallelFlow() {
+        return new FlowBuilder<Flow>("parallelFlow").split(messageFilterExecutor()).add(flow0(),flow1(),flow2(),flow3(),flow4(),flow5(),flow6(),flow7(),flow8(),flow9()).build();
+    }
 
     @Resource(name = "messageFilterReader0")
     public JdbcPagingItemReader<BusinessRouteValue> messageFilterReader0;
@@ -64,19 +82,6 @@ public class MessageFilterJobConfiguration {
     @Resource(name = "messageFilterReader9")
     public JdbcPagingItemReader<BusinessRouteValue> messageFilterReader9;
 
-
-    @Autowired
-    public MessageFilterWriter messageFilterWriter;
-
-    @Bean("messageFilterJob")
-    public Job messageFilterJob() {
-        return this.jobBuilderFactory.get("messageFilterJob").start(parallelFlow()).end().build();
-    }
-
-    @Bean
-    public Flow parallelFlow() {
-        return new FlowBuilder<Flow>("parallelFlow").split(messageFilterExecutor()).add(flow0(), flow1(), flow2(), flow3(), flow4(), flow5(), flow6(), flow7(), flow8(), flow9()).build();
-    }
 
     @Bean
     public Flow flow0() {

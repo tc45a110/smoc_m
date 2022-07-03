@@ -170,6 +170,21 @@ public class FiltersRedisDataService {
     }
 
     /**
+     * 按系统手机号发送限流
+     *
+     * @param key   限流的key
+     * @param maxBurst 初始化容量
+     * @param tokens   每seconds 添加的容量
+     * @param seconds  限流的时间间隔
+     * @param times    本次要发送的条数
+     * @return 返回true 表示，可以继续发送，返回false表示已触发限流
+     */
+    public Boolean limiterMessageFilter(String key, int maxBurst, int tokens, int seconds, int times) {
+        Boolean status = isActionAllowed(key, maxBurst, tokens, seconds, times);
+        return status;
+    }
+
+    /**
      * 请求是否被允许
      *
      * @param key      限流的key

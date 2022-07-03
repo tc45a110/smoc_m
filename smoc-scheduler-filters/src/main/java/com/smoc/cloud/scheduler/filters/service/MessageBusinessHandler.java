@@ -4,6 +4,7 @@ import com.smoc.cloud.common.filters.utils.RedisConstant;
 import com.smoc.cloud.scheduler.batch.filters.model.BusinessRouteValue;
 import com.smoc.cloud.scheduler.batch.filters.repository.RouteMessageRepository;
 import com.smoc.cloud.scheduler.filters.service.service.FiltersRedisDataService;
+import com.smoc.cloud.scheduler.tools.utils.FilterResponseCodeConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -16,7 +17,7 @@ import java.util.Map;
 
 @Slf4j
 @Service
-public class MessageBusinessHandle {
+public class MessageBusinessHandler {
 
     @Autowired
     private FiltersRedisDataService filtersRedisDataService;
@@ -44,24 +45,23 @@ public class MessageBusinessHandle {
         List<BusinessRouteValue> successList = new ArrayList<>();
         List<BusinessRouteValue> auditList = new ArrayList<>();
         List<BusinessRouteValue> errorList = new ArrayList<>();
-        //log.info("[batch number start]条数：{}:{}", list.size(), System.currentTimeMillis());
-        StopWatch stopWatch = new StopWatch();
-        stopWatch.start("FILTER");
+        Integer count = list.size();
         for (BusinessRouteValue businessRouteValue : list) {
 
             /**
-             * 完善businessRouteValue 的运营商、省份数据
+             * 号段运营商，根据手机号辨别运营商
              */
-            //运营商
-            Object carrier = filtersRedisDataService.hget(RedisConstant.FILTERS_CONFIG_SYSTEM_CARRIER_NUMBER, businessRouteValue.getPhoneNumber().substring(0, 3));
-            if (null == carrier) {
-                carrier = filtersRedisDataService.hget(RedisConstant.FILTERS_CONFIG_SYSTEM_CARRIER_NUMBER, businessRouteValue.getPhoneNumber().substring(0, 4));
+            Object segmentCarrier = filtersRedisDataService.hget(RedisConstant.FILTERS_CONFIG_SYSTEM_CARRIER_NUMBER, businessRouteValue.getPhoneNumber().substring(0, 3));
+            if (null == segmentCarrier) {
+                segmentCarrier = filtersRedisDataService.hget(RedisConstant.FILTERS_CONFIG_SYSTEM_CARRIER_NUMBER, businessRouteValue.getPhoneNumber().substring(0, 4));
             }
-            //log.info("carrier:{}",carrier);
-            if (null != carrier) {
-                businessRouteValue.setBusinessCarrier(carrier.toString().split("-")[0]);
+            if (null != segmentCarrier) {
+                businessRouteValue.setSegmentCarrier(segmentCarrier.toString().split("-")[0]);
             }
-            //省份
+
+            /**
+             * 完善省份信息，根据号段辨别省份
+             */
             Object province = filtersRedisDataService.hget(RedisConstant.FILTERS_CONFIG_SYSTEM_PROVINCE_NUMBER, businessRouteValue.getPhoneNumber().substring(0, 7));
             if (null != province) {
                 businessRouteValue.setAreaCode(province.toString().split("-")[0]);
@@ -81,27 +81,33 @@ public class MessageBusinessHandle {
             } else {//没有通过过滤
                 businessRouteValue.setFilterCode(filterResult.get("code"));
                 businessRouteValue.setFilterMessage(filterResult.get("message"));
+                businessRouteValue.setStatusCode(FilterResponseCodeConstant.mapping(filterResult.get("code")));
                 errorList.add(businessRouteValue);
             }
         }
-        stopWatch.stop();
-        log.info("[stopWatch]:{}",stopWatch.prettyPrint());
-
+        log.info("[完成过滤操作]条数：{}:{}", count, System.currentTimeMillis());
+        Boolean limiter = filtersRedisDataService.limiterMessageFilter("filter:speed:test", 8000, 8000, 1, count);
+        if (!limiter) {
+            log.info("[------------触发限流-----------------------]");
+        }
         /**
          * 根据过滤结果，进行分业务处理
          */
         //成功通过过滤
         if (successList.size() > 0) {
+            //log.info("[通过过滤]条数：{}", successList.size());
         }
 
         //要经过审核
         if (auditList.size() > 0) {
+            //log.info("[审核过滤]条数：{}", auditList.size());
             routeMessageRepository.generateMessageAudit(auditList);
         }
 
         //没有通过过滤,直接生成报告
         if (errorList.size() > 0) {
-            routeMessageRepository.generateMessageResponse(errorList);
+            //log.info("[没通过过滤]条数：{}", errorList.size());
+            routeMessageRepository.generateErrorMessageResponse(errorList);
         }
 
     }

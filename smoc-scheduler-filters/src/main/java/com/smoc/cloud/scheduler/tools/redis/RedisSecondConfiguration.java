@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import redis.clients.jedis.JedisPoolConfig;
 
 
 @Slf4j
@@ -53,6 +54,7 @@ public class RedisSecondConfiguration extends RedisConfiguration {
      */
     @Bean(name = "redisTemplate2")
     public RedisTemplate redisTemplate2() {
+        JedisPoolConfig jedisPoolConfig = this.setPoolConfig(redisPoolMaxIdle,redisPoolMinIdle,redisPoolMaxActive,redisPoolMaxWait,true);
         RedisTemplate template = new RedisTemplate();
         template.setConnectionFactory(cacheRedisConnectionFactory());
         setSerializer(template);

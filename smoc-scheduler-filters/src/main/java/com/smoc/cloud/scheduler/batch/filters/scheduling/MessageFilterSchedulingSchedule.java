@@ -1,5 +1,6 @@
 package com.smoc.cloud.scheduler.batch.filters.scheduling;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameters;
@@ -15,6 +16,7 @@ import javax.annotation.Resource;
 /**
  *
  */
+@Slf4j
 @Component
 public class MessageFilterSchedulingSchedule {
 
@@ -27,8 +29,9 @@ public class MessageFilterSchedulingSchedule {
     @Resource(name="messageFilterJob")
     private Job messageFilterJob;
 
-    @Scheduled(cron = "*/50 * * * * ?")
+    @Scheduled(cron = "*/1 * * * * ?")
     public void accountPriceHistorySchedule() throws Exception {
+        log.info("[Job启动]");
         JobParameters jobParameter = new JobParametersBuilder().addLong("filters",System.currentTimeMillis()).toJobParameters();
         JobExecution run = jobLauncher.run(messageFilterJob, jobParameter);
         run.getId();

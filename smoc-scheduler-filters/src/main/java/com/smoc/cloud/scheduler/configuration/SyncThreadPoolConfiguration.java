@@ -17,7 +17,7 @@ public class SyncThreadPoolConfiguration {
         // 1: 创建核心线程数 cpu核数 就是cpu数
         threadPoolTaskExecutor.setCorePoolSize(cpuNum*3);
         // 2：线程池维护线程的最大数量，只有在缓存队列满了之后才会申请超过核心线程数的线程
-        threadPoolTaskExecutor.setMaxPoolSize(100);
+        threadPoolTaskExecutor.setMaxPoolSize(200);
         // 3：缓存队列 可以写大一点无非就浪费一点内存空间
         threadPoolTaskExecutor.setQueueCapacity(1000);
         // 4：线程的空闲事件，当超过了核心线程数之外的线程在达到指定的空闲时间会被销毁 200ms

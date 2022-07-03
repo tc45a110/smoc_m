@@ -303,10 +303,10 @@ public class FullFilterParamsFilterService {
          * 1、单手机号发送频率限制
          */
         Object phoneFrequencyLimit = entities.get("COMMON_SEND_FREQUENCY_LIMIT");
-        Map<String, String> phoneFrequencyLimitResult = phoneSendFrequencyLimitFilter.filter(filtersService, phoneFrequencyLimit, account, phone);
-        if (!"false".equals(phoneFrequencyLimitResult.get("result"))) {
-            return errorHandle(phoneFrequencyLimitResult.get("code"), phoneFrequencyLimitResult.get("message"));
-        }
+//        Map<String, String> phoneFrequencyLimitResult = phoneSendFrequencyLimitFilter.filter(filtersService, phoneFrequencyLimit, account, phone);
+//        if (!"false".equals(phoneFrequencyLimitResult.get("result"))) {
+//            return errorHandle(phoneFrequencyLimitResult.get("code"), phoneFrequencyLimitResult.get("message"));
+//        }
 
         return success();
     }

@@ -111,7 +111,7 @@ public class BusinessRouteValue implements Serializable {
     /**
      * account 计费单价
      */
-    private String messagePrice;
+    private Double messagePrice;
 
     /**
      * account 业务类型：普通短信、多媒体短信、5G短信、国际短信、彩信的编码
@@ -139,39 +139,39 @@ public class BusinessRouteValue implements Serializable {
     private String infoType;
 
     /**
+     *  account 业务运营商:平台业务处理的运营商标识
+     */
+    private String businessCarrier;
+
+    /**
      * account 企业ID
      */
     private String enterpriseFlag;
+
+    /**
+     * account 价格区域编码
+     */
+    private String priceAreaCode;
 
 
     /**
      * phone number 号段运营商:根据号段识别的运营商标识
      */
     private String segmentCarrier;
-    /**
-     * 业务运营商:平台业务处理的运营商标识
-     */
-    private String businessCarrier;
 
     /**
-     * 区域编码：国家编码或省份编码
+     * phone number 区域编码：国家编码或省份编码
      */
     private String areaCode;
     /**
-     * 区域名称:国家名称或省份名称
+     * phone number 区域名称:国家名称或省份名称
      */
     private String areaName;
 
     /**
-     * 地市名称:
+     * phone number 地市名称:
      */
     private String cityName;
-
-
-    /**
-     * 价格区域编码
-     */
-    private String priceAreaCode;
 
 
     /**

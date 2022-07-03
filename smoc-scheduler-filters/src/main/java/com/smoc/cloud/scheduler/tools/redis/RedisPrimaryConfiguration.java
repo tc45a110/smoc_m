@@ -38,7 +38,6 @@ public class RedisPrimaryConfiguration extends RedisConfiguration {
      */
     @Bean
     public RedisConnectionFactory defaultRedisConnectionFactory() {
-        JedisPoolConfig jedisPoolConfig = this.setPoolConfig(redisPoolMaxIdle,redisPoolMinIdle,redisPoolMaxActive,redisPoolMaxWait,true);
         return createJedisConnectionFactory(dbIndex, host, port, password, timeout);
     }
 
@@ -48,6 +47,7 @@ public class RedisPrimaryConfiguration extends RedisConfiguration {
      */
     @Bean(name = "defaultRedisTemplate")
     public RedisTemplate defaultRedisTemplate() {
+        JedisPoolConfig jedisPoolConfig = this.setPoolConfig(redisPoolMaxIdle,redisPoolMinIdle,redisPoolMaxActive,redisPoolMaxWait,true);
         RedisTemplate template = new RedisTemplate();
         template.setConnectionFactory(defaultRedisConnectionFactory());
 
