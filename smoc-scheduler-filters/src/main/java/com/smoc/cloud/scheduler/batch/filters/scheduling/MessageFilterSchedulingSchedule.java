@@ -29,7 +29,7 @@ public class MessageFilterSchedulingSchedule {
     @Resource(name="messageFilterJob")
     private Job messageFilterJob;
 
-    @Scheduled(cron = "*/1 * * * * ?")
+    @Scheduled(cron = "*/10 * * * * ?")
     public void accountPriceHistorySchedule() throws Exception {
         log.info("[Job启动]");
         JobParameters jobParameter = new JobParametersBuilder().addLong("filters",System.currentTimeMillis()).toJobParameters();

@@ -11,7 +11,6 @@ import org.springframework.util.DigestUtils;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.List;
 
@@ -28,7 +27,7 @@ public class RouteMessageRepository {
      * @param businessRouteValueList
      */
     @Async("threadPoolTaskExecutor")
-    private void handlerBusinessBatch(List<BusinessRouteValue> businessRouteValueList) {
+    public void handlerBusinessBatch(List<BusinessRouteValue> businessRouteValueList) {
         Connection conn = null;
         Statement stmt = null;
         try {
@@ -77,16 +76,16 @@ public class RouteMessageRepository {
             sql.append("values(?,?,?,?,?,?,?,?,?,now())");
             stmt = conn.prepareStatement(sql.toString());
             for (BusinessRouteValue businessRouteValue : list) {
-                stmt.setString(1, businessRouteValue.getAccountId());
-                stmt.setString(2, businessRouteValue.getInfoType());
-                stmt.setString(3, businessRouteValue.getPhoneNumber());
-                stmt.setString(4, businessRouteValue.getAccountSubmitTime());
-                stmt.setString(5, businessRouteValue.getMessageContent());
-                stmt.setString(6, businessRouteValue.getChannelId());
-                stmt.setString(7, businessRouteValue.getAuditReason());
-                stmt.setString(8, DigestUtils.md5DigestAsHex(businessRouteValue.getMessageContent().getBytes()));
-                stmt.setString(9, new Gson().toJson(businessRouteValue));
-                stmt.addBatch();
+//                stmt.setString(1, businessRouteValue.getAccountId());
+//                stmt.setString(2, businessRouteValue.getInfoType());
+//                stmt.setString(3, businessRouteValue.getPhoneNumber());
+//                stmt.setString(4, businessRouteValue.getAccountSubmitTime());
+//                stmt.setString(5, businessRouteValue.getMessageContent());
+//                stmt.setString(6, businessRouteValue.getChannelId());
+//                stmt.setString(7, businessRouteValue.getStatusMessage());
+//                stmt.setString(8, DigestUtils.md5DigestAsHex(businessRouteValue.getMessageContent().getBytes()));
+//                stmt.setString(9, new Gson().toJson(businessRouteValue));
+//                stmt.addBatch();
             }
             stmt.executeBatch();
             conn.commit();
@@ -138,7 +137,7 @@ public class RouteMessageRepository {
                 stmt.setString(7, businessRouteValue.getAccountSubmitSrcId());
                 stmt.setString(8, businessRouteValue.getAccountBusinessCode());
                 stmt.setInt(9, businessRouteValue.getMessageTotal());
-                stmt.setInt(10, businessRouteValue.getMessageIndex());
+                stmt.setInt(10,0);
                 stmt.setString(11, businessRouteValue.getOptionParam());
                 stmt.addBatch();
             }
@@ -209,17 +208,17 @@ public class RouteMessageRepository {
      */
     public String buildRouteChannelMessageSql(BusinessRouteValue businessRouteValue) {
         StringBuffer insertRouteChannelMessageSql = new StringBuffer();
-        insertRouteChannelMessageSql.append("insert into smoc_route.route_channel_message_mt_info_");
-        insertRouteChannelMessageSql.append(businessRouteValue.getEnterpriseFlag().toLowerCase());
-        insertRouteChannelMessageSql.append(" (ACCOUNT_ID,ACCOUNT_PRIORITY,INFO_TYPE,PHONE_NUMBER,ACCOUNT_SUBMIT_TIME,MESSAGE_CONTENT,MESSAGE_JSON,CREATED_TIME)");
-        insertRouteChannelMessageSql.append(" values('" + businessRouteValue.getAccountId() + "',");
-        insertRouteChannelMessageSql.append("'" + businessRouteValue.getAccountPriority() + "',");
-        insertRouteChannelMessageSql.append("'" + businessRouteValue.getInfoType() + "',");
-        insertRouteChannelMessageSql.append("'" + businessRouteValue.getPhoneNumber() + "',");
-        insertRouteChannelMessageSql.append("'" + businessRouteValue.getAccountSubmitTime() + "',");
-        insertRouteChannelMessageSql.append("'" + businessRouteValue.getMessageContent() + "',");
-        insertRouteChannelMessageSql.append("'" + new Gson().toJson(businessRouteValue) + "',");
-        insertRouteChannelMessageSql.append(" now())");
+//        insertRouteChannelMessageSql.append("insert into smoc_route.route_channel_message_mt_info_");
+//        insertRouteChannelMessageSql.append(businessRouteValue.getEnterpriseFlag().toLowerCase());
+//        insertRouteChannelMessageSql.append(" (ACCOUNT_ID,ACCOUNT_PRIORITY,INFO_TYPE,PHONE_NUMBER,ACCOUNT_SUBMIT_TIME,MESSAGE_CONTENT,MESSAGE_JSON,CREATED_TIME)");
+//        insertRouteChannelMessageSql.append(" values('" + businessRouteValue.getAccountId() + "',");
+//        insertRouteChannelMessageSql.append("'" + businessRouteValue.getAccountPriority() + "',");
+//        insertRouteChannelMessageSql.append("'" + businessRouteValue.getInfoType() + "',");
+//        insertRouteChannelMessageSql.append("'" + businessRouteValue.getPhoneNumber() + "',");
+//        insertRouteChannelMessageSql.append("'" + businessRouteValue.getAccountSubmitTime() + "',");
+//        insertRouteChannelMessageSql.append("'" + businessRouteValue.getMessageContent() + "',");
+//        insertRouteChannelMessageSql.append("'" + new Gson().toJson(businessRouteValue) + "',");
+//        insertRouteChannelMessageSql.append(" now())");
         return insertRouteChannelMessageSql.toString();
     }
 
@@ -232,18 +231,18 @@ public class RouteMessageRepository {
     public String buildUpdateFinanceSql(BusinessRouteValue businessRouteValue) {
 
         StringBuffer updateFinanceSql = new StringBuffer();
-        updateFinanceSql.append(" update smoc.finance_account set");
-        updateFinanceSql.append(" ACCOUNT_USABLE_SUM = ACCOUNT_USABLE_SUM - " + businessRouteValue.getMessagePrice() + ",");
-
-        // 1 下发时计费：扣费金额即冻结金额，暂不产生消费金额，一定周期内返还余额、产生消费金额
-        // 2 回执成功计费:扣费金额即消费金额，不产生冻结金额;
-        if ("1".equals(businessRouteValue.getConsumeType())) { //下发计费
-            updateFinanceSql.append(" ACCOUNT_CONSUME_SUM = ACCOUNT_CONSUME_SUM + " + businessRouteValue.getMessagePrice() + ",");
-        } else {
-            updateFinanceSql.append(" ACCOUNT_FROZEN_SUM = ACCOUNT_FROZEN_SUM + " + businessRouteValue.getMessagePrice() + ",");
-        }
-        updateFinanceSql.append(" UPDATED_TIME=now() ");
-        updateFinanceSql.append(" WHERE ACCOUNT_ID = '" + businessRouteValue.getAccountId() + "' ");
+//        updateFinanceSql.append(" update smoc.finance_account set");
+//        updateFinanceSql.append(" ACCOUNT_USABLE_SUM = ACCOUNT_USABLE_SUM - " + businessRouteValue.getMessagePrice() + ",");
+//
+//        // 1 下发时计费：扣费金额即冻结金额，暂不产生消费金额，一定周期内返还余额、产生消费金额
+//        // 2 回执成功计费:扣费金额即消费金额，不产生冻结金额;
+//        if ("1".equals(businessRouteValue.getConsumeType())) { //下发计费
+//            updateFinanceSql.append(" ACCOUNT_CONSUME_SUM = ACCOUNT_CONSUME_SUM + " + businessRouteValue.getMessagePrice() + ",");
+//        } else {
+//            updateFinanceSql.append(" ACCOUNT_FROZEN_SUM = ACCOUNT_FROZEN_SUM + " + businessRouteValue.getMessagePrice() + ",");
+//        }
+//        updateFinanceSql.append(" UPDATED_TIME=now() ");
+//        updateFinanceSql.append(" WHERE ACCOUNT_ID = '" + businessRouteValue.getAccountId() + "' ");
         return updateFinanceSql.toString();
     }
 

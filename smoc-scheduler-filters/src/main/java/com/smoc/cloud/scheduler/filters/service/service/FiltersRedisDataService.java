@@ -1,5 +1,7 @@
 package com.smoc.cloud.scheduler.filters.service.service;
 
+import com.smoc.cloud.common.redis.RedisConstant;
+import com.smoc.cloud.scheduler.batch.filters.model.MessageRouteAccountParams;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
@@ -24,6 +26,19 @@ public class FiltersRedisDataService {
 
     @Resource(name = "redisTemplate2")
     private RedisTemplate<String ,Object> redisTemplate2;
+
+
+    /**
+     * 根据accountId获取account信息
+     *
+     * @param account
+     * @return
+     */
+    public MessageRouteAccountParams getAccountInfo(String account) {
+        //redis 查询
+        MessageRouteAccountParams redisModel = (MessageRouteAccountParams) redisTemplate.opsForValue().get(RedisConstant.HTTP_SERVER_KEY + account);
+        return redisModel;
+    }
 
     /**
      * 是否包含 set 存储
