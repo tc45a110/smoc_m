@@ -2,6 +2,7 @@ package com.smoc.cloud.scheduler.account.price.service;
 
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.UUID;
+import com.smoc.cloud.scheduler.account.price.service.model.AccountFutruePriceModel;
 import com.smoc.cloud.scheduler.account.price.service.model.AccountPriceModel;
 import com.smoc.cloud.scheduler.common.repository.BatchRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -142,6 +143,50 @@ public class AccountFinanceService {
             log.info("[消息日汇总 账号价格更新]");
         } catch (Exception e) {
             log.error("[消息日汇总 账号价格更新]:{}", e.getMessage());
+        }
+    }
+
+    /**
+     * 生效未来价格
+     * @param list
+     */
+    public void saveFutrue(List<? extends AccountFutruePriceModel> list) {
+
+        if (null == list || list.size() < 1) {
+            return;
+        }
+
+        try {
+            //组织执行的sql
+            List<String> sql = new ArrayList<>();
+            for (AccountFutruePriceModel model : list) {
+
+                //价格日期
+                String dataDate = model.getPriceDate();
+                //1国内运营商 2：国际
+                String type = model.getCarrierType();
+                //如果存在则进行修改操作
+                StringBuffer updateSqlBuffer = new StringBuffer("update smoc.account_price_history set CARRIER_PRICE =" + model.getCarrierPrice() + ",SOURCE_ID='" + model.getSourceId() + "' where ACCOUNT_ID='" + model.getAccountId() + "' and CARRIER='" + model.getCarrier() + "' and PRICE_DATE='" + dataDate + "' ");
+
+                //进行插入，并判断是否存在
+                StringBuffer sqlBuffer = new StringBuffer(" insert into smoc.account_price_history(ID,SOURCE_ID,ACCOUNT_ID,CARRIER_TYPE,CARRIER,CARRIER_PRICE,PRICE_DATE,CREATED_TIME) ");
+                sqlBuffer.append(" select '" + UUID.uuid32() + "' ,DATA_ID,BUSINESS_ID,"+type+",PRICE_AREA ,CHANGE_PRICE,'" + dataDate + "' PRICE_DATE ,now() from smoc.system_history_price_change_record where ID ='" + model.getId() + "' ");
+                sqlBuffer.append(" and NOT EXISTS(select * from smoc.account_price_history t where t.ACCOUNT_ID='" + model.getAccountId() + "' and t.CARRIER='" + model.getCarrier() + "' and t.PRICE_DATE='" + dataDate + "')");
+
+                //修改原来数据的批处理日期
+                String updateSql = "update smoc.account_finance_info set BATCH_DATE = now(),CARRIER_PRICE =" + model.getCarrierPrice()+" where ID ='" + model.getSourceId() + "'";
+
+                //修改变更记录表为已处理
+                String updateSystemSql = "update smoc.system_history_price_change_record set TASK_STATUS =1  where ID ='" + model.getId() + "'";
+
+                sql.add(updateSqlBuffer.toString());
+                sql.add(sqlBuffer.toString());
+                sql.add(updateSql);
+                sql.add(updateSystemSql);
+            }
+            batchRepository.batchSave(sql);
+        } catch (Exception e) {
+            log.error("[业务账号未来价格批处理 新数据]:{}", e.getMessage());
         }
     }
 }

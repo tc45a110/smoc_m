@@ -2,6 +2,7 @@ package com.smoc.cloud.scheduler.channel.price.service;
 
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.UUID;
+import com.smoc.cloud.scheduler.channel.price.service.model.ChannelFutruePriceModel;
 import com.smoc.cloud.scheduler.channel.price.service.model.ChannelPriceModel;
 import com.smoc.cloud.scheduler.common.repository.BatchRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -146,4 +147,39 @@ public class ChannelPriceHistoryService {
     }
 
 
+    public void saveFutrue(List<? extends ChannelFutruePriceModel> list) {
+        if (null == list || list.size() < 1) {
+            return;
+        }
+
+        try {
+            List<String> sql = new ArrayList<>();
+            for (ChannelFutruePriceModel model : list) {
+
+                //如果存在则进行修改操作
+                StringBuffer updateSqlBuffer = new StringBuffer("update smoc.config_channel_price_history set CHANNEL_PRICE =" + model.getCarrierPrice() + ",SOURCE_ID='" + model.getSourceId() + "',UPDATED_TIME = now() where CHANNEL_ID='" + model.getAccountId() + "' and AREA_CODE='" + model.getCarrier() + "' and PRICE_DATE='" + model.getPriceDate() + "' ");
+
+                //如果不存在则进行 insert
+                StringBuffer insertSqlBuffer = new StringBuffer("insert into smoc.config_channel_price_history(ID,SOURCE_ID,CHANNEL_ID,PRICE_STYLE,AREA_CODE,CHANNEL_PRICE,PRICE_DATE,CREATE_TIME) ");
+                insertSqlBuffer.append(" select '" + UUID.uuid32() + "',ID,CHANNEL_ID,"+model.getPriceStyle()+",AREA_CODE,CHANNEL_PRICE,'" + model.getPriceDate() + "' ,now() from smoc.config_channel_price where ID ='" + model.getId() + "' ");
+                insertSqlBuffer.append(" and NOT EXISTS(select * from smoc.config_channel_price_history t where t.CHANNEL_ID='" + model.getAccountId() + "' and t.AREA_CODE='" + model.getCarrier() + "' and t.PRICE_DATE='" + model.getPriceDate() + "' )");
+
+                //修改原来数据的批处理日期
+                String updateSql = "update smoc.config_channel_price set BATCH_DATE = now(),CHANNEL_PRICE = "+model.getCarrierPrice()+" where ID ='" + model.getSourceId() + "'";
+
+                //修改变更记录表为已处理
+                String updateSystemSql = "update smoc.system_history_price_change_record set TASK_STATUS =1  where ID ='" + model.getId() + "'";
+
+                sql.add(updateSqlBuffer.toString());
+                sql.add(insertSqlBuffer.toString());
+                sql.add(updateSql);
+                sql.add(updateSystemSql);
+            }
+
+            //log.info("[通道价格批处理 新数据]:{}", sql.size());
+            batchRepository.batchSave(sql);
+        } catch (Exception e) {
+            log.error("[通道未来价格批处理]:{}", e.getMessage());
+        }
+    }
 }
