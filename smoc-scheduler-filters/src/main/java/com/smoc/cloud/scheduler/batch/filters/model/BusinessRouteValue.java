@@ -67,6 +67,7 @@ public class BusinessRouteValue implements Serializable {
      */
     private long taskPhoneNumberNumber;
 
+
     /**
      * message 批次包含的消息条数,长短信算多条 **********
      */
@@ -88,70 +89,14 @@ public class BusinessRouteValue implements Serializable {
     private String accountSubmitTime;
 
     /**
+     * message 本条消息计数条数
+     */
+    private int messageTotal;
+
+    /**
      * message 消息签名
      */
     private String messageSignature;
-
-    /**
-     * account 业务账号名称
-     */
-    private String accountName;
-
-
-    /**
-     * account 业务账号优先级
-     */
-    private String accountPriority;
-
-    /**
-     * account 计费账号ID
-     */
-    private String financeAccountId;
-
-    /**
-     * account 计费单价
-     */
-    private Double messagePrice;
-
-    /**
-     * account 业务类型：普通短信、多媒体短信、5G短信、国际短信、彩信的编码
-     */
-    private String businessType;
-
-    /**
-     * account 扣费方式 1：下发时扣费 2：回执返回时扣费
-     */
-    private String consumeType;
-
-    /**
-     * account 账号在平台的扩展码包含随机扩展码加上账号自带扩展码
-     */
-    private String accountExtendCode;
-
-    /**
-     * account 行业分类：多个行业用&分隔
-     */
-    private String industryTypes;
-
-    /**
-     * account 信息分类:按照投诉高低分为：行业、会销、拉新、催收
-     */
-    private String infoType;
-
-    /**
-     *  account 业务运营商:平台业务处理的运营商标识
-     */
-    private String businessCarrier;
-
-    /**
-     * account 企业ID
-     */
-    private String enterpriseFlag;
-
-    /**
-     * account 价格区域编码
-     */
-    private String priceAreaCode;
 
 
     /**
@@ -175,182 +120,19 @@ public class BusinessRouteValue implements Serializable {
 
 
     /**
-     * 路由标签：MO上行，RP状态报告，MT下行
+     * account 平台账号配置的运营商
      */
-    private String routeLabel;
-
+    private String businessCarrier;
 
     /**
-     * 本条消息总条数
-     */
-    private int messageTotal;
-
-    /**
-     * 本条消息当前条数
-     */
-    private int messageIndex;
-
-    /**
-     * 本条信息计费条数
-     */
-    private String messageNumber;
-
-    /**
-     * 计费金额
-     */
-    private String messageAmount;
-
-
-    /**
-     * 发送批次号
-     */
-    private String accountTaskId = "0";
-
-
-    /**
-     * 标识一条消息，长短信该值相同
-     */
-    private String businessMessageId;
-
-    /**
-     * 到审核表时间
-     */
-    private String tableAuditTime;
-
-    /**
-     * 到下行通道表时间
-     */
-    private String tableSubmitTime;
-
-    /**
-     * 上行内容
-     */
-    private String MOContent;
-
-    /**
-     * 到下发队列时间
-     */
-    private String queueSubmitTime;
-
-    /**
-     * 通道ID
-     */
-    private String channelId;
-
-    /**
-     * 通道名称
-     */
-    private String channelName;
-
-    /**
-     * 通道单价
-     */
-    private String channelPrice;
-
-    /**
-     * 通道接入码
-     */
-    private String channelSRCID;
-
-    /**
-     * 提交到通道的码号
-     */
-    private String channelSubmitSRCID;
-
-    /**
-     * 提交到通道总条数
-     */
-    private int channelTotal;
-
-    /**
-     * 提交到通道本条序号
-     */
-    private int channelIndex;
-
-    /**
-     * 提交到通道时间
-     */
-    private String channelSubmitTime;
-
-    /**
-     * 提交到通道响应消息ID
-     */
-    private String channelMessageID;
-
-    /**
-     * 是否进入了审核的code
-     */
-    private int executeCheckCode;
-
-    /**
-     * 路由下一个节点的code：0成功；其他代表失败
-     */
-    private String nextNodeCode;
-
-    /**
-     * 路由下一个的节点的错误码
-     */
-    private String nextNodeErrorCode;
-
-    /**
-     * 通道返回状态报告时间
-     */
-    private String channelReportTime;
-
-    /**
-     * 成功码0代表成功2代表失败
-     */
-    private String successCode;
-
-    /**
-     * 状态码
+     * 数据状态
      */
     private String statusCode;
 
     /**
-     * 状态子码
+     * 状态提示
      */
-    private String subStatusCode;
+    private String statusMessage;
 
-    /**
-     * 状态码来源0:内部;1:通道提交码;2:通道状态码
-     */
-    private String statusCodeSource;
-
-    /**
-     * 通道返回状态报告的码号，用于当通过消息ID未能匹配到提交记录时，可以通过码号+手机号+通道ID 进行模糊匹配，类似上行。
-     */
-    private String channelReportSRCID;
-
-    /**
-     * 通道上行码号
-     */
-    private String channelMOSRCID;
-
-    /**
-     * 通道模板id
-     */
-    private String channelTemplateID = "0";
-
-    /**
-     * 重复发送次数
-     */
-    private int repeatSendTimes;
-
-
-    /**
-     * 进入审核原因
-     */
-    private String auditReason;
-
-    /**
-     * 补发通道
-     */
-    private String channelRepairID;
-
-    //过滤响应码
-    private String filterCode;
-    //过滤响应提示
-    private String filterMessage;
 
 }

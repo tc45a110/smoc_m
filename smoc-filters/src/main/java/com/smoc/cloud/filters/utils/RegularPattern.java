@@ -1,6 +1,7 @@
 package com.smoc.cloud.filters.utils;
 
 import com.google.gson.Gson;
+import org.springframework.util.StringUtils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,8 +17,8 @@ public class RegularPattern {
 //        }else{
 //            System.out.println(false);
 //        }
-
-        String phone = "13510351258";
-        System.out.println(phone.substring(0,4));
+            String a = "CMCC";
+            String b ="CMCC";
+            System.out.print(a.contains(b));
     }
 }

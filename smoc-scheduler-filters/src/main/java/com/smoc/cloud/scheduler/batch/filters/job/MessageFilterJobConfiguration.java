@@ -27,7 +27,7 @@ import javax.annotation.Resource;
 public class MessageFilterJobConfiguration {
 
     //每批次处理数量
-    private Integer chunk = 1000;
+    private Integer chunk = 400;
 
     @Autowired
     public JobBuilderFactory jobBuilderFactory;
@@ -49,7 +49,7 @@ public class MessageFilterJobConfiguration {
 
     @Bean
     public Flow parallelFlow() {
-        return new FlowBuilder<Flow>("parallelFlow").split(messageFilterExecutor()).add(flow0(),flow1(),flow2(),flow3(),flow4(),flow5(),flow6(),flow7(),flow8(),flow9()).build();
+        return new FlowBuilder<Flow>("parallelFlow").split(messageFilterExecutor()).add(flow9()).build();
     }
 
     @Resource(name = "messageFilterReader0")

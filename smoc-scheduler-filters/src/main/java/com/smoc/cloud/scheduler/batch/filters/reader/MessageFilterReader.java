@@ -21,9 +21,9 @@ public class MessageFilterReader {
     @Autowired
     public DataSource dataSource;
 
-    private Integer fetchSize = 1200;
+    private Integer fetchSize = 1000;
 
-    private Integer pageSize = 1200;
+    private Integer pageSize = 1000;
 
     /**
      * 查询 route_message_mt_info 表中，等待发送的短信数据
