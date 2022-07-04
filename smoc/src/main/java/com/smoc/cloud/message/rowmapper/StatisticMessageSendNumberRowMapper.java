@@ -36,7 +36,7 @@ public class StatisticMessageSendNumberRowMapper implements RowMapper<StatisticM
             qo.setNoReportRate(Integer.parseInt(df.format(100*(double)noReportNumber/sendNumber)));
         }
 
-        qo.setCreatedTime(resultSet.getString("CREATED_TIME"));
+        qo.setCreatedTime(resultSet.getString("MESSAGE_DATE"));
 
         return qo;
     }

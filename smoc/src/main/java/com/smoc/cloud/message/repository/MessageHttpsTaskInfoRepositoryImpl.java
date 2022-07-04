@@ -127,75 +127,73 @@ public class MessageHttpsTaskInfoRepositoryImpl extends BasePageRepository {
         StringBuilder sqlBuffer = new StringBuilder("select ");
         String groupBySql = "";
         //按账号维度查询
-        if("1".equals(qo)){
+        if("1".equals(qo.getFlag())){
             sqlBuffer.append(" t.BUSINESS_ACCOUNT,");
             sqlBuffer.append(" ''PROTOCOL,");
             sqlBuffer.append(" ''SIGN,");
             sqlBuffer.append(" ''CARRIER,");
-            sqlBuffer.append(" sum(t.SUCCESS_NUMBER),");
-            sqlBuffer.append(" sum(t.SUCCESS_SEND_NUMBER),");
-            sqlBuffer.append(" sum(t.FAILURE_NUMBER),");
-            sqlBuffer.append(" sum(t.NO_REPORT_NUMBER),");
-            sqlBuffer.append(" DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d')CREATED_TIME ");
-            sqlBuffer.append(" from view_message_task_info t ");
+            sqlBuffer.append(" sum(t.SUCCESS_SUBMIT_NUM)SUCCESS_NUMBER,");
+            sqlBuffer.append(" sum(t.MESSAGE_SUCCESS_NUM)SUCCESS_SEND_NUMBER,");
+            sqlBuffer.append(" sum(t.MESSAGE_FAILURE_NUM)FAILURE_NUMBER,");
+            sqlBuffer.append(" sum(t.MESSAGE_NO_REPORT_NUM)NO_REPORT_NUMBER,");
+            sqlBuffer.append(" t.MESSAGE_DATE ");
+            sqlBuffer.append(" from message_daily_statistics t left join account_base_info a on t.BUSINESS_ACCOUNT = a.ACCOUNT_ID left join enterprise_basic_info b on a.ENTERPRISE_ID = b.ENTERPRISE_ID ");
             sqlBuffer.append(" where 1=1 ");
 
-            groupBySql = "group by DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d'),t.BUSINESS_ACCOUNT,PROTOCOL,SIGN,CARRIER ";
+            groupBySql = "group by t.MESSAGE_DATE,t.BUSINESS_ACCOUNT ";
         }
         //按签名维度
-        else if("2".equals(qo)){
-            sqlBuffer.append(" ''SIGN,");
+        else if("2".equals(qo.getFlag())){
+            sqlBuffer.append(" t.MESSAGE_SIGN SIGN,");
             sqlBuffer.append(" ''BUSINESS_ACCOUNT,");
             sqlBuffer.append(" ''PROTOCOL,");
             sqlBuffer.append(" ''CARRIER,");
-            sqlBuffer.append(" sum(t.SUCCESS_NUMBER)SUCCESS_NUMBER,");
-            sqlBuffer.append(" sum(t.SUCCESS_SEND_NUMBER)SUCCESS_SEND_NUMBER,");
-            sqlBuffer.append(" sum(t.FAILURE_NUMBER)FAILURE_NUMBER,");
-            sqlBuffer.append(" sum(t.NO_REPORT_NUMBER)NO_REPORT_NUMBER,");
-            sqlBuffer.append(" DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d')CREATED_TIME ");
-            sqlBuffer.append(" from view_message_task_info t ");
+            sqlBuffer.append(" sum(t.SUCCESS_SUBMIT_NUM)SUCCESS_NUMBER,");
+            sqlBuffer.append(" sum(t.MESSAGE_SUCCESS_NUM)SUCCESS_SEND_NUMBER,");
+            sqlBuffer.append(" sum(t.MESSAGE_FAILURE_NUM)FAILURE_NUMBER,");
+            sqlBuffer.append(" sum(t.MESSAGE_NO_REPORT_NUM)NO_REPORT_NUMBER,");
+            sqlBuffer.append(" t.MESSAGE_DATE ");
+            sqlBuffer.append(" from message_daily_statistics t left join account_base_info a on t.BUSINESS_ACCOUNT = a.ACCOUNT_ID left join enterprise_basic_info b on a.ENTERPRISE_ID = b.ENTERPRISE_ID ");
             sqlBuffer.append(" where 1=1 ");
 
-            groupBySql = "group by DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d'),SIGN,BUSINESS_ACCOUNT,PROTOCOL,CARRIER ";
+            groupBySql = "group by t.MESSAGE_DATE,t.MESSAGE_SIGN ";
         }
         //按运营商维度
-        else if("2".equals(qo)){
-            sqlBuffer.append(" ''CARRIER,");
+        else if("2".equals(qo.getFlag())){
+            sqlBuffer.append(" t.CARRIER,");
             sqlBuffer.append(" ''BUSINESS_ACCOUNT,");
             sqlBuffer.append(" ''PROTOCOL,");
             sqlBuffer.append(" ''SIGN,");
-            sqlBuffer.append(" sum(t.SUCCESS_NUMBER)SUCCESS_NUMBER,");
-            sqlBuffer.append(" sum(t.SUCCESS_SEND_NUMBER)SUCCESS_SEND_NUMBER,");
-            sqlBuffer.append(" sum(t.FAILURE_NUMBER)FAILURE_NUMBER,");
-            sqlBuffer.append(" sum(t.NO_REPORT_NUMBER)NO_REPORT_NUMBER,");
-            sqlBuffer.append(" DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d')CREATED_TIME ");
-            sqlBuffer.append(" from view_message_task_info t ");
+            sqlBuffer.append(" sum(t.SUCCESS_SUBMIT_NUM)SUCCESS_NUMBER,");
+            sqlBuffer.append(" sum(t.MESSAGE_SUCCESS_NUM)SUCCESS_SEND_NUMBER,");
+            sqlBuffer.append(" sum(t.MESSAGE_FAILURE_NUM)FAILURE_NUMBER,");
+            sqlBuffer.append(" sum(t.MESSAGE_NO_REPORT_NUM)NO_REPORT_NUMBER,");
+            sqlBuffer.append(" t.MESSAGE_DATE ");
+            sqlBuffer.append(" from message_daily_statistics t left join account_base_info a on t.BUSINESS_ACCOUNT = a.ACCOUNT_ID left join enterprise_basic_info b on a.ENTERPRISE_ID = b.ENTERPRISE_ID ");
             sqlBuffer.append(" where 1=1 ");
 
-            groupBySql = "group by DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d'),CARRIER,BUSINESS_ACCOUNT,PROTOCOL,SIGN ";
+            groupBySql = "group by t.MESSAGE_DATE,t.CARRIER ";
         }else{
-            sqlBuffer.append(" ''CARRIER,");
+            sqlBuffer.append(" t.CARRIER,");
             sqlBuffer.append(" t.BUSINESS_ACCOUNT,");
+            sqlBuffer.append(" t.MESSAGE_SIGN SIGN,");
             sqlBuffer.append(" ''PROTOCOL,");
-            sqlBuffer.append(" ''SIGN,");
-            sqlBuffer.append(" sum(t.SUCCESS_NUMBER)SUCCESS_NUMBER,");
-            sqlBuffer.append(" sum(t.SUCCESS_SEND_NUMBER)SUCCESS_SEND_NUMBER,");
-            sqlBuffer.append(" sum(t.FAILURE_NUMBER)FAILURE_NUMBER,");
-            sqlBuffer.append(" sum(t.NO_REPORT_NUMBER)NO_REPORT_NUMBER,");
-            sqlBuffer.append(" DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d')CREATED_TIME ");
-            sqlBuffer.append(" from view_message_task_info t ");
+            sqlBuffer.append(" sum(t.SUCCESS_SUBMIT_NUM)SUCCESS_NUMBER,");
+            sqlBuffer.append(" sum(t.MESSAGE_SUCCESS_NUM)SUCCESS_SEND_NUMBER,");
+            sqlBuffer.append(" sum(t.MESSAGE_FAILURE_NUM)FAILURE_NUMBER,");
+            sqlBuffer.append(" sum(t.MESSAGE_NO_REPORT_NUM)NO_REPORT_NUMBER,");
+            sqlBuffer.append(" t.MESSAGE_DATE ");
+            sqlBuffer.append(" from message_daily_statistics t left join account_base_info a on t.BUSINESS_ACCOUNT = a.ACCOUNT_ID left join enterprise_basic_info b on a.ENTERPRISE_ID = b.ENTERPRISE_ID ");
             sqlBuffer.append(" where 1=1 ");
 
-            groupBySql = "group by DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d'),t.BUSINESS_ACCOUNT,CARRIER,PROTOCOL,SIGN ";
+            groupBySql = "group by t.MESSAGE_DATE,t.BUSINESS_ACCOUNT,CARRIER, t.MESSAGE_SIGN ";
         }
-
-
 
         List<Object> paramsList = new ArrayList<Object>();
 
         //业务ID
         if (!StringUtils.isEmpty(qo.getEnterpriseId())) {
-            sqlBuffer.append(" and t.ENTERPRISE_ID =?");
+            sqlBuffer.append(" and b.ENTERPRISE_ID =?");
             paramsList.add(qo.getEnterpriseId().trim());
         }
 
@@ -205,19 +203,25 @@ public class MessageHttpsTaskInfoRepositoryImpl extends BasePageRepository {
             paramsList.add(qo.getBusinessAccount().trim());
         }
 
+        //签名
+        if (!StringUtils.isEmpty(qo.getSign())) {
+            sqlBuffer.append(" and t.MESSAGE_SIGN like ?");
+            paramsList.add("%"+qo.getSign().trim()+"%");
+        }
+
         //时间起
         if (!StringUtils.isEmpty(qo.getStartDate())) {
-            sqlBuffer.append(" and DATE_FORMAT(t.CREATED_TIME,'%Y-%m-%d') >=? ");
+            sqlBuffer.append(" and t.MESSAGE_DATE >=? ");
             paramsList.add(qo.getStartDate().trim());
         }
         //时间止
         if (!StringUtils.isEmpty(qo.getEndDate())) {
-            sqlBuffer.append(" and DATE_FORMAT(t.CREATED_TIME,'%Y-%m-%d') <=? ");
+            sqlBuffer.append(" and t.MESSAGE_DATE <=? ");
             paramsList.add(qo.getEndDate().trim());
         }
 
         sqlBuffer.append(groupBySql);
-        sqlBuffer.append(" order by t.CREATED_TIME desc");
+        sqlBuffer.append(" order by t.MESSAGE_DATE desc");
 
         //根据参数个数，组织参数值
         Object[] params = new Object[paramsList.size()];

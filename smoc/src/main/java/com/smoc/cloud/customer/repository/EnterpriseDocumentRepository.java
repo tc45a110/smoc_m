@@ -46,4 +46,6 @@ public interface EnterpriseDocumentRepository extends CrudRepository<EnterpriseD
      * @return
      */
     List<EnterpriseDocumentInfoValidator> findMessageSign(EnterpriseDocumentInfoValidator enterpriseDocumentInfoValidator);
+
+    List<EnterpriseDocumentInfo> findByEnterpriseIdAndSignNameAndBusinessTypeAndDocStatus(String enterpriseId, String signName, String businessType, String s);
 }

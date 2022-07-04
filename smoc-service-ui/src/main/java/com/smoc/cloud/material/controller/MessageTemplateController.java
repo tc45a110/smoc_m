@@ -301,6 +301,20 @@ public class MessageTemplateController {
             accountTemplateInfoValidator.setInfoType(account.getData().getInfoType());
         }
 
+        //查询签名
+        /*ResponseData<EnterpriseDocumentInfoValidator> signInfo = businessAccountService.findSignByEnterpriseIdAndSignNameAndBusinessType(user.getOrganization(),accountTemplateInfoValidator.getSignName(),account.getData().getBusinessType());
+        if (!ResponseCode.SUCCESS.getCode().equals(signInfo.getCode())) {
+            view.addObject("error", signInfo.getCode() + ":" + signInfo.getMessage());
+            return view;
+        }*/
+
+        //重新查签名，重新组内容
+        String content = accountTemplateInfoValidator.getTemplateContent();
+        content = content.replaceAll("\\【.*?\\】", "");
+        content = "【"+accountTemplateInfoValidator.getSignName()+"】"+content;
+        accountTemplateInfoValidator.setTemplateContent(content);
+
+
         //默认需要审核
         accountTemplateInfoValidator.setTemplateStatus("3");
         //查询账号接口信息

@@ -87,7 +87,7 @@ public class EnterpriseDocumentService {
     @Transactional
     public ResponseData<EnterpriseDocumentInfo> save(EnterpriseDocumentInfoValidator enterpriseDocumentInfoValidator, String op) {
 
-        List<EnterpriseDocumentInfo> data = enterpriseDocumentRepository.findByEnterpriseIdAndSignNameAndDocStatus(enterpriseDocumentInfoValidator.getEnterpriseId(),enterpriseDocumentInfoValidator.getSignName(),"1");
+        List<EnterpriseDocumentInfo> data = enterpriseDocumentRepository.findByEnterpriseIdAndSignNameAndBusinessTypeAndDocStatus(enterpriseDocumentInfoValidator.getEnterpriseId(),enterpriseDocumentInfoValidator.getSignName(),enterpriseDocumentInfoValidator.getBusinessType(),"1");
 
         EnterpriseDocumentInfo entity = new EnterpriseDocumentInfo();
         BeanUtils.copyProperties(enterpriseDocumentInfoValidator, entity);

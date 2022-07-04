@@ -57,12 +57,6 @@ public class InitializeFiltersDataService {
     private RedisModuleCuckooFilter redisModuleCuckooFilter;
 
     @Resource
-    private BlackRepository blackRepository;
-    @Resource
-    private WhiteRepository whiteRepository;
-    @Resource
-    private KeywordsRepository keywordsRepository;
-    @Resource
     private AccountTemplateInfoRepository accountTemplateInfoRepository;
     @Resource
     private ConfigNumberInfoRepository configNumberInfoRepository;
@@ -71,6 +65,9 @@ public class InitializeFiltersDataService {
 
     @Autowired
     private ParameterExtendFiltersValueRepository parameterExtendFiltersValueRepository;
+
+    @Autowired
+    private InitializeFiltersRepository initializeFiltersRepository;
 
     @Resource(name = "defaultRedisTemplate")
     private RedisTemplate redisTemplate;
@@ -243,7 +240,7 @@ public class InitializeFiltersDataService {
      */
     public void initializeAccountRegularWhiteWords() {
         //加载数据
-        List<KeyWordsMaskKeyWords> wordsMaskKeyWords = keywordsRepository.loadKeyWordsAndMaskKeyWord("BUSINESS_ACCOUNT", null, "WHITE_AVOID_REGULAR");
+        List<KeyWordsMaskKeyWords> wordsMaskKeyWords = initializeFiltersRepository.loadKeyWordsAndMaskKeyWord("BUSINESS_ACCOUNT", null, "WHITE_AVOID_REGULAR");
         log.info("加载业务账号免审白词条数：{}", wordsMaskKeyWords.size());
         //删除redis现有缓存
         this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_WHITE_REGULAR);
@@ -259,7 +256,7 @@ public class InitializeFiltersDataService {
      */
     public void initializeAccountNoCheckWhiteWords() {
         //加载数据
-        List<KeyWordsMaskKeyWords> wordsMaskKeyWords = keywordsRepository.loadKeyWordsAndMaskKeyWord("BUSINESS_ACCOUNT", null, "WHITE_AVOID_CHECK");
+        List<KeyWordsMaskKeyWords> wordsMaskKeyWords = initializeFiltersRepository.loadKeyWordsAndMaskKeyWord("BUSINESS_ACCOUNT", null, "WHITE_AVOID_CHECK");
         log.info("加载业务账号免审白词条数：{}", wordsMaskKeyWords.size());
         //删除redis现有缓存
         this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_WHITE_NO_CHECK);
@@ -276,7 +273,7 @@ public class InitializeFiltersDataService {
      */
     public void initializeAccountWhiteBlackWords() {
         //加载数据
-        List<KeyWordsMaskKeyWords> wordsMaskKeyWords = keywordsRepository.loadKeyWordsAndMaskKeyWord("BUSINESS_ACCOUNT", null, "WHITE_AVOID_BLACK");
+        List<KeyWordsMaskKeyWords> wordsMaskKeyWords = initializeFiltersRepository.loadKeyWordsAndMaskKeyWord("BUSINESS_ACCOUNT", null, "WHITE_AVOID_BLACK");
         log.info("加载业务账号洗黑白词条数：{}", wordsMaskKeyWords.size());
         //删除redis现有缓存
         this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_WHITE_SENSITIVE);
@@ -292,7 +289,7 @@ public class InitializeFiltersDataService {
      */
     public void initializeAccountSuperWhiteWords() {
         //加载数据
-        List<KeyWordsMaskKeyWords> wordsMaskKeyWords = keywordsRepository.loadKeyWordsAndMaskKeyWord("BUSINESS_ACCOUNT", null, "SUPER_WHITE");
+        List<KeyWordsMaskKeyWords> wordsMaskKeyWords = initializeFiltersRepository.loadKeyWordsAndMaskKeyWord("BUSINESS_ACCOUNT", null, "SUPER_WHITE");
         log.info("加载业务账号超级白词条数：{}", wordsMaskKeyWords.size());
         //删除redis现有缓存
         this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_WHITE_SUPER);
@@ -308,7 +305,7 @@ public class InitializeFiltersDataService {
      */
     public void initializeAccountCheckWords() {
         //加载数据
-        List<KeyWordsMaskKeyWords> wordsMaskKeyWords = keywordsRepository.loadKeyWordsAndMaskKeyWord("BUSINESS_ACCOUNT", null, "CHECK");
+        List<KeyWordsMaskKeyWords> wordsMaskKeyWords = initializeFiltersRepository.loadKeyWordsAndMaskKeyWord("BUSINESS_ACCOUNT", null, "CHECK");
         log.info("加载业务账号审核词条数：{}", wordsMaskKeyWords.size());
         //删除redis 现有缓存
         this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_CHECK);
@@ -324,7 +321,7 @@ public class InitializeFiltersDataService {
      */
     public void initializeAccountSensitiveWords() {
         //加载数据
-        List<KeyWordsMaskKeyWords> wordsMaskKeyWords = keywordsRepository.loadKeyWordsAndMaskKeyWord("BUSINESS_ACCOUNT", null, "BLACK");
+        List<KeyWordsMaskKeyWords> wordsMaskKeyWords = initializeFiltersRepository.loadKeyWordsAndMaskKeyWord("BUSINESS_ACCOUNT", null, "BLACK");
         log.info("加载业务账号敏感词条数：{}", wordsMaskKeyWords.size());
         //删除redis现有缓存
         this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_ACCOUNT_WORDS_SENSITIVE);
@@ -340,7 +337,7 @@ public class InitializeFiltersDataService {
      */
     public void initializeBlackList() {
         //加载数据
-        List<String> filterBlackListList = blackRepository.findSystemBlackList();
+        List<String> filterBlackListList = initializeFiltersRepository.findSystemBlackList();
         if (null == filterBlackListList || filterBlackListList.size() < 1) {
             return;
         }
@@ -348,7 +345,7 @@ public class InitializeFiltersDataService {
         filterBlackListList.toArray(array);
         redisModuleBloomFilter.addFilter(RedisFilterConstant.REDIS_BLOOM_FILTERS_SYSTEM_BLACK_COMPLAINT, array);
         //更新黑名单状态
-        blackRepository.bathUpdate(filterBlackListList);
+        //blackRepository.bathUpdate(filterBlackListList);
 
     }
 
@@ -357,14 +354,14 @@ public class InitializeFiltersDataService {
      */
     public void initializeWhiteList() {
         //加载数据
-        List<String> filterWhiteList = whiteRepository.findSystemWhiteList();
+        List<String> filterWhiteList = initializeFiltersRepository.findSystemWhiteList();
         if (null == filterWhiteList || filterWhiteList.size() < 1) {
             return;
         }
         String[] array = new String[filterWhiteList.size()];
         filterWhiteList.toArray(array);
         redisModuleCuckooFilter.addFilter(RedisFilterConstant.REDIS_BLOOM_FILTERS_SYSTEM_WHITE, array);
-        whiteRepository.bathUpdate(filterWhiteList);
+        //whiteRepository.bathUpdate(filterWhiteList);
     }
 
     /**
@@ -372,7 +369,7 @@ public class InitializeFiltersDataService {
      */
     public void initializeIndustryBlackList() {
         //加载数据
-        List<FilterBlackListValidator> filterIndustryBlackListList = blackRepository.findIndustryBlackList();
+        List<FilterBlackListValidator> filterIndustryBlackListList = initializeFiltersRepository.findIndustryBlackList();
         //删除现有redis缓存
         this.deleteByKey(RedisConstant.FILTERS_CONFIG_SYSTEM_INDUSTRY_BLACK);
         if (null != filterIndustryBlackListList && filterIndustryBlackListList.size() > 0) {
@@ -389,7 +386,7 @@ public class InitializeFiltersDataService {
      */
     public void initializeIndustryWhiteList() {
         //加载数据
-        List<FilterWhiteListValidator> filterIndustryWhiteList = whiteRepository.findIndustryWhiteList();
+        List<FilterWhiteListValidator> filterIndustryWhiteList = initializeFiltersRepository.findIndustryWhiteList();
         //删除现有redis缓存
         this.batchDeleteByPatten(RedisConstant.FILTERS_CONFIG_SYSTEM_INDUSTRY_WHITE);
         if (null != filterIndustryWhiteList && filterIndustryWhiteList.size() > 0) {
@@ -407,7 +404,7 @@ public class InitializeFiltersDataService {
      */
     public void initializeSensitiveWords() {
         //加载数据
-        List<String> sensitiveWords = keywordsRepository.loadKeyWords("SYSTEM", "BLACK", "BLACK");
+        List<String> sensitiveWords = initializeFiltersRepository.loadKeyWords("SYSTEM", "BLACK", "BLACK");
         log.info("加载系统敏感词条数：{}", sensitiveWords.size());
         //删除现有redis 缓存
         this.deleteByKey(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_SENSITIVE);
@@ -423,7 +420,7 @@ public class InitializeFiltersDataService {
      */
     public void initializeCheckWords() {
         //加载数据
-        List<String> checkWords = keywordsRepository.loadKeyWords("SYSTEM", "CHECK", "CHECK");
+        List<String> checkWords = initializeFiltersRepository.loadKeyWords("SYSTEM", "CHECK", "CHECK");
         log.info("加载系统审核词条数：{}", checkWords.size());
         //删除redis现有缓存
         this.deleteByKey(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_CHECK);
@@ -439,7 +436,7 @@ public class InitializeFiltersDataService {
      */
     public void initializeSuperWhiteWords() {
         //加载数据
-        List<String> superWhiteWords = keywordsRepository.loadKeyWords("SYSTEM", "WHITE", "SUPER_WHITE");
+        List<String> superWhiteWords = initializeFiltersRepository.loadKeyWords("SYSTEM", "WHITE", "SUPER_WHITE");
         log.info("加载系统超级白词条数：{}", superWhiteWords.size());
         //删除redis现有缓存
         this.deleteByKey(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_WHITE_SUPER);
@@ -455,7 +452,7 @@ public class InitializeFiltersDataService {
      */
     public void initializeWhiteBlackWords() {
         //加载数据
-        List<KeyWordsMaskKeyWords> wordsMaskKeyWords = keywordsRepository.loadKeyWordsAndMaskKeyWord("SYSTEM", "WHITE", "WHITE_AVOID_BLACK");
+        List<KeyWordsMaskKeyWords> wordsMaskKeyWords = initializeFiltersRepository.loadKeyWordsAndMaskKeyWord("SYSTEM", "WHITE", "WHITE_AVOID_BLACK");
         log.info("加载系统洗黑白词条数：{}", wordsMaskKeyWords.size());
         //删除redis现有缓存
         this.deleteByKey(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_WHITE_SENSITIVE);
@@ -471,7 +468,7 @@ public class InitializeFiltersDataService {
      */
     public void initializeNoCheckWhiteWords() {
         //加载数据
-        List<KeyWordsMaskKeyWords> wordsMaskKeyWords = keywordsRepository.loadKeyWordsAndMaskKeyWord("SYSTEM", "WHITE", "WHITE_AVOID_CHECK");
+        List<KeyWordsMaskKeyWords> wordsMaskKeyWords = initializeFiltersRepository.loadKeyWordsAndMaskKeyWord("SYSTEM", "WHITE", "WHITE_AVOID_CHECK");
         log.info("加载系统免审白词条数：{}", wordsMaskKeyWords.size());
         //删除redis 现有缓存
         this.deleteByKey(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_WHITE_NO_CHECK);
@@ -487,7 +484,7 @@ public class InitializeFiltersDataService {
      */
     public void initializeRegularWhiteWords() {
         //加载数据
-        List<String> regulars = keywordsRepository.loadKeyWords("SYSTEM", "WHITE", "WHITE_AVOID_REGULAR");
+        List<String> regulars = initializeFiltersRepository.loadKeyWords("SYSTEM", "WHITE", "WHITE_AVOID_REGULAR");
         log.info("加载系统正则白词条数：{}", regulars.size());
         //删除redis现有缓存
         this.deleteByKey(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_WHITE_REGULAR);
@@ -508,7 +505,7 @@ public class InitializeFiltersDataService {
         log.info("加载行业敏感词start：{}", start);
         if (null != infoType && infoType.getDict().size() > 0) {
             for (Dict dict : infoType.getDict()) {
-                List<String> infoTypes = keywordsRepository.loadKeyWords("INFO_TYPE", dict.getFieldCode(), "BLACK");
+                List<String> infoTypes = initializeFiltersRepository.loadKeyWords("INFO_TYPE", dict.getFieldCode(), "BLACK");
                 if (null != infoTypes && infoTypes.size() > 0) {
                     redisTemplate.opsForSet().add(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_INFO_TYPE, dict.getFieldCode());
                     this.multiSaveSet(RedisConstant.FILTERS_CONFIG_SYSTEM_WORDS_INFO_TYPE_SENSITIVE + dict.getFieldCode(), infoTypes);

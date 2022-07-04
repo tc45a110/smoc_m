@@ -337,6 +337,12 @@ public class MessageMMTemplateController {
             accountTemplateInfoValidator.setInfoType(account.getData().getInfoType());
         }
 
+        //重新查签名，重新组内容
+        String content = accountTemplateInfoValidator.getTemplateContent();
+        content = content.replaceAll("\\【.*?\\】", "");
+        content = "【"+accountTemplateInfoValidator.getSignName()+"】"+content;
+        accountTemplateInfoValidator.setTemplateContent(content);
+
         //默认需要审核
         accountTemplateInfoValidator.setTemplateStatus("3");
         //查询账号接口信息
