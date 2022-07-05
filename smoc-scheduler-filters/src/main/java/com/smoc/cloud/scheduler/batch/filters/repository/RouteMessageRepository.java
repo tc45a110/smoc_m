@@ -1,12 +1,10 @@
 package com.smoc.cloud.scheduler.batch.filters.repository;
 
-import com.google.gson.Gson;
 import com.smoc.cloud.scheduler.batch.filters.model.BusinessRouteValue;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.util.DigestUtils;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
