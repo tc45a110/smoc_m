@@ -24,7 +24,7 @@ public class ReconciliationAccountRowMapper implements RowMapper<ReconciliationA
         if(!StringUtils.isEmpty(qo.getPrice())){
             qo.setPrice(new BigDecimal(qo.getPrice().stripTrailingZeros().toPlainString()));
         }
-        qo.setTotalSum(new BigDecimal(qo.getSendSum()).multiply(qo.getPrice()));
+        qo.setTotalSum(new BigDecimal(new BigDecimal(qo.getSendSum()).multiply(qo.getPrice()).stripTrailingZeros().toPlainString()));
         return qo;
     }
 }

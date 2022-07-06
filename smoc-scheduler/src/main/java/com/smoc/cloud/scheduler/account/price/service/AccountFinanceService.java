@@ -170,7 +170,7 @@ public class AccountFinanceService {
 
                 //进行插入，并判断是否存在
                 StringBuffer sqlBuffer = new StringBuffer(" insert into smoc.account_price_history(ID,SOURCE_ID,ACCOUNT_ID,CARRIER_TYPE,CARRIER,CARRIER_PRICE,PRICE_DATE,CREATED_TIME) ");
-                sqlBuffer.append(" select '" + UUID.uuid32() + "' ,DATA_ID,BUSINESS_ID,"+type+",PRICE_AREA ,CHANGE_PRICE,'" + dataDate + "' PRICE_DATE ,now() from smoc.system_history_price_change_record where ID ='" + model.getId() + "' ");
+                sqlBuffer.append(" select '" + UUID.uuid32() + "' ,DATA_ID,BUSINESS_ID,'"+type+"' CARRIER_TYPE,PRICE_AREA ,CHANGE_PRICE,'" + dataDate + "' PRICE_DATE ,now() CREATED_TIME from smoc.system_history_price_change_record where ID ='" + model.getId() + "' ");
                 sqlBuffer.append(" and NOT EXISTS(select * from smoc.account_price_history t where t.ACCOUNT_ID='" + model.getAccountId() + "' and t.CARRIER='" + model.getCarrier() + "' and t.PRICE_DATE='" + dataDate + "')");
 
                 //修改原来数据的批处理日期

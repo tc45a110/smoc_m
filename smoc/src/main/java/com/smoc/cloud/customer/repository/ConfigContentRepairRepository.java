@@ -38,4 +38,6 @@ public interface ConfigContentRepairRepository extends CrudRepository<ConfigCont
     PageList<AccountContentRepairQo> accountList(PageParams<AccountContentRepairQo> pageParams);
 
     List<ConfigContentRepairRule> findByAccountIdAndCarrierAndRepairContentAndRepairStatus(String accountId, String carrier, String repairContent, String status);
+
+    ConfigContentRepairRule findByAccountIdAndCarrier(String accountId, String carrier);
 }

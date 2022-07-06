@@ -146,7 +146,10 @@ public class ChannelPriceHistoryService {
         }
     }
 
-
+    /**
+     * 通道未来价格批处理
+     * @param list
+     */
     public void saveFutrue(List<? extends ChannelFutruePriceModel> list) {
         if (null == list || list.size() < 1) {
             return;
@@ -161,7 +164,7 @@ public class ChannelPriceHistoryService {
 
                 //如果不存在则进行 insert
                 StringBuffer insertSqlBuffer = new StringBuffer("insert into smoc.config_channel_price_history(ID,SOURCE_ID,CHANNEL_ID,PRICE_STYLE,AREA_CODE,CHANNEL_PRICE,PRICE_DATE,CREATE_TIME) ");
-                insertSqlBuffer.append(" select '" + UUID.uuid32() + "',ID,CHANNEL_ID,"+model.getPriceStyle()+",AREA_CODE,CHANNEL_PRICE,'" + model.getPriceDate() + "' ,now() from smoc.config_channel_price where ID ='" + model.getId() + "' ");
+                insertSqlBuffer.append(" select '" + UUID.uuid32() + "' ,DATA_ID,BUSINESS_ID,'"+model.getPriceStyle()+"',PRICE_AREA ,CHANGE_PRICE,'" + model.getPriceDate() + "' PRICE_DATE ,now() from smoc.system_history_price_change_record where ID ='" + model.getId() + "' ");
                 insertSqlBuffer.append(" and NOT EXISTS(select * from smoc.config_channel_price_history t where t.CHANNEL_ID='" + model.getAccountId() + "' and t.AREA_CODE='" + model.getCarrier() + "' and t.PRICE_DATE='" + model.getPriceDate() + "' )");
 
                 //修改原来数据的批处理日期

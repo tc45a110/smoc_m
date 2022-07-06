@@ -96,4 +96,14 @@ public class AccountContentRepairService {
             return ResponseDataUtil.buildError(e.getMessage());
         }
     }
+
+    public ResponseData<ConfigContentRepairRuleValidator> findContentRepair(String accountId, String carrier) {
+        try {
+            ResponseData<ConfigContentRepairRuleValidator> data = this.accountContentRepairFeignClient.findContentRepair(accountId,carrier);
+            return data;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
 }

@@ -3,10 +3,13 @@ package com.smoc.cloud.customer.controller;
 import com.alibaba.fastjson.JSON;
 import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
+import com.smoc.cloud.common.auth.qo.Dict;
+import com.smoc.cloud.common.auth.qo.DictType;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.configuate.validator.ChannelBasicInfoValidator;
 import com.smoc.cloud.common.smoc.configuate.validator.ConfigChannelRepairRuleValidator;
 import com.smoc.cloud.common.smoc.configuate.validator.ConfigChannelRepairValidator;
 import com.smoc.cloud.common.smoc.customer.qo.AccountContentRepairQo;
@@ -18,6 +21,7 @@ import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.configure.channel.service.ChannelRepairService;
+import com.smoc.cloud.configure.channel.service.ChannelService;
 import com.smoc.cloud.customer.service.AccountContentRepairService;
 import com.smoc.cloud.customer.service.BusinessAccountService;
 import lombok.extern.slf4j.Slf4j;
@@ -30,9 +34,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * EC业务账号内容失败补发管理
@@ -50,6 +57,9 @@ public class AccountContentRepairController {
 
     @Autowired
     private ChannelRepairService channelRepairService;
+
+    @Autowired
+    private ChannelService channelService;
 
     @Autowired
     private SystemUserLogService systemUserLogService;
@@ -166,12 +176,13 @@ public class AccountContentRepairController {
 
     /**
      * 失败补发页面
+     *
      * @param id
      * @param request
      * @return
      */
     @RequestMapping(value = "/add/{id}/{carrier}", method = RequestMethod.GET)
-    public ModelAndView detail(@PathVariable String id,@PathVariable String carrier,  HttpServletRequest request) {
+    public ModelAndView detail(@PathVariable String id, @PathVariable String carrier, HttpServletRequest request) {
 
         ModelAndView view = new ModelAndView("customer/account/account_content_repair/repair_edit");
 
@@ -182,9 +193,6 @@ public class AccountContentRepairController {
             view.addObject("error", ResponseCode.PARAM_ERROR.getCode() + ":" + MpmValidatorUtil.validateMessage(validator));
             return view;
         }
-
-        //op操作标记，add表示添加，edit表示修改
-        view.addObject("op", "add");
 
         //查询账号数据是否存在
         ResponseData<AccountBasicInfoValidator> data = businessAccountService.findById(id);
@@ -205,18 +213,33 @@ public class AccountContentRepairController {
             return view;
         }
 
-        //初始化数据
-        ConfigContentRepairRuleValidator configContentRepairRuleValidator = new ConfigContentRepairRuleValidator();
-        configContentRepairRuleValidator.setId(UUID.uuid32());
-        configContentRepairRuleValidator.setAccountId(data.getData().getAccountId());
-        configContentRepairRuleValidator.setCarrier(carrier);
-        configContentRepairRuleValidator.setRepairStatus("1");
-        if(!"INTL".equals(carrier)){
-            configContentRepairRuleValidator.setAreaCodes("ALL");
+        ResponseData<ConfigContentRepairRuleValidator> contentData = accountContentRepairService.findContentRepair(data.getData().getAccountId(), carrier);
+        if (!ResponseCode.SUCCESS.getCode().equals(contentData.getCode())) {
+            view.addObject("error", contentData.getCode() + ":" + contentData.getMessage());
+            return view;
+        }
+
+        ConfigContentRepairRuleValidator configContentRepairRuleValidator = contentData.getData();
+        if (!StringUtils.isEmpty(configContentRepairRuleValidator)) {
+            //op操作标记，add表示添加，edit表示修改
+            view.addObject("op", "edit");
+            view.addObject("configContentRepairRuleValidator", configContentRepairRuleValidator);
+        } else {
+            //初始化数据
+            configContentRepairRuleValidator = new ConfigContentRepairRuleValidator();
+            configContentRepairRuleValidator.setId(UUID.uuid32());
+            configContentRepairRuleValidator.setAccountId(data.getData().getAccountId());
+            configContentRepairRuleValidator.setCarrier(carrier);
+            configContentRepairRuleValidator.setRepairStatus("1");
+            if (!"INTL".equals(carrier)) {
+                configContentRepairRuleValidator.setAreaCodes("ALL");
+            }
+            //op操作标记，add表示添加，edit表示修改
+            view.addObject("op", "add");
+            view.addObject("configContentRepairRuleValidator", configContentRepairRuleValidator);
         }
 
         view.addObject("channelList", channelList.getData());
-        view.addObject("configContentRepairRuleValidator", configContentRepairRuleValidator);
         view.addObject("accountBasicInfoValidator", data.getData());
 
         return view;
@@ -265,10 +288,10 @@ public class AccountContentRepairController {
             return view;
         }
 
-        view.addObject("configContentRepairRuleValidator",data.getData());
+        view.addObject("configContentRepairRuleValidator", data.getData());
         view.addObject("channelList", channelList.getData());
         view.addObject("accountBasicInfoValidator", accountData.getData());
-        view.addObject("op","edit");
+        view.addObject("op", "edit");
 
         return view;
 
@@ -369,7 +392,7 @@ public class AccountContentRepairController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            systemUserLogService.logsAsync("BUSINESS_ACCOUNT", infoDate.getData().getBusinessId(), user.getRealName(), "delete", "删除内容失败补发" , JSON.toJSONString(infoDate.getData()));
+            systemUserLogService.logsAsync("BUSINESS_ACCOUNT", infoDate.getData().getBusinessId(), user.getRealName(), "delete", "删除内容失败补发", JSON.toJSONString(infoDate.getData()));
         }
 
         //记录日志
@@ -377,5 +400,68 @@ public class AccountContentRepairController {
 
         view.setView(new RedirectView("/account/content/repair/list", true, false));
         return view;
+    }
+
+    /**
+     * 查询通道区域
+     *
+     * @return
+     */
+    @RequestMapping(value = "/findByChannelId/{channelId}", method = RequestMethod.GET)
+    public List<Dict> findByChannelId(@PathVariable String channelId, HttpServletRequest request) {
+
+        List<Dict> areaList = new ArrayList<>();
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(channelId);
+        if (!MpmValidatorUtil.validate(validator)) {
+            return areaList;
+        }
+
+        //查询账号数据是否存在
+        ResponseData<ChannelBasicInfoValidator> data = channelService.findById(channelId);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            return areaList;
+        }
+
+        //取字典数据
+        ServletContext context = request.getServletContext();
+        Map<String, DictType> dictMap = (Map<String, DictType>) context.getAttribute("dict");
+        List<Dict> dictList = new ArrayList<>();
+
+        //国际
+        if ("INTL".equals(data.getData().getBusinessAreaType())) {
+            DictType dictType = dictMap.get("internationalArea");
+            dictList = dictType.getDict();
+        } else {
+            DictType dictType = dictMap.get("provices");
+            dictList = dictType.getDict();
+        }
+
+        if (dictList.size() < 1) {
+            return areaList;
+        }
+
+        String areaCodes = data.getData().getSupportAreaCodes();
+        if (!StringUtils.isEmpty(areaCodes)) {
+            String[] codes = areaCodes.split(",");
+            for (int i = 0; i < codes.length; i++) {
+                for (int a = 0; a < dictList.size(); a++) {
+                    Dict d = new Dict();
+                    Dict dict = dictList.get(a);
+                    if (codes[i].equals(dict.getFieldCode())) {
+                        d.setId(dict.getId());
+                        d.setFieldName(dict.getFieldName());
+                        d.setFieldCode(dict.getFieldCode());
+                        areaList.add(d);
+                        break;
+                    }
+                }
+            }
+        }
+
+        return areaList;
+
     }
 }

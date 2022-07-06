@@ -55,7 +55,7 @@ spring:
   # Redis
   #**********************************************************
   redis: #redis配置
-    host: r-2ze52zqfr1odqdu0ri.redis.rds.aliyuncs.com
+    host: r-2ze96mgel4jyc0k58g.redis.rds.aliyuncs.com
     port: 6379
     password: J15mDngG
     database: 1

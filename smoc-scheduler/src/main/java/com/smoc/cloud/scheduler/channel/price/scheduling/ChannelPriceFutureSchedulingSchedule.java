@@ -27,7 +27,10 @@ public class ChannelPriceFutureSchedulingSchedule {
     @Resource(name="channelPriceFutureJob")
     private Job channelPriceFutureJob;
 
-    @Scheduled(cron = "0 0/1 * * * ?")
+    /**
+     * 每天凌晨12点开始到1点之间每30分钟执行一次
+     */
+    @Scheduled(cron = "0 0/30 0 * * ?")
     public void accountPriceHistorySchedule() throws Exception {
         JobParameters jobParameter = new JobParametersBuilder().addLong("times",System.currentTimeMillis()).toJobParameters();
         JobExecution run = jobLauncher.run(channelPriceFutureJob, jobParameter);

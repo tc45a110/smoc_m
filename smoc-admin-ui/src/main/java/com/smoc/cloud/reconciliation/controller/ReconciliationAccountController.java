@@ -33,6 +33,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
@@ -137,9 +138,6 @@ public class ReconciliationAccountController {
 
         ResponseData<EnterpriseBasicInfoValidator> enterpriseResponseDate = enterpriseService.findById(enterpriseId);
 
-        String templateFileName = TestFileUtil.getPath() + "static" + File.separator + "files" + File.separator + "templates" + File.separator + "reconciliation.xlsx";
-        log.info("[templateFileName]:{}",templateFileName);
-
         //运营商
         Map<String,String>  carrierMap = this.carrier(request);
         //对接主体公司
@@ -181,7 +179,8 @@ public class ReconciliationAccountController {
         OutputStream out = null;
         BufferedOutputStream bos = null;
         try {
-
+            ClassPathResource classPathResource = new ClassPathResource("static/files/templates/" + "reconciliation.xlsx");
+            InputStream fis = classPathResource.getInputStream();
             response.setContentType("application/vnd.ms-excel");
             response.setCharacterEncoding("utf-8");
             String fileName = URLEncoder.encode(enterpriseResponseDate.getData().getEnterpriseName() + "-" + accountPeriod + "-结算单.xls", "utf-8");
@@ -191,7 +190,7 @@ public class ReconciliationAccountController {
             bos = new BufferedOutputStream(out);
 
             //读取Excel
-            ExcelWriter excelWriter = EasyExcel.write(bos).withTemplate(templateFileName).build();
+            ExcelWriter excelWriter = EasyExcel.write(bos).withTemplate(fis).build();
             WriteSheet writeSheet = EasyExcel.writerSheet().build();
 
             Map<String, Object> map = new HashMap<>();

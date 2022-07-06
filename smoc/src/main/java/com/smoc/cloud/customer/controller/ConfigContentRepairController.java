@@ -108,4 +108,11 @@ public class ConfigContentRepairController {
 
         return configContentRepairService.deleteById(id);
     }
+
+    @RequestMapping(value = "/findContentRepair/{accountId}/{carrier}", method = RequestMethod.GET)
+    public ResponseData findById(@PathVariable String accountId,@PathVariable String carrier) {
+
+        ResponseData data = configContentRepairService.findContentRepair(accountId,carrier);
+        return data;
+    }
 }

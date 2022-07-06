@@ -57,4 +57,7 @@ public interface AccountContentRepairFeignClient {
      */
     @RequestMapping(value = "/configure/content/repair/deleteById/{id}", method = RequestMethod.GET)
     ResponseData deleteById(@PathVariable String id);
+
+    @RequestMapping(value = "/configure/content/repair/findContentRepair/{accountId}/{carrier}", method = RequestMethod.GET)
+    ResponseData<ConfigContentRepairRuleValidator> findContentRepair(@PathVariable String accountId,@PathVariable String carrier);
 }

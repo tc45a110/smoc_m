@@ -64,7 +64,7 @@
                                     </div>
                                     <div class="form-group m-b-20">
                                         <label>路由通道<span class="text-danger">*</span></label>
-                                        <select name="channelRepairId" data-style="btn-default" required
+                                        <select name="channelRepairId" data-style="btn-default" required onchange="changeArea(this.value,'')"
                                                 class="selectpicker  form-control" tabindex="-98" data-live-search="true">
                                             <option data-icon="mdi mdi-key-plus" value="">--请选择路由通道--</option>
                                             <option data-icon="mdi mdi-key-plus" th:each="channel:${channelList}"
@@ -75,7 +75,7 @@
                                     </div>
                                     <div class="form-group m-b-20">
                                         <label>路由内容<span class="text-danger">*</span></label><span style="margin-left:15px;color:#F5707A">支持多个内容，请用 | 隔开</span>
-                                        <textarea type="text" class="form-control" th:field="*{repairContent}"
+                                        <textarea type="text" class="form-control" th:field="*{repairContent}" data-parsley-pattern="^((?![｜,\*]).)*$"
                                                   required="" data-parsley-length="[1,800]" autocomplete="off"
                                                   rows="5"   placeholder="输入内容"></textarea>
                                     </div>
@@ -119,6 +119,19 @@
                             <div class="col-md-12">
                                 <div class="p-20">
                                     <div class="form-group">
+
+
+                                        <div class="form-group">
+                                            <label>业务区域</label><br>
+                                            <span id="problemTypeId">
+
+                                            </span>
+
+
+                                        </div>
+
+<!--
+
                                         <label>业务区域</label><br>
                                         <span th:if="${configContentRepairRuleValidator.carrier ne 'INTL'}">
                                         <mpm:tag id="province" identity="provices" name="areaCodes"
@@ -132,6 +145,7 @@
                                                  name="areaCodes" show-type="checkbox"  key="code" class="form-control"
                                                  th:value="${configContentRepairRuleValidator.areaCodes}" title="业务区域"/>
                                     </span>
+-->
 
                                     </div>
                                 </div>
@@ -173,8 +187,59 @@
 <script th:src="@{/static/plugins/moment/moment.js}"></script>
 <th:block th:insert="fragments/common_fragments :: common_submit_form"/>
 
-<script>
+<script  th:remove="${#strings.isEmpty(error)}?none:all">
 
+    $(document).ready(function () {
+
+        if ("edit" == '[[${op}]]') {
+            var code = '[[${configContentRepairRuleValidator.areaCodes}]]';
+            var channelId = '[[${configContentRepairRuleValidator.channelRepairId}]]';
+            changeArea(channelId,code)
+        }
+
+    });
+
+    function changeArea(value,code) {
+
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+
+        $("#problemTypeId").html("");
+        var _html= "";
+        $.ajax({
+            url : contextPath + "/account/content/repair/findByChannelId/" + value,
+            success : function(data) {
+                if(""==data){return}
+
+                for(var i=0; i<data.length; i++){
+
+                    var name = data[i].fieldName;
+                    var value = data[i].fieldCode;
+                    var id = data[i].id;
+
+                    var checked = "";
+                    if(""!=code && code!=null){
+                        var codes = code.split(",");
+                        for(var a=0; a<codes.length; a++){
+                            if(value == codes[a]){
+                                checked = "checked";
+                                break;
+                            }
+                        }
+                    }
+
+                    _html=_html+"<div style='margin-left:10px;margin-bottom:10px' class='btn-switch btn-switch-info'>";
+                    _html=_html+"<input name='areaCodes' id='"+id+"' type='checkbox' value='"+value+"' data-parsley-multiple='areaCodes' "+checked+">";
+                    _html=_html+"<label for='"+id+"' class='btn btn-rounded btn-info waves-effect waves-light'><em class='glyphicon glyphicon-ok'></em>";
+                    _html=_html+"<strong>"+name+"</strong></label></div>";
+
+                };
+
+                $("#problemTypeId").html(_html);
+            }
+        });
+
+
+    }
 
     var resizefunc = [];
     //隐藏进度项

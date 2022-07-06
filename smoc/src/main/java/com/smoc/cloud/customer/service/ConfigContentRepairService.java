@@ -21,6 +21,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -131,6 +132,20 @@ public class ConfigContentRepairService {
         //记录日志
         log.info("[内容失败补发配置][delete]数据:{}",JSON.toJSONString(data));
         configContentRepairRepository.updateStatusById(id);
+
+        return ResponseDataUtil.buildSuccess();
+    }
+
+    public ResponseData findContentRepair(String accountId, String carrier) {
+        ConfigContentRepairRule entity = configContentRepairRepository.findByAccountIdAndCarrier(accountId,carrier);
+        if(!StringUtils.isEmpty(entity)){
+            ConfigContentRepairRuleValidator configContentRepairRuleValidator = new ConfigContentRepairRuleValidator();
+            BeanUtils.copyProperties(entity, configContentRepairRuleValidator);
+
+            //转换日期
+            configContentRepairRuleValidator.setCreatedTime(DateTimeUtils.getDateTimeFormat(entity.getCreatedTime()));
+            return ResponseDataUtil.buildSuccess(configContentRepairRuleValidator);
+        }
 
         return ResponseDataUtil.buildSuccess();
     }
