@@ -21,23 +21,26 @@ import com.base.common.util.DateUtil;
 import com.base.common.util.MessageContentUtil;
 import com.base.common.util.UUIDUtil;
 import com.base.common.vo.BusinessRouteValue;
-import com.base.common.worker.SuperQueueWorker;
+import com.base.common.worker.SuperConcurrentMapWorker;
 
 /**
  * 保存1.匹配到下行记录2.上行扩展码完整匹配3.指定通道模糊匹配扩展码;2和3需要通过客户接入码和通道扩展码生成accountSubmitSRCID
  */
-public class MOStoreWorker extends SuperQueueWorker<BusinessRouteValue>{
+public class MOStoreWorker extends SuperConcurrentMapWorker<String,BusinessRouteValue>{
+	
+	public void put(String businessMessageID, BusinessRouteValue businessRouteValue) {
+		add(businessMessageID,businessRouteValue);
+	}
 
 	@Override
 	public void doRun() throws Exception {
 
-		if(superQueue.size() > 0){
+		if(superMap.size() > 0){
 			long startTime = System.currentTimeMillis();
 			//临时数据
-			List<BusinessRouteValue> businessRouteValueList;
-			synchronized (lock) {
-				businessRouteValueList = new ArrayList<BusinessRouteValue>(superQueue);
-				superQueue.clear();
+			List<BusinessRouteValue> businessRouteValueList = new ArrayList<BusinessRouteValue>(superMap.values());
+			for(BusinessRouteValue businessRouteValue : businessRouteValueList) {
+				remove(businessRouteValue.getBusinessMessageID());
 			}
 			//对businessRouteValueList进行判断1.匹配到提交信息需保存smoc_route.route_message_mo_info和smoc.message_mo_info
 			//2.未匹配提交信息但是过了匹配周期，需将上行信息保存到message_mo_info

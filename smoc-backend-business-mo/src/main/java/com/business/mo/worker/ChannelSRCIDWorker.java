@@ -17,6 +17,7 @@ import com.base.common.dao.LavenderDBSingleton;
 import com.base.common.manager.BusinessDataManager;
 import com.base.common.util.DateUtil;
 import com.base.common.util.TableNameGeneratorUtil;
+import com.base.common.util.UUIDUtil;
 import com.base.common.vo.BusinessRouteValue;
 import com.base.common.vo.ChannelMO;
 
@@ -71,6 +72,7 @@ public class ChannelSRCIDWorker implements Callable<BusinessRouteValue>{
 				businessRouteValue.setChannelReportTime(channelMO.getMOTime());
 				businessRouteValue.setMOContent(channelMO.getMessageContent());
 				businessRouteValue.setChannelMOSRCID(channelMO.getChannelMOSRCID());
+				businessRouteValue.setBusinessMessageID(UUIDUtil.get32UUID());
 				logger.info("下行匹配{}{}{}{}",
 						FixedConstant.SPLICER,channelMO.getChannelSRCID(),FixedConstant.SPLICER,businessRouteValue.toString());
 				

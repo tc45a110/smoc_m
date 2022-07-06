@@ -78,7 +78,7 @@ public class MainWorker extends SuperCacheWorker{
 				try {
 					BusinessRouteValue businessRouteValue = call.get();
 					if(businessRouteValue != null){
-						MOStoreWorker.add(businessRouteValue);
+						MOStoreWorker.put(businessRouteValue.getBusinessMessageID(), businessRouteValue);
 					}
 				} catch (Exception e) {
 					logger.error(e.getMessage(),e);
@@ -142,18 +142,24 @@ public class MainWorker extends SuperCacheWorker{
 			}
 			
 			if(channelMOList != null && channelMOList.size() > 0) {
-				long maxID = channelMOList.get(channelMOList.size() - 1).getID();
+				
 				sql.setLength(0);
-				sql.append("UPDATE smoc_route.route_channel_mo_info SET MATCH_TIMES = MATCH_TIMES + 1 WHERE ID <= ? ");
+				sql.append("UPDATE smoc_route.route_channel_mo_info SET MATCH_TIMES = MATCH_TIMES + 1 WHERE ID in (");
+				for(int i = 0; i < channelMOList.size();i++) {
+					sql.append(channelMOList.get(i).getID());
+					if(i != (channelMOList.size() - 1)) {
+						sql.append(",");
+					}
+				}
+				sql.append(") ");
 				if(firstTimeFlag){
 					sql.append("AND MATCH_TIMES = 0 ");
 				}else{
 					sql.append("AND MATCH_TIMES > 0 ");
 				}
 				pstmt2 = conn.prepareStatement(sql.toString());
-				pstmt2.setLong(1, maxID);
 				int row = pstmt2.executeUpdate();
-				logger.info("修改 ROUTE_CHANNEL_MO_INFO ID <= {} 的匹配次数,修改行数={}",channelMO.getID(),row);
+				logger.info("修改 ROUTE_CHANNEL_MO_INFO 的匹配次数,修改行数={}",row);
 			}
 			conn.commit();
 		} catch (Exception e) {
@@ -163,6 +169,7 @@ public class MainWorker extends SuperCacheWorker{
 			}catch (Exception e1) {
 				logger.error(e1.getMessage(),e1);
 			}
+			return null;
 		} finally {
 			LavenderDBSingleton.getInstance().closeAll(rs, pstmt2, null);
 			LavenderDBSingleton.getInstance().closeAll(null, pstmt, conn);
@@ -221,7 +228,7 @@ public class MainWorker extends SuperCacheWorker{
 					try {
 						BusinessRouteValue businessRouteValue = call.get();
 						if(businessRouteValue != null){
-							MOStoreWorker.add(businessRouteValue);
+							MOStoreWorker.put(businessRouteValue.getBusinessMessageID(), businessRouteValue);
 						}
 					} catch (Exception e) {
 						logger.error(e.getMessage(),e);
