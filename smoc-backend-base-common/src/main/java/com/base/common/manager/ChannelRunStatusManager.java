@@ -15,12 +15,13 @@ import java.util.Set;
 import com.alibaba.fastjson.JSONObject;
 import com.base.common.dao.LavenderDBSingleton;
 import com.base.common.manager.ChannelRunStatusManager.ChannelRunStatusValue;
-import com.base.common.worker.SuperQueueWorker;
+import com.base.common.util.UUIDUtil;
+import com.base.common.worker.SuperConcurrentMapWorker;
 
 /**
  * 通道运行状态维护
  */
-public class ChannelRunStatusManager extends SuperQueueWorker<ChannelRunStatusValue> {
+public class ChannelRunStatusManager extends SuperConcurrentMapWorker<String, ChannelRunStatusValue> {
 	
 	private static ChannelRunStatusManager manager = new ChannelRunStatusManager();
 	
@@ -39,18 +40,17 @@ public class ChannelRunStatusManager extends SuperQueueWorker<ChannelRunStatusVa
 	 */
 	public void process(String channelID,String runStatus) {
 		ChannelRunStatusValue channelRunStatusValue = new ChannelRunStatusValue(channelID, runStatus);
-		super.add(channelRunStatusValue);
+		super.add(channelRunStatusValue.getBusinessMessageID(), channelRunStatusValue);
 	}
 	
 	@Override
 	protected void doRun() throws Exception {
-		if(superQueue.size() > 0){
+		if(superMap.size() > 0){
 			long startTime = System.currentTimeMillis();
 			//临时数据
-			Set<ChannelRunStatusValue> channelRunStatusValueSet;
-			synchronized (lock) {
-				channelRunStatusValueSet = new HashSet<ChannelRunStatusValue>(superQueue);
-				superQueue.clear();
+			Set<ChannelRunStatusValue> channelRunStatusValueSet = new HashSet<ChannelRunStatusValue>(superMap.values());
+			for(ChannelRunStatusValue channelRunStatusValue : channelRunStatusValueSet) {
+				remove(channelRunStatusValue.getBusinessMessageID());
 			}
 			saveChannelRunStatusInfo(channelRunStatusValueSet);
 			long interval = System.currentTimeMillis() - startTime;
@@ -106,7 +106,7 @@ public class ChannelRunStatusManager extends SuperQueueWorker<ChannelRunStatusVa
 		
 		private String channelID;
 		private String runStatus;
-		
+		private String businessMessageID;
 		
 		
 		@Override
@@ -149,6 +149,10 @@ public class ChannelRunStatusManager extends SuperQueueWorker<ChannelRunStatusVa
 			super();
 			this.channelID = channelID;
 			this.runStatus = runStatus;
+			this.businessMessageID = UUIDUtil.get32UUID();
+		}
+		public String getBusinessMessageID() {
+			return businessMessageID;
 		}
 		
 		public String getChannelID() {

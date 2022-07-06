@@ -5,7 +5,6 @@
 package com.base.common.manager;
 
 import java.net.InetAddress;
-
 import org.apache.commons.lang3.StringUtils;
 
 import com.base.common.constant.FixedConstant;
@@ -476,6 +475,26 @@ public class BusinessDataManager {
 		return String.valueOf(FixedConstant.AccountConsumeType.SUBMIT.ordinal());
 	}
 	
+	/**
+	 * 根据账号获取状态码转换信息
+	 * @param accountID
+	 * @return
+	 */
+	public String getAccountStatusCodeConversion(String accountID,String statusCode) {
+		String statusCodeConversions = getBusinessParamValue(BusinessDataCategory.BUSINESS_ACCOUNT,BusinessDataItem.STATUS_CODE_CONVERSION,accountID);
+		if(StringUtils.isNotEmpty(statusCodeConversions) && statusCodeConversions.contains(statusCode)){
+			String[] statusCodeConversionArray = statusCodeConversions.split(FixedConstant.DATABASE_SEPARATOR);
+			for(String statusCodeConversion : statusCodeConversionArray){
+				String[] statusCodeArray = statusCodeConversion.split("=");
+				if(statusCodeArray.length == 2){
+					if(statusCode.equalsIgnoreCase(statusCodeArray[0])){
+						return statusCodeArray[1];
+					}
+				}
+			}
+		}
+		return null;
+	}
 	
 	private static class BusinessDataCategory {
 		
@@ -516,7 +535,7 @@ public class BusinessDataManager {
 		public static BusinessDataItem MESSAGE_LOAD_INTERVAL_TIME = new BusinessDataItem(FixedConstant.SystemItem.MESSAGE_LOAD_INTERVAL_TIME.toString());
 		public static BusinessDataItem MESSAGE_LOAD_MAX_NUMBER = new BusinessDataItem(FixedConstant.SystemItem.MESSAGE_LOAD_MAX_NUMBER.toString());
 		public static BusinessDataItem CHANNEL_MO_LOAD_INTERVAL_TIME = new BusinessDataItem(FixedConstant.SystemItem.CHANNEL_MO_LOAD_INTERVAL_TIME.toString());
-		public static BusinessDataItem ACCOUNT_FINANCE_LOAD_INTERVAL_TIME = new BusinessDataItem(FixedConstant.SystemItem.CHANNEL_MO_LOAD_INTERVAL_TIME.toString());
+		public static BusinessDataItem ACCOUNT_FINANCE_LOAD_INTERVAL_TIME = new BusinessDataItem(FixedConstant.SystemItem.ACCOUNT_FINANCE_LOAD_INTERVAL_TIME.toString());
 		
 		public static BusinessDataItem SESSION_MONITOR_INTERVAL_TIME = new BusinessDataItem(FixedConstant.SystemItem.SESSION_MONITOR_INTERVAL_TIME.toString());
 		public static BusinessDataItem REPORT_REDIS_POP_INTERVAL_TIME = new BusinessDataItem(FixedConstant.SystemItem.REPORT_REDIS_POP_INTERVAL_TIME.toString());
@@ -551,7 +570,8 @@ public class BusinessDataManager {
 		//业务账号的扩展项
 		public static BusinessDataItem ACCOUNT_REPORT_PUSH_INTERVAL_TIME = new BusinessDataItem(FixedConstant.AccountExtendItem.ACCOUNT_REPORT_PUSH_INTERVAL_TIME.toString());
 		public static BusinessDataItem ACCOUNT_CONSUME_TYPE = new BusinessDataItem(FixedConstant.AccountExtendItem.ACCOUNT_CONSUME_TYPE.toString());
-		
+		public static BusinessDataItem STATUS_CODE_CONVERSION = new BusinessDataItem(FixedConstant.AccountExtendItem.STATUS_CODE_CONVERSION.toString());
+
 		
 		//通道扩展参数
 		public static BusinessDataItem DAY_SUCCESS_NUMBER = new BusinessDataItem(FixedConstant.ChannelExtendItem.DAY_SUCCESS_NUMBER.toString());

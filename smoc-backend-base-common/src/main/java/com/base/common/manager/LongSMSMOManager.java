@@ -120,7 +120,7 @@ public class LongSMSMOManager extends SuperQueueWorker<ChannelMO>{
 		protected void doRun() throws Exception {
 			Map<Integer,ChannelMO> channelMOMap = superQueue.take();
 			ChannelMO channelMO = match(channelMOMap);
-			ChannelMOManager.getInstance().add(channelMO);
+			ChannelMOManager.getInstance().put(channelMO.getBusinessMessageID(), channelMO);
 		}
 		
 	}

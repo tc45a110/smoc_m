@@ -189,7 +189,7 @@ public class ChannelInfoManager extends SuperMapWorker<String, ChannelInfo> {
 		}
 		// 获取缓存队列数据条数
 		int size = CacheBaseService.getChannelQueueSizeFromMiddlewareCache(channelID);
-		return maxSendSecond - size;
+		return 2*maxSendSecond - size;
 	}
 
 	/**

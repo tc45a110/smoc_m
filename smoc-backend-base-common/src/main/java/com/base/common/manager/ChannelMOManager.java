@@ -14,12 +14,12 @@ import java.util.List;
 
 import com.base.common.dao.LavenderDBSingleton;
 import com.base.common.vo.ChannelMO;
-import com.base.common.worker.SuperQueueWorker;
+import com.base.common.worker.SuperConcurrentMapWorker;
 
 /**
  * 上行信息处理类
  */
-public class ChannelMOManager extends SuperQueueWorker<ChannelMO> {
+public class ChannelMOManager extends SuperConcurrentMapWorker<String, ChannelMO> {
 	
 	private static ChannelMOManager manager = new ChannelMOManager();
 	
@@ -31,15 +31,18 @@ public class ChannelMOManager extends SuperQueueWorker<ChannelMO> {
 		return manager;
 	}
 	
+	public void put(String businessMessageID, ChannelMO channelMO) {
+		add(businessMessageID, channelMO);
+	}
+	
 	@Override
 	protected void doRun() throws Exception {
-		if(superQueue.size() > 0){
+		if(superMap.size() > 0){
 			long startTime = System.currentTimeMillis();
 			//临时数据
-			List<ChannelMO> channelMOList;
-			synchronized (lock) {
-				channelMOList = new ArrayList<ChannelMO>(superQueue);
-				superQueue.clear();
+			List<ChannelMO> channelMOList = new ArrayList<ChannelMO>(superMap.values());
+			for(ChannelMO channelMO : channelMOList) {
+				remove(channelMO.getBusinessMessageID());
 			}
 			saveRouteChannelMOInfo(channelMOList);
 			long interval = System.currentTimeMillis() - startTime;

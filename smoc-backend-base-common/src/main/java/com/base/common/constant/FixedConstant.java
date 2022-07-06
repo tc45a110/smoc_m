@@ -239,6 +239,7 @@ public class FixedConstant {
 	public static enum AccountExtendItem {
 		ACCOUNT_REPORT_PUSH_INTERVAL_TIME,//状态报告推送间隔时间
 		ACCOUNT_CONSUME_TYPE,//扣费方式
+		STATUS_CODE_CONVERSION,//状态码转换
 	}
 	
 	//业务数据的生效时间
@@ -274,9 +275,14 @@ public class FixedConstant {
 	}
 	
 	public static enum RepairStatus {
-		NO_CONFIG,//未配置
+		CHANNEL_REPAIR,//通道补发
 		NO_REPAIR,//不补发
-		REPAIR,//补发
+		ACCOUNT_REPAIR,//账号补发
+	}
+	
+	public static enum RepairBusinessType {
+		CHANNEL,//通道
+		ACCOUNT,//账号
 	}
 }
 

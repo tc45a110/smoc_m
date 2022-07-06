@@ -6,6 +6,7 @@
  */
 package com.base.common.vo;
 
+import com.base.common.util.UUIDUtil;
 
 public class ChannelMO implements Cloneable{
 	/**
@@ -61,6 +62,23 @@ public class ChannelMO implements Cloneable{
 	 */
 	private int matchTimes;
 	
+	/**
+	 * 唯一标识
+	 */
+	private String businessMessageID;
+	
+	
+	public String getBusinessMessageID() {
+		if(businessMessageID == null || businessMessageID.length() < 1) {
+			setBusinessMessageID(UUIDUtil.get32UUID());
+		}
+		return businessMessageID;
+	}
+
+	public void setBusinessMessageID(String businessMessageID) {
+		this.businessMessageID = businessMessageID;
+	}
+
 	private ChannelMO(){
 		
 	}

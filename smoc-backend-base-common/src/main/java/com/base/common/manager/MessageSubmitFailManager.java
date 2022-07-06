@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.base.common.constant.FixedConstant;
+import com.base.common.constant.InsideStatusCodeConstant;
 import com.base.common.util.DateUtil;
 import com.base.common.vo.BusinessRouteValue;
 import com.base.common.worker.MessageSubmitFailWorker;
@@ -36,6 +37,7 @@ public class MessageSubmitFailManager extends SuperQueueWorker<BusinessRouteValu
 	 */
 	public void process(BusinessRouteValue businessRouteValue){
 		businessRouteValue.setRouteLabel(FixedConstant.RouteLable.MR.name());
+		businessRouteValue.setSuccessCode(InsideStatusCodeConstant.FAIL_CODE);
 		businessRouteValue.setChannelReportTime(DateUtil.getCurDateTime(DateUtil.DATE_FORMAT_COMPACT_STANDARD_MILLI));
 		add(businessRouteValue);
 	}

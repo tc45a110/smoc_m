@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import com.base.common.constant.FixedConstant;
 import com.base.common.dao.AccountInfoDAO;
@@ -43,7 +44,7 @@ public class AccountInfoManager extends SuperMapWorker<String, AccountInfo> {
 	 */
 	public String getAccountStatus(String accountID) {
 		AccountInfo accountInfo = get(accountID);
-		if (accountInfo != null) {
+		if (accountInfo != null && StringUtils.isNoneEmpty(accountInfo.getAccountStatus())) {
 			switch (accountInfo.getAccountStatus()) {
 			case "0":
 				return FixedConstant.AccountStatus.CANCEL.name();

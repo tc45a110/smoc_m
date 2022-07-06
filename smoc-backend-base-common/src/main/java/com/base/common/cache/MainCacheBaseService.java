@@ -15,8 +15,8 @@ import com.base.common.vo.BusinessRouteValue;
 /**
  * 对外部提供带有业务含义的服务
  */
-public class CacheBaseService {
-	private static final Logger logger = LoggerFactory.getLogger(CacheBaseService.class);
+public class MainCacheBaseService {
+	private static final Logger logger = LoggerFactory.getLogger(MainCacheBaseService.class);
 	private static CacheServiceInter cacheBaseService = new JedisService();
 	
 	/**
@@ -33,112 +33,6 @@ public class CacheBaseService {
 			logger.error(e.getMessage(),e);
 		}
 		return false;
-	}
-	
-	/**
-	 * 从中间件缓存中获取状态报告或上行
-	 * @param accountID
-	 * @return
-	 */
-	public static BusinessRouteValue getReportFromMiddlewareCache(String accountID){
-		try {
-			return cacheBaseService.popQueue(CacheNameGeneratorUtil.generateAccessReportCacheName(accountID), BusinessRouteValue.class);
-		} catch (Exception e) {
-			logger.error(e.getMessage(),e);
-		}
-		return null;
-	}
-	
-	/**
-	 * 保存状态报告到中间件缓存
-	 * @param accountID
-	 * @param businessRouteValue
-	 */
-	public static void saveReportToMiddlewareCache(String accountID,BusinessRouteValue businessRouteValue){
-		try {
-			cacheBaseService.pushQueue(CacheNameGeneratorUtil.generateAccessReportCacheName(accountID), businessRouteValue);
-		} catch (Exception e) {
-			logger.error(e.getMessage(),e);
-		}
-	}
-	
-	/**
-	 * 保存提交记录到中间件缓存
-	 * @param channelID
-	 * @param businessRouteValue
-	 */
-	public static void saveSubmitToMiddlewareCache(String channelID,BusinessRouteValue businessRouteValue){
-		try {
-			cacheBaseService.pushQueue(CacheNameGeneratorUtil.generateSubmitCacheName(channelID), businessRouteValue);
-		} catch (Exception e) {
-			logger.error(e.getMessage(),e);
-		}
-	}
-	
-	/**
-	 * 从中间件缓存中获取提交记录
-	 * @param accountID
-	 * @return
-	 */
-	public static BusinessRouteValue getSubmitFromMiddlewareCache(String channelID){
-		try {
-			return cacheBaseService.popQueue(CacheNameGeneratorUtil.generateSubmitCacheName(channelID), BusinessRouteValue.class);
-		} catch (Exception e) {
-			logger.error(e.getMessage(),e);
-		}
-		return null;
-	}
-	
-	/**
-	 * 保存响应记录到中间件缓存
-	 * @param channelID
-	 * @param businessRouteValue
-	 */
-	public static void saveResponseToMiddlewareCache(BusinessRouteValue businessRouteValue){
-		try {
-			cacheBaseService.pushQueue(CacheNameGeneratorUtil.generateResponseCacheName(), businessRouteValue);
-		} catch (Exception e) {
-			logger.error(e.getMessage(),e);
-		}
-	}
-	
-	/**
-	 * 从中间件缓存获取状态报告：代理层使用
-	 * @return
-	 */
-	public static BusinessRouteValue getReportFromMiddlewareCache(){
-		try {
-			return cacheBaseService.popQueue(CacheNameGeneratorUtil.generateProxyReportCacheName(), BusinessRouteValue.class);
-		} catch (Exception e) {
-			logger.error(e.getMessage(),e);
-		}
-		return null;
-	}
-	
-	/**
-	 * 保存状态报告到中间件缓存：代理协议层使用
-	 * @param channelID
-	 * @param businessRouteValue
-	 */
-	public static void saveReportToMiddlewareCache(BusinessRouteValue businessRouteValue){
-		try {
-			cacheBaseService.pushQueue(CacheNameGeneratorUtil.generateProxyReportCacheName(), businessRouteValue);
-		} catch (Exception e) {
-			logger.error(e.getMessage(),e);
-		}
-	}
-	
-	/**
-	 * 从中间件缓存获取响应信息：代理业务层使用
-	 * @return
-	 */
-	public static BusinessRouteValue getResponseToMiddlewareCache(){
-		try {
-			return cacheBaseService.popQueue(CacheNameGeneratorUtil.generateResponseCacheName(), BusinessRouteValue.class);
-		} catch (Exception e) {
-			logger.error(e.getMessage(),e);
-		}
-		return null;
 	}
 	
 	/**
@@ -217,20 +111,6 @@ public class CacheBaseService {
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 		}
-	}
-	
-	/**
-	 * 从缓存中获取一个通道队列中元素数量
-	 * @param channelID
-	 * @return
-	 */
-	public static int getChannelQueueSizeFromMiddlewareCache(String channelID){
-		try {
-			return (int)cacheBaseService.getQueueSize(CacheNameGeneratorUtil.generateSubmitCacheName(channelID));
-		} catch (Exception e) {
-			logger.error(e.getMessage(),e);
-		}
-		return 0;
 	}
 	
 	/**
@@ -349,33 +229,6 @@ public class CacheBaseService {
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 		}
-	}
-	
-	/**
-	 * 保存状态报告到中间件缓存：保留到接入层
-	 * @param channelID
-	 * @param businessRouteValue
-	 */
-	public static void saveBusinessReportToMiddlewareCache(BusinessRouteValue businessRouteValue){
-		try {
-			cacheBaseService.pushQueue(CacheNameGeneratorUtil.generateAccessReportCacheName(), businessRouteValue);
-		} catch (Exception e) {
-			logger.error(e.getMessage(),e);
-		}
-	}
-	
-	/**
-	 * 接入业务层从中间件缓存中获取状态报告：接入业务层使用
-	 * @param accountID
-	 * @return
-	 */
-	public static BusinessRouteValue getBusinessReportFromMiddlewareCache(){
-		try {
-			return cacheBaseService.popQueue(CacheNameGeneratorUtil.generateAccessReportCacheName(), BusinessRouteValue.class);
-		} catch (Exception e) {
-			logger.error(e.getMessage(),e);
-		}
-		return null;
 	}
 	
 	/**

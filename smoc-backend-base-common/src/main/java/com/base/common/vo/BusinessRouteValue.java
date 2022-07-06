@@ -1,6 +1,7 @@
 package com.base.common.vo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import com.alibaba.fastjson.JSONObject;
 
@@ -337,14 +338,28 @@ public class BusinessRouteValue implements Serializable,Cloneable {
 	/**
 	 * 补发通道
 	 */
-	private String channelRepairID;
+	private ArrayList<String> channelRepairIDs;
+	
+	/**
+	 * 补发时间
+	 */
+	private int repairTime;
 
-	public String getChannelRepairID() {
-		return channelRepairID;
+
+	public ArrayList<String> getChannelRepairIDs() {
+		return channelRepairIDs;
 	}
 
-	public void setChannelRepairID(String channelRepairID) {
-		this.channelRepairID = channelRepairID;
+	public void setChannelRepairIDs(ArrayList<String> channelRepairIDs) {
+		this.channelRepairIDs = channelRepairIDs;
+	}
+
+	public int getRepairTime() {
+		return repairTime;
+	}
+
+	public void setRepairTime(int repairTime) {
+		this.repairTime = repairTime;
 	}
 
 	public String getAuditReason() {

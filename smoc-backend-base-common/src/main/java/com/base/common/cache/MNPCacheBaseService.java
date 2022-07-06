@@ -15,12 +15,12 @@ import com.base.common.util.CacheNameGeneratorUtil;
 public class MNPCacheBaseService {
 	private static final Logger logger = LoggerFactory.getLogger(MNPCacheBaseService.class);
 	
-	private static CacheServiceInter MNPCacheBaseService = new JedisService("jedisClientPool1");
+	private static CacheServiceInter MNPCacheBaseService = new JedisService("jedisClientPool_mnp");
 
 	/**
 	 * 从中间件缓存中获取一个号码是否携号转网为其他运营商
-	 * @param phoneNumber 手机号
-	 * @return 携号转网之后的运营商标识
+	 * @param phoneNumber
+	 * @return
 	 */
 	public static String getMNPFromMiddlewareCache(String phoneNumber){
 		try {
@@ -33,8 +33,8 @@ public class MNPCacheBaseService {
 	
 	/**
 	 * 保存携号转网数据到中间件缓存
-	 * @param phoneNumber 手机号
-	 * @param carrier 运营商
+	 * @param phoneNumber
+	 * @param carrier
 	 */
 	public static void saveMNPToMiddlewareCache(String phoneNumber,String carrier){
 		try {

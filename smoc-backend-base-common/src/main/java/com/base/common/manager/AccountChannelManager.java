@@ -153,7 +153,7 @@ public class AccountChannelManager  extends SuperMapWorker<String,ChannelWeight>
 		int index = 0;
 		if(notFullAccountChannelInfoList.size() > 0){
 			//按照权重构造ChannelWeight
-			for(AccountChannelInfo accountChannelInfo : accountChannelInfoList){
+			for(AccountChannelInfo accountChannelInfo : notFullAccountChannelInfoList){
 				for(int i=0;i<accountChannelInfo.getChannelWeight();i++){
 					channelWeight.put(index, accountChannelInfo.getChannelID());
 					index++;
@@ -182,7 +182,8 @@ public class AccountChannelManager  extends SuperMapWorker<String,ChannelWeight>
 		long currentMonthSuccessNumber = CacheBaseService
 				.getChannelMonthSuccessNumberFromMiddlewareCache(channelID);
 		
-		return currentDaySuccessNumber > daySuccessNumber || currentMonthSuccessNumber > monthSuccessNumber;
+		return (daySuccessNumber >0 && currentDaySuccessNumber > daySuccessNumber) 
+				|| (monthSuccessNumber >0 && currentMonthSuccessNumber > monthSuccessNumber);
 	}
 	
 	/**
@@ -207,6 +208,7 @@ public class AccountChannelManager  extends SuperMapWorker<String,ChannelWeight>
 		
 		for(Map.Entry<String,List<AccountChannelInfo>> entry : accountChannelInfoListMap.entrySet()){
 			String accountID = entry.getKey();
+		
 			List<AccountChannelInfo> accountChannelInfoList = entry.getValue();
 			
 			for(AccountChannelInfo accountChannelInfo:accountChannelInfoList){
@@ -227,6 +229,8 @@ public class AccountChannelManager  extends SuperMapWorker<String,ChannelWeight>
 				}
 				
 			}
+			
+
 			
 		}
 		
@@ -259,11 +263,17 @@ public class AccountChannelManager  extends SuperMapWorker<String,ChannelWeight>
 				String carrier = rs.getString("CARRIER");
 				String channelID = rs.getString("CHANNEL_ID");
 				int channelWeight = rs.getInt("CHANNEL_WEIGHT");
+				String channelGroupID = rs.getString("CHANNEL_GROUP_ID");
+				if(StringUtils.isEmpty(channelGroupID)){
+					channelWeight = 1;
+				}
 				String areaCodes = ChannelInfoManager.getInstance().getSupportAreaCodes(channelID);
 				String businessAreaType = ChannelInfoManager.getInstance().getBusinessAreaType(channelID);
 				
-				//有支持区域时才处理数据
-				if(StringUtils.isNotEmpty(areaCodes)){
+				//有支持区域时才处理数据 && FixedConstant.AccountStatus.NORMAL.name().equals(AccountInfoManager.getInstance().getAccountStatus(accountID))
+				if(StringUtils.isNotEmpty(areaCodes) 
+						&& FixedConstant.AccountStatus.NORMAL.name().equals(AccountInfoManager.getInstance().getAccountStatus(accountID)) 
+						){
 					Set<String> areaCodeSet = new HashSet<String>();
 					areaCodeSet.addAll(Arrays.asList(areaCodes.split(FixedConstant.DATABASE_SEPARATOR)));	
 					List<AccountChannelInfo> accountChannelInfoList = resultMap.get(accountID);
@@ -353,6 +363,16 @@ public class AccountChannelManager  extends SuperMapWorker<String,ChannelWeight>
 			return channelWeight;
 		}
 
+		@Override
+		public String toString() {
+			return "AccountChannelInfo [accountID=" + accountID + ", carrier="
+					+ carrier + ", areaCodeSet=" + areaCodeSet + ", channelID="
+					+ channelID + ", businessAreaType=" + businessAreaType
+					+ ", channelWeight=" + channelWeight + "]";
+		}
+		
+		
+
 	}
 	
 	class ChannelWeight {
@@ -377,6 +397,13 @@ public class AccountChannelManager  extends SuperMapWorker<String,ChannelWeight>
 		public void put(int index,String channelID){
 			channelIDMap.put(index, channelID);
 		}
+
+		@Override
+		public String toString() {
+			return "ChannelWeight [channelIDMap=" + channelIDMap + "]";
+		}
+		
+		
 		
 	}
 }
