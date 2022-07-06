@@ -5,17 +5,18 @@
 package com.business.proxy.worker;
 
 
+import java.util.ArrayList;
+
 import org.apache.commons.lang3.StringUtils;
 
 import com.base.common.cache.CacheBaseService;
 import com.base.common.constant.FixedConstant;
 import com.base.common.constant.InsideStatusCodeConstant;
 import com.base.common.log.PorxyBusinessLogManager;
-import com.base.common.manager.AccountRepairManager;
 import com.base.common.manager.BusinessDataManager;
 import com.base.common.manager.ChannelInfoManager;
 import com.base.common.manager.ChannelPriceManager;
-import com.base.common.manager.ChannelRepairManager;
+import com.base.common.manager.FailRepairManager;
 import com.base.common.util.Commons;
 import com.base.common.util.DateUtil;
 import com.base.common.util.MessageContentUtil;
@@ -51,19 +52,26 @@ public class ReportProcessWorker extends SuperQueueWorker<BusinessRouteValue>{
 			CacheBaseService.deleteBusinessRouteValueFromMiddlewareCache(businessRouteValueReport);
 			businessRouteValue.setBusinessRouteValueReport(businessRouteValueReport);
 			businessRouteValue.setRouteLabel(FixedConstant.RouteLable.MR.name());
+			String [] messageIDsArray = businessRouteValue.getAccountMessageIDs().split(FixedConstant.SPLICER);
+			
+			for(int i = 0; i < messageIDsArray.length; i++) {
+				businessRouteValue.setAccountMessageIDs(messageIDsArray[i]);
+				//如果解析的msgID数组大于1    则为提交到平台为多条数据  下发合成为1条  状态报告返回为1条  如：cmpp -- http
+				if(messageIDsArray.length > 1) {
+					businessRouteValue.setMessageIndex(i+1);
+				}
+				doLog(businessRouteValue);
+			}
 			
 			//维护通道日，月成功量
 			if(InsideStatusCodeConstant.SUCCESS_CODE.equals(businessRouteValue.getSuccessCode()) ){
 				//向接入业务层状态报告队列中存入状态报告    
-				String [] messageIDsArray = businessRouteValue.getAccountMessageIDs().split(FixedConstant.SPLICER);
-				
 				for(int i = 0; i < messageIDsArray.length; i++) {
 					businessRouteValue.setAccountMessageIDs(messageIDsArray[i]);
 					//如果解析的msgID数组大于1    则为提交到平台为多条数据  下发合成为1条  状态报告返回为1条  如：cmpp -- http
 					if(messageIDsArray.length > 1) {
 						businessRouteValue.setMessageIndex(i+1);
 					}
-					doLog(businessRouteValue);
 					CacheBaseService.saveBusinessReportToMiddlewareCache(businessRouteValue);
 				}
 				
@@ -89,40 +97,34 @@ public class ReportProcessWorker extends SuperQueueWorker<BusinessRouteValue>{
 				//失败补发
 				String accountID = businessRouteValue.getAccountID();
 				String businessCarrier = businessRouteValue.getBusinessCarrier();
-				String accountRepairStatus = AccountRepairManager.getInstance().getAccountRepairStatus(accountID, businessCarrier);
-				int intervalTime = DateUtil.getIntervalTime(businessRouteValue.getAccountSubmitTime(), DateUtil.getCurDateTime(DateUtil.DATE_FORMAT_COMPACT_STANDARD_MILLI));
-				String channelRepairID = businessRouteValue.getChannelRepairID();
 				String statusCode = businessRouteValue.getStatusCode();
-				String newChannelRepairID;
-				boolean reportFlag = true;
-				//TODO 长短信补发机制
+				String channelID = businessRouteValue.getChannelID();
+				int repeatSendTimes = businessRouteValue.getRepeatSendTimes();
+				int intervalTime = DateUtil.getIntervalTime(businessRouteValue.getAccountSubmitTime(), DateUtil.getCurDateTime(DateUtil.DATE_FORMAT_COMPACT_STANDARD_MILLI));
 				
-				//1.先进行账号失败补发
-				if(FixedConstant.RepairStatus.REPAIR.name().equals(accountRepairStatus)) {
-					//补发
-					int accountRepairTime = AccountRepairManager.getInstance().getAccountRepairTime(accountID, businessCarrier);
-					if(accountRepairTime > intervalTime) {
-						//没有超过时间 进行补发
-						//获取账号失败补发通道
-						newChannelRepairID = AccountRepairManager.getInstance().getChannelRepairID(accountID, businessCarrier, statusCode, channelRepairID);
-						if(StringUtils.isNotEmpty(newChannelRepairID)) {
-							//补发通道为空 则进行补发
-							repair(businessRouteValue,newChannelRepairID);
-							//补发不往接入业务层推送状态报告
-							reportFlag = false;
-						}
+				boolean reportFlag = true;
+				ArrayList<String> channelRepairList;
+				int repairTime;
+				
+				if(repeatSendTimes > 0) {
+					//已补发过
+					channelRepairList = businessRouteValue.getChannelRepairIDs();
+					repairTime = businessRouteValue.getRepairTime();
+					if(repairTime > intervalTime && channelRepairList.size() > repeatSendTimes) {
+						//进行补发
+						repair(businessRouteValue,channelRepairList.get(repeatSendTimes));
+						reportFlag = false;
 					}
-					
-				}else if(FixedConstant.RepairStatus.NO_CONFIG.name().equals(accountRepairStatus)) {
-					//未配置 获取通道失败补发
-					String channelID = businessRouteValue.getChannelID();
-					int channelRepairTime = ChannelRepairManager.getInstance().getChannelRepairTime(channelID);
-					if(channelRepairTime > 0 && channelRepairTime > intervalTime) {
-						newChannelRepairID = ChannelRepairManager.getInstance().getChannelRepairID(channelID, channelRepairID, statusCode);
-						if(StringUtils.isNotEmpty(newChannelRepairID)) {
-							//补发通道为空 则进行补发
-							repair(businessRouteValue,newChannelRepairID);
-							//补发不往接入业务层推送状态报告
+				}else {
+					//初补发
+					channelRepairList = FailRepairManager.getInstance().getChannelRepairID(accountID, businessCarrier, statusCode, channelID);
+					if(channelRepairList != null) {
+						repairTime = FailRepairManager.getInstance().getRepairTime(accountID, businessCarrier, channelID) * 60;
+						if(repairTime > intervalTime) {
+							//进行补发
+							businessRouteValue.setChannelRepairIDs(channelRepairList);
+							businessRouteValue.setRepairTime(repairTime);
+							repair(businessRouteValue,channelRepairList.get(0));
 							reportFlag = false;
 						}
 					}
@@ -130,23 +132,17 @@ public class ReportProcessWorker extends SuperQueueWorker<BusinessRouteValue>{
 				
 				if(reportFlag) {
 					//向接入业务层状态报告队列中存入状态报告    
-					String [] messageIDsArray = businessRouteValue.getAccountMessageIDs().split(FixedConstant.SPLICER);
-					
 					for(int i = 0; i < messageIDsArray.length; i++) {
 						businessRouteValue.setAccountMessageIDs(messageIDsArray[i]);
 						//如果解析的msgID数组大于1    则为提交到平台为多条数据  下发合成为1条  状态报告返回为1条  如：cmpp -- http
 						if(messageIDsArray.length > 1) {
 							businessRouteValue.setMessageIndex(i+1);
 						}
-						doLog(businessRouteValue);
 						CacheBaseService.saveBusinessReportToMiddlewareCache(businessRouteValue);
 					}
 				}
-				
 			}
 			
-			//当账号是按状态报告成功限量时，需维护账号日限量
-			//TODO
 		}else{
 			logger.warn(
 					new StringBuilder().append("状态报告未匹配到提交信息")
@@ -170,7 +166,7 @@ public class ReportProcessWorker extends SuperQueueWorker<BusinessRouteValue>{
 	}
 
 	private void repair(BusinessRouteValue businessRouteValue, String channelID) {
-		businessRouteValue.setChannelRepairID(channelID);
+		businessRouteValue.setChannelID(channelID);
 		businessRouteValue.setChannelSRCID(ChannelInfoManager.getInstance().getChannelSRCID(channelID));
 		
 		//获取通道价格
@@ -184,6 +180,23 @@ public class ReportProcessWorker extends SuperQueueWorker<BusinessRouteValue>{
 		}
 		businessRouteValue.setRepeatSendTimes(businessRouteValue.getRepeatSendTimes() + 1);
 		businessRouteValue.setQueueSubmitTime(DateUtil.getCurDateTime(DateUtil.DATE_FORMAT_COMPACT_STANDARD_MILLI));
+		
+		logger.info(
+				new StringBuilder().append("失败补发")
+				.append("{}accountID={}")
+				.append("{}phoneNumber={}")
+				.append("{}messageContent={}")
+				.append("{}businessCarrier={}")
+				.append("{}channelID={}")
+				.append("{}repeatSendTimes={}")
+				.toString(),
+				FixedConstant.SPLICER,businessRouteValue.getAccountID(),
+				FixedConstant.SPLICER,businessRouteValue.getPhoneNumber(),
+				FixedConstant.SPLICER,businessRouteValue.getMessageContent(),
+				FixedConstant.SPLICER,businessRouteValue.getBusinessCarrier(),
+				FixedConstant.SPLICER,businessRouteValue.getChannelID(),
+				FixedConstant.SPLICER,businessRouteValue.getRepeatSendTimes()
+				);
 		
 		//长短信区分
 		if(businessRouteValue.getChannelTotal() == 1) {

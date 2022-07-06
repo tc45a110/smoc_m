@@ -9,9 +9,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+import org.apache.commons.collections4.CollectionUtils;
 
 import com.base.common.cache.CacheBaseService;
 import com.base.common.constant.FixedConstant;
@@ -19,14 +19,14 @@ import com.base.common.constant.InsideStatusCodeConstant;
 import com.base.common.constant.TableNameConstant;
 import com.base.common.dao.LavenderDBSingleton;
 import com.base.common.manager.ChannelInfoManager;
-import com.base.common.manager.ChannelPriceManager;
 import com.base.common.manager.MessageSubmitFailManager;
-import com.base.common.util.Commons;
 import com.base.common.util.DateUtil;
 import com.base.common.util.TableNameGeneratorUtil;
 import com.base.common.vo.BusinessRouteValue;
 import com.base.common.worker.SuperCacheWorker;
 import com.base.common.worker.SuperQueueWorker;
+import com.business.proxy.manager.SubmitJsonToBeanWorkerManager;
+import com.business.proxy.vo.SubmitJson;
 
 public class SubmitPullWorker extends SuperQueueWorker<BusinessRouteValue>{
 	private String channelID;
@@ -93,27 +93,28 @@ public class SubmitPullWorker extends SuperQueueWorker<BusinessRouteValue>{
 		logger.debug("可加载最大数据条数{}",messageLoadMaxNumber);
 		
 		if(messageLoadMaxNumber > 0){
-			List<BusinessRouteValue> businessRouteValueList = loadRouteChannelMessageMtInfo(tableName,messageLoadMaxNumber);
+			List<SubmitJson>  submitJsonList= loadRouteChannelMessageMtInfo(tableName,messageLoadMaxNumber);
 			
-			if(businessRouteValueList != null && businessRouteValueList.size() > 0 ){
+			if(CollectionUtils.isNotEmpty(submitJsonList)){
 				
 				long interval = System.currentTimeMillis() - startTime;
-				logger.info("通道状态{},本次加载数据条数{},耗时{}毫秒",channelStatus,businessRouteValueList.size(),interval);
+				logger.info("通道状态{},本次加载数据条数{},耗时{}毫秒",channelStatus,submitJsonList.size(),interval);
 				
 				startTime = System.currentTimeMillis();
 				if(FixedConstant.ChannelStatus.NORMAL.name().equals(channelStatus)){
 					//当通道状态为正常时
-					processChannelNormal(businessRouteValueList);
+					processChannelNormal(submitJsonList);
 				}else{
-					processChannelAbnormal(businessRouteValueList);
+					processChannelAbnormal(submitJsonList);
 				}
-				logger.info("通道状态{},分发数据条数{},耗时{}毫秒",channelStatus,businessRouteValueList.size(),interval);
+				logger.info("通道状态{},本次分发数据条数{},耗时{}毫秒",channelStatus,submitJsonList.size(),interval);
+				Thread.sleep(FixedConstant.COMMON_INTERVAL_TIME/20);
 			}else{
-				Thread.sleep(FixedConstant.COMMON_INTERVAL_TIME);
+				Thread.sleep(FixedConstant.COMMON_INTERVAL_TIME/10);
 			}
 		}else{
 			//通道队列中元素数量已经满了
-			Thread.sleep(FixedConstant.COMMON_INTERVAL_TIME);
+			Thread.sleep(FixedConstant.COMMON_INTERVAL_TIME/10);
 		}
 
 	}
@@ -122,24 +123,9 @@ public class SubmitPullWorker extends SuperQueueWorker<BusinessRouteValue>{
 	 * 通道正常处理
 	 * @param businessRouteValueList
 	 */
-	private void processChannelNormal(List<BusinessRouteValue> businessRouteValueList){
-		//当通道异常时
-		for(BusinessRouteValue businessRouteValue : businessRouteValueList){
-			logger.info(
-					new StringBuilder().append("通道状态正常")
-					.append("{}accountID={}")
-					.append("{}phoneNumber={}")
-					.append("{}messageContent={}")
-					.append("{}channelID={}")
-					.toString(),
-					FixedConstant.SPLICER,businessRouteValue.getAccountID(),
-					FixedConstant.SPLICER,businessRouteValue.getPhoneNumber(),
-					FixedConstant.SPLICER,businessRouteValue.getMessageContent(),
-					FixedConstant.SPLICER,channelID
-					);
-			//保存在下发队列中
-			businessRouteValue.setQueueSubmitTime(DateUtil.getCurDateTime(DateUtil.DATE_FORMAT_COMPACT_STANDARD_MILLI));
-			CacheBaseService.saveSubmitToMiddlewareCache(channelID, businessRouteValue);
+	private void processChannelNormal(List<SubmitJson>  submitJsonList){
+		for(final SubmitJson submitJson : submitJsonList){
+			SubmitJsonToBeanWorkerManager.getInstance().process(submitJson);
 		}
 	}
 	
@@ -147,9 +133,14 @@ public class SubmitPullWorker extends SuperQueueWorker<BusinessRouteValue>{
 	 * 通道异常处理
 	 * @param businessRouteValueList
 	 */
-	private void processChannelAbnormal(List<BusinessRouteValue> businessRouteValueList){
+	private void processChannelAbnormal(List<SubmitJson>  submitJsonList){
 		//当通道异常时
-		for(BusinessRouteValue businessRouteValue : businessRouteValueList){
+		for(final SubmitJson submitJson : submitJsonList){
+			
+			BusinessRouteValue businessRouteValue = BusinessRouteValue.toObject(submitJson.getMessageJson());
+			businessRouteValue.setMessageContent(submitJson.getMessageContent());
+			businessRouteValue.setTableSubmitTime(submitJson.getTableSubmitTime());
+			
 			logger.info(
 					new StringBuilder().append("通道状态异常")
 					.append("{}accountID={}")
@@ -160,11 +151,11 @@ public class SubmitPullWorker extends SuperQueueWorker<BusinessRouteValue>{
 					FixedConstant.SPLICER,businessRouteValue.getPhoneNumber(),
 					FixedConstant.SPLICER,businessRouteValue.getMessageContent()
 					);
+
 			
 			businessRouteValue.setStatusCodeSource(FixedConstant.StatusReportSource.PROXY.name());
 			businessRouteValue.setStatusCode(InsideStatusCodeConstant.StatusCode.GWPAUSE.name());
 			businessRouteValue.setSubStatusCode("");
-			businessRouteValue.setSuccessCode(InsideStatusCodeConstant.FAIL_CODE);
 			MessageSubmitFailManager.getInstance().process(businessRouteValue);
 			
 		}
@@ -176,55 +167,69 @@ public class SubmitPullWorker extends SuperQueueWorker<BusinessRouteValue>{
 	 * @param messageLoadMaxNumber
 	 * @return
 	 */
-	private List<BusinessRouteValue> loadRouteChannelMessageMtInfo(
+	private List<SubmitJson> loadRouteChannelMessageMtInfo(
 			String tableName, int messageLoadMaxNumber) {
-		List<BusinessRouteValue> list = new ArrayList<BusinessRouteValue>();
-		Map<Integer,Long> map = new HashMap<Integer,Long>();
+
 		StringBuffer sql = new StringBuffer();
-		sql.append("SELECT ID,ACCOUNT_PRIORITY,MESSAGE_CONTENT,MESSAGE_JSON,CREATED_TIME FROM ");
+		sql.append("SELECT ID,MESSAGE_CONTENT,MESSAGE_JSON,CREATED_TIME FROM ");
 		sql.append("smoc_route.").append(tableName);
-		sql.append(" ORDER BY ACCOUNT_PRIORITY DESC,ID ASC LIMIT 0,?");
+		//sql.append(" WHERE ACCOUNT_PRIORITY in (1,2,3)");
+		sql.append(" ORDER BY ACCOUNT_PRIORITY DESC,ID ASC LIMIT 0, ?");
+		
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		PreparedStatement pstmt2 = null;
 		ResultSet rs = null;
+		ArrayList<Long> idList = null;
+		ArrayList<SubmitJson> submitJsonList = null;
+		long id = 0L;
+
 		try {
+			idList = new ArrayList<Long>();
+			submitJsonList = new ArrayList<SubmitJson>();
 			conn = LavenderDBSingleton.getInstance().getConnection();
 			conn.setAutoCommit(false);
+			long start = System.currentTimeMillis();
 			pstmt = conn.prepareStatement(sql.toString());
 			pstmt.setInt(1, messageLoadMaxNumber);
 			rs = pstmt.executeQuery();
+			logger.debug("表{}本次读取数据sql执行,耗时：{}",tableName,(System.currentTimeMillis() - start));
 			while (rs.next()) {
-				map.put(rs.getInt("ACCOUNT_PRIORITY"), rs.getLong("ID"));
-				BusinessRouteValue businessRouteValue = BusinessRouteValue.toObject(rs.getString("MESSAGE_JSON"));
-				businessRouteValue.setMessageContent(rs.getString("MESSAGE_CONTENT"));
+				long startTime = System.currentTimeMillis();
+				id = rs.getLong("ID");
+				idList.add(id);
+				
+				String  messageJson = rs.getString("MESSAGE_JSON");
+				String  messageContent = rs.getString("MESSAGE_CONTENT");
 				String tableSubmitTime = DateUtil.format(rs.getTimestamp("CREATED_TIME"), DateUtil.DATE_FORMAT_COMPACT_STANDARD_MILLI);
-				businessRouteValue.setTableSubmitTime(tableSubmitTime);
-				
-				businessRouteValue.setChannelPrice(ChannelPriceManager.getInstance().getPrice(channelID, businessRouteValue.getAreaCode()));
-				if(FixedConstant.PriceStyle.AREA_PRICE.name().equals(ChannelInfoManager.getInstance().getPriceStyle(channelID))) {
-					businessRouteValue.setPriceAreaCode(businessRouteValue.getAreaCode());
-					businessRouteValue.setChannelPrice(ChannelPriceManager.getInstance().getPrice(channelID, businessRouteValue.getAreaCode()));
-				}else {
-					//省份编码/国家编码,当通道不区分省份计价时，该值为ALL
-					businessRouteValue.setPriceAreaCode(Commons.UNIFIED_PRICING_CODE);
-					businessRouteValue.setChannelPrice(ChannelPriceManager.getInstance().getPrice(channelID, Commons.UNIFIED_PRICING_CODE));
-				}
-				
-				list.add(businessRouteValue);
+				submitJsonList.add(new SubmitJson(messageJson, messageContent, tableSubmitTime));
+				logger.debug("获取记录{},耗时{}",id,(System.currentTimeMillis() - startTime));
 			}
-			if(map.size() > 0) {
+			
+			if(submitJsonList.size() > 0) {
+				logger.info("表{}本次获取数据条数{},耗时：{}",tableName,submitJsonList.size(),(System.currentTimeMillis() - start));
+			}
+			
+			if(idList.size() > 0) {
+				start = System.currentTimeMillis();
 				sql.setLength(0);
-				sql.append("DELETE FROM smoc_route.").append(tableName).append(" WHERE ID <= ? AND ACCOUNT_PRIORITY = ?");
-				pstmt2 = conn.prepareStatement(sql.toString());
-				for(Integer priority : map.keySet()) {
-					long maxID = map.get(priority);
-					pstmt2.setLong(1, maxID);
-					pstmt2.setInt(2, priority);
-					int count = pstmt2.executeUpdate();
-					logger.info("删除{} ID<={} ACCOUNT_PRIORITY={}，共{}条",tableName,maxID,priority,count);
+				//sql.append("DELETE FROM smoc_route.").append(tableName).append(" WHERE ID <= ? AND ID in (");
+				sql.append("DELETE FROM smoc_route.").append(tableName).append(" WHERE ID in (");
+				
+				for(int i = 0;i < idList.size();i++) {
+					sql.append(idList.get(i));
+					if(i != (idList.size() - 1)) {
+						sql.append(",");
+					}
 				}
-				conn.commit();
+				sql.append(")");
+				pstmt2 = conn.prepareStatement(sql.toString());
+				//pstmt2.setLong(1, maxID);
+				pstmt2.execute();
+			}
+			conn.commit();
+			if(idList.size() > 0) {
+				logger.info("{}共删除{}条,耗时：{}",tableName,idList.size(),(System.currentTimeMillis() - start));
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
@@ -233,11 +238,12 @@ public class SubmitPullWorker extends SuperQueueWorker<BusinessRouteValue>{
 			} catch (Exception e1) {
 				logger.error(e1.getMessage(),e1);
 			}
+			return null;
 		} finally {
 			LavenderDBSingleton.getInstance().closeAll(rs, pstmt2, null);
 			LavenderDBSingleton.getInstance().closeAll(null, pstmt, conn);
 		}
-		return list;
+		return submitJsonList;
 	}
 	
 	/**
@@ -267,7 +273,6 @@ public class SubmitPullWorker extends SuperQueueWorker<BusinessRouteValue>{
 					businessRouteValue.setStatusCodeSource(FixedConstant.StatusReportSource.PROXY.name());
 					businessRouteValue.setStatusCode(InsideStatusCodeConstant.StatusCode.GWPAUSE.name());
 					businessRouteValue.setSubStatusCode("");
-					businessRouteValue.setSuccessCode(InsideStatusCodeConstant.FAIL_CODE);
 					MessageSubmitFailManager.getInstance().process(businessRouteValue);
 					
 				}else{

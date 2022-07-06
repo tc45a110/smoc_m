@@ -15,7 +15,7 @@ public class ReportProcessWorkerManager extends SuperMapWorker<Integer, ReportPr
 		
 	private ReportProcessWorkerManager(){
 		//启动cpu的数量*8的系数
-		for(int i=0;i<FixedConstant.CPU_NUMBER*8;i++){
+		for(int i=0;i<FixedConstant.CPU_NUMBER*2;i++){
 			ReportProcessWorker reportProcessWorker = new ReportProcessWorker();
 			reportProcessWorker.setName(new StringBuilder("ReportProcessWorker-").append(i+1).toString());
 			reportProcessWorker.start();

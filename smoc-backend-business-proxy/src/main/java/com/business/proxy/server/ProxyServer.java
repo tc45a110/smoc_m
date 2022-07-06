@@ -10,7 +10,9 @@ import com.base.common.manager.ExtendParameterManager;
 import com.base.common.manager.ResourceManager;
 import com.business.proxy.manager.ReportPullWorkerManager;
 import com.business.proxy.manager.ResponsePullWorkerManager;
+import com.business.proxy.manager.SubmitJsonToBeanWorkerManager;
 import com.business.proxy.manager.SubmitPullWorkerManager;
+import com.business.proxy.manager.SubmitSaveWorkerManager;
 
 public class ProxyServer {
 
@@ -36,6 +38,9 @@ public class ProxyServer {
 	private void startup(){
 
 		System.out.println("服务正在启动");
+		SubmitSaveWorkerManager.getInstance();
+		SubmitJsonToBeanWorkerManager.getInstance();
+
 		//初始化文件配置数据
 		ResourceManager.getInstance();
 		//初始化数据库配置数据

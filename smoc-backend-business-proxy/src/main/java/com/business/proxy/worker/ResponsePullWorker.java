@@ -66,7 +66,6 @@ public class ResponsePullWorker extends SuperCacheWorker{
 					businessRouteValue.setStatusCodeSource(FixedConstant.StatusReportSource.RESPONSE.name());
 					businessRouteValue.setStatusCode(businessRouteValue.getNextNodeErrorCode());
 					businessRouteValue.setSubStatusCode("");
-					businessRouteValue.setSuccessCode(InsideStatusCodeConstant.FAIL_CODE);
 					MessageSubmitFailManager.getInstance().process(businessRouteValue);
 				}			
 			}

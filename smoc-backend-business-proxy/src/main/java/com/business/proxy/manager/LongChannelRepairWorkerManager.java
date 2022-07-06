@@ -72,8 +72,8 @@ public class LongChannelRepairWorkerManager{
 			String md5 =  DigestUtils.md5DigestAsHex(businessRouteValue.getMessageContent().getBytes());
 			String key = new StringBuffer(String.valueOf(businessRouteValue.getChannelTotal()))
 										.append(FixedConstant.SPLICER).append(businessRouteValue.getPhoneNumber())
-										.append(FixedConstant.SPLICER).append(businessRouteValue.getChannelID())
 										.append(FixedConstant.SPLICER).append(businessRouteValue.getAccountID())
+										.append(FixedConstant.SPLICER).append(businessRouteValue.getBusinessMessageID())
 										.append(FixedConstant.SPLICER).append(md5).toString();
 			logger.info(new StringBuilder().append("长短信状态报告需合成处理")
 						.append("{}accountID={}")
@@ -81,6 +81,7 @@ public class LongChannelRepairWorkerManager{
 						.append("{}total={}")
 						.append("{}number={}")
 						.append("{}messageContent={}")
+						.append("{}businessMessageID={}")
 						.append("{}key={}").toString()
 						,
 						FixedConstant.LOG_SEPARATOR,businessRouteValue.getAccountID(),
@@ -88,6 +89,7 @@ public class LongChannelRepairWorkerManager{
 						FixedConstant.LOG_SEPARATOR,businessRouteValue.getChannelTotal(),
 						FixedConstant.LOG_SEPARATOR,businessRouteValue.getChannelIndex(),
 						FixedConstant.LOG_SEPARATOR,businessRouteValue.getMessageContent(),
+						FixedConstant.LOG_SEPARATOR,businessRouteValue.getBusinessMessageID(),
 						FixedConstant.LOG_SEPARATOR,key
 						);
 			
@@ -105,7 +107,7 @@ public class LongChannelRepairWorkerManager{
 				}
 				
 				//当满足条件则匹配成功
-				if(temp.size() == Integer.parseInt(key.substring(0, key.indexOf(",")))){
+				if(temp.size() == Integer.parseInt(key.substring(0, key.indexOf(FixedConstant.SPLICER)))){
 					combinationWorker.add(temp);
 					map.remove(key);
 					TimerTask task = taskMap.remove(key);
@@ -136,7 +138,7 @@ public class LongChannelRepairWorkerManager{
 						FixedConstant.LOG_SEPARATOR,businessRouteValue.getAccountID(),
 						FixedConstant.LOG_SEPARATOR,businessRouteValue.getPhoneNumber(),
 						FixedConstant.LOG_SEPARATOR,businessRouteValue.getMessageContent());
-			ChannelRepairWorkerManager.getInstance().saveBusinessRouteValue(businessRouteValue.getChannelRepairID(), businessRouteValue);
+			ChannelRepairWorkerManager.getInstance().saveBusinessRouteValue(businessRouteValue.getChannelID(), businessRouteValue);
 			
 		}
 	}

@@ -14,7 +14,7 @@ public class ResponsePullWorkerManager extends SuperMapWorker<String, ResponsePu
 		
 	private ResponsePullWorkerManager(){
 		//启动cpu的数量*8的系数
-		for(int i=0;i<FixedConstant.CPU_NUMBER*8;i++){
+		for(int i=0;i<FixedConstant.CPU_NUMBER*2;i++){
 			ResponsePullWorker responsePullWorker = new ResponsePullWorker();
 			responsePullWorker.setName(new StringBuilder("ResponsePullWorker-").append(i+1).toString());
 			responsePullWorker.start();
