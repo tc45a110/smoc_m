@@ -322,7 +322,7 @@ public class FinanceReturnStatisticsService {
 
 		StringBuffer sql = new StringBuffer();
 		sql.append("UPDATE smoc.finance_account SET ACCOUNT_USABLE_SUM = ACCOUNT_USABLE_SUM + ?,");
-		sql.append("ACCOUNT_FROZEN_SUM = ACCOUNT_FROZEN_SUM - ? ");
+		sql.append("ACCOUNT_FROZEN_SUM = ACCOUNT_FROZEN_SUM - ?,ACCOUNT_CONSUME_SUM = ACCOUNT_CONSUME_SUM + ? ");
 		sql.append("WHERE ACCOUNT_ID = ?");
 		
 		logger.info("updateFinanceAccount sql={}",sql.toString());
@@ -335,7 +335,8 @@ public class FinanceReturnStatisticsService {
 			for (FinanceAccountReturnStatisticsVo vo : saveReturnStatisticsMap.values()) {
 				pstmt.setDouble(1, vo.getReturnSum());
 				pstmt.setDouble(2, vo.getUnfreezeSum());
-				pstmt.setString(3, vo.getConsumeAccountID());
+				pstmt.setDouble(3, vo.getSucessSum());
+				pstmt.setString(4, vo.getConsumeAccountID());
 				
 				pstmt.addBatch();
 			}

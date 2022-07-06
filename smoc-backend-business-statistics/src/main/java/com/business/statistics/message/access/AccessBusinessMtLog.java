@@ -13,6 +13,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.LineIterator;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,51 +26,60 @@ import com.base.common.vo.BusinessRouteValue;
 import com.business.statistics.message.access.AccessBusinessDao;
 import com.business.statistics.util.FileFilterUtil;
 
-public class AccessBusinessMrLog {
-	private static final Logger logger = LoggerFactory.getLogger(AccessBusinessMrLog.class);
-	//接入业务层一条mr日志字符串个数
-	private static final int ACCESS_BUSINESS_MR_MESSAGE_LOG_LENGTH  = ResourceManager.getInstance().getIntValue("access.business.mr.message.log.length");
+public class AccessBusinessMtLog {
+	private static final Logger logger = LoggerFactory.getLogger(AccessBusinessMtLog.class);
+	// 接入业务层一条mt日志字符串个数
+	private static final int ACCESS_BUSINESS_MT_MESSAGE_LOG_LENGTH = ResourceManager.getInstance()
+			.getIntValue("access.business.mt.message.log.length");
 
 	public static void main(String[] args) {
 		logger.info(Arrays.toString(args));
+
+		long startTime = System.currentTimeMillis();
+
 		String lineTime = null;
-       
+
 		int afterMinute = -1;
-		if (!(args.length == 1 || args.length == 0)){
+		if (!(args.length == 1 || args.length == 0)) {
 			logger.error("参数不符合规范");
 			System.exit(0);
 		}
-		//创建一个线程池
-		ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(FixedConstant.CPU_NUMBER * 8, Integer.MAX_VALUE,
-				100000L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
-		threadPoolExecutor.prestartAllCoreThreads();
-
+		// 通过传参 确定读取时间
+		if (args.length >= 1) {
+			afterMinute = Integer.valueOf(args[0]);
+		}
 		try {
-			//通过传参 确定读取时间
-			if (args.length >= 1) {
-				afterMinute = Integer.valueOf(args[0]);
-			}
-			//当前系统前一分钟的时间  格式：yyyy-MM-dd HH:mm
+
+			// 当前系统前一分钟的时间 格式：yyyy-MM-dd HH:mm
 			lineTime = DateUtil.getAfterMinuteDateTime(afterMinute, DateUtil.DATE_FORMAT_COMPACT_STANDARD_MINUTE);
-			//日志文件路径
+
+			// 日志文件路径
 			String filePath = new StringBuilder(LogPathConstant.LOG_BASE_PATH)
-					.append(LogPathConstant.getAccessBusinessFilePathPart(FixedConstant.RouteLable.MR.name()))
+					.append(LogPathConstant.getAccessBusinessFilePathPart(FixedConstant.RouteLable.MT.name()))
 					.toString();
-			
-			//日志文件名称
-			String fileName = new StringBuilder(LogPathConstant.getFileNamePrefix(FixedConstant.RouteLable.MR.name()))
-					.append(DateUtil.getCurDateTime(DateUtil.DATE_FORMAT_COMPACT_HOUR)).toString();
+
+			// 读取的文件名
+			String fileName = new StringBuilder(LogPathConstant.getFileNamePrefix(FixedConstant.RouteLable.MT.name()))
+					.append(DateUtil.getAfterMinuteDateTime(afterMinute, DateUtil.DATE_FORMAT_COMPACT_HOUR)).toString();
+
+			logger.info("读取当前文件路径={},文件名={},生成时间={}", filePath, fileName, lineTime);
+
+			// 创建一个线程池
+			ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(FixedConstant.CPU_NUMBER * 8,
+					Integer.MAX_VALUE, 100000L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
+			threadPoolExecutor.prestartAllCoreThreads();
+
 			Vector<Future<Integer>> calls = new Vector<Future<Integer>>();
-		
 			int fileNumber = 0;
 			// 得到yyyyMMddHH格式获取文件
 			if (StringUtils.isNotEmpty(filePath) && StringUtils.isNotEmpty(fileName)) {
-				//得到文件数组
+				// 得到符合文件数组
 				File[] fileList = FileFilterUtil.findFile(filePath, fileName);
 				fileNumber = fileList.length;
+
 				for (File file : fileList) {
-					//一个文件用一个线程去处理
-					Worker worker = new AccessBusinessMrLog().new Worker(file, lineTime);
+					// 一个文件用一个线程去处理
+					Worker worker = new AccessBusinessMtLog().new Worker(file, lineTime);
 					Future<Integer> call = threadPoolExecutor.submit(worker);
 					calls.add(call);
 				}
@@ -81,8 +91,10 @@ public class AccessBusinessMrLog {
 				} catch (Exception e) {
 					logger.error(e.getMessage(), e);
 				}
-			} 
-			logger.info("{}处理文件数量:{},处理数据行数:{}",fileNumber,rowNumber);
+			}
+
+			logger.info("{},处理文件数量:{},处理数据行数:{},耗时:{}", lineTime, fileNumber, rowNumber,
+					(System.currentTimeMillis() - startTime));
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
@@ -104,26 +116,26 @@ public class AccessBusinessMrLog {
 		@Override
 		public Integer call() throws Exception {
 			int rowNumber = 0;
+			long startTime = System.currentTimeMillis();
 			try {
-				//得到文件内符合的数据
-				Map<String,List<BusinessRouteValue>> enterpriseMap= getAccessBusinessMrData(file, lineTime);
+				// 得到文件内符合的数据
+				Map<String, List<BusinessRouteValue>> enterpriseMap = getAccessBusinessMtData(file, lineTime);
+
 				String tableName = null;
 				for (String EnterpriseFlag : enterpriseMap.keySet()) {
 					tableName = TableNameGeneratorUtil.generateEnterpriseMessageMRInfoTableName(EnterpriseFlag);
-					logger.info("表{} 修改数据{}条", tableName, enterpriseMap.get(EnterpriseFlag).size());
+
 					rowNumber += enterpriseMap.get(EnterpriseFlag).size();
-					
-					
-					for(BusinessRouteValue businessRouteValues: enterpriseMap.get(EnterpriseFlag)) {
-						AccessBusinessDao.updateMtLog(businessRouteValues,tableName);
-					}
+					AccessBusinessDao.insertMtLog(enterpriseMap.get(EnterpriseFlag), tableName);
 				}
-				
-				
+				logger.info("表{} 保存数据{}条", tableName, rowNumber);
 			} catch (Exception e) {
 				logger.error(e.getMessage(), e);
 			}
-
+			logger.info("文件:{},时间段:{},处理数据{}条,耗时:{}", file.getName(), lineTime, rowNumber,
+					(System.currentTimeMillis() - startTime));
+			
+			logger.info("线程退出循环");
 			return rowNumber;
 		}
 	}
@@ -131,54 +143,85 @@ public class AccessBusinessMrLog {
 	/**
 	 * @param file
 	 * @param lineTime
-	 * @return 获取mr文件内前一分钟返回的日志数据
+	 * @return 获取mt文件内前一分种下发的数据
 	 * @throws Exception
 	 */
-	public Map<String,List<BusinessRouteValue>>  getAccessBusinessMrData(File file, String lineTime) throws Exception {
-		List<String> lines = null;
+	public Map<String, List<BusinessRouteValue>> getAccessBusinessMtData(File file, String lineTime) throws Exception {
+		LineIterator lines = null;
+		String line = null;
 		String[] array = null;
 		boolean error = false;
 		String error_line = null;
 		String error_file = null;
 		
-		Map<String,List<BusinessRouteValue>> enterpriseMap = new HashMap<String,List<BusinessRouteValue>>();
-		BusinessRouteValue businessRouteValue = null;
-
 		
+		Map<String, List<BusinessRouteValue>> enterpriseMap = new HashMap<String, List<BusinessRouteValue>>();
+		BusinessRouteValue businessRouteValue = null;
+		
+		
+
 		try {
-			lines = FileUtils.readLines(file, "utf-8");			
-			for (String line : lines) {
+			lines = FileUtils.lineIterator(file, "utf-8");
+
+			while (lines.hasNext()) {
+				line = lines.next();
+			
+				
 				array = line.split(FixedConstant.LOG_SEPARATOR);
-				if (array.length <ACCESS_BUSINESS_MR_MESSAGE_LOG_LENGTH) {
+				
+			
+		
+				if (array.length < ACCESS_BUSINESS_MT_MESSAGE_LOG_LENGTH) {
 					error = true;
 					error_line = line;
 					error_file = file.getAbsolutePath();
 					continue;
 
 				}
-				//得到一分钟之前的数据
+				// 得到一分钟之前的数据
 				if (array[0].startsWith(lineTime)) {
+
 					businessRouteValue = new BusinessRouteValue();
-				
-					
-					businessRouteValue.setStatusCode(array[25]);
-				
-					businessRouteValue.setChannelReportTime(array[4]);
-					
+
+					businessRouteValue.setAccountID(array[1]);
+
+					businessRouteValue.setMessageFormat(array[3]);
+
+					businessRouteValue.setAccountSubmitTime(array[4]);
+
+					businessRouteValue.setPhoneNumber(array[6]);
+
+					businessRouteValue.setBusinessCarrier(array[8]);
+
+					businessRouteValue.setAreaName(array[10]);
+
+					businessRouteValue.setMessageContent(array[16]);
+
+					businessRouteValue.setMessageSignature(array[17]);
+
+					businessRouteValue.setAccountMessageIDs(array[22]);
+
+					businessRouteValue.setChannelTemplateID(array[29]);
+
+					businessRouteValue.setAccountSubmitSRCID(array[13]);
+
+					businessRouteValue.setAccountBusinessCode(array[14]);
+
+					businessRouteValue.setChannelTotal(Integer.valueOf(array[18]));
+
 					businessRouteValue.setBusinessMessageID(array[5]);
-					
-					businessRouteValue.setMessageTotal(Integer.valueOf(array[18]));
-					
-					businessRouteValue.setMessageIndex(Integer.valueOf(array[19]));
+
 					List<BusinessRouteValue> businessRouteValues = enterpriseMap.get(array[2]);
-					if(businessRouteValues == null) {
+					if (businessRouteValues == null) {
 						businessRouteValues = new ArrayList<BusinessRouteValue>();
 						enterpriseMap.put(array[2], businessRouteValues);
 					}
 					businessRouteValues.add(businessRouteValue);
-				
 				}
+
 			}
+		
+			
 
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);

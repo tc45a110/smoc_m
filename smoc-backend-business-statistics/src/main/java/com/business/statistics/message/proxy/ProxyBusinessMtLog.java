@@ -16,6 +16,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.LineIterator;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,20 +42,19 @@ public class ProxyBusinessMtLog {
 	public static void main(String[] args) {
 		logger.info(Arrays.toString(args));
 		try {
+			long start = System.currentTimeMillis();
 			String lineTime = null;
 			int afterMinute = -1;
 			if (!(args.length == 1 || args.length == 0)) {
 				logger.error("参数不符合规范");
 				System.exit(0);
 			}
-			ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(FixedConstant.CPU_NUMBER * 8,
-					Integer.MAX_VALUE, 100000L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
-			threadPoolExecutor.prestartAllCoreThreads();
 			//通过传参 确定读取时间
 			if (args.length >= 1) {
 				afterMinute = Integer.valueOf(args[0]);
 			}
 			lineTime = DateUtil.getAfterMinuteDateTime(afterMinute, DateUtil.DATE_FORMAT_COMPACT_STANDARD_MINUTE);
+			
 			//读取的文件路径
 			String filePath = new StringBuilder(LogPathConstant.LOG_BASE_PATH)
 					.append(LogPathConstant.getProxyBusinessFilePathPart(FixedConstant.RouteLable.MT.name()))
@@ -62,6 +62,12 @@ public class ProxyBusinessMtLog {
 			//读取的文件名
 			String fileName = new StringBuilder(LogPathConstant.getFileNamePrefix(FixedConstant.RouteLable.MT.name()))
 					.append(DateUtil.getAfterMinuteDateTime(afterMinute, DateUtil.DATE_FORMAT_COMPACT_HOUR)).toString();
+			
+			logger.info("读取当前文件路径={},文件名={},生成时间={}",filePath,fileName,lineTime);
+			
+			ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(FixedConstant.CPU_NUMBER * 8,
+					Integer.MAX_VALUE, 100000L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
+			threadPoolExecutor.prestartAllCoreThreads();
 			
 			Vector<Future<Integer>> calls = new Vector<Future<Integer>>();
 			int fileNumber = 0;
@@ -88,7 +94,7 @@ public class ProxyBusinessMtLog {
 				}
 			}
 			
-			logger.info("{}处理文件数量:{},处理数据行数:{}",lineTime,fileNumber,rowNumber);
+			logger.info("{},处理文件数量:{},处理数据行数:{},耗时:{}",lineTime,fileNumber,rowNumber,(System.currentTimeMillis() - start));
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 		}
@@ -109,6 +115,7 @@ public class ProxyBusinessMtLog {
 		@Override
 		public Integer call() throws Exception {
 			int rowNumber = 0;
+			long start = System.currentTimeMillis();
 			try {
 				Map<String, List<BusinessRouteValue>> channelSRCIDMap = groupChannelSRCID(file, lineTime);
 				String tableName = null;
@@ -119,6 +126,7 @@ public class ProxyBusinessMtLog {
 					//保存对应的channelsrcId的下发临时表中
 					saveRouteChannelSRCIDMessageMTInfo(channelSRCIDMap.get(channelSRCID), tableName);
 				}
+				logger.info("文件:{},时间段:{},处理数据{}条,耗时:{}",file.getName(),lineTime,rowNumber,(System.currentTimeMillis() - start));
 			} catch (Exception e) {
 				logger.error(e.getMessage(), e);
 			}
@@ -137,18 +145,19 @@ public class ProxyBusinessMtLog {
 	 * @throws Exception
 	 */
 	private Map<String,List<BusinessRouteValue>> groupChannelSRCID(File file,String lineTime) throws Exception {
-
-		List<String> lines = null;
+		LineIterator lines = null;
 		String[] array = null;
 		boolean error = false;
 		String error_line=null;
 		String error_file=null;
+		String line = null;
 		Map<String,List<BusinessRouteValue>> channelChannelSRCIDMap = new HashMap<String,List<BusinessRouteValue>>();
 		BusinessRouteValue businessRouteValue = null;
 		try {
-			lines = FileUtils.readLines(file, "utf-8");
+			lines = FileUtils.lineIterator(file, "utf-8");
 
-			for (String line : lines) {
+			while (lines.hasNext()) {
+				line = lines.next();
 				array = line.split(FixedConstant.LOG_SEPARATOR);
 
 				if (array.length < BUSINESS_PROXY_MT_MESSAGE_LOG_LENGTH) {
@@ -239,12 +248,14 @@ public class ProxyBusinessMtLog {
 		
 		logger.info("sql={}",sql.toString());
 		// 在一个事务中更新数据
+		int num = 0;
 		try {
 			conn = LavenderDBSingleton.getInstance().getConnection();
 			conn.setAutoCommit(false);
 			pstmt = conn.prepareStatement(sql.toString());
 
 			for (BusinessRouteValue businessRouteValue : businessRouteValues) {
+				num++;
 				pstmt.setString(1, businessRouteValue.getPhoneNumber());
 				pstmt.setString(2, businessRouteValue.getMessageContent());
 				pstmt.setString(3, businessRouteValue.getChannelID());
@@ -252,6 +263,9 @@ public class ProxyBusinessMtLog {
 				pstmt.setString(5, businessRouteValue.toJSONString());
 
 				pstmt.addBatch();
+				if(num % 10000 == 0) {
+					pstmt.executeBatch();
+				}
 			}
 
 			pstmt.executeBatch();
@@ -261,7 +275,7 @@ public class ProxyBusinessMtLog {
 			try {
 				conn.rollback();
 			} catch (Exception e1) {
-				logger.error(e.getMessage(), e1);
+				logger.error(e1.getMessage(), e1);
 			}
 		} finally {
 			LavenderDBSingleton.getInstance().closeAll(null, pstmt, conn);

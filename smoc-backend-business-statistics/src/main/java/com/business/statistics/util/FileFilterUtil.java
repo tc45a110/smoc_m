@@ -4,14 +4,13 @@ import java.io.File;
 import java.io.FileFilter;
 
 public class FileFilterUtil {
-
 	/**
 	 * 	加载符合条件的文件
 	 * @param filePath
 	 * @param filename
 	 * @return
 	 */
-	public static File[] findFile(String filePath, String filename) {
+	public static File[] findFile(String filePath,final String filename) {
 		FileFilter ff = new FileFilter() {
 
 			@Override
