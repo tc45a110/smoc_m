@@ -27,6 +27,7 @@ import com.base.common.manager.BusinessDataManager;
 import com.base.common.util.CacheNameGeneratorUtil;
 import com.base.common.util.LongSMSEncode6;
 import com.base.common.worker.SuperCacheWorker;
+import com.base.common.worker.SuperConcurrentMapWorker;
 import com.base.common.worker.SuperQueueWorker;
 
 public class MOManager {
@@ -108,10 +109,6 @@ public class MOManager {
 
 	class MOPushWorker extends SuperQueueWorker<Report> {
 
-
-		public void add(Report vo) {
-			add(vo);
-		}
 		
 		public void addAll(List<Report> reports) {
 			superQueue.addAll(reports);
@@ -256,23 +253,26 @@ public class MOManager {
 				}
 			}
 			if(!result){
-				moStoreWorker.add(report);
+				moStoreWorker.put(report.getBusinessMessageID(), report);
 			}
 			Thread.sleep(BusinessDataManager.getInstance().getMessageSaveIntervalTime());
 		}
 	}
 
-	class MOStoreWorker extends SuperQueueWorker<Report> {
+	class MOStoreWorker extends SuperConcurrentMapWorker<String, Report> {
+		
+		public void put(String businessMessageID, Report report) {
+			add(businessMessageID, report);
+		}
 
 		@Override
 		public void doRun() throws Exception {
-			if(superQueue.size() > 0) {
+			if(superMap.size() > 0) {
 				long start = System.currentTimeMillis();
 				//临时数据
-				List<Report> reportList;
-				synchronized (lock) {
-					reportList = new ArrayList<Report>(superQueue);
-					superQueue.clear();
+				List<Report> reportList = new ArrayList<Report>(superMap.values());
+				for(Report report : reportList) {
+					remove(report.getBusinessMessageID());
 				}
 				DAO.saveRouteMessageMoInfoList(reportList);
 				long interval = System.currentTimeMillis() - start;

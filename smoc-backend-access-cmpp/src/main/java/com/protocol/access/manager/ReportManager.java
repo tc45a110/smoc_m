@@ -17,6 +17,7 @@ import com.base.common.manager.BusinessDataManager;
 import com.base.common.util.CacheNameGeneratorUtil;
 import com.base.common.util.DateUtil;
 import com.base.common.worker.SuperCacheWorker;
+import com.base.common.worker.SuperConcurrentMapWorker;
 import com.base.common.worker.SuperQueueWorker;
 import com.protocol.access.util.DAO;
 import com.protocol.access.util.DeliverUtil;
@@ -61,25 +62,28 @@ public class ReportManager {
 	/**
 	 * 回执持久化线程：处理回执推送失败
 	 */
-	class ReportStoreWorker extends SuperQueueWorker<Report> {
+	class ReportStoreWorker extends SuperConcurrentMapWorker<String,Report> {
 
+		public void put(String messageID, Report report) {
+			add(messageID,report);
+		}
+		
 		@Override
 		protected void doRun() throws Exception {
-			long interval = 0;
-			if(superQueue.size() > 0){
+			if(superMap.size() > 0){
 				long startTime = System.currentTimeMillis();
 				//临时数据
-				List<Report> reporList;
-				synchronized (lock) {
-					reporList = new ArrayList<Report>(superQueue);
-					superQueue.clear();
+				List<Report> reportList = new ArrayList<Report>(superMap.values());
+				for(Report report : reportList) {
+					remove(report.getMessageId());
 				}
-				DAO.saveRouteMessageMrInfoList(reporList);
-				interval = System.currentTimeMillis() - startTime;
-				logger.info("保存状态报告数据条数{},耗时{}毫秒",reporList.size(),interval);
+				
+				DAO.saveRouteMessageMrInfoList(reportList);
+				long interval = System.currentTimeMillis() - startTime;
+				logger.info("保存状态报告数据条数{},耗时{}毫秒",reportList.size(),interval);
 			}else{
 				//当没有数据时，需要暂停一会
-				interval = BusinessDataManager.getInstance().getMessageSaveIntervalTime();
+				long interval = BusinessDataManager.getInstance().getMessageSaveIntervalTime();
 				Thread.sleep(interval);
 			}
 		}
@@ -128,7 +132,6 @@ public class ReportManager {
 						for(Report report:reportList){
 							reportPushWorker.add(report);
 						}
-					
 					}else{
 						logger.info("{}无离线状态消息",accountID);
 					}
@@ -154,7 +157,7 @@ public class ReportManager {
 	 * @param vo
 	 */
 	public void addPushFailReport(Report vo){
-		reportStoreWorker.add(vo);
+		reportStoreWorker.put(vo.getMessageId(), vo);
 	}
 	
 	/**

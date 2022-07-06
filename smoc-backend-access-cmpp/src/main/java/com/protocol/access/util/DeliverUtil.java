@@ -109,23 +109,26 @@ public class DeliverUtil {
 		// 当写入给client成功后，result 为 true
 		try {
 			if (session != null && session.isConnected()) {
-				logger.info(new StringBuilder().append("开始推送:")
-							.append("client={}")
-							.append("{}msgid={}")
-							.append("{}mobile={}")
-							.append("{}stat={}").toString(),
-							report.getAccountId(),
-							FixedConstant.LOG_SEPARATOR,msgid,
-							FixedConstant.LOG_SEPARATOR,report.getPhoneNumber(),
-							FixedConstant.LOG_SEPARATOR,report.getStatusCode());
 
 				delive = packageDeliver(report, SessionManager
 						.getInstance().getSessionVersion(session));
-				session.write(delive);
-				
 				if(!report.getDbFlag()) {
 					ReportTimerTaskWorkerManager.getInstance().addReportTimeoutTask(report);
 				}
+				
+				session.write(delive);
+				
+				logger.info(new StringBuilder().append("状态报告推送成功:")
+						.append("client={}")
+						.append("{}msgid={}")
+						.append("{}mobile={}")
+						.append("{}stat={}").toString(),
+						report.getAccountId(),
+						FixedConstant.LOG_SEPARATOR,msgid,
+						FixedConstant.LOG_SEPARATOR,report.getPhoneNumber(),
+						FixedConstant.LOG_SEPARATOR,report.getStatusCode());
+				
+
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);

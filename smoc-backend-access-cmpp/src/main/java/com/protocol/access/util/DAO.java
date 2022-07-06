@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.base.common.dao.LavenderDBSingleton;
-
+import com.base.common.util.UUIDUtil;
 import com.protocol.access.vo.Report;
 import com.protocol.access.vo.MessageInfo;
 
@@ -149,9 +149,7 @@ public class DAO {
 			conn = LavenderDBSingleton.getInstance().getConnection();
 			conn.setAutoCommit(false);
 			pstmt = conn.prepareStatement(sql.toString());
-			logger.info("pstmt:"+pstmt);
 			for(Report vo:reports){
-				logger.info("vo:"+vo);
 				pstmt.setString(1, vo.getAccountId());
 				pstmt.setString(2, vo.getPhoneNumber());
 				pstmt.setString(3, vo.getReportTime());
@@ -288,6 +286,7 @@ public class DAO {
 				report.setAccountSrcId(rs.getString("ACCOUNT_SRC_ID"));
 				report.setAccountBusinessCode(rs.getString("ACCOUNT_BUSINESS_CODE"));
 				report.setOptionParam(rs.getString("OPTION_PARAM"));
+				report.setBusinessMessageID(UUIDUtil.get32UUID());
 				list.add(report);	
 			}
 			

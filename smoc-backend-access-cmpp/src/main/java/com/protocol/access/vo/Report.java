@@ -72,8 +72,21 @@ public class Report implements Serializable {
 	 * 是否从数据库中加载出来的
 	 */
 	private boolean dbFlag;
-
+	/**
+	 * 业务标识
+	 * @return
+	 */
+	private String businessMessageID;
 	
+	
+	public String getBusinessMessageID() {
+		return businessMessageID;
+	}
+
+	public void setBusinessMessageID(String businessMessageID) {
+		this.businessMessageID = businessMessageID;
+	}
+
 	public boolean getDbFlag() {
 		return dbFlag;
 	}

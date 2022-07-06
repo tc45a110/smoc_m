@@ -25,7 +25,6 @@ import com.base.common.cache.CacheBaseService;
 import com.base.common.constant.FixedConstant;
 import com.base.common.log.CategoryLog;
 import com.base.common.manager.BusinessDataManager;
-import com.base.common.util.DateUtil;
 import com.base.common.vo.BusinessRouteValue;
 
 //维护每个session的版本
@@ -102,6 +101,7 @@ public class SessionManager {
 		
 		if(worker != null){
 			String client = worker.getUsername();
+			worker.setFlag(false);
 			CategoryLog.connectionLogger.info("client={}连接中断", client);
 			Set<IoSession> set = clientMap.get(client);
 			if (set != null) {
@@ -245,7 +245,7 @@ public class SessionManager {
 								}
 							}
 						}
-
+						CategoryLog.connectionLogger.info("会话过期数量:{}", temp.size());
 						for (IoSession session : temp) {
 							session.closeNow();
 						}
@@ -325,7 +325,7 @@ public class SessionManager {
 				try {
 					BusinessRouteValue value = CacheBaseService.getReportFromMiddlewareCache(clientId);
 					if (value != null) {
-						logger.info("{}获取状态报告{}{}",DateUtil.getCurDateTime(DateUtil.DATE_FORMAT_COMPACT_STANDARD_MILLI),FixedConstant.SPLICER,value.toString());
+						//logger.info("获取状态报告{}{}",FixedConstant.SPLICER,value.toString());
 						long start = System.currentTimeMillis();
 						if (FixedConstant.RouteLable.MR.toString().equals(value.getRouteLabel())) {
 							if (value.getAccountReportFlag() != 1) {

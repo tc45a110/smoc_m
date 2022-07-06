@@ -38,7 +38,7 @@ public class SubmitWorkerManager extends SuperMapWorker<Integer, SubmitWorker>{
 	 * @param businessRouteValue
 	 */
 	public void process(MessageInfo vo){
-		superMap.get((int)(superMap.size() * Math.random())).add(vo);
+		superMap.get((int)(superMap.size() * Math.random())).put(vo.getMessageId(), vo);
 	}
 	
 	/**

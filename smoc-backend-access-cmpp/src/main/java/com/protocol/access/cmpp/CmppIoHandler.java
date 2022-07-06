@@ -191,10 +191,9 @@ public class CmppIoHandler extends IoHandlerAdapter {
 					.append("{}serviceId={}")
 					.append("{}status={}")
 					.append("{}result={}")
-					.append(",响应耗时{}毫秒").toString()
+					.append("{}响应耗时{}毫秒").toString()
 					,
 					accountId,
-					FixedConstant.LOG_SEPARATOR,SequenceNumber,
 					FixedConstant.LOG_SEPARATOR,String.valueOf(TypeConvert.byte2long(msgid)),
 					FixedConstant.LOG_SEPARATOR,submit.getServiceId(),
 					FixedConstant.LOG_SEPARATOR,String.valueOf(subStatus),
@@ -229,8 +228,9 @@ public class CmppIoHandler extends IoHandlerAdapter {
 	
 	private void submitLog(com.protocol.access.cmpp.pdu.Submit submit) {
 		CategoryLog.messageLogger.info(
-				new StringBuilder(DateUtil.getCurDateTime()).append("CMPP SUBMIT:")
-				.append("msg_id={}")
+				new StringBuilder().append("CMPP_SUBMIT")
+				.append(":command_Id={}")
+				.append("{}msg_id={}")
 				.append("{}pk_Total={}")
 				.append("{}pk_Number={}")
 				.append("{}registered_Delivery={}")
@@ -256,6 +256,7 @@ public class CmppIoHandler extends IoHandlerAdapter {
 				.append("{}LinkID={}")
 				.toString(),
 				submit.getCommandId(),
+				FixedConstant.LOG_SEPARATOR,String.valueOf(TypeConvert.byte2long(submit.getMsgId())),
 				FixedConstant.LOG_SEPARATOR,submit.getPkTotal(),
 				FixedConstant.LOG_SEPARATOR,submit.getPkNumber(),
 				FixedConstant.LOG_SEPARATOR,submit.getNeedReport(),
