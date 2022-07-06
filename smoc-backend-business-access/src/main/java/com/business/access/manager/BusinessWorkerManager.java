@@ -16,7 +16,7 @@ public class BusinessWorkerManager extends SuperQueueWorker<BusinessRouteValue>{
 	
 	private BusinessWorkerManager(){
 		//启动cpu的数量*8的系数
-		for(int i=0;i<FixedConstant.CPU_NUMBER*8;i++){
+		for(int i=0;i<FixedConstant.CPU_NUMBER*2;i++){
 			BusinessWorker businessWorker = new BusinessWorker(superQueue);
 			businessWorker.setName(new StringBuilder("BusinessWorker-").append(i).toString());
 			businessWorker.start();
@@ -39,7 +39,6 @@ public class BusinessWorkerManager extends SuperQueueWorker<BusinessRouteValue>{
 
 	
 	public void doRun() throws Exception {
-		logger.info("业务缓存队列数量{}",size());
 		Thread.sleep(FixedConstant.COMMON_MONITOR_INTERVAL_TIME);
 	}
 	

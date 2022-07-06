@@ -154,7 +154,7 @@ public class BusinessWorker extends SuperCacheWorker {
 
 		if (StringUtils.isEmpty(areaCode)) {
 			doLog(businessRouteValue);
-			logger.error(
+			logger.warn(
 					new StringBuilder().append("省份路由失败").append("{}accountID={}").append("{}phoneNumber={}")
 							.append("{}messageContent={}").toString(),
 					FixedConstant.SPLICER, accountID, FixedConstant.SPLICER, phoneNumber, FixedConstant.SPLICER,
@@ -174,7 +174,7 @@ public class BusinessWorker extends SuperCacheWorker {
 		String messagePrice = AccountPriceManager.getInstance().getPrice(accountID, businessCarrier);
 		if (StringUtils.isEmpty(messagePrice)) {
 			doLog(businessRouteValue);
-			logger.error(
+			logger.warn(
 					new StringBuilder().append("获取账号价格失败").append("{}accountID={}").append("{}phoneNumber={}")
 							.append("{}messageContent={}").append("{}businessCarrier={}").toString(),
 					FixedConstant.SPLICER, accountID, FixedConstant.SPLICER, phoneNumber, FixedConstant.SPLICER,
@@ -195,7 +195,7 @@ public class BusinessWorker extends SuperCacheWorker {
 		String channelID = AccountChannelManager.getInstance().getChannel(accountID, businessCarrier, areaCode);
 		if (StringUtils.isEmpty(channelID)) {
 			doLog(businessRouteValue);
-			logger.error("无下发通道或账号非正常状态:{}{}{}{}{}{}", FixedConstant.SPLICER, accountID, FixedConstant.SPLICER, phoneNumber,
+			logger.warn("无下发通道或账号非正常状态:{}{}{}{}{}{}", FixedConstant.SPLICER, accountID, FixedConstant.SPLICER, phoneNumber,
 					FixedConstant.SPLICER, messageContent);
 			// TODO生成模拟状态报告
 			businessRouteValue.setStatusCodeSource(FixedConstant.StatusReportSource.ACCESS.name());
@@ -254,9 +254,14 @@ public class BusinessWorker extends SuperCacheWorker {
 		long endTime = System.currentTimeMillis();
 		logger.info(
 				new StringBuilder().append("业务数据封装").append("{}accountID={}").append("{}phoneNumber={}")
-						.append("{}messageContent={}").append("{}耗时={}").toString(),
-				FixedConstant.SPLICER, accountID, FixedConstant.SPLICER, phoneNumber, FixedConstant.SPLICER,
-				messageContent, FixedConstant.SPLICER, (endTime - startTime));
+						.append("{}channelID={}")
+						.append("{}messageContent={}")
+						.append("{}耗时={}").toString(),
+				FixedConstant.SPLICER, accountID, 
+				FixedConstant.SPLICER, phoneNumber, 
+				FixedConstant.SPLICER,channelID, 
+				FixedConstant.SPLICER,messageContent, 
+				FixedConstant.SPLICER, (endTime - startTime));
 		// 进入过滤流程
 		InsideFilterWorkerManager.getInstance().process(businessRouteValue);
 	

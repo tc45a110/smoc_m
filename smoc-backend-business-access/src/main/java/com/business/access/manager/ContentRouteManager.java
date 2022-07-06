@@ -6,7 +6,9 @@ import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
+
 import org.apache.commons.lang3.StringUtils;
+
 import com.base.common.dao.LavenderDBSingleton;
 import com.base.common.worker.SuperMapWorker;
 import com.business.access.manager.ContentRouteManager.ContentRoute;

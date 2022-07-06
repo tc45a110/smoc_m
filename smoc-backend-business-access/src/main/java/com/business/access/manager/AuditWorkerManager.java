@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.util.DigestUtils;
 
 import com.base.common.constant.FixedConstant;
@@ -19,9 +20,10 @@ import com.base.common.manager.BusinessDataManager;
 import com.base.common.manager.MessageSubmitFailManager;
 import com.base.common.util.DateUtil;
 import com.base.common.vo.BusinessRouteValue;
+import com.base.common.worker.SuperConcurrentMapWorker;
 import com.base.common.worker.SuperQueueWorker;
 
-public class AuditWorkerManager extends SuperQueueWorker<BusinessRouteValue>{
+public class AuditWorkerManager extends SuperConcurrentMapWorker<String,BusinessRouteValue>{
 	
 	private static AuditWorkerManager manager = new AuditWorkerManager();
 	
@@ -45,7 +47,7 @@ public class AuditWorkerManager extends SuperQueueWorker<BusinessRouteValue>{
 	public void process(BusinessRouteValue businessRouteValue){
 		//进入审核
 		if(InsideStatusCodeConstant.StatusCode.AUDIT.name().equals(businessRouteValue.getNextNodeCode())){
-			add(businessRouteValue);
+			add(businessRouteValue.getBusinessMessageID(), businessRouteValue);
 		}else{
 			ExternalBlacklistFilterWorkerManager.getInstance().process(businessRouteValue);
 		}
@@ -54,12 +56,12 @@ public class AuditWorkerManager extends SuperQueueWorker<BusinessRouteValue>{
 	
 	@Override
 	protected void doRun() throws Exception {
-		if(superQueue.size() > 0){
+		if(superMap.size() > 0){
 			long start = System.currentTimeMillis();
-			List<BusinessRouteValue> businessRouteValueList;
-			synchronized (lock) {
-				businessRouteValueList = new ArrayList<BusinessRouteValue>(superQueue);
-				superQueue.clear();
+			List<BusinessRouteValue> businessRouteValueList = new ArrayList<BusinessRouteValue>(superMap.values());
+
+			for(BusinessRouteValue businessRouteValue : businessRouteValueList) {
+				superMap.remove(businessRouteValue.getBusinessMessageID());
 			}
 			doAudit(businessRouteValueList);
 			long interval = System.currentTimeMillis() - start;
@@ -145,7 +147,7 @@ public class AuditWorkerManager extends SuperQueueWorker<BusinessRouteValue>{
 			
 			//2.获取已设置编号的审核信息
 			List<BusinessRouteValue> businessRouteValueList = loadRouteAuditMessageMTInfo(messageLoadMaxNumber);
-			if(businessRouteValueList != null && businessRouteValueList.size() > 0 ){
+			if(CollectionUtils.isNotEmpty(businessRouteValueList) ){
 				
 				//3.将已审批信息添加到通道队列，将已驳回信息添加添加到模拟队列
 				long interval = System.currentTimeMillis() - startTime;
@@ -199,11 +201,12 @@ public class AuditWorkerManager extends SuperQueueWorker<BusinessRouteValue>{
 			
 			sql.append("SELECT MESSAGE_CONTENT,MESSAGE_JSON,AUDIT_ID,AUDIT_FLAG,CREATED_TIME");
 			sql.append(" FROM smoc_route.route_audit_message_mt_info");
-			sql.append(" where AUDIT_ID >0 ");
+			sql.append(" where AUDIT_ID > 0 ");
 			sql.append(" ORDER BY AUDIT_ID ASC LIMIT 0,");
 			sql.append(messageLoadMaxNumber);
 			List<BusinessRouteValue> businessRouteValueList = new ArrayList<BusinessRouteValue>();
 			long maxAuditID = 0L;
+			List<Long> ids = new ArrayList<Long>();
 			try {
 				conn = LavenderDBSingleton.getInstance().getConnection();
 				conn.setAutoCommit(false);
@@ -211,6 +214,7 @@ public class AuditWorkerManager extends SuperQueueWorker<BusinessRouteValue>{
 				rs = pstmt.executeQuery();
 				while (rs.next()) {
 					maxAuditID = rs.getLong("AUDIT_ID");
+					ids.add(maxAuditID);
 					BusinessRouteValue businessRouteValue = BusinessRouteValue.toObject(rs.getString("MESSAGE_JSON"));
 					businessRouteValue.setMessageContent(rs.getString("MESSAGE_CONTENT"));		
 					String tableAuditTime = DateUtil.format(rs.getDate("CREATED_TIME"), DateUtil.DATE_FORMAT_COMPACT_STANDARD_MILLI);
@@ -226,11 +230,17 @@ public class AuditWorkerManager extends SuperQueueWorker<BusinessRouteValue>{
 				
 				if(maxAuditID > 0) {
 					sql.setLength(0);
-					sql.append("DELETE FROM smoc_route.route_audit_message_mt_info WHERE AUDIT_ID <= ?");
+					sql.append("DELETE FROM smoc_route.route_audit_message_mt_info WHERE AUDIT_ID in (");
+					for (int i = 0; i < ids.size(); i++) {
+						sql.append(ids.get(i));
+						if(i != (ids.size() - 1)) {
+							sql.append(",");
+						}
+					}
+					sql.append(")");
 					pstmt2 = conn.prepareStatement(sql.toString());
-					pstmt2.setLong(1, maxAuditID);
 					int count = pstmt2.executeUpdate();					
-					logger.info("删除smoc_route.route_audit_message_mt_info数据条数{},AUDIT_ID<={}",count,maxAuditID);
+					logger.info("删除smoc_route.route_audit_message_mt_info数据条数{}",count);
 				}
 				conn.commit();
 			} catch (Exception e) {
@@ -240,6 +250,7 @@ public class AuditWorkerManager extends SuperQueueWorker<BusinessRouteValue>{
 				} catch (Exception e1) {
 					logger.error(e1.getMessage(),e);
 				}
+				return null;
 			} finally {
 				LavenderDBSingleton.getInstance().closeAll(rs, pstmt2, null);
 				LavenderDBSingleton.getInstance().closeAll(null, pstmt, conn);

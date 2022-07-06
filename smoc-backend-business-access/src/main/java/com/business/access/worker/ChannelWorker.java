@@ -10,14 +10,15 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.base.common.constant.FixedConstant;
 import com.base.common.dao.LavenderDBSingleton;
 import com.base.common.manager.BusinessDataManager;
 import com.base.common.util.TableNameGeneratorUtil;
 import com.base.common.vo.BusinessRouteValue;
-import com.base.common.worker.SuperQueueWorker;
+import com.base.common.worker.SuperConcurrentMapWorker;
 import com.business.access.manager.FinanceWorkerManager;
 
-public class ChannelWorker extends SuperQueueWorker<BusinessRouteValue>{
+public class ChannelWorker extends SuperConcurrentMapWorker<String,BusinessRouteValue>{
 	
 	private String channelID;
 	
@@ -26,17 +27,32 @@ public class ChannelWorker extends SuperQueueWorker<BusinessRouteValue>{
 	@Override
 	public void doRun() throws Exception {
 
-		if(superQueue.size() > 0){
+		if(superMap.size() > 0){
 			long startTime = System.currentTimeMillis();
 			//临时数据
-			List<BusinessRouteValue> businessRouteValueList;
-			synchronized (lock) {
-				businessRouteValueList = new ArrayList<BusinessRouteValue>(superQueue);
-				superQueue.clear();
+			List<BusinessRouteValue> businessRouteValueList =  new ArrayList<BusinessRouteValue>(superMap.values());
+			
+			//将已经取走的数据在原始缓存中进行删除
+			for(BusinessRouteValue businessRouteValue : businessRouteValueList){
+				superMap.remove(businessRouteValue.getBusinessMessageID());
+				logger.debug(
+						new StringBuilder().append("从通道队列删除")
+						.append("{}accountID={}")
+						.append("{}phoneNumber={}")
+						.append("{}channelID={}")
+						.append("{}businessMessageID={}")
+						.toString(),
+						FixedConstant.SPLICER,businessRouteValue.getAccountID(),
+						FixedConstant.SPLICER,businessRouteValue.getPhoneNumber(),
+						FixedConstant.SPLICER,businessRouteValue.getChannelID(),
+						FixedConstant.SPLICER,businessRouteValue.getBusinessMessageID()
+						);
 			}
+			long interval = System.currentTimeMillis() - startTime;
+			logger.debug("通道{}获取数据条数{},耗时{}毫秒",channelID,businessRouteValueList.size(),interval);
 			FinanceWorkerManager.getInstance().process(businessRouteValueList);
 			saveRouteChannelMessageMtInfo(businessRouteValueList,tableName);
-			long interval = System.currentTimeMillis() - startTime;
+			interval = System.currentTimeMillis() - startTime;
 			logger.info("通道{}保存数据条数{},耗时{}毫秒",channelID,businessRouteValueList.size(),interval);
 		}else{
 			//当没有数据时，需要暂停一会
@@ -44,6 +60,10 @@ public class ChannelWorker extends SuperQueueWorker<BusinessRouteValue>{
 			Thread.sleep(interval);
 		}
 	
+	}
+	
+	public void process(String businessMessageID,BusinessRouteValue businessRouteValue){
+		add(businessMessageID, businessRouteValue);
 	}
 	
 	public ChannelWorker(String channelID) {
@@ -76,6 +96,18 @@ public class ChannelWorker extends SuperQueueWorker<BusinessRouteValue>{
 			pstmt = conn.prepareStatement(sql.toString());
 			int count = 0;
 			for (BusinessRouteValue businessRouteValue : businessRouteValueList) {
+				logger.debug(
+						new StringBuilder().append("存通道表")
+						.append("{}accountID={}")
+						.append("{}phoneNumber={}")
+						.append("{}channelID={}")
+						.append("{}businessMessageID={}")
+						.toString(),
+						FixedConstant.SPLICER,businessRouteValue.getAccountID(),
+						FixedConstant.SPLICER,businessRouteValue.getPhoneNumber(),
+						FixedConstant.SPLICER,businessRouteValue.getChannelID(),
+						FixedConstant.SPLICER,businessRouteValue.getBusinessMessageID()
+						);
 				pstmt.setString(1, businessRouteValue.getAccountID());
 				pstmt.setString(2, businessRouteValue.getAccountPriority());
 				pstmt.setString(3, businessRouteValue.getInfoType());
@@ -102,6 +134,7 @@ public class ChannelWorker extends SuperQueueWorker<BusinessRouteValue>{
 			}
 		} finally {
 			LavenderDBSingleton.getInstance().closeAll(rs, pstmt, conn);
+			businessRouteValueList = null;
 		}
 	}
 	

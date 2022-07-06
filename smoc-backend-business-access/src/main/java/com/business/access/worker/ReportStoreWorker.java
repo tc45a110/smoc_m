@@ -13,33 +13,36 @@ import java.util.List;
 import com.base.common.dao.LavenderDBSingleton;
 import com.base.common.manager.BusinessDataManager;
 import com.base.common.vo.BusinessRouteValue;
-import com.base.common.worker.SuperQueueWorker;
+import com.base.common.worker.SuperConcurrentMapWorker;
 
 /**
  * 保存状态报告到数据库
  */
-public class ReportStoreWorker extends SuperQueueWorker<BusinessRouteValue>{
+public class ReportStoreWorker extends SuperConcurrentMapWorker<String,BusinessRouteValue>{
 
 	@Override
 	public void doRun() throws Exception {
-
-		if(superQueue.size() > 0){
+		if(superMap.size() > 0) {
 			long startTime = System.currentTimeMillis();
 			//临时数据
-			List<BusinessRouteValue> businessRouteValueList;
-			synchronized (lock) {
-				businessRouteValueList = new ArrayList<BusinessRouteValue>(superQueue);
-				superQueue.clear();
+			List<BusinessRouteValue> businessRouteValueList =  new ArrayList<BusinessRouteValue>(superMap.values());
+			
+			//将已经取走的数据在原始缓存中进行删除
+			for(BusinessRouteValue businessRouteValue : businessRouteValueList){
+				superMap.remove(businessRouteValue.getBusinessMessageID());
 			}
 			saveRouteMessageMrInfo(businessRouteValueList);
 			long interval = System.currentTimeMillis() - startTime;
 			logger.info("状态报告保存数据条数{},耗时{}毫秒",businessRouteValueList.size(),interval);
-		}else{
+		}else {
 			//当没有数据时，需要暂停一会
 			long interval = BusinessDataManager.getInstance().getMessageSaveIntervalTime();
 			Thread.sleep(interval);
 		}
+	}
 	
+	public void put(String businessMessageID, BusinessRouteValue businessRouteValue) {
+		this.add(businessMessageID,businessRouteValue);
 	}
 	
 	/**

@@ -46,7 +46,23 @@ public class ExternalBlacklistFilterWorker extends SuperCacheWorker{
 		long startTime = System.currentTimeMillis();
 		
 		String blackListLevelFiltering = BusinessDataManager.getInstance().getBlackListLevelFiltering(businessRouteValue.getAccountID());
-		
+		//进行二次判断的机制，当大量数据拥堵后，可以通过临时调整个别账号的过滤级别来提升处理速率
+		if(StringUtils.isEmpty(blackListLevelFiltering) || !blackListLevelFiltering.startsWith("HIGH")){
+			ChannelWorkerManager.getInstance().process(businessRouteValue);
+			logger.info(
+					new StringBuilder().append("黑名单过滤级别已调低")
+					.append("{}accountID={}")
+					.append("{}phoneNumber={}")
+					.append("{}messageContent={}")
+					.append("{}blackListLevelFiltering={}")
+					.toString(),
+					FixedConstant.SPLICER,businessRouteValue.getAccountID(),
+					FixedConstant.SPLICER,businessRouteValue.getPhoneNumber(),
+					FixedConstant.SPLICER,businessRouteValue.getMessageContent(),
+					FixedConstant.SPLICER,blackListLevelFiltering
+					);
+			return;
+		}
 		//通过高等级黑名单过滤参数获取外部黑名单过滤配置参数
 		String url = getExternalBlacklistFilterUrl(blackListLevelFiltering);
 		String connectTimeout = getExternalBlacklistFilterConnectTimeout(blackListLevelFiltering);
@@ -71,7 +87,7 @@ public class ExternalBlacklistFilterWorker extends SuperCacheWorker{
 		}
 		
 		long endTime = System.currentTimeMillis();		
-		long interval = endTime  - startTime;
+		long costTime = endTime  - startTime;
 		logger.info(
 				new StringBuilder().append("外部黑名单过滤")
 				.append("{}accountID={}")
@@ -86,7 +102,7 @@ public class ExternalBlacklistFilterWorker extends SuperCacheWorker{
 				FixedConstant.SPLICER,errorCode,
 				FixedConstant.SPLICER,(endTime-startTime)
 				);
-		controlSubmitSpeed(interval, getExternalBlacklistFilterInterval(blackListLevelFiltering));
+		controlSubmitSpeed(getExternalBlacklistFilterInterval(blackListLevelFiltering),costTime);
 		
 	}
 	

@@ -44,7 +44,19 @@ public class ChannelWorkerManager extends SuperMapWorker<String,ChannelWorker>{
 			}
 
 		}
-		channelWorker.add(businessRouteValue);
+		channelWorker.process(businessRouteValue.getBusinessMessageID(), businessRouteValue);
+		logger.info(
+				new StringBuilder().append("添加到通道队列")
+				.append("{}accountID={}")
+				.append("{}phoneNumber={}")
+				.append("{}channelID={}")
+				.append("{}businessMessageID={}")
+				.toString(),
+				FixedConstant.SPLICER,businessRouteValue.getAccountID(),
+				FixedConstant.SPLICER,businessRouteValue.getPhoneNumber(),
+				FixedConstant.SPLICER,businessRouteValue.getChannelID(),
+				FixedConstant.SPLICER,businessRouteValue.getBusinessMessageID()
+				);
 	}
 	
 	private ChannelWorker register(String channelID){

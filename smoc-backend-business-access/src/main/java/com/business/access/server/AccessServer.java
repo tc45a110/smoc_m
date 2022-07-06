@@ -13,6 +13,7 @@ import com.base.common.manager.ResourceManager;
 import com.business.access.manager.BusinessWorkerManager;
 import com.business.access.manager.ContentRouteManager;
 import com.business.access.manager.EnterpriseFlagManager;
+import com.business.access.manager.ExternalBlacklistFilterPersistenceWorkerManager;
 import com.business.access.manager.ExternalBlacklistFilterWorkerManager;
 import com.business.access.manager.InsideFilterWorkerManager;
 import com.business.access.manager.ReportPullWorkerManager;
@@ -78,7 +79,14 @@ public class AccessServer {
 	public void stop(){
 		try {
 			mainWorker.exit();
-			Thread.sleep(FixedConstant.COMMON_INTERVAL_TIME);
+			ExternalBlacklistFilterPersistenceWorkerManager.getInstance().exit();
+			//增加缓存的判断，当缓存数据为0时，则可以安心退出
+			Thread.sleep(FixedConstant.COMMON_INTERVAL_TIME*3);
+			System.out.println("业务数据缓存队列数量:"+BusinessWorkerManager.getInstance().getSize());
+			System.out.println("内部过滤缓存队列数量:"+InsideFilterWorkerManager.getInstance().getSize());
+			System.out.println("外部过滤缓存队列数量:"+ExternalBlacklistFilterWorkerManager.getInstance().getSize());
+			System.out.println("外部过滤持久化队列数量:"+ExternalBlacklistFilterPersistenceWorkerManager.getInstance().getSize());
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

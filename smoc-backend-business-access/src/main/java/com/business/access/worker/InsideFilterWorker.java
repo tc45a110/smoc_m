@@ -60,7 +60,7 @@ public class InsideFilterWorker extends SuperCacheWorker{
 		}
 		
 		long endTime = System.currentTimeMillis();		
-		long interval = endTime  - startTime;
+		long costTime = endTime  - startTime;
 		logger.info(
 				new StringBuilder().append("内部过滤")
 				.append("{}accountID={}")
@@ -79,9 +79,9 @@ public class InsideFilterWorker extends SuperCacheWorker{
 				FixedConstant.SPLICER,responseValue.getCode(),
 				FixedConstant.SPLICER,responseValue.getErrorCode(),
 				FixedConstant.SPLICER,responseValue.getMessage(),
-				FixedConstant.SPLICER,(endTime-startTime)
+				FixedConstant.SPLICER,costTime
 				);
-		controlSubmitSpeed(interval, ResourceManager.getInstance().getLongValue("inside.filter.request.interval"));
+		controlSubmitSpeed(ResourceManager.getInstance().getLongValue("inside.filter.request.interval"),costTime);
 	}
 	
 	/**

@@ -17,7 +17,7 @@ import com.base.common.constant.InsideStatusCodeConstant;
 import com.base.common.manager.BusinessDataManager;
 import com.base.common.util.DateUtil;
 import com.base.common.vo.BusinessRouteValue;
-import com.base.common.worker.SuperQueueWorker;
+import com.base.common.worker.SuperConcurrentMapWorker;
 import com.business.access.dao.AccountFinanceDAO;
 
 public class FinanceWorkerManager{
@@ -57,7 +57,7 @@ public class FinanceWorkerManager{
 					FixedConstant.SPLICER,businessRouteValue.getPhoneNumber(),
 					FixedConstant.SPLICER,businessRouteValue.getMessageContent()
 					);
-			submitReductWorker.add(businessRouteValue);
+			submitReductWorker.put(businessRouteValue.getBusinessMessageID(), businessRouteValue);
 		}
 		//回执数据，处理回执扣费：只有回执成功才进行扣费
 		else if(
@@ -77,7 +77,7 @@ public class FinanceWorkerManager{
 					FixedConstant.SPLICER,businessRouteValue.getPhoneNumber(),
 					FixedConstant.SPLICER,businessRouteValue.getMessageContent()
 					);
-			reportReductWorker.add(businessRouteValue);
+			reportReductWorker.put(businessRouteValue.getBusinessMessageID(), businessRouteValue);
 		}
 		
 	}
@@ -143,63 +143,68 @@ public class FinanceWorkerManager{
 	/**
 	 * 下发扣费处理线程
 	 */
-	class SubmitDeductWorker extends SuperQueueWorker<BusinessRouteValue>{
+	class SubmitDeductWorker extends SuperConcurrentMapWorker<String, BusinessRouteValue>{
 
 		public SubmitDeductWorker() {
-			
 		}
-
+		
+		public void put(String businessMessageID, BusinessRouteValue businessRouteValue) {
+			this.add(businessMessageID,businessRouteValue);
+		}
+		
 		@Override
 		public void doRun() throws Exception {
 
-			if(superQueue.size() > 0){
+			if(superMap.size() > 0){
 				long start = System.currentTimeMillis();
-				List<BusinessRouteValue> businessRouteValueList;
-				synchronized (lock) {
-					businessRouteValueList = new ArrayList<BusinessRouteValue>(superQueue);
-					superQueue.clear();
+				List<BusinessRouteValue> businessRouteValueList = new ArrayList<BusinessRouteValue>(superMap.values());
+				for(BusinessRouteValue businessRouteValue : businessRouteValueList) {
+					superMap.remove(businessRouteValue.getBusinessMessageID());
 				}
+				
 				doFinance(businessRouteValueList,String.valueOf(FixedConstant.AccountConsumeType.SUBMIT.ordinal()));
 				long interval = System.currentTimeMillis() - start;
-				logger.info("计费数据条数{},耗时{}毫秒",businessRouteValueList.size(),interval);
+				logger.info("下发扣费:计费数据条数{},耗时{}毫秒",businessRouteValueList.size(),interval);
 			}else{
 				long interval = BusinessDataManager.getInstance().getMessageSaveIntervalTime();
 				Thread.sleep(interval);
 			}
-			
 		}
-		
 	}
+	
 	
 	/**
 	 * 回执成功扣费处理线程
 	 */
-	class ReportReductWorker extends SuperQueueWorker<BusinessRouteValue>{
+	class ReportReductWorker extends SuperConcurrentMapWorker<String, BusinessRouteValue>{
 
 		public ReportReductWorker() {
 			
 		}
+		
+		public void put(String businessMessageID, BusinessRouteValue businessRouteValue) {
+			this.add(businessMessageID,businessRouteValue);
+		}
 
 		@Override
 		public void doRun() throws Exception {
-
-			if(superQueue.size() > 0){
+			
+			if(superMap.size() > 0){
 				long start = System.currentTimeMillis();
-				List<BusinessRouteValue> businessRouteValueList;
-				synchronized (lock) {
-					businessRouteValueList = new ArrayList<BusinessRouteValue>(superQueue);
-					superQueue.clear();
+				List<BusinessRouteValue> businessRouteValueList = new ArrayList<BusinessRouteValue>(superMap.values());
+				for(BusinessRouteValue businessRouteValue : businessRouteValueList) {
+					superMap.remove(businessRouteValue.getBusinessMessageID());
 				}
+				
 				doFinance(businessRouteValueList,String.valueOf(FixedConstant.AccountConsumeType.REPORT.ordinal()));
 				long interval = System.currentTimeMillis() - start;
-				logger.info("计费数据条数{},耗时{}毫秒",businessRouteValueList.size(),interval);
+				logger.info("回执扣费:计费数据条数{},耗时{}毫秒",businessRouteValueList.size(),interval);
 			}else{
 				long interval = BusinessDataManager.getInstance().getMessageSaveIntervalTime();
 				Thread.sleep(interval);
 			}
 			
 		}
-		
 		
 	}
 	

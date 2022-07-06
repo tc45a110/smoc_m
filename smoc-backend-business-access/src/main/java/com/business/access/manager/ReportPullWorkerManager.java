@@ -21,7 +21,7 @@ public class ReportPullWorkerManager extends SuperMapWorker<String, ReportPullWo
 		reportStoreWorker.start();
 		
 		//启动cpu的数量*8的系数
-		for(int i=0;i<FixedConstant.CPU_NUMBER*8;i++){
+		for(int i=0;i<FixedConstant.CPU_NUMBER*2;i++){
 			ReportPullWorker reportPullWorker = new ReportPullWorker(reportStoreWorker);
 			reportPullWorker.setName(new StringBuilder("ReportPullWorker-").append(i+1).toString());
 			reportPullWorker.start();
