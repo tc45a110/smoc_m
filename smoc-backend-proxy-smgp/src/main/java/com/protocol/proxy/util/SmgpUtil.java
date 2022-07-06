@@ -26,6 +26,7 @@ public class SmgpUtil  extends ChannelMTUtil{
 	 * @param content
 	 * @param mobile
 	 * @param spNumber
+	 * @param isCMPP20Version
 	 * @param messageFormat
 	 * @return
 	 */

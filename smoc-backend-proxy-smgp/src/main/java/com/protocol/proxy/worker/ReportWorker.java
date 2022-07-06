@@ -164,7 +164,7 @@ public class ReportWorker extends SuperQueueWorker<SMGPMessage>{
 		if(channelMO.getMessageTotal() > 1){
 			LongSMSMOManager.getInstance().add(channelMO);
 		}else {
-			ChannelMOManager.getInstance().add(channelMO);
+			ChannelMOManager.getInstance().put(channelMO.getBusinessMessageID(), channelMO);
 		}
 	}
 	
