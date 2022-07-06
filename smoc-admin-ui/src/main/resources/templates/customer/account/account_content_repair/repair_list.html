@@ -168,8 +168,9 @@
                                         <span th:if="${not #strings.isEmpty(info.mobileNum)}">[[${info.mobileNum}]]</span>
                                         <br>
                                         <span th:if="${info.minContent <=0 and info.maxContent <=0}">无限制</span>
-                                        <span th:if="${info.minContent >0}">字数小于[[${info.minContent}]]</span><br>
-                                        <span th:if="${info.maxContent >0}">字数大于[[${info.maxContent}]]</span>
+                                        <span th:if="${info.maxContent >0}">字数大于[[${info.maxContent}]]</span><br>
+                                        <span th:if="${info.minContent >0}">字数小于[[${info.minContent}]]</span>
+
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
                                         <a class="btn btn-success btn-rounded btn-sm waves-effect waves-light" th:if="${info.repairStatus eq '1'}">生效中</a>
