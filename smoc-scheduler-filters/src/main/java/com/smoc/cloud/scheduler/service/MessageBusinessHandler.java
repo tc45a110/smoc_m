@@ -4,6 +4,7 @@ import com.smoc.cloud.common.filters.utils.RedisConstant;
 import com.smoc.cloud.scheduler.batch.filters.model.BusinessRouteValue;
 import com.smoc.cloud.scheduler.batch.filters.repository.RouteMessageRepository;
 import com.smoc.cloud.scheduler.initialize.Reference;
+import com.smoc.cloud.scheduler.service.channel.ChannelService;
 import com.smoc.cloud.scheduler.service.filters.FullFilterParamsFilterService;
 import com.smoc.cloud.scheduler.service.filters.service.FiltersRedisDataService;
 import com.smoc.cloud.scheduler.service.filters.service.message.ChannelMessageFilter;
@@ -23,6 +24,9 @@ import java.util.Map;
 @Slf4j
 @Service
 public class MessageBusinessHandler {
+
+    @Autowired
+    private ChannelService channelService;
 
     @Autowired
     private ChannelMessageFilter channelMessageFilter;
@@ -47,9 +51,6 @@ public class MessageBusinessHandler {
             return;
         }
 
-        /**
-         * 过滤操作
-         */
         //通过过滤
         List<BusinessRouteValue> successList = new ArrayList<>();
         //需要审核，审核列表
@@ -94,6 +95,11 @@ public class MessageBusinessHandler {
              * 业务逻辑-完善省份信息
              */
             this.provinceBusiness(businessRouteValue, accountInfo);
+            if ("00".equals(businessRouteValue.getAreaCode())) {
+                businessRouteValue.setStatusCode(InsideStatusCodeConstant.StatusCode.SHIELD.name());
+                businessRouteValue.setStatusMessage("手机好未解析出对应区域！");
+                errorList.add(businessRouteValue);
+            }
 
             /**
              * 账号、号码、内容、区域、限流......
@@ -113,15 +119,27 @@ public class MessageBusinessHandler {
             }
 
             /**
-             * 通道路由
-             * 根据accountId、segmentCarrier、messageContent
+             * 账户路由到通道
              */
+            String channelId = channelService.accountRouteChannel(businessRouteValue.getAccountId(), businessRouteValue.getSegmentCarrier(), businessRouteValue.getAreaCode());
+            if (StringUtils.isEmpty(channelId)) {
+                businessRouteValue.setStatusCode(InsideStatusCodeConstant.StatusCode.NOROUTE.name());
+                businessRouteValue.setStatusMessage("没找到对英的通道！");
+                errorList.add(businessRouteValue);
+            }
 
+            /**
+             * 内容路由到通道
+             */
+            String routeChannelId = channelService.contentRouteChannel(businessRouteValue.getAccountId(), businessRouteValue.getPhoneNumber(), businessRouteValue.getSegmentCarrier(), businessRouteValue.getAreaCode(), businessRouteValue.getMessageContent());
+            if (!StringUtils.isEmpty(routeChannelId)) {
+                channelId = routeChannelId;
+            }
 
             /**
              * 逻辑处理-通道过滤，优化通道过滤位置
              */
-            Map<String, String> channelMessageParamsFilterResult = channelMessageFilter.filter(null, businessRouteValue.getMessageContent());
+            Map<String, String> channelMessageParamsFilterResult = channelMessageFilter.filter(channelId, businessRouteValue.getMessageContent());
             if (!"false".equals(channelMessageParamsFilterResult.get("result"))) {
                 businessRouteValue.setStatusMessage(channelMessageParamsFilterResult.get("message"));
                 businessRouteValue.setStatusCode(FilterResponseCodeConstant.mapping(filterResult.get("code")));
@@ -131,11 +149,8 @@ public class MessageBusinessHandler {
 
 
         }
-        //log.info("[完成过滤操作]条数：{}:{}", count, System.currentTimeMillis());
-        Boolean limiter = filtersRedisDataService.limiterMessageFilter("filter:speed:test", 10000, 10000, 1, count);
-        if (!limiter) {
-            log.info("[------------过滤触发限流 触发限流-----------------------]");
-        }
+
+
         /**
          * 根据过滤结果，进行分业务处理
          */
