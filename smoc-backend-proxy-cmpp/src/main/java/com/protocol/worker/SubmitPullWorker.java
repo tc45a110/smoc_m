@@ -2,7 +2,7 @@
  * @desc
  * 从通道表中按照优先级及时间先后获取数据，每次按照通道的速率进行获取，存入到队列中
  */
-package com.protocol.proxy.worker;
+package com.protocol.worker;
 
 import org.apache.commons.lang3.ArrayUtils;
 

@@ -4,7 +4,7 @@
  * @date 2017年8月15日
  * 
  */
-package com.protocol.proxy.util;
+package com.protocol.util;
 
 import java.util.Date;
 import java.util.Map;

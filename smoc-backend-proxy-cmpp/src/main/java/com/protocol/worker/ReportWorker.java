@@ -2,7 +2,7 @@
  * @desc
  * 从通道表中按照优先级及时间先后获取数据，每次按照通道的速率进行获取，存入到队列中
  */
-package com.protocol.proxy.worker;
+package com.protocol.worker;
 
 import com.alibaba.druid.util.Base64;
 import com.base.common.cache.CacheBaseService;
@@ -92,7 +92,7 @@ public class ReportWorker extends SuperQueueWorker<CMPPMessage>{
 		}
 		//状态报告
 		if(registeredDeliver == 1){
-			processChannelReport(statusCode, channelReportSRCID, channelMessageID, phoneNumber,sequenceID);
+			processChannelReport(statusCode, channelReportSRCID, String.valueOf(TypeConvert.byte2long(channelMessageID)), phoneNumber,sequenceID);
 		}else if(registeredDeliver == 0){
 			processChannelMO(tpUdhi, messageFormat, phoneNumber, channelReportSRCID, messageContent,sequenceID);
 		}
@@ -106,7 +106,7 @@ public class ReportWorker extends SuperQueueWorker<CMPPMessage>{
 	 * @param channelMessageID
 	 * @param phoneNumber
 	 */
-	private void processChannelReport(String statusCode,String channelReportSRCID,byte[] channelMessageID,String phoneNumber,String sequenceID){
+	private void processChannelReport(String statusCode,String channelReportSRCID,String channelMessageID,String phoneNumber,String sequenceID){
 		logger.info(
 				new StringBuilder().append("回执信息")
 				.append("{}channelID={}")
@@ -118,7 +118,7 @@ public class ReportWorker extends SuperQueueWorker<CMPPMessage>{
 				.toString(),
 				FixedConstant.SPLICER,channelID,
 				FixedConstant.SPLICER,phoneNumber,
-				FixedConstant.SPLICER,String.valueOf(TypeConvert.byte2long(channelMessageID)),
+				FixedConstant.SPLICER,channelMessageID,
 				FixedConstant.SPLICER,channelReportSRCID,
 				FixedConstant.SPLICER,statusCode,
 				FixedConstant.SPLICER,sequenceID
@@ -137,7 +137,7 @@ public class ReportWorker extends SuperQueueWorker<CMPPMessage>{
 			businessRouteValue.setSuccessCode(InsideStatusCodeConstant.FAIL_CODE);
 		}
 		businessRouteValue.setChannelReportSRCID(channelReportSRCID);
-		businessRouteValue.setChannelMessageID(String.valueOf(TypeConvert.byte2long(channelMessageID)));
+		businessRouteValue.setChannelMessageID(channelMessageID);
 		businessRouteValue.setPhoneNumber(phoneNumber);
 		businessRouteValue.setChannelReportTime(DateUtil.getCurDateTime(DateUtil.DATE_FORMAT_COMPACT_STANDARD_MILLI));
 		
@@ -178,7 +178,7 @@ public class ReportWorker extends SuperQueueWorker<CMPPMessage>{
 		if(channelMO.getMessageTotal() > 1){
 			LongSMSMOManager.getInstance().add(channelMO);
 		}else{
-			ChannelMOManager.getInstance().add(channelMO);
+			ChannelMOManager.getInstance().put(channelMO.getBusinessMessageID(), channelMO);
 		}
 	
 	}

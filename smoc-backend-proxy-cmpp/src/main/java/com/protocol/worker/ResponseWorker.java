@@ -2,7 +2,7 @@
  * @desc
  * 
  */
-package com.protocol.proxy.worker;
+package com.protocol.worker;
 
 import java.util.Timer;
 import java.util.TimerTask;

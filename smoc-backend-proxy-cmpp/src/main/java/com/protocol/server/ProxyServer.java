@@ -2,7 +2,7 @@
  * @desc
  * 
  */
-package com.protocol.proxy.server;
+package com.protocol.server;
 
 import com.base.common.constant.FixedConstant;
 import com.base.common.manager.ChannelInfoManager;

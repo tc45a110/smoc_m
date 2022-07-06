@@ -2,7 +2,7 @@
  * @desc
  * 
  */
-package com.protocol.proxy.manager;
+package com.protocol.manager;
 
 import java.util.Collection;
 import java.util.HashSet;

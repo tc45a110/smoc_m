@@ -2,7 +2,7 @@
  * @desc
  * 
  */
-package com.protocol.proxy.server;
+package com.protocol.server;
 
 import java.io.BufferedReader;
 import java.io.IOException;

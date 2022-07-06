@@ -2,7 +2,7 @@
  * @desc
  * 连接参数缓存
  */
-package com.protocol.proxy.util;
+package com.protocol.util;
 
 import java.util.HashMap;
 import java.util.Map;
