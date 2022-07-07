@@ -49,7 +49,7 @@ public class MessageFilterJobConfiguration {
 
     @Bean
     public Flow parallelFlow() {
-        return new FlowBuilder<Flow>("parallelFlow").split(messageFilterExecutor()).add(flow7()).build();
+        return new FlowBuilder<Flow>("parallelFlow").split(messageFilterExecutor()).add(flow0(),flow1(),flow2(),flow2(),flow3(),flow4(),flow5(),flow6(),flow7(),flow8(),flow9()).build();
     }
 
     @Resource(name = "messageFilterReader0")

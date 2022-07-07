@@ -1,30 +1,41 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <configuration scan="true" scanPeriod="30 seconds">
-    <include
-            resource="org/springframework/boot/logging/logback/base.xml" />
 
     <appender name="INFO_FILE"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
         <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
             <evaluator>
-                <expression>return message.contains("数据:");</expression>
+                <expression>return message.contains("info:");</expression>
             </evaluator>
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
         </filter>
-        <File>${LOG_PATH}/smoc-scheduler-filters-info.log</File>
-        <rollingPolicy
-                class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH}/smoc-scheduler-filters-info-%d{yyyyMMdd}.log.%i
-            </fileNamePattern>
-            <timeBasedFileNamingAndTriggeringPolicy
-                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>10MB</maxFileSize>
-            </timeBasedFileNamingAndTriggeringPolicy>
-            <maxHistory>2</maxHistory>
+        <!--被写入的文件名，可以是相对目录，也可以是绝对目录，如果上级目录不存在会自动创建，没有默认值。-->
+        <file>${LOG_PATH}/smoc-scheduler-filters-info.log</file>
+        <!--滚动策略  基于时间的分包策略 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- yyyy-MM-dd-HH 时间策略则为一小时一个文件 -->
+            <FileNamePattern>${LOG_PATH}/smoc-scheduler-filters-info.%d{yyyy-MM-dd-HH}.%i.log</FileNamePattern>
+            <!--日志文件保留小时数-->
+            <MaxHistory>48</MaxHistory>
+            <!--单个日志文件最大1GB-->
+            <maxFileSize>1GB</maxFileSize>
+            <!--日志文件总大小超过20GB会删除旧的日志文件-->
+            <totalSizeCap>20GB</totalSizeCap>
         </rollingPolicy>
+
+        <!--级别过滤器，根据日志级别进行过滤。如果日志级别等于配置级别，过滤器会根据onMath 和 onMismatch接收或拒绝日志-->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <!--设置过滤级别-->
+            <level>INFO</level>
+            <!--用于配置符合过滤条件的操作-->
+            <onMatch>ACCEPT</onMatch>
+            <!--用于配置不符合过滤条件的操作-->
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <!--  layout 负责把事件转换成字符串，格式化的日志信息的输出 -->
         <layout class="ch.qos.logback.classic.PatternLayout">
-            <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %msg%n
+            <Pattern> %msg%n
             </Pattern>
         </layout>
     </appender>
@@ -39,16 +50,16 @@
         <File>${LOG_PATH}/smoc-scheduler-filters-error.log</File>
         <rollingPolicy
                 class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH}/smoc-error-%d{yyyyMMdd}.log.%i
+            <fileNamePattern>${LOG_PATH}/smoc-scheduler-filters-error-%d{yyyyMMdd}.log.%i
             </fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy
                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>10MB</maxFileSize>
+                <maxFileSize>50MB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
             <maxHistory>2</maxHistory>
         </rollingPolicy>
         <layout class="ch.qos.logback.classic.PatternLayout">
-            <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%msg]%n
+            <Pattern>%msg%n
             </Pattern>
         </layout>
     </appender>
@@ -60,7 +71,7 @@
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
         </filter>
-        <File>${LOG_PATH}/smoc-debug.log</File>
+        <File>${LOG_PATH}/smoc-scheduler-filters-debug.log</File>
         <rollingPolicy
                 class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <FileNamePattern>${LOG_PATH}/smoc-scheduler-filters-debug.%d{yyyy-MM-dd}.log
@@ -81,7 +92,7 @@
             <onMismatch>DENY</onMismatch>
         </filter>
         <File>
-            ${LOG_PATH}/smoc-warn.log
+            ${LOG_PATH}/smoc-scheduler-filters-warn.log
         </File>
         <rollingPolicy
                 class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -135,22 +146,9 @@
 
     </logger>
 
-
     <!--开发环境:打印控制台 -->
     <springProfile name="dev">
         <root level="info">
-            <!--<appender-ref ref="consoleAppender" /> -->
-            <!--<appender-ref ref="async_trace_file" /> -->
-            <appender-ref ref="async_error_file" />
-            <appender-ref ref="async_warn_file" />
-            <appender-ref ref="async_info_file" />
-        </root>
-    </springProfile>
-    <!--开发环境:打印控制台 -->
-    <springProfile name="dev92">
-        <root level="info">
-            <!--<appender-ref ref="consoleAppender" /> -->
-            <!--<appender-ref ref="async_trace_file" /> -->
             <appender-ref ref="async_error_file" />
             <appender-ref ref="async_warn_file" />
             <appender-ref ref="async_info_file" />
@@ -160,8 +158,8 @@
     <!--生产环境:输出到文件 -->
     <springProfile name="prod">
         <root level="info">
-            <appender-ref ref="async_error_file" />
             <appender-ref ref="async_info_file" />
+            <appender-ref ref="async_error_file" />
             <appender-ref ref="async_warn_file" />
         </root>
     </springProfile>

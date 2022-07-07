@@ -44,13 +44,14 @@ public class ChannelRepository {
         sql.append(" route.CARRIER,");
         sql.append(" route.AREA_CODES,");
         sql.append(" channel.SUPPORT_AREA_CODES CHANNEL_AREA_CODES,");
-        sql.append(" route.REPAIR_CONTENT,");
+        sql.append(" route.ROUTE_CONTENT,");
+        sql.append(" route.ROUTE_REVERSE_CONTENT,");
         sql.append(" route.MOBILE_NUM,");
         sql.append(" route.MIN_CONTENT,");
         sql.append(" route.MAX_CONTENT,");
-        sql.append(" route.CHANNEL_REPAIR_ID");
-        sql.append(" FROM smoc.config_content_repair_rule route,smoc.config_channel_basic_info channel ");
-        sql.append(" where route.CHANNEL_REPAIR_ID=channel.CHANNEL_ID and REPAIR_STATUS='1' and channel.CHANNEL_STATUS = '001'");
+        sql.append(" route.CHANNEL_ID");
+        sql.append(" FROM smoc.config_route_content_rule route,smoc.config_channel_basic_info channel ");
+        sql.append(" where route.CHANNEL_ID = channel.CHANNEL_ID and ROUTE_STATUS='1' and channel.CHANNEL_STATUS = '001'");
         try {
             conn = dataSource.getConnection();
             pstmt = conn.prepareStatement(sql.toString());
@@ -62,11 +63,12 @@ public class ChannelRepository {
                 qo.setAreaCodes(rs.getString("AREA_CODES"));
                 qo.setChannelAreaCodes(rs.getString("CHANNEL_AREA_CODES"));
                 qo.setSupportAreaCodes(convertIntersection(qo.getAreaCodes(), qo.getChannelAreaCodes()));
-                qo.setRouteContent(rs.getString("REPAIR_CONTENT"));
+                qo.setRouteContent(rs.getString("ROUTE_CONTENT"));
+                qo.setRouteReverseContent(rs.getString("ROUTE_REVERSE_CONTENT"));
                 qo.setMobileNum(rs.getString("MOBILE_NUM"));
                 qo.setMinContent(rs.getInt("MIN_CONTENT"));
                 qo.setMaxContent(rs.getInt("MAX_CONTENT"));
-                qo.setRouteChannelId(rs.getString("CHANNEL_REPAIR_ID"));
+                qo.setRouteChannelId(rs.getString("CHANNEL_ID"));
                 ContentRouteBusinessModel contentRouteBusinessModel = resultMap.get(qo.getAccountId());
                 if (null == contentRouteBusinessModel) {
                     contentRouteBusinessModel = new ContentRouteBusinessModel();

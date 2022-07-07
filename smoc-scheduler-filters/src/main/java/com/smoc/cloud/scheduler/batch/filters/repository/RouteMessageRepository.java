@@ -29,15 +29,15 @@ public class RouteMessageRepository {
         Connection conn = null;
         Statement stmt = null;
         try {
-            conn = dataSource.getConnection();
-            conn.setAutoCommit(false);
-            stmt = conn.createStatement();
-            for (BusinessRouteValue businessRouteValue : businessRouteValueList) {
-                stmt.addBatch(this.buildRouteChannelMessageSql(businessRouteValue));
-                stmt.addBatch(this.buildUpdateFinanceSql(businessRouteValue));
-            }
-            stmt.executeBatch();
-            conn.commit();
+//            conn = dataSource.getConnection();
+//            conn.setAutoCommit(false);
+//            stmt = conn.createStatement();
+//            for (BusinessRouteValue businessRouteValue : businessRouteValueList) {
+//                stmt.addBatch(this.buildRouteChannelMessageSql(businessRouteValue));
+//                stmt.addBatch(this.buildUpdateFinanceSql(businessRouteValue));
+//            }
+//            stmt.executeBatch();
+//            conn.commit();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -66,14 +66,14 @@ public class RouteMessageRepository {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
-            conn = dataSource.getConnection();
-            conn.setAutoCommit(false);
-            StringBuffer sql = new StringBuffer();
-            sql.append("insert into smoc_route.route_audit_message_mt_info1 ");
-            sql.append("(ACCOUNT_ID,INFO_TYPE,PHONE_NUMBER,ACCOUNT_SUBMIT_TIME,MESSAGE_CONTENT,CHANNEL_ID,REASON,MESSAGE_MD5,MESSAGE_JSON,CREATED_TIME) ");
-            sql.append("values(?,?,?,?,?,?,?,?,?,now())");
-            stmt = conn.prepareStatement(sql.toString());
-            for (BusinessRouteValue businessRouteValue : list) {
+//            conn = dataSource.getConnection();
+//            conn.setAutoCommit(false);
+//            StringBuffer sql = new StringBuffer();
+//            sql.append("insert into smoc_route.route_audit_message_mt_info1 ");
+//            sql.append("(ACCOUNT_ID,INFO_TYPE,PHONE_NUMBER,ACCOUNT_SUBMIT_TIME,MESSAGE_CONTENT,CHANNEL_ID,REASON,MESSAGE_MD5,MESSAGE_JSON,CREATED_TIME) ");
+//            sql.append("values(?,?,?,?,?,?,?,?,?,now())");
+//            stmt = conn.prepareStatement(sql.toString());
+//            for (BusinessRouteValue businessRouteValue : list) {
 //                stmt.setString(1, businessRouteValue.getAccountId());
 //                stmt.setString(2, businessRouteValue.getInfoType());
 //                stmt.setString(3, businessRouteValue.getPhoneNumber());
@@ -84,9 +84,9 @@ public class RouteMessageRepository {
 //                stmt.setString(8, DigestUtils.md5DigestAsHex(businessRouteValue.getMessageContent().getBytes()));
 //                stmt.setString(9, new Gson().toJson(businessRouteValue));
 //                stmt.addBatch();
-            }
-            stmt.executeBatch();
-            conn.commit();
+//            }
+//            stmt.executeBatch();
+//            conn.commit();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -120,9 +120,9 @@ public class RouteMessageRepository {
             conn.setAutoCommit(false);
             StringBuffer sql = new StringBuffer();
             sql.append("insert into smoc_route.route_message_mr_info1");
-            sql.append(" (ACCOUNT_ID,PHONE_NUMBER,REPORT_TIME,SUBMIT_TIME,STATUS_CODE,MESSAGE_ID,TEMPLATE_ID,ACCOUNT_SRC_ID,ACCOUNT_BUSINESS_CODE,");
+            sql.append(" (ACCOUNT_ID,PHONE_NUMBER,REPORT_TIME,SUBMIT_TIME,STATUS_CODE,STATUS_MESSAGE,MESSAGE_ID,TEMPLATE_ID,ACCOUNT_SRC_ID,ACCOUNT_BUSINESS_CODE,");
             sql.append("MESSAGE_TOTAL,MESSAGE_INDEX,OPTION_PARAM,CREATED_TIME) ");
-            sql.append("values(?,?,now(),?,?,?,?,?,?,?,?,?,now())");
+            sql.append("values(?,?,now(),?,?,?,?,?,?,?,?,?,?,now())");
             stmt = conn.prepareStatement(sql.toString());
             for (BusinessRouteValue businessRouteValue : list) {
                 stmt.setString(1, businessRouteValue.getAccountId());
@@ -130,13 +130,14 @@ public class RouteMessageRepository {
 //                stmt.setString(3, businessRouteValue.getChannelReportTime());
                 stmt.setString(3, businessRouteValue.getAccountSubmitTime());
                 stmt.setString(4, businessRouteValue.getStatusCode());
-                stmt.setString(5, businessRouteValue.getAccountMessageIds());
-                stmt.setString(6, businessRouteValue.getAccountTemplateId());
-                stmt.setString(7, businessRouteValue.getAccountSubmitSrcId());
-                stmt.setString(8, businessRouteValue.getAccountBusinessCode());
-                stmt.setInt(9, businessRouteValue.getMessageTotal());
-                stmt.setInt(10,0);
-                stmt.setString(11, businessRouteValue.getOptionParam());
+                stmt.setString(5, businessRouteValue.getStatusMessage());
+                stmt.setString(6, businessRouteValue.getAccountMessageIds());
+                stmt.setString(7, businessRouteValue.getAccountTemplateId());
+                stmt.setString(8, businessRouteValue.getAccountSubmitSrcId());
+                stmt.setString(9, businessRouteValue.getAccountBusinessCode());
+                stmt.setInt(10, businessRouteValue.getMessageTotal());
+                stmt.setInt(11,0);
+                stmt.setString(12, businessRouteValue.getOptionParam());
                 stmt.addBatch();
             }
             stmt.executeBatch();

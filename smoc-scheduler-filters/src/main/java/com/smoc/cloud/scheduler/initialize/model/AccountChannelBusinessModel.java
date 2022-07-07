@@ -101,9 +101,7 @@ public class AccountChannelBusinessModel {
                     }
                 }
 
-                if (!StringUtils.isEmpty(channelId)) {
-                    return channelId;
-                }
+                return channelId;
             }
         }
 
@@ -136,10 +134,7 @@ public class AccountChannelBusinessModel {
                         channelId = channels.get(new Random().nextInt(channels.size()));
                     }
                 }
-
-                if (!StringUtils.isEmpty(channelId)) {
-                    return channelId;
-                }
+                return channelId;
             }
         }
 
@@ -172,10 +167,7 @@ public class AccountChannelBusinessModel {
                         channelId = channels.get(new Random().nextInt(channels.size()));
                     }
                 }
-
-                if (!StringUtils.isEmpty(channelId)) {
-                    return channelId;
-                }
+                return channelId;
             }
         }
 
@@ -209,9 +201,7 @@ public class AccountChannelBusinessModel {
                     }
                 }
 
-                if (!StringUtils.isEmpty(channelId)) {
-                    return channelId;
-                }
+                return channelId;
             }
         }
 

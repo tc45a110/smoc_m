@@ -1,22 +1,26 @@
 package com.smoc.cloud.scheduler.service;
 
-import com.smoc.cloud.common.filters.utils.RedisConstant;
+import com.google.gson.Gson;
 import com.smoc.cloud.scheduler.batch.filters.model.BusinessRouteValue;
 import com.smoc.cloud.scheduler.batch.filters.repository.RouteMessageRepository;
 import com.smoc.cloud.scheduler.initialize.Reference;
+import com.smoc.cloud.scheduler.initialize.entity.AccountBaseInfo;
+import com.smoc.cloud.scheduler.service.area.AreaService;
+import com.smoc.cloud.scheduler.service.carrier.CarrierService;
 import com.smoc.cloud.scheduler.service.channel.ChannelService;
 import com.smoc.cloud.scheduler.service.filters.FullFilterParamsFilterService;
-import com.smoc.cloud.scheduler.service.filters.service.FiltersRedisDataService;
 import com.smoc.cloud.scheduler.service.filters.service.message.ChannelMessageFilter;
-import com.smoc.cloud.scheduler.initialize.entity.AccountBaseInfo;
+import com.smoc.cloud.scheduler.service.finance.FinanceService;
+import com.smoc.cloud.scheduler.service.log.LogService;
 import com.smoc.cloud.scheduler.tools.utils.FilterResponseCodeConstant;
 import com.smoc.cloud.scheduler.tools.utils.InsideStatusCodeConstant;
-import com.smoc.cloud.scheduler.tools.utils.NumberUtils;
+import lombok.Generated;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -26,13 +30,22 @@ import java.util.Map;
 public class MessageBusinessHandler {
 
     @Autowired
+    private LogService logService;
+
+    @Autowired
+    private FinanceService financeService;
+
+    @Autowired
+    private AreaService areaService;
+
+    @Autowired
+    private CarrierService carrierService;
+
+    @Autowired
     private ChannelService channelService;
 
     @Autowired
     private ChannelMessageFilter channelMessageFilter;
-
-    @Autowired
-    private FiltersRedisDataService filtersRedisDataService;
 
     @Autowired
     private RouteMessageRepository routeMessageRepository;
@@ -58,7 +71,9 @@ public class MessageBusinessHandler {
         //没通过过滤，直接生成报告
         List<BusinessRouteValue> errorList = new ArrayList<>();
 
-        Integer count = list.size();
+        /**
+         * 批次处理
+         */
         for (BusinessRouteValue businessRouteValue : list) {
 
             /**
@@ -68,6 +83,7 @@ public class MessageBusinessHandler {
                 businessRouteValue.setStatusCode(InsideStatusCodeConstant.StatusCode.UNSIGNA.name());
                 businessRouteValue.setStatusMessage("无短信签名！");
                 errorList.add(businessRouteValue);
+                logService.error(businessRouteValue);
                 continue;
             }
 
@@ -79,26 +95,30 @@ public class MessageBusinessHandler {
                 businessRouteValue.setStatusCode(InsideStatusCodeConstant.StatusCode.ILLEGAL.name());
                 businessRouteValue.setStatusMessage("无效业务账号！");
                 errorList.add(businessRouteValue);
+                logService.error(businessRouteValue);
                 continue;
             }
 
             /**
              * 逻辑处理-运营商
              */
-            this.carrierBusiness(businessRouteValue, accountInfo);
+            this.carrierService.carrierBusiness(businessRouteValue, accountInfo);
             if (!StringUtils.isEmpty(businessRouteValue.getStatusCode())) {
                 errorList.add(businessRouteValue);
+                logService.error(businessRouteValue);
                 continue;
             }
 
             /**
              * 业务逻辑-完善省份信息
              */
-            this.provinceBusiness(businessRouteValue, accountInfo);
+            this.areaService.provinceBusiness(businessRouteValue, accountInfo);
             if ("00".equals(businessRouteValue.getAreaCode())) {
                 businessRouteValue.setStatusCode(InsideStatusCodeConstant.StatusCode.SHIELD.name());
                 businessRouteValue.setStatusMessage("手机好未解析出对应区域！");
                 errorList.add(businessRouteValue);
+                logService.error(businessRouteValue);
+                continue;
             }
 
             /**
@@ -115,6 +135,7 @@ public class MessageBusinessHandler {
                 businessRouteValue.setStatusMessage(filterResult.get("message"));
                 businessRouteValue.setStatusCode(FilterResponseCodeConstant.mapping(filterResult.get("code")));
                 errorList.add(businessRouteValue);
+                logService.error(businessRouteValue);
                 continue;
             }
 
@@ -126,6 +147,8 @@ public class MessageBusinessHandler {
                 businessRouteValue.setStatusCode(InsideStatusCodeConstant.StatusCode.NOROUTE.name());
                 businessRouteValue.setStatusMessage("没找到对英的通道！");
                 errorList.add(businessRouteValue);
+                logService.error(businessRouteValue);
+                continue;
             }
 
             /**
@@ -144,9 +167,34 @@ public class MessageBusinessHandler {
                 businessRouteValue.setStatusMessage(channelMessageParamsFilterResult.get("message"));
                 businessRouteValue.setStatusCode(FilterResponseCodeConstant.mapping(filterResult.get("code")));
                 errorList.add(businessRouteValue);
+                logService.error(businessRouteValue);
                 continue;
             }
 
+            /**
+             * 加载数据-获得响应运营商短信单价
+             */
+            BigDecimal messagePrice = financeService.getAccountMessagePrice(businessRouteValue.getAccountId(), businessRouteValue.getSegmentCarrier(), businessRouteValue.getAreaCode());
+            if (null == messagePrice) {
+                businessRouteValue.setStatusCode(InsideStatusCodeConstant.StatusCode.NOPRICE.name());
+                businessRouteValue.setStatusMessage("未找到对应的通道价格！");
+                errorList.add(businessRouteValue);
+                logService.error(businessRouteValue);
+                continue;
+            }
+
+            /**
+             * 验证账户余额，是否够本次消费
+             */
+            Boolean checked = financeService.checkingAccountFinance(businessRouteValue.getAccountId(), businessRouteValue.getMessageTotal(), messagePrice);
+            if (!checked) {
+                businessRouteValue.setStatusCode(InsideStatusCodeConstant.StatusCode.NOMONEY.name());
+                businessRouteValue.setStatusMessage("财务账户余额不足！");
+                errorList.add(businessRouteValue);
+                logService.error(businessRouteValue);
+                continue;
+            }
+            successList.add(businessRouteValue);
 
         }
 
@@ -154,111 +202,23 @@ public class MessageBusinessHandler {
         /**
          * 根据过滤结果，进行分业务处理
          */
-        //成功通过过滤
-        if (successList.size() > 0) {
+        if (successList.size() > 0) {//成功通过过滤
             log.info("[数据过滤]条数：{}", successList.size());
             routeMessageRepository.handlerBusinessBatch(successList);
         }
 
-        //要经过审核
-        if (auditList.size() > 0) {
+        if (auditList.size() > 0) { //要经过审核
             log.info("[审核过滤]条数：{}", auditList.size());
             routeMessageRepository.generateMessageAudit(auditList);
         }
 
-        //没有通过过滤,直接生成报告
-        if (errorList.size() > 0) {
+        if (errorList.size() > 0) {//没有通过过滤,直接生成报告
             //log.info("[没通过过滤]条数：{}", errorList.size());
+            //log.info(new Gson().toJson(errorList));
             routeMessageRepository.generateErrorMessageResponse(errorList);
         }
 
     }
 
-    /**
-     * 省份、地域-业务逻辑处理
-     *
-     * @param businessRouteValue
-     * @param messageRouteAccountParams
-     */
-    private void provinceBusiness(BusinessRouteValue businessRouteValue, AccountBaseInfo messageRouteAccountParams) {
 
-        //如果是国际运营商
-        if ("INTL".equals(messageRouteAccountParams.getBusinessCarrier())) {
-            String areaName = NumberUtils.getInternationalAreaName(businessRouteValue.getPhoneNumber());
-            businessRouteValue.setAreaName(StringUtils.isEmpty(areaName) ? "未知" : areaName);
-            String areaCode = "" + NumberUtils.getCountryCode(businessRouteValue.getPhoneNumber());
-            businessRouteValue.setAreaCode(StringUtils.isEmpty(areaCode) ? "00" : areaCode);
-            return;
-        }
-
-        //根据手机号前7位获取国内省份信息
-        Object province = filtersRedisDataService.hget(RedisConstant.FILTERS_CONFIG_SYSTEM_PROVINCE_NUMBER, businessRouteValue.getPhoneNumber().substring(0, 7));
-        if (StringUtils.isEmpty(province)) {
-            businessRouteValue.setAreaCode(province.toString().split("-")[0]);
-            businessRouteValue.setAreaName(province.toString().split("-")[1]);
-            businessRouteValue.setCityName("未知");
-        } else {
-            businessRouteValue.setAreaCode("00");
-            businessRouteValue.setAreaName("未知");
-            businessRouteValue.setCityName("未知");
-        }
-    }
-
-
-    /**
-     * 运营商-业务逻辑处理
-     *
-     * @param businessRouteValue
-     * @return
-     */
-    private void carrierBusiness(BusinessRouteValue businessRouteValue, AccountBaseInfo messageRouteAccountParams) {
-
-        Object segmentCarrier;
-
-        //如果业务账号配置的运营商为空
-        if (StringUtils.isEmpty(messageRouteAccountParams.getBusinessCarrier())) {
-            businessRouteValue.setStatusCode(InsideStatusCodeConstant.StatusCode.NOROUTE.name());
-            businessRouteValue.setStatusMessage("业务账号运营商为空！");
-            return;
-        }
-
-        //如果是国际运营商
-        if ("INTL".equals(messageRouteAccountParams.getBusinessCarrier())) {
-            segmentCarrier = "INTL";
-            businessRouteValue.setBusinessCarrier(messageRouteAccountParams.getBusinessCarrier());
-            businessRouteValue.setSegmentCarrier(segmentCarrier.toString());
-            return;
-        }
-
-        /**
-         * 根据手机号获取运营商
-         */
-        segmentCarrier = filtersRedisDataService.hget(RedisConstant.FILTERS_CONFIG_SYSTEM_CARRIER_NUMBER, businessRouteValue.getPhoneNumber().substring(0, 3));
-        if (null == segmentCarrier) {
-            segmentCarrier = filtersRedisDataService.hget(RedisConstant.FILTERS_CONFIG_SYSTEM_CARRIER_NUMBER, businessRouteValue.getPhoneNumber().substring(0, 4));
-        }
-
-        //判断号段运营商及业务账号配置的运营商
-        if (StringUtils.isEmpty(segmentCarrier)) {
-            businessRouteValue.setStatusCode(InsideStatusCodeConstant.StatusCode.NOROUTE.name());
-            businessRouteValue.setStatusMessage("号段运营商为空！");
-            return;
-        }
-
-        //账号配置运营商与号段运营商是否匹配
-        if (messageRouteAccountParams.getBusinessCarrier().contains(segmentCarrier.toString())) {
-            businessRouteValue.setBusinessCarrier(messageRouteAccountParams.getBusinessCarrier());
-            businessRouteValue.setSegmentCarrier(segmentCarrier.toString().split("-")[0]);
-            return;
-        }
-        //是否可以携号转网
-        if ("1".equals(messageRouteAccountParams.getTransferType())) {
-            businessRouteValue.setBusinessCarrier(messageRouteAccountParams.getBusinessCarrier());
-            businessRouteValue.setSegmentCarrier(segmentCarrier.toString().split("-")[0]);
-            return;
-        }
-
-        businessRouteValue.setStatusCode(InsideStatusCodeConstant.StatusCode.INVAREQ.name());
-        businessRouteValue.setStatusMessage("运营商-业务逻辑处理，未知错误！");
-    }
 }

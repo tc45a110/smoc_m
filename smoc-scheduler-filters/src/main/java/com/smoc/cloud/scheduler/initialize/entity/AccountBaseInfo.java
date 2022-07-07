@@ -44,6 +44,7 @@ public class AccountBaseInfo {
 
 
     /**
+     * 已废弃，暂时保留
      * account 计费方式 1：下发时扣费 2：回执返回时扣费
      */
     private String consumeType;
