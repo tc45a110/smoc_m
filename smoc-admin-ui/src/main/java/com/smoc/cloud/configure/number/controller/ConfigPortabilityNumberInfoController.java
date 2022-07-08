@@ -290,4 +290,71 @@ public class ConfigPortabilityNumberInfoController {
         return view;
     }
 
+    /**
+     * 查询redis库页面
+     *
+     * @return
+     */
+    @RequestMapping(value = "/findRedis", method = RequestMethod.GET)
+    public ModelAndView findRedis(HttpServletRequest request) {
+
+        ModelAndView view = new ModelAndView("configure/config_number/redis_data");
+
+        ConfigNumberInfoValidator configNumberInfoValidator = new ConfigNumberInfoValidator();
+
+        view.addObject("configNumberInfoValidator",configNumberInfoValidator);
+
+        return view;
+
+    }
+
+    /**
+     * 查询携号转网数据是否在redis库
+     * @param configNumberInfoValidator
+     * @param result
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/postRedis", method = RequestMethod.POST)
+    public ModelAndView postRedis(@ModelAttribute @Validated ConfigNumberInfoValidator configNumberInfoValidator, BindingResult result, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("configure/config_number/redis_data");
+
+        //查询操作
+        ResponseData<ConfigNumberInfoValidator> data = configNumberInfoService.findRedis(configNumberInfoValidator.getNumberCode());
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+        if(!StringUtils.isEmpty(data.getData().getCarrier())){
+            view.addObject("result", "0000");
+        }else{
+            view.addObject("result", "1111");
+        }
+
+        view.addObject("configNumberInfoValidator",data.getData());
+
+        return view;
+    }
+
+    /**
+     * 删除信息
+     *
+     * @return
+     */
+    @RequestMapping(value = "/deleteRedis", method = RequestMethod.POST)
+    public ModelAndView deleteById(@ModelAttribute ConfigNumberInfoValidator configNumberInfoValidator, HttpServletRequest request) {
+        SecurityUser user = (SecurityUser)request.getSession().getAttribute("user");
+        ModelAndView view = new ModelAndView("configure/config_number/redis_data");
+
+
+        //删除操作
+        ResponseData data = configNumberInfoService.deleteRedis(configNumberInfoValidator.getNumberCode());
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("result", "2222");
+        return view;
+    }
 }

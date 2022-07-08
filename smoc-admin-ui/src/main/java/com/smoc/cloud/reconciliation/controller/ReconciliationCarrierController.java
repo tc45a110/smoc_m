@@ -5,8 +5,10 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.reconciliation.ReconciliationCarrierItemsValidator;
 import com.smoc.cloud.common.smoc.reconciliation.model.ReconciliationChannelCarrierModel;
 import com.smoc.cloud.common.smoc.reconciliation.model.ReconciliationEnterpriseModel;
+import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.reconciliation.service.ReconciliationCarrierService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -45,6 +48,7 @@ public class ReconciliationCarrierController {
         params.setPageSize(3);
         params.setCurrentPage(1);
         ReconciliationChannelCarrierModel reconciliationChannelCarrierModel = new ReconciliationChannelCarrierModel();
+        reconciliationChannelCarrierModel.setChannelPeriod(DateTimeUtils.getMonth());
         params.setParams(reconciliationChannelCarrierModel);
 
         //查询
@@ -86,29 +90,40 @@ public class ReconciliationCarrierController {
     }
 
     /**
-     * 运营商对账
+     * 运营商对账中心
      *
      * @return
      */
-    @RequestMapping(value = "/reconciliation/{id}", method = RequestMethod.GET)
-    public ModelAndView reconciliation(@PathVariable String id, HttpServletRequest request) {
-        ModelAndView view = new ModelAndView("reconciliation/finance_reconciliation_carrier_reconciliation");
+    @RequestMapping(value = "/reconciliation/center/{channelProvder}/{startDate}", method = RequestMethod.GET)
+    public ModelAndView reconciliation_center(@PathVariable String channelProvder,@PathVariable String startDate, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("reconciliation/finance_reconciliation_carrier_reconciliation_center");
 
-        //查询数据
+        view.addObject("channelProvder", channelProvder);
+        view.addObject("startDate", startDate);
 
         return view;
     }
 
     /**
-     * 运营商对账中心
+     * 运营商对账
      *
      * @return
      */
-    @RequestMapping(value = "/reconciliation/center/{id}", method = RequestMethod.GET)
-    public ModelAndView reconciliation_center(@PathVariable String id, HttpServletRequest request) {
-        ModelAndView view = new ModelAndView("reconciliation/finance_reconciliation_carrier_reconciliation_center");
+    @RequestMapping(value = "/reconciliation/{channelProvder}/{startDate}", method = RequestMethod.GET)
+    public ModelAndView reconciliation(@PathVariable String channelProvder,@PathVariable String startDate, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("reconciliation/finance_reconciliation_carrier_reconciliation");
 
         //查询数据
+        ResponseData<List<ReconciliationCarrierItemsValidator>> data = reconciliationCarrierService.findReconciliationCarrier(startDate,channelProvder);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("list", data.getData());
+        view.addObject("channelProvder", channelProvder);
+        view.addObject("startDate", startDate);
+        view.addObject("rowspan", data.getData().size());
 
         return view;
     }

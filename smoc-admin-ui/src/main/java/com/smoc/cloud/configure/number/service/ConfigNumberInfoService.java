@@ -99,4 +99,29 @@ public class ConfigNumberInfoService {
             return ResponseDataUtil.buildError(e.getMessage());
         }
     }
+
+    /**
+     * 查询携号转网数据是否在redis库
+     * @param numberCode
+     * @return
+     */
+    public ResponseData<ConfigNumberInfoValidator> findRedis(String numberCode) {
+        try {
+            ResponseData<ConfigNumberInfoValidator> data = this.configNumberInfoFeignClient.findRedis(numberCode);
+            return data;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    public ResponseData deleteRedis(String numberCode) {
+        try {
+            ResponseData data = this.configNumberInfoFeignClient.deleteRedis(numberCode);
+            return data;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
 }

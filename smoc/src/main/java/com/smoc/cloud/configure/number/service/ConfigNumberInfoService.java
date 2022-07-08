@@ -26,6 +26,7 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.Pipeline;
@@ -129,7 +130,7 @@ public class ConfigNumberInfoService {
 
         Jedis jedis = jedisPool.getResource();
         try {
-            jedis.set(RedisSerializer.string().serialize(RedisConstant.MOBILE_PORTABILITY +entity.getNumberCode()), RedisSerializer.string().serialize(new Gson().toJson(entity.getCarrier())));
+            jedis.set(RedisConstant.MOBILE_PORTABILITY +entity.getNumberCode(),entity.getCarrier());
         } finally {
             jedis.close();
         }
@@ -184,7 +185,7 @@ public class ConfigNumberInfoService {
         try {
             Pipeline pipelined = jedis.pipelined();
             for (int i = 0; i < list.size(); i++) {
-                pipelined.set(RedisSerializer.string().serialize(RedisConstant.MOBILE_PORTABILITY + list.get(i).getColumn1()), RedisSerializer.string().serialize(new Gson().toJson(configNumberInfoValidator.getCarrier())));
+                pipelined.set(RedisConstant.MOBILE_PORTABILITY + list.get(i).getColumn1(), configNumberInfoValidator.getCarrier());
             }
             pipelined.sync();
         } finally {
@@ -195,5 +196,39 @@ public class ConfigNumberInfoService {
 
         //变更加载状态
         //this.configNumberInfoRepository.bathUpdateStatus(list);
+    }
+
+    /**
+     * 查询携号转网数据是否在redis库
+     * @param numberCode
+     * @return
+     */
+    public ResponseData<ConfigNumberInfoValidator> findRedis(String numberCode) {
+
+        ConfigNumberInfoValidator configNumberInfoValidator = new ConfigNumberInfoValidator();
+
+        Jedis jedis = jedisPool.getResource();
+        try {
+            String value = jedis.get(RedisConstant.MOBILE_PORTABILITY +numberCode);
+            if(!StringUtils.isEmpty(value)){
+                configNumberInfoValidator.setCarrier(value);
+            }
+        } finally {
+            jedis.close();
+        }
+
+        configNumberInfoValidator.setNumberCode(numberCode);
+        return ResponseDataUtil.buildSuccess(configNumberInfoValidator);
+    }
+
+    public ResponseData deleteRedis(String numberCode) {
+        Jedis jedis = jedisPool.getResource();
+        try {
+            jedis.del(RedisConstant.MOBILE_PORTABILITY + numberCode);
+        } finally {
+            jedis.close();
+        }
+
+        return ResponseDataUtil.buildSuccess();
     }
 }

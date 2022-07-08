@@ -55,4 +55,15 @@ public interface ConfigNumberInfoFeignClient {
      */
     @RequestMapping(value = "/configure/number/batchSave", method = RequestMethod.POST)
     void batchSave(@RequestBody ConfigNumberInfoValidator configNumberInfoValidator);
+
+    /**
+     * 查询携号转网数据是否在redis库
+     * @param numberCode
+     * @return
+     */
+    @RequestMapping(value = "/configure/number/findRedis/{numberCode}", method = RequestMethod.GET)
+    ResponseData<ConfigNumberInfoValidator> findRedis(@PathVariable String numberCode);
+
+    @RequestMapping(value = "/configure/number/deleteRedis/{numberCode}", method = RequestMethod.GET)
+    ResponseData deleteRedis(@PathVariable String numberCode);
 }

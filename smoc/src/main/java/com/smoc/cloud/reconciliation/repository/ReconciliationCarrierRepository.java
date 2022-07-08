@@ -7,6 +7,7 @@ import com.smoc.cloud.common.smoc.reconciliation.model.ReconciliationChannelCarr
 import com.smoc.cloud.reconciliation.entity.ReconciliationCarrierItems;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 
 
 public interface ReconciliationCarrierRepository extends JpaRepository<ReconciliationCarrierItems, String> {
@@ -18,5 +19,11 @@ public interface ReconciliationCarrierRepository extends JpaRepository<Reconcili
      */
     PageList<ReconciliationChannelCarrierModel> page(PageParams<ReconciliationChannelCarrierModel> pageParams);
 
-
+    /**
+     * 根据运营商和账单周期查询账单
+     * @param startDate
+     * @param channelProvder
+     * @return
+     */
+    List<ReconciliationCarrierItemsValidator> findReconciliationCarrier(String startDate, String channelProvder);
 }

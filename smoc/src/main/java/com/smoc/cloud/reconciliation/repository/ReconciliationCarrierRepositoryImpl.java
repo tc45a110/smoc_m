@@ -35,7 +35,7 @@ public class ReconciliationCarrierRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(" left join ");
         sqlBuffer.append(" (select LEFT (t.CHANNEL_PERIOD, 7)MESSAGE_DATE,t.CHANNEL_PROVDER,t.CHANNEL_PERIOD_STATUS from reconciliation_carrier_items t group by LEFT (t.CHANNEL_PERIOD, 7),t.CHANNEL_PROVDER,t.CHANNEL_PERIOD_STATUS order by LEFT (t.CHANNEL_PERIOD, 7) desc )b ");
         sqlBuffer.append(" on a.MESSAGE_DATE=b.MESSAGE_DATE and a.CHANNEL_PROVDER=b.CHANNEL_PROVDER ");
-        sqlBuffer.append(" where 1=1 ");
+        sqlBuffer.append(" where a.CHANNEL_PROVDER is not null ");
 
         List<Object> paramsList = new ArrayList<Object>();
 
@@ -92,7 +92,7 @@ public class ReconciliationCarrierRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(" t.CHANNEL_PRICE, ");
         sqlBuffer.append(" t.BUSINESS_TYPE, ");
         sqlBuffer.append(" t.MESSAGE_SUCCESS_NUM,");
-        sqlBuffer.append(" a.CARRIER_TOTAL_AMOUNT,");
+        sqlBuffer.append(" IFNULL(a.CARRIER_TOTAL_AMOUNT,0)CARRIER_TOTAL_AMOUNT,");
         sqlBuffer.append(" a.CARRIER_TOTAL_SEND_QUANTITY,");
         sqlBuffer.append(" a.CHANNEL_PERIOD_STATUS");
         sqlBuffer.append(" from view_reconciliation_carrier t left join reconciliation_carrier_items a  ");

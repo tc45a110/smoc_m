@@ -107,4 +107,28 @@ public class CofigNumberInfoController {
 
         configNumberInfoService.batchSave(configNumberInfoValidator);
     }
+
+    /**
+     * 查询携号转网数据是否在redis库
+     * @param numberCode
+     * @return
+     */
+    @RequestMapping(value = "/findRedis/{numberCode}", method = RequestMethod.GET)
+    public ResponseData<ConfigNumberInfoValidator> findRedis(@PathVariable String numberCode) {
+
+        ResponseData<ConfigNumberInfoValidator> data = configNumberInfoService.findRedis(numberCode);
+        return data;
+    }
+    /**
+     * 根据ID 删除
+     *
+     * @param numberCode
+     * @return
+     */
+    @RequestMapping(value = "/deleteRedis/{numberCode}", method = RequestMethod.GET)
+    public ResponseData deleteRedis(@PathVariable String numberCode) {
+
+        return configNumberInfoService.deleteRedis(numberCode);
+    }
+
 }

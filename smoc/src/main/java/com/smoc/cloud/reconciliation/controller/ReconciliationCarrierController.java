@@ -3,6 +3,7 @@ package com.smoc.cloud.reconciliation.controller;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.reconciliation.ReconciliationCarrierItemsValidator;
 import com.smoc.cloud.common.smoc.reconciliation.model.ReconciliationChannelCarrierModel;
 import com.smoc.cloud.reconciliation.service.ReconciliationCarrierService;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
+
+import java.util.List;
 
 /**
  * 运营商对账
@@ -35,5 +38,15 @@ public class ReconciliationCarrierController {
         return reconciliationCarrierService.page(pageParams);
     }
 
+    /**
+     * 根据运营商和账单周期查询账单
+     * @param startDate
+     * @param channelProvder
+     * @return
+     */
+    @RequestMapping(value = "/findReconciliationCarrier/{startDate}/{channelProvder}", method = RequestMethod.GET)
+    public ResponseData<List<ReconciliationCarrierItemsValidator>> findReconciliationCarrier(@PathVariable String startDate, @PathVariable String channelProvder) {
 
+        return reconciliationCarrierService.findReconciliationCarrier(startDate,channelProvder);
+    }
 }

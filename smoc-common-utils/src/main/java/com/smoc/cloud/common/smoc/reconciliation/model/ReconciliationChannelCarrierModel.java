@@ -22,6 +22,7 @@ public class ReconciliationChannelCarrierModel {
 
     private int rowspan;
 
+
     private List<ReconciliationCarrierItemsValidator> carrierList = new ArrayList<>();
 
 }
