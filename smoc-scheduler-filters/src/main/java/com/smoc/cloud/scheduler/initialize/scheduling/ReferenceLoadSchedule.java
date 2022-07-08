@@ -4,13 +4,13 @@ package com.smoc.cloud.scheduler.initialize.scheduling;
 import com.smoc.cloud.scheduler.initialize.Reference;
 import com.smoc.cloud.scheduler.initialize.entity.AccountBaseInfo;
 import com.smoc.cloud.scheduler.initialize.entity.AccountFinanceInfo;
-import com.smoc.cloud.scheduler.initialize.entity.AccountMessagePrice;
 import com.smoc.cloud.scheduler.initialize.model.AccountChannelBusinessModel;
 import com.smoc.cloud.scheduler.initialize.model.ContentRouteBusinessModel;
 import com.smoc.cloud.scheduler.initialize.model.MessagePriceBusinessModel;
 import com.smoc.cloud.scheduler.initialize.repository.AccountRepository;
 import com.smoc.cloud.scheduler.initialize.repository.ChannelRepository;
 import com.smoc.cloud.scheduler.service.channel.ChannelService;
+import com.smoc.cloud.scheduler.service.finance.FinanceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -24,6 +24,9 @@ import java.util.Map;
 @Slf4j
 @Component
 public class ReferenceLoadSchedule {
+
+    @Autowired
+    private FinanceService financeService;
 
     @Autowired
     private AccountRepository accountRepository;
@@ -46,6 +49,7 @@ public class ReferenceLoadSchedule {
 
         log.info("[加载业务账号财务信息]");
         Map<String, AccountFinanceInfo> accountFinances = accountRepository.getAccountFinanceInfo();
+        financeService.syncFinanceAccountToRedis(accountFinances);
         Reference.accountFinances = accountFinances;
 
         log.info("[加载业务账号运营商价格信息]");

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Setter
 @Getter
@@ -123,6 +124,29 @@ public class BusinessRouteValue implements Serializable {
      * account 平台账号配置的运营商
      */
     private String businessCarrier;
+
+    /**
+     * 付费方式 1 预付费 2后付费
+     */
+    private String payType;
+    /**
+     * 计费方式  1 下发运营商计费 2 回执成功计费
+     */
+    private String chargeType;
+
+    /**
+     * 短信计费价格
+     */
+    private BigDecimal messagePrice;
+    /**
+     * 扣费的财务账户id
+     */
+    private String financeId;
+
+    /**
+     * 路由的最终通道id
+     */
+    private String channelId;
 
     /**
      * 数据状态

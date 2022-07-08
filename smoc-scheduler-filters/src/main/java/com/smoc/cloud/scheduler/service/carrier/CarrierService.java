@@ -3,13 +3,16 @@ package com.smoc.cloud.scheduler.service.carrier;
 import com.smoc.cloud.common.filters.utils.RedisConstant;
 import com.smoc.cloud.scheduler.batch.filters.model.BusinessRouteValue;
 import com.smoc.cloud.scheduler.initialize.entity.AccountBaseInfo;
-import com.smoc.cloud.scheduler.service.filters.service.FiltersRedisDataService;
+import com.smoc.cloud.scheduler.service.redis.FiltersRedisDataService;
 import com.smoc.cloud.scheduler.tools.utils.InsideStatusCodeConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+/**
+ * 运营商业务逻辑
+ */
 @Slf4j
 @Service
 public class CarrierService {
@@ -71,7 +74,6 @@ public class CarrierService {
             businessRouteValue.setSegmentCarrier(segmentCarrier.toString().split("-")[0]);
             return;
         }
-
 
 
         businessRouteValue.setStatusCode(InsideStatusCodeConstant.StatusCode.INVAREQ.name());

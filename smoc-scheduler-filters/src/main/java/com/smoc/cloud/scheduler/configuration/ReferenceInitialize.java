@@ -11,6 +11,7 @@ import com.smoc.cloud.scheduler.initialize.model.MessagePriceBusinessModel;
 import com.smoc.cloud.scheduler.initialize.repository.AccountRepository;
 import com.smoc.cloud.scheduler.initialize.repository.ChannelRepository;
 import com.smoc.cloud.scheduler.service.channel.ChannelService;
+import com.smoc.cloud.scheduler.service.finance.FinanceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -25,6 +26,9 @@ import java.util.Map;
 @Slf4j
 @Component
 public class ReferenceInitialize implements ApplicationRunner {
+
+    @Autowired
+    private FinanceService financeService;
 
     @Autowired
     private AccountRepository accountRepository;
@@ -44,6 +48,7 @@ public class ReferenceInitialize implements ApplicationRunner {
 
         log.info("[加载业务账号财务信息]");
         Map<String, AccountFinanceInfo> accountFinances = accountRepository.getAccountFinanceInfo();
+        financeService.syncFinanceAccountToRedis(accountFinances);
         Reference.accountFinances = accountFinances;
 
         log.info("[加载业务账号运营商价格信息]");

@@ -99,6 +99,9 @@ public class RedisConstant {
     //业务账号签名模版
     public static final String FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE_SIGN = FILTERS_CONFIG_ACCOUNT_WORDS_TEMPLATE + "sign:";
 
+    //业务账号财务账户
+    public static final String FILTERS_CONFIG_ACCOUNT_FINANCE = FILTERS_CONFIG_ACCOUNT + "finance:";
+
     /**
      * 临时数据，表示有有效期，基本上都是限流、限量
      */

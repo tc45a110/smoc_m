@@ -27,32 +27,32 @@ public class MessagePriceBusinessModel {
      * @param areaCode
      * @return
      */
-    public BigDecimal getMessagePrice(String carrier, String areaCode) {
+    public AccountMessagePrice getAccountMessagePrice(String carrier, String areaCode) {
 
         if ("CMCC".equals(carrier)) {
             if(null == cmccAccountMessagePrice){
                 return null;
             }
-            return cmccAccountMessagePrice.getCarrierPrice();
+            return cmccAccountMessagePrice;
         }
         if ("TELC".equals(carrier)) {
             if(null == telcAccountMessagePrice){
                 return null;
             }
-            telcAccountMessagePrice.getCarrierPrice();
+            return telcAccountMessagePrice;
         }
         if ("UNIC".equals(carrier)) {
             if(null == unicAccountMessagePrice){
                 return null;
             }
-            unicAccountMessagePrice.getCarrierPrice();
+            return unicAccountMessagePrice;
         }
         if ("INTL".equals(carrier)) {
             AccountMessagePrice accountMessagePrice = intlAccountMessagePrices.get(areaCode);
             if (null == accountMessagePrice) {
                 return null;
             }
-            return accountMessagePrice.getCarrierPrice();
+            return accountMessagePrice;
         }
 
         return null;

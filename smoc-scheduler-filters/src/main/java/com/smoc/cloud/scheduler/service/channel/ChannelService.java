@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 通道业务逻辑
+ */
 @Service
 public class ChannelService {
 
@@ -18,6 +21,7 @@ public class ChannelService {
 
     /**
      * 内容通道路由
+     * 根据业务账号配置的路由内容路由到响应通道
      *
      * @param accountId
      * @param phoneNumber
@@ -39,6 +43,7 @@ public class ChannelService {
 
     /**
      * 业务账号通道路由
+     * 根据业务账号本身配置的通道信息
      *
      * @param accountId
      * @param carrier
@@ -57,6 +62,7 @@ public class ChannelService {
 
     /**
      * 构建业务账号-通道业务模型
+     * 构建业务账号业务账号通道路由的业务模型
      *
      * @return
      */

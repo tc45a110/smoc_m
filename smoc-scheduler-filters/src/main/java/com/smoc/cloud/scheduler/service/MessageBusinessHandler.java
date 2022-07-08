@@ -1,6 +1,5 @@
 package com.smoc.cloud.scheduler.service;
 
-import com.google.gson.Gson;
 import com.smoc.cloud.scheduler.batch.filters.model.BusinessRouteValue;
 import com.smoc.cloud.scheduler.batch.filters.repository.RouteMessageRepository;
 import com.smoc.cloud.scheduler.initialize.Reference;
@@ -14,7 +13,6 @@ import com.smoc.cloud.scheduler.service.finance.FinanceService;
 import com.smoc.cloud.scheduler.service.log.LogService;
 import com.smoc.cloud.scheduler.tools.utils.FilterResponseCodeConstant;
 import com.smoc.cloud.scheduler.tools.utils.InsideStatusCodeConstant;
-import lombok.Generated;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 代理服务核心流程
+ */
 @Slf4j
 @Service
 public class MessageBusinessHandler {
@@ -122,27 +123,10 @@ public class MessageBusinessHandler {
             }
 
             /**
-             * 账号、号码、内容、区域、限流......
-             * 考虑到优化操作，此处通道过滤排除
-             */
-            Map<String, String> filterResult = fullFilterParamsFilterService.filter(businessRouteValue.getPhoneNumber(), businessRouteValue.getAccountId(), businessRouteValue.getMessageContent(), businessRouteValue.getAccountTemplateId(), businessRouteValue.getBusinessCarrier(), businessRouteValue.getAreaCode(), null);
-            if ("1208".equals(filterResult.get("code")) || "1211".equals(filterResult.get("code"))) { //1208、1211表示包含审核词
-                businessRouteValue.setStatusCode(InsideStatusCodeConstant.StatusCode.AUDIT.name());
-                businessRouteValue.setStatusMessage(filterResult.get("message"));
-                auditList.add(businessRouteValue);
-                continue;
-            } else if ("true".equals(filterResult.get("result"))) {//没有通过过滤
-                businessRouteValue.setStatusMessage(filterResult.get("message"));
-                businessRouteValue.setStatusCode(FilterResponseCodeConstant.mapping(filterResult.get("code")));
-                errorList.add(businessRouteValue);
-                logService.error(businessRouteValue);
-                continue;
-            }
-
-            /**
              * 账户路由到通道
              */
             String channelId = channelService.accountRouteChannel(businessRouteValue.getAccountId(), businessRouteValue.getSegmentCarrier(), businessRouteValue.getAreaCode());
+            businessRouteValue.setChannelId(channelId);
             if (StringUtils.isEmpty(channelId)) {
                 businessRouteValue.setStatusCode(InsideStatusCodeConstant.StatusCode.NOROUTE.name());
                 businessRouteValue.setStatusMessage("没找到对英的通道！");
@@ -156,15 +140,22 @@ public class MessageBusinessHandler {
              */
             String routeChannelId = channelService.contentRouteChannel(businessRouteValue.getAccountId(), businessRouteValue.getPhoneNumber(), businessRouteValue.getSegmentCarrier(), businessRouteValue.getAreaCode(), businessRouteValue.getMessageContent());
             if (!StringUtils.isEmpty(routeChannelId)) {
-                channelId = routeChannelId;
+                businessRouteValue.setChannelId(routeChannelId);
             }
 
             /**
-             * 逻辑处理-通道过滤，优化通道过滤位置
+             * 账号、号码、内容、区域、限流......
              */
-            Map<String, String> channelMessageParamsFilterResult = channelMessageFilter.filter(channelId, businessRouteValue.getMessageContent());
-            if (!"false".equals(channelMessageParamsFilterResult.get("result"))) {
-                businessRouteValue.setStatusMessage(channelMessageParamsFilterResult.get("message"));
+            Map<String, String> filterResult = fullFilterParamsFilterService.filter(businessRouteValue.getPhoneNumber(), businessRouteValue.getAccountId(), businessRouteValue.getMessageContent(), businessRouteValue.getAccountTemplateId(), businessRouteValue.getBusinessCarrier(), businessRouteValue.getAreaCode(), businessRouteValue.getChannelId());
+            //1208、1211表示包含审核词
+            if ("1208".equals(filterResult.get("code")) || "1211".equals(filterResult.get("code"))) { //1208、1211表示包含审核词
+                businessRouteValue.setStatusCode(InsideStatusCodeConstant.StatusCode.AUDIT.name());
+                businessRouteValue.setStatusMessage(filterResult.get("message"));
+                auditList.add(businessRouteValue);
+                logService.warning(businessRouteValue);
+                continue;
+            } else if ("true".equals(filterResult.get("result"))) {//没有通过过滤
+                businessRouteValue.setStatusMessage(filterResult.get("message"));
                 businessRouteValue.setStatusCode(FilterResponseCodeConstant.mapping(filterResult.get("code")));
                 errorList.add(businessRouteValue);
                 logService.error(businessRouteValue);
@@ -173,8 +164,9 @@ public class MessageBusinessHandler {
 
             /**
              * 加载数据-获得响应运营商短信单价
+             * 同时初始化了payType、chargeType参数
              */
-            BigDecimal messagePrice = financeService.getAccountMessagePrice(businessRouteValue.getAccountId(), businessRouteValue.getSegmentCarrier(), businessRouteValue.getAreaCode());
+            BigDecimal messagePrice = financeService.getAccountMessagePrice(businessRouteValue);
             if (null == messagePrice) {
                 businessRouteValue.setStatusCode(InsideStatusCodeConstant.StatusCode.NOPRICE.name());
                 businessRouteValue.setStatusMessage("未找到对应的通道价格！");
@@ -185,8 +177,9 @@ public class MessageBusinessHandler {
 
             /**
              * 验证账户余额，是否够本次消费
+             * 同时初始化了financeId
              */
-            Boolean checked = financeService.checkingAccountFinance(businessRouteValue.getAccountId(), businessRouteValue.getMessageTotal(), messagePrice);
+            Boolean checked = financeService.checkingAccountFinance(businessRouteValue);
             if (!checked) {
                 businessRouteValue.setStatusCode(InsideStatusCodeConstant.StatusCode.NOMONEY.name());
                 businessRouteValue.setStatusMessage("财务账户余额不足！");
@@ -194,27 +187,27 @@ public class MessageBusinessHandler {
                 logService.error(businessRouteValue);
                 continue;
             }
+
+            /**
+             * 成功通过所以关卡
+             */
             successList.add(businessRouteValue);
+            logService.info(businessRouteValue);
 
         }
-
 
         /**
          * 根据过滤结果，进行分业务处理
          */
         if (successList.size() > 0) {//成功通过过滤
-            log.info("[数据过滤]条数：{}", successList.size());
             routeMessageRepository.handlerBusinessBatch(successList);
         }
 
         if (auditList.size() > 0) { //要经过审核
-            log.info("[审核过滤]条数：{}", auditList.size());
             routeMessageRepository.generateMessageAudit(auditList);
         }
 
         if (errorList.size() > 0) {//没有通过过滤,直接生成报告
-            //log.info("[没通过过滤]条数：{}", errorList.size());
-            //log.info(new Gson().toJson(errorList));
             routeMessageRepository.generateErrorMessageResponse(errorList);
         }
 

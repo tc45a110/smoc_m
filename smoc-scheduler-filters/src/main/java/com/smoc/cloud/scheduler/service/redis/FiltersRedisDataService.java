@@ -1,4 +1,4 @@
-package com.smoc.cloud.scheduler.service.filters.service;
+package com.smoc.cloud.scheduler.service.redis;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
@@ -57,6 +57,18 @@ public class FiltersRedisDataService {
      */
     public Object hget(String redisKey, String hashKey) {
         return redisTemplate.opsForHash().get(redisKey, hashKey);
+    }
+
+
+    /**
+     * @description 新增map值
+     * @param key
+     * @param field
+     * @param value
+     * @return void
+     */
+    public void hset(String key, Object field, Object value) {
+        redisTemplate.opsForHash().put(key, field, value);
     }
 
     /**
