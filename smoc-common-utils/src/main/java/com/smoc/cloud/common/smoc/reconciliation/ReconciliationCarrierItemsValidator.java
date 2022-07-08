@@ -15,13 +15,13 @@ public class ReconciliationCarrierItemsValidator {
     private String channelId;
     private String srcId;
     private String businessType;
-    private int totalSendQuantity;
-    private int totalSubmitQuantity;
+    private long totalSendQuantity;
+    private long totalSubmitQuantity;
     private BigDecimal totalAmount;
-    private int totalNoReportQuantity;
+    private long totalNoReportQuantity;
     private BigDecimal price;
     private BigDecimal carrierTotalAmount;
-    private int carrierTotalSendQuantity;
+    private long carrierTotalSendQuantity;
     private Integer carrierTotalSubmitQuantity;
     private Integer carrierTotalNoReportQuantity;
     private String channelPeriodStatus;
@@ -31,4 +31,8 @@ public class ReconciliationCarrierItemsValidator {
     private String updatedBy;
     private Date updatedTime;
 
+    //条数差额
+    private long quantityDifference;
+    //金额差额
+    private BigDecimal amountDifference;
 }

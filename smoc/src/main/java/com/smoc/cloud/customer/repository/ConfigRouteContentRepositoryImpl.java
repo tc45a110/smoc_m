@@ -5,28 +5,23 @@ import com.smoc.cloud.common.BasePageRepository;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.smoc.customer.qo.AccountContentRepairQo;
-import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
-import com.smoc.cloud.common.smoc.customer.validator.AccountChannelInfoValidator;
-import com.smoc.cloud.common.smoc.customer.validator.AccountFinanceInfoValidator;
-import com.smoc.cloud.common.smoc.customer.validator.ConfigContentRepairRuleValidator;
+import com.smoc.cloud.common.smoc.customer.validator.ConfigRouteContentRuleValidator;
 import com.smoc.cloud.customer.rowmapper.*;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 2020/5/28 15:44
  **/
-public class ConfigContentRepairRepositoryImpl extends BasePageRepository {
+public class ConfigRouteContentRepositoryImpl extends BasePageRepository {
 
 
-    public PageList<ConfigContentRepairRuleValidator> page(PageParams<ConfigContentRepairRuleValidator> pageParams) {
+    public PageList<ConfigRouteContentRuleValidator> page(PageParams<ConfigRouteContentRuleValidator> pageParams) {
 
         //查询条件
-        ConfigContentRepairRuleValidator qo = pageParams.getParams();
+        ConfigRouteContentRuleValidator qo = pageParams.getParams();
 
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");
@@ -34,17 +29,18 @@ public class ConfigContentRepairRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", t.ACCOUNT_ID");
         sqlBuffer.append(", t.CARRIER");
         sqlBuffer.append(", t.AREA_CODES");
-        sqlBuffer.append(", t.REPAIR_CONTENT");
-        sqlBuffer.append(", t.CHANNEL_REPAIR_ID");
+        sqlBuffer.append(", t.ROUTE_CONTENT");
+        sqlBuffer.append(", t.ROUTE_REVERSE_CONTENT");
+        sqlBuffer.append(", t.CHANNEL_ID");
         sqlBuffer.append(", t.MOBILE_NUM");
         sqlBuffer.append(", t.MIN_CONTENT");
         sqlBuffer.append(", t.MAX_CONTENT");
-        sqlBuffer.append(", t.REPAIR_STATUS");
+        sqlBuffer.append(", t.ROUTE_STATUS");
         sqlBuffer.append(", e.ACCOUNT_NAME");
         sqlBuffer.append(", b.CHANNEL_NAME");
         sqlBuffer.append(", e.BUSINESS_TYPE");
-        sqlBuffer.append("  from config_content_repair_rule t left join account_base_info e on t.ACCOUNT_ID = e.ACCOUNT_ID");
-        sqlBuffer.append("  left join config_channel_basic_info b on t.CHANNEL_REPAIR_ID = b.CHANNEL_ID");
+        sqlBuffer.append("  from config_route_content_rule t left join account_base_info e on t.ACCOUNT_ID = e.ACCOUNT_ID");
+        sqlBuffer.append("  left join config_channel_basic_info b on t.CHANNEL_ID = b.CHANNEL_ID");
         sqlBuffer.append("  where 1=1");
 
         List<Object> paramsList = new ArrayList<Object>();
@@ -69,9 +65,9 @@ public class ConfigContentRepairRepositoryImpl extends BasePageRepository {
             paramsList.add(qo.getBusinessType().trim());
         }
 
-        if (!StringUtils.isEmpty(qo.getRepairContent())) {
-            sqlBuffer.append(" and t.REPAIR_CONTENT like ?");
-            paramsList.add("%"+qo.getRepairContent().trim()+"%");
+        if (!StringUtils.isEmpty(qo.getRouteContent())) {
+            sqlBuffer.append(" and t.ROUTE_CONTENT like ?");
+            paramsList.add("%"+qo.getRouteContent().trim()+"%");
         }
 
         if (!StringUtils.isEmpty(qo.getAreaCodes())) {
@@ -84,9 +80,9 @@ public class ConfigContentRepairRepositoryImpl extends BasePageRepository {
             paramsList.add("%"+qo.getChannelName().trim()+"%");
         }
 
-        if (!StringUtils.isEmpty(qo.getRepairStatus())) {
+        if (!StringUtils.isEmpty(qo.getRouteStatus())) {
             sqlBuffer.append(" and t.REPAIR_STATUS = ?");
-            paramsList.add(qo.getRepairStatus().trim());
+            paramsList.add(qo.getRouteStatus().trim());
         }
 
         sqlBuffer.append(" order by t.CREATED_TIME desc, t.id");
@@ -95,7 +91,7 @@ public class ConfigContentRepairRepositoryImpl extends BasePageRepository {
         Object[] params = new Object[paramsList.size()];
         paramsList.toArray(params);
 
-        PageList<ConfigContentRepairRuleValidator> pageList = this.queryByPageForMySQL(sqlBuffer.toString(), params, pageParams.getCurrentPage(), pageParams.getPageSize(), new ConfigContentRepairRuleRowMapper());
+        PageList<ConfigRouteContentRuleValidator> pageList = this.queryByPageForMySQL(sqlBuffer.toString(), params, pageParams.getCurrentPage(), pageParams.getPageSize(), new ConfigContentRepairRuleRowMapper());
         pageList.getPageParams().setParams(qo);
 
         return pageList;

@@ -83,67 +83,76 @@
                     <div class="panel-heading">
                         <h3 class="panel-title">发送日志明细列表</h3>
                     </div>
-                    <div class="panel-body">
-                        <div class="row" th:each="info:${list}">
-                            <div class="col-md-12">
-                                <div class="property-card property-horizontal" style="margin-bottom:10px;">
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <div class="property-content"
-                                                 style="height:270px">
-                                                <div class="listingInfo">
-                                                    <div class="">
-                                                        <h5 style="padding-left:10px">
-                                                            手机号：[[${info.phoneNumber}]]
-                                                        </h5>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">业务账号：[[${info.businessAccount}]]</p>
-                                                        <p style="font-size:12px">信息分类： <mpm:tag identity="infoType" show-type="label" key="code" th:value="${info.infoType}"/></p>
-                                                        <p style="font-size:12px">业务类型：<mpm:tag identity="businessType" show-type="label" key="code" th:value="${info.businessType}"/></p>
-                                                        <p style="font-size:12px">下发扩展码：[[${info.extcode}]]</p>
-                                                        <p style="font-size:12px">区域地市：[[${info.areaName}]]&nbsp;[[${info.cityName}]]</p>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">提交方式：[[${info.userSubmitType}]]</p>
-                                                        <p style="font-size:12px">提交时间：[[${info.userSubmitTime}]]</p>
-                                                        <p style="font-size:12px">状态报告时间：[[${info.mrTime}]]</p>
-                                                        <p style="font-size:12px">耗时时长：[[${info.timeElapsed}]]</p>
-                                                        <p style="font-size:12px">模板ID：[[${info.templateId}]]</p>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">号段运营商：<mpm:tag identity="carrier" show-type="label" key="code" th:value="${info.segmentCarrier}"/></p>
-                                                        <p style="font-size:12px">业务运营商：<mpm:tag identity="carrier" show-type="label" key="code" th:value="${info.businessCarrier}"/></p>
-                                                        <p style="font-size:12px">通道ID：[[${info.channelId}]]</p>
-                                                        <p style="font-size:12px">通道接入码：[[${info.channelSrcid}]]</p>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">计费条数：[[${info.messageNumber}]]</p>
-                                                        <p style="font-size:12px">计费账号：[[${info.financeAccountId}]]</p>
-                                                        <p style="font-size:12px">计费单价：[[${info.messagePrice}]]</p>
-                                                        <p style="font-size:12px">计费总额：[[${info.messageFee}]]</p>
-                                                    </div>
-                                                    <div class="col-sm-6">
-                                                        <p style="font-size:12px">状态码：[[${info.statusCodeExtend}]]</p>
-                                                    </div>
-                                                </div>
-                                                <div class="property-action">
-                                                    <span style="padding-left:10px;font-size:12px">
-                                                        短信内容：<span class="text-overflow" data-toggle="tooltip" data-placement="bottom"
-                                                                   th:data-original-title="${info.messageContent}">[[${info.messageContent}]]</span>
-                                                    </span>
-                                                </div>
-                                                <!-- end. Card actions -->
-                                            </div>
-                                        </div>
-                                        <!-- /col 8 -->
-                                    </div>
-                                </div>
 
-                            </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table table-hover m-10" style="margin-top: -12px;table-layout:fixed;">
+                                <thead>
+                                <tr>
+                                    <th>业务账号/账号名称</th>
+                                    <th>业务类型</th>
+                                    <th>运营商</th>
+                                    <th>计费条数/手机号</th>
+                                    <th>省份/地市</th>
+                                    <th>状态码</th>
+                                    <th>提交时间/状态报告时间</th>
+                                    <th>耗时时长/短信内容</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="info:${list}">
+                                    <td style="line-height: 26px">
+                                        [[${info.businessAccount}]]<br>[[${info.accountName}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <mpm:tag identity="businessType" show-type="button"
+                                                 key="code" th:value="${info.businessType}"
+                                                 class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;MULTI_SMS,btn btn-brown btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;5G_SMS,btn btn-primary btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-inverse btn-rounded btn-sm waves-effect waves-light"/>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <mpm:tag identity="carrier" show-type="label" key="code"
+                                                 th:value="${info.businessCarrier}"/>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px;">
+                                        [[${info.messageNumber}]]
+                                        <br>
+                                        [[${info.phoneNumber}]]
+                                    </td>
+
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        [[${info.areaName}]]&nbsp;[[${info.cityName}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        [[${info.statusCodeExtend}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
+                                        [[${info.userSubmitTime}]]
+                                        <br>
+                                        [[${info.mrTime}]]
+                                    </td>
+                                    <td>
+                                        [[${info.timeElapsed}]]
+                                        <br>
+                                        <span style="padding-left:10px;font-size:12px">
+                                            <span class="text-overflow" data-toggle="tooltip" data-placement="bottom"
+                                                       th:data-original-title="${info.messageContent}">[[${info.messageContent}]]</span>
+                                        </span>
+                                    </td>
+
+
+                                </tr>
+
+                                </tbody>
+
+                            </table>
+
+                            <hr>
                         </div>
+
                         <th:block th:insert="fragments/page_fragments :: page"/>
                     </div>
+
+
                 </div>
 
             </div>

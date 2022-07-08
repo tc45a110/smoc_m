@@ -1,6 +1,6 @@
 package com.smoc.cloud.customer.rowmapper;
 
-import com.smoc.cloud.common.smoc.customer.validator.ConfigContentRepairRuleValidator;
+import com.smoc.cloud.common.smoc.customer.validator.ConfigRouteContentRuleValidator;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -9,25 +9,26 @@ import java.sql.SQLException;
 /**
  * 复杂查询对象封装
  **/
-public class ConfigContentRepairRuleRowMapper implements RowMapper<ConfigContentRepairRuleValidator> {
+public class ConfigContentRepairRuleRowMapper implements RowMapper<ConfigRouteContentRuleValidator> {
 
     @Override
-    public ConfigContentRepairRuleValidator mapRow(ResultSet resultSet, int i) throws SQLException {
+    public ConfigRouteContentRuleValidator mapRow(ResultSet resultSet, int i) throws SQLException {
 
-        ConfigContentRepairRuleValidator qo = new ConfigContentRepairRuleValidator();
+        ConfigRouteContentRuleValidator qo = new ConfigRouteContentRuleValidator();
         qo.setId(resultSet.getString("ID"));
         qo.setAccountId(resultSet.getString("ACCOUNT_ID"));
         qo.setAccountName(resultSet.getString("ACCOUNT_NAME"));
         qo.setCarrier(resultSet.getString("CARRIER"));
         qo.setAreaCodes(resultSet.getString("AREA_CODES"));
-        qo.setRepairContent(resultSet.getString("REPAIR_CONTENT"));
-        qo.setChannelRepairId(resultSet.getString("CHANNEL_REPAIR_ID"));
+        qo.setRouteContent(resultSet.getString("ROUTE_CONTENT"));
+        qo.setRouteReverseContent(resultSet.getString("ROUTE_REVERSE_CONTENT"));
+        qo.setChannelId(resultSet.getString("CHANNEL_ID"));
         qo.setChannelName(resultSet.getString("CHANNEL_NAME"));
         qo.setBusinessType(resultSet.getString("BUSINESS_TYPE"));
         qo.setMobileNum(resultSet.getString("MOBILE_NUM"));
         qo.setMinContent(resultSet.getInt("MIN_CONTENT"));
         qo.setMaxContent(resultSet.getInt("MAX_CONTENT"));
-        qo.setRepairStatus(resultSet.getString("REPAIR_STATUS"));
+        qo.setRouteStatus(resultSet.getString("ROUTE_STATUS"));
 
         return qo;
     }

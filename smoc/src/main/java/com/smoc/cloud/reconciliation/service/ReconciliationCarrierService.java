@@ -1,0 +1,34 @@
+package com.smoc.cloud.reconciliation.service;
+
+import com.smoc.cloud.common.page.PageList;
+import com.smoc.cloud.common.page.PageParams;
+import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.smoc.reconciliation.model.ReconciliationChannelCarrierModel;
+import com.smoc.cloud.reconciliation.repository.ReconciliationCarrierRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+
+@Slf4j
+@Service
+public class ReconciliationCarrierService {
+
+    @Autowired
+    private ReconciliationCarrierRepository reconciliationCarrierRepository;
+
+    /**
+     * 查询运营商账单
+     * @param pageParams
+     * @return
+     */
+    public ResponseData<PageList<ReconciliationChannelCarrierModel>> page(PageParams<ReconciliationChannelCarrierModel> pageParams){
+
+        PageList<ReconciliationChannelCarrierModel> pageList = reconciliationCarrierRepository.page(pageParams);
+
+
+        return ResponseDataUtil.buildSuccess(pageList);
+    }
+
+}

@@ -6,11 +6,10 @@ import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.customer.qo.AccountContentRepairQo;
-import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
-import com.smoc.cloud.common.smoc.customer.validator.ConfigContentRepairRuleValidator;
+import com.smoc.cloud.common.smoc.customer.validator.ConfigRouteContentRuleValidator;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
-import com.smoc.cloud.customer.service.ConfigContentRepairService;
+import com.smoc.cloud.customer.service.ConfigRouteContentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -19,16 +18,16 @@ import org.springframework.web.context.WebApplicationContext;
 
 
 /**
- * 账号内容失败补发接口
+ * 账号内容路由接口
  **/
 @Slf4j
 @RestController
 @RequestMapping("configure/content/repair")
 @Scope(value= WebApplicationContext.SCOPE_REQUEST)
-public class ConfigContentRepairController {
+public class ConfigRouteContentController {
 
     @Autowired
-    private ConfigContentRepairService configContentRepairService;
+    private ConfigRouteContentService configRouteContentService;
 
     /**
      * 查询通道失败补发列表
@@ -36,9 +35,9 @@ public class ConfigContentRepairController {
      * @return
      */
     @RequestMapping(value = "/page", method = RequestMethod.POST)
-    public PageList<ConfigContentRepairRuleValidator> page(@RequestBody PageParams<ConfigContentRepairRuleValidator> pageParams) {
+    public PageList<ConfigRouteContentRuleValidator> page(@RequestBody PageParams<ConfigRouteContentRuleValidator> pageParams) {
 
-        return configContentRepairService.page(pageParams);
+        return configRouteContentService.page(pageParams);
     }
 
     /**
@@ -49,7 +48,7 @@ public class ConfigContentRepairController {
     @RequestMapping(value = "/accountList", method = RequestMethod.POST)
     public PageList<AccountContentRepairQo> accountList(@RequestBody PageParams<AccountContentRepairQo> pageParams) {
 
-        return configContentRepairService.accountList(pageParams);
+        return configRouteContentService.accountList(pageParams);
     }
 
     /**
@@ -67,7 +66,7 @@ public class ConfigContentRepairController {
             return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(validator));
         }
 
-        ResponseData data = configContentRepairService.findById(id);
+        ResponseData data = configRouteContentService.findById(id);
         return data;
     }
 
@@ -77,7 +76,7 @@ public class ConfigContentRepairController {
      * @return
      */
     @RequestMapping(value = "/save/{op}", method = RequestMethod.POST)
-    public ResponseData save(@RequestBody ConfigContentRepairRuleValidator configContentRepairRuleValidator, @PathVariable String op) {
+    public ResponseData save(@RequestBody ConfigRouteContentRuleValidator configContentRepairRuleValidator, @PathVariable String op) {
 
         //完成参数规则验证
         if (!MpmValidatorUtil.validate(configContentRepairRuleValidator)) {
@@ -85,7 +84,7 @@ public class ConfigContentRepairController {
         }
 
         //保存操作
-        ResponseData data = configContentRepairService.save(configContentRepairRuleValidator, op);
+        ResponseData data = configRouteContentService.save(configContentRepairRuleValidator, op);
 
         return data;
     }
@@ -106,13 +105,13 @@ public class ConfigContentRepairController {
             return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(validator));
         }
 
-        return configContentRepairService.deleteById(id);
+        return configRouteContentService.deleteById(id);
     }
 
     @RequestMapping(value = "/findContentRepair/{accountId}/{carrier}", method = RequestMethod.GET)
     public ResponseData findById(@PathVariable String accountId,@PathVariable String carrier) {
 
-        ResponseData data = configContentRepairService.findContentRepair(accountId,carrier);
+        ResponseData data = configRouteContentService.findContentRepair(accountId,carrier);
         return data;
     }
 }

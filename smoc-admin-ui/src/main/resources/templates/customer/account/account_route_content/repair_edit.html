@@ -42,13 +42,13 @@
             <div class="col-md-12">
                 <div class="card-box">
                     <form id="submit_form" th:action="@{/account/content/repair/save/{op}(op=${op})}"
-                          th:object="${configContentRepairRuleValidator}"
+                          th:object="${configRouteContentRuleValidator}"
                           method="post" data-parsley-validate="" enctype="multipart/form-data">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="p-20">
                                     <div class="form-group m-b-20">
-                                        <label>业务账号：[[${configContentRepairRuleValidator.accountId}]]</label>
+                                        <label>业务账号：[[${configRouteContentRuleValidator.accountId}]]</label>
                                     </div>
                                     <div class="form-group">
                                         <label>业务类型：
@@ -59,24 +59,30 @@
                                     <div class="form-group">
                                         <label>运营商：
                                             <mpm:tag identity="carrier" show-type="label" key="code"
-                                                     th:value="${configContentRepairRuleValidator.carrier}"/>
+                                                     th:value="${configRouteContentRuleValidator.carrier}"/>
                                         </label>
                                     </div>
                                     <div class="form-group m-b-20">
                                         <label>路由通道<span class="text-danger">*</span></label>
-                                        <select name="channelRepairId" data-style="btn-default" required onchange="changeArea(this.value,'')"
+                                        <select name="channelId" data-style="btn-default" required onchange="changeArea(this.value,'')"
                                                 class="selectpicker  form-control" tabindex="-98" data-live-search="true">
                                             <option data-icon="mdi mdi-key-plus" value="">--请选择路由通道--</option>
                                             <option data-icon="mdi mdi-key-plus" th:each="channel:${channelList}"
-                                                    th:selected="${configContentRepairRuleValidator.channelRepairId eq channel.channelId}"
+                                                    th:selected="${configRouteContentRuleValidator.channelId eq channel.channelId}"
                                                     th:value="${channel.channelId}">[[${channel.channelName}]]
                                             </option>
                                         </select>
                                     </div>
                                     <div class="form-group m-b-20">
-                                        <label>路由内容<span class="text-danger">*</span></label><span style="margin-left:15px;color:#F5707A">支持多个内容，请用 | 隔开</span>
-                                        <textarea type="text" class="form-control" th:field="*{repairContent}" data-parsley-pattern="^((?![｜,\*]).)*$"
+                                        <label>路由内容包含<span class="text-danger">*</span></label><span style="margin-left:15px;color:#F5707A">支持多个内容，请用 | 隔开</span>
+                                        <textarea type="text" class="form-control" th:field="*{routeContent}" data-parsley-pattern="^((?![｜,\*]).)*$"
                                                   required="" data-parsley-length="[1,800]" autocomplete="off"
+                                                  rows="5"   placeholder="输入内容"></textarea>
+                                    </div>
+                                    <div class="form-group m-b-20">
+                                        <label class="text-danger">路由内容不包含</label><span style="margin-left:15px;color:#F5707A">支持多个内容，请用 | 隔开</span>
+                                        <textarea type="text" class="form-control" th:field="*{routeReverseContent}" data-parsley-pattern="^((?![｜,\*]).)*$"
+                                                  data-parsley-length="[1,800]" autocomplete="off"
                                                   rows="5"   placeholder="输入内容"></textarea>
                                     </div>
 
@@ -92,20 +98,16 @@
                                             <div class="col-sm-6 m-b-10">
                                                 <label>当短信字数大于<small>XX</small>时路由</label>
                                                 <input type="text" class="form-control" th:field="*{maxContent}"
-                                                       data-parsley-type="number" min="0" max="5000" autocomplete="off"
+                                                       data-parsley-type="number" min="1" max="5000" autocomplete="off"
                                                        placeholder="短信字数大于">
                                             </div>
                                             <div class="col-sm-6 m-b-10">
                                                 <label>当短信字数小于<small>XX</small>时路由
-                                                    <span class="text-danger"
-                                                          id="price">*</span>&nbsp;<span
-                                                            class="text-danger"
-                                                            th:if="${#fields.hasErrors('minContent')}"
-                                                            th:errors="*{minContent}"
-                                                            style="font-weight: 200;font-size: 12px"></span>
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('errorRemark')}"
+                                                          th:errors="*{errorRemark}"></span>&nbsp;
                                                 </label>
                                                 <input type="text" class="form-control" th:field="*{minContent}"
-                                                       data-parsley-type="number" min="0" max="5000" autocomplete="off"
+                                                       data-parsley-type="number" min="1" max="5000" autocomplete="off"
                                                        placeholder="短信字数小于">
                                             </div>
                                         </div>
@@ -114,8 +116,8 @@
                                     <div class="form-group m-b-20">
                                         <label>有效状态<span class="text-danger">*</span>&nbsp;
                                         </label>
-                                        <mpm:tag id="repairStatus" identity="isOrNo" name="repairStatus" show-type="radio" style="margin-top:0px"
-                                                 key="code" th:value="${configContentRepairRuleValidator.repairStatus}" required="true" title="是否"/>
+                                        <mpm:tag id="routeStatus" identity="isOrNo" name="routeStatus" show-type="radio" style="margin-top:0px"
+                                                 key="code" th:value="${configRouteContentRuleValidator.routeStatus}" required="true" title="是否"/>
                                     </div>
 
                                     </div>
@@ -123,13 +125,13 @@
                                 </div>
                                 <!-- end class p-20 -->
 
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <div class="p-20">
                                     <div class="form-group">
 
 
                                         <div class="form-group">
-                                            <label>业务区域</label><br>
+                                            <label>业务区域</label><span style="margin-left:15px;color:#F5707A">可为空，不选则使用通道区域；勾选则使用选择的区域</span><br><br>
                                             <span id="problemTypeId">
 
                                             </span>
@@ -199,8 +201,8 @@
     $(document).ready(function () {
 
         if ("edit" == '[[${op}]]') {
-            var code = '[[${configContentRepairRuleValidator.areaCodes}]]';
-            var channelId = '[[${configContentRepairRuleValidator.channelRepairId}]]';
+            var code = '[[${configRouteContentRuleValidator.areaCodes}]]';
+            var channelId = '[[${configRouteContentRuleValidator.channelId}]]';
             changeArea(channelId,code)
         }
 

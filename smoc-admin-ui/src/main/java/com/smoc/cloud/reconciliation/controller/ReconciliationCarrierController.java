@@ -1,15 +1,24 @@
-package com.smoc.cloud.finance.controller;
+package com.smoc.cloud.reconciliation.controller;
 
 
+import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
+import com.smoc.cloud.common.response.ResponseCode;
+import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.reconciliation.model.ReconciliationChannelCarrierModel;
+import com.smoc.cloud.common.smoc.reconciliation.model.ReconciliationEnterpriseModel;
+import com.smoc.cloud.reconciliation.service.ReconciliationCarrierService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  * 运营商对账
@@ -18,6 +27,9 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 @RequestMapping("/finance/reconciliation/carrier")
 public class ReconciliationCarrierController {
+
+    @Autowired
+    private ReconciliationCarrierService reconciliationCarrierService;
 
     /**
      * 运营商对账列表
@@ -28,16 +40,23 @@ public class ReconciliationCarrierController {
     public ModelAndView list() {
         ModelAndView view = new ModelAndView("reconciliation/finance_reconciliation_carrier_list");
 
-        //查询数据
-        PageParams params = new PageParams<>();
-        params.setPages(3);
-        params.setPageSize(10);
-        params.setStartRow(1);
-        params.setEndRow(10);
+        //初始化数据
+        PageParams<ReconciliationChannelCarrierModel> params = new PageParams<ReconciliationChannelCarrierModel>();
+        params.setPageSize(3);
         params.setCurrentPage(1);
-        params.setTotalRows(22);
+        ReconciliationChannelCarrierModel reconciliationChannelCarrierModel = new ReconciliationChannelCarrierModel();
+        params.setParams(reconciliationChannelCarrierModel);
 
-        view.addObject("pageParams", params);
+        //查询
+        ResponseData<PageList<ReconciliationChannelCarrierModel>> data = reconciliationCarrierService.page(params);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("reconciliationChannelCarrierModel", reconciliationChannelCarrierModel);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
 
         return view;
     }
@@ -48,19 +67,21 @@ public class ReconciliationCarrierController {
      * @return
      */
     @RequestMapping(value = "/page", method = RequestMethod.POST)
-    public ModelAndView page() {
+    public ModelAndView page(@ModelAttribute ReconciliationChannelCarrierModel reconciliationChannelCarrierModel, PageParams pageParams) {
         ModelAndView view = new ModelAndView("reconciliation/finance_reconciliation_carrier_list");
 
-        //查询数据
-        PageParams params = new PageParams<>();
-        params.setPages(3);
-        params.setPageSize(10);
-        params.setStartRow(1);
-        params.setEndRow(10);
-        params.setCurrentPage(1);
-        params.setTotalRows(22);
+        //分页查询
+        pageParams.setParams(reconciliationChannelCarrierModel);
 
-        view.addObject("pageParams", params);
+        ResponseData<PageList<ReconciliationChannelCarrierModel>> data = reconciliationCarrierService.page(pageParams);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("reconciliationChannelCarrierModel", reconciliationChannelCarrierModel);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
         return view;
     }
 

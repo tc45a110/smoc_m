@@ -9,8 +9,6 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
-import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
-import com.smoc.cloud.common.smoc.customer.validator.EnterpriseContractInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseDocumentInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.SystemAttachmentValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
@@ -38,6 +36,8 @@ import org.springframework.web.servlet.view.RedirectView;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 短信签名
@@ -202,15 +202,25 @@ public class MessageSignController {
 
         MultipartHttpServletRequest mRequest = (MultipartHttpServletRequest) request;
         List<MultipartFile> file = mRequest.getFiles("file[]");
-        /*if("add".equals(op) && file.size()==0){
+
+        Pattern p = Pattern.compile("\\【.*?\\】");
+        Matcher m = p.matcher(enterpriseDocumentInfoValidator.getSignName());
+        boolean match = m.find();
+        if(match){
             // 提交前台错误提示
-            FieldError err = new FieldError("上传附件", "contractFiles", "附件不能为空");
+            FieldError err = new FieldError("签名", "signName", "无需在签名内容前后添加中括号");
             result.addError(err);
-        }*/
+        }
 
         //完成参数规则验证
         if (result.hasErrors()) {
+            //查询附件
+            ResponseData<List<SystemAttachmentValidator>> filesList = systemAttachmentService.findByMoudleId(enterpriseDocumentInfoValidator.getId());
+
+            //op操作标记，add表示添加，edit表示修改
             view.addObject("enterpriseDocumentInfoValidator", enterpriseDocumentInfoValidator);
+            view.addObject("signType", enterpriseDocumentInfoValidator.getBusinessType());
+            view.addObject("filesList", filesList.getData());
             view.addObject("op", op);
             return view;
         }

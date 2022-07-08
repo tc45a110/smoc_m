@@ -4,8 +4,8 @@ package com.smoc.cloud.customer.repository;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.smoc.customer.qo.AccountContentRepairQo;
-import com.smoc.cloud.common.smoc.customer.validator.ConfigContentRepairRuleValidator;
-import com.smoc.cloud.customer.entity.ConfigContentRepairRule;
+import com.smoc.cloud.common.smoc.customer.validator.ConfigRouteContentRuleValidator;
+import com.smoc.cloud.customer.entity.ConfigRouteContentRule;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -15,19 +15,19 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 /**
- * 内容失败补发操作类
+ * 内容路由操作类
  */
-public interface ConfigContentRepairRepository extends CrudRepository<ConfigContentRepairRule, String>, JpaRepository<ConfigContentRepairRule, String> {
+public interface ConfigRouteContentRepository extends CrudRepository<ConfigRouteContentRule, String>, JpaRepository<ConfigRouteContentRule, String> {
 
     /**
      * 分页查询
      * @param pageParams
      * @return
      */
-    PageList<ConfigContentRepairRuleValidator> page(PageParams<ConfigContentRepairRuleValidator> pageParams);
+    PageList<ConfigRouteContentRuleValidator> page(PageParams<ConfigRouteContentRuleValidator> pageParams);
 
     @Modifying
-    @Query(value = "update config_content_repair_rule set REPAIR_STATUS = 0 where ID =:id ",nativeQuery = true)
+    @Query(value = "update config_route_content_rule set ROUTE_STATUS = 0 where ID =:id ",nativeQuery = true)
     void updateStatusById(@Param("id") String id);
 
     /**
@@ -37,7 +37,7 @@ public interface ConfigContentRepairRepository extends CrudRepository<ConfigCont
      */
     PageList<AccountContentRepairQo> accountList(PageParams<AccountContentRepairQo> pageParams);
 
-    List<ConfigContentRepairRule> findByAccountIdAndCarrierAndRepairContentAndRepairStatus(String accountId, String carrier, String repairContent, String status);
+    List<ConfigRouteContentRule> findByAccountIdAndCarrierAndRouteContentAndRouteStatus(String accountId, String carrier, String routeContent, String status);
 
-    ConfigContentRepairRule findByAccountIdAndCarrier(String accountId, String carrier);
+    ConfigRouteContentRule findByAccountIdAndCarrier(String accountId, String carrier);
 }

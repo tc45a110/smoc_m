@@ -10,19 +10,17 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelBasicInfoValidator;
-import com.smoc.cloud.common.smoc.configuate.validator.ConfigChannelRepairRuleValidator;
 import com.smoc.cloud.common.smoc.configuate.validator.ConfigChannelRepairValidator;
 import com.smoc.cloud.common.smoc.customer.qo.AccountContentRepairQo;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
-import com.smoc.cloud.common.smoc.customer.validator.ConfigContentRepairRuleValidator;
-import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
+import com.smoc.cloud.common.smoc.customer.validator.ConfigRouteContentRuleValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.configure.channel.service.ChannelRepairService;
 import com.smoc.cloud.configure.channel.service.ChannelService;
-import com.smoc.cloud.customer.service.AccountContentRepairService;
+import com.smoc.cloud.customer.service.AccountRouteContentService;
 import com.smoc.cloud.customer.service.BusinessAccountService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +48,7 @@ import java.util.Map;
 public class AccountContentRepairController {
 
     @Autowired
-    private AccountContentRepairService accountContentRepairService;
+    private AccountRouteContentService accountRouteContentService;
 
     @Autowired
     private BusinessAccountService businessAccountService;
@@ -71,17 +69,17 @@ public class AccountContentRepairController {
      */
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ModelAndView list() {
-        ModelAndView view = new ModelAndView("customer/account/account_content_repair/repair_list");
+        ModelAndView view = new ModelAndView("customer/account/account_route_content/repair_list");
 
         //初始化数据
-        PageParams<ConfigContentRepairRuleValidator> params = new PageParams<ConfigContentRepairRuleValidator>();
+        PageParams<ConfigRouteContentRuleValidator> params = new PageParams<ConfigRouteContentRuleValidator>();
         params.setPageSize(10);
         params.setCurrentPage(1);
-        ConfigContentRepairRuleValidator configContentRepairRuleValidator = new ConfigContentRepairRuleValidator();
+        ConfigRouteContentRuleValidator configContentRepairRuleValidator = new ConfigRouteContentRuleValidator();
         params.setParams(configContentRepairRuleValidator);
 
         //查询
-        ResponseData<PageList<ConfigContentRepairRuleValidator>> data = accountContentRepairService.page(params);
+        ResponseData<PageList<ConfigRouteContentRuleValidator>> data = accountRouteContentService.page(params);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;
@@ -100,13 +98,13 @@ public class AccountContentRepairController {
      * @return
      */
     @RequestMapping(value = "/page", method = RequestMethod.POST)
-    public ModelAndView page(@ModelAttribute ConfigContentRepairRuleValidator configContentRepairRuleValidator, PageParams pageParams) {
-        ModelAndView view = new ModelAndView("customer/account/account_content_repair/repair_list");
+    public ModelAndView page(@ModelAttribute ConfigRouteContentRuleValidator configContentRepairRuleValidator, PageParams pageParams) {
+        ModelAndView view = new ModelAndView("customer/account/account_route_content/repair_list");
 
         //分页查询
         pageParams.setParams(configContentRepairRuleValidator);
 
-        ResponseData<PageList<ConfigContentRepairRuleValidator>> data = accountContentRepairService.page(pageParams);
+        ResponseData<PageList<ConfigRouteContentRuleValidator>> data = accountRouteContentService.page(pageParams);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;
@@ -126,7 +124,7 @@ public class AccountContentRepairController {
      */
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public ModelAndView search() {
-        ModelAndView view = new ModelAndView("customer/account/account_content_repair/account_search_list");
+        ModelAndView view = new ModelAndView("customer/account/account_route_content/account_search_list");
 
         //初始化数据
         PageParams<AccountContentRepairQo> params = new PageParams<AccountContentRepairQo>();
@@ -136,7 +134,7 @@ public class AccountContentRepairController {
         params.setParams(accountContentRepairQo);
 
         //查询
-        ResponseData<PageList<AccountContentRepairQo>> data = accountContentRepairService.accountList(params);
+        ResponseData<PageList<AccountContentRepairQo>> data = accountRouteContentService.accountList(params);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;
@@ -156,12 +154,12 @@ public class AccountContentRepairController {
      */
     @RequestMapping(value = "/search/page", method = RequestMethod.POST)
     public ModelAndView searchPage(@ModelAttribute AccountContentRepairQo accountContentRepairQo, PageParams pageParams) {
-        ModelAndView view = new ModelAndView("customer/account/account_content_repair/account_search_list");
+        ModelAndView view = new ModelAndView("customer/account/account_route_content/account_search_list");
 
         //分页查询
         pageParams.setParams(accountContentRepairQo);
 
-        ResponseData<PageList<AccountContentRepairQo>> data = accountContentRepairService.accountList(pageParams);
+        ResponseData<PageList<AccountContentRepairQo>> data = accountRouteContentService.accountList(pageParams);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;
@@ -184,7 +182,7 @@ public class AccountContentRepairController {
     @RequestMapping(value = "/add/{id}/{carrier}", method = RequestMethod.GET)
     public ModelAndView detail(@PathVariable String id, @PathVariable String carrier, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("customer/account/account_content_repair/repair_edit");
+        ModelAndView view = new ModelAndView("customer/account/account_route_content/repair_edit");
 
         //完成参数规则验证
         MpmIdValidator validator = new MpmIdValidator();
@@ -213,30 +211,30 @@ public class AccountContentRepairController {
             return view;
         }
 
-        ResponseData<ConfigContentRepairRuleValidator> contentData = accountContentRepairService.findContentRepair(data.getData().getAccountId(), carrier);
+        ResponseData<ConfigRouteContentRuleValidator> contentData = accountRouteContentService.findContentRepair(data.getData().getAccountId(), carrier);
         if (!ResponseCode.SUCCESS.getCode().equals(contentData.getCode())) {
             view.addObject("error", contentData.getCode() + ":" + contentData.getMessage());
             return view;
         }
 
-        ConfigContentRepairRuleValidator configContentRepairRuleValidator = contentData.getData();
-        if (!StringUtils.isEmpty(configContentRepairRuleValidator)) {
+        ConfigRouteContentRuleValidator configRouteContentRuleValidator = contentData.getData();
+        if (!StringUtils.isEmpty(configRouteContentRuleValidator)) {
             //op操作标记，add表示添加，edit表示修改
             view.addObject("op", "edit");
-            view.addObject("configContentRepairRuleValidator", configContentRepairRuleValidator);
+            view.addObject("configRouteContentRuleValidator", configRouteContentRuleValidator);
         } else {
             //初始化数据
-            configContentRepairRuleValidator = new ConfigContentRepairRuleValidator();
-            configContentRepairRuleValidator.setId(UUID.uuid32());
-            configContentRepairRuleValidator.setAccountId(data.getData().getAccountId());
-            configContentRepairRuleValidator.setCarrier(carrier);
-            configContentRepairRuleValidator.setRepairStatus("1");
+            configRouteContentRuleValidator = new ConfigRouteContentRuleValidator();
+            configRouteContentRuleValidator.setId(UUID.uuid32());
+            configRouteContentRuleValidator.setAccountId(data.getData().getAccountId());
+            configRouteContentRuleValidator.setCarrier(carrier);
+            configRouteContentRuleValidator.setRouteStatus("1");
             if (!"INTL".equals(carrier)) {
-                configContentRepairRuleValidator.setAreaCodes("ALL");
+                configRouteContentRuleValidator.setAreaCodes("ALL");
             }
             //op操作标记，add表示添加，edit表示修改
             view.addObject("op", "add");
-            view.addObject("configContentRepairRuleValidator", configContentRepairRuleValidator);
+            view.addObject("configRouteContentRuleValidator", configRouteContentRuleValidator);
         }
 
         view.addObject("channelList", channelList.getData());
@@ -253,7 +251,7 @@ public class AccountContentRepairController {
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public ModelAndView edit(@PathVariable String id, HttpServletRequest request) {
 
-        ModelAndView view = new ModelAndView("customer/account/account_content_repair/repair_edit");
+        ModelAndView view = new ModelAndView("customer/account/account_route_content/repair_edit");
 
         //完成参数规则验证
         MpmIdValidator validator = new MpmIdValidator();
@@ -263,7 +261,7 @@ public class AccountContentRepairController {
             return view;
         }
 
-        ResponseData<ConfigContentRepairRuleValidator> data = accountContentRepairService.findById(id);
+        ResponseData<ConfigRouteContentRuleValidator> data = accountRouteContentService.findById(id);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;
@@ -288,7 +286,7 @@ public class AccountContentRepairController {
             return view;
         }
 
-        view.addObject("configContentRepairRuleValidator", data.getData());
+        view.addObject("configRouteContentRuleValidator", data.getData());
         view.addObject("channelList", channelList.getData());
         view.addObject("accountBasicInfoValidator", accountData.getData());
         view.addObject("op", "edit");
@@ -303,21 +301,39 @@ public class AccountContentRepairController {
      * @return
      */
     @RequestMapping(value = "/save/{op}", method = RequestMethod.POST)
-    public ModelAndView save(@ModelAttribute @Validated ConfigContentRepairRuleValidator configContentRepairRuleValidator, BindingResult result, @PathVariable String op, HttpServletRequest request) {
-        ModelAndView view = new ModelAndView("customer/account/account_content_repair/repair_edit");
+    public ModelAndView save(@ModelAttribute @Validated ConfigRouteContentRuleValidator configRouteContentRuleValidator, BindingResult result, @PathVariable String op, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("customer/account/account_route_content/repair_edit");
 
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        //判断字数是否在范围内
+        if(!StringUtils.isEmpty(configRouteContentRuleValidator.getMinContent()) && !StringUtils.isEmpty(configRouteContentRuleValidator.getMaxContent())){
+            if(configRouteContentRuleValidator.getMinContent()>0 && configRouteContentRuleValidator.getMaxContent()>0
+                    && (configRouteContentRuleValidator.getMinContent() - configRouteContentRuleValidator.getMaxContent()<0)){
+                FieldError err = new FieldError("短信字数", "errorRemark", "短信字数不在范围内");
+                result.addError(err);
+            }
+        }
 
         //完成参数规则验证
         if (result.hasErrors()) {
             //根据运营商符合要求的备用通道
             ConfigChannelRepairValidator configChannelRepairValidator = new ConfigChannelRepairValidator();
-            configChannelRepairValidator.setBusinessType(configContentRepairRuleValidator.getBusinessType());
-            configChannelRepairValidator.setCarrier(configContentRepairRuleValidator.getCarrier());
+            configChannelRepairValidator.setBusinessType(configRouteContentRuleValidator.getBusinessType());
+            configChannelRepairValidator.setCarrier(configRouteContentRuleValidator.getCarrier());
             configChannelRepairValidator.setFlag("ACCOUNT");
-            configChannelRepairValidator.setChannelId(configContentRepairRuleValidator.getAccountId());
+            configChannelRepairValidator.setChannelId(configRouteContentRuleValidator.getAccountId());
             ResponseData<List<ConfigChannelRepairValidator>> channelList = channelRepairService.findSpareChannel(configChannelRepairValidator);
-            view.addObject("configContentRepairRuleValidator", configContentRepairRuleValidator);
+
+            //查询账号数据是否存在
+            ResponseData<AccountBasicInfoValidator> accountData = businessAccountService.findById(configRouteContentRuleValidator.getAccountId());
+            if (!ResponseCode.SUCCESS.getCode().equals(accountData.getCode())) {
+                view.addObject("error", accountData.getCode() + ":" + accountData.getMessage());
+                return view;
+            }
+
+            view.addObject("configRouteContentRuleValidator", configRouteContentRuleValidator);
+            view.addObject("accountBasicInfoValidator", accountData.getData());
             view.addObject("op", op);
             view.addObject("channelList", channelList.getData());
             return view;
@@ -325,20 +341,20 @@ public class AccountContentRepairController {
 
         //初始化其他变量
         if (!StringUtils.isEmpty(op) && "add".equals(op)) {
-            configContentRepairRuleValidator.setCreatedTime(DateTimeUtils.getDateTimeFormat(new Date()));
-            configContentRepairRuleValidator.setCreatedBy(user.getRealName());
+            configRouteContentRuleValidator.setCreatedTime(DateTimeUtils.getDateTimeFormat(new Date()));
+            configRouteContentRuleValidator.setCreatedBy(user.getRealName());
         } else if (!StringUtils.isEmpty(op) && "edit".equals(op)) {
-            configContentRepairRuleValidator.setUpdatedTime(new Date());
-            configContentRepairRuleValidator.setUpdatedBy(user.getRealName());
+            configRouteContentRuleValidator.setUpdatedTime(new Date());
+            configRouteContentRuleValidator.setUpdatedBy(user.getRealName());
         } else {
             view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":" + ResponseCode.PARAM_LINK_ERROR.getMessage());
             return view;
         }
 
         //保存数据
-        configContentRepairRuleValidator.setBusinessId(configContentRepairRuleValidator.getAccountId());
-        configContentRepairRuleValidator.setBusinessType("ACCOUNT");
-        ResponseData data = accountContentRepairService.save(configContentRepairRuleValidator, op);
+        configRouteContentRuleValidator.setBusinessId(configRouteContentRuleValidator.getAccountId());
+        configRouteContentRuleValidator.setBusinessType("ACCOUNT");
+        ResponseData data = accountRouteContentService.save(configRouteContentRuleValidator, op);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;
@@ -346,11 +362,11 @@ public class AccountContentRepairController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            systemUserLogService.logsAsync("BUSINESS_ACCOUNT", configContentRepairRuleValidator.getAccountId(), "add".equals(op) ? configContentRepairRuleValidator.getCreatedBy() : configContentRepairRuleValidator.getUpdatedBy(), op, "add".equals(op) ? "添加内容失败补发" : "修改内容失败补发", JSON.toJSONString(configContentRepairRuleValidator));
+            systemUserLogService.logsAsync("BUSINESS_ACCOUNT", configRouteContentRuleValidator.getAccountId(), "add".equals(op) ? configRouteContentRuleValidator.getCreatedBy() : configRouteContentRuleValidator.getUpdatedBy(), op, "add".equals(op) ? "添加内容路由通道" : "修改内容路由通道", JSON.toJSONString(configRouteContentRuleValidator));
         }
 
         //记录日志
-        log.info("[内容失败补发配置][补发配置][{}][{}]数据:{}", op, user.getUserName(), JSON.toJSONString(configContentRepairRuleValidator));
+        log.info("[内容路由配置][路由配置][{}][{}]数据:{}", op, user.getUserName(), JSON.toJSONString(configRouteContentRuleValidator));
 
         view.setView(new RedirectView("/account/content/repair/list", true, false));
         return view;
@@ -364,7 +380,7 @@ public class AccountContentRepairController {
      */
     @RequestMapping(value = "/deleteById/{id}", method = RequestMethod.GET)
     public ModelAndView deleteById(@PathVariable String id, HttpServletRequest request) {
-        ModelAndView view = new ModelAndView("customer/account/account_content_repair/repair_edit");
+        ModelAndView view = new ModelAndView("customer/account/account_route_content/repair_edit");
 
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
 
@@ -377,14 +393,14 @@ public class AccountContentRepairController {
         }
 
         //查询信息
-        ResponseData<ConfigContentRepairRuleValidator> infoDate = accountContentRepairService.findById(id);
+        ResponseData<ConfigRouteContentRuleValidator> infoDate = accountRouteContentService.findById(id);
         if (!ResponseCode.SUCCESS.getCode().equals(infoDate.getCode())) {
             view.addObject("error", infoDate.getCode() + ":" + infoDate.getMessage());
             return view;
         }
 
         //删除操作
-        ResponseData data = accountContentRepairService.deleteById(id);
+        ResponseData data = accountRouteContentService.deleteById(id);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;
@@ -396,7 +412,7 @@ public class AccountContentRepairController {
         }
 
         //记录日志
-        log.info("[内容失败补发配置][补发配置][{}]数据:{}", "delete", user.getUserName(), JSON.toJSONString(infoDate.getData()));
+        log.info("[内容路由配置][路由配置][{}]数据:{}", "delete", user.getUserName(), JSON.toJSONString(infoDate.getData()));
 
         view.setView(new RedirectView("/account/content/repair/list", true, false));
         return view;

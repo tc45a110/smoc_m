@@ -261,6 +261,7 @@ public class EnterpriseDocumentController {
         if (!StringUtils.isEmpty(op) && "add".equals(op)) {
             enterpriseDocumentInfoValidator.setCreatedTime(DateTimeUtils.getDateTimeFormat(new Date()));
             enterpriseDocumentInfoValidator.setCreatedBy(user.getRealName());
+            enterpriseDocumentInfoValidator.setCheckDate(enterpriseDocumentInfoValidator.getCreatedTime());
         } else if (!StringUtils.isEmpty(op) && "edit".equals(op)) {
             enterpriseDocumentInfoValidator.setUpdatedTime(new Date());
             enterpriseDocumentInfoValidator.setUpdatedBy(user.getRealName());

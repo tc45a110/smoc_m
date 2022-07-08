@@ -5,18 +5,18 @@ import java.util.Date;
 import java.util.Objects;
 
 @Entity
-@Table(name = "config_content_repair_rule")
-public class ConfigContentRepairRule {
+@Table(name = "config_route_content_rule")
+public class ConfigRouteContentRule {
     private String id;
     private String accountId;
     private String businessId;
     private String businessType;
     private String carrier;
     private String areaCodes;
-    private String repairContent;
-    private String channelRepairId;
-    private String repairCode;
-    private String repairStatus;
+    private String routeContent;
+    private String channelId;
+    private String routeCode;
+    private String routeStatus;
     private String createdBy;
     private Date createdTime;
     private String updatedBy;
@@ -25,6 +25,7 @@ public class ConfigContentRepairRule {
     private String mobileNum;
     private Integer minContent;
     private Integer maxContent;
+    private String routeReverseContent;
 
     @Id
     @Column(name = "ID")
@@ -86,45 +87,6 @@ public class ConfigContentRepairRule {
         this.areaCodes = areaCodes;
     }
 
-    @Basic
-    @Column(name = "REPAIR_CONTENT")
-    public String getRepairContent() {
-        return repairContent;
-    }
-
-    public void setRepairContent(String repairContent) {
-        this.repairContent = repairContent;
-    }
-
-    @Basic
-    @Column(name = "CHANNEL_REPAIR_ID")
-    public String getChannelRepairId() {
-        return channelRepairId;
-    }
-
-    public void setChannelRepairId(String channelRepairId) {
-        this.channelRepairId = channelRepairId;
-    }
-
-    @Basic
-    @Column(name = "REPAIR_CODE")
-    public String getRepairCode() {
-        return repairCode;
-    }
-
-    public void setRepairCode(String repairCode) {
-        this.repairCode = repairCode;
-    }
-
-    @Basic
-    @Column(name = "REPAIR_STATUS")
-    public String getRepairStatus() {
-        return repairStatus;
-    }
-
-    public void setRepairStatus(String repairStatus) {
-        this.repairStatus = repairStatus;
-    }
 
     @Basic
     @Column(name = "CREATED_BY")
@@ -196,29 +158,53 @@ public class ConfigContentRepairRule {
         this.maxContent = maxContent;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ConfigContentRepairRule that = (ConfigContentRepairRule) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(accountId, that.accountId) &&
-                Objects.equals(businessId, that.businessId) &&
-                Objects.equals(businessType, that.businessType) &&
-                Objects.equals(carrier, that.carrier) &&
-                Objects.equals(areaCodes, that.areaCodes) &&
-                Objects.equals(repairContent, that.repairContent) &&
-                Objects.equals(channelRepairId, that.channelRepairId) &&
-                Objects.equals(repairCode, that.repairCode) &&
-                Objects.equals(repairStatus, that.repairStatus) &&
-                Objects.equals(createdBy, that.createdBy) &&
-                Objects.equals(createdTime, that.createdTime) &&
-                Objects.equals(updatedBy, that.updatedBy) &&
-                Objects.equals(updatedTime, that.updatedTime);
+    @Basic
+    @Column(name = "ROUTE_CONTENT")
+    public String getRouteContent() {
+        return routeContent;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, accountId, businessId, businessType, carrier, areaCodes, repairContent, channelRepairId, repairCode, repairStatus, createdBy, createdTime, updatedBy, updatedTime);
+    public void setRouteContent(String routeContent) {
+        this.routeContent = routeContent;
+    }
+
+    @Basic
+    @Column(name = "CHANNEL_ID")
+    public String getChannelId() {
+        return channelId;
+    }
+
+    public void setChannelId(String channelId) {
+        this.channelId = channelId;
+    }
+
+    @Basic
+    @Column(name = "ROUTE_CODE")
+    public String getRouteCode() {
+        return routeCode;
+    }
+
+    public void setRouteCode(String routeCode) {
+        this.routeCode = routeCode;
+    }
+
+    @Basic
+    @Column(name = "ROUTE_STATUS")
+    public String getRouteStatus() {
+        return routeStatus;
+    }
+
+    public void setRouteStatus(String routeStatus) {
+        this.routeStatus = routeStatus;
+    }
+
+    @Basic
+    @Column(name = "ROUTE_REVERSE_CONTENT")
+    public String getRouteReverseContent() {
+        return routeReverseContent;
+    }
+
+    public void setRouteReverseContent(String routeReverseContent) {
+        this.routeReverseContent = routeReverseContent;
     }
 }

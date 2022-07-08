@@ -13,6 +13,9 @@ public class TableStoreMessageDetailInfoValidator {
     //业务账号ID
     private String businessAccount;
 
+    //业务账号名称
+    private String accountName;
+
     //企业标识
     private String enterpriseFlag;
 

@@ -8,7 +8,7 @@ import java.util.Objects;
 
 @Getter
 @Setter
-public class ConfigContentRepairRuleValidator {
+public class ConfigRouteContentRuleValidator {
 
     private String id;
     private String accountId;
@@ -16,18 +16,21 @@ public class ConfigContentRepairRuleValidator {
     private String businessType;
     private String carrier;
     private String areaCodes;
-    private String repairContent;
-    private String channelRepairId;
-    private String repairCode;
-    private String repairStatus;
+    private String routeContent;
+    private String channelId;
+    private String routeCode;
+    private String routeStatus;
     private String createdBy;
     private String createdTime;
     private String updatedBy;
     private Date updatedTime;
+
     private String mobileNum;
     private Integer minContent;
     private Integer maxContent;
+    private String routeReverseContent;
 
     private String accountName;
     private String channelName;
+    private String errorRemark;
 }

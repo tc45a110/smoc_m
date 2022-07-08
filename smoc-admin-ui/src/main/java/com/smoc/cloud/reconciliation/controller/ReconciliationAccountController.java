@@ -70,7 +70,7 @@ public class ReconciliationAccountController {
 
         //初始化数据
         PageParams<ReconciliationEnterpriseModel> params = new PageParams<ReconciliationEnterpriseModel>();
-        params.setPageSize(10);
+        params.setPageSize(5);
         params.setCurrentPage(1);
         ReconciliationEnterpriseModel reconciliationEnterpriseModel = new ReconciliationEnterpriseModel();
         params.setParams(reconciliationEnterpriseModel);
@@ -144,6 +144,8 @@ public class ReconciliationAccountController {
         Map<String,String> corporationMap = this.corporation(request);
         //业务类型
         Map<String,String> businessTypeMap = this.businessType(request);
+        //业务类型
+        Map<String,String> payTypeMap = this.payType(request);
 
         //初始化数据
         PageParams<ReconciliationEnterpriseModel> params = new PageParams<ReconciliationEnterpriseModel>();
@@ -167,6 +169,7 @@ public class ReconciliationAccountController {
                     Map<String, Object> map = new HashMap<>();
                     map.put("period", model.getAccountingPeriod());
                     map.put("account", model.getAccount());
+                    map.put("payType", payTypeMap.get(model.getPayType()));
                     map.put("carrier", carrierMap.get(model.getCarrier()));
                     map.put("type",businessTypeMap.get(model.getBusinessType()));
                     map.put("quantity", model.getSendSum());
@@ -259,5 +262,19 @@ public class ReconciliationAccountController {
         return dictValueMap;
     }
 
+    /**
+     * 付费类型
+     */
+    private Map<String,String> payType(HttpServletRequest request) {
+        Map<String, DictType> dictMap = (Map<String, DictType>) request.getServletContext().getAttribute("dict");
+
+        DictType businessType = dictMap.get("payType");
+
+        Map<String,String> dictValueMap = new HashMap<>();
+        for (Dict dict : businessType.getDict()) {
+            dictValueMap.put(dict.getFieldCode(),dict.getFieldName());
+        }
+        return dictValueMap;
+    }
 
 }

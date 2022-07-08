@@ -4,7 +4,7 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.customer.qo.AccountContentRepairQo;
-import com.smoc.cloud.common.smoc.customer.validator.ConfigContentRepairRuleValidator;
+import com.smoc.cloud.common.smoc.customer.validator.ConfigRouteContentRuleValidator;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 
 /**
- * 业务账号内容失败补发远程服务接口
+ * 业务账号内容路由远程服务接口
  **/
 @FeignClient(name = "smoc", path = "/smoc")
-public interface AccountContentRepairFeignClient {
+public interface AccountRouteContentFeignClient {
 
     /**
      * 查询列表
@@ -24,7 +24,7 @@ public interface AccountContentRepairFeignClient {
      * @return
      */
     @RequestMapping(value = "/configure/content/repair/page", method = RequestMethod.POST)
-    PageList<ConfigContentRepairRuleValidator> page(@RequestBody PageParams<ConfigContentRepairRuleValidator> pageParams)  throws Exception;
+    PageList<ConfigRouteContentRuleValidator> page(@RequestBody PageParams<ConfigRouteContentRuleValidator> pageParams)  throws Exception;
 
     /**
      * 业务账号列表
@@ -39,7 +39,7 @@ public interface AccountContentRepairFeignClient {
      * op 是类型 表示了保存或修改
      */
     @RequestMapping(value = "/configure/content/repair/save/{op}", method = RequestMethod.POST)
-    ResponseData save(@RequestBody ConfigContentRepairRuleValidator configContentRepairRuleValidator, @PathVariable String op);
+    ResponseData save(@RequestBody ConfigRouteContentRuleValidator configContentRepairRuleValidator, @PathVariable String op);
 
     /**
      * 根据ID 查询
@@ -48,7 +48,7 @@ public interface AccountContentRepairFeignClient {
      * @return
      */
     @RequestMapping(value = "/configure/content/repair/findById/{id}", method = RequestMethod.GET)
-    ResponseData<ConfigContentRepairRuleValidator> findById(@PathVariable String id);
+    ResponseData<ConfigRouteContentRuleValidator> findById(@PathVariable String id);
 
     /**
      * 根据ID 删除
@@ -59,5 +59,5 @@ public interface AccountContentRepairFeignClient {
     ResponseData deleteById(@PathVariable String id);
 
     @RequestMapping(value = "/configure/content/repair/findContentRepair/{accountId}/{carrier}", method = RequestMethod.GET)
-    ResponseData<ConfigContentRepairRuleValidator> findContentRepair(@PathVariable String accountId,@PathVariable String carrier);
+    ResponseData<ConfigRouteContentRuleValidator> findContentRepair(@PathVariable String accountId, @PathVariable String carrier);
 }
