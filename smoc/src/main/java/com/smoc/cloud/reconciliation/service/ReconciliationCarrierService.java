@@ -10,6 +10,7 @@ import com.smoc.cloud.reconciliation.repository.ReconciliationCarrierRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -50,6 +51,7 @@ public class ReconciliationCarrierService {
      * @param reconciliationChannelCarrierModel
      * @return
      */
+    @Transactional
     public ResponseData save(ReconciliationChannelCarrierModel reconciliationChannelCarrierModel) {
 
         //先删除
