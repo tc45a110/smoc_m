@@ -49,4 +49,16 @@ public class ReconciliationCarrierController {
 
         return reconciliationCarrierService.findReconciliationCarrier(startDate,channelProvder);
     }
+
+    /**
+     * 保存对账
+     *
+     * @param reconciliationChannelCarrierModel
+     * @return
+     */
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    public ResponseData save(@RequestBody ReconciliationChannelCarrierModel reconciliationChannelCarrierModel) {
+
+        return reconciliationCarrierService.save(reconciliationChannelCarrierModel);
+    }
 }

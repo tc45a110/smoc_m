@@ -26,8 +26,10 @@ public class ReconciliationCarrierRowMapper implements RowMapper<ReconciliationC
 
         if(!StringUtils.isEmpty(qo.getPrice())){
             qo.setPrice(new BigDecimal(qo.getPrice().stripTrailingZeros().toPlainString()));
+            qo.setTotalAmount(new BigDecimal(new BigDecimal(qo.getTotalSendQuantity()).multiply(qo.getPrice()).stripTrailingZeros().toPlainString()));
+        }else{
+            qo.setTotalAmount(new BigDecimal(0));
         }
-        qo.setTotalAmount(new BigDecimal(new BigDecimal(qo.getTotalSendQuantity()).multiply(qo.getPrice()).stripTrailingZeros().toPlainString()));
 
         //金额差额
         if(!StringUtils.isEmpty(qo.getCarrierTotalAmount())){

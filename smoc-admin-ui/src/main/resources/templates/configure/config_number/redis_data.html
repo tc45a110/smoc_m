@@ -130,6 +130,10 @@
 <script>
 
     $("#submitbut").click(function(){
+        var mobile = $("#mobile").val();
+        if(""==mobile || mobile==null){
+            return ;
+        }
         var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
         document.submit_form.action=contextPath + '/configure/number/portability/deleteRedis';
         var el=document.getElementById('excelId');

@@ -3,13 +3,21 @@ package com.smoc.cloud.reconciliation.repository;
 import com.smoc.cloud.common.BasePageRepository;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
+import com.smoc.cloud.common.smoc.message.MessageComplaintInfoValidator;
+import com.smoc.cloud.common.smoc.message.model.ComplaintExcelModel;
 import com.smoc.cloud.common.smoc.reconciliation.ReconciliationCarrierItemsValidator;
 import com.smoc.cloud.common.smoc.reconciliation.model.ReconciliationChannelCarrierModel;
+import com.smoc.cloud.common.smoc.utils.ChannelUtils;
+import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.reconciliation.rowmapper.ReconciliationCarrierRowMapper;
 import com.smoc.cloud.reconciliation.rowmapper.ReconciliationChannelRowMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -97,7 +105,7 @@ public class ReconciliationCarrierRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(" a.CHANNEL_PERIOD_STATUS");
         sqlBuffer.append(" from view_reconciliation_carrier t left join reconciliation_carrier_items a  ");
         sqlBuffer.append(" on t.MESSAGE_DATE=a.CHANNEL_PERIOD and t.CHANNEL_PROVDER=a.CHANNEL_PROVDER and t.CHANNEL_ID=a.CHANNEL_ID ");
-        sqlBuffer.append(" where t.MESSAGE_DATE =? and t.CHANNEL_PROVDER =? ");
+        sqlBuffer.append(" where t.MESSAGE_DATE =? and t.CHANNEL_PROVDER =? and (a.STATUS=1 or a.STATUS is null)");
 
         List<Object> paramsList = new ArrayList<Object>();
         paramsList.add(channelPeriod.trim());
@@ -111,6 +119,58 @@ public class ReconciliationCarrierRepositoryImpl extends BasePageRepository {
 
         List<ReconciliationCarrierItemsValidator> list = this.queryForObjectList(sqlBuffer.toString(), params, new ReconciliationCarrierRowMapper());
         return list;
+    }
+
+    public void batchSave(ReconciliationChannelCarrierModel reconciliationChannelCarrierModel) {
+
+        Connection connection = null;
+        PreparedStatement statement = null;
+        List<ReconciliationCarrierItemsValidator> list= reconciliationChannelCarrierModel.getCarrierList();
+        final String sql = "insert into reconciliation_carrier_items(ID,CHANNEL_PERIOD,CHANNEL_PROVDER,CHANNEL_ID,SRC_ID,BUSINESS_TYPE,TOTAL_SEND_QUANTITY,TOTAL_SUBMIT_QUANTITY,TOTAL_AMOUNT,TOTAL_NO_REPORT_QUANTITY,PRICE," +
+                "CARRIER_TOTAL_AMOUNT,CARRIER_TOTAL_SEND_QUANTITY,CHANNEL_PERIOD_STATUS,STATUS,CREATED_BY,CREATED_TIME) " +
+                " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,now()) ";
+        try {
+            connection = jdbcTemplate.getDataSource().getConnection();
+            connection.setAutoCommit(false);
+            statement = connection.prepareStatement(sql);
+            for (ReconciliationCarrierItemsValidator entry : list) {
+                statement.setString(1, UUID.uuid32());
+                statement.setString(2, entry.getChannelPeriod());
+                statement.setString(3, entry.getChannelProvder());
+                statement.setString(4, entry.getChannelId());
+                statement.setString(5, entry.getSrcId());
+                statement.setString(6, entry.getBusinessType());
+                statement.setLong(7, entry.getTotalSendQuantity());
+                statement.setLong(8, entry.getTotalSubmitQuantity());
+                statement.setBigDecimal(9, new BigDecimal(entry.getTotalSendQuantity()).multiply(entry.getPrice()));
+                statement.setLong(10, entry.getTotalNoReportQuantity());
+                statement.setBigDecimal(11, entry.getPrice());
+                statement.setBigDecimal(12, entry.getCarrierTotalAmount());
+                statement.setLong(13, entry.getCarrierTotalSendQuantity());
+                statement.setString(14, entry.getChannelPeriodStatus());
+                statement.setString(15, "1");
+                statement.setString(16, entry.getCreatedBy());
+
+                statement.addBatch();
+            }
+            statement.executeBatch();
+            connection.commit();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (null != statement) {
+                    statement.close();
+                }
+                if (null != connection) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
 }

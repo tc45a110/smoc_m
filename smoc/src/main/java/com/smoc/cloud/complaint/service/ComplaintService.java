@@ -165,7 +165,10 @@ public class ComplaintService {
         if("day".equals(messageComplaintInfoValidator.getComplaintSource())){
             for(ComplaintExcelModel info:list){
                 //查询日志表
-                TableStoreMessageDetailInfoValidator message =  tableStoreMessageDetailInfoRepository.findByCarrierAndPhoneNumberAndMessageContent(messageComplaintInfoValidator.getCarrier(),info.getReportNumber(),info.getReportContent());
+                Date data = DateTimeUtils.dateAddDays(new Date(),-7);
+                String sDate = DateTimeUtils.getDateFormat(data);
+                String endDate = DateTimeUtils.getDateFormat(new Date());
+                TableStoreMessageDetailInfoValidator message =  tableStoreMessageDetailInfoRepository.findByCarrierAndPhoneNumberAndMessageContent(messageComplaintInfoValidator.getCarrier(),info.getReportNumber(),info.getReportContent(),sDate,endDate);
                 if(!StringUtils.isEmpty(message)){
                     info.setBusinessAccount(message.getBusinessAccount());
                     info.setSendDate(message.getUserSubmitTime());

@@ -6,6 +6,9 @@ import com.smoc.cloud.common.smoc.reconciliation.ReconciliationCarrierItemsValid
 import com.smoc.cloud.common.smoc.reconciliation.model.ReconciliationChannelCarrierModel;
 import com.smoc.cloud.reconciliation.entity.ReconciliationCarrierItems;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -26,4 +29,14 @@ public interface ReconciliationCarrierRepository extends JpaRepository<Reconcili
      * @return
      */
     List<ReconciliationCarrierItemsValidator> findReconciliationCarrier(String startDate, String channelProvder);
+
+    /**
+     * 保存对账
+     * @param reconciliationChannelCarrierModel
+     */
+    void batchSave(ReconciliationChannelCarrierModel reconciliationChannelCarrierModel);
+
+    @Modifying
+    @Query(value = "update account_channel_info reconciliation_carrier_items set status =0 where CHANNEL_PERIOD = :channelPeriod and CHANNEL_PROVDER = :channelProvder ",nativeQuery = true)
+    void deleteByChannelPeriodAndChannelProvder(@Param("channelPeriod")String channelPeriod,@Param("channelProvder")String channelProvder);
 }

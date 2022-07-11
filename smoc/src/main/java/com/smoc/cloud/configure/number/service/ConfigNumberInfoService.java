@@ -221,6 +221,7 @@ public class ConfigNumberInfoService {
         return ResponseDataUtil.buildSuccess(configNumberInfoValidator);
     }
 
+    @Transactional
     public ResponseData deleteRedis(String numberCode) {
         Jedis jedis = jedisPool.getResource();
         try {
@@ -228,6 +229,9 @@ public class ConfigNumberInfoService {
         } finally {
             jedis.close();
         }
+
+        log.info("[携号转网][delete]数据:{}", numberCode);
+        configNumberInfoRepository.deleteByNumberCode(numberCode);
 
         return ResponseDataUtil.buildSuccess();
     }

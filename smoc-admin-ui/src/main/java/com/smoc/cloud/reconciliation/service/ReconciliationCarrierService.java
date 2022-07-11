@@ -53,4 +53,19 @@ public class ReconciliationCarrierService {
         }
 
     }
+
+    /**
+     * 保存对账
+     * @param reconciliationChannelCarrierModel
+     * @return
+     */
+    public ResponseData save(ReconciliationChannelCarrierModel reconciliationChannelCarrierModel) {
+        try {
+            ResponseData data = this.reconciliationCarrierRemoteClient.save(reconciliationChannelCarrierModel);
+            return data;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
 }

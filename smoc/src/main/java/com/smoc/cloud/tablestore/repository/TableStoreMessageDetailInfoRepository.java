@@ -9,6 +9,8 @@ import com.smoc.cloud.common.smoc.message.MessageDetailInfoValidator;
 import com.smoc.cloud.common.smoc.message.TableStoreMessageDetailInfoValidator;
 import com.smoc.cloud.common.smoc.message.model.MessageTaskDetail;
 import com.smoc.cloud.common.utils.DateTimeUtils;
+import com.smoc.cloud.customer.entity.AccountBasicInfo;
+import com.smoc.cloud.customer.repository.BusinessAccountRepository;
 import com.smoc.cloud.message.rowmapper.MessageDetailInfoRowMapper;
 import com.smoc.cloud.message.rowmapper.MessageMessageRecordRowMapper;
 import com.smoc.cloud.message.rowmapper.MessageTaskDetailRowMapper;
@@ -18,9 +20,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -28,6 +32,9 @@ public class TableStoreMessageDetailInfoRepository extends TableStorePageReposit
 
     @Autowired
     private TableStoreUtils tableStoreUtils;
+
+    @Resource
+    private BusinessAccountRepository businessAccountRepository;
 
     public PageList<TableStoreMessageDetailInfoValidator> tableStorePage(PageParams<TableStoreMessageDetailInfoValidator> pageParams) {
 
@@ -69,10 +76,17 @@ public class TableStoreMessageDetailInfoRepository extends TableStorePageReposit
         while (resultSet.hasNext()) {
             SQLRow row = resultSet.next();
             TableStoreMessageDetailInfoValidator messageDetailInfoValidator = new TableStoreMessageDetailInfoValidator();
+            String accountId = row.getString("account_id");
             messageDetailInfoValidator.setPhoneNumber(row.getString("phone_number"));
             messageDetailInfoValidator.setBusinessAccount(row.getString("account_id"));
             messageDetailInfoValidator.setBusinessMessageFlag(row.getString("business_message_flag"));
             messageDetailInfoValidator.setUserSubmitTime(DateTimeUtils.getDateTimeFormat(new Date(row.getLong("user_submit_time"))));
+            if(!StringUtils.isEmpty(accountId)){
+                Optional<AccountBasicInfo> data = businessAccountRepository.findById(accountId);
+                if(data.isPresent()){
+                    messageDetailInfoValidator.setAccountName(data.get().getAccountName());
+                }
+            }
            /* messageDetailInfoValidator.setUserSubmitType(row.getString("user_submit_type"));
             messageDetailInfoValidator.setBusinessMessageFlag(row.getString("business_message_flag"));
             messageDetailInfoValidator.setSegmentCarrier(row.getString("segment_carrier"));
@@ -209,7 +223,7 @@ public class TableStoreMessageDetailInfoRepository extends TableStorePageReposit
      * @param reportContent
      * @return
      */
-    public TableStoreMessageDetailInfoValidator findByCarrierAndPhoneNumberAndMessageContent(String carrier, String reportNumber, String reportContent) {
+    public TableStoreMessageDetailInfoValidator findByCarrierAndPhoneNumberAndMessageContent(String carrier, String reportNumber, String reportContent,String startDate,String endDate) {
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select * from access_log where 1=1 ");
         //手机号
@@ -218,7 +232,12 @@ public class TableStoreMessageDetailInfoRepository extends TableStorePageReposit
         //sqlBuffer.append(" and segment_carrier = '"+carrier.trim()+"'");
         //运营商
        // sqlBuffer.append(" and message_content = '"+reportContent.trim()+"'");
-        sqlBuffer.append(" limit 0,1");
+        //开始时间：时间戳
+        sqlBuffer.append(" and user_submit_time >= "+DateTimeUtils.getDateFormat(startDate).getTime()+"");
+        //结束时间：时间戳
+        sqlBuffer.append(" and user_submit_time <= "+DateTimeUtils.getDateFormat(endDate).getTime()+"");
+
+        //sqlBuffer.append(" limit 0,10");
 
         //初始化
         SyncClient client = tableStoreUtils.client();
@@ -234,12 +253,17 @@ public class TableStoreMessageDetailInfoRepository extends TableStorePageReposit
         TableStoreMessageDetailInfoValidator messageDetailInfoValidator =null;
         while (resultSet.hasNext()) {
             SQLRow row = resultSet.next();
-            messageDetailInfoValidator = new TableStoreMessageDetailInfoValidator();
-            messageDetailInfoValidator.setBusinessAccount(row.getString("account_id"));
-            messageDetailInfoValidator.setUserSubmitTime(DateTimeUtils.getDateTimeFormat(new Date(row.getLong("user_submit_time"))));
-            /*messageDetailInfoValidator.setChannelId(row.getString("channel_id"));
-            messageDetailInfoValidator.setChannelSrcid(row.getString("channel_srcid"));*/
+            if(row.getString("account_id").equals(reportContent) && row.getString("business_carrier").equals(carrier)){
+                messageDetailInfoValidator = new TableStoreMessageDetailInfoValidator();
+                messageDetailInfoValidator.setBusinessAccount(row.getString("account_id"));
+                messageDetailInfoValidator.setUserSubmitTime(DateTimeUtils.getDateTimeFormat(new Date(row.getLong("user_submit_time"))));
+                /*messageDetailInfoValidator.setChannelId(row.getString("channel_id"));
+                messageDetailInfoValidator.setChannelSrcid(row.getString("channel_srcid"));*/
+
+                break;
+            }
         }
+
         return messageDetailInfoValidator;
     }
 }

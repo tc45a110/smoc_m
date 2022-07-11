@@ -274,8 +274,8 @@ public class MessageDetailInfoRepositoryImpl extends BasePageRepository {
 
             //手机号
             if (!StringUtils.isEmpty(qo.getMobile())) {
-                sqlBuffer.append(" and t.PHONE_NUMBER like ? ");
-                paramsList.add("%" + qo.getMobile().trim() + "%");
+                sqlBuffer.append(" and t.PHONE_NUMBER = ? ");
+                paramsList.add(qo.getMobile().trim());
             }
 
             sqlBuffer.append(" order by t.REPORT_TIME desc");
@@ -339,8 +339,8 @@ public class MessageDetailInfoRepositoryImpl extends BasePageRepository {
 
             //手机号
             if (!StringUtils.isEmpty(qo.getMobile())) {
-                sqlBuffer.append(" and t.PHONE_NUMBER like ? ");
-                paramsList.add("%" + qo.getMobile().trim() + "%");
+                sqlBuffer.append(" and t.PHONE_NUMBER = ? ");
+                paramsList.add(qo.getMobile().trim());
             }
 
             sqlBuffer.append(" order by t.REPORT_TIME desc");
@@ -406,8 +406,8 @@ public class MessageDetailInfoRepositoryImpl extends BasePageRepository {
 
             //手机号
             if (!StringUtils.isEmpty(qo.getPhoneNumber())) {
-                sqlBuffer.append(" and t.PHONE_NUMBER like ?");
-                paramsList.add("%" + qo.getPhoneNumber().trim() + "%");
+                sqlBuffer.append(" and t.PHONE_NUMBER = ?");
+                paramsList.add(qo.getPhoneNumber().trim());
             }
 
             //业务账号

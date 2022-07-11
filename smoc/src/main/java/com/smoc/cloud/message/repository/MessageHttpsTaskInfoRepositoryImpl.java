@@ -186,7 +186,7 @@ public class MessageHttpsTaskInfoRepositoryImpl extends BasePageRepository {
             sqlBuffer.append(" from message_daily_statistics t left join account_base_info a on t.BUSINESS_ACCOUNT = a.ACCOUNT_ID left join enterprise_basic_info b on a.ENTERPRISE_ID = b.ENTERPRISE_ID ");
             sqlBuffer.append(" where 1=1 ");
 
-            groupBySql = "group by t.MESSAGE_DATE,t.BUSINESS_ACCOUNT,CARRIER, t.MESSAGE_SIGN ";
+            groupBySql = "group by t.MESSAGE_DATE,t.BUSINESS_ACCOUNT,t.CARRIER, t.MESSAGE_SIGN ";
         }
 
         List<Object> paramsList = new ArrayList<Object>();
@@ -221,7 +221,7 @@ public class MessageHttpsTaskInfoRepositoryImpl extends BasePageRepository {
         }
 
         sqlBuffer.append(groupBySql);
-        sqlBuffer.append(" order by t.MESSAGE_DATE desc");
+        sqlBuffer.append(" order by t.MESSAGE_DATE desc,t.BUSINESS_ACCOUNT ");
 
         //根据参数个数，组织参数值
         Object[] params = new Object[paramsList.size()];

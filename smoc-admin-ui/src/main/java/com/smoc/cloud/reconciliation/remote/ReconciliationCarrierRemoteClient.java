@@ -39,4 +39,12 @@ public interface ReconciliationCarrierRemoteClient {
      */
     @RequestMapping(value = "/reconciliation/carrier/findReconciliationCarrier/{startDate}/{channelProvder}", method = RequestMethod.GET)
     ResponseData<List<ReconciliationCarrierItemsValidator>> findReconciliationCarrier(@PathVariable String startDate, @PathVariable String channelProvder);
+
+    /**
+     * 保存对账
+     * @param reconciliationChannelCarrierModel
+     * @return
+     */
+    @RequestMapping(value = "/reconciliation/carrier/save", method = RequestMethod.POST)
+    ResponseData save(@RequestBody ReconciliationChannelCarrierModel reconciliationChannelCarrierModel);
 }

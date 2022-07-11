@@ -44,4 +44,19 @@ public class ReconciliationCarrierService {
 
         return ResponseDataUtil.buildSuccess(pageList);
     }
+
+    /**
+     * 保存对账
+     * @param reconciliationChannelCarrierModel
+     * @return
+     */
+    public ResponseData save(ReconciliationChannelCarrierModel reconciliationChannelCarrierModel) {
+
+        //先删除
+        reconciliationCarrierRepository.deleteByChannelPeriodAndChannelProvder(reconciliationChannelCarrierModel.getChannelPeriod(),reconciliationChannelCarrierModel.getChannelProvder());
+
+        reconciliationCarrierRepository.batchSave(reconciliationChannelCarrierModel);
+
+        return ResponseDataUtil.buildSuccess();
+    }
 }
