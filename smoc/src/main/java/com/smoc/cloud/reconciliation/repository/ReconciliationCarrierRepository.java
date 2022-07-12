@@ -41,4 +41,11 @@ public interface ReconciliationCarrierRepository extends JpaRepository<Reconcili
     @Modifying
     @Query(value = "update reconciliation_carrier_items set status =0 where CHANNEL_PERIOD = :channelPeriod and CHANNEL_PROVDER = :channelProvder ",nativeQuery = true)
     void deleteByChannelPeriodAndChannelProvder(@Param("channelPeriod")String channelPeriod,@Param("channelProvder")String channelProvder);
+
+    /**
+     * 运营商对账记录
+     * @param pageParams
+     * @return
+     */
+    PageList<ReconciliationChannelCarrierModel> reconciliationCarrierRecord(PageParams<ReconciliationChannelCarrierModel> pageParams);
 }

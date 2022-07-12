@@ -97,14 +97,14 @@ public class ReconciliationCarrierRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(" t.CHANNEL_PROVDER,");
         sqlBuffer.append(" t.CHANNEL_ID,");
         sqlBuffer.append(" t.SRC_ID,");
-        sqlBuffer.append(" t.CHANNEL_PRICE, ");
+        sqlBuffer.append(" IFNULL(t.CHANNEL_PRICE,0)CHANNEL_PRICE, ");
         sqlBuffer.append(" t.BUSINESS_TYPE, ");
         sqlBuffer.append(" t.MESSAGE_SUCCESS_NUM,");
-        sqlBuffer.append(" IFNULL(a.CARRIER_TOTAL_AMOUNT,0)CARRIER_TOTAL_AMOUNT,");
+        sqlBuffer.append(" a.CARRIER_TOTAL_AMOUNT,");
         sqlBuffer.append(" a.CARRIER_TOTAL_SEND_QUANTITY,");
         sqlBuffer.append(" a.CHANNEL_PERIOD_STATUS");
         sqlBuffer.append(" from view_reconciliation_carrier t left join reconciliation_carrier_items a  ");
-        sqlBuffer.append(" on t.MESSAGE_DATE=a.CHANNEL_PERIOD and t.CHANNEL_PROVDER=a.CHANNEL_PROVDER and t.CHANNEL_ID=a.CHANNEL_ID ");
+        sqlBuffer.append(" on t.MESSAGE_DATE=a.CHANNEL_PERIOD and t.CHANNEL_PROVDER=a.CHANNEL_PROVDER and t.CHANNEL_ID=a.CHANNEL_ID and t.BUSINESS_TYPE=a.BUSINESS_TYPE and t.CHANNEL_PRICE=a.PRICE");
         sqlBuffer.append(" where t.MESSAGE_DATE =? and t.CHANNEL_PROVDER =? and (a.STATUS=1 or a.STATUS is null)");
 
         List<Object> paramsList = new ArrayList<Object>();
@@ -173,4 +173,85 @@ public class ReconciliationCarrierRepositoryImpl extends BasePageRepository {
 
     }
 
+    public PageList<ReconciliationChannelCarrierModel> reconciliationCarrierRecord(PageParams<ReconciliationChannelCarrierModel> pageParams) {
+
+        //查询条件
+        ReconciliationChannelCarrierModel qo = pageParams.getParams();
+
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append(" t.CHANNEL_PERIOD MESSAGE_DATE,");
+        sqlBuffer.append(" t.CHANNEL_PROVDER,");
+        sqlBuffer.append(" t.CHANNEL_PERIOD_STATUS");
+        sqlBuffer.append(" from reconciliation_carrier_items t where t.STATUS=1 ");
+
+        List<Object> paramsList = new ArrayList<Object>();
+
+        //账期
+        if (!StringUtils.isEmpty(qo.getChannelPeriod())) {
+            sqlBuffer.append(" and t.CHANNEL_PERIOD =?");
+            paramsList.add(qo.getChannelPeriod().trim());
+        }
+        //账期类型
+        if (!StringUtils.isEmpty(qo.getChannelProvder())) {
+            sqlBuffer.append(" and t.CHANNEL_PROVDER =?");
+            paramsList.add(qo.getChannelProvder().trim());
+        }
+
+        sqlBuffer.append("  group by t.CHANNEL_PERIOD,t.CHANNEL_PROVDER order by t.CHANNEL_PERIOD desc,t.CHANNEL_PROVDER ");
+        //log.info("[SQL]:{}",sqlBuffer);
+        //根据参数个数，组织参数值
+        Object[] params = new Object[paramsList.size()];
+        paramsList.toArray(params);
+        //log.info("[SQL1]:{}",sqlBuffer);
+        PageList<ReconciliationChannelCarrierModel> pageList = this.queryByPageForMySQL(sqlBuffer.toString(), params, pageParams.getCurrentPage(), pageParams.getPageSize(), new ReconciliationChannelRowMapper());
+        pageList.getPageParams().setParams(qo);
+
+        List<ReconciliationChannelCarrierModel> list = pageList.getList();
+        if(null != pageList.getList() && pageList.getList().size()>0){
+            for(ReconciliationChannelCarrierModel model :list){
+                List<ReconciliationCarrierItemsValidator> carrierList = findReconciliationCarrierRecord(model.getChannelPeriod(),model.getChannelProvder());
+                if(null != carrierList && carrierList.size()>0){
+                    model.setRowspan(carrierList.size());
+                }else{
+                    model.setRowspan(1);
+                }
+                model.setCarrierList(carrierList);
+            }
+        }
+
+        return pageList;
+
+    }
+
+    public List<ReconciliationCarrierItemsValidator> findReconciliationCarrierRecord(String channelPeriod, String channelProvder) {
+
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append(" t.CHANNEL_PERIOD MESSAGE_DATE,");
+        sqlBuffer.append(" t.CHANNEL_PROVDER,");
+        sqlBuffer.append(" t.CHANNEL_ID,");
+        sqlBuffer.append(" t.SRC_ID,");
+        sqlBuffer.append(" IFNULL(t.PRICE,0)CHANNEL_PRICE, ");
+        sqlBuffer.append(" t.BUSINESS_TYPE, ");
+        sqlBuffer.append(" t.TOTAL_SEND_QUANTITY MESSAGE_SUCCESS_NUM,");
+        sqlBuffer.append(" t.CARRIER_TOTAL_AMOUNT,");
+        sqlBuffer.append(" t.CARRIER_TOTAL_SEND_QUANTITY,");
+        sqlBuffer.append(" t.CHANNEL_PERIOD_STATUS");
+        sqlBuffer.append(" from reconciliation_carrier_items t  ");
+        sqlBuffer.append(" where t.CHANNEL_PERIOD =? and t.CHANNEL_PROVDER =? and t.STATUS=1 ");
+
+        List<Object> paramsList = new ArrayList<Object>();
+        paramsList.add(channelPeriod.trim());
+        paramsList.add(channelProvder.trim());
+
+        sqlBuffer.append(" order by t.CHANNEL_ID ");
+
+        //根据参数个数，组织参数值
+        Object[] params = new Object[paramsList.size()];
+        paramsList.toArray(params);
+
+        List<ReconciliationCarrierItemsValidator> list = this.queryForObjectList(sqlBuffer.toString(), params, new ReconciliationCarrierRowMapper());
+        return list;
+    }
 }

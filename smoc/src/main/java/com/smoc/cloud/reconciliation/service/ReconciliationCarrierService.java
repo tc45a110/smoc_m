@@ -61,4 +61,15 @@ public class ReconciliationCarrierService {
 
         return ResponseDataUtil.buildSuccess();
     }
+
+    /**
+     * 运营商对账记录
+     * @param pageParams
+     * @return
+     */
+    public ResponseData<PageList<ReconciliationChannelCarrierModel>> reconciliationCarrierRecord(PageParams<ReconciliationChannelCarrierModel> pageParams) {
+        PageList<ReconciliationChannelCarrierModel> pageList = reconciliationCarrierRepository.reconciliationCarrierRecord(pageParams);
+
+        return ResponseDataUtil.buildSuccess(pageList);
+    }
 }

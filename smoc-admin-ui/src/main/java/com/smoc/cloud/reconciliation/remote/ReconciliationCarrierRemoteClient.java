@@ -47,4 +47,12 @@ public interface ReconciliationCarrierRemoteClient {
      */
     @RequestMapping(value = "/reconciliation/carrier/save", method = RequestMethod.POST)
     ResponseData save(@RequestBody ReconciliationChannelCarrierModel reconciliationChannelCarrierModel);
+
+    /**
+     * 运营商对账记录
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/reconciliation/carrier/reconciliationCarrierRecord", method = RequestMethod.POST)
+    ResponseData<PageList<ReconciliationChannelCarrierModel>> reconciliationCarrierRecord(@RequestBody PageParams<ReconciliationChannelCarrierModel> params);
 }

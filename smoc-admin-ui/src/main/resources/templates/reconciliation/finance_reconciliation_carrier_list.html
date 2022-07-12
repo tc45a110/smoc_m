@@ -112,7 +112,7 @@
                                 <tr>
                                     <th>账期</th>
                                     <th>运营商</th>
-                                    <th>端口号（计费号码）</th>
+                                    <th>接入码号（计费号码）</th>
                                     <th>发送量</th>
                                     <th>价格</th>
                                     <th>总金额</th>
@@ -139,50 +139,47 @@
                                             [[${dataInfo.srcId}]]([[${dataInfo.channelId}]])
                                         </td>
                                         <td class="smoc" style="vertical-align: middle;line-height: 26px" th:each="dataInfo:${info.carrierList}" th:if="${dataInfoStat.index ==0}">
-                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                             style="width:90px;text-align:left"
-                                             class="autonumber">[[${dataInfo.totalSendQuantity}]]</span>
+                                            [[${dataInfo.totalSendQuantity}]]
                                         </td>
                                         <td class="smoc" style="vertical-align: middle;line-height: 26px" th:each="dataInfo:${info.carrierList}" th:if="${dataInfoStat.index ==0}">
                                             ¥[[${dataInfo.price}]]
                                         </td>
                                         <td class="smoc" style="vertical-align: middle;line-height: 26px" th:each="dataInfo:${info.carrierList}" th:if="${dataInfoStat.index ==0}">
-                                            <span data-d-group="4" data-a-sign="¥ " class="autonumber">[[${dataInfo.totalAmount}]]</span>
+                                            [[${dataInfo.totalAmount}]]
                                         </td>
                                         <td class="carrier" style="vertical-align: middle;line-height: 26px" th:each="dataInfo:${info.carrierList}" th:if="${dataInfoStat.index ==0}">
-                                            <span data-d-group="4" data-a-sign="¥ " class="autonumber">[[${dataInfo.carrierTotalAmount}]]</span>
+                                            [[${dataInfo.carrierTotalAmount}]]
                                         </td>
                                         <td class="carrier" style="vertical-align: middle;line-height: 26px" th:each="dataInfo:${info.carrierList}" th:if="${dataInfoStat.index ==0}">
-                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                             style="width:90px;text-align:left"
-                                             class="autonumber">[[${dataInfo.carrierTotalSendQuantity}]]</span>
+                                           <span th:if="${dataInfo.carrierTotalSendQuantity ne 0}">[[${dataInfo.carrierTotalSendQuantity}]]</span>
                                         </td>
                                         <td class="contradiction" style="vertical-align: middle;line-height: 26px" th:each="dataInfo:${info.carrierList}" th:if="${dataInfoStat.index ==0}">
-                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                             style="width:90px;text-align:left"
-                                             class="autonumber">[[${dataInfo.quantityDifference}]]</span>
+                                           <span th:if="${dataInfo.quantityDifference ne 0}">[[${dataInfo.quantityDifference}]] ([[${dataInfo.quantityDifferenceRate}]]%)</span>
                                         </td>
                                         <td class="contradiction" style="vertical-align: middle;line-height: 26px" th:each="dataInfo:${info.carrierList}" th:if="${dataInfoStat.index ==0}">
-                                            <span data-d-group="4" data-a-sign="¥ " class="autonumber">[[${dataInfo.amountDifference}]]</span>
+                                            [[${dataInfo.amountDifference}]]
+                                        </td>
+                                        <td style="vertical-align: middle;line-height: 26px;text-align:center" th:rowspan="${info.rowspan}">
+                                            <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light" th:if="${info.channelPeriodStatus eq '0'}">未配置</a>
+                                            <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light" th:if="${info.channelPeriodStatus eq '1'}">审核中</a>
+                                            <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light" th:if="${info.channelPeriodStatus eq '2'}">已完成</a>
                                         </td>
                                         <td style="vertical-align: middle;line-height: 26px" th:rowspan="${info.rowspan}">
-                                            <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light"></a>
-                                        </td>
-                                        <td style="vertical-align: middle;line-height: 26px" th:rowspan="${info.rowspan}">
-                                            <a sec:authorize-url="/finance/reconciliation/carrier/view/center/*"
-                                               th:href="@{/finance/reconciliation/carrier/view/center/id}"
+                                            <a sec:authorize-url="/finance/reconciliation/carrier/view/center/*/*"
+                                               th:href="@{/finance/reconciliation/carrier/view/center/{channelProvder}/{startDate}(channelProvder=${info.channelProvder},startDate=${info.channelPeriod})}"
                                                data-toggle="tooltip" data-placement="bottom"
                                                data-original-title="查看对账明细"
                                                class="on-default edit-row"
                                                style="padding-left: 5px;color:#4BD396;"><i style="font-size: 18px"
                                                                                            class="glyphicon glyphicon-search"></i></a>
-                                            <a
+                                            <a sec:authorize-url="/finance/reconciliation/carrier/excel/*/*"
+                                               th:href="@{/finance/reconciliation/carrier/excel/{channelProvder}/{startDate}(channelProvder=${info.channelProvder},startDate=${info.channelPeriod})}"
                                                     data-toggle="tooltip" data-placement="bottom"
                                                     data-original-title="导出EXCEL"
                                                     class="on-default edit-row"
                                                     style="padding-left: 5px;color:#188ae2"><i style="font-size: 18px"
                                                                                                class="glyphicon glyphicon-export"></i></a>
-                                            <a sec:authorize-url="/finance/reconciliation/carrier/reconciliation/center/*/*"
+                                            <a sec:authorize-url="/finance/reconciliation/carrier/reconciliation/center/*/*" th:if="${info.channelPeriodStatus ne '2'}"
                                                th:href="@{/finance/reconciliation/carrier/reconciliation/center/{channelProvder}/{startDate}(channelProvder=${info.channelProvder},startDate=${info.channelPeriod})}"
                                                data-toggle="tooltip" data-placement="bottom"
                                                data-original-title="开始对账"
@@ -197,31 +194,25 @@
                                             [[${dataInfo.srcId}]]([[${dataInfo.channelId}]])
                                         </td>
                                         <td class="smoc" style="vertical-align: middle;line-height: 26px">
-                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                             style="width:90px;text-align:left"
-                                             class="autonumber">[[${dataInfo.totalSendQuantity}]]</span>
+                                           [[${dataInfo.totalSendQuantity}]]
                                         </td>
                                         <td class="smoc" style="vertical-align: middle;line-height: 26px">
                                             ¥[[${dataInfo.price}]]
                                         </td>
                                         <td class="smoc" style="vertical-align: middle;line-height: 26px">
-                                            <span data-d-group="4" data-a-sign="¥ " class="autonumber">[[${dataInfo.totalAmount}]]</span>
+                                            [[${dataInfo.totalAmount}]]
                                         </td>
                                         <td class="carrier" style="vertical-align: middle;line-height: 26px">
-                                            <span data-d-group="4" data-a-sign="¥ " class="autonumber">[[${dataInfo.carrierTotalAmount}]]</span>
+                                            [[${dataInfo.carrierTotalAmount}]]
                                         </td>
                                         <td class="carrier" style="vertical-align: middle;line-height: 26px">
-                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                             style="width:90px;text-align:left"
-                                             class="autonumber">[[${dataInfo.carrierTotalSendQuantity}]]</span>
+                                       <span  th:if="${dataInfo.carrierTotalSendQuantity ne 0}">[[${dataInfo.carrierTotalSendQuantity}]]</span>
                                         </td>
                                         <td class="contradiction" style="vertical-align: middle;line-height: 26px">
-                                       <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
-                                             style="width:90px;text-align:left"
-                                             class="autonumber">[[${dataInfo.quantityDifference}]]</span>
+                                       <span th:if="${dataInfo.quantityDifference ne 0}">[[${dataInfo.quantityDifference}]]([[${dataInfo.quantityDifferenceRate}]]%)</span>
                                         </td>
                                         <td class="contradiction" style="vertical-align: middle;line-height: 26px">
-                                            <span data-d-group="4" data-a-sign="¥ " class="autonumber">[[${dataInfo.amountDifference}]]</span>
+                                            [[${dataInfo.amountDifference}]]
                                         </td>
                                     </tr>
                                 </th:block>

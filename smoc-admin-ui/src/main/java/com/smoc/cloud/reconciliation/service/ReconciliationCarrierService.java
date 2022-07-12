@@ -68,4 +68,17 @@ public class ReconciliationCarrierService {
             return ResponseDataUtil.buildError(e.getMessage());
         }
     }
+
+    /**
+     * 运营商对账记录
+     * @param params
+     * @return
+     */
+    public ResponseData<PageList<ReconciliationChannelCarrierModel>> reconciliationCarrierRecord(PageParams<ReconciliationChannelCarrierModel> params) {
+        try {
+            return reconciliationCarrierRemoteClient.reconciliationCarrierRecord(params);
+        } catch (Exception e) {
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
 }

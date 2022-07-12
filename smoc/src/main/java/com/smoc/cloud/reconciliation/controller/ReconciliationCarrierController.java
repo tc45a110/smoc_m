@@ -61,4 +61,17 @@ public class ReconciliationCarrierController {
 
         return reconciliationCarrierService.save(reconciliationChannelCarrierModel);
     }
+
+    /**
+     * 运营商对账记录
+     *
+     * @param pageParams
+     * @return
+     */
+    @RequestMapping(value = "/reconciliationCarrierRecord", method = RequestMethod.POST)
+    public ResponseData<PageList<ReconciliationChannelCarrierModel>> reconciliationCarrierRecord(@RequestBody PageParams<ReconciliationChannelCarrierModel> pageParams) {
+
+        return reconciliationCarrierService.reconciliationCarrierRecord(pageParams);
+    }
+
 }

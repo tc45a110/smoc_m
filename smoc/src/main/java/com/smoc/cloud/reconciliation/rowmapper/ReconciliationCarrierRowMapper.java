@@ -31,13 +31,17 @@ public class ReconciliationCarrierRowMapper implements RowMapper<ReconciliationC
             qo.setTotalAmount(new BigDecimal(0));
         }
 
+        //运营商总额
+        if(!StringUtils.isEmpty(resultSet.getBigDecimal("CARRIER_TOTAL_AMOUNT"))){
+            qo.setCarrierTotalAmount(new BigDecimal(qo.getCarrierTotalAmount().stripTrailingZeros().toPlainString()));
+        }
+
         //金额差额
         if(!StringUtils.isEmpty(qo.getCarrierTotalAmount())){
-            qo.setAmountDifference(new BigDecimal(qo.getTotalAmount().subtract(qo.getCarrierTotalAmount()).stripTrailingZeros().toPlainString()));
-        }
-        //条数差额
-        if(!StringUtils.isEmpty(qo.getCarrierTotalSendQuantity())){
+            qo.setAmountDifference(new BigDecimal(qo.getTotalAmount().subtract(qo.getCarrierTotalAmount()).setScale(2, BigDecimal.ROUND_HALF_UP).stripTrailingZeros().toPlainString()));
+
             qo.setQuantityDifference(qo.getTotalSendQuantity() - qo.getCarrierTotalSendQuantity());
+            qo.setQuantityDifferenceRate( new BigDecimal(qo.getQuantityDifference()).divide(new BigDecimal(qo.getCarrierTotalSendQuantity()), 2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)).stripTrailingZeros().toPlainString());
         }
 
         return qo;

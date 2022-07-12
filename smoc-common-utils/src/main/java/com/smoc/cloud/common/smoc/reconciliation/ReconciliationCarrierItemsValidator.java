@@ -33,6 +33,8 @@ public class ReconciliationCarrierItemsValidator {
 
     //条数差额
     private long quantityDifference;
+    //条数差额比列
+    private String quantityDifferenceRate;
     //金额差额
     private BigDecimal amountDifference;
 }
