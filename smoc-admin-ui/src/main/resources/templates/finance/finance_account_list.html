@@ -81,30 +81,36 @@
         <!-- end row -->
 
         <!-- start row  汇总统计-->
-        <div id="help" class="row" th:remove="${#strings.isEmpty(error)}?none:all">
-            <div class="col-sm-12">
-                <div class="detail">
-                    <ul>
-                        <li>
-                            <h2 style="color: #fff">财务账户汇总统计</h2>
-                            <span></span>
-                            <div class="detailInner">
+        <div class="detail">
+            <div id="help" class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+                <ul>
+                    <li>
+                        <h2 style="color: #fff">财务账户汇总统计</h2>
+                        <span></span>
+                        <div class="row">
+                            <div class="form-group  col-lg-3 col-md-6 col-sm-6 col-xs-12 detailInner" style="min-width:400px;">
                                 <a>总可用（元）：<span data-d-group="4" data-a-sign="¥ "
                                                 style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
-                                                readonly class="autonumber">[[${counter.get('ACCOUNT_USABLE_SUM')}]]</span></a><i></i>
+                                                readonly class="autonumber">[[${counter.get('ACCOUNT_USABLE_SUM')}]]</span></a>
+                            </div>
+                            <div class="form-group  col-lg-3 col-md-6 col-sm-6 col-xs-12 detailInner" style="min-width:400px;">
                                 <a>总冻结（元）：<span data-d-group="4" data-a-sign="¥ "
                                                 style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
-                                                readonly class="autonumber">[[${counter.get('ACCOUNT_FROZEN_SUM')}]]</span></a><i></i>
+                                                readonly class="autonumber">[[${counter.get('ACCOUNT_FROZEN_SUM')}]]</span></a>
+                            </div>
+                            <div class="form-group col-lg-3 col-md-6 col-sm-6 col-xs-12 detailInner" style="min-width:400px;">
                                 <a>总消费（元）：<span data-d-group="4" data-a-sign="¥ "
                                                 style="color:#fff;width:120px;background-color:#0095a8;text-align:left"
-                                                readonly class="autonumber">[[${counter.get('ACCOUNT_CONSUME_SUM')}]]</span></a><i></i>
+                                                readonly class="autonumber">[[${counter.get('ACCOUNT_CONSUME_SUM')}]]</span></a>
+                            </div>
+                            <div class="form-group  col-lg-3 col-md-6 col-sm-6 col-xs-12 detailInner" style="min-width:400px;">
                                 <a>总充值（元）：<span data-d-group="4" data-a-sign="¥ "
                                                 style="color:#fff;width:120px;background-color:#0095a8;text-align:left"
                                                 readonly class="autonumber">[[${counter.get('ACCOUNT_RECHARGE_SUM')}]]</span></a>
                             </div>
-                        </li>
-                    </ul>
-                </div>
+                        </div>
+                    </li>
+                </ul>
             </div>
         </div>
         <!-- end row -->

@@ -70,19 +70,20 @@
         <!-- end row -->
 
         <!-- start row  汇总统计-->
-        <div id="help" class="row" th:remove="${#strings.isEmpty(error)}?none:all">
-            <div class="col-sm-12">
-                <div class="detail">
-                    <ul>
-                        <li>
-                            <h2 style="color: #fff">友好提示</h2>
-                            <span></span>
-                            <div class="detailInner">
+        <div class="detail">
+            <div id="help" class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+                <ul>
+                    <li>
+                        <h2 style="color: #fff">友好提示</h2>
+                        <span></span>
+                        <div class="row">
+                            <div class="form-group  col-xs-12 detailInner">
                                 <span style="width:500px;height:36px;background-color:#0095a8;color:#fff">发起EC出账前，请确认业务账号价格已调整完毕</span>
                             </div>
-                        </li>
-                    </ul>
-                </div>
+
+                        </div>
+                    </li>
+                </ul>
             </div>
         </div>
         <!-- end row -->

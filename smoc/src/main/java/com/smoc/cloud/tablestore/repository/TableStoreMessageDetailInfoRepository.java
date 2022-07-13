@@ -56,12 +56,12 @@ public class TableStoreMessageDetailInfoRepository extends TableStorePageReposit
 
         //开始时间：时间戳
         if (!StringUtils.isEmpty(qo.getStartDate())) {
-            sqlBuffer.append(" and user_submit_time >= "+DateTimeUtils.getDateFormat(qo.getStartDate()).getTime()+"");
+            sqlBuffer.append(" and user_submit_time >= "+DateTimeUtils.getDateTimeFormat(qo.getStartDate()).getTime()+"");
         }
 
         //结束时间：时间戳
         if (!StringUtils.isEmpty(qo.getEndDate())) {
-            sqlBuffer.append(" and user_submit_time <= "+DateTimeUtils.getDateFormat(qo.getEndDate()).getTime()+"");
+            sqlBuffer.append(" and user_submit_time <= "+DateTimeUtils.getDateTimeFormat(qo.getEndDate()).getTime()+"");
         }
 
         sqlBuffer.append(" order by user_submit_time desc ");
@@ -204,12 +204,12 @@ public class TableStoreMessageDetailInfoRepository extends TableStorePageReposit
 
         //开始时间：时间戳
         if (!StringUtils.isEmpty(qo.getStartDate())) {
-            sqlBuffer.append(" and user_submit_time >= "+DateTimeUtils.getDateFormat(qo.getStartDate()).getTime()+"");
+            sqlBuffer.append(" and user_submit_time >= "+DateTimeUtils.getDateTimeFormat(qo.getStartDate()).getTime()+"");
         }
 
         //结束时间：时间戳
         if (!StringUtils.isEmpty(qo.getEndDate())) {
-            sqlBuffer.append(" and user_submit_time <= "+DateTimeUtils.getDateFormat(qo.getEndDate()).getTime()+"");
+            sqlBuffer.append(" and user_submit_time <= "+DateTimeUtils.getDateTimeFormat(qo.getEndDate()).getTime()+"");
         }
 
         Long num = (Long) this.queryOneColumnForSigetonRow(sqlBuffer.toString(),Long.class);

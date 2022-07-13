@@ -393,7 +393,7 @@ public class MessageDetailInfoRepositoryImpl extends BasePageRepository {
             sqlBuffer.append(" t.SUBMIT_TIME,");
             sqlBuffer.append(" t.REPORT_TIME,");
             sqlBuffer.append(" t.STATUS_CODE,");
-            sqlBuffer.append(" ''PROTOCOL");
+            sqlBuffer.append(" t.SUBMIT_STYLE PROTOCOL");
             sqlBuffer.append(" from smoc_route.enterprise_message_mr_info_"+qo.getEnterpriseFlag()+" t ");
             sqlBuffer.append(" where 1=1 ");
 

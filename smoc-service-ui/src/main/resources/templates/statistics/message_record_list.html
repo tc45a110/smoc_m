@@ -23,7 +23,7 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">单条发送记录</h4>
+                    <h4 class="page-title">单条发送记录<small style="color: red">&nbsp;请根据手机号进行查询</small></h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
                             数据统计
@@ -49,15 +49,7 @@
                                     <input id="dateQueryStr" class="form-control" th:field="*{startDate}" type="text"/>
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <input type="text" class="form-control" th:field="*{businessAccount}"
-                                           placeholder="账号" autocomplete="off">
-                                </div>
-                                <div class="form-group  col-sm-3">
-                                    <input type="text" class="form-control" th:field="*{taskId}"
-                                           placeholder="批次号" autocomplete="off">
-                                </div>
-                                <div class="form-group  col-sm-3">
-                                    <input type="text" class="form-control" th:field="*{phoneNumber}"
+                                    <input type="text" class="form-control" th:field="*{phoneNumber}" required
                                            placeholder="手机号" autocomplete="off">
                                 </div>
 
@@ -84,7 +76,7 @@
                 <div class="panel panel-color panel-info">
                     <div class="panel-heading">
                         <h3 class="panel-title">
-                            单条发送记录<small>&nbsp;系统默认保留30天内的数据</small></h3>
+                            单条发送记录<small>&nbsp;请根据手机号进行查询，系统默认保留30天内的数据</small></h3>
                     </div>
                     <div class="panel-body">
                         <div class="table-responsive">
@@ -167,7 +159,7 @@
          minDate: '2019-01-01',
          maxDate: '2080-12-31',
          dateLimit: {
-             days: 31
+             days: 7
          },
         showDropdowns: true,
         showWeekNumbers: true,

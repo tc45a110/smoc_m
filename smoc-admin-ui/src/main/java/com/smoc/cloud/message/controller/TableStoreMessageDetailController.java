@@ -44,9 +44,9 @@ public class TableStoreMessageDetailController {
         params.setPageSize(10);
         params.setCurrentPage(1);
         TableStoreMessageDetailInfoValidator messageDetailInfoValidator = new TableStoreMessageDetailInfoValidator();
-        Date startDate = DateTimeUtils.getFirstMonth(1);
-        messageDetailInfoValidator.setStartDate(DateTimeUtils.getDateFormat(startDate));
-        messageDetailInfoValidator.setEndDate(DateTimeUtils.getDateFormat(new Date()));
+        Date startDate = DateTimeUtils.dateAddDays(new Date(),-3);
+        messageDetailInfoValidator.setStartDate(DateTimeUtils.getDateTimeFormat(startDate));
+        messageDetailInfoValidator.setEndDate(DateTimeUtils.getDateTimeFormat(new Date()));
         params.setParams(messageDetailInfoValidator);
 
         //查询
