@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
+
+</head>
+<body>
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <!-- start row 页面导航-->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">新建、修改运营商</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            资源接入
+                        </li>
+                        <li>
+                            运营商资源接入
+                        </li>
+                        <li class="active">
+                            新建、修改运营商
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row 页面内容-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-md-12">
+                <div class="card-box">
+                    <form id="submit_form" th:action="@{/iot/carrier/save/{op}(op=${op})}"
+                          th:object="${systemAccountInfoValidator}"
+                          method="post" data-parsley-validate="">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="p-20">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-6 form-group">
+                                                <select class="selectpicker" >
+                                                    <option>------请选择运营商------</option>
+                                                    <option>------中国移动------</option>
+                                                    <option>------中国联通------</option>
+                                                    <option>------中国电信------</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label for="identificationAccount">运营商名称<span
+                                                        class="text-danger">*</span>&nbsp;
+                                                </label>
+                                                <input id="identificationAccount" type="text" class="form-control"
+
+                                                       required="" data-parsley-length="[2,64]" readonly
+                                                       autocomplete="off">
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label for="md5HmacKey">运营商用户名<span
+                                                        class="text-danger">*</span>&nbsp;
+                                                </label>
+                                                <input id="md5HmacKey" type="text" class="form-control"
+
+                                                       required="" data-parsley-length="[2,32]" autocomplete="off"
+                                                       readonly>
+
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label for="aesKey">运营商服务地址<span class="text-danger">*</span>&nbsp;
+                                                </label>
+                                                <input id="aesKey" type="text" class="form-control"
+                                                       required="" data-parsley-length="[2,32]" autocomplete="off"
+                                                       readonly>
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label class="m-b-10">接口类型</label>
+                                                <br/>
+                                                <div style="margin-top:0px" class="radio radio-info checkbox-inline">
+                                                    <input name="accountStatus" type="radio" value="1" required><label>运营商标准接口</label>
+                                                </div>
+                                                <div style="margin-top:0px" class="radio radio-info checkbox-inline">
+                                                    <input name="accountStatus" type="radio" value="2" required ><label>个性化接口</label>
+                                                </div>
+
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label class="m-b-10">是否有效</label>
+                                                <br/>
+                                                <div style="margin-top:0px" class="radio radio-info checkbox-inline">
+                                                    <input name="accountStatus" type="radio" value="1" required><label>有效</label>
+                                                </div>
+                                                <div style="margin-top:0px" class="radio radio-info checkbox-inline">
+                                                    <input name="accountStatus" type="radio" value="2" required ><label>无效</label>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="col-md-12 text-center m-t-20">
+                                                <button sec:authorize-url="/iot/carrier/save/*" type="submit"
+                                                        class="btn btn-teal waves-effect waves-light">提交
+                                                </button>
+                                                <a sec:authorize-url="/iot/carrier/list"
+                                                   th:href="@{/iot/carrier/list}" style="margin-left:20px"
+                                                   class="btn btn-default waves-effect waves-light">返回</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end class p-20 -->
+                            </div> <!-- end col -->
+                        </div> <!-- end row -->
+                    </form>
+                    <!-- end form -->
+                </div> <!-- end card-box -->
+            </div> <!-- end col -->
+        </div>
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<th:block th:insert="fragments/common_fragments :: common_submit_form"/>
+<script>
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+</script>
+</body>
+</html>

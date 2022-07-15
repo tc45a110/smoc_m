@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <configuration scan="true" scanPeriod="30 seconds">
-
+    <include
+            resource="org/springframework/boot/logging/logback/base.xml" />
     <appender name="INFO_FILE"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
         <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
@@ -17,9 +18,9 @@
             <!-- yyyy-MM-dd-HH 时间策略则为一小时一个文件 -->
             <FileNamePattern>${LOG_PATH}/smoc-scheduler-filters-info.%d{yyyy-MM-dd-HH}.%i.log</FileNamePattern>
             <!--日志文件保留小时数-->
-            <MaxHistory>48</MaxHistory>
+            <MaxHistory>72</MaxHistory>
             <!--单个日志文件最大1GB-->
-            <maxFileSize>1GB</maxFileSize>
+            <maxFileSize>2GB</maxFileSize>
             <!--日志文件总大小超过20GB会删除旧的日志文件-->
             <totalSizeCap>20GB</totalSizeCap>
         </rollingPolicy>
@@ -35,32 +36,40 @@
         </filter>
         <!--  layout 负责把事件转换成字符串，格式化的日志信息的输出 -->
         <layout class="ch.qos.logback.classic.PatternLayout">
-            <Pattern> %msg%n
+            <Pattern>[%date{yyyy-MM-dd HH:mm:ss}] %msg%n
             </Pattern>
         </layout>
     </appender>
 
     <appender name="ERROR_FILE"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>ERROR</level>
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator>
+                <expression>return message.contains("[error]");</expression>
+            </evaluator>
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
         </filter>
-        <File>${LOG_PATH}/smoc-scheduler-filters-error.log</File>
-        <rollingPolicy
-                class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH}/smoc-scheduler-filters-error-%d{yyyyMMdd}.log.%i
-            </fileNamePattern>
-            <timeBasedFileNamingAndTriggeringPolicy
-                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>50MB</maxFileSize>
-            </timeBasedFileNamingAndTriggeringPolicy>
-            <maxHistory>2</maxHistory>
+        <!--被写入的文件名，可以是相对目录，也可以是绝对目录，如果上级目录不存在会自动创建，没有默认值。-->
+        <file>${LOG_PATH}/smoc-scheduler-filters-error.log</file>
+        <!--滚动策略  基于时间的分包策略 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- yyyy-MM-dd-HH 时间策略则为一小时一个文件 -->
+            <FileNamePattern>${LOG_PATH}/smoc-scheduler-filters-error.%d{yyyy-MM-dd-HH}.%i.log</FileNamePattern>
+            <!--日志文件保留小时数-->
+            <MaxHistory>72</MaxHistory>
+            <!--单个日志文件最大1GB-->
+            <maxFileSize>2GB</maxFileSize>
+            <!--日志文件总大小超过20GB会删除旧的日志文件-->
+            <totalSizeCap>20GB</totalSizeCap>
         </rollingPolicy>
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <Pattern>%msg%n
-            </Pattern>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>WARN</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <layout>
+            <pattern>[%date{yyyy-MM-dd HH:mm:ss}] %msg%n</pattern>
         </layout>
     </appender>
 
@@ -86,22 +95,33 @@
 
     <appender name="WARN_FILE"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator>
+                <expression>return message.contains("[warning]");</expression>
+            </evaluator>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <!--被写入的文件名，可以是相对目录，也可以是绝对目录，如果上级目录不存在会自动创建，没有默认值。-->
+        <file>${LOG_PATH}/smoc-scheduler-filters-warning.log</file>
+        <!--滚动策略  基于时间的分包策略 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- yyyy-MM-dd-HH 时间策略则为一小时一个文件 -->
+            <FileNamePattern>${LOG_PATH}/smoc-scheduler-filters-warning.%d{yyyy-MM-dd-HH}.%i.log</FileNamePattern>
+            <!--日志文件保留小时数-->
+            <MaxHistory>72</MaxHistory>
+            <!--单个日志文件最大1GB-->
+            <maxFileSize>2GB</maxFileSize>
+            <!--日志文件总大小超过20GB会删除旧的日志文件-->
+            <totalSizeCap>20GB</totalSizeCap>
+        </rollingPolicy>
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>WARN</level>
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
         </filter>
-        <File>
-            ${LOG_PATH}/smoc-scheduler-filters-warn.log
-        </File>
-        <rollingPolicy
-                class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>${LOG_PATH}/smoc-scheduler-filters-warn.%d{yyyy-MM-dd}.log
-            </FileNamePattern>
-        </rollingPolicy>
         <layout>
-            <pattern>[%date{yyyy-MM-dd HH:mm:ss}] [%-5level]
-                [%logger:%line]--%mdc{client} %msg%n</pattern>
+            <pattern>[%date{yyyy-MM-dd HH:mm:ss}] %msg%n</pattern>
         </layout>
 
     </appender>
@@ -112,7 +132,7 @@
         <encoder
                 class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} -
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}
                 %msg%n</pattern>
         </encoder>
     </appender>
@@ -149,6 +169,7 @@
     <!--开发环境:打印控制台 -->
     <springProfile name="dev">
         <root level="info">
+<!--            <appender-ref ref="consoleAppender" />-->
             <appender-ref ref="async_error_file" />
             <appender-ref ref="async_warn_file" />
             <appender-ref ref="async_info_file" />

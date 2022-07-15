@@ -16,7 +16,6 @@ import com.smoc.cloud.filter.utils.ExcelModelListener;
 import com.smoc.cloud.filter.utils.KeywordsExcelModelListener;
 import com.smoc.cloud.filter.utils.WhiteKeywordsExcelModelListener;
 import com.smoc.cloud.parameter.errorcode.model.ErrorCodeExcelModelListener;
-import com.sun.xml.internal.messaging.saaj.packaging.mime.internet.MimeUtility;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
@@ -256,7 +255,7 @@ public class FileUtils {
                 return newFileName;
             }
             if ((agent != null) && (-1 != agent.indexOf("Mozilla")))
-                return MimeUtility.encodeText(filename, "UTF-8", "B");
+                return filename;
 
             return filename;
         } catch (Exception ex) {

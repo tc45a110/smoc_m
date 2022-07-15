@@ -6,25 +6,19 @@
       <module fileurl="file://$PROJECT_DIR$/smoc-admin-ui/smoc-admin-ui.iml" filepath="$PROJECT_DIR$/smoc-admin-ui/smoc-admin-ui.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-auth/smoc-auth.iml" filepath="$PROJECT_DIR$/smoc-auth/smoc-auth.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-auth-ui/smoc-auth-ui.iml" filepath="$PROJECT_DIR$/smoc-auth-ui/smoc-auth-ui.iml" />
-      <module fileurl="file://$PROJECT_DIR$/smoc-base-common/smoc-base-common.iml" filepath="$PROJECT_DIR$/smoc-base-common/smoc-base-common.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-common-utils/smoc-common-utils.iml" filepath="$PROJECT_DIR$/smoc-common-utils/smoc-common-utils.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-examples/smoc-examples.iml" filepath="$PROJECT_DIR$/smoc-examples/smoc-examples.iml" />
-      <module fileurl="file://$PROJECT_DIR$/smoc-filter/smoc-filter.iml" filepath="$PROJECT_DIR$/smoc-filter/smoc-filter.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-filters/smoc-filters.iml" filepath="$PROJECT_DIR$/smoc-filters/smoc-filters.iml" />
-      <module fileurl="file://$PROJECT_DIR$/smoc-filters-grpc/smoc-filters-grpc.iml" filepath="$PROJECT_DIR$/smoc-filters-grpc/smoc-filters-grpc.iml" />
-      <module fileurl="file://$PROJECT_DIR$/smoc-filters-grpc-client/smoc-filters-grpc-client.iml" filepath="$PROJECT_DIR$/smoc-filters-grpc-client/smoc-filters-grpc-client.iml" />
-      <module fileurl="file://$PROJECT_DIR$/smoc-filters-grpc-lib/smoc-filters-grpc-lib.iml" filepath="$PROJECT_DIR$/smoc-filters-grpc-lib/smoc-filters-grpc-lib.iml" />
-      <module fileurl="file://$PROJECT_DIR$/smoc-filters-grpc-server/smoc-filters-grpc-server.iml" filepath="$PROJECT_DIR$/smoc-filters-grpc-server/smoc-filters-grpc-server.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-gateway/smoc-gateway.iml" filepath="$PROJECT_DIR$/smoc-gateway/smoc-gateway.iml" />
-      <module fileurl="file://$PROJECT_DIR$/smoc-filters-grpc/smoc-grpc-server/smoc-grpc-server.iml" filepath="$PROJECT_DIR$/smoc-filters-grpc/smoc-grpc-server/smoc-grpc-server.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-http-server/smoc-http-server.iml" filepath="$PROJECT_DIR$/smoc-http-server/smoc-http-server.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-identity/smoc-identity.iml" filepath="$PROJECT_DIR$/smoc-identity/smoc-identity.iml" />
+      <module fileurl="file://$PROJECT_DIR$/smoc-iot/smoc-iot.iml" filepath="$PROJECT_DIR$/smoc-iot/smoc-iot.iml" />
+      <module fileurl="file://$PROJECT_DIR$/smoc-iot-ui/smoc-iot-ui.iml" filepath="$PROJECT_DIR$/smoc-iot-ui/smoc-iot-ui.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-parent/smoc-parent.iml" filepath="$PROJECT_DIR$/smoc-parent/smoc-parent.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-parent-ui/smoc-parent-ui.iml" filepath="$PROJECT_DIR$/smoc-parent-ui/smoc-parent-ui.iml" />
-      <module fileurl="file://$PROJECT_DIR$/smoc-protocol-access-cmpp/smoc-protocol-access-cmpp.iml" filepath="$PROJECT_DIR$/smoc-protocol-access-cmpp/smoc-protocol-access-cmpp.iml" />
-      <module fileurl="file://$PROJECT_DIR$/smoc-protocol-proxy-cmpp/smoc-protocol-proxy-cmpp.iml" filepath="$PROJECT_DIR$/smoc-protocol-proxy-cmpp/smoc-protocol-proxy-cmpp.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-saler-ui/smoc-saler-ui.iml" filepath="$PROJECT_DIR$/smoc-saler-ui/smoc-saler-ui.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-scheduler/smoc-scheduler.iml" filepath="$PROJECT_DIR$/smoc-scheduler/smoc-scheduler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/smoc-scheduler-filters/smoc-scheduler-filters.iml" filepath="$PROJECT_DIR$/smoc-scheduler-filters/smoc-scheduler-filters.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-service-ui/smoc-service-ui.iml" filepath="$PROJECT_DIR$/smoc-service-ui/smoc-service-ui.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-statistic-ui/smoc-statistic-ui.iml" filepath="$PROJECT_DIR$/smoc-statistic-ui/smoc-statistic-ui.iml" />
       <module fileurl="file://$PROJECT_DIR$/smoc-website/smoc-website.iml" filepath="$PROJECT_DIR$/smoc-website/smoc-website.iml" />

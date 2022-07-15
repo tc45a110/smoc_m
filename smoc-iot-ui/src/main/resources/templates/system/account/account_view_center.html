@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+</head>
+<body>
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <!-- start row 页面导航-->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">IOT财务账号明细</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            IOT账号管理
+                        </li>
+                        <li>
+                            IOT账号明细
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  页面数据-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <div class="row">
+
+                        <div class="col-md-12">
+
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12">
+                                    <h4>
+                                        <div class="pull-right" style="margin-top: -12px;">
+                                            <a sec:authorize-url="/iot/account/list"
+                                               th:href="@{/iot/account/list}"
+                                               class="btn btn-default waves-effect waves-light btn-md">
+                                                <i class="glyphicon  glyphicon-share-alt" style="margin-right:5px"></i>
+                                                返回IOT账号列表</a>
+                                        </div>
+                                    </h4>
+
+                                    <div  class="row" style="display:block">
+                                        <div class="col-lg-12" style="margin-top:10px">
+                                            <div class="panel panel-color panel-info">
+                                                <div  class="panel-heading"
+                                                     style="display:block">
+                                                    <h3 class="panel-title">
+                                                        <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
+                                                        xxx账号信息
+                                                    </h3>
+                                                </div>
+                                                <div  class="panel-body" style="padding-bottom:0px">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="property-card property-horizontal">
+                                                                <div class="row">
+                                                                    <div class="col-sm-12">
+                                                                        <div class="property-content"
+                                                                             style="height:166px">
+                                                                            <div class="listingInfo">
+                                                                                <div class="">
+                                                                                    <h5 style="padding-left:10px">
+                                                                                        企业：[[${enterprise.enterpriseName}]]</h5>
+                                                                                </div>
+                                                                                <div class="col-sm-4">
+                                                                                    <p style="font-size:12px">
+                                                                                        业务类型：<a class="btn btn-info btn-rounded btn-sm waves-effect waves-light">IOT服务</a>
+                                                                                    <p style="font-size:12px">
+                                                                                        md5Hmac密钥：[[${systemAccountInfoValidator.md5HmacKey}]]
+                                                                                    <p style="font-size:12px">
+
+                                                                                    </p>
+                                                                                </div>
+                                                                                <div class="col-sm-4">
+                                                                                    <p style="font-size:12px">
+                                                                                        IOT账号：[[${systemAccountInfoValidator.account}]]
+                                                                                    </p>
+                                                                                    <p style="font-size:12px">
+                                                                                        账号状态：
+                                                                                        <a th:if="${'1'==systemAccountInfoValidator.accountStatus}"
+                                                                                           class="btn btn-success btn-rounded  waves-effect waves-light btn-ms">有效</a>
+                                                                                        <a th:if="${'0'==systemAccountInfoValidator.accountStatus}"
+                                                                                           class="btn btn-danger btn-rounded  waves-effect waves-light btn-ms">无效</a>
+                                                                                    </p>
+                                                                                    <p style="font-size:12px">
+
+                                                                                    </p>
+                                                                                </div>
+                                                                                <div class="col-sm-4">
+                                                                                    <p style="font-size:12px">
+                                                                                        账号类型：
+                                                                                        <mpm:tag id="accountType" identity="idenAccountType" class="1,btn btn-teal btn-rounded btn-sm waves-effect waves-light;2,btn btn-danger btn-rounded btn-sm waves-effect waves-light;"
+                                                                                                 name="accountType" show-type="button"  key="code"
+                                                                                                 th:value="${systemAccountInfoValidator.accountType}" title="账号类型"/>
+                                                                                    </p>
+                                                                                    <p style="font-size:12px">
+
+                                                                                    </p>
+                                                                                    <p style="font-size:12px">
+
+                                                                                    </p>
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- /col 8 -->
+                                                                </div>
+                                                                <!-- /inner row -->
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div  class="row" style="display:block">
+                                        <div class="col-lg-12" style="margin-top:10px">
+                                            <div class="panel panel-color panel-teal">
+                                                <div  class="panel-heading"
+                                                     style="display:block">
+                                                    <h3 class="panel-title">
+                                                        <i class="mdi mdi-account-circle" style="margin-right:5px"></i>
+                                                        IOT账号财务信息
+                                                    </h3>
+                                                </div>
+                                                <div  class="panel-body" style="padding-bottom:0px">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="property-card property-horizontal">
+                                                                <div class="row">
+                                                                    <div class="col-sm-12">
+                                                                        <div class="property-content"
+                                                                             style="height:146px">
+                                                                            <div class="listingInfo">
+                                                                                <div style="height:20px">
+                                                                                </div>
+                                                                                <div class="col-sm-4">
+                                                                                    <p style="font-size:12px">
+                                                                                        可用余额：¥ [[${#numbers.formatDecimal(financeAccountValidator.accountUsableSum,1,'COMMA',2,'POINT')}]]
+
+
+                                                                                    <p style="font-size:12px">
+                                                                                       消费总金额：¥ [[${#numbers.formatDecimal(financeAccountValidator.accountConsumeSum,1,'COMMA',2,'POINT')}]]
+
+
+                                                                                </div>
+                                                                                <div class="col-sm-4">
+                                                                                    <p style="font-size:12px">
+                                                                                        冻结金额：¥ [[${#numbers.formatDecimal(financeAccountValidator.accountFrozenSum,1,'COMMA',2,'POINT')}]]
+
+                                                                                    </p>
+                                                                                    <p style="font-size:12px">
+                                                                                        充值总金额：
+                                                                                        ¥ [[${#numbers.formatDecimal(financeAccountValidator.accountRechargeSum,1,'COMMA',2,'POINT')}]]
+
+                                                                                    </p>
+
+                                                                                </div>
+                                                                                <div class="col-sm-4">
+                                                                                    <p style="font-size:12px">
+                                                                                        授信额度：¥
+                                                                                        [[${#numbers.formatDecimal(financeAccountValidator.accountCreditSum,1,'COMMA',2,'POINT')}]]
+                                                                                    </p>
+                                                                                    <p style="font-size:12px">
+                                                                                        创建日期： [[${financeAccountValidator.createdTime}]]
+                                                                                    </p>
+
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- /col 8 -->
+                                                                </div>
+                                                                <!-- /inner row -->
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin-top:10px">
+                                        <div class="col-md-12">
+                                            <div class="card-box">
+                                                <ul class="nav nav-tabs tabs-bordered">
+                                                    <li class="active" id="recharge">
+                                                        <a onclick="activeTab('recharge')"
+                                                           sec:authorize-url="/iot/finance/recharge/list/*"
+                                                           th:href="@{/iot/finance/recharge/list/{accountId}(accountId=${systemAccountInfoValidator.id})}"
+                                                           th:target="tab-content">充值记录
+                                                        </a>
+                                                    </li>
+                                                    <li class="" id="logs">
+                                                        <a onclick="activeTab('logs')"
+                                                           sec:authorize-url="/user/logs/list/*/*"
+                                                           th:href="@{/user/logs/list/IOT_ACCOUNT/{id}(id=${systemAccountInfoValidator.id})}"
+                                                           th:target="tab-content">操作日志
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                                <div class="tab-cotent" style="background-color:#fff">
+                                                    <iframe name="tab-content" id="tab-content" th:frameBorder="0"
+                                                            th:scrolling="auto"
+                                                            th:src="@{/iot/finance/recharge/list/{accountId}(accountId=${systemAccountInfoValidator.id})}"
+                                                            style="padding: 0px; width: 100%; height: 1200px;background-color:#fff"></iframe>
+                                                </div>
+
+                                            </div>
+                                        </div> <!-- end col -->
+                                    </div>
+                                    <!-- end row -->
+                                </div> <!-- end col -->
+
+                            </div> <!-- end row -->
+
+                        </div>
+                        <!-- end col -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<script th:src="@{/static/plugins/bootstrap-inputmask/bootstrap-inputmask.min.js}"></script>
+<script th:src="@{/static/plugins/autoNumeric/autoNumeric.js}"></script>
+<script>
+
+    //页签切换
+    function activeTab(id){
+       $("#recharge").removeClass("active");
+       $("#consume").removeClass("active");
+       $("#logs").removeClass("active");
+       $("#"+id).addClass("active");
+    }
+
+    $(document).ready(function() {
+		$('.autonumber').autoNumeric('init');
+	});
+
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+
+</script>
+</body>
+</html>

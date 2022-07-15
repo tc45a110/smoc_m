@@ -1,20 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
+    <option name="BUILD_PROCESS_ADDITIONAL_VM_OPTIONS" value="-Djps.track.ap.dependencies=false" />
     <annotationProcessing>
       <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="smoc-identity" />
         <module name="smoc-admin-ui" />
         <module name="smoc-parent-ui" />
-        <module name="smoc" />
-        <module name="smoc-saler-ui" />
+        <module name="smoc-iot-ui" />
+        <module name="smoc-scheduler" />
         <module name="smoc-service-ui" />
-        <module name="smoc-auth-ui" />
         <module name="smoc-auth" />
         <module name="smoc-common-utils" />
+        <module name="smoc-gateway" />
+        <module name="smoc-iot" />
+        <module name="smoc-http-server" />
+        <module name="smoc" />
+        <module name="smoc-saler-ui" />
+        <module name="smoc-examples" />
+        <module name="smoc-scheduler-filters" />
+        <module name="smoc-auth-ui" />
+        <module name="smoc-filters" />
         <module name="smoc-statistic-ui" />
       </profile>
     </annotationProcessing>
@@ -23,12 +33,34 @@
       <module name="smoc-admin-ui" target="1.8" />
       <module name="smoc-auth" target="1.8" />
       <module name="smoc-auth-ui" target="1.8" />
+      <module name="smoc-backend-base-common" target="1.8" />
+      <module name="smoc-backend-business-access" target="1.8" />
+      <module name="smoc-base-common" target="1.8" />
+      <module name="smoc-business-access" target="1.8" />
       <module name="smoc-common-utils" target="1.8" />
+      <module name="smoc-examples" target="1.8" />
+      <module name="smoc-filters" target="1.8" />
+      <module name="smoc-filters-grpc" target="1.8" />
+      <module name="smoc-filters-grpc-client" target="1.8" />
+      <module name="smoc-filters-grpc-lib" target="1.8" />
+      <module name="smoc-filters-grpc-server" target="1.8" />
+      <module name="smoc-gateway" target="1.8" />
+      <module name="smoc-http-server" target="1.8" />
+      <module name="smoc-identity" target="1.8" />
+      <module name="smoc-iot" target="1.8" />
+      <module name="smoc-iot-ui" target="1.8" />
       <module name="smoc-parent" target="1.8" />
       <module name="smoc-parent-ui" target="1.8" />
+      <module name="smoc-protocol-access-cmpp" target="1.8" />
+      <module name="smoc-protocol-proxy-cmpp" target="1.8" />
+      <module name="smoc-protocol-proxy-sgip" target="1.8" />
+      <module name="smoc-protocol-proxy-smgp" target="1.8" />
       <module name="smoc-saler-ui" target="1.8" />
+      <module name="smoc-scheduler" target="1.8" />
+      <module name="smoc-scheduler-filters" target="1.8" />
       <module name="smoc-service-ui" target="1.8" />
       <module name="smoc-statistic-ui" target="1.8" />
+      <module name="smoc_iot" target="8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
@@ -38,8 +70,19 @@
       <module name="smoc-auth" options="-parameters" />
       <module name="smoc-auth-ui" options="-parameters" />
       <module name="smoc-common-utils" options="-parameters" />
+      <module name="smoc-filters" options="-parameters" />
+      <module name="smoc-filters-grpc-client" options="-parameters" />
+      <module name="smoc-filters-grpc-lib" options="-parameters" />
+      <module name="smoc-filters-grpc-server" options="-parameters" />
+      <module name="smoc-gateway" options="-parameters" />
+      <module name="smoc-http-server" options="-parameters" />
+      <module name="smoc-identity" options="-parameters" />
+      <module name="smoc-iot" options="-parameters" />
+      <module name="smoc-iot-ui" options="-parameters" />
       <module name="smoc-parent-ui" options="-parameters" />
       <module name="smoc-saler-ui" options="-parameters" />
+      <module name="smoc-scheduler" options="-parameters" />
+      <module name="smoc-scheduler-filters" options="-parameters" />
       <module name="smoc-service-ui" options="-parameters" />
       <module name="smoc-statistic-ui" options="-parameters" />
     </option>

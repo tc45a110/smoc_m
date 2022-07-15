@@ -11,3 +11,5 @@ brew remove
 ps axu|grep redis
 
 gRPC Spring Boot Starter
+
+taskkill /pid 2460 -f
