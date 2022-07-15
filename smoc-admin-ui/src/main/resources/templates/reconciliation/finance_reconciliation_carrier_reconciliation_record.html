@@ -89,7 +89,18 @@
         <!-- start row  列表数据-->
         <div class="row"  th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
-                <div class="detail" style="margin-bottom:0px">
+                <div class="detail" style="height:80px;margin-bottom:0px">
+                    <ul>
+                        <li>
+                            <h2 style="color: #fff;margin-top:20px;font-size:18px;">
+                                <mpm:tag id="specificProvder" identity="specificProvder"
+                                         show-type="label" key="code"
+                                         th:value="${channelProvder}"/>&nbsp;[[${startDate}]]期 对账单
+                            </h2>
+                        </li>
+                    </ul>
+                </div>
+                <!--<div class="detail" style="margin-bottom:0px">
                     <ul>
                         <li>
                             <h2 style="color: #fff;font-size:16px;">
@@ -108,7 +119,7 @@
                             </div>
                         </li>
                     </ul>
-                </div>
+                </div>-->
             </div>
             <div class="col-sm-12">
                 <div class="panel panel-color panel-info">

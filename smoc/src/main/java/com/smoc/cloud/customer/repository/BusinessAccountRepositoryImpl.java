@@ -659,7 +659,11 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
         sqlBuffer.append("  t.MESSAGE_DATE,");
         sqlBuffer.append("  t.BUSINESS_ACCOUNT,");
         sqlBuffer.append("  a.ACCOUNT_NAME,");
-        sqlBuffer.append("  e.ENTERPRISE_NAME");
+        sqlBuffer.append("  e.ENTERPRISE_NAME,");
+        sqlBuffer.append(" sum(t.SUCCESS_SUBMIT_NUM) SUCCESS_SUBMIT_NUM,");
+        sqlBuffer.append(" sum(t.MESSAGE_SUCCESS_NUM) MESSAGE_SUCCESS_NUM,");
+        sqlBuffer.append(" sum(t.MESSAGE_FAILURE_NUM) MESSAGE_FAILURE_NUM,");
+        sqlBuffer.append(" sum(t.MESSAGE_NO_REPORT_NUM) MESSAGE_NO_REPORT_NUM");
         sqlBuffer.append("  from message_daily_statistics t left join account_base_info a on t.BUSINESS_ACCOUNT = a.ACCOUNT_ID ");
         sqlBuffer.append("  left join enterprise_basic_info e on a.ENTERPRISE_ID = e.ENTERPRISE_ID ");
         sqlBuffer.append("  where 1=1 ");
@@ -692,7 +696,7 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
             paramsList.add(qo.getEndDate().trim());
         }
 
-        sqlBuffer.append(" group by t.MESSAGE_DATE, t.BUSINESS_ACCOUNT order by t.MESSAGE_DATE desc, t.BUSINESS_ACCOUNT desc");
+        sqlBuffer.append(" group by t.MESSAGE_DATE, t.BUSINESS_ACCOUNT order by t.MESSAGE_DATE desc,sum(t.SUCCESS_SUBMIT_NUM)desc,t.BUSINESS_ACCOUNT desc ");
 
         //根据参数个数，组织参数值
         Object[] params = new Object[paramsList.size()];
@@ -708,19 +712,6 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
             info.setEndDate(info.getMessageDate());
             List<AccountSendStatisticItemsModel> items = findAccountSendStatisticsItems(info);
             info.setItems(items);
-
-            if(!StringUtils.isEmpty(items) && items.size()>0){
-                MessageDailyStatisticValidator messageDailyStatisticValidator = new MessageDailyStatisticValidator();
-                messageDailyStatisticValidator.setBusinessAccount(items.get(0).getBusinessAccount());
-                messageDailyStatisticValidator.setStartDate(items.get(0).getMessageDate());
-                messageDailyStatisticValidator.setEndDate(items.get(0).getMessageDate());
-                Map<String, Object> map = countSum(messageDailyStatisticValidator);
-                info.setTotalSuccessSubmitNum(""+map.get("SUCCESS_SUBMIT_NUM"));
-                info.setTotalMessageSuccessNum(""+map.get("MESSAGE_SUCCESS_NUM"));
-                info.setTotalMessageFailureNum(""+map.get("MESSAGE_FAILURE_NUM"));
-                info.setTotalMessageNoReportNum(""+map.get("MESSAGE_NO_REPORT_NUM"));
-            }
-
         }
 
         return pageList;
@@ -771,49 +762,4 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
         return list;
     }
 
-    public Map<String, Object> countSum(MessageDailyStatisticValidator qo) {
-
-        //查询sql
-        StringBuilder sqlBuffer = new StringBuilder("select ");
-        sqlBuffer.append(" sum(t.SUCCESS_SUBMIT_NUM) SUCCESS_SUBMIT_NUM,");
-        sqlBuffer.append(" sum(t.MESSAGE_SUCCESS_NUM) MESSAGE_SUCCESS_NUM,");
-        sqlBuffer.append(" sum(t.MESSAGE_FAILURE_NUM) MESSAGE_FAILURE_NUM,");
-        sqlBuffer.append(" sum(t.MESSAGE_NO_REPORT_NUM) MESSAGE_NO_REPORT_NUM");
-        sqlBuffer.append(" from message_daily_statistics t ");
-        sqlBuffer.append(" where  1=1 ");
-
-        List<Object> paramsList = new ArrayList<Object>();
-        //业务账号
-        if (!StringUtils.isEmpty(qo.getBusinessAccount())) {
-            sqlBuffer.append(" and t.BUSINESS_ACCOUNT =?");
-            paramsList.add(qo.getBusinessAccount().trim());
-        }
-        //时间起
-        if (!StringUtils.isEmpty(qo.getStartDate())) {
-            sqlBuffer.append(" and DATE_FORMAT(t.MESSAGE_DATE,'%Y-%m-%d') >=? ");
-            paramsList.add(qo.getStartDate().trim());
-        }
-        //时间止
-        if (!StringUtils.isEmpty(qo.getEndDate())) {
-            sqlBuffer.append(" and DATE_FORMAT(t.MESSAGE_DATE,'%Y-%m-%d') <=? ");
-            paramsList.add(qo.getEndDate().trim());
-        }
-
-        sqlBuffer.append(" order by t.MESSAGE_DATE desc,t.CREATED_TIME desc");
-
-        //根据参数个数，组织参数值
-        Object[] params = new Object[paramsList.size()];
-        paramsList.toArray(params);
-
-        Map<String, Object> map = jdbcTemplate.queryForMap(sqlBuffer.toString(), params);
-        if(null == map || map.size()<1 || null == map.get("SUCCESS_SUBMIT_NUM")){
-            map = new HashMap<>();
-            map.put("SUCCESS_SUBMIT_NUM",0);
-            map.put("MESSAGE_SUCCESS_NUM",0);
-            map.put("MESSAGE_FAILURE_NUM",0);
-            map.put("MESSAGE_NO_REPORT_NUM",0);
-        }
-        return map;
-
-    }
 }

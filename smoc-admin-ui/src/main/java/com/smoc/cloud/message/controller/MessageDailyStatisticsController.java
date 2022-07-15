@@ -62,7 +62,7 @@ public class MessageDailyStatisticsController {
         params.setCurrentPage(1);
         MessageDailyStatisticValidator messageDailyStatisticValidator = new MessageDailyStatisticValidator();
 
-        Date startDate = DateTimeUtils.dateAddDays(new Date(),-7);
+        Date startDate = DateTimeUtils.dateAddDays(new Date(),-3);
         messageDailyStatisticValidator.setStartDate(DateTimeUtils.getDateFormat(startDate));
         messageDailyStatisticValidator.setEndDate(DateTimeUtils.getDateFormat(new Date()));
         params.setParams(messageDailyStatisticValidator);

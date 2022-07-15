@@ -115,6 +115,9 @@ public class TableStoreMessageDetailInfoValidator {
     //完整的状态码数据，长短信会追加状态码
     private String statusCodeExtend;
 
+    //状态码
+    private String statusCode;
+
     private String startDate;
     private String endDate;
 }

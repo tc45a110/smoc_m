@@ -188,7 +188,7 @@ public class ReconciliationCarrierController {
             info.setCarrierTotalAmount(new BigDecimal(request.getParameter("carrierAccount"+i)));
             info.setCarrierTotalSendQuantity(Long.parseLong(request.getParameter("carrierMessage"+i)));
             info.setCreatedBy(user.getRealName());
-            info.setChannelPeriodStatus("3");
+            info.setChannelPeriodStatus("2");
         }
 
         reconciliationChannelCarrierModel.setCarrierList(list);

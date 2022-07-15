@@ -17,6 +17,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.Iterator;
@@ -129,4 +130,25 @@ public class SystemErrorCodeService {
         systemErrorCodeRepository.bathSave(systemErrorCodeValidator);
     }
 
+    /**
+     * 查询错误码描述
+     * @param customerStatus
+     * @return
+     */
+    public String findErrorRemark(String customerStatus,String carrier) {
+
+        //查询系统错误码
+        List<SystemErrorCode> list = systemErrorCodeRepository.findByCodeTypeAndErrorCode("SYSTEM",customerStatus);
+        if(!StringUtils.isEmpty(list) && list.size()>0){
+            return list.get(0).getErrorContent();
+        }
+
+        //查询运营商错误码
+        List<SystemErrorCode> carrierList = systemErrorCodeRepository.findByCodeTypeAndErrorCode(carrier,customerStatus);
+        if(!StringUtils.isEmpty(carrierList) && carrierList.size()>0){
+            return carrierList.get(0).getErrorContent();
+        }
+
+        return "";
+    }
 }

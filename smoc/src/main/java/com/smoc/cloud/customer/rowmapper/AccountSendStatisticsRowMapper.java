@@ -20,6 +20,10 @@ public class AccountSendStatisticsRowMapper implements RowMapper<AccountSendStat
         qo.setBusinessAccount(resultSet.getString("BUSINESS_ACCOUNT"));
         qo.setAccountName(resultSet.getString("ACCOUNT_NAME"));
         qo.setEnterpriseName(resultSet.getString("ENTERPRISE_NAME"));
+        qo.setTotalSuccessSubmitNum(resultSet.getInt("SUCCESS_SUBMIT_NUM"));
+        qo.setTotalMessageSuccessNum(resultSet.getInt("MESSAGE_SUCCESS_NUM"));
+        qo.setTotalMessageFailureNum(resultSet.getInt("MESSAGE_FAILURE_NUM"));
+        qo.setTotalMessageNoReportNum(resultSet.getInt("MESSAGE_NO_REPORT_NUM"));
         return qo;
     }
 }

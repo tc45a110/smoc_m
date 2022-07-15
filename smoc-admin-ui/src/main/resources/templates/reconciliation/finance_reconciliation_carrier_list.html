@@ -160,10 +160,10 @@
                                             [[${dataInfo.amountDifference}]]
                                         </td>
                                         <td style="vertical-align: middle;line-height: 26px;text-align:center" th:rowspan="${info.rowspan}">
-                                            <a class="btn btn-inverse btn-rounded btn-sm waves-effect waves-light" th:if="${info.channelPeriodStatus eq '4'}">未配置</a>
+                                            <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light" th:if="${info.channelPeriodStatus eq '4'}">未配置</a>
                                             <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light" th:if="${info.channelPeriodStatus eq '3'}">审核中</a>
                                             <a class="btn btn-success btn-rounded btn-sm waves-effect waves-light" th:if="${info.channelPeriodStatus eq '2'}">已完成</a>
-                                            <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light" th:if="${info.channelPeriodStatus eq '1'}">已拒绝</a>
+                                            <a class="btn btn-inverse btn-rounded btn-sm waves-effect waves-light" th:if="${info.channelPeriodStatus eq '1'}">已拒绝</a>
                                         </td>
                                         <td style="vertical-align: middle;line-height: 26px" th:rowspan="${info.rowspan}">
                                             <a sec:authorize-url="/finance/reconciliation/carrier/view/center/*/*"
@@ -180,7 +180,7 @@
                                                     class="on-default edit-row"
                                                     style="padding-left: 5px;color:#188ae2"><i style="font-size: 18px"
                                                                                                class="glyphicon glyphicon-export"></i></a>
-                                            <a sec:authorize-url="/finance/reconciliation/carrier/reconciliation/center/*/*" th:if="${info.channelPeriodStatus ne '2'}"
+                                            <a sec:authorize-url="/finance/reconciliation/carrier/reconciliation/center/*/*"
                                                th:href="@{/finance/reconciliation/carrier/reconciliation/center/{channelProvder}/{startDate}(channelProvder=${info.channelProvder},startDate=${info.channelPeriod})}"
                                                data-toggle="tooltip" data-placement="bottom"
                                                data-original-title="开始对账"

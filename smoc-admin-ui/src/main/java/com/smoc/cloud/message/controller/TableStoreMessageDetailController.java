@@ -44,7 +44,7 @@ public class TableStoreMessageDetailController {
         params.setPageSize(10);
         params.setCurrentPage(1);
         TableStoreMessageDetailInfoValidator messageDetailInfoValidator = new TableStoreMessageDetailInfoValidator();
-        Date startDate = DateTimeUtils.dateAddDays(new Date(),-3);
+        Date startDate = DateTimeUtils.dateAddDays(new Date(),-2);
         messageDetailInfoValidator.setStartDate(DateTimeUtils.getDateTimeFormat(startDate));
         messageDetailInfoValidator.setEndDate(DateTimeUtils.getDateTimeFormat(new Date()));
         params.setParams(messageDetailInfoValidator);

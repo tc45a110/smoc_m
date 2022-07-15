@@ -118,7 +118,9 @@
                                                  th:value="${info.carrier}"/>&nbsp;[[${info.area}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;width:80px">
-                                        [[${info.customerStatus}]]
+                                        <span class="text-overflow"
+                                              data-toggle="tooltip" data-placement="bottom"
+                                              th:data-original-title="${info.customerStatus}">[[${info.customerStatus}]]</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;width:160px">[[${info.submitTime}]]
                                     </td>

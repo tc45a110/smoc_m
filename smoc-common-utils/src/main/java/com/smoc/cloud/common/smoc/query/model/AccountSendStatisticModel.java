@@ -25,11 +25,11 @@ public class AccountSendStatisticModel {
 
     private List<AccountSendStatisticItemsModel> items = new ArrayList<>();
 
-    private String totalSuccessSubmitNum;
+    private int totalSuccessSubmitNum;
 
-    private String totalMessageSuccessNum;
+    private int totalMessageSuccessNum;
 
-    private String totalMessageFailureNum;
+    private int totalMessageFailureNum;
 
-    private String totalMessageNoReportNum;
+    private int totalMessageNoReportNum;
 }
