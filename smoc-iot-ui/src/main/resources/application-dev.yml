@@ -71,7 +71,6 @@ com:
       protocol: org.apache.coyote.http11.Http11NioProtocol #org.apache.coyote.http11.Http11AprProtocol
 
 logging:
-  charset: GBK
   config: classpath:logback-spring.xml
   path: d:/log/smoc-log/smoc-iot-ui-logs
   level:
