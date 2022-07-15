@@ -164,6 +164,7 @@ public class QueryAccountInfoController {
         AccountSendStatisticModel accountSendStatisticModel = new AccountSendStatisticModel();
         accountSendStatisticModel.setStartDate(startDate);
         accountSendStatisticModel.setEndDate(DateTimeUtils.getDateFormat(new Date()));
+        accountSendStatisticModel.setBusinessAccount(account);
         params.setParams(accountSendStatisticModel);
 
         //查询
