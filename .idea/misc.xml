@@ -19,8 +19,23 @@
         <option value="$PROJECT_DIR$/smoc-gateway/pom.xml" />
         <option value="$PROJECT_DIR$/smoc-examples/pom.xml" />
         <option value="$PROJECT_DIR$/smoc/pom.xml" />
+        <option value="$PROJECT_DIR$/smoc-protocol-proxy-sgip/pom.xml" />
+        <option value="$PROJECT_DIR$/smoc-scheduler/pom.xml" />
+        <option value="$PROJECT_DIR$/smoc-base-common/pom.xml" />
+        <option value="$PROJECT_DIR$/smoc-http-server/pom.xml" />
+        <option value="$PROJECT_DIR$/smoc-filters/pom.xml" />
+        <option value="$PROJECT_DIR$/smoc-protocol-access-cmpp/pom.xml" />
+        <option value="$PROJECT_DIR$/smoc-protocol-proxy-cmpp/pom.xml" />
+        <option value="$PROJECT_DIR$/smoc-protocol-proxy-smgp/pom.xml" />
+        <option value="$PROJECT_DIR$/smoc-business-access/pom.xml" />
+        <option value="$PROJECT_DIR$/smoc-scheduler-filters/pom.xml" />
+        <option value="$PROJECT_DIR$/smoc-iot/pom.xml" />
+        <option value="$PROJECT_DIR$/smoc-iot-ui/pom.xml" />
       </list>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8 (2)" project-jdk-type="JavaSDK" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8.0_301" project-jdk-type="JavaSDK" />
+  <component name="ProjectType">
+    <option name="id" value="jpab" />
+  </component>
 </project>

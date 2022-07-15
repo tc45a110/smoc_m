@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
+</head>
+<body>
+<!-- Loader -->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">用户属性</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            用户属性
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4">
+                            <div class="text-center card-box">
+                                <div class="member-card">
+                                    <div class="thumb-xl member-thumb m-b-10 center-block">
+                                        <img th:src="@{/static/assets/images/users/avatar-1.jpg}" class="img-circle img-thumbnail"
+                                             alt="profile-image">
+                                        <i class="mdi mdi-star-circle member-star text-success"
+                                           title="verified user"></i>
+                                    </div>
+
+                                    <div class="">
+                                        <h4 class="m-b-5">[[${sysUser.baseUserValidator.userName}]]</h4>
+                                        <p style="font-size:12px"></p>
+                                    </div>
+
+                                    <button type="button"
+                                            class="btn btn-success btn-sm w-sm waves-effect m-t-10 waves-light">领导
+                                    </button>
+                                    <button type="button"
+                                            class="btn btn-danger btn-sm w-sm waves-effect m-t-10 waves-light">信息部主任
+                                    </button>
+
+                                    <p class="text-muted font-13 m-t-20" style="text-align:left">
+                                        个人简介：我是一个兵，来自老百姓。
+                                    </p>
+
+                                    <hr/>
+
+                                    <div class="text-left">
+                                        <p class="text-muted font-13"><strong>姓名 :</strong> <span class="m-l-15">[[${sysUser.baseUserExtendsValidator.realName}]]</span>
+                                        </p>
+                                        <p class="text-muted font-13"><strong>手机 :</strong><span class="m-l-15">[[${sysUser.baseUserValidator.phone}]]</span>
+                                        </p>
+                                        <p class="text-muted font-13"><strong>单位 :</strong> <span class="m-l-15">[[${sysUser.baseUserExtendsValidator.corporation}]]</span>
+                                        </p>
+                                        <p class="text-muted font-13"><strong>部门 :</strong> <span class="m-l-15">[[${sysUser.baseUserExtendsValidator.department}]]</span>
+                                        </p>
+                                        <p class="text-muted font-13"><strong>员工编码 :</strong> <span class="m-l-15">[[${sysUser.baseUserExtendsValidator.code}]]</span>
+                                        </p>
+                                        <p class="text-muted font-13"><strong>上级编码 :</strong> <span class="m-l-15">[[${sysUser.baseUserExtendsValidator.teamLeader}]]</span>
+                                        </p>
+                                    </div>
+
+                                </div>
+                            </div> <!-- end card-box -->
+
+                        </div> <!-- end col -->
+
+                        <div class="col-md-8 col-lg-9">
+
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12">
+                                    <h4>自定义属性（SysUserController中扩展）</h4>
+
+                                    <div class=" p-t-10">
+                                        <h5 class="text-custom m-b-5">扩展用户业务属性</h5>
+                                        <p class="m-b-0"></p>
+                                        <p><b>2010-2015</b></p>
+
+                                        <p class="text-muted font-13 m-b-0">Lorem Ipsum is simply dummy text
+                                            of the printing and typesetting industry. Lorem Ipsum has
+                                            been the industry's standard dummy text ever since the
+                                            1500s, when an unknown printer took a galley of type and
+                                            scrambled it to make a type specimen book.
+                                        </p>
+                                    </div>
+
+                                    <hr/>
+
+                                    <div class="">
+                                        <h5 class="text-custom m-b-5">展现风格根据业务调整</h5>
+                                        <p class="m-b-0"></p>
+                                        <p><b>2007-2009</b></p>
+
+                                        <p class="text-muted font-13">Lorem Ipsum is simply dummy text
+                                            of the printing and typesetting industry. Lorem Ipsum has
+                                            been the industry's standard dummy text ever since the
+                                            1500s, when an unknown printer took a galley of type and
+                                            scrambled it to make a type specimen book.
+                                        </p>
+                                    </div>
+                                </div> <!-- end col -->
+
+                            </div> <!-- end row -->
+
+                        </div>
+                        <!-- end col -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End row -->
+
+        <!-- end row -->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<script>
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+</script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
+    <!-- Custom box css -->
+    <link th:href="@{/static/plugins/custombox/css/custombox.min.css}" rel="stylesheet">
+</head>
+<body>
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <!-- start row 页面导航-->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">错误码管理</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            系统参数配置
+                        </li>
+                        <li class="active">
+                            错误码管理
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <div class="row m-b-60">
+                        <div class="col-sm-12">
+                            <form>
+                                <div class="form-group pull-right" style="text-align: right">
+                                    <a th:if="${dictType!='root'}" sec:authorize-url="/dict/add/*/*"
+                                       th:href="@{/dict/add/{typeId}/{dictType}(dictType=${dictType},typeId=${typeId})}"
+                                       class="btn btn-success waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-plus-sign"></i> 新建</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="panel panel-color panel-info">
+                    <div class="panel-heading">
+                        <h3 th:if="${dictTypeValidator != null}" class="panel-title">[[${dictTypeValidator.dictTypeName}]]列表</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table table-hover m-10" style="margin-top: -12px;">
+                                <thead>
+                                <tr>
+                                    <th>错误码描述</th>
+                                    <th>错误码编码</th>
+                                    <th>显示顺序</th>
+                                    <th>创建日期</th>
+                                    <th sec:authorize-url="/dictOperateColumn">操作</th>
+                                </tr>
+                                <thead>
+                                <tbody>
+                                <tr th:each="dict:${list}">
+                                    <td>
+                                        [[${dict.dictName}]]
+                                    </td>
+                                    <td th:text="${dict.dictCode}"></td>
+                                    <td th:text="${dict.sort}"></td>
+                                    <td>[[${#dates.format(dict.getCreateDate(),'yyyy-MM-dd HH:mm:ss')}]]</td>
+                                    <td sec:authorize-url="/dictOperateColumn">
+                                        <a sec:authorize-url="/dict/edit/*"
+                                           th:href="@{/dict/edit/{id}(id=${dict.id})}"
+                                           class="on-default edit-row"
+                                           style="padding-left: 5px;color: #29b6f6;"
+                                           title="编辑"><i style="font-size: 18px" class="mdi mdi-table-edit"></i></a>
+
+                                        <a sec:authorize-url="/dict/deleteById/*"
+                                           th:onclick="confirmDelete([[${dict.id}]],this)" data-toggle="modal"
+                                           data-target="#confirm-modal" class="on-default remove-row"
+                                           style="padding-left: 5px;color: #f05050"
+                                           title="删除"><i style="font-size: 18px" class="mdi mdi-delete-sweep"></i></a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <th:block th:insert="fragments/common_fragments :: confirm-modal"/>
+    </div> <!-- container -->
+</div> <!-- content -->
+
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<!-- Modal-Effect -->
+
+<script>
+
+    function confirmDelete(id) {
+        $("#deleteId").val(id);
+    }
+
+    function deleteById() {
+        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+        $('#preloader').css('display', 'block');
+        location.href = contextPath + '/dict/deleteById/' + $("#deleteId").val();
+    }
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+</script>
+</body>
+</html>

@@ -10,13 +10,36 @@
     <file url="file://$PROJECT_DIR$/smoc-auth-ui/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/smoc-auth/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/smoc-auth/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/smoc-base-common/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/smoc-base-common/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/smoc-business-access/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/smoc-business-access/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/smoc-common-utils" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/smoc-common-utils/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/smoc-filters-grpc-lib/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/smoc-filters-grpc/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/smoc-filters-grpc/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/smoc-filters/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/smoc-filters/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/smoc-gateway/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/smoc-http-server/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/smoc-http-server/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/smoc-identity/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/smoc-iot-ui/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/smoc-iot-ui/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/smoc-iot/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/smoc-parent" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/smoc-parent-ui" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/smoc-parent-ui/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/smoc-parent/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/smoc-parent/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/smoc-protocol-access-cmpp/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/smoc-protocol-access-cmpp/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/smoc-saler-ui/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/smoc-saler-ui/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/smoc-scheduler-filters/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/smoc-scheduler/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/smoc-scheduler/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/smoc-service-ui/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/smoc-service-ui/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/smoc-statistic-ui/src/main/java" charset="UTF-8" />
