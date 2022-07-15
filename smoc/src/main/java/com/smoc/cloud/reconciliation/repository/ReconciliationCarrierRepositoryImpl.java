@@ -38,7 +38,7 @@ public class ReconciliationCarrierRepositoryImpl extends BasePageRepository {
         StringBuilder sqlBuffer = new StringBuilder("select ");
         sqlBuffer.append(" a.MESSAGE_DATE,");
         sqlBuffer.append(" a.CHANNEL_PROVDER,");
-        sqlBuffer.append(" IFNULL(b.CHANNEL_PERIOD_STATUS,0)CHANNEL_PERIOD_STATUS");
+        sqlBuffer.append(" IFNULL(b.CHANNEL_PERIOD_STATUS,4)CHANNEL_PERIOD_STATUS");
         sqlBuffer.append(" from (select LEFT (t.MESSAGE_DATE, 7)MESSAGE_DATE,t.CHANNEL_PROVDER from view_reconciliation_carrier t group by LEFT (t.MESSAGE_DATE, 7),t.CHANNEL_PROVDER order by LEFT (t.MESSAGE_DATE, 7) desc )a ");
         sqlBuffer.append(" left join ");
         sqlBuffer.append(" (select LEFT (t.CHANNEL_PERIOD, 7)MESSAGE_DATE,t.CHANNEL_PROVDER,t.CHANNEL_PERIOD_STATUS from reconciliation_carrier_items t group by LEFT (t.CHANNEL_PERIOD, 7),t.CHANNEL_PROVDER,t.CHANNEL_PERIOD_STATUS order by LEFT (t.CHANNEL_PERIOD, 7) desc )b ");
@@ -64,7 +64,7 @@ public class ReconciliationCarrierRepositoryImpl extends BasePageRepository {
             paramsList.add(qo.getChannelPeriodStatus().trim());
         }
 
-        sqlBuffer.append(" order by a.MESSAGE_DATE desc,a.CHANNEL_PROVDER ");
+        sqlBuffer.append(" order by a.MESSAGE_DATE desc,IFNULL(b.CHANNEL_PERIOD_STATUS,4) desc ");
         //log.info("[SQL]:{}",sqlBuffer);
         //根据参数个数，组织参数值
         Object[] params = new Object[paramsList.size()];

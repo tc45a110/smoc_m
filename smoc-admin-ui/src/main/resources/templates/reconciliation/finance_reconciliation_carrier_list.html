@@ -160,9 +160,10 @@
                                             [[${dataInfo.amountDifference}]]
                                         </td>
                                         <td style="vertical-align: middle;line-height: 26px;text-align:center" th:rowspan="${info.rowspan}">
-                                            <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light" th:if="${info.channelPeriodStatus eq '0'}">未配置</a>
-                                            <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light" th:if="${info.channelPeriodStatus eq '1'}">审核中</a>
-                                            <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light" th:if="${info.channelPeriodStatus eq '2'}">已完成</a>
+                                            <a class="btn btn-inverse btn-rounded btn-sm waves-effect waves-light" th:if="${info.channelPeriodStatus eq '4'}">未配置</a>
+                                            <a class="btn btn-info btn-rounded btn-sm waves-effect waves-light" th:if="${info.channelPeriodStatus eq '3'}">审核中</a>
+                                            <a class="btn btn-success btn-rounded btn-sm waves-effect waves-light" th:if="${info.channelPeriodStatus eq '2'}">已完成</a>
+                                            <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light" th:if="${info.channelPeriodStatus eq '1'}">已拒绝</a>
                                         </td>
                                         <td style="vertical-align: middle;line-height: 26px" th:rowspan="${info.rowspan}">
                                             <a sec:authorize-url="/finance/reconciliation/carrier/view/center/*/*"

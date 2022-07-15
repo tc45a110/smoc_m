@@ -14,6 +14,8 @@ public class MessageDailyStatisticValidator {
 
     private String businessAccount;
 
+    private String accountName;
+
     private String channelId;
 
     private String areaCode;

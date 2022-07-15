@@ -8,6 +8,7 @@ import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticComplaintData;
 import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
 import com.smoc.cloud.common.smoc.customer.qo.StatisticProfitData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
+import com.smoc.cloud.common.smoc.query.model.AccountSendStatisticModel;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -113,4 +114,12 @@ public interface BusinessAccountFeignClient {
      */
     @RequestMapping(value = "/account/accountByProtocol", method = RequestMethod.POST)
     PageList<AccountBasicInfoValidator> accountByProtocol(@RequestBody PageParams<AccountBasicInfoValidator> pageParams);
+
+    /**
+     * 查询业务账号发送量
+     * @param pageParams
+     * @return
+     */
+    @RequestMapping(value = "/account/queryAccountSendStatistics", method = RequestMethod.POST)
+    ResponseData<PageList<AccountSendStatisticModel>> queryAccountSendStatistics(@RequestBody PageParams<AccountSendStatisticModel> pageParams);
 }

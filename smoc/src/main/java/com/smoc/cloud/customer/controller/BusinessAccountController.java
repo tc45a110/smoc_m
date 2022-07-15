@@ -10,6 +10,7 @@ import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticComplaintData;
 import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
 import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.common.smoc.message.MessageAccountValidator;
+import com.smoc.cloud.common.smoc.query.model.AccountSendStatisticModel;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.customer.entity.AccountBasicInfo;
@@ -235,5 +236,16 @@ public class BusinessAccountController {
     public PageList<AccountBasicInfoValidator> accountByProtocol(@RequestBody PageParams<AccountBasicInfoValidator> pageParams) {
 
         return businessAccountService.accountByProtocol(pageParams);
+    }
+
+    /**
+     * 查询业务账号发送量
+     * @param pageParams
+     * @return
+     */
+    @RequestMapping(value = "/queryAccountSendStatistics", method = RequestMethod.POST)
+    public ResponseData<PageList<AccountSendStatisticModel>> queryAccountSendStatistics(@RequestBody PageParams<AccountSendStatisticModel> pageParams){
+
+        return businessAccountService.queryAccountSendStatistics(pageParams);
     }
 }

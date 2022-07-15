@@ -150,6 +150,12 @@ public class MessageDailyStatisticRepositoryImpl extends BasePageRepository {
             paramsList.add(qo.getBusinessAccount().trim());
         }
 
+        //业务账号
+        if (!StringUtils.isEmpty(qo.getAccountName())) {
+            sqlBuffer.append(" and a.ACCOUNT_NAME like ?");
+            paramsList.add("%" +qo.getAccountName().trim()+ "%");
+        }
+
         //运营商
         if (!StringUtils.isEmpty(qo.getCarrier())) {
             sqlBuffer.append(" and t.CARRIER =?");

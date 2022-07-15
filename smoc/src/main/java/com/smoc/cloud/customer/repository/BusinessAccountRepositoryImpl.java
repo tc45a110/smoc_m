@@ -12,6 +12,9 @@ import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.AccountChannelInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.AccountFinanceInfoValidator;
 import com.smoc.cloud.common.smoc.message.MessageAccountValidator;
+import com.smoc.cloud.common.smoc.message.MessageDailyStatisticValidator;
+import com.smoc.cloud.common.smoc.query.model.AccountSendStatisticItemsModel;
+import com.smoc.cloud.common.smoc.query.model.AccountSendStatisticModel;
 import com.smoc.cloud.customer.rowmapper.*;
 import org.springframework.util.StringUtils;
 
@@ -644,5 +647,173 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
         pageList.getPageParams().setParams(qo);
 
         return pageList;
+    }
+
+    public PageList<AccountSendStatisticModel> queryAccountSendStatistics(PageParams<AccountSendStatisticModel> pageParams){
+
+        //查询条件
+        AccountSendStatisticModel qo = pageParams.getParams();
+
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append("  t.MESSAGE_DATE,");
+        sqlBuffer.append("  t.BUSINESS_ACCOUNT,");
+        sqlBuffer.append("  a.ACCOUNT_NAME,");
+        sqlBuffer.append("  e.ENTERPRISE_NAME");
+        sqlBuffer.append("  from message_daily_statistics t left join account_base_info a on t.BUSINESS_ACCOUNT = a.ACCOUNT_ID ");
+        sqlBuffer.append("  left join enterprise_basic_info e on a.ENTERPRISE_ID = e.ENTERPRISE_ID ");
+        sqlBuffer.append("  where 1=1 ");
+
+        List<Object> paramsList = new ArrayList<Object>();
+
+        if (!StringUtils.isEmpty(qo.getEnterpriseName())) {
+            sqlBuffer.append(" and e.ENTERPRISE_NAME like ?");
+            paramsList.add( "%"+qo.getEnterpriseName().trim()+"%");
+        }
+
+        if (!StringUtils.isEmpty(qo.getAccountName())) {
+            sqlBuffer.append(" and a.ACCOUNT_NAME like ?");
+            paramsList.add( "%"+qo.getAccountName().trim()+"%");
+        }
+
+        if (!StringUtils.isEmpty(qo.getBusinessAccount())) {
+            sqlBuffer.append(" and a.ACCOUNT_ID = ?");
+            paramsList.add( qo.getBusinessAccount().trim());
+        }
+
+        //时间起
+        if (!StringUtils.isEmpty(qo.getStartDate())) {
+            sqlBuffer.append(" and DATE_FORMAT(t.MESSAGE_DATE,'%Y-%m-%d') >=? ");
+            paramsList.add(qo.getStartDate().trim());
+        }
+        //时间止
+        if (!StringUtils.isEmpty(qo.getEndDate())) {
+            sqlBuffer.append(" and DATE_FORMAT(t.MESSAGE_DATE,'%Y-%m-%d') <=? ");
+            paramsList.add(qo.getEndDate().trim());
+        }
+
+        sqlBuffer.append(" group by t.MESSAGE_DATE, t.BUSINESS_ACCOUNT order by t.MESSAGE_DATE desc, t.BUSINESS_ACCOUNT desc");
+
+        //根据参数个数，组织参数值
+        Object[] params = new Object[paramsList.size()];
+        paramsList.toArray(params);
+
+        PageList<AccountSendStatisticModel> pageList = this.queryByPageForMySQL(sqlBuffer.toString(), params, pageParams.getCurrentPage(), pageParams.getPageSize(), new AccountSendStatisticsRowMapper());
+        pageList.getPageParams().setParams(qo);
+
+        List<AccountSendStatisticModel> list = pageList.getList();
+        for (int i = 0; i < list.size(); i++) {
+            AccountSendStatisticModel info = list.get(i);
+            info.setStartDate(info.getMessageDate());
+            info.setEndDate(info.getMessageDate());
+            List<AccountSendStatisticItemsModel> items = findAccountSendStatisticsItems(info);
+            info.setItems(items);
+
+            if(!StringUtils.isEmpty(items) && items.size()>0){
+                MessageDailyStatisticValidator messageDailyStatisticValidator = new MessageDailyStatisticValidator();
+                messageDailyStatisticValidator.setBusinessAccount(items.get(0).getBusinessAccount());
+                messageDailyStatisticValidator.setStartDate(items.get(0).getMessageDate());
+                messageDailyStatisticValidator.setEndDate(items.get(0).getMessageDate());
+                Map<String, Object> map = countSum(messageDailyStatisticValidator);
+                info.setTotalSuccessSubmitNum(""+map.get("SUCCESS_SUBMIT_NUM"));
+                info.setTotalMessageSuccessNum(""+map.get("MESSAGE_SUCCESS_NUM"));
+                info.setTotalMessageFailureNum(""+map.get("MESSAGE_FAILURE_NUM"));
+                info.setTotalMessageNoReportNum(""+map.get("MESSAGE_NO_REPORT_NUM"));
+            }
+
+        }
+
+        return pageList;
+    }
+
+    public List<AccountSendStatisticItemsModel> findAccountSendStatisticsItems(AccountSendStatisticModel qo) {
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append(" t.MESSAGE_DATE,");
+        sqlBuffer.append(" t.BUSINESS_ACCOUNT,");
+        sqlBuffer.append(" t.CHANNEL_ID,");
+        sqlBuffer.append(" t.BUSINESS_TYPE,");
+        sqlBuffer.append(" t.CARRIER,");
+        sqlBuffer.append(" t.ACCOUNT_PRICE,");
+        sqlBuffer.append(" sum(t.CUSTOMER_SUBMIT_NUM)CUSTOMER_SUBMIT_NUM,");
+        sqlBuffer.append(" sum(t.SUCCESS_SUBMIT_NUM)SUCCESS_SUBMIT_NUM,");
+        sqlBuffer.append(" sum(t.FAILURE_SUBMIT_NUM)FAILURE_SUBMIT_NUM,");
+        sqlBuffer.append(" sum(t.MESSAGE_SUCCESS_NUM)MESSAGE_SUCCESS_NUM,");
+        sqlBuffer.append(" sum(t.MESSAGE_FAILURE_NUM)MESSAGE_FAILURE_NUM,");
+        sqlBuffer.append(" sum(t.MESSAGE_NO_REPORT_NUM)MESSAGE_NO_REPORT_NUM");
+        sqlBuffer.append("  from message_daily_statistics t ");
+        sqlBuffer.append("  where 1=1 ");
+
+        List<Object> paramsList = new ArrayList<Object>();
+        if (!StringUtils.isEmpty(qo.getBusinessAccount())) {
+            sqlBuffer.append(" and t.BUSINESS_ACCOUNT = ?");
+            paramsList.add( qo.getBusinessAccount().trim());
+        }
+
+        //时间起
+        if (!StringUtils.isEmpty(qo.getStartDate())) {
+            sqlBuffer.append(" and DATE_FORMAT(t.MESSAGE_DATE,'%Y-%m-%d') >=? ");
+            paramsList.add(qo.getStartDate().trim());
+        }
+        //时间止
+        if (!StringUtils.isEmpty(qo.getEndDate())) {
+            sqlBuffer.append(" and DATE_FORMAT(t.MESSAGE_DATE,'%Y-%m-%d') <=? ");
+            paramsList.add(qo.getEndDate().trim());
+        }
+
+        sqlBuffer.append(" group by t.MESSAGE_DATE, t.BUSINESS_ACCOUNT,t.CHANNEL_ID,t.BUSINESS_TYPE,t.CARRIER,t.ACCOUNT_PRICE order by t.MESSAGE_DATE desc");
+
+        //根据参数个数，组织参数值
+        Object[] params = new Object[paramsList.size()];
+        paramsList.toArray(params);
+
+        List<AccountSendStatisticItemsModel> list = this.queryForObjectList(sqlBuffer.toString(), params, new AccountSendStatisticItemsRowMapper());
+        return list;
+    }
+
+    public Map<String, Object> countSum(MessageDailyStatisticValidator qo) {
+
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append(" sum(t.SUCCESS_SUBMIT_NUM) SUCCESS_SUBMIT_NUM,");
+        sqlBuffer.append(" sum(t.MESSAGE_SUCCESS_NUM) MESSAGE_SUCCESS_NUM,");
+        sqlBuffer.append(" sum(t.MESSAGE_FAILURE_NUM) MESSAGE_FAILURE_NUM,");
+        sqlBuffer.append(" sum(t.MESSAGE_NO_REPORT_NUM) MESSAGE_NO_REPORT_NUM");
+        sqlBuffer.append(" from message_daily_statistics t ");
+        sqlBuffer.append(" where  1=1 ");
+
+        List<Object> paramsList = new ArrayList<Object>();
+        //业务账号
+        if (!StringUtils.isEmpty(qo.getBusinessAccount())) {
+            sqlBuffer.append(" and t.BUSINESS_ACCOUNT =?");
+            paramsList.add(qo.getBusinessAccount().trim());
+        }
+        //时间起
+        if (!StringUtils.isEmpty(qo.getStartDate())) {
+            sqlBuffer.append(" and DATE_FORMAT(t.MESSAGE_DATE,'%Y-%m-%d') >=? ");
+            paramsList.add(qo.getStartDate().trim());
+        }
+        //时间止
+        if (!StringUtils.isEmpty(qo.getEndDate())) {
+            sqlBuffer.append(" and DATE_FORMAT(t.MESSAGE_DATE,'%Y-%m-%d') <=? ");
+            paramsList.add(qo.getEndDate().trim());
+        }
+
+        sqlBuffer.append(" order by t.MESSAGE_DATE desc,t.CREATED_TIME desc");
+
+        //根据参数个数，组织参数值
+        Object[] params = new Object[paramsList.size()];
+        paramsList.toArray(params);
+
+        Map<String, Object> map = jdbcTemplate.queryForMap(sqlBuffer.toString(), params);
+        if(null == map || map.size()<1 || null == map.get("SUCCESS_SUBMIT_NUM")){
+            map = new HashMap<>();
+            map.put("SUCCESS_SUBMIT_NUM",0);
+            map.put("MESSAGE_SUCCESS_NUM",0);
+            map.put("MESSAGE_FAILURE_NUM",0);
+            map.put("MESSAGE_NO_REPORT_NUM",0);
+        }
+        return map;
+
     }
 }

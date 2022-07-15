@@ -18,6 +18,7 @@ import com.smoc.cloud.common.smoc.customer.validator.AccountChannelInfoValidator
 import com.smoc.cloud.common.smoc.customer.validator.AccountFinanceInfoValidator;
 import com.smoc.cloud.common.smoc.message.MessageAccountValidator;
 import com.smoc.cloud.common.smoc.parameter.ParameterExtendFiltersValueValidator;
+import com.smoc.cloud.common.smoc.query.model.AccountSendStatisticModel;
 import com.smoc.cloud.common.utils.DES;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.PasswordUtils;
@@ -555,5 +556,15 @@ public class BusinessAccountService {
      */
     public PageList<AccountBasicInfoValidator> accountByProtocol(PageParams<AccountBasicInfoValidator> pageParams) {
         return businessAccountRepository.accountByProtocol(pageParams);
+    }
+
+    /**
+     * 查询业务账号发送量
+     * @param pageParams
+     * @return
+     */
+    public ResponseData<PageList<AccountSendStatisticModel>> queryAccountSendStatistics(PageParams<AccountSendStatisticModel> pageParams) {
+        PageList<AccountSendStatisticModel> list = businessAccountRepository.queryAccountSendStatistics(pageParams);
+        return ResponseDataUtil.buildSuccess(list);
     }
 }

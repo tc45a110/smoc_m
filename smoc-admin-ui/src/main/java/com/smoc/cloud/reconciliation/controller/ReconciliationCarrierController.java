@@ -68,7 +68,7 @@ public class ReconciliationCarrierController {
 
         //初始化数据
         PageParams<ReconciliationChannelCarrierModel> params = new PageParams<ReconciliationChannelCarrierModel>();
-        params.setPageSize(3);
+        params.setPageSize(20);
         params.setCurrentPage(1);
         ReconciliationChannelCarrierModel reconciliationChannelCarrierModel = new ReconciliationChannelCarrierModel();
         reconciliationChannelCarrierModel.setChannelPeriod(DateTimeUtils.getMonth());
@@ -188,7 +188,7 @@ public class ReconciliationCarrierController {
             info.setCarrierTotalAmount(new BigDecimal(request.getParameter("carrierAccount"+i)));
             info.setCarrierTotalSendQuantity(Long.parseLong(request.getParameter("carrierMessage"+i)));
             info.setCreatedBy(user.getRealName());
-            info.setChannelPeriodStatus("1");
+            info.setChannelPeriodStatus("3");
         }
 
         reconciliationChannelCarrierModel.setCarrierList(list);

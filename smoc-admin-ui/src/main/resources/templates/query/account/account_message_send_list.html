@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org"
+>
+<head>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
+    <link th:href="@{/static/css/detail_statistics.css}" rel="stylesheet">
+    <style>
+        .smoc{
+
+        }
+        .carrier{
+           color:#6b5fb5
+        }
+        .contradiction{
+           color:#f5707a
+        }
+        .bgRow{
+           background-color:#f8fcf3
+        }
+
+
+    </style>
+</head>
+<body>
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <!-- start row 页面导航-->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">账号发送量查询</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            信息查询
+                        </li>
+                        <li>
+                            账号发送量查询
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  查询条件-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <form id="query_form" th:action="@{/query/account/sendStatistics/page}"
+                          th:object="${accountSendStatisticModel}" method="post">
+                        <div class="row m-b-60">
+                            <div class="col-sm-12">
+                                <div class="form-group  col-sm-3">
+                                    <input id="reportrange" class="form-control" type="text" th:field="*{startDate}"/>
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control" placeholder="企业名称"  th:field="*{enterpriseName}" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control" th:field="*{accountName}"
+                                           placeholder="业务账号名称" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control" th:field="*{businessAccount}"
+                                           placeholder="业务账号" autocomplete="off">
+                                </div>
+                                <div class="form-group col-sm-3 pull-right" style="text-align: right">
+                                    <button sec:authorize-url="/query/account/sendStatistics/page" type="submit"
+                                            class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
+                                        <i class="glyphicon glyphicon-search"></i> 查询
+                                    </button>
+                                    <input type="hidden" name="currentPage" id="currentPage"
+                                           th:value="${pageParams.currentPage}">
+                                    <input type="hidden" name="pageSize" id="pageSize"
+                                           th:value="${pageParams.pageSize}">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  汇总统计-->
+        <div class="detail">
+            <div id="help" class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+                <ul>
+                    <li>
+                        <h2 style="color: #fff">日汇总统计</h2>
+                        <span></span>
+                        <div class="row">
+                            <div class="form-group  col-lg-3 col-md-6 col-sm-6 col-xs-12 detailInner" style="min-width:400px;">
+                                <a>提交运营商总数：<span style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
+                                                 data-d-group="4" data-a-sign=" " data-v-min="0"
+                                                 data-v-max="99999999999"
+                                                 class="autonumber">[[${countMap.get('SUCCESS_SUBMIT_NUM')}]]</span></a>
+                            </div>
+                            <div class="form-group  col-lg-3 col-md-6 col-sm-6 col-xs-12 detailInner" style="min-width:400px;">
+                                <a>总成功发送数：<span style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
+                                                data-d-group="4" data-a-sign=" " data-v-min="0"
+                                                data-v-max="99999999999"
+                                                class="autonumber">[[${countMap.get('MESSAGE_SUCCESS_NUM')}]]</span></a>
+                            </div>
+                            <div class="form-group col-lg-3 col-md-6 col-sm-6 col-xs-12 detailInner" style="min-width:400px;">
+                                <a>总发送失败数：<span style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
+                                                data-d-group="4" data-a-sign=" " data-v-min="0"
+                                                data-v-max="99999999999"
+                                                class="autonumber">[[${countMap.get('MESSAGE_FAILURE_NUM')}]]</span></a>
+                            </div>
+                            <div class="form-group  col-lg-3 col-md-6 col-sm-6 col-xs-12 detailInner" style="min-width:400px;">
+                                <a>总未知数：<span style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
+                                              data-d-group="4" data-a-sign=" " data-v-min="0"
+                                              data-v-max="99999999999"
+                                              class="autonumber">[[${countMap.get('MESSAGE_NO_REPORT_NUM')}]]</span></a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- end row -->
+
+
+        <!-- start row  列表数据-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-sm-12">
+                <div class="panel panel-color panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">账号发送量列表</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table table-hover m-10" style="margin-top: -12px;">
+                                <thead>
+                                <tr>
+                                    <th>汇总日期</th>
+                                    <th>通道ID</th>
+                                    <th>业务类型</th>
+                                    <th>运营商</th>
+                                    <th>账号价格</th>
+                                    <th>客户提交数/提交失败数</th>
+                                    <th>成功发送数/提交运营商数</th>
+                                    <th>发送失败数/未知数</th>
+                                    <th></th>
+                                </tr>
+                                <thead>
+                                <tbody>
+                                <th:block th:each="info,state:${list}">
+                                    <tr  th:class="${state.odd?'bgRow':''}">
+                                        <td style="vertical-align: middle;height:50px;font-size:15px;font-weight:600;"
+                                            colspan="8">
+                                            [[${info.messageDate}]]&nbsp;[[${info.businessAccount}]]&nbsp;[[${info.accountName}]]&nbsp;<small>([[${info.enterpriseName}]])</small>
+                                        </td>
+                                        <td class="pull-right" style="padding-right:20px">
+                                            <a sec:authorize-url="/query/account/excel/*/*"
+                                               th:href="@{/query/account/excel/{messageDate}/{businessAccount}(businessAccount=${info.businessAccount},messageDate=${info.messageDate})}"
+                                               data-toggle="tooltip" data-placement="left"
+                                               data-original-title="导出账号发送量"
+                                               class="on-default edit-row"
+                                               style="padding-left: 5px;color:#188ae2"><i style="font-size: 18px" class="glyphicon glyphicon-export"></i></a>
+                                        </td>
+                                    </tr>
+                                    <tr  th:class="${state.odd?'bgRow':''}" th:each="account:${info.items}">
+                                        <td style="vertical-align: middle;height:42px;">
+                                            [[${account.messageDate}]]
+                                        </td>
+                                        <td style="vertical-align: middle;height:42px;">
+                                            [[${account.channelId}]]
+                                        </td>
+                                        <td style="vertical-align: middle;height:42px;">
+                                            <mpm:tag identity="businessType" show-type="button"
+                                                     key="code" th:value="${account.businessType}"
+                                                     class="TEXT_SMS,btn btn-teal btn-rounded waves-effect waves-light btn-sm;MULTI_SMS,btn btn-brown btn-rounded waves-effect waves-light btn-sm;MMS,btn btn-info waves-effect waves-light btn-sm;5G_SMS,btn btn-primary btn-rounded waves-effect waves-light btn-sm;INTERNATIONAL_SMS,btn btn-purple btn-rounded waves-effect waves-light btn-sm;BLACK_SERVICE,btn btn-inverse btn-rounded waves-effect waves-light btn-sm"/>
+                                        </td>
+                                        <td style="vertical-align: middle;height:42px;">
+                                            <mpm:tag  identity="carrier"
+                                                      show-type="button" key="code" th:value="${account.carrier}" class="CMCC,btn btn-teal btn-rounded btn-sm waves-effect waves-light;UNIC,btn btn-info btn-rounded btn-sm waves-effect waves-light;TELC,btn btn-success btn-rounded btn-sm waves-effect waves-light;INTL,btn btn-purple btn-rounded btn-sm waves-effect waves-light;"/>
+                                        </td>
+                                        <td style="vertical-align: middle;height:42px;">
+                                            [[${account.price}]]
+                                        </td>
+                                        <td style="vertical-align: middle;line-height: 26px">
+                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999999"
+                                              class="autonumber">[[${account.customerSubmitNum}]]</span>
+                                            <br>
+                                            <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="99999999999"
+                                                  class="autonumber">[[${account.failureSubmitNum}]]</span>
+                                        </td>
+                                        <td style="vertical-align: middle;line-height: 26px">
+                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="99999999999"
+                                              class="autonumber">[[${account.messageSuccessNum}]]</span>
+                                            <br>
+                                            <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="99999999999"
+                                                  class="autonumber">[[${account.successSubmitNum}]]</span>
+                                        </td>
+                                        <td style="vertical-align: middle;line-height: 26px">
+                                        <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="99999999999"
+                                              class="autonumber">[[${account.messageFailureNum}]]</span>
+                                            <br>
+                                            <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="99999999999"
+                                                  class="autonumber">[[${account.messageNoReportNum}]]</span>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr  th:class="${state.odd?'bgRow':''}" style="margin-bottom:20px">
+                                        <td style="vertical-align: middle;height:40px;font-size:13px;font-weight:500;" colspan="9">
+                                            提交运营商总额：[[${info.totalSuccessSubmitNum}]]&nbsp;&nbsp;总成功发送数：[[${info.totalMessageSuccessNum}]]&nbsp;&nbsp;总发送失败数：[[${info.totalMessageFailureNum}]]&nbsp;&nbsp;总未知数：[[${info.totalMessageNoReportNum}]]
+                                        </td>
+                                    </tr>
+                                </th:block>
+                                </tbody>
+                            </table>
+                            <hr>
+                        </div>
+                        <th:block th:insert="fragments/page_fragments :: page"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+    </div>
+</div> <!-- content -->
+
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<script th:src="@{/static/plugins/moment/moment.js}"></script>
+<script th:src="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.js}"></script>
+<script th:src="@{/static/plugins/bootstrap-inputmask/bootstrap-inputmask.min.js}"></script>
+
+<script th:remove="${#strings.isEmpty(error)}?none:all">
+
+    $('#reportrange').daterangepicker({
+        format: 'YYYY-MM-DD',
+        startDate: '[[${accountSendStatisticModel.startDate}]]',
+        endDate: '[[${accountSendStatisticModel.endDate}]]',
+        minDate: '2012-01-01',
+        maxDate: '2080-12-31',
+        dateLimit: {
+            days: 2
+        },
+        showDropdowns: true,
+        showWeekNumbers: true,
+        timePicker: false,
+        timePickerIncrement: 1,
+        timePicker12Hour: true,
+        ranges: {
+            '今天': [moment(), moment()],
+            '昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            '最近7天': [moment().subtract(6, 'days'), moment()],
+            '最近30天': [moment().subtract(29, 'days'), moment()],
+            '本月': [moment().startOf('month'), moment().endOf('month')],
+            '上月': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        },
+        opens: 'right',
+        buttonClasses: ['btn btn-default'],
+        applyClass: 'btn-small btn-primary',
+        cancelClass: 'btn-small',
+        format: 'YYYY-MM-DD',
+        separator: ' - ',
+        locale: {
+            applyLabel: '确认',
+            cancelLabel: '取消',
+            fromLabel: '从',
+            toLabel: '到',
+            customRangeLabel: '自定义',
+            format: "YYYY-MM-DD",
+            daysOfWeek: ['日', '一', '二', '三', '四', '五', '六'],
+            monthNames: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+            firstDay: 1
+        }
+    }, function (start, end, label) {
+        //alert('A date range was chosen: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+    });
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+
+</script>
+</body>
+</html>

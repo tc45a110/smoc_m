@@ -18,6 +18,7 @@ import com.smoc.cloud.common.smoc.customer.validator.AccountInterfaceInfoValidat
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseWebAccountInfoValidator;
 import com.smoc.cloud.common.smoc.parameter.ParameterExtendFiltersValueValidator;
 import com.smoc.cloud.common.smoc.parameter.ParameterExtendSystemParamValueValidator;
+import com.smoc.cloud.common.smoc.query.model.AccountSendStatisticModel;
 import com.smoc.cloud.common.utils.DES;
 import com.smoc.cloud.customer.remote.BusinessAccountFeignClient;
 import com.smoc.cloud.identification.model.AccountExcelModel;
@@ -658,6 +659,21 @@ public class BusinessAccountService {
         try {
             PageList<AccountBasicInfoValidator> pageList = this.businessAccountFeignClient.accountByProtocol(pageParams);
             return ResponseDataUtil.buildSuccess(pageList);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 查询业务账号发送量
+     * @param pageParams
+     * @return
+     */
+    public ResponseData<PageList<AccountSendStatisticModel>> queryAccountSendStatistics(PageParams<AccountSendStatisticModel> pageParams) {
+        try {
+            ResponseData<PageList<AccountSendStatisticModel>> pageList = this.businessAccountFeignClient.queryAccountSendStatistics(pageParams);
+            return pageList;
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseDataUtil.buildError(e.getMessage());

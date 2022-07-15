@@ -83,6 +83,10 @@
                                     class="btn btn-teal waves-effect waves-light">查看
                             </button>
 
+                            <a sec:authorize-url="/configure/number/portability/list" th:href="@{/configure/number/portability/list}"
+                               class="btn btn-default waves-effect waves-light">返回
+                            </a>
+
                             <a sec:authorize-url="/configure/number/portability/deleteRedis" type="submit"
                                data-toggle="modal" data-target="#confirm-modal"
                                     class="btn btn-danger waves-effect waves-light">删除
