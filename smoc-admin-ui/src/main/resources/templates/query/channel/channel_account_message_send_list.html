@@ -9,22 +9,7 @@
     <th:block th:insert="fragments/common_fragments :: select_css"/>
     <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
     <link th:href="@{/static/css/detail_statistics.css}" rel="stylesheet">
-    <style>
-        .smoc{
 
-        }
-        .carrier{
-           color:#6b5fb5
-        }
-        .contradiction{
-           color:#f5707a
-        }
-        .bgRow{
-           background-color:#f8fcf3
-        }
-
-
-    </style>
 </head>
 <body>
 <!-- Loader start 页面加载进度-->
@@ -39,10 +24,13 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">账号发送量查询</h4>
+                    <h4 class="page-title">通道发送量查询</h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
                             信息查询
+                        </li>
+                        <li>
+                            通道发送量查询
                         </li>
                         <li>
                             账号发送量查询
@@ -58,26 +46,25 @@
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
                 <div class="card-box">
-                    <form id="query_form" th:action="@{/query/account/sendStatistics/page}"
-                          th:object="${accountSendStatisticModel}" method="post">
+                    <form id="query_form" th:action="@{/query/channel/accountMessageSend/page}"
+                          th:object="${accountSendStatisticItemsModel}" method="post">
                         <div class="row m-b-60">
                             <div class="col-sm-12">
                                 <div class="form-group  col-sm-3">
                                     <input id="reportrange" class="form-control" type="text" th:field="*{startDate}"/>
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <input type="text" class="form-control" placeholder="企业名称"  th:field="*{enterpriseName}" autocomplete="off">
+                                    <input type="text" class="form-control" th:field="*{businessAccount}"
+                                           placeholder="业务账号" autocomplete="off">
                                 </div>
                                 <div class="form-group  col-sm-3">
                                     <input type="text" class="form-control" th:field="*{accountName}"
                                            placeholder="业务账号名称" autocomplete="off">
                                 </div>
-                                <div class="form-group  col-sm-3">
-                                    <input type="text" class="form-control" th:field="*{businessAccount}"
-                                           placeholder="业务账号" autocomplete="off">
-                                </div>
+
                                 <div class="form-group col-sm-3 pull-right" style="text-align: right">
-                                    <button sec:authorize-url="/query/account/sendStatistics/page" type="submit"
+                                    <input type="hidden" th:field="*{channelId}">
+                                    <button sec:authorize-url="/query/channel/accountMessageSend/page" type="submit"
                                             class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search"></i> 查询
                                     </button>
@@ -148,77 +135,44 @@
                                 <tr>
                                     <th>汇总日期</th>
                                     <th>通道ID</th>
-                                    <th>业务类型</th>
-                                    <th>运营商</th>
-                                    <th>账号价格</th>
+                                    <th>账号</th>
                                     <th>客户提交数/提交失败数</th>
                                     <th>成功发送数/提交运营商数</th>
                                     <th>发送失败数/未知数</th>
-                                    <th></th>
                                 </tr>
                                 <thead>
                                 <tbody>
-                                <th:block th:each="info,state:${list}">
-                                    <tr  th:class="${state.odd?'bgRow':''}">
-                                        <td style="vertical-align: middle;height:50px;font-size:15px;font-weight:600;"
-                                            colspan="8">
-                                            [[${info.messageDate}]]&nbsp;[[${info.businessAccount}]]&nbsp;[[${info.accountName}]]&nbsp;<small>([[${info.enterpriseName}]])</small>
+                                    <tr th:each="info:${list}">
+                                        <td style="vertical-align: middle;line-height: 26px;">
+                                            [[${info.messageDate}]]
                                         </td>
-                                        <td class="pull-right" style="padding-right:20px">
-                                            <a sec:authorize-url="/query/account/excel/*/*"
-                                               th:href="@{/query/account/excel/{messageDate}/{businessAccount}(businessAccount=${info.businessAccount},messageDate=${info.messageDate})}"
-                                               data-toggle="tooltip" data-placement="left"
-                                               data-original-title="导出账号发送量"
-                                               class="on-default edit-row"
-                                               style="padding-left: 5px;color:#188ae2"><i style="font-size: 18px" class="glyphicon glyphicon-export"></i></a>
+                                        <td style="vertical-align: middle;line-height: 26px;">
+                                            [[${info.channelId}]]
                                         </td>
-                                    </tr>
-                                    <tr  th:class="${state.odd?'bgRow':''}" th:each="account:${info.items}">
-                                        <td style="vertical-align: middle;height:42px;">
-                                            [[${account.messageDate}]]
-                                        </td>
-                                        <td style="vertical-align: middle;height:42px;">
-                                            <a class="btn btn-success btn-xs">[[${account.channelId}]]</a>
-                                        </td>
-                                        <td style="vertical-align: middle;height:42px;">
-                                            <mpm:tag identity="businessType" show-type="label" key="code" th:value="${account.businessType}"
-                                                    />
-                                        </td>
-                                        <td style="vertical-align: middle;height:42px;">
-                                            <mpm:tag  identity="carrier" show-type="label" key="code" th:value="${account.carrier}"/>
-                                        </td>
-                                        <td style="vertical-align: middle;height:42px;">
-                                            [[${account.price}]]
-                                        </td>
+                                        <td style="vertical-align: middle;line-height: 26px;">[[${info.businessAccount}]]<br>[[${info.accountName}]]</td>
                                         <td style="vertical-align: middle;line-height: 26px">
                                         <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999999"
-                                              class="autonumber">[[${account.customerSubmitNum}]]</span>
+                                              class="autonumber">[[${info.customerSubmitNum}]]</span>
                                             /
                                             <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="99999999999"
-                                                  class="autonumber">[[${account.failureSubmitNum}]]</span>
+                                                  class="autonumber">[[${info.failureSubmitNum}]]</span>
                                         </td>
                                         <td style="vertical-align: middle;line-height: 26px">
                                             <span class="btn btn-primary btn-xs autonumber" data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="99999999999"
-                                                 >[[${account.messageSuccessNum}]]</span>
+                                            >[[${info.messageSuccessNum}]]</span>
                                             /
                                             <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="99999999999"
-                                                  >[[${account.successSubmitNum}]]</span>
+                                            >[[${info.successSubmitNum}]]</span>
                                         </td>
                                         <td style="vertical-align: middle;line-height: 26px">
                                         <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="99999999999"
-                                              class="autonumber">[[${account.messageFailureNum}]]</span>
+                                              class="autonumber">[[${info.messageFailureNum}]]</span>
                                             /
                                             <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="99999999999"
-                                                  class="autonumber">[[${account.messageNoReportNum}]]</span>
-                                        </td>
-                                        <td></td>
-                                    </tr>
-                                    <tr  th:class="${state.odd?'bgRow':''}" style="margin-bottom:20px">
-                                        <td style="vertical-align: middle;height:40px;font-size:13px;font-weight:500;" colspan="9">
-                                            提交运营商总额：[[${info.totalSuccessSubmitNum}]]&nbsp;&nbsp;总成功发送数：[[${info.totalMessageSuccessNum}]]&nbsp;&nbsp;总发送失败数：[[${info.totalMessageFailureNum}]]&nbsp;&nbsp;总未知数：[[${info.totalMessageNoReportNum}]]
+                                                  class="autonumber">[[${info.messageNoReportNum}]]</span>
                                         </td>
                                     </tr>
-                                </th:block>
+
                                 </tbody>
                             </table>
                             <hr>
@@ -246,8 +200,8 @@
 
     $('#reportrange').daterangepicker({
         format: 'YYYY-MM-DD',
-        startDate: '[[${accountSendStatisticModel.startDate}]]',
-        endDate: '[[${accountSendStatisticModel.endDate}]]',
+        startDate: '[[${accountSendStatisticItemsModel.startDate}]]',
+        endDate: '[[${accountSendStatisticItemsModel.endDate}]]',
         minDate: '2012-01-01',
         maxDate: '2080-12-31',
         dateLimit: {

@@ -18,6 +18,8 @@ public class MessageDailyStatisticValidator {
 
     private String channelId;
 
+    private String channelName;
+
     private String areaCode;
 
     private String priceAreaCode;

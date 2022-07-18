@@ -36,35 +36,44 @@ public class ReconciliationCarrierRepositoryImpl extends BasePageRepository {
 
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");
-        sqlBuffer.append(" a.MESSAGE_DATE,");
+       /* sqlBuffer.append(" a.MESSAGE_DATE,");
         sqlBuffer.append(" a.CHANNEL_PROVDER,");
         sqlBuffer.append(" IFNULL(b.CHANNEL_PERIOD_STATUS,4)CHANNEL_PERIOD_STATUS");
         sqlBuffer.append(" from (select LEFT (t.MESSAGE_DATE, 7)MESSAGE_DATE,t.CHANNEL_PROVDER from view_reconciliation_carrier t group by LEFT (t.MESSAGE_DATE, 7),t.CHANNEL_PROVDER order by LEFT (t.MESSAGE_DATE, 7) desc )a ");
         sqlBuffer.append(" left join ");
         sqlBuffer.append(" (select LEFT (t.CHANNEL_PERIOD, 7)MESSAGE_DATE,t.CHANNEL_PROVDER,t.CHANNEL_PERIOD_STATUS from reconciliation_carrier_items t group by LEFT (t.CHANNEL_PERIOD, 7),t.CHANNEL_PROVDER,t.CHANNEL_PERIOD_STATUS order by LEFT (t.CHANNEL_PERIOD, 7) desc )b ");
         sqlBuffer.append(" on a.MESSAGE_DATE=b.MESSAGE_DATE and a.CHANNEL_PROVDER=b.CHANNEL_PROVDER ");
-        sqlBuffer.append(" where a.CHANNEL_PROVDER is not null ");
+        sqlBuffer.append(" where a.CHANNEL_PROVDER is not null ");*/
+        sqlBuffer.append(" LEFT (t.MESSAGE_DATE, 7) MESSAGE_DATE,");
+        sqlBuffer.append(" a.SPECIFIC_PROVDER CHANNEL_PROVDER,");
+        sqlBuffer.append(" IFNULL(b.CHANNEL_PERIOD_STATUS,4)CHANNEL_PERIOD_STATUS");
+        sqlBuffer.append(" FROM message_daily_statistics t ");
+        sqlBuffer.append(" left join config_channel_basic_info a on t.CHANNEL_ID = a.CHANNEL_ID ");
+        sqlBuffer.append(" left join (select t.CHANNEL_PERIOD,t.CHANNEL_PROVDER,t.CHANNEL_PERIOD_STATUS from reconciliation_carrier_items t ");
+        sqlBuffer.append(" where t.CHANNEL_PERIOD =? group by t.CHANNEL_PERIOD,t.CHANNEL_PROVDER,t.CHANNEL_PERIOD_STATUS)b ");
+        sqlBuffer.append(" on LEFT (t.MESSAGE_DATE, 7) = b.CHANNEL_PERIOD and a.SPECIFIC_PROVDER = b.CHANNEL_PROVDER ");
+        sqlBuffer.append(" where LEFT (t.MESSAGE_DATE, 7) =? and a.CHANNEL_PROVDER is not null  ");
 
         List<Object> paramsList = new ArrayList<Object>();
 
         //账期
         if (!StringUtils.isEmpty(qo.getChannelPeriod())) {
-            sqlBuffer.append(" and a.MESSAGE_DATE =?");
+            paramsList.add(qo.getChannelPeriod().trim());
             paramsList.add(qo.getChannelPeriod().trim());
         }
         //账期类型
         if (!StringUtils.isEmpty(qo.getChannelProvder())) {
-            sqlBuffer.append(" and a.CHANNEL_PROVDER =?");
+            sqlBuffer.append(" and a.SPECIFIC_PROVDER =?");
             paramsList.add(qo.getChannelProvder().trim());
         }
 
         //有效状态
         if (!StringUtils.isEmpty(qo.getChannelPeriodStatus())) {
-            sqlBuffer.append(" and t.CHANNEL_PERIOD_STATUS =?");
+            sqlBuffer.append(" and b.CHANNEL_PERIOD_STATUS =?");
             paramsList.add(qo.getChannelPeriodStatus().trim());
         }
 
-        sqlBuffer.append(" order by a.MESSAGE_DATE desc,IFNULL(b.CHANNEL_PERIOD_STATUS,4) desc ");
+        sqlBuffer.append(" GROUP BY LEFT (t.MESSAGE_DATE, 7),a.SPECIFIC_PROVDER order by LEFT (t.MESSAGE_DATE, 7) desc,IFNULL(b.CHANNEL_PERIOD_STATUS,4) desc,a.SPECIFIC_PROVDER ");
         //log.info("[SQL]:{}",sqlBuffer);
         //根据参数个数，组织参数值
         Object[] params = new Object[paramsList.size()];
@@ -93,7 +102,7 @@ public class ReconciliationCarrierRepositoryImpl extends BasePageRepository {
 
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");
-        sqlBuffer.append(" t.MESSAGE_DATE,");
+        /*sqlBuffer.append(" t.MESSAGE_DATE,");
         sqlBuffer.append(" t.CHANNEL_PROVDER,");
         sqlBuffer.append(" t.CHANNEL_ID,");
         sqlBuffer.append(" t.SRC_ID,");
@@ -105,13 +114,30 @@ public class ReconciliationCarrierRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(" a.CHANNEL_PERIOD_STATUS");
         sqlBuffer.append(" from view_reconciliation_carrier t left join reconciliation_carrier_items a  ");
         sqlBuffer.append(" on t.MESSAGE_DATE=a.CHANNEL_PERIOD and t.CHANNEL_PROVDER=a.CHANNEL_PROVDER and t.CHANNEL_ID=a.CHANNEL_ID and t.BUSINESS_TYPE=a.BUSINESS_TYPE and t.CHANNEL_PRICE=a.PRICE");
-        sqlBuffer.append(" where t.MESSAGE_DATE =? and t.CHANNEL_PROVDER =? and (a.STATUS=1 or a.STATUS is null)");
+        sqlBuffer.append(" where t.MESSAGE_DATE =? and t.CHANNEL_PROVDER =? and (a.STATUS=1 or a.STATUS is null)");*/
+        sqlBuffer.append(" a.MESSAGE_DATE,");
+        sqlBuffer.append(" b.SPECIFIC_PROVDER CHANNEL_PROVDER,");
+        sqlBuffer.append(" a.CHANNEL_ID,");
+        sqlBuffer.append(" c.SRC_ID,");
+        sqlBuffer.append(" IFNULL(a.CHANNEL_PRICE,0)CHANNEL_PRICE,");
+        sqlBuffer.append(" a.BUSINESS_TYPE,");
+        sqlBuffer.append(" a.MESSAGE_SUCCESS_NUM,");
+        sqlBuffer.append(" d.CARRIER_TOTAL_AMOUNT,");
+        sqlBuffer.append(" d.CARRIER_TOTAL_SEND_QUANTITY,");
+        sqlBuffer.append(" d.CHANNEL_PERIOD_STATUS");
+        sqlBuffer.append(" from( SELECT t.MESSAGE_DATE, t.CHANNEL_ID, IFNULL(t.CHANNEL_PRICE, 0) CHANNEL_PRICE, t.BUSINESS_TYPE, t.MESSAGE_SUCCESS_NUM FROM message_daily_statistics t ");
+        sqlBuffer.append("  where LEFT (t.MESSAGE_DATE, 7) =? group by LEFT (t.MESSAGE_DATE, 7), t.CHANNEL_ID, t.CHANNEL_PRICE, t.BUSINESS_TYPE )a ");
+        sqlBuffer.append(" left join config_channel_basic_info b on a.CHANNEL_ID = b.CHANNEL_ID left join config_channel_interface c on a.CHANNEL_ID = c.CHANNEL_ID ");
+        sqlBuffer.append(" LEFT JOIN reconciliation_carrier_items d ON a.MESSAGE_DATE = d.CHANNEL_PERIOD AND b.SPECIFIC_PROVDER = d.CHANNEL_PROVDER AND a.CHANNEL_ID = d.CHANNEL_ID ");
+        sqlBuffer.append(" AND a.BUSINESS_TYPE = d.BUSINESS_TYPE AND a.CHANNEL_PRICE = d.PRICE");
+        sqlBuffer.append(" where b.SPECIFIC_PROVDER = ? and (d.STATUS=1 or d.STATUS is null) ");
+
 
         List<Object> paramsList = new ArrayList<Object>();
         paramsList.add(channelPeriod.trim());
         paramsList.add(channelProvder.trim());
 
-        sqlBuffer.append(" order by t.CHANNEL_ID ");
+        sqlBuffer.append(" order by a.CHANNEL_ID ");
 
         //根据参数个数，组织参数值
         Object[] params = new Object[paramsList.size()];

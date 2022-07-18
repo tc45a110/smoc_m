@@ -656,7 +656,7 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
 
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");
-        sqlBuffer.append("  t.MESSAGE_DATE,");
+        /*sqlBuffer.append("  t.MESSAGE_DATE,");
         sqlBuffer.append("  t.BUSINESS_ACCOUNT,");
         sqlBuffer.append("  a.ACCOUNT_NAME,");
         sqlBuffer.append("  e.ENTERPRISE_NAME,");
@@ -666,9 +666,27 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(" sum(t.MESSAGE_NO_REPORT_NUM) MESSAGE_NO_REPORT_NUM");
         sqlBuffer.append("  from message_daily_statistics t left join account_base_info a on t.BUSINESS_ACCOUNT = a.ACCOUNT_ID ");
         sqlBuffer.append("  left join enterprise_basic_info e on a.ENTERPRISE_ID = e.ENTERPRISE_ID ");
-        sqlBuffer.append("  where 1=1 ");
+        sqlBuffer.append("  where 1=1 ");*/
+        sqlBuffer.append(" b.MESSAGE_DATE,");
+        sqlBuffer.append(" b.BUSINESS_ACCOUNT,");
+        sqlBuffer.append(" a.ACCOUNT_NAME,");
+        sqlBuffer.append(" e.ENTERPRISE_NAME,");
+        sqlBuffer.append(" b.SUCCESS_SUBMIT_NUM,");
+        sqlBuffer.append(" b.MESSAGE_SUCCESS_NUM,");
+        sqlBuffer.append(" b.MESSAGE_FAILURE_NUM,");
+        sqlBuffer.append(" b.MESSAGE_NO_REPORT_NUM");
+        sqlBuffer.append(" from(SELECT t.MESSAGE_DATE, t.BUSINESS_ACCOUNT,sum(t.SUCCESS_SUBMIT_NUM) SUCCESS_SUBMIT_NUM,");
+        sqlBuffer.append(" sum(t.MESSAGE_SUCCESS_NUM) MESSAGE_SUCCESS_NUM, sum(t.MESSAGE_FAILURE_NUM) MESSAGE_FAILURE_NUM,sum(t.MESSAGE_NO_REPORT_NUM) MESSAGE_NO_REPORT_NUM ");
+        sqlBuffer.append(" FROM message_daily_statistics t ");
+        sqlBuffer.append(" where DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m-%d') >=? AND DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m-%d') <=?");
+        sqlBuffer.append(" GROUP BY t.MESSAGE_DATE, t.BUSINESS_ACCOUNT ORDER BY t.MESSAGE_DATE DESC, sum(t.SUCCESS_SUBMIT_NUM) DESC, t.BUSINESS_ACCOUNT DESC)b");
+        sqlBuffer.append(" LEFT JOIN account_base_info a ON b.BUSINESS_ACCOUNT = a.ACCOUNT_ID");
+        sqlBuffer.append(" LEFT JOIN enterprise_basic_info e ON a.ENTERPRISE_ID = e.ENTERPRISE_ID");
+        sqlBuffer.append(" WHERE 1=1 ");
 
         List<Object> paramsList = new ArrayList<Object>();
+        paramsList.add(qo.getStartDate().trim());
+        paramsList.add(qo.getEndDate().trim());
 
         if (!StringUtils.isEmpty(qo.getEnterpriseName())) {
             sqlBuffer.append(" and e.ENTERPRISE_NAME like ?");
@@ -684,19 +702,6 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
             sqlBuffer.append(" and a.ACCOUNT_ID = ?");
             paramsList.add( qo.getBusinessAccount().trim());
         }
-
-        //时间起
-        if (!StringUtils.isEmpty(qo.getStartDate())) {
-            sqlBuffer.append(" and DATE_FORMAT(t.MESSAGE_DATE,'%Y-%m-%d') >=? ");
-            paramsList.add(qo.getStartDate().trim());
-        }
-        //时间止
-        if (!StringUtils.isEmpty(qo.getEndDate())) {
-            sqlBuffer.append(" and DATE_FORMAT(t.MESSAGE_DATE,'%Y-%m-%d') <=? ");
-            paramsList.add(qo.getEndDate().trim());
-        }
-
-        sqlBuffer.append(" group by t.MESSAGE_DATE, t.BUSINESS_ACCOUNT order by t.MESSAGE_DATE desc,sum(t.SUCCESS_SUBMIT_NUM)desc,t.BUSINESS_ACCOUNT desc ");
 
         //根据参数个数，组织参数值
         Object[] params = new Object[paramsList.size()];
@@ -725,15 +730,15 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(" t.CHANNEL_ID,");
         sqlBuffer.append(" t.BUSINESS_TYPE,");
         sqlBuffer.append(" t.CARRIER,");
-        sqlBuffer.append(" t.ACCOUNT_PRICE,");
+        sqlBuffer.append(" IFNULL(t.ACCOUNT_PRICE,0)ACCOUNT_PRICE,");
         sqlBuffer.append(" sum(t.CUSTOMER_SUBMIT_NUM)CUSTOMER_SUBMIT_NUM,");
         sqlBuffer.append(" sum(t.SUCCESS_SUBMIT_NUM)SUCCESS_SUBMIT_NUM,");
         sqlBuffer.append(" sum(t.FAILURE_SUBMIT_NUM)FAILURE_SUBMIT_NUM,");
         sqlBuffer.append(" sum(t.MESSAGE_SUCCESS_NUM)MESSAGE_SUCCESS_NUM,");
         sqlBuffer.append(" sum(t.MESSAGE_FAILURE_NUM)MESSAGE_FAILURE_NUM,");
         sqlBuffer.append(" sum(t.MESSAGE_NO_REPORT_NUM)MESSAGE_NO_REPORT_NUM");
-        sqlBuffer.append("  from message_daily_statistics t ");
-        sqlBuffer.append("  where 1=1 ");
+        sqlBuffer.append(" from message_daily_statistics t ");
+        sqlBuffer.append(" where 1=1 ");
 
         List<Object> paramsList = new ArrayList<Object>();
         if (!StringUtils.isEmpty(qo.getBusinessAccount())) {

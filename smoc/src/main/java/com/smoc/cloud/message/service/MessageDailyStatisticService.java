@@ -5,6 +5,8 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.message.MessageDailyStatisticValidator;
+import com.smoc.cloud.common.smoc.query.model.AccountSendStatisticItemsModel;
+import com.smoc.cloud.common.smoc.query.model.ChannelSendStatisticModel;
 import com.smoc.cloud.message.repository.MessageDailyStatisticRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -47,5 +49,27 @@ public class MessageDailyStatisticService {
         Map<String, Object> map = messageDailyStatisticRepository.countSum(qo);
         return ResponseDataUtil.buildSuccess(map);
 
+    }
+
+    /**
+     * 查询通道发送量
+     * @param params
+     * @return
+     */
+    public ResponseData<PageList<ChannelSendStatisticModel>> queryChannelSendStatistics(PageParams<ChannelSendStatisticModel> params) {
+        PageList<ChannelSendStatisticModel> page = messageDailyStatisticRepository.queryChannelSendStatistics(params);
+
+        return ResponseDataUtil.buildSuccess(page);
+    }
+
+    /**
+     * 查询通道下面账号发送量
+     * @param params
+     * @return
+     */
+    public ResponseData<PageList<AccountSendStatisticItemsModel>> accountMessageSendListByChannel(PageParams<AccountSendStatisticItemsModel> params) {
+        PageList<AccountSendStatisticItemsModel> page = messageDailyStatisticRepository.accountMessageSendListByChannel(params);
+
+        return ResponseDataUtil.buildSuccess(page);
     }
 }

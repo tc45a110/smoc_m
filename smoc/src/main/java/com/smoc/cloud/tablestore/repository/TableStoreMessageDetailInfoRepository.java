@@ -78,41 +78,47 @@ public class TableStoreMessageDetailInfoRepository extends TableStorePageReposit
             TableStoreMessageDetailInfoValidator messageDetailInfoValidator = new TableStoreMessageDetailInfoValidator();
             String accountId = row.getString("account_id");
             messageDetailInfoValidator.setPhoneNumber(row.getString("phone_number"));
-            messageDetailInfoValidator.setBusinessAccount(row.getString("account_id"));
-            messageDetailInfoValidator.setBusinessMessageFlag(row.getString("business_message_flag"));
-            messageDetailInfoValidator.setUserSubmitTime(DateTimeUtils.getDateTimeFormat(new Date(row.getLong("user_submit_time"))));
+            messageDetailInfoValidator.setBusinessAccount(accountId);
+
             if(!StringUtils.isEmpty(accountId)){
                 Optional<AccountBasicInfo> data = businessAccountRepository.findById(accountId);
                 if(data.isPresent()){
                     messageDetailInfoValidator.setAccountName(data.get().getAccountName());
                 }
             }
-           /* messageDetailInfoValidator.setUserSubmitType(row.getString("user_submit_type"));
+            messageDetailInfoValidator.setUserSubmitTime(DateTimeUtils.getDateTimeFormat(new Date(row.getLong("user_submit_time"))));
+
+          /*  messageDetailInfoValidator.setAreaName(row.getString("area_name"));
+            messageDetailInfoValidator.setCityName(row.getString("city_name"));
+            messageDetailInfoValidator.setBusinessType(row.getString("business_type"));
+            messageDetailInfoValidator.setBusinessCarrier(row.getString("business_carrier"));
+            messageDetailInfoValidator.setMessageNumber(row.getString("message_number"));
+            messageDetailInfoValidator.setMessageContent(row.getString("message_content"));
+            messageDetailInfoValidator.setMrTime(DateTimeUtils.getDateTimeFormat(new Date(row.getLong("mr_time"))));
+            messageDetailInfoValidator.setTimeElapsed(row.getString("time_elapsed"));
+            messageDetailInfoValidator.setStatusCodeExtend(row.getString("status_code"));*/
+
+            list.add(messageDetailInfoValidator);
+
+           /* messageDetailInfoValidator.setBusinessMessageFlag(row.getString("business_message_flag"));
+            messageDetailInfoValidator.setSignature(row.getString("signature"));
+            messageDetailInfoValidator.setIndustryTypes(row.getString("industry_types"));
+            messageDetailInfoValidator.setUserSubmitType(row.getString("user_submit_type"));
             messageDetailInfoValidator.setBusinessMessageFlag(row.getString("business_message_flag"));
             messageDetailInfoValidator.setSegmentCarrier(row.getString("segment_carrier"));
-            messageDetailInfoValidator.setBusinessCarrier(row.getString("business_carrier"));
-            messageDetailInfoValidator.setAreaName(row.getString("area_name"));
-            messageDetailInfoValidator.setCityName(row.getString("city_name"));
+            messageDetailInfoValidator.setInfoType(row.getString("info_type"));
             messageDetailInfoValidator.setUserSubmitSrcid(row.getString("user_submit_srcid"));
             messageDetailInfoValidator.setExtcode(row.getString("extcode"));
             messageDetailInfoValidator.setBusinessCode(row.getString("business_code"));
-            messageDetailInfoValidator.setMessageContent(row.getString("message_content"));
-            messageDetailInfoValidator.setMessageNumber(row.getString("message_number"));
-            messageDetailInfoValidator.setInfoType(row.getString("info_type"));
             messageDetailInfoValidator.setIndustryTypes(row.getString("industry_types"));
             messageDetailInfoValidator.setChannelId(row.getString("channel_id"));
             messageDetailInfoValidator.setChannelSrcid(row.getString("channel_srcid"));
             messageDetailInfoValidator.setFinanceAccountId(row.getString("finance_account_id"));
             messageDetailInfoValidator.setMessagePrice(row.getString("message_price"));
             messageDetailInfoValidator.setMessageFee(row.getString("message_fee"));
-            messageDetailInfoValidator.setBusinessType(row.getString("business_type"));
             messageDetailInfoValidator.setTemplateId(row.getString("template_id"));
-            messageDetailInfoValidator.setConsumeType(row.getString("consume_type"));
-             messageDetailInfoValidator.setTimeElapsed(row.getString("time_elapsed"));
-            messageDetailInfoValidator.setMrTime(DateTimeUtils.getDateTimeFormat(new Date(row.getLong("mr_time"))));
-            messageDetailInfoValidator.setStatusCodeExtend(row.getString("status_code_extend"));*/
+            messageDetailInfoValidator.setConsumeType(row.getString("consume_type"));*/
 
-            list.add(messageDetailInfoValidator);
         }
 
         return list;
@@ -126,7 +132,7 @@ public class TableStoreMessageDetailInfoRepository extends TableStorePageReposit
         //总页数
         int pages = 0;
         //查询总行数
-        Long rowsColumn = (Long) this.queryOneColumnForSigetonRow(sqlBuffer.toString(),Long.class);
+        Long rowsColumn = (Long) this.queryOneColumnForSigetonRow(client,sqlBuffer.toString(),Long.class);
         int rows = rowsColumn.intValue();
         //开始行
         int startRow = 0;
@@ -162,8 +168,8 @@ public class TableStoreMessageDetailInfoRepository extends TableStorePageReposit
         // 获取SQL的响应结果。
         SQLQueryResponse response = client.sqlQuery(request);
         // 获取SQL返回值的Schema。
-        SQLTableMeta tableMeta = response.getSQLResultSet().getSQLTableMeta();
-        System.out.println("response table meta: " + tableMeta.getSchema());
+        //SQLTableMeta tableMeta = response.getSQLResultSet().getSQLTableMeta();
+        //System.out.println("response table meta: " + tableMeta.getSchema());
         // 获取SQL的返回结果。
         SQLResultSet resultSet = response.getSQLResultSet();
         List<TableStoreMessageDetailInfoValidator> list = querySQLRow(resultSet);
@@ -212,7 +218,10 @@ public class TableStoreMessageDetailInfoRepository extends TableStorePageReposit
             sqlBuffer.append(" and user_submit_time <= "+DateTimeUtils.getDateTimeFormat(qo.getEndDate()).getTime()+"");
         }
 
-        Long num = (Long) this.queryOneColumnForSigetonRow(sqlBuffer.toString(),Long.class);
+        //初始化
+        SyncClient client = tableStoreUtils.client();
+
+        Long num = (Long) this.queryOneColumnForSigetonRow(client,sqlBuffer.toString(),Long.class);
         return num.intValue();
     }
 

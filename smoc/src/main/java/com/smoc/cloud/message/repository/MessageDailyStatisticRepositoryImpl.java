@@ -7,6 +7,10 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountRechargeValidator;
 import com.smoc.cloud.common.smoc.message.MessageDailyStatisticValidator;
 
+import com.smoc.cloud.common.smoc.query.model.AccountSendStatisticItemsModel;
+import com.smoc.cloud.common.smoc.query.model.ChannelSendStatisticModel;
+import com.smoc.cloud.message.rowmapper.ChannelAccountSendRowMapper;
+import com.smoc.cloud.message.rowmapper.ChannelSendStatisticsRowMapper;
 import com.smoc.cloud.message.rowmapper.MessageDailyStatisticRowMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
@@ -208,4 +212,109 @@ public class MessageDailyStatisticRepositoryImpl extends BasePageRepository {
         return map;
 
     }
+
+    /**
+     * 查询通道发送量
+     * @param pageParams
+     * @return
+     */
+    public PageList<ChannelSendStatisticModel> queryChannelSendStatistics(PageParams<ChannelSendStatisticModel> pageParams){
+
+        //查询条件
+        ChannelSendStatisticModel qo = pageParams.getParams();
+
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append(" b.MESSAGE_DATE,");
+        sqlBuffer.append(" b.CHANNEL_ID,");
+        sqlBuffer.append(" a.CHANNEL_NAME,");
+        sqlBuffer.append(" b.CUSTOMER_SUBMIT_NUM,");
+        sqlBuffer.append(" b.SUCCESS_SUBMIT_NUM,");
+        sqlBuffer.append(" b.MESSAGE_SUCCESS_NUM,");
+        sqlBuffer.append(" b.FAILURE_SUBMIT_NUM,");
+        sqlBuffer.append(" b.MESSAGE_FAILURE_NUM,");
+        sqlBuffer.append(" b.MESSAGE_NO_REPORT_NUM");
+        sqlBuffer.append(" from(SELECT t.MESSAGE_DATE, t.CHANNEL_ID,sum(t.CUSTOMER_SUBMIT_NUM)CUSTOMER_SUBMIT_NUM,sum(t.SUCCESS_SUBMIT_NUM) SUCCESS_SUBMIT_NUM,");
+        sqlBuffer.append(" sum(t.MESSAGE_SUCCESS_NUM) MESSAGE_SUCCESS_NUM, sum(t.FAILURE_SUBMIT_NUM)FAILURE_SUBMIT_NUM,sum(t.MESSAGE_FAILURE_NUM) MESSAGE_FAILURE_NUM,sum(t.MESSAGE_NO_REPORT_NUM) MESSAGE_NO_REPORT_NUM ");
+        sqlBuffer.append(" FROM message_daily_statistics t ");
+        sqlBuffer.append(" where DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m-%d') >=? AND DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m-%d') <=?");
+        sqlBuffer.append(" GROUP BY t.MESSAGE_DATE, t.CHANNEL_ID ORDER BY t.MESSAGE_DATE DESC, sum(t.SUCCESS_SUBMIT_NUM) DESC, t.CHANNEL_ID DESC)b");
+        sqlBuffer.append(" LEFT JOIN config_channel_basic_info a ON b.CHANNEL_ID = a.CHANNEL_ID");
+        sqlBuffer.append(" WHERE 1=1 ");
+
+        List<Object> paramsList = new ArrayList<Object>();
+        paramsList.add(qo.getStartDate().trim());
+        paramsList.add(qo.getEndDate().trim());
+
+        if (!StringUtils.isEmpty(qo.getChannelName())) {
+            sqlBuffer.append(" and a.CHANNEL_NAME like ?");
+            paramsList.add( "%"+qo.getChannelName().trim()+"%");
+        }
+
+        if (!StringUtils.isEmpty(qo.getChannelId())) {
+            sqlBuffer.append(" and b.CHANNEL_ID = ?");
+            paramsList.add( qo.getChannelId().trim());
+        }
+
+        //根据参数个数，组织参数值
+        Object[] params = new Object[paramsList.size()];
+        paramsList.toArray(params);
+
+        PageList<ChannelSendStatisticModel> pageList = this.queryByPageForMySQL(sqlBuffer.toString(), params, pageParams.getCurrentPage(), pageParams.getPageSize(), new ChannelSendStatisticsRowMapper());
+        pageList.getPageParams().setParams(qo);
+        return pageList;
+    }
+    /**
+     * 查询通道下面账号发送量
+     * @param pageParams
+     * @return
+     */
+    public PageList<AccountSendStatisticItemsModel> accountMessageSendListByChannel(PageParams<AccountSendStatisticItemsModel> pageParams){
+
+        //查询条件
+        AccountSendStatisticItemsModel qo = pageParams.getParams();
+
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append(" b.MESSAGE_DATE,");
+        sqlBuffer.append(" b.BUSINESS_ACCOUNT,");
+        sqlBuffer.append(" b.CHANNEL_ID,");
+        sqlBuffer.append(" a.ACCOUNT_NAME,");
+        sqlBuffer.append(" b.CUSTOMER_SUBMIT_NUM,");
+        sqlBuffer.append(" b.SUCCESS_SUBMIT_NUM,");
+        sqlBuffer.append(" b.FAILURE_SUBMIT_NUM,");
+        sqlBuffer.append(" b.MESSAGE_SUCCESS_NUM,");
+        sqlBuffer.append(" b.MESSAGE_FAILURE_NUM,");
+        sqlBuffer.append(" b.MESSAGE_NO_REPORT_NUM");
+        sqlBuffer.append(" from(SELECT t.MESSAGE_DATE,t.CHANNEL_ID,t.BUSINESS_ACCOUNT,sum(t.CUSTOMER_SUBMIT_NUM)CUSTOMER_SUBMIT_NUM,sum(t.SUCCESS_SUBMIT_NUM)SUCCESS_SUBMIT_NUM,");
+        sqlBuffer.append(" sum(t.MESSAGE_SUCCESS_NUM) MESSAGE_SUCCESS_NUM, sum(t.FAILURE_SUBMIT_NUM)FAILURE_SUBMIT_NUM,sum(t.MESSAGE_FAILURE_NUM) MESSAGE_FAILURE_NUM,sum(t.MESSAGE_NO_REPORT_NUM) MESSAGE_NO_REPORT_NUM ");
+        sqlBuffer.append(" FROM message_daily_statistics t ");
+        sqlBuffer.append(" where t.CHANNEL_ID =? and DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m-%d') >=? AND DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m-%d') <=?");
+        sqlBuffer.append(" GROUP BY t.MESSAGE_DATE, t.BUSINESS_ACCOUNT ORDER BY t.MESSAGE_DATE DESC, sum(t.SUCCESS_SUBMIT_NUM) DESC, t.BUSINESS_ACCOUNT DESC)b");
+        sqlBuffer.append(" LEFT JOIN account_base_info a ON b.BUSINESS_ACCOUNT = a.ACCOUNT_ID");
+        sqlBuffer.append(" WHERE 1=1 ");
+
+        List<Object> paramsList = new ArrayList<Object>();
+        paramsList.add( qo.getChannelId().trim());
+        paramsList.add(qo.getStartDate().trim());
+        paramsList.add(qo.getEndDate().trim());
+
+        if (!StringUtils.isEmpty(qo.getAccountName())) {
+            sqlBuffer.append(" and a.ACCOUNT_NAME like ?");
+            paramsList.add( "%"+qo.getAccountName().trim()+"%");
+        }
+        if (!StringUtils.isEmpty(qo.getBusinessAccount())) {
+            sqlBuffer.append(" and a.ACCOUNT_ID = ?");
+            paramsList.add( qo.getBusinessAccount().trim());
+        }
+
+        //根据参数个数，组织参数值
+        Object[] params = new Object[paramsList.size()];
+        paramsList.toArray(params);
+
+        PageList<AccountSendStatisticItemsModel> pageList = this.queryByPageForMySQL(sqlBuffer.toString(), params, pageParams.getCurrentPage(), pageParams.getPageSize(), new ChannelAccountSendRowMapper());
+        pageList.getPageParams().setParams(qo);
+        return pageList;
+    }
+
 }

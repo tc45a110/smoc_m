@@ -3,26 +3,23 @@ package com.smoc.cloud.common.smoc.query.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Setter
 @Getter
-public class AccountSendStatisticItemsModel {
+public class ChannelSendStatisticModel {
 
     private String messageDate;
 
-    private String businessAccount;
-
-    private String accountName;
-
     private String channelId;
 
-    private String carrier;
+    private String channelName;
 
-    private String businessType;
+    private String startDate;
 
-    private BigDecimal price;
+    private String endDate;
 
     private Integer customerSubmitNum;
 
@@ -35,9 +32,4 @@ public class AccountSendStatisticItemsModel {
     private Integer messageFailureNum;
 
     private Integer messageNoReportNum;
-
-    private String startDate;
-
-    private String endDate;
-
 }

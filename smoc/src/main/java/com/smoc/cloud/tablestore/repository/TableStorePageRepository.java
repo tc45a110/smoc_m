@@ -36,9 +36,8 @@ public class TableStorePageRepository {
      * @param cla    Integer.class
      * @return
      */
-    public Object queryOneColumnForSigetonRow(String sql, Class cla) {
+    public Object queryOneColumnForSigetonRow(SyncClient client,String sql, Class cla) {
 
-        SyncClient client = tableStoreUtils.client();
 
         String rowsql = "select count(*)message_num from (" + sql + ") mySqlPage_";
 

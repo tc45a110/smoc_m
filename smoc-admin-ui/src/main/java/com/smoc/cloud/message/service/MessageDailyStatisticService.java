@@ -6,6 +6,8 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.message.MessageDailyStatisticValidator;
+import com.smoc.cloud.common.smoc.query.model.AccountSendStatisticItemsModel;
+import com.smoc.cloud.common.smoc.query.model.ChannelSendStatisticModel;
 import com.smoc.cloud.message.remote.MessageDailyStatisticFeignClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +50,34 @@ public class MessageDailyStatisticService {
         try {
             ResponseData<Map<String, Object>> count = messageDailyStatisticFeignClient.count(qo);
             return count;
+        } catch (Exception e) {
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 查询通道发送量
+     * @param params
+     * @return
+     */
+    public ResponseData<PageList<ChannelSendStatisticModel>> queryChannelSendStatistics(PageParams<ChannelSendStatisticModel> params) {
+        try {
+            ResponseData<PageList<ChannelSendStatisticModel>> page = messageDailyStatisticFeignClient.queryChannelSendStatistics(params);
+            return page;
+        } catch (Exception e) {
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 查询通道下面账号发送量
+     * @param params
+     * @return
+     */
+    public ResponseData<PageList<AccountSendStatisticItemsModel>> accountMessageSendListByChannel(PageParams<AccountSendStatisticItemsModel> params) {
+        try {
+            ResponseData<PageList<AccountSendStatisticItemsModel>> page = messageDailyStatisticFeignClient.accountMessageSendListByChannel(params);
+            return page;
         } catch (Exception e) {
             return ResponseDataUtil.buildError(e.getMessage());
         }
