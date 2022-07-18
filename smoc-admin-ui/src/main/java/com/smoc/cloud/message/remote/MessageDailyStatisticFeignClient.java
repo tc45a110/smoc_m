@@ -51,5 +51,13 @@ public interface MessageDailyStatisticFeignClient {
      * @return
      */
     @RequestMapping(value = "/message/daily/channel/accountMessageSendListByChannel", method = RequestMethod.POST)
-    ResponseData<PageList<AccountSendStatisticItemsModel>> accountMessageSendListByChannel(PageParams<AccountSendStatisticItemsModel> params);
+    ResponseData<PageList<AccountSendStatisticItemsModel>> accountMessageSendListByChannel(@RequestBody PageParams<AccountSendStatisticItemsModel> params);
+
+    /**
+     * 通道发送量统计
+     * @param qo
+     * @return
+     */
+    @RequestMapping(value = "/message/daily/channel/channelSendCountSum", method = RequestMethod.POST)
+    ResponseData<Map<String, Object>> channelSendCountSum(@RequestBody MessageDailyStatisticValidator qo);
 }

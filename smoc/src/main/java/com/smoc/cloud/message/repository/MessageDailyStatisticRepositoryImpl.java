@@ -317,4 +317,63 @@ public class MessageDailyStatisticRepositoryImpl extends BasePageRepository {
         return pageList;
     }
 
+    /**
+     * 统计发送数量
+     *
+     * @param qo
+     * @return
+     */
+    public Map<String, Object> channelSendCountSum(MessageDailyStatisticValidator qo) {
+
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append(" sum(t.SUCCESS_SUBMIT_NUM) SUCCESS_SUBMIT_NUM,");
+        sqlBuffer.append(" sum(t.MESSAGE_SUCCESS_NUM) MESSAGE_SUCCESS_NUM,");
+        sqlBuffer.append(" sum(t.MESSAGE_FAILURE_NUM) MESSAGE_FAILURE_NUM,");
+        sqlBuffer.append(" sum(t.MESSAGE_NO_REPORT_NUM) MESSAGE_NO_REPORT_NUM");
+        sqlBuffer.append(" from message_daily_statistics t left join config_channel_basic_info a on t.CHANNEL_ID = a.CHANNEL_ID ");
+        sqlBuffer.append(" where  1=1 ");
+
+        List<Object> paramsList = new ArrayList<Object>();
+
+        //通道id
+        if (!StringUtils.isEmpty(qo.getChannelId())) {
+            sqlBuffer.append(" and t.CHANNEL_ID =?");
+            paramsList.add(qo.getChannelId().trim());
+        }
+
+        //业务账号
+        if (!StringUtils.isEmpty(qo.getChannelName())) {
+            sqlBuffer.append(" and a.CHANNEL_NAME like ?");
+            paramsList.add("%" +qo.getChannelName().trim()+ "%");
+        }
+
+        //时间起
+        if (!StringUtils.isEmpty(qo.getStartDate())) {
+            sqlBuffer.append(" and DATE_FORMAT(t.MESSAGE_DATE,'%Y-%m-%d') >=? ");
+            paramsList.add(qo.getStartDate().trim());
+        }
+        //时间止
+        if (!StringUtils.isEmpty(qo.getEndDate())) {
+            sqlBuffer.append(" and DATE_FORMAT(t.MESSAGE_DATE,'%Y-%m-%d') <=? ");
+            paramsList.add(qo.getEndDate().trim());
+        }
+
+        sqlBuffer.append(" order by t.MESSAGE_DATE desc,t.CREATED_TIME desc");
+
+        //根据参数个数，组织参数值
+        Object[] params = new Object[paramsList.size()];
+        paramsList.toArray(params);
+
+        Map<String, Object> map = jdbcTemplate.queryForMap(sqlBuffer.toString(), params);
+        if(null == map || map.size()<1 || null == map.get("SUCCESS_SUBMIT_NUM")){
+            map = new HashMap<>();
+            map.put("SUCCESS_SUBMIT_NUM",0);
+            map.put("MESSAGE_SUCCESS_NUM",0);
+            map.put("MESSAGE_FAILURE_NUM",0);
+            map.put("MESSAGE_NO_REPORT_NUM",0);
+        }
+        return map;
+
+    }
 }

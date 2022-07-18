@@ -72,4 +72,14 @@ public class MessageDailyStatisticService {
 
         return ResponseDataUtil.buildSuccess(page);
     }
+
+    /**
+     * 通道发送量统计
+     * @param qo
+     * @return
+     */
+    public ResponseData<Map<String, Object>> channelSendCountSum(MessageDailyStatisticValidator qo) {
+        Map<String, Object> map = messageDailyStatisticRepository.channelSendCountSum(qo);
+        return ResponseDataUtil.buildSuccess(map);
+    }
 }

@@ -77,4 +77,16 @@ public class MessageDailyStatisticController {
 
         return messageDailyStatisticService.accountMessageSendListByChannel(params);
     }
+
+    /**
+     * 通道发送量统计
+     *
+     * @param qo
+     * @return
+     */
+    @RequestMapping(value = "/channel/channelSendCountSum", method = RequestMethod.POST)
+    public ResponseData<Map<String, Object>> channelSendCountSum(@RequestBody MessageDailyStatisticValidator qo) {
+
+        return messageDailyStatisticService.channelSendCountSum(qo);
+    }
 }

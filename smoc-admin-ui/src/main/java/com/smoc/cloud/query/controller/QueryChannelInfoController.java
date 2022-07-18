@@ -74,7 +74,7 @@ public class QueryChannelInfoController {
         MessageDailyStatisticValidator messageDailyStatisticValidator = new MessageDailyStatisticValidator();
         messageDailyStatisticValidator.setStartDate(DateTimeUtils.getDateFormat(startDate));
         messageDailyStatisticValidator.setEndDate(DateTimeUtils.getDateFormat(new Date()));
-        ResponseData<Map<String, Object>> count = messageDailyStatisticService.count(messageDailyStatisticValidator);
+        ResponseData<Map<String, Object>> count = messageDailyStatisticService.channelSendCountSum(messageDailyStatisticValidator);
         if (!ResponseCode.SUCCESS.getCode().equals(count.getCode())) {
             view.addObject("error", count.getCode() + ":" + count.getMessage());
             return view;
@@ -120,7 +120,7 @@ public class QueryChannelInfoController {
         messageDailyStatisticValidator.setEndDate(channelSendStatisticModel.getEndDate());
         messageDailyStatisticValidator.setChannelId(channelSendStatisticModel.getChannelId());
         messageDailyStatisticValidator.setChannelName(channelSendStatisticModel.getChannelName());
-        ResponseData<Map<String, Object>> count = messageDailyStatisticService.count(messageDailyStatisticValidator);
+        ResponseData<Map<String, Object>> count = messageDailyStatisticService.channelSendCountSum(messageDailyStatisticValidator);
         if (!ResponseCode.SUCCESS.getCode().equals(count.getCode())) {
             view.addObject("error", count.getCode() + ":" + count.getMessage());
             return view;
@@ -139,8 +139,8 @@ public class QueryChannelInfoController {
      *  查询通道下面账号发送量
      * @return
      */
-    @RequestMapping(value = "/accountMessageSend/list/{channelId}", method = RequestMethod.GET)
-    public ModelAndView list(@PathVariable String channelId, HttpServletResponse response, HttpServletRequest request) {
+    @RequestMapping(value = "/accountMessageSend/list/{channelId}/{startDate}/{endDate}", method = RequestMethod.GET)
+    public ModelAndView list(@PathVariable String channelId, @PathVariable String startDate, @PathVariable String endDate, HttpServletResponse response, HttpServletRequest request) {
         ModelAndView view = new ModelAndView("query/channel/channel_account_message_send_list");
 
         //初始化数据
@@ -148,9 +148,8 @@ public class QueryChannelInfoController {
         params.setPageSize(20);
         params.setCurrentPage(1);
         AccountSendStatisticItemsModel accountSendStatisticItemsModel = new AccountSendStatisticItemsModel();
-        Date startDate = DateTimeUtils.dateAddDays(new Date(),-1);
-        accountSendStatisticItemsModel.setStartDate(DateTimeUtils.getDateFormat(startDate));
-        accountSendStatisticItemsModel.setEndDate(DateTimeUtils.getDateFormat(new Date()));
+        accountSendStatisticItemsModel.setStartDate(startDate);
+        accountSendStatisticItemsModel.setEndDate(endDate);
         accountSendStatisticItemsModel.setChannelId(channelId);
         params.setParams(accountSendStatisticItemsModel);
 
@@ -162,8 +161,8 @@ public class QueryChannelInfoController {
         }
 
         MessageDailyStatisticValidator messageDailyStatisticValidator = new MessageDailyStatisticValidator();
-        messageDailyStatisticValidator.setStartDate(DateTimeUtils.getDateFormat(startDate));
-        messageDailyStatisticValidator.setEndDate(DateTimeUtils.getDateFormat(new Date()));
+        messageDailyStatisticValidator.setStartDate(startDate);
+        messageDailyStatisticValidator.setEndDate(endDate);
         ResponseData<Map<String, Object>> count = messageDailyStatisticService.count(messageDailyStatisticValidator);
         if (!ResponseCode.SUCCESS.getCode().equals(count.getCode())) {
             view.addObject("error", count.getCode() + ":" + count.getMessage());

@@ -44,4 +44,11 @@ public interface MessageDailyStatisticRepository extends JpaRepository<MessageDa
      * @return
      */
     PageList<AccountSendStatisticItemsModel> accountMessageSendListByChannel(PageParams<AccountSendStatisticItemsModel> params);
+
+    /**
+     * 通道发送量统计
+     * @param qo
+     * @return
+     */
+    Map<String, Object> channelSendCountSum(MessageDailyStatisticValidator qo);
 }

@@ -82,4 +82,18 @@ public class MessageDailyStatisticService {
             return ResponseDataUtil.buildError(e.getMessage());
         }
     }
+
+    /**
+     * 通道发送量统计
+     * @param qo
+     * @return
+     */
+    public ResponseData<Map<String, Object>> channelSendCountSum(MessageDailyStatisticValidator qo) {
+        try {
+            ResponseData<Map<String, Object>> count = messageDailyStatisticFeignClient.channelSendCountSum(qo);
+            return count;
+        } catch (Exception e) {
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
 }
