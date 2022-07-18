@@ -16,36 +16,11 @@ public class IotUserProductInfo {
     @Column(name = "USER_ID", nullable = false, length = 32)
     private String userId;
 
-    @Column(name = "PRODUCT_ID", nullable = false, length = 32)
-    private String productId;
-
     @Column(name = "CREATED_BY", nullable = false, length = 32)
     private String createdBy;
 
     @Column(name = "CREATED_TIME", nullable = false)
     private Date createdTime;
-
-    @Column(name = "UPDATED_BY", length = 32)
-    private String updatedBy;
-
-    @Column(name = "UPDATED_TIME")
-    private Date updatedTime;
-
-    public Date getUpdatedTime() {
-        return updatedTime;
-    }
-
-    public void setUpdatedTime(Date updatedTime) {
-        this.updatedTime = updatedTime;
-    }
-
-    public String getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(String updatedBy) {
-        this.updatedBy = updatedBy;
-    }
 
     public Date getCreatedTime() {
         return createdTime;
@@ -62,15 +37,7 @@ public class IotUserProductInfo {
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
-
-    public String getProductId() {
-        return productId;
-    }
-
-    public void setProductId(String productId) {
-        this.productId = productId;
-    }
-
+    
     public String getUserId() {
         return userId;
     }

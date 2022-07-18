@@ -4,7 +4,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.Date;
 
 @Entity
 @Table(name = "iot_flow_cards_secondary_info")
@@ -35,16 +34,16 @@ public class IotFlowCardsSecondaryInfo {
     private String latitude;
 
     @Column(name = "LONGITUDE_LATITUDE_DATE")
-    private Date longitudeLatitudeDate;
+    private String longitudeLatitudeDate;
 
     @Column(name = "FLOW_SYNC_MONTH_DATE")
-    private Date flowSyncMonthDate;
+    private String flowSyncMonthDate;
 
     @Column(name = "FLOW_SYNC_DAY_DATE")
-    private Date flowSyncDayDate;
+    private String flowSyncDayDate;
 
     @Column(name = "CYCLE_SETTLEMENT_DATE")
-    private Date cycleSettlementDate;
+    private String cycleSettlementDate;
 
     @Column(name = "REMARK")
     private String remark;
@@ -57,35 +56,35 @@ public class IotFlowCardsSecondaryInfo {
         this.remark = remark;
     }
 
-    public Date getCycleSettlementDate() {
+    public String getCycleSettlementDate() {
         return cycleSettlementDate;
     }
 
-    public void setCycleSettlementDate(Date cycleSettlementDate) {
+    public void setCycleSettlementDate(String cycleSettlementDate) {
         this.cycleSettlementDate = cycleSettlementDate;
     }
 
-    public Date getFlowSyncDayDate() {
+    public String getFlowSyncDayDate() {
         return flowSyncDayDate;
     }
 
-    public void setFlowSyncDayDate(Date flowSyncDayDate) {
+    public void setFlowSyncDayDate(String flowSyncDayDate) {
         this.flowSyncDayDate = flowSyncDayDate;
     }
 
-    public Date getFlowSyncMonthDate() {
+    public String getFlowSyncMonthDate() {
         return flowSyncMonthDate;
     }
 
-    public void setFlowSyncMonthDate(Date flowSyncMonthDate) {
+    public void setFlowSyncMonthDate(String flowSyncMonthDate) {
         this.flowSyncMonthDate = flowSyncMonthDate;
     }
 
-    public Date getLongitudeLatitudeDate() {
+    public String getLongitudeLatitudeDate() {
         return longitudeLatitudeDate;
     }
 
-    public void setLongitudeLatitudeDate(Date longitudeLatitudeDate) {
+    public void setLongitudeLatitudeDate(String longitudeLatitudeDate) {
         this.longitudeLatitudeDate = longitudeLatitudeDate;
     }
 
