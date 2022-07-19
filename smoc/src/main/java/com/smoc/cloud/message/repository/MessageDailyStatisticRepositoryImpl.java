@@ -222,6 +222,7 @@ public class MessageDailyStatisticRepositoryImpl extends BasePageRepository {
 
         //查询条件
         ChannelSendStatisticModel qo = pageParams.getParams();
+        List<Object> paramsList = new ArrayList<Object>();
 
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");
@@ -237,23 +238,22 @@ public class MessageDailyStatisticRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(" from(SELECT t.MESSAGE_DATE, t.CHANNEL_ID,sum(t.CUSTOMER_SUBMIT_NUM)CUSTOMER_SUBMIT_NUM,sum(t.SUCCESS_SUBMIT_NUM) SUCCESS_SUBMIT_NUM,");
         sqlBuffer.append(" sum(t.MESSAGE_SUCCESS_NUM) MESSAGE_SUCCESS_NUM, sum(t.FAILURE_SUBMIT_NUM)FAILURE_SUBMIT_NUM,sum(t.MESSAGE_FAILURE_NUM) MESSAGE_FAILURE_NUM,sum(t.MESSAGE_NO_REPORT_NUM) MESSAGE_NO_REPORT_NUM ");
         sqlBuffer.append(" FROM message_daily_statistics t ");
-        sqlBuffer.append(" where DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m-%d') >=? AND DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m-%d') <=?");
+        sqlBuffer.append(" where 1=1 ");
+        if (!StringUtils.isEmpty(qo.getChannelId())) {
+            sqlBuffer.append(" and t.CHANNEL_ID = ?");
+            paramsList.add( qo.getChannelId().trim());
+        }
+        sqlBuffer.append(" and DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m-%d') >=? AND DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m-%d') <=?");
         sqlBuffer.append(" GROUP BY t.MESSAGE_DATE, t.CHANNEL_ID ORDER BY t.MESSAGE_DATE DESC, sum(t.SUCCESS_SUBMIT_NUM) DESC, t.CHANNEL_ID DESC)b");
         sqlBuffer.append(" LEFT JOIN config_channel_basic_info a ON b.CHANNEL_ID = a.CHANNEL_ID");
         sqlBuffer.append(" WHERE 1=1 ");
 
-        List<Object> paramsList = new ArrayList<Object>();
         paramsList.add(qo.getStartDate().trim());
         paramsList.add(qo.getEndDate().trim());
 
         if (!StringUtils.isEmpty(qo.getChannelName())) {
             sqlBuffer.append(" and a.CHANNEL_NAME like ?");
             paramsList.add( "%"+qo.getChannelName().trim()+"%");
-        }
-
-        if (!StringUtils.isEmpty(qo.getChannelId())) {
-            sqlBuffer.append(" and b.CHANNEL_ID = ?");
-            paramsList.add( qo.getChannelId().trim());
         }
 
         //根据参数个数，组织参数值
@@ -273,6 +273,7 @@ public class MessageDailyStatisticRepositoryImpl extends BasePageRepository {
 
         //查询条件
         AccountSendStatisticItemsModel qo = pageParams.getParams();
+        List<Object> paramsList = new ArrayList<Object>();
 
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");
@@ -289,12 +290,16 @@ public class MessageDailyStatisticRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(" from(SELECT t.MESSAGE_DATE,t.CHANNEL_ID,t.BUSINESS_ACCOUNT,sum(t.CUSTOMER_SUBMIT_NUM)CUSTOMER_SUBMIT_NUM,sum(t.SUCCESS_SUBMIT_NUM)SUCCESS_SUBMIT_NUM,");
         sqlBuffer.append(" sum(t.MESSAGE_SUCCESS_NUM) MESSAGE_SUCCESS_NUM, sum(t.FAILURE_SUBMIT_NUM)FAILURE_SUBMIT_NUM,sum(t.MESSAGE_FAILURE_NUM) MESSAGE_FAILURE_NUM,sum(t.MESSAGE_NO_REPORT_NUM) MESSAGE_NO_REPORT_NUM ");
         sqlBuffer.append(" FROM message_daily_statistics t ");
-        sqlBuffer.append(" where t.CHANNEL_ID =? and DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m-%d') >=? AND DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m-%d') <=?");
+        sqlBuffer.append(" where 1=1 ");
+        if (!StringUtils.isEmpty(qo.getBusinessAccount())) {
+            sqlBuffer.append(" and t.BUSINESS_ACCOUNT= ?");
+            paramsList.add( qo.getBusinessAccount().trim());
+        }
+        sqlBuffer.append(" and t.CHANNEL_ID =? and DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m-%d') >=? AND DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m-%d') <=?");
         sqlBuffer.append(" GROUP BY t.MESSAGE_DATE, t.BUSINESS_ACCOUNT ORDER BY t.MESSAGE_DATE DESC, sum(t.SUCCESS_SUBMIT_NUM) DESC, t.BUSINESS_ACCOUNT DESC)b");
         sqlBuffer.append(" LEFT JOIN account_base_info a ON b.BUSINESS_ACCOUNT = a.ACCOUNT_ID");
         sqlBuffer.append(" WHERE 1=1 ");
 
-        List<Object> paramsList = new ArrayList<Object>();
         paramsList.add( qo.getChannelId().trim());
         paramsList.add(qo.getStartDate().trim());
         paramsList.add(qo.getEndDate().trim());
@@ -302,10 +307,6 @@ public class MessageDailyStatisticRepositoryImpl extends BasePageRepository {
         if (!StringUtils.isEmpty(qo.getAccountName())) {
             sqlBuffer.append(" and a.ACCOUNT_NAME like ?");
             paramsList.add( "%"+qo.getAccountName().trim()+"%");
-        }
-        if (!StringUtils.isEmpty(qo.getBusinessAccount())) {
-            sqlBuffer.append(" and a.ACCOUNT_ID = ?");
-            paramsList.add( qo.getBusinessAccount().trim());
         }
 
         //根据参数个数，组织参数值

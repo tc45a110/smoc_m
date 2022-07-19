@@ -61,7 +61,7 @@ public class MessageWebTaskInfoValidator {
     private String inputNumber;
 
     @NotNull(message = "内容不能为空！")
-    @Size(min = 1, max = 1500, message = "短信内容长度不符合规则！")
+    @Size(min = 1, max = 2000, message = "短信内容长度不符合规则！")
     private String messageContent;
 
     private String createdBy;

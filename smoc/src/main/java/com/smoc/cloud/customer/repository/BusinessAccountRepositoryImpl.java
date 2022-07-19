@@ -653,6 +653,7 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
 
         //查询条件
         AccountSendStatisticModel qo = pageParams.getParams();
+        List<Object> paramsList = new ArrayList<Object>();
 
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");
@@ -678,13 +679,17 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(" from(SELECT t.MESSAGE_DATE, t.BUSINESS_ACCOUNT,sum(t.SUCCESS_SUBMIT_NUM) SUCCESS_SUBMIT_NUM,");
         sqlBuffer.append(" sum(t.MESSAGE_SUCCESS_NUM) MESSAGE_SUCCESS_NUM, sum(t.MESSAGE_FAILURE_NUM) MESSAGE_FAILURE_NUM,sum(t.MESSAGE_NO_REPORT_NUM) MESSAGE_NO_REPORT_NUM ");
         sqlBuffer.append(" FROM message_daily_statistics t ");
-        sqlBuffer.append(" where DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m-%d') >=? AND DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m-%d') <=?");
+        sqlBuffer.append(" where 1=1 ");
+        if (!StringUtils.isEmpty(qo.getBusinessAccount())) {
+            sqlBuffer.append(" and t.BUSINESS_ACCOUNT = ?");
+            paramsList.add( qo.getBusinessAccount().trim());
+        }
+        sqlBuffer.append(" and DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m-%d') >=? AND DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m-%d') <=?");
         sqlBuffer.append(" GROUP BY t.MESSAGE_DATE, t.BUSINESS_ACCOUNT ORDER BY t.MESSAGE_DATE DESC, sum(t.SUCCESS_SUBMIT_NUM) DESC, t.BUSINESS_ACCOUNT DESC)b");
         sqlBuffer.append(" LEFT JOIN account_base_info a ON b.BUSINESS_ACCOUNT = a.ACCOUNT_ID");
         sqlBuffer.append(" LEFT JOIN enterprise_basic_info e ON a.ENTERPRISE_ID = e.ENTERPRISE_ID");
         sqlBuffer.append(" WHERE 1=1 ");
 
-        List<Object> paramsList = new ArrayList<Object>();
         paramsList.add(qo.getStartDate().trim());
         paramsList.add(qo.getEndDate().trim());
 
@@ -696,11 +701,6 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
         if (!StringUtils.isEmpty(qo.getAccountName())) {
             sqlBuffer.append(" and a.ACCOUNT_NAME like ?");
             paramsList.add( "%"+qo.getAccountName().trim()+"%");
-        }
-
-        if (!StringUtils.isEmpty(qo.getBusinessAccount())) {
-            sqlBuffer.append(" and a.ACCOUNT_ID = ?");
-            paramsList.add( qo.getBusinessAccount().trim());
         }
 
         //根据参数个数，组织参数值

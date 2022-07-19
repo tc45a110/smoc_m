@@ -94,7 +94,7 @@ public class CustomerAccountController {
      *
      * @return
      */
-    @RequestMapping(value = "/account/statistic/{accountId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/account/statistic/messageSend/{accountId}", method = RequestMethod.GET)
     public ModelAndView statistic(@PathVariable String accountId,HttpServletRequest request) {
         ModelAndView view = new ModelAndView("customer/customer_statistic_account_send");
 

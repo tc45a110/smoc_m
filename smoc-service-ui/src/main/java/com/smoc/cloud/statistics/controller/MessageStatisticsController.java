@@ -106,7 +106,7 @@ public class MessageStatisticsController {
 
         view.addObject("statisticMessageSendData", statisticMessageSendData);
         view.addObject("list", data.getData().getList());
-        view.addObject("pageParams",params);
+        view.addObject("pageParams",data.getData().getPageParams());
         view.addObject("businessType", statisticMessageSendData.getBusinessType());
         return view;
     }

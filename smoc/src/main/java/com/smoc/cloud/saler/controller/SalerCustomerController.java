@@ -22,7 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("saler/customer")
 @Scope(value = WebApplicationContext.SCOPE_REQUEST)
-public class CustomerController {
+public class SalerCustomerController {
 
     @Autowired
     private CustomerService customerService;

@@ -174,9 +174,9 @@ public class MessageHttpsTaskInfoRepositoryImpl extends BasePageRepository {
 
             groupBySql = "group by t.MESSAGE_DATE,t.CARRIER ";
         }else{
-            sqlBuffer.append(" t.CARRIER,");
-            sqlBuffer.append(" t.BUSINESS_ACCOUNT,");
-            sqlBuffer.append(" t.MESSAGE_SIGN SIGN,");
+            sqlBuffer.append(" ''CARRIER,");
+            sqlBuffer.append(" ''BUSINESS_ACCOUNT,");
+            sqlBuffer.append(" ''SIGN,");
             sqlBuffer.append(" ''PROTOCOL,");
             sqlBuffer.append(" sum(t.SUCCESS_SUBMIT_NUM)SUCCESS_NUMBER,");
             sqlBuffer.append(" sum(t.MESSAGE_SUCCESS_NUM)SUCCESS_SEND_NUMBER,");
@@ -186,7 +186,7 @@ public class MessageHttpsTaskInfoRepositoryImpl extends BasePageRepository {
             sqlBuffer.append(" from message_daily_statistics t left join account_base_info a on t.BUSINESS_ACCOUNT = a.ACCOUNT_ID left join enterprise_basic_info b on a.ENTERPRISE_ID = b.ENTERPRISE_ID ");
             sqlBuffer.append(" where 1=1 ");
 
-            groupBySql = "group by t.MESSAGE_DATE,t.BUSINESS_ACCOUNT,t.CARRIER, t.MESSAGE_SIGN ";
+            groupBySql = "group by t.MESSAGE_DATE ";
         }
 
         List<Object> paramsList = new ArrayList<Object>();
@@ -195,6 +195,11 @@ public class MessageHttpsTaskInfoRepositoryImpl extends BasePageRepository {
         if (!StringUtils.isEmpty(qo.getEnterpriseId())) {
             sqlBuffer.append(" and b.ENTERPRISE_ID =?");
             paramsList.add(qo.getEnterpriseId().trim());
+        }
+
+        if (!StringUtils.isEmpty(qo.getBusinessType())) {
+            sqlBuffer.append(" and t.BUSINESS_TYPE =?");
+            paramsList.add(qo.getBusinessType().trim());
         }
 
         //业务账号
@@ -221,7 +226,7 @@ public class MessageHttpsTaskInfoRepositoryImpl extends BasePageRepository {
         }
 
         sqlBuffer.append(groupBySql);
-        sqlBuffer.append(" order by t.MESSAGE_DATE desc,t.BUSINESS_ACCOUNT ");
+        sqlBuffer.append(" order by t.MESSAGE_DATE desc ");
 
         //根据参数个数，组织参数值
         Object[] params = new Object[paramsList.size()];

@@ -71,32 +71,42 @@
                                             </div>
                                         </h4>
                                     </div>
-                                    <div id="help" class="row" style="margin-top:20px;">
-                                        <div class="col-sm-12">
-                                            <div class="detail">
-                                                <ul>
-                                                    <li>
-                                                        <h2 style="color: #fff">[[${enterprise.enterpriseName}]] 账户统计</h2>
-                                                        <span></span>
-                                                        <div class="detailInner">
+
+                                    <!-- start row  汇总统计-->
+                                    <div class="detail" style="margin-top:20px;">
+                                        <div id="help" class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+                                            <ul>
+                                                <li>
+                                                    <h2 style="color: #fff">[[${enterprise.enterpriseName}]] 账户统计</h2>
+                                                    <span></span>
+                                                    <div class="row">
+                                                        <div class="form-group  col-lg-3 col-md-6 col-sm-6 col-xs-12 detailInner" style="min-width:400px;">
                                                             <a>总可用（元）：<span data-d-group="4" data-a-sign="¥ "
                                                                             style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
-                                                                            readonly class="autonumber">[[${count.get('ACCOUNT_USABLE_SUM')}]]</span></a><i></i>
+                                                                            readonly class="autonumber">[[${count.get('ACCOUNT_USABLE_SUM')}]]</span></a>
+                                                        </div>
+                                                        <div class="form-group  col-lg-3 col-md-6 col-sm-6 col-xs-12 detailInner" style="min-width:400px;">
                                                             <a>总冻结（元）：<span data-d-group="4" data-a-sign="¥ "
                                                                             style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
-                                                                            readonly class="autonumber">[[${count.get('ACCOUNT_FROZEN_SUM')}]]</span></a><i></i>
+                                                                            readonly class="autonumber">[[${count.get('ACCOUNT_FROZEN_SUM')}]]</span></a>
+                                                        </div>
+                                                        <div class="form-group col-lg-3 col-md-6 col-sm-6 col-xs-12 detailInner" style="min-width:400px;">
                                                             <a>总消费（元）：<span data-d-group="4" data-a-sign="¥ "
                                                                             style="color:#fff;width:120px;background-color:#0095a8;text-align:left"
-                                                                            readonly class="autonumber">[[${count.get('ACCOUNT_CONSUME_SUM')}]]</span></a><i></i>
+                                                                            readonly class="autonumber">[[${count.get('ACCOUNT_CONSUME_SUM')}]]</span></a>
+                                                        </div>
+                                                        <div class="form-group  col-lg-3 col-md-6 col-sm-6 col-xs-12 detailInner" style="min-width:400px;">
                                                             <a>总充值（元）：<span data-d-group="4" data-a-sign="¥ "
                                                                             style="color:#fff;width:120px;background-color:#0095a8;text-align:left"
                                                                             readonly class="autonumber">[[${count.get('ACCOUNT_RECHARGE_SUM')}]]</span></a>
                                                         </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
                                         </div>
                                     </div>
+                                    <!-- end row -->
+
                                     <div class="row" style="margin-top:10px">
                                         <div class="col-lg-12" style="margin-top:0px">
                                             <div class="panel panel-color panel-info">

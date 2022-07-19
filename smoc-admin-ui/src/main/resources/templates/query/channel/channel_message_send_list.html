@@ -164,8 +164,8 @@
                                                   class="autonumber">[[${info.messageNoReportNum}]]</span>
                                         </td>
                                         <td style="vertical-align: middle;line-height: 26px">
-                                            <a sec:authorize-url="/query/channel/accountMessageSend/list/*/*/*"
-                                               th:href="@{/query/channel/accountMessageSend/list/{businessAccount}/{startDate}/{endDate}(businessAccount=${info.channelId},startDate=${channelSendStatisticModel.startDate},endDate=${channelSendStatisticModel.endDate})}"
+                                            <a sec:authorize-url="/query/channel/accountMessageSend/list/*/*"
+                                               th:href="@{/query/channel/accountMessageSend/list/{businessAccount}/{startDate}(businessAccount=${info.channelId},startDate=${info.messageDate})}"
                                                data-toggle="tooltip" data-placement="left"
                                                data-original-title="账号发送量明细"
                                                class="on-default edit-row"

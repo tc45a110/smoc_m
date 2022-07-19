@@ -16,10 +16,10 @@
         <div class="row fixed-navigation">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">统计账号发送量 </h4>
+                    <h4 class="page-title">统计通道发送量 </h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
-                            统计账号发送量
+                            统计通道发送量
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -38,22 +38,22 @@
 
                     <div class="col-md-12">
                         <div class="pull-right" style="margin-right:10px">
-                            <a sec:authorize-url="/customer/account/statistic/statisticAccountSendMonth/*/*"
+                            <a sec:authorize-url="/customer/channel/statistic/statisticChannelSendMonth/*/*"
                                style="margin-left:10px;" onclick="active('1')"
                                class="btn btn-info waves-effect waves-light btn-sm">
                                 <i class="mdi mdi-chart-bar" style="margin-right:5px"></i>
                                 按月统计
                             </a>
-                            <a sec:authorize-url="/customer/account/statistic/statisticAccountSendMonth/*/*"
+                            <a sec:authorize-url="/customer/channel/statistic/statisticChannelSendMonth/*/*"
                                style="margin-left:10px;" onclick="active('2')"
                                class="btn btn-primary waves-effect waves-light btn-sm">
                                 <i class="mdi mdi-chart-bar" style="margin-right:5px"></i>
                                 按天统计
                             </a>
-                            <a sec:authorize-url="/customer/account/list" style="margin-left:10px;"
-                               th:href="@{/customer/account/list}" class="btn btn-default waves-effect waves-light btn-sm">
+                            <a sec:authorize-url="/customer/channel/list" style="margin-left:10px;"
+                               th:href="@{/customer/channel/list}" class="btn btn-default waves-effect waves-light btn-sm">
                                 <i class="glyphicon  glyphicon-share-alt" style="margin-right:5px"></i>
-                                返回客户列表</a>
+                                返回通道列表</a>
                         </div>
                     </div> <!-- end col -->
 
@@ -90,7 +90,7 @@
         }
 
         $.ajax({
-            url : '[[${#httpServletRequest.getContextPath()}]]/customer/account/statistic/statisticAccountSendMonth/[[${accountId}]]/'+type,
+            url : '[[${#httpServletRequest.getContextPath()}]]/customer/channel/statistic/statisticChannelSendMonth/[[${channelId}]]/'+type,
             success : function(data) {
                 articles = eval(data);
                 option2 = {

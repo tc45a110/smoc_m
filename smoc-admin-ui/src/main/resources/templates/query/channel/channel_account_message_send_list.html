@@ -86,7 +86,7 @@
             <div id="help" class="row" th:remove="${#strings.isEmpty(error)}?none:all">
                 <ul>
                     <li>
-                        <h2 style="color: #fff">日汇总统计</h2>
+                        <h2 style="color: #fff">[[${channelId}]] 日汇总统计</h2>
                         <span></span>
                         <div class="row">
                             <div class="form-group  col-lg-3 col-md-6 col-sm-6 col-xs-12 detailInner" style="min-width:400px;">
@@ -120,7 +120,6 @@
         </div>
         <!-- end row -->
 
-
         <!-- start row  列表数据-->
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
@@ -134,8 +133,7 @@
                                 <thead>
                                 <tr>
                                     <th>汇总日期</th>
-                                    <th>通道ID</th>
-                                    <th>账号</th>
+                                    <th>账号/账号名称</th>
                                     <th>客户提交数/提交失败数</th>
                                     <th>成功发送数/提交运营商数</th>
                                     <th>发送失败数/未知数</th>
@@ -145,9 +143,6 @@
                                     <tr th:each="info:${list}">
                                         <td style="vertical-align: middle;line-height: 26px;">
                                             [[${info.messageDate}]]
-                                        </td>
-                                        <td style="vertical-align: middle;line-height: 26px;">
-                                            [[${info.channelId}]]
                                         </td>
                                         <td style="vertical-align: middle;line-height: 26px;">[[${info.businessAccount}]]<br>[[${info.accountName}]]</td>
                                         <td style="vertical-align: middle;line-height: 26px">

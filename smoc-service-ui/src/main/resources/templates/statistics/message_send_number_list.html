@@ -61,7 +61,6 @@
                                         <option value="" data-icon="mdi mdi-arrange-bring-forward">--请选择统计维度--</option>
                                         <option data-icon="mdi mdi-arrange-bring-forward" value="1" th:selected="${statisticMessageSendData.flag eq '1'}">账号</option>
                                         <option data-icon="mdi mdi-arrange-bring-forward" value="2" th:selected="${statisticMessageSendData.flag eq '2'}">签名</option>
-                                        <option data-icon="mdi mdi-arrange-bring-forward" value="3" th:selected="${statisticMessageSendData.flag eq '3'}">运营商</option>
                                     </select>
                                 </div>
 
@@ -95,9 +94,6 @@
                                 <thead>
                                 <tr>
                                     <th>日期</th>
-                                    <th>账号</th>
-                                    <th>签名</th>
-                                    <th>运营商</th>
                                     <th>发送量</th>
                                     <th>成功数</th>
                                     <th>失败数</th>
@@ -111,14 +107,7 @@
                                 <tr th:each="info:${list}">
                                     <td style="vertical-align: middle;line-height: 26px;width:160px">[[${info.createdTime}]]
                                     </td>
-                                    <td style="vertical-align: middle;line-height: 26px">[[${info.businessAccount}]]</td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        [[${info.sign}]]
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <mpm:tag identity="carrier" show-type="label" key="code"
-                                                 th:value="${info.carrier}"/>
-                                    </td>
+
                                     <td style="vertical-align: middle;line-height: 26px;width:100px">
                                         <span data-d-group="3" data-a-sign=" " data-v-min="0" data-v-max="999999999"
                                               style="width:90px;text-align:left"

@@ -85,7 +85,6 @@ public class CustomerService {
         String[] month = list.stream().map(AccountStatisticSendData::getMonth).toArray(String[]::new);
         //发送量
         BigDecimal[] sendNumber = list.stream().map(AccountStatisticSendData::getSendNumber).toArray(BigDecimal[]::new);
-        ;
 
         AccountStatisticSendData accountStatisticSendData = new AccountStatisticSendData();
         accountStatisticSendData.setMonthArray(month);
