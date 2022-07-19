@@ -45,7 +45,7 @@
             <div class="col-md-12">
                 <div class="card-box">
                     <form id="submit_form" th:action="@{/iot/carrier/pool/save/{op}(op=${op})}"
-                          th:object="${systemAccountInfoValidator}"
+                          th:object="${validator}"
                           method="post" data-parsley-validate="">
                         <div class="row">
                             <div class="col-md-12">
@@ -53,64 +53,74 @@
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-6 form-group">
-                                                <select class="selectpicker" >
+                                                <select class="selectpicker" name="carrierId">
                                                     <option>------请选择运营商------</option>
-                                                    <option>------中国移动福建分公司------</option>
-                                                    <option>------中国移动安徽分公司------</option>
+                                                    <option th:each="carrier:${carriers}"
+                                                            th:selected="${carrier.id == validator.carrierId}"
+                                                            th:value="${carrier.id}" th:text="${carrier.carrierName}">
+                                                    </option>
                                                 </select>
                                             </div>
                                             <div class="col-md-6 form-group">
-                                                <label for="md5HmacKey">流量池名称<span
-                                                        class="text-danger">*</span>&nbsp;
+                                                <label>流量池名称<span class="text-danger">*</span>&nbsp;<span
+                                                        class="text-danger"
+                                                        th:if="${#fields.hasErrors('poolName')}"
+                                                        th:errors="*{poolName}"
+                                                        style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
-                                                <input id="md5HmacKey" type="text" class="form-control"
-                                                       required="" data-parsley-length="[2,32]" autocomplete="off"
-                                                       readonly>
+                                                <input type="text" required="" class="form-control"
+                                                       autocomplete="off" th:field="*{poolName}"
+                                                       data-parsley-length="[4,24]" placeholder="流量池名称">
                                             </div>
 
                                             <div class="col-md-6 form-group">
-                                                <label for="aesKey">流量池卡数量<span class="text-danger">*</span>&nbsp;
+                                                <label>初始流量池卡数量<span class="text-danger">*</span>&nbsp;<span
+                                                        class="text-danger"
+                                                        th:if="${#fields.hasErrors('poolCardNumber')}"
+                                                        th:errors="*{poolCardNumber}"
+                                                        style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
-                                                <input id="aesKey" type="text" class="form-control"
-                                                       required="" data-parsley-length="[2,32]" autocomplete="off"
-                                                       readonly>
+                                                <input type="text" required="" class="form-control"
+                                                       autocomplete="off" th:field="*{poolCardNumber}"
+                                                       min="0" data-parsley-type="number" placeholder="流量池卡数量">
                                             </div>
                                             <div class="col-md-6 form-group">
-                                                <label for="md5HmacKey1">流量池卡数量<span
-                                                        class="text-danger">*</span>&nbsp;
+                                                <label>流量池大小（G）<span class="text-danger">*</span>&nbsp;<span
+                                                        class="text-danger"
+                                                        th:if="${#fields.hasErrors('poolSize')}"
+                                                        th:errors="*{poolSize}"
+                                                        style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
-                                                <input id="md5HmacKey1" type="text" class="form-control"
-                                                       required="" data-parsley-length="[2,32]" autocomplete="off"
-                                                       readonly>
+                                                <input type="text" required="" class="form-control"
+                                                       autocomplete="off" th:field="*{poolSize}"
+                                                       min="0.0001"  placeholder="流量池大小（G）">
 
                                             </div>
                                             <div class="col-md-6 form-group">
-                                                <label for="aesKey1">流量池大小（G）<span class="text-danger">*</span>&nbsp;
-                                                </label>
-                                                <input id="aesKey1" type="text" class="form-control"
-                                                       required="" data-parsley-length="[2,32]" autocomplete="off"
-                                                       readonly>
-                                            </div>
-                                            <div class="col-md-6 form-group">
-                                                <select class="selectpicker" >
+                                                <select class="selectpicker" name="continueType">
                                                     <option>------请选择续流方式------</option>
-                                                    <option>------方式1------</option>
-                                                    <option>------方式2------</option>
+                                                    <option value="1">------方式1------</option>
+                                                    <option value="2">------方式2------</option>
                                                 </select>
                                             </div>
-                                            <div class="col-md-10 form-group">
+                                            <div class="col-md-6 form-group">
                                                 <label class="m-b-10">流量池状态</label>
                                                 <br/>
                                                 <div style="margin-top:0px" class="radio radio-info checkbox-inline">
-                                                    <input name="accountStatus" type="radio" value="1" required><label>有效</label>
+                                                    <input name="poolStatus" type="radio" value="1" required
+                                                           th:checked="${validator.poolStatus eq '1'}"><label>有效</label>
                                                 </div>
                                                 <div style="margin-top:0px" class="radio radio-info checkbox-inline">
-                                                    <input name="accountStatus" type="radio" value="2" required ><label>无效</label>
+                                                    <input name="poolStatus" type="radio" value="0" required
+                                                           th:checked="${validator.poolStatus eq '0'}"><label>无效</label>
                                                 </div>
-
                                             </div>
 
                                             <div class="col-md-12 text-center m-t-20">
+                                                <input type="hidden" th:field="*{syncDate}">
+                                                <input type="hidden" th:field="*{createdTime}">
+                                                <input type="hidden" th:field="*{createdBy}">
+                                                <input type="hidden" th:field="*{id}">
                                                 <button sec:authorize-url="/iot/carrier/pool/save/*" type="submit"
                                                         class="btn btn-teal waves-effect waves-light">提交
                                                 </button>
@@ -145,6 +155,7 @@
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
+
 
 </script>
 </body>

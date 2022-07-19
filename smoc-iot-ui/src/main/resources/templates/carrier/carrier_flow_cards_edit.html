@@ -45,93 +45,116 @@
             <div class="col-md-12">
                 <div class="card-box">
                     <form id="submit_form" th:action="@{/iot/carrier/cards/save/{op}(op=${op})}"
-                          method="post" data-parsley-validate="">
+                          method="post" data-parsley-validate="" th:object="${validator}">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="p-20">
                                     <div class="form-group">
                                         <div class="row">
-                                            <div class="col-md-6 form-group">
-                                                <select class="selectpicker" >
-                                                    <option>------请选择运营商------</option>
-                                                    <option>------中国移动福建分公司------</option>
-                                                    <option>------中国移动安徽分公司------</option>
+                                            <div class="col-md-4 form-group">
+                                                <select class="selectpicker" name="carrier">
+                                                    <option value="">------请选择运营商------</option>
+                                                    <option th:each="carrier:${carriers}"
+                                                            th:selected="${carrier.id == validator.carrier}"
+                                                            th:value="${carrier.id}" th:text="${carrier.carrierName}">
+                                                    </option>
                                                 </select>
                                             </div>
-                                            <div class="col-md-6 form-group">
-                                                <label for="orderNo">订单号
-                                                </label>
-                                                <input id="orderNo" type="text" class="form-control"
-                                                       data-parsley-length="[2,32]" autocomplete="off"
-                                                       readonly>
-                                            </div>
-
-                                            <div class="col-md-6 form-group">
-                                                <label for="MSISDN">MSISDN<span class="text-danger">*</span>&nbsp;
-                                                </label>
-                                                <input id="MSISDN" type="text" class="form-control"
-                                                       required="" data-parsley-length="[2,32]" autocomplete="off" >
-                                            </div>
-                                            <div class="col-md-6 form-group">
-                                                <label for="ICCID">ICCID<span
-                                                        class="text-danger">*</span>&nbsp;
-                                                </label>
-                                                <input id="ICCID" type="text" class="form-control"
-                                                       required="" data-parsley-length="[2,32]" autocomplete="off"
-                                                       readonly>
-
-                                            </div>
-                                            <div class="col-md-6 form-group">
-                                                <label for="IMSI">IMSI<span class="text-danger">*</span>&nbsp;
-                                                </label>
-                                                <input id="IMSI" type="text" class="form-control"
-                                                       required="" data-parsley-length="[2,32]" autocomplete="off"
-                                                       readonly>
-                                            </div>
-
-                                            <div class="col-md-6 form-group">
-                                                <label for="ICCID1">周期限额<span
-                                                        class="text-danger">*</span>&nbsp;
-                                                </label>
-                                                <input id="ICCID1" type="text" class="form-control"
-                                                       required="" data-parsley-length="[2,32]" autocomplete="off"
-                                                       readonly>
-
-                                            </div>
-                                            <div class="col-md-6 form-group">
-                                                <select class="selectpicker" >
-                                                    <option>------请选择计费周期类型------</option>
-                                                    <option>------类型1------</option>
-                                                    <option>------类型1------</option>
+                                            <div class="col-md-4 form-group">
+                                                <select class="selectpicker" name="flowPoolId">
+                                                    <option value="">------运营商流量池------</option>
+                                                    <option th:each="pool:${pools}"
+                                                            th:selected="${pool.id == validator.flowPoolId}"
+                                                            th:value="${pool.id}" th:text="${pool.poolName}">
+                                                    </option>
                                                 </select>
                                             </div>
-                                            <div class="col-md-6 form-group">
-                                                <select class="selectpicker" >
-                                                    <option>------请选择卡类型------</option>
-                                                    <option>------卡类型1------</option>
-                                                    <option>------卡类型1------</option>
+                                            <div class="col-md-4 form-group">
+                                                <select class="selectpicker" name="changingType" required>
+                                                    <option value="">------请选择计费周期类型------</option>
+                                                    <option th:selected="${validator.changingType == '01'}" value="01">------计费周期类型01------</option>
+                                                    <option th:selected="${validator.changingType == '02'}" value="02">------计费周期类型02------</option>
                                                 </select>
                                             </div>
-                                            <div class="col-md-6 form-group">
-                                                <label for="IMSI1">开卡时间<span class="text-danger">*</span>&nbsp;
+                                            <div class="col-md-4 form-group">
+                                                <label>订单号<span class="text-danger">*</span>&nbsp;<span
+                                                        class="text-danger"
+                                                        th:if="${#fields.hasErrors('orderNum')}"
+                                                        th:errors="*{orderNum}"
+                                                        style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
-                                                <input id="IMSI1" type="text" class="form-control"
-                                                       required="" data-parsley-length="[2,32]" autocomplete="off"
-                                                       readonly>
+                                                <input type="text" class="form-control"
+                                                       autocomplete="off" th:field="*{orderNum}"
+                                                       data-parsley-length="[0,32]" placeholder="订单号">
+                                            </div>
+                                            <div class="col-md-4 form-group">
+                                                <label>MSISDN<span class="text-danger">*</span>&nbsp;<span
+                                                        class="text-danger"
+                                                        th:if="${#fields.hasErrors('msisdn')}"
+                                                        th:errors="*{msisdn}"
+                                                        style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input type="text" required="" class="form-control"
+                                                       autocomplete="off" th:field="*{msisdn}"
+                                                       data-parsley-length="[6,32]" placeholder="MSISDN">
+                                            </div>
+                                            <div class="col-md-4 form-group">
+                                                <label>ICCID<span class="text-danger">*</span>&nbsp;<span
+                                                        class="text-danger"
+                                                        th:if="${#fields.hasErrors('iccid')}"
+                                                        th:errors="*{iccid}"
+                                                        style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input type="text" required="" class="form-control"
+                                                       autocomplete="off" th:field="*{iccid}"
+                                                       data-parsley-length="[6,32]" placeholder="ICCID">
+                                            </div>
+                                            <div class="col-md-4 form-group">
+                                                <label>IMSI<span class="text-danger">*</span>&nbsp;<span
+                                                        class="text-danger"
+                                                        th:if="${#fields.hasErrors('imsi')}"
+                                                        th:errors="*{imsi}"
+                                                        style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input type="text" required="" class="form-control"
+                                                       autocomplete="off" th:field="*{imsi}"
+                                                       data-parsley-length="[6,32]" placeholder="IMSI">
+                                            </div>
+                                            <div class="col-md-4 form-group">
+                                                <label>周期限额<span class="text-danger">*</span>&nbsp;<span
+                                                        class="text-danger"
+                                                        th:if="${#fields.hasErrors('cycleQuota')}"
+                                                        th:errors="*{cycleQuota}"
+                                                        style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input type="text" required="" class="form-control"
+                                                       autocomplete="off" th:field="*{cycleQuota}"
+                                                       min="0.0001" placeholder="周期限额">
+                                            </div>
+                                            <div class="col-md-4 form-group">
+                                                <select class="selectpicker" name="cardType" required>
+                                                    <option  value="">------请选择卡类型------</option>
+                                                    <option th:selected="${validator.cardType == '01'}" value="01">------卡类型01------</option>
+                                                    <option th:selected="${validator.cardType == '02'}" value="02">------卡类型02------</option>
+                                                </select>
                                             </div>
                                             <div class="col-md-6 form-group">
                                                 <label class="m-b-10">卡状态</label>
-                                                <br/>
                                                 <div style="margin-top:0px" class="radio radio-info checkbox-inline">
-                                                    <input name="accountStatus" type="radio" value="1" required><label>有效</label>
+                                                    <input name="cardStatus" type="radio" value="1" required
+                                                           th:checked="${validator.cardStatus eq '1'}"><label>有效</label>
                                                 </div>
                                                 <div style="margin-top:0px" class="radio radio-info checkbox-inline">
-                                                    <input name="accountStatus" type="radio" value="2" required ><label>无效</label>
+                                                    <input name="cardStatus" type="radio" value="0" required
+                                                           th:checked="${validator.cardStatus eq '0'}"><label>无效</label>
                                                 </div>
-
                                             </div>
-
                                             <div class="col-md-12 text-center m-t-20">
+                                                <input type="hidden" th:field="*{activeDate}">
+                                                <input type="hidden" th:field="*{openDate}">
+                                                <input type="hidden" th:field="*{createdTime}">
+                                                <input type="hidden" th:field="*{createdBy}">
+                                                <input type="hidden" th:field="*{id}">
                                                 <button sec:authorize-url="/iot/carrier/cards/save/*" type="submit"
                                                         class="btn btn-teal waves-effect waves-light">提交
                                                 </button>
@@ -166,6 +189,8 @@
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
+
+
 
 </script>
 </body>

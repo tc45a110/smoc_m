@@ -12,4 +12,6 @@ ps axu|grep redis
 
 gRPC Spring Boot Starter
 
+
+netstat -aon|findstr
 taskkill /pid 2460 -f

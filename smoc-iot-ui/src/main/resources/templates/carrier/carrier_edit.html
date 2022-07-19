@@ -45,7 +45,7 @@
             <div class="col-md-12">
                 <div class="card-box">
                     <form id="submit_form" th:action="@{/iot/carrier/save/{op}(op=${op})}"
-                          th:object="${systemAccountInfoValidator}"
+                          th:object="${validator}"
                           method="post" data-parsley-validate="">
                         <div class="row">
                             <div class="col-md-12">
@@ -53,63 +53,87 @@
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-6 form-group">
-                                                <select class="selectpicker" >
-                                                    <option>------请选择运营商------</option>
-                                                    <option>------中国移动------</option>
-                                                    <option>------中国联通------</option>
-                                                    <option>------中国电信------</option>
-                                                </select>
+                                                <mpm:tag id="carrier" identity="carrier" name="carrier"
+                                                         show-type="select" key="code" mask-value="INTL"
+                                                         class="form-control"
+                                                         th:value="${validator.carrier}"
+                                                         required="true" title="运营商"/>
                                             </div>
                                             <div class="col-md-6 form-group">
-                                                <label for="identificationAccount">运营商名称<span
-                                                        class="text-danger">*</span>&nbsp;
+                                                <label>运营商名称<span class="text-danger">*</span>&nbsp;<span
+                                                        class="text-danger"
+                                                        th:if="${#fields.hasErrors('carrierName')}"
+                                                        th:errors="*{carrierName}"
+                                                        style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
-                                                <input id="identificationAccount" type="text" class="form-control"
-
-                                                       required="" data-parsley-length="[2,64]" readonly
-                                                       autocomplete="off">
+                                                <input type="text" required="" class="form-control"
+                                                       autocomplete="off" th:field="*{carrierName}"
+                                                       data-parsley-length="[4,24]" placeholder="运营商名称">
                                             </div>
                                             <div class="col-md-6 form-group">
-                                                <label for="md5HmacKey">运营商用户名<span
-                                                        class="text-danger">*</span>&nbsp;
+                                                <label>运营商用户名<span class="text-danger">*</span>&nbsp;<span
+                                                        class="text-danger"
+                                                        th:if="${#fields.hasErrors('carrierUsername')}"
+                                                        th:errors="*{carrierUsername}"
+                                                        style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
-                                                <input id="md5HmacKey" type="text" class="form-control"
-
-                                                       required="" data-parsley-length="[2,32]" autocomplete="off"
-                                                       readonly>
-
+                                                <input type="text" required="" class="form-control"
+                                                       autocomplete="off" th:field="*{carrierUsername}"
+                                                       data-parsley-length="[4,24]" placeholder="运营商用户名">
                                             </div>
                                             <div class="col-md-6 form-group">
-                                                <label for="aesKey">运营商服务地址<span class="text-danger">*</span>&nbsp;
+                                                <label>运营商密钥<span class="text-danger">*</span>&nbsp;<span
+                                                        class="text-danger"
+                                                        th:if="${#fields.hasErrors('carrierPassword')}"
+                                                        th:errors="*{carrierPassword}"
+                                                        style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
-                                                <input id="aesKey" type="text" class="form-control"
-                                                       required="" data-parsley-length="[2,32]" autocomplete="off"
-                                                       readonly>
+                                                <input type="text" required="" class="form-control"
+                                                       autocomplete="off" th:field="*{carrierPassword}"
+                                                       data-parsley-length="[4,64]" placeholder="运营商密钥">
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label>运营商服务地址<span class="text-danger">*</span>&nbsp;<span
+                                                        class="text-danger"
+                                                        th:if="${#fields.hasErrors('carrierServerUrl')}"
+                                                        th:errors="*{carrierServerUrl}"
+                                                        style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input type="text" required="" class="form-control"
+                                                       autocomplete="off" th:field="*{carrierServerUrl}"
+                                                       data-parsley-length="[4,128]" placeholder="运营商服务地址">
                                             </div>
                                             <div class="col-md-6 form-group">
                                                 <label class="m-b-10">接口类型</label>
                                                 <br/>
                                                 <div style="margin-top:0px" class="radio radio-info checkbox-inline">
-                                                    <input name="accountStatus" type="radio" value="1" required><label>运营商标准接口</label>
+                                                    <input name="apiType" type="radio" value="1" required
+                                                           th:checked="${validator.apiType eq '1'}"><label>运营商标准接口</label>
                                                 </div>
                                                 <div style="margin-top:0px" class="radio radio-info checkbox-inline">
-                                                    <input name="accountStatus" type="radio" value="2" required ><label>个性化接口</label>
+                                                    <input name="apiType" type="radio" value="2" required
+                                                           th:checked="${validator.apiType eq '2'}"><label>个性化接口</label>
                                                 </div>
 
                                             </div>
-                                            <div class="col-md-6 form-group">
+                                            <div class="col-md-8 form-group">
                                                 <label class="m-b-10">是否有效</label>
                                                 <br/>
                                                 <div style="margin-top:0px" class="radio radio-info checkbox-inline">
-                                                    <input name="accountStatus" type="radio" value="1" required><label>有效</label>
+                                                    <input name="carrierStatus" type="radio" value="1" required
+                                                           th:checked="${validator.carrierStatus eq '1'}"><label>有效</label>
                                                 </div>
                                                 <div style="margin-top:0px" class="radio radio-info checkbox-inline">
-                                                    <input name="accountStatus" type="radio" value="2" required ><label>无效</label>
+                                                    <input name="carrierStatus" type="radio" value="0" required
+                                                           th:checked="${validator.carrierStatus eq '0'}"><label>无效</label>
                                                 </div>
-
                                             </div>
 
                                             <div class="col-md-12 text-center m-t-20">
+                                                <input type="hidden" th:field="*{carrierIdentifying}">
+                                                <input type="hidden" th:field="*{createdTime}">
+                                                <input type="hidden" th:field="*{createdBy}">
+                                                <input type="hidden" th:field="*{id}">
                                                 <button sec:authorize-url="/iot/carrier/save/*" type="submit"
                                                         class="btn btn-teal waves-effect waves-light">提交
                                                 </button>
