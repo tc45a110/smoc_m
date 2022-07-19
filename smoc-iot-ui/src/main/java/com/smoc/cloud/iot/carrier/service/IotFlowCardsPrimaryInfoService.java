@@ -1,5 +1,6 @@
 package com.smoc.cloud.iot.carrier.service;
 
+import com.smoc.cloud.common.iot.validator.IotFlowCardsInfo;
 import com.smoc.cloud.common.iot.validator.IotFlowCardsPrimaryInfoValidator;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
@@ -41,9 +42,9 @@ public class IotFlowCardsPrimaryInfoService {
      * @param id
      * @return
      */
-    public ResponseData<Map<String, Object>> findById(String id) {
+    public ResponseData<IotFlowCardsInfo> findById(String id) {
         try {
-            ResponseData<Map<String, Object>> data = this.iotFlowCardsPrimaryInfoFeignClient.findById(id);
+            ResponseData<IotFlowCardsInfo> data = this.iotFlowCardsPrimaryInfoFeignClient.findById(id);
             return data;
         } catch (Exception e) {
             e.printStackTrace();
@@ -57,9 +58,9 @@ public class IotFlowCardsPrimaryInfoService {
      * @param op 操作标记，add表示添加，edit表示修改
      * @return
      */
-    public ResponseData save( Map<String, Object> map, String op){
+    public ResponseData save(IotFlowCardsPrimaryInfoValidator iotFlowCardsPrimaryInfoValidator, String op) {
         try {
-            ResponseData data = this.iotFlowCardsPrimaryInfoFeignClient.save(map, op);
+            ResponseData data = this.iotFlowCardsPrimaryInfoFeignClient.save(iotFlowCardsPrimaryInfoValidator, op);
             return data;
         } catch (Exception e) {
             e.printStackTrace();

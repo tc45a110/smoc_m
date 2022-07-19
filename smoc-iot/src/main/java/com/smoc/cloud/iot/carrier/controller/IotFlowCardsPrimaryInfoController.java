@@ -1,6 +1,7 @@
 package com.smoc.cloud.iot.carrier.controller;
 
 
+import com.smoc.cloud.common.iot.validator.IotFlowCardsInfo;
 import com.smoc.cloud.common.iot.validator.IotFlowCardsPrimaryInfoValidator;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
@@ -43,7 +44,7 @@ public class IotFlowCardsPrimaryInfoController {
      * @return
      */
     @RequestMapping(value = "/findById/{id}", method = RequestMethod.GET)
-    public ResponseData<Map<String, Object>>  findById(@PathVariable String id) {
+    public ResponseData<IotFlowCardsInfo>  findById(@PathVariable String id) {
 
         //完成参数规则验证
         MpmIdValidator validator = new MpmIdValidator();
@@ -52,7 +53,7 @@ public class IotFlowCardsPrimaryInfoController {
             return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(validator));
         }
 
-        ResponseData<Map<String, Object>>  data = iotFlowCardsPrimaryInfoService.findById(id);
+        ResponseData<IotFlowCardsInfo>  data = iotFlowCardsPrimaryInfoService.findById(id);
         return data;
     }
 
@@ -63,10 +64,10 @@ public class IotFlowCardsPrimaryInfoController {
      * @return
      */
     @RequestMapping(value = "/save/{op}", method = RequestMethod.POST)
-    public ResponseData save(@RequestBody Map<String, Object> map, @PathVariable String op) {
+    public ResponseData save(@RequestBody IotFlowCardsPrimaryInfoValidator iotFlowCardsPrimaryInfoValidator, @PathVariable String op) {
 
         //保存操作
-        ResponseData data = iotFlowCardsPrimaryInfoService.save(map, op);
+        ResponseData data = iotFlowCardsPrimaryInfoService.save(iotFlowCardsPrimaryInfoValidator, op);
 
         return data;
     }

@@ -40,7 +40,7 @@ public class IotProductInfoService {
      * @param id
      * @return
      */
-    ResponseData<IotProductInfoValidator> findById(String id) {
+    public ResponseData<IotProductInfoValidator> findById(String id) {
         try {
             ResponseData<IotProductInfoValidator> data = this.iotProductInfoFeignClient.findById(id);
             return data;
@@ -56,7 +56,7 @@ public class IotProductInfoService {
      * @param op 操作标记，add表示添加，edit表示修改
      * @return
      */
-    ResponseData save(IotProductInfoValidator iotProductInfoValidator, String op) {
+    public ResponseData save(IotProductInfoValidator iotProductInfoValidator, String op) {
         try {
             ResponseData data = this.iotProductInfoFeignClient.save(iotProductInfoValidator, op);
             return data;

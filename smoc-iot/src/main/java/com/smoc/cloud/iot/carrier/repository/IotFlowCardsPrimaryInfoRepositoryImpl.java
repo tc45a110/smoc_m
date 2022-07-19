@@ -35,7 +35,7 @@ public class IotFlowCardsPrimaryInfoRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", t.CARD_STATUS");
         sqlBuffer.append(", t.CREATED_BY");
         sqlBuffer.append(", DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME");
-        sqlBuffer.append("  from iot_carrier_flow_pool t where 1=1 ");
+        sqlBuffer.append("  from iot_flow_cards_primary_info t where 1=1 ");
 
         List<Object> paramsList = new ArrayList<Object>();
 

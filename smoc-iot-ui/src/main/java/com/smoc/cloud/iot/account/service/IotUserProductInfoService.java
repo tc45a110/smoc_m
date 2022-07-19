@@ -60,9 +60,9 @@ public class IotUserProductInfoService {
      * @param op 操作标记，add表示添加，edit表示修改
      * @return
      */
-    public ResponseData save(Map<String, Object> map, List<IotUserProductItemsValidator> cards, String op) {
+    public ResponseData save(Map<String, Object> map, String op) {
         try {
-            ResponseData data = this.iotUserProductInfoFeignClient.save(map, cards, op);
+            ResponseData data = this.iotUserProductInfoFeignClient.save(map, op);
             return data;
         } catch (Exception e) {
             e.printStackTrace();

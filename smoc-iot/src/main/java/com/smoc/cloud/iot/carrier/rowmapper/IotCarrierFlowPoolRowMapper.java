@@ -3,6 +3,7 @@ package com.smoc.cloud.iot.carrier.rowmapper;
 import com.smoc.cloud.common.iot.validator.IotCarrierFlowPoolValidator;
 import org.springframework.jdbc.core.RowMapper;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -14,7 +15,7 @@ public class IotCarrierFlowPoolRowMapper implements RowMapper<IotCarrierFlowPool
         qo.setCarrierId(rs.getString("CARRIER_ID"));
         qo.setPoolName(rs.getString("POOL_NAME"));
         qo.setPoolCardNumber(rs.getInt("POOL_CARD_NUMBER"));
-        qo.setPoolSize(rs.getBigDecimal("POOL_SIZE"));
+        qo.setPoolSize(new BigDecimal(rs.getBigDecimal("POOL_SIZE").stripTrailingZeros().toPlainString()));
         qo.setSyncDate(rs.getString("SYNC_DATE"));
         qo.setContinueType(rs.getString("CONTINUE_TYPE"));
         qo.setPoolStatus(rs.getString("POOL_STATUS"));

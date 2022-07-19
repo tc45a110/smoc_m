@@ -1,5 +1,6 @@
 package com.smoc.cloud.iot.carrier.remote;
 
+import com.smoc.cloud.common.iot.validator.IotFlowCardsInfo;
 import com.smoc.cloud.common.iot.validator.IotFlowCardsPrimaryInfoValidator;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
@@ -34,7 +35,7 @@ public interface IotFlowCardsPrimaryInfoFeignClient {
      * @return
      */
     @RequestMapping(value = "/iot/carrier/cards/findById/{id}", method = RequestMethod.GET)
-    ResponseData<Map<String, Object>> findById(@PathVariable String id) throws Exception;
+    ResponseData<IotFlowCardsInfo> findById(@PathVariable String id) throws Exception;
 
     /**
      * 添加、修改
@@ -43,7 +44,7 @@ public interface IotFlowCardsPrimaryInfoFeignClient {
      * @return
      */
     @RequestMapping(value = "/iot/carrier/cards/save/{op}", method = RequestMethod.POST)
-    ResponseData save(@RequestBody Map<String, Object> map, @PathVariable String op) throws Exception;
+    ResponseData save(@RequestBody IotFlowCardsPrimaryInfoValidator iotFlowCardsPrimaryInfoValidator, @PathVariable String op) throws Exception;
 
     /**
      * 注销

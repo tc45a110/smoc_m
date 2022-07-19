@@ -1,6 +1,7 @@
 package com.smoc.cloud.iot.carrier.service;
 
 import com.alibaba.fastjson.JSON;
+import com.smoc.cloud.common.iot.validator.IotFlowCardsInfo;
 import com.smoc.cloud.common.iot.validator.IotFlowCardsPrimaryInfoValidator;
 import com.smoc.cloud.common.iot.validator.IotFlowCardsSecondaryInfoValidator;
 import com.smoc.cloud.common.page.PageList;
@@ -52,41 +53,40 @@ public class IotFlowCardsPrimaryInfoService {
      * @param id
      * @return
      */
-    public ResponseData<Map<String, Object>> findById(String id) {
+    public ResponseData<IotFlowCardsInfo> findById(String id) {
         Optional<IotFlowCardsPrimaryInfo> data = iotFlowCardsPrimaryInfoRepository.findById(id);
         if (!data.isPresent()) {
             return ResponseDataUtil.buildError(ResponseCode.PARAM_QUERY_ERROR);
         }
 
-        Map<String, Object> result = new HashMap<>();
+        IotFlowCardsInfo result = new IotFlowCardsInfo();
         IotFlowCardsPrimaryInfoValidator validator = new IotFlowCardsPrimaryInfoValidator();
         BeanUtils.copyProperties(data.get(), validator);
         //转换日期
         validator.setCreatedTime(DateTimeUtils.getDateTimeFormat(data.get().getCreatedTime()));
-        result.put("primary", validator);
+        result.setIotFlowCardsPrimaryInfoValidator(validator);
 
         Optional<IotFlowCardsSecondaryInfo> secondaryData = iotFlowCardsSecondaryInfoRepository.findById(id);
         IotFlowCardsSecondaryInfoValidator secondary = new IotFlowCardsSecondaryInfoValidator();
         BeanUtils.copyProperties(secondaryData.get(), secondary);
-        result.put("secondary", secondary);
+        result.setIotFlowCardsSecondaryInfoValidator(secondary);
         return ResponseDataUtil.buildSuccess(result);
     }
 
     /**
      * 保存或修改
      *
-     * @param map
-     * @param op  操作类型 为add、edit
+     * @param iotFlowCardsPrimaryInfoValidator
+     * @param op                               操作类型 为add、edit
      * @return
      */
     @Transactional
-    public ResponseData save(Map<String, Object> map, String op) {
+    public ResponseData save(IotFlowCardsPrimaryInfoValidator iotFlowCardsPrimaryInfoValidator, String op) {
 
-        IotFlowCardsPrimaryInfoValidator validator = (IotFlowCardsPrimaryInfoValidator) map.get("primary");
-        Iterable<IotFlowCardsPrimaryInfo> data = iotFlowCardsPrimaryInfoRepository.findByMsisdnOrImsiOrIccid(validator.getMsisdn(), validator.getImsi(), validator.getIccid());
+        Iterable<IotFlowCardsPrimaryInfo> data = iotFlowCardsPrimaryInfoRepository.findByMsisdnOrImsiOrIccid(iotFlowCardsPrimaryInfoValidator.getMsisdn(), iotFlowCardsPrimaryInfoValidator.getImsi(), iotFlowCardsPrimaryInfoValidator.getIccid());
 
         IotFlowCardsPrimaryInfo entity = new IotFlowCardsPrimaryInfo();
-        BeanUtils.copyProperties(validator, entity);
+        BeanUtils.copyProperties(iotFlowCardsPrimaryInfoValidator, entity);
 
         //add查重
         if (data != null && data.iterator().hasNext() && "add".equals(op)) {
@@ -97,7 +97,7 @@ public class IotFlowCardsPrimaryInfoService {
             boolean status = false;
             Iterator iterator = data.iterator();
             while (iterator.hasNext()) {
-                IotCarrierFlowPool info = (IotCarrierFlowPool) iterator.next();
+                IotFlowCardsPrimaryInfo info = (IotFlowCardsPrimaryInfo) iterator.next();
                 if (!entity.getId().equals(info.getId())) {
                     status = true;
                     break;
@@ -109,23 +109,25 @@ public class IotFlowCardsPrimaryInfoService {
         }
 
         //转换日期格式
-        entity.setCreatedTime(DateTimeUtils.getDateTimeFormat(validator.getCreatedTime()));
+        entity.setCreatedTime(DateTimeUtils.getDateTimeFormat(iotFlowCardsPrimaryInfoValidator.getCreatedTime()));
 
         //op 不为 edit 或 add
         if (!("edit".equals(op) || "add".equals(op))) {
             return ResponseDataUtil.buildError();
         }
 
-        IotFlowCardsSecondaryInfoValidator secondary = (IotFlowCardsSecondaryInfoValidator) map.get("secondary");
-        if (null != secondary) {
+
+        //记录日志
+        log.info("[物联网卡管理][{}]数据:{}", op, JSON.toJSONString(entity));
+        iotFlowCardsPrimaryInfoRepository.saveAndFlush(entity);
+
+        if ("add".equals(op)) {
             IotFlowCardsSecondaryInfo secondaryModel = new IotFlowCardsSecondaryInfo();
-            BeanUtils.copyProperties(secondary, secondaryModel);
+            secondaryModel.setId(iotFlowCardsPrimaryInfoValidator.getId());
+            secondaryModel.setCardId(iotFlowCardsPrimaryInfoValidator.getId());
             iotFlowCardsSecondaryInfoRepository.saveAndFlush(secondaryModel);
         }
 
-        //记录日志
-        log.info("[运营接入][{}]数据:{}", op, JSON.toJSONString(entity));
-        iotFlowCardsPrimaryInfoRepository.saveAndFlush(entity);
 
         return ResponseDataUtil.buildSuccess();
     }

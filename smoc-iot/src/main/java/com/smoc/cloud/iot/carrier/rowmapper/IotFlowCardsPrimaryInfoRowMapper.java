@@ -3,6 +3,7 @@ package com.smoc.cloud.iot.carrier.rowmapper;
 import com.smoc.cloud.common.iot.validator.IotFlowCardsPrimaryInfoValidator;
 import org.springframework.jdbc.core.RowMapper;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -19,7 +20,7 @@ public class IotFlowCardsPrimaryInfoRowMapper implements RowMapper<IotFlowCardsP
         qo.setIccid(rs.getString("ICCID"));
         qo.setFlowPoolId(rs.getString("FLOW_POOL_ID"));
         qo.setChangingType(rs.getString("CHANGING_TYPE"));
-        qo.setCycleQuota(rs.getBigDecimal("CYCLE_QUOTA"));
+        qo.setCycleQuota(new BigDecimal(rs.getBigDecimal("CYCLE_QUOTA").stripTrailingZeros().toPlainString()));
         qo.setActiveDate(rs.getString("ACTIVE_DATE"));
         qo.setOpenDate(rs.getString("OPEN_DATE"));
         qo.setUseStatus(rs.getString("USE_STATUS"));

@@ -43,5 +43,5 @@ public interface IotUserProductInfoFeignClient {
      * @return
      */
     @RequestMapping(value = "/save/{op}", method = RequestMethod.POST)
-    ResponseData save(@RequestBody Map<String, Object> map, List<IotUserProductItemsValidator> cards, @PathVariable String op) throws Exception;
+    ResponseData save(@RequestBody Map<String, Object> map, @PathVariable String op) throws Exception;
 }
