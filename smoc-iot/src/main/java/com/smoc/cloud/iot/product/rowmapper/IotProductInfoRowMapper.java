@@ -15,9 +15,9 @@ public class IotProductInfoRowMapper implements RowMapper<IotProductInfoValidato
         qo.setProductName(rs.getString("PRODUCT_NAME"));
         qo.setProductType(rs.getString("PRODUCT_TYPE"));
         qo.setCardsChanging(new BigDecimal(rs.getBigDecimal("CARDS_CHANGING").stripTrailingZeros().toPlainString()));
-        qo.setProductPoolSize(rs.getBigDecimal("PRODUCT_POOL_SIZE"));
+        qo.setProductPoolSize(new BigDecimal(rs.getBigDecimal("PRODUCT_POOL_SIZE").stripTrailingZeros().toPlainString()));
         qo.setChangingCycle(rs.getString("CHANGING_CYCLE"));
-        qo.setCycleQuota(rs.getBigDecimal("CYCLE_QUOTA"));
+        qo.setCycleQuota(new BigDecimal(rs.getBigDecimal("CYCLE_QUOTA").stripTrailingZeros().toPlainString()));
         qo.setAboveQuotaChanging(new BigDecimal(rs.getBigDecimal("ABOVE_QUOTA_CHANGING").stripTrailingZeros().toPlainString()));
         qo.setProductCardsNum(rs.getInt("PRODUCT_CARDS_NUM"));
         qo.setRemark(rs.getString("REMARK"));

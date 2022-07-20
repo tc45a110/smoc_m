@@ -1,7 +1,10 @@
 package com.smoc.cloud.iot.product.service;
 
 import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
+import com.smoc.cloud.common.iot.validator.IotFlowCardsPrimaryInfoValidator;
 import com.smoc.cloud.common.iot.validator.IotProductInfoValidator;
+import com.smoc.cloud.common.iot.validator.ProductCards;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
@@ -9,6 +12,7 @@ import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.iot.product.entity.IotProductInfo;
+import com.smoc.cloud.iot.product.repository.IotProductCardRepository;
 import com.smoc.cloud.iot.product.repository.IotProductInfoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -17,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -25,6 +30,8 @@ public class IotProductInfoService {
 
     @Resource
     private IotProductInfoRepository iotProductInfoRepository;
+    @Resource
+    private IotProductCardRepository iotProductCardRepository;
 
     /**
      * 分页查询
@@ -35,6 +42,17 @@ public class IotProductInfoService {
     public ResponseData<PageList<IotProductInfoValidator>> page(PageParams<IotProductInfoValidator> pageParams) {
         PageList<IotProductInfoValidator> page = iotProductInfoRepository.page(pageParams);
         return ResponseDataUtil.buildSuccess(page);
+    }
+
+    /**
+     * 根据产品id查询，产品配置的信息，及未配置的 物联网卡信息
+     *
+     * @param productId
+     * @return
+     */
+    public ResponseData<List<IotFlowCardsPrimaryInfoValidator>> list(String productId) {
+        List<IotFlowCardsPrimaryInfoValidator> list = iotProductCardRepository.list(productId);
+        return ResponseDataUtil.buildSuccess(list);
     }
 
     /**
@@ -104,6 +122,20 @@ public class IotProductInfoService {
         log.info("[运营接入][{}]数据:{}", op, JSON.toJSONString(entity));
         iotProductInfoRepository.saveAndFlush(entity);
 
+        return ResponseDataUtil.buildSuccess();
+    }
+
+    /**
+     * 保存或修改
+     *
+     * @param productCards
+     * @return
+     */
+    @Transactional
+    public ResponseData saveConfig(ProductCards productCards) {
+
+        log.info("[产品物联网卡配置]:{}", new Gson().toJson(productCards));
+        iotProductCardRepository.insertProductCards(productCards.getProductId(), productCards.getCardsId());
         return ResponseDataUtil.buildSuccess();
     }
 

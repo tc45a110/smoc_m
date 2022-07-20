@@ -67,4 +67,5 @@ public class IotProductInfoRepositoryImpl extends BasePageRepository {
         pageList.getPageParams().setParams(qo);
         return pageList;
     }
+
 }

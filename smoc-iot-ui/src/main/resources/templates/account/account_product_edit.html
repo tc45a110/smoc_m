@@ -42,22 +42,19 @@
 
                     <!-- start row  页面内容-->
                     <div class="row m-b-0" style="padding-left:20px;padding-right:20px">
-                        <form id="submit_form" th:action="@{/finance/account/share/save/{op}(op=${op})}"
-                              method="post" data-parsley-validate="">
+                        <form id="submit_form" th:action="@{/iot/account/product/save}"
+                              method="post" data-parsley-validate="" th:object="${accountProduct}">
                             <div class="row">
                                 <div class="col-md-12 panel panel-color panel-info">
                                     <div class="panel-body">
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group m-b-20">
-                                                    <select class="selectpicker">
-                                                        <option>------请选择业务账号------</option>
-                                                        <option>---IOT100001609（小舟内部测试账号）---</option>
-                                                        <option>---IOT100001609（小舟内部测试账号）---</option>
-                                                    </select>
+                                                    账号：[[${accountProduct.account}]]
                                                 </div>
                                             </div>
                                             <div class="col-md-6 pull-right" style="text-align: right">
+                                                <input type="hidden" name="account" th:value="${accountProduct.account}">
                                                 <button type="submit"
                                                         class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                                     提交
@@ -94,331 +91,69 @@
                                                                     </th>
                                                                     <th>产品名称</th>
                                                                     <th>产品类型</th>
-                                                                    <th>产品流量池额度</th>
+                                                                    <th>产品流量池额度(G)</th>
+                                                                    <th>单卡周期限额(G)</th>
                                                                     <th>计费周期</th>
-                                                                    <th>单卡周期限额</th>
-                                                                    <th>单卡超额计费标准（M）</th>
-                                                                    <th>产品卡数</th>
+                                                                    <th>单卡标准费用（元）</th>
+                                                                    <th>单卡超额计费标准（元/M）</th>
+                                                                    <th>物联网卡数</th>
                                                                     <th>使用状态</th>
                                                                 </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                <tr>
+                                                                <tr  th:each="product:${products}">
                                                                     <td>
-                                                                        <div class="btn-switch btn-switch-custom">
-                                                                            <input type="checkbox" id="input-btn-1"/>
-                                                                            <label for="input-btn-1"
+                                                                        <div th:if="${product.useStatus!=accountProduct.account}"
+                                                                             class="btn-switch btn-switch-custom">
+                                                                            <input th:id="${product.id}"
+                                                                                   th:value="${product.id}"
+                                                                                   name="productIds" type="checkbox"/>
+                                                                            <label th:for="${product.id}"
+                                                                                   class="btn btn-rounded btn-custom waves-effect waves-light">
+                                                                                <em class="glyphicon glyphicon-ok"></em>
+                                                                            </label>
+                                                                        </div>
+                                                                        <div th:if="${product.useStatus==accountProduct.account}"
+                                                                             class="btn-switch btn-switch-custom">
+                                                                            <input th:id="${product.id}"
+                                                                                   th:value="${product.id}" checked
+                                                                                   name="productIds" type="checkbox"/>
+                                                                            <label th:for="${product.id}"
                                                                                    class="btn btn-rounded btn-custom waves-effect waves-light">
                                                                                 <em class="glyphicon glyphicon-ok"></em>
                                                                             </label>
                                                                         </div>
                                                                     </td>
                                                                     <td style="vertical-align: middle;line-height: 26px">
-                                                                        福建移动xxx流量产品包
+                                                                        [[${product.productName}]]
                                                                     </td>
                                                                     <td style="vertical-align: middle;line-height: 26px">
-                                                                        共享流量
+                                                                        <a th:if="${product.productType =='01'}" class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">单卡计费</a>
+                                                                        <a th:if="${product.productType =='02'}" class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">流量共享</a>
                                                                     </td>
                                                                     <td style="vertical-align: middle;line-height: 26px">
-                                                                        1000G
+                                                                        [[${product.productPoolSize}]] G
                                                                     </td>
                                                                     <td style="vertical-align: middle;line-height: 26px">
-                                                                        自然月
+                                                                        [[${product.cycleQuota}]] G
                                                                     </td>
                                                                     <td style="vertical-align: middle;line-height: 26px">
-                                                                        1G
+                                                                        [[${product.changingCycle}]]
                                                                     </td>
                                                                     <td style="vertical-align: middle;line-height: 26px">
-                                                                        0.55元/M
+                                                                        [[${product.cardsChanging}]] 元
                                                                     </td>
                                                                     <td style="vertical-align: middle;line-height: 26px">
-                                                                        1000
+                                                                        [[${product.aboveQuotaChanging}]] 元/M
                                                                     </td>
                                                                     <td style="vertical-align: middle;line-height: 26px">
-                                                                        <a class="btn btn-warning btn-rounded  waves-effect waves-light btn-ms">未分配</a>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>
-                                                                        <div class="btn-switch btn-switch-custom">
-                                                                            <input type="checkbox" id="input-btn-3"/>
-                                                                            <label for="input-btn-3"
-                                                                                   class="btn btn-rounded btn-custom waves-effect waves-light">
-                                                                                <em class="glyphicon glyphicon-ok"></em>
-                                                                            </label>
-                                                                        </div>
+                                                                        [[${product.productCardsNum}]] 张
                                                                     </td>
                                                                     <td style="vertical-align: middle;line-height: 26px">
-                                                                        福建移动xxx流量产品包
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        共享流量
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        1000G
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        自然月
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        1G
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        0.55元/M
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        1000
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        <a class="btn btn-warning btn-rounded  waves-effect waves-light btn-ms">未分配</a>
+                                                                        <a th:if="${product.useStatus =='01'}" class="btn btn-warning btn-rounded  waves-effect waves-light btn-ms">未使用</a>
+                                                                        <a th:if="${product.useStatus =='02'}" class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">已分配</a>
                                                                     </td>
                                                                 </tr>
-                                                                <tr>
-                                                                    <td>
-                                                                        <div class="btn-switch btn-switch-custom">
-                                                                            <input type="checkbox" id="input-btn-4"/>
-                                                                            <label for="input-btn-4"
-                                                                                   class="btn btn-rounded btn-custom waves-effect waves-light">
-                                                                                <em class="glyphicon glyphicon-ok"></em>
-                                                                            </label>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        福建移动xxx流量产品包
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        共享流量
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        1000G
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        自然月
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        1G
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        0.55元/M
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        1000
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        <a class="btn btn-warning btn-rounded  waves-effect waves-light btn-ms">未分配</a>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>
-                                                                        <div class="btn-switch btn-switch-custom">
-                                                                            <input type="checkbox" id="input-btn-5"/>
-                                                                            <label for="input-btn-5"
-                                                                                   class="btn btn-rounded btn-custom waves-effect waves-light">
-                                                                                <em class="glyphicon glyphicon-ok"></em>
-                                                                            </label>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        福建移动xxx流量产品包
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        共享流量
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        1000G
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        自然月
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        1G
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        0.55元/M
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        1000
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        <a class="btn btn-warning btn-rounded  waves-effect waves-light btn-ms">未分配</a>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>
-                                                                        <div class="btn-switch btn-switch-custom">
-                                                                            <input type="checkbox" id="input-btn-6"/>
-                                                                            <label for="input-btn-6"
-                                                                                   class="btn btn-rounded btn-custom waves-effect waves-light">
-                                                                                <em class="glyphicon glyphicon-ok"></em>
-                                                                            </label>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        福建移动xxx流量产品包
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        共享流量
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        1000G
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        自然月
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        1G
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        0.55元/M
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        1000
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        <a class="btn btn-warning btn-rounded  waves-effect waves-light btn-ms">未分配</a>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>
-                                                                        <div class="btn-switch btn-switch-custom">
-                                                                            <input type="checkbox" id="input-btn-7"/>
-                                                                            <label for="input-btn-7"
-                                                                                   class="btn btn-rounded btn-custom waves-effect waves-light">
-                                                                                <em class="glyphicon glyphicon-ok"></em>
-                                                                            </label>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        福建移动xxx流量产品包
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        共享流量
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        1000G
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        自然月
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        1G
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        0.55元/M
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        1000
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        <a class="btn btn-warning btn-rounded  waves-effect waves-light btn-ms">未分配</a>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>
-                                                                        <div class="btn-switch btn-switch-custom">
-                                                                            <input type="checkbox" id="input-btn-8"/>
-                                                                            <label for="input-btn-8"
-                                                                                   class="btn btn-rounded btn-custom waves-effect waves-light">
-                                                                                <em class="glyphicon glyphicon-ok"></em>
-                                                                            </label>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        福建移动xxx流量产品包
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        共享流量
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        1000G
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        自然月
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        1G
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        0.55元/M
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        1000
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        <a class="btn btn-warning btn-rounded  waves-effect waves-light btn-ms">未分配</a>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>
-                                                                        <div class="btn-switch btn-switch-custom">
-                                                                            <input type="checkbox" id="input-btn-9"/>
-                                                                            <label for="input-btn-9"
-                                                                                   class="btn btn-rounded btn-custom waves-effect waves-light">
-                                                                                <em class="glyphicon glyphicon-ok"></em>
-                                                                            </label>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        福建移动xxx流量产品包
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        共享流量
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        1000G
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        自然月
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        1G
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        0.55元/M
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        1000
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        <a class="btn btn-warning btn-rounded  waves-effect waves-light btn-ms">未分配</a>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>
-                                                                        <div class="btn-switch btn-switch-custom">
-                                                                            <input type="checkbox" id="input-btn-10"/>
-                                                                            <label for="input-btn-10"
-                                                                                   class="btn btn-rounded btn-custom waves-effect waves-light">
-                                                                                <em class="glyphicon glyphicon-ok"></em>
-                                                                            </label>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        福建移动xxx流量产品包
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        共享流量
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        1000G
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        自然月
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        1G
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        0.55元/M
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        1000
-                                                                    </td>
-                                                                    <td style="vertical-align: middle;line-height: 26px">
-                                                                        <a class="btn btn-warning btn-rounded  waves-effect waves-light btn-ms">未分配</a>
-                                                                    </td>
-                                                                </tr>
-
                                                                 </tbody>
                                                             </table>
                                                         </div>

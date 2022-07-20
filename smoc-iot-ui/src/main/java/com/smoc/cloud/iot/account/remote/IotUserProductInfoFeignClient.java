@@ -1,6 +1,8 @@
 package com.smoc.cloud.iot.account.remote;
 
 
+import com.smoc.cloud.common.iot.validator.AccountProduct;
+import com.smoc.cloud.common.iot.validator.IotProductInfoValidator;
 import com.smoc.cloud.common.iot.validator.IotUserProductInfoValidator;
 import com.smoc.cloud.common.iot.validator.IotUserProductItemsValidator;
 import com.smoc.cloud.common.page.PageList;
@@ -24,8 +26,18 @@ public interface IotUserProductInfoFeignClient {
      * @param pageParams
      * @return
      */
-    @RequestMapping(value = "/page", method = RequestMethod.POST)
+    @RequestMapping(value = "/iot/user/product/page", method = RequestMethod.POST)
     ResponseData<PageList<IotUserProductInfoValidator>> page(@RequestBody PageParams<IotUserProductInfoValidator> pageParams) throws Exception;
+
+
+    /**
+     * 查询列表
+     *
+     * @param account
+     * @return
+     */
+    @RequestMapping(value = "/iot/user/product/list/{account}", method = RequestMethod.GET)
+    ResponseData<List<IotProductInfoValidator>> list(@PathVariable String account) throws Exception;
 
     /**
      * 根据id获取信息
@@ -33,15 +45,15 @@ public interface IotUserProductInfoFeignClient {
      * @param id
      * @return
      */
-    @RequestMapping(value = "/findById/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/iot/user/product/findById/{id}", method = RequestMethod.GET)
     ResponseData<IotUserProductInfoValidator> findById(@PathVariable String id) throws Exception;
 
     /**
      * 添加、修改
      *
-     * @param op 操作标记，add表示添加，edit表示修改
      * @return
      */
-    @RequestMapping(value = "/save/{op}", method = RequestMethod.POST)
-    ResponseData save(@RequestBody Map<String, Object> map, @PathVariable String op) throws Exception;
+    @RequestMapping(value = "/iot/user/product/save", method = RequestMethod.POST)
+    ResponseData save(@RequestBody AccountProduct accountProduct) throws Exception;
+
 }

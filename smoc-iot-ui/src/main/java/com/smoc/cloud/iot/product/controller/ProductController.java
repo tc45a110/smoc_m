@@ -2,10 +2,13 @@ package com.smoc.cloud.iot.product.controller;
 
 
 import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
 import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
 import com.smoc.cloud.common.iot.validator.IotCarrierInfoValidator;
+import com.smoc.cloud.common.iot.validator.IotFlowCardsPrimaryInfoValidator;
 import com.smoc.cloud.common.iot.validator.IotProductInfoValidator;
+import com.smoc.cloud.common.iot.validator.ProductCards;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
@@ -13,6 +16,7 @@ import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.iot.carrier.service.IotCarrierInfoService;
+import com.smoc.cloud.iot.carrier.service.IotFlowCardsPrimaryInfoService;
 import com.smoc.cloud.iot.product.service.IotProductInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +33,9 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 物联网卡产品管理
@@ -38,13 +45,17 @@ import java.util.Date;
 @RequestMapping("/iot/product")
 public class ProductController {
 
+    @Autowired
+    private IotCarrierInfoService iotCarrierInfoService;
 
     @Autowired
     private IotProductInfoService iotProductInfoService;
 
-
     @Autowired
     private SystemUserLogService systemUserLogService;
+
+    @Autowired
+    private IotFlowCardsPrimaryInfoService iotFlowCardsPrimaryInfoService;
 
     /**
      * 列表
@@ -72,6 +83,7 @@ public class ProductController {
         view.addObject("validator", validator);
         view.addObject("list", data.getData().getList());
         view.addObject("pageParams", data.getData().getPageParams());
+
         return view;
 
     }
@@ -112,6 +124,8 @@ public class ProductController {
         IotProductInfoValidator validator = new IotProductInfoValidator();
         validator.setId(UUID.uuid32());
         validator.setProductStatus("1");
+        validator.setUseStatus("01");
+        validator.setProductCardsNum(0);
         view.addObject("validator", validator);
         view.addObject("op", "add");
 
@@ -176,7 +190,7 @@ public class ProductController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            systemUserLogService.logsAsync("CARRIER", iotProductInfoValidator.getId(), "add".equals(op) ? iotProductInfoValidator.getCreatedBy() : iotProductInfoValidator.getUpdatedBy(), op, "add".equals(op) ? "新建物联网产品" : "修改运物联网产品", JSON.toJSONString(iotProductInfoService));
+            systemUserLogService.logsAsync("PRODUCT", iotProductInfoValidator.getId(), "add".equals(op) ? iotProductInfoValidator.getCreatedBy() : iotProductInfoValidator.getUpdatedBy(), op, "add".equals(op) ? "新建物联网产品" : "修改运物联网产品", JSON.toJSONString(iotProductInfoValidator));
         }
 
         //记录日志
@@ -190,10 +204,78 @@ public class ProductController {
     /**
      * @return
      */
-    @RequestMapping(value = "/config", method = RequestMethod.GET)
-    public ModelAndView config() {
+    @RequestMapping(value = "/config/edit/{id}", method = RequestMethod.GET)
+    public ModelAndView config(@PathVariable String id) {
         ModelAndView view = new ModelAndView("product/product_config");
+
+        //初始化数据
+        PageParams<IotFlowCardsPrimaryInfoValidator> params = new PageParams<>();
+        params.setPageSize(100);
+        params.setCurrentPage(1);
+        IotFlowCardsPrimaryInfoValidator validator = new IotFlowCardsPrimaryInfoValidator();
+        params.setParams(validator);
+        //查询
+        ResponseData<List<IotFlowCardsPrimaryInfoValidator>> data = iotProductInfoService.list(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        ResponseData<IotProductInfoValidator> validatorData = iotProductInfoService.findById(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(validatorData.getCode())) {
+            view.addObject("error", validatorData.getCode() + ":" + validatorData.getMessage());
+            return view;
+        }
+
+        //初始化数据
+        PageParams<IotCarrierInfoValidator> paramsCarrier = new PageParams<>();
+        paramsCarrier.setPageSize(100);
+        paramsCarrier.setCurrentPage(1);
+        IotCarrierInfoValidator validatorCarrier = new IotCarrierInfoValidator();
+        paramsCarrier.setParams(validatorCarrier);
+        ResponseData<PageList<IotCarrierInfoValidator>> dataCarrier = iotCarrierInfoService.page(paramsCarrier);
+        Map<String, String> carrierMap = dataCarrier.getData().getList().stream().collect(Collectors.toMap(IotCarrierInfoValidator::getId, IotCarrierInfoValidator::getCarrierName));
+
+
+        ProductCards productCards = new ProductCards();
+
+        log.info("[product]:{}",new Gson().toJson(validatorData.getData()));
+        view.addObject("carrierMap", carrierMap);
+        view.addObject("product", validatorData.getData());
+        view.addObject("cards", data.getData());
+        view.addObject("productCards", productCards);
         return view;
+    }
+
+    /**
+     * 保存
+     *
+     * @return
+     */
+    @RequestMapping(value = "/config/save", method = RequestMethod.POST)
+    public ModelAndView config_save(@ModelAttribute @Validated ProductCards productCards, BindingResult result,HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("product/product_edit");
+
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        //保存数据
+        ResponseData data = iotProductInfoService.saveConfig(productCards);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        //保存操作记录
+        if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            systemUserLogService.logsAsync("CARRIER", productCards.getProductId(), user.getRealName(), "config", "产品物联网卡配置", JSON.toJSONString(productCards));
+        }
+
+        //记录日志
+        log.info("[产品物联网卡配置][{}][{}]数据:{}", "config", user.getUserName(), JSON.toJSONString(productCards));
+
+        view.setView(new RedirectView("/iot/product/list", true, false));
+        return view;
+
     }
 
     /**

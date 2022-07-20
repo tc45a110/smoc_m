@@ -1,7 +1,8 @@
 package com.smoc.cloud.iot.account.service;
 
+import com.smoc.cloud.common.iot.validator.AccountProduct;
+import com.smoc.cloud.common.iot.validator.IotProductInfoValidator;
 import com.smoc.cloud.common.iot.validator.IotUserProductInfoValidator;
-import com.smoc.cloud.common.iot.validator.IotUserProductItemsValidator;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Map;
 
 
 @Slf4j
@@ -39,6 +39,22 @@ public class IotUserProductInfoService {
     }
 
     /**
+     * 查询列表
+     *
+     * @param account
+     * @return
+     */
+    public ResponseData<List<IotProductInfoValidator>> list(String account) {
+        try {
+            ResponseData<List<IotProductInfoValidator>> data = this.iotUserProductInfoFeignClient.list(account);
+            return data;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
      * 根据id获取信息
      *
      * @param id
@@ -57,12 +73,11 @@ public class IotUserProductInfoService {
     /**
      * 添加、修改
      *
-     * @param op 操作标记，add表示添加，edit表示修改
      * @return
      */
-    public ResponseData save(Map<String, Object> map, String op) {
+    public ResponseData save(AccountProduct accountProduct) {
         try {
-            ResponseData data = this.iotUserProductInfoFeignClient.save(map, op);
+            ResponseData data = this.iotUserProductInfoFeignClient.save(accountProduct);
             return data;
         } catch (Exception e) {
             e.printStackTrace();

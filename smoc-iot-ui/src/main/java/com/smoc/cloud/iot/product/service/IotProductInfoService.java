@@ -1,6 +1,8 @@
 package com.smoc.cloud.iot.product.service;
 
+import com.smoc.cloud.common.iot.validator.IotFlowCardsPrimaryInfoValidator;
 import com.smoc.cloud.common.iot.validator.IotProductInfoValidator;
+import com.smoc.cloud.common.iot.validator.ProductCards;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
@@ -10,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -27,6 +30,22 @@ public class IotProductInfoService {
     public ResponseData<PageList<IotProductInfoValidator>> page(PageParams<IotProductInfoValidator> pageParams) {
         try {
             ResponseData<PageList<IotProductInfoValidator>> data = this.iotProductInfoFeignClient.page(pageParams);
+            return data;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 根据产品id查询，产品配置的信息，及未配置的 物联网卡信息
+     *
+     * @param productId
+     * @return
+     */
+    public ResponseData<List<IotFlowCardsPrimaryInfoValidator>> list(String productId) {
+        try {
+            ResponseData<List<IotFlowCardsPrimaryInfoValidator>> data = this.iotProductInfoFeignClient.list(productId);
             return data;
         } catch (Exception e) {
             e.printStackTrace();
@@ -59,6 +78,21 @@ public class IotProductInfoService {
     public ResponseData save(IotProductInfoValidator iotProductInfoValidator, String op) {
         try {
             ResponseData data = this.iotProductInfoFeignClient.save(iotProductInfoValidator, op);
+            return data;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 添加、修改
+     *
+     * @return
+     */
+    public ResponseData saveConfig(ProductCards productCards) {
+        try {
+            ResponseData data = this.iotProductInfoFeignClient.saveConfig(productCards);
             return data;
         } catch (Exception e) {
             e.printStackTrace();

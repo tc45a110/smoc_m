@@ -1,6 +1,8 @@
 package com.smoc.cloud.iot.account.service;
 
 import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
+import com.smoc.cloud.common.iot.validator.AccountProduct;
 import com.smoc.cloud.common.iot.validator.IotProductInfoValidator;
 import com.smoc.cloud.common.iot.validator.IotUserProductInfoValidator;
 import com.smoc.cloud.common.iot.validator.IotUserProductItemsValidator;
@@ -43,6 +45,17 @@ public class IotUserProductInfoService {
     }
 
     /**
+     * 列表查询
+     *
+     * @param account
+     * @return
+     */
+    public ResponseData<List<IotProductInfoValidator>> list(String account) {
+        List<IotProductInfoValidator> list = iotUserProductInfoRepository.list(account);
+        return ResponseDataUtil.buildSuccess(list);
+    }
+
+    /**
      * 根据ID 查询数据
      *
      * @param id
@@ -65,48 +78,12 @@ public class IotUserProductInfoService {
     /**
      * 保存或修改
      *
-     * @param op 操作类型 为add、edit
      * @return
      */
     @Transactional
-    public ResponseData save(Map<String, Object> map, List<IotUserProductItemsValidator> cards, String op) {
-        IotUserProductInfoValidator validator = (IotUserProductInfoValidator) map.get("validator");
-        Iterable<IotUserProductInfo> data = iotUserProductInfoRepository.findByUserId(validator.getUserId());
-
-        IotUserProductInfo entity = new IotUserProductInfo();
-        BeanUtils.copyProperties(validator, entity);
-
-        //add查重
-        if (data != null && data.iterator().hasNext() && "add".equals(op)) {
-            return ResponseDataUtil.buildError(ResponseCode.PARAM_CREATE_ERROR);
-        }
-        //edit查重
-        else if (data != null && data.iterator().hasNext() && "edit".equals(op)) {
-            boolean status = false;
-            Iterator iterator = data.iterator();
-            while (iterator.hasNext()) {
-                IotUserProductInfo info = (IotUserProductInfo) iterator.next();
-                if (!entity.getId().equals(info.getId())) {
-                    status = true;
-                    break;
-                }
-            }
-            if (status) {
-                return ResponseDataUtil.buildError(ResponseCode.PARAM_CREATE_ERROR);
-            }
-        }
-
-        //转换日期格式
-        entity.setCreatedTime(DateTimeUtils.getDateTimeFormat(validator.getCreatedTime()));
-
-        //op 不为 edit 或 add
-        if (!("edit".equals(op) || "add".equals(op))) {
-            return ResponseDataUtil.buildError();
-        }
-
-        //记录日志
-        log.info("[运营接入][{}]数据:{}", op, JSON.toJSONString(entity));
-        iotUserProductInfoRepository.saveAndFlush(entity);
+    public ResponseData save(AccountProduct accountProduct) {
+        log.info("[accountProduct]:{}", new Gson().toJson(accountProduct));
+        iotUserProductInfoRepository.insertAccountProductCards(accountProduct.getAccount(), accountProduct.getProductIds());
         return ResponseDataUtil.buildSuccess();
     }
 

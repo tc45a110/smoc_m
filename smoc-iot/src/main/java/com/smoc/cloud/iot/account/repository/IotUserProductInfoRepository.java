@@ -1,5 +1,6 @@
 package com.smoc.cloud.iot.account.repository;
 
+import com.smoc.cloud.common.iot.validator.IotProductInfoValidator;
 import com.smoc.cloud.common.iot.validator.IotUserProductInfoValidator;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
@@ -18,5 +19,17 @@ public interface IotUserProductInfoRepository extends JpaRepository<IotUserProdu
      */
     PageList<IotUserProductInfoValidator> page(PageParams<IotUserProductInfoValidator> pageParams);
 
+    /**
+     * 列表查询
+     * @param userId
+     * @return
+     */
+    List<IotProductInfoValidator> list(String userId);
+
     List<IotUserProductInfo> findByUserId(String userId);
+
+    /**
+     * 批量保存产品卡
+     */
+    void insertAccountProductCards(String account, String productIds);
 }

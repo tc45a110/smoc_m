@@ -1,7 +1,8 @@
 package com.smoc.cloud.iot.account.controller;
 
+import com.smoc.cloud.common.iot.validator.AccountProduct;
+import com.smoc.cloud.common.iot.validator.IotProductInfoValidator;
 import com.smoc.cloud.common.iot.validator.IotUserProductInfoValidator;
-import com.smoc.cloud.common.iot.validator.IotUserProductItemsValidator;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
@@ -15,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -34,6 +34,18 @@ public class IotUserProductInfoController {
     @RequestMapping(value = "/page", method = RequestMethod.POST)
     public ResponseData<PageList<IotUserProductInfoValidator>> page(@RequestBody PageParams<IotUserProductInfoValidator> pageParams) {
         ResponseData<PageList<IotUserProductInfoValidator>> data = iotUserProductInfoService.page(pageParams);
+        return data;
+    }
+
+    /**
+     * 查询列表
+     *
+     * @param account
+     * @return
+     */
+    @RequestMapping(value = "/list/{account}", method = RequestMethod.GET)
+    public ResponseData<List<IotProductInfoValidator>> list(@PathVariable String account) {
+        ResponseData<List<IotProductInfoValidator>> data = iotUserProductInfoService.list(account);
         return data;
     }
 
@@ -60,14 +72,12 @@ public class IotUserProductInfoController {
     /**
      * 添加、修改
      *
-     * @param op 操作标记，add表示添加，edit表示修改
      * @return
      */
-    @RequestMapping(value = "/save/{op}", method = RequestMethod.POST)
-    public ResponseData save(@RequestBody Map<String, Object> map, List<IotUserProductItemsValidator> cards, @PathVariable String op) {
-
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    public ResponseData save(@RequestBody AccountProduct accountProduct) {
         //保存操作
-        ResponseData data = iotUserProductInfoService.save(map, cards, op);
+        ResponseData data = iotUserProductInfoService.save(accountProduct);
 
         return data;
     }

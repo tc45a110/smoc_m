@@ -198,6 +198,7 @@ public class CarrierFlowCardsController {
         IotFlowCardsPrimaryInfoValidator validator = new IotFlowCardsPrimaryInfoValidator();
         validator.setId(UUID.uuid32());
         validator.setCardStatus("1");
+        validator.setUseStatus("0");
 
         view.addObject("pools", dataPool.getData().getList());
         view.addObject("carriers", dataCarrier.getData().getList());
