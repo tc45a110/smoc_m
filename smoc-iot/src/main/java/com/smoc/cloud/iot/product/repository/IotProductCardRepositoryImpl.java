@@ -132,6 +132,7 @@ public class IotProductCardRepositoryImpl extends BasePageRepository {
             //处理原来产品配置的物联网卡
             stmt.addBatch("update iot_flow_cards_primary_info c  inner join iot_product_cards pc  on  c.ID=pc.CARD_ID set c.USE_STATUS  ='0' where pc.PRODUCT_ID='" + productId + "' ");
             stmt.addBatch("delete from iot_product_cards where PRODUCT_ID='" + productId + "' ");
+            //处理产品新设置的物联网卡
             if (!StringUtils.isEmpty(cardsId)) {
                 String[] cards = cardsId.split(",");
                 Integer cardsNum = cards.length;
