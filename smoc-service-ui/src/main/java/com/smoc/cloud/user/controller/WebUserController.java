@@ -67,6 +67,7 @@ public class WebUserController {
         log.info("[用户管理][重置密码][{}]数据:{}",user.getUserName(), userPasswordValidator.getId());
 
         //修改密码操作
+        userPasswordValidator.setId(user.getId());
         ResponseData data = webUserService.resetOwnPassword(userPasswordValidator);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("userPasswordValidator", userPasswordValidator);

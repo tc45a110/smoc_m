@@ -7,6 +7,7 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.smoc.finance.validator.FinanceAccountRechargeValidator;
 import com.smoc.cloud.common.smoc.message.MessageDailyStatisticValidator;
 
+import com.smoc.cloud.common.smoc.message.model.StatisticMessageSendData;
 import com.smoc.cloud.common.smoc.query.model.AccountSendStatisticItemsModel;
 import com.smoc.cloud.common.smoc.query.model.ChannelSendStatisticModel;
 import com.smoc.cloud.message.rowmapper.ChannelAccountSendRowMapper;
@@ -376,5 +377,74 @@ public class MessageDailyStatisticRepositoryImpl extends BasePageRepository {
         }
         return map;
 
+    }
+
+    /**
+     * 统计web端发送量
+     *
+     * @param qo
+     * @return
+     */
+    public Map<String, Object> webStatisticMessageCount(StatisticMessageSendData qo) {
+
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append(" sum(t.SUCCESS_SUBMIT_NUM) SUCCESS_SUBMIT_NUM,");
+        sqlBuffer.append(" sum(t.MESSAGE_SUCCESS_NUM) MESSAGE_SUCCESS_NUM,");
+        sqlBuffer.append(" sum(t.MESSAGE_FAILURE_NUM) MESSAGE_FAILURE_NUM,");
+        sqlBuffer.append(" sum(t.MESSAGE_NO_REPORT_NUM) MESSAGE_NO_REPORT_NUM");
+        sqlBuffer.append(" from message_daily_statistics t ");
+        sqlBuffer.append(" where  1=1 ");
+
+        List<Object> paramsList = new ArrayList<Object>();
+
+        if (!StringUtils.isEmpty(qo.getEnterpriseFlag())) {
+            sqlBuffer.append(" and t.ENTERPRISE_FLAG =?");
+            paramsList.add(qo.getEnterpriseFlag().trim());
+        }
+
+        //业务账号
+        if (!StringUtils.isEmpty(qo.getBusinessAccount())) {
+            sqlBuffer.append(" and t.BUSINESS_ACCOUNT =?");
+            paramsList.add(qo.getBusinessAccount().trim());
+        }
+
+        if (!StringUtils.isEmpty(qo.getSign())) {
+            sqlBuffer.append(" and t.MESSAGE_SIGN like ?");
+            paramsList.add("%" +qo.getSign().trim()+ "%");
+        }
+
+        //业务类型
+        if (!StringUtils.isEmpty(qo.getBusinessType())) {
+            sqlBuffer.append(" and t.BUSINESS_TYPE =?");
+            paramsList.add(qo.getBusinessType().trim());
+        }
+
+        //时间起
+        if (!StringUtils.isEmpty(qo.getStartDate())) {
+            sqlBuffer.append(" and DATE_FORMAT(t.MESSAGE_DATE,'%Y-%m-%d') >=? ");
+            paramsList.add(qo.getStartDate().trim());
+        }
+        //时间止
+        if (!StringUtils.isEmpty(qo.getEndDate())) {
+            sqlBuffer.append(" and DATE_FORMAT(t.MESSAGE_DATE,'%Y-%m-%d') <=? ");
+            paramsList.add(qo.getEndDate().trim());
+        }
+
+        sqlBuffer.append(" order by t.MESSAGE_DATE desc,t.CREATED_TIME desc");
+
+        //根据参数个数，组织参数值
+        Object[] params = new Object[paramsList.size()];
+        paramsList.toArray(params);
+
+        Map<String, Object> map = jdbcTemplate.queryForMap(sqlBuffer.toString(), params);
+        if(null == map || map.size()<1 || null == map.get("SUCCESS_SUBMIT_NUM")){
+            map = new HashMap<>();
+            map.put("SUCCESS_SUBMIT_NUM",0);
+            map.put("MESSAGE_SUCCESS_NUM",0);
+            map.put("MESSAGE_FAILURE_NUM",0);
+            map.put("MESSAGE_NO_REPORT_NUM",0);
+        }
+        return map;
     }
 }

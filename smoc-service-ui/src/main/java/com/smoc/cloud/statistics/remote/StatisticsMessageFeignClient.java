@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.Map;
+
 
 /**
  * 统计短信远程服务接口
@@ -40,4 +42,12 @@ public interface StatisticsMessageFeignClient {
      */
     @RequestMapping(value = "/message/https/task/messageSendNumberList", method = RequestMethod.POST)
     ResponseData<PageList<StatisticMessageSendData>> messageSendNumberList(@RequestBody PageParams<StatisticMessageSendData> params);
+
+    /**
+     * 统计web端发送量
+     * @param statisticMessageSendData
+     * @return
+     */
+    @RequestMapping(value = "/message/daily/web/webStatisticMessageCount", method = RequestMethod.POST)
+    ResponseData<Map<String, Object>> webStatisticMessageCount(@RequestBody StatisticMessageSendData statisticMessageSendData);
 }

@@ -4,6 +4,7 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.message.MessageDailyStatisticValidator;
+import com.smoc.cloud.common.smoc.message.model.StatisticMessageSendData;
 import com.smoc.cloud.common.smoc.query.model.AccountSendStatisticItemsModel;
 import com.smoc.cloud.common.smoc.query.model.ChannelSendStatisticModel;
 import com.smoc.cloud.message.service.MessageDailyStatisticService;
@@ -88,5 +89,17 @@ public class MessageDailyStatisticController {
     public ResponseData<Map<String, Object>> channelSendCountSum(@RequestBody MessageDailyStatisticValidator qo) {
 
         return messageDailyStatisticService.channelSendCountSum(qo);
+    }
+
+    /**
+     * 统计web端发送量
+     *
+     * @param qo
+     * @return
+     */
+    @RequestMapping(value = "/web/webStatisticMessageCount", method = RequestMethod.POST)
+    public ResponseData<Map<String, Object>> webStatisticMessageCount(@RequestBody StatisticMessageSendData qo) {
+
+        return messageDailyStatisticService.webStatisticMessageCount(qo);
     }
 }

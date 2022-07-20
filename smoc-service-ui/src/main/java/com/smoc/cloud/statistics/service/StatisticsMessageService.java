@@ -15,6 +15,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 @Slf4j
 @Service
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode = ScopedProxyMode.TARGET_CLASS)
@@ -64,6 +66,21 @@ public class StatisticsMessageService {
         try {
             ResponseData<PageList<StatisticMessageSendData>> pageList = this.statisticsMessageFeignClient.messageSendNumberList(params);
             return pageList;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 统计web端发送量
+     * @param statisticMessageSendData
+     * @return
+     */
+    public ResponseData<Map<String, Object>> webStatisticMessageCount(StatisticMessageSendData statisticMessageSendData) {
+        try {
+            ResponseData<Map<String, Object>> map = this.statisticsMessageFeignClient.webStatisticMessageCount(statisticMessageSendData);
+            return map;
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseDataUtil.buildError(e.getMessage());

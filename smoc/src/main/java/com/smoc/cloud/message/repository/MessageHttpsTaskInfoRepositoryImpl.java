@@ -137,7 +137,7 @@ public class MessageHttpsTaskInfoRepositoryImpl extends BasePageRepository {
             sqlBuffer.append(" sum(t.MESSAGE_FAILURE_NUM)FAILURE_NUMBER,");
             sqlBuffer.append(" sum(t.MESSAGE_NO_REPORT_NUM)NO_REPORT_NUMBER,");
             sqlBuffer.append(" t.MESSAGE_DATE ");
-            sqlBuffer.append(" from message_daily_statistics t left join account_base_info a on t.BUSINESS_ACCOUNT = a.ACCOUNT_ID left join enterprise_basic_info b on a.ENTERPRISE_ID = b.ENTERPRISE_ID ");
+            sqlBuffer.append(" from message_daily_statistics t  ");
             sqlBuffer.append(" where 1=1 ");
 
             groupBySql = "group by t.MESSAGE_DATE,t.BUSINESS_ACCOUNT ";
@@ -153,7 +153,7 @@ public class MessageHttpsTaskInfoRepositoryImpl extends BasePageRepository {
             sqlBuffer.append(" sum(t.MESSAGE_FAILURE_NUM)FAILURE_NUMBER,");
             sqlBuffer.append(" sum(t.MESSAGE_NO_REPORT_NUM)NO_REPORT_NUMBER,");
             sqlBuffer.append(" t.MESSAGE_DATE ");
-            sqlBuffer.append(" from message_daily_statistics t left join account_base_info a on t.BUSINESS_ACCOUNT = a.ACCOUNT_ID left join enterprise_basic_info b on a.ENTERPRISE_ID = b.ENTERPRISE_ID ");
+            sqlBuffer.append(" from message_daily_statistics t  ");
             sqlBuffer.append(" where 1=1 ");
 
             groupBySql = "group by t.MESSAGE_DATE,t.MESSAGE_SIGN ";
@@ -169,7 +169,7 @@ public class MessageHttpsTaskInfoRepositoryImpl extends BasePageRepository {
             sqlBuffer.append(" sum(t.MESSAGE_FAILURE_NUM)FAILURE_NUMBER,");
             sqlBuffer.append(" sum(t.MESSAGE_NO_REPORT_NUM)NO_REPORT_NUMBER,");
             sqlBuffer.append(" t.MESSAGE_DATE ");
-            sqlBuffer.append(" from message_daily_statistics t left join account_base_info a on t.BUSINESS_ACCOUNT = a.ACCOUNT_ID left join enterprise_basic_info b on a.ENTERPRISE_ID = b.ENTERPRISE_ID ");
+            sqlBuffer.append(" from message_daily_statistics t  ");
             sqlBuffer.append(" where 1=1 ");
 
             groupBySql = "group by t.MESSAGE_DATE,t.CARRIER ";
@@ -183,7 +183,7 @@ public class MessageHttpsTaskInfoRepositoryImpl extends BasePageRepository {
             sqlBuffer.append(" sum(t.MESSAGE_FAILURE_NUM)FAILURE_NUMBER,");
             sqlBuffer.append(" sum(t.MESSAGE_NO_REPORT_NUM)NO_REPORT_NUMBER,");
             sqlBuffer.append(" t.MESSAGE_DATE ");
-            sqlBuffer.append(" from message_daily_statistics t left join account_base_info a on t.BUSINESS_ACCOUNT = a.ACCOUNT_ID left join enterprise_basic_info b on a.ENTERPRISE_ID = b.ENTERPRISE_ID ");
+            sqlBuffer.append(" from message_daily_statistics t  ");
             sqlBuffer.append(" where 1=1 ");
 
             groupBySql = "group by t.MESSAGE_DATE ";
@@ -192,9 +192,9 @@ public class MessageHttpsTaskInfoRepositoryImpl extends BasePageRepository {
         List<Object> paramsList = new ArrayList<Object>();
 
         //业务ID
-        if (!StringUtils.isEmpty(qo.getEnterpriseId())) {
-            sqlBuffer.append(" and b.ENTERPRISE_ID =?");
-            paramsList.add(qo.getEnterpriseId().trim());
+        if (!StringUtils.isEmpty(qo.getEnterpriseFlag())) {
+            sqlBuffer.append(" and t.ENTERPRISE_FLAG =?");
+            paramsList.add(qo.getEnterpriseFlag().trim());
         }
 
         if (!StringUtils.isEmpty(qo.getBusinessType())) {

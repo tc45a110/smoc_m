@@ -3,6 +3,7 @@ package com.smoc.cloud.message.repository;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.smoc.message.MessageDailyStatisticValidator;
+import com.smoc.cloud.common.smoc.message.model.StatisticMessageSendData;
 import com.smoc.cloud.common.smoc.query.model.AccountSendStatisticItemsModel;
 import com.smoc.cloud.common.smoc.query.model.ChannelSendStatisticModel;
 import com.smoc.cloud.message.entity.MessageDailyStatistic;
@@ -51,4 +52,11 @@ public interface MessageDailyStatisticRepository extends JpaRepository<MessageDa
      * @return
      */
     Map<String, Object> channelSendCountSum(MessageDailyStatisticValidator qo);
+
+    /**
+     * 统计web端发送量
+     * @param qo
+     * @return
+     */
+    Map<String, Object> webStatisticMessageCount(StatisticMessageSendData qo);
 }

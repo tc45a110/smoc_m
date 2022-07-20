@@ -49,4 +49,6 @@ public class StatisticMessageSendData {
     private String startDate;
 
     private String endDate;
+
+    private String enterpriseFlag;
 }
