@@ -125,8 +125,6 @@ public class IotProductCardRepositoryImpl extends BasePageRepository {
     public void insertProductCards(String productId, String cardsId) {
         Connection conn = null;
         Statement stmt = null;
-
-
         try {
             conn = dataSource.getConnection();
             conn.setAutoCommit(false);
