@@ -9,6 +9,8 @@ import com.smoc.cloud.common.smoc.message.MessageDetailInfoValidator;
 import com.smoc.cloud.common.smoc.message.TableStoreMessageDetailInfoValidator;
 import com.smoc.cloud.common.smoc.message.model.MessageTaskDetail;
 import com.smoc.cloud.common.utils.DateTimeUtils;
+import com.smoc.cloud.configure.channel.entity.ConfigChannelBasicInfo;
+import com.smoc.cloud.configure.channel.repository.ChannelRepository;
 import com.smoc.cloud.customer.entity.AccountBasicInfo;
 import com.smoc.cloud.customer.repository.BusinessAccountRepository;
 import com.smoc.cloud.message.rowmapper.MessageDetailInfoRowMapper;
@@ -35,6 +37,9 @@ public class TableStoreMessageDetailInfoRepository extends TableStorePageReposit
 
     @Resource
     private BusinessAccountRepository businessAccountRepository;
+
+    @Resource
+    private ChannelRepository channelRepository;
 
     public PageList<TableStoreMessageDetailInfoValidator> tableStorePage(PageParams<TableStoreMessageDetailInfoValidator> pageParams) {
 
@@ -79,13 +84,22 @@ public class TableStoreMessageDetailInfoRepository extends TableStorePageReposit
             String accountId = row.getString("account_id");
             messageDetailInfoValidator.setPhoneNumber(row.getString("phone_number"));
             messageDetailInfoValidator.setBusinessAccount(accountId);
-
+            //查询账号名称
             if(!StringUtils.isEmpty(accountId)){
                 Optional<AccountBasicInfo> data = businessAccountRepository.findById(accountId);
                 if(data.isPresent()){
                     messageDetailInfoValidator.setAccountName(data.get().getAccountName());
                 }
             }
+            //查询通道名称
+            /*String channelId = row.getString("channel_id");
+            if(!StringUtils.isEmpty(channelId)){
+                Optional<ConfigChannelBasicInfo> data = channelRepository.findById(accountId);
+                if(data.isPresent()){
+                    messageDetailInfoValidator.setChannelName(data.get().getChannelName());
+                }
+            }*/
+
             messageDetailInfoValidator.setUserSubmitTime(DateTimeUtils.getDateTimeFormat(new Date(row.getLong("user_submit_time"))));
 
           /*  messageDetailInfoValidator.setAreaName(row.getString("area_name"));

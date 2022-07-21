@@ -79,6 +79,9 @@ public class TableStoreMessageDetailInfoValidator {
     //通道ID
     private String channelId;
 
+    //通道名称
+    private String channelName;
+
     //通道基础接入码
     private String channelSrcid;
 
