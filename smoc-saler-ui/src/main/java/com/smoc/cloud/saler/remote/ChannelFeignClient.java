@@ -42,4 +42,12 @@ public interface ChannelFeignClient {
      */
     @RequestMapping(value = "/saler/channel/statisticSendNumberMonthByChannel", method = RequestMethod.POST)
     ResponseData<List<ChannelStatisticSendData>> statisticSendNumberMonthByChannel(@RequestBody ChannelStatisticSendData statisticSendData);
+
+    /**
+     * 通道总发送量统计
+     * @param statisticSendData
+     * @return
+     */
+    @RequestMapping(value = "/saler/channel/statisticTotalSendNumberByChannel", method = RequestMethod.POST)
+    ResponseData<List<ChannelStatisticSendData>> statisticTotalSendNumberByChannel(@RequestBody ChannelStatisticSendData statisticSendData);
 }

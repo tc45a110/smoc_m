@@ -21,6 +21,8 @@ public class ChannelStatisticSendData {
 
     private BigDecimal[] sendNumberArray;
 
+    private BigDecimal[] sendNumberArrayBefore;
+
     //统计维度
     private String dimension;
     private String startDate;

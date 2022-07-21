@@ -122,72 +122,81 @@
 <script th:src="@{/static/plugins/autoNumeric/autoNumeric.js}"></script>
 <script type="text/javascript">
 
-    var dom3 = document.getElementById("main1");
-    var myChart3 = echarts.init(dom3);
-    var app = {};
-    option3 = null;
-    option3 = {
-        title: {
-            text: '客户近12个月短信发送量（W）'
-        },
-        color: ['#EE6666', '#92CB76'],
-        legend: {
-          data: ['2021年近12个月', '2022年近12个月']
-        },
-        tooltip: {
-            trigger: 'axis'
-        },
-        toolbox: {
-            show: true,
-            feature: {
-                saveAsImage: {show: true}
+    $.ajax({
+        url : '[[${#httpServletRequest.getContextPath()}]]/index/indexStatisticMessageSendSum',
+        success : function(data) {
+            articles = eval(data);
+            var dom3 = document.getElementById("main1");
+            var myChart3 = echarts.init(dom3);
+            var app = {};
+            option3 = null;
+            option3 = {
+                title: {
+                    text: '客户近12个月短信发送量（W）'
+                },
+                color: ['#EE6666', '#92CB76'],
+                legend: {
+                    data: articles.year
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        saveAsImage: {show: true}
+                    }
+                },
+                calculable: true,
+                xAxis: [
+                    {
+                        type: 'category',
+                        axisLabel: {
+                            interval: 'auto',
+                            rotate: 30
+                        },
+                        data: articles.monthArray
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value'
+                    }
+                ],
+                series: [
+                    {
+                        name: articles.year[0],
+                        type: 'line',
+                        stack: 'Total',
+                        data: articles.sendNumberArrayBefore,
+                        markLine: {
+                            data: [
+                                {type: 'average', name: '平均值'}
+                            ]
+                        }
+                    },
+                    {
+                        name: articles.year[1],
+                        type: 'line',
+                        stack: 'Total',
+                        data: articles.sendNumberArray,
+                        markLine: {
+                            data: [
+                                {type: 'average', name: '平均值'}
+                            ]
+                        }
+                    },
+                ]
+            };
+
+            if (option3 && typeof option3 === "object") {
+                myChart3.setOption(option3, true);
             }
-        },
-        calculable: true,
-        xAxis: [
-            {
-                type: 'category',
-                axisLabel: {
-                  interval: 'auto',
-                  rotate: 30
-                 },
-                data: ['2020-11', '2020-12', '2021-01', '2021-02', '2021-03', '2021-04', '2021-05', '2021-06', '2021-07', '2021-08', '2021-09','2021-10']
-            }
-        ],
-        yAxis: [
-            {
-                type: 'value'
-            }
-        ],
-         series: [
-            {
-              name: '2021年近12个月',
-              type: 'line',
-              stack: 'Total',
-              data: [26, 59, 90, 264, 287, 707, 1756, 1822, 487, 188, 60, 23],
-              markLine: {
-                    data: [
-                        {type: 'average', name: '平均值'}
-                    ]
-              }
-            },
-            {
-              name: '2022年近12个月',
-              type: 'line',
-              stack: 'Total',
-              data: [526, 459, 90, 264, 287, 207, 56, 822, 287, 88, 560, 823],
-              markLine: {
-                    data: [
-                        {type: 'average', name: '平均值'}
-                    ]
-              }
-            },
-        ]
-    };
-    ;
-    if (option3 && typeof option3 === "object") {
-        myChart3.setOption(option3, true);
-    }
+
+        }
+    });
+
+
 
     var dom4 = document.getElementById("main2");
     var myChart4 = echarts.init(dom4);

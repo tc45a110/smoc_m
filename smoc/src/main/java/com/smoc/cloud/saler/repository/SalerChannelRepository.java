@@ -29,4 +29,11 @@ public interface SalerChannelRepository extends JpaRepository<ConfigChannelBasic
      * @return
      */
     List<ChannelStatisticSendData> statisticSendNumberMonthByChannel(ChannelStatisticSendData statisticSendData);
+
+    /**
+     * 通道总发送量统计
+     * @param statisticSendData
+     * @return
+     */
+    List<ChannelStatisticSendData> statisticTotalSendNumberByChannel(ChannelStatisticSendData statisticSendData);
 }

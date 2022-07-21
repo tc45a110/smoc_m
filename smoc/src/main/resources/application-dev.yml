@@ -66,9 +66,9 @@ spring:
   # Redis
   #**********************************************************
   redis: #redis配置  配置了布隆过滤器、限流插件
-    host: localhost
+    host: r-2zegyswwjdbicif2hdpd.redis.rds.aliyuncs.com
     port: 6379
-    password: Smoc4.0localwu
+    password: Tsmoc40#RedistEst
     database: 1
     timeout: 3000
     jedis:

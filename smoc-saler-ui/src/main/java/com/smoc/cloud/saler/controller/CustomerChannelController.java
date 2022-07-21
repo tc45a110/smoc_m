@@ -6,6 +6,7 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelBasicInfoValidator;
+import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
 import com.smoc.cloud.common.smoc.saler.qo.ChannelStatisticSendData;
 import com.smoc.cloud.common.smoc.saler.qo.CustomerChannelInfoQo;
 import com.smoc.cloud.saler.service.ChannelService;
@@ -144,4 +145,69 @@ public class CustomerChannelController {
         return statisticSendData;
     }
 
+    /**
+     * 通道发送量统计显示页面：根据通道查询
+     *
+     * @return
+     */
+    @RequestMapping(value = "/channel/statistic/statisticSendMonth", method = RequestMethod.GET)
+    public ModelAndView statisticSendMonth(HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("channel/channel_statistic_total_send");
+
+        ChannelStatisticSendData channelStatisticSendData = new ChannelStatisticSendData();
+
+        view.addObject("channelStatisticSendData", channelStatisticSendData);
+
+        return view;
+    }
+
+    /**
+     * 查询通道发送量统计显示页面：根据通道查询
+     *
+     * @return
+     */
+    @RequestMapping(value = "/channel/statistic/statisticSendQuery", method = RequestMethod.POST)
+    public ModelAndView statisticSendQuery(@ModelAttribute ChannelStatisticSendData channelStatisticSendData,HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("channel/channel_statistic_total_send");
+
+        view.addObject("channelStatisticSendData", channelStatisticSendData);
+
+        return view;
+    }
+
+    /**
+     * 通道发送量统计按月：根据通道查询
+     * @param statisticSendData
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/channel/statistic/statisticSendMonthByChannel", method = RequestMethod.POST)
+    public ChannelStatisticSendData statisticSendByAccount(@RequestBody ChannelStatisticSendData statisticSendData, HttpServletRequest request) {
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        statisticSendData.setSaler(user.getId());
+        statisticSendData.setDimension("month");
+
+        statisticSendData = channelService.statisticTotalSendNumberByChannel(statisticSendData);
+
+        return statisticSendData;
+    }
+
+    /**
+     * 通道发送量统计按天：根据通道查询
+     * @param statisticSendData
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/channel/statistic/statisticSendDayByChannel", method = RequestMethod.POST)
+    public ChannelStatisticSendData statisticSendDayByName(@RequestBody ChannelStatisticSendData statisticSendData, HttpServletRequest request) {
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        statisticSendData.setSaler(user.getId());
+        statisticSendData.setDimension("day");
+
+        statisticSendData = channelService.statisticTotalSendNumberByChannel(statisticSendData);
+
+        return statisticSendData;
+    }
 }

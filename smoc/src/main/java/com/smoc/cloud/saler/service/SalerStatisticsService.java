@@ -2,12 +2,14 @@ package com.smoc.cloud.saler.service;
 
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
 import com.smoc.cloud.saler.repository.SalerStatisticsRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -46,4 +48,13 @@ public class SalerStatisticsService {
         return ResponseDataUtil.buildSuccess(map);
     }
 
+    /**
+     * 首页：客户近12个月账号短信发送量统计
+     * @param statisticSendData
+     * @return
+     */
+    public ResponseData<List<AccountStatisticSendData>> indexStatisticMessageSendSum(AccountStatisticSendData statisticSendData) {
+        List<AccountStatisticSendData> list = salerStatisticsRepository.indexStatisticMessageSendSum(statisticSendData);
+        return ResponseDataUtil.buildSuccess(list);
+    }
 }

@@ -51,4 +51,15 @@ public class SalerChannelController {
 
         return salerChannelService.statisticSendNumberMonthByChannel(statisticSendData);
     }
+
+    /**
+     * 通道总发送量统计
+     * @param statisticSendData
+     * @return
+     */
+    @RequestMapping(value = "/statisticTotalSendNumberByChannel", method = RequestMethod.POST)
+    public ResponseData<List<ChannelStatisticSendData>> statisticTotalSendNumberByChannel(@RequestBody ChannelStatisticSendData statisticSendData){
+
+        return salerChannelService.statisticTotalSendNumberByChannel(statisticSendData);
+    }
 }

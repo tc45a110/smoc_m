@@ -76,4 +76,25 @@ public class ChannelService {
 
         return channelStatisticSendData;
     }
+
+    /**
+     * 通道总发送量统计
+     * @param statisticSendData
+     * @return
+     */
+    public ChannelStatisticSendData statisticTotalSendNumberByChannel(ChannelStatisticSendData statisticSendData) {
+        ResponseData<List<ChannelStatisticSendData>> responseData = this.channelFeignClient.statisticTotalSendNumberByChannel(statisticSendData);
+        List<ChannelStatisticSendData> list = responseData.getData();
+
+        //月份
+        String[] month = list.stream().map(ChannelStatisticSendData::getMonth).toArray(String[]::new);
+        //发送量
+        BigDecimal[] sendNumber = list.stream().map(ChannelStatisticSendData::getSendNumber).toArray(BigDecimal[]::new);
+
+        ChannelStatisticSendData channelStatisticSendData = new ChannelStatisticSendData();
+        channelStatisticSendData.setMonthArray(month);
+        channelStatisticSendData.setSendNumberArray(sendNumber);
+
+        return channelStatisticSendData;
+    }
 }

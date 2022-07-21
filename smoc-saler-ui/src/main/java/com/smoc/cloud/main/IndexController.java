@@ -1,11 +1,16 @@
 package com.smoc.cloud.main;
 
 import com.smoc.cloud.common.auth.entity.SecurityUser;
+import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
+import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
+import com.smoc.cloud.saler.service.CustomerService;
 import com.smoc.cloud.saler.service.StatisticsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,8 +31,11 @@ public class IndexController {
     @Autowired
     private StatisticsService statisticsService;
 
+    @Autowired
+    private CustomerService customerService;
+
     /**
-     * 查看详细信息
+     * 查看首页信息
      *
      * @return
      */
@@ -50,4 +58,20 @@ public class IndexController {
 
     }
 
+    /**
+     * 客户近12个月账号短信发送量统计
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/index/indexStatisticMessageSendSum", method = RequestMethod.GET)
+    public AccountStatisticSendData indexStatisticMessageSendSum(HttpServletRequest request) {
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+
+        AccountStatisticSendData statisticSendData = new AccountStatisticSendData();
+        statisticSendData.setSaler(user.getId());
+
+        statisticSendData = statisticsService.indexStatisticMessageSendSum(statisticSendData);
+
+        return statisticSendData;
+    }
 }

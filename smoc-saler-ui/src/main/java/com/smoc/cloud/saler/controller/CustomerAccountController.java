@@ -196,8 +196,8 @@ public class CustomerAccountController {
      * @param request
      * @return
      */
-    @RequestMapping(value = "/statistic/statisticSendMonthByName", method = RequestMethod.POST)
-    public AccountStatisticSendData statisticSendByName(@RequestBody AccountStatisticSendData statisticSendData, HttpServletRequest request) {
+    @RequestMapping(value = "/statistic/statisticSendMonthByAccount", method = RequestMethod.POST)
+    public AccountStatisticSendData statisticSendByAccount(@RequestBody AccountStatisticSendData statisticSendData, HttpServletRequest request) {
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
 
         statisticSendData.setSaler(user.getId());
@@ -214,7 +214,7 @@ public class CustomerAccountController {
      * @param request
      * @return
      */
-    @RequestMapping(value = "/statistic/statisticSendDayByName", method = RequestMethod.POST)
+    @RequestMapping(value = "/statistic/statisticSendDayByAccount", method = RequestMethod.POST)
     public AccountStatisticSendData statisticSendDayByName(@RequestBody AccountStatisticSendData statisticSendData, HttpServletRequest request) {
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
 

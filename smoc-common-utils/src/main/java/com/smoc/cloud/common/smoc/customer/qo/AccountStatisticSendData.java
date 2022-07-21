@@ -21,6 +21,8 @@ public class AccountStatisticSendData {
 
     private BigDecimal[] sendNumberArray;
 
+    private BigDecimal[] sendNumberArrayBefore;
+
     //统计维度
     private String dimension;
     private String startDate;
@@ -32,6 +34,9 @@ public class AccountStatisticSendData {
     private String maxMonth;
     private String minMonth;
 
+    private String[] year;
+
     private String saler;
     private String enterpriseName;
+
 }

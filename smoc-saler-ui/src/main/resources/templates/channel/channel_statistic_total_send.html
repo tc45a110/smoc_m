@@ -16,10 +16,10 @@
         <div class="row fixed-navigation">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">客户发送量统计 </h4>
+                    <h4 class="page-title">通道发送量统计 </h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
-                            客户发送量统计
+                            通道发送量统计
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -32,20 +32,16 @@
         <div class="row" style="position: relative;margin-top: 80px" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
                 <div class="card-box">
-                    <form th:action="@{/customer/statistic/statisticSendQuery}" th:object="${accountStatisticSendData}" id="query_form" method="post">
+                    <form th:action="@{/customer/channel/statistic/statisticSendQuery}" th:object="${channelStatisticSendData}" id="query_form" method="post">
                         <div class="row m-b-60">
                             <div class="col-sm-12">
                                 <div class="form-group  col-sm-3">
-                                    <input type="text" class="form-control" id="enterpriseName" th:field="*{enterpriseName}"
-                                           placeholder="企业名称" autocomplete="off">
-                                </div>
-                                <div class="form-group  col-sm-3">
-                                    <input type="text" class="form-control" id="accountId" th:field="*{accountId}"
-                                           placeholder="业务账号" autocomplete="off">
+                                    <input type="text" class="form-control" id="channelId" th:field="*{channelId}"
+                                           placeholder="通道ID" autocomplete="off">
                                 </div>
 
                                 <div class="form-group col-sm-6 pull-right" style="text-align: right">
-                                    <button sec:authorize-url="/customer/statistic/statisticSendQuery" type="submit"
+                                    <button sec:authorize-url="/customer/channel/statistic/statisticSendQuery" type="submit"
                                             class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search" style="margin-right:5px"></i> 查询
                                     </button>
@@ -91,13 +87,13 @@
         type: "POST",
         dataType: "json",
         contentType:"application/json;charset=UTF-8",
-        url : '[[${#httpServletRequest.getContextPath()}]]/customer/statistic/statisticSendMonthByAccount',
-        data:"{\"enterpriseName\":\""+$("#enterpriseName").val()+"\",\"accountId\":\""+$("#accountId").val()+"\"}",
+        url : '[[${#httpServletRequest.getContextPath()}]]/customer/channel/statistic/statisticSendMonthByChannel',
+        data:"{\"channelId\":\""+$("#channelId").val()+"\"}",
         success : function(data) {
             articles = eval(data);
             option2 = {
                 title: {
-                    text: '近24个月账号发送量统计（W）',
+                    text: '近24个月通道发送量统计（W）',
                     x: 'left'
                 },
                 tooltip: {
@@ -107,7 +103,7 @@
                     }
                 },
                 legend: {
-                    data: ['账号发送量统计']
+                    data: ['通道发送量统计']
                 },
                 toolbox: {
                     show: true,
@@ -141,12 +137,12 @@
                 },
                 series: [
                     {
-                        name: '账号发送量统计',
+                        name: '通道发送量统计',
                         type: 'line',
                         stack: '总量',
                         itemStyle: {
                             normal: {
-                                color: '#66AAE7',
+                                color: '#8D6E63',
                                 barBorderRadius: 0,
                                 label: {
                                     show: true,
@@ -175,16 +171,16 @@
         type: "POST",
         dataType: "json",
         contentType:"application/json;charset=UTF-8",
-        url : '[[${#httpServletRequest.getContextPath()}]]/customer/statistic/statisticSendDayByAccount',
-        data:"{\"enterpriseName\":\""+$("#enterpriseName").val()+"\",\"accountId\":\""+$("#accountId").val()+"\"}",
+        url : '[[${#httpServletRequest.getContextPath()}]]/customer/channel/statistic/statisticSendDayByChannel',
+        data:"{\"channelId\":\""+$("#channelId").val()+"\"}",
         success : function(data) {
             articles = eval(data);
             option2 = {
                 title: {
-                    text: '近180天账号发送量统计（W）',
+                    text: '近180天通道发送量统计（W）',
                     x: 'left'
                 },
-                color: ['#71D5DE'],
+                color: ['#6B5FB5'],
                 tooltip: {
                     trigger: 'axis',
                     axisPointer: {
@@ -192,7 +188,7 @@
                     }
                 },
                 legend: {
-                    data: ['账号发送量统计']
+                    data: ['通道发送量统计']
                 },
                 toolbox: {
                     show: true,
@@ -226,7 +222,7 @@
                 },
                 series: [
                     {
-                        name: '账号发送量统计',
+                        name: '通道发送量统计',
                         type: 'line',
                         stack: '总量',
                         /*itemStyle: {

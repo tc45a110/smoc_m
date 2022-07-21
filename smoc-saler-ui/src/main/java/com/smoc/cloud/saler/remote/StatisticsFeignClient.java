@@ -2,11 +2,14 @@ package com.smoc.cloud.saler.remote;
 
 
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.List;
 import java.util.Map;
 
 @FeignClient(name = "smoc", path = "/smoc")
@@ -22,4 +25,11 @@ public interface StatisticsFeignClient {
     @RequestMapping(value = "/saler/statistics/index/statisticsSalerIndexData/{startDate}/{endDate}/{salerId}", method = RequestMethod.GET)
     ResponseData<Map<String, Object>> statisticsSalerIndexData(@PathVariable String startDate, @PathVariable String endDate,@PathVariable String salerId);
 
+    /**
+     *  首页：客户近12个月账号短信发送量统计
+     * @param statisticSendData
+     * @return
+     */
+    @RequestMapping(value = "/saler/statistics/index/indexStatisticMessageSendSum", method = RequestMethod.POST)
+    ResponseData<List<AccountStatisticSendData>> indexStatisticMessageSendSum(@RequestBody AccountStatisticSendData statisticSendData);
 }

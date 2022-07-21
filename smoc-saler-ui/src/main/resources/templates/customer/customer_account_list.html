@@ -133,7 +133,10 @@
                                         <mpm:tag identity="carrier" show-type="label" key="code" th:value="${info.carrier}"/>
                                     </td>
                                     <td style="vertical-align: middle;line-height:26px">
-                                        <mpm:tag identity="payType" show-type="label" key="code" th:value="${info.payType}"/>
+                                        <mpm:tag identity="payType" show-type="button"
+                                                 key="code" th:value="${info.payType}"
+                                                 class="1,btn btn-brown btn-rounded btn-sm waves-effect waves-light;2,btn btn-primary btn-rounded btn-sm waves-effect waves-light"/>
+
                                     </td>
                                     <td style="vertical-align: middle;line-height:26px">
                                         <p style="font-size:14px;" th:if="${not #strings.isEmpty(info.enterpriseContacts)}">[[${info.enterpriseContacts}]]

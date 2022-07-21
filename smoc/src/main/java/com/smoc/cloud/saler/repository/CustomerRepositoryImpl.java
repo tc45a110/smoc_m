@@ -143,9 +143,12 @@ public class CustomerRepositoryImpl extends BasePageRepository {
         StringBuilder sqlBuffer = new StringBuilder("select ");
 
         //企业名称查询
-        String sql = "";
+        StringBuilder sql = new StringBuilder();
         if(!StringUtils.isEmpty(statisticSendData.getEnterpriseName())){
-            sql = " and n.ENTERPRISE_NAME like '%"+statisticSendData.getEnterpriseName()+"%'";
+            sql.append(" and n.ENTERPRISE_NAME like '%"+statisticSendData.getEnterpriseName().trim()+"%'");
+        }
+        if(!StringUtils.isEmpty(statisticSendData.getAccountId())){
+            sql.append(" and t.BUSINESS_ACCOUNT = '"+statisticSendData.getAccountId().trim()+"'");
         }
 
         //账户发送量：按月
@@ -158,7 +161,7 @@ public class CustomerRepositoryImpl extends BasePageRepository {
             sqlBuffer.append(" (SELECT DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m')MESSAGE_DATE, ROUND(sum(t.MESSAGE_SUCCESS_NUM)/10000,2) MESSAGE_SUCCESS_NUM ");
             sqlBuffer.append(" FROM message_daily_statistics t left join account_base_info m on t.BUSINESS_ACCOUNT = m.ACCOUNT_ID");
             sqlBuffer.append(" left join enterprise_basic_info n on m.ENTERPRISE_ID = n.ENTERPRISE_ID WHERE n.SALER = ? ");
-            sqlBuffer.append(sql);
+            sqlBuffer.append(sql.toString());
             sqlBuffer.append(" GROUP BY DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m')");
             sqlBuffer.append(" )b on a.MONTH_DAY = b.MESSAGE_DATE  order by a.MONTH_DAY asc");
         }
@@ -173,7 +176,7 @@ public class CustomerRepositoryImpl extends BasePageRepository {
             sqlBuffer.append(" (SELECT DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m-%d')MESSAGE_DATE, ROUND(sum(t.MESSAGE_SUCCESS_NUM)/10000,2) MESSAGE_SUCCESS_NUM ");
             sqlBuffer.append(" FROM message_daily_statistics t left join account_base_info m on t.BUSINESS_ACCOUNT = m.ACCOUNT_ID");
             sqlBuffer.append(" left join enterprise_basic_info n on m.ENTERPRISE_ID = n.ENTERPRISE_ID WHERE n.SALER = ? ");
-            sqlBuffer.append(sql);
+            sqlBuffer.append(sql.toString());
             sqlBuffer.append(" GROUP BY DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m-%d')");
             sqlBuffer.append(" )b on a.MONTH_DAY = b.MESSAGE_DATE  order by a.MONTH_DAY asc");
         }

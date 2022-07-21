@@ -57,5 +57,5 @@ public interface CustomerFeignClient {
      * @return
      */
     @RequestMapping(value = "/saler/customer/statisticSendNumberByEnterpriseName", method = RequestMethod.POST)
-    ResponseData<List<AccountStatisticSendData>> statisticSendNumberByEnterpriseName(AccountStatisticSendData statisticSendData);
+    ResponseData<List<AccountStatisticSendData>> statisticSendNumberByEnterpriseName(@RequestBody AccountStatisticSendData statisticSendData);
 }

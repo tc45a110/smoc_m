@@ -49,4 +49,14 @@ public class SalerChannelService {
         List<ChannelStatisticSendData> list = salerChannelRepository.statisticSendNumberMonthByChannel(statisticSendData);
         return ResponseDataUtil.buildSuccess(list);
     }
+
+    /**
+     * 通道总发送量统计
+     * @param statisticSendData
+     * @return
+     */
+    public ResponseData<List<ChannelStatisticSendData>> statisticTotalSendNumberByChannel(ChannelStatisticSendData statisticSendData) {
+        List<ChannelStatisticSendData> list = salerChannelRepository.statisticTotalSendNumberByChannel(statisticSendData);
+        return ResponseDataUtil.buildSuccess(list);
+    }
 }
