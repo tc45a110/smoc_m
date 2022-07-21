@@ -30,6 +30,15 @@ public enum ResponseCode {
     PARAM_MOBILE_LIMITER_ERROR("1113", "发送速率，到达了受限速率！"),
     PARAM_SUBMIT_LIMITER_ERROR("1114", "提交速率太快，到达了受限提交速率！"),
 
+
+
+    ORDER_NOT_EXIST_ERROR("1201", "订单不存在！"),
+    SIM_NOT_EXIST_ERROR("1202", "物联网卡不存在！"),
+    SIM_TOO_MUCH_QUERY_ERROR("1203", "物联网卡批量查询超过限制！"),
+
+
+
+
     //鉴权失败
     TOKEN_UNAUTH("2000", "认证、鉴权失败！"),
     TOKEN_ISEMPTY("2001", "token不能为空！"),
@@ -39,6 +48,12 @@ public enum ResponseCode {
     SIGN_ERROR("2005", "签名错误"),
     SIGN_LEGAL_ERROR("2006", "签名不合法"),
     ACCOUNT_BUSINESS_ERROR("2007", "当前账号不支持该业务"),
+
+
+
+    CARRIER_NOT_SUPPORT_ERROR("2100", "运营商不支持该接口"),
+    CARRIER_TOKEN_GET_ERROR("2101", "获取运营商token失败"),
+    CARRIER_DATA_GET_ERROR("2102", "获取运营商数据异常"),
 
 
     USER_UNAUTH("3000", "用户无权限信息！"),
