@@ -91,34 +91,16 @@ public class SalerStatisticsRepository extends BasePageRepository {
     public List<AccountStatisticSendData> indexStatisticMessageSendSum(AccountStatisticSendData statisticSendData) {
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");
-
-        //截至本年发送量
-        if("1".equals(statisticSendData.getDimension())){
-            sqlBuffer.append("  a.MONTH_DAY");
-            sqlBuffer.append(", IFNULL(b.MESSAGE_SUCCESS_NUM,0)SEND_NUMBER from ");
-            sqlBuffer.append(" (SELECT @s :=@s + 1 as `INDEX`, DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL @s MONTH),'%Y-%m') AS `MONTH_DAY` ");
-            sqlBuffer.append("  from mysql.help_topic, (SELECT @s := -1) temp WHERE  @s < 11 ORDER BY MONTH_DAY desc");
-            sqlBuffer.append(" )a  left join ");
-            sqlBuffer.append(" (SELECT DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m')MESSAGE_DATE, ROUND(sum(t.MESSAGE_SUCCESS_NUM)/10000,2) MESSAGE_SUCCESS_NUM ");
-            sqlBuffer.append(" FROM message_daily_statistics t left join account_base_info m on t.BUSINESS_ACCOUNT = m.ACCOUNT_ID");
-            sqlBuffer.append(" left join enterprise_basic_info n on m.ENTERPRISE_ID = n.ENTERPRISE_ID WHERE n.SALER = ? ");
-            sqlBuffer.append(" GROUP BY DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m')");
-            sqlBuffer.append(" )b on a.MONTH_DAY = b.MESSAGE_DATE  order by a.MONTH_DAY asc");
-        }
-
-        //同比去年发送量
-        if("2".equals(statisticSendData.getDimension())){
-            sqlBuffer.append("  a.MONTH_DAY");
-            sqlBuffer.append(", IFNULL(b.MESSAGE_SUCCESS_NUM,0)SEND_NUMBER from ");
-            sqlBuffer.append(" (select m.MONTH_DAY from (SELECT @s :=@s + 1 as `INDEX`, DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL @s MONTH),'%Y-%m') AS `MONTH_DAY` ");
-            sqlBuffer.append("  from mysql.help_topic, (SELECT @s := -1) temp WHERE  @s < 23 ORDER BY MONTH_DAY desc)m where m.INDEX >11 and m.INDEX<24 order by m.MONTH_DAY ");
-            sqlBuffer.append(" )a  left join ");
-            sqlBuffer.append(" (SELECT DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m')MESSAGE_DATE, ROUND(sum(t.MESSAGE_SUCCESS_NUM)/10000,2) MESSAGE_SUCCESS_NUM ");
-            sqlBuffer.append(" FROM message_daily_statistics t left join account_base_info m on t.BUSINESS_ACCOUNT = m.ACCOUNT_ID");
-            sqlBuffer.append(" left join enterprise_basic_info n on m.ENTERPRISE_ID = n.ENTERPRISE_ID WHERE n.SALER = ? ");
-            sqlBuffer.append(" GROUP BY DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m')");
-            sqlBuffer.append(" )b on a.MONTH_DAY = b.MESSAGE_DATE  order by a.MONTH_DAY asc");
-        }
+        sqlBuffer.append("  a.MONTH_DAY");
+        sqlBuffer.append(", IFNULL(b.MESSAGE_SUCCESS_NUM,0)SEND_NUMBER from ");
+        sqlBuffer.append(" (SELECT @s :=@s + 1 as `INDEX`, DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL @s MONTH),'%Y-%m') AS `MONTH_DAY` ");
+        sqlBuffer.append("  from mysql.help_topic, (SELECT @s := -1) temp WHERE  @s < 23 ORDER BY MONTH_DAY desc");
+        sqlBuffer.append(" )a  left join ");
+        sqlBuffer.append(" (SELECT DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m')MESSAGE_DATE, ROUND(sum(t.MESSAGE_SUCCESS_NUM)/10000,2) MESSAGE_SUCCESS_NUM ");
+        sqlBuffer.append(" FROM message_daily_statistics t left join account_base_info m on t.BUSINESS_ACCOUNT = m.ACCOUNT_ID");
+        sqlBuffer.append(" left join enterprise_basic_info n on m.ENTERPRISE_ID = n.ENTERPRISE_ID WHERE n.SALER = ? ");
+        sqlBuffer.append(" GROUP BY DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m')");
+        sqlBuffer.append(" )b on a.MONTH_DAY = b.MESSAGE_DATE  order by a.MONTH_DAY asc");
 
         List<Object> paramsList = new ArrayList<Object>();
         paramsList.add(statisticSendData.getSaler());

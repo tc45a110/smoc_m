@@ -26,7 +26,7 @@ public class MessageWebTaskInfoRowMapper implements RowMapper<MessageWebTaskInfo
         qo.setSuccessNumber(resultSet.getInt("SUCCESS_NUMBER"));
         qo.setSuccessSendNumber(resultSet.getInt("SUCCESS_SEND_NUMBER"));
         qo.setFailureNumber(resultSet.getInt("FAILURE_NUMBER"));
-        qo.setNoReportNumber(resultSet.getInt("NO_REPORT_NUMBER"));
+        qo.setNoReportNumber(qo.getSuccessNumber()-qo.getSuccessSendNumber()-qo.getFailureNumber());
         qo.setSendTime(resultSet.getString("SEND_TIME"));
         qo.setSendStatus(resultSet.getString("SEND_STATUS"));
         qo.setMessageContent(resultSet.getString("MESSAGE_CONTENT"));

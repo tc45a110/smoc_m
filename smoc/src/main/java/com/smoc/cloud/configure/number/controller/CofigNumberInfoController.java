@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
 
 /**
- * 号段接口
+ * 携号转网接口
  **/
 @Slf4j
 @RestController

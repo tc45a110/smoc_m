@@ -97,7 +97,7 @@
             articles = eval(data);
             option2 = {
                 title: {
-                    text: '近24个月账号发送量统计（W）',
+                    text: '近24个月账号发送量统计：'+articles.totalNumber+'W',
                     x: 'left'
                 },
                 tooltip: {
@@ -107,7 +107,7 @@
                     }
                 },
                 legend: {
-                    data: ['账号发送量统计']
+                    data: ['账号发送量统计（W）']
                 },
                 toolbox: {
                     show: true,
@@ -141,7 +141,7 @@
                 },
                 series: [
                     {
-                        name: '账号发送量统计',
+                        name: '账号发送量统计(W)',
                         type: 'line',
                         stack: '总量',
                         itemStyle: {
@@ -181,7 +181,7 @@
             articles = eval(data);
             option2 = {
                 title: {
-                    text: '近180天账号发送量统计（W）',
+                    text: '近180天账号发送量统计：'+articles.totalNumber+'W',
                     x: 'left'
                 },
                 color: ['#71D5DE'],
@@ -192,7 +192,7 @@
                     }
                 },
                 legend: {
-                    data: ['账号发送量统计']
+                    data: ['账号发送量统计（条）']
                 },
                 toolbox: {
                     show: true,
@@ -226,7 +226,7 @@
                 },
                 series: [
                     {
-                        name: '账号发送量统计',
+                        name: '账号发送量统计(条)',
                         type: 'line',
                         stack: '总量',
                         /*itemStyle: {

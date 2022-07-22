@@ -23,7 +23,7 @@ public class AccountSendStatisticsRowMapper implements RowMapper<AccountSendStat
         qo.setTotalSuccessSubmitNum(resultSet.getInt("SUCCESS_SUBMIT_NUM"));
         qo.setTotalMessageSuccessNum(resultSet.getInt("MESSAGE_SUCCESS_NUM"));
         qo.setTotalMessageFailureNum(resultSet.getInt("MESSAGE_FAILURE_NUM"));
-        qo.setTotalMessageNoReportNum(resultSet.getInt("MESSAGE_NO_REPORT_NUM"));
+        qo.setTotalMessageNoReportNum(qo.getTotalSuccessSubmitNum()-qo.getTotalMessageSuccessNum()-qo.getTotalMessageFailureNum());
         return qo;
     }
 }

@@ -114,7 +114,7 @@ public class IndexStatisticsRepository  extends BasePageRepository {
      */
     public Map<String, Object> getCountUsableAccount() {
         StringBuffer sql = new StringBuffer("select");
-        sql.append(" ROUND(sum(t.ACCOUNT_USABLE_SUM)) ACCOUNT_USABLE_SUM ");
+        sql.append(" IFNULL(ROUND(sum(t.ACCOUNT_USABLE_SUM)),0) ACCOUNT_USABLE_SUM ");
         sql.append("  from finance_account t ");
 
         Map<String, Object> map = jdbcTemplate.queryForMap(sql.toString());

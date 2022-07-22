@@ -23,6 +23,8 @@ public class AccountStatisticSendData {
 
     private BigDecimal[] sendNumberArrayBefore;
 
+    private BigDecimal totalNumber;
+
     //统计维度
     private String dimension;
     private String startDate;

@@ -136,7 +136,7 @@ public class MessageDailyStatisticRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(" sum(t.SUCCESS_SUBMIT_NUM) SUCCESS_SUBMIT_NUM,");
         sqlBuffer.append(" sum(t.MESSAGE_SUCCESS_NUM) MESSAGE_SUCCESS_NUM,");
         sqlBuffer.append(" sum(t.MESSAGE_FAILURE_NUM) MESSAGE_FAILURE_NUM,");
-        sqlBuffer.append(" sum(t.MESSAGE_NO_REPORT_NUM) MESSAGE_NO_REPORT_NUM");
+        sqlBuffer.append(" (sum(t.SUCCESS_SUBMIT_NUM)-sum(t.MESSAGE_SUCCESS_NUM)-sum(t.MESSAGE_FAILURE_NUM)) MESSAGE_NO_REPORT_NUM");
         sqlBuffer.append(" from message_daily_statistics t left join account_base_info a on t.BUSINESS_ACCOUNT = a.ACCOUNT_ID " +
                 " left join enterprise_basic_info e on a.ENTERPRISE_ID = e.ENTERPRISE_ID ");
         sqlBuffer.append(" where  1=1 ");
@@ -210,6 +210,7 @@ public class MessageDailyStatisticRepositoryImpl extends BasePageRepository {
             map.put("MESSAGE_FAILURE_NUM",0);
             map.put("MESSAGE_NO_REPORT_NUM",0);
         }
+
         return map;
 
     }
@@ -332,7 +333,7 @@ public class MessageDailyStatisticRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(" sum(t.SUCCESS_SUBMIT_NUM) SUCCESS_SUBMIT_NUM,");
         sqlBuffer.append(" sum(t.MESSAGE_SUCCESS_NUM) MESSAGE_SUCCESS_NUM,");
         sqlBuffer.append(" sum(t.MESSAGE_FAILURE_NUM) MESSAGE_FAILURE_NUM,");
-        sqlBuffer.append(" sum(t.MESSAGE_NO_REPORT_NUM) MESSAGE_NO_REPORT_NUM");
+        sqlBuffer.append(" (sum(t.SUCCESS_SUBMIT_NUM)-sum(t.MESSAGE_SUCCESS_NUM)-sum(t.MESSAGE_FAILURE_NUM)) MESSAGE_NO_REPORT_NUM");
         sqlBuffer.append(" from message_daily_statistics t left join config_channel_basic_info a on t.CHANNEL_ID = a.CHANNEL_ID ");
         sqlBuffer.append(" where  1=1 ");
 
@@ -392,7 +393,7 @@ public class MessageDailyStatisticRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(" sum(t.SUCCESS_SUBMIT_NUM) SUCCESS_SUBMIT_NUM,");
         sqlBuffer.append(" sum(t.MESSAGE_SUCCESS_NUM) MESSAGE_SUCCESS_NUM,");
         sqlBuffer.append(" sum(t.MESSAGE_FAILURE_NUM) MESSAGE_FAILURE_NUM,");
-        sqlBuffer.append(" sum(t.MESSAGE_NO_REPORT_NUM) MESSAGE_NO_REPORT_NUM");
+        sqlBuffer.append(" (sum(t.SUCCESS_SUBMIT_NUM)-sum(t.MESSAGE_SUCCESS_NUM)-sum(t.MESSAGE_FAILURE_NUM)) MESSAGE_NO_REPORT_NUM");
         sqlBuffer.append(" from message_daily_statistics t ");
         sqlBuffer.append(" where  1=1 ");
 

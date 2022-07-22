@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 
 /**
  * 客户管理
@@ -156,6 +157,9 @@ public class CustomerAccountController {
         statisticSendData.setDimension(type);
 
         statisticSendData = customerService.statisticSendNumberMonthByAccount(statisticSendData);
+        if("day".equals(type)){
+            statisticSendData.setTotalNumber(statisticSendData.getTotalNumber().divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
+        }
 
         return statisticSendData;
     }
@@ -222,6 +226,7 @@ public class CustomerAccountController {
         statisticSendData.setDimension("day");
 
         statisticSendData = customerService.statisticSendNumberByEnterpriseName(statisticSendData);
+        statisticSendData.setTotalNumber(statisticSendData.getTotalNumber().divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
 
         return statisticSendData;
     }

@@ -38,7 +38,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * 号段管理
+ * 携号转网管理
  **/
 @Slf4j
 @Service

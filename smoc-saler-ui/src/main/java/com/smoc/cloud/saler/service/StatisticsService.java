@@ -46,19 +46,16 @@ public class StatisticsService {
      */
     public AccountStatisticSendData indexStatisticMessageSendSum(AccountStatisticSendData statisticSendData) {
         //截至本年发送量
-        statisticSendData.setDimension("1");
         ResponseData<List<AccountStatisticSendData>> responseData = this.statisticsFeignClient.indexStatisticMessageSendSum(statisticSendData);
         List<AccountStatisticSendData> list = responseData.getData();
 
-        //同比去年发送量
-        statisticSendData.setDimension("2");
-        ResponseData<List<AccountStatisticSendData>> responseDataBefore = this.statisticsFeignClient.indexStatisticMessageSendSum(statisticSendData);
-        List<AccountStatisticSendData> listBefore = responseDataBefore.getData();
+        List<AccountStatisticSendData> newList = list.subList(12, 24);
+        List<AccountStatisticSendData> listBefore = list.subList(0, 12);
 
         //月份
-        String[] month = list.stream().map(AccountStatisticSendData::getMonth).toArray(String[]::new);
+        String[] month = newList.stream().map(AccountStatisticSendData::getMonth).toArray(String[]::new);
         //发送量
-        BigDecimal[] sendNumber = list.stream().map(AccountStatisticSendData::getSendNumber).toArray(BigDecimal[]::new);
+        BigDecimal[] sendNumber = newList.stream().map(AccountStatisticSendData::getSendNumber).toArray(BigDecimal[]::new);
         //去年发送量
         BigDecimal[] sendNumberBefore = listBefore.stream().map(AccountStatisticSendData::getSendNumber).toArray(BigDecimal[]::new);
         //年份

@@ -51,10 +51,10 @@ public class IndexController {
         String startDate = DateTimeUtils.getDateFormat(date);
         String endDate = DateTimeUtils.getDateFormat(new Date());
 
-        //统计(客户数、活跃数、通道数)
+        //统计(短信发送总量、客户数、活跃数、通道数)
         ResponseData<Map<String, Object>> countMap = statisticsService.statisticsCountData(startDate,endDate);
 
-        //短信发送总量、营收总额、充值总额、账户总余额
+        //营收总额、充值总额、账户总余额
         int year = DateTimeUtils.getNowYear();
         String start = year+"-01"+"-01";
         String end = DateTimeUtils.getDateFormat(new Date());

@@ -85,10 +85,13 @@ public class CustomerService {
         String[] month = list.stream().map(AccountStatisticSendData::getMonth).toArray(String[]::new);
         //发送量
         BigDecimal[] sendNumber = list.stream().map(AccountStatisticSendData::getSendNumber).toArray(BigDecimal[]::new);
+        //总发送量
+        BigDecimal totalNumber = list.stream().map(AccountStatisticSendData::getSendNumber).reduce(BigDecimal::add).get();
 
         AccountStatisticSendData accountStatisticSendData = new AccountStatisticSendData();
         accountStatisticSendData.setMonthArray(month);
         accountStatisticSendData.setSendNumberArray(sendNumber);
+        accountStatisticSendData.setTotalNumber(totalNumber);
 
         return accountStatisticSendData;
     }
@@ -106,11 +109,13 @@ public class CustomerService {
         String[] month = list.stream().map(AccountStatisticSendData::getMonth).toArray(String[]::new);
         //发送量
         BigDecimal[] sendNumber = list.stream().map(AccountStatisticSendData::getSendNumber).toArray(BigDecimal[]::new);
-        ;
+        //总发送量
+        BigDecimal totalNumber = list.stream().map(AccountStatisticSendData::getSendNumber).reduce(BigDecimal::add).get();
 
         AccountStatisticSendData accountStatisticSendData = new AccountStatisticSendData();
         accountStatisticSendData.setMonthArray(month);
         accountStatisticSendData.setSendNumberArray(sendNumber);
+        accountStatisticSendData.setTotalNumber(totalNumber);
 
         return accountStatisticSendData;
     }

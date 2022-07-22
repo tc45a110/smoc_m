@@ -18,7 +18,7 @@ public class StatisticMessageSendRowMapper implements RowMapper<StatisticMessage
         qo.setSuccessNumber(resultSet.getInt("SUCCESS_NUMBER"));
         qo.setSuccessSendNumber(resultSet.getInt("SUCCESS_SEND_NUMBER"));
         qo.setFailureNumber(resultSet.getInt("FAILURE_NUMBER"));
-        qo.setNoReportNumber(resultSet.getInt("NO_REPORT_NUMBER"));
+        qo.setNoReportNumber(qo.getSuccessNumber()-qo.getSuccessSendNumber()-qo.getFailureNumber());
 
         return qo;
     }

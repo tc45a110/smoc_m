@@ -38,6 +38,10 @@ public class StatisticsService {
 
         Map<String, Object> map = new HashMap<>();
 
+        //短信发送总量
+        Long messageSendTotal = indexStatisticsRepository.getMessageSendTotal(startDate,endDate);
+        map.put("MESSAGE_SEND_TOTAL",messageSendTotal);
+
         //所有客户数
         Long totalAccount = indexStatisticsRepository.getAccountCount();
         map.put("TOTAL_ACCOUNT",totalAccount);
@@ -62,10 +66,6 @@ public class StatisticsService {
     public ResponseData<Map<String, Object>> statisticsAccountData(String startDate, String endDate) {
 
         Map<String, Object> map = new HashMap<>();
-
-        //短信发送总量
-        Long messageSendTotal = indexStatisticsRepository.getMessageSendTotal(startDate,endDate);
-        map.put("MESSAGE_SEND_TOTAL",messageSendTotal);
 
         //营收总额
         Map<String, Object> profit = indexStatisticsRepository.getProfitSum(startDate,endDate);
