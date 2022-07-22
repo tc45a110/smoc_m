@@ -93,7 +93,7 @@
             articles = eval(data);
             option2 = {
                 title: {
-                    text: '近24个月通道发送量统计（W）',
+                    text: '近24个月通道发送量统计：'+articles.totalNumber+'W',
                     x: 'left'
                 },
                 tooltip: {
@@ -103,7 +103,7 @@
                     }
                 },
                 legend: {
-                    data: ['通道发送量统计']
+                    data: ['通道发送量统计（W）']
                 },
                 toolbox: {
                     show: true,
@@ -137,7 +137,7 @@
                 },
                 series: [
                     {
-                        name: '通道发送量统计',
+                        name: '通道发送量统计(W)',
                         type: 'line',
                         stack: '总量',
                         itemStyle: {
@@ -177,7 +177,7 @@
             articles = eval(data);
             option2 = {
                 title: {
-                    text: '近180天通道发送量统计（W）',
+                    text: '近180天通道发送量统计：'+articles.totalNumber+'W',
                     x: 'left'
                 },
                 color: ['#6B5FB5'],
@@ -188,7 +188,7 @@
                     }
                 },
                 legend: {
-                    data: ['通道发送量统计']
+                    data: ['通道发送量统计（条）']
                 },
                 toolbox: {
                     show: true,
@@ -222,7 +222,7 @@
                 },
                 series: [
                     {
-                        name: '通道发送量统计',
+                        name: '通道发送量统计(条)',
                         type: 'line',
                         stack: '总量',
                         /*itemStyle: {

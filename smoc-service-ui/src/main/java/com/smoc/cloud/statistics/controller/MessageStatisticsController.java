@@ -57,19 +57,11 @@ public class MessageStatisticsController {
 
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
 
-        //查询企业
-        ResponseData<EnterpriseBasicInfoValidator> ent = webEnterpriseService.findById(user.getOrganization());
-        if (!ResponseCode.SUCCESS.getCode().equals(ent.getCode())) {
-            view.addObject("error", ent.getCode() + ":" + ent.getMessage());
-            return view;
-        }
-
         //初始化数据
         PageParams<StatisticMessageSendData> params = new PageParams<>();
         params.setPageSize(10);
         params.setCurrentPage(1);
         StatisticMessageSendData statisticMessageSendData = new StatisticMessageSendData();
-        statisticMessageSendData.setEnterpriseFlag(ent.getData().getEnterpriseFlag());
         statisticMessageSendData.setBusinessType(businessType);
         Date startDate = DateTimeUtils.getFirstMonth(1);
         statisticMessageSendData.setStartDate(DateTimeUtils.getDateFormat(startDate));
@@ -108,13 +100,6 @@ public class MessageStatisticsController {
         ModelAndView view = new ModelAndView("statistics/message_send_number_list");
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
 
-        //查询企业标识
-        ResponseData<EnterpriseBasicInfoValidator> ent = webEnterpriseService.findById(user.getOrganization());
-        if (!ResponseCode.SUCCESS.getCode().equals(ent.getCode())) {
-            view.addObject("error", ent.getCode() + ":" + ent.getMessage());
-            return view;
-        }
-
         if("1".equals(statisticMessageSendData.getFlag())){
             view = new ModelAndView("statistics/message_send_number_list_account");
         }else if("2".equals(statisticMessageSendData.getFlag())){
@@ -125,7 +110,6 @@ public class MessageStatisticsController {
 
 
         //分页查询
-        statisticMessageSendData.setEnterpriseFlag(ent.getData().getEnterpriseFlag());
         if (!StringUtils.isEmpty(statisticMessageSendData.getStartDate())) {
             String[] date = statisticMessageSendData.getStartDate().split(" - ");
             statisticMessageSendData.setStartDate(StringUtils.trimWhitespace(date[0]));

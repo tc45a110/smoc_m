@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 
 /**
  * 通道管理
@@ -141,6 +142,9 @@ public class CustomerChannelController {
         statisticSendData.setDimension(type);
 
         statisticSendData = channelService.statisticSendNumberMonthByChannel(statisticSendData);
+        if("day".equals(type)){
+            statisticSendData.setTotalNumber(statisticSendData.getTotalNumber().divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
+        }
 
         return statisticSendData;
     }
@@ -207,6 +211,7 @@ public class CustomerChannelController {
         statisticSendData.setDimension("day");
 
         statisticSendData = channelService.statisticTotalSendNumberByChannel(statisticSendData);
+        statisticSendData.setTotalNumber(statisticSendData.getTotalNumber().divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
 
         return statisticSendData;
     }

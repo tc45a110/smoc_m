@@ -80,12 +80,14 @@
     function active (val){
         var type = 'month';
         var barType = 'line';
-        var title = '近24个月发送量统计（W）';
+        var title = '近24个月发送量统计';
+        var dataTitle = "（W）";
         var numberBoolean = true;
         if("2" == val){
             type = 'day';
             barType = 'line';
-            title = "近180天发送量统计（W）";
+            title = "近180天发送量统计";
+            dataTitle = "（条）";
             numberBoolean = false;
         }
 
@@ -95,7 +97,7 @@
                 articles = eval(data);
                 option2 = {
                     title: {
-                        text: title,
+                        text: title+"："+articles.totalNumber+'W',
                         x: 'left'
                     },
                     tooltip: {
@@ -105,7 +107,7 @@
                         }
                     },
                     legend: {
-                        data: ['发送量统计']
+                        data: ['发送量统计'+dataTitle]
                     },
                     toolbox: {
                         show: true,
@@ -140,7 +142,7 @@
                     },
                     series: [
                         {
-                            name: '发送量统计',
+                            name:  '发送量统计'+dataTitle,
                             type: barType,
                             stack: '总量',
                             itemStyle: {

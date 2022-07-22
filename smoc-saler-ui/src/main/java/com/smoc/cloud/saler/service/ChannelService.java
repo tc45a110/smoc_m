@@ -6,6 +6,7 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelBasicInfoValidator;
+import com.smoc.cloud.common.smoc.customer.qo.AccountStatisticSendData;
 import com.smoc.cloud.common.smoc.saler.qo.ChannelStatisticSendData;
 import com.smoc.cloud.common.smoc.saler.qo.CustomerChannelInfoQo;
 import com.smoc.cloud.saler.remote.ChannelFeignClient;
@@ -69,10 +70,13 @@ public class ChannelService {
         String[] month = list.stream().map(ChannelStatisticSendData::getMonth).toArray(String[]::new);
         //发送量
         BigDecimal[] sendNumber = list.stream().map(ChannelStatisticSendData::getSendNumber).toArray(BigDecimal[]::new);
+        //总发送量
+        BigDecimal totalNumber = list.stream().map(ChannelStatisticSendData::getSendNumber).reduce(BigDecimal::add).get();
 
         ChannelStatisticSendData channelStatisticSendData = new ChannelStatisticSendData();
         channelStatisticSendData.setMonthArray(month);
         channelStatisticSendData.setSendNumberArray(sendNumber);
+        channelStatisticSendData.setTotalNumber(totalNumber);
 
         return channelStatisticSendData;
     }
@@ -90,10 +94,13 @@ public class ChannelService {
         String[] month = list.stream().map(ChannelStatisticSendData::getMonth).toArray(String[]::new);
         //发送量
         BigDecimal[] sendNumber = list.stream().map(ChannelStatisticSendData::getSendNumber).toArray(BigDecimal[]::new);
+        //总发送量
+        BigDecimal totalNumber = list.stream().map(ChannelStatisticSendData::getSendNumber).reduce(BigDecimal::add).get();
 
         ChannelStatisticSendData channelStatisticSendData = new ChannelStatisticSendData();
         channelStatisticSendData.setMonthArray(month);
         channelStatisticSendData.setSendNumberArray(sendNumber);
+        channelStatisticSendData.setTotalNumber(totalNumber);
 
         return channelStatisticSendData;
     }

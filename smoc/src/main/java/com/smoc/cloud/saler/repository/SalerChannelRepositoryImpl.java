@@ -135,7 +135,7 @@ public class SalerChannelRepositoryImpl extends BasePageRepository {
             sqlBuffer.append(" (SELECT @s :=@s + 1 as `INDEX`, DATE(DATE_SUB(CURRENT_DATE, INTERVAL @s DAY)) AS `MONTH_DAY` ");
             sqlBuffer.append("  from mysql.help_topic, (SELECT @s := -1) temp WHERE  @s < 179 ORDER BY MONTH_DAY desc");
             sqlBuffer.append(" )a  left join ");
-            sqlBuffer.append(" (SELECT DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m-%d')MESSAGE_DATE, ROUND(sum(t.MESSAGE_SUCCESS_NUM)/10000,2) MESSAGE_SUCCESS_NUM ");
+            sqlBuffer.append(" (SELECT DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m-%d')MESSAGE_DATE, sum(t.MESSAGE_SUCCESS_NUM) MESSAGE_SUCCESS_NUM ");
             sqlBuffer.append(" FROM message_daily_statistics t WHERE t.CHANNEL_ID = ? ");
             sqlBuffer.append(" GROUP BY t.CHANNEL_ID, DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m-%d')");
             sqlBuffer.append(" )b on a.MONTH_DAY = b.MESSAGE_DATE  order by a.MONTH_DAY asc");
@@ -189,7 +189,7 @@ public class SalerChannelRepositoryImpl extends BasePageRepository {
             sqlBuffer.append(" (SELECT @s :=@s + 1 as `INDEX`, DATE(DATE_SUB(CURRENT_DATE, INTERVAL @s DAY)) AS `MONTH_DAY` ");
             sqlBuffer.append("  from mysql.help_topic, (SELECT @s := -1) temp WHERE  @s < 179 ORDER BY MONTH_DAY desc");
             sqlBuffer.append(" )a  left join ");
-            sqlBuffer.append(" (SELECT DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m-%d')MESSAGE_DATE, ROUND(sum(t.MESSAGE_SUCCESS_NUM)/10000,2) MESSAGE_SUCCESS_NUM ");
+            sqlBuffer.append(" (SELECT DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m-%d')MESSAGE_DATE, sum(t.MESSAGE_SUCCESS_NUM) MESSAGE_SUCCESS_NUM ");
             sqlBuffer.append(" FROM message_daily_statistics t left join config_channel_basic_info m on t.CHANNEL_ID = m.CHANNEL_ID");
             sqlBuffer.append(" WHERE m.CHANNEL_ACCESS_SALES = ? ");
             sqlBuffer.append(sql);
