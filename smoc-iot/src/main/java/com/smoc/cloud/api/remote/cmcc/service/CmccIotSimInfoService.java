@@ -2,20 +2,19 @@ package com.smoc.cloud.api.remote.cmcc.service;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.smoc.cloud.api.remote.cmcc.response.*;
+import com.smoc.cloud.api.remote.cmcc.response.CmccResponseData;
+import com.smoc.cloud.api.remote.cmcc.response.CmccTokenResponse;
 import com.smoc.cloud.api.remote.cmcc.response.info.*;
 import com.smoc.cloud.api.response.info.*;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
-import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.utils.Okhttp3Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Type;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -46,8 +45,7 @@ public class CmccIotSimInfoService extends CmccIotSimBaseService {
         /**
          * 组织请求参数
          */
-        String transid = cmccIotProperties.getAppId() + DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmss") + cmccRedisCacheUtils.getSequence();
-        String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/order-info?transid=" + transid + "&token=" + token + "&orderNum=" + orderNum;
+       String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/order-info?transid=" + this.getTransId() + "&token=" + token + "&orderNum=" + orderNum;
 
         /**
          * 向移动发送请求
@@ -104,8 +102,7 @@ public class CmccIotSimInfoService extends CmccIotSimBaseService {
         /**
          * 组织请求参数
          */
-        String transid = cmccIotProperties.getAppId() + DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmss") + cmccRedisCacheUtils.getSequence();
-        String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/sim-batch-result?transid=" + transid + "&token=" + token + "&jobId=" + batchId;
+        String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/sim-batch-result?transid=" + this.getTransId() + "&token=" + token + "&jobId=" + batchId;
 
         /**
          * 向移动发送请求
@@ -167,8 +164,7 @@ public class CmccIotSimInfoService extends CmccIotSimBaseService {
         /**
          * 组织请求参数
          */
-        String transid = cmccIotProperties.getAppId() + DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmss") + cmccRedisCacheUtils.getSequence();
-        String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/sim-basic-info?transid=" + transid + "&token=" + token + "&msisdn=" + msisdn;
+       String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/sim-basic-info?transid=" + this.getTransId() + "&token=" + token + "&msisdn=" + msisdn;
 
         /**
          * 向移动发送请求
@@ -239,8 +235,7 @@ public class CmccIotSimInfoService extends CmccIotSimBaseService {
                 msisdnsParams = "_" + mds;
             }
         }
-        String transid = cmccIotProperties.getAppId() + DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmss") + cmccRedisCacheUtils.getSequence();
-        String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/sim-card-info/batch?transid=" + transid + "&token=" + token + "&msisdns=" + msisdnsParams;
+        String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/sim-card-info/batch?transid=" + this.getTransId() + "&token=" + token + "&msisdns=" + msisdnsParams;
 
         /**
          * 向移动发送请求
@@ -295,8 +290,7 @@ public class CmccIotSimInfoService extends CmccIotSimBaseService {
         /**
          * 组织请求参数
          */
-        String transid = cmccIotProperties.getAppId() + DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmss") + cmccRedisCacheUtils.getSequence();
-        String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/sim-change-history?transid=" + transid + "&token=" + token + "&msisdn=" + msisdn;
+       String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/sim-change-history?transid=" + this.getTransId() + "&token=" + token + "&msisdn=" + msisdn;
 
         /**
          * 向移动发送请求
@@ -351,8 +345,7 @@ public class CmccIotSimInfoService extends CmccIotSimBaseService {
         /**
          * 组织请求参数
          */
-        String transid = cmccIotProperties.getAppId() + DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmss") + cmccRedisCacheUtils.getSequence();
-        String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/sim-manage-stop-restart-status?transid=" + transid + "&token=" + token + "&msisdn=" + msisdn;
+       String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/sim-manage-stop-restart-status?transid=" + this.getTransId() + "&token=" + token + "&msisdn=" + msisdn;
 
         /**
          * 向移动发送请求
@@ -408,8 +401,7 @@ public class CmccIotSimInfoService extends CmccIotSimBaseService {
         /**
          * 组织请求参数
          */
-        String transid = cmccIotProperties.getAppId() + DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmss") + cmccRedisCacheUtils.getSequence();
-        String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/sim-status?transid=" + transid + "&token=" + token + "&msisdn=" + msisdn;
+       String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/sim-status?transid=" + this.getTransId() + "&token=" + token + "&msisdn=" + msisdn;
 
         /**
          * 向移动发送请求
@@ -464,8 +456,7 @@ public class CmccIotSimInfoService extends CmccIotSimBaseService {
         /**
          * 组织请求参数
          */
-        String transid = cmccIotProperties.getAppId() + DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmss") + cmccRedisCacheUtils.getSequence();
-        String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/sim-stop-reason?transid=" + transid + "&token=" + token + "&msisdn=" + msisdn;
+        String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/sim-stop-reason?transid=" + this.getTransId() + "&token=" + token + "&msisdn=" + msisdn;
 
         /**
          * 向移动发送请求

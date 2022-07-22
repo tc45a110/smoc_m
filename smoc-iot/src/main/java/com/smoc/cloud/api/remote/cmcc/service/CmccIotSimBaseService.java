@@ -48,8 +48,7 @@ public class CmccIotSimBaseService {
          * 向移动发送获取token请求
          */
         CmccResponseData<List<CmccTokenResponse>> cmccResponseData = new CmccResponseData();
-        String transid = cmccIotProperties.getAppId() + DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmss") + cmccRedisCacheUtils.getSequence();
-        String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/get/token?appid=" + cmccIotProperties.getAppId() + "&password=" + cmccIotProperties.getPassword() + "&transid=" + transid;
+        String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/get/token?appid=" + cmccIotProperties.getAppId() + "&password=" + cmccIotProperties.getPassword() + "&transid=" + this.getTransId();
         try {
             String response = Okhttp3Utils.get(requestUrl);
             Type type = new TypeToken<CmccResponseData<List<CmccTokenResponse>>>() {
@@ -74,5 +73,10 @@ public class CmccIotSimBaseService {
         this.cmccRedisCacheUtils.saveLocalToken(cmccTokenResponse.getToken(), new Long(cmccTokenResponse.getTtl()), TimeUnit.SECONDS);
 
         return ResponseDataUtil.buildSuccess(cmccTokenResponse);
+    }
+
+    public String getTransId(){
+        String transId = cmccIotProperties.getAppId() + DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmss") + cmccRedisCacheUtils.getSequence();
+        return transId;
     }
 }

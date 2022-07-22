@@ -13,14 +13,12 @@ import com.smoc.cloud.api.response.flow.*;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
-import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.utils.Okhttp3Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Type;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -51,8 +49,7 @@ public class CmccIotSimFlowService extends CmccIotSimBaseService {
         /**
          * 组织请求参数
          */
-        String transid = cmccIotProperties.getAppId() + DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmss") + cmccRedisCacheUtils.getSequence();
-        String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/sim-data-margin?transid=" + transid + "&token=" + token + "&msisdn=" + msisdn;
+        String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/sim-data-margin?transid=" + this.getTransId() + "&token=" + token + "&msisdn=" + msisdn;
 
         /**
          * 向移动发送请求
@@ -109,8 +106,7 @@ public class CmccIotSimFlowService extends CmccIotSimBaseService {
         /**
          * 组织请求参数
          */
-        String transid = cmccIotProperties.getAppId() + DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmss") + cmccRedisCacheUtils.getSequence();
-        String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/sim-data-margin?transid=" + transid + "&token=" + token + "&msisdn=" + msisdn;
+        String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/sim-data-margin?transid=" + this.getTransId() + "&token=" + token + "&msisdn=" + msisdn;
 
         /**
          * 向移动发送请求
@@ -170,8 +166,7 @@ public class CmccIotSimFlowService extends CmccIotSimBaseService {
         /**
          * 组织请求参数
          */
-        String transid = cmccIotProperties.getAppId() + DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmss") + cmccRedisCacheUtils.getSequence();
-        String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/sim-data-usage-inpool?transid=" + transid + "&token=" + token + "&msisdn=" + msisdn;
+       String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/sim-data-usage-inpool?transid=" + this.getTransId() + "&token=" + token + "&msisdn=" + msisdn;
 
         /**
          * 向移动发送请求
@@ -240,8 +235,7 @@ public class CmccIotSimFlowService extends CmccIotSimBaseService {
                 msisdnsParams = "_" + mds;
             }
         }
-        String transid = cmccIotProperties.getAppId() + DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmss") + cmccRedisCacheUtils.getSequence();
-        String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/sim-data-usage-monthly/batch?transid=" + transid + "&token=" + token + "&msisdns=" + msisdnsParams + "&queryDate=" + queryDate;
+        String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/sim-data-usage-monthly/batch?transid=" + this.getTransId() + "&token=" + token + "&msisdns=" + msisdnsParams + "&queryDate=" + queryDate;
 
         /**
          * 向移动发送请求

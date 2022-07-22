@@ -13,14 +13,12 @@ import com.smoc.cloud.api.response.pool.SimGroupUsedThisMonthTotal;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
-import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.utils.Okhttp3Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -50,8 +48,7 @@ public class CmccIotSimPoolService extends CmccIotSimBaseService {
         /**
          * 组织请求参数
          */
-        String transid = cmccIotProperties.getAppId() + DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmss") + cmccRedisCacheUtils.getSequence();
-        String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/group-data-usage?transid=" + transid + "&token=" + token + "&groupId=" + groupId;
+        String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/group-data-usage?transid=" + this.getTransId() + "&token=" + token + "&groupId=" + groupId;
 
         /**
          * 向移动发送请求
@@ -105,8 +102,7 @@ public class CmccIotSimPoolService extends CmccIotSimBaseService {
         /**
          * 组织请求参数
          */
-        String transid = cmccIotProperties.getAppId() + DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmss") + cmccRedisCacheUtils.getSequence();
-        String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/group-data-usage?transid=" + transid + "&token=" + token + "&groupId=" + groupId;
+        String requestUrl = cmccIotProperties.getUrl() + "/v5/ec/query/group-data-usage?transid=" + this.getTransId() + "&token=" + token + "&groupId=" + groupId;
 
         /**
          * 向移动发送请求
