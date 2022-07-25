@@ -20,15 +20,15 @@ public class IotCarrierInfoRepositoryImpl extends BasePageRepository {
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");
         sqlBuffer.append("  t.ID");
-        sqlBuffer.append(", t.CARRIER");
-        sqlBuffer.append(", t.CARRIER_NAME");
-        sqlBuffer.append(", t.CARRIER_IDENTIFYING");
-        sqlBuffer.append(", t.CARRIER_USERNAME");
-        sqlBuffer.append(", t.CARRIER_SERVER_URL");
-        sqlBuffer.append(", t.API_TYPE");
-        sqlBuffer.append(", t.CARRIER_STATUS");
-        sqlBuffer.append(", t.CREATED_BY");
-        sqlBuffer.append(", DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME");
+        sqlBuffer.append(",t.CARRIER");
+        sqlBuffer.append(",t.CARRIER_NAME");
+        sqlBuffer.append(",t.CARRIER_IDENTIFYING");
+        sqlBuffer.append(",t.CARRIER_USERNAME");
+        sqlBuffer.append(",t.CARRIER_SERVER_URL");
+        sqlBuffer.append(",t.API_TYPE");
+        sqlBuffer.append(",t.CARRIER_STATUS");
+        sqlBuffer.append(",t.CREATED_BY");
+        sqlBuffer.append(",DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME");
         sqlBuffer.append("  from iot_carrier_info t where 1=1 ");
 
         List<Object> paramsList = new ArrayList<Object>();

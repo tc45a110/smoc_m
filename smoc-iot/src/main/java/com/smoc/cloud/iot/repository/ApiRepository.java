@@ -22,7 +22,7 @@ public class ApiRepository {
      */
     public Boolean isExistAccountOrder(String account, String orderNum) {
 
-        String sql = "select count(*) from iot_user_product_items u,iot_product_cards p,iot_flow_cards_primary_info c where u.PRODUCT_ID=p.PRODUCT_ID and p.CARD_ID = c.ID and u.USER_ID=? and c.ORDER_NUM=?";
+        String sql = "select count(*) from iot_account_package_items u,iot_package_cards p,iot_flow_cards_primary_info c where u.PACKAGE_ID=p.PACKAGE_ID and p.CARD_ID = c.ID and u.ACCOUNT_ID=? and c.ORDER_NUM=?";
         Object[] params = new Object[2];
         params[0] = account;
         params[1] = orderNum;
@@ -44,7 +44,7 @@ public class ApiRepository {
      */
     public Boolean isExistAccountSim(String account, String msisdn) {
 
-        String sql = "select count(*) from iot_user_product_items u,iot_product_cards p,iot_flow_cards_primary_info c where u.PRODUCT_ID=p.PRODUCT_ID and p.CARD_ID = c.ID and u.USER_ID=? and c.MSISDN=?";
+        String sql = "select count(*) from iot_account_package_items u,iot_package_cards p,iot_flow_cards_primary_info c where u.PACKAGE_ID=p.PACKAGE_ID and p.CARD_ID = c.ID and u.ACCOUNT_ID=? and c.MSISDN=?";
         Object[] params = new Object[2];
         params[0] = account;
         params[1] = msisdn;

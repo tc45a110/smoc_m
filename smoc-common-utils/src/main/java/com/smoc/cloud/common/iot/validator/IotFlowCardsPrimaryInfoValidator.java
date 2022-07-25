@@ -29,6 +29,8 @@ public class IotFlowCardsPrimaryInfoValidator {
 
     private BigDecimal cycleQuota;
 
+    private BigDecimal openCardFee;
+
     private String activeDate;
 
     private String openDate;

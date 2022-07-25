@@ -21,15 +21,15 @@ public class IotCarrierFlowPoolRepositoryImpl extends BasePageRepository {
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");
         sqlBuffer.append("  t.ID");
-        sqlBuffer.append(", t.CARRIER_ID");
-        sqlBuffer.append(", t.POOL_NAME");
-        sqlBuffer.append(", t.POOL_CARD_NUMBER");
-        sqlBuffer.append(", t.POOL_SIZE");
-        sqlBuffer.append(", t.SYNC_DATE");
-        sqlBuffer.append(", t.CONTINUE_TYPE");
-        sqlBuffer.append(", t.POOL_STATUS");
-        sqlBuffer.append(", t.CREATED_BY");
-        sqlBuffer.append(", DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME");
+        sqlBuffer.append(",t.CARRIER_ID");
+        sqlBuffer.append(",t.POOL_NAME");
+        sqlBuffer.append(",t.POOL_CARD_NUMBER");
+        sqlBuffer.append(",t.POOL_SIZE");
+        sqlBuffer.append(",t.SYNC_DATE");
+        sqlBuffer.append(",t.CONTINUE_TYPE");
+        sqlBuffer.append(",t.POOL_STATUS");
+        sqlBuffer.append(",t.CREATED_BY");
+        sqlBuffer.append(",DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME");
         sqlBuffer.append("  from iot_carrier_flow_pool t where 1=1 ");
 
         List<Object> paramsList = new ArrayList<Object>();

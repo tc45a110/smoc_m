@@ -41,6 +41,9 @@ public class IotFlowCardsPrimaryInfo {
     @Column(name = "CYCLE_QUOTA", nullable = false, precision = 24, scale = 6)
     private BigDecimal cycleQuota;
 
+    @Column(name = "OPEN_CARD_FEE", nullable = false, precision = 24, scale = 6)
+    private BigDecimal openCardFee;
+
     @Column(name = "ACTIVE_DATE", length = 32)
     private String activeDate;
 
@@ -135,6 +138,14 @@ public class IotFlowCardsPrimaryInfo {
 
     public void setCycleQuota(BigDecimal cycleQuota) {
         this.cycleQuota = cycleQuota;
+    }
+
+    public BigDecimal getOpenCardFee() {
+        return openCardFee;
+    }
+
+    public void setOpenCardFee(BigDecimal openCardFee) {
+        this.openCardFee = openCardFee;
     }
 
     public String getChangingType() {

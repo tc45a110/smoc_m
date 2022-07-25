@@ -21,6 +21,7 @@ public class IotFlowCardsPrimaryInfoRowMapper implements RowMapper<IotFlowCardsP
         qo.setFlowPoolId(rs.getString("FLOW_POOL_ID"));
         qo.setChangingType(rs.getString("CHANGING_TYPE"));
         qo.setCycleQuota(new BigDecimal(rs.getBigDecimal("CYCLE_QUOTA").stripTrailingZeros().toPlainString()));
+        qo.setOpenCardFee(new BigDecimal(rs.getBigDecimal("OPEN_CARD_FEE").stripTrailingZeros().toPlainString()));
         qo.setActiveDate(rs.getString("ACTIVE_DATE"));
         qo.setOpenDate(rs.getString("OPEN_DATE"));
         qo.setUseStatus(rs.getString("USE_STATUS"));

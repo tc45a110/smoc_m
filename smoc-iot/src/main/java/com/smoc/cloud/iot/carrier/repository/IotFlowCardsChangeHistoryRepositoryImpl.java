@@ -20,12 +20,12 @@ public class IotFlowCardsChangeHistoryRepositoryImpl extends BasePageRepository 
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");
         sqlBuffer.append("  t.ID");
-        sqlBuffer.append(", t.ICCID");
-        sqlBuffer.append(", t.IMSI");
-        sqlBuffer.append(", t.MSISDN");
-        sqlBuffer.append(", t.ORIGINAL_STATUS");
-        sqlBuffer.append(", t.TARGET_STATUS");
-        sqlBuffer.append(", DATE_FORMAT(t.CHANGE_TIME, '%Y-%m-%d %H:%i:%S')CHANGE_TIME");
+        sqlBuffer.append(",t.ICCID");
+        sqlBuffer.append(",t.IMSI");
+        sqlBuffer.append(",t.MSISDN");
+        sqlBuffer.append(",t.ORIGINAL_STATUS");
+        sqlBuffer.append(",t.TARGET_STATUS");
+        sqlBuffer.append(",DATE_FORMAT(t.CHANGE_TIME, '%Y-%m-%d %H:%i:%S')CHANGE_TIME");
         sqlBuffer.append("  from iot_flow_cards_change_history t where 1=1 ");
 
         List<Object> paramsList = new ArrayList<Object>();

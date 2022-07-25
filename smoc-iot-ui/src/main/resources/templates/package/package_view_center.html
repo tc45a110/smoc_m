@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+</head>
+<body>
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <!-- start row 页面导航-->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">套餐明细</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            套餐管理
+                        </li>
+                        <li class="active">
+                            套餐明细
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  页面内容-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-md-12">
+                <div class="card-box">
+                    <div class="row" style="margin-bottom:10px">
+                        <h4>
+                            <div class="pull-right" style="margin-top: -12px;margin-right:10pxx">
+                                <a sec:authorize-url="/iot/product/list"
+                                   th:href="@{/iot/product/list}" style="margin-left:10px"
+                                   class="btn btn-default waves-effect waves-light btn-md">
+                                    <i class="glyphicon  glyphicon-share-alt" style="margin-right:5px"></i>
+                                    返回套餐管理列表</a>
+                            </div>
+                        </h4>
+                    </div>
+                    <div id="login-panel" class="row" style="display:block">
+                        <div class="col-lg-12" style="margin-top:10px">
+                            <div class="panel panel-color panel-info">
+                                <div id="login-account-down" class="panel-heading"
+                                     style="display:block">
+                                    <h3 class="panel-title">
+                                        <i class="mdi mdi-apps" style="margin-right:5px"></i>
+                                        套餐明细
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <ul class="nav nav-tabs">
+                            <li class="active" id="tab1"><a onclick="active('1')"
+                                                            sec:authorize-url="/iot/product/view"
+                                                            th:href="@{/iot/product/view}"
+                                                            th:target="content1">套餐明细</a></li>
+                            <li class="" id="tab4"><a onclick="active('4')"
+                                                            sec:authorize-url="/iot/account/product/view"
+                                                            th:href="@{/iot/account/product/view}"
+                                                            th:target="content1">套餐物联网卡配置</a></li>
+                            <li class="" id="tab2">
+                                <a onclick="active('2')"
+                                   th:target="content1">使用用户信息
+                                </a>
+                            </li>
+                            <li class="" id="tab3">
+                                <a onclick="active('3')"
+                                   th:target="content1">套餐结算记录
+                                </a>
+                            </li>
+                            <li class="" id="tab6">
+                                <a onclick="active('6')"
+                                   th:target="content1">操作日志</a></li>
+                        </ul>
+                    </div>
+                    <div class="tab-cotent">
+                        <iframe name="content1" id="content1" th:frameBorder="0" th:scrolling="auto"
+                                th:src="@{/iot/product/view}"
+                                style="padding: 0px; width: 100%; height: 2200px"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<!-- Modal-Effect -->
+<script>
+
+    function active(tab) {
+        for(var num = 1;num<7;num++){
+            $('#tab'+num).removeClass("active");
+        }
+        $('#tab'+tab).attr("class","active");
+    }
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+
+
+</script>
+</body>
+</html>
