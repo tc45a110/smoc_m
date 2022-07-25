@@ -1,4 +1,4 @@
-package com.smoc.cloud.iot.product.entity;
+package com.smoc.cloud.iot.packages.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -7,14 +7,14 @@ import javax.persistence.Table;
 import java.util.Date;
 
 @Entity
-@Table(name = "iot_product_cards")
-public class IotProductCard {
+@Table(name = "iot_package_cards")
+public class IotPackageCard {
     @Id
     @Column(name = "ID", nullable = false, length = 32)
     private String id;
 
-    @Column(name = "PRODUCT_ID", nullable = false, length = 32)
-    private String productId;
+    @Column(name = "PACKAGE_ID", nullable = false, length = 32)
+    private String packageId;
 
     @Column(name = "CARD_MSISDN", nullable = false, length = 32)
     private String cardMsisdn;
@@ -82,12 +82,12 @@ public class IotProductCard {
         this.cardMsisdn = cardMsisdn;
     }
 
-    public String getProductId() {
-        return productId;
+    public String getPackageId() {
+        return packageId;
     }
 
-    public void setProductId(String productId) {
-        this.productId = productId;
+    public void setPackageId(String packageId) {
+        this.packageId = packageId;
     }
 
     public String getId() {
