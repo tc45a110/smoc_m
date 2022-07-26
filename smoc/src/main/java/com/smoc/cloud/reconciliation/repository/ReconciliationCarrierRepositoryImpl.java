@@ -125,7 +125,7 @@ public class ReconciliationCarrierRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(" d.CARRIER_TOTAL_AMOUNT,");
         sqlBuffer.append(" d.CARRIER_TOTAL_SEND_QUANTITY,");
         sqlBuffer.append(" d.CHANNEL_PERIOD_STATUS");
-        sqlBuffer.append(" from( SELECT t.MESSAGE_DATE, t.CHANNEL_ID, IFNULL(t.CHANNEL_PRICE, 0) CHANNEL_PRICE, t.BUSINESS_TYPE, t.MESSAGE_SUCCESS_NUM FROM message_daily_statistics t ");
+        sqlBuffer.append(" from( SELECT LEFT (t.MESSAGE_DATE, 7)MESSAGE_DATE, t.CHANNEL_ID, IFNULL(t.CHANNEL_PRICE, 0) CHANNEL_PRICE, t.BUSINESS_TYPE, sum(t.MESSAGE_SUCCESS_NUM)MESSAGE_SUCCESS_NUM FROM message_daily_statistics t ");
         sqlBuffer.append("  where LEFT (t.MESSAGE_DATE, 7) =? group by LEFT (t.MESSAGE_DATE, 7), t.CHANNEL_ID, t.CHANNEL_PRICE, t.BUSINESS_TYPE )a ");
         sqlBuffer.append(" left join config_channel_basic_info b on a.CHANNEL_ID = b.CHANNEL_ID left join config_channel_interface c on a.CHANNEL_ID = c.CHANNEL_ID ");
         sqlBuffer.append(" LEFT JOIN reconciliation_carrier_items d ON a.MESSAGE_DATE = d.CHANNEL_PERIOD AND b.SPECIFIC_PROVDER = d.CHANNEL_PROVDER AND a.CHANNEL_ID = d.CHANNEL_ID ");

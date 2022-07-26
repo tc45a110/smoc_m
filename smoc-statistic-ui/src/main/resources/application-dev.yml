@@ -12,7 +12,7 @@ server: #服务端口
     # 是否分配的直接内存
     direct-buffers: true
   servlet:
-    context-path: /statistic
+    context-path: /spss
     session:
       cookie:
         name: OAUTH2SESSION

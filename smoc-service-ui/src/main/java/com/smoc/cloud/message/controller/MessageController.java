@@ -34,6 +34,7 @@ import com.smoc.cloud.message.service.MessageService;
 import com.smoc.cloud.message.utils.SendMessage;
 import com.smoc.cloud.properties.MessageProperties;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.ClassPathResource;
@@ -390,6 +391,7 @@ public class MessageController {
         }
 
         //保存操作
+        messageWebTaskInfoValidator.setMessageContent(StringEscapeUtils.unescapeHtml4(messageWebTaskInfoValidator.getMessageContent()));
         ResponseData data = messageService.save(messageWebTaskInfoValidator,op);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());

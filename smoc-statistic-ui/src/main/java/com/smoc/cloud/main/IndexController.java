@@ -32,9 +32,4 @@ public class IndexController {
 
     }
 
-    @RequestMapping(value = "/getPublicKey", method = RequestMethod.GET)
-    public String getKey(HttpServletRequest request){
-        String publicKey = RSAUtils.generateBase64PublicKey();
-        return publicKey;
-    }
 }

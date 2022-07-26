@@ -5,8 +5,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.smoc.cloud.admin.security.remote.service.FlowApproveService;
 import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
-import com.smoc.cloud.common.auth.qo.Dict;
-import com.smoc.cloud.common.auth.qo.DictType;
 import com.smoc.cloud.common.auth.validator.FlowApproveValidator;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
@@ -24,8 +22,8 @@ import com.smoc.cloud.material.service.MessageSignService;
 import com.smoc.cloud.material.service.MessageTemplateService;
 import com.smoc.cloud.material.service.SequenceService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -34,13 +32,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 短信模板
@@ -301,6 +296,9 @@ public class MessageTemplateController {
             accountTemplateInfoValidator.setInfoType(account.getData().getInfoType());
         }
 
+        //去除转义
+        accountTemplateInfoValidator.setTemplateContent(StringEscapeUtils.unescapeHtml4(accountTemplateInfoValidator.getTemplateContent()));
+
         //查询签名
         /*ResponseData<EnterpriseDocumentInfoValidator> signInfo = businessAccountService.findSignByEnterpriseIdAndSignNameAndBusinessType(user.getOrganization(),accountTemplateInfoValidator.getSignName(),account.getData().getBusinessType());
         if (!ResponseCode.SUCCESS.getCode().equals(signInfo.getCode())) {
@@ -310,10 +308,12 @@ public class MessageTemplateController {
 
         //重新查签名，重新组内容
         String content = accountTemplateInfoValidator.getTemplateContent();
-        content = content.replaceAll("\\【.*?\\】", "");
+        content = content.replace("\n","");
+        content = content.replaceFirst("\\【.*?\\】", "");
         content = "【"+accountTemplateInfoValidator.getSignName()+"】"+content;
         accountTemplateInfoValidator.setTemplateContent(content);
 
+        System.out.print(content.length());
 
         //默认需要审核
         accountTemplateInfoValidator.setTemplateStatus("3");
