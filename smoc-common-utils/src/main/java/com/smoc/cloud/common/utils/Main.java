@@ -1,6 +1,11 @@
 package com.smoc.cloud.common.utils;
 
 
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 测试类
  * 2019/5/22 12:31
@@ -9,11 +14,11 @@ public class Main {
 
     public static void main(String[] args) {
 
-        String s = "XYBA100014,XYBA100012";
-        String accountIds = "'"+s.replace(",","','")+"'";
+        List<String> list = new ArrayList<>();
 
-        //String flag= MD5.md5("F6D42B072BA02649A66CB4B94F593686"+"7F6C5E670F4CCDC8591BB91F5054C3DB");
+        list.add("1");
+        list.add("2");
 
-        System.out.println(accountIds);
+        System.out.println(new Gson().toJson(list));
     }
 }

@@ -12,7 +12,7 @@ import lombok.Setter;
 public class SimStartStatusResponse {
 
     /**
-     * 是否管理停机冻结：
+     * 是否停机冻结：
      * 0：否
      * 1：是
      */

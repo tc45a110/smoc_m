@@ -36,5 +36,5 @@ public class SimBaseInfoResponse {
      * SIM 卡备注信息，即客户在平台标
      * 注的卡备注信息
      */
-    private String remark;
+//    private String remark;
 }

@@ -40,12 +40,12 @@ public class IotPackageInfoService {
     /**
      * 根据产品id查询，产品配置的信息，及未配置的 物联网卡信息
      *
-     * @param PackageId
+     * @param packageId
      * @return
      */
-    public ResponseData<List<IotFlowCardsPrimaryInfoValidator>> list(String PackageId) {
+    public ResponseData<List<IotFlowCardsPrimaryInfoValidator>> list(String packageId) {
         try {
-            ResponseData<List<IotFlowCardsPrimaryInfoValidator>> data = this.iotPackageInfoFeignClient.list(PackageId);
+            ResponseData<List<IotFlowCardsPrimaryInfoValidator>> data = this.iotPackageInfoFeignClient.list(packageId);
             return data;
         } catch (Exception e) {
             e.printStackTrace();

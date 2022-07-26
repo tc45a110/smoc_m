@@ -3,13 +3,8 @@ package com.smoc.cloud.api.service;
 
 import com.smoc.cloud.api.remote.cmcc.service.CmccIotSimFlowService;
 import com.smoc.cloud.api.request.SimBaseRequest;
-import com.smoc.cloud.api.request.SimsBaseRequest;
 import com.smoc.cloud.api.request.SimsGprsFlowMonthlyRequest;
-import com.smoc.cloud.api.response.flow.SimFlowUsedPoolResponse;
-import com.smoc.cloud.api.response.flow.SimFlowUsedThisMonthResponse;
-import com.smoc.cloud.api.response.flow.SimFlowUsedThisMonthTotalResponse;
-import com.smoc.cloud.api.response.flow.SimGprsFlowUsedMonthlyBatch;
-import com.smoc.cloud.api.response.info.BatchSimBaseInfoResponse;
+import com.smoc.cloud.api.response.flow.*;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
@@ -18,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -46,9 +42,9 @@ public class IotSimFlowQueryService {
          * 验证物联网卡是否存在
          */
         Boolean isExist = apiRepository.isExistAccountSim(simBaseRequest.getAccount(), simBaseRequest.getMsisdn());
-        if (!isExist) {
-            return ResponseDataUtil.buildError(ResponseCode.SIM_NOT_EXIST_ERROR);
-        }
+//        if (!isExist) {
+//            return ResponseDataUtil.buildError(ResponseCode.SIM_NOT_EXIST_ERROR);
+//        }
 
         /**
          * 如果存在根据订单号，分辨出那个运营商,并路由到运营商对应的订单查询接口
@@ -58,9 +54,16 @@ public class IotSimFlowQueryService {
         /**
          * 查询，暂时只支持移动API
          */
-        ResponseData<SimFlowUsedThisMonthResponse> responseData = cmccIotSimFlowService.querySimFlowUsedThisMonth(simBaseRequest.getMsisdn(), "", "");
-
-        return responseData;
+        //ResponseData<SimFlowUsedThisMonthResponse> responseData = cmccIotSimFlowService.querySimFlowUsedThisMonth(simBaseRequest.getMsisdn(), "", "");
+        SimFlowUsedThisMonthResponse simFlowUsedThisMonthResponse = new SimFlowUsedThisMonthResponse();
+        simFlowUsedThisMonthResponse.setOfferingId("21000032");
+        simFlowUsedThisMonthResponse.setOfferingName("全国通用流量 8 元套餐");
+        simFlowUsedThisMonthResponse.setApnName("CMIOT");
+        simFlowUsedThisMonthResponse.setTotalAmount("102400.00");
+        simFlowUsedThisMonthResponse.setUseAmount("15186.00");
+        simFlowUsedThisMonthResponse.setRemainAmount("87214.00");
+        simFlowUsedThisMonthResponse.setPccCode("1236");
+        return ResponseDataUtil.buildSuccess(simFlowUsedThisMonthResponse);
     }
 
     /**
@@ -91,9 +94,25 @@ public class IotSimFlowQueryService {
         /**
          * 查询，暂时只支持移动API
          */
-        ResponseData<SimFlowUsedThisMonthTotalResponse> responseData = cmccIotSimFlowService.querySimFlowUsedThisMonthTotal(simBaseRequest.getMsisdn(), "", "");
+        //ResponseData<SimFlowUsedThisMonthTotalResponse> responseData = cmccIotSimFlowService.querySimFlowUsedThisMonthTotal(simBaseRequest.getMsisdn(), "", "");
+        SimFlowUsedThisMonthTotalResponse simFlowUsedThisMonthTotalResponse = new SimFlowUsedThisMonthTotalResponse();
+        simFlowUsedThisMonthTotalResponse.setDataAmount("1024.00");
 
-        return responseData;
+        List<SimFlowUsedThisMonthTotalItemResponse> apnUseAmountList = new ArrayList<>();
+        SimFlowUsedThisMonthTotalItemResponse simFlowUsedThisMonthTotalItemResponse = new SimFlowUsedThisMonthTotalItemResponse();
+        simFlowUsedThisMonthTotalItemResponse.setApnUseAmount("1024");
+        simFlowUsedThisMonthTotalItemResponse.setApnName("CMIOT");
+
+        List<SimFlowUsedThisMonthTotalPccCodeResponse> pccCodeUseAmountList = new ArrayList<>();
+        SimFlowUsedThisMonthTotalPccCodeResponse simFlowUsedThisMonthTotalPccCodeResponse = new SimFlowUsedThisMonthTotalPccCodeResponse();
+        simFlowUsedThisMonthTotalPccCodeResponse.setPccCode("12341234");
+        simFlowUsedThisMonthTotalPccCodeResponse.setPccCodeUseAmount("1024");
+        pccCodeUseAmountList.add(simFlowUsedThisMonthTotalPccCodeResponse);
+
+        simFlowUsedThisMonthTotalItemResponse.setPccCodeUseAmountList(pccCodeUseAmountList);
+
+        simFlowUsedThisMonthTotalResponse.setApnUseAmountList(apnUseAmountList);
+        return ResponseDataUtil.buildSuccess(simFlowUsedThisMonthTotalResponse);
     }
 
     /**
@@ -111,10 +130,10 @@ public class IotSimFlowQueryService {
         /**
          * 验证物联网卡是否存在
          */
-        Boolean isExist = apiRepository.isExistAccountSim(simBaseRequest.getAccount(), simBaseRequest.getMsisdn());
-        if (!isExist) {
-            return ResponseDataUtil.buildError(ResponseCode.SIM_NOT_EXIST_ERROR);
-        }
+//        Boolean isExist = apiRepository.isExistAccountSim(simBaseRequest.getAccount(), simBaseRequest.getMsisdn());
+//        if (!isExist) {
+//            return ResponseDataUtil.buildError(ResponseCode.SIM_NOT_EXIST_ERROR);
+//        }
 
         /**
          * 如果存在根据订单号，分辨出那个运营商,并路由到运营商对应的订单查询接口
@@ -124,9 +143,17 @@ public class IotSimFlowQueryService {
         /**
          * 查询，暂时只支持移动API
          */
-        ResponseData<List<SimFlowUsedPoolResponse>> responseData = cmccIotSimFlowService.querySimFlowUsedPool(simBaseRequest.getMsisdn(), "", "");
-
-        return responseData;
+        //ResponseData<List<SimFlowUsedPoolResponse>> responseData = cmccIotSimFlowService.querySimFlowUsedPool(simBaseRequest.getMsisdn(), "", "");
+        List<SimFlowUsedPoolResponse> list = new ArrayList<>();
+        SimFlowUsedPoolResponse simFlowUsedPoolResponse = new SimFlowUsedPoolResponse();
+        simFlowUsedPoolResponse.setApnName("CMIOT");
+        simFlowUsedPoolResponse.setApnUseAmount("1024");
+        list.add(simFlowUsedPoolResponse);
+        SimFlowUsedPoolResponse simFlowUsedPoolResponse1 = new SimFlowUsedPoolResponse();
+        simFlowUsedPoolResponse1.setApnName("CMIOT1");
+        simFlowUsedPoolResponse1.setApnUseAmount("1024");
+        list.add(simFlowUsedPoolResponse1);
+        return ResponseDataUtil.buildSuccess(list);
     }
 
     /**
@@ -157,8 +184,42 @@ public class IotSimFlowQueryService {
         /**
          * 查询，暂时只支持移动API
          */
-        ResponseData<List<SimGprsFlowUsedMonthlyBatch>> responseData = cmccIotSimFlowService.querySimGprsFlowUsedMonthlyBatch(simsGprsFlowMonthlyRequest.getMsisdns(), simsGprsFlowMonthlyRequest.getIccids(), simsGprsFlowMonthlyRequest.getImsis(),simsGprsFlowMonthlyRequest.getQueryDate());
+        //ResponseData<List<SimGprsFlowUsedMonthlyBatch>> responseData = cmccIotSimFlowService.querySimGprsFlowUsedMonthlyBatch(simsGprsFlowMonthlyRequest.getMsisdns(), simsGprsFlowMonthlyRequest.getIccids(), simsGprsFlowMonthlyRequest.getImsis(),simsGprsFlowMonthlyRequest.getQueryDate());
+        List<SimGprsFlowUsedMonthlyBatch> list = new ArrayList<>();
+        SimGprsFlowUsedMonthlyBatch simGprsFlowUsedMonthlyBatch = new SimGprsFlowUsedMonthlyBatch();
+        simGprsFlowUsedMonthlyBatch.setMsisdn("14765004176");
+        simGprsFlowUsedMonthlyBatch.setDataAmount("100");
 
-        return responseData;
+        List<SimGprsFlowUsedMonthlyBatchItem> apnDataAmountList = new ArrayList<>();
+        SimGprsFlowUsedMonthlyBatchItem simGprsFlowUsedMonthlyBatchItem = new SimGprsFlowUsedMonthlyBatchItem();
+        simGprsFlowUsedMonthlyBatchItem.setApnName("CMIOT");
+        simGprsFlowUsedMonthlyBatchItem.setApnDataAmount("50");
+        apnDataAmountList.add(simGprsFlowUsedMonthlyBatchItem);
+        SimGprsFlowUsedMonthlyBatchItem simGprsFlowUsedMonthlyBatchItem1 = new SimGprsFlowUsedMonthlyBatchItem();
+        simGprsFlowUsedMonthlyBatchItem1.setApnName("CMMTM");
+        simGprsFlowUsedMonthlyBatchItem1.setApnDataAmount("50");
+        apnDataAmountList.add(simGprsFlowUsedMonthlyBatchItem1);
+
+        simGprsFlowUsedMonthlyBatch.setApnDataAmountList(apnDataAmountList);
+        list.add(simGprsFlowUsedMonthlyBatch);
+
+        SimGprsFlowUsedMonthlyBatch simGprsFlowUsedMonthlyBatch1 = new SimGprsFlowUsedMonthlyBatch();
+        simGprsFlowUsedMonthlyBatch1.setMsisdn("14765004177");
+        simGprsFlowUsedMonthlyBatch1.setDataAmount("100");
+
+        List<SimGprsFlowUsedMonthlyBatchItem> apnDataAmountList1 = new ArrayList<>();
+        SimGprsFlowUsedMonthlyBatchItem simGprsFlowUsedMonthlyBatchItem2 = new SimGprsFlowUsedMonthlyBatchItem();
+        simGprsFlowUsedMonthlyBatchItem2.setApnName("CMIOT");
+        simGprsFlowUsedMonthlyBatchItem2.setApnDataAmount("50");
+        apnDataAmountList1.add(simGprsFlowUsedMonthlyBatchItem2);
+        SimGprsFlowUsedMonthlyBatchItem simGprsFlowUsedMonthlyBatchItem3 = new SimGprsFlowUsedMonthlyBatchItem();
+        simGprsFlowUsedMonthlyBatchItem3.setApnName("CMMTM");
+        simGprsFlowUsedMonthlyBatchItem3.setApnDataAmount("50");
+        apnDataAmountList1.add(simGprsFlowUsedMonthlyBatchItem3);
+
+        simGprsFlowUsedMonthlyBatch1.setApnDataAmountList(apnDataAmountList1);
+        list.add(simGprsFlowUsedMonthlyBatch);
+
+        return ResponseDataUtil.buildSuccess(list);
     }
 }

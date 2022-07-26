@@ -9,11 +9,14 @@ import com.smoc.cloud.api.response.info.*;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.iot.carrier.repository.IotFlowCardsPrimaryInfoRepository;
 import com.smoc.cloud.iot.repository.ApiRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -25,6 +28,9 @@ public class IotSimInfoQueryService {
 
     @Autowired
     private CmccIotSimInfoService cmccIotSimInfoService;
+
+    @Resource
+    private IotFlowCardsPrimaryInfoRepository iotFlowCardsPrimaryInfoRepository;
 
     /**
      * 单卡操作订单处理情况查询
@@ -107,10 +113,10 @@ public class IotSimInfoQueryService {
         /**
          * 验证物联网卡是否存在
          */
-        Boolean isExist = apiRepository.isExistAccountSim(simBaseRequest.getAccount(), simBaseRequest.getMsisdn());
-        if (!isExist) {
-            return ResponseDataUtil.buildError(ResponseCode.SIM_NOT_EXIST_ERROR);
-        }
+//        Boolean isExist = apiRepository.isExistAccountSim(simBaseRequest.getAccount(), simBaseRequest.getMsisdn());
+//        if (!isExist) {
+//            return ResponseDataUtil.buildError(ResponseCode.SIM_NOT_EXIST_ERROR);
+//        }
 
         /**
          * 如果存在根据订单号，分辨出那个运营商,并路由到运营商对应的订单查询接口
@@ -120,9 +126,10 @@ public class IotSimInfoQueryService {
         /**
          * 查询，暂时只支持移动API
          */
-        ResponseData<SimBaseInfoResponse> responseData = cmccIotSimInfoService.querySimBaseInfo(simBaseRequest.getMsisdn(), "", "");
-
-        return responseData;
+//        ResponseData<SimBaseInfoResponse> responseData = cmccIotSimInfoService.querySimBaseInfo(simBaseRequest.getMsisdn(), "", "");
+        //本地查询
+        SimBaseInfoResponse simBaseInfoResponse = this.iotFlowCardsPrimaryInfoRepository.findSimByAccountAndMsisdn(simBaseRequest.getAccount(), simBaseRequest.getMsisdn());
+        return ResponseDataUtil.buildSuccess(simBaseInfoResponse);
     }
 
     /**
@@ -135,7 +142,7 @@ public class IotSimInfoQueryService {
      * 是否查询结果本地持久化?
      * 把运营商查询结果映射为最终结果
      */
-    public ResponseData<List<BatchSimBaseInfoResponse>> queryBatchSimBaseInfo(SimsBaseRequest simsBaseRequest) {
+    public ResponseData<List<SimBaseInfoResponse>> queryBatchSimBaseInfo(SimsBaseRequest simsBaseRequest) {
 
         /**
          * 验证物联网卡是否存在
@@ -153,9 +160,9 @@ public class IotSimInfoQueryService {
         /**
          * 查询，暂时只支持移动API
          */
-        ResponseData<List<BatchSimBaseInfoResponse>> responseData = cmccIotSimInfoService.queryBatchSimBaseInfo(simsBaseRequest.getMsisdns(), simsBaseRequest.getIccids(), simsBaseRequest.getImsis());
-
-        return responseData;
+//        ResponseData<List<BatchSimBaseInfoResponse>> responseData = cmccIotSimInfoService.queryBatchSimBaseInfo(simsBaseRequest.getMsisdns(), simsBaseRequest.getIccids(), simsBaseRequest.getImsis());
+        List<SimBaseInfoResponse> simBaseInfoResponses = this.iotFlowCardsPrimaryInfoRepository.queryBatchSimBaseInfo(simsBaseRequest.getAccount(), simsBaseRequest.getMsisdns());
+        return ResponseDataUtil.buildSuccess(simBaseInfoResponses);
     }
 
     /**
@@ -173,10 +180,10 @@ public class IotSimInfoQueryService {
         /**
          * 验证物联网卡是否存在
          */
-        Boolean isExist = apiRepository.isExistAccountSim(simBaseRequest.getAccount(), simBaseRequest.getMsisdn());
-        if (!isExist) {
-            return ResponseDataUtil.buildError(ResponseCode.SIM_NOT_EXIST_ERROR);
-        }
+//        Boolean isExist = apiRepository.isExistAccountSim(simBaseRequest.getAccount(), simBaseRequest.getMsisdn());
+//        if (!isExist) {
+//            return ResponseDataUtil.buildError(ResponseCode.SIM_NOT_EXIST_ERROR);
+//        }
 
         /**
          * 如果存在根据订单号，分辨出那个运营商,并路由到运营商对应的订单查询接口
@@ -186,9 +193,19 @@ public class IotSimInfoQueryService {
         /**
          * 查询，暂时只支持移动API
          */
-        ResponseData<List<SimChangeHistoryResponse>> responseData = cmccIotSimInfoService.querySimChangeHistory(simBaseRequest.getMsisdn(), "", "");
-
-        return responseData;
+        //ResponseData<List<SimChangeHistoryResponse>> responseData = cmccIotSimInfoService.querySimChangeHistory(simBaseRequest.getMsisdn(), "", "");
+        List<SimChangeHistoryResponse> simChangeHistoryResponses = new ArrayList<>();
+        SimChangeHistoryResponse simChangeHistoryResponse1 = new SimChangeHistoryResponse();
+        simChangeHistoryResponse1.setDescStatus("2");
+        simChangeHistoryResponse1.setTargetStatus("4");
+        simChangeHistoryResponse1.setChangeDate("2022-07-26 11:45:54");
+        simChangeHistoryResponses.add(simChangeHistoryResponse1);
+        SimChangeHistoryResponse simChangeHistoryResponse = new SimChangeHistoryResponse();
+        simChangeHistoryResponse.setDescStatus("1");
+        simChangeHistoryResponse.setTargetStatus("2");
+        simChangeHistoryResponse.setChangeDate("2022-07-26 11:45:04");
+        simChangeHistoryResponses.add(simChangeHistoryResponse);
+        return ResponseDataUtil.buildSuccess(simChangeHistoryResponses);
     }
 
     /**
@@ -206,10 +223,10 @@ public class IotSimInfoQueryService {
         /**
          * 验证物联网卡是否存在
          */
-        Boolean isExist = apiRepository.isExistAccountSim(simBaseRequest.getAccount(), simBaseRequest.getMsisdn());
-        if (!isExist) {
-            return ResponseDataUtil.buildError(ResponseCode.SIM_NOT_EXIST_ERROR);
-        }
+//        Boolean isExist = apiRepository.isExistAccountSim(simBaseRequest.getAccount(), simBaseRequest.getMsisdn());
+//        if (!isExist) {
+//            return ResponseDataUtil.buildError(ResponseCode.SIM_NOT_EXIST_ERROR);
+//        }
 
         /**
          * 如果存在根据订单号，分辨出那个运营商,并路由到运营商对应的订单查询接口
@@ -219,9 +236,11 @@ public class IotSimInfoQueryService {
         /**
          * 查询，暂时只支持移动API
          */
-        ResponseData<SimStartStatusResponse> responseData = cmccIotSimInfoService.querySimStartStatus(simBaseRequest.getMsisdn(), "", "");
-
-        return responseData;
+        //ResponseData<SimStartStatusResponse> responseData = cmccIotSimInfoService.querySimStartStatus(simBaseRequest.getMsisdn(), "", "");
+        SimStartStatusResponse simStartStatusResponse = new SimStartStatusResponse();
+        simStartStatusResponse.setSimStatus("0");
+        simStartStatusResponse.setReason("");
+        return ResponseDataUtil.buildSuccess(simStartStatusResponse);
     }
 
     /**
@@ -239,10 +258,10 @@ public class IotSimInfoQueryService {
         /**
          * 验证物联网卡是否存在
          */
-        Boolean isExist = apiRepository.isExistAccountSim(simBaseRequest.getAccount(), simBaseRequest.getMsisdn());
-        if (!isExist) {
-            return ResponseDataUtil.buildError(ResponseCode.SIM_NOT_EXIST_ERROR);
-        }
+//        Boolean isExist = apiRepository.isExistAccountSim(simBaseRequest.getAccount(), simBaseRequest.getMsisdn());
+//        if (!isExist) {
+//            return ResponseDataUtil.buildError(ResponseCode.SIM_NOT_EXIST_ERROR);
+//        }
 
         /**
          * 如果存在根据订单号，分辨出那个运营商,并路由到运营商对应的订单查询接口
@@ -252,9 +271,11 @@ public class IotSimInfoQueryService {
         /**
          * 查询，暂时只支持移动API
          */
-        ResponseData<SimStatusResponse> responseData = cmccIotSimInfoService.querySimStatus(simBaseRequest.getMsisdn(), "", "");
-
-        return responseData;
+        //ResponseData<SimStatusResponse> responseData = cmccIotSimInfoService.querySimStatus(simBaseRequest.getMsisdn(), "", "");
+        SimStatusResponse simStatusResponse = new SimStatusResponse();
+        simStatusResponse.setCardStatus("2");
+        simStatusResponse.setLastChangeDate("2022-07-25 19:03:04");
+        return ResponseDataUtil.buildSuccess(simStatusResponse);
     }
 
     /**
@@ -272,10 +293,10 @@ public class IotSimInfoQueryService {
         /**
          * 验证物联网卡是否存在
          */
-        Boolean isExist = apiRepository.isExistAccountSim(simBaseRequest.getAccount(), simBaseRequest.getMsisdn());
-        if (!isExist) {
-            return ResponseDataUtil.buildError(ResponseCode.SIM_NOT_EXIST_ERROR);
-        }
+//        Boolean isExist = apiRepository.isExistAccountSim(simBaseRequest.getAccount(), simBaseRequest.getMsisdn());
+//        if (!isExist) {
+//            return ResponseDataUtil.buildError(ResponseCode.SIM_NOT_EXIST_ERROR);
+//        }
 
         /**
          * 如果存在根据订单号，分辨出那个运营商,并路由到运营商对应的订单查询接口
@@ -285,9 +306,11 @@ public class IotSimInfoQueryService {
         /**
          * 查询，暂时只支持移动API
          */
-        ResponseData<SimStopReasonResponse> responseData = cmccIotSimInfoService.querySimStopReason(simBaseRequest.getMsisdn(), "", "");
-
-        return responseData;
+        //ResponseData<SimStopReasonResponse> responseData = cmccIotSimInfoService.querySimStopReason(simBaseRequest.getMsisdn(), "", "");
+        SimStopReasonResponse simStopReasonResponse = new SimStopReasonResponse();
+        simStopReasonResponse.setStopReason("000000002000");
+        simStopReasonResponse.setShutdownReasonDesc("暂时停机，以后继续使用");
+        return ResponseDataUtil.buildSuccess(simStopReasonResponse);
     }
 
 

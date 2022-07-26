@@ -132,6 +132,17 @@
                                                        min="0.0001" placeholder="周期限额">
                                             </div>
                                             <div class="col-md-4 form-group">
+                                                <label>开卡费<span
+                                                        class="text-danger"
+                                                        th:if="${#fields.hasErrors('openCardFee')}"
+                                                        th:errors="*{openCardFee}"
+                                                        style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input type="text"  class="form-control"
+                                                       autocomplete="off" th:field="*{openCardFee}"
+                                                       min="0.00" placeholder="开卡费">
+                                            </div>
+                                            <div class="col-md-4 form-group">
                                                 <select class="selectpicker" name="cardType" required>
                                                     <option  value="">------请选择卡类型------</option>
                                                     <option th:selected="${validator.cardType == '01'}" value="01">------卡类型01------</option>

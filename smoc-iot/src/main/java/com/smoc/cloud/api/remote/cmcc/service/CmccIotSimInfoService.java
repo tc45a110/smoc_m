@@ -198,7 +198,7 @@ public class CmccIotSimInfoService extends CmccIotSimBaseService {
         simBaseInfoResponse.setImsi(cmccSimBaseInfoResponse.getImsi());
         simBaseInfoResponse.setActiveDate(cmccSimBaseInfoResponse.getActiveDate());
         simBaseInfoResponse.setOpenDate(cmccSimBaseInfoResponse.getOpenDate());
-        simBaseInfoResponse.setRemark(cmccSimBaseInfoResponse.getRemark());
+        //simBaseInfoResponse.setRemark(cmccSimBaseInfoResponse.getRemark());
 
         return ResponseDataUtil.buildSuccess(simBaseInfoResponse);
     }

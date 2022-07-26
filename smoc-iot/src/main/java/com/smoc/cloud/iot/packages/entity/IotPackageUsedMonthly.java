@@ -17,17 +17,20 @@ public class IotPackageUsedMonthly {
     @Column(name = "PACKAGE_ID", nullable = false, length = 32)
     private String packageId;
 
+    @Column(name = "PACKAGE_NAME", nullable = false, length = 32)
+    private String packageName;
+
     @Column(name = "CHANGING_TYPE", nullable = false, length = 32)
     private String changingType;
 
     @Column(name = "CHANGING_CYCLE", nullable = false, length = 32)
     private String changingCycle;
 
-    @Column(name = "PACKAGE_CHANGING", nullable = false, length = 32)
-    private String packageChanging;
+    @Column(name = "PACKAGE_CHANGING", nullable = false, precision = 24, scale = 6)
+    private BigDecimal packageChanging;
 
-    @Column(name = "ABOVE_QUOTA_CHANGING", nullable = false, length = 32)
-    private String aboveQuotaChanging;
+    @Column(name = "ABOVE_QUOTA_CHANGING", nullable = false, precision = 24, scale = 6)
+    private BigDecimal aboveQuotaChanging;
 
     @Column(name = "PACKAGE_TEMP_AMOUNT", nullable = false, precision = 24, scale = 6)
     private BigDecimal packageTempAmount;
@@ -172,19 +175,19 @@ public class IotPackageUsedMonthly {
         this.packageTempAmount = packageTempAmount;
     }
 
-    public String getAboveQuotaChanging() {
+    public BigDecimal getAboveQuotaChanging() {
         return aboveQuotaChanging;
     }
 
-    public void setAboveQuotaChanging(String aboveQuotaChanging) {
+    public void setAboveQuotaChanging(BigDecimal aboveQuotaChanging) {
         this.aboveQuotaChanging = aboveQuotaChanging;
     }
 
-    public String getPackageChanging() {
+    public BigDecimal getPackageChanging() {
         return packageChanging;
     }
 
-    public void setPackageChanging(String packageChanging) {
+    public void setPackageChanging(BigDecimal packageChanging) {
         this.packageChanging = packageChanging;
     }
 

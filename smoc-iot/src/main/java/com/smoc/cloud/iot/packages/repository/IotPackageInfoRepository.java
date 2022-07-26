@@ -1,5 +1,6 @@
 package com.smoc.cloud.iot.packages.repository;
 
+import com.smoc.cloud.api.response.account.IotAccountPackageInfo;
 import com.smoc.cloud.common.iot.validator.IotPackageInfoValidator;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
@@ -22,6 +23,23 @@ public interface IotPackageInfoRepository extends JpaRepository<IotPackageInfo, 
     PageList<IotPackageInfoValidator> page(PageParams<IotPackageInfoValidator> pageParams);
 
     List<IotPackageInfo> findByPackageName(String packageName);
+
+    /**
+     * 根据用户账号分页查询账号套餐
+     *
+     * @param account
+     * @return
+     */
+    PageList<IotAccountPackageInfo> page(String account, PageParams<IotAccountPackageInfo> pageParams);
+
+    /**
+     * 根据用户账号分页查询账号套餐
+     *
+     * @param account
+     * @param packageId
+     * @return
+     */
+    IotAccountPackageInfo queryAccountPackageById(String account, String packageId);
 
     @Modifying
     @Query(value = "update iot_package_info set PACKAGE_STATUS=:status where ID = :id ", nativeQuery = true)

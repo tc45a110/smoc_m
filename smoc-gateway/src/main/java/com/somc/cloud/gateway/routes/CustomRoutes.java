@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 
-
 import javax.annotation.Resource;
 
 /**
@@ -29,6 +28,9 @@ public class CustomRoutes {
     //梦网回执
     @Resource
     private GatewayFilter intellectSignatureGatewayFilter;
+
+    @Resource
+    private GatewayFilter iotServerGatewayFilter;
 
     @Bean
     public RouteLocator identityRouteLocator(RouteLocatorBuilder builder) {
@@ -63,7 +65,17 @@ public class CustomRoutes {
                             return true;
                         }).filters(f -> f.stripPrefix(1).filter(shortMessageSignatureGatewayFilter)).uri("lb://smoc-http-server")
 
-                ).build();
+                )
+                /**
+                 * iot物联网卡服务
+                 */
+                .route(r -> r.method(HttpMethod.POST).and().path("/smoc-gateway/iot-server/iot/**").and().readBody(String.class, requestBody -> {
+                            //相当于缓存了body信息，在filter 中可以这么获取 exchange.getAttribute("cachedRequestBodyObject");
+                            return true;
+                        }).filters(f -> f.stripPrefix(2).filter(iotServerGatewayFilter)).uri("lb://iot")
+
+                )
+                .build();
     }
 
 //配置限流代码 先注释掉。现在增加了根据业务动态限流

@@ -23,7 +23,7 @@ public class IotAccountPackageItemsRepositoryImpl extends BasePageRepository {
 
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");
-        sqlBuffer.append("  t.ID");
+        sqlBuffer.append(" t.ID");
         sqlBuffer.append(",t.PACKAGE_NAME");
         sqlBuffer.append(",t.PACKAGE_TYPE");
         sqlBuffer.append(",t.PACKAGE_CHANGING");
@@ -31,6 +31,10 @@ public class IotAccountPackageItemsRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(",t.CHANGING_CYCLE");
         sqlBuffer.append(",t.CYCLE_QUOTA");
         sqlBuffer.append(",t.ABOVE_QUOTA_CHANGING");
+        sqlBuffer.append(",t.PACKAGE_TEMP_AMOUNT");
+        sqlBuffer.append(",t.PACKAGE_TEMP_AMOUNT_FEE");
+        sqlBuffer.append(",t.CYCLE_FUNCTION_FEE");
+        sqlBuffer.append(",t.WARNING_LEVEL");
         sqlBuffer.append(",t.PACKAGE_CARDS_NUM");
         sqlBuffer.append(",t.REMARK");
         sqlBuffer.append(",u.ACCOUNT_ID USE_STATUS");

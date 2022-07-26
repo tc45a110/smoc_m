@@ -41,12 +41,12 @@ public class IotPackageInfoController {
     /**
      * 根据套餐id查询，套餐配置的信息，及未配置的 物联网卡信息
      *
-     * @param PackageId
+     * @param packageId
      * @return
      */
     @RequestMapping(value = "/list/{packageId}", method = RequestMethod.GET)
-    public ResponseData<List<IotFlowCardsPrimaryInfoValidator>> list(@PathVariable String PackageId) {
-        ResponseData<List<IotFlowCardsPrimaryInfoValidator>> data = iotPackageInfoService.list(PackageId);
+    public ResponseData<List<IotFlowCardsPrimaryInfoValidator>> list(@PathVariable String packageId) {
+        ResponseData<List<IotFlowCardsPrimaryInfoValidator>> data = iotPackageInfoService.list(packageId);
         return data;
     }
 

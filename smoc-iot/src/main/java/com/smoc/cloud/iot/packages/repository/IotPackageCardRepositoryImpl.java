@@ -89,7 +89,7 @@ public class IotPackageCardRepositoryImpl extends BasePageRepository {
 
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");
-        sqlBuffer.append("  t.ID");
+        sqlBuffer.append(" t.ID");
         sqlBuffer.append(",t.CARRIER");
         sqlBuffer.append(",t.CARD_TYPE");
         sqlBuffer.append(",t.ORDER_NUM");
@@ -101,11 +101,12 @@ public class IotPackageCardRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(",t.CYCLE_QUOTA");
         sqlBuffer.append(",t.ACTIVE_DATE");
         sqlBuffer.append(",t.OPEN_DATE");
+        sqlBuffer.append(",t.OPEN_CARD_FEE");
         sqlBuffer.append(",pc.PACKAGE_ID USE_STATUS");
         sqlBuffer.append(",t.CARD_STATUS");
         sqlBuffer.append(",t.CREATED_BY");
         sqlBuffer.append(",DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME");
-        sqlBuffer.append("  from iot_flow_cards_primary_info t left join  iot_package_info pc on t.ID=pc.CARD_ID  where pc.PACKAGE_ID=? or t.USE_STATUS=? ");
+        sqlBuffer.append("  from iot_flow_cards_primary_info t left join  iot_package_cards pc on t.ID=pc.CARD_ID  where pc.PACKAGE_ID=? or t.USE_STATUS=? ");
 
         sqlBuffer.append(" order by t.CREATED_TIME desc");
         log.info("[sqlBuffer]:{}", sqlBuffer);
@@ -128,26 +129,32 @@ public class IotPackageCardRepositoryImpl extends BasePageRepository {
             conn = dataSource.getConnection();
             conn.setAutoCommit(false);
             stmt = conn.createStatement();
-            //处理原来套餐配置的物联网卡
-            stmt.addBatch("update iot_flow_cards_primary_info c  inner join iot_package_info pc  on  c.ID=pc.CARD_ID set c.USE_STATUS  ='0' where pc.PACKAGE_ID='" + packageId + "' ");
-            stmt.addBatch("delete from iot_package_info where PACKAGE_ID='" + packageId + "' ");
-            //处理套餐新设置的物联网卡
+            /**
+             * 处理原来套餐配置的物联网卡
+             */
+            //取消原来配置的物联网卡
+            stmt.addBatch("update iot_flow_cards_primary_info c inner join iot_package_cards pc on c.ID=pc.CARD_ID set c.USE_STATUS ='0' where pc.PACKAGE_ID='" + packageId + "' ");
+            stmt.addBatch("delete from iot_package_cards where PACKAGE_ID='" + packageId + "' ");
+            stmt.addBatch(" update iot_package_info set PACKAGE_CARDS_NUM =0 where id = '" + packageId + "' ");
+
+            /**
+             * 处理套餐新设置的物联网卡
+             */
             if (!StringUtils.isEmpty(cardsId)) {
                 String[] cards = cardsId.split(",");
                 Integer cardsNum = cards.length;
                 if (null != cards && cardsNum > 0) {
                     for (String cardId : cards) {
                         StringBuffer sqlBuffer = new StringBuffer();
-                        sqlBuffer.append(" insert into iot_package_info(ID,PACKAGE_ID,CARD_ID,CARD_MSISDN,CARD_IMSI,CARD_ICCID,STATUS,CREATED_BY,CREATED_TIME)");
+                        sqlBuffer.append(" insert into iot_package_cards(ID,PACKAGE_ID,CARD_ID,CARD_MSISDN,CARD_IMSI,CARD_ICCID,STATUS,CREATED_BY,CREATED_TIME)");
                         sqlBuffer.append(" select '" + UUID.uuid32() + "','" + packageId + "','" + cardId + "',MSISDN,IMSI,ICCID,'1','system',NOW() from iot_flow_cards_primary_info where id = '" + cardId + "' ");
                         stmt.addBatch(sqlBuffer.toString());
                         stmt.addBatch(" update iot_flow_cards_primary_info set USE_STATUS ='1' where id = '" + cardId + "' ");
                     }
                     stmt.addBatch(" update iot_package_info set PACKAGE_CARDS_NUM =" + cardsNum + " where id = '" + packageId + "' ");
                 }
-            } else {
-                stmt.addBatch(" update iot_package_info set PACKAGE_CARDS_NUM =0 where id = '" + packageId + "' ");
             }
+
             stmt.executeBatch();
             stmt.clearBatch();
             stmt.close();

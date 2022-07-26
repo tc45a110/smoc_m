@@ -9,4 +9,6 @@ import lombok.Setter;
 public class BaseRequest {
 
     private String account;
+
+    private String timestamp;
 }

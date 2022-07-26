@@ -1,15 +1,20 @@
 package com.smoc.cloud.iot.carrier.repository;
 
+import com.google.gson.Gson;
+import com.smoc.cloud.api.response.info.SimBaseInfoResponse;
 import com.smoc.cloud.common.iot.validator.IotFlowCardsPrimaryInfoValidator;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.iot.carrier.rowmapper.IotFlowCardsPrimaryInfoRowMapper;
 import com.smoc.cloud.iot.common.BasePageRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.util.StringUtils;
 
+import java.lang.management.GarbageCollectorMXBean;
 import java.util.ArrayList;
 import java.util.List;
-
+@Slf4j
 public class IotFlowCardsPrimaryInfoRepositoryImpl extends BasePageRepository {
 
     public PageList<IotFlowCardsPrimaryInfoValidator> page(PageParams<IotFlowCardsPrimaryInfoValidator> pageParams) {
@@ -99,5 +104,62 @@ public class IotFlowCardsPrimaryInfoRepositoryImpl extends BasePageRepository {
         PageList<IotFlowCardsPrimaryInfoValidator> pageList = this.queryByPageForMySQL(sqlBuffer.toString(), params, pageParams.getCurrentPage(), pageParams.getPageSize(), new IotFlowCardsPrimaryInfoRowMapper());
         pageList.getPageParams().setParams(qo);
         return pageList;
+    }
+
+    /**
+     * 根据账号及msisdn 查询物联网卡基本信息
+     * @param account
+     * @param msisdn
+     * @return
+     */
+    public SimBaseInfoResponse findSimByAccountAndMsisdn(String account, String msisdn) {
+
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append(" t.MSISDN");
+        sqlBuffer.append(",t.IMSI");
+        sqlBuffer.append(",t.ICCID");
+        sqlBuffer.append(",t.ACTIVE_DATE");
+        sqlBuffer.append(",t.OPEN_DATE");
+        sqlBuffer.append("  from iot_flow_cards_primary_info t,iot_account_package_items a,iot_package_cards pc where pc.PACKAGE_ID=a.PACKAGE_ID and pc.CARD_ID=t.ID and a.ACCOUNT_ID=? and t.MSISDN=? ");
+
+        Object[] params = new Object[2];
+        params[0] = account;
+        params[1] = msisdn;
+        SimBaseInfoResponse simBaseInfoResponse = this.jdbcTemplate.queryForObject(sqlBuffer.toString(), new BeanPropertyRowMapper<SimBaseInfoResponse>(SimBaseInfoResponse.class), params);
+        return simBaseInfoResponse;
+    }
+
+    /**
+     * 码号信息批量查询
+     * @param account
+     * @param msisdns
+     * @return
+     */
+    public List<SimBaseInfoResponse> queryBatchSimBaseInfo(String account, List<String> msisdns) {
+
+        StringBuffer msisdnBuffer = new StringBuffer();
+        for(String msisdn:msisdns){
+           if(msisdnBuffer.length()<1){
+               msisdnBuffer.append("'"+msisdn+"'");
+           }else {
+               msisdnBuffer.append(",'"+msisdn+"'");
+           }
+        }
+
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append(" t.MSISDN");
+        sqlBuffer.append(",t.IMSI");
+        sqlBuffer.append(",t.ICCID");
+        sqlBuffer.append(",t.ACTIVE_DATE");
+        sqlBuffer.append(",t.OPEN_DATE");
+        sqlBuffer.append("  from iot_flow_cards_primary_info t,iot_account_package_items a,iot_package_cards pc where pc.PACKAGE_ID=a.PACKAGE_ID and pc.CARD_ID=t.ID and a.ACCOUNT_ID=? and t.MSISDN in ("+msisdnBuffer+") ");
+
+        Object[] params = new Object[1];
+        params[0] = account;
+        log.info("[sql]:{}",sqlBuffer);
+        List<SimBaseInfoResponse> list = this.jdbcTemplate.query(sqlBuffer.toString(), new BeanPropertyRowMapper<SimBaseInfoResponse>(SimBaseInfoResponse.class), params);
+        return list;
     }
 }

@@ -22,7 +22,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping("iot/sim/flow")
+@RequestMapping("sim/flow")
 public class IotSimFlowQueryController {
 
     private IotSimFlowQueryService iotSimFlowQueryService;

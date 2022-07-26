@@ -22,7 +22,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping("iot/sim/info")
+@RequestMapping("sim/info")
 public class IotSimInfoQueryController {
 
     @Autowired
@@ -34,10 +34,10 @@ public class IotSimInfoQueryController {
      * @param orderHandleRequest
      * @return
      */
-    @RequestMapping(value = "/queryOrderHandle", method = RequestMethod.POST)
-    public ResponseData<OrderHandleResponse> orderHandle(@RequestBody OrderHandleRequest orderHandleRequest) {
-        return iotSimInfoQueryService.queryOrderHandle(orderHandleRequest);
-    }
+//    @RequestMapping(value = "/queryOrderHandle", method = RequestMethod.POST)
+//    public ResponseData<OrderHandleResponse> orderHandle(@RequestBody OrderHandleRequest orderHandleRequest) {
+//        return iotSimInfoQueryService.queryOrderHandle(orderHandleRequest);
+//    }
 
     /**
      * 物联网卡批量办理结果查询
@@ -45,10 +45,10 @@ public class IotSimInfoQueryController {
      * @param batchSimHandleRequest
      * @return
      */
-    @RequestMapping(value = "/queryBatchSimHandle", method = RequestMethod.POST)
-    public ResponseData<BatchSimHandleResponse> queryBatchSimHandle(@RequestBody BatchSimHandleRequest batchSimHandleRequest) {
-        return iotSimInfoQueryService.queryBatchSimHandle(batchSimHandleRequest);
-    }
+//    @RequestMapping(value = "/queryBatchSimHandle", method = RequestMethod.POST)
+//    public ResponseData<BatchSimHandleResponse> queryBatchSimHandle(@RequestBody BatchSimHandleRequest batchSimHandleRequest) {
+//        return iotSimInfoQueryService.queryBatchSimHandle(batchSimHandleRequest);
+//    }
 
     /**
      * 物联网卡基本信息查询
@@ -68,7 +68,7 @@ public class IotSimInfoQueryController {
      * @return
      */
     @RequestMapping(value = "/queryBatchSimBaseInfo", method = RequestMethod.POST)
-    public ResponseData<List<BatchSimBaseInfoResponse>> queryBatchSimBaseInfo(@RequestBody SimsBaseRequest simsBaseRequest) {
+    public ResponseData<List<SimBaseInfoResponse>> queryBatchSimBaseInfo(@RequestBody SimsBaseRequest simsBaseRequest) {
         return iotSimInfoQueryService.queryBatchSimBaseInfo(simsBaseRequest);
     }
 

@@ -31,6 +31,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -199,6 +200,7 @@ public class CarrierFlowCardsController {
         validator.setId(UUID.uuid32());
         validator.setCardStatus("1");
         validator.setUseStatus("0");
+        validator.setOpenCardFee(new BigDecimal("0"));
 
         view.addObject("pools", dataPool.getData().getList());
         view.addObject("carriers", dataCarrier.getData().getList());
