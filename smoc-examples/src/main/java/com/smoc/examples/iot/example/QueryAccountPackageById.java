@@ -10,32 +10,31 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class QueryAccountPackageById {
+public class QueryAccountPackageById extends Base {
 
 
-    public  static void main(String[] args) throws Exception {
-
+    public static void main(String[] args) throws Exception {
         //请求路径（具体参见技术文档）
-        String url = "http://localhost:18088/smoc-gateway/iot-server/iot/account/info/queryAccountPackageById";
+        String url = baseUrl + "/iot/account/info/queryAccountPackageById";
 
         //自定义header协议
         Map<String, String> header = new HashMap<>();
         //signature-nonce 为17位数字，并且每次请求signature-nonce不能重复
-        String signatureNonce =  DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(10);
-        System.out.println("[接口请求][signatureNonce]数据:" +signatureNonce);
-        header.put("signature-nonce",signatureNonce);
+        String signatureNonce = DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(10);
+        System.out.println("[Header][signatureNonce]数据:" + signatureNonce);
+        header.put("signature-nonce", signatureNonce);
         header.put("account", "IOT100001618");
 
         //请求的数据
-        Map<String,String> requestDataMap = new HashMap<>();
+        Map<String, String> requestDataMap = new HashMap<>();
         //账号
-        requestDataMap.put("account","IOT100001618");
+        requestDataMap.put("account", "IOT100001618");
 
-        //账号
-        requestDataMap.put("packageId","68431b97d812475ea2f7ae1d17b2e82b");
+        //套餐id
+        requestDataMap.put("packageId", "68431b97d812475ea2f7ae1d17b2e82b");
         //时间戳
         String timestamp = DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS");
-        requestDataMap.put("timestamp",timestamp);
+        requestDataMap.put("timestamp", timestamp);
 
         //组织签名字符串
         StringBuffer signData = new StringBuffer();
@@ -46,15 +45,15 @@ public class QueryAccountPackageById {
         //加密后的身份证号
         signData.append(requestDataMap.get("timestamp"));
         //签名 MD5_HMAC 签名KEY,参见给的账号EXCEL文件
-        String sign = HMACUtil.md5_HMAC_sign(signData.toString(),"235P990t4vGB917d009t313UEF378224");
-        System.out.println("[接口请求][签名数据]数据:" +signData);
-        System.out.println("[接口请求][签名]数据:" +sign);
+        String sign = HMACUtil.md5_HMAC_sign(signData.toString(), "235P990t4vGB917d009t313UEF378224");
+        System.out.println("[接口请求][签名数据]数据:" + signData);
+        System.out.println("[接口请求][签名]数据:" + sign);
 
         header.put("signature", sign);
         //转JSON请求数据
         String requestJsonData = new Gson().toJson(requestDataMap);
-        System.out.println("[请求JSON]数据:" +requestJsonData);
-        String result = Okhttp3Utils.postJson(url,requestJsonData,header);
-        System.out.println("[请求响应]数据:" +result);
+        System.out.println("[请求JSON]数据:" + requestJsonData);
+        String result = Okhttp3Utils.postJson(url, requestJsonData, header);
+        System.out.println("[请求响应]数据:" + result);
     }
 }

@@ -26,6 +26,7 @@ public class IotFlowCardsPrimaryInfoRepositoryImpl extends BasePageRepository {
         StringBuilder sqlBuffer = new StringBuilder("select ");
         sqlBuffer.append("  t.ID");
         sqlBuffer.append(",t.CARRIER");
+        sqlBuffer.append(",c.CARRIER_NAME");
         sqlBuffer.append(",t.CARD_TYPE");
         sqlBuffer.append(",t.ORDER_NUM");
         sqlBuffer.append(",t.MSISDN");
@@ -41,7 +42,7 @@ public class IotFlowCardsPrimaryInfoRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(",t.CARD_STATUS");
         sqlBuffer.append(",t.CREATED_BY");
         sqlBuffer.append(",DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME");
-        sqlBuffer.append("  from iot_flow_cards_primary_info t where 1=1 ");
+        sqlBuffer.append("  from iot_flow_cards_primary_info t,iot_carrier_info c where c.ID=t.CARRIER ");
 
         List<Object> paramsList = new ArrayList<Object>();
 
@@ -81,8 +82,21 @@ public class IotFlowCardsPrimaryInfoRepositoryImpl extends BasePageRepository {
         }
 
         if (!StringUtils.isEmpty(qo.getOpenDate())) {
-            sqlBuffer.append(" and t.OPEN_DATE = ?");
-            paramsList.add(qo.getOpenDate().trim());
+            String[] date = qo.getOpenDate().split(" - ");
+            sqlBuffer.append(" and DATE_FORMAT(t.OPEN_DATE,'%Y-%m-%d') >= ? ");
+            paramsList.add(date[0]);
+            sqlBuffer.append(" and DATE_FORMAT(t.OPEN_DATE,'%Y-%m-%d') <= ? ");
+            paramsList.add(date[1]);
+        }
+
+        if (!StringUtils.isEmpty(qo.getStartDateTime())) {
+            sqlBuffer.append(" and DATE_FORMAT(t.CREATED_TIME,'%Y-%m-%d') >= ? ");
+            paramsList.add(qo.getStartDateTime());
+        }
+
+        if (!StringUtils.isEmpty(qo.getEndDateTime())) {
+            sqlBuffer.append(" and DATE_FORMAT(t.CREATED_TIME,'%Y-%m-%d') <= ? ");
+            paramsList.add(qo.getEndDateTime());
         }
 
         if (!StringUtils.isEmpty(qo.getUseStatus())) {

@@ -62,6 +62,17 @@
                                                 </select>
                                             </div>
                                             <div class="col-md-6 form-group">
+                                                <select class="selectpicker" name="poolType" required>
+                                                    <option value="">------请选择流量池类型------</option>
+                                                    <option th:selected="${validator.poolType == '02'}" value="02">
+                                                        ------共享流量------
+                                                    </option>
+                                                    <option th:selected="${validator.poolType == '03'}" value="03">
+                                                        ------流量池------
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6 form-group">
                                                 <label>流量池名称<span class="text-danger">*</span>&nbsp;<span
                                                         class="text-danger"
                                                         th:if="${#fields.hasErrors('poolName')}"
@@ -93,30 +104,31 @@
                                                 </label>
                                                 <input type="text" required="" class="form-control"
                                                        autocomplete="off" th:field="*{poolSize}"
-                                                       min="0.0001"  placeholder="流量池大小（G）">
+                                                       min="0.0001" placeholder="流量池大小（G）">
+
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label>预警值（%）<span class="text-danger">*</span>&nbsp;<span
+                                                        class="text-danger"
+                                                        th:if="${#fields.hasErrors('warningLevel')}"
+                                                        th:errors="*{warningLevel}"
+                                                        style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input type="text" required="" class="form-control"
+                                                       autocomplete="off" th:field="*{warningLevel}"
+                                                       min="10" placeholder="预警值（%）">
 
                                             </div>
                                             <div class="col-md-6 form-group">
                                                 <select class="selectpicker" name="continueType">
-                                                    <option>------请选择续流方式------</option>
-                                                    <option value="1">------方式1------</option>
-                                                    <option value="2">------方式2------</option>
+                                                    <option value="">------请选择续流方式------</option>
+                                                    <option value="1" th:selected="${validator.continueType == '1'}">------方式1------</option>
+                                                    <option value="2" th:selected="${validator.continueType == '1'}">------方式2------</option>
                                                 </select>
                                             </div>
-                                            <div class="col-md-6 form-group">
-                                                <label class="m-b-10">流量池状态</label>
-                                                <br/>
-                                                <div style="margin-top:0px" class="radio radio-info checkbox-inline">
-                                                    <input name="poolStatus" type="radio" value="1" required
-                                                           th:checked="${validator.poolStatus eq '1'}"><label>有效</label>
-                                                </div>
-                                                <div style="margin-top:0px" class="radio radio-info checkbox-inline">
-                                                    <input name="poolStatus" type="radio" value="0" required
-                                                           th:checked="${validator.poolStatus eq '0'}"><label>无效</label>
-                                                </div>
-                                            </div>
-
                                             <div class="col-md-12 text-center m-t-20">
+                                                <input type="hidden" th:field="*{usedAmount}">
+                                                <input type="hidden" th:field="*{poolStatus}">
                                                 <input type="hidden" th:field="*{syncDate}">
                                                 <input type="hidden" th:field="*{createdTime}">
                                                 <input type="hidden" th:field="*{createdBy}">
@@ -155,6 +167,7 @@
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
+
 
 
 </script>

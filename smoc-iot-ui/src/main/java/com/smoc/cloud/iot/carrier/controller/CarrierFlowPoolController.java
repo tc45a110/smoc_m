@@ -29,6 +29,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -82,11 +83,9 @@ public class CarrierFlowPoolController {
         IotCarrierInfoValidator validatorCarrier = new IotCarrierInfoValidator();
         paramsCarrier.setParams(validatorCarrier);
 
-        //查询
+        //查询运营商
         ResponseData<PageList<IotCarrierInfoValidator>> dataCarrier = iotCarrierInfoService.page(paramsCarrier);
 
-        Map<String, String> carrierMap = dataCarrier.getData().getList().stream().collect(Collectors.toMap(IotCarrierInfoValidator::getId, IotCarrierInfoValidator::getCarrierName));
-        request.getSession().setAttribute("carrierMap", carrierMap);
         view.addObject("validator", validator);
         view.addObject("list", data.getData().getList());
         view.addObject("carriers", dataCarrier.getData().getList());
@@ -120,14 +119,9 @@ public class CarrierFlowPoolController {
         IotCarrierInfoValidator validatorCarrier = new IotCarrierInfoValidator();
         paramsCarrier.setParams(validatorCarrier);
 
-        //查询
+        //查询运营商
         ResponseData<PageList<IotCarrierInfoValidator>> dataCarrier = iotCarrierInfoService.page(paramsCarrier);
 
-        log.info("[dataCarrier]:{}", new Gson().toJson(dataCarrier));
-        log.info("[validator]:{}", new Gson().toJson(validator));
-
-        Map<String, String> carrierMap = dataCarrier.getData().getList().stream().collect(Collectors.toMap(IotCarrierInfoValidator::getId, IotCarrierInfoValidator::getCarrierName));
-        request.getSession().setAttribute("carrierMap", carrierMap);
         view.addObject("validator", validator);
         view.addObject("list", data.getData().getList());
         view.addObject("carriers", dataCarrier.getData().getList());
@@ -151,7 +145,7 @@ public class CarrierFlowPoolController {
         paramsCarrier.setCurrentPage(1);
         IotCarrierInfoValidator validatorCarrier = new IotCarrierInfoValidator();
         paramsCarrier.setParams(validatorCarrier);
-        //查询
+        //查询运营商
         ResponseData<PageList<IotCarrierInfoValidator>> dataCarrier = iotCarrierInfoService.page(paramsCarrier);
         if (!ResponseCode.SUCCESS.getCode().equals(dataCarrier.getCode())) {
             view.addObject("error", dataCarrier.getCode() + ":" + dataCarrier.getMessage());
@@ -160,6 +154,9 @@ public class CarrierFlowPoolController {
 
         IotCarrierFlowPoolValidator validator = new IotCarrierFlowPoolValidator();
         validator.setId(UUID.uuid32());
+        validator.setPoolStatus("1");
+        validator.setUsedAmount(new BigDecimal("0"));
+        validator.setWarningLevel(90);
 
         view.addObject("carriers", dataCarrier.getData().getList());
         view.addObject("validator", validator);

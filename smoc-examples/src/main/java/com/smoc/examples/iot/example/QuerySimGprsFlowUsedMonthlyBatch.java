@@ -8,12 +8,12 @@ import com.smoc.examples.utils.Utils;
 
 import java.util.*;
 
-public class QuerySimGprsFlowUsedMonthlyBatch {
+public class QuerySimGprsFlowUsedMonthlyBatch extends Base{
 
     public  static void main(String[] args) throws Exception {
 
         //请求路径（具体参见技术文档）
-        String url = "http://localhost:18088/smoc-gateway/iot-server/iot/sim/flow/querySimGprsFlowUsedMonthlyBatch";
+        String url = baseUrl + "/iot/sim/flow/querySimGprsFlowUsedMonthlyBatch";
 
         //自定义header协议
         Map<String, String> header = new HashMap<>();

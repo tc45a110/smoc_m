@@ -20,23 +20,37 @@ public class IotCarrierFlowPoolRepositoryImpl extends BasePageRepository {
 
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");
-        sqlBuffer.append("  t.ID");
+        sqlBuffer.append(" t.ID");
         sqlBuffer.append(",t.CARRIER_ID");
+        sqlBuffer.append(",c.CARRIER_NAME");
         sqlBuffer.append(",t.POOL_NAME");
+        sqlBuffer.append(",t.POOL_TYPE");
         sqlBuffer.append(",t.POOL_CARD_NUMBER");
         sqlBuffer.append(",t.POOL_SIZE");
+        sqlBuffer.append(",t.USED_AMOUNT");
         sqlBuffer.append(",t.SYNC_DATE");
+        sqlBuffer.append(",t.WARNING_LEVEL");
         sqlBuffer.append(",t.CONTINUE_TYPE");
         sqlBuffer.append(",t.POOL_STATUS");
         sqlBuffer.append(",t.CREATED_BY");
         sqlBuffer.append(",DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME");
-        sqlBuffer.append("  from iot_carrier_flow_pool t where 1=1 ");
+        sqlBuffer.append("  from iot_carrier_flow_pool t,iot_carrier_info c where t.CARRIER_ID = c.ID ");
 
         List<Object> paramsList = new ArrayList<Object>();
 
         if (!StringUtils.isEmpty(qo.getCarrierId())) {
             sqlBuffer.append(" and t.CARRIER_ID = ?");
             paramsList.add(qo.getCarrierId().trim());
+        }
+
+        if (!StringUtils.isEmpty(qo.getCarrierName())) {
+            sqlBuffer.append(" and c.CARRIER_NAME like ?");
+            paramsList.add("%" + qo.getCarrierName().trim() + "%");
+        }
+
+        if (!StringUtils.isEmpty(qo.getPoolType())) {
+            sqlBuffer.append(" and t.POOL_TYPE = ?");
+            paramsList.add(qo.getPoolType().trim());
         }
 
         if (!StringUtils.isEmpty(qo.getPoolName())) {

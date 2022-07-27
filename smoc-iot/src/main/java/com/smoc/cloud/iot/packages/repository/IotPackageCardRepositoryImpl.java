@@ -91,6 +91,7 @@ public class IotPackageCardRepositoryImpl extends BasePageRepository {
         StringBuilder sqlBuffer = new StringBuilder("select ");
         sqlBuffer.append(" t.ID");
         sqlBuffer.append(",t.CARRIER");
+        sqlBuffer.append(",t.CARRIER CARRIER_NAME");
         sqlBuffer.append(",t.CARD_TYPE");
         sqlBuffer.append(",t.ORDER_NUM");
         sqlBuffer.append(",t.MSISDN");

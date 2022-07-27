@@ -10,13 +10,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class QueryAccountPackagesByMonth {
+public class QueryAccountPackagesByMonth extends Base{
 
 
     public static void main(String[] args) throws Exception {
 
         //请求路径（具体参见技术文档）
-        String url = "http://localhost:18088/smoc-gateway/iot-server/iot/account/info/queryAccountPackagesByMonth";
+        String url = baseUrl + "/iot/account/info/queryAccountPackagesByMonth";
 
         //自定义header协议
         Map<String, String> header = new HashMap<>();

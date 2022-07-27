@@ -10,12 +10,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class QuerySimStartStatus {
+public class QuerySimStartStatus extends Base{
 
     public  static void main(String[] args) throws Exception {
 
         //请求路径（具体参见技术文档）
-        String url = "http://localhost:18088/smoc-gateway/iot-server/iot/sim/info/querySimStartStatus";
+        String url = baseUrl + "/iot/sim/info/querySimStartStatus";
 
         //自定义header协议
         Map<String, String> header = new HashMap<>();

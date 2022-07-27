@@ -46,4 +46,10 @@ public class IotFlowCardsPrimaryInfoValidator {
     private String updatedBy;
 
     private Date updatedTime;
+
+    private String carrierName;
+
+    private String startDateTime;
+
+    private String endDateTime;
 }

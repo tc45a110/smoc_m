@@ -55,33 +55,49 @@
                                                     [[${package.packageName}]]
                                                 </div>
                                             </div>
-
-                                            <div class="col-md-4">
-                                                <div class="form-group m-b-20">
-                                                    <label style="margin-right:10px">套餐类型：</label><a
-                                                        th:if="${package.packageType =='01'}"
-                                                        class="btn btn-teal btn-rounded  waves-effect waves-light btn-xs">单卡计费</a><a
-                                                        th:if="${package.packageType =='02'}"
-                                                        class="btn btn-teal btn-rounded  waves-effect waves-light btn-xs">流量共享</a>
-                                                </div>
-                                            </div>
                                             <div class="col-md-4">
                                                 <div class="form-group m-b-20">
                                                     <label style="margin-right:10px">套餐流量池额度：</label>
-                                                    [[${package.packagePoolSize}]] G
+                                                    [[${#numbers.formatDecimal(package.packagePoolSize,1,'COMMA',2,'POINT')}]] G
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-group m-b-20">
-                                                    <label style="margin-right:10px">计费周期：</label>
-                                                    [[${package.changingCycle}]]
+                                                    <label style="margin-right:10px">套餐标准费用：</label>
+                                                    <span>[[${#numbers.formatDecimal(package.packageChanging,1,'COMMA',2,'POINT')}]]元</span>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-group m-b-20">
                                                     <label style="margin-right:10px">单卡周期限额：</label>
-                                                    [[${package.cycleQuota}]]
-                                                    G
+                                                    <span style="color:#188ae2" th:if="${package.cycleQuota == 0}">不限</span>
+                                                    <span th:if="${package.cycleQuota != 0}">[[${package.cycleQuota}]]G</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <div class="form-group m-b-20">
+                                                    <label style="margin-right:10px">计费周期：</label>
+                                                    <a th:if="${package.changingCycle =='01'}" class="btn btn-info btn-rounded  waves-effect waves-light btn-ms">自然月</a>
+                                                    <a th:if="${package.changingCycle =='02'}" class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">年</a>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group m-b-20">
+                                                    <label style="margin-right:10px">套餐类型：</label><a
+                                                        th:if="${package.packageType =='01'}"
+                                                        class="btn btn-success btn-rounded  waves-effect waves-light btn-ms">普通流量</a><a
+                                                        th:if="${package.packageType =='02'}"
+                                                        class="btn btn-info btn-rounded  waves-effect waves-light btn-ms">共享流量</a>
+                                                    <a
+                                                            th:if="${package.packageType =='03'}"
+                                                            class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">流量池</a>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group m-b-20">
+                                                    <label style="margin-right:10px">预警值：</label>
+                                                    <span style="color:#188ae2">[[${package.warningLevel}]]%</span>
                                                 </div>
                                             </div>
                                             <div class="col-md-4 pull-right" style="text-align: right">
@@ -166,10 +182,18 @@
                                                                         [[${card.iccid}]]
                                                                     </td>
                                                                     <td>
-                                                                        <a class="btn btn-info btn-rounded  waves-effect waves-light btn-ms">共享流量池类</a>
+                                                                        <a th:if="${card.cardType == '01'}" class="btn btn-success btn-rounded  waves-effect waves-light btn-ms">普通流量</a>
+                                                                        <a th:if="${card.cardType == '02'}" class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">共享流量</a>
+                                                                        <a th:if="${card.cardType == '03'}" class="btn btn-info btn-rounded  waves-effect waves-light btn-ms">流量池</a>
                                                                     </td>
                                                                     <td>
-                                                                        <a class="btn btn-success btn-rounded  waves-effect waves-light btn-ms">已激活</a>
+                                                                        <a th:if="${card.cardStatus == '0'}" class="btn btn-warning btn-rounded  waves-effect waves-light btn-ms">待同步</a>
+                                                                        <a th:if="${card.cardStatus == '1'}" class="btn btn-warning btn-rounded  waves-effect waves-light btn-ms">待激活</a>
+                                                                        <a th:if="${card.cardStatus == '2'}" class="btn btn-success btn-rounded  waves-effect waves-light btn-ms">已激活</a>
+                                                                        <a th:if="${card.cardStatus == '4'}" class="btn btn-danger btn-rounded  waves-effect waves-light btn-ms">停机</a>
+                                                                        <a th:if="${card.cardStatus == '6'}" class="btn btn-success btn-rounded  waves-effect waves-light btn-ms">可测试</a>
+                                                                        <a th:if="${card.cardStatus == '7'}" class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">库存</a>
+                                                                        <a th:if="${card.cardStatus == '8'}" class="btn btn-danger btn-rounded  waves-effect waves-light btn-ms">预销户</a>
                                                                     </td>
                                                                 </tr>
                                                                 </tbody>

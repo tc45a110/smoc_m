@@ -16,11 +16,17 @@ public class IotCarrierFlowPoolValidator {
 
     private String poolName;
 
+    private String poolType;
+
     private Integer poolCardNumber;
 
     private BigDecimal poolSize;
 
+    private BigDecimal usedAmount;
+
     private String syncDate;
+
+    private Integer warningLevel;
 
     private String continueType;
 
@@ -33,4 +39,6 @@ public class IotCarrierFlowPoolValidator {
     private String updatedBy;
 
     private Date updatedTime;
+
+    private String carrierName;
 }

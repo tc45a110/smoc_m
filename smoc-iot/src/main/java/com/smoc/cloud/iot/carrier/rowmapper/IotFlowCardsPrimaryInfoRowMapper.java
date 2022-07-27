@@ -13,6 +13,7 @@ public class IotFlowCardsPrimaryInfoRowMapper implements RowMapper<IotFlowCardsP
         IotFlowCardsPrimaryInfoValidator qo = new IotFlowCardsPrimaryInfoValidator();
         qo.setId(rs.getString("ID"));
         qo.setCarrier(rs.getString("CARRIER"));
+        qo.setCarrierName(rs.getString("CARRIER_NAME"));
         qo.setCardType(rs.getString("CARD_TYPE"));
         qo.setOrderNum(rs.getString("ORDER_NUM"));
         qo.setMsisdn(rs.getString("MSISDN"));
@@ -22,9 +23,7 @@ public class IotFlowCardsPrimaryInfoRowMapper implements RowMapper<IotFlowCardsP
         qo.setChangingType(rs.getString("CHANGING_TYPE"));
         qo.setCycleQuota(new BigDecimal(rs.getBigDecimal("CYCLE_QUOTA").stripTrailingZeros().toPlainString()));
         BigDecimal openCardFee = rs.getBigDecimal("OPEN_CARD_FEE");
-        if (null != openCardFee) {
-            qo.setOpenCardFee(new BigDecimal(openCardFee.stripTrailingZeros().toPlainString()));
-        }
+        qo.setOpenCardFee(new BigDecimal(openCardFee.stripTrailingZeros().toPlainString()));
         qo.setActiveDate(rs.getString("ACTIVE_DATE"));
         qo.setOpenDate(rs.getString("OPEN_DATE"));
         qo.setUseStatus(rs.getString("USE_STATUS"));

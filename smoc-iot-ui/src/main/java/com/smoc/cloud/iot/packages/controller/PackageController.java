@@ -126,6 +126,7 @@ public class PackageController {
         validator.setId(UUID.uuid32());
         validator.setPackageStatus("1");
         validator.setUseStatus("01");
+        validator.setAboveQuotaChanging(new BigDecimal("0"));
         validator.setPackageCardsNum(0);
         validator.setWarningLevel(90);
         validator.setPackageTempAmount(new BigDecimal("0"));
@@ -220,6 +221,7 @@ public class PackageController {
     }
 
     /**
+     * @param id          套餐id
      * @return
      */
     @RequestMapping(value = "/config/edit/{id}", method = RequestMethod.GET)

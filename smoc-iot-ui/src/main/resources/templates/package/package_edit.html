@@ -73,15 +73,31 @@
                                             </div>
 
                                             <div class="col-md-6 form-group">
-                                                <label>结算周期<span class="text-danger">*</span>&nbsp;<span
+                                                <label>计费周期<span class="text-danger">*</span>&nbsp;<span
                                                         class="text-danger"
                                                         th:if="${#fields.hasErrors('changingCycle')}"
                                                         th:errors="*{changingCycle}"
                                                         style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
-                                                <input type="text" required="" class="form-control"
-                                                       autocomplete="off" th:field="*{changingCycle}"
-                                                       data-parsley-length="[1,24]" placeholder="计费周期">
+                                                <select class="selectpicker" name="changingCycle" required>
+                                                    <option value="">------请选择计费周期------</option>
+                                                    <option th:selected="${validator.changingCycle == '01'}" value="01">------自然月------</option>
+                                                    <option th:selected="${validator.changingCycle == '02'}" value="02">------年------</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label>套餐流量类型<span class="text-danger">*</span>&nbsp;<span
+                                                        class="text-danger"
+                                                        th:if="${#fields.hasErrors('packageType')}"
+                                                        th:errors="*{packageType}"
+                                                        style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <select class="selectpicker" name="packageType">
+                                                    <option value="">------请选择套餐流量类型------</option>
+                                                    <option value="01" th:selected="${validator.packageType == '01'}">------普通流量------</option>
+                                                    <option value="02" th:selected="${validator.packageType == '02'}">------共享流量------</option>
+                                                    <option value="03" th:selected="${validator.packageType == '03'}">------流量池------</option>
+                                                </select>
                                             </div>
                                             <div class="col-md-6 form-group">
                                                 <label>套餐周期流量池额度(G)<span class="text-danger">*</span>&nbsp;<span
@@ -104,10 +120,11 @@
                                                 </label>
                                                 <input type="text" required="" class="form-control"
                                                        autocomplete="off" th:field="*{cycleQuota}"
-                                                       min="0.0" placeholder="单卡周期限额(0表示不限量)">
+                                                       min="0" placeholder="单卡周期限额(0表示不限量)" data-toggle="tooltip" data-placement="top"
+                                                       data-original-title="0表示不限量">
                                             </div>
                                             <div class="col-md-6 form-group">
-                                                <label>套餐超限额计费标准（元/K）<span class="text-danger">*</span>&nbsp;<span
+                                                <label>套餐超限额计费（元/K）<span class="text-danger">*</span>&nbsp;<span
                                                         class="text-danger"
                                                         th:if="${#fields.hasErrors('aboveQuotaChanging')}"
                                                         th:errors="*{aboveQuotaChanging}"
@@ -115,40 +132,43 @@
                                                 </label>
                                                 <input type="text" required="" class="form-control"
                                                        autocomplete="off" th:field="*{aboveQuotaChanging}"
-                                                       min="0.01" placeholder="单卡超额计费标准（元/K）">
+                                                       min="0" placeholder="单卡超额计费标准（元/K）" data-toggle="tooltip" data-placement="top"
+                                                       data-original-title="0表示该字段不起作用">
                                             </div>
                                             <div class="col-md-6 form-group">
-                                                <label>套餐临时额度(G)<span
+                                                <label>套餐临时额度(G) <span class="text-danger">*</span><span
                                                         class="text-danger"
                                                         th:if="${#fields.hasErrors('packageTempAmount')}"
                                                         th:errors="*{packageTempAmount}"
                                                         style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
-                                                <input type="text" class="form-control"
+                                                <input type="text" class="form-control" required=""
                                                        autocomplete="off" th:field="*{packageTempAmount}"
-                                                       min="0.00" placeholder="临时额度(G)">
+                                                       min="0.00" placeholder="临时额度(G)" data-toggle="tooltip" data-placement="top"
+                                                       data-original-title="0表示无临时额度">
                                             </div>
                                             <div class="col-md-6 form-group">
-                                                <label>套餐临时额度费用（元）<span
+                                                <label>套餐临时额度费用（元）<span class="text-danger">*</span><span
                                                         class="text-danger"
                                                         th:if="${#fields.hasErrors('packageTempAmountFee')}"
                                                         th:errors="*{packageTempAmountFee}"
                                                         style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
-                                                <input type="text"  class="form-control"
+                                                <input type="text"  class="form-control" required=""
                                                        autocomplete="off" th:field="*{packageTempAmountFee}"
                                                        min="0.00" placeholder="临时额度费用（元）">
                                             </div>
                                             <div class="col-md-6 form-group">
-                                                <label>周期功能费（元/卡）&nbsp;<span
+                                                <label>周期功能费（元/卡）<span class="text-danger">*</span><span
                                                         class="text-danger"
                                                         th:if="${#fields.hasErrors('cycleFunctionFee')}"
                                                         th:errors="*{cycleFunctionFee}"
                                                         style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
-                                                <input type="text"  class="form-control"
+                                                <input type="text"  class="form-control" required=""
                                                        autocomplete="off" th:field="*{cycleFunctionFee}"
-                                                       min="0.00" placeholder="周期功能费（元/卡月，0表示不收功能费）">
+                                                       min="0.00" placeholder="周期功能费（元/卡月，0表示不收功能费）" data-toggle="tooltip" data-placement="top"
+                                                       data-original-title="0表示不收功能费">
                                             </div>
                                             <div class="col-md-6 form-group">
                                                 <label>预警比例(%)<span class="text-danger">*</span>&nbsp;<span
@@ -158,19 +178,10 @@
                                                         style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
                                                 <input type="text" required="" class="form-control" data-parsley-type="number"
-                                                       autocomplete="off" th:field="*{warningLevel}"  placeholder="预警比例（默认90%）">
+                                                       autocomplete="off" th:field="*{warningLevel}"  placeholder="预警比例（默认90%）" data-toggle="tooltip" data-placement="top"
+                                                       data-original-title="使用比例达到这个值，将通知所属人">
                                             </div>
-                                            <div class="col-md-6 form-group">
-                                                <select class="selectpicker" name="packageType">
-                                                    <option value="">------请选择套餐类型------</option>
-                                                    <option th:selected="${validator.packageType == '01'}" value="01">
-                                                        ------单卡计费------
-                                                    </option>
-                                                    <option th:selected="${validator.packageType == '02'}" value="02">
-                                                        ------流量共享------
-                                                    </option>
-                                                </select>
-                                            </div>
+
                                             <div class="col-md-12 text-center m-t-20">
                                                 <input type="hidden" th:field="*{thisMonthUsedAmount}">
                                                 <input type="hidden" th:field="*{lastMonthCarryAmount}">

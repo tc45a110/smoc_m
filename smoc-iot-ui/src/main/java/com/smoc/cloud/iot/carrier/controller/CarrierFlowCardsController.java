@@ -14,6 +14,7 @@ import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.UUID;
+import com.smoc.cloud.common.utils.Utils;
 import com.smoc.cloud.iot.carrier.service.IotCarrierFlowPoolService;
 import com.smoc.cloud.iot.carrier.service.IotCarrierInfoService;
 import com.smoc.cloud.iot.carrier.service.IotFlowCardsPrimaryInfoService;
@@ -71,6 +72,11 @@ public class CarrierFlowCardsController {
         params.setPageSize(10);
         params.setCurrentPage(1);
         IotFlowCardsPrimaryInfoValidator validator = new IotFlowCardsPrimaryInfoValidator();
+
+        Date startDate = DateTimeUtils.getFirstMonth(18);
+        validator.setStartDateTime(DateTimeUtils.getDateFormat(startDate));
+        validator.setEndDateTime(DateTimeUtils.getDateFormat(new Date()));
+
         params.setParams(validator);
 
         //查询
@@ -98,10 +104,8 @@ public class CarrierFlowCardsController {
         //查询
         ResponseData<PageList<IotCarrierInfoValidator>> dataCarrier = iotCarrierInfoService.page(paramsCarrier);
 
-        Map<String, String> carrierMap = dataCarrier.getData().getList().stream().collect(Collectors.toMap(IotCarrierInfoValidator::getId, IotCarrierInfoValidator::getCarrierName));
-        request.getSession().setAttribute("carrierMap", carrierMap);
         Map<String, String> poolMap = dataPool.getData().getList().stream().collect(Collectors.toMap(IotCarrierFlowPoolValidator::getId, IotCarrierFlowPoolValidator::getPoolName));
-        request.getSession().setAttribute("poolMap", poolMap);
+        view.addObject("poolMap", poolMap);
         view.addObject("validator", validator);
         view.addObject("list", data.getData().getList());
         view.addObject("carriers", dataCarrier.getData().getList());
@@ -120,6 +124,10 @@ public class CarrierFlowCardsController {
     public ModelAndView page(@ModelAttribute IotFlowCardsPrimaryInfoValidator validator, PageParams pageParams, HttpServletRequest request) {
         ModelAndView view = new ModelAndView("carrier/carrier_flow_cards_list");
 
+        String createTime = validator.getCreatedTime();
+        String[] date = createTime.split(" - ");
+        validator.setStartDateTime(date[0]);
+        validator.setEndDateTime(date[1]);
         //分页查询
         pageParams.setParams(validator);
 
@@ -147,10 +155,8 @@ public class CarrierFlowCardsController {
         //查询
         ResponseData<PageList<IotCarrierInfoValidator>> dataCarrier = iotCarrierInfoService.page(paramsCarrier);
 
-        Map<String, String> carrierMap = dataCarrier.getData().getList().stream().collect(Collectors.toMap(IotCarrierInfoValidator::getId, IotCarrierInfoValidator::getCarrierName));
-        request.getSession().setAttribute("carrierMap", carrierMap);
         Map<String, String> poolMap = dataPool.getData().getList().stream().collect(Collectors.toMap(IotCarrierFlowPoolValidator::getId, IotCarrierFlowPoolValidator::getPoolName));
-        request.getSession().setAttribute("poolMap", poolMap);
+        view.addObject("poolMap", poolMap);
         view.addObject("validator", validator);
         view.addObject("list", data.getData().getList());
         view.addObject("carriers", dataCarrier.getData().getList());
@@ -198,7 +204,7 @@ public class CarrierFlowCardsController {
 
         IotFlowCardsPrimaryInfoValidator validator = new IotFlowCardsPrimaryInfoValidator();
         validator.setId(UUID.uuid32());
-        validator.setCardStatus("1");
+        validator.setCardStatus("0");
         validator.setUseStatus("0");
         validator.setOpenCardFee(new BigDecimal("0"));
 
@@ -288,6 +294,10 @@ public class CarrierFlowCardsController {
         } else {
             view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":" + ResponseCode.PARAM_LINK_ERROR.getMessage());
             return view;
+        }
+
+        if(StringUtils.isEmpty(iotFlowCardsPrimaryInfoValidator.getOrderNum())){
+            iotFlowCardsPrimaryInfoValidator.setOrderNum(DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(4));
         }
 
         //保存数据

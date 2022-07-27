@@ -53,11 +53,13 @@
                                 </div>
                                 <div class="form-group  col-sm-3">
                                     <input type="text" class="form-control" th:field="*{carrierName}"
-                                           placeholder="运营商名称" autocomplete="off">
+                                           placeholder="运营商名称" autocomplete="off" data-toggle="tooltip" data-placement="top"
+                                           data-original-title="运营商名称">
                                 </div>
                                 <div class="form-group  col-sm-3">
                                     <input type="text" class="form-control"  th:field="*{carrierIdentifying}"
-                                           placeholder="运营商标识" autocomplete="off">
+                                           placeholder="运营商标识" autocomplete="off" data-toggle="tooltip" data-placement="top"
+                                           data-original-title="运营商标识">
                                 </div>
                                 <div class="form-group col-sm-3 pull-right" style="text-align: right">
                                     <button sec:authorize-url="/iot/carrier/page" type="submit"
@@ -128,10 +130,12 @@
                                         [[${info.carrierServerUrl}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">标准接口</a>
+                                        <a th:if="${info.apiType == '1'}" class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">标准接口</a>
+                                        <a th:if="${info.apiType == '2'}" class="btn btn-info btn-rounded  waves-effect waves-light btn-ms">标准接口</a>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a class="btn btn-success btn-rounded  waves-effect waves-light btn-ms">有效</a>
+                                        <a th:if="${info.carrierStatus == '1'}" class="btn btn-success btn-rounded  waves-effect waves-light btn-ms">有效</a>
+                                        <a th:if="${info.carrierStatus == '0'}" class="btn btn-danger btn-rounded  waves-effect waves-light btn-ms">无效</a>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         [[${info.createdBy}]]

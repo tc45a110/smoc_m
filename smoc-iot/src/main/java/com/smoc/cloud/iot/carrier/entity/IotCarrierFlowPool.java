@@ -20,14 +20,23 @@ public class IotCarrierFlowPool {
     @Column(name = "POOL_NAME", nullable = false, length = 128)
     private String poolName;
 
+    @Column(name = "POOL_TYPE", nullable = false, length = 32)
+    private String poolType;
+
     @Column(name = "POOL_CARD_NUMBER")
     private Integer poolCardNumber;
 
     @Column(name = "POOL_SIZE", nullable = false, precision = 24, scale = 6)
     private BigDecimal poolSize;
 
+    @Column(name = "USED_AMOUNT", nullable = false, precision = 24, scale = 6)
+    private BigDecimal usedAmount;
+
     @Column(name = "SYNC_DATE", length = 32)
     private String syncDate;
+
+    @Column(name = "WARNING_LEVEL")
+    private Integer warningLevel;
 
     @Column(name = "CONTINUE_TYPE", length = 32)
     private String continueType;
@@ -111,6 +120,14 @@ public class IotCarrierFlowPool {
         this.poolSize = poolSize;
     }
 
+    public BigDecimal getUsedAmount() {
+        return usedAmount;
+    }
+
+    public void setUsedAmount(BigDecimal usedAmount) {
+        this.usedAmount = usedAmount;
+    }
+
     public Integer getPoolCardNumber() {
         return poolCardNumber;
     }
@@ -119,12 +136,28 @@ public class IotCarrierFlowPool {
         this.poolCardNumber = poolCardNumber;
     }
 
+    public Integer getWarningLevel() {
+        return warningLevel;
+    }
+
+    public void setWarningLevel(Integer warningLevel) {
+        this.warningLevel = warningLevel;
+    }
+
     public String getPoolName() {
         return poolName;
     }
 
     public void setPoolName(String poolName) {
         this.poolName = poolName;
+    }
+
+    public String getPoolType() {
+        return poolType;
+    }
+
+    public void setPoolType(String poolType) {
+        this.poolType = poolType;
     }
 
     public String getCarrierId() {

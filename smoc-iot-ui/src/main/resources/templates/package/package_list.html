@@ -48,16 +48,17 @@
                                 </div>
                                 <div class="form-group  col-sm-3">
                                     <select class="selectpicker" name="packageType">
-                                        <option value="">------请选择套餐类型------</option>
-                                        <option value="01">------单卡计费------</option>
-                                        <option value="02">------流量共享------</option>
+                                        <option value="">------请选择套餐流量类型------</option>
+                                        <option value="01" th:selected="${validator.packageType == '01'}">------普通流量------</option>
+                                        <option value="02" th:selected="${validator.packageType == '02'}">------共享流量------</option>
+                                        <option value="03" th:selected="${validator.packageType == '03'}">------流量池------</option>
                                     </select>
                                 </div>
                                 <div class="form-group  col-sm-3">
                                     <select class="selectpicker" name="useStatus">
                                         <option value="">------请选择套餐使用状态------</option>
-                                        <option value="01">------未使用------</option>
-                                        <option value="02">------已分配------</option>
+                                        <option value="01" th:selected="${validator.useStatus == '01'}">------未使用------</option>
+                                        <option value="02" th:selected="${validator.useStatus == '02'}">------已使用------</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-sm-3 pull-right" style="text-align: right">
@@ -96,17 +97,19 @@
                                 <thead>
                                 <tr>
                                     <th>套餐名称</th>
-                                    <th>套餐类型</th>
+                                    <th>套餐流量类型</th>
                                     <th>套餐标准费用（元）</th>
-                                    <th>结算周期</th>
+                                    <th>计费周期</th>
                                     <th>套餐流量池额度(G)</th>
                                     <th>单卡周期限额(G)</th>
-                                    <th>套餐超限额计费标准（元/K）</th>
+<!--                                    <th>套餐超限额计费（元/K）</th>-->
                                     <th>物联网卡数</th>
                                     <th>当月用量</th>
-                                    <th>使用状态</th>
+
                                     <th>数据同步时间</th>
-                                    <th>创建人</th>
+                                    <th>预警值</th>
+                                    <th>使用状态</th>
+<!--                                    <th>创建人</th>-->
                                     <th>操作</th>
                                 </tr>
                                 <thead>
@@ -116,24 +119,27 @@
                                         [[${info.packageName}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a th:if="${info.packageType =='01'}" class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">单卡计费</a>
-                                        <a th:if="${info.packageType =='02'}" class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">流量共享</a>
+                                        <a th:if="${info.packageType =='01'}" class="btn btn-success btn-rounded  waves-effect waves-light btn-ms">普通流量</a>
+                                        <a th:if="${info.packageType =='02'}" class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">共享流量</a>
+                                        <a th:if="${info.packageType =='03'}" class="btn btn-info btn-rounded  waves-effect waves-light btn-ms">流量池</a>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         [[${info.packageChanging}]] 元
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        [[${info.changingCycle}]]
+                                        <a th:if="${info.changingCycle =='01'}" class="btn btn-info btn-rounded  waves-effect waves-light btn-ms">自然月</a>
+                                        <a th:if="${info.changingCycle =='02'}" class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">年</a>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         [[${info.packagePoolSize}]] G
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        [[${info.cycleQuota}]] G
+                                        <span style="color:#188ae2" th:if="${info.cycleQuota == 0}">不限</span>
+                                        <span th:if="${info.cycleQuota != 0}">[[${info.cycleQuota}]]G</span>
                                     </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        [[${info.aboveQuotaChanging}]] 元/K
-                                    </td>
+<!--                                    <td style="vertical-align: middle;line-height: 26px">-->
+<!--                                        [[${info.aboveQuotaChanging}]] 元/K-->
+<!--                                    </td>-->
                                     <td style="vertical-align: middle;line-height: 26px">
                                         [[${info.packageCardsNum}]] 张
                                     </td>
@@ -145,16 +151,20 @@
                                                  class="progress-bar progress-bar-danger progress-bar-striped active"></div>
                                         </div>
                                     </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        <a th:if="${info.useStatus =='01'}" class="btn btn-warning btn-rounded  waves-effect waves-light btn-ms">未使用</a>
-                                        <a th:if="${info.useStatus =='02'}" class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">已分配</a>
-                                    </td>
+
                                     <td style="vertical-align: middle;line-height: 26px">
                                         [[${info.syncDate}]]
                                     </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        [[${info.createdBy}]]
+                                    <td style="vertical-align: middle;line-height: 26px" >
+                                        [[${info.warningLevel}]]%
                                     </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <a th:if="${info.useStatus =='01'}" class="btn btn-warning btn-rounded  waves-effect waves-light btn-ms">未使用</a>
+                                        <a th:if="${info.useStatus =='02'}" class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">已使用</a>
+                                    </td>
+<!--                                    <td style="vertical-align: middle;line-height: 26px">-->
+<!--                                        [[${info.createdBy}]]-->
+<!--                                    </td>-->
                                     <td style="vertical-align: middle;line-height: 26px">
                                         <a th:href="@{/iot/package/center}"
                                            data-toggle="tooltip" data-placement="bottom"

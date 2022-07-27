@@ -45,7 +45,7 @@
                     <form id="query_form" th:action="@{/iot/carrier/pool/page}" method="post" th:object="${validator}">
                         <div class="row m-b-60">
                             <div class="col-sm-12">
-                                <div class="form-group  col-sm-3">
+                                <div class="form-group  col-sm-4">
                                     <select class="selectpicker" name="carrierId">
                                         <option value="">------请选择运营商------</option>
                                         <option th:each="carrier:${carriers}"
@@ -54,11 +54,22 @@
                                         </option>
                                     </select>
                                 </div>
-                                <div class="form-group  col-sm-3">
+                                <div class="form-group  col-sm-4">
                                     <input type="text" class="form-control" th:field="*{poolName}"
-                                           placeholder="流量池名称" autocomplete="off">
+                                           placeholder="流量池名称" autocomplete="off"  data-toggle="tooltip" data-placement="top"
+                                           data-original-title="流量池名称">
                                 </div>
-                                <div class="form-group col-sm-3 pull-right" style="text-align: right">
+                                <div class="form-group  col-sm-4">
+                                    <select class="selectpicker" name="poolType">
+                                        <option value="">------请选择流量池类型------</option>
+                                        <option th:selected="${validator.poolType == '02'}" value="02">
+                                            ------共享流量------
+                                        </option>
+                                        <option th:selected="${validator.poolType == '03'}" value="03">------流量池------
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-sm-4 pull-right" style="text-align: right">
                                     <button sec:authorize-url="/iot/carrier/pool/page" type="submit"
                                             class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search"></i> 查询
@@ -99,13 +110,15 @@
                                 <tr>
                                     <th>运营商名称</th>
                                     <th>流量池名称</th>
+                                    <th>流量池类型</th>
                                     <th>流量池卡数量</th>
                                     <th>流量池大小（G）</th>
+                                    <th>已使用量（G）</th>
                                     <th>流量池使用状态</th>
                                     <th>数据同步时间</th>
-                                    <th>续流方式</th>
+                                    <th>预警值</th>
                                     <th>流量池状态</th>
-                                    <th>创建人</th>
+<!--                                    <th>创建人</th>-->
                                     <th>创建时间</th>
                                     <th>操作</th>
                                 </tr>
@@ -113,16 +126,23 @@
                                 <tbody>
                                 <tr th:each="info:${list}">
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        [[${session.carrierMap[info.carrierId]}]]
+                                        [[${info.carrierName}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         [[${info.poolName}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <a th:if="${info.poolType == '02'}" class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">共享流量</a>
+                                        <a th:if="${info.poolType == '03'}" class="btn btn-info btn-rounded  waves-effect waves-light btn-ms">流量池</a>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         [[${info.poolCardNumber}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         [[${info.poolSize}]]（G）
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        [[${info.usedAmount}]]（G）
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         <div class="progress" style="margin-top:20px" data-toggle="tooltip"
@@ -136,14 +156,19 @@
                                         [[${info.syncDate}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a class="btn btn-info btn-rounded  waves-effect waves-light btn-ms">手动续流</a>
+                                        [[${info.warningLevel}]]%
                                     </td>
+<!--                                    <td style="vertical-align: middle;line-height: 26px">-->
+<!--                                        <a th:if="${info.continueType == '1'}" class="btn btn-info btn-rounded  waves-effect waves-light btn-ms">方式一</a>-->
+<!--                                        <a th:if="${info.continueType == '2'}" class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">方式二</a>-->
+<!--                                    </td>-->
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a class="btn btn-success btn-rounded  waves-effect waves-light btn-ms">有效</a>
+                                        <a th:if="${info.poolStatus == '1'}"   class="btn btn-success btn-rounded  waves-effect waves-light btn-ms">有效</a>
+                                        <a th:if="${info.poolStatus == '0'}"   class="btn btn-danger btn-rounded  waves-effect waves-light btn-ms">无效</a>
                                     </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        [[${info.createdBy}]]
-                                    </td>
+<!--                                    <td style="vertical-align: middle;line-height: 26px">-->
+<!--                                        [[${info.createdBy}]]-->
+<!--                                    </td>-->
                                     <td style="vertical-align: middle;line-height: 26px">
                                         [[${info.createdTime}]]
                                     </td>
@@ -223,6 +248,7 @@
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
+
 
 
 

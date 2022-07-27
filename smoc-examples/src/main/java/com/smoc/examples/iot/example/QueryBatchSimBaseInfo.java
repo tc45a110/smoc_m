@@ -8,13 +8,13 @@ import com.smoc.examples.utils.Utils;
 
 import java.util.*;
 
-public class QueryBatchSimBaseInfo {
+public class QueryBatchSimBaseInfo extends Base{
 
 
     public  static void main(String[] args) throws Exception {
 
         //请求路径（具体参见技术文档）
-        String url = "http://localhost:18088/smoc-gateway/iot-server/iot/sim/info/queryBatchSimBaseInfo";
+        String url = baseUrl + "/iot/sim/info/queryBatchSimBaseInfo";
 
         //自定义header协议
         Map<String, String> header = new HashMap<>();

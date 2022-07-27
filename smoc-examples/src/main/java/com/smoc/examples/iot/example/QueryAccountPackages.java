@@ -13,13 +13,13 @@ import java.util.Map;
 /**
  *
  */
-public class QueryAccountPackages {
+public class QueryAccountPackages extends Base{
 
 
     public  static void main(String[] args) throws Exception {
 
         //请求路径（具体参见技术文档）
-        String url = "http://localhost:18088/smoc-gateway/iot-server/iot/account/info/queryAccountPackages";
+        String url = baseUrl + "/iot/account/info/queryAccountPackages";
 
         //自定义header协议
         Map<String, String> header = new HashMap<>();
