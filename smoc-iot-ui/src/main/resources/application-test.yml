@@ -23,9 +23,9 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 127.0.0.1:8848
+        server-addr: 172.28.235.186:8848
   redis: #redis配置
-    host: 123.57.216.87
+    host: 172.28.235.188
     port: 6555
     password: Dj!bm%Mk8DyP
     database: 1
@@ -72,7 +72,7 @@ com:
 
 logging:
   config: classpath:logback-spring.xml
-  path: d:/log/smoc-log/smoc-iot-ui-logs
+  path: /alidata/smoc/smoc-log/smoc-iot-ui-logs
   level:
     root: info
 
