@@ -41,7 +41,7 @@ public class IotSimFlowQueryService {
         /**
          * 验证物联网卡是否存在
          */
-        Boolean isExist = apiRepository.isExistAccountSim(simBaseRequest.getAccount(), simBaseRequest.getMsisdn());
+//        Boolean isExist = apiRepository.isExistAccountSim(simBaseRequest.getAccount(), simBaseRequest.getMsisdn());
 //        if (!isExist) {
 //            return ResponseDataUtil.buildError(ResponseCode.SIM_NOT_EXIST_ERROR);
 //        }
@@ -81,10 +81,10 @@ public class IotSimFlowQueryService {
         /**
          * 验证物联网卡是否存在
          */
-        Boolean isExist = apiRepository.isExistAccountSim(simBaseRequest.getAccount(), simBaseRequest.getMsisdn());
-        if (!isExist) {
-            return ResponseDataUtil.buildError(ResponseCode.SIM_NOT_EXIST_ERROR);
-        }
+//        Boolean isExist = apiRepository.isExistAccountSim(simBaseRequest.getAccount(), simBaseRequest.getMsisdn());
+//        if (!isExist) {
+//            return ResponseDataUtil.buildError(ResponseCode.SIM_NOT_EXIST_ERROR);
+//        }
 
         /**
          * 如果存在根据订单号，分辨出那个运营商,并路由到运营商对应的订单查询接口
@@ -110,6 +110,7 @@ public class IotSimFlowQueryService {
         pccCodeUseAmountList.add(simFlowUsedThisMonthTotalPccCodeResponse);
 
         simFlowUsedThisMonthTotalItemResponse.setPccCodeUseAmountList(pccCodeUseAmountList);
+        apnUseAmountList.add(simFlowUsedThisMonthTotalItemResponse);
 
         simFlowUsedThisMonthTotalResponse.setApnUseAmountList(apnUseAmountList);
         return ResponseDataUtil.buildSuccess(simFlowUsedThisMonthTotalResponse);
@@ -218,7 +219,7 @@ public class IotSimFlowQueryService {
         apnDataAmountList1.add(simGprsFlowUsedMonthlyBatchItem3);
 
         simGprsFlowUsedMonthlyBatch1.setApnDataAmountList(apnDataAmountList1);
-        list.add(simGprsFlowUsedMonthlyBatch);
+        list.add(simGprsFlowUsedMonthlyBatch1);
 
         return ResponseDataUtil.buildSuccess(list);
     }

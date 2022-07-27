@@ -10,6 +10,7 @@ import com.smoc.cloud.api.response.flow.SimGprsFlowUsedMonthlyBatch;
 import com.smoc.cloud.api.service.IotSimFlowQueryService;
 import com.smoc.cloud.common.response.ResponseData;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,6 +26,7 @@ import java.util.List;
 @RequestMapping("sim/flow")
 public class IotSimFlowQueryController {
 
+    @Autowired
     private IotSimFlowQueryService iotSimFlowQueryService;
 
     /**
