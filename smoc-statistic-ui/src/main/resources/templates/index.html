@@ -34,14 +34,14 @@
                     <i class="mdi mdi-chart-areaspline widget-two-icon"></i>
                     <div class="wigdet-two-content text-white">
                         <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Statistics">
-                            营收总额（2022年）</p>
+                            营收总额（[[${year}]]年）</p>
                         <h2 class="text-white">
                             <span data-plugin="counterup">
                                 <span data-d-group="4" data-a-sign="¥ "
                                                                 style="width:100px;text-align:left"
-                                                                class="autonumber">2045922</span>
+                                                                class="autonumber">[[${countMap.get('PROFIT_SUM')}]]</span>
                             </span></h2>
-                        <p class="m-0">截止日期: 2022-05-11</p>
+                        <p class="m-0">截止日期: [[${endDate}]]</p>
                     </div>
                 </div>
             </div><!-- end col -->
@@ -51,14 +51,14 @@
                     <i class="mdi mdi-account-convert widget-two-icon"></i>
                     <div class="wigdet-two-content text-white">
                         <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="User This Month">
-                            毛利总额（2022年）</p>
+                            毛利总额（[[${year}]]年）</p>
                         <h2 class="text-white">
                             <span data-plugin="counterup">
                              <span data-d-group="4" data-a-sign="¥ "
                                    style="width:100px;text-align:left"
-                                   class="autonumber">1492000</span>
+                                   class="autonumber">[[${countMap.get('GROSS_PROFIT_SUM')}]]</span>
                             </span></h2>
-                        <p class="m-0">截止日期: 2022-05-11</p>
+                        <p class="m-0">截止日期: [[${endDate}]]</p>
                     </div>
                 </div>
             </div><!-- end col -->
@@ -68,14 +68,14 @@
                     <i class="mdi mdi-layers widget-two-icon"></i>
                     <div class="wigdet-two-content text-white">
                         <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="User This Month">
-                            发送总量（2022年）</p>
+                            发送总量（[[${year}]]年）</p>
                         <h2 class="text-white">
                             <span data-plugin="counterup">
                             <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
                                   style="width:90px;text-align:left"
-                                  class="autonumber">459322200</span>
+                                  class="autonumber">[[${countMap.get('MESSAGE_SEND_TOTAL')}]]</span>
                             </span></h2>
-                        <p class="m-0">截止日期: 2022-05-11</p>
+                        <p class="m-0">截止日期: [[${endDate}]]</p>
                     </div>
                 </div>
             </div><!-- end col -->
@@ -90,9 +90,9 @@
                             <span data-plugin="counterup">
                              <span data-d-group="4" data-a-sign="¥ "
                                    style="width:100px;text-align:left"
-                                   class="autonumber">145922</span>
+                                   class="autonumber">&nbsp;</span>
                             </span></h2>
-                        <p class="m-0">截止日期: 2022-05-11</p>
+                        <p class="m-0">截止日期: [[${endDate}]]</p>
                     </div>
                 </div>
             </div><!-- end col -->
@@ -106,7 +106,7 @@
                 <div class="card-box widget-box-one">
                     <div class="wigdet-one-content">
                         <p class="m-0 text-uppercase font-600 font-secondary text-overflow">客户总数</p>
-                        <h2 class="text-teal"><i class="mdi mdi-weather-partlycloudy"  style="padding-right: 5px"></i><span data-plugin="counterup">578</span></h2>
+                        <h2 class="text-teal"><i class="mdi mdi-weather-partlycloudy"  style="padding-right: 5px"></i><span data-plugin="counterup">[[${countMap.get('TOTAL_ACCOUNT')}]]</span></h2>
 
                     </div>
                 </div>
@@ -115,8 +115,8 @@
             <div class="col-lg-3 col-md-6">
                 <div class="card-box widget-box-one">
                     <div class="wigdet-one-content">
-                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow">新增客户（2022年）</p>
-                        <h2 class="text-custom"><i class="mdi mdi-weather-snowy"  style="padding-right: 5px"></i><span data-plugin="counterup">95</span> </h2>
+                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow">新增客户（[[${year}]]年）</p>
+                        <h2 class="text-custom"><i class="mdi mdi-weather-snowy"  style="padding-right: 5px"></i><span data-plugin="counterup">[[${countMap.get('TOTAL_NEWLY_ACCOUNT')}]]</span> </h2>
 
                     </div>
                 </div>
@@ -125,7 +125,7 @@
                 <div class="card-box widget-box-one">
                     <div class="wigdet-one-content">
                         <p class="m-0 text-uppercase font-600 font-secondary text-overflow">通道总数</p>
-                        <h2 class="text-brown"><i class="mdi mdi-weather-rainy"  style="padding-right: 5px"></i><span data-plugin="counterup">52</span> </h2>
+                        <h2 class="text-brown"><i class="mdi mdi-weather-rainy"  style="padding-right: 5px"></i><span data-plugin="counterup">[[${countMap.get('TOTAL_CHANNEL')}]]</span> </h2>
 
                     </div>
                 </div>
@@ -133,8 +133,8 @@
             <div class="col-lg-3 col-md-6">
                 <div class="card-box widget-box-one">
                     <div class="wigdet-one-content">
-                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow">新增通道（2022年）</p>
-                        <h2 class="text-warning"><i class="mdi mdi-weather-night"  style="padding-right: 5px"></i><span data-plugin="counterup">45</span> </h2>
+                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow">新增通道（[[${year}]]年）</p>
+                        <h2 class="text-warning"><i class="mdi mdi-weather-night"  style="padding-right: 5px"></i><span data-plugin="counterup">[[${countMap.get('TOTAL_NEWLY_CHANNEL')}]]</span> </h2>
 
                     </div>
                 </div>

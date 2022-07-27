@@ -4,17 +4,21 @@ package com.smoc.cloud.statistic.data.controller;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Setter
 @Getter
 public class StatisticModel {
 
-    String[] date;
+    private String[] date;
 
-    Integer[] sendAmount;
+    private Integer[] sendAmount;
 
-    Integer[] incomeAmount;
+    private BigDecimal[] incomeAmount;
 
-    Integer[] costAmount;
+    private BigDecimal[] costAmount;
 
-    Integer[] profitAmount;
+    private BigDecimal[] profitAmount;
+
+    private String startDate;
 }

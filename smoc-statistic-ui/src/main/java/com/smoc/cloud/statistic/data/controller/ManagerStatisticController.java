@@ -2,12 +2,15 @@ package com.smoc.cloud.statistic.data.controller;
 
 import com.google.gson.Gson;
 import com.smoc.cloud.common.utils.DateTimeUtils;
+import com.smoc.cloud.statistic.data.service.ManagerStatisticsService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.Random;
@@ -16,9 +19,12 @@ import java.util.Random;
  * 运营数据统计分析
  */
 @Slf4j
-@Controller
+@RestController
 @RequestMapping("/statistic/manager")
 public class ManagerStatisticController {
+
+    @Autowired
+    private ManagerStatisticsService managerStatisticsService;
 
     /**
      * 运营管理综合日统计
@@ -59,14 +65,28 @@ public class ManagerStatisticController {
         StatisticModel model = new StatisticModel();
         model.setDate(date);
         model.setSendAmount(sendAmount);
-        model.setIncomeAmount(incomeAmount);
-        model.setCostAmount(costAmount);
-        model.setProfitAmount(profitAmount);
+        //model.setIncomeAmount(incomeAmount);
+        //model.setCostAmount(costAmount);
+        //model.setProfitAmount(profitAmount);
 
         String str = new Gson().toJson(model);
         log.info(str);
         return view;
 
+    }
+
+    /**
+     * 运营管理综合日统计Ajax
+     * @param startDate
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/daily/ajax/{startDate}", method = RequestMethod.GET)
+    public StatisticModel managerDailyStatistic(@PathVariable String startDate, HttpServletRequest request) {
+
+        StatisticModel statisticModel = managerStatisticsService.managerDailyStatistic(startDate);
+
+        return statisticModel;
     }
 
     /**
