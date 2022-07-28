@@ -78,7 +78,7 @@ public class MessageController {
     private MessageService messageService;
 
     @Autowired
-    private SequenceService sequenceService;
+    private MessageTemplateService messageTemplateService;
 
     @Autowired
     private SystemUserLogService systemUserLogService;
@@ -390,8 +390,11 @@ public class MessageController {
             messageWebTaskInfoValidator.setNumberFiles("");
         }
 
+        //重新查询模板内容
+        ResponseData<AccountTemplateInfoValidator> templateInfo = messageTemplateService.findById(messageWebTaskInfoValidator.getTemplateId());
+        messageWebTaskInfoValidator.setMessageContent(templateInfo.getData().getTemplateContent());
+
         //保存操作
-        messageWebTaskInfoValidator.setMessageContent(StringEscapeUtils.unescapeHtml4(messageWebTaskInfoValidator.getMessageContent()));
         ResponseData data = messageService.save(messageWebTaskInfoValidator,op);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());

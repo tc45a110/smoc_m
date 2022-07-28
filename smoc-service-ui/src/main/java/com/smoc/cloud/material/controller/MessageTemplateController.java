@@ -257,6 +257,18 @@ public class MessageTemplateController {
             result.addError(err);
         }
 
+        //重新查签名，重新组内容
+        //去除转义
+        String content = StringEscapeUtils.unescapeHtml4(accountTemplateInfoValidator.getTemplateContent());
+        content = content.replace("\n","");
+        content = content.replaceFirst("\\【.*?\\】", "");
+        content = "【"+accountTemplateInfoValidator.getSignName()+"】"+content;
+        if(content.length()>2000){
+            // 提交前台错误提示
+            FieldError err = new FieldError("模板内容", "templateContent", "模板内容不能大于2000个字符");
+            result.addError(err);
+        }
+
         //完成参数规则验证
         if (result.hasErrors()) {
             //查询企业下得所有WEB业务账号
@@ -296,9 +308,6 @@ public class MessageTemplateController {
             accountTemplateInfoValidator.setInfoType(account.getData().getInfoType());
         }
 
-        //去除转义
-        accountTemplateInfoValidator.setTemplateContent(StringEscapeUtils.unescapeHtml4(accountTemplateInfoValidator.getTemplateContent()));
-
         //查询签名
         /*ResponseData<EnterpriseDocumentInfoValidator> signInfo = businessAccountService.findSignByEnterpriseIdAndSignNameAndBusinessType(user.getOrganization(),accountTemplateInfoValidator.getSignName(),account.getData().getBusinessType());
         if (!ResponseCode.SUCCESS.getCode().equals(signInfo.getCode())) {
@@ -306,14 +315,8 @@ public class MessageTemplateController {
             return view;
         }*/
 
-        //重新查签名，重新组内容
-        String content = accountTemplateInfoValidator.getTemplateContent();
-        content = content.replace("\n","");
-        content = content.replaceFirst("\\【.*?\\】", "");
-        content = "【"+accountTemplateInfoValidator.getSignName()+"】"+content;
-        accountTemplateInfoValidator.setTemplateContent(content);
 
-        System.out.print(content.length());
+        accountTemplateInfoValidator.setTemplateContent(content);
 
         //默认需要审核
         accountTemplateInfoValidator.setTemplateStatus("3");
