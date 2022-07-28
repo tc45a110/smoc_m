@@ -69,8 +69,8 @@
                     <div class="row">
                         <ul class="nav nav-tabs">
                             <li class="active" id="tab1"><a onclick="active('1')"
-                                                            sec:authorize-url="/iot/carrier/cards/view"
-                                                            th:href="@{/iot/carrier/cards/view}"
+                                                            sec:authorize-url="/iot/carrier/cards/view/*"
+                                                            th:href="@{/iot/carrier/cards/view/{cardId}(cardId=${cardId})}"
                                                             th:target="content1">物联网卡明细</a></li>
                             <li class="" id="tab3">
                                 <a onclick="active('3')"
@@ -89,12 +89,15 @@
                             </li>
                             <li class="" id="tab6">
                                 <a onclick="active('6')"
-                                   th:target="content1">操作日志</a></li>
+                                   sec:authorize-url="/user/logs/list/*/*"
+                                   th:href="@{/user/logs/list/CARRIER_CARDS/{id}(id=${cardId})}"
+                                   th:target="content1">操作日志</a>
+                            </li>
                         </ul>
                     </div>
                     <div class="tab-cotent">
                         <iframe name="content1" id="content1" th:frameBorder="0" th:scrolling="auto"
-                                th:src="@{/iot/carrier/cards/view}"
+                                th:src="@{/iot/carrier/cards/view/{cardId}(cardId=${cardId})}"
                                 style="padding: 0px; width: 100%; height: 2200px"></iframe>
                     </div>
                 </div>
@@ -123,8 +126,6 @@
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
-
-
 
 </script>
 </body>

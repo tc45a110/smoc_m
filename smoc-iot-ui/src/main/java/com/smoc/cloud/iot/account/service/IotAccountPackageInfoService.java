@@ -2,6 +2,7 @@ package com.smoc.cloud.iot.account.service;
 
 import com.smoc.cloud.common.iot.validator.AccountPackage;
 import com.smoc.cloud.common.iot.validator.IotAccountPackageItemsValidator;
+import com.smoc.cloud.common.iot.validator.IotFlowCardsPrimaryInfoValidator;
 import com.smoc.cloud.common.iot.validator.IotPackageInfoValidator;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
@@ -38,6 +39,23 @@ public class IotAccountPackageInfoService {
         }
     }
 
+
+    /**
+     * 查询账号配置得套餐
+     *
+     * @param account
+     * @return
+     */
+    public ResponseData<List<IotPackageInfoValidator>> listAccountPackages(String account) {
+        try {
+            ResponseData<List<IotPackageInfoValidator>> data = this.iotAccountPackageInfoFeignClient.listAccountPackages(account);
+            return data;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
     /**
      * 查询列表
      *
@@ -47,6 +65,22 @@ public class IotAccountPackageInfoService {
     public ResponseData<List<IotPackageInfoValidator>> list(String account) {
         try {
             ResponseData<List<IotPackageInfoValidator>> data = this.iotAccountPackageInfoFeignClient.list(account);
+            return data;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 根据套餐id，查询套餐绑定的物联网卡
+     *
+     * @param packageId
+     * @return
+     */
+    public ResponseData<List<IotFlowCardsPrimaryInfoValidator>> listCardsByPackageId(String account,String packageId) {
+        try {
+            ResponseData<List<IotFlowCardsPrimaryInfoValidator>> data = this.iotAccountPackageInfoFeignClient.listCardsByPackageId(account,packageId);
             return data;
         } catch (Exception e) {
             e.printStackTrace();

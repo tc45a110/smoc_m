@@ -20,13 +20,13 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">账号产品配置明细</h4>
+                    <h4 class="page-title">账号套餐配置明细</h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
-                            账号产品配置
+                            账号套餐配置
                         </li>
                         <li class="active">
-                            账号产品配置明细
+                            账号套餐配置明细
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -43,17 +43,17 @@
                         <div class="col-md-6">
                             <div class="form-group m-b-20">
                                 <div class="form-group m-b-20">
-                                    <label style="margin-right:10px">IOT账号：</label> IOT100001609（小舟内部测试账号）
+                                    <label style="margin-right:10px">IOT账号：</label> [[${account}]]
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6 pull-right" style="text-align: right">
-                            <a sec:authorize-url="/iot/account/product/list"
-                               th:href="@{/iot/account/product/list}" style="margin-left:10px"
+                            <a sec:authorize-url="/iot/account/package/list"
+                               th:href="@{/iot/account/package/list}" style="margin-left:10px"
                                class="btn btn-default waves-effect waves-light btn-md">
                                 <i class="glyphicon  glyphicon-share-alt"
                                    style="margin-right:5px"></i>
-                                返回账号产品配置列表</a>
+                                返回账号套餐配置列表</a>
                         </div>
                     </div>
                     <div id="login-panel" class="row" style="display:block">
@@ -63,7 +63,7 @@
                                      style="display:block">
                                     <h3 class="panel-title">
                                         <i class="mdi mdi-apps" style="margin-right:5px"></i>
-                                        账号产品配置明细
+                                        账号套餐配置明细
                                     </h3>
                                 </div>
                             </div>
@@ -71,28 +71,25 @@
                     </div>
                     <div class="row">
                         <ul class="nav nav-tabs">
-                            <li class="active" id="tab1"><a onclick="active('1')"
-                                                            sec:authorize-url="/iot/account/product/view"
-                                                            th:href="@{/iot/account/product/view}"
-                                                            th:target="content1">配置产品1</a></li>
-                            <li class="" id="tab3">
-                                <a onclick="active('3')"
-                                   th:target="content1">配置产品2
+                            <li class="active" id="tab31">
+                                <a onclick="active('31')"
+                                   sec:authorize-url="/user/logs/list/*/*"
+                                   th:href="@{/user/logs/list/ACCOUNT_PACKAGE/{id}(id=${account})}"
+                                   th:target="content1">操作日志</a>
+                            </li>
+                            <li th:each="package,packageStat:${packages}" class="" th:id="${'tab'+packageStat.count}">
+                                <a sec:authorize-url="/iot/account/package/view/*/*"
+                                   th:onclick="active([[${packageStat.count}]])"
+                                   th:href="@{/iot/account/package/view/{account}/{packageId}(account=${account},packageId=${package.id})}"
+                                   th:target="content1">[[${package.packageName}]]
                                 </a>
                             </li>
-                            <li class="" id="tab4">
-                                <a onclick="active('4')"
-                                   th:target="content1">配置产品3
-                                </a>
-                            </li>
-                            <li class="" id="tab6">
-                                <a onclick="active('6')"
-                                   th:target="content1">操作日志</a></li>
+
                         </ul>
                     </div>
                     <div class="tab-cotent">
                         <iframe name="content1" id="content1" th:frameBorder="0" th:scrolling="auto"
-                                th:src="@{/iot/account/product/view}"
+                                th:src="@{/user/logs/list/ACCOUNT_PACKAGE/{id}(id=${account})}"
                                 style="padding: 0px; width: 100%; height: 2200px"></iframe>
                     </div>
                 </div>
@@ -112,7 +109,7 @@
 <script>
 
     function active(tab) {
-        for(var num = 1;num<7;num++){
+        for(var num = 1;num<32;num++){
             $('#tab'+num).removeClass("active");
         }
         $('#tab'+tab).attr("class","active");
@@ -121,8 +118,6 @@
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
-
-
 
 </script>
 </body>

@@ -46,28 +46,29 @@
                         <div class="row m-b-60">
                             <div class="col-sm-12">
                                 <div class="form-group  col-sm-4">
-                                    <select class="selectpicker" name="carrierId">
-                                        <option value="">------请选择运营商------</option>
-                                        <option th:each="carrier:${carriers}"
-                                                th:selected="${carrier.id == validator.carrierId}"
-                                                th:value="${carrier.id}" th:text="${carrier.carrierName}">
-                                        </option>
-                                    </select>
-                                </div>
-                                <div class="form-group  col-sm-4">
                                     <input type="text" class="form-control" th:field="*{poolName}"
-                                           placeholder="流量池名称" autocomplete="off"  data-toggle="tooltip" data-placement="top"
+                                           placeholder="流量池名称" autocomplete="off" data-toggle="tooltip"
+                                           data-placement="top"
                                            data-original-title="流量池名称">
                                 </div>
                                 <div class="form-group  col-sm-4">
-                                    <select class="selectpicker" name="poolType">
-                                        <option value="">------请选择流量池类型------</option>
-                                        <option th:selected="${validator.poolType == '02'}" value="02">
-                                            ------共享流量------
-                                        </option>
-                                        <option th:selected="${validator.poolType == '03'}" value="03">------流量池------
+                                    <select data-style="btn-default" name="carrierId" data-live-search="true"
+                                            id="carrierId" class="selectpicker">
+                                        <option value="" data-icon="mdi mdi-cellphone-android">--请选择运营商--</option>
+                                        <option th:each="carrier:${carriers}"
+                                                th:selected="${carrier.id == validator.carrierId}"
+                                                th:value="${carrier.id}"
+                                                data-icon="mdi mdi-cellphone-android"
+                                                th:text="${carrier.carrierName}">
                                         </option>
                                     </select>
+                                </div>
+                                <div class="form-group  col-sm-4">
+                                    <mpm:tag id="poolType" identity="poolType"
+                                             name="poolType" show-type="select" key="code"
+                                             style="margin-top:0px"
+                                             th:value="${validator.poolType}" mask-value="01"
+                                             title="流量类型"/>
                                 </div>
                                 <div class="form-group col-sm-4 pull-right" style="text-align: right">
                                     <button sec:authorize-url="/iot/carrier/pool/page" type="submit"
@@ -118,7 +119,7 @@
                                     <th>数据同步时间</th>
                                     <th>预警值</th>
                                     <th>流量池状态</th>
-<!--                                    <th>创建人</th>-->
+                                    <!--                                    <th>创建人</th>-->
                                     <th>创建时间</th>
                                     <th>操作</th>
                                 </tr>
@@ -132,8 +133,11 @@
                                         [[${info.poolName}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a th:if="${info.poolType == '02'}" class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">共享流量</a>
-                                        <a th:if="${info.poolType == '03'}" class="btn btn-info btn-rounded  waves-effect waves-light btn-ms">流量池</a>
+                                        <mpm:tag id="poolType" identity="poolType"
+                                                 name="poolType" show-type="button" key="code"
+                                                 style="margin-top:0px"
+                                                 th:value="${info.poolType}"
+                                                 class="01,btn btn-success btn-rounded btn-sm waves-effect waves-light;02,btn btn-info btn-rounded btn-sm waves-effect waves-light;03,btn btn-teal btn-rounded btn-sm waves-effect waves-light;"/>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         [[${info.poolCardNumber}]]
@@ -158,17 +162,19 @@
                                     <td style="vertical-align: middle;line-height: 26px">
                                         [[${info.warningLevel}]]%
                                     </td>
-<!--                                    <td style="vertical-align: middle;line-height: 26px">-->
-<!--                                        <a th:if="${info.continueType == '1'}" class="btn btn-info btn-rounded  waves-effect waves-light btn-ms">方式一</a>-->
-<!--                                        <a th:if="${info.continueType == '2'}" class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">方式二</a>-->
-<!--                                    </td>-->
+                                    <!--                                    <td style="vertical-align: middle;line-height: 26px">-->
+                                    <!--                                        <a th:if="${info.continueType == '1'}" class="btn btn-info btn-rounded  waves-effect waves-light btn-ms">方式一</a>-->
+                                    <!--                                        <a th:if="${info.continueType == '2'}" class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">方式二</a>-->
+                                    <!--                                    </td>-->
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a th:if="${info.poolStatus == '1'}"   class="btn btn-success btn-rounded  waves-effect waves-light btn-ms">有效</a>
-                                        <a th:if="${info.poolStatus == '0'}"   class="btn btn-danger btn-rounded  waves-effect waves-light btn-ms">无效</a>
+                                        <a th:if="${info.poolStatus == '1'}"
+                                           class="btn btn-success btn-rounded  waves-effect waves-light btn-sm">有效</a>
+                                        <a th:if="${info.poolStatus == '0'}"
+                                           class="btn btn-danger btn-rounded  waves-effect waves-light btn-sm">无效</a>
                                     </td>
-<!--                                    <td style="vertical-align: middle;line-height: 26px">-->
-<!--                                        [[${info.createdBy}]]-->
-<!--                                    </td>-->
+                                    <!--                                    <td style="vertical-align: middle;line-height: 26px">-->
+                                    <!--                                        [[${info.createdBy}]]-->
+                                    <!--                                    </td>-->
                                     <td style="vertical-align: middle;line-height: 26px">
                                         [[${info.createdTime}]]
                                     </td>
@@ -248,6 +254,8 @@
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
+
+
 
 
 

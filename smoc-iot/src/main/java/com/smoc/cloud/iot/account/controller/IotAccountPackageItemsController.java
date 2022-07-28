@@ -37,6 +37,18 @@ public class IotAccountPackageItemsController {
     }
 
     /**
+     * 查询账号配置得套餐
+     *
+     * @param account
+     * @return
+     */
+    @RequestMapping(value = "/listAccountPackages/{account}", method = RequestMethod.GET)
+    public ResponseData<List<IotPackageInfoValidator>> listAccountPackages(@PathVariable String account) {
+        ResponseData<List<IotPackageInfoValidator>> data = iotAccountPackageItemsService.listAccountPackages(account);
+        return data;
+    }
+
+    /**
      * 根据id获取信息
      *
      * @param id

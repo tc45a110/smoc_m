@@ -65,48 +65,53 @@
                                            data-original-title="IMSI">
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <select class="selectpicker" name="carrier">
-                                        <option value="">------请选择运营商------</option>
+                                    <select data-style="btn-default" name="carrier" data-live-search="true"
+                                            id="carrier" class="selectpicker" >
+                                        <option value="" data-icon="mdi mdi-cellphone-android">--请选择运营商--</option>
                                         <option th:each="carrier:${carriers}"
                                                 th:selected="${carrier.id == validator.carrier}"
-                                                th:value="${carrier.id}" th:text="${carrier.carrierName}">
+                                                th:value="${carrier.id}"
+                                                data-icon="mdi mdi-cellphone-android"
+                                                th:text="${carrier.carrierName}">
                                         </option>
                                     </select>
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <select class="selectpicker" name="cardType">
-                                        <option  value="">------请选择流量类型------</option>
-                                        <option th:selected="${validator.cardType == '01'}" value="01">------普通流量------</option>
-                                        <option th:selected="${validator.cardType == '02'}" value="02">------共享流量------</option>
-                                        <option th:selected="${validator.cardType == '03'}" value="03">------流量池------</option>
-                                    </select>
+                                    <mpm:tag id="cardType" identity="poolType"
+                                             name="cardType" show-type="select" key="code"
+                                             style="margin-top:0px"
+                                             th:value="${validator.cardType}"
+                                             title="流量类型"/>
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <select class="selectpicker" name="flowPoolId">
-                                        <option value="">------运营商流量池------</option>
+                                    <select data-style="btn-default" name="flowPoolId" data-live-search="true"
+                                            id="flowPoolId" class="selectpicker" >
+                                        <option value="" data-icon="mdi mdi-package-variant">--请选择运营商流量池--</option>
                                         <option th:each="pool:${pools}"
                                                 th:selected="${pool.id == validator.flowPoolId}"
-                                                th:value="${pool.id}" th:text="${pool.poolName}">
+                                                th:value="${pool.id}"
+                                                data-icon="mdi mdi-package-variant"
+                                                th:text="${pool.poolName}">
                                         </option>
                                     </select>
                                 </div>
                                 <div class="form-group  col-sm-3">
                                     <select class="selectpicker" name="cardStatus">
-                                        <option value="">------请选择卡状态------</option>
-                                        <option value="0" th:selected="${validator.cardStatus == '0'}">------待同步------</option>
-                                        <option value="1" th:selected="${validator.cardStatus == '1'}">------待激活------</option>
-                                        <option value="2" th:selected="${validator.cardStatus == '2'}">------已激活------</option>
-                                        <option value="4" th:selected="${validator.cardStatus == '4'}">------停机------</option>
-                                        <option value="6" th:selected="${validator.cardStatus == '6'}">------可测试------</option>
-                                        <option value="7" th:selected="${validator.cardStatus == '7'}">------库存------</option>
-                                        <option value="8" th:selected="${validator.cardStatus == '8'}">------预销户------</option>
+                                        <option value="">--请选择卡状态--</option>
+                                        <option value="0" th:selected="${validator.cardStatus == '0'}">待同步</option>
+                                        <option value="1" th:selected="${validator.cardStatus == '1'}">待激活</option>
+                                        <option value="2" th:selected="${validator.cardStatus == '2'}">已激活</option>
+                                        <option value="4" th:selected="${validator.cardStatus == '4'}">停机</option>
+                                        <option value="6" th:selected="${validator.cardStatus == '6'}">可测试</option>
+                                        <option value="7" th:selected="${validator.cardStatus == '7'}">库存</option>
+                                        <option value="8" th:selected="${validator.cardStatus == '8'}">预销户</option>
                                     </select>
                                 </div>
                                 <div class="form-group  col-sm-3">
                                     <select class="selectpicker" name="useStatus">
-                                        <option value="">------请选择卡使用状态------</option>
-                                        <option value="1" th:selected="${validator.useStatus == '1'}">------已使用------</option>
-                                        <option value="0" th:selected="${validator.useStatus == '0'}">------待使用------</option>
+                                        <option value="">--请选择卡使用状态--</option>
+                                        <option value="1" th:selected="${validator.useStatus == '1'}">已使用</option>
+                                        <option value="0" th:selected="${validator.useStatus == '0'}">待使用</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-sm-3 pull-right" style="text-align: right">
@@ -152,7 +157,7 @@
                                     <th>流量类型</th>
                                     <th>MSISDN</th>
                                     <th>IMSI/ICCID</th>
-                                    <th>流量池</th>
+                                    <th>运营商流量池</th>
                                     <th>标准限额（G）</th>
                                     <th>计费周期</th>
                                     <th>激活日期(首次)/开卡时间</th>
@@ -168,9 +173,11 @@
                                         [[${info.orderNum}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a th:if="${info.cardType == '01'}" class="btn btn-success btn-rounded  waves-effect waves-light btn-ms">普通流量</a>
-                                        <a th:if="${info.cardType == '02'}" class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">共享流量</a>
-                                        <a th:if="${info.cardType == '03'}" class="btn btn-info btn-rounded  waves-effect waves-light btn-ms">流量池</a>
+                                        <mpm:tag id="cardType" identity="poolType"
+                                                 name="cardType" show-type="button" key="code"
+                                                 style="margin-top:0px"
+                                                 th:value="${info.cardType}"
+                                                 class="01,btn btn-success btn-rounded btn-sm waves-effect waves-light;02,btn btn-info btn-rounded btn-sm waves-effect waves-light;03,btn btn-teal btn-rounded btn-sm waves-effect waves-light;"/>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         [[${info.msisdn}]]
@@ -185,11 +192,11 @@
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         <span style="color:#188ae2" th:if="${info.cycleQuota == 0}">不限</span>
-                                        <span th:if="${info.cycleQuota != 0}">[[${info.cycleQuota}]]G</span><br>
+                                        <span th:if="${info.cycleQuota != 0}">[[${info.cycleQuota}]]G</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a th:if="${info.changingType == '01'}" class="btn btn-info btn-rounded  waves-effect waves-light btn-ms">自然月</a>
-                                        <a th:if="${info.changingType == '02'}" class="btn btn-info btn-rounded  waves-effect waves-light btn-ms">年</a>
+                                        <a th:if="${info.changingType == '01'}" class="btn btn-info btn-rounded  waves-effect waves-light btn-sm">自然月</a>
+                                        <a th:if="${info.changingType == '02'}" class="btn btn-info btn-rounded  waves-effect waves-light btn-sm">年</a>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         [[${info.activeDate}]]
@@ -209,7 +216,8 @@
                                         <a th:if="${info.cardStatus == '8'}" class="btn btn-danger btn-rounded  waves-effect waves-light btn-xs">预销户</a>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a th:href="@{/iot/carrier/cards/center}"
+                                        <a sec:authorize-url="/iot/carrier/cards/center/*"
+                                           th:href="@{/iot/carrier/cards/center/{cardId}(cardId=${info.id})}"
                                            data-toggle="tooltip" data-placement="bottom"
                                            data-original-title="物联网卡明细"
                                            class="on-default edit-row"

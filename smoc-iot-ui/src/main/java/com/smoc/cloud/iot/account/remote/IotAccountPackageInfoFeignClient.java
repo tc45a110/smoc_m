@@ -3,6 +3,7 @@ package com.smoc.cloud.iot.account.remote;
 
 import com.smoc.cloud.common.iot.validator.AccountPackage;
 import com.smoc.cloud.common.iot.validator.IotAccountPackageItemsValidator;
+import com.smoc.cloud.common.iot.validator.IotFlowCardsPrimaryInfoValidator;
 import com.smoc.cloud.common.iot.validator.IotPackageInfoValidator;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
@@ -27,6 +28,24 @@ public interface IotAccountPackageInfoFeignClient {
     @RequestMapping(value = "/iot/account/package/page", method = RequestMethod.POST)
     ResponseData<PageList<IotAccountPackageItemsValidator>> page(@RequestBody PageParams<IotAccountPackageItemsValidator> pageParams) throws Exception;
 
+    /**
+     * 查询账号配置得套餐
+     *
+     * @param account
+     * @return
+     */
+    @RequestMapping(value = "/iot/account/package/listAccountPackages/{account}", method = RequestMethod.GET)
+    ResponseData<List<IotPackageInfoValidator>> listAccountPackages(@PathVariable String account) throws Exception;
+
+
+    /**
+     * 根据套餐id，查询套餐绑定的物联网卡
+     *
+     * @param packageId
+     * @return
+     */
+    @RequestMapping(value = "/iot/package/cards/listCardsByPackageId/{account}/{packageId}", method = RequestMethod.GET)
+    ResponseData<List<IotFlowCardsPrimaryInfoValidator>> listCardsByPackageId(@PathVariable String account,@PathVariable String packageId)  throws Exception;
 
     /**
      * 查询列表

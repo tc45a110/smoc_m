@@ -226,7 +226,7 @@ public class CarrierFlowCardsController {
     public ModelAndView edit(@PathVariable String id) {
         ModelAndView view = new ModelAndView("carrier/carrier_flow_cards_edit");
 
-        //初始化数据
+        //初始化运营商数据
         PageParams<IotCarrierInfoValidator> paramsCarrier = new PageParams<>();
         paramsCarrier.setPageSize(100);
         paramsCarrier.setCurrentPage(1);
@@ -239,7 +239,7 @@ public class CarrierFlowCardsController {
             return view;
         }
 
-        //初始化数据
+        //初始化流量池数据
         PageParams<IotCarrierFlowPoolValidator> paramsPoos = new PageParams<>();
         paramsPoos.setPageSize(100);
         paramsPoos.setCurrentPage(1);
@@ -257,7 +257,7 @@ public class CarrierFlowCardsController {
             view.addObject("error", infoResponseData.getCode() + ":" + infoResponseData.getMessage());
             return view;
         }
-        log.info("[validatorMap]:{}", new Gson().toJson(infoResponseData));
+        //log.info("[validatorMap]:{}", new Gson().toJson(infoResponseData));
         IotFlowCardsPrimaryInfoValidator iotFlowCardsPrimaryInfoValidator = infoResponseData.getData().getIotFlowCardsPrimaryInfoValidator();
         view.addObject("pools", dataPool.getData().getList());
         view.addObject("carriers", dataCarrier.getData().getList());
@@ -296,7 +296,7 @@ public class CarrierFlowCardsController {
             return view;
         }
 
-        if(StringUtils.isEmpty(iotFlowCardsPrimaryInfoValidator.getOrderNum())){
+        if (StringUtils.isEmpty(iotFlowCardsPrimaryInfoValidator.getOrderNum())) {
             iotFlowCardsPrimaryInfoValidator.setOrderNum(DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(4));
         }
 
@@ -323,18 +323,60 @@ public class CarrierFlowCardsController {
     /**
      * @return
      */
-    @RequestMapping(value = "/center", method = RequestMethod.GET)
-    public ModelAndView center() {
+    @RequestMapping(value = "/center/{cardId}", method = RequestMethod.GET)
+    public ModelAndView center(@PathVariable String cardId) {
         ModelAndView view = new ModelAndView("carrier/carrier_flow_cards_view_center");
+
+        view.addObject("cardId", cardId);
         return view;
     }
 
     /**
      * @return
      */
-    @RequestMapping(value = "/view", method = RequestMethod.GET)
-    public ModelAndView view() {
+    @RequestMapping(value = "/view/{cardId}", method = RequestMethod.GET)
+    public ModelAndView view(@PathVariable String cardId) {
         ModelAndView view = new ModelAndView("carrier/carrier_flow_cards_view");
+        //初始化运营商数据
+        PageParams<IotCarrierInfoValidator> paramsCarrier = new PageParams<>();
+        paramsCarrier.setPageSize(100);
+        paramsCarrier.setCurrentPage(1);
+        IotCarrierInfoValidator validatorCarrier = new IotCarrierInfoValidator();
+        paramsCarrier.setParams(validatorCarrier);
+        //查询
+        ResponseData<PageList<IotCarrierInfoValidator>> dataCarrier = iotCarrierInfoService.page(paramsCarrier);
+        if (!ResponseCode.SUCCESS.getCode().equals(dataCarrier.getCode())) {
+            view.addObject("error", dataCarrier.getCode() + ":" + dataCarrier.getMessage());
+            return view;
+        }
+
+        Map<String, String> carrierMap = dataCarrier.getData().getList().stream().collect(Collectors.toMap(IotCarrierInfoValidator::getId, IotCarrierInfoValidator::getCarrierName));
+
+
+        //初始化流量池数据
+        PageParams<IotCarrierFlowPoolValidator> paramsPoos = new PageParams<>();
+        paramsPoos.setPageSize(100);
+        paramsPoos.setCurrentPage(1);
+        IotCarrierFlowPoolValidator validatorPool = new IotCarrierFlowPoolValidator();
+        paramsPoos.setParams(validatorPool);
+        //查询
+        ResponseData<PageList<IotCarrierFlowPoolValidator>> dataPool = iotCarrierFlowPoolService.page(paramsPoos);
+        if (!ResponseCode.SUCCESS.getCode().equals(dataPool.getCode())) {
+            view.addObject("error", dataPool.getCode() + ":" + dataPool.getMessage());
+            return view;
+        }
+
+        ResponseData<IotFlowCardsInfo> infoResponseData = iotFlowCardsPrimaryInfoService.findById(cardId);
+        if (!ResponseCode.SUCCESS.getCode().equals(infoResponseData.getCode())) {
+            view.addObject("error", infoResponseData.getCode() + ":" + infoResponseData.getMessage());
+            return view;
+        }
+        Map<String, String> poolMap = dataPool.getData().getList().stream().collect(Collectors.toMap(IotCarrierFlowPoolValidator::getId, IotCarrierFlowPoolValidator::getPoolName));
+
+        view.addObject("poolMap", poolMap);
+        view.addObject("carrierMap", carrierMap);
+        view.addObject("primary", infoResponseData.getData().getIotFlowCardsPrimaryInfoValidator());
+        view.addObject("secondary", infoResponseData.getData().getIotFlowCardsSecondaryInfoValidator());
         return view;
     }
 }

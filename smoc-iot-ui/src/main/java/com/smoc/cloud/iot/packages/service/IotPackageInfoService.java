@@ -43,9 +43,9 @@ public class IotPackageInfoService {
      * @param packageId
      * @return
      */
-    public ResponseData<List<IotFlowCardsPrimaryInfoValidator>> list(String packageId) {
+    public ResponseData<List<IotFlowCardsPrimaryInfoValidator>> list(String packageId,String packageType) {
         try {
-            ResponseData<List<IotFlowCardsPrimaryInfoValidator>> data = this.iotPackageInfoFeignClient.list(packageId);
+            ResponseData<List<IotFlowCardsPrimaryInfoValidator>> data = this.iotPackageInfoFeignClient.list(packageId,packageType);
             return data;
         } catch (Exception e) {
             e.printStackTrace();

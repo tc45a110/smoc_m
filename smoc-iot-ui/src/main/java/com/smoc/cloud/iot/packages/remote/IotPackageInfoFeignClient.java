@@ -35,8 +35,8 @@ public interface IotPackageInfoFeignClient {
      * @param packageId
      * @return
      */
-    @RequestMapping(value = "/iot/package/list/{packageId}", method = RequestMethod.GET)
-    ResponseData<List<IotFlowCardsPrimaryInfoValidator>> list(@PathVariable String packageId) throws Exception;
+    @RequestMapping(value = "/iot/package/list/{packageId}/{packageType}", method = RequestMethod.GET)
+    ResponseData<List<IotFlowCardsPrimaryInfoValidator>> list(@PathVariable String packageId,@PathVariable String packageType) throws Exception;
 
 
     /**

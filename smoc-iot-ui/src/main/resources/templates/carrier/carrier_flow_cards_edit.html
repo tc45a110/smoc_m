@@ -58,13 +58,47 @@
                                                         th:errors="*{carrier}"
                                                         style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
-                                                <select class="selectpicker" name="carrier" required="">
-                                                    <option value="">------请选择运营商------</option>
+                                                <select data-style="btn-default" name="carrier" data-live-search="true"
+                                                        id="carrier" class="selectpicker" >
+                                                    <option value="" data-icon="mdi mdi-cellphone-android">--请选择运营商--</option>
                                                     <option th:each="carrier:${carriers}"
                                                             th:selected="${carrier.id == validator.carrier}"
-                                                            th:value="${carrier.id}" th:text="${carrier.carrierName}">
+                                                            th:value="${carrier.id}"
+                                                            data-icon="mdi mdi-cellphone-android"
+                                                            th:text="${carrier.carrierName}">
                                                     </option>
                                                 </select>
+                                            </div>
+                                            <div class="col-md-4 form-group">
+                                                <label>运营商流量池<span
+                                                        class="text-danger"
+                                                        th:if="${#fields.hasErrors('flowPoolId')}"
+                                                        th:errors="*{flowPoolId}"
+                                                        style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <select data-style="btn-default" name="flowPoolId" data-live-search="true"
+                                                        id="flowPoolId" class="selectpicker" >
+                                                    <option value="" data-icon="mdi mdi-package-variant">--请选择运营商流量池--</option>
+                                                    <option th:each="pool:${pools}"
+                                                            th:selected="${pool.id == validator.flowPoolId}"
+                                                            th:value="${pool.id}"
+                                                            data-icon="mdi mdi-package-variant"
+                                                            th:text="${pool.poolName}">
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4 form-group">
+                                                <label>流量类型<span class="text-danger">*</span>&nbsp;<span
+                                                        class="text-danger"
+                                                        th:if="${#fields.hasErrors('cardType')}"
+                                                        th:errors="*{cardType}"
+                                                        style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <mpm:tag id="cardType" identity="poolType"
+                                                         name="cardType" show-type="select" key="code"
+                                                         style="margin-top:0px"
+                                                         th:value="${validator.cardType}"
+                                                         title="流量类型"/>
                                             </div>
                                             <div class="col-md-4 form-group">
                                                 <label>计费周期<span class="text-danger">*</span>&nbsp;<span
@@ -74,26 +108,12 @@
                                                         style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
                                                 <select class="selectpicker" name="changingType" required>
-                                                    <option value="">------请选择计费周期------</option>
-                                                    <option th:selected="${validator.changingType == '01'}" value="01">------自然月------</option>
-                                                    <option th:selected="${validator.changingType == '02'}" value="02">------年------</option>
+                                                    <option value="">--请选择计费周期--</option>
+                                                    <option th:selected="${validator.changingType == '01'}" value="01">自然月</option>
+                                                    <option th:selected="${validator.changingType == '02'}" value="02">年</option>
                                                 </select>
                                             </div>
-                                            <div class="col-md-4 form-group">
-                                                <label>计费周期<span
-                                                        class="text-danger"
-                                                        th:if="${#fields.hasErrors('flowPoolId')}"
-                                                        th:errors="*{flowPoolId}"
-                                                        style="font-weight: 200;font-size: 12px"></span>
-                                                </label>
-                                                <select class="selectpicker" name="flowPoolId" >
-                                                    <option value="">------运营商流量池------</option>
-                                                    <option th:each="pool:${pools}"
-                                                            th:selected="${pool.id == validator.flowPoolId}"
-                                                            th:value="${pool.id}" th:text="${pool.poolName}">
-                                                    </option>
-                                                </select>
-                                            </div>
+
                                             <div class="col-md-4 form-group">
                                                 <label>MSISDN<span class="text-danger">*</span>&nbsp;<span
                                                         class="text-danger"
@@ -151,24 +171,18 @@
                                                        data-original-title="0表示不限制">
                                             </div>
                                             <div class="col-md-4 form-group">
-                                                <label>开卡费<span
+                                                <label>开卡费 <span class="text-danger">*</span><span
                                                         class="text-danger"
                                                         th:if="${#fields.hasErrors('openCardFee')}"
                                                         th:errors="*{openCardFee}"
                                                         style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
                                                 <input type="text"  class="form-control"
-                                                       autocomplete="off" th:field="*{openCardFee}"
-                                                       min="0.00" placeholder="开卡费">
+                                                       autocomplete="off" th:field="*{openCardFee}" required=""
+                                                       min="0.00" placeholder="开卡费" data-toggle="tooltip" data-placement="top"
+                                                       data-original-title="0表示不收开卡费">
                                             </div>
-                                            <div class="col-md-4 form-group">
-                                                <select class="selectpicker" name="cardType" required>
-                                                    <option  value="">------请选择流量类型------</option>
-                                                    <option th:selected="${validator.cardType == '01'}" value="01">------普通流量------</option>
-                                                    <option th:selected="${validator.cardType == '02'}" value="02">------共享流量------</option>
-                                                    <option th:selected="${validator.cardType == '03'}" value="03">------流量池------</option>
-                                                </select>
-                                            </div>
+
                                             <div class="col-md-12 text-center m-t-20">
                                                 <input type="hidden" th:field="*{cardStatus}">
                                                 <input type="hidden" th:field="*{useStatus}">

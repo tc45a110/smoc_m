@@ -1,5 +1,6 @@
 package com.smoc.cloud.iot.packages.service;
 
+import com.smoc.cloud.common.iot.validator.IotFlowCardsPrimaryInfoValidator;
 import com.smoc.cloud.common.iot.validator.IotPackageCardValidator;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
@@ -54,6 +55,18 @@ public class IotPackageCardService {
         //转换日期
         validator.setCreatedTime(DateTimeUtils.getDateTimeFormat(data.get().getCreatedTime()));
         return ResponseDataUtil.buildSuccess(validator);
+    }
+
+
+    /**
+     * 根据套餐id，查询套餐绑定的物联网卡
+     *
+     * @param packageId
+     * @return
+     */
+    public ResponseData<List<IotFlowCardsPrimaryInfoValidator>> listCardsByPackageId(String account,String packageId) {
+        List<IotFlowCardsPrimaryInfoValidator> list = this.iotPackageCardRepository.listCardsByPackageId(account,packageId);
+        return ResponseDataUtil.buildSuccess(list);
     }
 
     /**

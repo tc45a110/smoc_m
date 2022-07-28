@@ -50,8 +50,8 @@ public class IotPackageInfoService {
      * @param packageId
      * @return
      */
-    public ResponseData<List<IotFlowCardsPrimaryInfoValidator>> list(String packageId) {
-        List<IotFlowCardsPrimaryInfoValidator> list = iotPackageCardRepository.list(packageId);
+    public ResponseData<List<IotFlowCardsPrimaryInfoValidator>> list(String packageId,String packageType) {
+        List<IotFlowCardsPrimaryInfoValidator> list = iotPackageCardRepository.list(packageId,packageType);
         return ResponseDataUtil.buildSuccess(list);
     }
 

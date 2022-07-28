@@ -27,13 +27,23 @@ public class IotAccountPackageItemsService {
     private IotAccountPackageItemsRepository iotAccountPackageItemsRepository;
 
     /**
-     * 列表查询
-     *
+     * 查询业务账号套餐及未使用套餐
      * @param account
      * @return
      */
     public ResponseData<List<IotPackageInfoValidator>> list(String account) {
         List<IotPackageInfoValidator> list = iotAccountPackageItemsRepository.list(account);
+        return ResponseDataUtil.buildSuccess(list);
+    }
+
+    /**
+     * 查询账号配置得套餐
+     *
+     * @param account
+     * @return
+     */
+    public ResponseData<List<IotPackageInfoValidator>> listAccountPackages(String account){
+        List<IotPackageInfoValidator> list = iotAccountPackageItemsRepository.listAccountPackages(account);
         return ResponseDataUtil.buildSuccess(list);
     }
 

@@ -29,5 +29,14 @@ public interface IotPackageCardRepository extends JpaRepository<IotPackageCard, 
      * @param packageId
      * @return
      */
-    List<IotFlowCardsPrimaryInfoValidator> list(String packageId);
+    List<IotFlowCardsPrimaryInfoValidator> list(String packageId,String packageType);
+
+
+    /**
+     * 根据套餐id，查询套餐绑定的物联网卡
+     *
+     * @param packageId
+     * @return
+     */
+    List<IotFlowCardsPrimaryInfoValidator> listCardsByPackageId(String account,String packageId);
 }

@@ -1,6 +1,7 @@
 package com.smoc.cloud.iot.packages.controller;
 
 
+import com.smoc.cloud.common.iot.validator.IotFlowCardsPrimaryInfoValidator;
 import com.smoc.cloud.common.iot.validator.IotPackageCardValidator;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
@@ -33,6 +34,18 @@ public class IotPackageCardController {
     @RequestMapping(value = "/page", method = RequestMethod.POST)
     public ResponseData<PageList<IotPackageCardValidator>> page(@RequestBody PageParams<IotPackageCardValidator> pageParams) {
         ResponseData<PageList<IotPackageCardValidator>> data = iotPackageCardService.page(pageParams);
+        return data;
+    }
+
+    /**
+     * 根据套餐id，查询套餐绑定的物联网卡
+     *
+     * @param packageId
+     * @return
+     */
+    @RequestMapping(value = "/listCardsByPackageId/{account}/{packageId}", method = RequestMethod.GET)
+    public ResponseData<List<IotFlowCardsPrimaryInfoValidator>> listCardsByPackageId(@PathVariable String account,@PathVariable String packageId) {
+        ResponseData<List<IotFlowCardsPrimaryInfoValidator>> data = iotPackageCardService.listCardsByPackageId(account,packageId);
         return data;
     }
 

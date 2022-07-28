@@ -47,18 +47,17 @@
                                            placeholder="套餐名称" autocomplete="off">
                                 </div>
                                 <div class="form-group  col-sm-3">
-                                    <select class="selectpicker" name="packageType">
-                                        <option value="">------请选择套餐流量类型------</option>
-                                        <option value="01" th:selected="${validator.packageType == '01'}">------普通流量------</option>
-                                        <option value="02" th:selected="${validator.packageType == '02'}">------共享流量------</option>
-                                        <option value="03" th:selected="${validator.packageType == '03'}">------流量池------</option>
-                                    </select>
+                                    <mpm:tag id="packageType" identity="poolType"
+                                             name="packageType" show-type="select" key="code"
+                                             style="margin-top:0px"
+                                             th:value="${validator.packageType}"
+                                             title="套餐流量类型"/>
                                 </div>
                                 <div class="form-group  col-sm-3">
                                     <select class="selectpicker" name="useStatus">
-                                        <option value="">------请选择套餐使用状态------</option>
-                                        <option value="01" th:selected="${validator.useStatus == '01'}">------未使用------</option>
-                                        <option value="02" th:selected="${validator.useStatus == '02'}">------已使用------</option>
+                                        <option value="">--请选择套餐使用状态--</option>
+                                        <option value="01" th:selected="${validator.useStatus == '01'}">未使用</option>
+                                        <option value="02" th:selected="${validator.useStatus == '02'}">已使用</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-sm-3 pull-right" style="text-align: right">
@@ -119,16 +118,18 @@
                                         [[${info.packageName}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a th:if="${info.packageType =='01'}" class="btn btn-success btn-rounded  waves-effect waves-light btn-ms">普通流量</a>
-                                        <a th:if="${info.packageType =='02'}" class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">共享流量</a>
-                                        <a th:if="${info.packageType =='03'}" class="btn btn-info btn-rounded  waves-effect waves-light btn-ms">流量池</a>
+                                       <mpm:tag id="packageType" identity="poolType"
+                                                 name="packageType" show-type="button" key="code"
+                                                 style="margin-top:0px"
+                                                 th:value="${info.packageType}"
+                                                 class="01,btn btn-success btn-rounded btn-sm waves-effect waves-light;02,btn btn-info btn-rounded btn-sm waves-effect waves-light;03,btn btn-teal btn-rounded btn-sm waves-effect waves-light;"/>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         [[${info.packageChanging}]] 元
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a th:if="${info.changingCycle =='01'}" class="btn btn-info btn-rounded  waves-effect waves-light btn-ms">自然月</a>
-                                        <a th:if="${info.changingCycle =='02'}" class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">年</a>
+                                        <a th:if="${info.changingCycle =='01'}" class="btn btn-info btn-rounded  waves-effect waves-light btn-sm">自然月</a>
+                                        <a th:if="${info.changingCycle =='02'}" class="btn btn-teal btn-rounded  waves-effect waves-light btn-sm">年</a>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         [[${info.packagePoolSize}]] G
@@ -159,14 +160,15 @@
                                         [[${info.warningLevel}]]%
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a th:if="${info.useStatus =='01'}" class="btn btn-warning btn-rounded  waves-effect waves-light btn-ms">未使用</a>
-                                        <a th:if="${info.useStatus =='02'}" class="btn btn-teal btn-rounded  waves-effect waves-light btn-ms">已使用</a>
+                                        <a th:if="${info.useStatus =='01'}" class="btn btn-warning btn-rounded  waves-effect waves-light btn-sm">未使用</a>
+                                        <a th:if="${info.useStatus =='02'}" class="btn btn-teal btn-rounded  waves-effect waves-light btn-sm">已使用</a>
                                     </td>
 <!--                                    <td style="vertical-align: middle;line-height: 26px">-->
 <!--                                        [[${info.createdBy}]]-->
 <!--                                    </td>-->
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a th:href="@{/iot/package/center}"
+                                        <a sec:authorize-url="/iot/package/center/*"
+                                           th:href="@{/iot/package/center/{packageId}(packageId=${info.id})}"
                                            data-toggle="tooltip" data-placement="bottom"
                                            data-original-title="套餐明细"
                                            class="on-default edit-row"

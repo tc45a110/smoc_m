@@ -53,24 +53,35 @@
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-6 form-group">
-                                                <select class="selectpicker" name="carrierId">
-                                                    <option>------请选择运营商------</option>
+                                                <label>运营商<span class="text-danger">*</span>&nbsp;<span
+                                                        class="text-danger"
+                                                        th:if="${#fields.hasErrors('carrierId')}"
+                                                        th:errors="*{carrierId}"
+                                                        style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <select data-style="btn-default" name="carrierId" data-live-search="true"
+                                                        id="carrierId" class="selectpicker" required>
+                                                    <option value="" data-icon="mdi mdi-cellphone-android">--请选择运营商--</option>
                                                     <option th:each="carrier:${carriers}"
                                                             th:selected="${carrier.id == validator.carrierId}"
-                                                            th:value="${carrier.id}" th:text="${carrier.carrierName}">
+                                                            th:value="${carrier.id}"
+                                                            data-icon="mdi mdi-cellphone-android"
+                                                            th:text="${carrier.carrierName}">
                                                     </option>
                                                 </select>
                                             </div>
                                             <div class="col-md-6 form-group">
-                                                <select class="selectpicker" name="poolType" required>
-                                                    <option value="">------请选择流量池类型------</option>
-                                                    <option th:selected="${validator.poolType == '02'}" value="02">
-                                                        ------共享流量------
-                                                    </option>
-                                                    <option th:selected="${validator.poolType == '03'}" value="03">
-                                                        ------流量池------
-                                                    </option>
-                                                </select>
+                                                <label>流量类型<span class="text-danger">*</span>&nbsp;<span
+                                                        class="text-danger"
+                                                        th:if="${#fields.hasErrors('poolType')}"
+                                                        th:errors="*{poolType}"
+                                                        style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <mpm:tag id="poolType" identity="poolType"
+                                                         name="poolType" show-type="select" key="code" required="true"
+                                                         style="margin-top:0px"
+                                                         th:value="${validator.poolType}" mask-value="01"
+                                                         title="流量类型"/>
                                             </div>
                                             <div class="col-md-6 form-group">
                                                 <label>流量池名称<span class="text-danger">*</span>&nbsp;<span
@@ -120,10 +131,16 @@
 
                                             </div>
                                             <div class="col-md-6 form-group">
+                                                <label>续流方式<span class="text-danger">*</span>&nbsp;<span
+                                                        class="text-danger"
+                                                        th:if="${#fields.hasErrors('continueType')}"
+                                                        th:errors="*{continueType}"
+                                                        style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
                                                 <select class="selectpicker" name="continueType">
-                                                    <option value="">------请选择续流方式------</option>
-                                                    <option value="1" th:selected="${validator.continueType == '1'}">------方式1------</option>
-                                                    <option value="2" th:selected="${validator.continueType == '1'}">------方式2------</option>
+                                                    <option value="">--请选择续流方式--</option>
+                                                    <option value="1" th:selected="${validator.continueType == '1'}">方式1</option>
+                                                    <option value="2" th:selected="${validator.continueType == '1'}">方式2</option>
                                                 </select>
                                             </div>
                                             <div class="col-md-12 text-center m-t-20">

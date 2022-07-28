@@ -42,8 +42,8 @@
                     <div class="row" style="margin-bottom:10px">
                         <h4>
                             <div class="pull-right" style="margin-top: -12px;margin-right:10pxx">
-                                <a sec:authorize-url="/iot/product/list"
-                                   th:href="@{/iot/product/list}" style="margin-left:10px"
+                                <a sec:authorize-url="/iot/package/list"
+                                   th:href="@{/iot/package/list}" style="margin-left:10px"
                                    class="btn btn-default waves-effect waves-light btn-md">
                                     <i class="glyphicon  glyphicon-share-alt" style="margin-right:5px"></i>
                                     返回套餐管理列表</a>
@@ -66,13 +66,9 @@
                     <div class="row">
                         <ul class="nav nav-tabs">
                             <li class="active" id="tab1"><a onclick="active('1')"
-                                                            sec:authorize-url="/iot/product/view"
-                                                            th:href="@{/iot/product/view}"
+                                                            sec:authorize-url="/iot/package/view/*"
+                                                            th:href="@{/iot/package/view/{packageId}(packageId=${packageId})}"
                                                             th:target="content1">套餐明细</a></li>
-                            <li class="" id="tab4"><a onclick="active('4')"
-                                                            sec:authorize-url="/iot/account/product/view"
-                                                            th:href="@{/iot/account/product/view}"
-                                                            th:target="content1">套餐物联网卡配置</a></li>
                             <li class="" id="tab2">
                                 <a onclick="active('2')"
                                    th:target="content1">使用用户信息
@@ -85,12 +81,15 @@
                             </li>
                             <li class="" id="tab6">
                                 <a onclick="active('6')"
-                                   th:target="content1">操作日志</a></li>
+                                   sec:authorize-url="/user/logs/list/*/*"
+                                   th:href="@{/user/logs/list/PACKAGE/{id}(id=${packageId})}"
+                                   th:target="content1">操作日志</a>
+                            </li>
                         </ul>
                     </div>
                     <div class="tab-cotent">
                         <iframe name="content1" id="content1" th:frameBorder="0" th:scrolling="auto"
-                                th:src="@{/iot/product/view}"
+                                th:src="@{/iot/package/view/{packageId}(packageId=${packageId})}"
                                 style="padding: 0px; width: 100%; height: 2200px"></iframe>
                     </div>
                 </div>
@@ -119,6 +118,8 @@
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
+
+
 
 
 

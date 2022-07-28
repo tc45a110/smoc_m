@@ -5,16 +5,15 @@ import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
-import com.smoc.cloud.common.iot.validator.IotCarrierInfoValidator;
-import com.smoc.cloud.common.iot.validator.IotFlowCardsPrimaryInfoValidator;
-import com.smoc.cloud.common.iot.validator.IotPackageInfoValidator;
-import com.smoc.cloud.common.iot.validator.PackageCards;
+import com.smoc.cloud.common.iot.validator.*;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.UUID;
+import com.smoc.cloud.iot.account.service.IotAccountPackageInfoService;
+import com.smoc.cloud.iot.carrier.service.IotCarrierFlowPoolService;
 import com.smoc.cloud.iot.carrier.service.IotCarrierInfoService;
 import com.smoc.cloud.iot.carrier.service.IotFlowCardsPrimaryInfoService;
 import com.smoc.cloud.iot.packages.service.IotPackageInfoService;
@@ -56,7 +55,13 @@ public class PackageController {
     private SystemUserLogService systemUserLogService;
 
     @Autowired
+    private IotCarrierFlowPoolService iotCarrierFlowPoolService;
+
+    @Autowired
     private IotFlowCardsPrimaryInfoService iotFlowCardsPrimaryInfoService;
+
+    @Autowired
+    private IotAccountPackageInfoService iotAccountPackageInfoService;
 
     /**
      * 列表
@@ -209,7 +214,7 @@ public class PackageController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            systemUserLogService.logsAsync("Package", iotPackageInfoValidator.getId(), "add".equals(op) ? iotPackageInfoValidator.getCreatedBy() : iotPackageInfoValidator.getUpdatedBy(), op, "add".equals(op) ? "新建物联网套餐" : "修改运物联网套餐", JSON.toJSONString(iotPackageInfoValidator));
+            systemUserLogService.logsAsync("PACKAGE", iotPackageInfoValidator.getId(), "add".equals(op) ? iotPackageInfoValidator.getCreatedBy() : iotPackageInfoValidator.getUpdatedBy(), op, "add".equals(op) ? "新建物联网套餐" : "修改运物联网套餐", JSON.toJSONString(iotPackageInfoValidator));
         }
 
         //记录日志
@@ -221,33 +226,34 @@ public class PackageController {
     }
 
     /**
-     * @param id          套餐id
+     * @param id 套餐id
      * @return
      */
     @RequestMapping(value = "/config/edit/{id}", method = RequestMethod.GET)
     public ModelAndView config(@PathVariable String id) {
         ModelAndView view = new ModelAndView("package/package_config");
 
-        //初始化数据
+        //查询套餐信息
+        ResponseData<IotPackageInfoValidator> packageData = iotPackageInfoService.findById(id);
+        if (!ResponseCode.SUCCESS.getCode().equals(packageData.getCode())) {
+            view.addObject("error", packageData.getCode() + ":" + packageData.getMessage());
+            return view;
+        }
+
+        //初始化套餐绑卡数据数据
         PageParams<IotFlowCardsPrimaryInfoValidator> params = new PageParams<>();
         params.setPageSize(100);
         params.setCurrentPage(1);
         IotFlowCardsPrimaryInfoValidator validator = new IotFlowCardsPrimaryInfoValidator();
         params.setParams(validator);
         //查询
-        ResponseData<List<IotFlowCardsPrimaryInfoValidator>> data = iotPackageInfoService.list(id);
+        ResponseData<List<IotFlowCardsPrimaryInfoValidator>> data = iotPackageInfoService.list(id, packageData.getData().getPackageType());
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;
         }
 
-        ResponseData<IotPackageInfoValidator> validatorData = iotPackageInfoService.findById(id);
-        if (!ResponseCode.SUCCESS.getCode().equals(validatorData.getCode())) {
-            view.addObject("error", validatorData.getCode() + ":" + validatorData.getMessage());
-            return view;
-        }
-
-        //初始化数据
+        //初始化运营商数据
         PageParams<IotCarrierInfoValidator> paramsCarrier = new PageParams<>();
         paramsCarrier.setPageSize(100);
         paramsCarrier.setCurrentPage(1);
@@ -256,12 +262,27 @@ public class PackageController {
         ResponseData<PageList<IotCarrierInfoValidator>> dataCarrier = iotCarrierInfoService.page(paramsCarrier);
         Map<String, String> carrierMap = dataCarrier.getData().getList().stream().collect(Collectors.toMap(IotCarrierInfoValidator::getId, IotCarrierInfoValidator::getCarrierName));
 
+        //初始化运营商流量池数据
+        PageParams<IotCarrierFlowPoolValidator> paramsPoos = new PageParams<>();
+        paramsPoos.setPageSize(100);
+        paramsPoos.setCurrentPage(1);
+        IotCarrierFlowPoolValidator validatorPool = new IotCarrierFlowPoolValidator();
+        paramsPoos.setParams(validatorPool);
+        //查询
+        ResponseData<PageList<IotCarrierFlowPoolValidator>> dataPool = iotCarrierFlowPoolService.page(paramsPoos);
+        if (!ResponseCode.SUCCESS.getCode().equals(dataPool.getCode())) {
+            view.addObject("error", dataPool.getCode() + ":" + dataPool.getMessage());
+            return view;
+        }
+        Map<String, String> poolMap = dataPool.getData().getList().stream().collect(Collectors.toMap(IotCarrierFlowPoolValidator::getId, IotCarrierFlowPoolValidator::getPoolName));
+        view.addObject("poolMap", poolMap);
 
+        //要收集套餐绑卡数据模型
         PackageCards PackageCards = new PackageCards();
 
-        log.info("[Package]:{}", new Gson().toJson(validatorData.getData()));
+        //log.info("[Package]:{}", new Gson().toJson(validatorData.getData()));
         view.addObject("carrierMap", carrierMap);
-        view.addObject("package", validatorData.getData());
+        view.addObject("package", packageData.getData());
         view.addObject("cards", data.getData());
         view.addObject("packageCards", PackageCards);
         return view;
@@ -287,7 +308,7 @@ public class PackageController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            systemUserLogService.logsAsync("CARRIER", PackageCards.getPackageId(), user.getRealName(), "config", "套餐物联网卡配置", JSON.toJSONString(PackageCards));
+            systemUserLogService.logsAsync("PACKAGE", PackageCards.getPackageId(), user.getRealName(), "config", "套餐物联网卡配置", JSON.toJSONString(PackageCards));
         }
 
         //记录日志
@@ -301,18 +322,69 @@ public class PackageController {
     /**
      * @return
      */
-    @RequestMapping(value = "/center", method = RequestMethod.GET)
-    public ModelAndView center() {
+    @RequestMapping(value = "/center/{packageId}", method = RequestMethod.GET)
+    public ModelAndView center(@PathVariable String packageId) {
         ModelAndView view = new ModelAndView("package/package_view_center");
+
+
+        view.addObject("packageId", packageId);
         return view;
     }
 
     /**
      * @return
      */
-    @RequestMapping(value = "/view", method = RequestMethod.GET)
-    public ModelAndView view() {
+    @RequestMapping(value = "/view/{packageId}", method = RequestMethod.GET)
+    public ModelAndView view(@PathVariable String packageId) {
         ModelAndView view = new ModelAndView("package/package_view");
+
+        //查询套餐信息
+        ResponseData<IotPackageInfoValidator> packageData = iotPackageInfoService.findById(packageId);
+        if (!ResponseCode.SUCCESS.getCode().equals(packageData.getCode())) {
+            view.addObject("error", packageData.getCode() + ":" + packageData.getMessage());
+            return view;
+        }
+
+        //初始化套餐绑卡数据数据
+        //根据套餐id，查询套餐绑定的物联网卡
+        ResponseData<List<IotFlowCardsPrimaryInfoValidator>> listData = iotAccountPackageInfoService.listCardsByPackageId("account",packageId);
+        if (!ResponseCode.SUCCESS.getCode().equals(listData.getCode())) {
+            view.addObject("error", listData.getCode() + ":" + listData.getMessage());
+            return view;
+        }
+
+        //初始化运营商数据
+        PageParams<IotCarrierInfoValidator> paramsCarrier = new PageParams<>();
+        paramsCarrier.setPageSize(100);
+        paramsCarrier.setCurrentPage(1);
+        IotCarrierInfoValidator validatorCarrier = new IotCarrierInfoValidator();
+        paramsCarrier.setParams(validatorCarrier);
+        ResponseData<PageList<IotCarrierInfoValidator>> dataCarrier = iotCarrierInfoService.page(paramsCarrier);
+        Map<String, String> carrierMap = dataCarrier.getData().getList().stream().collect(Collectors.toMap(IotCarrierInfoValidator::getId, IotCarrierInfoValidator::getCarrierName));
+
+        //初始化运营商流量池数据
+        PageParams<IotCarrierFlowPoolValidator> paramsPoos = new PageParams<>();
+        paramsPoos.setPageSize(100);
+        paramsPoos.setCurrentPage(1);
+        IotCarrierFlowPoolValidator validatorPool = new IotCarrierFlowPoolValidator();
+        paramsPoos.setParams(validatorPool);
+        //查询
+        ResponseData<PageList<IotCarrierFlowPoolValidator>> dataPool = iotCarrierFlowPoolService.page(paramsPoos);
+        if (!ResponseCode.SUCCESS.getCode().equals(dataPool.getCode())) {
+            view.addObject("error", dataPool.getCode() + ":" + dataPool.getMessage());
+            return view;
+        }
+        Map<String, String> poolMap = dataPool.getData().getList().stream().collect(Collectors.toMap(IotCarrierFlowPoolValidator::getId, IotCarrierFlowPoolValidator::getPoolName));
+        view.addObject("poolMap", poolMap);
+
+        //要收集套餐绑卡数据模型
+        PackageCards PackageCards = new PackageCards();
+
+        //log.info("[Package]:{}", new Gson().toJson(validatorData.getData()));
+        view.addObject("carrierMap", carrierMap);
+        view.addObject("package", packageData.getData());
+        view.addObject("cards", listData.getData());
+        view.addObject("packageCards", PackageCards);
         return view;
     }
 

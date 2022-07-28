@@ -18,7 +18,7 @@
     <div class="container">
         <!-- start row  页面内容-->
         <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
-            <form id="submit_form" th:action="@{/finance/account/share/save/{op}(op=${op})}"
+            <form id="submit_form"
                   method="post" data-parsley-validate="">
                 <div class="row">
                     <div class="col-md-12 panel panel-color panel-info">
@@ -36,215 +36,71 @@
                                                     <thead>
                                                     <tr>
                                                         <th>运营商名称</th>
+                                                        <th>流量类型</th>
                                                         <th>MSISDN</th>
-                                                        <th>IMSI</th>
-                                                        <th>ICCID</th>
-                                                        <th>卡类型</th>
+                                                        <th>IMSI/ICCID</th>
+                                                        <th>运营商流量池</th>
+                                                        <th>标准限额（G）</th>
+                                                        <th>计费周期</th>
+                                                        <th>激活日期(首次)/开卡时间</th>
                                                         <th>卡状态</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    <tr>
-                                                        <td>
-                                                            中国移动-福建分公司
+                                                    <tr th:each="info:${cards}">
+                                                        <td style="vertical-align: middle;line-height: 26px">
+                                                            [[${info.carrierName}]]
                                                         </td>
-                                                        <td>
-                                                            14765004176
+                                                        <td style="vertical-align: middle;line-height: 26px">
+                                                            <mpm:tag id="cardType" identity="poolType"
+                                                                     name="cardType" show-type="button" key="code"
+                                                                     style="margin-top:0px"
+                                                                     th:value="${info.cardType}"
+                                                                     class="01,btn btn-success btn-rounded btn-sm waves-effect waves-light;02,btn btn-info btn-rounded btn-sm waves-effect waves-light;03,btn btn-teal btn-rounded btn-sm waves-effect waves-light;"/>
                                                         </td>
-                                                        <td>
-                                                            460079650004176
+                                                        <td style="vertical-align: middle;line-height: 26px">
+                                                            [[${info.msisdn}]]
                                                         </td>
-                                                        <td>
-                                                            898600D6991330004146
+                                                        <td style="vertical-align: middle;line-height: 26px">
+                                                            [[${info.imsi}]]
+                                                            <br>
+                                                            [[${info.iccid}]]
                                                         </td>
-                                                        <td>
-                                                            <a class="btn btn-info btn-rounded  waves-effect waves-light btn-ms">共享流量池类</a>
+                                                        <td style="vertical-align: middle;line-height: 26px">
+                                                            [[${poolMap[info.flowPoolId]}]]
                                                         </td>
-                                                        <td>
-                                                            <a class="btn btn-success btn-rounded  waves-effect waves-light btn-ms">已激活</a>
+                                                        <td style="vertical-align: middle;line-height: 26px">
+                                                            <span style="color:#188ae2" th:if="${info.cycleQuota == 0}">不限</span>
+                                                            <span th:if="${info.cycleQuota != 0}">[[${info.cycleQuota}]]G</span><br>
                                                         </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            中国移动-福建分公司
+                                                        <td style="vertical-align: middle;line-height: 26px">
+                                                            <a th:if="${info.changingType == '01'}"
+                                                               class="btn btn-info btn-rounded  waves-effect waves-light btn-sm">自然月</a>
+                                                            <a th:if="${info.changingType == '02'}"
+                                                               class="btn btn-info btn-rounded  waves-effect waves-light btn-sm">年</a>
                                                         </td>
-                                                        <td>
-                                                            14765004176
+                                                        <td style="vertical-align: middle;line-height: 26px">
+                                                            [[${info.activeDate}]]
+                                                            <br>
+                                                            [[${info.openDate}]]
                                                         </td>
-                                                        <td>
-                                                            460079650004176
-                                                        </td>
-                                                        <td>
-                                                            898600D6991330004146
-                                                        </td>
-                                                        <td>
-                                                            <a class="btn btn-info btn-rounded  waves-effect waves-light btn-ms">共享流量池类</a>
-                                                        </td>
-                                                        <td>
-                                                            <a class="btn btn-success btn-rounded  waves-effect waves-light btn-ms">已激活</a>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            中国移动-福建分公司
-                                                        </td>
-                                                        <td>
-                                                            14765004176
-                                                        </td>
-                                                        <td>
-                                                            460079650004176
-                                                        </td>
-                                                        <td>
-                                                            898600D6991330004146
-                                                        </td>
-                                                        <td>
-                                                            <a class="btn btn-info btn-rounded  waves-effect waves-light btn-ms">共享流量池类</a>
-                                                        </td>
-                                                        <td>
-                                                            <a class="btn btn-success btn-rounded  waves-effect waves-light btn-ms">已激活</a>
+                                                        <td style="vertical-align: middle;line-height: 26px">
+                                                            <a th:if="${info.cardStatus == '0'}"
+                                                               class="btn btn-warning btn-rounded  waves-effect waves-light btn-xs">待同步</a>
+                                                            <a th:if="${info.cardStatus == '1'}"
+                                                               class="btn btn-warning btn-rounded  waves-effect waves-light btn-xs">待激活</a>
+                                                            <a th:if="${info.cardStatus == '2'}"
+                                                               class="btn btn-success btn-rounded  waves-effect waves-light btn-xs">已激活</a>
+                                                            <a th:if="${info.cardStatus == '4'}"
+                                                               class="btn btn-danger btn-rounded  waves-effect waves-light btn-xs">停机</a>
+                                                            <a th:if="${info.cardStatus == '6'}"
+                                                               class="btn btn-success btn-rounded  waves-effect waves-light btn-xs">可测试</a>
+                                                            <a th:if="${info.cardStatus == '7'}"
+                                                               class="btn btn-teal btn-rounded  waves-effect waves-light btn-xs">库存</a>
+                                                            <a th:if="${info.cardStatus == '8'}"
+                                                               class="btn btn-danger btn-rounded  waves-effect waves-light btn-xs">预销户</a>
                                                         </td>
                                                     </tr>
-                                                    <tr>
-                                                        <td>
-                                                            中国移动-福建分公司
-                                                        </td>
-                                                        <td>
-                                                            14765004176
-                                                        </td>
-                                                        <td>
-                                                            460079650004176
-                                                        </td>
-                                                        <td>
-                                                            898600D6991330004146
-                                                        </td>
-                                                        <td>
-                                                            <a class="btn btn-info btn-rounded  waves-effect waves-light btn-ms">共享流量池类</a>
-                                                        </td>
-                                                        <td>
-                                                            <a class="btn btn-success btn-rounded  waves-effect waves-light btn-ms">已激活</a>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            中国移动-福建分公司
-                                                        </td>
-                                                        <td>
-                                                            14765004176
-                                                        </td>
-                                                        <td>
-                                                            460079650004176
-                                                        </td>
-                                                        <td>
-                                                            898600D6991330004146
-                                                        </td>
-                                                        <td>
-                                                            <a class="btn btn-info btn-rounded  waves-effect waves-light btn-ms">共享流量池类</a>
-                                                        </td>
-                                                        <td>
-                                                            <a class="btn btn-success btn-rounded  waves-effect waves-light btn-ms">已激活</a>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            中国移动-福建分公司
-                                                        </td>
-                                                        <td>
-                                                            14765004176
-                                                        </td>
-                                                        <td>
-                                                            460079650004176
-                                                        </td>
-                                                        <td>
-                                                            898600D6991330004146
-                                                        </td>
-                                                        <td>
-                                                            <a class="btn btn-info btn-rounded  waves-effect waves-light btn-ms">共享流量池类</a>
-                                                        </td>
-                                                        <td>
-                                                            <a class="btn btn-success btn-rounded  waves-effect waves-light btn-ms">已激活</a>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            中国移动-福建分公司
-                                                        </td>
-                                                        <td>
-                                                            14765004176
-                                                        </td>
-                                                        <td>
-                                                            460079650004176
-                                                        </td>
-                                                        <td>
-                                                            898600D6991330004146
-                                                        </td>
-                                                        <td>
-                                                            <a class="btn btn-info btn-rounded  waves-effect waves-light btn-ms">共享流量池类</a>
-                                                        </td>
-                                                        <td>
-                                                            <a class="btn btn-success btn-rounded  waves-effect waves-light btn-ms">已激活</a>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            中国移动-福建分公司
-                                                        </td>
-                                                        <td>
-                                                            14765004176
-                                                        </td>
-                                                        <td>
-                                                            460079650004176
-                                                        </td>
-                                                        <td>
-                                                            898600D6991330004146
-                                                        </td>
-                                                        <td>
-                                                            <a class="btn btn-info btn-rounded  waves-effect waves-light btn-ms">共享流量池类</a>
-                                                        </td>
-                                                        <td>
-                                                            <a class="btn btn-success btn-rounded  waves-effect waves-light btn-ms">已激活</a>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            中国移动-福建分公司
-                                                        </td>
-                                                        <td>
-                                                            14765004176
-                                                        </td>
-                                                        <td>
-                                                            460079650004176
-                                                        </td>
-                                                        <td>
-                                                            898600D6991330004146
-                                                        </td>
-                                                        <td>
-                                                            <a class="btn btn-info btn-rounded  waves-effect waves-light btn-ms">共享流量池类</a>
-                                                        </td>
-                                                        <td>
-                                                            <a class="btn btn-success btn-rounded  waves-effect waves-light btn-ms">已激活</a>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            中国移动-福建分公司
-                                                        </td>
-                                                        <td>
-                                                            14765004176
-                                                        </td>
-                                                        <td>
-                                                            460079650004176
-                                                        </td>
-                                                        <td>
-                                                            898600D6991330004146
-                                                        </td>
-                                                        <td>
-                                                            <a class="btn btn-info btn-rounded  waves-effect waves-light btn-ms">共享流量池类</a>
-                                                        </td>
-                                                        <td>
-                                                            <a class="btn btn-success btn-rounded  waves-effect waves-light btn-ms">已激活</a>
-                                                        </td>
-                                                    </tr>
-
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -275,6 +131,8 @@
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
+
+
 
 
 

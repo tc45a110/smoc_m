@@ -19,6 +19,12 @@ public class IotAccountPackageItemsRepositoryImpl extends BasePageRepository {
     @Autowired
     private DataSource dataSource;
 
+    /**
+     * 查询业务账号套餐及未使用套餐
+     *
+     * @param accountId
+     * @return
+     */
     public List<IotPackageInfoValidator> list(String accountId) {
 
         //查询sql
@@ -51,6 +57,46 @@ public class IotAccountPackageItemsRepositoryImpl extends BasePageRepository {
         Object[] params = new Object[2];
         params[0] = accountId;
         params[1] = "01";
+        List<IotPackageInfoValidator> list = this.queryForObjectList(sqlBuffer.toString(), params, new IotPackageInfoRowMapper());
+        return list;
+    }
+
+    /**
+     * 查询账号配置得套餐
+     *
+     * @param accountId
+     * @return
+     */
+    public List<IotPackageInfoValidator> listAccountPackages(String accountId) {
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append(" t.ID");
+        sqlBuffer.append(",t.PACKAGE_NAME");
+        sqlBuffer.append(",t.PACKAGE_TYPE");
+        sqlBuffer.append(",t.PACKAGE_CHANGING");
+        sqlBuffer.append(",t.PACKAGE_POOL_SIZE");
+        sqlBuffer.append(",t.CHANGING_CYCLE");
+        sqlBuffer.append(",t.CYCLE_QUOTA");
+        sqlBuffer.append(",t.ABOVE_QUOTA_CHANGING");
+        sqlBuffer.append(",t.PACKAGE_TEMP_AMOUNT");
+        sqlBuffer.append(",t.PACKAGE_TEMP_AMOUNT_FEE");
+        sqlBuffer.append(",t.CYCLE_FUNCTION_FEE");
+        sqlBuffer.append(",t.WARNING_LEVEL");
+        sqlBuffer.append(",t.PACKAGE_CARDS_NUM");
+        sqlBuffer.append(",t.REMARK");
+        sqlBuffer.append(",u.ACCOUNT_ID USE_STATUS");
+        sqlBuffer.append(",t.THIS_MONTH_USED_AMOUNT");
+        sqlBuffer.append(",t.LAST_MONTH_CARRY_AMOUNT");
+        sqlBuffer.append(",t.SYNC_DATE");
+        sqlBuffer.append(",t.PACKAGE_STATUS");
+        sqlBuffer.append(",t.CREATED_BY");
+        sqlBuffer.append(",DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME");
+        sqlBuffer.append("  from iot_package_info t left join iot_account_package_items u on t.ID=u.PACKAGE_ID where u.ACCOUNT_ID =? ");
+        sqlBuffer.append("  order by t.CREATED_TIME desc");
+        log.info("[sqlBuffer]:{}", sqlBuffer);
+        //根据参数个数，组织参数值
+        Object[] params = new Object[1];
+        params[0] = accountId;
         List<IotPackageInfoValidator> list = this.queryForObjectList(sqlBuffer.toString(), params, new IotPackageInfoRowMapper());
         return list;
     }

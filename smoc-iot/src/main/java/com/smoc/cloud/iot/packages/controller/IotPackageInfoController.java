@@ -44,9 +44,9 @@ public class IotPackageInfoController {
      * @param packageId
      * @return
      */
-    @RequestMapping(value = "/list/{packageId}", method = RequestMethod.GET)
-    public ResponseData<List<IotFlowCardsPrimaryInfoValidator>> list(@PathVariable String packageId) {
-        ResponseData<List<IotFlowCardsPrimaryInfoValidator>> data = iotPackageInfoService.list(packageId);
+    @RequestMapping(value = "/list/{packageId}/{packageType}", method = RequestMethod.GET)
+    public ResponseData<List<IotFlowCardsPrimaryInfoValidator>> list(@PathVariable String packageId,@PathVariable String packageType) {
+        ResponseData<List<IotFlowCardsPrimaryInfoValidator>> data = iotPackageInfoService.list(packageId,packageType);
         return data;
     }
 

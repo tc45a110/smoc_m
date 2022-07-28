@@ -28,32 +28,39 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="col-md-4 form-group">
-                                    <label style="margin-right:10px">运营商名称:</label>中国移动-福建分公司
+                                    <label style="margin-right:10px">运营商名称:</label>[[${carrierMap[primary.carrier]}]]
                                 </div>
                                 <div class="col-md-4 form-group">
-                                    <label style="margin-right:10px">订单号:</label>202205171348528400501704624
+                                    <label style="margin-right:10px">订单号:</label>[[${primary.orderNum}]]
                                 </div>
                                 <div class="col-md-4 form-group">
-                                    <label style="margin-right:10px">卡类型:</label> <a
-                                        class="btn btn-info btn-rounded  waves-effect waves-light btn-xs">共享流量池类</a>
+                                    <label style="margin-right:10px">流量类型:</label>
+                                    <mpm:tag id="cardType" identity="poolType"
+                                             name="cardType" show-type="button" key="code"
+                                             style="margin-top:0px"
+                                             th:value="${primary.cardType}"
+                                             class="01,btn btn-success btn-rounded btn-sm waves-effect waves-light;02,btn btn-info btn-rounded btn-sm waves-effect waves-light;03,btn btn-teal btn-rounded btn-sm waves-effect waves-light;"/>
+
                                 </div>
                                 <div class="col-md-4 form-group">
-                                    <label style="margin-right:10px">MSISDN:</label>14765004176
+                                    <label style="margin-right:10px">MSISDN:</label>[[${primary.msisdn}]]
                                 </div>
                                 <div class="col-md-4 form-group">
-                                    <label style="margin-right:10px">IMSI:</label>460079650004176
+                                    <label style="margin-right:10px">IMSI:</label>[[${primary.imsi}]]
                                 </div>
                                 <div class="col-md-4 form-group">
-                                    <label style="margin-right:10px">ICCID:</label>898600D6991330004146
+                                    <label style="margin-right:10px">ICCID:</label>[[${primary.iccid}]]
                                 </div>
                                 <div class="col-md-4 form-group">
-                                    <label style="margin-right:10px">流量池:</label> 福建100G共享001
+                                    <label style="margin-right:10px">运营商流量池:</label>[[${poolMap[primary.flowPoolId]}]]
                                 </div>
                                 <div class="col-md-4 form-group">
-                                    <label style="margin-right:10px">周期限额:</label> 1G
+                                    <label style="margin-right:10px">标准限额（G）:</label>
+                                    <span style="color:#188ae2" th:if="${primary.cycleQuota == 0}">不限</span>
+                                    <span th:if="${primary.cycleQuota != 0}">[[${primary.cycleQuota}]]G</span>
                                 </div>
                                 <div class="col-md-4 form-group">
-                                    <label style="margin-right:10px">计费周期类型:</label> 月周期
+                                    <label style="margin-right:10px">计费周期:</label> 月周期
                                 </div>
                                 <div class="col-md-4 form-group">
                                     <label style="margin-right:10px">激活日期(首次):</label> 2022-07-12 11:28:10 <i class="mdi mdi-refresh" style="font-size:18px;color:#26a69a"></i>

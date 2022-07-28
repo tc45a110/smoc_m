@@ -9,12 +9,20 @@ import java.util.List;
 public interface IotAccountPackageItemsRepository extends JpaRepository<IotAccountPackageItems, String> {
 
     /**
-     * 列表查询
+     * 查询业务账号套餐及未使用套餐
      *
-     * @param userId
+     * @param accountId
      * @return
      */
-    List<IotPackageInfoValidator> list(String userId);
+    List<IotPackageInfoValidator> list(String accountId);
+
+    /**
+     * 查询账号配置得套餐
+     *
+     * @param accountId
+     * @return
+     */
+    List<IotPackageInfoValidator> listAccountPackages(String accountId);
 
     /**
      * 批量保存套餐卡

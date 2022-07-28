@@ -1,5 +1,6 @@
 package com.smoc.cloud.iot.packages.repository;
 
+import com.google.gson.Gson;
 import com.smoc.cloud.common.iot.validator.IotFlowCardsPrimaryInfoValidator;
 import com.smoc.cloud.common.iot.validator.IotPackageCardValidator;
 import com.smoc.cloud.common.page.PageList;
@@ -85,7 +86,7 @@ public class IotPackageCardRepositoryImpl extends BasePageRepository {
      * @param packageId
      * @return
      */
-    public List<IotFlowCardsPrimaryInfoValidator> list(String packageId) {
+    public List<IotFlowCardsPrimaryInfoValidator> list(String packageId, String packageType) {
 
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");
@@ -107,14 +108,54 @@ public class IotPackageCardRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(",t.CARD_STATUS");
         sqlBuffer.append(",t.CREATED_BY");
         sqlBuffer.append(",DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME");
-        sqlBuffer.append("  from iot_flow_cards_primary_info t left join  iot_package_cards pc on t.ID=pc.CARD_ID  where pc.PACKAGE_ID=? or t.USE_STATUS=? ");
+        sqlBuffer.append("  from iot_flow_cards_primary_info t left join  iot_package_cards pc on t.ID=pc.CARD_ID  where (pc.PACKAGE_ID=? or t.USE_STATUS=?) and t.CARD_TYPE=? ");
 
         sqlBuffer.append(" order by t.CREATED_TIME desc");
         log.info("[sqlBuffer]:{}", sqlBuffer);
         //根据参数个数，组织参数值
-        Object[] params = new Object[2];
+        Object[] params = new Object[3];
         params[0] = packageId;
         params[1] = "0";
+        params[2] = packageType;
+
+        List<IotFlowCardsPrimaryInfoValidator> list = this.jdbcTemplate.query(sqlBuffer.toString(), new IotFlowCardsPrimaryInfoRowMapper(), params);
+        return list;
+    }
+
+    /**
+     * 根据套餐id，查询套餐绑定的物联网卡
+     *
+     * @param packageId
+     * @return
+     */
+    public List<IotFlowCardsPrimaryInfoValidator> listCardsByPackageId(String account, String packageId) {
+
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append(" t.ID");
+        sqlBuffer.append(",t.CARRIER");
+        sqlBuffer.append(",c.CARRIER_NAME");
+        sqlBuffer.append(",t.CARD_TYPE");
+        sqlBuffer.append(",t.ORDER_NUM");
+        sqlBuffer.append(",t.MSISDN");
+        sqlBuffer.append(",t.IMSI");
+        sqlBuffer.append(",t.ICCID");
+        sqlBuffer.append(",t.FLOW_POOL_ID");
+        sqlBuffer.append(",t.CHANGING_TYPE");
+        sqlBuffer.append(",t.CYCLE_QUOTA");
+        sqlBuffer.append(",t.ACTIVE_DATE");
+        sqlBuffer.append(",t.OPEN_DATE");
+        sqlBuffer.append(",t.OPEN_CARD_FEE");
+        sqlBuffer.append(",pc.PACKAGE_ID USE_STATUS");
+        sqlBuffer.append(",t.CARD_STATUS");
+        sqlBuffer.append(",t.CREATED_BY");
+        sqlBuffer.append(",DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME");
+        sqlBuffer.append("  from iot_flow_cards_primary_info t,iot_carrier_info c,iot_package_cards pc where c.Id=t.CARRIER and t.ID=pc.CARD_ID and pc.PACKAGE_ID=? ");
+
+        sqlBuffer.append(" order by t.CREATED_TIME desc");
+        //根据参数个数，组织参数值
+        Object[] params = new Object[1];
+        params[0] = packageId;
 
         List<IotFlowCardsPrimaryInfoValidator> list = this.jdbcTemplate.query(sqlBuffer.toString(), new IotFlowCardsPrimaryInfoRowMapper(), params);
         return list;
