@@ -4,8 +4,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <th:block th:insert="fragments/common_fragments :: common_header"/>
     <th:block th:insert="fragments/common_fragments :: common_css"/>
-    <link th:href="@{/static/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css}" rel="stylesheet">
-    <script th:src="@{/static/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js}"></script>
 </head>
 <body>
 <th:block th:insert="fragments/common_fragments :: common_loader"/>
@@ -39,7 +37,7 @@
                             <span data-plugin="counterup">
                                 <span data-d-group="4" data-a-sign="¥ "
                                                                 style="width:100px;text-align:left"
-                                                                class="autonumber">[[${countMap.get('PROFIT_SUM')}]]</span>
+                                                                class="autonumber">[[${countMap.get('TOTAL_SUM')}]]</span>
                             </span></h2>
                         <p class="m-0">截止日期: [[${endDate}]]</p>
                     </div>
@@ -51,12 +49,12 @@
                     <i class="mdi mdi-account-convert widget-two-icon"></i>
                     <div class="wigdet-two-content text-white">
                         <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="User This Month">
-                            毛利总额（[[${year}]]年）</p>
+                            利润总额（[[${year}]]年）</p>
                         <h2 class="text-white">
                             <span data-plugin="counterup">
                              <span data-d-group="4" data-a-sign="¥ "
                                    style="width:100px;text-align:left"
-                                   class="autonumber">[[${countMap.get('GROSS_PROFIT_SUM')}]]</span>
+                                   class="autonumber">[[${countMap.get('PROFIT_SUM')}]]</span>
                             </span></h2>
                         <p class="m-0">截止日期: [[${endDate}]]</p>
                     </div>
@@ -143,11 +141,11 @@
         </div>
         <!-- end row -->
         <div class="row">
-            <div class="col-lg-12">
+            <!--<div class="col-lg-12">
                 <div class="card-box">
                     <div id="main1" style="height: 400px;"></div>
                 </div>
-            </div><!-- end col -->
+            </div>&lt;!&ndash; end col &ndash;&gt;-->
             <div class="col-lg-12">
                 <div class="card-box">
                     <div id="main2" style="height: 400px;"></div>
@@ -164,7 +162,7 @@
 <script th:src="@{/static/echarts/echarts.min.js}"></script>
 <script th:src="@{/static/plugins/autoNumeric/autoNumeric.js}"></script>
 <script type="text/javascript">
-
+/*
     var dom3 = document.getElementById("main1");
     var myChart3 = echarts.init(dom3);
     var app = {};
@@ -173,7 +171,7 @@
         title: {
             text: '近365天运营数据'
         },
-        color: ['#71D5DE', '#59A9E7','#F4979E', '#7DDCB1'],
+        color: ['#8D6E63', '#59A9E7','#F4979E', '#7DDCB1'],
         legend: {
           data: ['发送量（百万）', '营收（万元）', '毛利（万元）','净毛利（万元）']
         },
@@ -245,93 +243,89 @@
     };
     if (option3 && typeof option3 === "object") {
         myChart3.setOption(option3, true);
-    }
+    }*/
 
-    $(document).ready(function() {
-		$('.autonumber').autoNumeric('init');
-	 });
 
-    var dom4 = document.getElementById("main2");
-    var myChart4 = echarts.init(dom4);
-    var app = {};
-    option4 = null;
-    option4 = {
-        title: {
-            text: '近24月运营数据'
-        },
-        color: ['#71D5DE', '#59A9E7','#F4979E', '#7DDCB1'],
-        legend: {
-            data: ['发送量（百万）', '营收（万元）', '毛利（万元）','净毛利（万元）']
-        },
-        tooltip: {
-            trigger: 'axis'
-        },
-        toolbox: {
-            show: true,
-
-            feature: {
-                dataView: {show: true, readOnly: false},
-                saveAsImage: {show: true},
-                magicType: {                       //动态类型切换
-                 show: true,
-                 title:"切换",                   //各个类型的标题文本，可以分别配置。
-                 type: ['line', 'bar'],          //启用的动态类型，包括'line'（切换为折线图）, 'bar'（切换为柱状图）, 'stack'（切换为堆叠模式）, 'tiled'（切换为平铺模式）
+    $.ajax({
+        url : '[[${#httpServletRequest.getContextPath()}]]/statistic/manager/month/ajax/'+'[[${month}]]',
+        success : function(data) {
+            articles = eval(data);
+            var dom4 = document.getElementById("main2");
+            var myChart4 = echarts.init(dom4);
+            var app = {};
+            option4 = null;
+            option4 = {
+                title: {
+                    text: '近24月运营数据'
                 },
-            }
-        },
-        calculable: true,
-        grid: {
-                top: '60px',
-                left: '24px',
-                right: '24px',
-                bottom: '24px',
-                containLabel: true
-            },
-        xAxis: [
-            {
-                type: 'category',
-                axisLabel: {
-                    interval: 'auto',
-                    rotate: 30
+                color: ['#71D5DE', '#59A9E7', '#F4979E'],
+                legend: {
+                    data: ['发送量（百万）', '营收（万元）', '净利润（万元）']
                 },
-                data: ['2020-01', '2020-02', '2020-03', '2020-04', '2020-05', '2020-06', '2020-07', '2020-08', '2020-09', '2020-10', '2020-11', '2020-12','2021-01', '2021-02', '2021-03', '2021-04', '2021-05', '2021-06', '2021-07', '2021-08', '2021-09', '2021-10', '2021-11','2021-12']
+                tooltip: {
+                    trigger: 'axis'
+                },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        magicType: {                       //动态类型切换
+                            show: true,
+                            title: "切换",                   //各个类型的标题文本，可以分别配置。
+                            type: ['line', 'bar'],          //启用的动态类型，包括'line'（切换为折线图）, 'bar'（切换为柱状图）, 'stack'（切换为堆叠模式）, 'tiled'（切换为平铺模式）
+                        },
+                        dataView: {show: true, readOnly: false},
+                        saveAsImage: {show: true}
+                    }
+                },
+                calculable: true,
+                grid: {
+                    top: '60px',
+                    left: '24px',
+                    right: '24px',
+                    bottom: '24px',
+                    containLabel: true
+                },
+                xAxis: [
+                    {
+                        type: 'category',
+                        axisLabel: {
+                            interval: 'auto',
+                            rotate: 30
+                        },
+                        data: articles.date
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value'
+                    }
+                ],
+                series: [
+                    {
+                        name: '发送量（百万）',
+                        type: 'line',
+                        stack: 'Total',
+                        data: articles.sendAmount
+                    },
+                    {
+                        name: '营收（万元）',
+                        type: 'line',
+                        stack: 'Total',
+                        data: articles.incomeAmount
+                    },
+                    {
+                        name: '净利润（万元）',
+                        type: 'line',
+                        stack: 'Total',
+                        data: articles.profitAmount
+                    },
+                ]
+            };
+            if (option4 && typeof option4 === "object") {
+                myChart4.setOption(option4, true);
             }
-        ],
-        yAxis: [
-            {
-                type: 'value'
-            }
-        ],
-        series: [
-            {
-              name: '发送量（百万）',
-              type: 'line',
-              stack: 'Total',
-              data: [707, 659, 590, 864, 687, 707, 856, 822, 587, 588, 460, 423,526, 459, 490, 764, 887, 707, 756, 822, 487, 488, 460, 423],
-            },
-             {
-                 name: '营收（万元）',
-                 type: 'line',
-                 stack: 'Total',
-                 data: [260, 259, 390, 364, 487, 307, 256, 322, 487, 388, 460, 223,226, 159, 290, 264, 287, 307, 556, 522, 487, 388, 460, 323],
-             },
-             {
-                 name: '毛利（万元）',
-                 type: 'line',
-                 stack: 'Total',
-                 data: [130, 200, 120, 164, 187, 207, 156, 222, 287, 188, 120, 131,226, 129,130, 164, 187, 207, 256,222, 187, 288, 220, 210],
-             },
-             {
-                 name: '净毛利（万元）',
-                 type: 'line',
-                 stack: 'Total',
-                 data: [116, 119, 119, 164, 187, 177, 156, 122, 187, 188, 116, 113,116, 119, 119, 164, 187, 177, 156, 182, 187, 181, 116, 113],
-             },
-        ]
-    };
-    if (option4 && typeof option4 === "object") {
-        myChart4.setOption(option4, true);
-    }
+        }
+    });
 
     $(document).ready(function() {
 		$('.autonumber').autoNumeric('init');

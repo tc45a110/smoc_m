@@ -46,6 +46,7 @@ public class IndexController {
         view.addObject("countMap", dataMap.getData());
         view.addObject("endDate", endDate);
         view.addObject("year", year);
+        view.addObject("month", DateTimeUtils.getMonth());
 
         return view;
 

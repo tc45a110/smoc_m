@@ -129,7 +129,7 @@ public class IndexStatisticsRepository  extends BasePageRepository {
      */
     public Map<String, Object> getProfitSum(String startDate, String endDate) {
         StringBuffer sql = new StringBuffer("select");
-        sql.append("  IFNULL(ROUND(sum(t.ACCOUNT_PRICE*t.MESSAGE_SUCCESS_NUM)-sum(t.CHANNEL_PRICE*t.MESSAGE_SUCCESS_NUM)),0) PROFIT_SUM ");
+        sql.append("  IFNULL(ROUND(sum(t.ACCOUNT_PRICE*t.MESSAGE_SUCCESS_NUM)),0) PROFIT_SUM ");
         sql.append("  from message_daily_statistics t ");
         sql.append("  where t.MESSAGE_DATE>=? and t.MESSAGE_DATE<=?");
 
@@ -154,7 +154,7 @@ public class IndexStatisticsRepository  extends BasePageRepository {
         sqlBuffer.append(" (SELECT @s :=@s + 1 as `INDEX`, DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL @s MONTH),'%Y-%m') AS `MONTH_DAY` ");
         sqlBuffer.append("  from mysql.help_topic, (SELECT @s := -1) temp WHERE  @s < 11 ORDER BY MONTH_DAY desc");
         sqlBuffer.append(" )a  left join ");
-        sqlBuffer.append(" (SELECT DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m')MESSAGE_DATE, ROUND((sum(t.ACCOUNT_PRICE*t.MESSAGE_SUCCESS_NUM)-sum(t.CHANNEL_PRICE*t.MESSAGE_SUCCESS_NUM))/10000,2) PROFIT_NUM ");
+        sqlBuffer.append(" (SELECT DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m')MESSAGE_DATE, ROUND((sum(t.ACCOUNT_PRICE*t.MESSAGE_SUCCESS_NUM))/10000,2) PROFIT_NUM ");
         sqlBuffer.append(" FROM message_daily_statistics t ");
         sqlBuffer.append(" GROUP BY DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m')");
         sqlBuffer.append(" )b on a.MONTH_DAY = b.MESSAGE_DATE  order by a.MONTH_DAY asc");

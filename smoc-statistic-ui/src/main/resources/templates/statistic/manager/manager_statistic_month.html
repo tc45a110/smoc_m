@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <th:block th:insert="fragments/common_fragments :: common_header"/>
@@ -37,15 +37,17 @@
         <div class="row" style="position: relative;margin-top: 80px" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
                 <div class="card-box">
-                    <form id="query_form" method="post">
+                    <form  id="query_form" th:action="@{/statistic/manager/month/query}"
+                           th:object="${managerStatisticQo}" method="post">
                         <div class="row m-b-60">
                             <div class="col-sm-12">
                                 <div class="form-group  col-sm-4">
-                                    <input  id="form_datetime" type="text" class="form-control" value="2021-12"
-                                           placeholder="" autocomplete="off">
+                                    <input id="form_datetime" class="form-control" type="text"
+                                           th:field="*{startDate}" required="" autocomplete="off">
                                 </div>
                                 <div class="form-group col-sm-4 pull-right" style="text-align: right">
-                                    <button class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
+                                    <button  sec:authorize-url="/statistic/manager/month/query"
+                                             class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search" style="margin-right:5px"></i> 查询
                                     </button>
                                 </div>
@@ -75,93 +77,95 @@
 
     </div> <!-- container -->
 </div> <!-- content -->
-<script th:src="@{/static/assets/js/jquery.min.js}"></script>
+<th:block th:insert="fragments/common_fragments :: common_js"/>
 <script th:src="@{/static/echarts/echarts.min.js}"></script>
 <script th:src="@{/static/plugins/autoNumeric/autoNumeric.js}"></script>
 <script th:src="@{/static/js/month-picker/bootstrap-datepicker.js}"></script>
 <script th:src="@{/static/js/month-picker/bootstrap-datepicker.zh-CN.js}"></script>
 <script type="text/javascript">
 
-     var dom4 = document.getElementById("main1");
-    var myChart4 = echarts.init(dom4);
-    var app = {};
-    option4 = null;
-    option4 = {
-        title: {
-            text: '近24月运营数据'
-        },
-        color: ['#71D5DE', '#59A9E7','#F4979E', '#7DDCB1'],
-        legend: {
-            data: ['发送量（百万）', '营收（万元）', '毛利（万元）','净毛利（万元）']
-        },
-        tooltip: {
-            trigger: 'axis'
-        },
-        toolbox: {
-            show: true,
-            feature: {
-                magicType: {                       //动态类型切换
-                 show: true,
-                 title:"切换",                   //各个类型的标题文本，可以分别配置。
-                 type: ['line', 'bar'],          //启用的动态类型，包括'line'（切换为折线图）, 'bar'（切换为柱状图）, 'stack'（切换为堆叠模式）, 'tiled'（切换为平铺模式）
+    $.ajax({
+        url : '[[${#httpServletRequest.getContextPath()}]]/statistic/manager/month/ajax/'+'[[${managerStatisticQo.startDate}]]',
+        success : function(data) {
+            articles = eval(data);
+            var dom4 = document.getElementById("main1");
+            var myChart4 = echarts.init(dom4);
+            var app = {};
+            option4 = null;
+            option4 = {
+                title: {
+                    text: '近24月运营数据'
                 },
-                dataView: {show: true, readOnly: false},
-                saveAsImage: {show: true}
-            }
-        },
-        calculable: true,
-        grid: {
-                top: '60px',
-                left: '24px',
-                right: '24px',
-                bottom: '24px',
-                containLabel: true
-            },
-        xAxis: [
-            {
-                type: 'category',
-                axisLabel: {
-                    interval: 'auto',
-                    rotate: 30
+                color: ['#71D5DE', '#59A9E7', '#F4979E'],
+                legend: {
+                    data: ['发送量（百万）', '营收（万元）', '净利润（万元）']
                 },
-                data: ['2020-01', '2020-02', '2020-03', '2020-04', '2020-05', '2020-06', '2020-07', '2020-08', '2020-09', '2020-10', '2020-11', '2020-12','2021-01', '2021-02', '2021-03', '2021-04', '2021-05', '2021-06', '2021-07', '2021-08', '2021-09', '2021-10', '2021-11','2021-12']
+                tooltip: {
+                    trigger: 'axis'
+                },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        magicType: {                       //动态类型切换
+                            show: true,
+                            title: "切换",                   //各个类型的标题文本，可以分别配置。
+                            type: ['line', 'bar'],          //启用的动态类型，包括'line'（切换为折线图）, 'bar'（切换为柱状图）, 'stack'（切换为堆叠模式）, 'tiled'（切换为平铺模式）
+                        },
+                        dataView: {show: true, readOnly: false},
+                        saveAsImage: {show: true}
+                    }
+                },
+                calculable: true,
+                grid: {
+                    top: '60px',
+                    left: '24px',
+                    right: '24px',
+                    bottom: '24px',
+                    containLabel: true
+                },
+                xAxis: [
+                    {
+                        type: 'category',
+                        axisLabel: {
+                            interval: 'auto',
+                            rotate: 30
+                        },
+                        data: articles.date
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value'
+                    }
+                ],
+                series: [
+                    {
+                        name: '发送量（百万）',
+                        type: 'line',
+                        stack: 'Total',
+                        data: articles.sendAmount
+                    },
+                    {
+                        name: '营收（万元）',
+                        type: 'line',
+                        stack: 'Total',
+                        data: articles.incomeAmount
+                    },
+                    {
+                        name: '净利润（万元）',
+                        type: 'line',
+                        stack: 'Total',
+                        data: articles.profitAmount
+                    },
+                ]
+            };
+            if (option4 && typeof option4 === "object") {
+                myChart4.setOption(option4, true);
             }
-        ],
-        yAxis: [
-            {
-                type: 'value'
-            }
-        ],
-        series: [
-            {
-              name: '发送量（百万）',
-              type: 'line',
-              stack: 'Total',
-              data: [707, 659, 590, 864, 687, 707, 856, 822, 587, 588, 460, 423,526, 459, 490, 764, 887, 707, 756, 822, 487, 488, 460, 423],
-            },
-             {
-                 name: '营收（万元）',
-                 type: 'line',
-                 stack: 'Total',
-                 data: [260, 259, 390, 364, 487, 307, 256, 322, 487, 388, 460, 223,226, 159, 290, 264, 287, 307, 556, 522, 487, 388, 460, 323],
-             },
-             {
-                 name: '毛利（万元）',
-                 type: 'line',
-                 stack: 'Total',
-                 data: [130, 200, 120, 164, 187, 207, 156, 222, 287, 188, 120, 131,226, 129,130, 164, 187, 207, 256,222, 187, 288, 220, 210],
-             },
-             {
-                 name: '净毛利（万元）',
-                 type: 'line',
-                 stack: 'Total',
-                 data: [116, 119, 119, 164, 187, 177, 156, 122, 187, 188, 116, 113,116, 119, 119, 164, 187, 177, 156, 182, 187, 181, 116, 113],
-             },
-        ]
-    };
-    if (option4 && typeof option4 === "object") {
-        myChart4.setOption(option4, true);
-    }
+        }
+    });
+
+
 
     $(document).ready(function() {
 

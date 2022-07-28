@@ -424,6 +424,40 @@ public class DateTimeUtils {
 	}
 
 	/**
+	 * 传入两个时间范围，返回这两个时间范围内的所有日期，并保存在一个集合中
+	 * @param beginTime
+	 * @param endTime
+	 * @return
+	 * @throws ParseException
+	 */
+	public static List<String> findEveryDay(String beginTime, String endTime)
+			throws ParseException {
+		//1.创建一个放所有日期的集合
+		List<String> dates = new ArrayList();
+		//2.创建时间解析对象规定解析格式
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+		//3.将传入的时间解析成Date类型,相当于格式化
+		Date dBegin = sdf.parse(beginTime);
+		Date dEnd = sdf.parse(endTime);
+		//4.将格式化后的第一天添加进集合
+		dates.add(sdf.format(dBegin));
+		//5.使用本地的时区和区域获取日历
+		Calendar calBegin = Calendar.getInstance();
+		//6.传入起始时间将此日历设置为起始日历
+		calBegin.setTime(dBegin);
+		//8.判断结束日期是否在起始日历的日期之后
+		while (dEnd.after(calBegin.getTime())) {
+			// 9.根据日历的规则:月份中的每一天，为起始日历加一天
+			calBegin.add(Calendar.DAY_OF_MONTH, 1);
+			//10.得到的每一天就添加进集合
+			dates.add(sdf.format(calBegin.getTime()));
+			//11.如果当前的起始日历超过结束日期后,就结束循环
+		}
+		return dates;
+	}
+
+	/**
 	 * 获取提前多少个月
 	 * 
 	 * @param monty
@@ -568,6 +602,30 @@ public class DateTimeUtils {
 		c.setTime(startDate);
 		c.add(Calendar.MONTH,months);
 		return c.getTime();
+	}
+
+	/**
+	 * 时间月数加减
+	 *
+	 * @param startDate
+	 *            要处理的时间，Null则为当前时间
+	 * @param months
+	 *            加减的月数
+	 * @return Date
+	 */
+	public static String dateAddMonthsStr(String startDate, int months) {
+		//月份加减
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM");
+		Calendar calendar=Calendar.getInstance();
+		try {
+			calendar.setTime(sdf.parse(startDate));
+			calendar.add(Calendar.MONTH,months);//日期加3个月
+			Date dt=calendar.getTime();
+			return sdf.format(dt);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/**
@@ -863,4 +921,5 @@ public class DateTimeUtils {
 		String str = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);//再将时间转换为对应格式字符串
 		return str;
 	}
+
 }

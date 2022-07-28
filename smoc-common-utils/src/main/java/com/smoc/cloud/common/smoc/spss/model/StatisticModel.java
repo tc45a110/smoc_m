@@ -1,4 +1,4 @@
-package com.smoc.cloud.statistic.data.controller;
+package com.smoc.cloud.common.smoc.spss.model;
 
 
 import lombok.Getter;
@@ -12,7 +12,7 @@ public class StatisticModel {
 
     private String[] date;
 
-    private Integer[] sendAmount;
+    private BigDecimal[] sendAmount;
 
     private BigDecimal[] incomeAmount;
 
@@ -20,5 +20,4 @@ public class StatisticModel {
 
     private BigDecimal[] profitAmount;
 
-    private String startDate;
 }

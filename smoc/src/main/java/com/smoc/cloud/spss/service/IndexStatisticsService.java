@@ -32,10 +32,10 @@ public class IndexStatisticsService {
         Map<String, Object> map = new HashMap<>();
 
         Map<String, Object> profit = indexStatisticsDataRepository.getProfitSum(startDate,endDate);
-        //营收总额
+        //利润总额
         map.put("PROFIT_SUM",new BigDecimal(""+profit.get("ACCOUNT_PROFIT_SUM")).subtract(new BigDecimal(""+profit.get("CHANNEL_PROFIT_SUM"))));
-        //毛利总额
-        map.put("GROSS_PROFIT_SUM",profit.get("ACCOUNT_PROFIT_SUM"));
+        //营收总额
+        map.put("TOTAL_SUM",profit.get("ACCOUNT_PROFIT_SUM"));
 
         //发送总量
         Long messageSendTotal = indexStatisticsDataRepository.getMessageSendTotal(startDate,endDate);

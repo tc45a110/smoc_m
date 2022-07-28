@@ -4,7 +4,7 @@
 var publicKey = null;
 $(document).ready(
 	function() {
-		$.ajax({
+		/*$.ajax({
 			url: "/admin/getPublicKey" ,
 			success: function (data) {
 				if(data){
@@ -17,7 +17,7 @@ $(document).ready(
 			}, error: function (data) {
 				console.log("error");
 			}
-		});
+		});*/
 
 		$('#login_submit').on(
 			'click',
