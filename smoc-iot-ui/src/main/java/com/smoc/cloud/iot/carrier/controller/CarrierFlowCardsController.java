@@ -207,6 +207,7 @@ public class CarrierFlowCardsController {
         validator.setCardStatus("0");
         validator.setUseStatus("0");
         validator.setOpenCardFee(new BigDecimal("0"));
+        validator.setCycleFunctionFee(new BigDecimal("0"));
 
         view.addObject("pools", dataPool.getData().getList());
         view.addObject("carriers", dataCarrier.getData().getList());
@@ -298,6 +299,13 @@ public class CarrierFlowCardsController {
 
         if (StringUtils.isEmpty(iotFlowCardsPrimaryInfoValidator.getOrderNum())) {
             iotFlowCardsPrimaryInfoValidator.setOrderNum(DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(4));
+        }
+
+        //根据流量类型，映射计费类型
+        if ("01".equals(iotFlowCardsPrimaryInfoValidator.getCardType())) {
+            iotFlowCardsPrimaryInfoValidator.setChargeType("01");
+        } else {
+            iotFlowCardsPrimaryInfoValidator.setChargeType("02");
         }
 
         //保存数据

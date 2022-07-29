@@ -24,25 +24,28 @@ public class IotFlowCardsPrimaryInfoRepositoryImpl extends BasePageRepository {
 
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");
-        sqlBuffer.append("  t.ID");
+        sqlBuffer.append(" t.ID");
         sqlBuffer.append(",t.CARRIER");
         sqlBuffer.append(",c.CARRIER_NAME");
         sqlBuffer.append(",t.CARD_TYPE");
         sqlBuffer.append(",t.ORDER_NUM");
+        sqlBuffer.append(",t.ICCID");
         sqlBuffer.append(",t.MSISDN");
         sqlBuffer.append(",t.IMSI");
-        sqlBuffer.append(",t.ICCID");
+        sqlBuffer.append(",t.IMEI");
+        sqlBuffer.append(",t.CHARGE_CYCLE");
+        sqlBuffer.append(",t.CHARGE_TYPE");
         sqlBuffer.append(",t.FLOW_POOL_ID");
-        sqlBuffer.append(",t.CHANGING_TYPE");
         sqlBuffer.append(",t.CYCLE_QUOTA");
         sqlBuffer.append(",t.OPEN_CARD_FEE");
+        sqlBuffer.append(",t.CYCLE_FUNCTION_FEE");
         sqlBuffer.append(",t.ACTIVE_DATE");
         sqlBuffer.append(",t.OPEN_DATE");
         sqlBuffer.append(",t.USE_STATUS");
         sqlBuffer.append(",t.CARD_STATUS");
         sqlBuffer.append(",t.CREATED_BY");
         sqlBuffer.append(",DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME");
-        sqlBuffer.append("  from iot_flow_cards_primary_info t,iot_carrier_info c where c.ID=t.CARRIER ");
+        sqlBuffer.append(" from iot_flow_cards_primary_info t,iot_carrier_info c where c.ID=t.CARRIER ");
 
         List<Object> paramsList = new ArrayList<Object>();
 

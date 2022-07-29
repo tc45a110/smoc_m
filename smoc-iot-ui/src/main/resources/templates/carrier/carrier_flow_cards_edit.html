@@ -103,27 +103,15 @@
                                             <div class="col-md-4 form-group">
                                                 <label>计费周期<span class="text-danger">*</span>&nbsp;<span
                                                         class="text-danger"
-                                                        th:if="${#fields.hasErrors('changingType')}"
-                                                        th:errors="*{changingType}"
+                                                        th:if="${#fields.hasErrors('chargeCycle')}"
+                                                        th:errors="*{chargeCycle}"
                                                         style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
-                                                <select class="selectpicker" name="changingType" required>
+                                                <select class="selectpicker" name="chargeCycle" required>
                                                     <option value="">--请选择计费周期--</option>
-                                                    <option th:selected="${validator.changingType == '01'}" value="01">自然月</option>
-                                                    <option th:selected="${validator.changingType == '02'}" value="02">年</option>
+                                                    <option th:selected="${validator.chargeCycle == '01'}" value="01">自然月</option>
+                                                    <option th:selected="${validator.chargeCycle == '02'}" value="02">年</option>
                                                 </select>
-                                            </div>
-
-                                            <div class="col-md-4 form-group">
-                                                <label>MSISDN<span class="text-danger">*</span>&nbsp;<span
-                                                        class="text-danger"
-                                                        th:if="${#fields.hasErrors('msisdn')}"
-                                                        th:errors="*{msisdn}"
-                                                        style="font-weight: 200;font-size: 12px"></span>
-                                                </label>
-                                                <input type="text" required="" class="form-control"
-                                                       autocomplete="off" th:field="*{msisdn}"
-                                                       data-parsley-length="[4,32]" placeholder="MSISDN">
                                             </div>
                                             <div class="col-md-4 form-group">
                                                 <label>ICCID<span class="text-danger">*</span>&nbsp;<span
@@ -137,6 +125,17 @@
                                                        data-parsley-length="[4,32]" placeholder="ICCID">
                                             </div>
                                             <div class="col-md-4 form-group">
+                                                <label>MSISDN<span class="text-danger">*</span>&nbsp;<span
+                                                        class="text-danger"
+                                                        th:if="${#fields.hasErrors('msisdn')}"
+                                                        th:errors="*{msisdn}"
+                                                        style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input type="text" required="" class="form-control"
+                                                       autocomplete="off" th:field="*{msisdn}"
+                                                       data-parsley-length="[4,32]" placeholder="MSISDN">
+                                            </div>
+                                            <div class="col-md-4 form-group">
                                                 <label>IMSI<span class="text-danger">*</span>&nbsp;<span
                                                         class="text-danger"
                                                         th:if="${#fields.hasErrors('imsi')}"
@@ -146,6 +145,17 @@
                                                 <input type="text" required="" class="form-control"
                                                        autocomplete="off" th:field="*{imsi}"
                                                        data-parsley-length="[4,32]" placeholder="IMSI">
+                                            </div>
+                                            <div class="col-md-4 form-group">
+                                                <label>IMEI&nbsp;<span
+                                                        class="text-danger"
+                                                        th:if="${#fields.hasErrors('imei')}"
+                                                        th:errors="*{imei}"
+                                                        style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input type="text" class="form-control"
+                                                       autocomplete="off" th:field="*{imei}"
+                                                       data-parsley-length="[0,32]" placeholder="IMEI">
                                             </div>
                                             <div class="col-md-4 form-group">
                                                 <label>订单号&nbsp;<span
@@ -181,6 +191,18 @@
                                                        autocomplete="off" th:field="*{openCardFee}" required=""
                                                        min="0.00" placeholder="开卡费" data-toggle="tooltip" data-placement="top"
                                                        data-original-title="0表示不收开卡费">
+                                            </div>
+                                            <div class="col-md-4 form-group">
+                                                <label>周期功能费（元/卡月） <span class="text-danger">*</span><span
+                                                        class="text-danger"
+                                                        th:if="${#fields.hasErrors('cycleFunctionFee')}"
+                                                        th:errors="*{cycleFunctionFee}"
+                                                        style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input type="text"  class="form-control"
+                                                       autocomplete="off" th:field="*{cycleFunctionFee}" required=""
+                                                       min="0.00" placeholder="周期功能费（元/卡月）" data-toggle="tooltip" data-placement="top"
+                                                       data-original-title="0表示不收费用">
                                             </div>
 
                                             <div class="col-md-12 text-center m-t-20">

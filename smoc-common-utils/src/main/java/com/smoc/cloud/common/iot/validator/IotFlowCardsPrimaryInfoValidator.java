@@ -17,19 +17,25 @@ public class IotFlowCardsPrimaryInfoValidator {
 
     private String orderNum;
 
+    private String iccid;
+
     private String msisdn;
 
     private String imsi;
 
-    private String iccid;
+    private String imei;
+
+    private String chargeCycle;
+
+    private String chargeType;
 
     private String flowPoolId;
-
-    private String changingType;
 
     private BigDecimal cycleQuota;
 
     private BigDecimal openCardFee;
+
+    private BigDecimal cycleFunctionFee;
 
     private String activeDate;
 

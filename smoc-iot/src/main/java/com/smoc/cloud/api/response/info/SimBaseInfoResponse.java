@@ -8,14 +8,14 @@ import lombok.Setter;
 public class SimBaseInfoResponse {
 
     /**
-     * 物联卡号码
-     */
-    private String msisdn;
-
-    /**
      * 集成电路卡识别码
      */
     private String iccid;
+
+    /**
+     * 物联卡号码
+     */
+    private String msisdn;
 
     /**
      * 国际移动用户识别码
