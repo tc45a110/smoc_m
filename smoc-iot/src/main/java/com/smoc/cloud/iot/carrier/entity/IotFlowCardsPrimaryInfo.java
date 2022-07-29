@@ -23,26 +23,34 @@ public class IotFlowCardsPrimaryInfo {
     @Column(name = "ORDER_NUM", length = 32)
     private String orderNum;
 
-    @Column(name = "MSISDN", nullable = false, length = 32)
-    private String msisdn;
-
-    @Column(name = "IMSI", nullable = false, length = 32)
-    private String imsi;
-
     @Column(name = "ICCID", nullable = false, length = 32)
     private String iccid;
+    @Column(name = "MSISDN", length = 32)
+    private String msisdn;
+
+    @Column(name = "IMSI", length = 32)
+    private String imsi;
+
+    @Column(name = "IMEI", length = 32)
+    private String imei;
+
+    @Column(name = "CHARGE_CYCLE", nullable = false, length = 32)
+    private String chargeCycle;
+
+    @Column(name = "CHARGE_TYPE", nullable = false, length = 32)
+    private String chargeType;
 
     @Column(name = "FLOW_POOL_ID", length = 32)
     private String flowPoolId;
-
-    @Column(name = "CHANGING_TYPE", nullable = false, length = 32)
-    private String changingType;
 
     @Column(name = "CYCLE_QUOTA", nullable = false, precision = 24, scale = 6)
     private BigDecimal cycleQuota;
 
     @Column(name = "OPEN_CARD_FEE", nullable = false, precision = 24, scale = 6)
     private BigDecimal openCardFee;
+
+    @Column(name = "CYCLE_FUNCTION_FEE", nullable = false, precision = 24, scale = 6)
+    private BigDecimal cycleFunctionFee;
 
     @Column(name = "ACTIVE_DATE", length = 32)
     private String activeDate;
@@ -148,12 +156,36 @@ public class IotFlowCardsPrimaryInfo {
         this.openCardFee = openCardFee;
     }
 
-    public String getChangingType() {
-        return changingType;
+    public String getImei() {
+        return imei;
     }
 
-    public void setChangingType(String changingType) {
-        this.changingType = changingType;
+    public void setImei(String imei) {
+        this.imei = imei;
+    }
+
+    public String getChargeCycle() {
+        return chargeCycle;
+    }
+
+    public void setChargeCycle(String chargeCycle) {
+        this.chargeCycle = chargeCycle;
+    }
+
+    public String getChargeType() {
+        return chargeType;
+    }
+
+    public void setChargeType(String chargeType) {
+        this.chargeType = chargeType;
+    }
+
+    public BigDecimal getCycleFunctionFee() {
+        return cycleFunctionFee;
+    }
+
+    public void setCycleFunctionFee(BigDecimal cycleFunctionFee) {
+        this.cycleFunctionFee = cycleFunctionFee;
     }
 
     public String getFlowPoolId() {
