@@ -196,7 +196,7 @@ public class ChannelRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(" )a  left join ");
         sqlBuffer.append(" (SELECT DATE_FORMAT(t.REPORT_DATE, '%Y-%m')MONTH_DAY,count(*)COMPLAINT_NUM ");
         sqlBuffer.append(" FROM message_complaint_info t left join config_channel_interface i on t.NUMBER_CODE = i.SRC_ID ");
-        sqlBuffer.append(" WHERE i.CHANNEL_ID = ? GROUP BY t.NUMBER_CODE,i.CHANNEL_ID, DATE_FORMAT(t.REPORT_DATE, '%Y-%m')");
+        sqlBuffer.append(" WHERE t.COMPLAINT_SOURCE = 'day' and i.CHANNEL_ID = ? GROUP BY t.NUMBER_CODE,i.CHANNEL_ID, DATE_FORMAT(t.REPORT_DATE, '%Y-%m')");
         sqlBuffer.append(" )b on a.MONTH_DAY = b.MONTH_DAY  order by a.MONTH_DAY asc");
 
 

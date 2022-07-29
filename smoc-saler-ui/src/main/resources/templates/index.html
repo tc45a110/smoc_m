@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <th:block th:insert="fragments/common_fragments :: common_header"/>
@@ -27,79 +27,122 @@
             </div>
         </div>
         <!-- end row -->
-        <div class="row" style="position: relative;margin-top: 80px">
+        <div class="row" style="position: relative;margin-top: 80px" th:remove="${#strings.isEmpty(error)}?none:all">
 
-            <div class="col-lg-3 col-md-6">
-                <div class="card-box widget-box-two widget-two-info">
-                    <i class="mdi mdi-chart-areaspline widget-two-icon"></i>
-                    <div class="wigdet-two-content text-white">
-                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Statistics">
-                            客户消费总额（[[${year}]]年）</p>
-                        <h2 class="text-white">
+            <div sec:authorize="hasAnyAuthority('SMOC_SALER_ACCOUNT','SMOC_SALER')" >
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="card-box widget-box-two widget-two-info">
+                        <i class="mdi mdi-chart-areaspline widget-two-icon"></i>
+                        <div class="wigdet-two-content text-white">
+                            <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Statistics">
+                                客户消费总额（[[${year}]]年）</p>
+                            <h2 class="text-white">
                             <span data-plugin="counterup">
                                 <span data-d-group="4" data-a-sign="¥ "
-                                                                style="width:100px;text-align:left"
-                                                                class="autonumber">[[${countMap.get('ACCOUNT_CONSUME_SUM')}]]</span>
+                                      style="width:100px;text-align:left"
+                                      class="autonumber" id="ACCOUNT_CONSUME_SUM">&nbsp;</span>
                             </span></h2>
-                        <p class="m-0">截止日期: [[${endDate}]]</p>
+                            <p class="m-0">截止日期: [[${endDate}]]</p>
+                        </div>
                     </div>
-                </div>
-            </div><!-- end col -->
+                </div><!-- end col -->
 
-            <div class="col-lg-3 col-md-6">
-                <div class="card-box widget-box-two widget-two-primary">
-                    <i class="mdi mdi-layers widget-two-icon"></i>
-                    <div class="wigdet-two-content text-white">
-                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="User This Month">
-                            客户发送总量（[[${year}]]年）</p>
-                        <h2 class="text-white">
+                <div class="col-lg-3 col-md-6">
+                    <div class="card-box widget-box-two widget-two-primary">
+                        <i class="mdi mdi-layers widget-two-icon"></i>
+                        <div class="wigdet-two-content text-white">
+                            <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="User This Month">
+                                客户发送总量（[[${year}]]年）</p>
+                            <h2 class="text-white">
                             <span data-plugin="counterup">
                             <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
                                   style="width:90px;text-align:left"
-                                  class="autonumber">[[${countMap.get('MESSAGE_SEND_TOTAL')}]]</span>
+                                  class="autonumber" id="MESSAGE_SEND_TOTAL">&nbsp;</span>
                             </span></h2>
-                        <p class="m-0">截止日期: [[${endDate}]]</p>
+                            <p class="m-0">截止日期: [[${endDate}]]</p>
+                        </div>
                     </div>
-                </div>
-            </div><!-- end col -->
+                </div><!-- end col -->
 
-            <div class="col-lg-3 col-md-6">
-                <div class="card-box widget-box-two widget-two-danger">
-                    <i class="mdi mdi-access-point-network widget-two-icon"></i>
-                    <div class="wigdet-two-content text-white">
-                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="User This Month">
-                            客户欠费总额（后付费）</p>
-                        <h2 class="text-white">
+                <div class="col-lg-3 col-md-6">
+                    <div class="card-box widget-box-two widget-two-danger">
+                        <i class="mdi mdi-access-point-network widget-two-icon"></i>
+                        <div class="wigdet-two-content text-white">
+                            <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="User This Month">
+                                客户欠费总额（后付费）</p>
+                            <h2 class="text-white">
                             <span data-plugin="counterup">
                              <span data-d-group="4" data-a-sign="¥ "
                                    style="width:100px;text-align:left"
-                                   class="autonumber">145922</span>
+                                   class="autonumber" >[[${countMap.get('ACCOUNT_LATER_USABLE_SUM')}]]</span>
                             </span></h2>
-                        <p class="m-0">截止日期: [[${endDate}]]</p>
+                            <p class="m-0">截止日期: [[${endDate}]]</p>
+                        </div>
                     </div>
-                </div>
-            </div><!-- end col -->
+                </div><!-- end col -->
 
-            <div class="col-lg-3 col-md-6">
-                <div class="card-box widget-box-two widget-two-success">
-                    <i class="mdi mdi-account-convert widget-two-icon"></i>
-                    <div class="wigdet-two-content text-white">
-                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="User This Month">
-                            客户余额（预付费）</p>
-                        <h2 class="text-white">
+                <div class="col-lg-3 col-md-6">
+                    <div class="card-box widget-box-two widget-two-success">
+                        <i class="mdi mdi-account-convert widget-two-icon"></i>
+                        <div class="wigdet-two-content text-white">
+                            <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="User This Month">
+                                客户余额（预付费）</p>
+                            <h2 class="text-white">
                             <span data-plugin="counterup">
                              <span data-d-group="4" data-a-sign="¥ "
                                    style="width:100px;text-align:left"
                                    class="autonumber">[[${countMap.get('ACCOUNT_USABLE_SUM')}]]</span>
                             </span></h2>
-                        <p class="m-0">截止日期: [[${endDate}]]</p>
+                            <p class="m-0">截止日期: [[${endDate}]]</p>
+                        </div>
                     </div>
-                </div>
-            </div><!-- end col -->
+                </div><!-- end col -->
+            </div>
+
+            <div sec:authorize="hasAnyAuthority('SMOC_SALER_CHANNEL','SMOC_SALER')">
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="card-box widget-box-two widget-two-brown">
+                        <i class="mdi mdi-chart-areaspline widget-two-icon"></i>
+                        <div class="wigdet-two-content text-white">
+                            <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Statistics">
+                                通道消费总额（[[${year}]]年）</p>
+                            <h2 class="text-white">
+                            <span data-plugin="counterup">
+                                <span data-d-group="4" data-a-sign="¥ "
+                                      style="width:100px;text-align:left"
+                                      class="autonumber" id="CHANNEL_CONSUME_SUM">&nbsp;</span>
+                            </span></h2>
+                            <p class="m-0">截止日期: [[${endDate}]]</p>
+                        </div>
+                    </div>
+                </div><!-- end col -->
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="card-box widget-box-two widget-two-purple">
+                        <i class="mdi mdi-layers widget-two-icon"></i>
+                        <div class="wigdet-two-content text-white">
+                            <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="User This Month">
+                                通道发送总量（[[${year}]]年）</p>
+                            <h2 class="text-white">
+                            <span data-plugin="counterup">
+                            <span data-d-group="4" data-a-sign=" " data-v-min="0" data-v-max="999999999"
+                                  style="width:90px;text-align:left"
+                                  class="autonumber" id="CHANNEL_MESSAGE_SEND_TOTAL">&nbsp;</span>
+                            </span></h2>
+                            <p class="m-0">截止日期: [[${endDate}]]</p>
+                        </div>
+                    </div>
+                </div><!-- end col -->
+
+            </div>
 
         </div>
+
+
         <!-- end row -->
-        <div class="row">
+        <div class="row" sec:authorize="hasAnyAuthority('SMOC_SALER_ACCOUNT','SMOC_SALER')">
             <div class="col-lg-6">
                 <div class="card-box">
                     <div id="main1" style="height: 400px;"></div>
@@ -112,6 +155,19 @@
             </div><!-- end col -->
 
         </div>
+        <div class="row" sec:authorize="hasAnyAuthority('SMOC_SALER_CHANNEL','SMOC_SALER')">
+            <div class="col-lg-6">
+                <div class="card-box">
+                    <div id="main3" style="height: 400px;"></div>
+                </div>
+            </div><!-- end col -->
+            <div class="col-lg-6">
+                <div class="card-box">
+                    <div id="main4" style="height: 400px;"></div>
+                </div>
+            </div><!-- end col -->
+
+        </div>
         <!-- end row -->
 
 
@@ -120,10 +176,19 @@
 <script th:src="@{/static/assets/js/jquery.min.js}"></script>
 <script th:src="@{/static/echarts/echarts.min.js}"></script>
 <script th:src="@{/static/plugins/autoNumeric/autoNumeric.js}"></script>
-<script type="text/javascript">
+<script type="text/javascript" sec:authorize="hasAnyAuthority('SMOC_SALER_ACCOUNT','SMOC_SALER')">
 
     $.ajax({
-        url : '[[${#httpServletRequest.getContextPath()}]]/index/indexStatisticMessageSendSum',
+        url : '[[${#httpServletRequest.getContextPath()}]]/index/accountAjax',
+        success : function(data) {
+            articles = eval(data);
+            $("#ACCOUNT_CONSUME_SUM").html("¥ "+articles.accountConsumeSum);
+            $("#MESSAGE_SEND_TOTAL").html(articles.messageSendTotal);
+        }
+    });
+
+    $.ajax({
+        url : '[[${#httpServletRequest.getContextPath()}]]/index/indexStatisticAccountMessageSendSum',
         success : function(data) {
             articles = eval(data);
             var dom3 = document.getElementById("main1");
@@ -197,77 +262,244 @@
     });
 
 
+    $.ajax({
+        url : '[[${#httpServletRequest.getContextPath()}]]/index/indexStatisticAccountComplaint',
+        success : function(data) {
+            articles = eval(data);
+            var dom4 = document.getElementById("main2");
+            var myChart4 = echarts.init(dom4);
+            var app = {};
+            option4 = null;
+            option4 = {
+                title: {
+                    text: '客户近12个月投诉统计（个）'
+                },
+                color: ['#00ACC1', '#8D6E63'],
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: articles.year
+                },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        saveAsImage: {show: true}
+                    }
+                },
+                calculable: true,
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    axisLabel: {
+                        interval: 'auto',
+                        rotate: 30
+                    },
+                    data: articles.monthArray,
+                },
+                yAxis: [
+                    {
+                        type: 'value'
+                    }
+                ],
+                series: [
+                    {
+                        name: articles.year[0],
+                        type: 'line',
+                        stack: 'Total',
+                        data: articles.complaintArrayBefore,
+                        markLine: {
+                            data: [
+                                {type: 'average', name: '平均值'}
+                            ]
+                        }
+                    },
+                    {
+                        name: articles.year[1],
+                        type: 'line',
+                        stack: 'Total',
+                        data: articles.complaintArray,
+                        markLine: {
+                            data: [
+                                {type: 'average', name: '平均值'}
+                            ]
+                        }
+                    },
+                ]
+            };
+            ;
+            if (option4 && typeof option4 === "object") {
+                myChart4.setOption(option4, true);
+            }
+        }
+    });
 
-    var dom4 = document.getElementById("main2");
-    var myChart4 = echarts.init(dom4);
-    var app = {};
-    option4 = null;
-    option4 = {
-        title: {
-            text: '客户近12个月带来营业额（W）'
-        },
-        color: ['#EE6666', '#92CB76'],
-        tooltip: {
-            trigger: 'axis'
-        },
-        legend: {
-          data: ['2021年近12个月', '2022年近12个月']
-        },
-        toolbox: {
-            show: true,
-            feature: {
-                saveAsImage: {show: true}
+
+</script>
+<script type="text/javascript" sec:authorize="hasAnyAuthority('SMOC_SALER_CHANNEL','SMOC_SALER')">
+
+    $.ajax({
+        url : '[[${#httpServletRequest.getContextPath()}]]/index/channelAjax',
+        success : function(data) {
+            articles = eval(data);
+            $("#CHANNEL_CONSUME_SUM").html("¥ "+articles.accountConsumeSum);
+            $("#CHANNEL_MESSAGE_SEND_TOTAL").html(articles.messageSendTotal);
+        }
+    });
+
+    $.ajax({
+        url : '[[${#httpServletRequest.getContextPath()}]]/index/indexStatisticChannelMessageSendSum',
+        success : function(data) {
+            articles = eval(data);
+            var dom3 = document.getElementById("main3");
+            var myChart3 = echarts.init(dom3);
+            var app = {};
+            option3 = null;
+            option3 = {
+                title: {
+                    text: '通道近12个月短信发送量（W）'
+                },
+                color: ['#4BD396', '#3AC9D6'],
+                legend: {
+                    data: articles.year
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        saveAsImage: {show: true}
+                    }
+                },
+                calculable: true,
+                xAxis: [
+                    {
+                        type: 'category',
+                        axisLabel: {
+                            interval: 'auto',
+                            rotate: 30
+                        },
+                        data: articles.monthArray
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value'
+                    }
+                ],
+                series: [
+                    {
+                        name: articles.year[0],
+                        type: 'line',
+                        stack: 'Total',
+                        data: articles.sendNumberArrayBefore,
+                        markLine: {
+                            data: [
+                                {type: 'average', name: '平均值'}
+                            ]
+                        }
+                    },
+                    {
+                        name: articles.year[1],
+                        type: 'line',
+                        stack: 'Total',
+                        data: articles.sendNumberArray,
+                        markLine: {
+                            data: [
+                                {type: 'average', name: '平均值'}
+                            ]
+                        }
+                    },
+                ]
+            };
+
+            if (option3 && typeof option3 === "object") {
+                myChart3.setOption(option3, true);
             }
-        },
-        calculable: true,
-        xAxis: {
-            type: 'category',
-            boundaryGap: false,
-            axisLabel: {
-              interval: 'auto',
-              rotate: 30
-            },
-            data: ['2020-11', '2020-12', '2021-01', '2021-02', '2021-03', '2021-04', '2021-05', '2021-06', '2021-07', '2021-08', '2021-09','2021-10']
-        },
-        yAxis: [
-            {
-                type: 'value'
+
+        }
+    });
+
+
+    $.ajax({
+        url : '[[${#httpServletRequest.getContextPath()}]]/index/indexStatisticChannelComplaint',
+        success : function(data) {
+            articles = eval(data);
+            var dom4 = document.getElementById("main4");
+            var myChart4 = echarts.init(dom4);
+            var app = {};
+            option4 = null;
+            option4 = {
+                title: {
+                    text: '通道近12个月投诉统计（个）'
+                },
+                color: ['#FF9800', '#6B5FB5'],
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: articles.year
+                },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        saveAsImage: {show: true}
+                    }
+                },
+                calculable: true,
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    axisLabel: {
+                        interval: 'auto',
+                        rotate: 30
+                    },
+                    data: articles.monthArray,
+                },
+                yAxis: [
+                    {
+                        type: 'value'
+                    }
+                ],
+                series: [
+                    {
+                        name: articles.year[0],
+                        type: 'line',
+                        stack: 'Total',
+                        data: articles.complaintArrayBefore,
+                        markLine: {
+                            data: [
+                                {type: 'average', name: '平均值'}
+                            ]
+                        }
+                    },
+                    {
+                        name: articles.year[1],
+                        type: 'line',
+                        stack: 'Total',
+                        data: articles.complaintArray,
+                        markLine: {
+                            data: [
+                                {type: 'average', name: '平均值'}
+                            ]
+                        }
+                    },
+                ]
+            };
+            ;
+            if (option4 && typeof option4 === "object") {
+                myChart4.setOption(option4, true);
             }
-        ],
-        series: [
-            {
-              name: '2021年近12个月',
-              type: 'line',
-              stack: 'Total',
-              data: [26, 59, 90, 264, 287, 707, 1756, 1822, 487, 188, 60, 123],
-              markLine: {
-                    data: [
-                        {type: 'average', name: '平均值'}
-                    ]
-              }
-            },
-            {
-              name: '2022年近12个月',
-              type: 'line',
-              stack: 'Total',
-              data: [36, 29, 40, 124, 87, 407, 856, 122, 687, 888, 50, 103],
-              markLine: {
-                    data: [
-                        {type: 'average', name: '平均值'}
-                    ]
-              }
-            },
-        ]
-    };
-    ;
-    if (option4 && typeof option4 === "object") {
-        myChart4.setOption(option4, true);
-    }
+        }
+    });
+
+</script>
+<script type="text/javascript">
 
     $(document).ready(function() {
-		$('.autonumber').autoNumeric('init');
-	 });
-
+        $('.autonumber').autoNumeric('init');
+    });
 
     var resizefunc = [];
     //隐藏进度项

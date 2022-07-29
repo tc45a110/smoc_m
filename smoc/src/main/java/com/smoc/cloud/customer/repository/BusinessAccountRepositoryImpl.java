@@ -394,7 +394,7 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
         sqlBuffer.append("  from mysql.help_topic, (SELECT @s := -1) temp WHERE  @s < 11 ORDER BY MONTH_DAY desc");
         sqlBuffer.append(" )a  left join ");
         sqlBuffer.append(" (SELECT DATE_FORMAT(t.REPORT_DATE, '%Y-%m')MONTH_DAY,count(*)COMPLAINT_NUM ");
-        sqlBuffer.append(" FROM message_complaint_info t WHERE t.BUSINESS_ACCOUNT = ? ");
+        sqlBuffer.append(" FROM message_complaint_info t WHERE t.BUSINESS_ACCOUNT = ? and t.COMPLAINT_SOURCE = 'day'");
         sqlBuffer.append(" GROUP BY t.BUSINESS_ACCOUNT, DATE_FORMAT(t.REPORT_DATE, '%Y-%m')");
         sqlBuffer.append(" )b on a.MONTH_DAY = b.MONTH_DAY  order by a.MONTH_DAY asc");
 
