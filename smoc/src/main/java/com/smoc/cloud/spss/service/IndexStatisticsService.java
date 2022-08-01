@@ -36,10 +36,12 @@ public class IndexStatisticsService {
         map.put("PROFIT_SUM",new BigDecimal(""+profit.get("ACCOUNT_PROFIT_SUM")).subtract(new BigDecimal(""+profit.get("CHANNEL_PROFIT_SUM"))));
         //营收总额
         map.put("TOTAL_SUM",profit.get("ACCOUNT_PROFIT_SUM"));
-
         //发送总量
-        Long messageSendTotal = indexStatisticsDataRepository.getMessageSendTotal(startDate,endDate);
-        map.put("MESSAGE_SEND_TOTAL",messageSendTotal);
+        map.put("MESSAGE_SEND_TOTAL",profit.get("MESSAGE_TOTAL"));
+
+        //欠费总额（后付费）
+        Map<String, Object> laterUsableSum = indexStatisticsDataRepository.getUsableTotalLater();
+        map.put("ACCOUNT_LATER_USABLE_SUM",laterUsableSum.get("ACCOUNT_LATER_USABLE_SUM"));
 
         //所有客户数
         Long totalAccount = indexStatisticsDataRepository.getAccountCount();

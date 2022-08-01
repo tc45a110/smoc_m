@@ -64,6 +64,10 @@
                                            autocomplete="off">
                                 </div>
                                 <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control" placeholder="签名" th:field="*{messageSign}"
+                                           autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-3">
                                     <mpm:tag id="businessType" identity="businessType" show-type="select" key="code"
                                              name="businessType"
                                              th:value="${messageDailyStatisticValidator.businessType}"
@@ -73,6 +77,12 @@
                                     <mpm:tag  identity="carrier" name="carrier"
                                               show-type="select" key="code" th:value="${messageDailyStatisticValidator.carrier}"
                                               title="运营商"/>
+
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <mpm:tag  identity="provices" name="areaCode"
+                                              show-type="select" key="code" th:value="${messageDailyStatisticValidator.areaCode}"
+                                              title="区域"/>
 
                                 </div>
 

@@ -28,18 +28,18 @@ public class IndexStatisticsRepository  extends BasePageRepository {
      * @param endDate   结束日期 yyyy-MM-dd
      * @return
      */
-    public Long getMessageSendTotal(String startDate, String endDate) {
+    public Map<String, Object>  getMessageSendTotal(String startDate, String endDate) {
 
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");
-        sqlBuffer.append("  sum(m.MESSAGE_SUCCESS_NUM) messageTotal ");
+        sqlBuffer.append("  IFNULL(ROUND(sum(m.MESSAGE_SUCCESS_NUM)/10000,2),0) MESSAGE_TOTAL ");
         sqlBuffer.append("  from message_daily_statistics m ");
         sqlBuffer.append("  where m.MESSAGE_DATE>=? and m.MESSAGE_DATE<=?");
 
         Object[] params = new Object[2];
         params[0] = startDate;
         params[1] = endDate;
-        Long messageTotal = jdbcTemplate.queryForObject(sqlBuffer.toString(), params, Long.class);
+        Map<String, Object>  messageTotal = jdbcTemplate.queryForMap(sqlBuffer.toString(), params);
 
         return messageTotal;
 
@@ -109,15 +109,32 @@ public class IndexStatisticsRepository  extends BasePageRepository {
     }
 
     /**
-     * 账户总余额
+     * 账户总余额（预付费）
      * @return
      */
     public Map<String, Object> getCountUsableAccount() {
-        StringBuffer sql = new StringBuffer("select");
-        sql.append(" IFNULL(ROUND(sum(t.ACCOUNT_USABLE_SUM)),0) ACCOUNT_USABLE_SUM ");
-        sql.append("  from finance_account t ");
+        StringBuffer sqlBuffer = new StringBuffer("select");
+        sqlBuffer.append("  IFNULL(ROUND(sum(t.ACCOUNT_USABLE_SUM),2),0) ACCOUNT_USABLE_SUM ");
+        sqlBuffer.append("  from finance_account t ");
+        sqlBuffer.append("  left join account_finance_info b ON t.ACCOUNT_ID = b.ACCOUNT_ID ");
+        sqlBuffer.append("  where b.PAY_TYPE = 1 ");
 
-        Map<String, Object> map = jdbcTemplate.queryForMap(sql.toString());
+        Map<String, Object> map = jdbcTemplate.queryForMap(sqlBuffer.toString());
+        return map;
+    }
+
+    /**
+     * 欠费总额（后付费）
+     * @return
+     */
+    public Map<String, Object> getUsableTotalLater() {
+        StringBuffer sqlBuffer = new StringBuffer("select");
+        sqlBuffer.append("  IFNULL(ROUND(sum(t.ACCOUNT_USABLE_SUM),2),0) ACCOUNT_LATER_USABLE_SUM ");
+        sqlBuffer.append("  from finance_account t ");
+        sqlBuffer.append("  left join account_finance_info b ON t.ACCOUNT_ID = b.ACCOUNT_ID ");
+        sqlBuffer.append("  where b.PAY_TYPE = 2 ");
+
+        Map<String, Object> map = jdbcTemplate.queryForMap(sqlBuffer.toString());
         return map;
     }
 

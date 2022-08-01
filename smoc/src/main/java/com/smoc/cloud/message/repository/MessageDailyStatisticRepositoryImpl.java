@@ -93,6 +93,12 @@ public class MessageDailyStatisticRepositoryImpl extends BasePageRepository {
             paramsList.add(qo.getAreaCode().trim());
         }
 
+        //签名
+        if (!StringUtils.isEmpty(qo.getMessageSign())) {
+            sqlBuffer.append(" and t.MESSAGE_SIGN like ? ");
+            paramsList.add("%" + qo.getMessageSign().trim() + "%");
+        }
+
         //通道id
         if (!StringUtils.isEmpty(qo.getChannelId())) {
             sqlBuffer.append(" and t.CHANNEL_ID =?");

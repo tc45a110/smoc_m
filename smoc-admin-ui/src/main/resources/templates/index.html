@@ -6,15 +6,7 @@
     <th:block th:insert="fragments/common_fragments :: common_css"/>
     <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
     <th:block th:insert="fragments/common_fragments :: select_css"/>
-    <style>
-        .bg{
-            background:-webkit-linear-gradient(left,#fff, #f5707a);/*new gradient for Webkit*/
-            background: -o-linear-gradient(right, #fff, #f5707a); /* Opera 11.1 - 12.0 */
-            background: -moz-linear-gradient(left, #fff, #f5707a);
-            background: linear-gradient(to right, #fff, #f5707a); /* 标准的语法 */
-        }
 
-    </style>
 </head>
 <body>
 <th:block th:insert="fragments/common_fragments :: common_loader"/>
@@ -43,7 +35,13 @@
                     <i class="mdi mdi-chart-areaspline widget-two-icon"></i>
                     <div class="wigdet-two-content text-white">
                         <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Statistics">营收总额（[[${year}]]年）</p>
-                        <h2 class="text-white"><i class="fa fa-rmb" STYLE="color:#fff;margin-right:10px"></i></small><span data-plugin="counterup">[[${accountMap.get('PROFIT_SUM')}]]</span></h2>
+                        <h2 class="text-white">
+                            <span data-plugin="counterup">
+                                <span data-d-group="4" data-a-sign="¥ "
+                                      style="width:100px;text-align:left"
+                                      class="autonumber">[[${accountMap.get('PROFIT_SUM')}]]</span>
+                            </span>
+                        </h2>
                         <p class="m-0">截止日期: [[${endDate}]]</p>
                     </div>
                 </div>
@@ -54,7 +52,12 @@
                     <i class="mdi mdi-layers widget-two-icon"></i>
                     <div class="wigdet-two-content text-white">
                         <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="User This Month">充值总额（[[${year}]]年）</p>
-                        <h2 class="text-white"><i class="fa fa-rmb" STYLE="color:#fff;margin-right:10px"></i></small><span data-plugin="counterup">[[${accountMap.get('RECHARGE_SUM')}]] </span></h2>
+                        <h2 class="text-white">
+                            <span data-plugin="counterup">
+                             <span data-d-group="4" data-a-sign="¥ "
+                                   style="width:100px;text-align:left"
+                                   class="autonumber">[[${accountMap.get('RECHARGE_SUM')}]]</span>
+                            </span></h2>
                         <p class="m-0">截止日期: [[${endDate}]]</p>
                     </div>
                 </div>
@@ -64,8 +67,14 @@
                 <div class="card-box widget-box-two widget-two-danger">
                     <i class="mdi mdi-access-point-network widget-two-icon"></i>
                     <div class="wigdet-two-content text-white">
-                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Statistics">待收总额（[[${year}]]年）</p>
-                        <h2 class="text-white"><i class="fa fa-rmb" STYLE="color:#fff;margin-right:10px"></i></small><span data-plugin="counterup"></span></h2>
+                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Statistics">欠费总额（后付费）</p>
+                        <h2 class="text-white">
+                            <span data-plugin="counterup">
+                                <span data-d-group="4" data-a-sign="¥ "
+                                      style="width:100px;text-align:left"
+                                      class="autonumber">[[${accountMap.get('ACCOUNT_LATER_USABLE_SUM')}]]</span>
+                            </span>
+                        </h2>
                         <p class="m-0">截止日期: [[${endDate}]]</p>
                     </div>
                 </div>
@@ -75,9 +84,15 @@
                 <div class="card-box widget-box-two widget-two-success">
                     <i class="mdi mdi-account-convert widget-two-icon"></i>
                     <div class="wigdet-two-content text-white">
-                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="User Today">账户总余额</p>
-                        <h2 class="text-white"><small><i class="fa fa-rmb" STYLE="color:#fff;margin-right:10px"></i></small><span data-plugin="counterup">[[${accountMap.get('ACCOUNT_USABLE_SUM')}]] </span></h2>
-                        <p class="m-0">&nbsp;</p>
+                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="User Today">账户总余额（预付费）</p>
+                        <h2 class="text-white">
+                            <span data-plugin="counterup">
+                                <span data-d-group="4" data-a-sign="¥ "
+                                      style="width:100px;text-align:left"
+                                      class="autonumber">[[${accountMap.get('ACCOUNT_USABLE_SUM')}]]</span>
+                            </span>
+                        </h2>
+                        <p class="m-0">截止日期: [[${endDate}]]</p>
                     </div>
                 </div>
             </div><!-- end col -->
@@ -89,7 +104,7 @@
             <div class="col-lg-3 col-md-6">
                 <div class="card-box widget-box-one">
                     <div class="wigdet-one-content">
-                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow">短信发送总量（[[${year}]]）</p>
+                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow">短信发送总量(W)（[[${year}]]）</p>
                         <h2 class="text-teal"><i class="mdi mdi-weather-partlycloudy"  style="padding-right: 5px"></i><span data-plugin="counterup">[[${countMap.get('MESSAGE_SEND_TOTAL')}]]</span></h2>
 
                     </div>
@@ -121,6 +136,25 @@
                         <h2 class="text-warning"><i class="mdi mdi-weather-night"  style="padding-right: 5px"></i><span data-plugin="counterup">[[${countMap.get('ACTIVE_CHANNEL')}]]</span> </h2>
 
                     </div>
+                </div>
+            </div><!-- end col -->
+
+        </div>
+        <!-- end row -->
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card-box">
+
+                    <div id="main1" style="height: 400px;"></div>
+
+                </div>
+            </div><!-- end col -->
+            <div class="col-lg-6">
+                <div class="card-box">
+
+                    <div id="main2" style="height: 400px;"></div>
+
                 </div>
             </div><!-- end col -->
 
@@ -219,24 +253,6 @@
 
         </div>-->
         <!-- end row -->
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="card-box">
-
-                    <div id="main1" style="height: 400px;"></div>
-
-                </div>
-            </div><!-- end col -->
-            <div class="col-lg-6">
-                <div class="card-box">
-
-                    <div id="main2" style="height: 400px;"></div>
-
-                </div>
-            </div><!-- end col -->
-
-        </div>
-        <!-- end row -->
 
 
     </div> <!-- container -->
@@ -244,6 +260,7 @@
 <th:block th:insert="fragments/common_fragments :: common_js"/>
 <th:block th:insert="fragments/common_fragments :: select_js"/>
 <script th:src="@{/static/echarts/echarts.min.js}"></script>
+<script th:src="@{/static/plugins/autoNumeric/autoNumeric.js}"></script>
 <script type="text/javascript">
 /*
 var dom = document.getElementById("main4");
@@ -601,7 +618,9 @@ $.ajax({
 
 
 
-
+    $(document).ready(function() {
+        $('.autonumber').autoNumeric('init');
+    });
 
     var resizefunc = [];
     //隐藏进度项

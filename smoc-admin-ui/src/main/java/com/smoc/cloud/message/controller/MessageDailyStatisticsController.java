@@ -147,6 +147,8 @@ public class MessageDailyStatisticsController {
 
         //运营商
         Map<String,String>  carrierMap = this.carrier(request);
+        //地域
+        Map<String,String>  areaMap = this.area(request);
 
         //日期格式
         if (!StringUtils.isEmpty(messageDailyStatisticValidator.getStartDate())) {
@@ -183,6 +185,7 @@ public class MessageDailyStatisticsController {
                 map.put("carrier", carrierMap.get(model.getCarrier()));
                 map.put("channelId", model.getChannelId());
                 map.put("messageSign",model.getMessageSign());
+                map.put("areaCode",areaMap.get(model.getAreaCode()));
                 map.put("customerSubmitNum", model.getCustomerSubmitNum());
                 map.put("failureSubmitNum", model.getFailureSubmitNum());
                 map.put("messageSuccessNum", model.getMessageSuccessNum());
@@ -234,6 +237,26 @@ public class MessageDailyStatisticsController {
         Map<String, DictType> dictMap = (Map<String, DictType>) request.getServletContext().getAttribute("dict");
         //运营商
         DictType carrier = dictMap.get("carrier");
+        //国际区域
+        DictType internationalArea = dictMap.get("internationalArea");
+
+        Map<String,String> dictValueMap = new HashMap<>();
+        for (Dict dict : carrier.getDict()) {
+            dictValueMap.put(dict.getFieldCode(),dict.getFieldName());
+        }
+        for (Dict dict : internationalArea.getDict()) {
+            dictValueMap.put(dict.getFieldCode(),dict.getFieldName());
+        }
+        return dictValueMap;
+    }
+
+    /**
+     * 地域和 国际区域合并
+     */
+    private Map<String,String> area(HttpServletRequest request) {
+        Map<String, DictType> dictMap = (Map<String, DictType>) request.getServletContext().getAttribute("dict");
+        //运营商
+        DictType carrier = dictMap.get("provices");
         //国际区域
         DictType internationalArea = dictMap.get("internationalArea");
 

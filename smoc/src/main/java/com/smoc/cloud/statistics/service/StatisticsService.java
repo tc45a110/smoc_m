@@ -29,7 +29,7 @@ public class StatisticsService {
     private FinanceAccountRechargeRepository financeAccountRechargeRepository;
 
     /**
-     * 统计(客户数、活跃数、通道数)
+     * 统计(短信发送总量、客户数、活跃数、通道数)
      * @param startDate
      * @param endDate
      * @return
@@ -39,8 +39,8 @@ public class StatisticsService {
         Map<String, Object> map = new HashMap<>();
 
         //短信发送总量
-        Long messageSendTotal = indexStatisticsRepository.getMessageSendTotal(startDate,endDate);
-        map.put("MESSAGE_SEND_TOTAL",messageSendTotal);
+        Map<String, Object>  messageSendTotal = indexStatisticsRepository.getMessageSendTotal(startDate,endDate);
+        map.put("MESSAGE_SEND_TOTAL",messageSendTotal.get("MESSAGE_TOTAL"));
 
         //所有客户数
         Long totalAccount = indexStatisticsRepository.getAccountCount();
@@ -58,7 +58,7 @@ public class StatisticsService {
     }
 
     /**
-     * 短信发送总量、营收总额、充值总额、账户总余额
+     * 营收总额、充值总额、账户总余额
      * @param startDate
      * @param endDate
      * @return
@@ -78,9 +78,13 @@ public class StatisticsService {
         Map<String, Object> recharge = financeAccountRechargeRepository.countRechargeSum(qo);
         map.put("RECHARGE_SUM",recharge.get("RECHARGE_SUM"));
 
-        //账户总余额
+        //账户总余额(预付费)
         Map<String, Object> usableAccount = indexStatisticsRepository.getCountUsableAccount();
         map.put("ACCOUNT_USABLE_SUM",usableAccount.get("ACCOUNT_USABLE_SUM"));
+
+        //欠费总额（后付费）
+        Map<String, Object> laterUsableAccount = indexStatisticsRepository.getUsableTotalLater();
+        map.put("ACCOUNT_LATER_USABLE_SUM",laterUsableAccount.get("ACCOUNT_LATER_USABLE_SUM"));
 
         return ResponseDataUtil.buildSuccess(map);
     }
