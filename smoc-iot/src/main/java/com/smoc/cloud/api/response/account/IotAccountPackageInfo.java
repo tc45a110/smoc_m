@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * 账号套餐信息
@@ -20,21 +19,27 @@ public class IotAccountPackageInfo {
 
     private String packageType;
 
-    private BigDecimal packageChanging;
+    private BigDecimal packageCharging;
+
+    private BigDecimal packageChargingDiscount;
 
     private BigDecimal packagePoolSize;
 
-    private String changingCycle;
+    private String chargingCycle;
 
     private BigDecimal cycleQuota;
 
-    private BigDecimal aboveQuotaChanging;
+    private BigDecimal aboveQuotaCharging;
 
     private BigDecimal packageTempAmount;
 
     private BigDecimal packageTempAmountFee;
 
-    private BigDecimal cycleFunctionFee;
+    private String isOpenFee;
+
+    private String isFunctionFee;
+
+//    private BigDecimal cycleFunctionFee;
 
     private Integer warningLevel;
 

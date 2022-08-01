@@ -20,25 +20,34 @@ public class IotPackageInfo {
     @Column(name = "PACKAGE_TYPE", nullable = false, length = 32)
     private String packageType;
 
-    @Column(name = "PACKAGE_CHANGING", precision = 24, scale = 6)
-    private BigDecimal packageChanging;
+    @Column(name = "PACKAGE_CHARGING", precision = 24, scale = 6)
+    private BigDecimal packageCharging;
+
+    @Column(name = "PACKAGE_CHARGING_DISCOUNT", precision = 24, scale = 6)
+    private BigDecimal packageChargingDiscount;
 
     @Column(name = "PACKAGE_POOL_SIZE", nullable = false, precision = 24, scale = 6)
     private BigDecimal packagePoolSize;
-    @Column(name = "CHANGING_CYCLE", nullable = false, length = 32)
-    private String changingCycle;
+    @Column(name = "CHARGING_CYCLE", nullable = false, length = 32)
+    private String chargingCycle;
 
     @Column(name = "CYCLE_QUOTA", nullable = false, precision = 24, scale = 6)
     private BigDecimal cycleQuota;
 
-    @Column(name = "ABOVE_QUOTA_CHANGING", nullable = false, precision = 24, scale = 4)
-    private BigDecimal aboveQuotaChanging;
+    @Column(name = "ABOVE_QUOTA_CHARGING", nullable = false, precision = 24, scale = 4)
+    private BigDecimal aboveQuotaCharging;
 
     @Column(name = "PACKAGE_TEMP_AMOUNT", nullable = false, precision = 24, scale = 4)
     private BigDecimal packageTempAmount;
 
     @Column(name = "PACKAGE_TEMP_AMOUNT_FEE", nullable = false, precision = 24, scale = 4)
     private BigDecimal packageTempAmountFee;
+
+    @Column(name = "IS_OPEN_FEE", length = 32)
+    private String isOpenFee;
+
+    @Column(name = "IS_FUNCTION_FEE", length = 32)
+    private String  isFunctionFee;
 
     @Column(name = "CYCLE_FUNCTION_FEE", nullable = false, precision = 24, scale = 4)
     private BigDecimal cycleFunctionFee;
@@ -78,6 +87,30 @@ public class IotPackageInfo {
 
     @Column(name = "UPDATED_TIME")
     private Date updatedTime;
+
+    public BigDecimal getPackageChargingDiscount() {
+        return packageChargingDiscount;
+    }
+
+    public void setPackageChargingDiscount(BigDecimal packageChargingDiscount) {
+        this.packageChargingDiscount = packageChargingDiscount;
+    }
+
+    public String getIsOpenFee() {
+        return isOpenFee;
+    }
+
+    public void setIsOpenFee(String isOpenFee) {
+        this.isOpenFee = isOpenFee;
+    }
+
+    public String getIsFunctionFee() {
+        return isFunctionFee;
+    }
+
+    public void setIsFunctionFee(String isFunctionFee) {
+        this.isFunctionFee = isFunctionFee;
+    }
 
     public Date getUpdatedTime() {
         return updatedTime;
@@ -127,13 +160,6 @@ public class IotPackageInfo {
         this.remark = remark;
     }
 
-    public BigDecimal getAboveQuotaChanging() {
-        return aboveQuotaChanging;
-    }
-
-    public void setAboveQuotaChanging(BigDecimal aboveQuotaChanging) {
-        this.aboveQuotaChanging = aboveQuotaChanging;
-    }
 
     public BigDecimal getPackageTempAmount() {
         return packageTempAmount;
@@ -175,20 +201,28 @@ public class IotPackageInfo {
         this.cycleQuota = cycleQuota;
     }
 
-    public String getChangingCycle() {
-        return changingCycle;
+    public String getChargingCycle() {
+        return chargingCycle;
     }
 
-    public void setChangingCycle(String changingCycle) {
-        this.changingCycle = changingCycle;
+    public void setChargingCycle(String chargingCycle) {
+        this.chargingCycle = chargingCycle;
     }
 
-    public BigDecimal getPackageChanging() {
-        return packageChanging;
+    public BigDecimal getPackageCharging() {
+        return packageCharging;
     }
 
-    public void setPackageChanging(BigDecimal packageChanging) {
-        this.packageChanging = packageChanging;
+    public void setPackageCharging(BigDecimal packageCharging) {
+        this.packageCharging = packageCharging;
+    }
+
+    public BigDecimal getAboveQuotaCharging() {
+        return aboveQuotaCharging;
+    }
+
+    public void setAboveQuotaCharging(BigDecimal aboveQuotaCharging) {
+        this.aboveQuotaCharging = aboveQuotaCharging;
     }
 
     public String getPackageName() {

@@ -6,9 +6,12 @@ import com.smoc.cloud.api.request.OrderHandleRequest;
 import com.smoc.cloud.api.request.SimBaseRequest;
 import com.smoc.cloud.api.request.SimsBaseRequest;
 import com.smoc.cloud.api.response.info.*;
+import com.smoc.cloud.common.page.PageList;
+import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.iot.account.repository.IotAccountPackageItemsRepository;
 import com.smoc.cloud.iot.carrier.repository.IotFlowCardsPrimaryInfoRepository;
 import com.smoc.cloud.iot.repository.ApiRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +34,9 @@ public class IotSimInfoQueryService {
 
     @Resource
     private IotFlowCardsPrimaryInfoRepository iotFlowCardsPrimaryInfoRepository;
+
+    @Resource
+    private IotAccountPackageItemsRepository iotAccountPackageItemsRepository;
 
     /**
      * 单卡操作订单处理情况查询
@@ -128,7 +134,7 @@ public class IotSimInfoQueryService {
          */
 //        ResponseData<SimBaseInfoResponse> responseData = cmccIotSimInfoService.querySimBaseInfo(simBaseRequest.getMsisdn(), "", "");
         //本地查询
-        SimBaseInfoResponse simBaseInfoResponse = this.iotFlowCardsPrimaryInfoRepository.findSimByAccountAndMsisdn(simBaseRequest.getAccount(), simBaseRequest.getMsisdn());
+        SimBaseInfoResponse simBaseInfoResponse = this.iotAccountPackageItemsRepository.querySimBaseInfo(simBaseRequest.getAccount(), simBaseRequest.getIccid());
         return ResponseDataUtil.buildSuccess(simBaseInfoResponse);
     }
 
@@ -142,7 +148,7 @@ public class IotSimInfoQueryService {
      * 是否查询结果本地持久化?
      * 把运营商查询结果映射为最终结果
      */
-    public ResponseData<List<SimBaseInfoResponse>> queryBatchSimBaseInfo(SimsBaseRequest simsBaseRequest) {
+    public PageList<SimBaseInfoResponse> queryBatchSimBaseInfo(SimsBaseRequest simsBaseRequest, PageParams pageParams) {
 
         /**
          * 验证物联网卡是否存在
@@ -161,8 +167,8 @@ public class IotSimInfoQueryService {
          * 查询，暂时只支持移动API
          */
 //        ResponseData<List<BatchSimBaseInfoResponse>> responseData = cmccIotSimInfoService.queryBatchSimBaseInfo(simsBaseRequest.getMsisdns(), simsBaseRequest.getIccids(), simsBaseRequest.getImsis());
-        List<SimBaseInfoResponse> simBaseInfoResponses = this.iotFlowCardsPrimaryInfoRepository.queryBatchSimBaseInfo(simsBaseRequest.getAccount(), simsBaseRequest.getMsisdns());
-        return ResponseDataUtil.buildSuccess(simBaseInfoResponses);
+        PageList<SimBaseInfoResponse> page = this.iotAccountPackageItemsRepository.queryBatchSimBaseInfo(simsBaseRequest.getAccount(), simsBaseRequest.getIccids(), pageParams);
+        return page;
     }
 
     /**

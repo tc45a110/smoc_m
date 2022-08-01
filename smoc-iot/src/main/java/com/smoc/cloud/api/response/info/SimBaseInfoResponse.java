@@ -23,18 +23,37 @@ public class SimBaseInfoResponse {
     private String imsi;
 
     /**
-     * 激活日期（首次）
+     * 国际移动设备识别码
      */
-    private String activeDate;
+    private String imei;
+
+    /**
+     * 首次激活日
+     */
+    private String dateActivated;
 
     /**
      * 开卡时间
      */
-    private String openDate;
+    private String dateOpen;
 
     /**
-     * SIM 卡备注信息，即客户在平台标
-     * 注的卡备注信息
+     * 开卡费用，0表示不收费用
      */
-//    private String remark;
+    private String openCardFee;
+
+    /**
+     * 周期性功能费，0表示不收费用
+     */
+    private String cycleFunctionFee;
+
+    /**
+     * 计费类型  01表示单卡计费 02共享计费 03流量池计费
+     */
+    private String chargingType;
+
+    /**
+     * 卡状态
+     */
+    private String cardStatus;
 }

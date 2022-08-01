@@ -54,7 +54,8 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-6 pull-right" style="text-align: right">
-                                                <input type="hidden" name="account" th:value="${accountPackage.account}">
+                                                <input type="hidden" name="account"
+                                                       th:value="${accountPackage.account}">
                                                 <button type="submit"
                                                         class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                                     提交
@@ -95,13 +96,13 @@
                                                                     <th>计费周期</th>
                                                                     <th>套餐流量池额度(G)</th>
                                                                     <th>单卡周期限额(G)</th>
-<!--                                                                    <th>套餐超限额计费标准（元/K）</th>-->
+                                                                    <!--                                                                    <th>套餐超限额计费标准（元/K）</th>-->
                                                                     <th>物联网卡数</th>
                                                                     <th>使用状态</th>
                                                                 </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                <tr  th:each="package:${packages}">
+                                                                <tr th:each="package:${packages}">
                                                                     <td>
                                                                         <div th:if="${package.useStatus!=accountPackage.account}"
                                                                              class="btn-switch btn-switch-custom">
@@ -129,36 +130,41 @@
                                                                     </td>
                                                                     <td style="vertical-align: middle;line-height: 26px">
                                                                         <mpm:tag id="packageType" identity="poolType"
-                                                                                 name="packageType" show-type="button" key="code"
+                                                                                 name="packageType" show-type="button"
+                                                                                 key="code"
                                                                                  style="margin-top:0px"
                                                                                  th:value="${package.packageType}"
                                                                                  class="01,btn btn-success btn-rounded btn-sm waves-effect waves-light;02,btn btn-info btn-rounded btn-sm waves-effect waves-light;03,btn btn-teal btn-rounded btn-sm waves-effect waves-light;"/>
                                                                     </td>
                                                                     <td style="vertical-align: middle;line-height: 26px">
-                                                                        [[${package.packageChanging}]] 元
+                                                                        [[${package.packageCharging}]] 元
                                                                     </td>
 
                                                                     <td style="vertical-align: middle;line-height: 26px">
-                                                                        <a th:if="${package.changingCycle =='01'}" class="btn btn-info btn-rounded  waves-effect waves-light btn-sm">自然月</a>
-                                                                        <a th:if="${package.changingCycle =='02'}" class="btn btn-teal btn-rounded  waves-effect waves-light btn-sm">年</a>
+                                                                        <a th:if="${package.chargingCycle =='01'}"
+                                                                           class="btn btn-info btn-rounded  waves-effect waves-light btn-sm">自然月</a>
+                                                                        <a th:if="${package.chargingCycle =='02'}"
+                                                                           class="btn btn-teal btn-rounded  waves-effect waves-light btn-sm">年</a>
                                                                     </td>
                                                                     <td style="vertical-align: middle;line-height: 26px">
                                                                         [[${package.packagePoolSize}]] G
                                                                     </td>
                                                                     <td style="vertical-align: middle;line-height: 26px">
-                                                                        <span style="color:#188ae2" th:if="${package.cycleQuota == 0}">不限</span>
+                                                                        <span style="color:#188ae2"
+                                                                              th:if="${package.cycleQuota == 0}">不限</span>
                                                                         <span th:if="${package.cycleQuota != 0}">[[${package.cycleQuota}]]G</span>
                                                                     </td>
-<!--                                                                    <td style="vertical-align: middle;line-height: 26px">-->
-<!--                                                                        [[${package.aboveQuotaChanging}]] 元/K-->
-<!--                                                                    </td>-->
+                                                                    <!--                                                                    <td style="vertical-align: middle;line-height: 26px">-->
+                                                                    <!--                                                                        [[${package.aboveQuotaCharging}]] 元/K-->
+                                                                    <!--                                                                    </td>-->
                                                                     <td style="vertical-align: middle;line-height: 26px">
                                                                         [[${package.packageCardsNum}]] 张
                                                                     </td>
                                                                     <td style="vertical-align: middle;line-height: 26px">
-
-                                                                        <a th:if="${package.useStatus == null}" class="btn btn-warning btn-rounded  waves-effect waves-light btn-sm">未使用</a>
-                                                                        <a th:if="${package.useStatus != null}" class="btn btn-teal btn-rounded  waves-effect waves-light btn-sm">已使用</a>
+                                                                        <a th:if="${package.useStatus == null}"
+                                                                           class="btn btn-warning btn-rounded  waves-effect waves-light btn-sm">未使用</a>
+                                                                        <a th:if="${package.useStatus != null}"
+                                                                           class="btn btn-teal btn-rounded  waves-effect waves-light btn-sm">已使用</a>
                                                                     </td>
                                                                 </tr>
                                                                 </tbody>
@@ -196,6 +202,7 @@
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
+
 
 
 

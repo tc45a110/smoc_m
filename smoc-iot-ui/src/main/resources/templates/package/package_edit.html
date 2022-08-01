@@ -63,26 +63,26 @@
                                             <div class="col-md-6 form-group">
                                                 <label>套餐标准费用(元)<span class="text-danger">*</span>&nbsp;<span
                                                         class="text-danger"
-                                                        th:if="${#fields.hasErrors('packageChanging')}"
-                                                        th:errors="*{packageChanging}"
+                                                        th:if="${#fields.hasErrors('packageCharging')}"
+                                                        th:errors="*{packageCharging}"
                                                         style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
                                                 <input type="text" required="" class="form-control"
-                                                       autocomplete="off" th:field="*{packageChanging}"
+                                                       autocomplete="off" th:field="*{packageCharging}"
                                                        min="0.01" placeholder="套餐标准费用">
                                             </div>
 
                                             <div class="col-md-6 form-group">
                                                 <label>计费周期<span class="text-danger">*</span>&nbsp;<span
                                                         class="text-danger"
-                                                        th:if="${#fields.hasErrors('changingCycle')}"
-                                                        th:errors="*{changingCycle}"
+                                                        th:if="${#fields.hasErrors('chargingCycle')}"
+                                                        th:errors="*{chargingCycle}"
                                                         style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
-                                                <select class="selectpicker" name="changingCycle" required>
+                                                <select class="selectpicker" name="chargingCycle" required>
                                                     <option value="">--请选择计费周期--</option>
-                                                    <option th:selected="${validator.changingCycle == '01'}" value="01">自然月</option>
-                                                    <option th:selected="${validator.changingCycle == '02'}" value="02">年</option>
+                                                    <option th:selected="${validator.chargingCycle == '01'}" value="01">自然月</option>
+                                                    <option th:selected="${validator.chargingCycle == '02'}" value="02">年</option>
                                                 </select>
                                             </div>
                                             <div class="col-md-6 form-group">
@@ -125,12 +125,12 @@
                                             <div class="col-md-6 form-group">
                                                 <label>套餐超限额计费（元/K）<span class="text-danger">*</span>&nbsp;<span
                                                         class="text-danger"
-                                                        th:if="${#fields.hasErrors('aboveQuotaChanging')}"
-                                                        th:errors="*{aboveQuotaChanging}"
+                                                        th:if="${#fields.hasErrors('aboveQuotaCharging')}"
+                                                        th:errors="*{aboveQuotaCharging}"
                                                         style="font-weight: 200;font-size: 12px"></span>
                                                 </label>
                                                 <input type="text" required="" class="form-control"
-                                                       autocomplete="off" th:field="*{aboveQuotaChanging}"
+                                                       autocomplete="off" th:field="*{aboveQuotaCharging}"
                                                        min="0" placeholder="单卡超额计费标准（元/K）" data-toggle="tooltip" data-placement="top"
                                                        data-original-title="0表示该字段不起作用">
                                             </div>
@@ -158,18 +158,6 @@
                                                        min="0.00" placeholder="临时额度费用（元）">
                                             </div>
                                             <div class="col-md-6 form-group">
-                                                <label>周期功能费（元/卡）<span class="text-danger">*</span><span
-                                                        class="text-danger"
-                                                        th:if="${#fields.hasErrors('cycleFunctionFee')}"
-                                                        th:errors="*{cycleFunctionFee}"
-                                                        style="font-weight: 200;font-size: 12px"></span>
-                                                </label>
-                                                <input type="text"  class="form-control" required=""
-                                                       autocomplete="off" th:field="*{cycleFunctionFee}"
-                                                       min="0.00" placeholder="周期功能费（元/卡月，0表示不收功能费）" data-toggle="tooltip" data-placement="top"
-                                                       data-original-title="0表示不收功能费">
-                                            </div>
-                                            <div class="col-md-6 form-group">
                                                 <label>预警比例(%)<span class="text-danger">*</span>&nbsp;<span
                                                         class="text-danger"
                                                         th:if="${#fields.hasErrors('warningLevel')}"
@@ -180,8 +168,33 @@
                                                        autocomplete="off" th:field="*{warningLevel}"  placeholder="预警比例（默认90%）" data-toggle="tooltip" data-placement="top"
                                                        data-original-title="使用比例达到这个值，将通知所属人">
                                             </div>
+                                            <div class="col-md-6 form-group">
+                                                <label class="m-b-10">是否收取开卡费</label>
+                                                <br/>
+                                                <div style="margin-top:0px" class="radio radio-info checkbox-inline">
+                                                    <input name="isOpenFee" type="radio" value="1" required
+                                                           th:checked="${validator.isOpenFee eq '1'}"><label>收取</label>
+                                                </div>
+                                                <div style="margin-top:0px" class="radio radio-info checkbox-inline">
+                                                    <input name="isOpenFee" type="radio" value="0" required
+                                                           th:checked="${validator.isOpenFee eq '0'}"><label>不收取</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label class="m-b-10">是否收取周期功能费</label>
+                                                <br/>
+                                                <div style="margin-top:0px" class="radio radio-info checkbox-inline">
+                                                    <input name="isFunctionFee" type="radio" value="1" required
+                                                           th:checked="${validator.isFunctionFee eq '1'}"><label>收取</label>
+                                                </div>
+                                                <div style="margin-top:0px" class="radio radio-info checkbox-inline">
+                                                    <input name="isFunctionFee" type="radio" value="0" required
+                                                           th:checked="${validator.isFunctionFee eq '0'}"><label>不收取</label>
+                                                </div>
+                                            </div>
 
                                             <div class="col-md-12 text-center m-t-20">
+                                                <input type="hidden" th:field="*{packageChargingDiscount}">
                                                 <input type="hidden" th:field="*{thisMonthUsedAmount}">
                                                 <input type="hidden" th:field="*{lastMonthCarryAmount}">
                                                 <input type="hidden" th:field="*{packageCardsNum}">
@@ -224,7 +237,6 @@
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
-
 
 </script>
 </body>

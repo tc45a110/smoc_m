@@ -125,11 +125,11 @@
                                                  class="01,btn btn-success btn-rounded btn-sm waves-effect waves-light;02,btn btn-info btn-rounded btn-sm waves-effect waves-light;03,btn btn-teal btn-rounded btn-sm waves-effect waves-light;"/>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        [[${info.packageChanging}]] 元
+                                        [[${info.packageCharging}]] 元
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <a th:if="${info.changingCycle =='01'}" class="btn btn-info btn-rounded  waves-effect waves-light btn-sm">自然月</a>
-                                        <a th:if="${info.changingCycle =='02'}" class="btn btn-teal btn-rounded  waves-effect waves-light btn-sm">年</a>
+                                        <a th:if="${info.chargingCycle =='01'}" class="btn btn-info btn-rounded  waves-effect waves-light btn-sm">自然月</a>
+                                        <a th:if="${info.chargingCycle =='02'}" class="btn btn-teal btn-rounded  waves-effect waves-light btn-sm">年</a>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         [[${info.packagePoolSize}]] G
@@ -139,7 +139,7 @@
                                         <span th:if="${info.cycleQuota != 0}">[[${info.cycleQuota}]]G</span>
                                     </td>
 <!--                                    <td style="vertical-align: middle;line-height: 26px">-->
-<!--                                        [[${info.aboveQuotaChanging}]] 元/K-->
+<!--                                        [[${info.aboveQuotaCharging}]] 元/K-->
 <!--                                    </td>-->
                                     <td style="vertical-align: middle;line-height: 26px">
                                         [[${info.packageCardsNum}]] 张

@@ -5,9 +5,13 @@ import com.smoc.cloud.api.request.BatchSimHandleRequest;
 import com.smoc.cloud.api.request.OrderHandleRequest;
 import com.smoc.cloud.api.request.SimBaseRequest;
 import com.smoc.cloud.api.request.SimsBaseRequest;
+import com.smoc.cloud.api.response.account.IotAccountPackageInfo;
 import com.smoc.cloud.api.response.info.*;
 import com.smoc.cloud.api.service.IotSimInfoQueryService;
+import com.smoc.cloud.common.page.PageList;
+import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.response.ResponseDataUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -69,7 +73,11 @@ public class IotSimInfoQueryController {
      */
     @RequestMapping(value = "/queryBatchSimBaseInfo", method = RequestMethod.POST)
     public ResponseData<List<SimBaseInfoResponse>> queryBatchSimBaseInfo(@RequestBody SimsBaseRequest simsBaseRequest) {
-        return iotSimInfoQueryService.queryBatchSimBaseInfo(simsBaseRequest);
+        PageParams<IotAccountPackageInfo> pageParams = new PageParams<>();
+        pageParams.setPageSize(100);
+        pageParams.setCurrentPage(1);
+        PageList<SimBaseInfoResponse> page = iotSimInfoQueryService.queryBatchSimBaseInfo(simsBaseRequest, pageParams);
+        return ResponseDataUtil.buildSuccess(page.getList());
     }
 
     /**

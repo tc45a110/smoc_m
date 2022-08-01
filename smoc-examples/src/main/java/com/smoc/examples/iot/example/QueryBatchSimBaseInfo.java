@@ -32,10 +32,10 @@ public class QueryBatchSimBaseInfo extends Base{
         String timestamp = DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS");
         requestDataMap.put("timestamp",timestamp);
 
-        List<String> msisdns = new ArrayList<>();
-        msisdns.add("14765004176");
-        msisdns.add("14765004177");
-        requestDataMap.put("msisdns",msisdns);
+        List<String> iccids = new ArrayList<>();
+        iccids.add("898600D6991330004149");
+        iccids.add("898600D6991330004146");
+        requestDataMap.put("iccids",iccids);
 
         //组织签名字符串
         StringBuffer signData = new StringBuffer();

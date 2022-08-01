@@ -131,14 +131,17 @@ public class PackageController {
         validator.setId(UUID.uuid32());
         validator.setPackageStatus("1");
         validator.setUseStatus("01");
-        validator.setAboveQuotaChanging(new BigDecimal("0"));
+        validator.setAboveQuotaCharging(new BigDecimal("0"));
         validator.setPackageCardsNum(0);
         validator.setWarningLevel(90);
         validator.setPackageTempAmount(new BigDecimal("0"));
-        validator.setCycleFunctionFee(new BigDecimal("0"));
+//        validator.setCycleFunctionFee(new BigDecimal("0"));
         validator.setPackageTempAmountFee(new BigDecimal("0"));
         validator.setLastMonthCarryAmount(new BigDecimal("0"));
         validator.setThisMonthUsedAmount(new BigDecimal("0"));
+        validator.setPackageChargingDiscount(new BigDecimal("0"));
+        validator.setIsOpenFee("0");
+        validator.setIsFunctionFee("0");
         view.addObject("validator", validator);
         view.addObject("op", "add");
 
@@ -197,9 +200,6 @@ public class PackageController {
         //下面字段给定初始值
         if (null == iotPackageInfoValidator.getPackageTempAmount()) {
             iotPackageInfoValidator.setPackageTempAmount(new BigDecimal("0"));
-        }
-        if (null == iotPackageInfoValidator.getCycleFunctionFee()) {
-            iotPackageInfoValidator.setCycleFunctionFee(new BigDecimal("0"));
         }
         if (null == iotPackageInfoValidator.getPackageTempAmountFee()) {
             iotPackageInfoValidator.setPackageTempAmountFee(new BigDecimal("0"));

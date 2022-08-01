@@ -47,17 +47,19 @@ public class IotAccountInfoQueryService {
         return iotAccountPackageInfo;
     }
 
+
     /**
-     * 根据用户账号、月份查询套裁历史使用情况
+     * 根据用户账号、历史月份、套裁id，查询套餐历史使用情况
      *
      * @param account
      * @param queryMonth
+     * @param packageId
      * @param pageParams
      * @return
      */
-    public List<IotAccountPackageInfoMonthly> page(String account, String queryMonth, PageParams<IotAccountPackageInfo> pageParams) {
-        PageList<IotAccountPackageInfoMonthly> page = this.iotPackageUsedMonthlyRepository.page(account, queryMonth, pageParams);
-        return page.getList();
+    public PageList<IotAccountPackageInfoMonthly> page(String account, String queryMonth, String packageId, PageParams<IotAccountPackageInfo> pageParams){
+        PageList<IotAccountPackageInfoMonthly> page = this.iotPackageUsedMonthlyRepository.page(account, queryMonth,packageId,pageParams);
+        return page;
     }
 
     /**

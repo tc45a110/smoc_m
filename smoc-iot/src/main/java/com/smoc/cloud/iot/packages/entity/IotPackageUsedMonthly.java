@@ -14,29 +14,34 @@ public class IotPackageUsedMonthly {
     @Column(name = "ID", nullable = false, length = 32)
     private String id;
 
+    @Column(name = "ACCOUNT", nullable = false, length = 32)
+    private String account;
     @Column(name = "PACKAGE_ID", nullable = false, length = 32)
     private String packageId;
 
     @Column(name = "PACKAGE_NAME", nullable = false, length = 32)
     private String packageName;
 
-    @Column(name = "CHANGING_TYPE", nullable = false, length = 32)
-    private String changingType;
+    @Column(name = "CHARGING_TYPE", nullable = false, length = 32)
+    private String chargingType;
 
-    @Column(name = "CHANGING_CYCLE", nullable = false, length = 32)
-    private String changingCycle;
+    @Column(name = "CHARGING_CYCLE", nullable = false, length = 32)
+    private String chargingCycle;
 
-    @Column(name = "PACKAGE_CHANGING", nullable = false, precision = 24, scale = 6)
-    private BigDecimal packageChanging;
+    @Column(name = "PACKAGE_CHARGING", nullable = false, precision = 24, scale = 6)
+    private BigDecimal packageCharging;
 
-    @Column(name = "ABOVE_QUOTA_CHANGING", nullable = false, precision = 24, scale = 6)
-    private BigDecimal aboveQuotaChanging;
+    @Column(name = "ABOVE_QUOTA_CHARGING", nullable = false, precision = 24, scale = 6)
+    private BigDecimal aboveQuotaCharging;
 
     @Column(name = "PACKAGE_TEMP_AMOUNT", nullable = false, precision = 24, scale = 6)
     private BigDecimal packageTempAmount;
 
     @Column(name = "PACKAGE_TEMP_AMOUNT_FEE", nullable = false, precision = 24, scale = 6)
     private BigDecimal packageTempAmountFee;
+
+    @Column(name = "IS_FUNCTION_FEE", nullable = false, length = 32)
+    private String isFunctionFee;
 
     @Column(name = "CYCLE_FUNCTION_FEE", nullable = false, precision = 24, scale = 6)
     private BigDecimal cycleFunctionFee;
@@ -55,6 +60,9 @@ public class IotPackageUsedMonthly {
 
     @Column(name = "SURPLUS_AMOUNT", nullable = false, precision = 24, scale = 6)
     private BigDecimal surplusAmount;
+
+    @Column(name = "SETTLEMENT_FEE", nullable = false, precision = 24, scale = 6)
+    private BigDecimal settlementFee;
 
     @Column(name = "PACKAGE_MONTH", nullable = false, length = 32)
     private String packageMonth;
@@ -175,36 +183,68 @@ public class IotPackageUsedMonthly {
         this.packageTempAmount = packageTempAmount;
     }
 
-    public BigDecimal getAboveQuotaChanging() {
-        return aboveQuotaChanging;
+    public String getAccount() {
+        return account;
     }
 
-    public void setAboveQuotaChanging(BigDecimal aboveQuotaChanging) {
-        this.aboveQuotaChanging = aboveQuotaChanging;
+    public void setAccount(String account) {
+        this.account = account;
     }
 
-    public BigDecimal getPackageChanging() {
-        return packageChanging;
+    public String getPackageName() {
+        return packageName;
     }
 
-    public void setPackageChanging(BigDecimal packageChanging) {
-        this.packageChanging = packageChanging;
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
     }
 
-    public String getChangingCycle() {
-        return changingCycle;
+    public String getChargingType() {
+        return chargingType;
     }
 
-    public void setChangingCycle(String changingCycle) {
-        this.changingCycle = changingCycle;
+    public void setChargingType(String chargingType) {
+        this.chargingType = chargingType;
     }
 
-    public String getChangingType() {
-        return changingType;
+    public String getChargingCycle() {
+        return chargingCycle;
     }
 
-    public void setChangingType(String changingType) {
-        this.changingType = changingType;
+    public void setChargingCycle(String chargingCycle) {
+        this.chargingCycle = chargingCycle;
+    }
+
+    public BigDecimal getPackageCharging() {
+        return packageCharging;
+    }
+
+    public void setPackageCharging(BigDecimal packageCharging) {
+        this.packageCharging = packageCharging;
+    }
+
+    public BigDecimal getAboveQuotaCharging() {
+        return aboveQuotaCharging;
+    }
+
+    public void setAboveQuotaCharging(BigDecimal aboveQuotaCharging) {
+        this.aboveQuotaCharging = aboveQuotaCharging;
+    }
+
+    public String getIsFunctionFee() {
+        return isFunctionFee;
+    }
+
+    public void setIsFunctionFee(String isFunctionFee) {
+        this.isFunctionFee = isFunctionFee;
+    }
+
+    public BigDecimal getSettlementFee() {
+        return settlementFee;
+    }
+
+    public void setSettlementFee(BigDecimal settlementFee) {
+        this.settlementFee = settlementFee;
     }
 
     public String getPackageId() {

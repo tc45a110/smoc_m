@@ -46,9 +46,12 @@
 
     <dependencies>
         <!--使用 lombok 简化 Java 代码-->
+        <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <version>1.18.24</version>
+            <scope>provided</scope>
         </dependency>
         <!--ali json工具包-->
         <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->

@@ -16,21 +16,27 @@ public class IotPackageInfoValidator {
 
     private String packageType;
 
-    private BigDecimal packageChanging;
+    private BigDecimal packageCharging;
+
+    private BigDecimal packageChargingDiscount;
 
     private BigDecimal packagePoolSize;
 
-    private String changingCycle;
+    private String chargingCycle;
 
     private BigDecimal cycleQuota;
 
-    private BigDecimal aboveQuotaChanging;
+    private BigDecimal aboveQuotaCharging;
 
     private BigDecimal packageTempAmount;
 
     private BigDecimal packageTempAmountFee;
 
-    private BigDecimal cycleFunctionFee;
+    private String isOpenFee;
+
+    private String  isFunctionFee;
+
+//    private BigDecimal cycleFunctionFee;
 
     private Integer warningLevel;
 

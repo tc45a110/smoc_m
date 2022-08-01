@@ -35,6 +35,13 @@
     </dependencyManagement>
 
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.24</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>com.smoc.cloud</groupId>
             <artifactId>com.smoc.cloud.common</artifactId>
@@ -113,19 +120,13 @@
         <dependency>
             <groupId>io.github.openfeign</groupId>
             <artifactId>feign-okhttp</artifactId>
-            <version>9.2.0</version>
+            <version>11.9.1</version>
         </dependency>
-
+        <!-- https://mvnrepository.com/artifact/io.github.openfeign/feign-gson -->
         <dependency>
-            <groupId>com.netflix.feign</groupId>
+            <groupId>io.github.openfeign</groupId>
             <artifactId>feign-gson</artifactId>
-            <version>8.18.0</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.netflix.feign</groupId>
-                    <artifactId>feign-core</artifactId>
-                </exclusion>
-            </exclusions>
+            <version>11.9.1</version>
         </dependency>
         <!--Redis缓存-->
         <dependency>
@@ -155,7 +156,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.61</version>
+            <version>2.0.10</version>
         </dependency>
         <dependency>
             <groupId>com.redislabs</groupId>

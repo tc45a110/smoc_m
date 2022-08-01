@@ -27,11 +27,17 @@ public class QueryAccountPackagesByMonth extends Base{
         header.put("account", "IOT100001618");
 
         //请求的数据
-        Map<String, String> requestDataMap = new HashMap<>();
+        Map<String, Object> requestDataMap = new HashMap<>();
         //账号
         requestDataMap.put("account", "IOT100001618");
         //月份
-        requestDataMap.put("queryMonth", "202206");
+        //requestDataMap.put("queryMonth", "202207");
+
+        requestDataMap.put("packageId", "5a5a4914fa95426894ada84288cba287");
+
+        requestDataMap.put("currentPage", 1);
+
+
         //时间戳
         String timestamp = DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS");
         requestDataMap.put("timestamp", timestamp);

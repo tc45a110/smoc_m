@@ -1,9 +1,12 @@
 package com.smoc.cloud.iot.account.service;
 
 import com.google.gson.Gson;
+import com.smoc.cloud.api.response.info.SimBaseInfoResponse;
 import com.smoc.cloud.common.iot.validator.AccountPackage;
 import com.smoc.cloud.common.iot.validator.IotAccountPackageItemsValidator;
 import com.smoc.cloud.common.iot.validator.IotPackageInfoValidator;
+import com.smoc.cloud.common.page.PageList;
+import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
@@ -28,6 +31,7 @@ public class IotAccountPackageItemsService {
 
     /**
      * 查询业务账号套餐及未使用套餐
+     *
      * @param account
      * @return
      */
@@ -42,7 +46,7 @@ public class IotAccountPackageItemsService {
      * @param account
      * @return
      */
-    public ResponseData<List<IotPackageInfoValidator>> listAccountPackages(String account){
+    public ResponseData<List<IotPackageInfoValidator>> listAccountPackages(String account) {
         List<IotPackageInfoValidator> list = iotAccountPackageItemsRepository.listAccountPackages(account);
         return ResponseDataUtil.buildSuccess(list);
     }
@@ -77,6 +81,24 @@ public class IotAccountPackageItemsService {
         log.info("[accountPackage]:{}", new Gson().toJson(accountPackage));
         iotAccountPackageItemsRepository.insertAccountPackageCards(accountPackage.getAccount(), accountPackage.getPackageIds());
         return ResponseDataUtil.buildSuccess();
+    }
+
+    /**
+     * 根据套餐id，查询套餐下绑定的物联网卡
+     *
+     * @return
+     */
+    public PageList<SimBaseInfoResponse> queryCardsByPackageId(String account, String packageId, PageParams pageParams) {
+        return this.iotAccountPackageItemsRepository.queryCardsByPackageId(account, packageId, pageParams);
+    }
+
+    /**
+     * 根据iccid，查询物联网卡明细
+     *
+     * @return
+     */
+    public SimBaseInfoResponse querySimBaseInfo(String account, String iccid) {
+        return this.iotAccountPackageItemsRepository.querySimBaseInfo(account, iccid);
     }
 
 }
