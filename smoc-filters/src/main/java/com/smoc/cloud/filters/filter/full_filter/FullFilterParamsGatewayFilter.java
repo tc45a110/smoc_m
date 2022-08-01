@@ -86,7 +86,7 @@ public class FullFilterParamsGatewayFilter extends BaseGatewayFilter implements 
         /**
          * 关键参数校验
          */
-        if (StringUtils.isEmpty(model.getAccount()) || StringUtils.isEmpty(model.getPhone()) || StringUtils.isEmpty(model.getMessage())) {
+        if (StringUtils.isEmpty(model.getAccount()) || StringUtils.isEmpty(model.getPhone())) {
             return errorHandle(exchange, FilterResponseCode.PARAM_FORMAT_ERROR.getCode(), FilterResponseCode.PARAM_FORMAT_ERROR.getMessage());
         }
 
@@ -190,6 +190,20 @@ public class FullFilterParamsGatewayFilter extends BaseGatewayFilter implements 
          * 7、业务账号内容扩展参数过滤
          */
 
+        //如果内容为空
+        if (StringUtils.isEmpty(model.getMessage())) {
+            /**
+             * 1、单手机号发送频率限制
+             */
+            Object phoneFrequencyLimit = entities.get("COMMON_SEND_FREQUENCY_LIMIT");
+            Map<String, String> phoneFrequencyLimitResult = phoneSendFrequencyLimitFilter.filter(filtersService, phoneFrequencyLimit, model.getAccount(), model.getPhone());
+            if (!"false".equals(phoneFrequencyLimitResult.get("result"))) {
+                return errorHandle(exchange, phoneFrequencyLimitResult.get("code"), phoneFrequencyLimitResult.get("message"));
+            }
+
+            return success(exchange);
+        }
+
         /**
          * 1、根据模版ID匹配，匹配成功，则跳过其他内容过滤 匹配不成功则响应错误
          */
@@ -237,7 +251,7 @@ public class FullFilterParamsGatewayFilter extends BaseGatewayFilter implements 
             //（1）匹配上变量模版 则跳过其他内容过滤
             String noFilterVariableTemplate = FilterInitialize.accountNoFilterVariableTemplateMap.get(model.getAccount());
             if (!StringUtils.isEmpty(noFilterVariableTemplate)) {
-                noFilterVariableTemplate =this.clean(noFilterVariableTemplate);
+                noFilterVariableTemplate = this.clean(noFilterVariableTemplate);
                 Pattern pattern = Pattern.compile(noFilterVariableTemplate);
                 String target = this.clean(model.getMessage());
                 Matcher matcher = pattern.matcher(target);
@@ -261,7 +275,7 @@ public class FullFilterParamsGatewayFilter extends BaseGatewayFilter implements 
          */
         String signTemplate = FilterInitialize.accountSignTemplateMap.get(model.getAccount());
         //是否模板匹配，如果选择是，才会去判断签名
-        if (null == isMatchTemplate || isMatchTemplate.toString().equals("1")){
+        if (null == isMatchTemplate || isMatchTemplate.toString().equals("1")) {
             if (!StringUtils.isEmpty(signTemplate)) {
                 //解析内容签名
                 String sign = null;
@@ -327,11 +341,12 @@ public class FullFilterParamsGatewayFilter extends BaseGatewayFilter implements 
 
     /**
      * 清除模版及内容中的 干扰正则表达式的特殊字符
+     *
      * @param str
      * @return
      */
-    public String clean(String str){
-        return str.replace("?","").replace("+","").replace("$","").replace("^","").replace("&","").replace("[","").replace("]","").replace("-","").replace("\\","");
+    public String clean(String str) {
+        return str.replace("?", "").replace("+", "").replace("$", "").replace("^", "").replace("&", "").replace("[", "").replace("]", "").replace("-", "").replace("\\", "");
     }
 
     @Override
