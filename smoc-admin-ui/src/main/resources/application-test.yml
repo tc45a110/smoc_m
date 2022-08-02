@@ -42,6 +42,7 @@ spring:
     multipart:
       max-file-size: 50MB  #单个数据大小
       max-request-size: 100MB #总数据大小
+      location: /alidata/smoc/apps/temp
 #**********************************************************
 # manpuman oauth2 token参数设置
 #**********************************************************

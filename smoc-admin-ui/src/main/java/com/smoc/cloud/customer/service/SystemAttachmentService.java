@@ -105,9 +105,6 @@ public class SystemAttachmentService {
                 if (!savefile.getParentFile().exists())
                     savefile.getParentFile().mkdirs();
 
-                //上传到目录文件夹
-                file.transferTo(savefile);
-
                 //封装附件数据
                 SystemAttachmentValidator info = new SystemAttachmentValidator();
                 info.setId(UUID.uuid32());
@@ -121,6 +118,9 @@ public class SystemAttachmentService {
                 info.setCreatedBy(createdBy);
                 info.setCreatedTime(new Date());
                 list.add(info);
+
+                //上传到目录文件夹
+                file.transferTo(savefile);
             }
         }
         return list;

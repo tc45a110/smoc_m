@@ -19,7 +19,7 @@ server: #服务端口
       timeout: 240m
   connection-timeout: 15000
   tomcat:
-    basedir:  /smoc/apps/temp
+    basedir: /smoc/apps/temp
 
 spring:
   cloud:
@@ -43,6 +43,7 @@ spring:
     multipart:
       max-file-size: 50MB  #单个数据大小
       max-request-size: 100MB #总数据大小
+      location: /smoc/apps/temp
 #**********************************************************
 # manpuman oauth2 token参数设置
 #**********************************************************

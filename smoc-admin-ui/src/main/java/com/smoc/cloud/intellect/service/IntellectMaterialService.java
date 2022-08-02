@@ -144,9 +144,6 @@ public class IntellectMaterialService {
                 if (!savefile.getParentFile().exists())
                     savefile.getParentFile().mkdirs();
 
-                //上传到目录文件夹
-                file.transferTo(savefile);
-
                 //封装附件数据
                 SystemAttachmentValidator info = new SystemAttachmentValidator();
                 info.setId(UUID.uuid32());
@@ -161,6 +158,9 @@ public class IntellectMaterialService {
                 info.setCreatedTime(new Date());
                 info.setBase64(base64);
                 list.add(info);
+
+                //上传到目录文件夹
+                file.transferTo(savefile);
             }
         }
         return list;
