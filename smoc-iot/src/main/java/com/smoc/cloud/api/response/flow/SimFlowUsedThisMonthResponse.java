@@ -7,18 +7,8 @@ import lombok.Setter;
 @Getter
 public class SimFlowUsedThisMonthResponse {
 
-    /**
-     * 资费 Id
-     */
-    private String offeringId;
-    /**
-     * 资费名称
-     */
-    private String offeringName;
-    /**
-     * APN 名称，无值则返回为" "
-     */
-    private String apnName;
+    private String iccid;
+
     /**
      * 总量，单位：KB
      */
@@ -31,8 +21,4 @@ public class SimFlowUsedThisMonthResponse {
      * 剩余量，单位：KB
      */
     private String remainAmount;
-    /**
-     * pccServiceCode 编码无值则返回为" "
-     */
-    private String pccCode;
 }

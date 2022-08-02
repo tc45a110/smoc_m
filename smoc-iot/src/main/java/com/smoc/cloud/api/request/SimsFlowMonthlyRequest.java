@@ -8,7 +8,7 @@ import java.util.List;
 
 @Setter
 @Getter
-public class SimsGprsFlowMonthlyRequest extends BaseRequest{
+public class SimsFlowMonthlyRequest extends BaseRequest{
 
     private List<String> msisdns;
 

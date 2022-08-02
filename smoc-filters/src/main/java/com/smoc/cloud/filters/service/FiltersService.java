@@ -1,5 +1,6 @@
 package com.smoc.cloud.filters.service;
 
+import com.google.gson.Gson;
 import com.smoc.cloud.common.filters.utils.RedisConstant;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.filters.utils.DFA.DFAUtils;
@@ -455,7 +456,7 @@ public class FiltersService {
         }
         long end = System.currentTimeMillis();
         log.info("[加载业务账号签名模版]：耗时：{}毫秒", end - start);
-        //log.info("[accountSignTemplateMap]:{}",new Gson().toJson(accountSignTemplateMap));
+        log.info("[accountSignTemplateMap]:{}",new Gson().toJson(accountSignTemplateMap));
         return accountSignTemplateMap;
     }
 

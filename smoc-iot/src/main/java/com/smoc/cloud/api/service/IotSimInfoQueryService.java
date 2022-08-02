@@ -1,10 +1,7 @@
 package com.smoc.cloud.api.service;
 
 import com.smoc.cloud.api.remote.cmcc.service.CmccIotSimInfoService;
-import com.smoc.cloud.api.request.BatchSimHandleRequest;
-import com.smoc.cloud.api.request.OrderHandleRequest;
-import com.smoc.cloud.api.request.SimBaseRequest;
-import com.smoc.cloud.api.request.SimsBaseRequest;
+import com.smoc.cloud.api.request.*;
 import com.smoc.cloud.api.response.info.*;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
@@ -285,7 +282,7 @@ public class IotSimInfoQueryService {
     }
 
     /**
-     * 单卡停机原因查询
+     * 变更物联网卡状态
      * 验证物联网卡是否存在
      * 如果存在根据订单号，分辨出那个运营商
      * 判断运营商是否支持订单接口查询
@@ -294,7 +291,42 @@ public class IotSimInfoQueryService {
      * 是否查询结果本地持久化?
      * 把运营商查询结果映射为最终结果
      */
-    public ResponseData<SimStopReasonResponse> querySimStopReason(SimBaseRequest simBaseRequest) {
+    public ResponseData<SimStatusChangeReponse> changeSimStatus(SimStatusChangeRequest simStatusChangeRequest) {
+
+        /**
+         * 验证物联网卡是否存在
+         */
+//        Boolean isExist = apiRepository.isExistAccountSim(simBaseRequest.getAccount(), simBaseRequest.getMsisdn());
+//        if (!isExist) {
+//            return ResponseDataUtil.buildError(ResponseCode.SIM_NOT_EXIST_ERROR);
+//        }
+
+        /**
+         * 如果存在根据订单号，分辨出那个运营商,并路由到运营商对应的订单查询接口
+         */
+
+
+        /**
+         * 查询，暂时只支持移动API
+         */
+        //ResponseData<SimStatusResponse> responseData = cmccIotSimInfoService.querySimStatus(simBaseRequest.getMsisdn(), "", "");
+        SimStatusChangeReponse simStatusChangeReponse = new SimStatusChangeReponse();
+        simStatusChangeReponse.setIccid("898600D6991330004149");
+        simStatusChangeReponse.setOrderNo("20220705212458357896147235");
+        return ResponseDataUtil.buildSuccess(simStatusChangeReponse);
+    }
+
+    /**
+     * 查询物联网卡位置信息
+     * 验证物联网卡是否存在
+     * 如果存在根据订单号，分辨出那个运营商
+     * 判断运营商是否支持订单接口查询
+     * 根据运营商，路由到对应运营商接口
+     * 运营商订单查询
+     * 是否查询结果本地持久化?
+     * 把运营商查询结果映射为最终结果
+     */
+    public ResponseData<SimLocationsResponse> querySimLocations(SimBaseRequest simBaseRequest) {
 
         /**
          * 验证物联网卡是否存在
@@ -313,10 +345,11 @@ public class IotSimInfoQueryService {
          * 查询，暂时只支持移动API
          */
         //ResponseData<SimStopReasonResponse> responseData = cmccIotSimInfoService.querySimStopReason(simBaseRequest.getMsisdn(), "", "");
-        SimStopReasonResponse simStopReasonResponse = new SimStopReasonResponse();
-        simStopReasonResponse.setStopReason("000000002000");
-        simStopReasonResponse.setShutdownReasonDesc("暂时停机，以后继续使用");
-        return ResponseDataUtil.buildSuccess(simStopReasonResponse);
+        SimLocationsResponse simLocationsResponse = new SimLocationsResponse();
+        simLocationsResponse.setIccid("898600D6991330004149");
+        simLocationsResponse.setLongitude("116.823401");
+        simLocationsResponse.setLatitude("39.114281");
+        return ResponseDataUtil.buildSuccess(simLocationsResponse);
     }
 
 

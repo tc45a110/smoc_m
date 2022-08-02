@@ -1,11 +1,9 @@
 package com.smoc.cloud.api.controller;
 
 
-import com.smoc.cloud.api.request.BatchSimHandleRequest;
-import com.smoc.cloud.api.request.OrderHandleRequest;
 import com.smoc.cloud.api.request.SimBaseRequest;
+import com.smoc.cloud.api.request.SimStatusChangeRequest;
 import com.smoc.cloud.api.request.SimsBaseRequest;
-import com.smoc.cloud.api.response.account.IotAccountPackageInfo;
 import com.smoc.cloud.api.response.info.*;
 import com.smoc.cloud.api.service.IotSimInfoQueryService;
 import com.smoc.cloud.common.page.PageList;
@@ -73,7 +71,7 @@ public class IotSimInfoQueryController {
      */
     @RequestMapping(value = "/queryBatchSimBaseInfo", method = RequestMethod.POST)
     public ResponseData<List<SimBaseInfoResponse>> queryBatchSimBaseInfo(@RequestBody SimsBaseRequest simsBaseRequest) {
-        PageParams<IotAccountPackageInfo> pageParams = new PageParams<>();
+        PageParams pageParams = new PageParams<>();
         pageParams.setPageSize(100);
         pageParams.setCurrentPage(1);
         PageList<SimBaseInfoResponse> page = iotSimInfoQueryService.queryBatchSimBaseInfo(simsBaseRequest, pageParams);
@@ -97,10 +95,10 @@ public class IotSimInfoQueryController {
      * @param simBaseRequest
      * @return
      */
-    @RequestMapping(value = "/querySimStartStatus", method = RequestMethod.POST)
-    public ResponseData<SimStartStatusResponse> querySimStartStatus(@RequestBody SimBaseRequest simBaseRequest) {
-        return iotSimInfoQueryService.querySimStartStatus(simBaseRequest);
-    }
+//    @RequestMapping(value = "/querySimStartStatus", method = RequestMethod.POST)
+//    public ResponseData<SimStartStatusResponse> querySimStartStatus(@RequestBody SimBaseRequest simBaseRequest) {
+//        return iotSimInfoQueryService.querySimStartStatus(simBaseRequest);
+//    }
 
     /**
      * 物联网卡状态查询（停机、复机、冻结...）
@@ -114,13 +112,24 @@ public class IotSimInfoQueryController {
     }
 
     /**
-     * 单卡停机原因查询
+     * 变更物联网卡状态
+     *
+     * @param simStatusChangeRequest
+     * @return
+     */
+    @RequestMapping(value = "/changeSimStatus", method = RequestMethod.POST)
+    public ResponseData<SimStatusChangeReponse> changeSimStatus(@RequestBody SimStatusChangeRequest simStatusChangeRequest) {
+        return iotSimInfoQueryService.changeSimStatus(simStatusChangeRequest);
+    }
+
+    /**
+     * 查询物联网卡位置信息
      *
      * @param simBaseRequest
      * @return
      */
-    @RequestMapping(value = "/querySimStopReason", method = RequestMethod.POST)
-    public ResponseData<SimStopReasonResponse> querySimStopReason(@RequestBody SimBaseRequest simBaseRequest) {
-        return iotSimInfoQueryService.querySimStopReason(simBaseRequest);
+    @RequestMapping(value = "/querySimLocations", method = RequestMethod.POST)
+    public ResponseData<SimLocationsResponse> querySimLocations(@RequestBody SimBaseRequest simBaseRequest) {
+        return iotSimInfoQueryService.querySimLocations(simBaseRequest);
     }
 }

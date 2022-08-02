@@ -10,12 +10,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class QuerySimStopReason extends Base{
+public class QuerySimLocations extends Base{
 
     public  static void main(String[] args) throws Exception {
 
         //请求路径（具体参见技术文档）
-        String url = baseUrl + "/iot/sim/info/querySimStopReason";
+        String url = baseUrl + "/iot/sim/info/querySimLocations";
 
         //自定义header协议
         Map<String, String> header = new HashMap<>();
@@ -33,7 +33,7 @@ public class QuerySimStopReason extends Base{
         String timestamp = DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS");
         requestDataMap.put("timestamp",timestamp);
 
-        requestDataMap.put("msisdn","14765004176");
+        requestDataMap.put("iccid","898600D6991330004149");
 
         //组织签名字符串
         StringBuffer signData = new StringBuffer();

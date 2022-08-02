@@ -6,16 +6,14 @@ import com.smoc.examples.utils.HMACUtil;
 import com.smoc.examples.utils.Okhttp3Utils;
 import com.smoc.examples.utils.Utils;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-public class QuerySimFlowUsedPool extends Base{
+public class QuerySimFlowUsedMonthly extends Base{
 
     public  static void main(String[] args) throws Exception {
 
         //请求路径（具体参见技术文档）
-        String url = baseUrl + "/iot/sim/flow/querySimFlowUsedPool";
+        String url = baseUrl + "/iot/sim/flow/querySimFlowUsedMonthly";
 
         //自定义header协议
         Map<String, String> header = new HashMap<>();
@@ -26,14 +24,18 @@ public class QuerySimFlowUsedPool extends Base{
         header.put("account", "IOT100001618");
 
         //请求的数据
-        Map<String,String> requestDataMap = new HashMap<>();
+        Map<String,Object> requestDataMap = new HashMap<>();
         //账号
         requestDataMap.put("account","IOT100001618");
         //时间戳
         String timestamp = DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS");
         requestDataMap.put("timestamp",timestamp);
+        List<String> msisdns = new ArrayList<>();
+        msisdns.add("14765004176");
+        msisdns.add("14765004177");
+        requestDataMap.put("msisdns",msisdns);
 
-        requestDataMap.put("msisdn","14765004176");
+        requestDataMap.put("queryDate","202206");
 
         //组织签名字符串
         StringBuffer signData = new StringBuffer();

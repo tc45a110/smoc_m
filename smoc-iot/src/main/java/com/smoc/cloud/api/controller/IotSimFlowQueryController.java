@@ -2,12 +2,11 @@ package com.smoc.cloud.api.controller;
 
 
 import com.smoc.cloud.api.request.SimBaseRequest;
-import com.smoc.cloud.api.request.SimsGprsFlowMonthlyRequest;
-import com.smoc.cloud.api.response.flow.SimFlowUsedPoolResponse;
+import com.smoc.cloud.api.request.SimsFlowMonthlyRequest;
+import com.smoc.cloud.api.response.flow.SimFlowUsedMonthlyResponse;
 import com.smoc.cloud.api.response.flow.SimFlowUsedThisMonthResponse;
-import com.smoc.cloud.api.response.flow.SimFlowUsedThisMonthTotalResponse;
-import com.smoc.cloud.api.response.flow.SimGprsFlowUsedMonthlyBatch;
 import com.smoc.cloud.api.service.IotSimFlowQueryService;
+import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.response.ResponseData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * 物联网卡流量查询api
@@ -46,10 +43,10 @@ public class IotSimFlowQueryController {
      * @param simBaseRequest
      * @return
      */
-    @RequestMapping(value = "/querySimFlowUsedThisMonthTotal", method = RequestMethod.POST)
-    public ResponseData<SimFlowUsedThisMonthTotalResponse> querySimFlowUsedThisMonthTotal(@RequestBody SimBaseRequest simBaseRequest) {
-        return iotSimFlowQueryService.querySimFlowUsedThisMonthTotal(simBaseRequest);
-    }
+//    @RequestMapping(value = "/querySimFlowUsedThisMonthTotal", method = RequestMethod.POST)
+//    public ResponseData<SimFlowUsedThisMonthTotalResponse> querySimFlowUsedThisMonthTotal(@RequestBody SimBaseRequest simBaseRequest) {
+//        return iotSimFlowQueryService.querySimFlowUsedThisMonthTotal(simBaseRequest);
+//    }
 
     /**
      *  单卡流量池内使用量实时查询
@@ -57,20 +54,20 @@ public class IotSimFlowQueryController {
      * @param simBaseRequest
      * @return
      */
-    @RequestMapping(value = "/querySimFlowUsedPool", method = RequestMethod.POST)
-    public ResponseData<List<SimFlowUsedPoolResponse>> querySimFlowUsedPool(@RequestBody SimBaseRequest simBaseRequest) {
-        return iotSimFlowQueryService.querySimFlowUsedPool(simBaseRequest);
-    }
+//    @RequestMapping(value = "/querySimFlowUsedPool", method = RequestMethod.POST)
+//    public ResponseData<List<SimFlowUsedPoolResponse>> querySimFlowUsedPool(@RequestBody SimBaseRequest simBaseRequest) {
+//        return iotSimFlowQueryService.querySimFlowUsedPool(simBaseRequest);
+//    }
 
     /**
      *  物联卡单月 GPRS 流量使用量批量查询
      *
-     * @param simsGprsFlowMonthlyRequest
+     * @param simsFlowMonthlyRequest
      * @return
      */
-    @RequestMapping(value = "/querySimGprsFlowUsedMonthlyBatch", method = RequestMethod.POST)
-    public  ResponseData<List<SimGprsFlowUsedMonthlyBatch>> querySimGprsFlowUsedMonthlyBatch(@RequestBody SimsGprsFlowMonthlyRequest simsGprsFlowMonthlyRequest) {
-        return iotSimFlowQueryService.querySimGprsFlowUsedMonthlyBatch(simsGprsFlowMonthlyRequest);
+    @RequestMapping(value = "/querySimFlowUsedMonthly", method = RequestMethod.POST)
+    public  ResponseData<PageList<SimFlowUsedMonthlyResponse>> querySimFlowUsedMonthly(@RequestBody SimsFlowMonthlyRequest simsFlowMonthlyRequest) {
+        return iotSimFlowQueryService.querySimFlowUsedMonthly(simsFlowMonthlyRequest);
     }
 
 }
