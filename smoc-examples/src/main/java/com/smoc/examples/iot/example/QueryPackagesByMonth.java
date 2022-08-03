@@ -10,13 +10,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class QueryAccountPackagesByMonth extends Base{
+public class QueryPackagesByMonth extends Base{
 
 
     public static void main(String[] args) throws Exception {
 
         //请求路径（具体参见技术文档）
-        String url = baseUrl + "/iot/account/info/queryAccountPackagesByMonth";
+        String url = baseUrl + "/iot/package/info/queryPackagesByMonth";
 
         //自定义header协议
         Map<String, String> header = new HashMap<>();
@@ -31,11 +31,11 @@ public class QueryAccountPackagesByMonth extends Base{
         //账号
         requestDataMap.put("account", "IOT100001618");
         //月份
-        //requestDataMap.put("queryMonth", "202207");
+        requestDataMap.put("queryMonth", "202207");
 
         requestDataMap.put("packageId", "5a5a4914fa95426894ada84288cba287");
 
-        requestDataMap.put("currentPage", 1);
+        requestDataMap.put("currentPage", "1");
 
 
         //时间戳

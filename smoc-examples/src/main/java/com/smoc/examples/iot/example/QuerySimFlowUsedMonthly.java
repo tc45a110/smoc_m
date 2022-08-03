@@ -30,12 +30,12 @@ public class QuerySimFlowUsedMonthly extends Base{
         //时间戳
         String timestamp = DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS");
         requestDataMap.put("timestamp",timestamp);
-        List<String> msisdns = new ArrayList<>();
-        msisdns.add("14765004176");
-        msisdns.add("14765004177");
-        requestDataMap.put("msisdns",msisdns);
 
-        requestDataMap.put("queryDate","202206");
+        requestDataMap.put("iccid","898600D6991330004149");
+
+        requestDataMap.put("queryMonth","202206");
+
+        requestDataMap.put("currentPage", "1");
 
         //组织签名字符串
         StringBuffer signData = new StringBuffer();
