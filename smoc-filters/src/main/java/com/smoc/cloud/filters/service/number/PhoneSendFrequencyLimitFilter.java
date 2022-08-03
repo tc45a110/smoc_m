@@ -1,5 +1,6 @@
 package com.smoc.cloud.filters.service.number;
 
+import com.smoc.cloud.common.filters.utils.RedisConstant;
 import com.smoc.cloud.filters.service.FiltersService;
 import com.smoc.cloud.filters.utils.FilterResponseCode;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +37,17 @@ public class PhoneSendFrequencyLimitFilter {
         if ("0".equals(phoneFrequencyLimit.toString())) {
             result.put("result", "false");
             return result;
+        }
+
+        //免频次限制手机号
+        Object whitePatten = filtersService.get(RedisConstant.FILTERS_CONFIG_ACCOUNT_NUMBER + "white:" + account);
+        if (!StringUtils.isEmpty(whitePatten)) {
+            //log.info("[号码_白名单_扩展参数]{}:{}", model.getAccount(), new Gson().toJson(whitePatten));
+            Boolean validator = filtersService.validator(whitePatten.toString(), phone);
+            if (validator) {
+                result.put("result", "false");
+                return result;
+            }
         }
 
         //限流默认数量
