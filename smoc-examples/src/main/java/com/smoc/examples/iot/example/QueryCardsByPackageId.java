@@ -15,7 +15,7 @@ public class QueryCardsByPackageId extends Base {
 
     public static void main(String[] args) throws Exception {
         //请求路径（具体参见技术文档）
-        String url = baseUrl + "/iot/account/info/queryCardsByPackageId";
+        String url = baseUrl + "/iot/package/info/queryCardsByPackageId";
 
         //自定义header协议
         Map<String, String> header = new HashMap<>();
@@ -34,7 +34,7 @@ public class QueryCardsByPackageId extends Base {
         requestDataMap.put("packageId", "5a5a4914fa95426894ada84288cba287");
 
         //套餐id
-        requestDataMap.put("currentPage", 1);
+        requestDataMap.put("currentPage", "1");
 
         //时间戳
         String timestamp = DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS");

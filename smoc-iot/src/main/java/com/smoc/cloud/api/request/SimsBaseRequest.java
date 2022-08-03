@@ -10,9 +10,6 @@ import java.util.List;
 @Getter
 public class SimsBaseRequest extends BaseRequest{
 
-    private List<String> msisdns;
-
     private List<String> iccids;
 
-    private List<String> imsis;
 }

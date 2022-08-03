@@ -1,11 +1,12 @@
 package com.smoc.cloud.api.service;
 
 import com.smoc.cloud.api.remote.cmcc.service.CmccIotSimInfoService;
-import com.smoc.cloud.api.request.*;
+import com.smoc.cloud.api.request.SimBaseRequest;
+import com.smoc.cloud.api.request.SimStatusChangeRequest;
+import com.smoc.cloud.api.request.SimsBaseRequest;
 import com.smoc.cloud.api.response.info.*;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
-import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.iot.account.repository.IotAccountPackageItemsRepository;
@@ -45,61 +46,61 @@ public class IotSimInfoQueryService {
      * 是否查询结果本地持久化?
      * 把运营商查询结果映射为最终结果
      */
-    public ResponseData<OrderHandleResponse> queryOrderHandle(OrderHandleRequest orderHandleRequest) {
-
-        /**
-         * 验证订单是否存在
-         */
-        Boolean isExist = apiRepository.isExistAccountOrder(orderHandleRequest.getAccount(), orderHandleRequest.getOrderNum());
-        if (!isExist) {
-            return ResponseDataUtil.buildError(ResponseCode.ORDER_NOT_EXIST_ERROR);
-        }
-
-        /**
-         * 如果存在根据订单号，分辨出那个运营商,并路由到运营商对应的订单查询接口
-         */
-
-
-        /**
-         * 查询，暂时只支持移动API
-         */
-        ResponseData<OrderHandleResponse> responseData = cmccIotSimInfoService.queryOrderHandle(orderHandleRequest.getOrderNum());
-
-        return responseData;
-    }
-
-    /**
-     * 物联网卡批量办理结果查询
-     * 验证订单是否存在
-     * 如果存在根据订单号，分辨出那个运营商
-     * 判断运营商是否支持订单接口查询
-     * 根据运营商，路由到对应运营商接口
-     * 运营商订单查询
-     * 是否查询结果本地持久化?
-     * 把运营商查询结果映射为最终结果
-     */
-    public ResponseData<BatchSimHandleResponse> queryBatchSimHandle(BatchSimHandleRequest batchSimHandleRequest) {
-
-        /**
-         * 验证订单是否存在
-         */
-        Boolean isExist = apiRepository.isExistAccountOrder(batchSimHandleRequest.getAccount(), batchSimHandleRequest.getBatchId());
-        if (!isExist) {
-            return ResponseDataUtil.buildError(ResponseCode.ORDER_NOT_EXIST_ERROR);
-        }
-
-        /**
-         * 如果存在根据订单号，分辨出那个运营商,并路由到运营商对应的订单查询接口
-         */
-
-
-        /**
-         * 查询，暂时只支持移动API
-         */
-        ResponseData<BatchSimHandleResponse> responseData = cmccIotSimInfoService.queryBatchSimHandle(batchSimHandleRequest.getBatchId());
-
-        return responseData;
-    }
+//    public ResponseData<OrderHandleResponse> queryOrderHandle(OrderHandleRequest orderHandleRequest) {
+//
+//        /**
+//         * 验证订单是否存在
+//         */
+//        Boolean isExist = apiRepository.isExistAccountOrder(orderHandleRequest.getAccount(), orderHandleRequest.getOrderNum());
+//        if (!isExist) {
+//            return ResponseDataUtil.buildError(ResponseCode.ORDER_NOT_EXIST_ERROR);
+//        }
+//
+//        /**
+//         * 如果存在根据订单号，分辨出那个运营商,并路由到运营商对应的订单查询接口
+//         */
+//
+//
+//        /**
+//         * 查询，暂时只支持移动API
+//         */
+//        ResponseData<OrderHandleResponse> responseData = cmccIotSimInfoService.queryOrderHandle(orderHandleRequest.getOrderNum());
+//
+//        return responseData;
+//    }
+//
+//    /**
+//     * 物联网卡批量办理结果查询
+//     * 验证订单是否存在
+//     * 如果存在根据订单号，分辨出那个运营商
+//     * 判断运营商是否支持订单接口查询
+//     * 根据运营商，路由到对应运营商接口
+//     * 运营商订单查询
+//     * 是否查询结果本地持久化?
+//     * 把运营商查询结果映射为最终结果
+//     */
+//    public ResponseData<BatchSimHandleResponse> queryBatchSimHandle(BatchSimHandleRequest batchSimHandleRequest) {
+//
+//        /**
+//         * 验证订单是否存在
+//         */
+//        Boolean isExist = apiRepository.isExistAccountOrder(batchSimHandleRequest.getAccount(), batchSimHandleRequest.getBatchId());
+//        if (!isExist) {
+//            return ResponseDataUtil.buildError(ResponseCode.ORDER_NOT_EXIST_ERROR);
+//        }
+//
+//        /**
+//         * 如果存在根据订单号，分辨出那个运营商,并路由到运营商对应的订单查询接口
+//         */
+//
+//
+//        /**
+//         * 查询，暂时只支持移动API
+//         */
+//        ResponseData<BatchSimHandleResponse> responseData = cmccIotSimInfoService.queryBatchSimHandle(batchSimHandleRequest.getBatchId());
+//
+//        return responseData;
+//    }
 
     /**
      * 单卡基本信息查询

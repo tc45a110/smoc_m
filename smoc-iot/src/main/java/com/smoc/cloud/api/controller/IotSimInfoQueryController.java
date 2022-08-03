@@ -8,8 +8,10 @@ import com.smoc.cloud.api.response.info.*;
 import com.smoc.cloud.api.service.IotSimInfoQueryService;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
+import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,28 +33,6 @@ public class IotSimInfoQueryController {
     private IotSimInfoQueryService iotSimInfoQueryService;
 
     /**
-     * 单卡操作订单处理情况查询
-     *
-     * @param orderHandleRequest
-     * @return
-     */
-//    @RequestMapping(value = "/queryOrderHandle", method = RequestMethod.POST)
-//    public ResponseData<OrderHandleResponse> orderHandle(@RequestBody OrderHandleRequest orderHandleRequest) {
-//        return iotSimInfoQueryService.queryOrderHandle(orderHandleRequest);
-//    }
-
-    /**
-     * 物联网卡批量办理结果查询
-     *
-     * @param batchSimHandleRequest
-     * @return
-     */
-//    @RequestMapping(value = "/queryBatchSimHandle", method = RequestMethod.POST)
-//    public ResponseData<BatchSimHandleResponse> queryBatchSimHandle(@RequestBody BatchSimHandleRequest batchSimHandleRequest) {
-//        return iotSimInfoQueryService.queryBatchSimHandle(batchSimHandleRequest);
-//    }
-
-    /**
      * 物联网卡基本信息查询
      *
      * @param simBaseRequest
@@ -60,6 +40,11 @@ public class IotSimInfoQueryController {
      */
     @RequestMapping(value = "/querySimBaseInfo", method = RequestMethod.POST)
     public ResponseData<SimBaseInfoResponse> querySimBaseInfo(@RequestBody SimBaseRequest simBaseRequest) {
+
+        //完成参数规则验证
+        if (!MpmValidatorUtil.validate(simBaseRequest)) {
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(simBaseRequest));
+        }
         return iotSimInfoQueryService.querySimBaseInfo(simBaseRequest);
     }
 
@@ -71,6 +56,15 @@ public class IotSimInfoQueryController {
      */
     @RequestMapping(value = "/queryBatchSimBaseInfo", method = RequestMethod.POST)
     public ResponseData<List<SimBaseInfoResponse>> queryBatchSimBaseInfo(@RequestBody SimsBaseRequest simsBaseRequest) {
+        //完成参数规则验证
+        if (!MpmValidatorUtil.validate(simsBaseRequest)) {
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(simsBaseRequest));
+        }
+
+        if(null == simsBaseRequest.getIccids() || simsBaseRequest.getIccids().size()<1 || simsBaseRequest.getIccids().size()>100){
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), "iccids参数不符合规则");
+        }
+
         PageParams pageParams = new PageParams<>();
         pageParams.setPageSize(100);
         pageParams.setCurrentPage(1);
@@ -86,6 +80,10 @@ public class IotSimInfoQueryController {
      */
     @RequestMapping(value = "/querySimChangeHistory", method = RequestMethod.POST)
     public ResponseData<List<SimChangeHistoryResponse>> querySimChangeHistory(@RequestBody SimBaseRequest simBaseRequest) {
+        //完成参数规则验证
+        if (!MpmValidatorUtil.validate(simBaseRequest)) {
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(simBaseRequest));
+        }
         return iotSimInfoQueryService.querySimChangeHistory(simBaseRequest);
     }
 
@@ -95,19 +93,12 @@ public class IotSimInfoQueryController {
      * @param simBaseRequest
      * @return
      */
-//    @RequestMapping(value = "/querySimStartStatus", method = RequestMethod.POST)
-//    public ResponseData<SimStartStatusResponse> querySimStartStatus(@RequestBody SimBaseRequest simBaseRequest) {
-//        return iotSimInfoQueryService.querySimStartStatus(simBaseRequest);
-//    }
-
-    /**
-     * 物联网卡状态查询（停机、复机、冻结...）
-     *
-     * @param simBaseRequest
-     * @return
-     */
     @RequestMapping(value = "/querySimStatus", method = RequestMethod.POST)
     public ResponseData<SimStatusResponse> querySimStatus(@RequestBody SimBaseRequest simBaseRequest) {
+        //完成参数规则验证
+        if (!MpmValidatorUtil.validate(simBaseRequest)) {
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(simBaseRequest));
+        }
         return iotSimInfoQueryService.querySimStatus(simBaseRequest);
     }
 
@@ -119,6 +110,10 @@ public class IotSimInfoQueryController {
      */
     @RequestMapping(value = "/changeSimStatus", method = RequestMethod.POST)
     public ResponseData<SimStatusChangeReponse> changeSimStatus(@RequestBody SimStatusChangeRequest simStatusChangeRequest) {
+        //完成参数规则验证
+        if (!MpmValidatorUtil.validate(simStatusChangeRequest)) {
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(simStatusChangeRequest));
+        }
         return iotSimInfoQueryService.changeSimStatus(simStatusChangeRequest);
     }
 
@@ -130,6 +125,10 @@ public class IotSimInfoQueryController {
      */
     @RequestMapping(value = "/querySimLocations", method = RequestMethod.POST)
     public ResponseData<SimLocationsResponse> querySimLocations(@RequestBody SimBaseRequest simBaseRequest) {
+        //完成参数规则验证
+        if (!MpmValidatorUtil.validate(simBaseRequest)) {
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(simBaseRequest));
+        }
         return iotSimInfoQueryService.querySimLocations(simBaseRequest);
     }
 }
