@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.smoc.saler.qo.CustomerAccountInfoQo;
 import com.smoc.cloud.common.smoc.spss.model.StatisticModel;
+import com.smoc.cloud.common.smoc.spss.qo.ManagerCarrierStatisticQo;
 import com.smoc.cloud.common.smoc.spss.qo.ManagerStatisticQo;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.statistic.data.service.ManagerStatisticsService;
@@ -130,11 +131,45 @@ public class ManagerStatisticController {
      * @return
      */
     @RequestMapping(value = "/carrier/month", method = RequestMethod.GET)
-    public ModelAndView manager_month() throws ParseException {
+    public ModelAndView carrierMonth() throws ParseException {
         ModelAndView view = new ModelAndView("statistic/manager/manager_statistic_carrier_month");
 
+        ManagerCarrierStatisticQo managerCarrierStatisticQo = new ManagerCarrierStatisticQo();
+        managerCarrierStatisticQo.setStartDate(DateTimeUtils.getMonth());
+
+        view.addObject("managerCarrierStatisticQo",managerCarrierStatisticQo);
         return view;
 
+    }
+
+    /**
+     * 运营管理运营商分类统计-查询
+     * @param managerCarrierStatisticQo
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/carrier/month/query", method = RequestMethod.POST)
+    public ModelAndView carrierMonthQuery(@ModelAttribute ManagerCarrierStatisticQo managerCarrierStatisticQo, HttpServletRequest request) {
+        ModelAndView view = new ModelAndView("statistic/manager/manager_statistic_carrier_month");
+
+        view.addObject("managerCarrierStatisticQo",managerCarrierStatisticQo);
+        return view;
+    }
+
+    /**
+     * 运营管理运营商按月分类统计Ajax
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/carrier/month/ajax/{startDate}", method = RequestMethod.POST)
+    public ManagerCarrierStatisticQo managerCarrierMonthStatistic(@ModelAttribute ManagerCarrierStatisticQo managerCarrierStatisticQo, HttpServletRequest request) {
+
+        managerCarrierStatisticQo.setStartDate(DateTimeUtils.dateAddMonthsStr(managerCarrierStatisticQo.getStartDate(),-24));
+        managerCarrierStatisticQo.setEndDate(managerCarrierStatisticQo.getStartDate());
+
+        ManagerCarrierStatisticQo statisticModel = managerStatisticsService.managerCarrierMonthStatistic(managerCarrierStatisticQo);
+
+        return statisticModel;
     }
 
     /**

@@ -3,6 +3,7 @@ package com.smoc.cloud.statistic.data.service;
 
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.spss.model.StatisticModel;
+import com.smoc.cloud.common.smoc.spss.qo.ManagerCarrierStatisticQo;
 import com.smoc.cloud.common.smoc.spss.qo.ManagerStatisticQo;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.statistic.data.remote.ManagerStatisticsFeignClient;
@@ -113,6 +114,37 @@ public class ManagerStatisticsService {
     }
 
     /**
+     * 运营管理运营商按月分类统计
+     * @param managerCarrierStatisticQo
+     * @return
+     */
+    public ManagerCarrierStatisticQo managerCarrierMonthStatistic(ManagerCarrierStatisticQo managerCarrierStatisticQo) {
+       /* ResponseData<List<ManagerCarrierStatisticQo>> responseData = this.managerStatisticsFeignClient.managerCarrierMonthStatistic(managerCarrierStatisticQo);
+        List<ManagerCarrierStatisticQo> list = responseData.getData();*/
+
+        //封装月份
+        /*Map<String, Map<String,String>> monthMap = buildCarrierMonthStatistics(managerCarrierStatisticQo.getEndDate(),12);
+        if(!StringUtils.isEmpty(list) && list.size()>0){
+            for(int i=0;i<list.size();i++){
+
+                monthMap
+
+                ManagerCarrierStatisticQo info = list.get(i);
+                Map<String,String> map = monthMap.get(info.getMessageDate());
+                map.put(info.getCarrier(),""+info.getCarrierData());
+
+
+                monthMap.put(info.getMessageDate(),info);
+            }
+        }*/
+
+
+        ManagerCarrierStatisticQo model = new ManagerCarrierStatisticQo();
+
+        return model;
+    }
+
+    /**
      * 查询当前月份和向后推N个月
      *
      * @return
@@ -138,4 +170,6 @@ public class ManagerStatisticsService {
         }
         return null;
     }
+
+
 }
