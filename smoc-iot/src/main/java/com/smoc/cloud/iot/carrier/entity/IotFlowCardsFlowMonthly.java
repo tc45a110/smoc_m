@@ -1,9 +1,8 @@
 package com.smoc.cloud.iot.carrier.entity;
 
 import javax.persistence.*;
-import javax.xml.crypto.Data;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Objects;
 
 @Entity
@@ -23,11 +22,11 @@ public class IotFlowCardsFlowMonthly {
     private BigDecimal usedAmount;
     private BigDecimal totalAmount;
     private BigDecimal remainAmount;
-    private String settlementFee;
+    private BigDecimal settlementFee;
     private String usedMonth;
     private String settlementStatus;
     private String createdBy;
-    private Data createdTime;
+    private Date createdTime;
 
     @Id
     @Column(name = "ID")
@@ -171,11 +170,11 @@ public class IotFlowCardsFlowMonthly {
 
     @Basic
     @Column(name = "SETTLEMENT_FEE")
-    public String getSettlementFee() {
+    public BigDecimal getSettlementFee() {
         return settlementFee;
     }
 
-    public void setSettlementFee(String settlementFee) {
+    public void setSettlementFee(BigDecimal settlementFee) {
         this.settlementFee = settlementFee;
     }
 
@@ -211,11 +210,11 @@ public class IotFlowCardsFlowMonthly {
 
     @Basic
     @Column(name = "CREATED_TIME")
-    public Data getCreatedTime() {
+    public Date getCreatedTime() {
         return createdTime;
     }
 
-    public void setCreatedTime(Data createdTime) {
+    public void setCreatedTime(Date createdTime) {
         this.createdTime = createdTime;
     }
 

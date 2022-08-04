@@ -1,4 +1,4 @@
-package com.smoc.cloud.api.response.flow;
+package com.smoc.cloud.common.iot.reponse;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +14,7 @@ public class SimFlowUsedMonthlyResponse {
 
     private String packageId;
 
-    private String packageName;
+
 
     private String chargingType;
 

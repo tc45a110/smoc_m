@@ -57,7 +57,7 @@ public class IotAccountInfoQueryService {
      * @param pageParams
      * @return
      */
-    public PageList<IotAccountPackageInfoMonthly> page(String account, String queryMonth, String packageId, PageParams<IotAccountPackageInfo> pageParams){
+    public PageList<IotAccountPackageInfoMonthly> page(String account, String queryMonth, String packageId, PageParams pageParams){
         PageList<IotAccountPackageInfoMonthly> page = this.iotPackageUsedMonthlyRepository.page(account, queryMonth,packageId,pageParams);
         return page;
     }

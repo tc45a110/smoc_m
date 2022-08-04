@@ -10,11 +10,13 @@ import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.iot.carrier.repository.IotFlowCardsFlowMonthlyRepository;
 import com.smoc.cloud.iot.repository.ApiRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +29,9 @@ public class IotSimFlowQueryService {
 
     @Autowired
     private CmccIotSimFlowService cmccIotSimFlowService;
+
+    @Resource
+    private IotFlowCardsFlowMonthlyRepository iotFlowCardsFlowMonthlyRepository;
 
     /**
      * 单卡本月套餐内流量使用量实时查询(加入流量池或流量共享的卡无法查询)
@@ -166,7 +171,7 @@ public class IotSimFlowQueryService {
      * 是否查询结果本地持久化?
      * 把运营商查询结果映射为最终结果
      */
-    public  ResponseData<PageList<SimFlowUsedMonthlyResponse>> querySimFlowUsedMonthly(SimsFlowMonthlyRequest simsFlowMonthlyRequest) {
+    public  ResponseData<PageList<SimFlowUsedMonthlyResponse>> querySimFlowUsedMonthly(SimsFlowMonthlyRequest simsFlowMonthlyRequest, PageParams pageParams) {
 
         /**
          * 验证物联网卡是否存在
@@ -185,13 +190,7 @@ public class IotSimFlowQueryService {
          * 查询，暂时只支持移动API
          */
         //ResponseData<List<SimGprsFlowUsedMonthlyBatch>> responseData = cmccIotSimFlowService.querySimGprsFlowUsedMonthlyBatch(simsGprsFlowMonthlyRequest.getMsisdns(), simsGprsFlowMonthlyRequest.getIccids(), simsGprsFlowMonthlyRequest.getImsis(),simsGprsFlowMonthlyRequest.getQueryDate());
-        List<SimFlowUsedMonthlyResponse> list = new ArrayList<>();
-        PageParams pageParams = new PageParams<>();
-        pageParams.setPageSize(100);
-        pageParams.setCurrentPage(1);
-        PageList page = new PageList();
-        page.setList(list);
-        page.setPageParams(pageParams);
+        PageList<SimFlowUsedMonthlyResponse> page = this.iotFlowCardsFlowMonthlyRepository.page(simsFlowMonthlyRequest.getAccount(),simsFlowMonthlyRequest.getIccid(),simsFlowMonthlyRequest.getQueryMonth(),pageParams);
         return ResponseDataUtil.buildSuccess(page);
     }
 }

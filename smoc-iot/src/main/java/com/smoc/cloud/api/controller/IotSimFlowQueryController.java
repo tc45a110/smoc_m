@@ -53,6 +53,7 @@ public class IotSimFlowQueryController {
      */
     @RequestMapping(value = "/querySimFlowUsedMonthly", method = RequestMethod.POST)
     public ResponseData<PageList<SimFlowUsedMonthlyResponse>> querySimFlowUsedMonthly(@RequestBody SimsFlowMonthlyRequest simsFlowMonthlyRequest) {
+
         //完成参数规则验证
         if (!MpmValidatorUtil.validate(simsFlowMonthlyRequest)) {
             return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(simsFlowMonthlyRequest));
@@ -67,7 +68,7 @@ public class IotSimFlowQueryController {
             pageParams.setCurrentPage(new Integer(simsFlowMonthlyRequest.getCurrentPage()));
         }
 
-        return iotSimFlowQueryService.querySimFlowUsedMonthly(simsFlowMonthlyRequest);
+        return iotSimFlowQueryService.querySimFlowUsedMonthly(simsFlowMonthlyRequest, pageParams);
     }
 
 }

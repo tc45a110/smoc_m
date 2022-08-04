@@ -29,5 +29,5 @@ public interface IotPackageUsedMonthlyRepository extends JpaRepository<IotPackag
      * @param pageParams
      * @return
      */
-    PageList<IotAccountPackageInfoMonthly> page(String account, String queryMonth, String packageId, PageParams<IotAccountPackageInfo> pageParams);
+    PageList<IotAccountPackageInfoMonthly> page(String account, String queryMonth, String packageId, PageParams pageParams);
 }

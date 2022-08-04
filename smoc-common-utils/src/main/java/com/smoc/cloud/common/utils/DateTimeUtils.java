@@ -389,6 +389,23 @@ public class DateTimeUtils {
 	}
 
 	/**
+	 * 获取上个月月份
+	 * @return
+	 */
+	public static final String getLastMonth() {
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMM");
+		Date date = new Date();
+		Calendar calendar = Calendar.getInstance();
+		// 设置为当前时间
+		calendar.setTime(date);
+		calendar.add(Calendar.MONTH,-1);
+		// 设置为上一个月
+		//calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) - 1);
+		date = calendar.getTime();
+		return format.format(date);
+	}
+
+	/**
 	 * 获取当月天数
 	 * 
 	 * @return

@@ -67,7 +67,7 @@ public class IotPackageUsedMonthlyRepositoryImpl extends BasePageRepository {
      * @param pageParams
      * @return
      */
-    public PageList<IotAccountPackageInfoMonthly> page(String account, String queryMonth, String packageId, PageParams<IotAccountPackageInfo> pageParams) {
+    public PageList<IotAccountPackageInfoMonthly> page(String account, String queryMonth, String packageId, PageParams pageParams) {
 
         //查询sql
         StringBuilder sqlBuffer = new StringBuilder("select ");
@@ -89,11 +89,14 @@ public class IotPackageUsedMonthlyRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(",t.PACKAGE_MONTH");
         sqlBuffer.append(",t.SETTLEMENT_STATUS");
         sqlBuffer.append(",t.DATA_STATUS");
-        sqlBuffer.append("  from iot_package_used_monthly t where t.ACCOUNT=? ");
+        sqlBuffer.append("  from iot_package_used_monthly t where (1=1)  ");
 
         //log.info("[sql]:{}", sqlBuffer);
         List<Object> paramsList = new ArrayList<Object>();
-        paramsList.add(account);
+        if (!StringUtils.isEmpty(account)) {
+            sqlBuffer.append(" and t.ACCOUNT=? ");
+            paramsList.add(account);
+        }
         if (!StringUtils.isEmpty(queryMonth)) {
             sqlBuffer.append(" and t.PACKAGE_MONTH=? ");
             paramsList.add(queryMonth);
