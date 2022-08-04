@@ -16,6 +16,8 @@ public class ManagerCarrierStatisticQo {
 
     private BigDecimal carrierData;
 
+    private String[] date;
+
     private BigDecimal[] cmccArray;
 
     private BigDecimal[] unicArray;

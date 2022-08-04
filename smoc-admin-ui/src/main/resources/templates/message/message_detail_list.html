@@ -1,14 +1,18 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:mpm="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <th:block th:insert="fragments/common_fragments :: common_header"/>
     <th:block th:insert="fragments/common_fragments :: common_css"/>
     <th:block th:insert="fragments/common_fragments :: dataTables_css"/>
     <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <!-- Custom box css -->
     <link th:href="@{/static/plugins/custombox/css/custombox.min.css}" rel="stylesheet">
     <link th:href="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.css}" rel="stylesheet">
     <link th:href="@{/static/css/detail_statistics.css}" rel="stylesheet">
+    <!-- Tooltipster css -->
+    <link rel="stylesheet" th:href="@{/static/plugins/tooltipster/tooltipster.bundle.min.css}">
 </head>
 <body>
 <!-- Loader start 页面加载进度-->
@@ -23,13 +27,13 @@
         <div class="row fixed-navigation">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">发送日志明细查询 </h4>
+                    <h4 class="page-title">发送日志明细查询(本地库) </h4>
                     <ol class="breadcrumb p-0 m-0">
                         <li>
                             运营数据
                         </li>
                         <li class="active">
-                            发送日志明细查询
+                            发送日志明细查询(本地库)
                         </li>
                     </ol>
                     <div class="clearfix"></div>
@@ -55,6 +59,7 @@
                                     <input type="text" class="form-control" placeholder="手机号" th:field="*{phoneNumber}" autocomplete="off">
                                 </div>
                                 <div class="form-group pull-right" style="text-align: right">
+                                    <input type="hidden" class="form-control" th:field="*{enterpriseFlag}" >
                                     <button sec:authorize-url="/message/detail/page" class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search"></i> 查询
                                     </button>
@@ -73,70 +78,84 @@
         <!-- end row -->
 
         <!-- start row  列表数据-->
-        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+        <div class="row"  th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
                 <div class="panel panel-color panel-info">
                     <div class="panel-heading">
-                        <h3 class="panel-title">发送日志明细列表</h3>
+                        <h3 class="panel-title">发送日志明细列表<small>&nbsp;系统默认查询三天内的数据</small></h3>
                     </div>
-                    <div class="panel-body">
-                        <div class="row" th:each="info:${list}">
-                            <div class="col-md-12">
-                                <div class="property-card property-horizontal" style="margin-bottom:10px;">
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <div class="property-content"
-                                                 style="height:240px">
-                                                <div class="listingInfo">
-                                                    <div class="">
-                                                        <h5 style="padding-left:10px">
-                                                            手机号：[[${info.phoneNumber}]]
-                                                        </h5>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">业务账号：[[${info.businessAccount}]]</p>
-                                                        <p style="font-size:12px">提交时间：[[${info.submitTime}]]</p>
-                                                        <p style="font-size:12px">下发时间：[[${info.createdTime}]]</p>
-                                                        <p style="font-size:12px">下发延迟时间：[[${info.delayTimes}]]秒</p>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">客户发送号码：[[${info.sendNumber}]]</p>
-                                                        <p style="font-size:12px">运营商：[[${info.carrier}]]</p>
-                                                        <p style="font-size:12px">通道ID：[[${info.channelId}]]</p>
-                                                        <p style="font-size:12px">总延迟时间：[[${info.totalDelayTimes}]]秒</p>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">客户提交方式：[[${info.submitStyle}]]</p>
-                                                        <p style="font-size:12px">地域：[[${info.area}]]</p>
-                                                        <p style="font-size:12px">状态报告回执时间：[[${info.reportTime}]]</p>
-                                                        <p style="font-size:12px">报告状态：[[${info.reportStatus}]]</p>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <p style="font-size:12px">签名：[[${info.sign}]]</p>
-                                                        <p style="font-size:12px">
-                                                           客户提交状态：[[${info.customerSubmitStatus}]]
-                                                        </p>
-                                                        <p style="font-size:12px">客户状态回执时间：[[${info.customerReportTime}]]</p>
-                                                        <p style="font-size:12px">客户状态回执：[[${info.customerStatus}]]</p>
-                                                    </div>
-                                                </div>
-                                                <div class="property-action">
-                                                    <span style="padding-left:10px;font-size:12px">
-                                                        短信内容：[[${info.messageContent}]]
-                                                    </span>
-                                                </div>
-                                                <!-- end. Card actions -->
-                                            </div>
-                                        </div>
-                                        <!-- /col 8 -->
-                                    </div>
-                                </div>
 
-                            </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table table-hover m-10" style="margin-top: -12px;table-layout:fixed;">
+                                <thead>
+                                <tr>
+                                    <th>业务账号/账号名称</th>
+                                    <th>运营商/业务类型</th>
+                                    <th>计费条数/手机号</th>
+                                    <th>省份/地市</th>
+                                    <th>通道/通道名称</th>
+                                    <th>状态码</th>
+                                    <th>提交时间/状态报告时间</th>
+                                    <th>耗时时长/短信内容</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="info:${list}">
+                                    <td style="line-height: 26px">
+                                        [[${info.businessAccount}]]<br>[[${info.accountName}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        <mpm:tag identity="carrier" show-type="label" key="code"
+                                                 th:value="${info.carrier}"/><br>
+                                        <mpm:tag identity="businessType" show-type="button"
+                                                 key="code" th:value="${info.businessType}"
+                                                 class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;MULTI_SMS,btn btn-brown btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;5G_SMS,btn btn-primary btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-inverse btn-rounded btn-sm waves-effect waves-light"/>
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px;">
+                                        [[${info.messageNumber}]]
+                                        <br>
+                                        [[${info.phoneNumber}]]
+                                    </td>
+
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        [[${info.area}]]&nbsp;
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        [[${info.channelId}]]<br>[[${info.channelName}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        [[${info.customerStatus}]]
+                                    </td>
+                                    <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
+                                        [[${info.submitTime}]]
+                                        <br>
+                                        [[${info.reportTime}]]
+                                    </td>
+                                    <td>
+                                        <br>
+                                        <span style="padding-left:10px;font-size:12px">
+                                            <span class="text-overflow" data-toggle="tooltip" data-placement="bottom"
+                                                  th:data-original-title="${info.messageContent}">[[${info.messageContent}]]</span>
+                                        </span>
+                                    </td>
+
+
+                                </tr>
+
+                                </tbody>
+
+                            </table>
+
+                            <hr>
                         </div>
+
                         <th:block th:insert="fragments/page_fragments :: page"/>
                     </div>
+
+
                 </div>
+
             </div>
 
         </div>
@@ -148,6 +167,7 @@
 
     </div> <!-- container -->
 </div> <!-- content -->
+
 <th:block th:insert="fragments/common_fragments :: common_js"/>
 <th:block th:insert="fragments/common_fragments :: select_js"/>
 <script th:src="@{/static/plugins/moment/moment.js}"></script>
@@ -157,19 +177,19 @@
 <script>
 
     $('#reportrange').daterangepicker({
-        format: 'YYYY-MM-DD',
+        format: 'YYYY-MM-DD HH:mm:ss',
         startDate: '[[${messageDetailInfoValidator.startDate}]]',
         endDate: '[[${messageDetailInfoValidator.endDate}]]',
         minDate: '2012-01-01',
         maxDate: '2080-12-31',
         dateLimit: {
-            days: 30
+            days: 2
         },
         showDropdowns: true,
         showWeekNumbers: true,
-        timePicker: false,
-        timePickerIncrement: 1,
-        timePicker12Hour: true,
+        timePicker: true,
+        pickTime:true,
+        timePicker24Hour: true, //时间制
         ranges: {
             '今天': [moment(), moment()],
             '昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
@@ -182,7 +202,7 @@
         buttonClasses: ['btn btn-default'],
         applyClass: 'btn-small btn-primary',
         cancelClass: 'btn-small',
-        format: 'YYYY-MM-DD',
+        format: 'YYYY-MM-DD HH:mm:ss',
         separator: ' - ',
         locale: {
             applyLabel: '确认',
@@ -190,7 +210,7 @@
             fromLabel: '从',
             toLabel: '到',
             customRangeLabel: '自定义',
-            format: "YYYY-MM-DD",
+            format: "YYYY-MM-DD HH:mm:ss",
             daysOfWeek: ['日', '一', '二', '三', '四', '五', '六'],
             monthNames: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
             firstDay: 1

@@ -1,22 +1,31 @@
 package com.smoc.cloud.message.controller;
 
+import com.smoc.cloud.common.auth.qo.Users;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
 import com.smoc.cloud.common.smoc.message.MessageDetailInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
+import com.smoc.cloud.customer.service.EnterpriseService;
 import com.smoc.cloud.message.service.MessageDetailInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * 消息明细
@@ -28,13 +37,16 @@ public class MessageDetailController {
     @Autowired
     private MessageDetailInfoService messageDetailInfoService;
 
+    @Autowired
+    private EnterpriseService enterpriseService;
+
     /**
      * 消息明细查询
      *
      * @return
      */
-    @RequestMapping(value = "/list1", method = RequestMethod.GET)
-    public ModelAndView list(HttpServletRequest request) {
+    @RequestMapping(value = "/list/{enterpriseFlag}", method = RequestMethod.GET)
+    public ModelAndView list(@PathVariable String enterpriseFlag, HttpServletRequest request) {
 
         ModelAndView view = new ModelAndView("message/message_detail_list");
 
@@ -43,9 +55,10 @@ public class MessageDetailController {
         params.setPageSize(10);
         params.setCurrentPage(1);
         MessageDetailInfoValidator messageDetailInfoValidator = new MessageDetailInfoValidator();
-        Date startDate = DateTimeUtils.getFirstMonth(1);
-        messageDetailInfoValidator.setStartDate(DateTimeUtils.getDateFormat(startDate));
-        messageDetailInfoValidator.setEndDate(DateTimeUtils.getDateFormat(new Date()));
+        Date startDate = DateTimeUtils.dateAddDays(new Date(),-2);
+        messageDetailInfoValidator.setStartDate(DateTimeUtils.getDateTimeFormat(startDate));
+        messageDetailInfoValidator.setEndDate(DateTimeUtils.getDateTimeFormat(new Date()));
+        messageDetailInfoValidator.setEnterpriseFlag(enterpriseFlag);
         params.setParams(messageDetailInfoValidator);
 
         //查询
@@ -67,7 +80,7 @@ public class MessageDetailController {
      *
      * @return
      */
-    @RequestMapping(value = "/page1", method = RequestMethod.POST)
+    @RequestMapping(value = "/page", method = RequestMethod.POST)
     public ModelAndView page(@ModelAttribute MessageDetailInfoValidator messageDetailInfoValidator, PageParams pageParams) {
         ModelAndView view = new ModelAndView("message/message_detail_list");
 
@@ -93,5 +106,60 @@ public class MessageDetailController {
 
         return view;
 
+    }
+
+    /**
+     * EC检索
+     * @return
+     */
+    @RequestMapping(value = "/ec/customer/search", method = RequestMethod.GET)
+    public ModelAndView search() {
+        ModelAndView view = new ModelAndView("message/search/search_list");
+
+        //初始化数据
+        PageParams<EnterpriseBasicInfoValidator> params = new PageParams<EnterpriseBasicInfoValidator>();
+        params.setPageSize(10);
+        params.setCurrentPage(1);
+        EnterpriseBasicInfoValidator enterpriseBasicInfoValidator = new EnterpriseBasicInfoValidator();
+        enterpriseBasicInfoValidator.setFlag("1");//不查询认证企业
+        params.setParams(enterpriseBasicInfoValidator);
+
+        //查询
+        ResponseData<PageList<EnterpriseBasicInfoValidator>> data = enterpriseService.page(params);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("enterpriseBasicInfoValidator", enterpriseBasicInfoValidator);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
+
+        return view;
+    }
+
+    /**
+     * EC检索
+     * @return
+     */
+    @RequestMapping(value = "/ec/customer/search/page", method = RequestMethod.POST)
+    public ModelAndView page(@ModelAttribute EnterpriseBasicInfoValidator enterpriseBasicInfoValidator, PageParams pageParams) {
+        ModelAndView view = new ModelAndView("message/search/search_list");
+
+        //分页查询
+        enterpriseBasicInfoValidator.setFlag("1");//不查询认证企业
+        pageParams.setParams(enterpriseBasicInfoValidator);
+
+        ResponseData<PageList<EnterpriseBasicInfoValidator>> data = enterpriseService.page(pageParams);
+        if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            view.addObject("error", data.getCode() + ":" + data.getMessage());
+            return view;
+        }
+
+        view.addObject("enterpriseBasicInfoValidator", enterpriseBasicInfoValidator);
+        view.addObject("list", data.getData().getList());
+        view.addObject("pageParams", data.getData().getPageParams());
+
+        return view;
     }
 }

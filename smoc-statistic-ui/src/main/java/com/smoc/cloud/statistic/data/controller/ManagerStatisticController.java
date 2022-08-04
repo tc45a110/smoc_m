@@ -95,7 +95,7 @@ public class ManagerStatisticController {
     }
 
     /**
-     * 运营管理综合日统计-查询
+     * 运营管理综合月统计-查询
      * @param managerStatisticQo
      * @param request
      * @return
@@ -136,6 +136,7 @@ public class ManagerStatisticController {
 
         ManagerCarrierStatisticQo managerCarrierStatisticQo = new ManagerCarrierStatisticQo();
         managerCarrierStatisticQo.setStartDate(DateTimeUtils.getMonth());
+        managerCarrierStatisticQo.setStatisticType("01");
 
         view.addObject("managerCarrierStatisticQo",managerCarrierStatisticQo);
         return view;
@@ -161,11 +162,13 @@ public class ManagerStatisticController {
      * @param request
      * @return
      */
-    @RequestMapping(value = "/carrier/month/ajax/{startDate}", method = RequestMethod.POST)
-    public ManagerCarrierStatisticQo managerCarrierMonthStatistic(@ModelAttribute ManagerCarrierStatisticQo managerCarrierStatisticQo, HttpServletRequest request) {
+    @RequestMapping(value = "/carrier/month/ajax/{startDate}/{statisticType}", method = RequestMethod.GET)
+    public ManagerCarrierStatisticQo managerCarrierMonthStatistic(@PathVariable String startDate, @PathVariable String statisticType,  HttpServletRequest request) {
 
-        managerCarrierStatisticQo.setStartDate(DateTimeUtils.dateAddMonthsStr(managerCarrierStatisticQo.getStartDate(),-24));
+        ManagerCarrierStatisticQo managerCarrierStatisticQo = new ManagerCarrierStatisticQo();
+        managerCarrierStatisticQo.setStartDate(DateTimeUtils.dateAddMonthsStr(managerCarrierStatisticQo.getStartDate(),-12));
         managerCarrierStatisticQo.setEndDate(managerCarrierStatisticQo.getStartDate());
+        managerCarrierStatisticQo.setStatisticType(statisticType);
 
         ManagerCarrierStatisticQo statisticModel = managerStatisticsService.managerCarrierMonthStatistic(managerCarrierStatisticQo);
 

@@ -34,7 +34,7 @@ public class TableStoreMessageDetailController {
      *
      * @return
      */
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    @RequestMapping(value = "/tablestore/list", method = RequestMethod.GET)
     public ModelAndView list(HttpServletRequest request) {
 
         ModelAndView view = new ModelAndView("message/tablestore_message_detail_list");
@@ -68,7 +68,7 @@ public class TableStoreMessageDetailController {
      *
      * @return
      */
-    @RequestMapping(value = "/page", method = RequestMethod.POST)
+    @RequestMapping(value = "/tablestore/page", method = RequestMethod.POST)
     public ModelAndView page(@ModelAttribute TableStoreMessageDetailInfoValidator messageDetailInfoValidator, PageParams pageParams) {
         ModelAndView view = new ModelAndView("message/tablestore_message_detail_list");
 

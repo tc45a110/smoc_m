@@ -17,6 +17,8 @@ public class MessageDetailInfoValidator {
 
     private String businessAccount;
 
+    private String accountName;
+
     private String sendNumber;
 
     private String submitStyle;
@@ -34,6 +36,8 @@ public class MessageDetailInfoValidator {
     private String sendTime;
 
     private String channelId;
+
+    private String channelName;
 
     private String reportTime;
 
@@ -63,4 +67,6 @@ public class MessageDetailInfoValidator {
     private String enterpriseFlag;
 
     private String businessType;
+
+    private int messageNumber;
 }

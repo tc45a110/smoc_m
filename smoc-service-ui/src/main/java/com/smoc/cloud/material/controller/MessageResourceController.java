@@ -419,9 +419,8 @@ public class MessageResourceController {
                 filePath = "/" + nowDay + "/" + user.getOrganization() + "/" + uuid + "." + suffixName;
 
                 File desFile = new File(resourceProperties.getResourceFileRootPath() + filePath);
-                if (!desFile.getParentFile().exists()) {
+                if (!desFile.getParentFile().exists())
                     desFile.getParentFile().mkdirs();
-                }
 
                 //file.transferTo(desFile);
                 FileUtils.copyInputStreamToFile(file.getInputStream(), desFile);

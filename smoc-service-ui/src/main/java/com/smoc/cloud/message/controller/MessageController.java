@@ -773,11 +773,15 @@ public class MessageController {
                     return result;
                 }
 
-                File desFile = new File(smocProperties.getMobileFileRootPath() + "/" + nowDay + "/"+ user.getOrganization());
+                /*File desFile = new File(smocProperties.getMobileFileRootPath() + "/" + nowDay + "/"+ user.getOrganization());
                 if(!desFile.getParentFile().exists()){
                     desFile.mkdirs();
-                }
+                }*/
                 File originalFile = new File(smocProperties.getMobileFileRootPath() + filePath);
+                if(!originalFile.getParentFile().exists()){
+                    //originalFile.mkdirs();
+                    originalFile.getParentFile().mkdirs();
+                }
                 originalAttachmentSize = file.getSize();
                 file.transferTo(originalFile);
 /*

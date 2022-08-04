@@ -41,73 +41,82 @@ public class MessageDetailInfoRepositoryImpl extends BasePageRepository {
         MessageDetailInfoValidator qo = pageParams.getParams();
 
         //查询sql
-        StringBuilder sqlBuffer = new StringBuilder("select ");
+        StringBuilder sql = new StringBuilder("select ");
+        sql.append(" count(*) messageTotal ");
+        sql.append(" from information_schema.TABLES where TABLE_SCHEMA = 'smoc_route' AND TABLE_NAME = 'enterprise_message_mr_info_"+qo.getEnterpriseFlag()+"' ");
+        Long messageTotal = jdbcTemplate.queryForObject(sql.toString(), Long.class);
 
-        sqlBuffer.append(" t.ID,");
-        sqlBuffer.append(" t.BUSINESS_ACCOUNT,");
-        sqlBuffer.append(" t.PHONE_NUMBER,");
-        sqlBuffer.append(" t.SUBMIT_TIME,");
-        sqlBuffer.append(" t.SEND_NUMBER,");
-        sqlBuffer.append(" t.SUBMIT_STYLE,");
-        sqlBuffer.append(" t.SIGN,");
-        sqlBuffer.append(" t.CARRIER,");
-        sqlBuffer.append(" t.AREA,");
-        sqlBuffer.append(" t.CUSTOMER_SUBMIT_STATUS,");
-        sqlBuffer.append(" t.SEND_TIME,");
-        sqlBuffer.append(" t.CHANNEL_ID,");
-        sqlBuffer.append(" t.REPORT_TIME,");
-        sqlBuffer.append(" t.REPORT_STATUS,");
-        sqlBuffer.append(" t.CUSTOMER_REPORT_TIME,");
-        sqlBuffer.append(" t.DELAY_TIMES,");
-        sqlBuffer.append(" t.TOTAL_DELAY_TIMES,");
-        sqlBuffer.append(" t.CUSTOMER_STATUS,");
-        sqlBuffer.append(" t.MESSAGE_CONTENT,");
-        sqlBuffer.append(" t.CREATED_BY,");
-        sqlBuffer.append(" DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME ");
-        sqlBuffer.append(" from message_detail_info t ");
-        sqlBuffer.append(" where (1=1) ");
+        if(messageTotal>=1){
+            //查询sql
+            StringBuilder sqlBuffer = new StringBuilder("select ");
+            sqlBuffer.append(" t.ID,");
+            sqlBuffer.append(" t.ACCOUNT_ID,");
+            sqlBuffer.append(" t.PHONE_NUMBER,");
+            sqlBuffer.append(" t.CARRIER,");
+            sqlBuffer.append(" t.AREA_NAME,");
+            sqlBuffer.append(" t.REPORT_TIME,");
+            sqlBuffer.append(" t.SUBMIT_TIME,");
+            sqlBuffer.append(" t.STATUS_CODE,");
+            sqlBuffer.append(" t.MESSAGE_CONTENT,");
+            sqlBuffer.append(" t.MESSAGE_TOTAL,");
+            sqlBuffer.append(" t.SIGN");
 
-        List<Object> paramsList = new ArrayList<Object>();
+            sqlBuffer.append(" from smoc_route.enterprise_message_mr_info_"+qo.getEnterpriseFlag()+" t ");
+            sqlBuffer.append(" where (1=1) ");
 
-        //手机号
-        if (!StringUtils.isEmpty(qo.getPhoneNumber())) {
-            sqlBuffer.append(" and t.PHONE_NUMBER =?");
-            paramsList.add(qo.getPhoneNumber().trim());
+            List<Object> paramsList = new ArrayList<Object>();
+
+            //手机号
+            if (!StringUtils.isEmpty(qo.getPhoneNumber())) {
+                sqlBuffer.append(" and t.PHONE_NUMBER =?");
+                paramsList.add(qo.getPhoneNumber().trim());
+            }
+
+            //业务账号
+            if (!StringUtils.isEmpty(qo.getBusinessAccount())) {
+                sqlBuffer.append(" and t.BUSINESS_ACCOUNT =?");
+                paramsList.add(qo.getBusinessAccount().trim());
+            }
+
+            //运营商
+            if (!StringUtils.isEmpty(qo.getCarrier())) {
+                sqlBuffer.append(" and t.CARRIER =?");
+                paramsList.add(qo.getCarrier().trim());
+            }
+
+            //时间起
+            if (!StringUtils.isEmpty(qo.getStartDate())) {
+                sqlBuffer.append(" and DATE_FORMAT(t.CREATED_TIME,'%Y-%m-%d') >=? ");
+                paramsList.add(qo.getStartDate().trim());
+            }
+            //时间止
+            if (!StringUtils.isEmpty(qo.getEndDate())) {
+                sqlBuffer.append(" and DATE_FORMAT(t.CREATED_TIME,'%Y-%m-%d') <=? ");
+                paramsList.add(qo.getEndDate().trim());
+            }
+
+            sqlBuffer.append(" order by t.CREATED_TIME desc");
+            //log.info("[SQL]:{}",sqlBuffer);
+            //根据参数个数，组织参数值
+            Object[] params = new Object[paramsList.size()];
+            paramsList.toArray(params);
+            //log.info("[SQL1]:{}",sqlBuffer);
+            PageList<MessageDetailInfoValidator> pageList = this.queryByPageForMySQL(sqlBuffer.toString(), params, pageParams.getCurrentPage(), pageParams.getPageSize(), new MessageDetailInfoRowMapper());
+            pageList.getPageParams().setParams(qo);
+            return pageList;
         }
 
-        //业务账号
-        if (!StringUtils.isEmpty(qo.getBusinessAccount())) {
-            sqlBuffer.append(" and t.BUSINESS_ACCOUNT =?");
-            paramsList.add(qo.getBusinessAccount().trim());
-        }
 
-        //运营商
-        if (!StringUtils.isEmpty(qo.getCarrier())) {
-            sqlBuffer.append(" and t.CARRIER =?");
-            paramsList.add(qo.getCarrier().trim());
-        }
+        //返回分页格式数据
+        PageList<MessageDetailInfoValidator> pageList = new PageList<>();
+        //设置当前页
+        pageList.getPageParams().setCurrentPage(pageParams.getCurrentPage());
+        //设置每页显示条数
+        pageList.getPageParams().setPageSize(pageParams.getPageSize());
+        //设置当前页数据
+        pageList.setList(null);
 
-        //时间起
-        if (!StringUtils.isEmpty(qo.getStartDate())) {
-            sqlBuffer.append(" and DATE_FORMAT(t.CREATED_TIME,'%Y-%m-%d') >=? ");
-            paramsList.add(qo.getStartDate().trim());
-        }
-        //时间止
-        if (!StringUtils.isEmpty(qo.getEndDate())) {
-            sqlBuffer.append(" and DATE_FORMAT(t.CREATED_TIME,'%Y-%m-%d') <=? ");
-            paramsList.add(qo.getEndDate().trim());
-        }
-
-        sqlBuffer.append(" order by t.CREATED_TIME desc");
-        //log.info("[SQL]:{}",sqlBuffer);
-        //根据参数个数，组织参数值
-        Object[] params = new Object[paramsList.size()];
-        paramsList.toArray(params);
-        //log.info("[SQL1]:{}",sqlBuffer);
-        PageList<MessageDetailInfoValidator> pageList = this.queryByPageForMySQL(sqlBuffer.toString(), params, pageParams.getCurrentPage(), pageParams.getPageSize(), new MessageDetailInfoRowMapper());
-        pageList.getPageParams().setParams(qo);
         return pageList;
-
     }
 
     public int statisticMessageNumber(MessageDetailInfoValidator qo){

@@ -119,37 +119,76 @@ public class ManagerStatisticsService {
      * @return
      */
     public ManagerCarrierStatisticQo managerCarrierMonthStatistic(ManagerCarrierStatisticQo managerCarrierStatisticQo) {
-       /* ResponseData<List<ManagerCarrierStatisticQo>> responseData = this.managerStatisticsFeignClient.managerCarrierMonthStatistic(managerCarrierStatisticQo);
-        List<ManagerCarrierStatisticQo> list = responseData.getData();*/
+        ResponseData<List<ManagerCarrierStatisticQo>> responseData = this.managerStatisticsFeignClient.managerCarrierMonthStatistic(managerCarrierStatisticQo);
+        List<ManagerCarrierStatisticQo> list = responseData.getData();
 
         //封装月份
-        /*Map<String, Map<String,String>> monthMap = buildCarrierMonthStatistics(managerCarrierStatisticQo.getEndDate(),12);
+        Map<String, Map<String,BigDecimal>> monthMap = buildCarrierMonthStatistics(managerCarrierStatisticQo.getEndDate(),12);
         if(!StringUtils.isEmpty(list) && list.size()>0){
             for(int i=0;i<list.size();i++){
 
-                monthMap
-
                 ManagerCarrierStatisticQo info = list.get(i);
-                Map<String,String> map = monthMap.get(info.getMessageDate());
-                map.put(info.getCarrier(),""+info.getCarrierData());
+                Map<String,BigDecimal> map = monthMap.get(info.getMessageDate());
 
+                int a = 1;
+                for(ManagerCarrierStatisticQo qo: list){
+                    if(info.getMessageDate().equals(qo.getMessageDate())){
+                        map.put(qo.getCarrier(),qo.getCarrierData());
+                        a++;
+                    }
+                    if(a==4){
+                        break;
+                    }
+                }
 
-                monthMap.put(info.getMessageDate(),info);
+                monthMap.put(info.getMessageDate(),map);
             }
-        }*/
+        }
 
+        //月份
+        String[] month = new String[monthMap.size()];
+        //发送量
+        BigDecimal[] cmccArray = new BigDecimal[monthMap.size()];
+        //营收
+        BigDecimal[] unicArray = new BigDecimal[monthMap.size()];
+        //净利润
+        BigDecimal[] telcArray = new BigDecimal[monthMap.size()];
+        //净利润
+        BigDecimal[] intlArray = new BigDecimal[monthMap.size()];
+
+        int i = 0;
+        for (String key : monthMap.keySet()) {
+            Map<String,BigDecimal> info = monthMap.get(key);
+            month[i] = key;
+
+            for(String infoKey : info.keySet()){
+                cmccArray[i] = info.get(key);
+                unicArray[i] = info.get(key);
+                telcArray[i] = info.get(key);
+                intlArray[i] = info.get(key);
+            }
+
+            i++;
+        }
 
         ManagerCarrierStatisticQo model = new ManagerCarrierStatisticQo();
+        model.setDate(month);
+        model.setCmccArray(cmccArray);
+        model.setUnicArray(unicArray);
+        model.setTelcArray(telcArray);
+        model.setIntlArray(intlArray);
 
         return model;
     }
+
+
 
     /**
      * 查询当前月份和向后推N个月
      *
      * @return
      */
-    public static Map<String, ManagerStatisticQo> buildMonthStatistics(String startDate, int a) {
+    public Map<String, ManagerStatisticQo> buildMonthStatistics(String startDate, int a) {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
         // 当前月份
@@ -158,7 +197,6 @@ public class ManagerStatisticsService {
             nowDate = sdf.parse(startDate);
             Map<String, ManagerStatisticQo> map = new TreeMap<String, ManagerStatisticQo>();
             map.put(startDate, new ManagerStatisticQo());
-            int z = 1;
             for (int i = 1; i < a; i++) {
                 Date subtract = DateTimeUtils.dateAddMonths(nowDate, -i);
                 map.put(sdf.format(subtract), new ManagerStatisticQo());
@@ -171,5 +209,30 @@ public class ManagerStatisticsService {
         return null;
     }
 
+    private Map<String, Map<String, BigDecimal>> buildCarrierMonthStatistics(String startDate, int a) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+        // 当前月份
+        Date nowDate;
+        try {
+            nowDate = sdf.parse(startDate);
+            Map<String, Map<String, BigDecimal>> map = new TreeMap<String, Map<String, BigDecimal>>();
+            for (int i = 1; i < a; i++) {
+                Date subtract = DateTimeUtils.dateAddMonths(nowDate, -i);
+
+                Map<String, BigDecimal> info = new TreeMap<String, BigDecimal>();
+                info.put("CMCC",new BigDecimal(0));
+                info.put("UNIC",new BigDecimal(0));
+                info.put("TELC",new BigDecimal(0));
+                info.put("INTL",new BigDecimal(0));
+
+                map.put(sdf.format(subtract), info);
+            }
+
+            return map;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 }

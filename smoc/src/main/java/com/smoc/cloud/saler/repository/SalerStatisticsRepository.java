@@ -55,10 +55,11 @@ public class SalerStatisticsRepository extends BasePageRepository {
     public Map<String, Object> getCustomerUsableTotal(String salerId) {
         StringBuffer sqlBuffer = new StringBuffer("select");
         sqlBuffer.append("  IFNULL(ROUND(sum(t.ACCOUNT_USABLE_SUM),2),0) ACCOUNT_USABLE_SUM ");
-        sqlBuffer.append("  from finance_account t left join account_base_info a ON t.ACCOUNT_ID = a.ACCOUNT_ID ");
-        sqlBuffer.append("  left join account_finance_info b ON t.ACCOUNT_ID = b.ACCOUNT_ID ");
-        sqlBuffer.append("  left join enterprise_basic_info e ON a.ENTERPRISE_ID = e.ENTERPRISE_ID ");
-        sqlBuffer.append("  where e.SALER = ? and b.PAY_TYPE = 1 ");
+        sqlBuffer.append("  from (select t.ACCOUNT_ID from account_finance_info t where t.PAY_TYPE=1 group by t.ACCOUNT_ID)a ");
+        sqlBuffer.append("  left join finance_account t on a.ACCOUNT_ID=t.ACCOUNT_ID ");
+        sqlBuffer.append("  left join account_base_info n ON a.ACCOUNT_ID = n.ACCOUNT_ID ");
+        sqlBuffer.append("  left join enterprise_basic_info e ON n.ENTERPRISE_ID = e.ENTERPRISE_ID ");
+        sqlBuffer.append("  where e.SALER = ? ");
 
         Object[] params = new Object[1];
         params[0] = salerId;
@@ -74,10 +75,11 @@ public class SalerStatisticsRepository extends BasePageRepository {
     public Map<String, Object> getCustomerUsableTotalLater(String salerId) {
         StringBuffer sqlBuffer = new StringBuffer("select");
         sqlBuffer.append("  IFNULL(ROUND(sum(t.ACCOUNT_USABLE_SUM),2),0) ACCOUNT_LATER_USABLE_SUM ");
-        sqlBuffer.append("  from finance_account t left join account_base_info a ON t.ACCOUNT_ID = a.ACCOUNT_ID ");
-        sqlBuffer.append("  left join account_finance_info b ON t.ACCOUNT_ID = b.ACCOUNT_ID ");
-        sqlBuffer.append("  left join enterprise_basic_info e ON a.ENTERPRISE_ID = e.ENTERPRISE_ID ");
-        sqlBuffer.append("  where e.SALER = ? and b.PAY_TYPE = 2 ");
+        sqlBuffer.append("  from (select t.ACCOUNT_ID from account_finance_info t where t.PAY_TYPE=2 group by t.ACCOUNT_ID)a ");
+        sqlBuffer.append("  left join finance_account t on a.ACCOUNT_ID=t.ACCOUNT_ID ");
+        sqlBuffer.append("  left join account_base_info n ON a.ACCOUNT_ID = n.ACCOUNT_ID ");
+        sqlBuffer.append("  left join enterprise_basic_info e ON n.ENTERPRISE_ID = e.ENTERPRISE_ID ");
+        sqlBuffer.append("  where e.SALER = ? ");
 
         Object[] params = new Object[1];
         params[0] = salerId;

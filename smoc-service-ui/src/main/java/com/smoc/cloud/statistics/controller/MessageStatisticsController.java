@@ -13,6 +13,7 @@ import com.smoc.cloud.common.smoc.message.MessageDetailInfoValidator;
 import com.smoc.cloud.common.smoc.message.MessageWebTaskInfoValidator;
 import com.smoc.cloud.common.smoc.message.model.StatisticMessageSendData;
 import com.smoc.cloud.common.utils.DateTimeUtils;
+import com.smoc.cloud.message.service.EnterpriseService;
 import com.smoc.cloud.statistics.service.StatisticsMessageService;
 import com.smoc.cloud.user.service.WebEnterpriseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,9 @@ public class MessageStatisticsController {
     @Autowired
     private WebEnterpriseService webEnterpriseService;
 
+    @Autowired
+    private EnterpriseService enterpriseService;
+
     /**
      * 统计发送量
      * @param request
@@ -57,11 +61,19 @@ public class MessageStatisticsController {
 
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
 
+        //查询企业，获取标识
+        ResponseData<EnterpriseBasicInfoValidator> enterpriseData = enterpriseService.findById(user.getOrganization());
+        if (!ResponseCode.SUCCESS.getCode().equals(enterpriseData.getCode())) {
+            view.addObject("error", enterpriseData.getCode() + ":" + enterpriseData.getMessage());
+            return view;
+        }
+
         //初始化数据
         PageParams<StatisticMessageSendData> params = new PageParams<>();
         params.setPageSize(10);
         params.setCurrentPage(1);
         StatisticMessageSendData statisticMessageSendData = new StatisticMessageSendData();
+        statisticMessageSendData.setEnterpriseFlag(enterpriseData.getData().getEnterpriseFlag().toLowerCase());
         statisticMessageSendData.setBusinessType(businessType);
         Date startDate = DateTimeUtils.getFirstMonth(1);
         statisticMessageSendData.setStartDate(DateTimeUtils.getDateFormat(startDate));
@@ -108,8 +120,15 @@ public class MessageStatisticsController {
             view = new ModelAndView("statistics/message_send_number_list_carrier");
         }
 
+        //查询企业，获取标识
+        ResponseData<EnterpriseBasicInfoValidator> enterpriseData = enterpriseService.findById(user.getOrganization());
+        if (!ResponseCode.SUCCESS.getCode().equals(enterpriseData.getCode())) {
+            view.addObject("error", enterpriseData.getCode() + ":" + enterpriseData.getMessage());
+            return view;
+        }
 
         //分页查询
+        statisticMessageSendData.setEnterpriseFlag(enterpriseData.getData().getEnterpriseFlag().toLowerCase());
         if (!StringUtils.isEmpty(statisticMessageSendData.getStartDate())) {
             String[] date = statisticMessageSendData.getStartDate().split(" - ");
             statisticMessageSendData.setStartDate(StringUtils.trimWhitespace(date[0]));

@@ -115,9 +115,8 @@ public class IndexStatisticsRepository  extends BasePageRepository {
     public Map<String, Object> getCountUsableAccount() {
         StringBuffer sqlBuffer = new StringBuffer("select");
         sqlBuffer.append("  IFNULL(ROUND(sum(t.ACCOUNT_USABLE_SUM),2),0) ACCOUNT_USABLE_SUM ");
-        sqlBuffer.append("  from finance_account t ");
-        sqlBuffer.append("  left join account_finance_info b ON t.ACCOUNT_ID = b.ACCOUNT_ID ");
-        sqlBuffer.append("  where b.PAY_TYPE = 1 ");
+        sqlBuffer.append("  from (select t.ACCOUNT_ID from account_finance_info t where t.PAY_TYPE=1 group by t.ACCOUNT_ID)a ");
+        sqlBuffer.append("  left join finance_account t on a.ACCOUNT_ID=t.ACCOUNT_ID ");
 
         Map<String, Object> map = jdbcTemplate.queryForMap(sqlBuffer.toString());
         return map;
@@ -130,9 +129,8 @@ public class IndexStatisticsRepository  extends BasePageRepository {
     public Map<String, Object> getUsableTotalLater() {
         StringBuffer sqlBuffer = new StringBuffer("select");
         sqlBuffer.append("  IFNULL(ROUND(sum(t.ACCOUNT_USABLE_SUM),2),0) ACCOUNT_LATER_USABLE_SUM ");
-        sqlBuffer.append("  from finance_account t ");
-        sqlBuffer.append("  left join account_finance_info b ON t.ACCOUNT_ID = b.ACCOUNT_ID ");
-        sqlBuffer.append("  where b.PAY_TYPE = 2 ");
+        sqlBuffer.append("  from (select t.ACCOUNT_ID from account_finance_info t where t.PAY_TYPE=2 group by t.ACCOUNT_ID)a ");
+        sqlBuffer.append("  left join finance_account t on a.ACCOUNT_ID=t.ACCOUNT_ID ");
 
         Map<String, Object> map = jdbcTemplate.queryForMap(sqlBuffer.toString());
         return map;

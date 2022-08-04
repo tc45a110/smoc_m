@@ -1,6 +1,7 @@
 package com.smoc.cloud.spss.controller;
 
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.spss.qo.ManagerCarrierStatisticQo;
 import com.smoc.cloud.common.smoc.spss.qo.ManagerStatisticQo;
 import com.smoc.cloud.spss.service.ManagerStatisticsService;
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +44,17 @@ public class ManagerStatisticsController {
     public ResponseData<List<ManagerStatisticQo>> managerMonthStatistic(@RequestBody ManagerStatisticQo managerStatisticQo){
 
         return managerStatisticsService.managerMonthStatistic(managerStatisticQo);
+    }
+
+    /**
+     * 运营管理运营商按月分类统计
+     * @param managerCarrierStatisticQo
+     * @return
+     */
+    @RequestMapping(value = "/carrier/month/managerCarrierMonthStatistic", method = RequestMethod.POST)
+    public ResponseData<List<ManagerCarrierStatisticQo>> managerCarrierMonthStatistic(@RequestBody ManagerCarrierStatisticQo managerCarrierStatisticQo){
+
+        return managerStatisticsService.managerCarrierMonthStatistic(managerCarrierStatisticQo);
     }
 
 }

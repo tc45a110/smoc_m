@@ -2,8 +2,10 @@ package com.smoc.cloud.spss.repository;
 
 import com.smoc.cloud.common.BasePageRepository;
 import com.smoc.cloud.common.smoc.spss.model.StatisticModel;
+import com.smoc.cloud.common.smoc.spss.qo.ManagerCarrierStatisticQo;
 import com.smoc.cloud.common.smoc.spss.qo.ManagerStatisticQo;
 import com.smoc.cloud.customer.rowmapper.AccountStatisticSendRowMapper;
+import com.smoc.cloud.spss.rowmapper.ManagerCarrierStatisticModelRowMapper;
 import com.smoc.cloud.spss.rowmapper.ManagerStatisticModelRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -89,6 +91,32 @@ public class ManagerStatisticsRepository extends BasePageRepository {
         paramsList.toArray(params);
 
         List<ManagerStatisticQo> list = this.queryForObjectList(sqlBuffer.toString(), params, new ManagerStatisticModelRowMapper());
+        return list;
+    }
+
+    /**
+     * 运营管理运营商按月分类统计
+     * @param managerCarrierStatisticQo
+     * @return
+     */
+    public List<ManagerCarrierStatisticQo> managerCarrierMonthStatistic(ManagerCarrierStatisticQo managerCarrierStatisticQo) {
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append(" DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m')MESSAGE_DATE,");
+        sqlBuffer.append(" t.CARRIER,");
+        sqlBuffer.append(" sum(t.MESSAGE_SUCCESS_NUM)MESSAGE_SUCCESS_NUM,");
+        sqlBuffer.append(" from message_daily_statistics t where DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m')>=? and DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m')<=? ");
+        sqlBuffer.append(" group by DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m'),t.CARRIER order by DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m') ");
+
+        List<Object> paramsList = new ArrayList<Object>();
+        paramsList.add(managerCarrierStatisticQo.getStartDate());
+        paramsList.add(managerCarrierStatisticQo.getEndDate());
+
+        //根据参数个数，组织参数值
+        Object[] params = new Object[paramsList.size()];
+        paramsList.toArray(params);
+
+        List<ManagerCarrierStatisticQo> list = this.queryForObjectList(sqlBuffer.toString(), params, new ManagerCarrierStatisticModelRowMapper());
         return list;
     }
 }
