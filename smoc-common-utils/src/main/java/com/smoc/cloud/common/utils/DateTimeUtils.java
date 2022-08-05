@@ -204,6 +204,22 @@ public class DateTimeUtils {
 	}
 
 	/**
+	 * 时间格式化到毫秒
+	 *
+	 * @param date
+	 * @return
+	 */
+	public static Date getDateTimeSSSFormat(String date) {
+		try {
+			DateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS");
+			return dateTimeFormat.parse(date);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
 	 * 获取当前日期(yyyy-MM-dd)
 	 * 
 	 * @param
@@ -705,6 +721,30 @@ public class DateTimeUtils {
 	 */
 	public static int dateBetweenIncludeToday(Date startDate, Date endDate) throws ParseException {
 		return dateBetween(startDate, endDate) + 1;
+	}
+
+	/**
+	 * 获取两个日期相减得到毫秒
+	 *
+	 * @param startDate
+	 * @param endDate
+	 * @return
+	 * @throws ParseException
+	 */
+	public static Long getTimeInMillis(Date startDate, Date endDate){
+		Calendar nowDate=Calendar.getInstance();
+
+		Calendar oldDate=Calendar.getInstance();
+
+		nowDate.setTime(startDate);
+
+		oldDate.setTime(endDate);
+
+		Long timeNow=nowDate.getTimeInMillis();
+
+		Long timeOld=oldDate.getTimeInMillis();
+
+		return (timeNow-timeOld)/1000;//相差毫秒数
 	}
 	
 	/**

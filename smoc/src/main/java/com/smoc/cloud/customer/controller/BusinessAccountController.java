@@ -248,4 +248,16 @@ public class BusinessAccountController {
 
         return businessAccountService.queryAccountSendStatistics(pageParams);
     }
+
+    /**
+     *  查询所有账号
+     * @param accountBasicInfoValidator
+     * @return
+     */
+    @RequestMapping(value = "/accountList", method = RequestMethod.POST)
+    public ResponseData<List<AccountBasicInfoValidator>> accountList(@RequestBody AccountBasicInfoValidator accountBasicInfoValidator)  {
+
+        ResponseData<List<AccountBasicInfoValidator>> data = businessAccountService.accountList(accountBasicInfoValidator);
+        return data;
+    }
 }

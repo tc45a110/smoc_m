@@ -28,9 +28,6 @@ public class MessageDetailInfoService {
     private MessageDetailInfoRepository messageDetailInfoRepository;
 
     @Resource
-    private TableStoreMessageDetailInfoRepository tableStoreMessageDetailInfoRepository;
-
-    @Resource
     private SystemErrorCodeService systemErrorCodeService;
 
     /**
@@ -41,6 +38,19 @@ public class MessageDetailInfoService {
     public ResponseData<PageList<MessageDetailInfoValidator>> page(PageParams<MessageDetailInfoValidator> pageParams){
 
         PageList<MessageDetailInfoValidator> page = messageDetailInfoRepository.page(pageParams);
+
+        //匹配错误码描述
+        List<MessageDetailInfoValidator> list = page.getList();
+        if(!StringUtils.isEmpty(list) && list.size()>0){
+            for(MessageDetailInfoValidator info :list){
+                if(!StringUtils.isEmpty(info.getCustomerStatus())){
+                    String remark = systemErrorCodeService.findErrorRemark(info.getCustomerStatus(),info.getCarrier());
+                    if(!StringUtils.isEmpty(remark)){
+                        info.setCustomerStatus(info.getCustomerStatus()+"("+remark+")");
+                    }
+                }
+            }
+        }
 
         return ResponseDataUtil.buildSuccess(page);
 
@@ -101,22 +111,4 @@ public class MessageDetailInfoService {
         return ResponseDataUtil.buildSuccess(page);
     }
 
-    public ResponseData<PageList<TableStoreMessageDetailInfoValidator>> tableStorePage(PageParams<TableStoreMessageDetailInfoValidator> pageParams) {
-        PageList<TableStoreMessageDetailInfoValidator> page = tableStoreMessageDetailInfoRepository.tableStorePage(pageParams);
-
-        //匹配错误码描述
-        List<TableStoreMessageDetailInfoValidator> list = page.getList();
-        if(!StringUtils.isEmpty(list) && list.size()>0){
-            for(TableStoreMessageDetailInfoValidator info :list){
-                if(!StringUtils.isEmpty(info.getStatusCode())){
-                    String remark = systemErrorCodeService.findErrorRemark(info.getStatusCode(),info.getBusinessCarrier());
-                    if(!StringUtils.isEmpty(remark)){
-                        info.setStatusCode(info.getStatusCode()+"("+remark+")");
-                    }
-                }
-            }
-        }
-
-        return ResponseDataUtil.buildSuccess(page);
-    }
 }

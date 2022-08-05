@@ -69,4 +69,6 @@ public class MessageDetailInfoValidator {
     private String businessType;
 
     private int messageNumber;
+    //间隔时间
+    private Long timeElapsed;
 }

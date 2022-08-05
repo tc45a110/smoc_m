@@ -2,6 +2,7 @@ package com.smoc.cloud.statistic.data.service;
 
 
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.spss.model.StatisticCarrierModel;
 import com.smoc.cloud.common.smoc.spss.model.StatisticModel;
 import com.smoc.cloud.common.smoc.spss.qo.ManagerCarrierStatisticQo;
 import com.smoc.cloud.common.smoc.spss.qo.ManagerStatisticQo;
@@ -15,10 +16,7 @@ import org.springframework.util.StringUtils;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 
 /**
@@ -33,6 +31,7 @@ public class ManagerStatisticsService {
 
     /**
      * 运营管理综合日统计
+     *
      * @param managerStatisticQo
      * @return
      */
@@ -61,6 +60,7 @@ public class ManagerStatisticsService {
 
     /**
      * 运营管理综合月统计
+     *
      * @param managerStatisticQo
      * @return
      */
@@ -69,11 +69,11 @@ public class ManagerStatisticsService {
         List<ManagerStatisticQo> list = responseData.getData();
 
         //封装月份
-        Map<String, ManagerStatisticQo> monthMap = buildMonthStatistics(managerStatisticQo.getEndDate(),24);
-        if(!StringUtils.isEmpty(list) && list.size()>0){
-            for(int i=0;i<list.size();i++){
+        Map<String, ManagerStatisticQo> monthMap = buildMonthStatistics(managerStatisticQo.getEndDate(), 24);
+        if (!StringUtils.isEmpty(list) && list.size() > 0) {
+            for (int i = 0; i < list.size(); i++) {
                 ManagerStatisticQo info = list.get(i);
-                monthMap.put(info.getMessageDate(),info);
+                monthMap.put(info.getMessageDate(), info);
             }
         }
 
@@ -92,13 +92,13 @@ public class ManagerStatisticsService {
             sendAmount[i] = info.getSendAmount();
             incomeAmount[i] = info.getIncomeAmount();
             profitAmount[i] = info.getProfitAmount();
-            if(StringUtils.isEmpty(info.getSendAmount())){
+            if (StringUtils.isEmpty(info.getSendAmount())) {
                 sendAmount[i] = new BigDecimal(0);
             }
-            if(StringUtils.isEmpty(info.getIncomeAmount())){
+            if (StringUtils.isEmpty(info.getIncomeAmount())) {
                 incomeAmount[i] = new BigDecimal(0);
             }
-            if(StringUtils.isEmpty(info.getProfitAmount())){
+            if (StringUtils.isEmpty(info.getProfitAmount())) {
                 profitAmount[i] = new BigDecimal(0);
             }
             i++;
@@ -115,6 +115,7 @@ public class ManagerStatisticsService {
 
     /**
      * 运营管理运营商按月分类统计
+     *
      * @param managerCarrierStatisticQo
      * @return
      */
@@ -123,25 +124,22 @@ public class ManagerStatisticsService {
         List<ManagerCarrierStatisticQo> list = responseData.getData();
 
         //封装月份
-        Map<String, Map<String,BigDecimal>> monthMap = buildCarrierMonthStatistics(managerCarrierStatisticQo.getEndDate(),12);
+        Map<String, Map<String, BigDecimal>> monthMap = buildCarrierMonthStatistics(managerCarrierStatisticQo.getEndDate(), 12);
+
+        //封装数据
         if(!StringUtils.isEmpty(list) && list.size()>0){
-            for(int i=0;i<list.size();i++){
-
-                ManagerCarrierStatisticQo info = list.get(i);
-                Map<String,BigDecimal> map = monthMap.get(info.getMessageDate());
-
+            for (String key : monthMap.keySet()) {
+                Map<String, BigDecimal> map = monthMap.get(key);
                 int a = 1;
-                for(ManagerCarrierStatisticQo qo: list){
-                    if(info.getMessageDate().equals(qo.getMessageDate())){
-                        map.put(qo.getCarrier(),qo.getCarrierData());
+                for (ManagerCarrierStatisticQo qo : list) {
+                    if (key.equals(qo.getMessageDate())) {
+                        map.put(qo.getCarrier(), qo.getCarrierData());
                         a++;
                     }
-                    if(a==4){
+                    if (a == 4) {
                         break;
                     }
                 }
-
-                monthMap.put(info.getMessageDate(),map);
             }
         }
 
@@ -157,30 +155,64 @@ public class ManagerStatisticsService {
         BigDecimal[] intlArray = new BigDecimal[monthMap.size()];
 
         int i = 0;
+        Double totalCMCC = 0D;
+        Double totalUNIC = 0D;
+        Double totalTELC = 0D;
+        Double totalINTL = 0D;
         for (String key : monthMap.keySet()) {
-            Map<String,BigDecimal> info = monthMap.get(key);
+            Map<String, BigDecimal> info = monthMap.get(key);
             month[i] = key;
 
-            for(String infoKey : info.keySet()){
-                cmccArray[i] = info.get(key);
-                unicArray[i] = info.get(key);
-                telcArray[i] = info.get(key);
-                intlArray[i] = info.get(key);
-            }
+            BigDecimal cmcc = info.get("CMCC");
+            BigDecimal unic = info.get("UNIC");
+            BigDecimal telc = info.get("TELC");
+            BigDecimal intl = info.get("INTL");
+
+            cmccArray[i] = cmcc;
+            unicArray[i] = unic;
+            telcArray[i] = telc;
+            intlArray[i] = intl;
+
+            totalCMCC += cmcc.doubleValue();
+            totalUNIC += unic.doubleValue();
+            totalTELC += telc.doubleValue();
+            totalINTL += intl.doubleValue();
 
             i++;
         }
 
-        ManagerCarrierStatisticQo model = new ManagerCarrierStatisticQo();
-        model.setDate(month);
-        model.setCmccArray(cmccArray);
-        model.setUnicArray(unicArray);
-        model.setTelcArray(telcArray);
-        model.setIntlArray(intlArray);
+        //封装占比数据
+        List<StatisticCarrierModel> ratio = new ArrayList<>();
+        StatisticCarrierModel modelCMCC = new StatisticCarrierModel();
+        modelCMCC.setName("移动");
+        modelCMCC.setValue(new BigDecimal(totalCMCC).setScale(2, BigDecimal.ROUND_HALF_UP));
+        ratio.add(modelCMCC);
 
-        return model;
+        StatisticCarrierModel modelUNIC = new StatisticCarrierModel();
+        modelUNIC.setName("联通");
+        modelUNIC.setValue(new BigDecimal(totalUNIC).setScale(2, BigDecimal.ROUND_HALF_UP));
+        ratio.add(modelUNIC);
+
+        StatisticCarrierModel modelTELC = new StatisticCarrierModel();
+        modelTELC.setName("电信");
+        modelTELC.setValue(new BigDecimal(totalTELC).setScale(2, BigDecimal.ROUND_HALF_UP));
+        ratio.add(modelTELC);
+
+        StatisticCarrierModel modelINTL = new StatisticCarrierModel();
+        modelINTL.setName("国际");
+        modelINTL.setValue(new BigDecimal(totalINTL).setScale(2, BigDecimal.ROUND_HALF_UP));
+        ratio.add(modelINTL);
+
+        managerCarrierStatisticQo.setDate(month);
+        managerCarrierStatisticQo.setCmccArray(cmccArray);
+        managerCarrierStatisticQo.setUnicArray(unicArray);
+        managerCarrierStatisticQo.setTelcArray(telcArray);
+        managerCarrierStatisticQo.setIntlArray(intlArray);
+        managerCarrierStatisticQo.setTotal(new BigDecimal(totalCMCC+totalUNIC+totalTELC+totalINTL).setScale(2, BigDecimal.ROUND_HALF_UP));
+        managerCarrierStatisticQo.setRatio(ratio);
+
+        return managerCarrierStatisticQo;
     }
-
 
 
     /**
@@ -210,29 +242,28 @@ public class ManagerStatisticsService {
     }
 
     private Map<String, Map<String, BigDecimal>> buildCarrierMonthStatistics(String startDate, int a) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
-        // 当前月份
-        Date nowDate;
-        try {
-            nowDate = sdf.parse(startDate);
-            Map<String, Map<String, BigDecimal>> map = new TreeMap<String, Map<String, BigDecimal>>();
-            for (int i = 1; i < a; i++) {
-                Date subtract = DateTimeUtils.dateAddMonths(nowDate, -i);
+        Map<String, Map<String, BigDecimal>> monthMap = new TreeMap<String, Map<String, BigDecimal>>();
+        //当前月
+        Map<String, BigDecimal> map = new TreeMap<String, BigDecimal>();
+        map.put("CMCC", new BigDecimal(0));
+        map.put("UNIC", new BigDecimal(0));
+        map.put("TELC", new BigDecimal(0));
+        map.put("INTL", new BigDecimal(0));
+        monthMap.put(startDate, map);
 
-                Map<String, BigDecimal> info = new TreeMap<String, BigDecimal>();
-                info.put("CMCC",new BigDecimal(0));
-                info.put("UNIC",new BigDecimal(0));
-                info.put("TELC",new BigDecimal(0));
-                info.put("INTL",new BigDecimal(0));
+        for (int i = 1; i < a; i++) {
+            String subtract = DateTimeUtils.dateAddMonthsStr(startDate, -i);
 
-                map.put(sdf.format(subtract), info);
-            }
+            Map<String, BigDecimal> info = new TreeMap<String, BigDecimal>();
+            info.put("CMCC", new BigDecimal(0));
+            info.put("UNIC", new BigDecimal(0));
+            info.put("TELC", new BigDecimal(0));
+            info.put("INTL", new BigDecimal(0));
 
-            return map;
-        } catch (ParseException e) {
-            e.printStackTrace();
+            monthMap.put(subtract, info);
         }
-        return null;
+
+        return monthMap;
     }
 
 }

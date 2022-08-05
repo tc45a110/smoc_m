@@ -19,7 +19,7 @@ public class ManagerCarrierStatisticModelRowMapper implements RowMapper<ManagerC
         ManagerCarrierStatisticQo qo = new ManagerCarrierStatisticQo();
         qo.setMessageDate(resultSet.getString("MESSAGE_DATE"));
         qo.setCarrier(resultSet.getString("CARRIER"));
-        qo.setCarrierData(resultSet.getBigDecimal("MESSAGE_SUCCESS_NUM").divide(new BigDecimal(10000)).setScale(2, BigDecimal.ROUND_HALF_UP));
+        qo.setCarrierData(resultSet.getBigDecimal("SUCCESS_SUM").divide(new BigDecimal(10000)).setScale(2, BigDecimal.ROUND_HALF_UP));
 
         return qo;
     }

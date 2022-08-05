@@ -58,8 +58,14 @@
                                 <div class="form-group  col-sm-3">
                                     <input type="text" class="form-control" placeholder="手机号" th:field="*{phoneNumber}" autocomplete="off">
                                 </div>
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control" placeholder="省份"  th:field="*{area}" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-3">
+                                    <input type="text" class="form-control" placeholder="状态码"  th:field="*{customerStatus}" autocomplete="off">
+                                </div>
                                 <div class="form-group pull-right" style="text-align: right">
-                                    <input type="hidden" class="form-control" th:field="*{enterpriseFlag}" >
+                                    <input type="hidden" class="form-control" th:field="*{enterpriseId}" >
                                     <button sec:authorize-url="/message/detail/page" class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search"></i> 查询
                                     </button>
@@ -91,25 +97,24 @@
                                 <thead>
                                 <tr>
                                     <th>业务账号/账号名称</th>
-                                    <th>运营商/业务类型</th>
+                                    <th>业务类型</th>
                                     <th>计费条数/手机号</th>
-                                    <th>省份/地市</th>
+                                    <th>运营商/省份</th>
                                     <th>通道/通道名称</th>
                                     <th>状态码</th>
                                     <th>提交时间/状态报告时间</th>
-                                    <th>耗时时长/短信内容</th>
+                                    <th>耗时时长(秒)/短信内容</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr th:each="info:${list}">
                                     <td style="line-height: 26px">
-                                        [[${info.businessAccount}]]<br>[[${info.accountName}]]
+                                        [[${info.businessAccount}]]<br>
+                                        <span th:if="${accountMap[info.businessAccount] !=null}">[[${accountMap[info.businessAccount].accountName}]]</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        <mpm:tag identity="carrier" show-type="label" key="code"
-                                                 th:value="${info.carrier}"/><br>
-                                        <mpm:tag identity="businessType" show-type="button"
-                                                 key="code" th:value="${info.businessType}"
+                                        <mpm:tag identity="businessType" show-type="button" th:if="${accountMap[info.businessAccount] !=null}"
+                                                 key="code" th:value="${accountMap[info.businessAccount].businessType}"
                                                  class="TEXT_SMS,btn btn-teal btn-rounded btn-sm waves-effect waves-light;MULTI_SMS,btn btn-brown btn-rounded btn-sm waves-effect waves-light;MMS,btn btn-info btn-rounded btn-sm waves-effect waves-light;5G_SMS,btn btn-primary btn-rounded btn-sm waves-effect waves-light;INTERNATIONAL_SMS,btn btn-purple btn-rounded btn-sm waves-effect waves-light;BLACK_SERVICE,btn btn-inverse btn-rounded btn-sm waves-effect waves-light"/>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;">
@@ -119,25 +124,27 @@
                                     </td>
 
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        [[${info.area}]]&nbsp;
+                                        <mpm:tag identity="carrier" show-type="label" key="code"
+                                                 th:value="${info.carrier}"/>&nbsp;
+                                        [[${info.area}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         [[${info.channelId}]]<br>[[${info.channelName}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        [[${info.customerStatus}]]
+                                         <span class="text-overflow" data-toggle="tooltip" data-placement="bottom"
+                                               th:data-original-title="${info.customerStatus}">[[${info.customerStatus}]]</span>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;word-wrap:break-word;">
                                         [[${info.submitTime}]]
                                         <br>
                                         [[${info.reportTime}]]
                                     </td>
-                                    <td>
+                                    <td style="vertical-align: middle;line-height: 26px">
+                                        [[${info.timeElapsed}]]
                                         <br>
-                                        <span style="padding-left:10px;font-size:12px">
-                                            <span class="text-overflow" data-toggle="tooltip" data-placement="bottom"
-                                                  th:data-original-title="${info.messageContent}">[[${info.messageContent}]]</span>
-                                        </span>
+                                        <span class="text-overflow" data-toggle="tooltip" data-placement="bottom"
+                                              th:data-original-title="${info.messageContent}">[[${info.messageContent}]]</span>
                                     </td>
 
 
@@ -183,7 +190,7 @@
         minDate: '2012-01-01',
         maxDate: '2080-12-31',
         dateLimit: {
-            days: 2
+            days: 30
         },
         showDropdowns: true,
         showWeekNumbers: true,

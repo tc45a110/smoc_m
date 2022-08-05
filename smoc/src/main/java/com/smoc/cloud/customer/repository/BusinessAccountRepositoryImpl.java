@@ -767,4 +767,39 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
         return list;
     }
 
+    public List<AccountBasicInfoValidator> accountList(AccountBasicInfoValidator accountBasicInfoValidator) {
+
+        //查询sql
+        StringBuilder sqlBuffer = new StringBuilder("select ");
+        sqlBuffer.append("  t.ACCOUNT_ID");
+        sqlBuffer.append(", t.ENTERPRISE_ID");
+        sqlBuffer.append(", t.ACCOUNT_NAME");
+        sqlBuffer.append(", t.BUSINESS_TYPE");
+        sqlBuffer.append(", t.CARRIER");
+        sqlBuffer.append(", t.INFO_TYPE");
+        sqlBuffer.append(", t.EXTEND_CODE");
+        sqlBuffer.append(", t.ACCOUNT_PROCESS");
+        sqlBuffer.append(", t.ACCOUNT_STATUS");
+        sqlBuffer.append(", t.ACCOUNT_CHANNEL_TYPE");
+        sqlBuffer.append(", t.COUNTRY_CODE");
+        sqlBuffer.append(", ''ENTERPRISE_NAME");
+        sqlBuffer.append("  from account_base_info t ");
+        sqlBuffer.append("  where 1=1 ");
+
+        List<Object> paramsList = new ArrayList<Object>();
+
+        if (!StringUtils.isEmpty(accountBasicInfoValidator.getEnterpriseId())) {
+            sqlBuffer.append(" and t.ENTERPRISE_ID = ?");
+            paramsList.add( accountBasicInfoValidator.getEnterpriseId().trim());
+        }
+
+        sqlBuffer.append(" order by t.CREATED_TIME desc");
+
+        //根据参数个数，组织参数值
+        Object[] params = new Object[paramsList.size()];
+        paramsList.toArray(params);
+
+        List<AccountBasicInfoValidator> list = this.queryForObjectList(sqlBuffer.toString(), params, new AccountBasicInfoRowMapper());
+        return list;
+    }
 }

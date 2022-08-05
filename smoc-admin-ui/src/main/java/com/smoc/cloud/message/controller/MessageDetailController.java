@@ -5,9 +5,11 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.EnterpriseBasicInfoValidator;
 import com.smoc.cloud.common.smoc.message.MessageDetailInfoValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
+import com.smoc.cloud.customer.service.BusinessAccountService;
 import com.smoc.cloud.customer.service.EnterpriseService;
 import com.smoc.cloud.message.service.MessageDetailInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,25 +42,36 @@ public class MessageDetailController {
     @Autowired
     private EnterpriseService enterpriseService;
 
+    @Autowired
+    private BusinessAccountService businessAccountService;
+
     /**
      * 消息明细查询
      *
      * @return
      */
-    @RequestMapping(value = "/list/{enterpriseFlag}", method = RequestMethod.GET)
-    public ModelAndView list(@PathVariable String enterpriseFlag, HttpServletRequest request) {
+    @RequestMapping(value = "/list/{enterpriseId}", method = RequestMethod.GET)
+    public ModelAndView list(@PathVariable String enterpriseId, HttpServletRequest request) {
 
         ModelAndView view = new ModelAndView("message/message_detail_list");
 
+        //查询企业
+        ResponseData<EnterpriseBasicInfoValidator> enterprise = enterpriseService.findById(enterpriseId);
+        if (!ResponseCode.SUCCESS.getCode().equals(enterprise.getCode())) {
+            view.addObject("error", enterprise.getCode() + ":" + enterprise.getMessage());
+            return view;
+        }
+
         //初始化数据
         PageParams<MessageDetailInfoValidator> params = new PageParams<>();
-        params.setPageSize(10);
+        params.setPageSize(20);
         params.setCurrentPage(1);
         MessageDetailInfoValidator messageDetailInfoValidator = new MessageDetailInfoValidator();
         Date startDate = DateTimeUtils.dateAddDays(new Date(),-2);
         messageDetailInfoValidator.setStartDate(DateTimeUtils.getDateTimeFormat(startDate));
         messageDetailInfoValidator.setEndDate(DateTimeUtils.getDateTimeFormat(new Date()));
-        messageDetailInfoValidator.setEnterpriseFlag(enterpriseFlag);
+        messageDetailInfoValidator.setEnterpriseFlag(enterprise.getData().getEnterpriseFlag());
+        messageDetailInfoValidator.setEnterpriseId(enterpriseId);
         params.setParams(messageDetailInfoValidator);
 
         //查询
@@ -68,9 +81,13 @@ public class MessageDetailController {
             return view;
         }
 
+        //查询账号，主要用于页面上取账号名称
+        Map<String, AccountBasicInfoValidator> accountMap = queryAccount(messageDetailInfoValidator.getEnterpriseId());
+
         view.addObject("messageDetailInfoValidator", messageDetailInfoValidator);
         view.addObject("list", data.getData().getList());
         view.addObject("pageParams", data.getData().getPageParams());
+        view.addObject("accountMap", accountMap);
         return view;
 
     }
@@ -84,6 +101,13 @@ public class MessageDetailController {
     public ModelAndView page(@ModelAttribute MessageDetailInfoValidator messageDetailInfoValidator, PageParams pageParams) {
         ModelAndView view = new ModelAndView("message/message_detail_list");
 
+        //查询企业
+        ResponseData<EnterpriseBasicInfoValidator> enterprise = enterpriseService.findById(messageDetailInfoValidator.getEnterpriseId());
+        if (!ResponseCode.SUCCESS.getCode().equals(enterprise.getCode())) {
+            view.addObject("error", enterprise.getCode() + ":" + enterprise.getMessage());
+            return view;
+        }
+
         //日期格式
         if (!StringUtils.isEmpty(messageDetailInfoValidator.getStartDate())) {
             String[] date = messageDetailInfoValidator.getStartDate().split(" - ");
@@ -92,6 +116,7 @@ public class MessageDetailController {
         }
 
         //分页查询
+        messageDetailInfoValidator.setEnterpriseFlag(enterprise.getData().getEnterpriseFlag());
         pageParams.setParams(messageDetailInfoValidator);
 
         ResponseData<PageList<MessageDetailInfoValidator>> data = messageDetailInfoService.page(pageParams);
@@ -100,10 +125,13 @@ public class MessageDetailController {
             return view;
         }
 
+        //查询账号，主要用于页面上取账号名称
+        Map<String, AccountBasicInfoValidator> accountMap = queryAccount(messageDetailInfoValidator.getEnterpriseId());
+
         view.addObject("messageDetailInfoValidator", messageDetailInfoValidator);
         view.addObject("list", data.getData().getList());
         view.addObject("pageParams", data.getData().getPageParams());
-
+        view.addObject("accountMap", accountMap);
         return view;
 
     }
@@ -118,7 +146,7 @@ public class MessageDetailController {
 
         //初始化数据
         PageParams<EnterpriseBasicInfoValidator> params = new PageParams<EnterpriseBasicInfoValidator>();
-        params.setPageSize(10);
+        params.setPageSize(20);
         params.setCurrentPage(1);
         EnterpriseBasicInfoValidator enterpriseBasicInfoValidator = new EnterpriseBasicInfoValidator();
         enterpriseBasicInfoValidator.setFlag("1");//不查询认证企业
@@ -161,5 +189,20 @@ public class MessageDetailController {
         view.addObject("pageParams", data.getData().getPageParams());
 
         return view;
+    }
+
+    //查询账号
+    private Map<String, AccountBasicInfoValidator> queryAccount(String enterpriseId) {
+
+        AccountBasicInfoValidator accountBasicInfoValidator = new AccountBasicInfoValidator();
+        accountBasicInfoValidator.setEnterpriseId(enterpriseId);
+        ResponseData<List<AccountBasicInfoValidator>> list = businessAccountService.accountList(accountBasicInfoValidator);
+
+        Map<String, AccountBasicInfoValidator> accountMap = new HashMap<>();
+        if(!StringUtils.isEmpty(list.getData()) && list.getData().size()>0){
+            accountMap = list.getData().stream().collect(Collectors.toMap(AccountBasicInfoValidator::getAccountId, Function.identity()));
+        }
+
+        return accountMap;
     }
 }

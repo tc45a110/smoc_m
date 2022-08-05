@@ -1,10 +1,13 @@
 package com.smoc.cloud.common.smoc.spss.qo;
 
 
+import com.smoc.cloud.common.smoc.spss.model.StatisticCarrierModel;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Setter
 @Getter
@@ -26,7 +29,11 @@ public class ManagerCarrierStatisticQo {
 
     private BigDecimal[] intlArray;
 
+    private BigDecimal total;
+
     private String statisticType;
     private String startDate;
     private String endDate;
+
+    List<StatisticCarrierModel> ratio = new ArrayList<>();
 }

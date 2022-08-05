@@ -123,4 +123,11 @@ public interface BusinessAccountRepository extends CrudRepository<AccountBasicIn
      * @return
      */
     PageList<AccountSendStatisticModel> queryAccountSendStatistics(PageParams<AccountSendStatisticModel> pageParams);
+
+    /**
+     * 查询所有账号
+     * @param accountBasicInfoValidator
+     * @return
+     */
+    List<AccountBasicInfoValidator> accountList(AccountBasicInfoValidator accountBasicInfoValidator);
 }

@@ -122,4 +122,12 @@ public interface BusinessAccountFeignClient {
      */
     @RequestMapping(value = "/account/queryAccountSendStatistics", method = RequestMethod.POST)
     ResponseData<PageList<AccountSendStatisticModel>> queryAccountSendStatistics(@RequestBody PageParams<AccountSendStatisticModel> pageParams);
+
+    /**
+     * 查询所有账号
+     * @param accountBasicInfoValidator
+     * @return
+     */
+    @RequestMapping(value = "/account/accountList", method = RequestMethod.POST)
+    ResponseData<List<AccountBasicInfoValidator>> accountList(@RequestBody AccountBasicInfoValidator accountBasicInfoValidator);
 }

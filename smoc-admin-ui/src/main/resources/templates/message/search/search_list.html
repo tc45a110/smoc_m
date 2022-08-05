@@ -120,7 +120,7 @@
                                         <td> [[${info.createdTime}]]</td>
                                         <td>
                                            <a sec:authorize-url="/message/detail/list/*"
-                                              th:href="@{/message/detail/list/{enterpriseFlag}(enterpriseFlag=${info.enterpriseFlag})}"
+                                              th:href="@{/message/detail/list/{enterpriseId}(enterpriseId=${info.enterpriseId})}"
                                               style="padding-left: 5px;color: #4BD396;" data-toggle="tooltip"
                                               data-placement="left" title="" data-original-title="查看发送明细"><i
                                                    style="font-size: 18px" class="glyphicon glyphicon-search"></i></a>

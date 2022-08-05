@@ -567,4 +567,14 @@ public class BusinessAccountService {
         PageList<AccountSendStatisticModel> list = businessAccountRepository.queryAccountSendStatistics(pageParams);
         return ResponseDataUtil.buildSuccess(list);
     }
+
+    /**
+     * 查询所有账号
+     * @param accountBasicInfoValidator
+     * @return
+     */
+    public ResponseData<List<AccountBasicInfoValidator>> accountList(AccountBasicInfoValidator accountBasicInfoValidator) {
+        List<AccountBasicInfoValidator> list = businessAccountRepository.accountList(accountBasicInfoValidator);
+        return ResponseDataUtil.buildSuccess(list);
+    }
 }

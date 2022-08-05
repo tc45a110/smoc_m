@@ -679,4 +679,19 @@ public class BusinessAccountService {
             return ResponseDataUtil.buildError(e.getMessage());
         }
     }
+
+    /**
+     * 查询所有账号
+     * @param accountBasicInfoValidator
+     * @return
+     */
+    public ResponseData<List<AccountBasicInfoValidator>> accountList(AccountBasicInfoValidator accountBasicInfoValidator) {
+        try {
+            ResponseData<List<AccountBasicInfoValidator>> list = this.businessAccountFeignClient.accountList(accountBasicInfoValidator);
+            return list;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
 }

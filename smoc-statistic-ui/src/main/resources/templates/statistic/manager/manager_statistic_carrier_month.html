@@ -103,6 +103,16 @@
         url : '[[${#httpServletRequest.getContextPath()}]]/statistic/manager/carrier/month/ajax/'+$("#form_datetime").val()+"/"+$("#statisticType option:selected").val(),
         success : function(data) {
             articles = eval(data);
+            var title = "";
+            if("01"==articles.statisticType){
+                title = "发送量";
+            }
+            if("02"==articles.statisticType){
+                title = "营收";
+            }
+            if("03"==articles.statisticType){
+                title = "净利润";
+            }
             var dom = document.getElementById("main1");
             var myChart = echarts.init(dom);
             var app = {};
@@ -194,7 +204,7 @@
 
             option = {
                 title: {
-                    text: '2021-12运营商分类统计'
+                    text: articles.startDate+'近12个月运营商'+title+'统计(万)：'+articles.total
                 },
                 color: ['#EE6666', '#92CB76', '#FAC858', '#00acc1'],
                 tooltip: {
@@ -230,7 +240,7 @@
                             interval: 'auto',
                             rotate: 30
                         },
-                        data: [ "2021-12-01", "2021-12-02", "2021-12-03", "2021-12-04", "2021-12-05", "2021-12-06", "2021-12-07", "2021-12-08", "2021-12-09", "2021-12-10", "2021-12-11", "2021-12-12", "2021-12-13", "2021-12-14", "2021-12-15", "2021-12-16", "2021-12-17", "2021-12-18", "2021-12-19", "2021-12-20", "2021-12-21", "2021-12-22", "2021-12-23", "2021-12-24", "2021-12-25", "2021-12-26", "2021-12-27", "2021-12-28", "2021-12-29", "2021-12-30", "2021-12-31"]
+                        data: articles.date
                     }
                 ],
                 yAxis: [
@@ -243,40 +253,35 @@
                         name: '移动（万）',
                         type: 'bar',
                         barGap: 0,
-                        data:  [605, 646, 632, 648, 641, 647, 689, 658, 650, 652, 685, 607, 619, 659, 643, 670, 691, 630, 666, 606, 686, 629, 700, 692, 629, 700, 667, 688, 605, 654, 646],
+                        data:  articles.cmccArray
                     },
                     {
                         name: '联通（万）',
                         type: 'bar',
-                        data: [468, 487, 447, 441, 489, 469, 446, 469, 491, 412, 478, 407, 474, 432, 491, 444, 443, 407, 441, 452, 442, 461, 423, 446, 468, 416, 445, 477, 459, 427, 439]
+                        data: articles.unicArray
                     },
                     {
                         name: '电信（万）',
                         type: 'bar',
-                        data: [341, 370, 262, 320, 317, 263, 270, 343, 302, 345, 293, 318, 255, 336, 344, 268, 370, 289, 360, 383, 286, 285, 274, 326, 323, 335, 258, 287, 294, 400, 336]
+                        data: articles.telcArray
                     },
                     {
                         name: '国际（万）',
                         type: 'bar',
-                        data: [171, 167, 175, 163, 156, 150, 231, 179, 203, 207, 198, 205, 194, 169, 165, 192, 227, 162, 229, 203, 159, 199, 194, 191, 184, 163, 168, 180, 246, 170, 151]
+                        data: articles.intlArray
                     }
                 ]
             };;
             if (option && typeof option === "object") {
                 myChart.setOption(option, true);
-            }
-        }
-    });
+            };
 
-
-
-
-        // 基于准备好的dom，初始化echarts实例
+            // 基于准备好的dom，初始化echarts实例
             var main2 = echarts.init(document.getElementById('main2'));
             // 指定图表的配置项和数据
             var option2 = {
                 title : {
-                    text: '2021-12运营商分类占比-总额：20523.88',
+                    text: articles.startDate+'近12个月运营商'+title+'占比-总额(万)：'+articles.total,
                     x:'center'
                 },
                 tooltip : {
@@ -304,7 +309,7 @@
                 series : [
 
                     {
-                        name:'净毛利占比',
+                        name:title+'占比',
                         type:'pie',
                         radius : [30, 110],
                         center : ['50%', 200],
@@ -312,18 +317,17 @@
                         x: '50%',               // for funnel
                         max: 40,                // for funnel
                         sort : 'ascending',     // for funnel
-                       data: [
-                        { value: 1584.25, name: '移动' },
-                        { value: 1542.26, name: '联通' },
-                        { value: 1254.69, name: '电信' },
-                        { value: 2547.26, name: '国际' }
-                      ]
+                        data: articles.ratio
                     }
                 ]
             };
 
             // 使用刚指定的配置项和数据显示图表。
             main2 .setOption(option2);
+
+        }
+    });
+
 
     $(document).ready(function() {
 

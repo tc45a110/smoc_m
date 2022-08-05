@@ -166,13 +166,13 @@ public class ManagerStatisticController {
     public ManagerCarrierStatisticQo managerCarrierMonthStatistic(@PathVariable String startDate, @PathVariable String statisticType,  HttpServletRequest request) {
 
         ManagerCarrierStatisticQo managerCarrierStatisticQo = new ManagerCarrierStatisticQo();
-        managerCarrierStatisticQo.setStartDate(DateTimeUtils.dateAddMonthsStr(managerCarrierStatisticQo.getStartDate(),-12));
-        managerCarrierStatisticQo.setEndDate(managerCarrierStatisticQo.getStartDate());
+        managerCarrierStatisticQo.setStartDate(DateTimeUtils.dateAddMonthsStr(startDate,-12));
+        managerCarrierStatisticQo.setEndDate(startDate);
         managerCarrierStatisticQo.setStatisticType(statisticType);
 
-        ManagerCarrierStatisticQo statisticModel = managerStatisticsService.managerCarrierMonthStatistic(managerCarrierStatisticQo);
+        managerCarrierStatisticQo = managerStatisticsService.managerCarrierMonthStatistic(managerCarrierStatisticQo);
 
-        return statisticModel;
+        return managerCarrierStatisticQo;
     }
 
     /**

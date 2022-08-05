@@ -104,7 +104,18 @@ public class ManagerStatisticsRepository extends BasePageRepository {
         StringBuilder sqlBuffer = new StringBuilder("select ");
         sqlBuffer.append(" DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m')MESSAGE_DATE,");
         sqlBuffer.append(" t.CARRIER,");
-        sqlBuffer.append(" sum(t.MESSAGE_SUCCESS_NUM)MESSAGE_SUCCESS_NUM,");
+        //发送量
+        if("01".equals(managerCarrierStatisticQo.getStatisticType())){
+            sqlBuffer.append(" sum(t.MESSAGE_SUCCESS_NUM)SUCCESS_SUM ");
+        }
+        //营收
+        if("02".equals(managerCarrierStatisticQo.getStatisticType())){
+            sqlBuffer.append(" IFNULL(sum(t.MESSAGE_SUCCESS_NUM*t.ACCOUNT_PRICE),0)SUCCESS_SUM ");
+        }
+        //净利润
+        if("03".equals(managerCarrierStatisticQo.getStatisticType())){
+            sqlBuffer.append(" IFNULL(sum(t.MESSAGE_SUCCESS_NUM*t.ACCOUNT_PRICE)-sum(t.MESSAGE_SUCCESS_NUM*t.CHANNEL_PRICE),0)SUCCESS_SUM ");
+        }
         sqlBuffer.append(" from message_daily_statistics t where DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m')>=? and DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m')<=? ");
         sqlBuffer.append(" group by DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m'),t.CARRIER order by DATE_FORMAT(t.MESSAGE_DATE, '%Y-%m') ");
 

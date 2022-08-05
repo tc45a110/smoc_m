@@ -60,7 +60,6 @@ public class MessageDetailInfoRepositoryImpl extends BasePageRepository {
             sqlBuffer.append(" t.MESSAGE_CONTENT,");
             sqlBuffer.append(" t.MESSAGE_TOTAL,");
             sqlBuffer.append(" t.SIGN");
-
             sqlBuffer.append(" from smoc_route.enterprise_message_mr_info_"+qo.getEnterpriseFlag()+" t ");
             sqlBuffer.append(" where (1=1) ");
 
@@ -82,6 +81,18 @@ public class MessageDetailInfoRepositoryImpl extends BasePageRepository {
             if (!StringUtils.isEmpty(qo.getCarrier())) {
                 sqlBuffer.append(" and t.CARRIER =?");
                 paramsList.add(qo.getCarrier().trim());
+            }
+
+            //省份
+            if (!StringUtils.isEmpty(qo.getArea())) {
+                sqlBuffer.append(" and t.AREA_NAME =?");
+                paramsList.add(qo.getArea().trim());
+            }
+
+            //状态码
+            if (!StringUtils.isEmpty(qo.getCustomerStatus())) {
+                sqlBuffer.append(" and t.STATUS_CODE =?");
+                paramsList.add(qo.getCustomerStatus().trim());
             }
 
             //时间起

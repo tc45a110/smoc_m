@@ -44,18 +44,6 @@ public class MessageDetailInfoController {
     }
 
     /**
-     * 查询列表
-     *
-     * @param pageParams
-     * @return
-     */
-    @RequestMapping(value = "/tableStorePage", method = RequestMethod.POST)
-    public ResponseData<PageList<TableStoreMessageDetailInfoValidator>> tableStorePage(@RequestBody PageParams<TableStoreMessageDetailInfoValidator> pageParams) {
-
-        return messageDetailInfoService.tableStorePage(pageParams);
-    }
-
-    /**
      * 统计自服务平台短信明细列表
      *
      * @param pageParams
