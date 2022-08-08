@@ -71,4 +71,6 @@ public class MessageDetailInfoValidator {
     private int messageNumber;
     //间隔时间
     private Long timeElapsed;
+
+    private String statusFlag;
 }

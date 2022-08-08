@@ -59,7 +59,8 @@ public class MessageDetailInfoRepositoryImpl extends BasePageRepository {
             sqlBuffer.append(" t.STATUS_CODE,");
             sqlBuffer.append(" t.MESSAGE_CONTENT,");
             sqlBuffer.append(" t.MESSAGE_TOTAL,");
-            sqlBuffer.append(" t.SIGN");
+            sqlBuffer.append(" t.SIGN,");
+            sqlBuffer.append(" t.SUBMIT_STYLE");
             sqlBuffer.append(" from smoc_route.enterprise_message_mr_info_"+qo.getEnterpriseFlag()+" t ");
             sqlBuffer.append(" where (1=1) ");
 
@@ -73,7 +74,7 @@ public class MessageDetailInfoRepositoryImpl extends BasePageRepository {
 
             //业务账号
             if (!StringUtils.isEmpty(qo.getBusinessAccount())) {
-                sqlBuffer.append(" and t.BUSINESS_ACCOUNT =?");
+                sqlBuffer.append(" and t.ACCOUNT_ID =?");
                 paramsList.add(qo.getBusinessAccount().trim());
             }
 
@@ -95,18 +96,38 @@ public class MessageDetailInfoRepositoryImpl extends BasePageRepository {
                 paramsList.add(qo.getCustomerStatus().trim());
             }
 
+            //状态码
+            if (!StringUtils.isEmpty(qo.getStatusFlag())) {
+                if("success".equals(qo.getStatusFlag())){
+                    sqlBuffer.append(" and t.STATUS_CODE = 'DELIVRD' ");
+                }else{
+                    sqlBuffer.append(" and t.STATUS_CODE !='DELIVRD' ");
+                }
+            }
+
+            //签名
+            if (!StringUtils.isEmpty(qo.getSign())) {
+                sqlBuffer.append(" and t.SIGN like ?");
+                paramsList.add("%"+qo.getSign().trim()+"%");
+            }
+            //接口类型
+            if (!StringUtils.isEmpty(qo.getSubmitStyle())) {
+                sqlBuffer.append(" and t.SUBMIT_STYLE =?");
+                paramsList.add(qo.getSubmitStyle().trim());
+            }
+
             //时间起
             if (!StringUtils.isEmpty(qo.getStartDate())) {
-                sqlBuffer.append(" and DATE_FORMAT(t.CREATED_TIME,'%Y-%m-%d') >=? ");
+                sqlBuffer.append(" and DATE_FORMAT(t.SUBMIT_TIME,'%Y-%m-%d %H:%i:%S') >=? ");
                 paramsList.add(qo.getStartDate().trim());
             }
             //时间止
             if (!StringUtils.isEmpty(qo.getEndDate())) {
-                sqlBuffer.append(" and DATE_FORMAT(t.CREATED_TIME,'%Y-%m-%d') <=? ");
+                sqlBuffer.append(" and DATE_FORMAT(t.SUBMIT_TIME,'%Y-%m-%d %H:%i:%S') <=? ");
                 paramsList.add(qo.getEndDate().trim());
             }
 
-            sqlBuffer.append(" order by t.CREATED_TIME desc");
+            sqlBuffer.append(" order by t.SUBMIT_TIME desc");
             //log.info("[SQL]:{}",sqlBuffer);
             //根据参数个数，组织参数值
             Object[] params = new Object[paramsList.size()];

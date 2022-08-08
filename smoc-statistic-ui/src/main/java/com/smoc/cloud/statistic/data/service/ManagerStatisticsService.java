@@ -2,7 +2,7 @@ package com.smoc.cloud.statistic.data.service;
 
 
 import com.smoc.cloud.common.response.ResponseData;
-import com.smoc.cloud.common.smoc.spss.model.StatisticCarrierModel;
+import com.smoc.cloud.common.smoc.spss.model.StatisticRatioModel;
 import com.smoc.cloud.common.smoc.spss.model.StatisticModel;
 import com.smoc.cloud.common.smoc.spss.qo.ManagerCarrierStatisticQo;
 import com.smoc.cloud.common.smoc.spss.qo.ManagerStatisticQo;
@@ -182,23 +182,23 @@ public class ManagerStatisticsService {
         }
 
         //封装占比数据
-        List<StatisticCarrierModel> ratio = new ArrayList<>();
-        StatisticCarrierModel modelCMCC = new StatisticCarrierModel();
+        List<StatisticRatioModel> ratio = new ArrayList<>();
+        StatisticRatioModel modelCMCC = new StatisticRatioModel();
         modelCMCC.setName("移动");
         modelCMCC.setValue(new BigDecimal(totalCMCC).setScale(2, BigDecimal.ROUND_HALF_UP));
         ratio.add(modelCMCC);
 
-        StatisticCarrierModel modelUNIC = new StatisticCarrierModel();
+        StatisticRatioModel modelUNIC = new StatisticRatioModel();
         modelUNIC.setName("联通");
         modelUNIC.setValue(new BigDecimal(totalUNIC).setScale(2, BigDecimal.ROUND_HALF_UP));
         ratio.add(modelUNIC);
 
-        StatisticCarrierModel modelTELC = new StatisticCarrierModel();
+        StatisticRatioModel modelTELC = new StatisticRatioModel();
         modelTELC.setName("电信");
         modelTELC.setValue(new BigDecimal(totalTELC).setScale(2, BigDecimal.ROUND_HALF_UP));
         ratio.add(modelTELC);
 
-        StatisticCarrierModel modelINTL = new StatisticCarrierModel();
+        StatisticRatioModel modelINTL = new StatisticRatioModel();
         modelINTL.setName("国际");
         modelINTL.setValue(new BigDecimal(totalINTL).setScale(2, BigDecimal.ROUND_HALF_UP));
         ratio.add(modelINTL);

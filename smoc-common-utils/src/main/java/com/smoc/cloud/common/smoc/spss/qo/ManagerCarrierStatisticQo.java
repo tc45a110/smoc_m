@@ -1,7 +1,7 @@
 package com.smoc.cloud.common.smoc.spss.qo;
 
 
-import com.smoc.cloud.common.smoc.spss.model.StatisticCarrierModel;
+import com.smoc.cloud.common.smoc.spss.model.StatisticRatioModel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -35,5 +35,5 @@ public class ManagerCarrierStatisticQo {
     private String startDate;
     private String endDate;
 
-    List<StatisticCarrierModel> ratio = new ArrayList<>();
+    List<StatisticRatioModel> ratio = new ArrayList<>();
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:mpm="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <th:block th:insert="fragments/common_fragments :: common_header"/>
@@ -38,19 +38,17 @@
         <div class="row" style="position: relative;margin-top: 80px" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
                 <div class="card-box">
-                    <form  id="query_form" method="post">
+                    <form  id="query_form" th:action="@{/statistic/operating/income/query}"
+                           th:object="${statisticIncomeQo}" method="post">
                         <div class="row m-b-60">
                             <div class="col-sm-12">
-                                <div class="form-group  col-sm-4">
-                                    <input id="datetimepicker" type="text" class="form-control" value="2021" readonly
-                                           placeholder="请选择年份" autocomplete="off">
-                                </div>
                                 <div class="form-group  col-sm-3">
-                                    <mpm:tag id="statistic" identity="statisticBusiness" show-type="select" key="code"
-                                             class="form-control" name="statistic"  title="统计维度"/>
+                                    <input id="datetimepicker" type="text" class="form-control" th:field="*{year}"
+                                           autocomplete="off">
                                 </div>
                                 <div class="form-group col-sm-4 pull-right" style="text-align: right">
-                                    <button class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
+                                    <button sec:authorize-url="/statistic/manager/month/query"
+                                            class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search" style="margin-right:5px"></i> 查询
                                     </button>
                                 </div>
@@ -93,13 +91,16 @@
 <script th:src="@{/static/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js}"></script>
 <script type="text/javascript">
 
-
-     // 基于准备好的dom，初始化echarts实例
+    $.ajax({
+        url : '[[${#httpServletRequest.getContextPath()}]]/statistic/operating/income/month/ajax/'+'[[${statisticIncomeQo.year}]]',
+        success : function(data) {
+            articles = eval(data);
+            // 基于准备好的dom，初始化echarts实例
             var main0 = echarts.init(document.getElementById('main0'));
             // 指定图表的配置项和数据
             var option = {
                 title: {
-                    text: '2021月净毛利统计-总额：20523.88',
+                    text: articles.year+'净毛利统计-总额：',
                     x:'left'
                 },
                 tooltip: {
@@ -135,7 +136,7 @@
                     {
                         type: 'category',
                         splitLine: {show: false},
-                        data: ['2021-01','2021-02','2021-03','2021-04','2021-05','2021-062','2021-07','2021-08','2021-09','2021-10','2021-11','2021-12'],
+                        data: articles.monthArray,
                         axisLabel: {
                             interval:'auto',
                             rotate: 30
@@ -162,7 +163,7 @@
                                 color: 'rgba(0,0,0,0)'
                             }
                         },
-                        data: [0,1584.25,3126.51,4381.2,6928.46,8182.71,9659.97,11225.11,12790.22,14044.93,15280.14,16869.34,20523.88,23523.88]
+                        data: articles.startImcomeArray
                     },
                     {
                         name: '净毛利',
@@ -170,13 +171,18 @@
                         stack: '总量',
                         color:'#00ACC1',
                         itemStyle: {normal: {label: {show: true, position: 'top'}}},
-                        data:[1584.25,1542.26,1254.69,2547.26,1254.25,1477.26,1565.14,1254.68,1235.21,1589.24,3654.54,3654.54]
+                        data:articles.incomeArray,
                     }
 
                 ]
             };
             // 使用刚指定的配置项和数据显示图表。
             main0 .setOption(option);
+        }
+    });
+
+
+
 
             // 基于准备好的dom，初始化echarts实例
             var main1 = echarts.init(document.getElementById('main1'));

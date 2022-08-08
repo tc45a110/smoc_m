@@ -22,6 +22,7 @@ public class MessageDetailInfoRowMapper implements RowMapper<MessageDetailInfoVa
         qo.setCustomerStatus(resultSet.getString("STATUS_CODE"));
         qo.setMessageContent(resultSet.getString("MESSAGE_CONTENT"));
         qo.setSign(resultSet.getString("SIGN"));
+        qo.setSubmitStyle(resultSet.getString("SUBMIT_STYLE"));
         qo.setMessageNumber(resultSet.getInt("MESSAGE_TOTAL"));
 
         String reportTime = resultSet.getString("REPORT_TIME");

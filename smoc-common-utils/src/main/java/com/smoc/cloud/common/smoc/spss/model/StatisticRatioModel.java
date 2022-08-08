@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 
 @Setter
 @Getter
-public class StatisticCarrierModel {
+public class StatisticRatioModel {
 
     private String name;
 

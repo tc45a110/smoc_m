@@ -41,11 +41,11 @@
                            th:object="${managerStatisticQo}" method="post">
                         <div class="row m-b-60">
                             <div class="col-sm-12">
-                                <div class="form-group  col-sm-4">
+                                <div class="form-group  col-sm-3">
                                     <input id="form_datetime" class="form-control" type="text"
                                            th:field="*{startDate}" required="" autocomplete="off">
                                 </div>
-                                <div class="form-group col-sm-4 pull-right" style="text-align: right">
+                                <div class="form-group col-sm-3 pull-right" style="text-align: right">
                                     <button  sec:authorize-url="/statistic/manager/month/query"
                                              class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search" style="margin-right:5px"></i> 查询
