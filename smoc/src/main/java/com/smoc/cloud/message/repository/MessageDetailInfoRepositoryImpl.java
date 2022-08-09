@@ -19,15 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 public class MessageDetailInfoRepositoryImpl extends BasePageRepository {
-
-    @Autowired
-    private TableStoreUtils tableStoreUtils;
 
     /**
      * 分页查询
@@ -61,6 +56,7 @@ public class MessageDetailInfoRepositoryImpl extends BasePageRepository {
             sqlBuffer.append(" t.MESSAGE_TOTAL,");
             sqlBuffer.append(" t.SIGN,");
             sqlBuffer.append(" t.SUBMIT_STYLE");
+            //sqlBuffer.append(" ,t.TIME_ELAPSED");
             sqlBuffer.append(" from smoc_route.enterprise_message_mr_info_"+qo.getEnterpriseFlag()+" t ");
             sqlBuffer.append(" where (1=1) ");
 
@@ -101,7 +97,7 @@ public class MessageDetailInfoRepositoryImpl extends BasePageRepository {
                 if("success".equals(qo.getStatusFlag())){
                     sqlBuffer.append(" and t.STATUS_CODE = 'DELIVRD' ");
                 }else{
-                    sqlBuffer.append(" and t.STATUS_CODE !='DELIVRD' ");
+                    sqlBuffer.append(" and (t.STATUS_CODE !='DELIVRD' or t.STATUS_CODE is null )");
                 }
             }
 
@@ -115,6 +111,19 @@ public class MessageDetailInfoRepositoryImpl extends BasePageRepository {
                 sqlBuffer.append(" and t.SUBMIT_STYLE =?");
                 paramsList.add(qo.getSubmitStyle().trim());
             }
+
+            //耗时
+            /*if(!StringUtils.isEmpty(qo.getTimeElapsed())){
+                String[] elapsed = qo.getTimeElapsed().split("-");
+                if(!StringUtils.isEmpty(elapsed[0])){
+                    sqlBuffer.append(" and t.TIME_ELAPSED >?");
+                    paramsList.add(elapsed[0]);
+                }
+                if(elapsed.length>=2 && !StringUtils.isEmpty(elapsed[1])){
+                    sqlBuffer.append(" and t.TIME_ELAPSED <=?");
+                    paramsList.add(elapsed[1]);
+                }
+            }*/
 
             //时间起
             if (!StringUtils.isEmpty(qo.getStartDate())) {
@@ -149,6 +158,116 @@ public class MessageDetailInfoRepositoryImpl extends BasePageRepository {
         pageList.setList(null);
 
         return pageList;
+    }
+
+    /**
+     * 根据企业实时查询成功发送总量
+     * @param qo
+     * @return
+     */
+    public Map<String, Object> statisticEnterpriseSendMessage(MessageDetailInfoValidator qo) {
+
+        //查询sql
+        StringBuilder sql = new StringBuilder("select ");
+        sql.append(" count(*) messageTotal ");
+        sql.append(" from information_schema.TABLES where TABLE_SCHEMA = 'smoc_route' AND TABLE_NAME = 'enterprise_message_mr_info_"+qo.getEnterpriseFlag()+"' ");
+        Long messageTotal = jdbcTemplate.queryForObject(sql.toString(), Long.class);
+
+        if(messageTotal>=1){
+            //查询sql
+            StringBuilder sqlBuffer = new StringBuilder("select ");
+            sqlBuffer.append(" count(*) SUCCESS_SEND_SUM ");
+            sqlBuffer.append(" from smoc_route.enterprise_message_mr_info_"+qo.getEnterpriseFlag()+" t ");
+            sqlBuffer.append(" where t.STATUS_CODE = 'DELIVRD' ");
+
+            List<Object> paramsList = new ArrayList<Object>();
+
+            //手机号
+            if (!StringUtils.isEmpty(qo.getPhoneNumber())) {
+                sqlBuffer.append(" and t.PHONE_NUMBER =?");
+                paramsList.add(qo.getPhoneNumber().trim());
+            }
+
+            //业务账号
+            if (!StringUtils.isEmpty(qo.getBusinessAccount())) {
+                sqlBuffer.append(" and t.ACCOUNT_ID =?");
+                paramsList.add(qo.getBusinessAccount().trim());
+            }
+
+            //运营商
+            if (!StringUtils.isEmpty(qo.getCarrier())) {
+                sqlBuffer.append(" and t.CARRIER =?");
+                paramsList.add(qo.getCarrier().trim());
+            }
+
+            //省份
+            if (!StringUtils.isEmpty(qo.getArea())) {
+                sqlBuffer.append(" and t.AREA_NAME =?");
+                paramsList.add(qo.getArea().trim());
+            }
+
+            //状态码
+            if (!StringUtils.isEmpty(qo.getCustomerStatus())) {
+                sqlBuffer.append(" and t.STATUS_CODE =?");
+                paramsList.add(qo.getCustomerStatus().trim());
+            }
+
+            //状态码
+            if (!StringUtils.isEmpty(qo.getStatusFlag())) {
+                if("success".equals(qo.getStatusFlag())){
+                    sqlBuffer.append(" and t.STATUS_CODE = 'DELIVRD' ");
+                }else{
+                    sqlBuffer.append(" and (t.STATUS_CODE !='DELIVRD' or t.STATUS_CODE is null ) ");
+                }
+            }
+
+            //签名
+            if (!StringUtils.isEmpty(qo.getSign())) {
+                sqlBuffer.append(" and t.SIGN like ?");
+                paramsList.add("%"+qo.getSign().trim()+"%");
+            }
+            //接口类型
+            if (!StringUtils.isEmpty(qo.getSubmitStyle())) {
+                sqlBuffer.append(" and t.SUBMIT_STYLE =?");
+                paramsList.add(qo.getSubmitStyle().trim());
+            }
+
+            //耗时
+            /*if(!StringUtils.isEmpty(qo.getTimeElapsed())){
+                String[] elapsed = qo.getTimeElapsed().split("-");
+                if(!StringUtils.isEmpty(elapsed[0])){
+                    sqlBuffer.append(" and t.TIME_ELAPSED >?");
+                    paramsList.add(elapsed[0]);
+                }
+                if(elapsed.length>=2 && !StringUtils.isEmpty(elapsed[1])){
+                    sqlBuffer.append(" and t.TIME_ELAPSED <=?");
+                    paramsList.add(elapsed[1]);
+                }
+            }*/
+
+            //时间起
+            if (!StringUtils.isEmpty(qo.getStartDate())) {
+                sqlBuffer.append(" and DATE_FORMAT(t.SUBMIT_TIME,'%Y-%m-%d %H:%i:%S') >=? ");
+                paramsList.add(qo.getStartDate().trim());
+            }
+            //时间止
+            if (!StringUtils.isEmpty(qo.getEndDate())) {
+                sqlBuffer.append(" and DATE_FORMAT(t.SUBMIT_TIME,'%Y-%m-%d %H:%i:%S') <=? ");
+                paramsList.add(qo.getEndDate().trim());
+            }
+
+            //根据参数个数，组织参数值
+            Object[] params = new Object[paramsList.size()];
+            paramsList.toArray(params);
+
+            Map<String, Object>  map = jdbcTemplate.queryForMap(sqlBuffer.toString(), params);
+            return map;
+        }
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("SUCCESS_SEND_SUM","0");
+
+        return map;
     }
 
     public int statisticMessageNumber(MessageDetailInfoValidator qo){

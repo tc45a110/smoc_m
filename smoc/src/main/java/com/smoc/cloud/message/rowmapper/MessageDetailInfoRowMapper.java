@@ -30,7 +30,7 @@ public class MessageDetailInfoRowMapper implements RowMapper<MessageDetailInfoVa
         if(!StringUtils.isEmpty(reportTime) && !StringUtils.isEmpty(submitTime)){
             Date reportDate = DateTimeUtils.getDateTimeSSSFormat(reportTime);
             Date submitDate = DateTimeUtils.getDateTimeSSSFormat(submitTime);
-            qo.setTimeElapsed(DateTimeUtils.getTimeInMillis(reportDate,submitDate));
+            qo.setTimeElapsed(""+DateTimeUtils.getTimeInMillis(reportDate,submitDate));
         }
 
         qo.setReportTime(reportTime);

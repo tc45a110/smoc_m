@@ -8,6 +8,7 @@ import com.smoc.cloud.message.entity.MessageDetailInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 短信明细
@@ -65,4 +66,10 @@ public interface MessageDetailInfoRepository extends JpaRepository<MessageDetail
      */
     PageList<MessageDetailInfoValidator> sendMessageList(PageParams<MessageDetailInfoValidator> pageParams);
 
+    /**
+     * 根据企业实时查询成功发送总量
+     * @param messageDetailInfoValidator
+     * @return
+     */
+    Map<String, Object> statisticEnterpriseSendMessage(MessageDetailInfoValidator messageDetailInfoValidator);
 }

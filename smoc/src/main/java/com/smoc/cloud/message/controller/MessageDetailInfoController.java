@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 短信明细
@@ -86,6 +87,17 @@ public class MessageDetailInfoController {
     public ResponseData<PageList<MessageDetailInfoValidator>> sendMessageList(@RequestBody PageParams<MessageDetailInfoValidator> pageParams) {
 
         return messageDetailInfoService.sendMessageList(pageParams);
+    }
+
+    /**
+     * 根据企业实时查询发送总量
+     * @param messageDetailInfoValidator
+     * @return
+     */
+    @RequestMapping(value = "/statisticEnterpriseSendMessage", method = RequestMethod.POST)
+    public ResponseData<Map<String, Object>> statisticEnterpriseSendMessage(@RequestBody MessageDetailInfoValidator messageDetailInfoValidator){
+
+        return messageDetailInfoService.statisticEnterpriseSendMessage(messageDetailInfoValidator);
     }
 
 }

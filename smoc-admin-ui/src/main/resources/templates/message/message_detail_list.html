@@ -70,7 +70,7 @@
                                             class="selectpicker  form-control" tabindex="-98">
                                         <option data-icon="mdi mdi-account" value="">--请选择下发状态--</option>
                                         <option data-icon="mdi mdi-account" th:selected="${messageDetailInfoValidator.statusFlag eq 'success'}" th:value="success">成功</option>
-                                        <option data-icon="mdi mdi-account" th:selected="${messageDetailInfoValidator.statusFlag eq 'error'}" th:value="error">失败(包含未知)</option>
+                                        <option data-icon="mdi mdi-account" th:selected="${messageDetailInfoValidator.statusFlag eq 'error'}" th:value="error">失败</option>
                                     </select>
                                 </div>
                                 <div class="form-group  col-sm-3">
@@ -80,7 +80,10 @@
                                     <mpm:tag id="submitStyle" identity="accountInterfaceType" show-type="select" key="code"
                                              class="form-control" name="submitStyle" th:value="${messageDetailInfoValidator.submitStyle}" title="接口类型"/>
                                 </div>
-
+                                <div class="form-group  col-sm-3">
+                                    <mpm:tag id="timeElapsed" identity="timeElapsed" show-type="select" key="code"
+                                             class="form-control" name="timeElapsed" th:value="${messageDetailInfoValidator.timeElapsed}" title="耗时时长"/>
+                                </div>
                                 <div class="form-group  col-sm-3">
                                     <input type="text" class="form-control" placeholder="省份"  th:field="*{area}" autocomplete="off">
                                 </div>
@@ -103,12 +106,56 @@
         </div>
         <!-- end row -->
 
+        <!-- start row  汇总统计-->
+        <div class="detail">
+            <div id="help" class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+                <ul>
+                    <li>
+                        <h2 style="color: #fff">客户提交总数：
+                            <span style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
+                                  data-d-group="4" data-a-sign=" " data-v-min="0"
+                                  data-v-max="99999999999"
+                                  class="autonumber">[[${total}]]</span>
+                        </h2>
+                        <span></span>
+                        <div class="row">
+                            <div class="form-group  col-lg-3 col-md-6 col-sm-6 col-xs-12 detailInner" style="min-width:400px;">
+                                <a>总成功发送数：<span style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
+                                                 data-d-group="4" data-a-sign=" " data-v-min="0"
+                                                 data-v-max="99999999999"
+                                                 class="autonumber">[[${successSum}]]</span></a>
+                            </div>
+                            <div class="form-group  col-lg-3 col-md-6 col-sm-6 col-xs-12 detailInner" style="min-width:400px;">
+                                <a>总失败发送数：<span style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
+                                                data-d-group="4" data-a-sign=" " data-v-min="0"
+                                                data-v-max="99999999999"
+                                                class="autonumber">[[${errorSum}]]</span></a>
+                            </div>
+                            <div class="form-group col-lg-3 col-md-6 col-sm-6 col-xs-12 detailInner" style="min-width:400px;">
+                                <a>成功率(%)：<span style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
+                                                data-d-group="4" data-a-sign=" " data-v-min="0"
+                                                data-v-max="99999999999"
+                                                class="autonumber">[[${successRatio}]]</span></a>
+                            </div>
+                            <div class="form-group  col-lg-3 col-md-6 col-sm-6 col-xs-12 detailInner" style="min-width:400px;">
+                                <a>失败率(%)：<span style="color:#fff;width:100px;background-color:#0095a8;text-align:left"
+                                              data-d-group="4" data-a-sign=" " data-v-min="0"
+                                              data-v-max="99999999999"
+                                              class="autonumber">[[${errorRatio}]]</span></a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- end row -->
+
         <!-- start row  列表数据-->
         <div class="row"  th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
                 <div class="panel panel-color panel-info">
                     <div class="panel-heading">
-                        <h3 class="panel-title">发送日志明细列表<small>&nbsp;系统默认查询三天内的数据</small></h3>
+                        <h3 class="panel-title">发送日志明细列表<small>&nbsp;系统默认查询当天内的数据</small></h3>
                     </div>
 
                     <div class="panel-body">

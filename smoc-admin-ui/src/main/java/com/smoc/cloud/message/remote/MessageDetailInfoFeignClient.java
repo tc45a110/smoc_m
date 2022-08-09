@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.Map;
+
 /**
  * 短信明细
  */
@@ -28,4 +30,12 @@ public interface MessageDetailInfoFeignClient {
 
     @RequestMapping(value = "/message/detail/tableStorePage", method = RequestMethod.POST)
     ResponseData<PageList<TableStoreMessageDetailInfoValidator>> tableStorePage(@RequestBody PageParams<TableStoreMessageDetailInfoValidator> params);
+
+    /**
+     * 根据企业实时查询发送总量
+     * @param messageDetailInfoValidator
+     * @return
+     */
+    @RequestMapping(value = "/message/detail/statisticEnterpriseSendMessage", method = RequestMethod.POST)
+    ResponseData<Map<String, Object>> statisticEnterpriseSendMessage(@RequestBody MessageDetailInfoValidator messageDetailInfoValidator);
 }

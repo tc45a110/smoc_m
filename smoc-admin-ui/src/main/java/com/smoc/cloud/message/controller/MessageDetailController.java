@@ -1,5 +1,6 @@
 package com.smoc.cloud.message.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.smoc.cloud.common.auth.qo.Users;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
@@ -12,6 +13,7 @@ import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.customer.service.BusinessAccountService;
 import com.smoc.cloud.customer.service.EnterpriseService;
 import com.smoc.cloud.message.service.MessageDetailInfoService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +35,7 @@ import java.util.stream.Collectors;
 /**
  * 消息明细
  **/
+@Slf4j
 @Controller
 @RequestMapping("/message/detail")
 public class MessageDetailController {
@@ -67,8 +71,7 @@ public class MessageDetailController {
         params.setPageSize(20);
         params.setCurrentPage(1);
         MessageDetailInfoValidator messageDetailInfoValidator = new MessageDetailInfoValidator();
-        Date startDate = DateTimeUtils.dateAddDays(new Date(),-2);
-        messageDetailInfoValidator.setStartDate(DateTimeUtils.getDateTimeFormat(startDate));
+        messageDetailInfoValidator.setStartDate(DateTimeUtils.getDateFormat(new Date())+" 00:00:00");
         messageDetailInfoValidator.setEndDate(DateTimeUtils.getDateTimeFormat(new Date()));
         messageDetailInfoValidator.setEnterpriseFlag(enterprise.getData().getEnterpriseFlag());
         messageDetailInfoValidator.setEnterpriseId(enterpriseId);
@@ -88,8 +91,11 @@ public class MessageDetailController {
         view.addObject("list", data.getData().getList());
         view.addObject("pageParams", data.getData().getPageParams());
         view.addObject("accountMap", accountMap);
-        return view;
 
+        //统计发送量、成功数、失败数、成功率、失败率
+        statisticEnterpriseSendMessage(view, messageDetailInfoValidator,data.getData().getPageParams().getTotalRows());
+
+        return view;
     }
 
     /**
@@ -132,12 +138,40 @@ public class MessageDetailController {
         view.addObject("list", data.getData().getList());
         view.addObject("pageParams", data.getData().getPageParams());
         view.addObject("accountMap", accountMap);
-        return view;
 
+        //统计发送量、成功数、失败数、成功率、失败率
+        statisticEnterpriseSendMessage(view, messageDetailInfoValidator,data.getData().getPageParams().getTotalRows());
+
+        return view;
+    }
+
+    //统计发送量、成功数、失败数、成功率、失败率
+    private void statisticEnterpriseSendMessage(ModelAndView view, MessageDetailInfoValidator messageDetailInfoValidator, long total ) {
+        //统计发送成功量
+        ResponseData<Map<String, Object>> sendData = messageDetailInfoService.statisticEnterpriseSendMessage(messageDetailInfoValidator);
+        //成功总数
+        long successSum = Long.parseLong("" + sendData.getData().get("SUCCESS_SEND_SUM"));
+        //成功率
+        BigDecimal successRatio = new BigDecimal(0);
+        //失败总数
+        long errorSum = total - successSum;
+        //失败率
+        BigDecimal errorRatio = new BigDecimal(0);
+        if(total>0){
+            successRatio = new BigDecimal(successSum).divide(new BigDecimal(total),2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100));
+            errorRatio = new BigDecimal(errorSum).divide(new BigDecimal(total),2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100));
+        }
+
+        view.addObject("total", total);
+        view.addObject("successSum", successSum);
+        view.addObject("successRatio", successRatio.stripTrailingZeros().toPlainString());
+        view.addObject("errorSum", errorSum);
+        view.addObject("errorRatio", errorRatio.stripTrailingZeros().toPlainString());
     }
 
     /**
      * EC检索
+     *
      * @return
      */
     @RequestMapping(value = "/ec/customer/search", method = RequestMethod.GET)
@@ -168,6 +202,7 @@ public class MessageDetailController {
 
     /**
      * EC检索
+     *
      * @return
      */
     @RequestMapping(value = "/ec/customer/search/page", method = RequestMethod.POST)
@@ -199,7 +234,7 @@ public class MessageDetailController {
         ResponseData<List<AccountBasicInfoValidator>> list = businessAccountService.accountList(accountBasicInfoValidator);
 
         Map<String, AccountBasicInfoValidator> accountMap = new HashMap<>();
-        if(!StringUtils.isEmpty(list.getData()) && list.getData().size()>0){
+        if (!StringUtils.isEmpty(list.getData()) && list.getData().size() > 0) {
             accountMap = list.getData().stream().collect(Collectors.toMap(AccountBasicInfoValidator::getAccountId, Function.identity()));
         }
 

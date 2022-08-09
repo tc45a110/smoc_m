@@ -36,31 +36,31 @@
                     <form id="query_form" th:action="@{/template/web/page}" th:object="${accountTemplateInfoValidator}"
                           method="post">
                         <div class="row m-b-60">
-                            <div class="form-group  col-sm-4">
+                            <div class="form-group  col-sm-3">
                                 <input type="text" class="form-control"
                                        placeholder="企业名称" autocomplete="off" th:field="*{enterpriseName}">
                             </div>
-                            <div class="form-group  col-sm-4">
+                            <div class="form-group  col-sm-3">
                                 <input type="text" class="form-control"
                                        placeholder="业务账号名称" autocomplete="off" th:field="*{accountName}">
                             </div>
-                            <div class="form-group  col-sm-4">
+                            <div class="form-group  col-sm-3">
                                 <input type="text" class="form-control"
                                        placeholder="业务账号" autocomplete="off" th:field="*{businessAccount}">
                             </div>
-                            <div class="form-group  col-sm-4">
+                            <div class="form-group  col-sm-3">
                                 <mpm:tag id="templateType" identity="businessType" show-type="select" key="code"
                                          name="templateType"
                                          th:value="${accountTemplateInfoValidator.templateType}"
                                          class="form-control" data-icon="mdi mdi-view-module" title="业务类型"/>
                             </div>
-                            <div class="form-group  col-sm-4">
+                            <div class="form-group  col-sm-3">
                                 <mpm:tag id="infoType" identity="infoType" show-type="select" key="code"
                                          name="infoType"
                                          th:value="${accountTemplateInfoValidator.infoType}"
                                          class="form-control" data-icon="mdi mdi-view-module" title="信息分类"/>
                             </div>
-                            <div class="form-group  col-sm-4">
+                            <div class="form-group  col-sm-3">
                                 <input type="text" class="form-control"
                                        placeholder="模板内容" autocomplete="off" th:field="*{templateContent}">
                             </div>
@@ -68,7 +68,16 @@
                                 <input type="text" class="form-control" placeholder="模板ID" autocomplete="off"
                                        th:field="*{templateId}">
                             </div>
-                            <div class="form-group col-sm-4 pull-right" style="text-align: right">
+                            <div class="form-group  col-sm-3">
+                                <select data-style="btn-default" name="templateStatus" data-live-search="true" id="templateStatus" class="selectpicker form-control" tabindex="-98">
+                                    <option value="" data-icon="mdi mdi-apps">--请选择模版状态--</option>
+                                    <option data-icon="mdi mdi-apps" value="2" th:selected="${accountTemplateInfoValidator.templateStatus eq '2'}">通过审核</option>
+                                    <option data-icon="mdi mdi-apps" value="3" th:selected="${accountTemplateInfoValidator.templateStatus eq '3'}">待审核</option>
+                                    <option data-icon="mdi mdi-apps" value="1" th:selected="${accountTemplateInfoValidator.templateStatus eq '1'}">拒绝</option>
+                                    <option data-icon="mdi mdi-apps" value="0" th:selected="${accountTemplateInfoValidator.templateStatus eq '0'}">已失效</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-sm-6 pull-right" style="text-align: right">
                                 <button sec:authorize-url="/template/web/page" type="submit"
                                         class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                     <i class="glyphicon glyphicon-search"></i> 查询
@@ -139,7 +148,7 @@
                                         <a class="btn btn-success btn-rounded btn-sm waves-effect waves-light" th:if="${info.templateStatus eq '2'}">通过审核</a>
                                         <a class="btn btn-warning btn-rounded btn-sm waves-effect waves-light" th:if="${info.templateStatus eq '3'}">待审核</a>
                                         <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light" th:if="${info.templateStatus eq '1'}">拒绝</a>
-                                        <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light" th:if="${info.templateStatus eq '0'}">无效</a>
+                                        <a class="btn btn-danger btn-rounded btn-sm waves-effect waves-light" th:if="${info.templateStatus eq '0'}">已失效</a>
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px;">
                                         <a sec:authorize-url="/template/view/center/*/*"
@@ -156,6 +165,13 @@
                                            data-toggle="tooltip"
                                            data-placement="left" title="" data-original-title="审核WEB模板">
                                             <i style="font-size: 20px" class="mdi mdi-comment-check-outline"></i></a>
+                                        <a th:if="${'0'== info.templateStatus or '2'== info.templateStatus}" sec:authorize-url="/template/cancel/*/*"
+                                           data-toggle="modal" th:onclick="confirmLogout([[${info.templateId}]],[[${info.templateStatus}]],this)"
+                                           data-target="#confirm-modal" class="on-default remove-row"
+                                           th:style="${info.templateStatus eq '2'?'padding-left: 5px;color: #f05050':'padding-left: 5px;color: #29b6f6'}"
+                                           th:title="${info.templateStatus eq '2'?'注销模板':'启用模板'}">
+                                            <i style="font-size: 18px" class="mdi mdi-delete-sweep"></i>
+                                        </a>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -176,17 +192,16 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                            <h4 class="modal-title" id="custom-width-modalLabel">确认注销</h4>
+                            <h4 class="modal-title" id="custom-width-modalLabel">注销、启用</h4>
                         </div>
                         <div class="modal-body">
-
-                            <p>注销之后，该模板将无法使用！你还是确认注销？</p>
-
+                            <p id="enterprise-tip">注销之后，该模板将无法使用！你还是确认注销？</p>
                         </div>
                         <div class="modal-footer">
                             <input type="hidden" id="deleteId">
+                            <input type="hidden" id="active">
                             <a class="btn btn-default waves-effect" data-dismiss="modal">取消</a>
-                            <button onclick="logoutById()" class="btn btn-primary waves-effect waves-light">确认注销
+                            <button id="forbbenEnterpriseButton" onclick="logoutById()" class="btn btn-primary waves-effect waves-light">确认注销
                             </button>
                         </div>
                     </div>
@@ -201,16 +216,25 @@
 <th:block th:insert="fragments/common_fragments :: common_js"/>
 <th:block th:insert="fragments/common_fragments :: select_js"/>
 <script>
-
-   function confirmLogout(id) {
+    function confirmLogout(id,active) {
         $("#deleteId").val(id);
+        $("#active").val(active);
+        if (0 == active) {
+            document.getElementById("enterprise-tip").innerText = "启用之后，该模板将正常使用！你还是确认启用？";
+            document.getElementById("forbbenEnterpriseButton").setAttribute("class", "btn btn-info waves-effect waves-light");
+            document.getElementById("forbbenEnterpriseButton").innerText = "确定启用";
+        } else {
+            document.getElementById("enterprise-tip").innerText = "注销之后，该模板将无法使用！你还是确认注销？";
+            document.getElementById("forbbenEnterpriseButton").setAttribute("class", "btn btn-danger waves-effect waves-light");
+            document.getElementById("forbbenEnterpriseButton").innerText = "确定注销";
+        }
     }
 
     //注销
     function logoutById() {
         var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
         $('#preloader').css('display', 'block');
-        location.href = contextPath + '/template/cancel/' + $("#deleteId").val();
+        location.href = contextPath + '/template/cancel/' + $("#deleteId").val()+"/"+$("#active").val();
     }
 
     var resizefunc = [];

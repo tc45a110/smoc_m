@@ -374,6 +374,12 @@ public class TemplateController {
         //记录日志
         log.info("[模板管理][注销模板][{}][{}]数据:{}", "delete", user.getUserName(), JSON.toJSONString(data.getCode()));
 
+        //web和http
+        if(!"CMPP".equals(data.getData().getTemplateAgreementType())){
+            view.setView(new RedirectView("/template/web/list", true, false));
+            return view;
+        }
+
         view.setView(new RedirectView("/template/list/" + data.getData().getTemplateAgreementType(), true, false));
         return view;
     }

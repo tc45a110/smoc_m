@@ -15,7 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 短信明细
@@ -111,4 +113,18 @@ public class MessageDetailInfoService {
         return ResponseDataUtil.buildSuccess(page);
     }
 
+    /**
+     * 根据企业实时查询成功发送总量
+     * @param messageDetailInfoValidator
+     * @return
+     */
+    public ResponseData<Map<String, Object>> statisticEnterpriseSendMessage(MessageDetailInfoValidator messageDetailInfoValidator) {
+        Map<String, Object> map = new HashMap<>();
+
+        //短信成功发送总量
+        Map<String, Object>  messageSendTotal = messageDetailInfoRepository.statisticEnterpriseSendMessage(messageDetailInfoValidator);
+        map.put("SUCCESS_SEND_SUM",messageSendTotal.get("SUCCESS_SEND_SUM"));
+
+        return ResponseDataUtil.buildSuccess(map);
+    }
 }

@@ -147,7 +147,7 @@ public class AccountTemplateInfoController {
                 }
 
                 //HTTP、WEB模版通过审核
-                if (("WEB".equals(accountTemplateInfoValidator.getTemplateAgreementType()) || "HTTP".equals(accountTemplateInfoValidator.getTemplateAgreementType())) && "2".equals(accountTemplateInfoValidator.getTemplateStatus())) {
+                if (("WEB".equals(accountTemplateInfoValidator.getTemplateAgreementType()) || "HTTP".equals(accountTemplateInfoValidator.getTemplateAgreementType())) && !"1".equals(accountTemplateInfoValidator.getTemplateStatus())) {
                     //固定模版
                     if ("1".equals(accountTemplateInfoValidator.getTemplateFlag())) {
                         this.accountTemplateInfoService.loadHttpWebTemplate();

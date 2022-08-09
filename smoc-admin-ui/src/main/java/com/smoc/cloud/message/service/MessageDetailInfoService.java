@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 
 /**
  * 短信明细
@@ -41,6 +43,20 @@ public class MessageDetailInfoService {
     public ResponseData<PageList<TableStoreMessageDetailInfoValidator>> tableStorePage(PageParams<TableStoreMessageDetailInfoValidator> params) {
         try {
             ResponseData<PageList<TableStoreMessageDetailInfoValidator>> page = messageDetailInfoFeignClient.tableStorePage(params);
+            return page;
+        } catch (Exception e) {
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 根据企业实时查询发送总量
+     * @param messageDetailInfoValidator
+     * @return
+     */
+    public ResponseData<Map<String, Object>> statisticEnterpriseSendMessage(MessageDetailInfoValidator messageDetailInfoValidator) {
+        try {
+            ResponseData<Map<String, Object>> page = messageDetailInfoFeignClient.statisticEnterpriseSendMessage(messageDetailInfoValidator);
             return page;
         } catch (Exception e) {
             return ResponseDataUtil.buildError(e.getMessage());
