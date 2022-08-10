@@ -19,6 +19,7 @@ public class AccountBasicInfoRowMapper implements RowMapper<AccountBasicInfoVali
         qo.setEnterpriseId(resultSet.getString("ENTERPRISE_ID"));
         qo.setEnterpriseName(resultSet.getString("ENTERPRISE_NAME"));
         qo.setAccountName(resultSet.getString("ACCOUNT_NAME"));
+        qo.setExtendNumber(resultSet.getString("EXTEND_NUMBER"));
         qo.setCarrier(resultSet.getString("CARRIER"));
         qo.setBusinessType(resultSet.getString("BUSINESS_TYPE"));
         qo.setInfoType(resultSet.getString("INFO_TYPE"));

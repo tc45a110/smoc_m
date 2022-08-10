@@ -2,10 +2,10 @@ package com.smoc.cloud.customer.service;
 
 
 import com.alibaba.fastjson.JSON;
-import com.smoc.cloud.common.redis.RedisConstant;
-import com.smoc.cloud.common.redis.RedisModel;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
+import com.smoc.cloud.common.redis.RedisConstant;
+import com.smoc.cloud.common.redis.RedisModel;
 import com.smoc.cloud.common.response.ResponseCode;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
@@ -23,7 +23,6 @@ import com.smoc.cloud.common.utils.DES;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.common.utils.PasswordUtils;
 import com.smoc.cloud.common.utils.UUID;
-import com.smoc.cloud.configure.channel.entity.ConfigChannelInterface;
 import com.smoc.cloud.customer.entity.AccountBasicInfo;
 import com.smoc.cloud.customer.entity.AccountChannelInfo;
 import com.smoc.cloud.customer.entity.AccountInterfaceInfo;
@@ -173,6 +172,28 @@ public class BusinessAccountService {
             }
         }
 
+        //扩展吗查重
+        Iterable<AccountBasicInfo> extendNumber = businessAccountRepository.findByExtendNumber(accountBasicInfoValidator.getExtendNumber());
+        //add查重
+        if (extendNumber != null && extendNumber.iterator().hasNext() && "add".equals(op)) {
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_CREATE_ERROR);
+        }
+        //edit查重
+        if (extendNumber != null && extendNumber.iterator().hasNext()) {
+            boolean status = false;
+            Iterator iterator = data.iterator();
+            while (iterator.hasNext()) {
+                AccountBasicInfo accountBasicInfo = (AccountBasicInfo) iterator.next();
+                if (!entity.getAccountId().equals(accountBasicInfo.getAccountId())) {
+                    status = true;
+                    break;
+                }
+            }
+            if (status) {
+                return ResponseDataUtil.buildError(ResponseCode.PARAM_CREATE_ERROR);
+            }
+        }
+
         //转换日期格式
         entity.setCreatedTime(DateTimeUtils.getDateTimeFormat(accountBasicInfoValidator.getCreatedTime()));
 
@@ -211,8 +232,8 @@ public class BusinessAccountService {
         }
 
         //如果不为空：代表是复制账号，需要查接口信息
-        if(StringUtils.hasText(accountBasicInfoValidator.getAccountCopyId())){
-            String process = copyAccount(accountBasicInfoValidator.getAccountCopyId(),entity);
+        if (StringUtils.hasText(accountBasicInfoValidator.getAccountCopyId())) {
+            String process = copyAccount(accountBasicInfoValidator.getAccountCopyId(), entity);
             entity.setAccountProcess(process);
         }
 
@@ -289,11 +310,11 @@ public class BusinessAccountService {
     }
 
     //复制账户信息accountCopyId:原账户，accountId:新账户
-    private String  copyAccount(String accountCopyId, AccountBasicInfo entity) {
+    private String copyAccount(String accountCopyId, AccountBasicInfo entity) {
         StringBuffer process = new StringBuffer(entity.getAccountProcess());
         Optional<AccountInterfaceInfo> accountInterfaceInfo = accountInterfaceRepository.findById(accountCopyId);
         //接口信息
-        if(accountInterfaceInfo.isPresent()){
+        if (accountInterfaceInfo.isPresent()) {
             AccountInterfaceInfo terface = new AccountInterfaceInfo();
             BeanUtils.copyProperties(accountInterfaceInfo.get(), terface);
             terface.setAccountId(entity.getAccountId());
@@ -317,14 +338,14 @@ public class BusinessAccountService {
                 redisTemplate2.delete(RedisConstant.HTTP_SERVER_KEY + entity.getAccountId());
             }
             //记录日志
-            log.info("[EC业务账号复制][业务账号接口信息][{}]数据:{}","add", JSON.toJSONString(terface));
+            log.info("[EC业务账号复制][业务账号接口信息][{}]数据:{}", "add", JSON.toJSONString(terface));
         }
 
         //财务信息
         AccountFinanceInfoValidator accountFinanceInfoValidator = new AccountFinanceInfoValidator();
         accountFinanceInfoValidator.setAccountId(accountCopyId);
         List<AccountFinanceInfoValidator> list = accountFinanceRepository.findByAccountId(accountFinanceInfoValidator);
-        if (!StringUtils.isEmpty(list) && list.size()>0) {
+        if (!StringUtils.isEmpty(list) && list.size() > 0) {
             List<AccountFinanceInfoValidator> prices = new ArrayList<>();
             for (AccountFinanceInfoValidator accountFinanceInfo : list) {
                 AccountFinanceInfoValidator price = new AccountFinanceInfoValidator();
@@ -346,25 +367,25 @@ public class BusinessAccountService {
             accountFinanceRepository.batchSave(accountFinanceInfoValidator);
 
             //修改账户的授信额度
-            financeAccountRepository.updateAccountCreditSumByAccountId(accountFinanceInfoValidator.getAccountId(),accountFinanceInfoValidator.getAccountCreditSum());
+            financeAccountRepository.updateAccountCreditSumByAccountId(accountFinanceInfoValidator.getAccountId(), accountFinanceInfoValidator.getAccountCreditSum());
             process = process.replace(1, 2, "1");
             //记录日志
-            log.info("[EC业务账号复制][业务账号财务信息][{}]数据:{}","add", JSON.toJSONString(accountFinanceInfoValidator));
+            log.info("[EC业务账号复制][业务账号财务信息][{}]数据:{}", "add", JSON.toJSONString(accountFinanceInfoValidator));
         }
 
         //通道信息
         List<AccountChannelInfo> channelList = accountChannelRepository.findByAccountId(accountCopyId);
-        if(!StringUtils.isEmpty(channelList) && channelList.size()>0){
+        if (!StringUtils.isEmpty(channelList) && channelList.size() > 0) {
             AccountChannelInfoValidator accountChannelInfoValidator = new AccountChannelInfoValidator();
             accountChannelInfoValidator.setAccountId(entity.getAccountId());
             accountChannelInfoValidator.setCreatedBy(entity.getCreatedBy());
-            accountChannelRepository.batchChannelCopy(accountChannelInfoValidator,channelList);
+            accountChannelRepository.batchChannelCopy(accountChannelInfoValidator, channelList);
             process = process.replace(3, 4, "1");
             //记录日志
-            log.info("[EC业务账号复制][业务账号通道信息][{}]数据:{}-{}","add", JSON.toJSONString(accountChannelInfoValidator), JSON.toJSONString(channelList));
+            log.info("[EC业务账号复制][业务账号通道信息][{}]数据:{}-{}", "add", JSON.toJSONString(accountChannelInfoValidator), JSON.toJSONString(channelList));
         }
 
-        copyFiltersInfo(accountCopyId,entity);
+        copyFiltersInfo(accountCopyId, entity);
 
         return process.toString();
     }
@@ -372,8 +393,8 @@ public class BusinessAccountService {
     @Async
     public void copyFiltersInfo(String accountCopyId, AccountBasicInfo entity) {
         //过滤信息
-        List<ParameterExtendFiltersValue> filtersList = parameterExtendFiltersValueRepository.findParameterExtendFiltersValueByBusinessIdAndBusinessType(accountCopyId,"BUSINESS_ACCOUNT_FILTER");
-        if(!StringUtils.isEmpty(filtersList) && filtersList.size()>0){
+        List<ParameterExtendFiltersValue> filtersList = parameterExtendFiltersValueRepository.findParameterExtendFiltersValueByBusinessIdAndBusinessType(accountCopyId, "BUSINESS_ACCOUNT_FILTER");
+        if (!StringUtils.isEmpty(filtersList) && filtersList.size() > 0) {
             //使用stream拷贝list
             List<ParameterExtendFiltersValueValidator> infoList = filtersList.stream()
                     .map(e -> {
@@ -392,7 +413,7 @@ public class BusinessAccountService {
             parameterExtendFiltersValueRepository.batchSave(infoList);
             parameterExtendFiltersValueService.reloadRedisCache(entity.getAccountId(), infoList);
             //记录日志
-            log.info("[EC业务账号复制][业务账号过滤信息][{}]数据:{}-{}","add", JSON.toJSONString(infoList));
+            log.info("[EC业务账号复制][业务账号过滤信息][{}]数据:{}-{}", "add", JSON.toJSONString(infoList));
         }
     }
 
@@ -465,8 +486,8 @@ public class BusinessAccountService {
      * @param enterpriseId
      * @return
      */
-    public ResponseData<List<AccountBasicInfo>> findBusinessAccountByEnterpriseIdAndBusinessType(String enterpriseId,String businessType) {
-        List<AccountBasicInfo> list = businessAccountRepository.findBusinessAccountByEnterpriseIdAndBusinessType(enterpriseId,businessType);
+    public ResponseData<List<AccountBasicInfo>> findBusinessAccountByEnterpriseIdAndBusinessType(String enterpriseId, String businessType) {
+        List<AccountBasicInfo> list = businessAccountRepository.findBusinessAccountByEnterpriseIdAndBusinessType(enterpriseId, businessType);
         return ResponseDataUtil.buildSuccess(list);
     }
 
@@ -551,6 +572,7 @@ public class BusinessAccountService {
 
     /**
      * 查询账户列表根据接口类型
+     *
      * @param pageParams
      * @return
      */
@@ -560,6 +582,7 @@ public class BusinessAccountService {
 
     /**
      * 查询业务账号发送量
+     *
      * @param pageParams
      * @return
      */
@@ -570,6 +593,7 @@ public class BusinessAccountService {
 
     /**
      * 查询所有账号
+     *
      * @param accountBasicInfoValidator
      * @return
      */

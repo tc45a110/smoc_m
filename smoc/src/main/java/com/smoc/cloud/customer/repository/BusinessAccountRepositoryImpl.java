@@ -41,6 +41,7 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
         sqlBuffer.append("  t.ACCOUNT_ID");
         sqlBuffer.append(", t.ENTERPRISE_ID");
         sqlBuffer.append(", t.ACCOUNT_NAME");
+        sqlBuffer.append(", t.EXTEND_NUMBER");
         sqlBuffer.append(", t.BUSINESS_TYPE");
         sqlBuffer.append(", t.CARRIER");
         sqlBuffer.append(", t.INFO_TYPE");
@@ -78,6 +79,11 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
         if (!StringUtils.isEmpty(qo.getBusinessType())) {
             sqlBuffer.append(" and t.BUSINESS_TYPE = ?");
             paramsList.add(qo.getBusinessType().trim());
+        }
+
+        if (!StringUtils.isEmpty(qo.getExtendNumber())) {
+            sqlBuffer.append(" and t.EXTEND_NUMBER = ?");
+            paramsList.add(qo.getExtendNumber().trim());
         }
 
         if (!StringUtils.isEmpty(qo.getInfoType())) {
