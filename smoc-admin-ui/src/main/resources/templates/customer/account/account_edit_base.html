@@ -84,12 +84,14 @@
                                                              th:value="${accountBasicInfoValidator.infoType}" title="信息分类"/>
                                                 </div>
                                                 <div class="col-sm-4 m-b-10">
-                                                    <label for="extendCode">扩展码&nbsp;</label>
-                                                    <input id="extendCode" type="text" class="form-control"
-                                                           th:field="*{extendCode}"
-                                                           data-parsley-length="[1,32]" data-parsley-type="number"
+                                                    <label for="extendNumber">账号扩展码&nbsp;<span class="text-danger">*</span>&nbsp;
+                                                        <span class="text-danger" th:if="${#fields.hasErrors('extendNumber')}"
+                                                              th:errors="*{extendNumber}">*</span></label>
+                                                    <input id="extendNumber" type="text" class="form-control"
+                                                           th:field="*{extendNumber}" th:attr="readonly=${op == 'edit'?'true':'false'}"
+                                                           data-parsley-length="[6,6]" data-parsley-type="number"
                                                            autocomplete="off"
-                                                           placeholder="输入扩展码">
+                                                           placeholder="输入账号扩展码">
                                                 </div>
 
                                             </div>

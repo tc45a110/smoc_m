@@ -23,6 +23,7 @@ import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.customer.service.*;
 import com.smoc.cloud.properties.SmocProperties;
+import com.smoc.cloud.sequence.service.SequenceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -74,6 +75,9 @@ public class AccountController {
 
     @Autowired
     private SmocProperties smocProperties;
+
+    @Autowired
+    private SequenceService sequenceService;
 
     /**
      * 业务账号列表
@@ -226,6 +230,9 @@ public class AccountController {
             accountBasicInfoValidator.setAccountPriority("2");//账号优先级：默认中
             accountBasicInfoValidator.setAccountChannelType("ACCOUNT_CHANNEL_GROUP");//设置通道方式:默认通道组
             accountBasicInfoValidator.setRepairStatus("0");//默认不补发
+
+            Integer extendNumber = sequenceService.findSequence("ACCOUNT_EXTEND_NUMBER");
+            accountBasicInfoValidator.setExtendNumber(extendNumber+"");
 
             //查询企业数据
             ResponseData<EnterpriseBasicInfoValidator> data = enterpriseService.findById(accountId);

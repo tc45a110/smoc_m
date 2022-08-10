@@ -35,6 +35,8 @@ public interface BusinessAccountRepository extends CrudRepository<AccountBasicIn
 
     Iterable<AccountBasicInfo> findByAccountId(String account);
 
+    Iterable<AccountBasicInfo> findByExtendNumber(String extendNumber);
+
     /**
      * 注销、启用业务账号
      *

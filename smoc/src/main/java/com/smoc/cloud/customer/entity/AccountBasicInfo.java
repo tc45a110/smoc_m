@@ -10,6 +10,7 @@ public class AccountBasicInfo {
     private String accountId;
     private String enterpriseId;
     private String accountName;
+    private String extendNumber;
     private String businessType;
     private String carrier;
     private String infoType;
@@ -58,6 +59,17 @@ public class AccountBasicInfo {
 
     public void setAccountName(String accountName) {
         this.accountName = accountName;
+    }
+
+
+    @Basic
+    @Column(name = "EXTEND_NUMBER")
+    public String getExtendNumber() {
+        return extendNumber;
+    }
+
+    public void setExtendNumber(String extendNumber) {
+        this.extendNumber = extendNumber;
     }
 
     @Basic
