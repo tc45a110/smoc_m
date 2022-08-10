@@ -157,18 +157,19 @@
                                                            data-parsley-type="url" autocomplete="off"
                                                            placeholder="上行短信推送地址url">
                                                 </div>
-                                                <div class="form-group m-b-20">
-                                                    <label>运营商状态报告推送地址url&nbsp;
-                                                        <span class="text-danger"
-                                                              th:if="${#fields.hasErrors('statusReportUrl')}"
-                                                              th:errors="*{statusReportUrl}"
-                                                              style="font-weight: 200;font-size: 12px"></span></label>
-                                                    <input type="text" class="form-control"
-                                                           th:field="*{statusReportUrl}" data-parsley-length="[2,128]"
-                                                           data-parsley-type="url" autocomplete="off"
-                                                           placeholder="运营商状态报告推送地址url">
-                                                </div>
                                             </div>
+                                        </div>
+
+                                        <div id="REPORT_URL" style="display: none" class="form-group m-b-20">
+                                            <label>运营商状态报告推送地址url&nbsp;
+                                                <span class="text-danger"
+                                                      th:if="${#fields.hasErrors('statusReportUrl')}"
+                                                      th:errors="*{statusReportUrl}"
+                                                      style="font-weight: 200;font-size: 12px"></span></label>
+                                            <input type="text" class="form-control" id="statusReportUrl"
+                                                   th:field="*{statusReportUrl}" data-parsley-length="[2,128]"
+                                                   data-parsley-type="url" autocomplete="off"
+                                                   placeholder="运营商状态报告推送地址url">
                                         </div>
 
                                         <div class="form-group m-b-20" id="CHECK_TEMPL" style="display: none">
@@ -282,6 +283,15 @@
             document.getElementById("HTTP_SMS").style.display = "none";
 
             //document.getElementById("checkTemplId").innerText = "是否审核内容";
+            if("SGIP" == value){
+                document.getElementById("REPORT_URL").style.display = "";
+                $('#statusReportUrl').prop("required","true");
+            }else{
+                document.getElementById("REPORT_URL").style.display = "none";
+                $("#REPORT_URL :input").each(function(){
+                    $(this).removeAttr("required")
+                });
+            }
 
             $('#srcId').prop("required","true");
             $('#maxConnect').prop("required","true");
@@ -319,12 +329,17 @@
 
             //document.getElementById("checkTemplId").innerText = "是否审核模板";
 
+
+
             if("WEB" == value){
                 document.getElementById("SMS_URL").style.display = "none";
                 document.getElementById("IP").style.display = "none";
+                document.getElementById("REPORT_URL").style.display = "none";
             }else{
                 document.getElementById("SMS_URL").style.display = "";
+                document.getElementById("REPORT_URL").style.display = "";
             }
+
 
             $('#maxSubmitSecond').prop("required","true");
             $('#executeCheck').prop("required","true");
@@ -337,6 +352,9 @@
             });
             $("#CHECK_TEMPL :radio").each(function(){
                 $(this).prop("required","true");
+            });
+            $("#REPORT_URL :input").each(function(){
+                $(this).removeAttr("required")
             });
 
             var maxSendSecond = $("#maxSendSecond").val();

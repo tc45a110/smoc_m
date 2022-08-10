@@ -287,7 +287,7 @@
 <script th:src="@{/static/plugins/bootstrap-inputmask/bootstrap-inputmask.min.js}"></script>
 <script th:src="@{/static/plugins/autoNumeric/autoNumeric.js}"></script>
 
-<script>
+<script th:remove="${#strings.isEmpty(error)}?none:all">
 
     $("#submitbut").click(function(){
         var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
@@ -364,13 +364,12 @@
         $('.autonumber').autoNumeric('init');
     });
 
+</script>
+<script>
+
     var resizefunc = [];
     //隐藏进度项
     $('#preloader').css('display', 'none');
-
-
-
-
 </script>
 </body>
 </html>

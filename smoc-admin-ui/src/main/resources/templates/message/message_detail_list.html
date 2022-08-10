@@ -249,7 +249,7 @@
 <script th:src="@{/static/plugins/bootstrap-daterangepicker/daterangepicker.js}"></script>
 <!-- Modal-Effect -->
 
-<script>
+<script th:remove="${#strings.isEmpty(error)}?none:all">
 
     $('#reportrange').daterangepicker({
         format: 'YYYY-MM-DD HH:mm:ss',
@@ -293,6 +293,12 @@
     }, function (start, end, label) {
         //alert('A date range was chosen: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
     });
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+</script>
+<script>
 
     var resizefunc = [];
     //隐藏进度项

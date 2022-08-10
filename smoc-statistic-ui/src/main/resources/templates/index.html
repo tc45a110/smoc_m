@@ -49,7 +49,7 @@
                     <i class="mdi mdi-account-convert widget-two-icon"></i>
                     <div class="wigdet-two-content text-white">
                         <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="User This Month">
-                            利润总额（[[${year}]]年）</p>
+                            净毛利总额（[[${year}]]年）</p>
                         <h2 class="text-white">
                             <span data-plugin="counterup">
                              <span data-d-group="4" data-a-sign="¥ "
@@ -175,7 +175,7 @@
                 },
                 color: ['#71D5DE', '#59A9E7', '#F4979E'],
                 legend: {
-                    data: ['发送量（百万）', '营收（万元）', '净利润（万元）']
+                    data: ['发送量（百万）', '营收（万元）', '净毛利（万元）']
                 },
                 tooltip: {
                     trigger: 'axis'
@@ -229,7 +229,7 @@
                         data: articles.incomeAmount
                     },
                     {
-                        name: '净利润（万元）',
+                        name: '净毛利（万元）',
                         type: 'line',
                         stack: 'Total',
                         data: articles.profitAmount

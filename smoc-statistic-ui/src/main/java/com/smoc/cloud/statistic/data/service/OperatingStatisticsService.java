@@ -2,6 +2,9 @@ package com.smoc.cloud.statistic.data.service;
 
 
 import com.smoc.cloud.common.response.ResponseData;
+import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.smoc.spss.model.StatisticRatioModel;
+import com.smoc.cloud.common.smoc.spss.qo.ManagerStatisticQo;
 import com.smoc.cloud.common.smoc.spss.qo.StatisticIncomeQo;
 import com.smoc.cloud.statistic.data.remote.OperatingStatisticsFeignClient;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -50,12 +54,23 @@ public class OperatingStatisticsService {
         String[] month = new String[monthMap.size()];
         //收入
         BigDecimal[] income = new BigDecimal[monthMap.size()];
+        //总收入
+        double totalIncome = 0;
+        //封装占比数据
+        List<StatisticRatioModel> ratio = new ArrayList<>();
 
         int i = 0;
         for (String key : monthMap.keySet()) {
             month[i] = key;
-            income[i] = monthMap.get(key);
+            BigDecimal profit = monthMap.get(key);
+            income[i] = profit;
+            totalIncome += profit.doubleValue();
             i++;
+
+            StatisticRatioModel model = new StatisticRatioModel();
+            model.setName(key);
+            model.setValue(profit);
+            ratio.add(model);
         }
 
         //组建每月收入的 起点
@@ -67,6 +82,8 @@ public class OperatingStatisticsService {
         statisticIncomeQo.setMonthArray(month);
         statisticIncomeQo.setIncomeArray(income);
         statisticIncomeQo.setStartImcomeArray(startImcome);
+        statisticIncomeQo.setTotalImcome(new BigDecimal(totalIncome).setScale(2, BigDecimal.ROUND_HALF_UP));
+        statisticIncomeQo.setRatios(ratio);
 
         return statisticIncomeQo;
     }
@@ -117,5 +134,19 @@ public class OperatingStatisticsService {
 
         return new BigDecimal(result);
 
+    }
+
+    /**
+     * 运营数据月查询:统计每月发送数据
+     * @param managerStatisticQo
+     * @return
+     */
+    public ResponseData<List<ManagerStatisticQo>> operatingStatisticSendMessageMonth(ManagerStatisticQo managerStatisticQo) {
+        try {
+            ResponseData<List<ManagerStatisticQo>> list = operatingStatisticsFeignClient.operatingStatisticSendMessageMonth(managerStatisticQo);
+            return list;
+        } catch (Exception e) {
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
     }
 }

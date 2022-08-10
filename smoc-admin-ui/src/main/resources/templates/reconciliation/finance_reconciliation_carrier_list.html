@@ -172,7 +172,7 @@
                                                class="on-default edit-row"
                                                style="padding-left: 5px;color:#4BD396;"><i style="font-size: 18px"
                                                                                            class="glyphicon glyphicon-search"></i></a>
-                                            <a sec:authorize-url="/finance/reconciliation/carrier/excel/*/*"
+                                            <a sec:authorize-url="/finance/reconciliation/carrier/excel/*/*" th:if="${info.channelPeriodStatus ne '4'}"
                                                th:href="@{/finance/reconciliation/carrier/excel/{channelProvder}/{startDate}(channelProvder=${info.channelProvder},startDate=${info.channelPeriod})}"
                                                     data-toggle="tooltip" data-placement="bottom"
                                                     data-original-title="导出EXCEL"

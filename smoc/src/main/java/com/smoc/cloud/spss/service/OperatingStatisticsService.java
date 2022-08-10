@@ -2,8 +2,8 @@ package com.smoc.cloud.spss.service;
 
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
+import com.smoc.cloud.common.smoc.spss.qo.ManagerStatisticQo;
 import com.smoc.cloud.common.smoc.spss.qo.StatisticIncomeQo;
-import com.smoc.cloud.spss.repository.ManagerStatisticsRepository;
 import com.smoc.cloud.spss.repository.OperatingStatisticsRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,6 +28,17 @@ public class OperatingStatisticsService {
      */
     public ResponseData<List<StatisticIncomeQo>> incomeMonthStatistic(StatisticIncomeQo statisticIncomeQo) {
         List<StatisticIncomeQo> list = operatingStatisticsRepository.incomeMonthStatistic(statisticIncomeQo);
+
+        return ResponseDataUtil.buildSuccess(list);
+    }
+
+    /**
+     * 运营数据月查询:统计每月发送数据
+     * @param managerStatisticQo
+     * @return
+     */
+    public ResponseData<List<ManagerStatisticQo>> operatingStatisticSendMessageMonth(ManagerStatisticQo managerStatisticQo) {
+        List<ManagerStatisticQo> list = operatingStatisticsRepository.operatingStatisticSendMessageMonth(managerStatisticQo);
 
         return ResponseDataUtil.buildSuccess(list);
     }

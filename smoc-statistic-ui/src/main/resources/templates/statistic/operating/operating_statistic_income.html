@@ -100,7 +100,7 @@
             // 指定图表的配置项和数据
             var option = {
                 title: {
-                    text: articles.year+'净毛利统计-总额：',
+                    text: articles.year+'净毛利统计-总额：'+articles.totalImcome,
                     x:'left'
                 },
                 tooltip: {
@@ -178,10 +178,6 @@
             };
             // 使用刚指定的配置项和数据显示图表。
             main0 .setOption(option);
-        }
-    });
-
-
 
 
             // 基于准备好的dom，初始化echarts实例
@@ -189,7 +185,7 @@
             // 指定图表的配置项和数据
             var option1 = {
                 title : {
-                    text: '2021年月净毛利占比-总额：20523.88',
+                    text: articles.year+'净毛利占比-总额：'+articles.totalImcome,
                     x:'center'
                 },
                 tooltip : {
@@ -225,26 +221,20 @@
                         x: '50%',               // for funnel
                         max: 40,                // for funnel
                         sort : 'ascending',     // for funnel
-                       data: [
-                        { value: 1584.25, name: '2021-01' },
-                        { value: 1542.26, name: '2021-02' },
-                        { value: 1254.69, name: '2021-03' },
-                        { value: 2547.26, name: '2021-04' },
-                        { value: 1254.25, name: '2021-05' },
-                        { value: 1477.26, name: '2021-06' },
-                        { value: 1565.14, name: '2021-07' },
-                        { value: 1254.68, name: '2021-08' },
-                        { value: 1235.21, name: '2021-09' },
-                        { value: 1589.24, name: '2021-10' },
-                        { value: 3654.54, name: '2021-11' },
-                        { value: 3654.54, name: '2021-12' }
-                      ]
+                        data: articles.ratios
                     }
                 ]
             };
 
             // 使用刚指定的配置项和数据显示图表。
             main1 .setOption(option1);
+        }
+    });
+
+
+
+
+
 
     $(document).ready(function() {
 		$('.autonumber').autoNumeric('init');
