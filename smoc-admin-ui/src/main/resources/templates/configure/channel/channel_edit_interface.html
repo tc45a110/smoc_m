@@ -38,21 +38,21 @@
                                                             th:errors="*{channelAccessAccount}" style="font-weight: 200;font-size: 12px"></span>
                                                     </label>
                                                     <input type="text" required="" th:field="*{channelAccessAccount}" placeholder="通道对接账号"
-                                                           data-parsley-length="[1,90]" class="form-control" autocomplete="off">
+                                                           data-parsley-length="[1,90]" class="form-control" autocomplete="off" onkeyup="value=value.replace(/^\s+|\s+$/g,'')">
                                                 </div>
                                                 <div class="col-sm-3 m-b-10">
                                                     <label>通道密码<span class="text-danger">*</span>&nbsp;<span
                                                             class="text-danger" th:if="${#fields.hasErrors('channelAccessPassword')}"
                                                             th:errors="*{channelAccessPassword}" style="font-weight: 200;font-size: 12px"></span>
                                                     </label>
-                                                    <input type="text" required="" class="form-control" autocomplete="off"
+                                                    <input type="text" required="" class="form-control" autocomplete="off" onkeyup="value=value.replace(/^\s+|\s+$/g,'')"
                                                            th:field="*{channelAccessPassword}" data-parsley-length="[1,128]" placeholder="通道密码">
                                                 </div>
                                                 <div class="col-sm-3 m-b-10">
                                                     <label>通道服务地址<span class="text-danger">*</span><span
                                                             class="text-danger" th:if="${#fields.hasErrors('channelServiceUrl')}"
                                                             th:errors="*{channelServiceUrl}" style="font-weight: 200;font-size: 12px"></span></label>
-                                                    <input type="text" required="" class="form-control" autocomplete="off"
+                                                    <input type="text" required="" class="form-control" autocomplete="off" onkeyup="value=value.replace(/^\s+|\s+$/g,'')"
                                                            th:field="*{channelServiceUrl}" data-parsley-length="[1,128]" data-parsley-type="url" placeholder="通道服务地址">
                                                 </div>
                                                 <div class="col-sm-3 m-b-10">
@@ -60,7 +60,7 @@
                                                             class="text-danger" th:if="${#fields.hasErrors('spId')}"
                                                             th:errors="*{spId}" style="font-weight: 200;font-size: 12px"></span>
                                                     </label>
-                                                    <input type="text" required="" class="form-control" autocomplete="off"
+                                                    <input type="text" required="" class="form-control" autocomplete="off" onkeyup="value=value.replace(/^\s+|\s+$/g,'')"
                                                            th:field="*{spId}" data-parsley-length="[1,128]" placeholder="企业代码">
                                                 </div>
                                             </div>
@@ -71,7 +71,7 @@
                                                     <label>服务代码(接入码号)&nbsp;<span class="text-danger" th:if="${#fields.hasErrors('srcId')}"
                                                             th:errors="*{srcId}" style="font-weight: 200;font-size: 12px"></span>
                                                     </label>
-                                                    <input type="text" placeholder="服务代码(接入码号)" class="form-control"
+                                                    <input type="text" placeholder="服务代码(接入码号)" class="form-control" onkeyup="value=value.replace(/^\s+|\s+$/g,'')"
                                                            th:field="*{srcId}" data-parsley-length="[1,32]" data-parsley-type="number" autocomplete="off">
                                                 </div>
                                                 <div class="col-sm-3 m-b-10">

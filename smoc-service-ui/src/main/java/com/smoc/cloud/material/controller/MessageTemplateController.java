@@ -480,7 +480,7 @@ public class MessageTemplateController {
 
         if(!StringUtils.isEmpty(templateId)){
             ResponseData<AccountTemplateInfoValidator> data = messageTemplateService.findById(templateId);
-            if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            if (ResponseCode.SUCCESS.getCode().equals(data.getCode()) && data.getData().getCheckStatus().equals("2")) {
                 list.add(data.getData());
             }
 

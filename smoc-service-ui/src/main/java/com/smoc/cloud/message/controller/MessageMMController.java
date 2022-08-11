@@ -409,6 +409,7 @@ public class MessageMMController {
         if("1".equals(messageWebTaskInfoValidator.getUpType())){
             messageWebTaskInfoValidator.setGroupId("");
             messageWebTaskInfoValidator.setNumberFiles("");
+            messageWebTaskInfoValidator.setInputNumber(messageWebTaskInfoValidator.getInputNumber().replace("\r\n",""));
         }
         if("2".equals(messageWebTaskInfoValidator.getUpType())){
             messageWebTaskInfoValidator.setInputNumber("");

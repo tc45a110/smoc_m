@@ -378,6 +378,7 @@ public class MessageController {
         if("1".equals(messageWebTaskInfoValidator.getUpType())){
             messageWebTaskInfoValidator.setGroupId("");
             messageWebTaskInfoValidator.setNumberFiles("");
+            messageWebTaskInfoValidator.setInputNumber(messageWebTaskInfoValidator.getInputNumber().replace("\r\n",""));
         }
         //上传附件
         if("2".equals(messageWebTaskInfoValidator.getUpType())){

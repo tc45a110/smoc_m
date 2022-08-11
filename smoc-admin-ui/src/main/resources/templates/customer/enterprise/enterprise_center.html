@@ -250,24 +250,21 @@
                                                                 <div class="row">
                                                                     <div class="col-sm-12">
                                                                         <div class="property-content"
-                                                                             style="height:146px">
+                                                                             style="height:166px">
                                                                             <div class="listingInfo">
                                                                                 <div class="">
                                                                                     <h5 style="padding-left:10px">
-                                                                                        WEB账号：[[${web.webLoginName}]]
-                                                                                        <a href="javascript:void(0)"
-                                                                                           data-placement="bottom"
-                                                                                           data-toggle="tooltip"
-                                                                                           data-original-title="查看密码"
-                                                                                           sec:authorize-url="/enterprise/web/look/*"
-                                                                                           th:onclick="lookPassword([[${web.id}]])">
-                                                                                            &nbsp;<i
-                                                                                                class="glyphicon glyphicon-eye-open"
-                                                                                                style="color: #00aced"></i>
-                                                                                            <span th:id="${web.id}"></span>
-                                                                                        </a>
+                                                                                        <p>WEB账号：<span>[[${web.webLoginName}]]</span></p>
                                                                                     </h5>
-
+                                                                                </div>
+                                                                                <div class="col-sm-12">
+                                                                                    <p style="font-size:12px">
+                                                                                        WEB密码：
+                                                                                        <a class="btn btn-success btn-rounded waves-effect waves-light btn-xs" th:onclick="lookPassword([[${web.id}]])">
+                                                                                            查看密码
+                                                                                        </a>
+                                                                                        <span th:id="${web.id}"></span>
+                                                                                    </p>
                                                                                 </div>
                                                                                 <div class="col-sm-12">
                                                                                     <p style="font-size:12px">
@@ -314,7 +311,7 @@
                                                                 <div class="row">
                                                                     <div class="col-sm-12">
                                                                         <div class="property-content"
-                                                                             style="height:146px">
+                                                                             style="height:166px">
                                                                             <div class="listingInfo">
                                                                                 <div class="">
 

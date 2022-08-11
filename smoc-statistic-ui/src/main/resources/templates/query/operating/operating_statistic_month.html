@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <th:block th:insert="fragments/common_fragments :: common_header"/>
@@ -37,15 +37,17 @@
         <div class="row" style="position: relative;margin-top: 80px" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-sm-12">
                 <div class="card-box">
-                    <form id="query_form" method="post">
+                    <form  id="query_form" th:action="@{/query/operating/statisticDataMonth/page}"
+                           th:object="${managerStatisticQo}" method="post">
                         <div class="row m-b-60">
                             <div class="col-sm-12">
-                                <div class="form-group  col-sm-4">
-                                    <input id="datetimepicker" type="text" class="form-control" value="2021" readonly
-                                           placeholder="请选择年份" autocomplete="off">
+                                <div class="form-group  col-sm-3">
+                                    <input id="datetimepicker" type="text" class="form-control" th:field="*{startDate}"
+                                           autocomplete="off">
                                 </div>
                                 <div class="form-group col-sm-4 pull-right" style="text-align: right">
-                                    <button class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
+                                    <button sec:authorize-url="/query/operating/statisticDataMonth/page"
+                                            class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search" style="margin-right:5px"></i> 查询
                                     </button>
                                 </div>
@@ -139,7 +141,9 @@
                         </ul>
 
                         <div class="text-center">
-                            <a class="btn btn-info btn-bordred btn-rounded waves-effect waves-light">详情</a>
+                            <a sec:authorize-url="/query/operating/statisticDataMonth/detail/*"
+                               th:href="@{/query/operating/statisticDataMonth/detail/{messageDate}(messageDate=${info.messageDate})}"
+                               class="btn btn-info btn-bordred btn-rounded waves-effect waves-light">详情</a>
                         </div>
                     </div>
                 </article>
