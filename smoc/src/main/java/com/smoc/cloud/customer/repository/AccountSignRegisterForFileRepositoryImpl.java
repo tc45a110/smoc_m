@@ -40,7 +40,7 @@ public class AccountSignRegisterForFileRepositoryImpl extends BasePageRepository
         sqlBuffer.append(", t.UPDATED_BY");
         sqlBuffer.append(", DATE_FORMAT(t.UPDATED_TIME, '%Y-%m-%d %H:%i:%S')UPDATED_TIME");
         sqlBuffer.append(", DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME");
-        sqlBuffer.append("  from account_sign_register_for_file ");
+        sqlBuffer.append("  from account_sign_register_for_file t");
         sqlBuffer.append("  where 1=1");
 
         List<Object> paramsList = new ArrayList<Object>();

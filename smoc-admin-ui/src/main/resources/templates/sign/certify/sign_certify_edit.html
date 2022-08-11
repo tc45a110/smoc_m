@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
+
+</head>
+<body>
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <!-- start row 页面导航-->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">新建、修改企业签名资质</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            业务办理
+                        </li>
+                        <li>
+                            企业签名资质管理
+                        </li>
+                        <li>
+                            新建、修改企业签名资质
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row 页面内容-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-md-12">
+                <div class="card-box">
+                    <form id="submit_form" th:action="@{/sign/certify/save/{op}(op=${op})}" th:object="${enterpriseSignCertifyValidator}"
+                          method="post" data-parsley-validate="">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="p-20">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-6 form-group">
+                                                <label for="registerEnterpriseName">资质企业名称<span class="text-danger">*</span>&nbsp;
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('registerEnterpriseName')}"
+                                                          th:errors="*{registerEnterpriseName}"  style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input id="registerEnterpriseName" type="text" class="form-control" th:field="*{registerEnterpriseName}"
+                                                       required="" data-parsley-length="[2,128]" autocomplete="off"
+                                                       placeholder="资质企业名称">
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label for="socialCreditCode">社会信用代码<span class="text-danger">*</span>&nbsp;
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('socialCreditCode')}"
+                                                          th:errors="*{socialCreditCode}"  style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input id="socialCreditCode" type="text" class="form-control" th:field="*{socialCreditCode}"
+                                                       data-parsley-length="[2,64]" required="" autocomplete="off"
+                                                       placeholder="社会信用代码">
+
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label >营业执照/组织机构代码证<span class="text-danger">*</span><span style="margin-left:5px;color:#F5707A;font-weight:200">附件：图片格式jpg；最大100K</span>
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('businessLicense')}"
+                                                          th:errors="*{businessLicense}"  style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input name="businessLicense" type="file" class="filestyle" data-buttonname="btn-info">
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label for="personLiableName">责任人（含法人）姓名<span class="text-danger">*</span>
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('personLiableName')}"
+                                                          th:errors="*{personLiableName}"  style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input id="personLiableName" type="text" class="form-control" th:field="*{personLiableName}"
+                                                       data-parsley-length="[7,24]" autocomplete="off" required=""
+                                                       placeholder="责任人（含法人）姓名">
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label>责任人（含法人）证件类型<span class="text-danger">*</span>
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('personLiableCertificateType')}"
+                                                          th:errors="*{personLiableCertificateType}"  style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <mpm:tag id="certifyType" identity="certifyType" required="true"
+                                                         name="personLiableCertificateType" show-type="select" key="code"
+                                                         th:value="${enterpriseSignCertifyValidator.personLiableCertificateType}"
+                                                         title="责任人（含法人）证件类型"/></span>
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label for="personLiableCertificateNumber">责任人（含法人）证件号码<span class="text-danger">*</span>
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('personLiableCertificateNumber')}"
+                                                          th:errors="*{personLiableCertificateNumber}"  style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input id="personLiableCertificateNumber" type="text" class="form-control" th:field="*{personLiableCertificateNumber}"
+                                                       data-parsley-length="[2,64]" autocomplete="off" required=""
+                                                       placeholder="责任人（含法人）证件号码">
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label >责任人（含法人）证件<span class="text-danger">*</span><span style="margin-left:5px;color:#F5707A;font-weight:200">附件：图片格式jpg；最大100K</span>
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('personLiableCertificateUrl')}"
+                                                          th:errors="*{personLiableCertificateUrl}"  style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input name="personLiableCertificateUrl" type="file" class="filestyle" data-buttonname="btn-teal">
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label for="personHandledName">经办人姓名<span class="text-danger">*</span>
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('personHandledName')}"
+                                                          th:errors="*{personHandledName}"  style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input id="personHandledName" type="text" class="form-control" th:field="*{personHandledName}"
+                                                       data-parsley-length="[7,24]" autocomplete="off" required=""
+                                                       placeholder="经办人姓名">
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label>经办人证件类型<span class="text-danger">*</span>
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('personHandledCertificateType')}"
+                                                          th:errors="*{personHandledCertificateType}"  style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <mpm:tag id="personHandledCertificateType" identity="certifyType" required="true"
+                                                         name="personHandledCertificateType" show-type="select" key="code"
+                                                         th:value="${enterpriseSignCertifyValidator.personHandledCertificateType}"
+                                                         title="经办人证件类型"/></span>
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label for="personHandledCertificateNumber">经办人证件号码<span class="text-danger">*</span>
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('personHandledCertificateNumber')}"
+                                                          th:errors="*{personHandledCertificateNumber}"  style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input id="personHandledCertificateNumber" type="text" class="form-control" th:field="*{personHandledCertificateNumber}"
+                                                       data-parsley-length="[2,64]" autocomplete="off" required=""
+                                                       placeholder="经办人证件号码">
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label >经办人证件<span class="text-danger">*</span><span style="margin-left:5px;color:#F5707A;font-weight:200">附件：图片格式jpg；最大100K</span>
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('personHandledCertificateUrl')}"
+                                                          th:errors="*{personHandledCertificateUrl}"  style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input name="personHandledCertificateUrl" type="file" class="filestyle" data-buttonname="btn-primary">
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label for="authorizeStartDate">授权开始时间<span class="text-danger">*</span>
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('authorizeStartDate')}"
+                                                          th:errors="*{authorizeStartDate}"  style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input id="authorizeStartDate" type="text" class="form-control" th:field="*{authorizeStartDate}"
+                                                       data-parsley-length="[2,24]" autocomplete="off" required=""
+                                                       placeholder="授权开始时间">
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label for="authorizeExpireDate">授权到期时间<span class="text-danger">*</span>
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('authorizeExpireDate')}"
+                                                          th:errors="*{authorizeExpireDate}"  style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input id="authorizeExpireDate" type="text" class="form-control" th:field="*{authorizeExpireDate}"
+                                                       data-parsley-length="[2,64]" autocomplete="off" required=""
+                                                       placeholder="授权到期时间">
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label >授权书<span class="text-danger">*</span><span style="margin-left:5px;color:#F5707A;font-weight:200">附件：图片格式jpg；最大100K</span>
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('authorizeCertificate')}"
+                                                          th:errors="*{authorizeCertificate}"  style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input name="authorizeCertificate" type="file" class="filestyle" data-buttonname="btn-purple">
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label for="position">企业接入设备位置<span class="text-danger">*</span>
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('position')}"
+                                                          th:errors="*{position}"  style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input id="position" type="text" class="form-control" th:field="*{position}"
+                                                       data-parsley-length="[2,64]" autocomplete="off" required=""
+                                                       placeholder="企业接入设备位置">
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label >现场拍摄留存经办人照片<span class="text-danger">*</span><span style="margin-left:5px;color:#F5707A;font-weight:200">附件：图片格式jpg；最大100K</span>
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('authorizeCertificate')}"
+                                                          th:errors="*{authorizeCertificate}"  style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input name="authorizeCertificate" type="file" class="filestyle" data-buttonname="btn-primary">
+                                            </div>
+
+                                            <div class="col-md-12 text-center">
+                                                <input type="hidden" th:field="*{registerEnterpriseId}">
+                                                <input type="hidden" th:field="*{createdTime}">
+                                                <input type="hidden" th:field="*{createdBy}">
+                                                <button sec:authorize-url="/sign/certify/save/*" type="submit"
+                                                   class="btn btn-teal waves-effect waves-light">提交</button>
+                                                <a sec:authorize-url="/sign/certify/list"
+                                                   th:href="@{/sign/certify/list}" style="margin-left:20px"
+                                                   class="btn btn-default waves-effect waves-light">返回</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end class p-20 -->
+                            </div> <!-- end col -->
+                        </div> <!-- end row -->
+                    </form>
+                    <!-- end form -->
+                </div> <!-- end card-box -->
+            </div> <!-- end col -->
+        </div>
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<th:block th:insert="fragments/common_fragments :: common_submit_form"/>
+<script>
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+</script>
+</body>
+</html>

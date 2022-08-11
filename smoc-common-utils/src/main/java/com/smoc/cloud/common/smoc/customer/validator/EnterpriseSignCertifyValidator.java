@@ -27,6 +27,7 @@ public class EnterpriseSignCertifyValidator {
     private String authorizeExpireDate;
     private String position;
     private String officePhotos;
+    private String certifyStatus;
     private String createdBy;
     private String createdTime;
     private String updatedBy;

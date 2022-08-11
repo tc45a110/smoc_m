@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -72,32 +74,34 @@ public class AccountSignRegisterService {
         AccountSignRegister entity = new AccountSignRegister();
         BeanUtils.copyProperties(accountSignRegisterValidator, entity);
 
-//        List<EnterpriseSignCertify> data = enterpriseSignCertifyRepository.findByGroupIdAndMobileAndStatus(entity.getGroupId(),entity.getMobile(), "1");
-//
-//        //add查重
-//        if (data != null && data.iterator().hasNext() && "add".equals(op)) {
-//            return ResponseDataUtil.buildError("组里已经存在此手机号码，请修改");
-//        }
-//        //edit查重orgName
-//        else if (data != null && data.iterator().hasNext() && "edit".equals(op)) {
-//            boolean status = false;
-//            Iterator iter = data.iterator();
-//            while (iter.hasNext()) {
-//                EnterpriseBookInfo organization = (EnterpriseBookInfo) iter.next();
-//                if (!entity.getId().equals(organization.getId()) ) {
-//                    status = true;
-//                    break;
-//                }
-//            }
-//            if (status) {
-//                return ResponseDataUtil.buildError(ResponseCode.PARAM_CREATE_ERROR);
-//            }
-//        }
+        //查重
+        List<AccountSignRegister> data = accountSignRegisterRepository.findByAccountAndSignExtendNumber(entity.getAccount(),entity.getSignExtendNumber());
+        //add查重
+        if (data != null && data.iterator().hasNext() && "add".equals(op)) {
+            return ResponseDataUtil.buildError("账号已存在该签名扩展号");
+        }
+        //edit查重
+        else if (data != null && data.iterator().hasNext() && "edit".equals(op)) {
+            boolean status = false;
+            Iterator iterator = data.iterator();
+            while (iterator.hasNext()) {
+                AccountSignRegister organization = (AccountSignRegister) iterator.next();
+                if (!entity.getId().equals(organization.getId()) ) {
+                    status = true;
+                    break;
+                }
+            }
+            if (status) {
+                return ResponseDataUtil.buildError(ResponseCode.PARAM_CREATE_ERROR);
+            }
+        }
 
         //op 不为 edit 或 add
         if (!("edit".equals(op) || "add".equals(op))) {
             return ResponseDataUtil.buildError();
         }
+        //转换日期格式
+        entity.setCreatedTime(DateTimeUtils.getDateTimeFormat(accountSignRegisterValidator.getCreatedTime()));
 
         //记录日志
         log.info("[签名报备][{}]数据:{}",op,JSON.toJSONString(entity));
@@ -119,7 +123,7 @@ public class AccountSignRegisterService {
 
         //记录日志
         log.info("[签名报备][delete]数据:{}", JSON.toJSONString(data));
-        accountSignRegisterRepository.deleteById(id);
+        accountSignRegisterRepository.delete(id,"0");
 
         return ResponseDataUtil.buildSuccess();
     }

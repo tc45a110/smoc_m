@@ -593,6 +593,7 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
         sqlBuffer.append("  t.ACCOUNT_ID");
         sqlBuffer.append(", t.ENTERPRISE_ID");
         sqlBuffer.append(", t.ACCOUNT_NAME");
+        sqlBuffer.append(", t.EXTEND_NUMBER");
         sqlBuffer.append(", t.BUSINESS_TYPE");
         sqlBuffer.append(", t.CARRIER");
         sqlBuffer.append(", t.INFO_TYPE");
@@ -780,6 +781,7 @@ public class BusinessAccountRepositoryImpl extends BasePageRepository {
         sqlBuffer.append("  t.ACCOUNT_ID");
         sqlBuffer.append(", t.ENTERPRISE_ID");
         sqlBuffer.append(", t.ACCOUNT_NAME");
+        sqlBuffer.append(", t.EXTEND_NUMBER");
         sqlBuffer.append(", t.BUSINESS_TYPE");
         sqlBuffer.append(", t.CARRIER");
         sqlBuffer.append(", t.INFO_TYPE");

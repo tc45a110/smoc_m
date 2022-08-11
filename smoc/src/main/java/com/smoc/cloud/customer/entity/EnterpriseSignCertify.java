@@ -26,6 +26,7 @@ public class EnterpriseSignCertify {
     private String authorizeExpireDate;
     private String position;
     private String officePhotos;
+    private String certifyStatus;
     private String createdBy;
     private Date createdTime;
     private String updatedBy;
@@ -209,6 +210,16 @@ public class EnterpriseSignCertify {
 
     public void setOfficePhotos(String officePhotos) {
         this.officePhotos = officePhotos;
+    }
+
+    @Basic
+    @Column(name = "CERTIFY_STATUS")
+    public String getCertifyStatus() {
+        return certifyStatus;
+    }
+
+    public void setCertifyStatus(String certifyStatus) {
+        this.certifyStatus = certifyStatus;
     }
 
     @Basic

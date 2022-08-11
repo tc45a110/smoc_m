@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:mpm="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
+
+</head>
+<body>
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <!-- start row 页面导航-->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">新增、修改企业签名报备</h4>
+                    <ol class="breadcrumb p-0 m-0">
+                        <li>
+                            业务办理
+                        </li>
+                        <li>
+                            企业签名报备
+                        </li>
+                        <li>
+                            新增、修改企业签名报备
+                        </li>
+                    </ol>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+        <!-- start row 页面内容-->
+        <div class="row" th:remove="${#strings.isEmpty(error)}?none:all">
+            <div class="col-md-12">
+                <div class="card-box">
+                    <form id="submit_form" th:action="@{/sign/register/save/{op}(op=${op})}" th:object="${accountSignRegisterValidator}"
+                          method="post" data-parsley-validate="">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="p-20">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-6 form-group">
+                                                <label for="account">业务账号<span class="text-danger">*</span>&nbsp;
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('account')}"
+                                                          th:errors="*{account}"  style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input id="account" type="text" class="form-control" th:field="*{account}"
+                                                       required="" data-parsley-length="[2,32]" autocomplete="off"
+                                                       placeholder="业务账号" readonly>
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label>签名扩展号<span class="text-danger">*</span>
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('signExtendNumber')}"
+                                                          th:errors="*{signExtendNumber}"  style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input id="signExtendNumber" type="text" class="form-control" th:field="*{signExtendNumber}"
+                                                       data-parsley-length="[4,4]" required="" autocomplete="off"
+                                                       placeholder="签名扩展号">
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label for="sign">报备签名<span class="text-danger">*</span>&nbsp;
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('sign')}"
+                                                          th:errors="*{sign}"  style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input id="sign" type="text" class="form-control" th:field="*{sign}"
+                                                       data-parsley-length="[2,64]" required="" autocomplete="off"
+                                                       placeholder="报备签名">
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label for="extendData">自定义扩展<span class="text-danger">*</span>
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('extendData')}"
+                                                          th:errors="*{extendData}"  style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input id="extendData" type="text" class="form-control" th:field="*{extendData}"
+                                                       data-parsley-length="[2,2]" autocomplete="off" required=""
+                                                       placeholder="自定义扩展">
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label>签名企业<span class="text-danger">*</span>
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('enterpriseId')}"
+                                                          th:errors="*{enterpriseId}"  style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input id="enterpriseId" type="text" class="form-control" th:field="*{enterpriseId}"
+                                                       data-parsley-length="[2,2]" autocomplete="off" required=""
+                                                       placeholder="签名企业">
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label for="appName">APP名称<span class="text-danger">*</span>
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('appName')}"
+                                                          th:errors="*{appName}"  style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input id="appName" type="text" class="form-control" th:field="*{appName}"
+                                                       data-parsley-length="[2,64]" autocomplete="off" required=""
+                                                       placeholder="APP名称">
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label for="serviceType">服务类型<span class="text-danger">*</span>
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('serviceType')}"
+                                                          th:errors="*{serviceType}"  style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input id="serviceType" type="text" class="form-control" th:field="*{serviceType}"
+                                                       data-parsley-length="[7,24]" autocomplete="off" required=""
+                                                       placeholder="服务类型">
+                                            </div>
+
+                                            <div class="col-md-6 form-group">
+                                                <label for="mainApplication">具体用途<span class="text-danger">*</span>
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('mainApplication')}"
+                                                          th:errors="*{mainApplication}"  style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input id="mainApplication" type="text" class="form-control" th:field="*{mainApplication}"
+                                                       data-parsley-length="[2,64]" autocomplete="off" required=""
+                                                       placeholder="具体用途">
+                                            </div>
+                                            <div class="col-md-12 text-center">
+                                                <input type="hidden" th:field="*{extendType}">
+                                                <input type="hidden" th:field="*{registerStatus}">
+                                                <input type="hidden" th:field="*{createdTime}">
+                                                <input type="hidden" th:field="*{createdBy}">
+                                                <button sec:authorize-url="/sign/register/save/*" type="submit"
+                                                   class="btn btn-teal waves-effect waves-light">提交</button>
+                                                <a sec:authorize-url="/sign/register/list"
+                                                   th:href="@{/sign/register/list}" style="margin-left:20px"
+                                                   class="btn btn-default waves-effect waves-light">返回</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end class p-20 -->
+                            </div> <!-- end col -->
+                        </div> <!-- end row -->
+                    </form>
+                    <!-- end form -->
+                </div> <!-- end card-box -->
+            </div> <!-- end col -->
+        </div>
+        <!-- end row -->
+
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<th:block th:insert="fragments/common_fragments :: common_submit_form"/>
+<script>
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+</script>
+</body>
+</html>
