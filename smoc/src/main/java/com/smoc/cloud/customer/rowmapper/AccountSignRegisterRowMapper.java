@@ -20,6 +20,7 @@ public class AccountSignRegisterRowMapper implements RowMapper<AccountSignRegist
         qo.setAppName(rs.getString("APP_NAME"));
         qo.setServiceType(rs.getString("SERVICE_TYPE"));
         qo.setMainApplication(rs.getString("MAIN_APPLICATION"));
+        qo.setRegisterStatus(rs.getString("REGISTER_STATUS"));
         qo.setCreatedBy(rs.getString("CREATED_BY"));
         qo.setCreatedTime(rs.getString("CREATED_TIME"));
         return qo;

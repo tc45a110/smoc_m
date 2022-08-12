@@ -181,7 +181,7 @@ public class BusinessAccountService {
         //edit查重
         if (extendNumber != null && extendNumber.iterator().hasNext()) {
             boolean status = false;
-            Iterator iterator = data.iterator();
+            Iterator iterator = extendNumber.iterator();
             while (iterator.hasNext()) {
                 AccountBasicInfo accountBasicInfo = (AccountBasicInfo) iterator.next();
                 if (!entity.getAccountId().equals(accountBasicInfo.getAccountId())) {

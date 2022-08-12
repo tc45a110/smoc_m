@@ -28,6 +28,7 @@ public class EnterpriseSignCertifyRowMapper implements RowMapper<EnterpriseSignC
         qo.setAuthorizeExpireDate(rs.getString("AUTHORIZE_EXPIRE_DATE"));
         qo.setPosition(rs.getString("POSITION"));
         qo.setOfficePhotos(rs.getString("OFFICE_PHOTOS"));
+        qo.setCertifyStatus(rs.getString("CERTIFY_STATUS"));
         qo.setCreatedBy(rs.getString("CREATED_BY"));
         qo.setCreatedTime(rs.getString("CREATED_TIME"));
         return qo;

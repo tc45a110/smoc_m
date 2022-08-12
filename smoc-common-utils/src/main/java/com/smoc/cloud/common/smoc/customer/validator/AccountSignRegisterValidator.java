@@ -19,6 +19,7 @@ public class AccountSignRegisterValidator {
     private String appName;
     private String serviceType;
     private String mainApplication;
+    private String registerStatus;
     private String createdBy;
     private String createdTime;
     private String updatedBy;

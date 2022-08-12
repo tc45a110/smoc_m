@@ -41,10 +41,11 @@ public class EnterpriseSignCertifyRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", t.AUTHORIZE_EXPIRE_DATE");
         sqlBuffer.append(", t.POSITION");
         sqlBuffer.append(", t.OFFICE_PHOTOS");
+        sqlBuffer.append(", t.CERTIFY_STATUS");
         sqlBuffer.append(", t.CREATED_BY");
         sqlBuffer.append(", DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME");
-        sqlBuffer.append("  from enterprise_sign_certify ");
-        sqlBuffer.append("  where 1=1");
+        sqlBuffer.append("  from enterprise_sign_certify t");
+        sqlBuffer.append("  where t.CERTIFY_STATUS='1' ");
 
         List<Object> paramsList = new ArrayList<Object>();
 

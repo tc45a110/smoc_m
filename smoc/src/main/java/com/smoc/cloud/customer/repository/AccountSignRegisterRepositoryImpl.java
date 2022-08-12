@@ -33,9 +33,10 @@ public class AccountSignRegisterRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", t.APP_NAME");
         sqlBuffer.append(", t.SERVICE_TYPE");
         sqlBuffer.append(", t.MAIN_APPLICATION");
+        sqlBuffer.append(", t.REGISTER_STATUS");
         sqlBuffer.append(", t.CREATED_BY");
         sqlBuffer.append(", DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME");
-        sqlBuffer.append("  from account_sign_register ");
+        sqlBuffer.append("  from account_sign_register t ");
         sqlBuffer.append("  where 1=1");
 
         List<Object> paramsList = new ArrayList<Object>();

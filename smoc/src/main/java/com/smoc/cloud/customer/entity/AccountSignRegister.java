@@ -18,6 +18,7 @@ public class AccountSignRegister {
     private String appName;
     private String serviceType;
     private String mainApplication;
+    private String registerStatus;
     private String createdBy;
     private Date createdTime;
     private String updatedBy;
@@ -121,6 +122,16 @@ public class AccountSignRegister {
 
     public void setMainApplication(String mainApplication) {
         this.mainApplication = mainApplication;
+    }
+
+    @Basic
+    @Column(name = "REGISTER_STATUS")
+    public String getRegisterStatus() {
+        return registerStatus;
+    }
+
+    public void setRegisterStatus(String registerStatus) {
+        this.registerStatus = registerStatus;
     }
 
     @Basic
