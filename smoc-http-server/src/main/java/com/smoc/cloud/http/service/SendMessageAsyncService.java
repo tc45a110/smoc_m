@@ -1,5 +1,6 @@
 package com.smoc.cloud.http.service;
 
+import com.google.gson.Gson;
 import com.smoc.cloud.common.http.server.message.request.SendMessageByTemplateRequestParams;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.http.entity.AccountTemplateInfo;
@@ -109,6 +110,7 @@ public class SendMessageAsyncService {
             messageFormat.setCreateTime(new Date());
 
             messages.add(messageFormat);
+            log.info("[http短信日志]：{}",new Gson().toJson(messages));
         }
         //异步 批量保存短消息
         this.saveMessageBatch(messageId, messages, messageCount, phoneCount, templateContent, params.getTemplateId(), params.getAccount(), params.getExtNumber());
@@ -182,8 +184,8 @@ public class SendMessageAsyncService {
             messageFormat.setProtocol("HTTP");
             messageFormat.setReportFlag(1);
             messageFormat.setCreateTime(new Date());
-
             messages.add(messageFormat);
+            log.info("[http多媒体短信日志]：{}",new Gson().toJson(messages));
         }
 
         //异步 批量保存短消息
@@ -258,6 +260,7 @@ public class SendMessageAsyncService {
             messageFormat.setReportFlag(1);
             messageFormat.setCreateTime(new Date());
             messages.add(messageFormat);
+            log.info("[http国际短信日志]：{}",new Gson().toJson(messages));
         }
 
         //异步 批量保存短消息

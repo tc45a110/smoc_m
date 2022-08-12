@@ -1,6 +1,7 @@
 package com.smoc.cloud.customer.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
 import com.smoc.cloud.admin.security.remote.service.SystemUserLogService;
 import com.smoc.cloud.common.auth.entity.SecurityUser;
 import com.smoc.cloud.common.page.PageList;
@@ -16,6 +17,7 @@ import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.customer.service.AccountSignRegisterService;
 import com.smoc.cloud.customer.service.EnterpriseSignCertifyService;
+import com.smoc.cloud.sequence.service.SequenceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -28,13 +30,16 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
+import java.util.*;
 
 @Slf4j
 @RestController
 @RequestMapping("sign/register")
-@Scope(value= WebApplicationContext.SCOPE_REQUEST)
+@Scope(value = WebApplicationContext.SCOPE_REQUEST)
 public class AccountSignRegisterController {
+
+    @Autowired
+    private SequenceService sequenceService;
 
     @Autowired
     private SystemUserLogService systemUserLogService;
@@ -117,6 +122,9 @@ public class AccountSignRegisterController {
         accountSignRegisterValidator.setRegisterStatus("1");
         accountSignRegisterValidator.setExtendType("1");
 
+        Integer extendNumber = sequenceService.findSequence("SIGN_EXTEND_NUMBER");
+        accountSignRegisterValidator.setSignExtendNumber(extendNumber + "");
+
         view.addObject("accountSignRegisterValidator", accountSignRegisterValidator);
         view.addObject("op", "add");
 
@@ -126,7 +134,6 @@ public class AccountSignRegisterController {
         params.setCurrentPage(1);
         EnterpriseSignCertifyValidator enterpriseSignCertifyValidator = new EnterpriseSignCertifyValidator();
         params.setParams(enterpriseSignCertifyValidator);
-
         //查询
         ResponseData<PageList<EnterpriseSignCertifyValidator>> data = enterpriseSignCertifyService.page(params);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
@@ -135,6 +142,53 @@ public class AccountSignRegisterController {
         }
 
         view.addObject("certifies", data.getData().getList());
+
+        //查询账号被占用的签名子扩展号
+        ResponseData<List<String>> signNumberList = this.accountSignRegisterService.findExtendDataByAccount(account, "null");
+        if (!ResponseCode.SUCCESS.getCode().equals(signNumberList.getCode())) {
+            view.addObject("error", signNumberList.getCode() + ":" + signNumberList.getMessage());
+            return view;
+        }
+        //将占用的签名子扩展号 转换成map方式
+        Map<String, String> signNumbers = new HashMap<>();
+        if (null != signNumberList.getData() && signNumberList.getData().size() > 0) {
+            for (String numbers : signNumberList.getData()) {
+                String[] numberArray = numbers.split(",");
+                for (String number : numberArray) {
+                    signNumbers.put(number, number);
+                }
+            }
+        }
+        log.info("[signNumberList.getData()]:{}",new Gson().toJson(signNumberList.getData()));
+        log.info("[signNumbers]:{}",new Gson().toJson(signNumbers));
+        //向前台传值的时候，要去除已经使用的签名自扩展号
+        List<String> signExtendNumbers = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            String number = "";
+            if (i < 10) {
+                number = "0"+i;
+            } else {
+                number = ""+i;
+            }
+            if(null == signNumbers.get(number)){
+                signExtendNumbers.add(number);
+            }
+        }
+        view.addObject("signExtendNumbers", signExtendNumbers);
+        log.info("[signExtendNumbers]:{}",new Gson().toJson(signExtendNumbers));
+
+        /**
+         * 把本id所占用的签名子扩展号，放到前端
+         */
+        Map<String,String> thisExtendNumberMap = new HashMap<>();
+        view.addObject("thisExtendNumberMap", thisExtendNumberMap);
+
+        /**
+         * 把本id所占用的服务类型，放到前端
+         */
+        Map<String,String> thisServiceTypeMap = new HashMap<>();
+        view.addObject("thisServiceTypeMap", thisServiceTypeMap);
+
         return view;
     }
 
@@ -155,7 +209,9 @@ public class AccountSignRegisterController {
             return view;
         }
 
-        //修改:查询数据
+        /**
+         * 修改:查询数据
+         */
         ResponseData<AccountSignRegisterValidator> responseData = accountSignRegisterService.findById(id);
         if (!ResponseCode.SUCCESS.getCode().equals(responseData.getCode())) {
             view.addObject("error", responseData.getCode() + ":" + responseData.getMessage());
@@ -165,21 +221,75 @@ public class AccountSignRegisterController {
         //op操作标记，add表示添加，edit表示修改
         view.addObject("op", "edit");
 
-        //初始化签名资质数据
+        /**
+         * 初始化签名资质数据
+         */
         PageParams<EnterpriseSignCertifyValidator> params = new PageParams<>();
         params.setPageSize(100000);
         params.setCurrentPage(1);
         EnterpriseSignCertifyValidator enterpriseSignCertifyValidator = new EnterpriseSignCertifyValidator();
         params.setParams(enterpriseSignCertifyValidator);
-
         //查询
         ResponseData<PageList<EnterpriseSignCertifyValidator>> data = enterpriseSignCertifyService.page(params);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
             view.addObject("error", data.getCode() + ":" + data.getMessage());
             return view;
         }
-
         view.addObject("certifies", data.getData().getList());
+
+        /**
+         * 查询账号被占用的签名子扩展号
+         */
+        ResponseData<List<String>> signNumberList = this.accountSignRegisterService.findExtendDataByAccount(responseData.getData().getAccount(), responseData.getData().getId());
+        if (!ResponseCode.SUCCESS.getCode().equals(signNumberList.getCode())) {
+            view.addObject("error", signNumberList.getCode() + ":" + signNumberList.getMessage());
+            return view;
+        }
+        //将占用的签名子扩展号 转换成map方式
+        Map<String, String> signNumbers = new HashMap<>();
+        if (null != signNumberList.getData() && signNumberList.getData().size() > 0) {
+            for (String numbers : signNumberList.getData()) {
+                String[] numberArray = numbers.split(",");
+                for (String number : numberArray) {
+                    signNumbers.put(number, number);
+                }
+            }
+        }
+        //向前台传值的时候，要去除已经使用的签名自扩展号
+        List<String> signExtendNumbers = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            String number = "";
+            if (i < 10) {
+                number = "0"+i;
+            } else {
+                number = ""+i;
+            }
+            if(null == signNumbers.get(number)){
+                signExtendNumbers.add(number);
+            }
+        }
+        view.addObject("signExtendNumbers", signExtendNumbers);
+
+        /**
+         * 把本id所占用的签名子扩展号，放到前端
+         */
+        String thisExtendNumbers = responseData.getData().getExtendData();
+        Map<String,String> thisExtendNumberMap = new HashMap<>();
+        String[] thisExtendNumbersArray = thisExtendNumbers.split(",");
+        for(String number:thisExtendNumbersArray){
+            thisExtendNumberMap.put(number,number);
+        }
+        view.addObject("thisExtendNumberMap", thisExtendNumberMap);
+
+        /**
+         * 把本id所占用的服务类型，放到前端
+         */
+        Map<String,String> thisServiceTypeMap = new HashMap<>();
+        String[] thisServiceTypeArray = responseData.getData().getServiceType().split(",");
+        for(String serviceType:thisServiceTypeArray){
+            thisServiceTypeMap.put(serviceType,serviceType);
+        }
+        view.addObject("thisServiceTypeMap", thisServiceTypeMap);
 
         return view;
     }
@@ -235,13 +345,14 @@ public class AccountSignRegisterController {
     }
 
     /**
-     *  注销
+     * 注销
+     *
      * @param id
      * @param request
      * @return
      */
     @RequestMapping(value = "/deleteById/{id}", method = RequestMethod.GET)
-    public ModelAndView deleteById(@PathVariable String id,HttpServletRequest request) {
+    public ModelAndView deleteById(@PathVariable String id, HttpServletRequest request) {
         ModelAndView view = new ModelAndView("sign/register/sign_register_edit");
 
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
@@ -265,7 +376,7 @@ public class AccountSignRegisterController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            systemUserLogService.logsAsync("SIGN_REGISTER", responseData.getData().getId(), user.getRealName(), "edit", "注销签名报备" , JSON.toJSONString(responseData.getData()));
+            systemUserLogService.logsAsync("SIGN_REGISTER", responseData.getData().getId(), user.getRealName(), "edit", "注销签名报备", JSON.toJSONString(responseData.getData()));
         }
 
         //记录日志

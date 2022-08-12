@@ -111,6 +111,17 @@ public class AccountSignRegisterService {
     }
 
     /**
+     * 根据业务账号，查询已占用的签名自定义扩展号
+     * @param account
+     * @param id 当id 不为空时候，不查询本id的签名自定义扩展号
+     * @return
+     */
+    public ResponseData<List<String>> findExtendDataByAccount(String account, String id){
+        List<String> list = this.accountSignRegisterRepository.findExtendDataByAccount(account,id);
+        return ResponseDataUtil.buildSuccess(list);
+    }
+
+    /**
      * 根据id 删除
      *
      * @param id

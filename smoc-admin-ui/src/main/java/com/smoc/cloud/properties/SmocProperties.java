@@ -24,4 +24,8 @@ public class SmocProperties {
     //自服务平台网址
     private String webUrl;
 
+    private String certifyFileRootPath;
+
+    private String certifyFileType;
+
 }

@@ -65,6 +65,8 @@ com:
       smoc:
         enterprise-file-path: F:/data/enterprise/
         mobile-file-root-path: F:/data/message/mobile  #短信手机号文件根目录
+        certify-file-root-path: F:/data/certify/   #证件文件根目录
+        certify-file-type: jpg  #证件文件允许的文件类型 多个用 “,” 隔开
         message-resource:
           resource-url: http://localhost:8090/smoc/message/resource #访问资源路径
           resource-file-root-path: F:/data/message/resource  #资源文件根目录

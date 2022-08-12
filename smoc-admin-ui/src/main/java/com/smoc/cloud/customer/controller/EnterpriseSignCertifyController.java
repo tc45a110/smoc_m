@@ -13,18 +13,20 @@ import com.smoc.cloud.common.utils.UUID;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.customer.service.EnterpriseSignCertifyService;
+import com.smoc.cloud.properties.SmocProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.util.Date;
 
 @Slf4j
@@ -32,6 +34,9 @@ import java.util.Date;
 @RequestMapping("sign/certify")
 @Scope(value = WebApplicationContext.SCOPE_REQUEST)
 public class EnterpriseSignCertifyController {
+
+    @Autowired
+    private SmocProperties smocProperties;
 
     @Autowired
     private SystemUserLogService systemUserLogService;
@@ -110,10 +115,19 @@ public class EnterpriseSignCertifyController {
         enterpriseSignCertifyValidator.setRegisterEnterpriseId(UUID.uuid32());
         enterpriseSignCertifyValidator.setCertifyStatus("1");
         enterpriseSignCertifyValidator.setAuthorizeStartDate(DateTimeUtils.getDateFormat(new Date()));
-        enterpriseSignCertifyValidator.setAuthorizeExpireDate(DateTimeUtils.getDateFormat(DateTimeUtils.dateAddYears(new Date(),2)));
+        enterpriseSignCertifyValidator.setAuthorizeExpireDate(DateTimeUtils.getDateFormat(DateTimeUtils.dateAddYears(new Date(), 2)));
         enterpriseSignCertifyValidator.setPersonLiableCertificateType("居民身份证");
         enterpriseSignCertifyValidator.setPersonHandledCertificateType("居民身份证");
         enterpriseSignCertifyValidator.setPosition("阿里云服务器");
+
+//        enterpriseSignCertifyValidator.setRegisterEnterpriseName("吉林省达维众成科技有限公司");
+//        enterpriseSignCertifyValidator.setSocialCreditCode("91110108769914581E");
+//
+//        enterpriseSignCertifyValidator.setPersonLiableName("贾明");
+//        enterpriseSignCertifyValidator.setPersonLiableCertificateNumber("32098119850129371X");
+//
+//        enterpriseSignCertifyValidator.setPersonHandledName("贾明");
+//        enterpriseSignCertifyValidator.setPersonHandledCertificateNumber("32098119850129371X");
 
         view.addObject("enterpriseSignCertifyValidator", enterpriseSignCertifyValidator);
         view.addObject("op", "add");
@@ -157,17 +171,10 @@ public class EnterpriseSignCertifyController {
      * @return
      */
     @RequestMapping(value = "/save/{op}", method = RequestMethod.POST)
-    public ModelAndView save(@ModelAttribute @Validated EnterpriseSignCertifyValidator enterpriseSignCertifyValidator, BindingResult result, @PathVariable String op, HttpServletRequest request) {
+    public ModelAndView save(@ModelAttribute EnterpriseSignCertifyValidator enterpriseSignCertifyValidator, @PathVariable String op, @RequestPart("license") MultipartFile license, @RequestPart("liableCertificate") MultipartFile liableCertificate, @RequestPart("handledCertificate") MultipartFile handledCertificate, @RequestPart("authorizeCertificateFile") MultipartFile authorizeCertificateFile, @RequestPart("positionFile") MultipartFile positionFile, HttpServletRequest request) {
         ModelAndView view = new ModelAndView("sign/certify/sign_certify_edit");
 
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
-
-        //完成参数规则验证
-        if (result.hasErrors()) {
-            view.addObject("enterpriseSignCertifyValidator", enterpriseSignCertifyValidator);
-            view.addObject("op", op);
-            return view;
-        }
 
         //初始化其他变量
         if (!StringUtils.isEmpty(op) && "add".equals(op)) {
@@ -178,6 +185,94 @@ public class EnterpriseSignCertifyController {
             enterpriseSignCertifyValidator.setUpdatedBy(user.getRealName());
         } else {
             view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":" + ResponseCode.PARAM_LINK_ERROR.getMessage());
+            return view;
+        }
+
+        //创建文件夹
+        String certifyFileRootPath = smocProperties.getCertifyFileRootPath();
+        String certifyFilePath = DateTimeUtils.getDateFormat(new Date());
+        File fold = new File(certifyFilePath);
+        while (!fold.exists()) {
+            fold.mkdirs();
+        }
+
+        /**
+         * 文件上传
+         */
+        try {
+            //营业执照
+            if(!ObjectUtils.isEmpty(license) && license.getSize()>0) {
+                String businessLicense = this.generateFileName(license.getOriginalFilename());
+                if ((license.getSize() / 1024) > 100) {
+                    view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":文件大小超过了100K");
+                    return view;
+                }
+                license.transferTo(new File(certifyFileRootPath + certifyFilePath + File.separator + businessLicense));
+                enterpriseSignCertifyValidator.setBusinessLicense(certifyFilePath + File.separator + businessLicense);
+            }else if("add".equals(op)){
+                view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":附件不能为空");
+                return view;
+            }
+
+            //责任人（含法人）证件
+            if(!ObjectUtils.isEmpty(liableCertificate) && liableCertificate.getSize()>0) {
+                String certificate = this.generateFileName(liableCertificate.getOriginalFilename());
+                if ((liableCertificate.getSize() / 1024) > 100) {
+                    view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":文件大小超过了100K");
+                    return view;
+                }
+                liableCertificate.transferTo(new File(certifyFileRootPath + certifyFilePath + File.separator + certificate));
+                enterpriseSignCertifyValidator.setPersonLiableCertificateUrl(certifyFilePath + File.separator + certificate);
+            }else if("add".equals(op)){
+                view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":附件不能为空");
+                return view;
+            }
+
+            //经办人证件
+            if(!ObjectUtils.isEmpty(handledCertificate) && handledCertificate.getSize()>0) {
+                String handledCertificat = this.generateFileName(handledCertificate.getOriginalFilename());
+                if ((handledCertificate.getSize() / 1024) > 100) {
+                    view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":文件大小超过了100K");
+                    return view;
+                }
+                handledCertificate.transferTo(new File(certifyFileRootPath + certifyFilePath + File.separator + handledCertificat));
+                enterpriseSignCertifyValidator.setPersonHandledCertificateUrl(certifyFilePath + File.separator + handledCertificat);
+            }else if("add".equals(op)){
+                view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":附件不能为空");
+                return view;
+            }
+
+            //授权书
+            if(!ObjectUtils.isEmpty(authorizeCertificateFile) && authorizeCertificateFile.getSize()>0) {
+                String authorizeCertificate = this.generateFileName(authorizeCertificateFile.getOriginalFilename());
+                if ((authorizeCertificateFile.getSize() / 1024) > 100) {
+                    view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":文件大小超过了100K");
+                    return view;
+                }
+                authorizeCertificateFile.transferTo(new File(certifyFileRootPath + certifyFilePath + File.separator + authorizeCertificate));
+                enterpriseSignCertifyValidator.setAuthorizeCertificate(certifyFilePath + File.separator + authorizeCertificate);
+            }else if("add".equals(op)){
+                view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":附件不能为空");
+                return view;
+            }
+
+            //授权书
+            if(!ObjectUtils.isEmpty(positionFile) && positionFile.getSize()>0) {
+                String position = this.generateFileName(positionFile.getOriginalFilename());
+                if ((positionFile.getSize() / 1024) > 100) {
+                    view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":文件大小超过了100K");
+                    return view;
+                }
+                positionFile.transferTo(new File(certifyFileRootPath + certifyFilePath + File.separator + position));
+                enterpriseSignCertifyValidator.setOfficePhotos(certifyFilePath + File.separator + position);
+            }else if("add".equals(op)){
+                view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":附件不能为空");
+                return view;
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+            view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":"+e.getMessage());
             return view;
         }
 
@@ -202,13 +297,14 @@ public class EnterpriseSignCertifyController {
     }
 
     /**
-     *  注销
+     * 注销
+     *
      * @param id
      * @param request
      * @return
      */
     @RequestMapping(value = "/deleteById/{id}", method = RequestMethod.GET)
-    public ModelAndView deleteById(@PathVariable String id,HttpServletRequest request) {
+    public ModelAndView deleteById(@PathVariable String id, HttpServletRequest request) {
         ModelAndView view = new ModelAndView("sign/certify/sign_certify_edit");
 
         SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
@@ -232,7 +328,7 @@ public class EnterpriseSignCertifyController {
 
         //保存操作记录
         if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
-            systemUserLogService.logsAsync("SIGN_CERTIFY", responseData.getData().getId(), user.getRealName(), "edit", "签名资质" , JSON.toJSONString(responseData.getData()));
+            systemUserLogService.logsAsync("SIGN_CERTIFY", responseData.getData().getId(), user.getRealName(), "edit", "签名资质", JSON.toJSONString(responseData.getData()));
         }
 
         //记录日志
@@ -241,6 +337,16 @@ public class EnterpriseSignCertifyController {
         view.setView(new RedirectView("/sign/certify/list", true, false));
         return view;
 
+    }
+
+    /**
+     * 文件名称替换工具，将文件名称替换为随机名称
+     * @param oldName
+     * @return
+     */
+    public String generateFileName(String oldName){
+        String suffix = oldName.substring(oldName.lastIndexOf("."));
+        return UUID.uuid32()+suffix;
     }
 
 }

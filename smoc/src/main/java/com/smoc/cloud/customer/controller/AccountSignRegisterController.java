@@ -15,6 +15,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequestMapping("sign/register")
@@ -71,6 +73,26 @@ public class AccountSignRegisterController {
         }
 
         ResponseData<AccountSignRegisterValidator> data = accountSignRegisterService.findById(id);
+        return data;
+    }
+
+    /**
+     * 根据业务账号，查询已占用的签名自定义扩展号
+     * @param account
+     * @param id 当id 不为空时候，不查询本id的签名自定义扩展号
+     * @return
+     */
+    @RequestMapping(value = "/findExtendDataByAccount/{account}/{id}", method = RequestMethod.GET)
+    public ResponseData<List<String>> findExtendDataByAccount(@PathVariable String account,@PathVariable String id) {
+
+        //完成参数规则验证
+        MpmIdValidator validator = new MpmIdValidator();
+        validator.setId(id);
+        if (!MpmValidatorUtil.validate(validator)) {
+            return ResponseDataUtil.buildError(ResponseCode.PARAM_ERROR.getCode(), MpmValidatorUtil.validateMessage(validator));
+        }
+
+        ResponseData<List<String>> data = accountSignRegisterService.findExtendDataByAccount(account,id);
         return data;
     }
 

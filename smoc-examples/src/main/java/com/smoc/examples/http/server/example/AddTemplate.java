@@ -17,24 +17,24 @@ public class AddTemplate {
 
     public static void main(String[] args) throws Exception {
 
-        String url = "http://39.96.175.93:18088/smoc-gateway/http-server/template/addTemplate";
+        String url = "http://localhost:18088/smoc-gateway/http-server/template/addTemplate";
 
         //自定义header协议
         Map<String, String> header = new HashMap<>();
         //signature-nonce 为17位数字，并且每次请求signature-nonce不能重复
         header.put("signature-nonce", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(10));
-        header.put("account", "XYK120");
+        header.put("account", "YQT170");
 
         //请求的数据
         Map<String, String> requestDataMap = new HashMap<>();
         //订单号，成功后的订单不能重复
         requestDataMap.put("orderNo", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(10));
         //业务账号；参见给的账号EXCEL文件
-        requestDataMap.put("account", "XYK120");
+        requestDataMap.put("account", "YQT170");
         //模板类型 1 表示普通模板 2 表示变量模板
-        requestDataMap.put("templateType", "2");
+        requestDataMap.put("templateType", "1");
         //模板内容
-        requestDataMap.put("content", "【小小鸟】你的验证码为, 请勿告诉他人，我们不会向你索要验证码。${1}");
+        requestDataMap.put("content", "【星语互联】为做好疫情防控工作，请您配合做好体温测量、健康码查验、新冠疫苗接种记录查验，公共场所佩戴口罩，保持一米线。");
         //时间戳
         requestDataMap.put("timestamp", DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS"));
         //转JSON请求数据
@@ -51,7 +51,7 @@ public class AddTemplate {
         //加密后的身份证号
         signData.append(requestDataMap.get("timestamp"));
         //签名 MD5_HMAC 签名KEY,参见给的账号EXCEL文件
-        String sign = HMACUtil.md5_HMAC_sign(signData.toString(), "E*Z8zK2le");
+        String sign = HMACUtil.md5_HMAC_sign(signData.toString(), "bcwcM5!jS");
         //System.out.println("[接口请求][签名数据]数据:" + signData);
         //System.out.println("[接口请求][签名]数据:" + sign);
 

@@ -32,4 +32,12 @@ public interface AccountSignRegisterRepository extends JpaRepository<AccountSign
     @Modifying
     @Query(value = "update account_sign_register set REGISTER_STATUS = :status where ID = :id", nativeQuery = true)
     void delete(@Param("id") String id, @Param("status") String status);
+
+    /**
+     * 根据业务账号，查询已占用的签名自定义扩展号
+     * @param account
+     * @param id 当id 不为空时候，不查询本id的签名自定义扩展号
+     * @return
+     */
+    List<String> findExtendDataByAccount(String account, String id);
 }

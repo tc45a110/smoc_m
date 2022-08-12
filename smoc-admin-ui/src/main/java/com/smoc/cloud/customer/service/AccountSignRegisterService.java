@@ -4,12 +4,13 @@ import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
-import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.AccountSignRegisterValidator;
 import com.smoc.cloud.customer.remote.AccountSignRegisterFeignClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -74,6 +75,22 @@ public class AccountSignRegisterService {
     public ResponseData deleteById(String id) {
         try {
             ResponseData data = this.accountSignRegisterFeignClient.deleteById(id);
+            return data;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDataUtil.buildError(e.getMessage());
+        }
+    }
+
+    /**
+     * 根据业务账号，查询已占用的签名自定义扩展号
+     * @param account
+     * @param id 当id 不为空时候，不查询本id的签名自定义扩展号
+     * @return
+     */
+    public ResponseData<List<String>> findExtendDataByAccount(String account, String id) {
+        try {
+            ResponseData<List<String>> data = this.accountSignRegisterFeignClient.findExtendDataByAccount(account,id);
             return data;
         } catch (Exception e) {
             log.error(e.getMessage());
