@@ -12,7 +12,7 @@ server: #服务端口
     # 是否分配的直接内存
     direct-buffers: true
   servlet:
-    context-path: /statistic
+    context-path: /spss
     session:
       cookie:
         name: OAUTH2SESSION
@@ -23,7 +23,7 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 127.0.0.1:8848
+        server-addr: 172.22.171.216:8848
   redis: #redis配置
     host: 172.22.171.219
     port: 6379
@@ -72,7 +72,7 @@ com:
 
 logging:
   config: classpath:logback-spring.xml
-  path: /smoc/smoc-log/smoc-spss-ui-logs
+  path: /smoc/smoc-log/smoc-statistic-ui-logs
   level:
     root: info
 

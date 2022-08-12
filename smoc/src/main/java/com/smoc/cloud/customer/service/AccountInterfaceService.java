@@ -86,7 +86,7 @@ public class AccountInterfaceService {
         BeanUtils.copyProperties(accountInterfaceInfoValidator, entity);
 
         if ("add".equals(op)) {
-            String passWord = PasswordUtils.getRandomPassword(9);
+            String passWord = PasswordUtils.getRandomPassword(8);
             entity.setAccountPassword(DES.encrypt(passWord));//加密
         }
 
