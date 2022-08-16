@@ -28,4 +28,7 @@ public class SmocProperties {
 
     private String certifyFileType;
 
+    //签名报备文件跟目录
+    private String signRegisterRootPath;
+
 }

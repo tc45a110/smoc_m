@@ -10,6 +10,7 @@ import java.util.Date;
 public class AccountSignRegisterForFileValidator {
 
     private String id;
+    private String registerType;
     private String registerSignId;
     private String account;
     private String channelId;

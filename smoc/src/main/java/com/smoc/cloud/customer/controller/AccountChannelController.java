@@ -6,11 +6,11 @@ import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.configuate.qo.ChannelBasicInfoQo;
 import com.smoc.cloud.common.smoc.configuate.validator.ChannelGroupInfoValidator;
 import com.smoc.cloud.common.smoc.customer.qo.AccountChannelInfoQo;
-import com.smoc.cloud.common.smoc.customer.validator.AccountBasicInfoValidator;
 import com.smoc.cloud.common.smoc.customer.validator.AccountChannelInfoValidator;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.customer.service.AccountChannelService;
+import com.smoc.cloud.sign.service.SignRegisterService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -28,6 +28,9 @@ import java.util.Map;
 @RequestMapping("account")
 @Scope(value= WebApplicationContext.SCOPE_REQUEST)
 public class AccountChannelController {
+
+    @Autowired
+    private SignRegisterService signRegisterService;
 
     @Autowired
     private AccountChannelService accountChannelService;
@@ -70,6 +73,10 @@ public class AccountChannelController {
         //保存操作
         ResponseData data = accountChannelService.save(accountChannelInfoValidator, op);
 
+        //生成签名报备
+        if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            signRegisterService.generateSignRegisterByAccount(accountChannelInfoValidator.getAccountId());
+        }
         return data;
     }
 

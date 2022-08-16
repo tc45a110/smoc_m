@@ -24,4 +24,7 @@ public class AccountSignRegisterValidator {
     private String createdTime;
     private String updatedBy;
     private Date updatedTime;
+
+    private String enterpriseName;
+    private String accountExtendNumber;
 }

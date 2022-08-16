@@ -73,6 +73,9 @@ public class ChannelBasicInfoValidator {
     @NotNull(message = "通道状态不能为空！")
     @Length(max = 32, message = "通道状态最大长度为{max}！")
     private String channelStatus;
+
+    private String isRegister;
+
     private String createdBy;
     private String createdTime;
     private String updatedBy;

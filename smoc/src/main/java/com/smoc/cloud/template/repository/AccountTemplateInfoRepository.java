@@ -103,4 +103,19 @@ public interface AccountTemplateInfoRepository extends JpaRepository<AccountTemp
      */
     List<AccountTemplateContent> findCMPPSignTemplate(String account);
 
+    /**
+     * 根据账号和模板类型查询模板
+     * @param account
+     * @param templateType
+     * @return
+     */
+    List<AccountTemplateInfo> findByBusinessAccountAndTemplateClassify(String account,String templateType);
+
+    /**
+     * 创建一个签名模板
+     * @param account
+     * @param sign
+     */
+    void createTemplate(String account,String sign);
+
 }

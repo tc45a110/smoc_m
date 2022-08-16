@@ -11,6 +11,7 @@ public class AccountSignRegisterForFileRowMapper implements RowMapper<AccountSig
     public AccountSignRegisterForFileValidator mapRow(ResultSet rs, int rowNum) throws SQLException {
         AccountSignRegisterForFileValidator qo = new AccountSignRegisterForFileValidator();
         qo.setId(rs.getString("ID"));
+        qo.setRegisterType(rs.getString("REGISTER_TYPE"));
         qo.setRegisterSignId(rs.getString("REGISTER_SIGN_ID"));
         qo.setAccount(rs.getString("ACCOUNT"));
         qo.setChannelId(rs.getString("CHANNEL_ID"));

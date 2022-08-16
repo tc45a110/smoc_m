@@ -4,12 +4,15 @@ import com.smoc.cloud.common.BasePageRepository;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.smoc.template.AccountTemplateInfoValidator;
+import com.smoc.cloud.common.utils.UUID;
+import com.smoc.cloud.sequence.repository.SequenceRepository;
 import com.smoc.cloud.template.entity.AccountTemplateContent;
 import com.smoc.cloud.template.rowmapper.AccountTemplateContentRowMapper;
 import com.smoc.cloud.template.rowmapper.AccountTemplateInfoRowMapper;
 import org.apache.commons.lang3.text.StrSubstitutor;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +20,9 @@ import java.util.Map;
 
 public class AccountTemplateInfoRepositoryImpl extends BasePageRepository {
 
+
+    @Resource
+    private SequenceRepository sequenceRepository;
 
     /**
      * 分页查询
@@ -467,5 +473,19 @@ public class AccountTemplateInfoRepositoryImpl extends BasePageRepository {
 
         List<AccountTemplateContent> result = this.jdbcTemplate.query(sqlBuffer.toString(), new AccountTemplateContentRowMapper());
         return result;
+    }
+
+    /**
+     * 创建一个签名模板
+     *
+     * @param account
+     * @param sign
+     */
+    public void createTemplate(String account, String sign) {
+
+        //创建签名模板
+        StringBuffer sqlBuffer = new StringBuffer(" insert into account_template_info(TEMPLATE_ID,TEMPLATE_TYPE,ENTERPRISE_ID,INFO_TYPE,BUSINESS_ACCOUNT,TEMPLATE_CONTENT,TEMPLATE_FLAG,IS_FILTER,TEMPLATE_CLASSIFY,TEMPLATE_STATUS,TEMPLATE_AGREEMENT_TYPE,CREATED_BY,CREATED_TIME) ");
+        sqlBuffer.append(" select 'TEMP" + sequenceRepository.findSequence("TEMPLATE") + "',BUSINESS_TYPE,ENTERPRISE_ID,INFO_TYPE,ACCOUNT_ID,'" + sign + "','3','FILTER','3','2','CMPP','SYSTEM' ,now() from account_base_info where ACCOUNT_ID ='" + account + "' ");
+        this.jdbcTemplate.batchUpdate(sqlBuffer.toString());
     }
 }

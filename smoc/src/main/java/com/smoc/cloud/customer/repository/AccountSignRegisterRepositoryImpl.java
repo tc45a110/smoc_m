@@ -1,12 +1,10 @@
 package com.smoc.cloud.customer.repository;
 
-import com.google.gson.Gson;
 import com.smoc.cloud.common.BasePageRepository;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
 import com.smoc.cloud.common.smoc.customer.validator.AccountSignRegisterValidator;
 import com.smoc.cloud.customer.rowmapper.AccountSignRegisterRowMapper;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -29,6 +27,8 @@ public class AccountSignRegisterRepositoryImpl extends BasePageRepository {
         sqlBuffer.append("  t.ID");
         sqlBuffer.append(", t.ACCOUNT");
         sqlBuffer.append(", t.SIGN");
+        sqlBuffer.append(", e.REGISTER_ENTERPRISE_NAME");
+        sqlBuffer.append(", a.EXTEND_NUMBER");
         sqlBuffer.append(", t.SIGN_EXTEND_NUMBER");
         sqlBuffer.append(", t.EXTEND_TYPE");
         sqlBuffer.append(", t.EXTEND_DATA");
@@ -39,8 +39,8 @@ public class AccountSignRegisterRepositoryImpl extends BasePageRepository {
         sqlBuffer.append(", t.REGISTER_STATUS");
         sqlBuffer.append(", t.CREATED_BY");
         sqlBuffer.append(", DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME");
-        sqlBuffer.append("  from account_sign_register t ");
-        sqlBuffer.append("  where t.REGISTER_STATUS= '1' ");
+        sqlBuffer.append("  from account_sign_register t,account_base_info a,enterprise_sign_certify e ");
+        sqlBuffer.append("  where t.ENTERPRISE_ID=e.ID and t.ACCOUNT=a.ACCOUNT_ID and t.REGISTER_STATUS= '1'  ");
 
         List<Object> paramsList = new ArrayList<Object>();
 
@@ -49,9 +49,19 @@ public class AccountSignRegisterRepositoryImpl extends BasePageRepository {
             paramsList.add(qo.getAccount().trim());
         }
 
+        if (!StringUtils.isEmpty(qo.getAccountExtendNumber())) {
+            sqlBuffer.append(" and a.EXTEND_NUMBER = ?");
+            paramsList.add(qo.getAccountExtendNumber().trim());
+        }
+
         if (!StringUtils.isEmpty(qo.getSign())) {
             sqlBuffer.append(" and t.SIGN like ?");
             paramsList.add("%" + qo.getSign().trim() + "%");
+        }
+
+        if (!StringUtils.isEmpty(qo.getEnterpriseName())) {
+            sqlBuffer.append(" and e.REGISTER_ENTERPRISE_NAME like ?");
+            paramsList.add("%" + qo.getEnterpriseName().trim() + "%");
         }
 
         sqlBuffer.append(" order by t.CREATED_TIME desc ");

@@ -12,7 +12,9 @@ public class AccountSignRegisterRowMapper implements RowMapper<AccountSignRegist
         AccountSignRegisterValidator qo = new AccountSignRegisterValidator();
         qo.setId(rs.getString("ID"));
         qo.setAccount(rs.getString("ACCOUNT"));
+        qo.setEnterpriseName(rs.getString("REGISTER_ENTERPRISE_NAME"));
         qo.setSign(rs.getString("SIGN"));
+        qo.setAccountExtendNumber(rs.getString("EXTEND_NUMBER"));
         qo.setSignExtendNumber(rs.getString("SIGN_EXTEND_NUMBER"));
         qo.setExtendType(rs.getString("EXTEND_TYPE"));
         qo.setExtendData(rs.getString("EXTEND_DATA"));

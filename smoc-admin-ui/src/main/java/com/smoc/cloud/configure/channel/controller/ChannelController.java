@@ -205,6 +205,7 @@ public class ChannelController {
             channelBasicInfoValidator.setPriceStyle("UNIFIED_PRICE");//默认统一计价
             channelBasicInfoValidator.setChannelProcess("1000");//配置进度
             channelBasicInfoValidator.setChannelRunStatus("1");//正常
+            channelBasicInfoValidator.setIsRegister("1");//是否需要报备
 
             //op操作标记，add表示添加，edit表示修改
             view.addObject("op", "add");

@@ -12,6 +12,7 @@ import com.smoc.cloud.common.smoc.customer.qo.AccountChannelRepairQo;
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.configure.channel.service.ChannelRepairService;
+import com.smoc.cloud.sign.service.SignRegisterService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -29,6 +30,9 @@ import java.util.List;
 @RequestMapping("configure/channel/repair")
 @Scope(value= WebApplicationContext.SCOPE_REQUEST)
 public class ChannelRepairController {
+
+    @Autowired
+    private SignRegisterService signRegisterService;
 
     @Autowired
     private ChannelRepairService channelRepairService;
@@ -96,6 +100,11 @@ public class ChannelRepairController {
 
         //保存操作
         ResponseData data = channelRepairService.save(configChannelRepairRuleValidator, op);
+
+        //生成签名报备
+        if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            signRegisterService.generateSignRegisterByAccount(configChannelRepairRuleValidator.getBusinessId());
+        }
 
         return data;
     }

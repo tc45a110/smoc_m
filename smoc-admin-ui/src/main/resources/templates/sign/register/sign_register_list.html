@@ -45,19 +45,23 @@
                           method="post">
                         <div class="row m-b-60">
                             <div class="col-sm-12">
-                                <div class="form-group  col-sm-3">
+                                <div class="form-group  col-sm-4">
+                                    <input type="text" class="form-control" th:field="*{enterpriseName}"
+                                           placeholder="签名资质企业" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-4">
                                     <input type="text" class="form-control" th:field="*{account}"
                                            placeholder="业务账号" autocomplete="off">
                                 </div>
-                                <div class="form-group  col-sm-3">
+                                <div class="form-group  col-sm-4">
+                                    <input type="text" class="form-control" th:field="*{accountExtendNumber}"
+                                           placeholder="业务账号扩展码" autocomplete="off">
+                                </div>
+                                <div class="form-group  col-sm-4">
                                     <input type="text" class="form-control" th:field="*{sign}"
                                            placeholder="签名" autocomplete="off">
                                 </div>
-                                <div class="form-group  col-sm-3">
-                                    <input type="text" class="form-control" th:field="*{signExtendNumber}"
-                                           placeholder="签名扩展码" autocomplete="off">
-                                </div>
-                                <div class="form-group col-sm-3 pull-right" style="text-align: right">
+                                <div class="form-group col-sm-4 pull-right" style="text-align: right">
                                     <button sec:authorize-url="/sign/register/page" type="submit"
                                             class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
                                         <i class="glyphicon glyphicon-search"></i> 查询
@@ -92,11 +96,10 @@
                             <table class="table table table-hover m-10" style="margin-top: -12px;table-layout:fixed;">
                                 <thead>
                                 <tr>
-                                    <th>报备签名</th>
-                                    <th>业务账号</th>
+                                    <th>报备签名/签名资质企业</th>
+                                    <th>业务账号/扩展号</th>
                                     <th>签名扩展号</th>
                                     <th>签名自定义扩展号</th>
-                                    <th>签名资质企业</th>
                                     <th>APP名称</th>
                                     <th>服务类型</th>
                                     <th>具体用途</th>
@@ -107,19 +110,18 @@
                                 <tbody>
                                 <tr th:each="info:${list}">
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        [[${info.sign}]]
+                                        [[${info.sign}]]<br>
+                                        [[${info.enterpriseName}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        [[${info.account}]]
+                                        [[${info.account}]]<br>
+                                        [[${info.accountExtendNumber}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         [[${info.signExtendNumber}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         [[${info.extendData}]]
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         [[${info.appName}]]

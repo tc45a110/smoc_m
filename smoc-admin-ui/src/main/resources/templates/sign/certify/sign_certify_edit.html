@@ -71,9 +71,9 @@
 
                                             </div>
                                             <div class="col-md-6 form-group">
-                                                <label >营业执照/组织机构代码证<span style="margin-left:5px;color:#F5707A;font-weight:200">附件：图片格式jpg；最大100K</span>
+                                                <label >营业执照/组织机构代码证<span th:if="${'add'==op}" class="text-danger" style="margin-left:5px;margin-right:5px">*</span><span style="margin-left:5px;color:#F5707A;font-weight:200">附件：图片格式jpg；最大100K</span>
                                                 </label>
-                                                <input name="license" type="file" class="filestyle"  data-buttonname="btn-info">
+                                                <input name="license" type="file" class="filestyle"  th:attr="required=${'add'==op?'true':'false'}"  data-buttonname="btn-info">
                                             </div>
                                             <div class="col-md-6 form-group">
                                                 <label for="personLiableName">责任人（含法人）姓名<span class="text-danger">*</span>
@@ -104,9 +104,9 @@
                                                        placeholder="责任人（含法人）证件号码">
                                             </div>
                                             <div class="col-md-6 form-group">
-                                                <label >责任人（含法人）证件<span style="margin-left:5px;color:#F5707A;font-weight:200">附件：图片格式jpg；最大100K</span>
+                                                <label >责任人（含法人）证件<span th:if="${'add'==op}" class="text-danger" style="margin-left:5px;margin-right:5px">*</span><span style="margin-left:5px;color:#F5707A;font-weight:200">附件：图片格式jpg；最大100K</span>
                                                 </label>
-                                                <input name="liableCertificate" type="file" class="filestyle" data-buttonname="btn-teal">
+                                                <input name="liableCertificate" type="file" class="filestyle"  th:attr="required=${'add'==op?'true':'false'}" data-buttonname="btn-teal">
                                             </div>
                                             <div class="col-md-6 form-group">
                                                 <label for="personHandledName">经办人姓名<span class="text-danger">*</span>
@@ -137,9 +137,9 @@
                                                        placeholder="经办人证件号码">
                                             </div>
                                             <div class="col-md-6 form-group">
-                                                <label >经办人证件<span style="margin-left:5px;color:#F5707A;font-weight:200">附件：图片格式jpg；最大100K</span>
+                                                <label >经办人证件<span th:if="${'add'==op}" class="text-danger" style="margin-left:5px;margin-right:5px">*</span><span style="margin-left:5px;color:#F5707A;font-weight:200">附件：图片格式jpg；最大100K</span>
                                                 </label>
-                                                <input name="handledCertificate" type="file" class="filestyle"  data-buttonname="btn-primary">
+                                                <input name="handledCertificate" type="file" class="filestyle"  th:attr="required=${'add'==op?'true':'false'}"  data-buttonname="btn-primary">
                                             </div>
                                             <div class="col-md-6 form-group">
                                                 <label for="authorizeStartDate">授权开始时间<span class="text-danger">*</span>
@@ -160,9 +160,9 @@
                                                        placeholder="授权到期时间">
                                             </div>
                                             <div class="col-md-6 form-group">
-                                                <label >授权书<span style="margin-left:5px;color:#F5707A;font-weight:200">附件：图片格式jpg；最大100K</span>
+                                                <label >授权书<span th:if="${'add'==op}" class="text-danger" style="margin-left:5px;margin-right:5px">*</span><span style="margin-left:5px;color:#F5707A;font-weight:200">附件：图片格式jpg；最大100K</span>
                                                 </label>
-                                                <input name="authorizeCertificateFile" type="file" class="filestyle" data-buttonname="btn-purple">
+                                                <input name="authorizeCertificateFile" type="file" class="filestyle"  th:attr="required=${'add'==op?'true':'false'}" data-buttonname="btn-purple">
                                             </div>
                                             <div class="col-md-6 form-group">
                                                 <label for="position">企业接入设备位置<span class="text-danger">*</span>
@@ -174,9 +174,9 @@
                                                        placeholder="企业接入设备位置">
                                             </div>
                                             <div class="col-md-6 form-group">
-                                                <label for="position">现场拍摄留存经办人照片<span style="margin-left:5px;color:#F5707A;font-weight:200">附件：图片格式jpg；最大100K</span>
+                                                <label for="position">现场拍摄留存经办人照片<span th:if="${'add'==op}" class="text-danger" style="margin-left:5px;margin-right:5px">*</span><span style="margin-left:5px;color:#F5707A;font-weight:200">附件：图片格式jpg；最大100K</span>
                                                 </label>
-                                                <input name="positionFile" type="file" class="filestyle" data-buttonname="btn-primary">
+                                                <input name="positionFile" type="file" class="filestyle" th:attr="required=${'add'==op?'true':'false'}" data-buttonname="btn-primary" required="">
                                             </div>
 
                                             <div class="col-md-12 text-center">

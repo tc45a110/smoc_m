@@ -9,6 +9,7 @@ import com.smoc.cloud.common.smoc.customer.validator.AccountSignRegisterValidato
 import com.smoc.cloud.common.validator.MpmIdValidator;
 import com.smoc.cloud.common.validator.MpmValidatorUtil;
 import com.smoc.cloud.customer.service.AccountSignRegisterService;
+import com.smoc.cloud.sign.service.SignRegisterService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -22,6 +23,9 @@ import java.util.List;
 @RequestMapping("sign/register")
 @Scope(value= WebApplicationContext.SCOPE_REQUEST)
 public class AccountSignRegisterController {
+
+    @Autowired
+    private SignRegisterService signRegisterService;
 
     @Autowired
     private AccountSignRegisterService accountSignRegisterService;
@@ -52,6 +56,11 @@ public class AccountSignRegisterController {
 
         //保存操作
         ResponseData data = accountSignRegisterService.save(accountSignRegisterValidator, op);
+
+        //生成签名报备
+        if (ResponseCode.SUCCESS.getCode().equals(data.getCode())) {
+            signRegisterService.generateSignRegisterByRegisterId(accountSignRegisterValidator.getId());
+        }
 
         return data;
     }

@@ -2,7 +2,6 @@ package com.smoc.cloud.configure.channel.entity;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Objects;
 
@@ -30,6 +29,7 @@ public class ConfigChannelBasicInfo {
     private String channelProcess;
     private String channelRunStatus;
     private String channelStatus;
+    private String isRegister;
     private String createdBy;
     private Date createdTime;
     private String updatedBy;
@@ -247,6 +247,16 @@ public class ConfigChannelBasicInfo {
 
     public void setChannelStatus(String channelStatus) {
         this.channelStatus = channelStatus;
+    }
+
+    @Basic
+    @Column(name = "IS_REGISTER")
+    public String getIsRegister() {
+        return isRegister;
+    }
+
+    public void setIsRegister(String isRegister) {
+        this.isRegister = isRegister;
     }
 
     @Basic

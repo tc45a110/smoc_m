@@ -16,8 +16,10 @@ import com.smoc.cloud.customer.entity.AccountBasicInfo;
 import com.smoc.cloud.customer.entity.AccountChannelInfo;
 import com.smoc.cloud.customer.repository.AccountChannelRepository;
 import com.smoc.cloud.customer.repository.BusinessAccountRepository;
+import com.smoc.cloud.sign.service.SignRegisterService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -139,6 +141,8 @@ public class AccountChannelService {
                 businessAccountRepository.save(accountBasicInfo);
             }
         }
+
+
 
         return ResponseDataUtil.buildSuccess();
     }

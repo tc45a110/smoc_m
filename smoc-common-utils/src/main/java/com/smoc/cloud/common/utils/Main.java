@@ -14,11 +14,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        List<String> list = new ArrayList<>();
-
-        list.add("1");
-        list.add("2");
-
-        System.out.println(new Gson().toJson(list));
+       String filePath = "2022-08-12/3967315a016f4c6eb010aa6a6895e90e.jpg";
+       System.out.println(filePath.substring(11,filePath.length()));
     }
 }

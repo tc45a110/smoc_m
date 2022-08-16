@@ -49,7 +49,7 @@ public class FileUtils {
             if (".xls".equals(fileType) || ".xlsx".equals(fileType)) {
                 list = readExcel(in, type);
             } else if (".txt".equals(fileType)) {
-                list = readerTxt(in,type);
+                list = readerTxt(in, type);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -70,7 +70,7 @@ public class FileUtils {
      * @param inputStream
      * @return
      */
-    private static List<ExcelModel> readerTxt(InputStream inputStream,String type) {
+    private static List<ExcelModel> readerTxt(InputStream inputStream, String type) {
 
         try {
             List<ExcelModel> list = new ArrayList<>();
@@ -80,13 +80,13 @@ public class FileUtils {
                 lineTxt = lineTxt.replaceAll("，", ",");
                 String[] s = lineTxt.split(",");
                 ExcelModel book = new ExcelModel();
-                if("4".equals(type)){
+                if ("4".equals(type)) {
                     if (!StringUtils.isEmpty(s[0].trim())) {
                         book.setColumn1(s[0].trim());
                     } else {
                         break;
                     }
-                }else{
+                } else {
                     if (!StringUtils.isEmpty(s[0].trim()) && Utils.isPhone(s[0].trim())) {
                         book.setColumn1(s[0].trim());
                     } else {
@@ -337,4 +337,31 @@ public class FileUtils {
         return list;
 
     }
+
+    /**
+     * 根据文件路径实现文件复制
+     *
+     * @param sourceFilePath
+     * @param targetFilePath
+     * @throws IOException
+     */
+    public static void copyFile(String sourceFilePath, String targetFilePath) throws IOException {
+        File sourceFile = new File(sourceFilePath);
+        File targetFile = new File(targetFilePath);
+        //如果文件存在
+        if (targetFile.exists()) {
+            return;
+        }
+
+        FileInputStream inputStream = new FileInputStream(sourceFile);
+        FileOutputStream outputStream = new FileOutputStream(targetFile);
+        byte[] buffer = new byte[4096];
+        int length = 0;
+        while ((length = inputStream.read(buffer)) != -1) {
+            outputStream.write(buffer, 0, length);
+        }
+        inputStream.close();
+        outputStream.close();
+    }
+
 }
