@@ -324,6 +324,9 @@ public class AccountSignRegisterController {
             return view;
         }
 
+        accountSignRegisterValidator.setAppName(accountSignRegisterValidator.getSign());
+        accountSignRegisterValidator.setMainApplication(accountSignRegisterValidator.getServiceType());
+
         //保存数据
         ResponseData data = accountSignRegisterService.save(accountSignRegisterValidator, op);
         if (!ResponseCode.SUCCESS.getCode().equals(data.getCode())) {

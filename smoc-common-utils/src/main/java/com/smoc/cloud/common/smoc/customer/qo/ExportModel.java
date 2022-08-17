@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter
 public class ExportModel {
 
+    private String id;
     //报备码号
     private String regCodeNum;
     //接入省份
@@ -26,6 +27,7 @@ public class ExportModel {
     //短信用途
     private String mainApplication;
 
+    private String registerEnterprise;
     //端口实际使用单位名称
     private String enterpriseName;
     //企业社会信用代码
@@ -58,4 +60,6 @@ public class ExportModel {
     private String position;
     //机房现场拍照
     private String officePhotos;
+
+    private String operate;
 }

@@ -190,8 +190,8 @@ public class EnterpriseSignCertifyController {
 
         //创建文件夹
         String certifyFileRootPath = smocProperties.getCertifyFileRootPath();
-        String certifyFilePath = DateTimeUtils.getDateFormat(new Date());
-        File fold = new File(certifyFilePath);
+        String certifyFilePath = enterpriseSignCertifyValidator.getId();
+        File fold = new File(certifyFileRootPath + certifyFilePath);
         while (!fold.exists()) {
             fold.mkdirs();
         }
@@ -201,78 +201,103 @@ public class EnterpriseSignCertifyController {
          */
         try {
             //营业执照
-            if(!ObjectUtils.isEmpty(license) && license.getSize()>0) {
-                String businessLicense = this.generateFileName(license.getOriginalFilename());
+            if (!ObjectUtils.isEmpty(license) && license.getSize() > 0) {
+                String licenseFileType = license.getOriginalFilename().substring(license.getOriginalFilename().lastIndexOf("."));
+                String businessLicenseFileName = enterpriseSignCertifyValidator.getRegisterEnterpriseName() + "营业执照" + licenseFileType;
                 if ((license.getSize() / 1024) > 100) {
                     view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":文件大小超过了100K");
                     return view;
                 }
-                license.transferTo(new File(certifyFileRootPath + certifyFilePath + File.separator + businessLicense));
-                enterpriseSignCertifyValidator.setBusinessLicense(certifyFilePath + File.separator + businessLicense);
-            }else if("add".equals(op)){
+                File file = new File(certifyFileRootPath + certifyFilePath + File.separator + businessLicenseFileName);
+                if (file.exists()) {
+                    file.delete();
+                }
+                license.transferTo(file);
+                enterpriseSignCertifyValidator.setBusinessLicense(businessLicenseFileName);
+            } else if ("add".equals(op)) {
                 view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":附件不能为空");
                 return view;
             }
 
             //责任人（含法人）证件
-            if(!ObjectUtils.isEmpty(liableCertificate) && liableCertificate.getSize()>0) {
-                String certificate = this.generateFileName(liableCertificate.getOriginalFilename());
+            if (!ObjectUtils.isEmpty(liableCertificate) && liableCertificate.getSize() > 0) {
+                String certificateType = liableCertificate.getOriginalFilename().substring(liableCertificate.getOriginalFilename().lastIndexOf("."));
+                String certificateFileName = enterpriseSignCertifyValidator.getRegisterEnterpriseName() + "责任人" + certificateType;
                 if ((liableCertificate.getSize() / 1024) > 100) {
                     view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":文件大小超过了100K");
                     return view;
                 }
-                liableCertificate.transferTo(new File(certifyFileRootPath + certifyFilePath + File.separator + certificate));
-                enterpriseSignCertifyValidator.setPersonLiableCertificateUrl(certifyFilePath + File.separator + certificate);
-            }else if("add".equals(op)){
+                File file = new File(certifyFileRootPath + certifyFilePath + File.separator + certificateFileName);
+                if (file.exists()) {
+                    file.delete();
+                }
+                liableCertificate.transferTo(file);
+                enterpriseSignCertifyValidator.setPersonLiableCertificateUrl(certificateFileName);
+            } else if ("add".equals(op)) {
                 view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":附件不能为空");
                 return view;
             }
 
             //经办人证件
-            if(!ObjectUtils.isEmpty(handledCertificate) && handledCertificate.getSize()>0) {
-                String handledCertificat = this.generateFileName(handledCertificate.getOriginalFilename());
+            if (!ObjectUtils.isEmpty(handledCertificate) && handledCertificate.getSize() > 0) {
+                String handledCertificateType = handledCertificate.getOriginalFilename().substring(handledCertificate.getOriginalFilename().lastIndexOf("."));
+                String handledCertificateFileName = enterpriseSignCertifyValidator.getRegisterEnterpriseName() + "经办人" + handledCertificateType;
                 if ((handledCertificate.getSize() / 1024) > 100) {
                     view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":文件大小超过了100K");
                     return view;
                 }
-                handledCertificate.transferTo(new File(certifyFileRootPath + certifyFilePath + File.separator + handledCertificat));
-                enterpriseSignCertifyValidator.setPersonHandledCertificateUrl(certifyFilePath + File.separator + handledCertificat);
-            }else if("add".equals(op)){
+                File file = new File(certifyFileRootPath + certifyFilePath + File.separator + handledCertificateFileName);
+                if (file.exists()) {
+                    file.delete();
+                }
+                handledCertificate.transferTo(file);
+                enterpriseSignCertifyValidator.setPersonHandledCertificateUrl(handledCertificateFileName);
+            } else if ("add".equals(op)) {
                 view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":附件不能为空");
                 return view;
             }
 
             //授权书
-            if(!ObjectUtils.isEmpty(authorizeCertificateFile) && authorizeCertificateFile.getSize()>0) {
-                String authorizeCertificate = this.generateFileName(authorizeCertificateFile.getOriginalFilename());
+            if (!ObjectUtils.isEmpty(authorizeCertificateFile) && authorizeCertificateFile.getSize() > 0) {
+                String authorizeCertificateType = authorizeCertificateFile.getOriginalFilename().substring(authorizeCertificateFile.getOriginalFilename().lastIndexOf("."));
+                String authorizeCertificateFileName = enterpriseSignCertifyValidator.getRegisterEnterpriseName() + "授权书" + authorizeCertificateType;
                 if ((authorizeCertificateFile.getSize() / 1024) > 100) {
                     view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":文件大小超过了100K");
                     return view;
                 }
-                authorizeCertificateFile.transferTo(new File(certifyFileRootPath + certifyFilePath + File.separator + authorizeCertificate));
-                enterpriseSignCertifyValidator.setAuthorizeCertificate(certifyFilePath + File.separator + authorizeCertificate);
-            }else if("add".equals(op)){
+                File file = new File(certifyFileRootPath + certifyFilePath + File.separator + authorizeCertificateFileName);
+                if (file.exists()) {
+                    file.delete();
+                }
+                authorizeCertificateFile.transferTo(file);
+                enterpriseSignCertifyValidator.setAuthorizeCertificate(authorizeCertificateFileName);
+            } else if ("add".equals(op)) {
                 view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":附件不能为空");
                 return view;
             }
 
             //授权书
-            if(!ObjectUtils.isEmpty(positionFile) && positionFile.getSize()>0) {
-                String position = this.generateFileName(positionFile.getOriginalFilename());
+            if (!ObjectUtils.isEmpty(positionFile) && positionFile.getSize() > 0) {
+                String positionType = positionFile.getOriginalFilename().substring(positionFile.getOriginalFilename().lastIndexOf("."));
+                String positionFileName = enterpriseSignCertifyValidator.getRegisterEnterpriseName() + "业务办理现场照片" + positionType;
                 if ((positionFile.getSize() / 1024) > 100) {
                     view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":文件大小超过了100K");
                     return view;
                 }
-                positionFile.transferTo(new File(certifyFileRootPath + certifyFilePath + File.separator + position));
-                enterpriseSignCertifyValidator.setOfficePhotos(certifyFilePath + File.separator + position);
-            }else if("add".equals(op)){
+                File file = new File(certifyFileRootPath + certifyFilePath + File.separator + positionFileName);
+                if (file.exists()) {
+                    file.delete();
+                }
+                positionFile.transferTo(file);
+                enterpriseSignCertifyValidator.setOfficePhotos(positionFileName);
+            } else if ("add".equals(op)) {
                 view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":附件不能为空");
                 return view;
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":"+e.getMessage());
+            view.addObject("error", ResponseCode.PARAM_LINK_ERROR.getCode() + ":" + e.getMessage());
             return view;
         }
 
@@ -341,12 +366,13 @@ public class EnterpriseSignCertifyController {
 
     /**
      * 文件名称替换工具，将文件名称替换为随机名称
+     *
      * @param oldName
      * @return
      */
-    public String generateFileName(String oldName){
+    public String generateFileName(String oldName) {
         String suffix = oldName.substring(oldName.lastIndexOf("."));
-        return UUID.uuid32()+suffix;
+        return UUID.uuid32() + suffix;
     }
 
 }

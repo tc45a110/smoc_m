@@ -84,7 +84,7 @@
                                                        placeholder="业务账号" readonly>
                                             </div>
                                             <div class="col-md-6 form-group">
-                                                <label for="sign">报备签名<span class="text-danger">*</span>&nbsp;
+                                                <label for="sign">报备签名<span class="text-danger">*</span>&nbsp;<span style="margin-left:5px;color:#F5707A;font-weight:200">不需要加【】</span>
                                                     <span class="text-danger" th:if="${#fields.hasErrors('sign')}"
                                                           th:errors="*{sign}"
                                                           style="font-weight: 200;font-size: 12px"></span>
@@ -135,29 +135,6 @@
                                                     <option value="通知提醒" th:attr="selected=${'通知提醒' == thisServiceTypeMap.get('通知提醒')}">通知提醒</option>
                                                     <option value="公共服务" th:attr="selected=${'公共服务' == thisServiceTypeMap.get('公共服务')}">公共服务</option>
                                                 </select>
-                                            </div>
-                                            <div class="col-md-6 form-group">
-                                                <label for="appName">APP名称<span class="text-danger">*</span>
-                                                    <span class="text-danger" th:if="${#fields.hasErrors('appName')}"
-                                                          th:errors="*{appName}"
-                                                          style="font-weight: 200;font-size: 12px"></span>
-                                                </label>
-                                                <input id="appName" type="text" class="form-control"
-                                                       th:field="*{appName}"
-                                                       data-parsley-length="[2,64]" autocomplete="off" required=""
-                                                       placeholder="APP名称">
-                                            </div>
-                                            <div class="col-md-6 form-group">
-                                                <label for="mainApplication">具体用途<span class="text-danger">*</span>
-                                                    <span class="text-danger"
-                                                          th:if="${#fields.hasErrors('mainApplication')}"
-                                                          th:errors="*{mainApplication}"
-                                                          style="font-weight: 200;font-size: 12px"></span>
-                                                </label>
-                                                <input id="mainApplication" type="text" class="form-control"
-                                                       th:field="*{mainApplication}"
-                                                       data-parsley-length="[2,24]" autocomplete="off" required=""
-                                                       placeholder="具体用途">
                                             </div>
                                             <div class="col-md-12 text-center">
                                                 <input type="hidden" th:field="*{extendType}">

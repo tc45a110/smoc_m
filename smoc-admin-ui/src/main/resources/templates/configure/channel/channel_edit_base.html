@@ -153,14 +153,14 @@
                                                             class="text-danger" th:if="${#fields.hasErrors('infoType')}"
                                                             th:errors="*{infoType}"
                                                             style="font-weight: 200;font-size: 12px"></span>
-                                                    </label>
+                                                    </label><br>
                                                     <mpm:tag id="infoType" identity="infoType" name="infoType"
                                                              show-type="checkbox" key="code" class="form-control"
                                                              th:value="${channelBasicInfoValidator.infoType}"
                                                              required="true" title="信息分类"/>
                                                 </div>
                                                 <div class="col-sm-4 m-b-10">
-                                                    <label>需要报备<span class="text-danger">*</span>&nbsp;<span
+                                                    <label style="margin-bottom:15px">是否需要报备<span class="text-danger">*</span>&nbsp;<span
                                                             class="text-danger" th:if="${#fields.hasErrors('isRegister')}"
                                                             th:errors="*{isRegister}"
                                                             style="font-weight: 200;font-size: 12px"></span>

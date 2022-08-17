@@ -121,21 +121,22 @@ public class AccountSignRegisterService {
         List<AccountTemplateInfo> templateInfos = this.accountTemplateInfoRepository.findByBusinessAccountAndTemplateClassify(entity.getAccount(), "3");
         //如果不存在，则创建签名模板
         if (null == templateInfos || templateInfos.size() < 1) {
-            accountTemplateInfoRepository.createTemplate(accountSignRegisterValidator.getAccount(), accountSignRegisterValidator.getSign());
+            accountTemplateInfoRepository.createTemplate(accountSignRegisterValidator.getAccount(), "【"+accountSignRegisterValidator.getSign()+"】");
         } else {
             //如果存在，则修改签名模板内容
             AccountTemplateInfo accountTemplateInfo = templateInfos.get(0);
             String templateContent = accountTemplateInfo.getTemplateContent();
             if (op.equals("add")) {
-                templateContent = templateContent + "|" + entity.getSign();
+                templateContent = templateContent + "|" + "【"+entity.getSign()+"】";
             }
             if (op.equals("edit")) {
 
                 Optional<AccountSignRegister> accountSignRegister = accountSignRegisterRepository.findById(entity.getId());
-                if(templateContent.indexOf(accountSignRegister.get().getSign()) ==-1){
-                    templateContent = templateContent + "|" + entity.getSign();
+                String sign = "【"+accountSignRegister.get().getSign()+"】";
+                if(templateContent.indexOf(sign) ==-1){
+                    templateContent = templateContent + "|" +sign;
                 }else{
-                    templateContent = templateContent.replace(accountSignRegister.get().getSign(), entity.getSign());
+                    templateContent = templateContent.replace(sign, "【"+entity.getSign()+"】");
                 }
 
             }

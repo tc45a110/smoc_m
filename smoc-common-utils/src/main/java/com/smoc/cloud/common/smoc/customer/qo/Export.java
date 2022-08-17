@@ -12,4 +12,6 @@ public class Export {
     private Integer number;
 
     private String  exportType;
+
+    private String registerOrderNo;
 }

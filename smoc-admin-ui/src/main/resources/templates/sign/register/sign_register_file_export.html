@@ -70,6 +70,23 @@
                                                          th:value="${export.carrier}"
                                                          required="true" title="运营商"/>
                                             </div>
+                                            <div class="col-md-6 form-group">
+                                                <label style="margin-right:10px">导出条数<span class="text-danger">*</span><span style="margin-left:5px;color:#F5707A;font-weight:200">大于100条，会生成多个文件包，最大1000条</span>
+
+                                                </label><br>
+                                                <input id="number" type="text" class="form-control" th:field="*{number}"
+                                                       data-parsley-type="number" data-parsley-max="1000" autocomplete="off"
+                                                       placeholder="一次性最大条数" readonly>
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label for="registerOrderNo">报备单号 <span style="margin-left:5px;color:#F5707A;font-weight:200">导出后会生成一个单号，可以根据单号重复导出</span>
+                                                    <span class="text-danger" th:if="${#fields.hasErrors('registerOrderNo')}"
+                                                          th:errors="*{registerOrderNo}"  style="font-weight: 200;font-size: 12px"></span>
+                                                </label>
+                                                <input id="registerOrderNo" type="text" class="form-control" th:field="*{registerOrderNo}"
+                                                       data-parsley-length="[2,24]" autocomplete="off"
+                                                       placeholder="报备单号">
+                                            </div>
 
                                             <div class="col-md-12 text-center" style="margin-top:10px">
                                                 <button sec:authorize-url="/sign/register/file/export" type="submit" style="margin-left:20px"

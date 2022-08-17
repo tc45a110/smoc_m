@@ -96,13 +96,11 @@
                             <table class="table table table-hover m-10" style="margin-top: -12px;table-layout:fixed;">
                                 <thead>
                                 <tr>
-                                    <th>报备签名/签名资质企业</th>
-                                    <th>业务账号/扩展号</th>
+                                    <th>报备签名/签名使用企业</th>
+                                    <th>业务账号/账号扩展号</th>
                                     <th>签名扩展号</th>
                                     <th>签名自定义扩展号</th>
-                                    <th>APP名称</th>
                                     <th>服务类型</th>
-                                    <th>具体用途</th>
                                     <th>创建时间</th>
                                     <th>操作</th>
                                 </tr>
@@ -110,7 +108,7 @@
                                 <tbody>
                                 <tr th:each="info:${list}">
                                     <td style="vertical-align: middle;line-height: 26px">
-                                        [[${info.sign}]]<br>
+                                        <span style="font-weight:600"> [[${info.sign}]]</span><br>
                                         [[${info.enterpriseName}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
@@ -120,17 +118,11 @@
                                     <td style="vertical-align: middle;line-height: 26px">
                                         [[${info.signExtendNumber}]]
                                     </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        [[${info.extendData}]]
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        [[${info.appName}]]
+                                    <td style="vertical-align: middle;line-height: 26px" th:text="${#strings.abbreviate(info.extendData,16)}"
+                                        th:title="${info.extendData}">
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         [[${info.serviceType}]]
-                                    </td>
-                                    <td style="vertical-align: middle;line-height: 26px">
-                                        [[${info.mainApplication}]]
                                     </td>
                                     <td style="vertical-align: middle;line-height: 26px">
                                         [[${info.createdTime}]]
