@@ -6,6 +6,7 @@ import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.response.ResponseDataUtil;
 import com.smoc.cloud.common.smoc.customer.qo.CarrierCount;
 import com.smoc.cloud.common.smoc.customer.qo.ExportModel;
+import com.smoc.cloud.common.smoc.customer.qo.ExportRegisterModel;
 import com.smoc.cloud.common.smoc.customer.validator.AccountSignRegisterForFileValidator;
 import com.smoc.cloud.customer.repository.AccountSignRegisterForFileRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +34,7 @@ public class AccountSignRegisterForFileService {
         return ResponseDataUtil.buildSuccess(pageList);
     }
 
+
     /**
      * 根据运营商，统计未报备得条数
      *
@@ -43,6 +45,8 @@ public class AccountSignRegisterForFileService {
         return ResponseDataUtil.buildSuccess(carrierCounts);
     }
 
+
+
     /**
      * 查询导出数据
      * @param pageParams
@@ -51,5 +55,31 @@ public class AccountSignRegisterForFileService {
     public ResponseData<PageList<ExportModel>> export(PageParams<ExportModel> pageParams){
         PageList<ExportModel> pageList = this.accountSignRegisterForFileRepository.export(pageParams);
         return ResponseDataUtil.buildSuccess(pageList);
+    }
+
+    /**
+     *  根据报备订单号查询导出数据
+     *
+     * @param registerOrderNo
+     * @return
+     */
+    public ResponseData<PageList<ExportModel>> query(PageParams pageParams,String registerOrderNo){
+        PageList<ExportModel> pageList = this.accountSignRegisterForFileRepository.query(pageParams,registerOrderNo);
+        return ResponseDataUtil.buildSuccess(pageList);
+    }
+
+    /**
+     * 为导出数据生成报备订单号，并改变报备数据状态
+     *
+     * @param exportRegisterModel
+     */
+    public ResponseData register(ExportRegisterModel exportRegisterModel){
+        this.accountSignRegisterForFileRepository.register(exportRegisterModel);
+        return ResponseDataUtil.buildSuccess();
+    }
+
+    public ResponseData updateRegisterStatusByOrderNo(String registerOrderNo, String status){
+       this.accountSignRegisterForFileRepository.updateRegisterStatusByOrderNo(registerOrderNo,status);
+       return ResponseDataUtil.buildSuccess();
     }
 }

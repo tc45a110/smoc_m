@@ -7,6 +7,7 @@ import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.excel.write.metadata.fill.FillConfig;
 import com.alibaba.excel.write.metadata.fill.FillWrapper;
 import com.google.gson.Gson;
+import com.smoc.cloud.common.auth.entity.SecurityUser;
 import com.smoc.cloud.common.auth.qo.Dict;
 import com.smoc.cloud.common.auth.qo.DictType;
 import com.smoc.cloud.common.page.PageList;
@@ -16,6 +17,7 @@ import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.customer.qo.CarrierCount;
 import com.smoc.cloud.common.smoc.customer.qo.Export;
 import com.smoc.cloud.common.smoc.customer.qo.ExportModel;
+import com.smoc.cloud.common.smoc.customer.qo.ExportRegisterModel;
 import com.smoc.cloud.common.smoc.customer.validator.AccountSignRegisterForFileValidator;
 import com.smoc.cloud.common.utils.DateTimeUtils;
 import com.smoc.cloud.customer.service.AccountSignRegisterForFileService;
@@ -28,10 +30,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -127,15 +126,67 @@ public class AccountSignRegisterForFileController {
         return view;
     }
 
+
+    /**
+     * 进入根据报备订单号，导出页面
+     *
+     * @return
+     */
+    @RequestMapping(value = "/register_button", method = RequestMethod.GET)
+    public ModelAndView register_button() {
+        ModelAndView view = new ModelAndView("sign/register/sign_register_file_register_button");
+        return view;
+    }
+
+    /**
+     * 入根据报备订单号，导出
+     *
+     * @return
+     */
+    @RequestMapping(value = "/register_query/{registerOrderNo}", method = RequestMethod.GET)
+    public void register_query(@PathVariable String registerOrderNo, HttpServletRequest request, HttpServletResponse response) {
+
+    }
+
+    /**
+     * 进入根据
+     *
+     * @return
+     */
+    @RequestMapping(value = "/register", method = RequestMethod.GET)
+    public ModelAndView register() {
+        ModelAndView view = new ModelAndView("sign/register/sign_register_file_register");
+        return view;
+    }
+
     /**
      * 进入导出页面
      *
      * @return
      */
-    @RequestMapping(value = "/export", method = RequestMethod.POST)
-    public void export(@ModelAttribute Export export, HttpServletRequest request, HttpServletResponse response) {
+    @RequestMapping(value = "/export_button", method = RequestMethod.GET)
+    public ModelAndView export_button() {
+        ModelAndView view = new ModelAndView("sign/register/sign_register_file_export_button");
+        return view;
+    }
+
+
+    /**
+     * 导出文件
+     *
+     * @return
+     */
+    @RequestMapping(value = "/export/{carrier}", method = RequestMethod.GET)
+    public void export(@PathVariable String carrier, HttpServletRequest request, HttpServletResponse response) {
+
+        if (!("CMCC".equals(carrier) || "UNIC".equals(carrier) || "TELC".equals(carrier))) {
+            return;
+        }
+        SecurityUser user = (SecurityUser) request.getSession().getAttribute("user");
+        List<String> ids = new ArrayList<>();
+
         ExportModel queryExportModel = new ExportModel();
-        queryExportModel.setRegisterCarrier(export.getCarrier());
+        queryExportModel.setRegisterCarrier(carrier);
         //初始化数据
         PageParams<ExportModel> params = new PageParams<>();
         params.setPageSize(1000);
@@ -151,7 +202,7 @@ public class AccountSignRegisterForFileController {
         }
 
         //省份字典
-        Map<String,String> provinces = this.provinces(request);
+        Map<String, String> provinces = this.provinces(request);
 
         //签名报备，生成文件根目录
         String rootPath = smocProperties.getSignRegisterRootPath();
@@ -161,10 +212,8 @@ public class AccountSignRegisterForFileController {
         //报备单号
         String exportOrderNo = DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(4);
 
-        Set<String> zipFiles = new HashSet<>();
-
         //移动导出
-        if ("CMCC".equals(export.getCarrier())) {
+        if ("CMCC".equals(carrier)) {
             //创建生成文件的文件夹
             String currentFold;
             try {
@@ -172,21 +221,23 @@ public class AccountSignRegisterForFileController {
                 Integer size = exportPage.getData().getList().size();
                 List<ExportModel> models = new ArrayList<>();
                 for (int i = 0; i < size; i++) {
+
                     ExportModel exportModel = exportPage.getData().getList().get(i);
+                    ids.add(exportModel.getId());
                     //复制营业执照/组织机构代码证
-                    files.add(certifyFileRootPath+ File.separator+ exportModel.getId()+ File.separator + exportModel.getBusinessLicense());
+                    files.add(certifyFileRootPath + File.separator + exportModel.getId() + File.separator + exportModel.getBusinessLicense());
 
                     //复制责任人（含法人）证件
-                    files.add(certifyFileRootPath + File.separator+ exportModel.getId()+ File.separator + exportModel.getLiableCertUrl());
+                    files.add(certifyFileRootPath + File.separator + exportModel.getId() + File.separator + exportModel.getLiableCertUrl());
 
                     //复制经办人证件
-                    files.add(certifyFileRootPath+ File.separator+ exportModel.getId()+ File.separator + exportModel.getHandledCertUrl());
+                    files.add(certifyFileRootPath + File.separator + exportModel.getId() + File.separator + exportModel.getHandledCertUrl());
 
                     //复制授权书
-                    files.add(certifyFileRootPath + File.separator+ exportModel.getId()+ File.separator +  exportModel.getAuthorizeCert());
+                    files.add(certifyFileRootPath + File.separator + exportModel.getId() + File.separator + exportModel.getAuthorizeCert());
 
                     //复制授权书
-                    files.add(certifyFileRootPath + File.separator+ exportModel.getId()+ File.separator +  exportModel.getOfficePhotos());
+                    files.add(certifyFileRootPath + File.separator + exportModel.getId() + File.separator + exportModel.getOfficePhotos());
 
 
                     exportModel.setAccessProvince(provinces.get(exportModel.getAccessProvince()));
@@ -196,7 +247,7 @@ public class AccountSignRegisterForFileController {
 
                         //创建生成文件的文件夹
                         String orderNo = DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(4);
-                        currentFold = "移动签名报备" + File.separator +exportOrderNo + File.separator +orderNo;
+                        currentFold = "移动签名报备" + File.separator + exportOrderNo + File.separator + orderNo;
                         File fold = new File(rootPath + currentFold);
                         while (!fold.exists()) {
                             fold.mkdirs();
@@ -208,7 +259,7 @@ public class AccountSignRegisterForFileController {
 
                         //生成excel文件
                         String excelFile = rootPath + currentFold + File.separator + orderNo + ".xlsx";
-                        writerExcelFile(excelFile, models);
+                        writerExcelFile(excelFile, models, "cmcc.xlsx");
                         log.info("[files]:{}", new Gson().toJson(files));
                         files = new HashSet<>();
                         models = new ArrayList<>();
@@ -216,19 +267,16 @@ public class AccountSignRegisterForFileController {
                 }
 
 
-
-
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            String tempPath = rootPath+ File.separator +"移动签名报备" + File.separator +"temp";
+            String tempPath = rootPath + File.separator + "移动签名报备" + File.separator + "temp";
             File temp = new File(tempPath);
             while (!temp.exists()) {
                 temp.mkdirs();
             }
-            String zipFilePath = temp+File.separator +exportOrderNo+".zip";
+            String zipFilePath = temp + File.separator + exportOrderNo + ".zip";
 
             FileOutputStream fileOutputStream = null;
 
@@ -239,11 +287,142 @@ public class AccountSignRegisterForFileController {
             }
 
             // 调用工具类压缩文件夹
-            ZipUtils.toZip(rootPath+ File.separator +"移动签名报备" + File.separator +exportOrderNo, fileOutputStream, true);
+            ZipUtils.toZip(rootPath + File.separator + "移动签名报备" + File.separator + exportOrderNo, fileOutputStream, true);
 
             // 调用工具类设置响应格式
             try {
-                this.downLoadFile(request, response, exportOrderNo+".zip", zipFilePath);
+                this.downLoadFile(request, response, "移动-" + exportOrderNo + ".zip", zipFilePath);
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException("导出失败~");
+            }
+
+        }
+
+        //联通导出
+        if ("UNIC".equals(carrier)) {
+            //创建生成文件的文件夹
+            String currentFold;
+            try {
+                Integer size = exportPage.getData().getList().size();
+                List<ExportModel> models = new ArrayList<>();
+                for (int i = 0; i < size; i++) {
+                    ExportModel exportModel = exportPage.getData().getList().get(i);
+                    ids.add(exportModel.getId());
+                    exportModel.setLiableCertType("居民身份证" + exportModel.getLiableCertNum().length() + "位");
+                    exportModel.setHandledCertType("居民身份证" + exportModel.getHandledCertNum().length() + "位");
+                    exportModel.setAccessProvince(provinces.get(exportModel.getAccessProvince()));
+                    exportModel.setOperate("新增");
+                    models.add(exportModel);
+                }
+
+                //创建生成文件的文件夹
+                String orderNo = DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(4);
+                currentFold = "联通签名报备" + File.separator + exportOrderNo + File.separator + orderNo;
+                File fold = new File(rootPath + currentFold);
+                while (!fold.exists()) {
+                    fold.mkdirs();
+                }
+
+                //生成excel文件
+                String excelFile = rootPath + currentFold + File.separator + orderNo + ".xlsx";
+                writerExcelFile(excelFile, models, "unic.xlsx");
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            String tempPath = rootPath + File.separator + "联通签名报备" + File.separator + "temp";
+            File temp = new File(tempPath);
+            while (!temp.exists()) {
+                temp.mkdirs();
+            }
+            String zipFilePath = temp + File.separator + exportOrderNo + ".zip";
+
+            FileOutputStream fileOutputStream = null;
+
+            try {
+                fileOutputStream = new FileOutputStream(new File(zipFilePath));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            // 调用工具类压缩文件夹
+            ZipUtils.toZip(rootPath + File.separator + "联通签名报备" + File.separator + exportOrderNo, fileOutputStream, true);
+
+            // 调用工具类设置响应格式
+            try {
+                this.downLoadFile(request, response, "联通-" + exportOrderNo + ".zip", zipFilePath);
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException("导出失败~");
+            }
+
+        }
+
+        //电信导出
+        if ("TELC".equals(carrier)) {
+            //创建生成文件的文件夹
+            String currentFold;
+            try {
+                Integer size = exportPage.getData().getList().size();
+                List<ExportModel> models = new ArrayList<>();
+                for (int i = 0; i < size; i++) {
+                    ExportModel exportModel = exportPage.getData().getList().get(i);
+                    ids.add(exportModel.getId());
+                    exportModel.setServiceType(exportModel.getServiceType().replace(",", "&"));
+                    exportModel.setIsAuthorize("有");
+                    exportModel.setLiableCertType("身份证");
+                    exportModel.setHandledCertType("身份证");
+                    exportModel.setIsSign("是");
+                    exportModel.setIsGreen("否");
+                    exportModel.setBlackList("黑名单");
+                    exportModel.setAccessProvince(provinces.get(exportModel.getAccessProvince()));
+                    exportModel.setOperate("新增");
+                    models.add(exportModel);
+                }
+
+                //创建生成文件的文件夹
+                String orderNo = DateTimeUtils.getDateFormat(new Date(), "yyyyMMddHHmmssSSS") + Utils.getRandom(4);
+                currentFold = "电信签名报备" + File.separator + exportOrderNo + File.separator + orderNo;
+                File fold = new File(rootPath + currentFold);
+                while (!fold.exists()) {
+                    fold.mkdirs();
+                }
+
+                //生成excel文件
+                String excelFile = rootPath + currentFold + File.separator + orderNo + ".xlsx";
+                writerExcelFile(excelFile, models, "telc.xlsx");
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            String tempPath = rootPath + File.separator + "电信签名报备" + File.separator + "temp";
+            File temp = new File(tempPath);
+            while (!temp.exists()) {
+                temp.mkdirs();
+            }
+            String zipFilePath = temp + File.separator + exportOrderNo + ".zip";
+
+            FileOutputStream fileOutputStream = null;
+
+            try {
+                fileOutputStream = new FileOutputStream(new File(zipFilePath));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            // 调用工具类压缩文件夹
+            ZipUtils.toZip(rootPath + File.separator + "电信签名报备" + File.separator + exportOrderNo, fileOutputStream, true);
+
+            // 调用工具类设置响应格式
+            try {
+                ExportRegisterModel exportRegisterModel = new ExportRegisterModel();
+                exportRegisterModel.setRegisterOrderNo(exportOrderNo);
+                exportRegisterModel.setCarrier(carrier);
+                exportRegisterModel.setIds(ids);
+                exportRegisterModel.setCreatedBy(user.getRealName());
+                this.accountSignRegisterForFileService.register(exportRegisterModel);
+                this.downLoadFile(request, response, "电信-" + exportOrderNo + ".zip", zipFilePath);
             } catch (UnsupportedEncodingException e) {
                 throw new RuntimeException("导出失败~");
             }
@@ -254,25 +433,17 @@ public class AccountSignRegisterForFileController {
     /**
      * @param resultFile 结果文件，省去了根据模板文件生成的步骤
      */
-    public void writerExcelFile(String resultFile, List<ExportModel> registerData) {
+    public void writerExcelFile(String resultFile, List<ExportModel> registerData, String fileType) {
 
-//        ClassPathResource classPathResource = new ClassPathResource("static/files/register/CMCC.xlsx");
-//        log.info("[filePath]:{}",classPathResource.getPath());
-//        String path = this.getClass().getResource("/static/files/register/CMCC.xlsx").getPath();
-//        log.info("[path]:{}",path);
-//        // 模板文件
-        String templateFile = "F:\\workbench\\smoc_cloud\\smoc-admin-ui\\src\\main\\resources\\static\\files\\register/CMCC.xlsx";
         try {
-            // 根据模板文件生成目标文件
-            ExcelWriter excelWriter = EasyExcel.write(resultFile).withTemplate(templateFile)
-                    // 单独设置单元格格式
-//                .registerWriteHandler(new CellStyleHandler())
-                    .build();
 
+            ClassPathResource classPathResource = new ClassPathResource("static/files/register/" + fileType);
+            InputStream fis = classPathResource.getInputStream();
+            // 根据模板文件生成目标文件
+            ExcelWriter excelWriter = EasyExcel.write(resultFile).withTemplate(fis).build();
             WriteSheet writeSheet = EasyExcel.writerSheet().build();
             // 每次都会重新生成新的一行，而不是使用下面的空行
-            FillConfig fillConfig = FillConfig.builder().forceNewRow(Boolean.FALSE).build();
-
+            FillConfig fillConfig = FillConfig.builder().forceNewRow(Boolean.TRUE).build();
             //占位符替换，这里定义了 hisData
             excelWriter.fill(new FillWrapper("rd", registerData), fillConfig, writeSheet);
             excelWriter.finish();
@@ -283,16 +454,16 @@ public class AccountSignRegisterForFileController {
     }
 
     /**
-     *  通道供应商
+     * 通道供应商
      */
-    private Map<String,String> provinces(HttpServletRequest request) {
+    private Map<String, String> provinces(HttpServletRequest request) {
         Map<String, DictType> dictMap = (Map<String, DictType>) request.getServletContext().getAttribute("dict");
         //运营商
         DictType provinces = dictMap.get("provices");
 
-        Map<String,String> provincesMap = new HashMap<>();
+        Map<String, String> provincesMap = new HashMap<>();
         for (Dict dict : provinces.getDict()) {
-            provincesMap.put(dict.getFieldCode(),dict.getFieldName());
+            provincesMap.put(dict.getFieldCode(), dict.getFieldName());
         }
 
         return provincesMap;
@@ -335,13 +506,11 @@ public class AccountSignRegisterForFileController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        DataOutputStream temps = new DataOutputStream(
-                servletOutputStream);
+        DataOutputStream temps = new DataOutputStream(servletOutputStream);
         // 浏览器下载文件的路径
         DataInputStream in = null;
         try {
-            in = new DataInputStream(
-                    new FileInputStream(filePath));
+            in = new DataInputStream(new FileInputStream(filePath));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

@@ -17,6 +17,9 @@ public class ExportModel {
     private String numberSegment;
     //报备签名
     private String registerSign;
+    private String isSign;
+    private String isGreen;
+    private String blackList;
     //报备运营商
     private String registerCarrier;
 
@@ -52,6 +55,7 @@ public class ExportModel {
     private String handledCertUrl;
     //授权书
     private String authorizeCert;
+    private String isAuthorize;
     //授权开始日期
     private String authorizeStart;
     //授权结束日期

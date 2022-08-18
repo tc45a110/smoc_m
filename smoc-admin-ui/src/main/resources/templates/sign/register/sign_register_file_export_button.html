@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
+
+</head>
+<body style="background-color:#fff">
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <!-- end row -->
+        <div class="row text-center" >
+            <div class="col-md-12" style="marin-bottom:40px">
+                <div class="card-box">
+                    <h4 class="header-title m-t-10">导出未报备数据</h4>
+                    <p class="text-muted m-b-25 font-13">
+                        每批次最多导出 1000条，导出后压缩文件名数字部分为“报备单号”
+                    </p>
+                    <div class="button-list" >
+                        <button id="CMCC" onclick="disableButton('CMCC')" sec:authorize-url="/sign/register/file/export/*"  th:href="@{/sign/register/file/export/CMCC}" class="btn btn-primary waves-effect waves-light btn-lg" style="margin-right:20px">导出移动数据</button>
+                        <button id="UNIC" onclick="disableButton('UNIC')" sec:authorize-url="/sign/register/file/export/*" th:href="@{/sign/register/file/export/UNIC}" class="btn btn-teal waves-effect waves-light btn-lg"  style="margin-right:20px">导出联通数据</button>
+                        <button id="TELC" onclick="disableButton('TELC')" sec:authorize-url="/sign/register/file/export/*" th:href="@{/sign/register/file/export/TELC}" class="btn btn-info waves-effect waves-light btn-lg">导出电信数据</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<th:block th:insert="fragments/common_fragments :: common_submit_form"/>
+<script>
+
+     function disableButton(id){
+       $("#"+id).attr("disabled","disabled")
+       var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+       $('#preloader').css('display', 'block');
+       location.href = contextPath + '/sign/register/file/export/' + id;
+     }
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+</script>
+</body>
+</html>

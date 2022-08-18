@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <th:block th:insert="fragments/common_fragments :: common_header"/>
+    <th:block th:insert="fragments/common_fragments :: common_css"/>
+    <th:block th:insert="fragments/common_fragments :: select_css"/>
+    <link th:href="@{/static/plugins/switchery/switchery.min.css}" rel="stylesheet">
+
+</head>
+<body style="background-color:#fff">
+<!-- Loader start 页面加载进度-->
+<th:block th:insert="fragments/common_fragments :: common_loader"/>
+<!-- Loader end -->
+
+<!-- Start content -->
+<div class="content" style="margin-top: 60px">
+    <div class="container">
+
+        <!-- end row -->
+        <div class="row text-center">
+            <div class="col-md-12" style="marin-bottom:40px">
+                <div class="card-box">
+                    <h4 class="header-title m-t-10">根据导出的订单号，重新导出数据</h4>
+                    <p class="text-muted m-b-25 font-13">
+
+                    </p>
+                    <p class="text-muted m-b-25 font-13">
+                        <input id="registerOrderNo" type="text" class="form-control" name="registerOrderNo"
+                               required="" data-parsley-length="[2,32]" autocomplete="off"
+                               placeholder="请输入订单号">
+                    </p>
+                    <div class="button-list">
+                        <button id="export" onclick="disableButton('export')"
+                                sec:authorize-url="/sign/register/file/register_query/*"
+                                class="btn btn-teal waves-effect waves-light btn-lg" style="margin-right:20px">
+                            导出订单号数据
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- start row  错误提示-->
+        <th:block th:insert="fragments/common_fragments :: common_error"/>
+        <!-- end row -->
+
+    </div> <!-- container -->
+</div> <!-- content -->
+<th:block th:insert="fragments/common_fragments :: common_js"/>
+<th:block th:insert="fragments/common_fragments :: select_js"/>
+<th:block th:insert="fragments/common_fragments :: common_submit_form"/>
+<script>
+
+     function disableButton(id){
+       var registerOrderNo = $("#registerOrderNo").val();
+       alert(registerOrderNo);
+       if(null == registerOrderNo || ""==registerOrderNo){
+          return;
+       }
+       $("#"+id).attr("disabled","disabled")
+       var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
+       $('#preloader').css('display', 'block');
+       location.href = contextPath + '/sign/register/file/register_query/' + registerOrderNo;
+     }
+
+    var resizefunc = [];
+    //隐藏进度项
+    $('#preloader').css('display', 'none');
+
+
+
+</script>
+</body>
+</html>
