@@ -53,6 +53,14 @@
                                              title="运营商"/>
                                 </div>
                                 <div class="form-group  col-sm-3">
+                                    <select class="selectpicker" name="registerStatus">
+                                        <option value="">--报备状态--</option>
+                                        <option th:selected="${accountSignRegisterForFileValidator.registerStatus == '1'}" value="1">未报备</option>
+                                        <option th:selected="${accountSignRegisterForFileValidator.registerStatus == '2'}" value="2">报备中</option>
+                                        <option th:selected="${accountSignRegisterForFileValidator.registerStatus == '3'}" value="3">已报备</option>
+                                    </select>
+                                </div>
+                                <div class="form-group  col-sm-3">
                                     <input type="text" class="form-control" th:field="*{account}"
                                            placeholder="业务账号" autocomplete="off">
                                 </div>
@@ -68,7 +76,6 @@
                                     <input type="text" class="form-control" th:field="*{registerSign}"
                                            placeholder="签名" autocomplete="off">
                                 </div>
-
                                 <div class="form-group col-sm-6 pull-right" style="text-align: right">
                                     <button sec:authorize-url="/sign/register/file/page" type="submit"
                                             class="btn btn-custom waves-effect waves-light m-l-10 btn-md">
