@@ -41,7 +41,7 @@ public class SqlInjectionConstant {
         list.add("and ");
         list.add("or ");
         list.add("column_name ");
-        list.add("%");
+        //list.add("%");有的密码会用到%
         return list;
 
     }
