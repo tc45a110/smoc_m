@@ -25,7 +25,7 @@ public class AccountSignRegisterExportRecordRepositoryImpl extends BasePageRepos
         sqlBuffer.append(",t.REGISTER_STATUS");
         sqlBuffer.append(",t.CREATED_BY");
         sqlBuffer.append(",DATE_FORMAT(t.CREATED_TIME, '%Y-%m-%d %H:%i:%S')CREATED_TIME");
-        sqlBuffer.append("  from account_sign_register_export_record t");
+        sqlBuffer.append("  from account_sign_register_export_record t order by t.CREATED_TIME desc ");
 
         PageList<AccountSignRegisterExportRecordValidator> pageList = this.queryByPageForMySQL(sqlBuffer.toString(),null, pageParams.getCurrentPage(), pageParams.getPageSize(), new AccountSignRegisterExportRecordRowMapper());
 
