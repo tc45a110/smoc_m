@@ -8,9 +8,11 @@ import com.smoc.cloud.common.smoc.customer.qo.CarrierCount;
 import com.smoc.cloud.common.smoc.customer.qo.ExportModel;
 import com.smoc.cloud.common.smoc.customer.qo.ExportRegisterModel;
 import com.smoc.cloud.common.smoc.customer.validator.AccountSignRegisterForFileValidator;
+import com.smoc.cloud.customer.repository.AccountSignRegisterExportRecordRepository;
 import com.smoc.cloud.customer.repository.AccountSignRegisterForFileRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -21,6 +23,9 @@ public class AccountSignRegisterForFileService {
 
     @Resource
     private AccountSignRegisterForFileRepository accountSignRegisterForFileRepository;
+
+    @Resource
+    private AccountSignRegisterExportRecordRepository accountSignRegisterExportRecordRepository;
 
     /**
      * 分页查询
@@ -46,25 +51,25 @@ public class AccountSignRegisterForFileService {
     }
 
 
-
     /**
      * 查询导出数据
+     *
      * @param pageParams
      * @return
      */
-    public ResponseData<PageList<ExportModel>> export(PageParams<ExportModel> pageParams){
+    public ResponseData<PageList<ExportModel>> export(PageParams<ExportModel> pageParams) {
         PageList<ExportModel> pageList = this.accountSignRegisterForFileRepository.export(pageParams);
         return ResponseDataUtil.buildSuccess(pageList);
     }
 
     /**
-     *  根据报备订单号查询导出数据
+     * 根据报备订单号查询导出数据
      *
      * @param registerOrderNo
      * @return
      */
-    public ResponseData<PageList<ExportModel>> query(PageParams pageParams,String registerOrderNo){
-        PageList<ExportModel> pageList = this.accountSignRegisterForFileRepository.query(pageParams,registerOrderNo);
+    public ResponseData<PageList<ExportModel>> query(PageParams pageParams, String registerOrderNo) {
+        PageList<ExportModel> pageList = this.accountSignRegisterForFileRepository.query(pageParams, registerOrderNo);
         return ResponseDataUtil.buildSuccess(pageList);
     }
 
@@ -73,13 +78,15 @@ public class AccountSignRegisterForFileService {
      *
      * @param exportRegisterModel
      */
-    public ResponseData register(ExportRegisterModel exportRegisterModel){
+    public ResponseData register(ExportRegisterModel exportRegisterModel) {
         this.accountSignRegisterForFileRepository.register(exportRegisterModel);
         return ResponseDataUtil.buildSuccess();
     }
 
-    public ResponseData updateRegisterStatusByOrderNo(String registerOrderNo, String status){
-       this.accountSignRegisterForFileRepository.updateRegisterStatusByOrderNo(registerOrderNo,status);
-       return ResponseDataUtil.buildSuccess();
+    @Transactional
+    public ResponseData updateRegisterStatusByOrderNo(String registerOrderNo, String status) {
+        this.accountSignRegisterForFileRepository.updateRegisterStatusByOrderNo(registerOrderNo, status);
+        accountSignRegisterExportRecordRepository.updateRegisterStatusByOrderNo(registerOrderNo, status);
+        return ResponseDataUtil.buildSuccess();
     }
 }

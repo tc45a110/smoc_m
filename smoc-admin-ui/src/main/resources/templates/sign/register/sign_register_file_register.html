@@ -19,7 +19,7 @@
     <div class="container">
 
         <!-- end row -->
-        <div class="row text-center">
+        <div class="row text-center" th:remove="${#strings.isEmpty(error)}?none:all">
             <div class="col-md-12" style="marin-bottom:40px">
                 <div class="card-box">
                     <h4 class="header-title m-t-10">根据导出的订单号，完成数据报备</h4>
@@ -33,7 +33,7 @@
                     </p>
                     <div class="button-list">
                         <button id="export" onclick="disableButton('export')"
-                                sec:authorize-url="/sign/register/file/register_query/*"
+                                sec:authorize-url="/sign/register/file/register_op/*"
                                 class="btn btn-info waves-effect waves-light btn-lg" style="margin-right:20px">
                             完成报备
                         </button>
@@ -55,14 +55,14 @@
 
      function disableButton(id){
        var registerOrderNo = $("#registerOrderNo").val();
-       alert(registerOrderNo);
+       //alert(registerOrderNo);
        if(null == registerOrderNo || ""==registerOrderNo){
           return;
        }
        $("#"+id).attr("disabled","disabled")
        var contextPath = '[[${#httpServletRequest.getContextPath()}]]';
        $('#preloader').css('display', 'block');
-       location.href = contextPath + '/sign/register/file/register_query/' + registerOrderNo;
+       location.href = contextPath + '/sign/register/file/register_op/' + registerOrderNo;
      }
 
     var resizefunc = [];

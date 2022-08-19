@@ -93,7 +93,7 @@ public class AccountSignRegisterForFileController {
      * @return
      */
     @RequestMapping(value = "/updateRegisterStatusByOrderNo/{status}/{registerOrderNo}", method = RequestMethod.GET)
-    public ResponseData updateRegisterStatusByOrderNo(@PathVariable  String registerOrderNo, @PathVariable String status) {
+    public ResponseData updateRegisterStatusByOrderNo(@PathVariable String status, @PathVariable  String registerOrderNo) {
 
         return accountSignRegisterForFileService.updateRegisterStatusByOrderNo(registerOrderNo,status);
     }

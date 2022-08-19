@@ -68,5 +68,5 @@ public interface AccountSignRegisterForFileFeignClient {
      * @return
      */
     @RequestMapping(value = "/sign/register/file/updateRegisterStatusByOrderNo/{status}/{registerOrderNo}", method = RequestMethod.GET)
-    ResponseData updateRegisterStatusByOrderNo(@PathVariable  String registerOrderNo, @PathVariable String status) throws Exception;
+    public ResponseData updateRegisterStatusByOrderNo(@PathVariable String status, @PathVariable  String registerOrderNo)  throws Exception;
 }

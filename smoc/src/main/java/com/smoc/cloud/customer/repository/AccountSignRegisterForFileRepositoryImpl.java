@@ -1,9 +1,9 @@
 package com.smoc.cloud.customer.repository;
 
+import com.google.gson.Gson;
 import com.smoc.cloud.common.BasePageRepository;
 import com.smoc.cloud.common.page.PageList;
 import com.smoc.cloud.common.page.PageParams;
-import com.smoc.cloud.common.response.ResponseData;
 import com.smoc.cloud.common.smoc.customer.qo.CarrierCount;
 import com.smoc.cloud.common.smoc.customer.qo.ExportModel;
 import com.smoc.cloud.common.smoc.customer.qo.ExportRegisterModel;
@@ -145,7 +145,8 @@ public class AccountSignRegisterForFileRepositoryImpl extends BasePageRepository
         }
 
         StringBuffer sqlBuffer = new StringBuffer("select ");
-        sqlBuffer.append(" asr.REGISTER_CODE_NUMBER");
+        sqlBuffer.append(" asr.ID");
+        sqlBuffer.append(",asr.REGISTER_CODE_NUMBER");
         sqlBuffer.append(",asr.ACCESS_PROVINCE");
         sqlBuffer.append(",asr.NUMBER_SEGMENT");
         sqlBuffer.append(",asr.REGISTER_SIGN");
@@ -153,7 +154,6 @@ public class AccountSignRegisterForFileRepositoryImpl extends BasePageRepository
         sqlBuffer.append(",sr.APP_NAME");
         sqlBuffer.append(",sr.SERVICE_TYPE");
         sqlBuffer.append(",sr.MAIN_APPLICATION");
-        sqlBuffer.append(",esc.ID");
         sqlBuffer.append(",esc.REGISTER_ENTERPRISE_ID");
         sqlBuffer.append(",esc.REGISTER_ENTERPRISE_NAME");
         sqlBuffer.append(",esc.SOCIAL_CREDIT_CODE");
@@ -198,7 +198,8 @@ public class AccountSignRegisterForFileRepositoryImpl extends BasePageRepository
         }
 
         StringBuffer sqlBuffer = new StringBuffer("select ");
-        sqlBuffer.append(" asr.REGISTER_CODE_NUMBER");
+        sqlBuffer.append(" asr.ID");
+        sqlBuffer.append(",asr.REGISTER_CODE_NUMBER");
         sqlBuffer.append(",asr.ACCESS_PROVINCE");
         sqlBuffer.append(",asr.NUMBER_SEGMENT");
         sqlBuffer.append(",asr.REGISTER_SIGN");
@@ -206,7 +207,6 @@ public class AccountSignRegisterForFileRepositoryImpl extends BasePageRepository
         sqlBuffer.append(",sr.APP_NAME");
         sqlBuffer.append(",sr.SERVICE_TYPE");
         sqlBuffer.append(",sr.MAIN_APPLICATION");
-        sqlBuffer.append(",esc.ID");
         sqlBuffer.append(",esc.REGISTER_ENTERPRISE_ID");
         sqlBuffer.append(",esc.REGISTER_ENTERPRISE_NAME");
         sqlBuffer.append(",esc.SOCIAL_CREDIT_CODE");
@@ -242,6 +242,7 @@ public class AccountSignRegisterForFileRepositoryImpl extends BasePageRepository
      * @param exportRegisterModel
      */
     public void register(ExportRegisterModel exportRegisterModel) {
+        //log.info("[exportRegisterModel]:{}",new Gson().toJson(exportRegisterModel));
         Connection conn = null;
         PreparedStatement stmt = null;
         try {

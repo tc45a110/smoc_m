@@ -10,6 +10,7 @@ public class ExportModelRowMapper implements RowMapper<ExportModel> {
     @Override
     public ExportModel mapRow(ResultSet rs, int rowNum) throws SQLException {
         ExportModel qo = new ExportModel();
+        qo.setId(rs.getString("ID"));
         qo.setRegCodeNum(rs.getString("REGISTER_CODE_NUMBER"));
         qo.setAccessProvince(rs.getString("ACCESS_PROVINCE"));
         qo.setNumberSegment(rs.getString("NUMBER_SEGMENT"));
@@ -18,7 +19,6 @@ public class ExportModelRowMapper implements RowMapper<ExportModel> {
         qo.setAppName(rs.getString("APP_NAME"));
         qo.setServiceType(rs.getString("SERVICE_TYPE"));
         qo.setMainApplication(rs.getString("MAIN_APPLICATION"));
-        qo.setId(rs.getString("ID"));
         qo.setRegisterEnterprise(rs.getString("REGISTER_ENTERPRISE_ID"));
         qo.setEnterpriseName(rs.getString("REGISTER_ENTERPRISE_NAME"));
         qo.setSocialCreditCode(rs.getString("SOCIAL_CREDIT_CODE"));

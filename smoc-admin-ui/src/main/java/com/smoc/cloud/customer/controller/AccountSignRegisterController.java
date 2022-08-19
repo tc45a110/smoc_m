@@ -143,24 +143,24 @@ public class AccountSignRegisterController {
 
         view.addObject("certifies", data.getData().getList());
 
-        //查询账号被占用的签名子扩展号
-        ResponseData<List<String>> signNumberList = this.accountSignRegisterService.findExtendDataByAccount(account, "null");
-        if (!ResponseCode.SUCCESS.getCode().equals(signNumberList.getCode())) {
-            view.addObject("error", signNumberList.getCode() + ":" + signNumberList.getMessage());
-            return view;
-        }
+//        //查询账号被占用的签名子扩展号
+//        ResponseData<List<String>> signNumberList = this.accountSignRegisterService.findExtendDataByAccount(account, "null");
+//        if (!ResponseCode.SUCCESS.getCode().equals(signNumberList.getCode())) {
+//            view.addObject("error", signNumberList.getCode() + ":" + signNumberList.getMessage());
+//            return view;
+//        }
         //将占用的签名子扩展号 转换成map方式
-        Map<String, String> signNumbers = new HashMap<>();
-        if (null != signNumberList.getData() && signNumberList.getData().size() > 0) {
-            for (String numbers : signNumberList.getData()) {
-                String[] numberArray = numbers.split(",");
-                for (String number : numberArray) {
-                    signNumbers.put(number, number);
-                }
-            }
-        }
-        log.info("[signNumberList.getData()]:{}",new Gson().toJson(signNumberList.getData()));
-        log.info("[signNumbers]:{}",new Gson().toJson(signNumbers));
+//        Map<String, String> signNumbers = new HashMap<>();
+//        if (null != signNumberList.getData() && signNumberList.getData().size() > 0) {
+//            for (String numbers : signNumberList.getData()) {
+//                String[] numberArray = numbers.split(",");
+//                for (String number : numberArray) {
+//                    signNumbers.put(number, number);
+//                }
+//            }
+//        }
+//        log.info("[signNumberList.getData()]:{}",new Gson().toJson(signNumberList.getData()));
+//        log.info("[signNumbers]:{}",new Gson().toJson(signNumbers));
         //向前台传值的时候，要去除已经使用的签名自扩展号
         List<String> signExtendNumbers = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
@@ -170,12 +170,10 @@ public class AccountSignRegisterController {
             } else {
                 number = ""+i;
             }
-            if(null == signNumbers.get(number)){
-                signExtendNumbers.add(number);
-            }
+            signExtendNumbers.add(number);
         }
         view.addObject("signExtendNumbers", signExtendNumbers);
-        log.info("[signExtendNumbers]:{}",new Gson().toJson(signExtendNumbers));
+        //log.info("[signExtendNumbers]:{}",new Gson().toJson(signExtendNumbers));
 
         /**
          * 把本id所占用的签名子扩展号，放到前端
@@ -240,21 +238,21 @@ public class AccountSignRegisterController {
         /**
          * 查询账号被占用的签名子扩展号
          */
-        ResponseData<List<String>> signNumberList = this.accountSignRegisterService.findExtendDataByAccount(responseData.getData().getAccount(), responseData.getData().getId());
-        if (!ResponseCode.SUCCESS.getCode().equals(signNumberList.getCode())) {
-            view.addObject("error", signNumberList.getCode() + ":" + signNumberList.getMessage());
-            return view;
-        }
+//        ResponseData<List<String>> signNumberList = this.accountSignRegisterService.findExtendDataByAccount(responseData.getData().getAccount(), responseData.getData().getId());
+//        if (!ResponseCode.SUCCESS.getCode().equals(signNumberList.getCode())) {
+//            view.addObject("error", signNumberList.getCode() + ":" + signNumberList.getMessage());
+//            return view;
+//        }
         //将占用的签名子扩展号 转换成map方式
-        Map<String, String> signNumbers = new HashMap<>();
-        if (null != signNumberList.getData() && signNumberList.getData().size() > 0) {
-            for (String numbers : signNumberList.getData()) {
-                String[] numberArray = numbers.split(",");
-                for (String number : numberArray) {
-                    signNumbers.put(number, number);
-                }
-            }
-        }
+//        Map<String, String> signNumbers = new HashMap<>();
+//        if (null != signNumberList.getData() && signNumberList.getData().size() > 0) {
+//            for (String numbers : signNumberList.getData()) {
+//                String[] numberArray = numbers.split(",");
+//                for (String number : numberArray) {
+//                    signNumbers.put(number, number);
+//                }
+//            }
+//        }
         //向前台传值的时候，要去除已经使用的签名自扩展号
         List<String> signExtendNumbers = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
@@ -264,9 +262,7 @@ public class AccountSignRegisterController {
             } else {
                 number = ""+i;
             }
-            if(null == signNumbers.get(number)){
-                signExtendNumbers.add(number);
-            }
+            signExtendNumbers.add(number);
         }
         view.addObject("signExtendNumbers", signExtendNumbers);
 

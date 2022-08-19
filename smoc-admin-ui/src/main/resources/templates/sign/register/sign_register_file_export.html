@@ -43,30 +43,30 @@
         <!-- end row -->
         <div class="row text-center" >
 
-            <div th:each="carrierCount:${carrierCounts}" class="col-lg-3 col-md-6" th:if="${carrierCount.carrier =='CMCC'}">
+            <div  class="col-lg-3 col-md-6">
                 <div class="card-box widget-box-one">
                     <div class="wigdet-one-content">
                         <p class="m-0 text-uppercase font-600 font-secondary text-overflow">移动未报备数</p>
-                        <h2 class="text-teal"><i class="mdi mdi-weather-partlycloudy"  style="padding-right: 5px"></i><span data-plugin="counterup">[[${carrierCount.count}]]</span></h2>
+                        <h2 class="text-teal"><i class="mdi mdi-weather-partlycloudy"  style="padding-right: 5px"></i><span data-plugin="counterup">[[${carrier.get('CMCC')}]]</span></h2>
 
                     </div>
                 </div>
             </div><!-- end col -->
 
-            <div class="col-lg-3 col-md-6" th:each="carrierCount:${carrierCounts}"  th:if="${carrierCount.carrier =='UNIC'}">
+            <div class="col-lg-3 col-md-6" >
                 <div class="card-box widget-box-one">
                     <div class="wigdet-one-content">
                         <p class="m-0 text-uppercase font-600 font-secondary text-overflow">联通未报备数</p>
-                        <h2 class="text-custom"><i class="mdi mdi-weather-snowy"  style="padding-right: 5px"></i><span data-plugin="counterup">[[${carrierCount.count}]]</span> </h2>
+                        <h2 class="text-custom"><i class="mdi mdi-weather-snowy"  style="padding-right: 5px"></i><span data-plugin="counterup">[[${carrier.get('UNIC')}]]</span> </h2>
 
                     </div>
                 </div>
             </div><!-- end col -->
-            <div th:each="carrierCount:${carrierCounts}" class="col-lg-3 col-md-6" th:if="${carrierCount.carrier =='TELC'}" >
+            <div  class="col-lg-3 col-md-6">
                 <div class="card-box widget-box-one">
                     <div class="wigdet-one-content">
                         <p class="m-0 text-uppercase font-600 font-secondary text-overflow">电信未报备数</p>
-                        <h2 class="text-brown"><i class="mdi mdi-weather-rainy"  style="padding-right: 5px"></i><span data-plugin="counterup">[[${carrierCount.count}]]</span> </h2>
+                        <h2 class="text-brown"><i class="mdi mdi-weather-rainy"  style="padding-right: 5px"></i><span data-plugin="counterup">[[${carrier.get('TELC')}]]</span> </h2>
 
                     </div>
                 </div>
@@ -111,8 +111,8 @@
                         </li>
                         <li class="" id="export">
                             <a onclick="activeTab('export')"
-                               sec:authorize-url="/sign/register/file/export_record"
-                               th:href="@{/sign/register/file/export_record}"
+                               sec:authorize-url="/sign/register/file/record/list"
+                               th:href="@{/sign/register/file/record/list}"
                                th:target="tab-content">导出记录
                             </a>
                         </li>

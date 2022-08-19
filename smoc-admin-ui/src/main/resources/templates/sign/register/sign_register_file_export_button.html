@@ -27,9 +27,9 @@
                         每批次最多导出 1000条，导出后压缩文件名数字部分为“报备单号”
                     </p>
                     <div class="button-list" >
-                        <button id="CMCC" onclick="disableButton('CMCC')" sec:authorize-url="/sign/register/file/export/*"  th:href="@{/sign/register/file/export/CMCC}" class="btn btn-primary waves-effect waves-light btn-lg" style="margin-right:20px">导出移动数据</button>
-                        <button id="UNIC" onclick="disableButton('UNIC')" sec:authorize-url="/sign/register/file/export/*" th:href="@{/sign/register/file/export/UNIC}" class="btn btn-teal waves-effect waves-light btn-lg"  style="margin-right:20px">导出联通数据</button>
-                        <button id="TELC" onclick="disableButton('TELC')" sec:authorize-url="/sign/register/file/export/*" th:href="@{/sign/register/file/export/TELC}" class="btn btn-info waves-effect waves-light btn-lg">导出电信数据</button>
+                        <button id="CMCC" th:disabled="${carrier.get('CMCC') ==0}"  onclick="disableButton('CMCC')" sec:authorize-url="/sign/register/file/export/*"  th:href="@{/sign/register/file/export/CMCC}" class="btn btn-primary waves-effect waves-light btn-lg" style="margin-right:20px">导出移动数据</button>
+                        <button id="UNIC" th:disabled="${carrier.get('UNIC') ==0}" onclick="disableButton('UNIC')" sec:authorize-url="/sign/register/file/export/*" th:href="@{/sign/register/file/export/UNIC}" class="btn btn-teal waves-effect waves-light btn-lg"  style="margin-right:20px">导出联通数据</button>
+                        <button id="TELC" th:disabled="${carrier.get('TELC') ==0}"  onclick="disableButton('TELC')" sec:authorize-url="/sign/register/file/export/*" th:href="@{/sign/register/file/export/TELC}" class="btn btn-info waves-effect waves-light btn-lg">导出电信数据</button>
                     </div>
                 </div>
             </div>
