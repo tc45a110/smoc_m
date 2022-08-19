@@ -14,4 +14,10 @@ public interface SequenceRepository extends CrudRepository<SmocSequence, String>
      * @return
      */
     Integer findSequence(String seqName);
+
+    /**
+     * 创建新序列
+     * @param sequenceName
+     */
+    void createSequence(String sequenceName);
 }

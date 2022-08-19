@@ -35,6 +35,7 @@ import com.smoc.cloud.finance.repository.FinanceAccountRepository;
 import com.smoc.cloud.parameter.entity.ParameterExtendFiltersValue;
 import com.smoc.cloud.parameter.repository.ParameterExtendFiltersValueRepository;
 import com.smoc.cloud.parameter.service.ParameterExtendFiltersValueService;
+import com.smoc.cloud.sequence.repository.SequenceRepository;
 import com.smoc.cloud.utils.RandomService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -63,6 +64,9 @@ import java.util.stream.Collectors;
 @Service
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class BusinessAccountService {
+
+    @Resource
+    private SequenceRepository sequenceRepository;
 
     @Resource
     private BusinessAccountRepository businessAccountRepository;
@@ -240,6 +244,11 @@ public class BusinessAccountService {
         //记录日志
         log.info("[EC业务账号管理][业务账号基本信息][{}]数据:{}", op, JSON.toJSONString(entity));
         businessAccountRepository.saveAndFlush(entity);
+
+        //为签名扩展好创建一个新得序列
+        if("add".equals(op)){
+            sequenceRepository.createSequence(entity.getAccountId());
+        }
 
         //把账号id放到redis里
         stringRedisTemplate.opsForValue().set(RandomService.PREFIX + ":" + entity.getAccountId(), entity.getAccountId());

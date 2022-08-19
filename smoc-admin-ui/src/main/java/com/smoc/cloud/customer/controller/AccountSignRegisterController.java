@@ -121,8 +121,11 @@ public class AccountSignRegisterController {
         accountSignRegisterValidator.setAccount(account);
         accountSignRegisterValidator.setRegisterStatus("1");
         accountSignRegisterValidator.setExtendType("1");
-
-        Integer extendNumber = sequenceService.findSequence("SIGN_EXTEND_NUMBER");
+        Integer extendNumber = sequenceService.findSequence(account);
+        log.info("sequenceService extendNumber:{}",extendNumber);
+        if(null == extendNumber){
+            extendNumber = sequenceService.findSequence("SIGN_EXTEND_NUMBER");
+        }
         accountSignRegisterValidator.setSignExtendNumber(extendNumber + "");
 
         view.addObject("accountSignRegisterValidator", accountSignRegisterValidator);
